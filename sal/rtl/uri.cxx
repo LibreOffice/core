@@ -20,6 +20,7 @@
 #include "surrogates.hxx"
 
 #include "osl/diagnose.h"
+#include "rtl/character.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/textenc.h"
 #include "rtl/textcvt.h"
@@ -38,20 +39,6 @@ namespace {
 std::size_t const nCharClassSize = 128;
 
 sal_Unicode const cEscapePrefix = 0x25; // '%'
-
-inline bool isDigit(sal_uInt32 nUtf32)
-{
-    return nUtf32 >= 0x30 && nUtf32 <= 0x39; // '0'--'9'
-}
-
-inline bool isAlpha(sal_uInt32 nUtf32)
-{
-    // 'A'--'Z', 'a'--'z'
-    return (
-            (nUtf32 >= 0x41 && nUtf32 <= 0x5A) ||
-            (nUtf32 >= 0x61 && nUtf32 <= 0x7A)
-           );
-}
 
 inline bool isHighSurrogate(sal_uInt32 nUtf16)
 {
@@ -376,7 +363,7 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
     sal_Unicode const * pEnd = pBegin + pUriRef->length;
     sal_Unicode const * pPos = pBegin;
 
-    if (pPos != pEnd && isAlpha(*pPos))
+    if (pPos != pEnd && rtl::isAsciiAlpha(*pPos))
     {
         for (sal_Unicode const * p = pPos + 1; p != pEnd; ++p)
         {
@@ -387,7 +374,7 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
                 pPos = p;
                 break;
             }
-            else if (!isAlpha(*p) && !isDigit(*p) && *p != '+' && *p != '-'
+            else if (!rtl::isAsciiAlphanumeric(*p) && *p != '+' && *p != '-'
                      && *p != '.')
             {
                 break;

@@ -32,6 +32,7 @@ $(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/rtl,include/rtl,\
 	rtl/bootstrap.hxx \
 	rtl/byteseq.h \
 	rtl/byteseq.hxx \
+	rtl/character.hxx \
 	rtl/cipher.h \
 	rtl/crc.h \
 	rtl/digest.h \

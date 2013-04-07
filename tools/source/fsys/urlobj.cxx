@@ -24,6 +24,7 @@
 #include "com/sun/star/util/XStringWidth.hpp"
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
+#include "rtl/character.hxx"
 #include "rtl/string.h"
 #include "rtl/textenc.h"
 #include "rtl/ustring.hxx"
@@ -630,11 +631,11 @@ OUString parseScheme(
     sal_uInt32 fragmentDelimiter)
 {
     sal_Unicode const * p = *begin;
-    if (p != end && INetMIME::isAlpha(*p)) {
+    if (p != end && rtl::isAsciiAlpha(*p)) {
         do {
             ++p;
         } while (p != end
-                 && (INetMIME::isAlphanumeric(*p) || *p == '+' || *p == '-'
+                 && (rtl::isAsciiAlphanumeric(*p) || *p == '+' || *p == '-'
                      || *p == '.'));
         // #i34835# To avoid problems with Windows file paths like "C:\foo",
         // do not accept generic schemes that are only one character long:
@@ -730,7 +731,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             sal_Unicode const * p1 = pPos;
             if (eStyle & FSYS_DOS
                 && pEnd - p1 >= 2
-                && INetMIME::isAlpha(p1[0])
+                && rtl::isAsciiAlpha(p1[0])
                 && p1[1] == ':'
                 && (pEnd - p1 == 2 || p1[2] == '/' || p1[2] == '\\'))
             {
@@ -1043,7 +1044,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         bSkippedInitialSlash = true;
                         if ((eStyle & FSYS_DOS) != 0
                             && pEnd - pPos >= 2
-                            && INetMIME::isAlpha(pPos[0])
+                            && rtl::isAsciiAlpha(pPos[0])
                             && pPos[1] == ':'
                             && (pEnd - pPos == 2
                                 || pPos[2] == '/' || pPos[2] == '\\'))
@@ -1106,7 +1107,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     //  replacing "\" by "/" within <*path>
                     if (eStyle & FSYS_DOS
                         && pEnd - pPos >= 2
-                        && INetMIME::isAlpha(pPos[0])
+                        && rtl::isAsciiAlpha(pPos[0])
                         && pPos[1] == ':'
                         && (pEnd - pPos == 2
                             || pPos[2] == '/'
@@ -1317,7 +1318,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             if ( getSchemeInfo().m_bPort && pHostPortBegin < pHostPortEnd )
             {
                 sal_Unicode const * p1 = pHostPortEnd - 1;
-                while (p1 > pHostPortBegin && INetMIME::isDigit(*p1))
+                while (p1 > pHostPortBegin && rtl::isAsciiDigit(*p1))
                     --p1;
                 if (*p1 == ':')
                     pPort = p1;
@@ -1519,7 +1520,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             bool bFSys = false;
             sal_Unicode const * q = p;
             if (pEnd - q >= 2
-                && INetMIME::isAlpha(q[0])
+                && rtl::isAsciiAlpha(q[0])
                 && q[1] == ':'
                 && (pEnd - q == 2 || q[2] == '/' || q[2] == '\\'))
                 bFSys = true; // 2nd, 3rd
@@ -2398,9 +2399,9 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     aTheCanonic.append(sal_Unicode('['));
                     eState = STATE_IP6;
                 }
-                else if (INetMIME::isAlpha(*p) || *p == '_')
+                else if (rtl::isAsciiAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
-                else if (INetMIME::isDigit(*p))
+                else if (rtl::isAsciiDigit(*p))
                 {
                     nNumber = INetMIME::getWeight(*p);
                     nDigits = 1;
@@ -2416,21 +2417,21 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     eState = STATE_LABEL_DOT;
                 else if (*p == '-')
                     eState = STATE_LABEL_HYPHEN;
-                else if (!INetMIME::isAlphanumeric(*p) && *p != '_')
+                else if (!rtl::isAsciiAlphanumeric(*p) && *p != '_')
                     goto done;
                 break;
 
             case STATE_LABEL_HYPHEN:
-                if (INetMIME::isAlphanumeric(*p) || *p == '_')
+                if (rtl::isAsciiAlphanumeric(*p) || *p == '_')
                     eState = STATE_LABEL;
                 else if (*p != '-')
                     goto done;
                 break;
 
             case STATE_LABEL_DOT:
-                if (INetMIME::isAlpha(*p) || *p == '_')
+                if (rtl::isAsciiAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
-                else if (INetMIME::isDigit(*p))
+                else if (rtl::isAsciiDigit(*p))
                     eState = STATE_LABEL;
                 else
                     goto done;
@@ -2441,21 +2442,21 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     eState = STATE_TOPLABEL_DOT;
                 else if (*p == '-')
                     eState = STATE_TOPLABEL_HYPHEN;
-                else if (!INetMIME::isAlphanumeric(*p) && *p != '_')
+                else if (!rtl::isAsciiAlphanumeric(*p) && *p != '_')
                     goto done;
                 break;
 
             case STATE_TOPLABEL_HYPHEN:
-                if (INetMIME::isAlphanumeric(*p) || *p == '_')
+                if (rtl::isAsciiAlphanumeric(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (*p != '-')
                     goto done;
                 break;
 
             case STATE_TOPLABEL_DOT:
-                if (INetMIME::isAlpha(*p) || *p == '_')
+                if (rtl::isAsciiAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
-                else if (INetMIME::isDigit(*p))
+                else if (rtl::isAsciiDigit(*p))
                     eState = STATE_LABEL;
                 else
                     goto done;
@@ -2475,9 +2476,9 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                         eState = STATE_LABEL_DOT;
                 else if (*p == '-')
                     eState = STATE_LABEL_HYPHEN;
-                else if (INetMIME::isAlpha(*p) || *p == '_')
+                else if (rtl::isAsciiAlpha(*p) || *p == '_')
                     eState = STATE_LABEL;
-                else if (INetMIME::isDigit(*p))
+                else if (rtl::isAsciiDigit(*p))
                     if (nDigits < 3)
                     {
                         nNumber = 10 * nNumber + INetMIME::getWeight(*p);
@@ -2490,9 +2491,9 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 break;
 
             case STATE_IP4_DOT:
-                if (INetMIME::isAlpha(*p) || *p == '_')
+                if (rtl::isAsciiAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
-                else if (INetMIME::isDigit(*p))
+                else if (rtl::isAsciiDigit(*p))
                 {
                     nNumber = INetMIME::getWeight(*p);
                     nDigits = 1;
@@ -2505,7 +2506,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
             case STATE_IP6:
                 if (*p == ':')
                     eState = STATE_IP6_COLON;
-                else if (INetMIME::isHexDigit(*p))
+                else if (rtl::isAsciiHexDigit(*p))
                 {
                     nNumber = INetMIME::getHexWeight(*p);
                     nDigits = 1;
@@ -2533,13 +2534,13 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     aTheCanonic.append(sal_Unicode(':'));
                     eState = STATE_IP6_3COLON;
                 }
-                else if (INetMIME::isDigit(*p))
+                else if (rtl::isAsciiDigit(*p))
                 {
                     nNumber = INetMIME::getWeight(*p);
                     nDigits = 1;
                     eState = STATE_IP6_HEXSEQ2_MAYBE_IP4;
                 }
-                else if (INetMIME::isHexDigit(*p))
+                else if (rtl::isAsciiHexDigit(*p))
                 {
                     nNumber = INetMIME::getHexWeight(*p);
                     nDigits = 1;
@@ -2550,7 +2551,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 break;
 
             case STATE_IP6_3COLON:
-                if (INetMIME::isDigit(*p))
+                if (rtl::isAsciiDigit(*p))
                 {
                     nNumber = INetMIME::getWeight(*p);
                     nDigits = 1;
@@ -2575,7 +2576,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     aTheCanonic.append(sal_Unicode(':'));
                     eState = STATE_IP6_HEXSEQ1_COLON;
                 }
-                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
+                else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
                 {
                     nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
                     ++nDigits;
@@ -2590,13 +2591,13 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     aTheCanonic.append(sal_Unicode(':'));
                     eState = STATE_IP6_2COLON;
                 }
-                else if (INetMIME::isDigit(*p))
+                else if (rtl::isAsciiDigit(*p))
                 {
                     nNumber = INetMIME::getWeight(*p);
                     nDigits = 1;
                     eState = STATE_IP6_HEXSEQ1_MAYBE_IP4;
                 }
-                else if (INetMIME::isHexDigit(*p))
+                else if (rtl::isAsciiHexDigit(*p))
                 {
                     nNumber = INetMIME::getHexWeight(*p);
                     nDigits = 1;
@@ -2630,12 +2631,12 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     nOctets = 2;
                     eState = STATE_IP6_IP4_DOT;
                 }
-                else if (INetMIME::isDigit(*p) && nDigits < 3)
+                else if (rtl::isAsciiDigit(*p) && nDigits < 3)
                 {
                     nNumber = 16 * nNumber + INetMIME::getWeight(*p);
                     ++nDigits;
                 }
-                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
+                else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
                 {
                     nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
                     ++nDigits;
@@ -2659,7 +2660,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     aTheCanonic.append(sal_Unicode(':'));
                     eState = STATE_IP6_HEXSEQ2_COLON;
                 }
-                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
+                else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
                 {
                     nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
                     ++nDigits;
@@ -2669,13 +2670,13 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 break;
 
             case STATE_IP6_HEXSEQ2_COLON:
-                if (INetMIME::isDigit(*p))
+                if (rtl::isAsciiDigit(*p))
                 {
                     nNumber = INetMIME::getWeight(*p);
                     nDigits = 1;
                     eState = STATE_IP6_HEXSEQ2_MAYBE_IP4;
                 }
-                else if (INetMIME::isHexDigit(*p))
+                else if (rtl::isAsciiHexDigit(*p))
                 {
                     nNumber = INetMIME::getHexWeight(*p);
                     nDigits = 1;
@@ -2709,12 +2710,12 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     nOctets = 2;
                     eState = STATE_IP6_IP4_DOT;
                 }
-                else if (INetMIME::isDigit(*p) && nDigits < 3)
+                else if (rtl::isAsciiDigit(*p) && nDigits < 3)
                 {
                     nNumber = 16 * nNumber + INetMIME::getWeight(*p);
                     ++nDigits;
                 }
-                else if (INetMIME::isHexDigit(*p) && nDigits < 4)
+                else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
                 {
                     nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
                     ++nDigits;
@@ -2745,7 +2746,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     }
                     else
                         goto done;
-                else if (INetMIME::isDigit(*p) && nDigits < 3)
+                else if (rtl::isAsciiDigit(*p) && nDigits < 3)
                 {
                     nNumber = 10 * nNumber + INetMIME::getWeight(*p);
                     ++nDigits;
@@ -2755,7 +2756,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 break;
 
             case STATE_IP6_IP4_DOT:
-                if (INetMIME::isDigit(*p))
+                if (rtl::isAsciiDigit(*p))
                 {
                     nNumber = INetMIME::getWeight(*p);
                     nDigits = 1;
@@ -2825,7 +2826,7 @@ bool INetURLObject::parseHostOrNetBiosName(
                                                  eEscapeType);
                     if (!INetMIME::isVisible(nUTF32))
                         return false;
-                    if (!INetMIME::isAlphanumeric(nUTF32))
+                    if (!rtl::isAsciiAlphanumeric(nUTF32))
                         switch (nUTF32)
                         {
                         case '"':
@@ -2996,7 +2997,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                                  || *pPos == nSegmentDelimiter
                                  || *pPos == nAltSegmentDelimiter)
                              && aTheSynPath.getLength() == 2
-                             && INetMIME::isAlpha(aTheSynPath[1]))
+                             && rtl::isAsciiAlpha(aTheSynPath[1]))
                     {
                         // A first segment of <ALPHA "|"> is translated to
                         // <ALPHA ":">:
@@ -3041,7 +3042,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
 
             // Match <group>:
-            if (INetMIME::isAlpha(*pPos))
+            if (rtl::isAsciiAlpha(*pPos))
             {
                 for (sal_Unicode const * p = pPos + 1;; ++p)
                 {
@@ -3053,7 +3054,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                         pPos = p;
                         goto done;
                     }
-                    else if (!INetMIME::isAlphanumeric(*p) && *p != '+'
+                    else if (!rtl::isAsciiAlphanumeric(*p) && *p != '+'
                              && *p != '-' && *p != '.' && *p != '_')
                     {
                         break;
@@ -3291,7 +3292,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     sal_uInt32 nUTF32 = getUTF32(pPos, pPathEnd, bOctets,
                                                  '=', eMechanism,
                                                  eCharset, eEscapeType);
-                    if (!INetMIME::isDigit(nUTF32))
+                    if (!rtl::isAsciiDigit(nUTF32))
                         return false;
                     aTheSynPath.append(sal_Unicode(nUTF32));
                     bEmpty = false;
@@ -3614,7 +3615,7 @@ bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
     return (eStyle & FSYS_DOS) != 0
            && m_aPath.getLength() >= 3
            && p[0] == '/'
-           && INetMIME::isAlpha(p[1])
+           && rtl::isAsciiAlpha(p[1])
            && p[2] == ':'
            && (m_aPath.getLength() == 3 || p[3] == '/');
 }
@@ -4628,7 +4629,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
 
             if (eStyle & FSYS_DOS
                 && pFSysEnd - pFSysBegin >= 2
-                && INetMIME::isAlpha(pFSysBegin[0])
+                && rtl::isAsciiAlpha(pFSysBegin[0])
                 && pFSysBegin[1] == ':'
                 && (pFSysEnd - pFSysBegin == 2
                     || pFSysBegin[2] == '/'
@@ -4704,7 +4705,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
             {
                 aSynAbsURIRef.append(sal_Unicode('/'));
                 if (pFSysEnd - p >= 2
-                    && INetMIME::isAlpha(p[0])
+                    && rtl::isAsciiAlpha(p[0])
                     && p[1] == ':'
                     && (pFSysEnd - p == 2 || p[2] == '\\' || p[2] == '/'))
                     nAltDelimiter = '/';
@@ -5162,7 +5163,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
         switch (eState)
         {
             case STATE_DOT:
-                if (p != pEnd && (INetMIME::isAlphanumeric(*p) || *p == '_'))
+                if (p != pEnd && (rtl::isAsciiAlphanumeric(*p) || *p == '_'))
                 {
                     ++nLabels;
                     eState = STATE_LABEL;
@@ -5176,7 +5177,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
             case STATE_LABEL:
                 if (p != pEnd)
                 {
-                    if (INetMIME::isAlphanumeric(*p) || *p == '_')
+                    if (rtl::isAsciiAlphanumeric(*p) || *p == '_')
                         break;
                     else if (*p == '.')
                     {
@@ -5196,7 +5197,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
             case STATE_HYPHEN:
                 if (p != pEnd)
                 {
-                    if (INetMIME::isAlphanumeric(*p) || *p == '_')
+                    if (rtl::isAsciiAlphanumeric(*p) || *p == '_')
                     {
                         eState = STATE_LABEL;
                         break;
@@ -5218,7 +5219,7 @@ bool INetURLObject::scanIPv6reference(sal_Unicode const *& rBegin,
     if (rBegin != pEnd && *rBegin == '[') {
         sal_Unicode const * p = rBegin + 1;
         //TODO: check for valid IPv6address (RFC 2373):
-        while (p != pEnd && (INetMIME::isHexDigit(*p) || *p == ':' || *p == '.'))
+        while (p != pEnd && (rtl::isAsciiHexDigit(*p) || *p == ':' || *p == '.'))
         {
             ++p;
         }

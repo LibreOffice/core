@@ -20,26 +20,7 @@
 #include <tools/errcode.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
-
-
-
-static bool isAlpha( sal_Unicode c )
-{
-    bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-    return bRet;
-}
-
-static bool isDigit( sal_Unicode c )
-{
-    bool bRet = (c >= '0' && c <= '9');
-    return bRet;
-}
-
-static bool isAlphaNumeric( sal_Unicode c )
-{
-    bool bRet = isDigit( c ) || isAlpha( c );
-    return bRet;
-}
+#include <rtl/character.hxx>
 
 
 static SbxVariable* Element
@@ -72,7 +53,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
     else
     {
         // A symbol had to begin with a alphabetic character or an underline
-        if( !isAlpha( *p ) && *p != '_' )
+        if( !rtl::isAsciiAlpha( *p ) && *p != '_' )
         {
             SbxBase::SetError( SbxERR_SYNTAX );
         }
@@ -80,7 +61,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
         {
             rSym = p;
             // The it can contain alphabetic characters, numbers or underlines
-            while( *p && (isAlphaNumeric( *p ) || *p == '_') )
+            while( *p && (rtl::isAsciiAlphanumeric( *p ) || *p == '_') )
             {
                 p++, nLen++;
             }
@@ -103,7 +84,7 @@ static SbxVariable* QualifiedName
 
     SbxVariableRef refVar;
     const sal_Unicode* p = SkipWhitespace( *ppBuf );
-    if( isAlpha( *p ) || *p == '_' || *p == '[' )
+    if( rtl::isAsciiAlpha( *p ) || *p == '_' || *p == '[' )
     {
         // Read in the element
         refVar = Element( pObj, pGbl, &p, t );
@@ -139,8 +120,8 @@ static SbxVariable* Operand
 {
     SbxVariableRef refVar( new SbxVariable );
     const sal_Unicode* p = SkipWhitespace( *ppBuf );
-    if( !bVar && ( isDigit( *p )
-                   || ( *p == '.' && isDigit( *( p+1 ) ) )
+    if( !bVar && ( rtl::isAsciiDigit( *p )
+                   || ( *p == '.' && rtl::isAsciiDigit( *( p+1 ) ) )
                    || *p == '-'
                    || *p == '&' ) )
     {
