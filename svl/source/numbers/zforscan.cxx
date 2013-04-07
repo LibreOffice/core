@@ -1474,8 +1474,8 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
 int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
                                                  sal_uInt16& rAnzResStrings )
 {
-    if ( sStrArray[i][0] == '[' &&
-         i < nAnzStrings-1 &&
+    if ( i < nAnzStrings-1 &&
+         sStrArray[i][0] == '[' &&
          nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
          sStrArray[i+1][0] == '~' )
     {
