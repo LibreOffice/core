@@ -343,6 +343,7 @@ include $(foreach class, \
 	InstallScript \
 	AutoInstallLibs \
 	Postprocess \
+	PackageSet \
 ,$(GBUILDDIR)/$(class).mk)
 
 $(eval $(call gb_Helper_process_executable_registrations))
