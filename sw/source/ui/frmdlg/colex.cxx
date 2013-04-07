@@ -582,4 +582,9 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     SwPageExample::UpdateExample(rSet);
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwPageGridExample(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwPageGridExample(pParent);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

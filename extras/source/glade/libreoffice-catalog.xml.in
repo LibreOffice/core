@@ -75,6 +75,9 @@
     <glade-widget-class title="Page Preview" name="svxlo-SvxPageWindow"
                         generic-name="Page Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Page Preview" name="swlo-SwPageGridExample"
+                        generic-name="Grid Page Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Page Preview" name="swlo-SwColExample"
                         generic-name="Page Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

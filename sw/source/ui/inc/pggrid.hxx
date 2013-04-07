@@ -30,48 +30,42 @@
  --------------------------------------------------------------------*/
 class SwTextGridPage: public SfxTabPage
 {
-    FixedLine       aGridTypeFL;
-    RadioButton     aNoGridRB;
-    RadioButton     aLinesGridRB;
-    RadioButton     aCharsGridRB;
-    CheckBox        aSnapToCharsCB;
+    FixedLine*       m_pGridTypeFL;
+    RadioButton*     m_pNoGridRB;
+    RadioButton*     m_pLinesGridRB;
+    RadioButton*     m_pCharsGridRB;
+    CheckBox*        m_pSnapToCharsCB;
 
-    SwPageGridExample   aExampleWN;
+    SwPageGridExample*   m_pExampleWN;
 
-    FixedLine       aLayoutFL;
+    VclFrame*        m_pLayoutFL;
+    NumericField*    m_pLinesPerPageNF;
+    FixedText*       m_pLinesRangeFT;
 
-    FixedText       aLinesPerPageFT;
-    NumericField    aLinesPerPageNF;
-    FixedText       aLinesRangeFT;
+    MetricField*     m_pTextSizeMF;
 
-    FixedText       aTextSizeFT;
-    MetricField     aTextSizeMF;
+    FixedText*       m_pCharsPerLineFT;
+    NumericField*    m_pCharsPerLineNF;
+    FixedText*       m_pCharsRangeFT;
 
-    FixedText       aCharsPerLineFT;
-    NumericField    aCharsPerLineNF;
-    FixedText       aCharsRangeFT;
+    FixedText*       m_pCharWidthFT;
+    MetricField*     m_pCharWidthMF;
 
-    FixedText       aCharWidthFT;
-    MetricField     aCharWidthMF;
+    FixedText*       m_pRubySizeFT;
+    MetricField*     m_pRubySizeMF;
 
-    FixedText       aRubySizeFT;
-    MetricField     aRubySizeMF;
+    CheckBox*        m_pRubyBelowCB;
 
-    CheckBox        aRubyBelowCB;
+    VclFrame*        m_pDisplayFL;
 
-    FixedLine       aDisplayFL;
-
-    CheckBox        aDisplayCB;
-    CheckBox        aPrintCB;
-    FixedText       aColorFT;
-    ColorListBox    aColorLB;
-
-    Window*         aControls[20];
+    CheckBox*        m_pDisplayCB;
+    CheckBox*        m_pPrintCB;
+    ColorListBox*    m_pColorLB;
 
     sal_Int32       m_nRubyUserValue;
     sal_Bool        m_bRubyUserValue;
     Size            m_aPageSize;
-    bool        m_bVertical;
+    bool            m_bVertical;
     sal_Bool        m_bSquaredMode;
     sal_Bool        m_bHRulerChanged;
     sal_Bool        m_bVRulerChanged;

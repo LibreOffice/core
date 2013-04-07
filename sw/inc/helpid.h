@@ -198,7 +198,7 @@
 
 #define HID_TP_BUSINESS_DATA                                    "SW_HID_TP_BUSINESS_DATA"
 #define HID_SECTION_FTNENDNOTES_PAGE                            "SW_HID_SECTION_FTNENDNOTES_PAGE"
-#define HID_TEXTGRID_PAGE                                       "SW_HID_TEXTGRID_PAGE"
+
 #define HID_OPTCOMPATIBILITY_PAGE                               "SW_HID_OPTCOMPATIBILITY_PAGE"
 #define HID_COMPATIBILITY_OPTIONS_BOX                           "SW_HID_COMPATIBILITY_OPTIONS_BOX"
 #define HID_COMPARISON_OPT				                        "SW_HID_COMPARISON_OPT"
