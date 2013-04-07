@@ -195,6 +195,7 @@ gb_ThesaurusIndexTarget_get_target = $(WORKDIR)/ThesaurusIndexTarget/$(basename 
 gb_UIConfig_get_target = $(WORKDIR)/UIConfig/$(1)
 gb_UILocalizeTarget_get_target = $(WORKDIR)/UILocalizeTarget/$(1).done
 gb_UILocalizeTarget_get_workdir = $(WORKDIR)/UILocalizeTarget/$(1)
+gb_UIMenubarTarget_get_target = $(WORKDIR)/UIMenubarTarget/$(1).xml
 gb_UnoApiTarget_get_external_headers_target = $(WORKDIR)/UnoApiTarget/$(1).external
 gb_UnoApiTarget_get_headers_target = $(WORKDIR)/UnoApiTarget/$(1).headers
 gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
@@ -310,6 +311,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ExternalProject \
 	UIConfig \
 	UILocalizeTarget \
+	UIMenubarTarget \
 	UnoApiHeadersTarget \
 	UnoApiTarget \
 	UnpackedTarball \

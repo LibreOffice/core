@@ -78,6 +78,39 @@ $(call gb_UILocalizeTarget_get_target,$(1)) :| \
 
 endef
 
+# class UIMenubarTarget
+
+# Handles platform-specific processing of menubar config files.
+
+# defined by platform:
+#  gb_UIMenubarTarget_UIMenubarTarget_platform
+#  gb_UIMenubarTarget__command
+
+$(dir $(call gb_UIMenubarTarget_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_UIMenubarTarget_get_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(call gb_UIMenubarTarget_get_target,%) :
+	$(call gb_UIMenubarTarget__command,$@,$*,$<)
+
+.PHONY : $(call gb_UIMenubarTarget_get_clean_target,%)
+$(call gb_UIMenubarTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$(2),$(false),UIM,1)
+	rm -f $(call gb_UIMenubarTarget_get_target,$*)
+
+# Process a menubar configuration file.
+#
+# gb_UIMenubarTarget_UIMenubarTarget target source
+define gb_UIMenubarTarget_UIMenubarTarget
+$(call gb_UIMenubarTarget_get_target,$(1)) : $(2)
+$(call gb_UIMenubarTarget_get_target,$(1)) :| $(dir $(call gb_UIMenubarTarget_get_target,$(1))).dir
+
+$(call gb_UIMenubarTarget_UIMenubarTarget_platform,$(1),$(2))
+
+endef
+
 # class UIConfig
 
 # Handles UI configuration files.
@@ -242,13 +275,23 @@ $(call gb_UIConfig__package_file,$(1),$(call gb_UIConfig_get_packagename,$(2)),$
 
 endef
 
+define gb_UIConfig__add_menubarfile
+$(call gb_UIMenubarTarget_UIMenubarTarget,$(2),$(3))
+$(call gb_Package_add_file,$(call gb_UIConfig_get_packagename,$(1)_generated),xml/uiconfig/$(1)/menubar/$(notdir $(2)).xml,$(subst $(WORKDIR)/,,$(call gb_UIMenubarTarget_get_target,$(2))))
+$(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(call gb_UIConfig_get_packagename,$(1)_generated))
+
+$(call gb_Package_get_target,$(call gb_UIConfig_get_packagename,$(1)_generated)) : $(call gb_UIMenubarTarget_get_target,$(2))
+$(call gb_Package_get_clean_target,$(call gb_UIConfig_get_packagename,$(1)_generated)) : $(call gb_UIMenubarTarget_get_clean_target,$(2))
+
+endef
+
 # Add menubar config file to the package.
 #
 # The file is relative to $(SRCDIR) and without extension.
 #
 # gb_UIConfig_add_menubarfile target file
 define gb_UIConfig_add_menubarfile
-$(call gb_UIConfig__add_xmlfile,$(1),$(1),menubar,$(2))
+$(call gb_UIConfig__add_menubarfile,$(1),$(2),$(SRCDIR)/$(2).xml)
 
 endef
 
@@ -266,8 +309,7 @@ endef
 #
 # gb_UIConfig_add_generated_menubarfile target file
 define gb_UIConfig_add_generated_menubarfile
-$(call gb_UIConfig__add_xmlfile,$(1),$(1)_generated,menubar,$(2))
-$(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(call gb_UIConfig_get_packagename,$(1)_generated))
+$(call gb_UIConfig__add_menubarfile,$(1),$(2),$(WORKDIR)/$(2).xml)
 
 endef
 
