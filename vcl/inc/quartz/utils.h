@@ -42,6 +42,7 @@ NSString* CreateNSString( const OUString& );
 std::ostream &operator <<(std::ostream& s, CGRect &rRect);
 std::ostream &operator <<(std::ostream& s, CGPoint &rPoint);
 std::ostream &operator <<(std::ostream& s, CGSize &rSize);
+std::ostream &operator <<(std::ostream& s, CGColorRef pSize);
 
 #endif // INCLUDED_QUARTZ_UTILS_HXX
 

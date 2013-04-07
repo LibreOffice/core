@@ -97,4 +97,20 @@ std::ostream &operator <<(std::ostream& s, CGSize &rSize)
     return s;
 }
 
+std::ostream &operator <<(std::ostream& s, CGColorRef pColor)
+{
+#ifndef SAL_LOG_INFO
+    (void) pColor;
+#else
+    CFStringRef colorString = CFCopyDescription(pColor);
+    if (colorString) {
+        s << GetOUString(colorString);
+        CFRelease(colorString);
+    } else {
+        s << "NULL";
+    }
+#endif
+    return s;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
