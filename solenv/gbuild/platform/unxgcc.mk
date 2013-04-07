@@ -410,6 +410,16 @@ endif
 # Package class
 gb_Package_SDKDIRNAME := sdk
 
+# UIMenubarTarget class
+
+define gb_UIMenubarTarget__command
+$(call gb_Output_announce,$(2),$(true),UIM,1)
+cp $(3) $(1)
+
+endef
+
+gb_UIMenubarTarget_UIMenubarTarget_platform :=
+
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
 
