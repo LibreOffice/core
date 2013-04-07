@@ -608,4 +608,20 @@ bool CoreTextPhysicalFontFace::HasCJKSupport( void )
     return m_bHasCJKSupport;
 }
 
+std::ostream &operator <<(std::ostream& s, CTFontRef pFont)
+{
+#ifndef SAL_LOG_INFO
+    (void) pFont;
+#else
+    if (pFont) {
+        CFStringRef fontString = CTFontCopyFullName(pFont);
+        s << "{" << GetOUString(fontString) << "@" << CTFontGetSize(pFont) << "}";
+        CFRelease(fontString);
+    } else {
+        s << "NULL";
+    }
+#endif
+    return s;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

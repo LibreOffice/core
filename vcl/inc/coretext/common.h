@@ -20,17 +20,18 @@
 #ifndef _VCL_CORETEXT_COMMON_H
 #define _VCL_CORETEXT_COMMON_H
 
-#include <sal/types.h>
-#include <premac.h>
+#include <iostream>
 
+#include <premac.h>
 #ifdef MACOSX
 #include <ApplicationServices/ApplicationServices.h>
 #else
 #include <CoreGraphics/CoreGraphics.h>
 #include <CoreText/CoreText.h>
 #endif
-
 #include <postmac.h>
+
+#include <sal/types.h>
 
 #include <tools/debug.hxx>
 
@@ -44,6 +45,8 @@
 #define round_to_long(a) ((a) >= 0 ? ((long)((a) + 0.5)) : ((long)((a) - 0.5)))
 
 #include "vcl/salgtype.hxx"
+
+std::ostream &operator <<(std::ostream& s, CTFontRef pFont);
 
 #endif /* _VCL_CORETEXT_COMMON_H */
 
