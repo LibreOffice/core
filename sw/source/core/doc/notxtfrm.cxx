@@ -138,13 +138,6 @@ static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     Graphic::DrawEx( rSh.GetOut(), rText, *pFont, rBmp, rRect.Pos(), rRect.SSize() );
 }
 
-/*************************************************************************
-|*
-|*    SwGrfFrm::SwGrfFrm(ViewShell * const,SwGrfNode *)
-|*
-*************************************************************************/
-
-
 SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode, SwFrm* pSib )
     : SwCntntFrm( pNode, pSib )
 {
@@ -161,34 +154,15 @@ void SwNoTxtFrm::InitCtor()
     nWeight = 0;
 }
 
-/*************************************************************************
-|*
-|*    SwNoTxtNode::MakeFrm()
-|*
-*************************************************************************/
-
-
 SwCntntFrm *SwNoTxtNode::MakeFrm( SwFrm* pSib )
 {
     return new SwNoTxtFrm(this, pSib);
 }
 
-/*************************************************************************
-|*
-|*    SwNoTxtFrm::~SwNoTxtFrm()
-|*
-*************************************************************************/
-
 SwNoTxtFrm::~SwNoTxtFrm()
 {
     StopAnimation();
 }
-
-/*************************************************************************
-|*
-|*    void SwNoTxtFrm::Modify( SwHint * pOld, SwHint * pNew )
-|*
-*************************************************************************/
 
 void SetOutDev( ViewShell *pSh, OutputDevice *pOut )
 {
@@ -222,12 +196,6 @@ static void lcl_ClearArea( const SwFrm &rFrm,
         }
     }
 }
-
-/*************************************************************************
-|*
-|*    void SwNoTxtFrm::Paint()
-|*
-*************************************************************************/
 
 void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
@@ -478,13 +446,6 @@ const Size& SwNoTxtFrm::GetSize() const
     return pFly->Prt().SSize();
 }
 
-/*************************************************************************
-|*
-|*    SwNoTxtFrm::MakeAll()
-|*
-*************************************************************************/
-
-
 void SwNoTxtFrm::MakeAll()
 {
     SwCntntNotify aNotify( this );
@@ -521,13 +482,6 @@ void SwNoTxtFrm::Format( const SwBorderAttrs * )
     else if( nChgHght < 0)
         Shrink( Min(Prt().Height(), -nChgHght) );
 }
-
-/*************************************************************************
-|*
-|*    SwNoTxtFrm::GetCharRect()
-|*
-|*************************************************************************/
-
 
 sal_Bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
                               SwCrsrMoveState *pCMS ) const

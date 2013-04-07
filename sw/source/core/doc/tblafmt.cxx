@@ -256,8 +256,6 @@ void SwAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
     rStream >> nNumFmtVersion;
 }
 
-//  ---------------------------------------------------------------------------
-
 SwBoxAutoFmt::SwBoxAutoFmt()
     : aFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) ),
     aHeight( 240, 100, RES_CHRATR_FONTSIZE ),

@@ -112,10 +112,6 @@ namespace TxtFmtCollFunc
     }
 } // end of namespace TxtFmtCollFunc
 
-/*
- * SwTxtFmtColl  TXT
- */
-
 void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( GetDoc()->IsInDtor() )

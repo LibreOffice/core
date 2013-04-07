@@ -298,10 +298,6 @@ SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
     return pRet;
 }
 
-/*************************************************************************
-|*    SwDoc::UpdateFlds()
-|*    Description: Update fields
-*************************************************************************/
 /*
  *    All have to be re-evaluated.
  */
@@ -362,9 +358,6 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
     SetModified();
 }
 
-/******************************************************************************
- *                      void SwDoc::UpdateUsrFlds()
- ******************************************************************************/
 void SwDoc::UpdateUsrFlds()
 {
     SwCalc* pCalc = 0;

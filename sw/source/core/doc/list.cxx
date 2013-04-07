@@ -27,10 +27,7 @@
 #include <pam.hxx>
 #include <SwNodeNum.hxx>
 
-// ----------------------------------------------------------------------------
-// SwListImpl
 // implementation class for SwList
-// ----------------------------------------------------------------------------
 class SwListImpl
 {
     public:
@@ -223,9 +220,7 @@ void SwListImpl::NotifyItemsOnListLevel( const int nLevel )
     }
 }
 
-// ----------------------------------------------------------------------------
-// SwList
-// ----------------------------------------------------------------------------
+// SwList ---------------------------------------------------------------------
 SwList::SwList( const String sListId,
                 SwNumRule& rDefaultListStyle,
                 const SwNodes& rNodes )

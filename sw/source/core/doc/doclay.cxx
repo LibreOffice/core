@@ -1092,12 +1092,6 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::InsertLabel()
-|*
-|*************************************************************************/
-
 /* #i6447# changed behaviour if lcl_CpyAttr:
 
    If the old item set contains the item to set (no inheritance) copy the item
@@ -1490,12 +1484,6 @@ SwDoc::InsertLabel(
     return pNewFmt;
 }
 
-
-/*************************************************************************
-|*
-|*  SwDoc::InsertDrawLabel()
-|*
-|*************************************************************************/
 static SwFlyFrmFmt *
 lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         SwUndoInsertLabel *const pUndo, SwDrawFrmFmt *const pOldFmt,
@@ -1781,12 +1769,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
     return pNewFmt;
 }
 
+// IDocumentTimerAccess methods ------------------------------------------
 
-/*************************************************************************
-|*
-|*  IDocumentTimerAccess methods
-|*
-|*************************************************************************/
 void SwDoc::StartIdling()
 {
     mbStartIdleTimer = true;
@@ -1818,11 +1802,6 @@ void SwDoc::StartBackgroundJobs() {
     maIdleTimer.Start();
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::DoIdleJobs()
-|*
-|*************************************************************************/
 IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 {
 #ifdef TIMELOG

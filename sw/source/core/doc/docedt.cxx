@@ -703,9 +703,6 @@ void SwDoc::SetModified(SwPaM &rPaM)
     SetModified();
 }
 
-/*************************************************************************
- * SwDoc::Overwrite()
- ************************************************************************/
 bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 {
     SwPosition& rPt = *(SwPosition*)rRg.GetPoint();

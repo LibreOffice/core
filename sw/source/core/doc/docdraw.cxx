@@ -381,12 +381,6 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     delete [] pFmtsAndObjs;
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::DeleteSelection()
-|*
-|*************************************************************************/
-
 bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
 {
     bool bCallBase = false;
@@ -482,12 +476,6 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
     return bCallBase;
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::DeleteSelection()
-|*
-|*************************************************************************/
-
 _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
                       sal_uInt32 nArrOrdNum )
     : pFmt( pFrmFmt ), pAnchor( pFlyAn ), nOrdNum( nArrOrdNum )
@@ -524,7 +512,6 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     }
 }
 
-/*************************************************************************/
 // Is also called by the Sw3 Reader, if there was an error when reading the
 // drawing layer. If it is called by the Sw3 Reader the layer is rebuilt
 // from scratch.
@@ -762,9 +749,6 @@ SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLa
     return nInvisibleLayerId;
 }
 
-/*************************************************************************/
-
-
 void SwDoc::ReleaseDrawModel()
 {
     if ( mpDrawModel )
@@ -785,9 +769,6 @@ void SwDoc::ReleaseDrawModel()
         SfxItemPool::Free(pEEgPool);
     }
 }
-
-/*************************************************************************/
-
 
 SdrModel* SwDoc::_MakeDrawModel()
 {
@@ -812,8 +793,6 @@ SdrModel* SwDoc::_MakeDrawModel()
     return mpDrawModel;
 }
 
-/*************************************************************************/
-
 void SwDoc::DrawNotifyUndoHdl()
 {
     mpDrawModel->SetNotifyUndoActionHdl( Link() );
@@ -835,19 +814,14 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
         if (pField && pField->ISA(SvxDateField))
         {
-            /******************************************************************
-            * Date field
-            ******************************************************************/
+            // Date field
             pInfo->SetRepresentation(
                 ((const SvxDateField*) pField)->GetFormatted(
                         *GetNumberFormatter( sal_True ), LANGUAGE_SYSTEM) );
         }
         else if (pField && pField->ISA(SvxURLField))
         {
-            /******************************************************************
-            * URL field
-            ******************************************************************/
-
+            // URL field
             switch ( ((const SvxURLField*) pField)->GetFormat() )
             {
                 case SVXURLFORMAT_APPDEFAULT: //!!! Can be set in App???
@@ -883,16 +857,12 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
         else if (pField && pField->ISA(SdrMeasureField))
         {
-            /******************************************************************
-            * Measure field
-            ******************************************************************/
+            // Measure field
             pInfo->ClearFldColor();
         }
         else if ( pField && pField->ISA(SvxExtTimeField))
         {
-            /******************************************************************
-            * Time field
-            ******************************************************************/
+            // Time field
             pInfo->SetRepresentation(
                 ((const SvxExtTimeField*) pField)->GetFormatted(
                         *GetNumberFormatter( sal_True ), LANGUAGE_SYSTEM) );
