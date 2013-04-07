@@ -377,8 +377,6 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-
-// handle new parameter <eDefaultNumberFormatPositionAndSpaceMode>
 SwNumRule::SwNumRule( const String& rNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType,

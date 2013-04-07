@@ -1981,8 +1981,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
                     rDestArr, pSrcColl->GetNextTxtFmtColl().GetName() ) );
 
             if(pSrcColl->IsAssignedToListLevelOfOutlineStyle())
-                pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
-            //<-end
+                pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());
 
 //FEATURE::CONDCOLL
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )

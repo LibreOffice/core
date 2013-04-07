@@ -125,7 +125,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
     SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
     // #i70223#
-    const bool bAssignedToListLevelOfOutlineStyle(IsAssignedToListLevelOfOutlineStyle());//#outline level ,zhaojianwei
+    const bool bAssignedToListLevelOfOutlineStyle(IsAssignedToListLevelOfOutlineStyle());
     const SwNumRuleItem* pNewNumRuleItem( 0L );
 
     SwAttrSetChg *pNewChgSet = 0,  *pOldChgSet = 0;
@@ -618,7 +618,7 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
         aCondColls.push_back( pNew );
     }
 }
-//#outline level, zhaojianwei
+
 void SwTxtFmtColl::SetAttrOutlineLevel( int nLevel)
 {
     OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtFmtColl: Level Out Of Range" );
@@ -670,8 +670,5 @@ void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle()
     mbAssignedToOutlineStyle = false;
     ResetFmtAttr(RES_PARATR_OUTLINELEVEL);
 }
-//<-end,zhaojianwei
-
-//FEATURE::CONDCOLL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

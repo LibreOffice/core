@@ -1473,6 +1473,7 @@ static bool lcl_DoWithBreaks(SwDoc & rDoc, SwPaM & rPam,
     return bRet;
 }
 
+///@todo fix implementation
 bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
 {
     OSL_ENSURE( IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );

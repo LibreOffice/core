@@ -1356,13 +1356,10 @@ void SwDoc::CalculatePagesForPrinting(
         pStPage = (SwPageFrm*)pStPage->GetNext();
     }
 
-
-    //
     // now that we have identified the valid pages for printing according
     // to the print settings we need to get the PageRange to use and
     // use both results to get the actual pages to be printed
     // (post-it settings need to be taken into account later on!)
-    //
 
     // get PageRange value to use
     OUString aPageRange;
@@ -1802,7 +1799,6 @@ void SwDoc::UpdateDocStat( bool bCompleteAsync )
     }
 }
 
-// Document - info
 void SwDoc::DocInfoChgd( )
 {
     GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
@@ -2215,9 +2211,7 @@ bool SwDoc::RemoveInvisibleContent()
         }
     }
 
-    //
     // Remove any hidden paragraph (hidden text attribute)
-    //
     for( sal_uLong n = GetNodes().Count(); n; )
     {
         SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
@@ -2355,9 +2349,7 @@ bool SwDoc::HasInvisibleContent() const
     if( aIter.First( TYPE( SwFmtFld ) ) )
         bRet = true;
 
-    //
     // Search for any hidden paragraph (hidden text attribute)
-    //
     if( ! bRet )
     {
         for( sal_uLong n = GetNodes().Count(); !bRet && (n > 0); )

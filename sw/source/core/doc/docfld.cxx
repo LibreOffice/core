@@ -298,9 +298,7 @@ SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
     return pRet;
 }
 
-/*
- *    All have to be re-evaluated.
- */
+// All have to be re-evaluated.
 void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 {
     // Call Modify() for every field type,
@@ -2209,18 +2207,18 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     delete pFldSortLst;
     pFldSortLst = new _SetGetExpFlds;
 
-    /// consider and unhide sections
-    ///     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
-    ///     notes by OD:
-    ///         eGetMode == GETFLD_CALC in call from methods SwDoc::FldsToCalc
-    ///         eGetMode == GETFLD_EXPAND in call from method SwDoc::FldsToExpand
-    ///         eGetMode == GETFLD_ALL in call from method SwDoc::UpdateExpFlds
-    ///         I figured out that hidden section only have to be shown,
-    ///         if fields have updated (call by SwDoc::UpdateExpFlds) and thus
-    ///         the hide conditions of section have to be updated.
-    ///         For correct updating the hide condition of a section, its position
-    ///         have to be known in order to insert the hide condition as a new
-    ///         expression field into the sorted field list (<pFldSortLst>).
+    // consider and unhide sections
+    //     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
+    //     notes by OD:
+    //         eGetMode == GETFLD_CALC in call from methods SwDoc::FldsToCalc
+    //         eGetMode == GETFLD_EXPAND in call from method SwDoc::FldsToExpand
+    //         eGetMode == GETFLD_ALL in call from method SwDoc::UpdateExpFlds
+    //         I figured out that hidden section only have to be shown,
+    //         if fields have updated (call by SwDoc::UpdateExpFlds) and thus
+    //         the hide conditions of section have to be updated.
+    //         For correct updating the hide condition of a section, its position
+    //         have to be known in order to insert the hide condition as a new
+    //         expression field into the sorted field list (<pFldSortLst>).
     if ( eGetMode == GETFLD_ALL )
     // Collect the sections first. Supply sections that are hidden by condition
     // with frames so that the contained fields are sorted properly.
