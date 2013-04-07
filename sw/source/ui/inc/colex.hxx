@@ -61,6 +61,11 @@ public:
                                 SwPageExample(pPar, rResId ),
                                 pGridItem(0),
                                 m_bVertical(false){}
+    SwPageGridExample(Window* pPar) :
+                                SwPageExample(pPar),
+                                pGridItem(0),
+                                m_bVertical(false){}
+
     ~SwPageGridExample();
     void UpdateExample( const SfxItemSet& rSet );
 };
