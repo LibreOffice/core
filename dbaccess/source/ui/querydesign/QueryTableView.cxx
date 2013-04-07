@@ -768,7 +768,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     DBG_CHKTHIS(OQueryTableView,NULL);
     OSL_ENSURE(pTabWin != NULL, "OQueryTableView::RemoveTabWin : Window should not be NULL !");
 
-    // I need my parent so it can be infomed about the deletion
+    // I need my parent so it can be informed about the deletion
     OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
     SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
@@ -961,7 +961,7 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
         }
         else
         {
-            // Initiaisation failed
+            // Initialisation failed
             // (for example when the Connection to the database is not available at the moment)
             pTabWin->clearListBox();
             delete pTabWin;
