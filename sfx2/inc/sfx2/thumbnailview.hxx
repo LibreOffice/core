@@ -305,6 +305,7 @@ protected:
 
     ValueItemList mItemList;
     ValueItemList mFilteredItemList; ///< Cache to store the filtered items
+    ValueItemList::iterator mpStartSelRange;
     ScrollBar* mpScrBar;
     Rectangle maItemListRect;
     long mnHeaderHeight;
