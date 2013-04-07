@@ -37,7 +37,7 @@ CoreTextStyleInfo::CoreTextStyleInfo() :
 
 CoreTextStyleInfo::~CoreTextStyleInfo()
 {
-    SAL_INFO( "vcl.coretext.style", "~CoreTextStyleInfo(" << this << "), font=" << m_CTFont );
+    SAL_INFO( "vcl.coretext.style", "~CoreTextStyleInfo(" << this << ")" );
 
     SafeCFRelease(m_CTFont);
     SafeCFRelease(m_CTParagraphStyle);
@@ -52,8 +52,6 @@ long CoreTextStyleInfo::GetFontStretchedSize() const
 
 void CoreTextStyleInfo::SetFont(FontSelectPattern* requested_font)
 {
-    SAL_INFO( "vcl.coretext.style", "SetFont(" << this );
-
     if(!requested_font)
     {
         SafeCFRelease(m_CTFont);
@@ -93,14 +91,10 @@ void CoreTextStyleInfo::SetFont(FontSelectPattern* requested_font)
     /* FIXME: pass attribute to take into accout 'VerticalStyle' */
     /* FIXME: how to deal with 'rendering options' i.e anti-aliasing, does it even matter in CoreText ? */
     m_CTFont = CTFontCreateCopyWithAttributes(m_font_face->GetCTFont(), font_size, &m_matrix, NULL);
-
-    SAL_INFO( "vcl.coretext.style", "  font=" << m_CTFont );
 }
 
 void CoreTextStyleInfo::SetColor(SalColor color)
 {
-    SAL_INFO( "vcl.coretext.style", "SetColor(" << this << ",color={" << (int)SALCOLOR_RED(color) << "," << (int)SALCOLOR_GREEN(color) << "," << (int)SALCOLOR_BLUE(color) << "})" );
-
     SafeCFRelease(m_color);
 #ifdef IOS
     // No CGColorCreateGenericRGB on iOS
@@ -115,8 +109,6 @@ void CoreTextStyleInfo::SetColor(SalColor color)
 
 void CoreTextStyleInfo::SetColor(void)
 {
-    SAL_INFO( "vcl.coretext.style",  "SetColor(" << this << ",none)" );
-
     SafeCFRelease(m_color);
 }
 
