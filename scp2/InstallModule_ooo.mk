@@ -106,6 +106,18 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	) \
 ))
 
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
+	-DGUIBASE_UNX \
+))
+endif
+
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+$(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
+	-DDBCONNECTIVITY \
+))
+endif
+
 ifeq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DDISABLE_PYUNO \

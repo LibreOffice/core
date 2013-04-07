@@ -124,6 +124,7 @@ endef
 #   of .ui files. This filelist only exists if the UIConfig contains any
 #   .ui files.
 
+gb_UIConfig_INSTDIR := share/config/soffice.cfg
 # en-US is the default, so there is no translation for it
 gb_UIConfig_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 
@@ -158,6 +159,8 @@ $(call gb_PackageSet_PackageSet_internal,$(call gb_UIConfig_get_packagesetname,$
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)),$(SRCDIR))
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)_generated),$(WORKDIR))
 
+$(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename,$(1)),$(INSTDIR))
+$(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename,$(1)_generated),$(INSTDIR))
 $(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(call gb_UIConfig_get_packagename,$(1)))
 
 $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
@@ -176,6 +179,7 @@ endef
 
 define gb_UIConfig__UIConfig_for_lang
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)),$(gb_UILocalizeTarget_WORKDIR))
+$(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)),$(INSTDIR))
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
 
@@ -183,7 +187,7 @@ endef
 
 # gb_UIConfig__package_file target package type destfile srcfile
 define gb_UIConfig__package_file
-$(call gb_Package_add_file,$(2),xml/uiconfig/$(1)/$(3)/$(4),$(5))
+$(call gb_Package_add_file,$(2),$(gb_UIConfig_INSTDIR)/$(1)/$(3)/$(4),$(5))
 
 endef
 
@@ -277,7 +281,7 @@ endef
 
 define gb_UIConfig__add_menubarfile
 $(call gb_UIMenubarTarget_UIMenubarTarget,$(2),$(3))
-$(call gb_Package_add_file,$(call gb_UIConfig_get_packagename,$(1)_generated),xml/uiconfig/$(1)/menubar/$(notdir $(2)).xml,$(subst $(WORKDIR)/,,$(call gb_UIMenubarTarget_get_target,$(2))))
+$(call gb_Package_add_file,$(call gb_UIConfig_get_packagename,$(1)_generated),$(gb_UIConfig_INSTDIR)/$(1)/menubar/$(notdir $(2)).xml,$(subst $(WORKDIR)/,,$(call gb_UIMenubarTarget_get_target,$(2))))
 $(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(call gb_UIConfig_get_packagename,$(1)_generated))
 
 $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename,$(1)_generated)) : $(call gb_UIMenubarTarget_get_target,$(2))
@@ -291,7 +295,7 @@ endef
 #
 # gb_UIConfig_add_menubarfile target file
 define gb_UIConfig_add_menubarfile
-$(call gb_UIConfig__add_menubarfile,$(1),$(2),$(SRCDIR)/$(2).xml)
+$(call gb_UIConfig__add_menubarfile,$(1),$(gb_UIConfig_INSTDIR)/$(1)/menubar/$(notdir $(2)),$(SRCDIR)/$(2).xml)
 
 endef
 
@@ -309,7 +313,7 @@ endef
 #
 # gb_UIConfig_add_generated_menubarfile target file
 define gb_UIConfig_add_generated_menubarfile
-$(call gb_UIConfig__add_menubarfile,$(1),$(2),$(WORKDIR)/$(2).xml)
+$(call gb_UIConfig__add_menubarfile,$(1),$(gb_UIConfig_INSTDIR)/$(1)/menubar/$(notdir $(2)),$(WORKDIR)/$(2).xml)
 
 endef
 
