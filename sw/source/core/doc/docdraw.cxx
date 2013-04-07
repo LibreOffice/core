@@ -67,15 +67,12 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 
-/*************************************************************************
-|*
-|*  SwDoc::GroupSelection / SwDoc::UnGroupSelection
-|*
-|*************************************************************************/
-// local method to determine positioning and
-// alignment attributes for a drawing object, which is newly connected to
-// the layout. Used for a newly formed group object <SwDoc::GroupSelection(..)>
-// and the members of a destroyed group <SwDoc::UnGroupSelection(..)>
+/** local method to determine positioning and alignment attributes for a drawing
+ *  object, which is newly connected to the layout.
+ *
+ * Used for a newly formed group object <SwDoc::GroupSelection(..)>
+ * and the members of a destroyed group <SwDoc::UnGroupSelection(..)>
+ */
 static void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                                 const SdrObject& _rSdrObj )
 {
@@ -664,7 +661,7 @@ void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 
 /** method to determine, if a layer ID belongs to the visible ones.
 
-    Note: If given layer ID is unknown, method asserts and returns <false>.
+    @note If given layer ID is unknown, method asserts and returns <false>.
 */
 bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
 {
@@ -693,8 +690,8 @@ bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
 
 /** method to determine, if the corresponding visible layer ID for a invisible one.
 
-    Note: If given layer ID is a visible one, method returns given layer ID.
-    Note: If given layer ID is unknown, method returns given layer ID.
+    @note If given layer ID is a visible one, method returns given layer ID.
+    @note If given layer ID is unknown, method returns given layer ID.
 */
 SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId )
 {
@@ -730,8 +727,8 @@ SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisible
 
 /** method to determine, if the corresponding invisible layer ID for a visible one.
 
-    Note: If given layer ID is a invisible one, method returns given layer ID.
-    Note: If given layer ID is unknown, method returns given layer ID.
+    @note If given layer ID is a invisible one, method returns given layer ID.
+    @note If given layer ID is unknown, method returns given layer ID.
 */
 SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId )
 {
@@ -822,23 +819,13 @@ void SwDoc::DrawNotifyUndoHdl()
     mpDrawModel->SetNotifyUndoActionHdl( Link() );
 }
 
-/*************************************************************************
-*
-* In the Outliner, set a link to the method for field display in edit objects.
-*
-*************************************************************************/
-
+/// In the Outliner, set a link to the method for field display in edit objects.
 void SwDoc::SetCalcFieldValueHdl(Outliner* pOutliner)
 {
     pOutliner->SetCalcFieldValueHdl(LINK(this, SwDoc, CalcFieldValueHdl));
 }
 
-/*************************************************************************
-|*
-|* Recognise fields/URLs in the Outliner and set how they are displayed.
-|*
-\************************************************************************/
-
+/// Recognise fields/URLs in the Outliner and set how they are displayed.
 IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 {
     if (pInfo)

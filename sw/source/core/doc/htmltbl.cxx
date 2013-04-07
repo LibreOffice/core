@@ -1050,10 +1050,14 @@ void SwHTMLTableLayout::AutoLayoutPass1()
     delete pConstraints;
 }
 
-// nAbsAvail is the available space in TWIPS.
-// nRelAvail is the available space related to USHRT_MAX or 0
-// nAbsSpace is the fraction of nAbsAvail, which is reserved by the surrounding
-//           cell for the border and the distance to the paragraph.
+//TODO: provide documentation
+/**
+
+    @param nAbsAvail available space in TWIPS.
+    @param nRelAvail available space related to USHRT_MAX or 0
+    @param nAbsSpace fraction of nAbsAvail, which is reserved by the surrounding
+                     cell for the border and the distance to the paragraph.
+*/
 void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAvail,
                                          sal_uInt16 nAbsLeftSpace,
                                          sal_uInt16 nAbsRightSpace,

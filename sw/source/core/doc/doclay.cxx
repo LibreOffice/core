@@ -110,15 +110,10 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
     return bResult;
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::MakeLayoutFmt()
-|*
-|*  Description: Create a new format whose settings fit to the Request by
-|*  default.
-|*  The format is put into the respective format array.
-|*  If there already is a fitting format, it is returned instead.
-|*************************************************************************/
+/** Create a new format whose settings fit to the Request by default.
+
+    The format is put into the respective format array.
+    If there already is a fitting format, it is returned instead. */
 SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
     SwFrmFmt *pFmt = 0;
@@ -203,13 +198,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     return pFmt;
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::DelLayoutFmt()
-|*
-|*  Description: Deletes the denoted format and its content.
-|*
-|*************************************************************************/
+/// Deletes the denoted format and its content.
 void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 {
     // A chain of frames needs to be merged, if necessary,
@@ -337,17 +326,12 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
     SetModified();
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::CopyLayoutFmt()
-|*
-|*  Copies the stated format (pSrc) to pDest and returns pDest.
-|*  If there's no pDest, it is created.
-|*  If the source format is located in another document, also copy correctly
-|*  in this case.
-|*  The Anchor attribute's position is always set to 0!
-|*
-|*************************************************************************/
+/** Copies the stated format (pSrc) to pDest and returns pDest.
+
+    If there's no pDest, it is created.
+    If the source format is located in another document, also copy correctly
+    in this case.
+    The Anchor attribute's position is always set to 0! */
 SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
                                 const SwFmtAnchor& rNewAnchor,
                                 bool bSetTxtFlyAtt, bool bMakeFrms )
@@ -872,8 +856,8 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
     return pFmt;
 }
 
-// Insert a DrawObject.
-// The Object has to be already registered in the DrawModel.
+/// Insert a DrawObject.
+/// The Object has to be already registered in the DrawModel.
 SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                              SdrObject& rDrawObj,
                              const SfxItemSet* pFlyAttrSet,

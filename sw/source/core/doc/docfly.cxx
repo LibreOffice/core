@@ -103,7 +103,7 @@ sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType ) const
     return nCount;
 }
 
-// If you change this, also update SwXFrameEnumeration in unocoll.
+/// @attention If you change this, also update SwXFrameEnumeration in unocoll.
 SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType )
 {
     SwFrmFmts& rFmts = *GetSpzFrmFmts();

@@ -289,12 +289,10 @@ static void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
         pColl->SetNextTxtFmtColl( *pDoc->GetTxtCollFromPool( nNxt ));
 }
 
-
-
-// Return the AutoCollection by it's Id. If it doesn't
-// exist yet, create it.
-// If the String pointer is defined, then only query for
-// the Attribute descriptions. It doesn't create a style!
+/// Return the AutoCollection by it's Id. If it doesn't
+/// exist yet, create it.
+/// If the String pointer is defined, then only query for
+/// the Attribute descriptions. It doesn't create a style!
 SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage)
 {
     SvxFrameDirection eResult = (MsLangId::isRightToLeft( static_cast<LanguageType>(nLanguage)) ?
@@ -1036,9 +1034,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
     return pNewColl;
 }
 
-
-
-// Check if this AutoCollection is already/still in use in this Document
+/// Check if this AutoCollection is already/still in use in this Document
 bool SwDoc::IsPoolTxtCollUsed( sal_uInt16 nId ) const
 {
     OSL_ENSURE(
@@ -1066,8 +1062,8 @@ bool SwDoc::IsPoolTxtCollUsed( sal_uInt16 nId ) const
     return !pNewColl->GetInfo( aGetHt );
 }
 
-// Return the AutomaticFormat with the supplied Id. If it doesn't
-// exist, create it.
+/// Return the AutomaticFormat with the supplied Id. If it doesn't
+/// exist, create it.
 SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
 {
     SwFmt *pNewFmt = 0;
@@ -1357,7 +1353,7 @@ SwCharFmt* SwDoc::GetCharFmtFromPool( sal_uInt16 nId )
     return (SwCharFmt*)GetFmtFromPool( nId );
 }
 
-// Check if this AutoCollection is already/still in use
+/// Check if this AutoCollection is already/still in use
 bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
 {
     SwFmt *pNewFmt = 0;
@@ -2260,9 +2256,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     return pNewRule;
 }
 
-
-
-// Check if this AutoCollection is already/still in use in this Document
+/// Check if this AutoCollection is already/still in use in this Document
 bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
 {
     OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,

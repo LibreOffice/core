@@ -65,9 +65,7 @@ typedef SwSortElement*      SwSortElementPtr;
 typedef ::boost::ptr_multiset<SwSortTxtElement> SwSortTxtElements;
 typedef ::boost::ptr_multiset<SwSortBoxElement> SwSortBoxElements;
 
-/*--------------------------------------------------------------------
-    Description: Construct a SortElement for the Sort
- --------------------------------------------------------------------*/
+/// Construct a SortElement for the Sort
 void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
                             FlatFndBox* pFltBx )
 {
@@ -191,9 +189,7 @@ double SwSortElement::GetValue( sal_uInt16 nKey ) const
     return StrToDouble( GetKey( nKey ));
 }
 
-/*--------------------------------------------------------------------
-    Description: SortingElement for Text
- --------------------------------------------------------------------*/
+/// SortingElement for Text
 SwSortTxtElement::SwSortTxtElement(const SwNodeIndex& rPos)
     : nOrg(rPos.GetIndex()), aPos(rPos)
 {
@@ -233,9 +229,7 @@ String SwSortTxtElement::GetKey(sal_uInt16 nId) const
     return rStr.Copy( nStart, nEnd-nStart );
 }
 
-/*--------------------------------------------------------------------
-    Description: SortingElement for Tables
- --------------------------------------------------------------------*/
+/// SortingElement for Tables
 SwSortBoxElement::SwSortBoxElement( sal_uInt16 nRC )
     : nRow( nRC )
 {
@@ -245,9 +239,7 @@ SwSortBoxElement::~SwSortBoxElement()
 {
 }
 
-/*--------------------------------------------------------------------
-    Description: Get Key for a cell
- --------------------------------------------------------------------*/
+/// Get Key for a cell
 String SwSortBoxElement::GetKey(sal_uInt16 nKey) const
 {
     const _FndBox* pFndBox;
@@ -303,9 +295,7 @@ double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const
     return nVal;
 }
 
-/*--------------------------------------------------------------------
-    Description: Sort Text in the Document
- --------------------------------------------------------------------*/
+/// Sort Text in the Document
 bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 {
     // Check if Frame is in the Text
@@ -489,9 +479,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Description: Sort Table in the Document
- --------------------------------------------------------------------*/
+/// Sort Table in the Document
 bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 {
     // Via SwDoc for Undo!
@@ -620,9 +608,7 @@ bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Description: Move a row
- --------------------------------------------------------------------*/
+/// Move a row
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
@@ -666,9 +652,7 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: Move a column
- --------------------------------------------------------------------*/
+/// Move a column
 void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
@@ -712,9 +696,7 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: Move a single Cell
- --------------------------------------------------------------------*/
+/// Move a single Cell
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
               bool bMovedBefore, SwUndoSort* pUD)
 {
@@ -767,9 +749,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
         pDoc->GetNodes().Delete( aTar, 1 );
 }
 
-/*--------------------------------------------------------------------
-    Description: Generate two-dimensional array of FndBoxes
- --------------------------------------------------------------------*/
+/// Generate two-dimensional array of FndBoxes
 FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
     pDoc(pDocPtr),
     rBoxRef(rBox),
@@ -803,9 +783,7 @@ FlatFndBox::~FlatFndBox()
         delete [] ppItemSets;
 }
 
-/*--------------------------------------------------------------------
-    Description: All Lines of a Box need to have same number of Boxes
- --------------------------------------------------------------------*/
+/// All Lines of a Box need to have same number of Boxes
 bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 {
     const _FndLines &rLines = rBox.GetLines();
@@ -827,10 +805,7 @@ bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Description: Check Box for symmetry
-                 All Boxes of a Line need to have same number of Lines
- --------------------------------------------------------------------*/
+/// Check Box for symmetry (All Boxes of a Line need to have same number of Lines)
 bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 {
     const _FndBoxes &rBoxes = rLn.GetBoxes();
@@ -852,9 +827,7 @@ bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Description: Maximum count of Columns (Boxes)
- --------------------------------------------------------------------*/
+/// Maximum count of Columns (Boxes)
 sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
 {
     const _FndLines& rLines = rBox.GetLines();
@@ -879,9 +852,7 @@ sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
     return nSum;
 }
 
-/*--------------------------------------------------------------------
-    Description: Maximum count of Rows (Lines)
- --------------------------------------------------------------------*/
+/// Maximum count of Rows (Lines)
 sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
 {
     const _FndLines& rLines = rBox.GetLines();
@@ -903,9 +874,7 @@ sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
     return nLines;
 }
 
-/*--------------------------------------------------------------------
-    Description: Create a linear array of atmoic FndBoxes
- --------------------------------------------------------------------*/
+/// Create a linear array of atmoic FndBoxes
 void FlatFndBox::FillFlat(const _FndBox& rBox, bool bLastBox)
 {
     bool bModRow = false;
@@ -964,9 +933,7 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, bool bLastBox)
         nRow = nOldRow;
 }
 
-/*--------------------------------------------------------------------
-    Description: Access a specific Cell
- --------------------------------------------------------------------*/
+/// Access a specific Cell
 const _FndBox* FlatFndBox::GetBox(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
     sal_uInt16 nOff = n_Row * nCols + n_Col;

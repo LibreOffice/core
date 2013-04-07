@@ -466,7 +466,7 @@ static void DeleteAndDestroy(SwGrfFmtColls& rFmts, int aStartIdx, int aEndIdx)
     rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
 }
 
-/*
+/**
  * Speciality: a member of the class SwDoc is located at
  * position 0 in the array of the Format and GDI objects.
  * This MUST not be destroyed using 'delete' in any case!
@@ -928,9 +928,7 @@ SwModify*   SwDoc::GetUnoCallBack() const
 }
 
 
-/** SwDoc:
- *  Reading and writing of the layout cache.
- *--------------------------------------------------*/
+/** SwDoc: Reading and writing of the layout cache. */
 void SwDoc::ReadLayoutCache( SvStream& rStream )
 {
     if( !mpLayoutCache )

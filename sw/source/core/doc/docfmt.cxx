@@ -85,7 +85,7 @@ static void SetTxtFmtCollNext( SwTxtFmtColl* pTxtColl, const SwTxtFmtColl* pDel 
  * Reset the text's hard formatting
  */
 
-// Parameters for _Rst and lcl_SetTxtFmtColl
+/// Parameters for _Rst and lcl_SetTxtFmtColl
 struct ParaRstFmt
 {
     SwFmtColl* pFmtColl;
@@ -130,10 +130,9 @@ struct ParaRstFmt
     {}
 };
 
-/* pArgs contains the document's ChrFmtTable
- * Is need for selections at the beginning/end and with no SSelection.
+/** @params pArgs contains the document's ChrFmtTable
+ *                Is need for selections at the beginning/end and with no SSelection.
  */
-
 static bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
@@ -490,9 +489,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
 #define DELETECHARSETS if ( bDelete ) { delete pCharSet; delete pOtherSet; }
 
-// Insert Hints according to content types;
+/// Insert Hints according to content types;
 // Is used in SwDoc::Insert(..., SwFmtHint &rHt)
-
 static bool
 lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             const SetAttrMode nFlags, SwUndoAttr *const pUndo,bool bExpandCharToPara=false)
@@ -1052,7 +1050,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
     return (nNodes != 0) || bRet;
 }
 
-//Add a para for the char attribute exp...
+///Add a para for the char attribute exp...
 bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
                             const SetAttrMode nFlags, bool bExpandCharToPara)
 {
@@ -1101,9 +1099,8 @@ bool SwDoc::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
     return bRet;
 }
 
-
-    // Set the attribute according to the stated format. If Undo is enabled, the old values is
-    // added to the Undo history.
+/// Set the attribute according to the stated format.
+/// If Undo is enabled, the old values is added to the Undo history.
 void SwDoc::SetAttr( const SfxPoolItem& rAttr, SwFmt& rFmt )
 {
     SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
@@ -1111,9 +1108,8 @@ void SwDoc::SetAttr( const SfxPoolItem& rAttr, SwFmt& rFmt )
     SetAttr( aSet, rFmt );
 }
 
-
-     // Set the attribute according to the stated format. If Undo is enabled, the old values is
-     // added to the Undo history.
+/// Set the attribute according to the stated format.
+/// If Undo is enabled, the old values is added to the Undo history.
 void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
 {
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1181,8 +1177,8 @@ static int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
     return sal_True;
 }
 
-// Set the attribute as new default attribute in this document.
-// If Undi is enabled, the old value is added to the Undo history.
+/// Set the attribute as new default attribute in this document.
+/// If Undo is enabled, the old value is added to the Undo history.
 void SwDoc::SetDefault( const SfxPoolItem& rAttr )
 {
     SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
@@ -1310,15 +1306,13 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     SetModified();
 }
 
-// Get the default attribute in this document
+/// Get the default attribute in this document
 const SfxPoolItem& SwDoc::GetDefault( sal_uInt16 nFmtHint ) const
 {
     return GetAttrPool().GetDefaultItem( nFmtHint );
 }
 
-/*
- * Delete the formats
- */
+/// Delete the formats
 void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
 {
     SwCharFmt * pDel = (*mpCharFmtTbl)[nFmt];
@@ -1399,9 +1393,7 @@ void SwDoc::DelTblFrmFmt( SwTableFmt *pFmt )
     mpTblFrmFmtTbl->erase(it);
 }
 
-/*
- * Create the formats
- */
+/// Create the formats
 SwFlyFrmFmt *SwDoc::MakeFlyFrmFmt( const String &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
@@ -1538,12 +1530,7 @@ SwFmt *SwDoc::_MakeCharFmt(const String &rFmtName,
     return dynamic_cast<SwFmt*>(pCharFmt);
 }
 
-
-/*
- * Create the FormatCollections
- */
-// TXT
-// #i40550# - add parameter <bAuto> - not relevant
+/// Create the FormatCollections
 SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
                                      SwTxtFmtColl *pDerivedFrom,
                                      bool bBroadcast,
@@ -1756,9 +1743,7 @@ bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
     return bRet;
 }
 
-
-// ---- Copy the formats to itself (SwDoc) ----------------------
-
+/// Copy the formats to itself
 SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
                         const SwFmtsBase& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt )
@@ -1794,8 +1779,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
     return pNewFmt;
 }
 
-
-// ---- copy the frame format --------
+/// copy the frame format
 SwFrmFmt* SwDoc::CopyFrmFmt( const SwFrmFmt& rFmt )
 {
 
@@ -1803,7 +1787,7 @@ SwFrmFmt* SwDoc::CopyFrmFmt( const SwFrmFmt& rFmt )
                                 *GetDfltFrmFmt() );
 }
 
-// ---- copy the char format --------
+/// copy the char format
 SwCharFmt* SwDoc::CopyCharFmt( const SwCharFmt& rFmt )
 {
     return (SwCharFmt*)CopyFmt( rFmt, *GetCharFmts(),
@@ -1811,9 +1795,7 @@ SwCharFmt* SwDoc::CopyCharFmt( const SwCharFmt& rFmt )
                                 *GetDfltCharFmt() );
 }
 
-
-// --- copy TextNodes ----
-
+/// copy TextNodes
 SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
 {
     SwTxtFmtColl* pNewColl = FindTxtFmtCollByName( rColl.GetName() );
@@ -1882,8 +1864,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     return pNewColl;
 }
 
-// --- copy the graphic nodes ----
-
+/// copy the graphic nodes
 SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
 {
     SwGrfFmtColl* pNewColl = FindGrfFmtCollByName( rColl.GetName() );

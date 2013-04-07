@@ -273,8 +273,8 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
     }
 }
 
-// Delete and move all Flys at the paragraph, that are within the selection.
-// If there is a Fly at the SPoint, it is moved onto the Mark.
+/// Delete and move all Flys at the paragraph, that are within the selection.
+/// If there is a Fly at the SPoint, it is moved onto the Mark.
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx )
 {
@@ -674,8 +674,8 @@ void _SaveRedlEndPosForRestore::_Restore()
     }
 }
 
-// Delete a full Section of the NodeArray.
-// The passed Node is located somewhere in the designated Section.
+/// Delete a full Section of the NodeArray.
+/// The passed Node is located somewhere in the designated Section.
 void SwDoc::DeleteSection( SwNode *pNode )
 {
     OSL_ENSURE( pNode, "Didn't pass a Node." );
@@ -1206,7 +1206,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     return sal_True;
 }
 
-// Convert list of ranges of whichIds to a corresponding list of whichIds
+/// Convert list of ranges of whichIds to a corresponding list of whichIds
 static std::vector<sal_uInt16> * lcl_RangesToVector(sal_uInt16 * pRanges)
 {
     std::vector<sal_uInt16> * pResult = new std::vector<sal_uInt16>();

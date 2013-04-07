@@ -425,15 +425,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::DelPageDesc()
-|*
-|*  Description: All descriptors whose Follow point to the to-be-deleted
-|*  have to be adapted.
-|*
-|*************************************************************************/
-
+/// All descriptors whose Follow point to the to-be-deleted have to be adapted.
 // #i7983#
 void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
 {

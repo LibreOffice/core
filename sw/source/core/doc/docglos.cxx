@@ -95,9 +95,7 @@ static void lcl_copyDocumentProperties(
     }
 }
 
-/* --------------------------------------------------
-    Description: inserts an AutoText block
- --------------------------------------------------*/
+/// inserts an AutoText block
 bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                             SwPaM& rPaM, SwCrsrShell* pShell )
 {

@@ -115,9 +115,7 @@ sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) con
     return rArr.size();
 }
 
-/*--------------------------------------------------------------------
-  Description: Get current table of contents Mark.
- --------------------------------------------------------------------*/
+/// Get current table of contents Mark.
 sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
                                 SwTOXMarks& rArr ) const
 {
@@ -155,9 +153,7 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
     return rArr.size();
 }
 
-/*--------------------------------------------------------------------
-  Description: Delete table of contents Mark
- --------------------------------------------------------------------*/
+/// Delete table of contents Mark
 void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 {
     // hole den TextNode und
@@ -189,9 +185,7 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
     SetModified();
 }
 
-/*--------------------------------------------------------------------
-  Description: Travel between table of content Marks
- --------------------------------------------------------------------*/
+/// Travel between table of content Marks
 class CompareNodeCntnt
 {
     sal_uLong nNode;
@@ -426,9 +420,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd
     return pNewSection;
 }
 
-/*--------------------------------------------------------------------
-  Description: Get current table of contents
- --------------------------------------------------------------------*/
+/// Get current table of contents
 const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
 {
     const SwNode& rNd = rPos.nNode.GetNode();
@@ -498,9 +490,7 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
     (*prBase) = new SwTOXBase(rBase);
 }
 
-/*--------------------------------------------------------------------
-  Description: Delete table of contents
- --------------------------------------------------------------------*/
+/// Delete table of contents
 bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 {
     // We only delete the TOX, not the Nodes
@@ -589,9 +579,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-  Description: Manage table of content types
- --------------------------------------------------------------------*/
+/// Manage table of content types
 sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 {
     sal_uInt16 nCnt = 0;
@@ -748,9 +736,7 @@ bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, bool bAtStart ) const
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-  Description: Collect table of contents content
- --------------------------------------------------------------------*/
+/// Collect table of contents content
 void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                               const bool        _bNewTOX )//swmodtest 080307
 {
@@ -1070,9 +1056,7 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
     }
 }
 
-/*--------------------------------------------------------------------
-  Description: Evaluate Template
- --------------------------------------------------------------------*/
+/// Evaluate Template
 SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( sal_uInt16 nLevel )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1120,9 +1104,7 @@ SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( sal_uInt16 nLevel )
     return pColl;
 }
 
-/*--------------------------------------------------------------------
-  Description: Create from Marks
- --------------------------------------------------------------------*/
+/// Create from Marks
 void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                     const SwTxtNode* pOwnChapterNode )
 {
@@ -1195,9 +1177,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
     }
 }
 
-/*--------------------------------------------------------------------
-  Description: Generate table of contents from outline
- --------------------------------------------------------------------*/
+/// Generate table of contents from outline
 void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1222,9 +1202,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
     }
 }
 
-/*--------------------------------------------------------------------
-  Description: Generate table of contents from template areas
- --------------------------------------------------------------------*/
+/// Generate table of contents from template areas
 void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1263,9 +1241,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
     }
 }
 
-/* --------------------------------------------------
-   Description: Generate content from sequence fields
- --------------------------------------------------*/
+/// Generate content from sequence fields
 void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1487,9 +1463,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
     }
 }
 
-/*--------------------------------------------------------------------
-  Description: Collect table entries
- --------------------------------------------------------------------*/
+/// Collect table entries
 void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1537,10 +1511,8 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
     }
 }
 
-/*--------------------------------------------------------------------
-  Description: Generate String according to the Form and remove the
-  special characters 0-31 and 255
- --------------------------------------------------------------------*/
+/// Generate String according to the Form and remove the
+/// special characters 0-31 and 255.
 static String lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel )
 {
     String sRet;
@@ -1559,10 +1531,8 @@ static String lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, 
     return sRet;
 }
 
-/*--------------------------------------------------------------------
-  Description: Generate String with newlines changed to spaces,
-  consecutive spaces changed to a single space, and trailing space removed.
- --------------------------------------------------------------------*/
+/// Generate String with newlines changed to spaces, consecutive spaces changed
+/// to a single space, and trailing space removed.
 String lcl_RemoveLineBreaks( String sRet )
 {
     xub_StrLen nOffset = 0;
@@ -1869,9 +1839,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
     }
 }
 
-/*--------------------------------------------------------------------
-  Description: Calculate PageNumber and insert after formatting
- --------------------------------------------------------------------*/
+/// Calculate PageNumber and insert after formatting
 void SwTOXBaseSection::UpdatePageNum()
 {
     if( aSortArr.empty() )
@@ -1984,10 +1952,8 @@ void SwTOXBaseSection::UpdatePageNum()
     aSortArr.clear();
 }
 
-/*--------------------------------------------------------------------
-  Description: Replace the PageNumber place holders
- --------------------------------------------------------------------*/
-// search for the page no in the array of main entry page numbers
+/// Replace the PageNumber place holders. Search for the page no. in the array
+/// of main entry page numbers.
 static bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uInt16 nToFind )
 {
     for(sal_uInt16 i = 0; pMainEntryNums && i < pMainEntryNums->size(); ++i)
@@ -2255,9 +2221,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
     aSortArr.insert(aSortArr.begin()+i, pNew);
 }
 
-/*--------------------------------------------------------------------
-  Description: Find Key Range and insert if possible
- --------------------------------------------------------------------*/
+/// Find Key Range and insert if possible
 Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReading,
                                     const SwTOXSortTabBase& rNew,
                                     sal_uInt16 nLevel, const Range& rRange )

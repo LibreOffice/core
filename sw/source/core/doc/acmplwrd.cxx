@@ -346,32 +346,36 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
     nMinWrdLen = n;
 }
 
-// Resets the current position within the tree to its root node.
+/// Reset the current position within the tree to its root node.
 void SwAutoCompleteWord::returnToRoot()
 {
     m_LookupTree->returnToRoot();
 }
 
-// Advances to a given node within the AutoComplete tree.
+/// Advance to a given node within the AutoComplete tree.
 void SwAutoCompleteWord::gotoNode(OUString sNode)
 {
     m_LookupTree->gotoNode( sNode );
 }
 
-// Advances from the current position towards the node keyed with cKey.
+/// Advance from the current position towards the node keyed with cKey.
 void SwAutoCompleteWord::advance(const sal_Unicode cKey)
 {
     m_LookupTree->advance( cKey );
 }
 
-// Goes back one char within the tree, except if the current node is already the root node.
+/// Go back one char within the tree, except if the current node is already the root node.
 void SwAutoCompleteWord::goBack()
 {
     m_LookupTree->goBack();
 }
 
-// Returns all words matching a given prefix aMatch. If bIgnoreCurrentPos is set, the current
-// position within the tree is ignored and replaced by aMatch.
+/** Return all words matching a given prefix
+ *
+ *  @param aMatch the prefix to search for
+ *  @param aWords the words to search in
+ *  @param bIgnoreCurrentPos if set, the current position within the tree is ignored and replaced by aMatch
+ */
 bool SwAutoCompleteWord::GetWordsMatching(String aMatch, std::vector<String>& aWords, bool bIgnoreCurrentPos) const
 {
     OUString aStringRoot = OUString( aMatch );
