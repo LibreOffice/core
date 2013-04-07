@@ -1326,7 +1326,7 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         sal_Int16 nFirstLineIndex,
         sal_Int16 /*nListTabPos*/,
         const String &rNumberingString,
-        const SvxBrushItem* /*pBrush*/)
+        const SvxBrushItem* pBrush)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
@@ -1361,6 +1361,17 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     }
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LEVELJC;
     m_rExport.OutULong( nVal );
+
+    // bullet
+    if (nNumberingType == SVX_NUM_BITMAP && pBrush)
+    {
+        int nIndex = m_rExport.GetGrfIndex(*pBrush);
+        if (nIndex != -1)
+        {
+            m_rExport.Strm() << LO_STRING_SVTOOLS_RTF_LEVELPICTURE;
+            m_rExport.OutULong(nIndex);
+        }
+    }
 
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LEVELSTARTAT;
     m_rExport.OutULong( nStart );
@@ -3542,6 +3553,28 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
     }
 
     m_rExport.Strm() << m_rExport.sNewLine;
+}
+
+void RtfAttributeOutput::BulletDefinition(int /*nId*/, const Graphic& rGraphic, Size aSize)
+{
+    m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT;
+    m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_PICT OOO_STRING_SVTOOLS_RTF_PNGBLIP;
+
+    m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_PICWGOAL;
+    m_rExport.OutULong(aSize.Width());
+    m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_PICHGOAL;
+    m_rExport.OutULong(aSize.Height());
+
+    m_rExport.Strm() << RtfExport::sNewLine;
+    const sal_uInt8* pGraphicAry = 0;
+    SvMemoryStream aStream;
+    if (GraphicConverter::Export(aStream, rGraphic, CVT_PNG) != ERRCODE_NONE)
+        SAL_WARN("sw.rtf", "failed to export the numbering picture bullet");
+    aStream.Seek(STREAM_SEEK_TO_END);
+    sal_uInt32 nSize = aStream.Tell();
+    pGraphicAry = (sal_uInt8*)aStream.GetData();
+    RtfAttributeOutput::WriteHex(pGraphicAry, nSize, &m_rExport.Strm());
+    m_rExport.Strm() << "}}"; // pict, shppict
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

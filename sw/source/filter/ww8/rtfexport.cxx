@@ -57,6 +57,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/configmgr.hxx>
+#include <vcl/svapp.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <iostream>
@@ -171,7 +172,7 @@ void RtfExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
 //For i120928,to export graphic of bullet for RTF filter
 void RtfExport::ExportGrfBullet(const SwTxtNode&)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    // Noop, would be too late, see WriteNumbering() instead.
 }
 
 void RtfExport::WriteChar( sal_Unicode )
@@ -224,6 +225,21 @@ void RtfExport::BuildNumbering()
     }
 }
 
+void RtfExport::BulletDefinitions()
+{
+    for (size_t i = 0; i < m_vecBulletPic.size(); ++i)
+    {
+        const MapMode aMapMode(MAP_TWIP);
+        const Graphic& rGraphic = *m_vecBulletPic[i];
+        Size aSize(rGraphic.GetPrefSize());
+        if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapMode);
+        else
+            aSize = OutputDevice::LogicToLogic(aSize,rGraphic.GetPrefMapMode(), aMapMode);
+        m_pAttrOutput->BulletDefinition(i, rGraphic, aSize);
+    }
+}
+
 void RtfExport::WriteNumbering()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
@@ -232,6 +248,14 @@ void RtfExport::WriteNumbering()
         return; // no numbering is used
 
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_LISTTABLE;
+
+    CollectGrfsOfBullets();
+    if (!m_vecBulletPic.empty())
+        Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << LO_STRING_SVTOOLS_RTF_LISTPICTURE;
+    BulletDefinitions();
+    if (!m_vecBulletPic.empty())
+        Strm() << '}';
+
     AbstractNumberingDefinitions();
     Strm() << '}';
 
