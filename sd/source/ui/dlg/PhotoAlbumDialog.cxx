@@ -99,19 +99,25 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
         Reference< lang::XMultiServiceFactory > xShapeFactory( pDoc->getUnoModel(), uno::UNO_QUERY  );
 
         // Create the title slide
-        Reference< drawing::XDrawPage > xTitleSlide = appendNewSlide(AUTOLAYOUT_TITLE, xDrawPages);
+        const sal_Int32 nSlideCount = pDoc->GetSdPageCount(PK_STANDARD);
 
-        SdPage* pFirstSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-        SvtUserOptions aUserOptions;
-        SdrObject* pTitleObj = pFirstSlide->GetPresObj(PRESOBJ_TITLE, 0);
-        SvxShapeText* pTitleText = new SvxShapeText(pTitleObj);
-        pTitleText->SetShapeType("com.sun.star.presentation.TitleTextShape");
-        pTitleText->setString(OUString("Photoalbum\n"));
+        if(nSlideCount == 1)
+        {
+            // we have created an empty presentation (probably)
+            Reference< drawing::XDrawPage > xTitleSlide = appendNewSlide(AUTOLAYOUT_TITLE, xDrawPages);
 
-        SdrObject* pTextObj = pFirstSlide->GetPresObj(PRESOBJ_TEXT, 0);
-        SvxShapeText* pTextShape = new SvxShapeText(pTextObj);
-        pTextShape->SetShapeType("com.sun.star.presentation.TextShape");
-        pTextShape->setString(OUString("Author: ") + aUserOptions.GetFullName());
+            SdPage* pFirstSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
+            SvtUserOptions aUserOptions;
+            SdrObject* pTitleObj = pFirstSlide->GetPresObj(PRESOBJ_TITLE, 0);
+            SvxShapeText* pTitleText = new SvxShapeText(pTitleObj);
+            pTitleText->SetShapeType("com.sun.star.presentation.TitleTextShape");
+            pTitleText->setString(OUString("Photoalbum\n"));
+
+            SdrObject* pTextObj = pFirstSlide->GetPresObj(PRESOBJ_TEXT, 0);
+            SvxShapeText* pTextShape = new SvxShapeText(pTextObj);
+            pTextShape->SetShapeType("com.sun.star.presentation.TextShape");
+            pTextShape->setString(OUString("Author: ") + aUserOptions.GetFullName());
+        }
 
         Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
@@ -121,10 +127,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
         if ( sOpt == "Fit to slide")
         {
             OUString sUrl;
-            OUString* pData;
+
             for( sal_Int16 i = 0; i < pImagesLst->GetEntryCount(); ++i )
             {
-                pData = (OUString*) pImagesLst->GetEntryData(i);
+                OUString* pData = (OUString*) pImagesLst->GetEntryData(i);
                 sUrl = *pData;
                 if (sUrl != "Text Box")
                 {
@@ -175,16 +181,17 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 {
                     appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
                 }
+                delete pData;
+                pData = NULL;
             }
-            delete pData;
         }
         else if( sOpt == "1 image with title" )
         {
             OUString sUrl;
-            OUString* pData;
+
             for( sal_Int16 i = 0; i < pImagesLst->GetEntryCount(); ++i )
             {
-                pData = (OUString*) pImagesLst->GetEntryData(i);
+                OUString* pData = (OUString*) pImagesLst->GetEntryData(i);
                 sUrl = *pData;
                 if ( sUrl != "Text Box" )
                 {
@@ -217,17 +224,19 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 {
                     appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
                 }
+                delete pData;
+                pData = NULL;
             }
-            delete pData;
         }
         else if( sOpt == "2 images" )
         {
             OUString sUrl1("");
             OUString sUrl2("");
-            OUString* pData;
 
             for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=2 )
             {
+                OUString* pData;
+
                 // create the slide
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
@@ -328,9 +337,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
                 }
-
+                delete pData;
+                pData = NULL;
             }
-            delete pData;
         }
         else if( sOpt == "4 images" )
         {
@@ -338,10 +347,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
             OUString sUrl2("");
             OUString sUrl3("");
             OUString sUrl4("");
-            OUString* pData;
 
             for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=4 )
             {
+                OUString* pData;
                 // create the slide
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
@@ -535,8 +544,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
                 }
+                delete pData;
+                pData = NULL;
             }
-            delete pData;
         }
         else
         {
@@ -591,7 +601,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
             // Write out configuration
             try
             {
-                Reference< XInterface > xCfg = ::comphelper::ConfigurationHelper::openConfig(
+                xCfg = ::comphelper::ConfigurationHelper::openConfig(
                     ::comphelper::getProcessComponentContext(),
                     OUString("/org.openoffice.Office.Impress/"),
                     ::comphelper::ConfigurationHelper::E_STANDARD);
@@ -895,6 +905,7 @@ Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OU
     Reference< graphic::XGraphicProvider> xProvider
 )
 {
+    // The same as above, except this returns an XGraphic from the image URL
     ::comphelper::NamedValueCollection aMediaProperties;
     aMediaProperties.put( "URL", OUString( sUrl ) );
     Reference< graphic::XGraphic> xGraphic =
