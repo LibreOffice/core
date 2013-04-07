@@ -68,7 +68,6 @@ gb_MERGEDLIBS := \
 	$(call gb_Helper_optional,DESKTOP,helplinker) \
 	hwp \
 	hyphen \
-	i18nlangtag \
 	i18nutil \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),javaloader) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),javavm) \
