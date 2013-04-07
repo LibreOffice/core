@@ -6068,6 +6068,10 @@ you must use the "--with-jdk-home" configure option explicitly])
             if test "$_jdk_ver" -lt 10500; then
                 AC_MSG_ERROR([JDK is too old, you need at least 1.5])
             fi
+            if test "$_jdk_ver" -gt 10600; then
+                JAVA_CLASSPATH_NOT_SET="1"
+            fi
+
             AC_MSG_RESULT([checked (JDK $_jdk)])
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
             if test "$_os" = "WINNT"; then
@@ -6613,6 +6617,7 @@ AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVADOC)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVAIFLAGS)
+AC_SUBST(JAVA_CLASSPATH_NOT_SET)
 AC_SUBST(JAVA_HOME)
 AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)

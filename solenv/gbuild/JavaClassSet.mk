@@ -27,7 +27,8 @@
 #*************************************************************************
 
 gb_JavaClassSet_JAVACCOMMAND := $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
-    -source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER)
+    -source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER) \
+    $(if $(JAVA_CLASSPATH_NOT_SET),-Xlint:-options)
 gb_JavaClassSet_JAVACDEBUG :=
 
 # Enforces correct dependency order for possibly generated stuff:
