@@ -437,8 +437,23 @@ End
 #endif
 #endif
 
+#define UI_FILELIST(name, file) \
+    File CONCAT2(gid_File_Share_Config_Sofficecfg_uiconfig_, name) \
+        TXT_FILE_BODY; \
+        Styles = (FILELIST); \
+        Dir = FILELIST_DIR; \
+        Name = file; \
+    End
+
 #include <langmacros.inc>
 
+#define UI_FILELIST_ALL_LANG(name, file, ext) \
+    File CONCAT3(gid_File_Share_Config_Sofficecfg_uiconfig_, name, _Lang) \
+        TXT_FILE_BODY; \
+        Styles = (FILELIST); \
+        Dir = FILELIST_DIR; \
+        EXTRA_ALL_LANG_BUT_EN_US(file, ext); \
+    End
 
 #endif // MACROS_INC
 
