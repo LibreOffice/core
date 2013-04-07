@@ -97,6 +97,7 @@ public:
 private:
     const gr_face *         mpFace; // not owned by layout
     gr_font *               mpFont; // not owned by layout
+    sal_Unicode *           mpStr;
     int                     mnSegCharOffset; // relative to ImplLayoutArgs::mpStr
     long                    mnWidth;
     std::vector<int>        mvChar2BaseGlyph;
