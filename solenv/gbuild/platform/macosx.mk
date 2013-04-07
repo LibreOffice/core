@@ -369,8 +369,8 @@ $(call gb_ExternalExecutable_get_command,xsltproc) -o $(1) $(UI_MENUBAR_XSLT) $(
 endef
 
 define gb_UIMenubarTarget_UIMenubarTarget_platform
-$(call gb_UIMenubarTarget_get_target,$(1)) : UI_MENUBAR_XSLT := $(SRCDIR)/postprocess/packconfig/macosx/macosx_menubar_modification.xsl
-$(call gb_UIMenubarTarget_get_target,$(1)) : $(SRCDIR)/postprocess/packconfig/macosx/macosx_menubar_modification.xsl
+$(call gb_UIMenubarTarget_get_target,$(1)) : UI_MENUBAR_XSLT := $(SRCDIR)/solenv/bin/macosx_menubar_modification.xsl
+$(call gb_UIMenubarTarget_get_target,$(1)) : $(SRCDIR)/solenv/bin/macosx_menubar_modification.xsl
 $(call gb_UIMenubarTarget_get_target,$(1)) :| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 
 endef
