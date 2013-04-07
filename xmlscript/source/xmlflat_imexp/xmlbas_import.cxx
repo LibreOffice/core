@@ -221,13 +221,11 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                     }
                     catch ( const container::ElementExistException& e )
                     {
-                        OSL_TRACE( "BasicLibrariesElement::startChildElement: caught ElementExceptionExist reason %s",
-                            OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught ElementExceptionExist reason " << e.Message );
                     }
                     catch ( const lang::IllegalArgumentException& e )
                     {
-                        OSL_TRACE( "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason %s",
-                            OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason " << e.Message );
                     }
                 }
             }
@@ -263,8 +261,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                     }
                     catch ( const lang::IllegalArgumentException& e )
                     {
-                        OSL_TRACE( "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason %s",
-                            OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason " << e.Message );
                     }
                 }
             }
@@ -306,8 +303,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
         catch ( const lang::WrappedTargetException& e )
         {
-            OSL_TRACE( "BasicEmbeddedLibraryElement CTOR: caught WrappedTargetException reason %s",
-                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("xmlscript.xmlflat", "BasicEmbeddedLibraryElement CTOR: caught WrappedTargetException reason " << e.Message );
         }
     }
 
@@ -451,18 +447,15 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
         catch ( const container::ElementExistException& e )
         {
-            OSL_TRACE( "BasicSourceCodeElement::endElement: caught ElementExceptionExist reason %s",
-                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught ElementExceptionExist reason " << e.Message );
         }
         catch ( const lang::IllegalArgumentException& e )
         {
-            OSL_TRACE( "BasicSourceCodeElement::endElement: caught IllegalArgumentException reason %s",
-                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught IllegalArgumentException reason " << e.Message );
         }
         catch ( const lang::WrappedTargetException& e )
         {
-            OSL_TRACE( "BasicSourceCodeElement::endElement: caught WrappedTargetException reason %s",
-                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught WrappedTargetException reason " << e.Message );
         }
     }
 
@@ -552,7 +545,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
                     xPSet->getPropertyValue("BasicLibraries" ) >>= xLibContainer;
             }
 
-            OSL_ENSURE( xLibContainer.is(), "BasicImport::startRootElement: nowhere to import to!" );
+            SAL_WARN_IF( !xLibContainer.is(), "xmlscript.xmlflat", "BasicImport::startRootElement: nowhere to import to!" );
 
             if ( xLibContainer.is() )
             {

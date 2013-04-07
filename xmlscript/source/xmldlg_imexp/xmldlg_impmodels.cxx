@@ -65,7 +65,7 @@ Reference< xml::input::XElement > Frame::startChildElement(
     }
     else
     {
-        OSL_TRACE("****** ARGGGGG!!!! **********");
+        SAL_INFO("xmlscript.xmldlg","****** ARGGGGG!!!! **********");
         throw     xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
@@ -574,7 +574,7 @@ void FormattedFieldElement::endElement()
         }
         catch (const util::MalformedNumberFormatException & exc)
         {
-            OSL_FAIL( "### util::MalformedNumberFormatException occurred!" );
+           SAL_WARN( "xmlscript.xmldlg", "### util::MalformedNumberFormatException occurred!" );
             // rethrow
             throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), Any() );
         }
@@ -1121,7 +1121,7 @@ void TextFieldElement::endElement()
     OUString aValue;
     if (getStringAttr( &aValue, "echochar", _xAttributes, _pImport->XMLNS_DIALOGS_UID ) && !aValue.isEmpty() )
     {
-        OSL_ENSURE( aValue.getLength() == 1, "### more than one character given for echochar!" );
+        SAL_WARN_IF( aValue.getLength() != 1, "xmlscript.xmldlg", "### more than one character given for echochar!" );
         sal_Int16 nChar = (sal_Int16)aValue[ 0 ];
         xControlModel->setPropertyValue( "EchoChar", makeAny( nChar ) );
     }
@@ -1377,7 +1377,7 @@ Reference< xml::input::XElement > MenuPopupElement::startChildElement(
     else if ( rLocalName == "menuitem" )
     {
         OUString aValue( xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID,"value" ) );
-        OSL_ENSURE( !aValue.isEmpty(), "### menuitem has no value?" );
+        SAL_WARN_IF( aValue.isEmpty(), "xmlscript.xmldlg", "### menuitem has no value?" );
         if (!aValue.isEmpty())
         {
             _itemValues.push_back( aValue );
