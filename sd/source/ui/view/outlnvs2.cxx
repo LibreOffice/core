@@ -295,6 +295,23 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             Cancel();
         }
         break;
+
+        case SID_PHOTOALBUM:
+        {
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            VclAbstractDialog* pDlg = pFact ? pFact->CreateSdPhotoAlbumDialog(
+                GetActiveWindow(),
+                GetDoc()) : 0;
+
+            if (pDlg)
+            {
+                pDlg->Execute();
+                delete pDlg;
+            }
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
     }
 
     if(HasCurrentFunction())
