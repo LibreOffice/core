@@ -53,8 +53,16 @@ public:
     virtual void Simplify( bool bIsBase );
 
 private:
+    void GetMeasurements();
     void InvalidateMeasurements();
-    bool InitGIA( ImplLayoutArgs &rArgs ) const;
+    void ApplyDXArray( ImplLayoutArgs& );
+    void Justify( long );
+
+#ifndef NDEBUG
+    int mnSavedMinCharPos;
+    int mnSavedEndCharPos;
+    sal_Unicode *mpSavedStr;
+#endif
 
     QuartzSalGraphics* mpGraphics;
     CoreTextStyleInfo* mpStyle;
@@ -88,6 +96,9 @@ private:
 };
 
 CoreTextLayout::CoreTextLayout(QuartzSalGraphics* graphics, CoreTextStyleInfo* style) :
+#ifndef NDEBUG
+    mpSavedStr(NULL),
+#endif
     mpGraphics(graphics),
     mpStyle(style),
     mnCharCount(-1),
@@ -112,6 +123,11 @@ CoreTextLayout::CoreTextLayout(QuartzSalGraphics* graphics, CoreTextStyleInfo* s
 CoreTextLayout::~CoreTextLayout()
 {
     InvalidateMeasurements();
+    SafeCFRelease(mpTypesetter);
+    SafeCFRelease(mpLine);
+#ifndef NDEBUG
+    delete[] mpSavedStr;
+#endif
     SAL_INFO( "vcl.coretext.layout", "~CoreTextLayout(" << this << ")" );
 }
 
@@ -119,16 +135,45 @@ void CoreTextLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     SAL_INFO( "vcl.coretext.layout", "AdjustLayout(" << this << ",rArgs=" << rArgs << ")" );
 
-    InvalidateMeasurements();
+#ifndef NDEBUG
+    assert( mnSavedMinCharPos == rArgs.mnMinCharPos );
+    assert( mnSavedEndCharPos == rArgs.mnEndCharPos );
+    assert( memcmp( &mpSavedStr[mnSavedMinCharPos],
+                    &rArgs.mpStr[mnSavedMinCharPos],
+                    (mnSavedEndCharPos - mnSavedMinCharPos) * sizeof( sal_Unicode ) ) == 0 );
+#endif
+
     SalLayout::AdjustLayout( rArgs );
-    mnCharCount = mnEndCharPos - mnMinCharPos;
-    InitGIA( rArgs );
+
+    // adjust positions if requested
+    if( rArgs.mpDXArray )
+        ApplyDXArray( rArgs );
+    else if( rArgs.mnLayoutWidth )
+        Justify( rArgs.mnLayoutWidth );
+    else
+        return;
+}
+
+void CoreTextLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
+{
+    Justify( rArgs.mpDXArray[mnCharCount-1] );
+}
+
+void CoreTextLayout::Justify( long nNewWidth )
+{
+    CTLineRef justifiedLine = CTLineCreateJustifiedLine( mpLine, 1.0, nNewWidth );
+    if ( !justifiedLine ) {
+        SAL_INFO( "vcl.coretext.layout", "ApplyDXArray(): CTLineCreateJustifiedLine() failed" );
+    } else {
+        CFRelease( mpLine );
+        mpLine = justifiedLine;
+    }
+
+    GetMeasurements();
 }
 
 void CoreTextLayout::InvalidateMeasurements()
 {
-    SAL_INFO( "vcl.coretext.layout", "InvalidateMeasurements(" << this << ")" );
-
     if( mpGlyphs ) {
         delete[] mpGlyphs;
         mpGlyphs = NULL;
@@ -149,8 +194,6 @@ void CoreTextLayout::InvalidateMeasurements()
         delete[] mpGlyphPositions;
         mpGlyphPositions = NULL;
     }
-    SafeCFRelease(mpTypesetter);
-    SafeCFRelease(mpLine);
     mbHasBoundRectangle = false;
 }
 
@@ -227,25 +270,22 @@ void CoreTextLayout::DropGlyph( int /*nStart*/ )
 
 long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
-    SAL_INFO( "vcl.coretext.layout", "FillDXArray(" << this << ")" );
-
-    // short circuit requests which don't need full details
+    // Short circuit requests which don't need full details
     if( !pDXArray ) {
-        SAL_INFO( "vcl.coretext.layout", "FillDXArray() returning GetTextWidth()" );
         return GetTextWidth();
     }
 
-    // distribute the widths among the string elements
+    // Distribute the widths among the string elements
     long width = 0;
     float scale = mpStyle->GetFontStretchFactor();
-    CGFloat accumulated_width = 0;
+    CGFloat accumulatedWidth = 0;
 
     std::ostringstream DXArrayInfo;
     for( int i = 0; i < mnCharCount; ++i ) {
-        // convert and adjust for accumulated rounding errors
-        accumulated_width += mpCharWidths[ i ];
+        // Convert and adjust for accumulated rounding errors
+        accumulatedWidth += mpCharWidths[ i ];
         const long old_width = width;
-        width = round_to_long( accumulated_width * scale );
+        width = round_to_long( accumulatedWidth * scale );
         pDXArray[i] = width - old_width;
 #ifdef SAL_LOG_INFO
         if ( i < 7 )
@@ -255,7 +295,7 @@ long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
 #endif
     }
 
-    SAL_INFO( "vcl.coretext.layout", "FillDXArray():" << DXArrayInfo.str() << ", result=" << width );
+    SAL_INFO( "vcl.coretext.layout", "FillDXArray(" << this << "):" << DXArrayInfo.str() << ", result=" << width );
 
     return width;
 }
@@ -454,19 +494,22 @@ void CoreTextLayout::InitFont() const
     SAL_INFO( "vcl.coretext.layout", "InitFont(" << this << ")" );
 }
 
-bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
+bool CoreTextLayout::LayoutText( ImplLayoutArgs& rArgs)
 {
-    SAL_INFO( "vcl.coretext.layout", "InitGIA(" << this << "): " << mnCharCount << ":" << rArgs.mnMinCharPos << "--" << mnEndCharPos );
+    SAL_INFO( "vcl.coretext.layout", "LayoutText(" << this << ",rArgs=" << rArgs << ")" );
 
-    if ( mnCharCount <= 0) {
-        SAL_INFO( "vcl.coretext.layout", "InitGIA(): mnCharCount is non-positive, returning false" );
+    mnCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
+
+    /* don't layout empty (or worse negative size) strings */
+    if(mnCharCount <= 0)
         return false;
-    }
 
-    if ( mpGlyphs ) {
-        SAL_INFO( "vcl.coretext.layout", "InitGIA(): mpGlyphs is non-NULL, returning true" );
-        return true;
-    }
+#ifndef NDEBUG
+    mnSavedMinCharPos = rArgs.mnMinCharPos;
+    mnSavedEndCharPos = rArgs.mnEndCharPos;
+    mpSavedStr = new sal_Unicode[mnCharCount];
+    memcpy( mpSavedStr, &rArgs.mpStr[mnSavedMinCharPos], mnCharCount * sizeof( sal_Unicode ) );
+#endif
 
     // Note that unlike the ATSUI code, we store only the part of the
     // buffer addressed by mnMinCharPos--mnEndCharPos. Not the whole
@@ -474,7 +517,7 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
     // mpTypesetter should be relative to mnMinCharPos.
     CFStringRef string = CFStringCreateWithCharacters( NULL, &(rArgs.mpStr[rArgs.mnMinCharPos]), mnCharCount );
     if ( !string ) {
-        SAL_INFO( "vcl.coretext.layout", "InitGIA(): CFStringCreateWithCharacter() returned NULL, returning false" );
+        SAL_INFO( "vcl.coretext.layout", "  CFStringCreateWithCharacter() returned NULL, returning false" );
         return false;
     }
 
@@ -495,35 +538,35 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
     CFRelease( string );
     CFRelease( attributes );
     if ( !attributed_string ) {
-        SAL_INFO( "vcl.coretext.layout", "InitGIA(): CFAttributedStringCreate() returned NULL, returning false" );
+        SAL_INFO( "vcl.coretext.layout", "  CFAttributedStringCreate() returned NULL, returning false" );
         return false;
     }
 
     mpTypesetter = CTTypesetterCreateWithAttributedString( attributed_string );
     CFRelease( attributed_string );
     if ( !mpTypesetter ) {
-        SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTTypesetterCreateWithAttributedString() returned NULL, returning false" );
+        SAL_INFO( "vcl.coretext.layout", "  CTTypesetterCreateWithAttributedString() returned NULL, returning false" );
         return false;
     }
 
     mpLine = CTTypesetterCreateLine( mpTypesetter, CFRangeMake( 0, 0 ) );
     if ( !mpLine ) {
-        SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTTypesetterCreateLine() returned NULL, returning false" );
+        SAL_INFO( "vcl.coretext.layout", "  CTTypesetterCreateLine() returned NULL, returning false" );
         return false;
     }
 
-    if ( rArgs.mpDXArray ) {
-        CTLineRef justifiedLine = CTLineCreateJustifiedLine( mpLine, 1.0, rArgs.mpDXArray[mnCharCount-1] );
-        if ( !justifiedLine ) {
-            SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTLineCreateJustifiedLine() failed" );
-        } else {
-            SAL_INFO( "vcl.coretext.layout", "InitGIA(): Created justified line" );
-            CFRelease( mpLine );
-            mpLine = justifiedLine;
-        }
-    }
-
     mnGlyphCount = CTLineGetGlyphCount( mpLine );
+
+    GetMeasurements();
+
+    SAL_INFO( "vcl.coretext.layout", "LayoutText() returning,  mnGlyphCount=" << mnGlyphCount );
+
+    return true;
+}
+
+void CoreTextLayout::GetMeasurements()
+{
+    InvalidateMeasurements();
 
     mpGlyphs = new CGGlyph[ mnGlyphCount ];
     mpCharWidths = new CGFloat[ mnCharCount ];
@@ -603,29 +646,8 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
     }
     SAL_INFO( "vcl.coretext.layout", "  char widths:" << charWidthInfo.str() );
 #endif
-
-    SAL_INFO( "vcl.coretext.layout", "InitGIA() returning normally true" );
-    return true;
 }
 
-bool CoreTextLayout::LayoutText( ImplLayoutArgs& rArgs)
-{
-    SAL_INFO( "vcl.coretext.layout", "LayoutText(" << this << ",rArgs=" << rArgs << ")" );
-
-    mpStyle->SetColor();
-
-    AdjustLayout( rArgs );
-
-    /* don't layout empty (or worse negative size) strings */
-    if(mnCharCount <= 0) {
-        SAL_INFO( "vcl.coretext.layout", "LayoutText(): mnCharCount non-positive, returning false!" );
-        return false;
-    }
-
-    SAL_INFO( "vcl.coretext.layout", "LayoutText() returning,  mnGlyphCount=" << mnGlyphCount );
-
-    return true;
-}
 
 // not needed. CoreText manage fallback directly
 void CoreTextLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ )
