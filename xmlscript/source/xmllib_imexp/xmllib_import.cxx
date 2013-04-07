@@ -114,7 +114,7 @@ LibElementBase::~LibElementBase()
 
 #if OSL_DEBUG_LEVEL > 1
     OString aStr( OUStringToOString( _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "LibElementBase::~LibElementBase(): %s", aStr.getStr() );
+    SAL_INFO("xmlscript.xmllib", "LibElementBase::~LibElementBase(): " << aStr.getStr() );
 #endif
 }
 
@@ -183,7 +183,7 @@ LibraryImport::~LibraryImport()
     SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "LibraryImport::~LibraryImport()." );
+    SAL_INFO("xmlscript.xmllib", "LibraryImport::~LibraryImport()." );
 #endif
 }
 

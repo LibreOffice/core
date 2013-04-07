@@ -302,6 +302,14 @@ certain functionality.
 @li @c xmlsecurity.helper
 @li @c xmlsecurity.xmlsec - xmlsec wrapper
 
+@section xmlscript
+
+@li @c xmlscript.xmlhelper
+@li @c xmlscript.xmldlg
+@li @c xmlscript.xmlflat
+@li @c xmlscript.xmllib
+@li @c xmlscript.xmlmod
+
 @section dbaccess
 
 @li @c dbaccess

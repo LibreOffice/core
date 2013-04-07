@@ -136,7 +136,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             break;
         }
         default:
-            OSL_FAIL( "### unexpected border value!" );
+            SAL_WARN( "xmlscript.xmldlg", "### unexpected border value!" );
             break;
         }
     }
@@ -156,7 +156,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":look", "simple" );
             break;
         default:
-            OSL_FAIL( "### unexpected visual effect value!" );
+            SAL_WARN( "xmlscript.xmldlg", "### unexpected visual effect value!" );
             break;
         }
     }
@@ -210,7 +210,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-family", "system" );
                 break;
             default:
-                OSL_FAIL( "### unexpected font-family!" );
+                SAL_WARN( "xmlscript.xmldlg", "### unexpected font-family!" );
                 break;
             }
         }
@@ -250,7 +250,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-charset", "symbol" );
                 break;
             default:
-                OSL_FAIL( "### unexpected font-charset!" );
+                SAL_WARN( "xmlscript.xmldlg", "### unexpected font-charset!" );
                 break;
             }
         }
@@ -266,7 +266,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-pitch", "variable" );
                 break;
             default:
-                OSL_FAIL( "### unexpected font-pitch!" );
+                SAL_WARN( "xmlscript.xmldlg", "### unexpected font-pitch!" );
                 break;
             }
         }
@@ -298,7 +298,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-slant", "reverse_italic" );
                 break;
             default:
-                OSL_FAIL( "### unexpected font-slant!" );
+                SAL_WARN( "xmlscript.xmldlg", "### unexpected font-slant!" );
                 break;
             }
         }
@@ -359,7 +359,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-underline", "boldwave" );
                 break;
             default:
-                OSL_FAIL( "### unexpected font-underline!" );
+                SAL_WARN( "xmlscript.xmldlg", "### unexpected font-underline!" );
                 break;
             }
         }
@@ -384,7 +384,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-strikeout", "x" );
                 break;
             default:
-                OSL_FAIL( "### unexpected font-strikeout!" );
+                SAL_WARN( "xmlscript.xmldlg", "### unexpected font-strikeout!" );
                 break;
             }
         }
@@ -418,7 +418,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-type", "scalable" );
                 break;
             default:
-                OSL_FAIL( "### unexpected font-type!" );
+                SAL_WARN( "xmlscript.xmldlg", "### unexpected font-type!" );
                 break;
             }
         }
@@ -436,7 +436,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-relief", "engraved" );
             break;
         default:
-            OSL_FAIL( "### unexpected font-relief!" );
+            SAL_WARN( "xmlscript.xmldlg", "### unexpected font-relief!" );
             break;
         }
         // dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
@@ -463,7 +463,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-emphasismark", "below" );
             break;
         default:
-            OSL_FAIL( "### unexpected font-emphasismark!" );
+            SAL_WARN( "xmlscript.xmldlg", "### unexpected font-emphasismark!" );
             break;
         }
     }
@@ -522,7 +522,7 @@ void ElementDescriptor::readStringAttr(
         if (a >>= v)
             addAttribute( rAttrName, v );
         else
-            OSL_FAIL( "### unexpected property type!" );
+            SAL_WARN( "xmlscript.xmldlg", "### unexpected property type!" );
     }
 }
 
@@ -590,7 +590,7 @@ void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString
                 addAttribute( rAttrName, "short_YYYYMMDD_DIN5008" );
                 break;
             default:
-                OSL_FAIL( "### unexpected date format!" );
+                SAL_WARN( "xmlscript.xmldlg", "### unexpected date format!" );
                 break;
             }
         }
@@ -625,7 +625,7 @@ void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString
                 addAttribute( rAttrName, "Duration_long" );
                 break;
             default:
-                OSL_FAIL( "### unexpected time format!" );
+                SAL_WARN( "xmlscript.xmldlg", "### unexpected time format!" );
                 break;
             }
         }
@@ -651,7 +651,7 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
                 addAttribute( rAttrName, "right" );
                 break;
             default:
-                OSL_FAIL( "### illegal alignment value!" );
+                SAL_WARN( "xmlscript.xmldlg", "### illegal alignment value!" );
                 break;
             }
         }
@@ -679,7 +679,7 @@ void ElementDescriptor::readVerticalAlignAttr( OUString const & rPropName, OUStr
                 addAttribute( rAttrName, "bottom" );
                 break;
             default:
-                OSL_FAIL( "### illegal vertical alignment value!" );
+                SAL_WARN( "xmlscript.xmldlg", "### illegal vertical alignment value!" );
                 break;
             }
         }
@@ -731,7 +731,7 @@ void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString
                 addAttribute( rAttrName, "bottom" );
                 break;
             default:
-                OSL_FAIL( "### illegal image alignment value!" );
+                SAL_WARN( "xmlscript.xmldlg", "### illegal image alignment value!" );
                 break;
             }
         }
@@ -787,7 +787,7 @@ void ElementDescriptor::readImagePositionAttr( OUString const & rPropName, OUStr
                 addAttribute( rAttrName, "center" );
                 break;
             default:
-                OSL_FAIL( "### illegal image position value!" );
+                SAL_WARN( "xmlscript.xmldlg", "### illegal image position value!" );
                 break;
             }
         }
@@ -816,7 +816,7 @@ void ElementDescriptor::readButtonTypeAttr( OUString const & rPropName, OUString
                 addAttribute( rAttrName, "help" );
                 break;
             default:
-                OSL_FAIL( "### illegal button-type value!" );
+                SAL_WARN( "xmlscript.xmldlg", "### illegal button-type value!" );
                 break;
             }
         }
@@ -839,7 +839,7 @@ void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUStrin
                 addAttribute( rAttrName, "vertical" );
                 break;
             default:
-                OSL_FAIL( "### illegal orientation value!" );
+                SAL_WARN( "xmlscript.xmldlg", "### illegal orientation value!" );
                 break;
             }
         }
@@ -865,7 +865,7 @@ void ElementDescriptor::readLineEndFormatAttr( OUString const & rPropName, OUStr
                 addAttribute( rAttrName, "carriage-return-line-feed" );
                 break;
             default:
-                OSL_FAIL( "### illegal line end format value!" );
+                SAL_WARN( "xmlscript.xmldlg", "### illegal line end format value!" );
                 break;
             }
         }
@@ -896,7 +896,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
                 if ( !sAddress.isEmpty() )
                     addAttribute( rAttrName, sAddress );
 
-                OSL_TRACE( "*** Bindable value %s", OUStringToOString( sAddress, RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_INFO("xmlscript.xmldlg", "*** Bindable value " << sAddress );
 
             }
         }
@@ -920,7 +920,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
                 OUString sAddress;
                 xConvertor->setPropertyValue( "Address", makeAny( aAddress ) );
                 xConvertor->getPropertyValue( "PersistentRepresentation" ) >>= sAddress;
-                OSL_TRACE("**** cell range source list %s", OUStringToOString( sAddress, RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_INFO("xmlscript.xmldlg","**** cell range source list " << sAddress );
                 if ( !sAddress.isEmpty() )
                     addAttribute( rAttrName, sAddress );
             }
@@ -957,7 +957,7 @@ void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUStr
                     addAttribute( rAttrName, "range" );
                     break;
                 default:
-                    OSL_FAIL( "### illegal selection type value!" );
+                    SAL_WARN( "xmlscript.xmldlg", "### illegal selection type value!" );
                     break;
             }
         }
@@ -1018,7 +1018,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     }
     else
     {
-        OSL_FAIL( "unexpected property type for \"Enabled\": not bool!" );
+        SAL_WARN( "xmlscript.xmldlg", "unexpected property type for \"Enabled\": not bool!" );
     }
 
     sal_Bool bVisible = sal_True;
@@ -1095,11 +1095,10 @@ void ElementDescriptor::readEvents()
                 script::ScriptEventDescriptor descr;
                 if (xEvents->getByName( pNames[ nPos ] ) >>= descr)
                 {
-                    OSL_ENSURE( !descr.ListenerType.isEmpty() &&
-                                !descr.EventMethod.isEmpty() &&
-                                !descr.ScriptCode.isEmpty() &&
-                                !descr.ScriptType.isEmpty() ,
-                                "### invalid event descr!" );
+                    SAL_WARN_IF( descr.ListenerType.isEmpty() ||
+                                descr.EventMethod.isEmpty() ||
+                                descr.ScriptCode.isEmpty() ||
+                                descr.ScriptType.isEmpty() , "xmlscript.xmldlg", "### invalid event descr!" );
 
                     OUString aEventName;
 
@@ -1170,7 +1169,7 @@ void ElementDescriptor::readEvents()
                 }
                 else
                 {
-                    OSL_FAIL( "### unexpected event type in container!" );
+                    SAL_WARN( "xmlscript.xmldlg", "### unexpected event type in container!" );
                 }
             }
         }

@@ -1478,7 +1478,7 @@ void ImportContext::importEvents(
                     }
                     else // script:listener-event element
                     {
-                        OSL_ASSERT( aLocalName == "listener-event" );
+                        SAL_WARN_IF( aLocalName != "listener-event", "xmlscript.xmldlg", "aLocalName != listener-event" );
 
                         if (!getStringAttr( &descr.ListenerType, "listener-type"  , xAttributes, _pImport->XMLNS_SCRIPT_UID ) ||
                             !getStringAttr( &descr.EventMethod , "listener-method", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
@@ -1491,7 +1491,7 @@ void ImportContext::importEvents(
                 }
                 else // deprecated dlg:event element
                 {
-                    OSL_ASSERT( _pImport->XMLNS_DIALOGS_UID == nUid && aLocalName == "event" );
+                    SAL_WARN_IF( _pImport->XMLNS_DIALOGS_UID != nUid || aLocalName != "event", "xmlscript.xmldlg", "_pImport->XMLNS_DIALOGS_UID != nUid || aLocalName != \"event\"" );
 
                     if (!getStringAttr( &descr.ListenerType, "listener-type", xAttributes, _pImport->XMLNS_DIALOGS_UID ) ||
                         !getStringAttr( &descr.EventMethod,  "event-method",  xAttributes, _pImport->XMLNS_DIALOGS_UID ))
@@ -1682,7 +1682,7 @@ ElementBase::~ElementBase()
 #if OSL_DEBUG_LEVEL > 1
     OString aStr( OUStringToOString(
                              _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "ElementBase::~ElementBase(): %s", aStr.getStr() );
+    SAL_INFO("xmlscript.xmldlg", "ElementBase::~ElementBase(): " << aStr.getStr() );
 #endif
 }
 
@@ -1744,7 +1744,7 @@ DialogImport::~DialogImport()
     SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "DialogImport::~DialogImport()." );
+    SAL_INFO("xmlscript.xmldlg", "DialogImport::~DialogImport()." );
 #endif
 }
 //__________________________________________________________________________________________________

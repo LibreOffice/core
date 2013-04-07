@@ -243,7 +243,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                         xPSet->getPropertyValue("BasicLibraries" ) >>= xLibContainer;
                 }
 
-                OSL_ENSURE( xLibContainer.is(), "XMLBasicExporterBase::filter: nowhere to export to!" );
+                SAL_WARN_IF( !xLibContainer.is(), "xmlscript.xmlflat", "XMLBasicExporterBase::filter: nowhere to export to!" );
 
                 if ( xLibContainer.is() )
                 {
@@ -398,26 +398,22 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         }
         catch ( const container::NoSuchElementException& e )
         {
-            OSL_TRACE( "XMLBasicExporterBase::filter: caught NoSuchElementException reason %s",
-                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("xmlscript.xmlflat", "XMLBasicExporterBase::filter: caught NoSuchElementException reason " << e.Message );
             bReturn = sal_False;
         }
         catch ( const lang::IllegalArgumentException& e )
         {
-            OSL_TRACE( "XMLBasicExporterBase::filter: caught IllegalArgumentException reason %s",
-                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("xmlscript.xmlflat", "XMLBasicExporterBase::filter: caught IllegalArgumentException reason " << e.Message );
             bReturn = sal_False;
         }
         catch ( const lang::WrappedTargetException& e )
         {
-            OSL_TRACE( "XMLBasicExporterBase::filter: caught WrappedTargetException reason %s",
-                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("xmlscript.xmlflat", "XMLBasicExporterBase::filter: caught WrappedTargetException reason " << e.Message );
             bReturn = sal_False;
         }
         catch ( const xml::sax::SAXException& e )
         {
-            OSL_TRACE( "XMLBasicExporterBase::filter: caught SAXException reason %s",
-                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("xmlscript.xmlflat", "XMLBasicExporterBase::filter: caught SAXException reason " << e.Message );
             bReturn = sal_False;
         }
 

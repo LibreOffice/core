@@ -114,7 +114,7 @@ ModuleElement::~ModuleElement()
 
 #if OSL_DEBUG_LEVEL > 1
     OString aStr( OUStringToOString( _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "ModuleElement::~ModuleElement(): %s", aStr.getStr() );
+    SAL_INFO("xmlscript.xmlmod", "ModuleElement::~ModuleElement(): " << aStr.getStr() );
 #endif
 }
 
@@ -179,7 +179,7 @@ ModuleImport::~ModuleImport()
     SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "ModuleImport::~ModuleImport()." );
+    SAL_INFO("xmlscript.xmlmod", "ModuleImport::~ModuleImport()." );
 #endif
 }
 

@@ -263,7 +263,7 @@ inline sal_Int32 DocumentHandlerImpl::getUidByPrefix(
         if (iFind != m_prefixes.end())
         {
             const PrefixEntry & rPrefixEntry = *iFind->second;
-            OSL_ASSERT( ! rPrefixEntry.m_Uids.empty() );
+            SAL_WARN_IF( rPrefixEntry.m_Uids.empty(), "xmlscript.xmlhelper", "rPrefixEntry.m_Uids is empty" );
             m_nLastPrefix_lookup = rPrefixEntry.m_Uids.back();
             m_aLastPrefix_lookup = rPrefix;
         }
@@ -294,7 +294,7 @@ inline void DocumentHandlerImpl::pushPrefix(
     else
     {
         PrefixEntry * pEntry = iFind->second;
-        OSL_ASSERT( ! pEntry->m_Uids.empty() );
+        SAL_WARN_IF( pEntry->m_Uids.empty(), "xmlscript.xmlhelper", "pEntry->m_Uids is empty" );
         pEntry->m_Uids.push_back( nUid );
     }
 
@@ -481,7 +481,7 @@ sal_Int32 DocumentHandlerImpl::getUidByUri( OUString const & Uri )
     throw (RuntimeException)
 {
     sal_Int32 uid = getUidByURI( Uri );
-    OSL_ASSERT( uid != UID_UNKNOWN );
+    SAL_WARN_IF( uid == UID_UNKNOWN, "xmlscript.xmlhelper", "uid UNKNOWN");
     return uid;
 }
 
@@ -538,8 +538,7 @@ void DocumentHandlerImpl::startElement(
 #if OSL_DEBUG_LEVEL > 1
         OString aQName(
             OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### no context given on createChildElement() "
-                   "=> ignoring element \"%s\" ...", aQName.getStr() );
+        SAL_INFO("xmlscript.xmlhelper", "### no context given on createChildElement() => ignoring element \"" << aQName.getStr() << "\" ...");
 #endif
         return;
     }
@@ -595,9 +594,7 @@ void DocumentHandlerImpl::startElement(
         if (pUids[ nPos ] >= 0) // no xmlns: attribute
         {
             OUString const & rQAttributeName = pQNames[ nPos ];
-            OSL_ENSURE(
-                !rQAttributeName.startsWith( "xmlns:" ),
-                "### unexpected xmlns!" );
+            SAL_WARN_IF(rQAttributeName.startsWith( "xmlns:" ), "xmlscript.xmlhelper", "### unexpected xmlns!" );
 
             // collect attribute's uid and current prefix
             sal_Int32 nColonPos = rQAttributeName.indexOf( (sal_Unicode) ':' );
@@ -651,9 +648,7 @@ void DocumentHandlerImpl::startElement(
 #if OSL_DEBUG_LEVEL > 1
         OString aQName(
             OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE(
-            "### no context given on createChildElement() => "
-            "ignoring element \"%s\" ...", aQName.getStr() );
+        SAL_INFO("xmlscript.xmlhelper", "### no context given on createChildElement() => ignoring element \"" << aQName.getStr() << "\" ...");
 #endif
     }
     }
@@ -673,14 +668,14 @@ void DocumentHandlerImpl::endElement(
 #if OSL_DEBUG_LEVEL > 1
         OString aQName(
             OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### received endElement() for \"%s\".", aQName.getStr() );
+        SAL_INFO("xmlscript.xmlhelper", "### received endElement() for \"" << aQName.getStr() << "\".");
 #endif
         static_cast<void>(rQElementName);
         return;
     }
 
     // popping context
-    OSL_ASSERT( ! m_elements.empty() );
+    SAL_WARN_IF( m_elements.empty(), "xmlscript.xmlhelper", "m_elements is empty" );
     ElementEntry * pEntry = m_elements.back();
     xCurrentElement = pEntry->m_xElement;
 
@@ -688,8 +683,8 @@ void DocumentHandlerImpl::endElement(
     sal_Int32 nUid;
     OUString aLocalName;
     getElementName( rQElementName, &nUid, &aLocalName );
-    OSL_ASSERT( xCurrentElement->getLocalName() == aLocalName );
-    OSL_ASSERT( xCurrentElement->getUid() == nUid );
+    SAL_WARN_IF( xCurrentElement->getLocalName() != aLocalName, "xmlscript.xmlhelper", "xCurrentElement->getLocalName() != aLocalName" );
+    SAL_WARN_IF( xCurrentElement->getUid() != nUid, "xmlscript.xmlhelper", "xCurrentElement->getUid() != nUid" );
 #endif
 
     // pop prefixes
@@ -792,7 +787,7 @@ OUString ExtendedAttributes::getTypeByIndex( sal_Int32 nIndex )
     throw (RuntimeException)
 {
     static_cast<void>(nIndex);
-    OSL_ASSERT( nIndex < m_nAttributes );
+    SAL_WARN_IF( nIndex >= m_nAttributes , "xmlscript.xmlhelper", "nIndex is bigger then m_nAttributes");
     return OUString(); // unsupported
 }
 
@@ -856,7 +851,7 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
     bool bSingleThreadedUse )
     SAL_THROW(())
 {
-    OSL_ASSERT( xRoot.is() );
+    SAL_WARN_IF( !xRoot.is(), "xmlscript.xmlhelper", "xRoot is NULL" );
     if (xRoot.is())
     {
         return static_cast< xml::sax::XDocumentHandler * >(
