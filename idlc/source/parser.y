@@ -1707,7 +1707,7 @@ service_export :
 				pDecl = pScope->lookupByName(*iter);
 				if ( pDecl && (pDecl->getNodeType() == NT_service) )
 				{
-					if ( static_cast< AstService * >(pDecl)->isSingleInterfaceBasedService() || pScope->getScopeNodeType() == NT_singleton && pScope->nMembers() > 0 )
+					if ( static_cast< AstService * >(pDecl)->isSingleInterfaceBasedService() || (pScope->getScopeNodeType() == NT_singleton && pScope->nMembers() > 0) )
 						idlc()->error()->error0(EIDL_ILLEGAL_ADD);										
                     else if ( idlc()->error()->checkPublished(pDecl) )
                     {
