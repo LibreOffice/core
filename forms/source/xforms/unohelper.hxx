@@ -22,7 +22,6 @@
 #include <sal/types.h>
 
 // forward declarations
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace uno {
         class XInterface;

@@ -26,10 +26,6 @@
 
 #include <boost/optional.hpp>
 
-namespace rtl
-{
-    class OUString;
-}
 
 namespace basegfx
 {

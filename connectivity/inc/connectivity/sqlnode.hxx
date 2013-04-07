@@ -53,10 +53,6 @@ namespace com
     }
 }
 
-namespace rtl
-{
-    class OUStringBuffer;
-}
 #define ORDER_BY_CHILD_POS  5
 #define TABLE_EXPRESSION_CHILD_COUNT    9
 

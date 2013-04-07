@@ -24,9 +24,6 @@
 #include <vector>
 #include <utility>
 
-namespace rtl {
-    class OUString;
-}
 namespace basegfx {
     class B2DRange;
 }

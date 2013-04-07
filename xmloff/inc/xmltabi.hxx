@@ -25,10 +25,6 @@
 class SvxXMLTabStopArray_Impl;
 class SvXMLImport;
 
-namespace rtl
-{
-    class OUString;
-}
 
 class SvxXMLTabStopImportContext : public XMLElementPropertyContext
 {

@@ -32,7 +32,6 @@
 namespace com { namespace sun { namespace star {
     namespace container{ class XHierarchicalNameAccess; }
 } } }
-namespace rtl { class OUString; }
 namespace utl { class ConfigItem; }
 
 namespace utl {

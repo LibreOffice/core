@@ -28,7 +28,6 @@
 namespace com { namespace sun { namespace star { namespace ucb {
     class XUniversalContentBroker;
 } } } }
-namespace rtl { class OUString; }
 
 namespace ucbhelper {
 

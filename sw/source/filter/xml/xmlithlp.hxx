@@ -30,7 +30,6 @@ namespace editeng { class SvxBorderLine; }
 struct SvXMLEnumMapEntry;
 class SvXMLUnitConverter;
 class Color;
-namespace rtl { class OUString; }
 
 
 

@@ -27,9 +27,6 @@ namespace com { namespace sun { namespace star { namespace drawing
 {
     class XShape;
 } } } }
-namespace rtl {
-    class OUString;
-}
 
 namespace slideshow
 {

@@ -35,9 +35,6 @@ namespace com { namespace sun { namespace star { namespace util {
     struct DateTime;
 } } } }
 
-namespace rtl {
-    class OUString;
-}
 
 namespace webdav_ucp
 {

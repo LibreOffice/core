@@ -22,7 +22,6 @@
 
 #include "com/sun/star/uno/Sequence.hxx"
 
-namespace rtl { class OUString; }
 
 namespace stoc { namespace uriproc {
 

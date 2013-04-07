@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
     namespace document { class XDocumentProperties; }
     namespace util { struct DateTime; }
 } } }
-namespace rtl { class OUString; }
 
 namespace svtools {
 

@@ -27,10 +27,6 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <cppcanvas/font.hxx>
 
-namespace rtl
-{
-    class OUString;
-}
 
 namespace com { namespace sun { namespace star { namespace rendering
 {

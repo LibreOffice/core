@@ -32,7 +32,6 @@
 
 #include "sal/config.h"
 
-namespace rtl { class OUString; }
 
 namespace sfx2 {
 

@@ -25,7 +25,6 @@
 #include <limits.h>
 #include <xmloff/xmlictxt.hxx>
 
-namespace rtl { class OUString; }
 
 class SfxItemSet;
 class SvXMLImportItemMapper;

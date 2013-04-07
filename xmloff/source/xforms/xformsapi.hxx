@@ -26,7 +26,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace frame { class XModel; }

@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "oox/dllapi.h"
 
-namespace rtl { class OUString; }
 
 namespace com { namespace sun { namespace star {
     namespace task { class XStatusIndicator; }

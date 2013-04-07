@@ -24,10 +24,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>
 
-namespace rtl
-{
-    class OUString;
-}
 
 // class SvxShadowItem ---------------------------------------------------
 

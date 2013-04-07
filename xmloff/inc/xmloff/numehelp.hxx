@@ -29,10 +29,6 @@
 #include <set>
 
 class SvXMLExport;
-namespace rtl
-{
-    class OUString;
-}
 
 struct XMLNumberFormat
 {

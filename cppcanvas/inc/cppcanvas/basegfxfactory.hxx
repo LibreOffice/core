@@ -38,10 +38,6 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-namespace rtl
-{
-    class OUString;
-}
 
 /* Definition of BaseGfxFactory class */
 

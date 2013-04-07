@@ -57,9 +57,6 @@ namespace com { namespace sun { namespace star {
 
 }}}
 
-namespace rtl {
-    class OUString;
-}
 
 ///////////////////////////////////////////////////////////////////////////
 

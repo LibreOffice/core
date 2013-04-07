@@ -33,7 +33,6 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace xforms { class XDataTypeRepository; }
 } } }
-namespace rtl { class OUString; }
 class SvXMLImport;
 class SvXMLImportContext;
 

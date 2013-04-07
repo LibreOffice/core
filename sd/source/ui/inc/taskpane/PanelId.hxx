@@ -20,10 +20,6 @@
 #ifndef SD_UI_TASKPANE_PANELID_HXX
 #define SD_UI_TASKPANE_PANELID_HXX
 
-namespace rtl
-{
-    class OUString;
-}
 
 //......................................................................................................................
 namespace sd { namespace toolpanel

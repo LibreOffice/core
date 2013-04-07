@@ -22,7 +22,6 @@
 
 #include "xmloff/xmlexp.hxx"
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
     namespace uno { template<class X> class Reference; }

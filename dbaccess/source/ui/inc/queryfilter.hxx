@@ -34,10 +34,6 @@
 #include <connectivity/predicateinput.hxx>
 #include "svx/ParseContext.hxx"
 
-namespace rtl
-{
-    class OUString;
-}
 namespace com
 {
     namespace sun

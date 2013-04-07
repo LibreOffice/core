@@ -24,10 +24,6 @@
 #include <cppcanvas/canvasgraphic.hxx>
 
 
-namespace rtl
-{
-    class OUString;
-}
 
 
 /* Definition of Text interface */

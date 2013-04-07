@@ -28,10 +28,6 @@ class SvXMLExport;
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
  } } }
-namespace rtl {
-    class OUString;
-    class OUStringBuffer;
-}
 
 
 /**

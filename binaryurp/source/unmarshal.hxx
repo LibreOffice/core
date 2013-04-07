@@ -38,9 +38,6 @@ namespace binaryurp {
 namespace com { namespace sun { namespace star { namespace uno {
     class TypeDescription;
 } } } }
-namespace rtl {
-    class OUString;
-}
 
 namespace binaryurp {
 

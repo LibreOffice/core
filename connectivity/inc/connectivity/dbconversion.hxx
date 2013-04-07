@@ -26,10 +26,6 @@
 #include "connectivity/dbtoolsdllapi.hxx"
 
 // forward declarations
-namespace rtl
-{
-    class OUString;
-}
 namespace com
 {
     namespace sun

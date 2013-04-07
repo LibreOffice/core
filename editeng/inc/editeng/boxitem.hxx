@@ -24,7 +24,6 @@
 #include <editeng/editengdllapi.h>
 #include <com/sun/star/table/BorderLine2.hpp>
 
-namespace rtl { class OUString; }
 
 // class SvxBoxItem ------------------------------------------------------
 

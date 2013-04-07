@@ -40,7 +40,6 @@ class Pointer;
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
 
-namespace rtl { class OUString; }
 
 namespace avmedia
 {

@@ -22,10 +22,6 @@
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-namespace rtl
-{
-    class OUStringBuffer;
-}
 //.........................................................................
 namespace dbtools
 {

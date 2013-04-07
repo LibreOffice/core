@@ -25,7 +25,6 @@
 #include "biffhelper.hxx"
 #include "biffcodec.hxx"
 
-namespace rtl { class OUStringBuffer; }
 
 namespace oox {
 namespace xls {

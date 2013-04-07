@@ -42,10 +42,6 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; struct PropertyValue; }
 } } }
 
-namespace rtl
-{
-    class OUString;
-}
 
 
 class SvXMLImport;

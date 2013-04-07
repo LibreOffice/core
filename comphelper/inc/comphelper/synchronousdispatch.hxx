@@ -34,7 +34,6 @@ namespace com { namespace sun { namespace star {
         class XComponent; }
 } } }
 
-namespace rtl { class OUString; }
 
 //........................................................................
 namespace comphelper

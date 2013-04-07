@@ -44,7 +44,6 @@ namespace com { namespace sun { namespace star
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
 } } }
-namespace rtl { class OUString; }
 namespace xforms
 {
     class MIP;

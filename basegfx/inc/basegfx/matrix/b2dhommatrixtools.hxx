@@ -25,7 +25,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-namespace rtl { class OUString; }
 
 ///////////////////////////////////////////////////////////////////////////////
 

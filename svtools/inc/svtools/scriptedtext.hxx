@@ -24,7 +24,6 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
 
-namespace rtl { class OUString; }
 class OutputDevice;
 class Font;
 class SvtScriptedTextHelper_Impl;

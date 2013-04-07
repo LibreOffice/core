@@ -24,9 +24,6 @@
 
 #include <vector>
 
-namespace rtl {
-    class OUString;
-}
 
 class ScDocument;
 class ScRange;

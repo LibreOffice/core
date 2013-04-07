@@ -47,7 +47,6 @@ namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
     namespace uno { template<typename A> class Sequence; }
 } } }
-namespace rtl { class OUString; }
 
 
 /// field IDs,

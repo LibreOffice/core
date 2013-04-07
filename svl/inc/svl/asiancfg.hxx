@@ -31,7 +31,6 @@
 namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
 } } } }
-namespace rtl { class OUString; }
 
 class SVL_DLLPUBLIC SvxAsianConfig: private boost::noncopyable {
 public:

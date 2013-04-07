@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include "oox/dllapi.h"
 
-namespace rtl { class OUString; }
 
 namespace com { namespace sun { namespace star {
     namespace container { class XIndexAccess; }

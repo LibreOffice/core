@@ -25,10 +25,6 @@
 #include "editeng/editengdllapi.h"
 
 class SvXMLUnitConverter;
-namespace rtl
-{
-    class OUString;
-}
 
 // class SvxFontItem -----------------------------------------------------
 

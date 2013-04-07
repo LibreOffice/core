@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace container { class XNameReplace; }
     namespace xml { namespace sax { class XAttributeList; } }

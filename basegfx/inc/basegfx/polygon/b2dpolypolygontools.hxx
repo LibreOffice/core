@@ -27,10 +27,6 @@
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 
-namespace rtl
-{
-    class OUString;
-}
 
 //////////////////////////////////////////////////////////////////////////////
 

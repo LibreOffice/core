@@ -31,7 +31,6 @@
 class SvXMLImport;
 struct XMLPropertyState;
 class XMLPropertySetMapper;
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Reference; }
     namespace xml { namespace sax { class XAttributeList; } }

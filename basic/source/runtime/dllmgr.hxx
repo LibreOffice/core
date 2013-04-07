@@ -27,7 +27,6 @@
 
 #include "basic/sberrors.hxx"
 
-namespace rtl { class OUString; }
 class SbxArray;
 class SbxVariable;
 

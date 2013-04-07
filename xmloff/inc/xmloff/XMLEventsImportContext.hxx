@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameReplace; }
     namespace document { class XEventsSupplier; }
 } } }
-namespace rtl { class OUString; }
 
 typedef ::std::pair<
             OUString,

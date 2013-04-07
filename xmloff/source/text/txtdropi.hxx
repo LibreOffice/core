@@ -23,7 +23,6 @@
 #include "XMLElementPropertyContext.hxx"
 
 
-namespace rtl { class OUString; }
 
 class XMLTextDropCapImportContext :public XMLElementPropertyContext
 {

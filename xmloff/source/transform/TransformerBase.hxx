@@ -30,7 +30,6 @@
 
 #include "Transformer.hxx"
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace i18n { class XCharacterClassification; }
 }}}

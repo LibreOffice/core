@@ -22,7 +22,6 @@
 
 #include <xmloff/xmlimp.hxx>
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Reference; }
     namespace uno { class XInterface; }

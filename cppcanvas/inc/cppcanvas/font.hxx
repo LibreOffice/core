@@ -24,10 +24,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-namespace rtl
-{
-    class OUString;
-}
 
 namespace com { namespace sun { namespace star { namespace rendering
 {

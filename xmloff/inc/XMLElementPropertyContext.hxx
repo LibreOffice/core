@@ -25,10 +25,6 @@
 
 class SvXMLImport;
 
-namespace rtl
-{
-    class OUString;
-}
 
 class XMLElementPropertyContext : public SvXMLImportContext
 {

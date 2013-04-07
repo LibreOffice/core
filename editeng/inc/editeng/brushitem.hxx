@@ -29,10 +29,6 @@
 class Graphic;
 class GraphicObject;
 class CntWallpaperItem;
-namespace rtl
-{
-    class OUString;
-}
 
 #define BRUSH_GRAPHIC_VERSION   ((sal_uInt16)0x0001)
 

@@ -29,7 +29,6 @@
 
 namespace com { namespace sun { namespace star { namespace container {
     class XIndexReplace; } } } }
-namespace rtl { class OUString; }
 
 
 class XMLTextListAutoStylePool_Impl;

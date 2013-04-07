@@ -39,9 +39,6 @@ class ViewShell;
 class ViewShellBase;
 }
 
-namespace rtl {
-class OUString;
-}
 
 namespace sd { namespace framework {
 

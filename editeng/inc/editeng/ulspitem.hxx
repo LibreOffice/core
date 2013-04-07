@@ -22,10 +22,6 @@
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 
-namespace rtl
-{
-    class OUString;
-}
 
 // class SvxULSpaceItem --------------------------------------------------
 

@@ -25,7 +25,6 @@
 #include <vector>
 #include <comphelper/stl_types.hxx>
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace uno { template<class A> class Reference; }

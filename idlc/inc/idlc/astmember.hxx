@@ -22,7 +22,6 @@
 
 #include "idlc/astdeclaration.hxx"
 
-namespace rtl { class OString; }
 class AstScope;
 class AstType;
 

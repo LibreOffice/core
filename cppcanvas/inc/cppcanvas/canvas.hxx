@@ -26,10 +26,6 @@
 #include <cppcanvas/font.hxx>
 #include <cppcanvas/color.hxx>
 
-namespace rtl
-{
-    class OUString;
-}
 
 namespace basegfx
 {

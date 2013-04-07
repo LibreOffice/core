@@ -24,7 +24,6 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "dp_misc_api.hxx"
 
-namespace rtl { class OUString; }
 
 namespace dp_misc {
 

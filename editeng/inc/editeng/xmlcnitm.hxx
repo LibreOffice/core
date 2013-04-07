@@ -24,7 +24,6 @@
 #include "editeng/editengdllapi.h"
 
 class SvXMLNamespaceMap;
-namespace rtl { class OUString; }
 
 //============================================================================
 

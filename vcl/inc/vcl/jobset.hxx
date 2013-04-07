@@ -24,10 +24,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
 
-namespace rtl
-{
-    class OUString;
-}
 
 class SvStream;
 struct ImplJobSetup;

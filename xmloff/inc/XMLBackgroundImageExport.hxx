@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }

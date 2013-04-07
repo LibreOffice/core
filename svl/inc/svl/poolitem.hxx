@@ -157,10 +157,6 @@ class SvXMLUnitConverter;
 class SfxItemPool;
 class SfxItemSet;
 
-namespace rtl
-{
-    class OUString;
-}
 
 // -----------------------------------------------------------------------
 

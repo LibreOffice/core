@@ -29,9 +29,6 @@ namespace com { namespace sun { namespace star {
         class XAttributeList;
     } }
 } } }
-namespace rtl {
-    class OUString;
-}
 
 
 /// import foot- and endnote body elements (<text:footnote-body>)

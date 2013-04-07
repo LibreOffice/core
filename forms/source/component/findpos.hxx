@@ -24,7 +24,6 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "sal/types.h"
 
-namespace rtl { class OUString; }
 
 namespace detail {
 

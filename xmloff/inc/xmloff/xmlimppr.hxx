@@ -35,7 +35,6 @@
 struct XMLPropertyState;
 class XMLPropertySetMapper;
 
-namespace rtl { class OUString; }
 
 class SvXMLUnitConverter;
 class SvXMLNamespaceMap;

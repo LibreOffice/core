@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
 } } }
 
-namespace rtl { class OUString; }
 
 namespace ucbhelper {
 

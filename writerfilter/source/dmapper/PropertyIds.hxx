@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DMAPPER_PROPERTYIDS_HXX
 #define INCLUDED_DMAPPER_PROPERTYIDS_HXX
 
-namespace rtl{ class OUString;}
 
 namespace writerfilter {
 namespace dmapper{

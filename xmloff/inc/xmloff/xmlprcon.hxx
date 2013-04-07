@@ -25,7 +25,6 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/uniref.hxx>
 
-namespace rtl { class OUString; }
 
 class SvXMLImportPropertyMapper;
 

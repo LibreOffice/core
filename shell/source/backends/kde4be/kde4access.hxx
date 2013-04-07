@@ -27,7 +27,6 @@
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }
-namespace rtl { class OUString; }
 
 namespace kde4access {
 

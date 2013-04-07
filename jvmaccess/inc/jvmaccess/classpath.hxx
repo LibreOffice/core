@@ -29,7 +29,6 @@
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
-namespace rtl { class OUString; }
 
 namespace jvmaccess {
 

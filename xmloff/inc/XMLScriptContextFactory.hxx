@@ -27,7 +27,6 @@
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
-namespace rtl { class OUString; }
 class SvXMLImport;
 class XMLEventsImportContext;
 

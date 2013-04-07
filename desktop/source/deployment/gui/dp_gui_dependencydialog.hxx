@@ -30,7 +30,6 @@
 #include "vcl/lstbox.hxx"
 
 class Window;
-namespace rtl { class OUString; }
 
 namespace dp_gui {
 

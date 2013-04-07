@@ -24,7 +24,6 @@
 
 #include "unotest/detail/unotestdllapi.hxx"
 
-namespace rtl { class OUString; }
 
 namespace test {
 

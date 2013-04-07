@@ -28,10 +28,6 @@
 
 #include <vector>
 
-namespace rtl {
-    class OString;
-    class OUString;
-}
 class TypeManager;
 
 namespace codemaker {

@@ -28,10 +28,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 
-namespace rtl
-{
-class OUString;
-}
 
 namespace com { namespace sun { namespace star {
 

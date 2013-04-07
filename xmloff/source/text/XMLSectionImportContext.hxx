@@ -29,7 +29,6 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
-namespace rtl { class OUString; }
 
 
 /**

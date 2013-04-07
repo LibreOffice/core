@@ -35,10 +35,6 @@
 #include <boost/noncopyable.hpp>
 
 
-namespace rtl
-{
-    class OUString;
-}
 
 
 /* Definition of AnimationFactory class */

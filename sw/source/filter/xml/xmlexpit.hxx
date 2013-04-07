@@ -31,7 +31,6 @@
                                                 // even if its empty
 #define XML_EXPORT_FLAG_IGN_WS      0x0008
 
-namespace rtl { class OUString; }
 class SvXMLUnitConverter;
 class SfxPoolItem;
 class SfxItemSet;

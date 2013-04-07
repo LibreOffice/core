@@ -26,10 +26,6 @@
 #include <cstdio>
 class String;
 
-namespace rtl
-{
-class OUString;
-}
 class SwNode;
 class SwTxtAttr;
 class SwpHints;

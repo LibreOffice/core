@@ -25,7 +25,6 @@
 #include <set>
 
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
     namespace frame { class XModel; }

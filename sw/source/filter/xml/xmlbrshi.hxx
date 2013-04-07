@@ -28,7 +28,6 @@ class SvXMLImport;
 class SvXMLUnitConverter;
 class SvxBrushItem;
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace io { class XOutputStream; }
 } } }

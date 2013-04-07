@@ -30,10 +30,6 @@
 
 #include <map>
 
-namespace rtl
-{
-    class OUString;
-}
 
 class ImplDevFontList;
 class SalBitmap;

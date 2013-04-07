@@ -27,7 +27,6 @@
 namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
 } } } }
-namespace rtl { class OUString; }
 
 namespace svl {
 

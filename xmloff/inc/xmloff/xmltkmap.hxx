@@ -25,7 +25,6 @@
 #include <sal/types.h>
 #include <xmloff/xmltoken.hxx>
 
-namespace rtl { class OUString; }
 
 class SvXMLTokenMap_Impl;
 class SvXMLTokenMapEntry_Impl;

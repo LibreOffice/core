@@ -25,7 +25,6 @@
 #include <vector>
 #include "sal/types.h"
 
-namespace rtl { class OUString; }
 
 namespace connectivity
 {

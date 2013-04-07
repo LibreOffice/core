@@ -33,10 +33,6 @@
 
 #include <list>
 
-namespace rtl
-{
-    class OUString;
-}
 
 struct SystemParentData;
 struct SalPrinterQueueInfo;

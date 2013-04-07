@@ -26,10 +26,6 @@
 #include <filter/msfilter/escherex.hxx>
 #include <editeng/outlobj.hxx>
 
-namespace rtl {
-    class OString;
-    class OStringBuffer;
-}
 
 namespace oox {
 

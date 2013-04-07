@@ -24,10 +24,6 @@
 #include <editeng/editengdllapi.h>
 
 class SvXMLUnitConverter;
-namespace rtl
-{
-    class OUString;
-}
 
 class EDITENG_DLLPUBLIC SvxTwoLinesItem : public SfxPoolItem
 {

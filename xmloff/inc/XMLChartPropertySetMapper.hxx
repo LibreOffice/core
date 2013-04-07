@@ -25,7 +25,6 @@
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 
-namespace rtl { class OUString; }
 
 extern const XMLPropertyMapEntry aXMLChartPropMap[];
 

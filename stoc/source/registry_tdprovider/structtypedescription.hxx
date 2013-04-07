@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star {
     namespace container { class XHierarchicalNameAccess; }
     namespace reflection { class XCompoundTypeDescription; }
 } } }
-namespace rtl { class OUString; }
 namespace stoc_rdbtdp { class CompoundTypeDescriptionImpl; }
 
 namespace stoc { namespace registry_tdprovider {

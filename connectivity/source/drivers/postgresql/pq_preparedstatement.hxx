@@ -70,7 +70,6 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 
 #include "pq_connection.hxx"
-namespace rtl { class OString; }
 namespace pq_sdbc_driver
 {
 

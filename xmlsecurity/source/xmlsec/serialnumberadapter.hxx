@@ -30,7 +30,6 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
     class XInterface;
 } } } }
-namespace rtl { class OUString; }
 
 namespace xml_security { namespace serial_number_adapter {
 

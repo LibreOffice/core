@@ -32,10 +32,6 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <list>
-namespace rtl
-{
-    class OUStringBuffer;
-}
 namespace com{ namespace sun { namespace star{namespace sdbc{ class XParameters; } } } }
 
 namespace dbaccess

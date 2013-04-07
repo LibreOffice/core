@@ -31,10 +31,6 @@
 
 #define DOG_ROWS    3
 
-namespace rtl
-{
-    class OUString;
-}
 namespace com
 {
     namespace sun

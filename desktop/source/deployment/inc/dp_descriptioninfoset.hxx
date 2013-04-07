@@ -40,7 +40,6 @@ namespace com { namespace sun { namespace star {
         namespace xpath { class XXPathAPI; }
     }
 } } }
-namespace rtl { class OUString; }
 
 namespace dp_misc {
 

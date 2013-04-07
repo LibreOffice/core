@@ -26,7 +26,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include "xmlitmap.hxx"
 
-namespace rtl { class OUString; }
 
 class SvXMLUnitConverter;
 class SfxPoolItem;

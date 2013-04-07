@@ -31,7 +31,6 @@
 #include "dp_persmap.h"
 #endif
 
-namespace rtl { class OUString; }
 
 namespace dp_manager {
 

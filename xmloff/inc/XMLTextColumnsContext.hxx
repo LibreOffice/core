@@ -23,7 +23,6 @@
 #include "XMLElementPropertyContext.hxx"
 
 
-namespace rtl { class OUString; }
 class XMLTextColumnsArray_Impl;
 class XMLTextColumnSepContext_Impl;
 class SvXMLTokenMap;

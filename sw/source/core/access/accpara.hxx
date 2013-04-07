@@ -38,7 +38,6 @@ class SwAccessibleHyperTextData;
 class SwXTextPortion;
 class SwParaChangeTrackingInfo; //#i108125#
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace i18n { struct Boundary; }
     namespace accessibility { class XAccessibleHyperlink; }

@@ -23,7 +23,6 @@
 class SvXMLExport;
 namespace com { namespace sun { namespace star { namespace uno {
     class Any; } } } }
-namespace rtl { class OUString; }
 
 class XMLTextDropCapExport
 {

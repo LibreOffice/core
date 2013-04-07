@@ -24,7 +24,6 @@
 #include <sal/types.h>         //sal_uInt16 and sal_Bool
 #include <boost/scoped_ptr.hpp>
 
-namespace rtl { class OUString; }
 class SvXMLAttrCollection; //Forward declaration only.
 
 class XMLOFF_DLLPUBLIC SvXMLAttrContainerData

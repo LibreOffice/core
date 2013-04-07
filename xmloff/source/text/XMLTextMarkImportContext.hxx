@@ -34,9 +34,6 @@ namespace com { namespace sun { namespace star {
         class XAttributeList;
     } }
 } } }
-namespace rtl {
-    class OUString;
-}
 class XMLTextImportHelper;
 
 class XMLFieldParamImportContext : public SvXMLImportContext

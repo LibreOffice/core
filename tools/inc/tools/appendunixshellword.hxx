@@ -25,10 +25,6 @@
 #if defined UNX
 #include "tools/toolsdllapi.h"
 
-namespace rtl {
-    class OString;
-    class OStringBuffer;
-}
 
 namespace tools {
 

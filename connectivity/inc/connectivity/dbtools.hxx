@@ -73,10 +73,6 @@ namespace task {
 
 } } }
 
-namespace rtl
-{
-    class OUStringBuffer;
-}
 
 //.........................................................................
 namespace dbtools

@@ -23,7 +23,6 @@
 #include "sal/config.h"
 #include "tools/toolsdllapi.h"
 
-namespace rtl { class OUString; }
 
 namespace tools {
 

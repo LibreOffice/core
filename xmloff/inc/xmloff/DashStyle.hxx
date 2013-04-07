@@ -31,7 +31,6 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace uno { class Any; }
 } } }
-namespace rtl { class OUString; }
 
 
 class XMLOFF_DLLPUBLIC XMLDashStyleImport

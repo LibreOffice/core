@@ -35,9 +35,6 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextContent; }
     namespace text { class XTextSection; }
  } } }
-namespace rtl {
-    class OUString;
-}
 
 // store a list of redline properties
 typedef ::std::list<

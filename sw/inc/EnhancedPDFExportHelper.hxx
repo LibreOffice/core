@@ -38,10 +38,6 @@ class SwFrm;
 class SwLinePortion;
 class SwTxtPainter;
 class SwEditShell;
-namespace rtl
-{
-    class OUString;
-}
 class StringRangeEnumerator;
 class SwTxtNode;
 class SwNumRule;

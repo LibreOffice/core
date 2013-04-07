@@ -25,9 +25,6 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include "ucbhelper/ucbhelperdllapi.h"
 
-namespace rtl {
-    class OUString;
-}
 
 namespace ucbhelper
 {

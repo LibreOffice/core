@@ -41,10 +41,6 @@ class Graphic;
 class GDIMetaFile;
 class Animation;
 
-namespace rtl
-{
-    class OUString;
-}
 namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XBitmapCanvas;

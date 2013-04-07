@@ -29,7 +29,6 @@
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }
-namespace rtl { class OUString; }
 namespace ucbhelper { class Content; }
 
 namespace utl { namespace UCBContentHelper {

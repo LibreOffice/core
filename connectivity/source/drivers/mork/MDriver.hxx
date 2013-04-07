@@ -39,7 +39,6 @@ namespace com { namespace sun { namespace star {
         class XInterface;
     }
 } } }
-namespace rtl { class OUString; }
 
 namespace connectivity { namespace mork {
 class ProfileAccess;

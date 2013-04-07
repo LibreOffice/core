@@ -17,7 +17,6 @@
 #include "unoidl/detail/dllapi.hxx"
 #include "unoidl/unoidl.hxx"
 
-namespace rtl { class OUString; }
 namespace unoidl { namespace detail {
     class MappedFile;
     struct MapEntry;

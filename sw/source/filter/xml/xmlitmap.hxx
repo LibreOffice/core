@@ -24,7 +24,6 @@
 #include <tools/ref.hxx>
 #include <xmloff/xmltoken.hxx>
 
-namespace rtl { class OUString; }
 
 #define MID_SW_FLAG_MASK                    0x0000ffff
 

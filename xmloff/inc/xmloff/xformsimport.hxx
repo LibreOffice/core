@@ -27,7 +27,6 @@
 
 class SvXMLImport;
 class SvXMLImportContext;
-namespace rtl { class OUString; }
 
 namespace com { namespace sun { namespace star {
     namespace uno { template<typename T> class Reference; }

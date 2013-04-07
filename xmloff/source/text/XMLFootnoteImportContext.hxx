@@ -33,9 +33,6 @@ namespace com { namespace sun { namespace star {
         class XAttributeList;
     } }
 } } }
-namespace rtl {
-    class OUString;
-}
 class XMLTextImportHelper;
 
 /// import footnote elements (<text:footnote>)

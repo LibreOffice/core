@@ -74,7 +74,6 @@ class XMLErrors;
 // Shapes in Writer cannot be named via context menu (#i51726#)
 #include <unotools/moduleoptions.hxx>
 
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
     namespace container { class XIndexContainer; }

@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star { namespace xml { namespace dom {
     class XElement;
 } } } } }
 namespace dp_misc { class DescriptionInfoset; }
-namespace rtl { class OUString; }
 
 namespace dp_misc {
 

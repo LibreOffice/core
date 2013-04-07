@@ -34,9 +34,6 @@
 
 class ScDocument;
 
-namespace rtl {
-    class OUStringBuffer;
-}
 
 
 //------------------------------------------------------------------------
