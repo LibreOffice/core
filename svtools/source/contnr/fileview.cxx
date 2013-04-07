@@ -1036,11 +1036,10 @@ void ViewTabListBox_Impl::DoQuickSearch( const sal_Unicode& rChar )
 
     OUString    aLastText = maQuickSearchText;
     sal_uInt32  aLastPos = mnSearchIndex;
-    sal_Bool    bFound = sal_False;
 
     maQuickSearchText += OUString(rChar).toAsciiLowerCase();
 
-    bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText, sal_False );
+    sal_Bool bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText, sal_False );
 
     if ( !bFound && ( aLastText.getLength() == 1 ) &&
          ( aLastText == OUString(rChar) ) )
@@ -1060,8 +1059,6 @@ void ViewTabListBox_Impl::DoQuickSearch( const sal_Unicode& rChar )
             SetCurEntry( pEntry );
             MakeVisible( pEntry );
         }
-        else
-            bFound = sal_False;
     }
 
     maResetQuickSearch.Start();

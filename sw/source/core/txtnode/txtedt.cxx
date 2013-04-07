@@ -1281,8 +1281,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
 
-            sal_Bool bSpell = sal_True;
-            bSpell = xSpell.is() ? xSpell->hasLanguage( eActLang ) : sal_False;
+            sal_Bool bSpell = xSpell.is() ? xSpell->hasLanguage( eActLang ) : sal_False;
             if( bSpell && rWord.Len() > 0 )
             {
                 // check for: bAlter => xHyphWord.is()

@@ -71,9 +71,8 @@ XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
 }
 
 XFStyleContainer::XFStyleContainer(const XFStyleContainer& other):IXFObject(other),
-    m_strStyleNamePrefix(other.m_strStyleNamePrefix)
+    m_aStyles(other.m_aStyles), m_strStyleNamePrefix(other.m_strStyleNamePrefix)
 {
-    this->m_aStyles = other.m_aStyles;
 }
 
 XFStyleContainer& XFStyleContainer::operator=(const XFStyleContainer& other)
