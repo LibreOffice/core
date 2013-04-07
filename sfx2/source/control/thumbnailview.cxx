@@ -1253,6 +1253,7 @@ void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailView
                 }
 
                 pItem->show(false);
+                pItem->setSelection(false);
 
                 maItemStateHdl.Call(pItem);
             }
