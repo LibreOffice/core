@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///vg\u003d",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T19:55:03Z",
+      "side": 1,
+      "message": "sounds strange... better: \"Do not allow transparent fonts because of selection\"",
+      "revId": "837f9ea85068988646680dfb6e0c41faf54f1b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///vc\u003d",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T19:55:03Z",
+      "side": 1,
+      "message": "missing \"e\" in del_e_ted",
+      "revId": "837f9ea85068988646680dfb6e0c41faf54f1b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///vY\u003d",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1420,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T19:55:03Z",
+      "side": 1,
+      "message": "I would delete the date here. Personal preference...",
+      "revId": "837f9ea85068988646680dfb6e0c41faf54f1b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///vU\u003d",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1735,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T19:55:03Z",
+      "side": 1,
+      "message": "This sounds better to me (word order): \"unless there is already a switch at nPos\"",
+      "revId": "837f9ea85068988646680dfb6e0c41faf54f1b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///vQ\u003d",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2295,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T19:55:03Z",
+      "side": 1,
+      "message": "Maybe remove question here? Just \"adjust tab\".",
+      "revId": "837f9ea85068988646680dfb6e0c41faf54f1b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///vM\u003d",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2393,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T19:55:03Z",
+      "side": 1,
+      "message": "better \"thus\" or \"to\" instead of \"so\"?",
+      "revId": "837f9ea85068988646680dfb6e0c41faf54f1b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///vI\u003d",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2424,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T19:55:03Z",
+      "side": 1,
+      "message": "typo in \"recalculated\"",
+      "revId": "837f9ea85068988646680dfb6e0c41faf54f1b3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
