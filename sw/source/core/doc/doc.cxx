@@ -2023,15 +2023,11 @@ static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
-//  sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
     if( pTxtNode )
     {
         pTxtNode->SetSmartTagDirty( true );
         if( pTxtNode->GetSmartTags() )
         {
-//            if ( bOnlyWrong ) // only some smart tag types have been enabled or disabled
-//              pTxtNode->GetSmartTags()->SetInvalid( 0, STRING_LEN );
-//            else // smart tags all have been enabled or disabled
                 pTxtNode->SetSmartTags( NULL );
         }
     }
