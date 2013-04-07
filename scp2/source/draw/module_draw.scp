@@ -42,7 +42,7 @@ Module gid_Module_Prg_Draw_Bin
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml,
+    Files = (gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,
     gid_File_Share_Registry_Draw_Xcd,
     gid_File_Tmp_Userinstall_Draw_Inf);
 End
