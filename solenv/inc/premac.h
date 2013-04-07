@@ -47,19 +47,4 @@
 #define StringPtr MacOSStringPtr
 #define TimeValue MacOSTimeValue
 
-#ifdef __OBJC__
-#import <Foundation/NSObjCRuntime.h>
-#if defined (NSFoundationVersionNumber10_5) &&  MAC_OS_X_VERSION_MAX_ALLOWED < 1050
-@class CALayer;
-@class NSViewController;
-typedef int NSColorRenderingIntent;
-#endif
-#endif
-
-#if defined(MACOSX_SDK_VERSION) && MACOSX_SDK_VERSION < 1050
-typedef float CGFloat;
-typedef int NSInteger;
-typedef unsigned NSUInteger;
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

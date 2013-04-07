@@ -72,7 +72,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X,$(CPU)),USE_64=1)) \
 		$(if $(filter MACOSX,$(OS)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
-		$(if $(filter 1060 1070 1080,$(MAC_OS_X_VERSION_MIN_REQUIRED)),NSS_USE_SYSTEM_SQLITE=1)) \
+			NSS_USE_SYSTEM_SQLITE=1) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(filter YES,$(CROSS_COMPILING)),\
 		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py") \

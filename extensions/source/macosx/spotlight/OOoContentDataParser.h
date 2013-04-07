@@ -19,7 +19,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface OOoContentDataParser : NSObject {
     // indicates if we are interested in an element's content
     BOOL shouldReadCharacters;

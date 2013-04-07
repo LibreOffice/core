@@ -88,7 +88,6 @@ gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 gb_OBJCFLAGS := -x objective-c -fobjc-exceptions
 
 gb_LinkTarget_LDFLAGS := \
-	$(if $(filter 1040 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),-Wl$(COMMA)-syslibroot$(COMMA)$(gb_SDKDIR)) \
 	$(SOLARLIB) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 

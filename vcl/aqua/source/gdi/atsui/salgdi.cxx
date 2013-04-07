@@ -452,21 +452,9 @@ static bool AddTempFontDir( const char* pDir )
     ATSFontContainerRef aATSFontContainer;
 
     const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
-#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
     eStatus = ::ATSFontActivateFromFileReference( &aPathFSRef,
         eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
         &aATSFontContainer );
-#else
-    FSSpec aPathFSSpec;
-    eStatus = ::FSGetCatalogInfo( &aPathFSRef, kFSCatInfoNone,
-        NULL, NULL, &aPathFSSpec, NULL );
-    if( eStatus != noErr )
-        return false;
-
-    eStatus = ::ATSFontActivateFromFileSpecification( &aPathFSSpec,
-        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
-        &aATSFontContainer );
-#endif
     if( eStatus != noErr )
         return false;
 
@@ -541,21 +529,9 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
     ATSFontContainerRef oContainer;
 
     const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
-#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
     eStatus = ::ATSFontActivateFromFileReference( &aNewRef,
         eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
         &oContainer );
-#else
-    FSSpec aFontFSSpec;
-    eStatus = ::FSGetCatalogInfo( &aNewRef, kFSCatInfoNone,
-        NULL, NULL, &aFontFSSpec, NULL );
-    if( eStatus != noErr )
-        return false;
-
-    eStatus = ::ATSFontActivateFromFileSpecification( &aFontFSSpec,
-        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
-        &oContainer );
-#endif
     if( eStatus != noErr )
         return false;
 

@@ -1213,20 +1213,6 @@ SPECIAL_LIB_FILE(gid_File_Lib_Softokn3,softokn3)
 SPECIAL_LIB_FILE(gid_File_Lib_Smime3,smime3)
 #ifdef WNT
 SPECIAL_LIB_FILE(gid_File_Lib_Sqlite3,sqlite3)
-#else
-/*
- For MacOSX >= 10.6 we can apparently use the system sqlite.
-
- For MacOSX 10.4 we've delivered sqlite into a sqlite subdir for the duration
- of the build to avoid #i106132#. Now we need to put it into the program dir of
- the install.
-*/
-#if !defined(MACOSX) || (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
-File gid_File_Lib_Sqlite3
-    Name = "sqlite/" SPECIAL_NAME(sqlite3);
-    PACKED_LIB_FILE_BODY;
-End
-#endif //!defined(MACOSX) || (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
 #endif //WNT
 SPECIAL_LIB_FILE(gid_File_Lib_Ssl3,ssl3)
 #endif //SYSTEM_NSS

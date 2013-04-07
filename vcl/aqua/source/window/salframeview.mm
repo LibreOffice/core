@@ -1587,11 +1587,7 @@ private:
     return 0;
 }
 
-#if MACOSX_SDK_VERSION < 1050
-- (long)conversationIdentifier
-#else
 - (NSInteger)conversationIdentifier
-#endif
 {
     return (long)self;
 }

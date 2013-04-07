@@ -205,19 +205,11 @@ private:
     
     /** OpenGL handle to the leaving slide's texture
     */
-#if defined(MAC_OS_X_VERSION_10_5) || defined(MAC_OS_X_VERSION_10_6)
     GLuint GLleavingSlide;
-#else /* build target 10.4 */ 
-    unsigned long int GLleavingSlide;
-#endif
 
     /** OpenGL handle to the entering slide's texture
     */
-#if defined(MAC_OS_X_VERSION_10_5) || defined(MAC_OS_X_VERSION_10_6)
     GLuint GLenteringSlide;
-#else /* build target 10.4 */ 
-    unsigned long int GLenteringSlide;
-#endif 
     
     /** pointer to our window which we MIGHT create.
     */
@@ -782,11 +774,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
                               static_cast<double>(GLWin.Height) );
 */
     // works but not mandatory
-#if defined(MAC_OS_X_VERSION_10_5)
     GLint swapInt = 1;
-#else /* build target 10.4 */ 
-    long swapInt = 1;
-#endif
     [[GLWin.pAquaOpenGLView openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
 
     NSOpenGLContext* context = [GLWin.pAquaOpenGLView openGLContext];

@@ -3,13 +3,6 @@
  *  aquaOpenGLView.m
  */
 
-#import <Foundation/NSObjCRuntime.h>
-#if defined (NSFoundationVersionNumber10_5) &&  MAC_OS_X_VERSION_MAX_ALLOWED < 1050
-@class CALayer;
-@class NSViewController;
-typedef int NSColorRenderingIntent;
-#endif
-
 #include <Cocoa/Cocoa.h>
 #include <OpenGL/OpenGL.h>
 #include <OpenGL/gl.h>
@@ -81,12 +74,7 @@ typedef int NSColorRenderingIntent;
 - (void)prepareOpenGL
 {
     // for overriding to initialize OpenGL state, occurs after context creation
-#if MACOSX_SDK_VERSION < 1050
-    long swapInt = 1;
-#else
     GLint swapInt = 1;
-#endif
-
 
     [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
 

@@ -17,20 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#import <Foundation/NSObjCRuntime.h>
-#if defined (NSFoundationVersionNumber10_5) &&  MAC_OS_X_VERSION_MAX_ALLOWED < 1050
-@class CALayer;
-@class NSViewController;
-typedef int NSColorRenderingIntent;
-#endif
-
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreServices/CoreServices.h>
 #include <Foundation/Foundation.h>
 
-
 #import "OOoSpotlightImporter.h"
-
 
 /* -----------------------------------------------------------------------------
     Get metadata attributes from file

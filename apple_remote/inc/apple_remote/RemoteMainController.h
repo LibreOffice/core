@@ -29,16 +29,6 @@
  *
  *****************************************************************************/
 
-#ifndef DID_DEFINE_SOME_FUTURE_TYPES
-#import <Foundation/NSObjCRuntime.h>
-#if defined (NSFoundationVersionNumber10_5) &&  MAC_OS_X_VERSION_MAX_ALLOWED < 1050
-@class CALayer;
-@class NSViewController;
-typedef int NSColorRenderingIntent;
-#define DID_DEFINE_SOME_FUTURE_TYPES
-#endif
-#endif
-
 #import <Cocoa/Cocoa.h>
 
 #define AppleRemoteControlEvent 15
