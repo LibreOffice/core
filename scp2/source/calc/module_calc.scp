@@ -42,7 +42,7 @@ Module gid_Module_Prg_Calc_Bin
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_File_Share_Registry_Calc_Xcd,gid_File_Lib_Calc,gid_File_Lib_Sc,gid_File_Lib_Scui,gid_File_Lib_Scfilt,gid_File_Lib_Scd,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg,gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml,
+    Files = (gid_File_Share_Registry_Calc_Xcd,gid_File_Lib_Calc,gid_File_Lib_Sc,gid_File_Lib_Scui,gid_File_Lib_Scfilt,gid_File_Lib_Scd,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg,
     gid_File_Lib_Solver,gid_File_Lib_Lpsolve,
     gid_File_Lib_Vbaobj,
     gid_File_Tmp_Userinstall_Calc_Inf);
