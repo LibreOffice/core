@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH///us\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T20:42:01Z",
+      "side": 1,
+      "message": "Because to me this sounds better...",
+      "parentUuid": "AAAAV3///Gw\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///MM\u003d",
         "filename": "sd/source/core/drawdoc.cxx",
         "patchSetId": 1
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Why?",
       "parentUuid": "AAAAV3///MM\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///uo\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T20:42:01Z",
+      "side": 1,
+      "message": "Same here. Sounds better to me. But personal preference...",
+      "parentUuid": "AAAAV3///Gs\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -223,6 +259,24 @@
       "side": 1,
       "message": "Re: both changes: Why?",
       "parentUuid": "AAAAV3///L8\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///ug\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T20:42:01Z",
+      "side": 1,
+      "message": "(1. that) \"oder wenn es klar ist, es wird nicht mehr geladen\" sounds also strange in German - sure, it is correct English but in my eyes adding a that makes the sentence better understandable\n(2. be loaded) The document is loaded from outside and does not load itself, thus I would use the passive form here.",
+      "parentUuid": "AAAAV3///Gk\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -369,6 +423,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH///uc\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T20:42:01Z",
+      "side": 1,
+      "message": "because the argument is called \"target page\" and thus \"given\" fits better in my eyes...",
+      "parentUuid": "AAAAV3///H8\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///Lg\u003d",
         "filename": "sd/source/core/drawdoc2.cxx",
         "patchSetId": 1
@@ -433,6 +505,24 @@
       "side": 1,
       "message": "Why?",
       "parentUuid": "AAAAV3///Lc\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///uY\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T20:42:01Z",
+      "side": 1,
+      "message": "Don\u0027t know... Sounds better to me. Personal preference.",
+      "parentUuid": "AAAAV3///H0\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
