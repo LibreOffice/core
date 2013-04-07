@@ -63,13 +63,13 @@ private:
 
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
-    mutable int mnGlyphCount;           // glyph count
+    mutable int mnGlyphCount;
 
-    mutable CGGlyph* mpGlyphs;          // glyphs
-    mutable int* mpCharWidths;          // map relative charpos to charwidth
-    mutable int* mpGlyphs2Chars;        // map absolute glyphpos to absolute charpos
+    mutable CGGlyph* mpGlyphs;
+    mutable CGFloat* mpCharWidths;
+    mutable int* mpGlyphs2Chars;
 
-    mutable CGSize* mpGlyphAdvances;    // glyph advances for the justified layout
+    mutable CGSize* mpGlyphAdvances;
 
     mutable CGPoint* mpGlyphPositions;
     mutable CTTypesetterRef mpTypesetter;
@@ -106,7 +106,7 @@ CoreTextLayout::CoreTextLayout(QuartzSalGraphics* graphics, CoreTextStyleInfo* s
     mnCurrentGlyphRunIndex(0),
     mpRuns(NULL)
 {
-    SAL_INFO( "vcl.coretext.layout", "CoreTextLayout::CoreTextLayout() " << this );
+    SAL_INFO( "vcl.coretext.layout", "CoreTextLayout::CoreTextLayout() " << this << ", style=" << *style);
 }
 
 CoreTextLayout::~CoreTextLayout()
@@ -163,7 +163,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
         return;
 
     Point pos = GetDrawPosition(Point(0,0));
-    SAL_INFO( "vcl.coretext.layout", "at pos (" << pos.X() << "," << pos.Y() <<") ctfont=" << mpStyle->GetFont() );
+    SAL_INFO( "vcl.coretext.layout", "  at pos (" << pos.X() << "," << pos.Y() <<") ctfont=" << mpStyle->GetFont() );
 
     CGFontRef cg_font = CTFontCopyGraphicsFont(mpStyle->GetFont(), NULL);
     if( !cg_font ) {
@@ -221,6 +221,10 @@ void CoreTextLayout::DropGlyph( int /*nStart*/ )
 {
 }
 
+// Note that the "DX array" here is filled with individual character
+// widths, while ImplLayoutArgs::mpDXArray contains cumulative
+// character positions. Consistency is over-rated.
+
 long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
     SAL_INFO( "vcl.coretext.layout", "FillDXArray(" << this << ")" );
@@ -236,15 +240,22 @@ long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
     float scale = mpStyle->GetFontStretchFactor();
     CGFloat accumulated_width = 0;
 
+    std::ostringstream DXArrayInfo;
     for( int i = 0; i < mnCharCount; ++i ) {
         // convert and adjust for accumulated rounding errors
-        accumulated_width += mpCharWidths[i];
+        accumulated_width += mpCharWidths[ i ];
         const long old_width = width;
-        width = round_to_long(accumulated_width * scale);
+        width = round_to_long( accumulated_width * scale );
         pDXArray[i] = width - old_width;
+#ifdef SAL_LOG_INFO
+        if ( i < 7 )
+            DXArrayInfo << " " << pDXArray[i];
+        else if ( i == 7 )
+            DXArrayInfo << "...";
+#endif
     }
 
-    SAL_INFO( "vcl.coretext.layout", "FillDXArrar() returning " << width );
+    SAL_INFO( "vcl.coretext.layout", "FillDXArray():" << DXArrayInfo.str() << ", result=" << width );
 
     return width;
 }
@@ -447,12 +458,12 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
 {
     SAL_INFO( "vcl.coretext.layout", "InitGIA(" << this << "): " << mnCharCount << ":" << rArgs.mnMinCharPos << "--" << mnEndCharPos );
 
-    if( mnCharCount <= 0) {
+    if ( mnCharCount <= 0) {
         SAL_INFO( "vcl.coretext.layout", "InitGIA(): mnCharCount is non-positive, returning false" );
         return false;
     }
 
-    if( mpGlyphs ) {
+    if ( mpGlyphs ) {
         SAL_INFO( "vcl.coretext.layout", "InitGIA(): mpGlyphs is non-NULL, returning true" );
         return true;
     }
@@ -490,13 +501,13 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
 
     mpTypesetter = CTTypesetterCreateWithAttributedString( attributed_string );
     CFRelease( attributed_string );
-    if( !mpTypesetter ) {
+    if ( !mpTypesetter ) {
         SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTTypesetterCreateWithAttributedString() returned NULL, returning false" );
         return false;
     }
 
     mpLine = CTTypesetterCreateLine( mpTypesetter, CFRangeMake( 0, 0 ) );
-    if( !mpLine ) {
+    if ( !mpLine ) {
         SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTTypesetterCreateLine() returned NULL, returning false" );
         return false;
     }
@@ -513,13 +524,9 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
     }
 
     mnGlyphCount = CTLineGetGlyphCount( mpLine );
-    SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTLineGetGlyphCount() returned " << mnGlyphCount );
 
     mpGlyphs = new CGGlyph[ mnGlyphCount ];
-    mpCharWidths = new int[ mnCharCount ];
-    for( int i = 0; i < mnCharCount; ++i) {
-        mpCharWidths[i] = 0.0;
-    }
+    mpCharWidths = new CGFloat[ mnCharCount ];
     mpGlyphs2Chars = new int[ mnGlyphCount ];
     mpGlyphAdvances = new CGSize[ mnGlyphCount ];
     mpGlyphPositions = new CGPoint[ mnGlyphCount ];
@@ -527,55 +534,75 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
     CFArrayRef runs = CTLineGetGlyphRuns( mpLine );
     CFIndex nb_runs = CFArrayGetCount( runs );
 
-    int p = 0;
-    for( CFIndex i = 0; i < nb_runs; ++i ) {
-        CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex( runs, i );
-        if( run ) {
-            std::ostringstream glyph_info_line;
-			CFIndex nb_glyphs = CTRunGetGlyphCount( run );
-            if( nb_glyphs ) {
-                CFRange text_range = CTRunGetStringRange( run );
-                if( text_range.location != kCFNotFound && text_range.length > 0 ) {
-                    CFIndex indices[ nb_glyphs ];
-                    CGGlyph glyphs[ nb_glyphs ];
-                    CTRunGetStringIndices( run, CFRangeMake( 0, 0 ), indices );
-                    CTRunGetGlyphs( run, CFRangeMake( 0, 0 ), glyphs );
-                    CTRunGetPositions( run, CFRangeMake( 0, 0 ), &mpGlyphPositions[p] );
-                    bool is_vertical_run = false;
-                    CFDictionaryRef aDict = CTRunGetAttributes( run );
-                    if ( aDict ) {
-                        const CFBooleanRef aValue = (const CFBooleanRef)CFDictionaryGetValue( aDict, kCTVerticalFormsAttributeName );
-                        is_vertical_run =  (aValue == kCFBooleanTrue) ? true : false;
-                    }
+    CFIndex lineGlyphIx = 0;
+    for ( CFIndex runIx = 0; runIx < nb_runs; runIx++ )
+    {
+        CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex( runs, runIx );
+        if ( !run )
+            continue;
 
-                    for (CFIndex j = 0 ; j < nb_glyphs; ++p, ++j ) {
-                        assert ( p < mnGlyphCount );
-                        mpGlyphs[ p ] = glyphs[ j ];
+        std::ostringstream glyphPositionInfo;
+        std::ostringstream glyphAdvancesInfo;
+        std::ostringstream charWidthInfo;
+
+        const CFIndex runGlyphCount = CTRunGetGlyphCount( run );
+        if ( runGlyphCount )
+        {
+            assert( lineGlyphIx + runGlyphCount <= mnGlyphCount );
+
+            const CFIndex lineRunGlyphStartIx = lineGlyphIx;
+
+            CFIndex runStringIndices[ runGlyphCount ];
+            CTRunGetStringIndices( run, CFRangeMake( 0, 0 ), runStringIndices );
+
+            CTRunGetGlyphs( run, CFRangeMake( 0, 0 ), &mpGlyphs[ lineGlyphIx ] );
+
+            CTRunGetPositions( run, CFRangeMake( 0, 0 ), &mpGlyphPositions[ lineGlyphIx ] );
+            CTRunGetAdvances( run, CFRangeMake( 0, 0 ), &mpGlyphAdvances[ lineGlyphIx ] );
+
+            bool isVerticalRun = false;
+            CFDictionaryRef aDict = CTRunGetAttributes( run );
+            if ( aDict ) {
+                const CFBooleanRef aValue = (const CFBooleanRef)CFDictionaryGetValue( aDict, kCTVerticalFormsAttributeName );
+                isVerticalRun = (aValue == kCFBooleanTrue);
+            }
+
+            for ( CFIndex runGlyphIx = 0 ; runGlyphIx < runGlyphCount; lineGlyphIx++, runGlyphIx++ )
+            {
+                const CFIndex charIx = runStringIndices[ runGlyphIx ];
+                assert( charIx < mnCharCount );
+                mpGlyphs2Chars[ lineGlyphIx ] = charIx;
+
+                mpCharWidths[ charIx ] = mpGlyphAdvances[ lineGlyphIx ].width;
+            }
 #ifdef SAL_LOG_INFO
-                        if (j < 7)
-                            glyph_info_line << " " << glyphs[j] << "@(" << mpGlyphPositions[p].x << "," << mpGlyphPositions[p].y << ")";
-                        else if (j == 7)
-                            glyph_info_line << "...";
-#endif
-                        CFIndex k = indices[ j ];
-                        mpGlyphs2Chars[p] = k;
-                        assert( k < mnCharCount );
-
-                        if ( j < nb_glyphs - 1 )
-                        {
-                            mpCharWidths[ k ] += mpGlyphPositions[ p + 1 ].x - mpGlyphPositions[ p ].x;
-                        }
-                        if( p > 0)
-                        {
-                            mpGlyphAdvances[p - 1].width = mpGlyphPositions[ p ].x - mpGlyphPositions[p - 1].x;
-                            mpGlyphAdvances[p - 1].height = mpGlyphPositions[ p ].y - mpGlyphPositions[p - 1].y;
-                        }
-                    }
+            for ( int i = 0; i < runGlyphCount; i++ ) {
+                const int ix = lineRunGlyphStartIx + i;
+                if ( i < 7 ) {
+                    glyphPositionInfo << " " << mpGlyphs[ ix ] << "@" << mpGlyphPositions[ ix ];
+                    glyphAdvancesInfo << " " << mpGlyphAdvances[ ix ];
+                } else if (i == 7 ) {
+                    glyphPositionInfo << "...";
+                    glyphAdvancesInfo << "...";
                 }
-			}
-            SAL_INFO( "vcl.coretext.layout", "  run " << run << " glyphs:" << glyph_info_line.str() );
+            }
+            SAL_INFO( "vcl.coretext.layout", "  run " << runIx << ": " << runGlyphCount << " glyphs:" << glyphPositionInfo.str() );
+            SAL_INFO( "vcl.coretext.layout", "  run " << runIx << ": advances:" << glyphAdvancesInfo.str() );
+#endif
         }
     }
+
+#ifdef SAL_LOG_INFO
+    std::ostringstream charWidthInfo;
+
+    for ( int ix = 0; ix < mnCharCount; ix++ ) {
+        if ( ix < 7 )
+            charWidthInfo << " " << mpCharWidths[ ix ];
+        else if ( ix == 7 )
+            charWidthInfo << "...";
+    }
+    SAL_INFO( "vcl.coretext.layout", "  char widths:" << charWidthInfo.str() );
+#endif
 
     SAL_INFO( "vcl.coretext.layout", "InitGIA() returning normally true" );
     return true;
