@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///vA\u003d",
+        "filename": "vcl/source/edit/textdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T20:04:31Z",
+      "side": 1,
+      "message": "Why a question mark at the end of the line, here?",
+      "revId": "c40ccab148287e0b82306ce5bed2c96d545241ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///u8\u003d",
+        "filename": "vcl/source/edit/textdoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T20:04:31Z",
+      "side": 1,
+      "message": "Why the question here? Better \"behind\" instead of \"past\"?",
+      "revId": "c40ccab148287e0b82306ce5bed2c96d545241ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///u4\u003d",
+        "filename": "vcl/source/edit/textdoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T20:04:31Z",
+      "side": 1,
+      "message": "Hmm, better: \"Otherwise e.g. an UL would go until the new ULDB, thus expand both.\"",
+      "revId": "c40ccab148287e0b82306ce5bed2c96d545241ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///u0\u003d",
+        "filename": "vcl/source/edit/textdoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-04-07T20:04:31Z",
+      "side": 1,
+      "message": "Why question here?",
+      "revId": "c40ccab148287e0b82306ce5bed2c96d545241ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
