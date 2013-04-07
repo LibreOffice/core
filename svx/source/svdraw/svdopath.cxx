@@ -1671,12 +1671,12 @@ SdrPathObj::~SdrPathObj()
     impDeleteDAC();
 }
 
-bool ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
+static bool lcl_ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     return (1L == rPolyPolygon.count() && 2L == rPolyPolygon.getB2DPolygon(0L).count());
 }
 
-Rectangle ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
+static Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
 
@@ -1687,7 +1687,7 @@ Rectangle ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
 
 void SdrPathObj::ImpForceLineWink()
 {
-    if(OBJ_LINE == meKind && ImpIsLine(GetPathPoly()))
+    if(OBJ_LINE == meKind && lcl_ImpIsLine(GetPathPoly()))
     {
         const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0L));
         const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0L));
@@ -1734,8 +1734,8 @@ void SdrPathObj::ImpForceKind()
         }
     }
 
-    if (meKind==OBJ_LINE && !ImpIsLine(GetPathPoly())) meKind=OBJ_PLIN;
-    if (meKind==OBJ_PLIN && ImpIsLine(GetPathPoly())) meKind=OBJ_LINE;
+    if (meKind==OBJ_LINE && !lcl_ImpIsLine(GetPathPoly())) meKind=OBJ_PLIN;
+    if (meKind==OBJ_PLIN && lcl_ImpIsLine(GetPathPoly())) meKind=OBJ_LINE;
 
     bClosedObj=IsClosed();
 
@@ -1768,7 +1768,7 @@ void SdrPathObj::ImpForceKind()
         // #i10659# for SdrTextObj, keep aRect up to date
         if(GetPathPoly().count())
         {
-            aRect = ImpGetBoundRect(GetPathPoly());
+            aRect = lcl_ImpGetBoundRect(GetPathPoly());
         }
     }
 
@@ -1868,7 +1868,7 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
     {
         sal_uInt16 nId(STR_ObjNameSingulLINE);
 
-        if(ImpIsLine(GetPathPoly()))
+        if(lcl_ImpIsLine(GetPathPoly()))
         {
             const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0L));
             const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0L));
@@ -2416,7 +2416,7 @@ void SdrPathObj::RecalcSnapRect()
 {
     if(GetPathPoly().count())
     {
-        maSnapRect = ImpGetBoundRect(GetPathPoly());
+        maSnapRect = lcl_ImpGetBoundRect(GetPathPoly());
     }
 }
 
@@ -2510,7 +2510,7 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
             if(GetPathPoly().count())
             {
                 // #i10659# for SdrTextObj, keep aRect up to date
-                aRect = ImpGetBoundRect(GetPathPoly());
+                aRect = lcl_ImpGetBoundRect(GetPathPoly());
             }
         }
 
