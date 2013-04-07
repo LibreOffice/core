@@ -497,7 +497,47 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Glas_Red_Zip,
 	gid_File_Extra_Glas_Green_Zip,
 	gid_File_Extra_Glas_Blue_Zip,
-	gid_File_Share_Config_Sofficecfg_uiconfig_Zip,
+        gid_File_Share_Config_Sofficecfg_uiconfig_basicide,
+        gid_File_Share_Config_Sofficecfg_uiconfig_cui,
+#ifdef DBCONNECTIVITY
+        gid_File_Share_Config_Sofficecfg_uiconfig_dbaccess,
+        gid_File_Share_Config_Sofficecfg_uiconfig_dbapp,
+        gid_File_Share_Config_Sofficecfg_uiconfig_dbbrowser,
+        gid_File_Share_Config_Sofficecfg_uiconfig_dbquery,
+        gid_File_Share_Config_Sofficecfg_uiconfig_dbrelation,
+        gid_File_Share_Config_Sofficecfg_uiconfig_dbreport,
+        gid_File_Share_Config_Sofficecfg_uiconfig_dbtable,
+        gid_File_Share_Config_Sofficecfg_uiconfig_dbtdata,
+#endif
+        gid_File_Share_Config_Sofficecfg_uiconfig_desktop,
+        gid_File_Share_Config_Sofficecfg_uiconfig_filter,
+#ifdef DBCONNECTIVITY
+        gid_File_Share_Config_Sofficecfg_uiconfig_sbibliography,
+#endif
+        gid_File_Share_Config_Sofficecfg_uiconfig_scalc,
+        gid_File_Share_Config_Sofficecfg_uiconfig_schart,
+        gid_File_Share_Config_Sofficecfg_uiconfig_sdraw,
+        gid_File_Share_Config_Sofficecfg_uiconfig_sfx,
+        gid_File_Share_Config_Sofficecfg_uiconfig_sglobal,
+        gid_File_Share_Config_Sofficecfg_uiconfig_simpress,
+        gid_File_Share_Config_Sofficecfg_uiconfig_smath,
+#ifdef GUIBASE_UNX
+        gid_File_Share_Config_Sofficecfg_uiconfig_spa,
+#endif
+        gid_File_Share_Config_Sofficecfg_uiconfig_startmodule,
+        gid_File_Share_Config_Sofficecfg_uiconfig_svt,
+        gid_File_Share_Config_Sofficecfg_uiconfig_svx,
+        gid_File_Share_Config_Sofficecfg_uiconfig_sweb,
+        gid_File_Share_Config_Sofficecfg_uiconfig_swform,
+        gid_File_Share_Config_Sofficecfg_uiconfig_swreport,
+        gid_File_Share_Config_Sofficecfg_uiconfig_swriter,
+        gid_File_Share_Config_Sofficecfg_uiconfig_swxform,
+#ifdef ENABLE_TELEPATHY
+        gid_File_Share_Config_Sofficecfg_uiconfig_tubes,
+#endif
+        gid_File_Share_Config_Sofficecfg_uiconfig_uui,
+        gid_File_Share_Config_Sofficecfg_uiconfig_vcl,
+        gid_File_Share_Config_Sofficecfg_uiconfig_xmlsec,
 	gid_File_Dtd_Accelerator,
 	gid_File_Dtd_Dialog,
 	gid_File_Dtd_Event,

@@ -87,9 +87,9 @@ $(packimages_DIR)/commandimagelist.ilst :
 
 $(packimages_DIR)/sorted.lst : \
 		$(SRCDIR)/postprocess/packimages/image-sort.lst \
-		$(call gb_Postprocess_get_target,AllPackages)
+		$(call gb_Postprocess_get_target,AllUIConfigs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
-		$(PERL) $(SOLARENV)/bin/image-sort.pl $< $(OUTDIR)/xml $@)
+		$(PERL) $(SOLARENV)/bin/image-sort.pl $< $(INSTDIR)/$(gb_UIConfig_INSTDIR) $@)
 
 # vim: set noet sw=4 ts=4:

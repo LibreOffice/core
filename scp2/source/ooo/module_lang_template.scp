@@ -30,7 +30,31 @@ Module gid_Module_Langpack_Basis_Template
     Name = "gid_Module_Langpack_Root_Template";
     Description = "gid_Module_Langpack_Root_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Share_Config_Sofficecfg_uiconfig_Zip_Lang,
+    Files = (
+             gid_File_Share_Config_Sofficecfg_uiconfig_basicide_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_cui_Lang,
+#ifdef DBCONNECTIVITY
+             gid_File_Share_Config_Sofficecfg_uiconfig_dbaccess_Lang,
+#endif
+             gid_File_Share_Config_Sofficecfg_uiconfig_desktop_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_filter_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_scalc_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_schart_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_sdraw_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_sfx_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_simpress_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_smath_Lang,
+#ifdef GUIBASE_UNX
+             gid_File_Share_Config_Sofficecfg_uiconfig_spa_Lang,
+#endif
+             gid_File_Share_Config_Sofficecfg_uiconfig_svt_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_svx_Lang,
+#ifdef ENABLE_TELEPATHY
+             gid_File_Share_Config_Sofficecfg_uiconfig_tubes_Lang,
+#endif
+             gid_File_Share_Config_Sofficecfg_uiconfig_uui_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_vcl_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_xmlsec_Lang,
              gid_File_Extra_Autotextshare_Lang,
              gid_File_Registry_Filter_Zip,
              gid_File_Registry_Lang,

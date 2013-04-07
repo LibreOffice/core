@@ -771,21 +771,72 @@ End
 #endif
 
 // user interface configuration files
-File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    Dir = gid_Dir_Share_Config_Sofficecfg;
-    Name = "uiconfig.zip";
-    Patchfiles = ();
-End
+UI_FILELIST(basicide, "UIConfig/modules/BasicIDE.filelist")
+UI_FILELIST(cui, "UIConfig/cui.filelist")
+#ifdef DBCONNECTIVITY
+UI_FILELIST(dbaccess, "UIConfig/dbaccess.filelist")
+UI_FILELIST(dbapp, "UIConfig/modules/dbapp.filelist")
+UI_FILELIST(dbbrowser, "UIConfig/modules/dbbrowser.filelist")
+UI_FILELIST(dbquery, "UIConfig/modules/dbquery.filelist")
+UI_FILELIST(dbrelation, "UIConfig/modules/dbrelation.filelist")
+UI_FILELIST(dbreport, "UIConfig/modules/dbreport.filelist")
+UI_FILELIST(dbtable, "UIConfig/modules/dbtable.filelist")
+UI_FILELIST(dbtdata, "UIConfig/modules/dbtdata.filelist")
+#endif
+UI_FILELIST(desktop, "UIConfig/desktop.filelist")
+UI_FILELIST(filter, "UIConfig/filter.filelist")
+#ifdef DBCONNECTIVITY
+UI_FILELIST(sbibliography, "UIConfig/modules/sbibliography.filelist")
+#endif
+UI_FILELIST(scalc, "UIConfig/modules/scalc.filelist")
+UI_FILELIST(schart, "UIConfig/modules/schart.filelist")
+UI_FILELIST(sdraw, "UIConfig/modules/sdraw.filelist")
+UI_FILELIST(sfx, "UIConfig/sfx.filelist")
+UI_FILELIST(sglobal, "UIConfig/modules/sglobal.filelist")
+UI_FILELIST(simpress, "UIConfig/modules/simpress.filelist")
+UI_FILELIST(smath, "UIConfig/modules/smath.filelist")
+#ifdef GUIBASE_UNX
+UI_FILELIST(spa, "UIConfig/spa.filelist")
+#endif
+UI_FILELIST(startmodule, "UIConfig/modules/StartModule.filelist")
+UI_FILELIST(svt, "UIConfig/svt.filelist")
+UI_FILELIST(svx, "UIConfig/svx.filelist")
+UI_FILELIST(sweb, "UIConfig/modules/sweb.filelist")
+UI_FILELIST(swform, "UIConfig/modules/swform.filelist")
+UI_FILELIST(swreport, "UIConfig/modules/swreport.filelist")
+UI_FILELIST(swriter, "UIConfig/modules/swriter.filelist")
+UI_FILELIST(swxform, "UIConfig/modules/swxform.filelist")
+#ifdef ENABLE_TELEPATHY
+UI_FILELIST(tubes, "UIConfig/tubes.filelist")
+#endif
+UI_FILELIST(uui, "UIConfig/uui.filelist")
+UI_FILELIST(vcl, "UIConfig/vcl.filelist")
+UI_FILELIST(xmlsec, "UIConfig/xmlsec.filelist")
 
-// user interface configuration file translations
-File gid_File_Share_Config_Sofficecfg_uiconfig_Zip_Lang
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    Dir = gid_Dir_Share_Config_Sofficecfg;
-    EXTRA_ALL_LANG_BUT_EN_US(uiconfig,zip);
-End
+UI_FILELIST_ALL_LANG(basicide, UIConfig/modules/BasicIDE, filelist)
+UI_FILELIST_ALL_LANG(cui, UIConfig/cui, filelist)
+#ifdef DBCONNECTIVITY
+UI_FILELIST_ALL_LANG(dbaccess, UIConfig/dbaccess, filelist)
+#endif
+UI_FILELIST_ALL_LANG(desktop, UIConfig/desktop, filelist)
+UI_FILELIST_ALL_LANG(filter, UIConfig/filter, filelist)
+UI_FILELIST_ALL_LANG(scalc, UIConfig/modules/scalc, filelist)
+UI_FILELIST_ALL_LANG(schart, UIConfig/modules/schart, filelist)
+UI_FILELIST_ALL_LANG(sdraw, UIConfig/modules/sdraw, filelist)
+UI_FILELIST_ALL_LANG(sfx, UIConfig/sfx, filelist)
+UI_FILELIST_ALL_LANG(simpress, UIConfig/modules/simpress, filelist)
+UI_FILELIST_ALL_LANG(smath, UIConfig/modules/smath, filelist)
+#ifdef GUIBASE_UNX
+UI_FILELIST_ALL_LANG(spa, UIConfig/spa, filelist)
+#endif
+UI_FILELIST_ALL_LANG(svt, UIConfig/svt, filelist)
+UI_FILELIST_ALL_LANG(svx, UIConfig/svx, filelist)
+#ifdef ENABLE_TELEPATHY
+UI_FILELIST_ALL_LANG(tubes, UIConfig/tubes, filelist)
+#endif
+UI_FILELIST_ALL_LANG(uui, UIConfig/uui, filelist)
+UI_FILELIST_ALL_LANG(vcl, UIConfig/vcl, filelist)
+UI_FILELIST_ALL_LANG(xmlsec, UIConfig/xmlsec, filelist)
 
 #ifdef WNT
 
