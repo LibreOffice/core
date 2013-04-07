@@ -74,6 +74,7 @@ public:
     void testFdo30983();
     void testPlaceholder();
     void testMnor();
+    void testI120928();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -122,6 +123,7 @@ void Test::run()
         {"fdo30983.rtf", &Test::testFdo30983},
         {"placeholder.odt", &Test::testPlaceholder},
         {"mnor.rtf", &Test::testMnor},
+        {"i120928.rtf", &Test::testI120928},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -514,6 +516,27 @@ void Test::testMnor()
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("iiint from {V} to <?> {\"divF\"} dV = llint from {S} to <?> {\"F\" ∙ \"n\" dS}", 74, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testI120928()
+{
+    // \listpicture and \levelpicture0 was ignored, leading to missing graphic bullet in numbering.
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    bool bIsGraphic = false;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "NumberingType")
+            CPPUNIT_ASSERT_EQUAL(style::NumberingType::BITMAP, rProp.Value.get<sal_Int16>());
+        else if (rProp.Name == "GraphicURL")
+            bIsGraphic = true;
+    }
+    CPPUNIT_ASSERT_EQUAL(true, bIsGraphic);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
