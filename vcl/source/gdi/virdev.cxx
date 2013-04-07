@@ -184,9 +184,14 @@ VirtualDevice::~VirtualDevice()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    // OutputDevice::ImplReleaseGraphics() requires the yield mutex to
-    // be held, hmm.
+#if defined(DBG_UTIL) && defined(MACOSX)
+    // OutputDevice::ImplReleaseGraphics() requires the yield mutex to be
+    // held, hmm. For some reason this is a problem only in a dbgutil build on
+    // OS X, when this stuff gets called when soffice is about to exit, from
+    // editeng/source/editeng/eerdll.cxx. If this code is used on Linux, we
+    // again get a hang in some/all of the subsequentchecks.
     pSVData->mpDefInst->AcquireYieldMutex( 1 );
+#endif
 
     ImplReleaseGraphics();
 
