@@ -1314,9 +1314,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
                 // get keyboard language
                 String aKeyboardLang;
-                LanguageType nLang = LANGUAGE_DONTKNOW;
                 SwEditWin& rEditWin = GetView().GetEditWin();
-                nLang = rEditWin.GetInputLanguage();
+                LanguageType nLang = rEditWin.GetInputLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aKeyboardLang = aLangTable.GetString( nLang );
 
