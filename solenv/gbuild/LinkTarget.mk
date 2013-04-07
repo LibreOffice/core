@@ -817,7 +817,25 @@ $$(call gb_Output_error,\
 endef
 
 define gb_PrintDeps_info
-$(info LibraryDep: $(4) links against $(2))
+$(info LibraryDep: $(1) links against $(2))
+endef
+
+define gb_LinkTarget__use_libraries
+
+# used by bin/module-deps.pl
+ifneq ($(ENABLE_PRINT_DEPS),)
+# exclude libraries in Library_merged
+ifeq ($(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))),)
+$$(eval $$(call gb_PrintDeps_info,$(4),$(3)))
+endif
+endif
+
+$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(3)
+
+$(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(3),$(call gb_Library_get_target,$(lib)))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) : \
+	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
+
 endef
 
 define gb_LinkTarget_use_libraries
@@ -826,23 +844,11 @@ $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
 
-gb_LINKED_LIBS := $(if $(filter $(gb_MERGEDLIBS),$(2)), \
-	$(if $(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))),, merged)) \
-	$(filter-out $(gb_MERGEDLIBS),$(2))
-
-# used by bin/module-deps.pl
-ifneq ($(ENABLE_PRINT_DEPS),)
-# exclude libraries in Library_merged
-ifeq ($(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))),)
-$$(eval $$(call gb_PrintDeps_info,$(1),$$(gb_LINKED_LIBS),$(3),$(4)))
-endif
-endif
-
-$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $$(gb_LINKED_LIBS)
-
-$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$$(gb_LINKED_LIBS),$$(call gb_Library_get_target,$$(lib)))
-$(call gb_LinkTarget_get_external_headers_target,$(1)) : \
-	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
+$(call gb_LinkTarget__use_libraries,$(1),$(2),$(strip \
+	$(if $(filter $(gb_MERGEDLIBS),$(2)), \
+		$(if $(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))),, merged)) \
+	$(filter-out $(gb_MERGEDLIBS),$(2)) \
+	),$(4))
 
 endef
 
