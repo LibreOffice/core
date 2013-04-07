@@ -888,22 +888,6 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     if ( CH_TXTATR_BREAKWORD == GetChar( rPos ) )
     {
         bFldBidi = true;
-/*
-        // examining the script of the field text should be sufficient
-        // for 99% of all cases
-        XubString aTxt = GetTxtFrm()->GetTxtNode()->GetExpandTxt( rPos, 1 );
-
-        if ( pBreakIt->GetBreakIter().is() && aTxt.Len() )
-        {
-            bool bFldDir = ( i18n::ScriptType::COMPLEX ==
-                                 pBreakIt->GetRealScriptOfText( aTxt, 0 ) );
-            bool bCurrDir = ( 0 != ( nCurrLevel % 2 ) );
-            if ( bFldDir != bCurrDir )
-            {
-                nNextLevel = nCurrLevel + 1;
-                bFldBidi = true;
-            }
-        }*/
     }
     else
         nNextLevel = rSI.DirType( rPos );
