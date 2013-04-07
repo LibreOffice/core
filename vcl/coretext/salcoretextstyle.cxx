@@ -120,4 +120,16 @@ void CoreTextStyleInfo::SetColor(void)
     SafeCFRelease(m_color);
 }
 
+std::ostream &operator <<(std::ostream& s, CoreTextStyleInfo &rStyle)
+{
+#ifndef SAL_LOG_INFO
+    (void) rStyle;
+#else
+    s << "{Font=" << rStyle.GetFont();
+    s << ",Color=" << rStyle.GetColor();
+    s << "}";
+#endif
+    return s;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

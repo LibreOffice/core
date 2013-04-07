@@ -20,6 +20,8 @@
 #ifndef _VCL_CORETEXT_SALCORETEXTSTYLE_HXX
 #define _VCL_CORETEXT_SALCORETEXTSTYLE_HXX
 
+#include <iostream>
+
 #include "quartz/salgdicommon.hxx"
 
 #include "coretext/salcoretextfontutils.hxx"
@@ -53,6 +55,8 @@ private:
     CGColorRef m_color;
     CoreTextPhysicalFontFace* m_font_face;
 };
+
+std::ostream &operator <<(std::ostream& s, CoreTextStyleInfo &rStyle);
 
 #endif // _VCL_AQUA_CORETEXT_SALCORETEXTSTYLE_HXX
 
