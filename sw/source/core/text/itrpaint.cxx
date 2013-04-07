@@ -174,7 +174,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     const bool bDrawInWindow = GetInfo().OnWin();
 
     // 6882: Leerzeilen duerfen nicht wegoptimiert werden bei Paragraphzeichen.
-    const sal_Bool bEndPor = GetInfo().GetOpt().IsParagraph() && !GetInfo().GetTxt().Len();
+    const sal_Bool bEndPor = GetInfo().GetOpt().IsParagraph() && GetInfo().GetTxt().isEmpty();
 
     SwLinePortion *pPor = bEndPor ? pCurr->GetFirstPortion() : CalcPaintOfst( rPaint );
 
@@ -434,7 +434,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if( !GetNextLine() &&
             GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreView() &&
             GetInfo().GetOpt().IsParagraph() && !GetTxtFrm()->GetFollow() &&
-            GetInfo().GetIdx() >= GetInfo().GetTxt().Len() )
+            GetInfo().GetIdx() >= GetInfo().GetTxt().getLength() )
         {
             const SwTmpEndPortion aEnd( *pEndTempl );
             GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), *pOut );
@@ -465,7 +465,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 // GetInfo().Y() must be current baseline.
                 SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTxtFrm()->Frm().Bottom();
                 if( ( nDiff > 0 &&
-                      ( GetEnd() < GetInfo().GetTxt().Len() ||
+                      ( GetEnd() < GetInfo().GetTxt().getLength() ||
                         ( nDiff > nTmpHeight/2 && GetPrevLine() ) ) ) ||
                     (nDiff >= 0 && bNextUndersized) )
 
@@ -508,7 +508,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     SwFont* pUnderlineFnt = 0;
     Point aCommonBaseLine;
 
-    Range aRange( 0, GetInfo().GetTxt().Len() );
+    Range aRange( 0, GetInfo().GetTxt().getLength() );
     MultiSelection aUnderMulti( aRange );
 
     OSL_ENSURE( GetFnt() && UNDERLINE_NONE != GetFnt()->GetUnderline(),

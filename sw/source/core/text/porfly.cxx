@@ -77,7 +77,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
     rInf.GetParaPortion()->SetFly( sal_True );
 
     // trailing blank:
-    if( rInf.GetIdx() < rInf.GetTxt().Len() &&  1 < rInf.GetIdx()
+    if( rInf.GetIdx() < rInf.GetTxt().getLength() &&  1 < rInf.GetIdx()
         && !rInf.GetRest()
         && ' ' == rInf.GetChar( rInf.GetIdx() )
         && ' ' != rInf.GetChar( rInf.GetIdx() - 1 )

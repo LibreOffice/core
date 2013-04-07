@@ -172,8 +172,8 @@ protected:
     SwUnderlineFont *pUnderFnt; // Font for underlining
     SwTxtFrm *pFrm;
     const SwViewOption *pOpt;
-    const XubString *pTxt;
-    xub_StrLen nIdx, nLen;
+    const OUString *pTxt;
+    sal_Int32 nIdx, nLen;
     sal_uInt16 nKanaIdx;
     bool bOnWin     : 1;
     bool bNotEOL    : 1;
@@ -201,12 +201,12 @@ protected:
     SwTxtSizeInfo() : pKanaComp(0), pVsh(0), pOut(0), pRef(0), pFnt(0), pUnderFnt(0), pFrm(0), pOpt(0), pTxt(0) {}
 public:
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf );
-    SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const XubString &rTxt,
-                   const xub_StrLen nIdx = 0,
+    SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const OUString &rTxt,
+                   const sal_Int32 nIdx = 0,
                    const xub_StrLen nLen = STRING_LEN );
 
     inline SwTxtSizeInfo( SwTxtFrm *pTxtFrm, SwFont *pTxtFnt = 0,
-                   const xub_StrLen nIndex = 0,
+                   const sal_Int32 nIndex = 0,
                    const xub_StrLen nLength = STRING_LEN )
            { CtorInitTxtSizeInfo( pTxtFrm, pTxtFnt, nIndex, nLength ); }
 
@@ -263,9 +263,9 @@ public:
     inline SwUnderlineFont* GetUnderFnt() const { return pUnderFnt; }
 
     inline const  SwViewOption &GetOpt() const { return *pOpt; }
-    inline const XubString &GetTxt() const { return *pTxt; }
-    inline sal_Unicode GetChar( const xub_StrLen nPos ) const
-        { return pTxt->GetChar( nPos ); }
+    inline const OUString &GetTxt() const { return *pTxt; }
+    inline sal_Unicode GetChar( const sal_Int32 nPos ) const
+    { return (*pTxt)[ nPos ]; }
 
     inline KSHORT      GetTxtHeight() const;
 
@@ -296,11 +296,11 @@ public:
 
     inline KSHORT GetAscent() const;
 
-    inline xub_StrLen GetIdx() const { return nIdx; }
-    inline void SetIdx( const xub_StrLen nNew ) { nIdx = nNew; }
-    inline xub_StrLen GetLen() const { return nLen; }
-    inline void SetLen( const xub_StrLen nNew ) { nLen = nNew; }
-    inline void SetTxt( const XubString &rNew ){ pTxt = &rNew; }
+    inline sal_Int32 GetIdx() const { return nIdx; }
+    inline void SetIdx( const sal_Int32 nNew ) { nIdx = nNew; }
+    inline sal_Int32 GetLen() const { return nLen; }
+    inline void SetLen( const sal_Int32 nNew ) { nLen = nNew; }
+    inline void SetTxt( const OUString &rNew ){ pTxt = &rNew; }
 
     friend SvStream &operator<<( SvStream &rOS, const SwTxtSizeInfo &rInf );
 
@@ -727,8 +727,8 @@ public:
 *************************************************************************/
 class SwTxtSlot
 {
-    XubString aTxt;
-    const XubString *pOldTxt;
+    OUString aTxt;
+    const OUString *pOldTxt;
     const SwWrongList* pOldSmartTagList;
     const SwWrongList* pOldGrammarCheckList;
     SwWrongList* pTempList;

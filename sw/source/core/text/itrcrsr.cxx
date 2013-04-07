@@ -66,20 +66,20 @@ static void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
 {
     OSL_ENSURE( rCMS.pSpecialPos, "Information about special pos missing" );
 
-    if ( rPor.InFldGrp() && ((SwFldPortion&)rPor).GetExp().Len() )
+    if ( rPor.InFldGrp() && !((SwFldPortion&)rPor).GetExp().isEmpty() )
     {
         const sal_uInt16 nCharOfst = rCMS.pSpecialPos->nCharOfst;
-        sal_uInt16 nFldIdx = 0;
-        sal_uInt16 nFldLen = 0;
+        sal_Int32 nFldIdx = 0;
+        sal_Int32 nFldLen = 0;
 
-        const XubString* pString = 0;
+        const OUString* pString = 0;
         const SwLinePortion* pPor = &rPor;
         do
         {
             if ( pPor->InFldGrp() )
             {
                 pString = &((SwFldPortion*)pPor)->GetExp();
-                nFldLen = pString->Len();
+                nFldLen = pString->getLength();
             }
             else
             {
@@ -97,14 +97,14 @@ static void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
         } while ( true );
 
         OSL_ENSURE( nCharOfst >= nFldIdx, "Request of position inside field failed" );
-        sal_uInt16 nLen = nCharOfst - nFldIdx + 1;
+        sal_Int32 nLen = nCharOfst - nFldIdx + 1;
 
         if ( pString )
         {
             // get script for field portion
             rInf.GetFont()->SetActual( SwScriptInfo::WhichFont( 0, pString, 0 ) );
 
-            xub_StrLen nOldLen = pPor->GetLen();
+            sal_Int32 nOldLen = pPor->GetLen();
             ((SwLinePortion*)pPor)->SetLen( nLen - 1 );
             const SwTwips nX1 = pPor->GetLen() ?
                                 pPor->GetTxtSize( rInf ).Width() :
@@ -422,7 +422,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     {
         // 8810: Masterzeile RightMargin, danach LeftMargin
         const sal_Bool bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
-        bRightMargin = nOfst >= GetEnd() && nOfst < GetInfo().GetTxt().Len();
+        bRightMargin = nOfst >= GetEnd() && nOfst < GetInfo().GetTxt().getLength();
         return bRet;
     }
 
@@ -937,7 +937,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             if( pPor->InFldGrp() && pPor->GetLen() )
             {
                 SwFldPortion *pTmp = (SwFldPortion*)pPor;
-                while( pTmp->HasFollow() && !pTmp->GetExp().Len() )
+                while( pTmp->HasFollow() && pTmp->GetExp().isEmpty() )
                 {
                     KSHORT nAddX = pTmp->Width();
                     SwLinePortion *pNext = pTmp->GetPortion();
@@ -1612,7 +1612,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
                 if ( nSpaceAdd )
                 {
-                    xub_StrLen nCharCnt;
+                    sal_Int32 nCharCnt;
                     // #i41860# Thai justified alignemt needs some
                     // additional information:
                     aDrawInf.SetNumberOfBlanks( pPor->InTxtGrp() ?

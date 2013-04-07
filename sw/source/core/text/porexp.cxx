@@ -33,10 +33,9 @@ xub_StrLen SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
  *              virtual SwExpandPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&,
-                                 XubString &rTxt ) const
+sal_Bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 {
-    rTxt.Erase();
+    rTxt = OUString();
     // Nicht etwa: return 0 != rTxt.Len();
     // Weil: leere Felder ersetzen CH_TXTATR gegen einen Leerstring
     return sal_True;
@@ -142,7 +141,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
         return 0; // Nur noch BlankPortions unterwegs
     // Wenn vor uns ein Blank ist, brauchen wir kein Underflow ausloesen,
     // wenn hinter uns ein Blank ist, brauchen wir kein Underflow weiterreichen
-    if( bUnderFlow && CH_BLANK == rInf.GetTxt().GetChar( nIdx + 1) )
+    if( bUnderFlow && CH_BLANK == rInf.GetTxt()[ nIdx + 1] )
         return 0;
     if( nIdx && !((SwTxtFormatInfo&)rInf).GetFly() )
     {
@@ -231,9 +230,9 @@ void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *              virtual SwBlankPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, XubString &rTxt ) const
+sal_Bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 {
-    rTxt = cChar;
+    rTxt = OUString(cChar);
     return sal_True;
 }
 
@@ -288,13 +287,12 @@ sal_Bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
  *              virtual SwPostItsPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwPostItsPortion::GetExpTxt( const SwTxtSizeInfo &rInf,
-                                  XubString &rTxt ) const
+sal_Bool SwPostItsPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsPostIts() )
-        rTxt = ' ';
+        rTxt = OUString(' ');
     else
-        rTxt.Erase();
+        rTxt = OUString();
     return sal_True;
 }
 

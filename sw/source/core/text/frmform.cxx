@@ -867,14 +867,14 @@ sal_Bool SwTxtFrm::CalcPreps()
                 // Let's see if it works ...
                 aLine.TruncLines();
                 aFrmBreak.SetRstHeight( aLine );
-                FormatAdjust( aLine, aFrmBreak, aInf.GetTxt().Len(), aInf.IsStop() );
+                FormatAdjust( aLine, aFrmBreak, aInf.GetTxt().getLength(), aInf.IsStop() );
             }
             else
             {
                 if( !GetFollow() )
                 {
                     FormatAdjust( aLine, aFrmBreak,
-                                  aInf.GetTxt().Len(), aInf.IsStop() );
+                                  aInf.GetTxt().getLength(), aInf.IsStop() );
                 }
                 else if ( !aFrmBreak.IsKeepAlways() )
                 {
@@ -1578,7 +1578,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         rLine.Top();
         if( !rLine.GetDropFmt() )
             rLine.SetOnceMore( sal_False );
-        SwCharRange aRange( 0, rInf.GetTxt().Len() );
+        SwCharRange aRange( 0, rInf.GetTxt().getLength() );
         *(pPara->GetReformat()) = aRange;
         _Format( rLine, rInf );
 
@@ -1608,7 +1608,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 rLine.CtorInitTxtFormatter( this, &rInf );
                 rLine.SetDropLines( 1 );
                 rLine.CalcDropHeight( 1 );
-                SwCharRange aTmpRange( 0, rInf.GetTxt().Len() );
+                SwCharRange aTmpRange( 0, rInf.GetTxt().getLength() );
                 *(pPara->GetReformat()) = aTmpRange;
                 _Format( rLine, rInf, sal_True );
                 // We paint everything ...
@@ -1906,7 +1906,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 
     xub_StrLen nStart = GetOfst();
     const xub_StrLen nEnd = GetFollow()
-                      ? GetFollow()->GetOfst() : aInf.GetTxt().Len();
+                      ? GetFollow()->GetOfst() : aInf.GetTxt().getLength();
     do
     {
         nStart = aLine.FormatLine( nStart );

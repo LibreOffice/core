@@ -186,13 +186,13 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
 void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
 {
   // Line number is stronger than the divider
-    const XubString aTmp( HasNumber() ? rLineInf.GetNumType().GetNumStr( nLineNr )
+    const OUString aTmp( HasNumber() ? rLineInf.GetNumType().GetNumStr( nLineNr )
                                 : rLineInf.GetDivider() );
 
     // Get script type of line numbering:
     pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmp, 0 ) );
 
-    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, aTmp.Len() );
+    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, aTmp.getLength() );
     aDrawInf.SetSpace( 0 );
     aDrawInf.SetWrong( NULL );
     aDrawInf.SetGrammarCheck( NULL );

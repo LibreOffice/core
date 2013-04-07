@@ -50,17 +50,17 @@ using namespace ::com::sun::star::i18n::ScriptType;
  * (for justified alignment).
  *************************************************************************/
 
-static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
-                     const SwLinePortion& rPor )
+static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
+                               const SwLinePortion& rPor )
 {
-    xub_StrLen nPos, nEnd;
+    sal_Int32 nPos, nEnd;
     const SwScriptInfo* pSI = 0;
 
     if ( pStr )
     {
         // passing a string means we are inside a field
         nPos = 0;
-        nEnd = pStr->Len();
+        nEnd = pStr->getLength();
     }
     else
     {
@@ -70,7 +70,7 @@ static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr
         pSI = &((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
     }
 
-    sal_uInt16 nCnt = 0;
+    sal_Int32 nCnt = 0;
     sal_uInt8 nScript = 0;
 
     // If portion consists of Asian characters and language is not
@@ -162,7 +162,7 @@ static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr
 
     for ( ; nPos < nEnd; ++nPos )
     {
-        if( CH_BLANK == pStr->GetChar( nPos ) )
+        if( CH_BLANK == (*pStr)[ nPos ] )
             ++nCnt;
     }
 
@@ -172,7 +172,7 @@ static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr
     // nPos referes to the original string, even if a field string has
     // been passed to this function
     nPos = rInf.GetIdx() + rPor.GetLen();
-    if ( nPos < rInf.GetTxt().Len() )
+    if ( nPos < rInf.GetTxt().getLength() )
     {
         sal_uInt8 nNextScript = 0;
         const SwLinePortion* pPor = rPor.GetPortion();
@@ -188,7 +188,7 @@ static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr
             bool bOldOnWin = rInf.OnWin();
             ((SwTxtSizeInfo &)rInf).SetOnWin( false );
 
-            XubString aStr;
+            OUString aStr;
             pPor->GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
@@ -289,8 +289,8 @@ void SwTxtPortion::BreakUnderflow( SwTxtFormatInfo &rInf )
 
 static bool lcl_HasContent( const SwFldPortion& rFld, SwTxtFormatInfo &rInf )
 {
-    String aTxt;
-    return rFld.GetExpTxt( rInf, aTxt ) && aTxt.Len();
+    OUString aTxt;
+    return rFld.GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty();
 }
 
 sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
@@ -497,7 +497,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
     if( ( !GetPortion() || ( GetPortion()->IsKernPortion() &&
         !GetPortion()->GetPortion() ) ) && GetLen() &&
-        rInf.GetIdx() < rInf.GetTxt().Len() &&
+        rInf.GetIdx() < rInf.GetTxt().getLength() &&
         1 < rInf.GetIdx() && ' ' == rInf.GetChar( rInf.GetIdx() - 1 )
         && !rInf.GetLast()->IsHolePortion() )
     {
@@ -548,13 +548,13 @@ SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
  *************************************************************************/
 void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetTxt().GetChar(rInf.GetIdx()))
+    if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetTxt()[rInf.GetIdx()])
     {
         rInf.DrawBackBrush( *this );
         const OUString aTxt(CH_TXT_ATR_SUBST_FIELDEND);
         rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
     }
-    else if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetTxt().GetChar(rInf.GetIdx()))
+    else if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetTxt()[rInf.GetIdx()])
     {
         rInf.DrawBackBrush( *this );
         const OUString aTxt(CH_TXT_ATR_SUBST_FIELDSTART);
@@ -590,7 +590,7 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 
 
-sal_Bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, XubString & ) const
+sal_Bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
 {
     return sal_False;
 }
@@ -602,11 +602,11 @@ sal_Bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, XubString & ) const
  * count and the resulting added space.
  *************************************************************************/
 
-xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
-                                      xub_StrLen& rCharCnt ) const
+sal_Int32 SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
+                                      sal_Int32& rCharCnt ) const
 {
-    xub_StrLen nCnt = 0;
-    xub_StrLen nPos = 0;
+    sal_Int32 nCnt = 0;
+    sal_Int32 nPos = 0;
     if ( InExpGrp() )
     {
         if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
@@ -616,12 +616,12 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
             bool bOldOnWin = rInf.OnWin();
             ((SwTxtSizeInfo &)rInf).SetOnWin( false );
 
-            XubString aStr;
+            OUString aStr;
             GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
             nCnt = nCnt + lcl_AddSpace( rInf, &aStr, *this );
-            nPos = aStr.Len();
+            nPos = aStr.getLength();
         }
     }
     else if( !IsDropPortion() )
@@ -646,7 +646,7 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
             bool bOldOnWin = rInf.OnWin();
             ((SwTxtSizeInfo &)rInf).SetOnWin( false );
 
-            XubString aStr;
+            OUString aStr;
             GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
             if( nSpaceAdd > 0 )
@@ -654,7 +654,7 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
             else
             {
                 nSpaceAdd = -nSpaceAdd;
-                nCnt = aStr.Len();
+                nCnt = aStr.getLength();
             }
         }
     }

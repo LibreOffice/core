@@ -459,8 +459,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 {
                     if ( pPos->InExpGrp() )
                     {
-                        XubString aTxt;
-                        if( pPos->GetExpTxt( rInf, aTxt ) && aTxt.Len() )
+                        OUString aTxt;
+                        if( pPos->GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty() )
                             SetCntnt( sal_True );
                     }
                     else if( ( pPos->InTxtGrp() || pPos->IsMultiPortion() ) &&
@@ -628,7 +628,7 @@ SwScriptInfo::~SwScriptInfo()
  * Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
 *************************************************************************/
 
-sal_uInt8 SwScriptInfo::WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
+sal_uInt8 SwScriptInfo::WhichFont( xub_StrLen nIdx, const OUString* pTxt, const SwScriptInfo* pSI )
 {
     SAL_WARN_IF( !pTxt && !pSI, "sw.core", "How should I determine the script type?" );
     sal_uInt16 nScript;

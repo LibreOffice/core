@@ -41,7 +41,7 @@ public:
     inline KSHORT& Orig() { return nOrigHeight; }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
@@ -77,14 +77,14 @@ public:
             SwQuoVadisPortion( const XubString &rExp, const XubString& rStr );
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     inline void SetNumber( const XubString& rStr ) { aErgo = rStr; }
-    inline const XubString &GetQuoTxt() const { return aExpand; }
+    inline const OUString GetQuoTxt() const { return aExpand; }
     inline const XubString &GetContTxt() const { return aErgo; }
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const XubString &rExpand ) const;
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
@@ -104,7 +104,7 @@ public:
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const XubString &rExpand ) const;
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
     OUTPUT_OPERATOR
 };
 

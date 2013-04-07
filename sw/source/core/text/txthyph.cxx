@@ -237,7 +237,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         bRet = 0 != nLen;
         if( bRet )
         {
-            XubString aSelTxt( rInf.GetTxt().Copy(nWrdStart, nLen) );
+            XubString aSelTxt( rInf.GetTxt().copy(nWrdStart, nLen) );
 
             {
                 MSHORT nMinTrail = 0;
@@ -298,7 +298,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         xub_StrLen nTmpLen = 0;
 
         // soft hyphen at alternative spelling position?
-        if( rInf.GetTxt().GetChar( rInf.GetSoftHyphPos() ) == CHAR_SOFTHYPHEN )
+        if( rInf.GetTxt()[ rInf.GetSoftHyphPos() ] == CHAR_SOFTHYPHEN )
         {
             pHyphPor = new SwSoftHyphStrPortion( aAltTxt );
             nTmpLen = 1;
@@ -370,7 +370,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
  *              virtual SwHyphPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
+sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     // #i16816# tagged pdf support
     const sal_Unicode cChar = rInf.GetVsh() &&
@@ -379,7 +379,7 @@ sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) 
                               0xad :
                               '-';
 
-    rTxt = cChar;
+    rTxt = OUString(cChar);
     return sal_True;
 }
 
@@ -402,7 +402,7 @@ sal_Bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
     const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
-    XubString aTxt;
+    OUString aTxt;
 
     if( !GetExpTxt( rInf, aTxt ) )
         return sal_False;
@@ -421,7 +421,7 @@ sal_Bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
  *              virtual SwHyphStrPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwHyphStrPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
+sal_Bool SwHyphStrPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 {
     rTxt = aExpand;
     return sal_True;
@@ -598,7 +598,7 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
  * - wenn wir vor einem (echten/emuliertem) Zeilenumbruch stehen
  *************************************************************************/
 
-sal_Bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
+sal_Bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     if( IsExpand() || ( rInf.OnWin() && rInf.GetOpt().IsSoftHyph() ) ||
         ( GetPortion() && ( GetPortion()->InFixGrp() ||

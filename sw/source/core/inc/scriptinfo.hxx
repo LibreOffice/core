@@ -315,7 +315,7 @@ public:
     static SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode,
                                         sal_Bool bAllowInvalid = sal_False );
 
-    static sal_uInt8 WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI );
+    static sal_uInt8 WhichFont( xub_StrLen nIdx, const OUString* pTxt, const SwScriptInfo* pSI );
 };
 
 inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )

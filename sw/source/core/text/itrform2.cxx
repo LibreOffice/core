@@ -103,10 +103,10 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
     nRightScanIdx = 0;
     m_nHintEndIndex = 0;
 
-    if( nStart > GetInfo().GetTxt().Len() )
+    if( nStart > GetInfo().GetTxt().getLength() )
     {
         OSL_ENSURE( !this, "+SwTxtFormatter::CTOR: bad offset" );
-        nStart = GetInfo().GetTxt().Len();
+        nStart = GetInfo().GetTxt().getLength();
     }
 
 }
@@ -373,7 +373,7 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
 
 void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 {
-    OSL_ENSURE( rInf.GetTxt().Len() < STRING_LEN,
+    OSL_ENSURE( rInf.GetTxt().getLength() < STRING_LEN,
             "SwTxtFormatter::BuildPortions: bad text length in info" );
 
     rInf.ChkNoHyph( CntEndHyph(), CntMidHyph() );
@@ -426,7 +426,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     while( pPor && !rInf.IsStop() )
     {
         OSL_ENSURE( rInf.GetLen() < STRING_LEN &&
-                rInf.GetIdx() <= rInf.GetTxt().Len(),
+                rInf.GetIdx() <= rInf.GetTxt().getLength(),
                 "SwTxtFormatter::BuildPortions: bad length in info" );
 
         // We have to check the script for fields in order to set the
@@ -449,9 +449,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             // of the kerning portion?
             if ( pPor->InFldGrp() )
             {
-                XubString aAltTxt;
+                OUString aAltTxt;
                 if ( ((SwFldPortion*)pPor)->GetExpTxt( rInf, aAltTxt ) &&
-                        aAltTxt.Len() )
+                        !aAltTxt.isEmpty() )
                 {
                     bAllowBehind = rCC.isLetterNumeric( aAltTxt, 0 );
 
@@ -468,11 +468,11 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             {
                 if ( pLast->InFldGrp() )
                 {
-                    XubString aAltTxt;
+                    OUString aAltTxt;
                     if ( ((SwFldPortion*)pLast)->GetExpTxt( rInf, aAltTxt ) &&
-                         aAltTxt.Len() )
+                         !aAltTxt.isEmpty() )
                     {
-                        bAllowBefore = rCC.isLetterNumeric( aAltTxt, aAltTxt.Len() - 1 );
+                        bAllowBefore = rCC.isLetterNumeric( aAltTxt, aAltTxt.getLength() - 1 );
 
                         const SwFont* pTmpFnt = ((SwFldPortion*)pLast)->GetFont();
                         if ( pTmpFnt )
@@ -619,7 +619,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 // to 20% of the fontheight.
                 xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
                 if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) &&
-                    nTmp != rInf.GetTxt().Len() )
+                    nTmp != rInf.GetTxt().getLength() )
                 {
                     sal_uInt16 nDist = (sal_uInt16)(rInf.GetFont()->GetHeight()/5);
 
@@ -648,7 +648,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
 
             const sal_uInt8 nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
-            const sal_uInt8 nNextScript = nTmp >= rInf.GetTxt().Len() ?
+            const sal_uInt8 nNextScript = nTmp >= rInf.GetTxt().getLength() ?
                                      SW_CJK :
                                      SwScriptInfo::WhichFont( nTmp, 0, pScriptInfo );
 
@@ -787,7 +787,7 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
         {
             if( bFirstPor )
             {
-                if( rInf.GetTxt().Len() )
+                if( !rInf.GetTxt().isEmpty() )
                 {
                     if ( pPor->GetLen() || !rInf.GetIdx()
                          || ( pCurr != pLast && !pLast->IsFlyPortion() )
@@ -875,11 +875,11 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
             // E.g. for non-displayable characters
             if( rInf.GetLen() > 0 )
             {
-                if( rInf.GetTxt().GetChar(rInf.GetIdx())==CH_TXT_ATR_FIELDSTART )
+                if( rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FIELDSTART )
                     pPor = new SwFieldMarkPortion();
-                else if( rInf.GetTxt().GetChar(rInf.GetIdx())==CH_TXT_ATR_FIELDEND )
+                else if( rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FIELDEND )
                     pPor = new SwFieldMarkPortion();
-                else if( rInf.GetTxt().GetChar(rInf.GetIdx())==CH_TXT_ATR_FORMELEMENT )
+                else if( rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FORMELEMENT )
                     pPor = new SwFieldFormPortion();
             }
             if( !pPor )
@@ -915,15 +915,15 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     SwTxtPortion *pPor = WhichTxtPor( rInf );
 
     // until next attribute change:
-    const xub_StrLen nNextAttr = GetNextAttr();
-    xub_StrLen nNextChg = Min( nNextAttr, rInf.GetTxt().Len() );
+    const sal_Int32 nNextAttr = GetNextAttr();
+    sal_Int32 nNextChg = Min( nNextAttr, rInf.GetTxt().getLength() );
 
     // end of script type:
-    const xub_StrLen nNextScript = pScriptInfo->NextScriptChg( rInf.GetIdx() );
+    const sal_Int32 nNextScript = pScriptInfo->NextScriptChg( rInf.GetIdx() );
     nNextChg = Min( nNextChg, nNextScript );
 
     // end of direction:
-    const xub_StrLen nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
+    const sal_Int32 nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
     nNextChg = Min( nNextChg, nNextDir );
 
     // Turbo boost:
@@ -943,13 +943,13 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     CalcAscent( rInf, pPor );
 
     const SwFont* pTmpFnt = rInf.GetFont();
-    KSHORT nExpect = Min( KSHORT( ((Font *)pTmpFnt)->GetSize().Height() ),
-                          KSHORT( pPor->GetAscent() ) ) / 8;
+    sal_Int32 nExpect = Min( sal_Int32( ((Font *)pTmpFnt)->GetSize().Height() ),
+                             sal_Int32( pPor->GetAscent() ) ) / 8;
     if ( !nExpect )
         nExpect = 1;
-    nExpect = (sal_uInt16)(rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect));
+    nExpect = rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect);
     if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
-        nNextChg = Min( nExpect, rInf.GetTxt().Len() );
+        nNextChg = Min( nExpect, rInf.GetTxt().getLength() );
 
     // we keep an invariant during method calls:
     // there are no portion ending characters like hard spaces
@@ -1281,7 +1281,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
         }
         else
         {
-            if( rInf.GetIdx() >= rInf.GetTxt().Len() )
+            if( rInf.GetIdx() >= rInf.GetTxt().getLength() )
             {
                 rInf.SetFull(sal_True);
                 CalcFlyWidth( rInf );
@@ -1470,8 +1470,8 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
 
     // For the formatting routines, we set pOut to the reference device.
     SwHookOut aHook( GetInfo() );
-    if( GetInfo().GetLen() < GetInfo().GetTxt().Len() )
-        GetInfo().SetLen( GetInfo().GetTxt().Len() );
+    if( GetInfo().GetLen() < GetInfo().GetTxt().getLength() )
+        GetInfo().SetLen( GetInfo().GetTxt().getLength() );
 
     sal_Bool bBuild = sal_True;
     SetFlyInCntBase( sal_False );
@@ -2001,7 +2001,7 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt() const
     const xub_StrLen nReformat = GetInfo().GetReformatStart();
     if( bOptimizeRepaint && STRING_LEN != nReformat )
     {
-        const sal_Unicode cCh = GetInfo().GetTxt().GetChar( nReformat );
+        const sal_Unicode cCh = GetInfo().GetTxt()[ nReformat ];
         bOptimizeRepaint = ( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
                             || ! GetInfo().HasHint( nReformat );
     }
@@ -2378,7 +2378,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
 
         // Although no text is left, we need to format another line,
         // because also empty lines need to avoid a Fly with no wrapping.
-        if( bFullLine && rInf.GetIdx() == rInf.GetTxt().Len() )
+        if( bFullLine && rInf.GetIdx() == rInf.GetTxt().getLength() )
         {
             rInf.SetNewLine( sal_True );
             // 8221: We know that for dummies, it holds ascent == height
@@ -2429,7 +2429,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         }
         else
         {
-            if( rInf.GetIdx() == rInf.GetTxt().Len() )
+            if( rInf.GetIdx() == rInf.GetTxt().getLength() )
             {
                 // Don't use nHeight, or we have a huge descent
                 pFly->Height( pLast->Height() );
