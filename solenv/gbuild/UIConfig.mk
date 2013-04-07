@@ -84,6 +84,12 @@ endef
 #
 # This mostly means UI description files (suffix .ui) for the new layouting
 # mechanism.
+#
+# This class provides the following filelists:
+# * UIConfig/<name> containing all nontranslatable files
+# * UIConfig/<name>_<lang> for each active lang, containing translations
+#   of .ui files. This filelist only exists if the UIConfig contains any
+#   .ui files.
 
 # en-US is the default, so there is no translation for it
 gb_UIConfig_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
@@ -109,17 +115,22 @@ $(call gb_UIConfig_get_clean_target,%) :
 
 gb_UIConfig_get_packagename = UIConfig/$(1)
 gb_UIConfig_get_packagename_for_lang = UIConfig/$(1)_$(2)
+gb_UIConfig_get_packagesetname = UIConfig/$(1)
 
 # Processes and delivers a set of UI configuration files.
 #
 # gb_UIConfig_UIConfig modulename
 define gb_UIConfig_UIConfig
+$(call gb_PackageSet_PackageSet_internal,$(call gb_UIConfig_get_packagesetname,$(1)))
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)),$(SRCDIR))
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)_generated),$(WORKDIR))
+
+$(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(call gb_UIConfig_get_packagename,$(1)))
+
 $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
-$(call gb_UIConfig_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename,$(1)))
+$(call gb_UIConfig_get_target,$(1)) : $(call gb_PackageSet_get_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 $(call gb_Postprocess_get_target,AllUIConfigs) : $(call gb_UIConfig_get_target,$(1))
-$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_UIConfig_get_packagename,$(1)))
+$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_PackageSet_get_clean_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 
 ifneq ($(gb_UIConfig_LANGS),)
 $(foreach lang,$(gb_UIConfig_LANGS),$(call gb_UIConfig__UIConfig_for_lang,$(1),$(lang)))
@@ -256,9 +267,7 @@ endef
 # gb_UIConfig_add_generated_menubarfile target file
 define gb_UIConfig_add_generated_menubarfile
 $(call gb_UIConfig__add_xmlfile,$(1),$(1)_generated,menubar,$(2))
-
-$(call gb_UIConfig_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename,$(1)_generated))
-$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_UIConfig_get_packagename,$(1)_generated))
+$(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(call gb_UIConfig_get_packagename,$(1)_generated))
 
 endef
 
