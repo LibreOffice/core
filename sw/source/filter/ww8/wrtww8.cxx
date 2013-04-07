@@ -107,6 +107,7 @@
 #include <filter/msfilter/svxmsbas.hxx>
 #include <osl/time.h>
 #include <rtl/random.h>
+#include <vcl/svapp.hxx>
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"
 #include "numrule.hxx"//For i120928
@@ -1447,6 +1448,22 @@ int MSWordExportBase::CollectGrfsOfBullets()
 
     return m_vecBulletPic.size();
 }
+
+void MSWordExportBase::BulletDefinitions()
+{
+    for (size_t i = 0; i < m_vecBulletPic.size(); ++i)
+    {
+        const MapMode aMapMode(MAP_TWIP);
+        const Graphic& rGraphic = *m_vecBulletPic[i];
+        Size aSize(rGraphic.GetPrefSize());
+        if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapMode);
+        else
+            aSize = OutputDevice::LogicToLogic(aSize,rGraphic.GetPrefMapMode(), aMapMode);
+        AttrOutput().BulletDefinition(i, rGraphic, aSize);
+    }
+}
+
 //Export Graphic of Bullets
 void WW8Export::ExportGrfBullet(const SwTxtNode& rNd)
 {

@@ -685,8 +685,7 @@ public:
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj);
     virtual oox::drawingml::DrawingML& GetDrawingML();
 
-    /// Exports the definition (image, size) of a single numbering picture bullet.
-    void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize);
+    void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) SAL_OVERRIDE;
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_

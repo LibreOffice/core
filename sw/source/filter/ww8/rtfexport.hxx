@@ -181,7 +181,6 @@ private:
 
     void WriteFonts();
     void WriteStyles();
-    void BulletDefinitions();
     void WriteMainText();
     void WriteInfo();
     /// Writes the writer-specific \pgdsctbl group.

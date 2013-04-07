@@ -597,6 +597,9 @@ public:
     ( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner,
       sal_uInt32& rPageSize, bool& rRelBoxSize );
 
+    /// Exports the definition (image, size) of a single numbering picture bullet.
+    virtual void BulletDefinition(int /*nId*/, const Graphic& /*rGraphic*/, Size /*aSize*/) {}
+
 };
 
 #endif // _ATTRIBUTEOUTPUTBASE_HXX_

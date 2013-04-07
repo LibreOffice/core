@@ -826,6 +826,8 @@ protected:
 
     /// Populates m_vecBulletPic with all the bullet graphics used by numberings.
     int CollectGrfsOfBullets();
+    /// Write the numbering picture bullets.
+    void BulletDefinitions();
     std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
 
 public:

@@ -225,21 +225,6 @@ void RtfExport::BuildNumbering()
     }
 }
 
-void RtfExport::BulletDefinitions()
-{
-    for (size_t i = 0; i < m_vecBulletPic.size(); ++i)
-    {
-        const MapMode aMapMode(MAP_TWIP);
-        const Graphic& rGraphic = *m_vecBulletPic[i];
-        Size aSize(rGraphic.GetPrefSize());
-        if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
-            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapMode);
-        else
-            aSize = OutputDevice::LogicToLogic(aSize,rGraphic.GetPrefMapMode(), aMapMode);
-        m_pAttrOutput->BulletDefinition(i, rGraphic, aSize);
-    }
-}
-
 void RtfExport::WriteNumbering()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");

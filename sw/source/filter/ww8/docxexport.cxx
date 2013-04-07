@@ -61,7 +61,6 @@
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace sax_fastparser;
 using namespace ::comphelper;
@@ -525,21 +524,6 @@ void DocxExport::WritePostitFields()
         m_pAttrOutput->WritePostitFields();
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
         pPostitFS->endElementNS( XML_w, XML_comments );
-    }
-}
-
-void DocxExport::BulletDefinitions()
-{
-    for (size_t i = 0; i < m_vecBulletPic.size(); ++i)
-    {
-        const MapMode aMapMode(MAP_TWIP);
-        const Graphic& rGraphic = *m_vecBulletPic[i];
-        Size aSize(rGraphic.GetPrefSize());
-        if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
-            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapMode);
-        else
-            aSize = OutputDevice::LogicToLogic(aSize,rGraphic.GetPrefMapMode(), aMapMode);
-        m_pAttrOutput->BulletDefinition(i, rGraphic, aSize);
     }
 }
 

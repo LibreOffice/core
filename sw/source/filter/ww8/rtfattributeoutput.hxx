@@ -587,8 +587,7 @@ public:
     /// Writes binary data as a hex dump.
     static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = 0, sal_uInt32 nLimit = 64);
 
-    /// Exports the definition (image, size) of a single numbering picture bullet.
-    void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize);
+    void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) SAL_OVERRIDE;
 };
 
 #endif // _RTFATTRIBUTEOUTPUT_HXX_
