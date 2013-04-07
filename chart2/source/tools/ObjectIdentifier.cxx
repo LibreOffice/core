@@ -764,8 +764,7 @@ bool ObjectIdentifier::isMultiClickObject( const OUString& rClassifiedIdentifier
     //was selected before;
 
     //!!!!! by definition the name of a MultiClickObject starts with "CID/MultiClick:"
-    bool bRet = false;
-    bRet = rClassifiedIdentifier.match( m_aMultiClick, m_aProtocol.getLength() );
+    bool bRet = rClassifiedIdentifier.match( m_aMultiClick, m_aProtocol.getLength() );
     return bRet;
 }
 
@@ -1027,11 +1026,9 @@ OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType,
 
 sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const OUString& rParticleOrCID )
 {
-    sal_Int32 nRet = -1;
-
     OUString aIndexString = lcl_getIndexStringAfterString( rParticleOrCID, "=" );
     sal_Int32 nCharacterIndex=0;
-    nRet = lcl_StringToIndex( aIndexString.getToken( 0, ',', nCharacterIndex ) );
+    sal_Int32 nRet = lcl_StringToIndex( aIndexString.getToken( 0, ',', nCharacterIndex ) );
 
     return nRet;
 }

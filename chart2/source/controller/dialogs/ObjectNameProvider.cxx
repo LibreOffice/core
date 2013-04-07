@@ -509,9 +509,8 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
             sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
 
             //replace data point index
-            sal_Int32 nIndex = -1;
             OUString aWildcard(  "%POINTNUMBER" );
-            nIndex = aRet.indexOf( aWildcard );
+            sal_Int32 nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
             {
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), OUString::valueOf(nPointIndex+1) );
@@ -569,9 +568,8 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
                         // replace formula
-                        sal_Int32 nIndex = -1;
                         OUString aWildcard( "%FORMULA" );
-                        nIndex = aRet.indexOf( aWildcard );
+                        sal_Int32 nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
                             aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), xCalculator->getRepresentation());
 
@@ -620,9 +618,8 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
 
                         sal_Unicode aDecimalSep( '.' );
 
-                        sal_Int32 nIndex = -1;
                         OUString aWildcard( "%AVERAGE_VALUE" );
-                        nIndex = aRet.indexOf( aWildcard );
+                        sal_Int32 nIndex = aRet.indexOf( aWildcard );
                         // as the curve is constant, the value at any x-value is ok
                         if( nIndex != -1 )
                         {

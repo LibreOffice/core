@@ -431,11 +431,10 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
 
     if (bSuccess)
     {
-        double fTempDateTime = 0.0;
         const Date aTmpNullDate(aTempNullDate.Day, aTempNullDate.Month, aTempNullDate.Year);
         const Date aTempDate((sal_uInt16)aDateTime.Day, (sal_uInt16)aDateTime.Month, (sal_uInt16)aDateTime.Year);
         const sal_Int32 nTage = aTempDate - aTmpNullDate;
-        fTempDateTime = nTage;
+        double fTempDateTime = nTage;
         double Hour = aDateTime.Hours;
         double Min = aDateTime.Minutes;
         double Sec = aDateTime.Seconds;

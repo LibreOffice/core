@@ -126,9 +126,8 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
 
 FltError ScFormatFilterPluginImpl::ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc )
 {
-    FltError   eRet = eERR_OK;
     ScQProReader aReader( rMedium );
-    eRet = aReader.import( pDoc );
+    FltError eRet = aReader.import( pDoc );
     return eRet;
 }
 
