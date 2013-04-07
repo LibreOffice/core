@@ -114,12 +114,6 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     rFmt3.SetFmtAttr( aUL );
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::ChgPageDesc()
-|*
-|*************************************************************************/
-
 static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                          const bool bPage = true )
 {
@@ -514,14 +508,6 @@ void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
     SetModified();
 }
 
-
-
-/*************************************************************************
-|*
-|*  SwDoc::MakePageDesc()
-|*
-|*************************************************************************/
-
 sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
                             bool bRegardLanguage, bool bBroadcast)
 {
@@ -581,11 +567,6 @@ SwPageDesc* SwDoc::FindPageDescByName( const String& rName, sal_uInt16* pPos ) c
         }
     return pRet;
 }
-
-/******************************************************************************
- *  Method      :   void SwDoc::PrtDataChanged()
- *  Description :
- ******************************************************************************/
 
 void SwDoc::PrtDataChanged()
 {

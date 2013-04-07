@@ -1156,9 +1156,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     return pRetShell;
 }
 
-/*-------------------------------------------------------------------------
-    copy document content - code from SwFEShell::Paste( SwDoc* )
-  -----------------------------------------------------------------------*/
+// copy document content - code from SwFEShell::Paste( SwDoc* )
 void SwDoc::Paste( const SwDoc& rSource )
 {
     // this has to be empty const sal_uInt16 nStartPageNumber = GetPhyPageNum();

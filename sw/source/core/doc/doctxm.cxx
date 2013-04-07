@@ -696,9 +696,8 @@ static const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl =
     return pNd ? pNd->FindOutlineNodeOfLevel( nLvl ) : 0;
 }
 
-/*--------------------------------------------------------------------
-  Description: Table of contents class
- --------------------------------------------------------------------*/
+// Table of contents class ------------------------------------------
+
 SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt)
     : SwTOXBase( rBase )
     , SwSection( TOX_CONTENT_SECTION, aEmptyStr, rFmt )
@@ -1011,9 +1010,6 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     SetProtect( SwTOXBase::IsProtected() );
 }
 
-/*--------------------------------------------------------------------
-  Description: Insert AlphaDelimitter
- --------------------------------------------------------------------*/
 void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -2129,9 +2125,6 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     delete pCharStyleIdx;
 }
 
-/*--------------------------------------------------------------------
-  Description: Insert sorted into aSortArr
- --------------------------------------------------------------------*/
 void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
 {
     Range aRange(0, aSortArr.size());

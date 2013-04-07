@@ -157,17 +157,11 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
     return nCmp;
 }
 
-/*--------------------------------------------------------------------
-    Description: Comparison operators
- --------------------------------------------------------------------*/
 bool SwSortElement::operator==(const SwSortElement& ) const
 {
     return false;
 }
 
-/*--------------------------------------------------------------------
-    Description: Less-than operator for sorting
- --------------------------------------------------------------------*/
 bool SwSortElement::operator<(const SwSortElement& rCmp) const
 {
     // The actual comparison
@@ -199,9 +193,6 @@ SwSortTxtElement::~SwSortTxtElement()
 {
 }
 
-/*--------------------------------------------------------------------
-    Description: Get Key
- --------------------------------------------------------------------*/
 String SwSortTxtElement::GetKey(sal_uInt16 nId) const
 {
     SwTxtNode* pTxtNd = aPos.GetNode().GetTxtNode();

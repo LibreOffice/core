@@ -22,9 +22,6 @@
 #include <sortopt.hxx>
 #include <boost/foreach.hpp>
 
-/*--------------------------------------------------------------------
-    Description: Sort Key
- --------------------------------------------------------------------*/
 SwSortKey::SwSortKey() :
     eSortOrder( SRT_ASCENDING ),
     nColumnId( 0 ),
@@ -48,9 +45,6 @@ SwSortKey::SwSortKey(const SwSortKey& rOld) :
 {
 }
 
-/*--------------------------------------------------------------------
-    Description: Sorting options for Sorting
- --------------------------------------------------------------------*/
 SwSortOptions::SwSortOptions()
     : eDirection( SRT_ROWS ),
     cDeli( 9 ),
