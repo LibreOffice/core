@@ -403,69 +403,9 @@ Directory gid_Dir_Share_Config_Sofficecfg_Basicide
     DosName = "BasicIDE";
 End
 
-Directory gid_Dir_Share_Config_Sofficecfg_Basicide_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Basicide;
-    DosName = "menubar";
-End
-
 Directory gid_Dir_Share_Config_Sofficecfg_Dbquery
     ParentID = gid_Dir_Share_Config_Sofficecfg;
     DosName = "dbquery";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbquery_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbquery;
-    DosName = "menubar";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbbrowser
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "dbbrowser";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbbrowser_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbbrowser;
-    DosName = "menubar";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbapp
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "dbapp";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbapp_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbapp;
-    DosName = "menubar";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbrelation
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "dbrelation";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbrelation_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbrelation;
-    DosName = "menubar";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbtable
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "dbtable";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbtable_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbtable;
-    DosName = "menubar";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Sbibliography
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "sbibliography";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Sbibliography_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Sbibliography;
-    DosName = "menubar";
 End
 
 Directory gid_Dir_Share_Config_Sofficecfg_Scalc
@@ -473,19 +413,9 @@ Directory gid_Dir_Share_Config_Sofficecfg_Scalc
     DosName = "scalc";
 End
 
-Directory gid_Dir_Share_Config_Sofficecfg_Scalc_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Scalc;
-    DosName = "menubar";
-End
-
 Directory gid_Dir_Share_Config_Sofficecfg_Schart
     ParentID = gid_Dir_Share_Config_Sofficecfg;
     DosName = "schart";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Schart_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Schart;
-    DosName = "menubar";
 End
 
 Directory gid_Dir_Share_Config_Sofficecfg_Sdraw
@@ -493,19 +423,9 @@ Directory gid_Dir_Share_Config_Sofficecfg_Sdraw
     DosName = "sdraw";
 End
 
-Directory gid_Dir_Share_Config_Sofficecfg_Sdraw_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Sdraw;
-    DosName = "menubar";
-End
-
 Directory gid_Dir_Share_Config_Sofficecfg_Sglobal
     ParentID = gid_Dir_Share_Config_Sofficecfg;
     DosName = "sglobal";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Sglobal_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Sglobal;
-    DosName = "menubar";
 End
 
 Directory gid_Dir_Share_Config_Sofficecfg_Simpress
@@ -513,19 +433,9 @@ Directory gid_Dir_Share_Config_Sofficecfg_Simpress
     DosName = "simpress";
 End
 
-Directory gid_Dir_Share_Config_Sofficecfg_Simpress_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Simpress;
-    DosName = "menubar";
-End
-
 Directory gid_Dir_Share_Config_Sofficecfg_Smath
     ParentID = gid_Dir_Share_Config_Sofficecfg;
     DosName = "smath";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Smath_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Smath;
-    DosName = "menubar";
 End
 
 Directory gid_Dir_Share_Config_Sofficecfg_Startmodule
@@ -533,29 +443,14 @@ Directory gid_Dir_Share_Config_Sofficecfg_Startmodule
     DosName = "StartModule";
 End
 
-Directory gid_Dir_Share_Config_Sofficecfg_Startmodule_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Startmodule;
-    DosName = "menubar";
-End
-
 Directory gid_Dir_Share_Config_Sofficecfg_Sweb
     ParentID = gid_Dir_Share_Config_Sofficecfg;
     DosName = "sweb";
 End
 
-Directory gid_Dir_Share_Config_Sofficecfg_Sweb_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Sweb;
-    DosName = "menubar";
-End
-
 Directory gid_Dir_Share_Config_Sofficecfg_Swriter
     ParentID = gid_Dir_Share_Config_Sofficecfg;
     DosName = "swriter";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Swriter_Menubar
-    ParentID = gid_Dir_Share_Config_Sofficecfg_Swriter;
-    DosName = "menubar";
 End
 
 Directory gid_Dir_Share_Registry_Res
