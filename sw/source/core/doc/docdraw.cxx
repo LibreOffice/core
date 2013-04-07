@@ -512,12 +512,11 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     }
 }
 
+#include <svx/sxenditm.hxx>
+
 // Is also called by the Sw3 Reader, if there was an error when reading the
 // drawing layer. If it is called by the Sw3 Reader the layer is rebuilt
 // from scratch.
-
-#include <svx/sxenditm.hxx>
-
 void SwDoc::InitDrawModel()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::InitDrawModel" );

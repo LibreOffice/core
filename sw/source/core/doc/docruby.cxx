@@ -45,8 +45,6 @@ using namespace ::com::sun::star::i18n;
  * Members in the list:
  *   - String - the orig text
  *   - SwFmtRuby - the ruby attribut
- *
- *
  */
 sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                             sal_uInt16 nMode )

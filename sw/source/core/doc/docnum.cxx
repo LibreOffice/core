@@ -684,7 +684,7 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     return nPos;
 }
 
-// Ad this bullet point:
+// Add this bullet point:
 
 // A Name can contain a Number and/or the Text.
 //

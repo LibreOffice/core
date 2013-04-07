@@ -325,9 +325,7 @@ SwDoc::SwDoc()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
-    //
     // COMPATIBILITY FLAGS START
-    //
 
     // Note: Any non-hidden compatibility flag should obtain its default
     // by asking SvtCompatibilityOptions, see below.
@@ -346,9 +344,7 @@ SwDoc::SwDoc()
 
     mbDoNotJustifyLinesWithManualBreak      = !aOptions.IsExpandWordSpace();
 
-    //
     // COMPATIBILITY FLAGS END
-    //
 
     /*
      * DefaultFormats and DefaultFormatCollections (FmtColl)
