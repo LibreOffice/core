@@ -66,6 +66,7 @@
 #include "glob.hrc"
 #include "unmodpg.hxx"
 #include "DrawViewShell.hxx"
+#include "sdabstdlg.hxx"
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -259,6 +260,22 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_ASSIGN_LAYOUT:
         {
             pShell->mpImpl->AssignLayout( rRequest, mrSlideSorter.GetModel().GetPageType() );
+            rRequest.Done ();
+        }
+        break;
+
+        case SID_PHOTOALBUM:
+        {
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            VclAbstractDialog* pDlg = pFact ? pFact->CreateSdPhotoAlbumDialog(
+                mrSlideSorter.GetContentWindow().get(),
+                pDocument) : 0;
+
+            if (pDlg)
+            {
+                pDlg->Execute();
+                delete pDlg;
+            }
             rRequest.Done ();
         }
         break;
