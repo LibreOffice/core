@@ -1362,12 +1362,6 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
             const String& rName = pFld->GetTyp()->GetName();
 
-            // Set value for Calculator
-//JP 10.02.96: GetValue doesn't make sense here
-//          ((SwDBField*)pFld)->GetValue();
-
-//!OK           aCalc.VarChange(aName, ((SwDBField*)pFld)->GetValue(aCalc));
-
             // Add entry to hash table
             // Entry present?
             sal_uInt16 nPos;

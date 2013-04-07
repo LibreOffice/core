@@ -1154,7 +1154,6 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
                             && pSrcTOX->GetType() == pDstTOX->GetType()
                             && pSrcTOX->GetTitle() == pDstTOX->GetTitle()
                             && pSrcTOX->GetTypeName() == pDstTOX->GetTypeName()
-//                          && pSrcTOX->GetTOXName() == pDstTOX->GetTOXName()
                             ;
                 }
                 break;
@@ -1222,7 +1221,6 @@ String SwCompareLine::GetText() const
                     if( pTOX )
                         sRet.Append( pTOX->GetTitle() )
                             .Append( pTOX->GetTypeName() )
-//                          .Append( pTOX->GetTOXName() )
                             .Append( OUString::number( pTOX->GetType() ));
                 }
                 break;
