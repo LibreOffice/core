@@ -48,14 +48,16 @@ static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
     char *buf, *filename=NULL;
     struct ld_info *lp;
 
-    if ((buf = malloc(size)) == NULL)
-        return result;
+    if ((buf = (char*)malloc(size)) == NULL)
+        return false;
 
-    while(loadquery(L_GETINFO, buf, size) == -1 && errno == ENOMEM)
+    //figure out how big a buffer we need
+    while (loadquery(L_GETINFO, buf, size) == -1 && errno == ENOMEM)
     {
         size += 4 * 1024;
-        if ((buf = malloc(size)) == NULL)
-            break;
+        free(buf);
+        if ((buf = (char*)malloc(size)) == NULL)
+            return false;
     }
 
     lp = (struct ld_info*) buf;
