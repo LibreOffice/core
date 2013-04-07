@@ -116,6 +116,7 @@ gbuild_TARGETS := AllLangHelp \
 	Library \
 	Module \
 	Package \
+	PackageSet \
 	Pagein \
 	Pyuno \
 	Rdb \
