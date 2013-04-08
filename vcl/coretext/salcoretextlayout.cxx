@@ -591,6 +591,7 @@ void CoreTextLayout::GetMeasurements()
             assert( lineGlyphIx + runGlyphCount <= mnGlyphCount );
 
             const CFIndex lineRunGlyphStartIx = lineGlyphIx;
+            (void) lineRunGlyphStartIx;
 
             CFIndex runStringIndices[ runGlyphCount ];
             CTRunGetStringIndices( run, CFRangeMake( 0, 0 ), runStringIndices );
