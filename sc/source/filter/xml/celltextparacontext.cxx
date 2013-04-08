@@ -75,24 +75,25 @@ void ScXMLCellTextParaContext::PushSpan(const OUString& rSpan, const OUString& r
     mrParentCxt.PushParagraphSpan(rSpan, rStyleName);
 }
 
-void ScXMLCellTextParaContext::PushFieldSheetName()
+void ScXMLCellTextParaContext::PushFieldSheetName(const OUString& rStyleName)
 {
-    mrParentCxt.PushParagraphFieldSheetName();
+    mrParentCxt.PushParagraphFieldSheetName(rStyleName);
 }
 
-void ScXMLCellTextParaContext::PushFieldDate()
+void ScXMLCellTextParaContext::PushFieldDate(const OUString& rStyleName)
 {
-    mrParentCxt.PushParagraphFieldDate();
+    mrParentCxt.PushParagraphFieldDate(rStyleName);
 }
 
-void ScXMLCellTextParaContext::PushFieldTitle()
+void ScXMLCellTextParaContext::PushFieldTitle(const OUString& rStyleName)
 {
-    mrParentCxt.PushParagraphFieldDocTitle();
+    mrParentCxt.PushParagraphFieldDocTitle(rStyleName);
 }
 
-void ScXMLCellTextParaContext::PushFieldURL(const OUString& rURL, const OUString& rRep)
+void ScXMLCellTextParaContext::PushFieldURL(
+    const OUString& rURL, const OUString& rRep, const OUString& rStyleName)
 {
-    mrParentCxt.PushParagraphFieldURL(rURL, rRep);
+    mrParentCxt.PushParagraphFieldURL(rURL, rRep, rStyleName);
 }
 
 ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(
@@ -145,6 +146,43 @@ void ScXMLCellTextSpanContext::Characters(const OUString& rChars)
 SvXMLImportContext* ScXMLCellTextSpanContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
 {
+    if (!maContent.isEmpty())
+    {
+        mrParentCxt.PushSpan(maContent, maStyleName);
+        maContent = OUString();
+    }
+
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextSpanElemTokenMap();
+    switch (rTokenMap.Get(nPrefix, rLocalName))
+    {
+        case XML_TOK_CELL_TEXT_SPAN_ELEM_SHEET_NAME:
+        {
+            ScXMLCellFieldSheetNameContext* p = new ScXMLCellFieldSheetNameContext(GetScImport(), nPrefix, rLocalName, mrParentCxt);
+            p->SetStyleName(maStyleName);
+            return p;
+        }
+        case XML_TOK_CELL_TEXT_SPAN_ELEM_DATE:
+        {
+            ScXMLCellFieldDateContext* p = new ScXMLCellFieldDateContext(GetScImport(), nPrefix, rLocalName, mrParentCxt);
+            p->SetStyleName(maStyleName);
+            return p;
+        }
+        case XML_TOK_CELL_TEXT_SPAN_ELEM_TITLE:
+        {
+            ScXMLCellFieldTitleContext* p = new ScXMLCellFieldTitleContext(GetScImport(), nPrefix, rLocalName, mrParentCxt);
+            p->SetStyleName(maStyleName);
+            return p;
+        }
+        case XML_TOK_CELL_TEXT_SPAN_ELEM_URL:
+        {
+            ScXMLCellFieldURLContext* p = new ScXMLCellFieldURLContext(GetScImport(), nPrefix, rLocalName, mrParentCxt);
+            p->SetStyleName(maStyleName);
+            return p;
+        }
+        default:
+            ;
+    }
+
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
 
@@ -155,6 +193,11 @@ ScXMLCellFieldSheetNameContext::ScXMLCellFieldSheetNameContext(
 {
 }
 
+void ScXMLCellFieldSheetNameContext::SetStyleName(const OUString& rStyleName)
+{
+    maStyleName = rStyleName;
+}
+
 void ScXMLCellFieldSheetNameContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
 {
     // <text:sheet-name> has no attributes (that I'm aware of).
@@ -162,7 +205,7 @@ void ScXMLCellFieldSheetNameContext::StartElement(const uno::Reference<xml::sax:
 
 void ScXMLCellFieldSheetNameContext::EndElement()
 {
-    mrParentCxt.PushFieldSheetName();
+    mrParentCxt.PushFieldSheetName(maStyleName);
 }
 
 void ScXMLCellFieldSheetNameContext::Characters(const OUString& /*rChars*/)
@@ -182,13 +225,18 @@ ScXMLCellFieldDateContext::ScXMLCellFieldDateContext(
 {
 }
 
+void ScXMLCellFieldDateContext::SetStyleName(const OUString& rStyleName)
+{
+    maStyleName = rStyleName;
+}
+
 void ScXMLCellFieldDateContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
 {
 }
 
 void ScXMLCellFieldDateContext::EndElement()
 {
-    mrParentCxt.PushFieldDate();
+    mrParentCxt.PushFieldDate(maStyleName);
 }
 
 void ScXMLCellFieldDateContext::Characters(const OUString& /*rChars*/)
@@ -208,13 +256,18 @@ ScXMLCellFieldTitleContext::ScXMLCellFieldTitleContext(
 {
 }
 
+void ScXMLCellFieldTitleContext::SetStyleName(const OUString& rStyleName)
+{
+    maStyleName = rStyleName;
+}
+
 void ScXMLCellFieldTitleContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
 {
 }
 
 void ScXMLCellFieldTitleContext::EndElement()
 {
-    mrParentCxt.PushFieldTitle();
+    mrParentCxt.PushFieldTitle(maStyleName);
 }
 
 void ScXMLCellFieldTitleContext::Characters(const OUString& /*rChars*/)
@@ -232,6 +285,11 @@ ScXMLCellFieldURLContext::ScXMLCellFieldURLContext(
     ScXMLImportContext(rImport, nPrefix, rLName),
     mrParentCxt(rParent)
 {
+}
+
+void ScXMLCellFieldURLContext::SetStyleName(const OUString& rStyleName)
+{
+    maStyleName = rStyleName;
 }
 
 void ScXMLCellFieldURLContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
@@ -266,7 +324,7 @@ void ScXMLCellFieldURLContext::StartElement(const uno::Reference<xml::sax::XAttr
 
 void ScXMLCellFieldURLContext::EndElement()
 {
-    mrParentCxt.PushFieldURL(maURL, maRep);
+    mrParentCxt.PushFieldURL(maURL, maRep, maStyleName);
 }
 
 void ScXMLCellFieldURLContext::Characters(const OUString& rChars)

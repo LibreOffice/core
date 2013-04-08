@@ -337,6 +337,26 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
     sal_Int32 nEnd = nBegin + rSpan.getLength();
     maParagraph.append(rSpan);
 
+    PushFormat(nBegin, nEnd, rStyleName);
+}
+
+void ScXMLTableRowCellContext::PushParagraphField(SvxFieldData* pData, const OUString& rStyleName)
+{
+    maFields.push_back(new Field(pData));
+    Field& rField = maFields.back();
+
+    sal_Int32 nPos = maParagraph.getLength();
+    maParagraph.append(sal_Unicode('\1')); // Placeholder text for inserted field item.
+    rField.maSelection.nStartPara = mnCurParagraph;
+    rField.maSelection.nEndPara = mnCurParagraph;
+    rField.maSelection.nStartPos = nPos;
+    rField.maSelection.nEndPos = nPos+1;
+
+    PushFormat(nPos, nPos+1, rStyleName);
+}
+
+void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, const OUString& rStyleName)
+{
     if (rStyleName.isEmpty())
         return;
 
@@ -559,38 +579,26 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
         rFmt.maItemSet.Put(*pPoolItem);
 }
 
-void ScXMLTableRowCellContext::PushParagraphField(SvxFieldData* pData)
+void ScXMLTableRowCellContext::PushParagraphFieldDate(const OUString& rStyleName)
 {
-    maFields.push_back(new Field(pData));
-    Field& rField = maFields.back();
-
-    sal_Int32 nPos = maParagraph.getLength();
-    maParagraph.append(sal_Unicode('\1')); // Placeholder text for inserted field item.
-    rField.maSelection.nStartPara = mnCurParagraph;
-    rField.maSelection.nEndPara = mnCurParagraph;
-    rField.maSelection.nStartPos = nPos;
-    rField.maSelection.nEndPos = nPos+1;
+    PushParagraphField(new SvxDateField, rStyleName);
 }
 
-void ScXMLTableRowCellContext::PushParagraphFieldDate()
-{
-    PushParagraphField(new SvxDateField);
-}
-
-void ScXMLTableRowCellContext::PushParagraphFieldSheetName()
+void ScXMLTableRowCellContext::PushParagraphFieldSheetName(const OUString& rStyleName)
 {
     SCTAB nTab = GetScImport().GetTables().GetCurrentCellPos().Tab();
-    PushParagraphField(new SvxTableField(nTab));
+    PushParagraphField(new SvxTableField(nTab), rStyleName);
 }
 
-void ScXMLTableRowCellContext::PushParagraphFieldDocTitle()
+void ScXMLTableRowCellContext::PushParagraphFieldDocTitle(const OUString& rStyleName)
 {
-    PushParagraphField(new SvxFileField);
+    PushParagraphField(new SvxFileField, rStyleName);
 }
 
-void ScXMLTableRowCellContext::PushParagraphFieldURL(const OUString& rURL, const OUString& rRep)
+void ScXMLTableRowCellContext::PushParagraphFieldURL(
+    const OUString& rURL, const OUString& rRep, const OUString& rStyleName)
 {
-    PushParagraphField(new SvxURLField(rURL, rRep, SVXURLFORMAT_REPR));
+    PushParagraphField(new SvxURLField(rURL, rRep, SVXURLFORMAT_REPR), rStyleName);
 }
 
 void ScXMLTableRowCellContext::PushParagraphEnd()

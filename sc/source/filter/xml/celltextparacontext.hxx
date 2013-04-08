@@ -32,10 +32,10 @@ public:
         sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     void PushSpan(const OUString& rSpan, const OUString& rStyleName);
-    void PushFieldSheetName();
-    void PushFieldDate();
-    void PushFieldTitle();
-    void PushFieldURL(const OUString& rURL, const OUString& rRep);
+    void PushFieldSheetName(const OUString& rStyleName);
+    void PushFieldDate(const OUString& rStyleName);
+    void PushFieldTitle(const OUString& rStyleName);
+    void PushFieldURL(const OUString& rURL, const OUString& rRep, const OUString& rStyleName);
 };
 
 /**
@@ -62,8 +62,11 @@ public:
 class ScXMLCellFieldSheetNameContext : public ScXMLImportContext
 {
     ScXMLCellTextParaContext& mrParentCxt;
+    OUString maStyleName;
 public:
     ScXMLCellFieldSheetNameContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+
+    void SetStyleName(const OUString& rStyleName);
 
     virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();
@@ -78,8 +81,11 @@ public:
 class ScXMLCellFieldDateContext : public ScXMLImportContext
 {
     ScXMLCellTextParaContext& mrParentCxt;
+    OUString maStyleName;
 public:
     ScXMLCellFieldDateContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+
+    void SetStyleName(const OUString& rStyleName);
 
     virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();
@@ -94,8 +100,11 @@ public:
 class ScXMLCellFieldTitleContext : public ScXMLImportContext
 {
     ScXMLCellTextParaContext& mrParentCxt;
+    OUString maStyleName;
 public:
     ScXMLCellFieldTitleContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+
+    void SetStyleName(const OUString& rStyleName);
 
     virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();
@@ -105,15 +114,18 @@ public:
 };
 
 /**
- * This context handles <text:a> element inside <text:p>.
+ * This context handles <text:a> element inside <text:p> or <text:span>.
  */
 class ScXMLCellFieldURLContext : public ScXMLImportContext
 {
     ScXMLCellTextParaContext& mrParentCxt;
+    OUString maStyleName;
     OUString maURL;
     OUString maRep;
 public:
     ScXMLCellFieldURLContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+
+    void SetStyleName(const OUString& rStyleName);
 
     virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();

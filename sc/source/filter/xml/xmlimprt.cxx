@@ -1860,6 +1860,24 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
     return *pCellTextParaElemTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetCellTextSpanElemTokenMap()
+{
+    if (!pCellTextSpanElemTokenMap)
+    {
+        static SvXMLTokenMapEntry aMap[] =
+        {
+            { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SPAN_ELEM_SHEET_NAME },
+            { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_SPAN_ELEM_DATE },
+            { XML_NAMESPACE_TEXT, XML_TITLE, XML_TOK_CELL_TEXT_SPAN_ELEM_TITLE },
+            { XML_NAMESPACE_TEXT, XML_A, XML_TOK_CELL_TEXT_SPAN_ELEM_URL },
+            XML_TOKEN_MAP_END
+        };
+
+        pCellTextSpanElemTokenMap = new SvXMLTokenMap(aMap);
+    }
+    return *pCellTextSpanElemTokenMap;
+}
+
 const SvXMLTokenMap& ScXMLImport::GetCellTextSpanAttrTokenMap()
 {
     if (!pCellTextSpanAttrTokenMap)
@@ -2013,6 +2031,7 @@ ScXMLImport::ScXMLImport(
     pDataPilotMemberAttrTokenMap( 0 ),
     pConsolidationAttrTokenMap( 0 ),
     pCellTextParaElemTokenMap(NULL),
+    pCellTextSpanElemTokenMap(NULL),
     pCellTextSpanAttrTokenMap(NULL),
     pCellTextURLAttrTokenMap(NULL),
     aTables(*this),
@@ -2153,6 +2172,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDataPilotMemberAttrTokenMap;
     delete pConsolidationAttrTokenMap;
     delete pCellTextParaElemTokenMap;
+    delete pCellTextSpanElemTokenMap;
     delete pCellTextSpanAttrTokenMap;
     delete pCellTextURLAttrTokenMap;
 

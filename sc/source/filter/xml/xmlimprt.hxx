@@ -695,6 +695,17 @@ enum ScXMLCellTextParaElemTokens
 };
 
 /**
+ * Tokens for elements that come under <text:span>
+ */
+enum ScXMLCellTextSpanElemTokens
+{
+    XML_TOK_CELL_TEXT_SPAN_ELEM_SHEET_NAME,
+    XML_TOK_CELL_TEXT_SPAN_ELEM_DATE,
+    XML_TOK_CELL_TEXT_SPAN_ELEM_TITLE,
+    XML_TOK_CELL_TEXT_SPAN_ELEM_URL
+};
+
+/**
  * Tokens for attributes for <text:span>
  */
 enum ScXMLCellTextSpanAttrTokens
@@ -877,6 +888,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     SvXMLTokenMap           *pDataPilotMemberAttrTokenMap;
     SvXMLTokenMap           *pConsolidationAttrTokenMap;
     SvXMLTokenMap           *pCellTextParaElemTokenMap;
+    SvXMLTokenMap           *pCellTextSpanElemTokenMap;
     SvXMLTokenMap           *pCellTextSpanAttrTokenMap;
     SvXMLTokenMap           *pCellTextURLAttrTokenMap;
 
@@ -1045,6 +1057,7 @@ public:
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
     const SvXMLTokenMap& GetConsolidationAttrTokenMap();
     const SvXMLTokenMap& GetCellTextParaElemTokenMap();
+    const SvXMLTokenMap& GetCellTextSpanElemTokenMap();
     const SvXMLTokenMap& GetCellTextSpanAttrTokenMap();
     const SvXMLTokenMap& GetCellTextURLAttrTokenMap();
 

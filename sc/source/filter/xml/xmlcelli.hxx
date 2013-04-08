@@ -118,7 +118,9 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     bool IsPossibleErrorString() const;
 
-    void PushParagraphField(SvxFieldData* pData);
+    void PushParagraphField(SvxFieldData* pData, const OUString& rStyleName);
+
+    void PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, const OUString& rStyleName);
 
 public:
 
@@ -136,10 +138,10 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     void PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName);
-    void PushParagraphFieldDate();
-    void PushParagraphFieldSheetName();
-    void PushParagraphFieldDocTitle();
-    void PushParagraphFieldURL(const OUString& rURL, const OUString& rRep);
+    void PushParagraphFieldDate(const OUString& rStyleName);
+    void PushParagraphFieldSheetName(const OUString& rStyleName);
+    void PushParagraphFieldDocTitle(const OUString& rStyleName);
+    void PushParagraphFieldURL(const OUString& rURL, const OUString& rRep, const OUString& rStyleName);
     void PushParagraphEnd();
 
     void SetAnnotation( const ScAddress& rPosition );
