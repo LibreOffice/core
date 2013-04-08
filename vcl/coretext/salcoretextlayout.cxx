@@ -30,7 +30,7 @@
 #include "headless/svpgdi.hxx"
 #endif
 
-class CoreTextLayout : public SalLayout
+class CoreTextLayout SAL_FINAL : public SalLayout
 {
 public:
     CoreTextLayout( QuartzSalGraphics* graphics, CoreTextStyleInfo* style);
