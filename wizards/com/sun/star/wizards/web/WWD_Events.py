@@ -68,6 +68,7 @@ class WWD_Events(WWD_Startup):
         self.count = 0
         self.bgDialog = None
         self.iconsDialog = None
+        self.docPreview = None
 
     @classmethod
     def main(self, args):

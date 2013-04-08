@@ -58,7 +58,7 @@ class UnoDataAware(DataAware):
             setattr(self.unoModel, self.unoPropName, value)
         else:
             print ("DEBUG !!! UnoDataAware.setToUI -- dataObject hasn't the attribute, su using the 'setter' method.")
-            uno.invoke(self.unoModel, "set" + self.unoPropName, (ui,))
+            uno.invoke(self.unoModel, "set" + self.unoPropName, (value,))
 
     # Try to get from an arbitrary object a boolean value.
     # Null returns Boolean.FALSE;
