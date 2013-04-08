@@ -349,12 +349,12 @@ HRESULT DocumentHolder::InPlaceActivate(
             m_xFrame->activate();
         else {
             // create frame and initialize it with with the created window
-            m_xFrame = frame::Frame::create( m_xFactory );
+            m_xFrame = frame::Frame::create( comphelper::getComponentContext(m_xFactory) );
             m_xFrame->initialize(m_xEditWindow);
 
             m_xFrame->registerDispatchProviderInterceptor( CreateNewInterceptor() );
 
-            m_xLayoutManager.set( m_xFrame->getLayoutManager(), UNO_QUERY_THROW );
+            m_xLayoutManager.set( m_xFrame->getLayoutManager(), uno::UNO_QUERY_THROW );
 
             if(m_xLayoutManager.is())
                 m_xLayoutManager->setDockingAreaAcceptor(this);
@@ -770,7 +770,7 @@ uno::Reference< frame::XFrame2 > DocumentHolder::DocumentFrame()
     {
         uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
 
-        uno::Reference<frame::XFrame> xFrame(xDesktop,uno::UNO_QUERY);
+        uno::Reference<frame::XFrame2> xFrame(xDesktop,uno::UNO_QUERY);
 
         // the frame will be registered on desktop here, later when the document
         // is loaded into the frame in ::show() method the terminate listener will be removed
