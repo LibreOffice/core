@@ -748,7 +748,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
 
     if (pPara)
     {
-        sal_Bool bHitTest = sal_False;
+        bool bHitTest = false;
         if( pModel )
             bHitTest = &pModel->GetHitTestOutliner() == &rOutliner;
 
@@ -851,7 +851,7 @@ OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
 void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg) const
 {
     OutputDevice* pOut = rOutliner.GetRefDevice();
-    sal_Bool bNoStretching(sal_False);
+    bool bNoStretching(false);
 
     if(pOut && pOut->GetOutDevType() == OUTDEV_PRINTER)
     {
@@ -886,7 +886,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         // we don't like that.
         if(aSize2.Height() >= aSize1.Height() * 2)
         {
-            bNoStretching = sal_True;
+            bNoStretching = true;
         }
 #endif
     }

@@ -218,7 +218,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 
 void SdrObjList::Clear()
 {
-    sal_Bool bObjectsRemoved(sal_False);
+    bool bObjectsRemoved(false);
 
     while( ! maList.empty())
     {
@@ -230,7 +230,7 @@ void SdrObjList::Clear()
         // to delete the object and thus refresh visualisations
         pObj->GetViewContact().flushViewObjectContacts(true);
 
-        bObjectsRemoved = sal_True;
+        bObjectsRemoved = true;
 
         // sent remove hint (after removal, see RemoveObject())
         if(pModel)

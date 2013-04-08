@@ -130,7 +130,7 @@ sal_Bool SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObj
     if (pLst==NULL) return sal_False;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return sal_False;
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
@@ -167,7 +167,7 @@ sal_Bool SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, sal_uI
     if (pLst==NULL) return sal_False;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return sal_False;
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
@@ -250,7 +250,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
     if (pLst==NULL)
         return sal_False;
 
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
     if (bUnmark)
         UnmarkAllObj();
 
@@ -258,7 +258,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
     // Calculate the necessary factors first.
     MapUnit eSrcUnit=pSrcMod->GetScaleUnit();
     MapUnit eDstUnit=pMod->GetScaleUnit();
-    sal_Bool bResize=eSrcUnit!=eDstUnit;
+    bool bResize=eSrcUnit!=eDstUnit;
     Fraction xResize,yResize;
     Point aPt0;
     if (bResize)
@@ -282,7 +282,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
         Size  aSiz(aDist.X(),aDist.Y());
         sal_uIntPtr nCloneErrCnt=0;
         sal_uIntPtr nOb,nObAnz=pSrcPg->GetObjCount();
-        sal_Bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
+        bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
 
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
@@ -431,7 +431,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
             pMarkPV=pPV;
     }
 
-    sal_Bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
+    bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
     if (bMark)
     { // select object the first PageView we found
         MarkObj(pObj,pMarkPV);

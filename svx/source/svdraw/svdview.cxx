@@ -814,7 +814,7 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                     MarkObj(rVEvt.pRootObj,rVEvt.pPV);
                     if (eHit==SDRHIT_TEXTEDIT)
                     {
-                        sal_Bool bRet2(pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType() &&
+                        bool bRet2(pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType() &&
                             SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, (Window*)pActualOutDev, sal_False, (SdrOutliner*)0L));
 
                         if(bRet2)
@@ -921,9 +921,9 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
     if (bRet && pActualOutDev!=NULL && pActualOutDev->GetOutDevType()==OUTDEV_WINDOW) {
         Window* pWin=(Window*)pActualOutDev;
         // left mouse button pressed?
-        sal_Bool bLeftDown=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseDown;
+        bool bLeftDown=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseDown;
         // left mouse button released?
-        sal_Bool bLeftUp=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseUp;
+        bool bLeftUp=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseUp;
         // left mouse button pressed or held?
         sal_Bool bLeftDown1=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && !rVEvt.bMouseUp;
         pWin->SetPointer(GetPreferedPointer(rVEvt.aLogicPos,pWin,
@@ -1047,14 +1047,14 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
         default: break;
     }
 
-    sal_Bool bMarkHit=eHit==SDRHIT_MARKEDOBJECT;
+    bool bMarkHit=eHit==SDRHIT_MARKEDOBJECT;
     SdrHdl* pHdl=aVEvt.pHdl;
     // now check the pointers for dragging
     if (pHdl!=NULL || bMarkHit) {
         SdrHdlKind eHdl= pHdl!=NULL ? pHdl->GetKind() : HDL_MOVE;
-        sal_Bool bCorner=pHdl!=NULL && pHdl->IsCornerHdl();
-        sal_Bool bVertex=pHdl!=NULL && pHdl->IsVertexHdl();
-        sal_Bool bMov=eHdl==HDL_MOVE;
+        bool bCorner=pHdl!=NULL && pHdl->IsCornerHdl();
+        bool bVertex=pHdl!=NULL && pHdl->IsVertexHdl();
+        bool bMov=eHdl==HDL_MOVE;
         if (bMov && (eDragMode==SDRDRAG_MOVE || eDragMode==SDRDRAG_RESIZE || bMarkedHitMovesAlways)) {
             if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // because double click or drag & drop is possible
             return Pointer(POINTER_MOVE);
@@ -1065,11 +1065,11 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                     return Pointer(POINTER_NOTALLOWED);
 
                 // are 3D objects selected?
-                sal_Bool b3DObjSelected = sal_False;
+                bool b3DObjSelected = false;
                 for (sal_uInt32 a=0; !b3DObjSelected && a<GetMarkedObjectCount(); a++) {
                     SdrObject* pObj = GetMarkedObjectByIndex(a);
                     if(pObj && pObj->ISA(E3dObject))
-                        b3DObjSelected = sal_True;
+                        b3DObjSelected = true;
                 }
                 // If we have a 3D object, go on despite !IsShearAllowed,
                 // because then we have a rotation instead of a shear.
@@ -1093,18 +1093,18 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                 if (bCorner || bVertex || bMov) {
                     SdrHdl* pH1=aHdl.GetHdl(HDL_REF1);
                     SdrHdl* pH2=aHdl.GetHdl(HDL_REF2);
-                    sal_Bool b90=sal_False;
-                    sal_Bool b45=sal_False;
+                    bool b90=false;
+                    bool b45=false;
                     Point aDif;
                     if (pH1!=NULL && pH2!=NULL) {
                         aDif=pH2->GetPos()-pH1->GetPos();
                         b90=(aDif.X()==0) || aDif.Y()==0;
                         b45=b90 || (Abs(aDif.X())==Abs(aDif.Y()));
                     }
-                    sal_Bool bNo=sal_False;
-                    if (!IsMirrorAllowed(sal_True,sal_True)) bNo=sal_True; // any mirroring is forbidden
-                    if (!IsMirrorAllowed(sal_False,sal_False) && !b45) bNo=sal_True; // mirroring freely is forbidden
-                    if (!IsMirrorAllowed(sal_True,sal_False) && !b90) bNo=sal_True;  // mirroring horizontally/vertically is allowed
+                    bool bNo=false;
+                    if (!IsMirrorAllowed(sal_True,sal_True)) bNo=true; // any mirroring is forbidden
+                    if (!IsMirrorAllowed(sal_False,sal_False) && !b45) bNo=true; // mirroring freely is forbidden
+                    if (!IsMirrorAllowed(sal_True,sal_False) && !b90) bNo=true;  // mirroring horizontally/vertically is allowed
                     if (bNo) return Pointer(POINTER_NOTALLOWED);
                     if (b90) {
                         return Pointer(POINTER_MIRROR);
@@ -1234,7 +1234,7 @@ XubString SdrView::GetStatusText()
         // position of the next line of the same paragraph, if there is one.
         sal_uInt16 nParaLine=0;
         sal_uIntPtr nParaLineAnz=pTextEditOutliner->GetLineCount(aSel.nEndPara);
-        sal_Bool bBrk=sal_False;
+        bool bBrk=false;
         while (!bBrk) {
             sal_uInt16 nLen=pTextEditOutliner->GetLineLen(aSel.nEndPara,nParaLine);
             sal_Bool bLastLine=(nParaLine==nParaLineAnz-1);
@@ -1242,8 +1242,8 @@ XubString SdrView::GetStatusText()
                 nCol-=nLen;
                 nLin++;
                 nParaLine++;
-            } else bBrk=sal_True;
-            if (nLen==0) bBrk=sal_True; // to be sure
+            } else bBrk=true;
+            if (nLen==0) bBrk=true; // to be sure
         }
 
         aStr.SearchAndReplaceAscii("%1", OUString::valueOf(nPar + 1));
@@ -1296,10 +1296,10 @@ SdrViewContext SdrView::GetContext() const
 
     if( HasMarkablePoints() && !IsFrameHandles() )
     {
-        sal_Bool bPath=sal_True;
+        bool bPath=true;
         for( sal_uIntPtr nMarkNum = 0; nMarkNum < nMarkAnz && bPath; nMarkNum++ )
             if (!GetMarkedObjectByIndex(nMarkNum)->ISA(SdrPathObj))
-                bPath=sal_False;
+                bPath=false;
 
         if( bPath )
             return SDRCONTEXT_POINTEDIT;
@@ -1307,7 +1307,7 @@ SdrViewContext SdrView::GetContext() const
 
     if( GetMarkedObjectCount() )
     {
-        sal_Bool bGraf = sal_True, bMedia = sal_True, bTable = sal_True;
+        bool bGraf = true, bMedia = true, bTable = true;
 
         for( sal_uIntPtr nMarkNum = 0; nMarkNum < nMarkAnz && ( bGraf || bMedia ); nMarkNum++ )
         {
@@ -1318,13 +1318,13 @@ SdrViewContext SdrView::GetContext() const
                 continue;
 
             if( !pMarkObj->ISA( SdrGrafObj ) )
-                bGraf = sal_False;
+                bGraf = false;
 
             if( !pMarkObj->ISA( SdrMediaObj ) )
-                bMedia = sal_False;
+                bMedia = false;
 
             if( !pMarkObj->ISA( ::sdr::table::SdrTableObj ) )
-                bTable = sal_False;
+                bTable = false;
         }
 
         if( bGraf )

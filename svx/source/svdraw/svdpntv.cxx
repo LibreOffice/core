@@ -271,7 +271,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         return;
     }
 
-    sal_Bool bObjChg=!bSomeObjChgdFlag; // if sal_True, evaluate for ComeBack timer
+    bool bObjChg=!bSomeObjChgdFlag; // if true, evaluate for ComeBack timer
     if (bObjChg) {
         SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
         if (pSdrHint!=NULL) {
@@ -1046,13 +1046,13 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
 {
 #ifdef DBG_UTIL
     {
-        sal_Bool bHasEEFeatureItems=sal_False;
+        bool bHasEEFeatureItems=false;
         SfxItemIter aIter(rAttr);
         const SfxPoolItem* pItem=aIter.FirstItem();
         while (!bHasEEFeatureItems && pItem!=NULL) {
             if (!IsInvalidItem(pItem)) {
                 sal_uInt16 nW=pItem->Which();
-                if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=sal_True;
+                if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=true;
             }
             pItem=aIter.NextItem();
         }
@@ -1159,12 +1159,12 @@ void SdrPaintView::MakeVisible(const Rectangle& rRect, Window& rWin)
     if( aActualSize.Height() > 0 && aActualSize.Width() > 0 )
     {
         Size aNewSize(rRect.GetSize());
-        sal_Bool bNewScale=sal_False;
-        sal_Bool bNeedMoreX=aNewSize.Width()>aActualSize.Width();
-        sal_Bool bNeedMoreY=aNewSize.Height()>aActualSize.Height();
+        bool bNewScale=false;
+        bool bNeedMoreX=aNewSize.Width()>aActualSize.Width();
+        bool bNeedMoreY=aNewSize.Height()>aActualSize.Height();
         if (bNeedMoreX || bNeedMoreY)
         {
-            bNewScale=sal_True;
+            bNewScale=true;
             // set new MapMode (Size+Org) and invalidate everything
             Fraction aXFact(aNewSize.Width(),aActualSize.Width());
             Fraction aYFact(aNewSize.Height(),aActualSize.Height());

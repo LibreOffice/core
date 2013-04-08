@@ -291,13 +291,13 @@ void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rRe
     if(GetPage())
     {
         SdrPageWindow* pPageWindow = FindPageWindow(rPaintWindow);
-        sal_Bool bIsTempTarget(sal_False);
+        bool bIsTempTarget(false);
 
         if(!pPageWindow)
         {
             // create temp PageWindow
             pPageWindow = new SdrPageWindow(*((SdrPageView*)this), rPaintWindow);
-            bIsTempTarget = sal_True;
+            bIsTempTarget = true;
         }
 
         // do the redraw

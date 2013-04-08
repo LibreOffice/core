@@ -137,8 +137,8 @@ void SdrText::SetModel( SdrModel* pNewModel )
         // see whether we need to use AutoGrow!
         sal_uIntPtr nOldFontHgt=pOldModel->GetDefaultFontHeight();
         sal_uIntPtr nNewFontHgt=pNewModel->GetDefaultFontHeight();
-        sal_Bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
-        sal_Bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
+        bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
+        bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
         if (bSetHgtItem)
         {
             // fix the value of HeightItem, so

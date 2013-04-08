@@ -50,7 +50,7 @@ public:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
-    sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
 
 ImpSdrObjTextLink::~ImpSdrObjTextLink()
@@ -168,7 +168,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
     if( pData )
     {
         DateTime                    aFileDT( DateTime::EMPTY );
-        sal_Bool                        bExists = sal_True, bLoad = sal_False;
+        bool                        bExists = true, bLoad = false;
 
         try
         {
@@ -184,13 +184,13 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
         }
         catch( ... )
         {
-            bExists = sal_False;
+            bExists = false;
         }
 
         if( bExists )
         {
             if( bForceLoad )
-                bLoad = sal_True;
+                bLoad = true;
             else
                 bLoad = ( aFileDT > pData->aFileDate0 );
 
@@ -209,7 +209,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
     INetURLObject   aFileURL( rFileName );
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     if( aFileURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
@@ -233,14 +233,14 @@ bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/
         cRTF[4] = 0;
         pIStm->Read(cRTF, 5);
 
-        sal_Bool bRTF = cRTF[0] == '{' && cRTF[1] == '\\' && cRTF[2] == 'r' && cRTF[3] == 't' && cRTF[4] == 'f';
+        bool bRTF = cRTF[0] == '{' && cRTF[1] == '\\' && cRTF[2] == 'r' && cRTF[3] == 't' && cRTF[4] == 'f';
 
         pIStm->Seek(0);
 
         if( !pIStm->GetError() )
         {
             SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::NO_DECODE ), sal::static_int_cast< sal_uInt16 >( bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT ) );
-            bRet = sal_True;
+            bRet = true;
         }
 
         delete pIStm;

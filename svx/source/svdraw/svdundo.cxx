@@ -267,8 +267,8 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
     bStyleSheet = bStyleSheet1;
 
     SdrObjList* pOL = rNewObj.GetSubList();
-    sal_Bool bIsGroup(pOL!=NULL && pOL->GetObjCount());
-    sal_Bool bIs3DScene(bIsGroup && pObj->ISA(E3dScene));
+    bool bIsGroup(pOL!=NULL && pOL->GetObjCount());
+    bool bIs3DScene(bIsGroup && pObj->ISA(E3dScene));
 
     if(bIsGroup)
     {
@@ -320,7 +320,7 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
 void SdrUndoAttrObj::Undo()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pObj);
-    sal_Bool bIs3DScene(pObj && pObj->ISA(E3dScene));
+    bool bIs3DScene(pObj && pObj->ISA(E3dScene));
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
@@ -420,7 +420,7 @@ void SdrUndoAttrObj::Undo()
 void SdrUndoAttrObj::Redo()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pObj);
-    sal_Bool bIs3DScene(pObj && pObj->ISA(E3dScene));
+    bool bIs3DScene(pObj && pObj->ISA(E3dScene));
 
     if(!pUndoGroup || bIs3DScene)
     {
