@@ -59,6 +59,9 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/classic/jvm.dll",
         // The 64-bit JRE has the jvm in bin/server
         "/bin/server/jvm.dll"
+#elif defined MACOSX && defined X86_64
+        // Oracle Java 7, under /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
+        "/lib/server/libjvm.dylib"
 #elif defined UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
@@ -71,12 +74,18 @@ char const* const* SunInfo::getRuntimePaths(int * size)
 
 char const* const* SunInfo::getLibraryPaths(int* size)
 {
-#ifdef UNX
+#if defined UNX
     static char const * ar[] = {
+#if defined MACOSX && defined X86_64
+        // Oracle Java 7, under /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
+        "/lib/server",
+        "/lib"
+#else
         "/lib/" JFW_PLUGIN_ARCH "/client",
         "/lib/" JFW_PLUGIN_ARCH "/server",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
+#endif
     };
     *size = SAL_N_ELEMENTS(ar);
     return ar;

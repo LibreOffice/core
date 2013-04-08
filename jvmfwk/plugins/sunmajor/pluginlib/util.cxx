@@ -61,6 +61,7 @@ using ::rtl::Reference;
 #endif
 
 #ifdef UNX
+#if !(defined MACOSX && defined X86_64)
 namespace {
 char const *g_arJavaNames[] = {
     "",
@@ -113,6 +114,7 @@ char const *g_arSearchPaths[] = {
 #endif
 };
 }
+#endif
 #endif //  UNX
 
 namespace jfw_plugin
@@ -1135,6 +1137,14 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
     JFW_TRACE2("\n[Java framework] Checking \"/usr/jdk/latest\"\n");
     getJREInfoByPath("file:////usr/jdk/latest", vecInfos);
+}
+
+#elif defined MACOSX && defined X86_64
+
+void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
+{
+    // Oracle Java 7
+    getJREInfoByPath("file:///Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home", vecInfos);
 }
 
 #else
