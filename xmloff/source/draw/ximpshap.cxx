@@ -78,7 +78,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-
+#include <basegfx/point/b2dpoint.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1813,6 +1813,11 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
             SvXMLUnitConverter::convertEnum( mnType, rValue, aXML_ConnectionKind_EnumMap );
             return;
         }
+        // #121965# draw:transform may be used in ODF1.2, e.g. exports from MS seem to use these
+        else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
+        {
+            mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
+        }
     }
     case XML_NAMESPACE_SVG:
     {
@@ -1903,6 +1908,29 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
         AddShape("com.sun.star.drawing.ConnectorShape");
         if(mxShape.is())
         {
+            // #121965# if draw:transform is used, apply directly to the start
+            // and end positions before using these
+            if(mnTransform.NeedsAction())
+            {
+                // transformation is used, apply to object.
+                ::basegfx::B2DHomMatrix aMat;
+                mnTransform.GetFullTransform(aMat);
+
+                if(!aMat.isIdentity())
+                {
+                    basegfx::B2DPoint aStart(maStart.X, maStart.Y);
+                    basegfx::B2DPoint aEnd(maEnd.X, maEnd.Y);
+
+                    aStart = aMat * aStart;
+                    aEnd = aMat * aEnd;
+
+                    maStart.X = basegfx::fround(aStart.getX());
+                    maStart.Y = basegfx::fround(aStart.getY());
+                    maEnd.X = basegfx::fround(aEnd.getX());
+                    maEnd.Y = basegfx::fround(aEnd.getY());
+                }
+            }
+
             // add connection ids
             if( !maStartShapeId.isEmpty() )
                 GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_True, maStartShapeId, mnStartGlueId );
