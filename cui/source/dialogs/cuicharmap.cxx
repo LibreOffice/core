@@ -191,11 +191,40 @@ void SvxShowText::Paint( const Rectangle& )
 
     const String aText = GetText();
     const Size aSize = GetOutputSizePixel();
-    Point aPoint( 2, mnY );
 
-    // adjust position using ink boundary if possible
+    long nAvailWidth = aSize.Width();
+    long nWinHeight = GetOutputSizePixel().Height();
+
+    bool bGotBoundary = true;
+    bool bShrankFont = false;
+    Font aOrigFont(GetFont());
+    Size aFontSize(aOrigFont.GetSize());
     Rectangle aBoundRect;
-    if( !GetTextBoundRect( aBoundRect, aText ) || aBoundRect.IsEmpty() )
+
+    for (long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 5)
+    {
+        if( !GetTextBoundRect( aBoundRect, aText ) || aBoundRect.IsEmpty() )
+        {
+            bGotBoundary = false;
+            break;
+        }
+        if (!mbCenter)
+            break;
+        //only shrink in the single glyph large view mode
+        long nTextWidth = aBoundRect.GetWidth();
+        if (nAvailWidth > nTextWidth)
+            break;
+        Font aFont(aOrigFont);
+        aFontSize.Height() = nFontHeight;
+        aFont.SetSize(aFontSize);
+        Control::SetFont(aFont);
+        mnY = ( nWinHeight - GetTextHeight() ) / 2;
+        bShrankFont = true;
+    }
+
+    Point aPoint( 2, mnY );
+    // adjust position using ink boundary if possible
+    if( !bGotBoundary )
         aPoint.X() = (aSize.Width() - GetTextWidth( aText )) / 2;
     else
     {
@@ -230,6 +259,8 @@ void SvxShowText::Paint( const Rectangle& )
 
     DrawText( aPoint, aText );
     SetTextColor( aTextCol );
+    if (bShrankFont)
+        Control::SetFont(aOrigFont);
 }
 
 // -----------------------------------------------------------------------
