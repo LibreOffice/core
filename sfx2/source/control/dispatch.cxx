@@ -1473,7 +1473,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
         {
             sal_uInt32 nId = pIFace->GetChildWindowId(nNo);
             const SfxSlot *pSlot = pSlotPool->GetSlot( (sal_uInt16) nId );
-            DBG_ASSERT( pSlot, "Childwindow slot missing!");
+            SAL_WARN_IF( !pSlot, "sfx2.control", "Childwindow slot missing: " << nId );
             if ( bReadOnlyShell )
             {
                 // only show ChildWindows if their slot is allowed for readonly documents
