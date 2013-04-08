@@ -75,6 +75,7 @@ public:
     void testPlaceholder();
     void testMnor();
     void testI120928();
+    void testBookmark();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -124,6 +125,7 @@ void Test::run()
         {"placeholder.odt", &Test::testPlaceholder},
         {"mnor.rtf", &Test::testMnor},
         {"i120928.rtf", &Test::testI120928},
+        {"bookmark.rtf", &Test::testBookmark},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -537,6 +539,13 @@ void Test::testI120928()
             bIsGraphic = true;
     }
     CPPUNIT_ASSERT_EQUAL(true, bIsGraphic);
+}
+
+void Test::testBookmark()
+{
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xBookmark(xBookmarksSupplier->getBookmarks()->getByName("firstword"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xBookmark->getAnchor()->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
