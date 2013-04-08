@@ -968,6 +968,9 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     xmlSetStructuredErrorFunc( NULL, NULL );
 
     // i83624: Tree files
+    // The following basically checks if the help.tree is well formed XML.
+    // Apparently there have been cases when translations contained
+    // non-well-formed XML in the past.
     OUString aTreeFileURL = aExtensionLanguageRoot;
     aTreeFileURL += OUString("/help.tree");
     osl::DirectoryItem aTreeFileItem;
