@@ -229,6 +229,18 @@ TabPage TAB_TEMPLATE_MANAGER
         {
             ToolBoxItem
             {
+                Identifier = TBI_TEMPLATE_SAVE;
+                Hide = TRUE;
+                Text [ en-US ] = "Save";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actionview028.png" ; };
+                };
+            };
+
+            ToolBoxItem
+            {
                 Identifier = TBI_TEMPLATE_EDIT;
                 Text [ en-US ] = "Edit";
 

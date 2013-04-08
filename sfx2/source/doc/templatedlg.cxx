@@ -308,6 +308,14 @@ void SfxTemplateManagerDlg::setSaveMode(bool bMode)
         mpViewBar->ShowItem(TBI_TEMPLATE_SAVE);
         mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
         mpViewBar->HideItem(TBI_TEMPLATE_REPOSITORY);
+
+        mpTemplateBar->ShowItem(TBI_TEMPLATE_SAVE);
+        mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
+        mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
+        mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
+        mpTemplateBar->HideItem(TBI_TEMPLATE_MOVE);
+        mpTemplateBar->HideItem(TBI_TEMPLATE_EXPORT);
+        mpTemplateBar->HideItem(TBI_TEMPLATE_DELETE);
     }
     else
     {
@@ -858,16 +866,22 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
 
     if (pItem->isSelected())
     {
-        if (!mbIsSaveMode)
+        if (maSelTemplates.empty())
         {
-            if (maSelTemplates.empty())
-            {
-                mpViewBar->Show(false);
-                mpTemplateBar->Show();
-            }
-            else if (maSelTemplates.size() != 1 || !bInSelection)
+            mpViewBar->Show(false);
+            mpTemplateBar->Show();
+        }
+        else if (maSelTemplates.size() != 1 || !bInSelection)
+        {
+            if (!mbIsSaveMode)
             {
                 mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
+                mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
+                mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
+            }
+            else
+            {
+                mpTemplateBar->HideItem(TBI_TEMPLATE_SAVE);
                 mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
                 mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
             }
@@ -882,16 +896,22 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
         {
             maSelTemplates.erase(pItem);
 
-            if (!mbIsSaveMode)
+            if (maSelTemplates.empty())
             {
-                if (maSelTemplates.empty())
-                {
-                    mpTemplateBar->Show(false);
-                    mpViewBar->Show();
-                }
-                else if (maSelTemplates.size() == 1)
+                mpTemplateBar->Show(false);
+                mpViewBar->Show();
+            }
+            else if (maSelTemplates.size() == 1)
+            {
+                if (!mbIsSaveMode)
                 {
                     mpTemplateBar->ShowItem(TBI_TEMPLATE_EDIT);
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
+                }
+                else
+                {
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_SAVE);
                     mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
                     mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
                 }
