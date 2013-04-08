@@ -72,7 +72,7 @@ static void createTheme( OUString aThemeName, OUString aGalleryURL,
     fprintf( stderr, "Work on gallery '%s'\n",
              OUStringToOString( aGalleryURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    fprintf( stderr, "Existing themes: %d\n",
+    fprintf( stderr, "Existing themes: %" SAL_PRI_SIZET "u\n",
              pGallery->GetThemeCount() );
 
     GalleryTheme *pGalTheme;
@@ -83,7 +83,7 @@ static void createTheme( OUString aThemeName, OUString aGalleryURL,
             }
     }
 
-    fprintf( stderr, "Existing themes: %d\n",
+    fprintf( stderr, "Existing themes: %" SAL_PRI_SIZET "u\n",
              pGallery->GetThemeCount() );
 
     SfxListener aListener;
@@ -111,7 +111,7 @@ static void createTheme( OUString aThemeName, OUString aGalleryURL,
             fprintf( stderr, "Failed to import '%s'\n",
                      OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ).getStr() );
         else
-            fprintf( stderr, "Imported file '%s' (%d)\n",
+            fprintf( stderr, "Imported file '%s' (%" SAL_PRI_SIZET "u)\n",
                      OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ).getStr(),
                      pGalTheme->GetObjectCount() );
     }
