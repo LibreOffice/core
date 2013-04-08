@@ -158,6 +158,33 @@ typedef sal_uInt32 sal_GlyphId;
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units
 
+// Unfortunately there is little documentation to help implementors of
+// new classes derived from SalLayout ("layout engines"), and the code
+// and data structures are far from obvious.
+
+// For instance, I *think* the important virtual functions in the
+// layout engines are called in this order:
+
+// * InitFont()
+// * LayoutText()
+// * AdjustLayout(), any number of times (but presumably
+// usually not at all or just once)
+// * Optionally, DrawText()
+
+// Functions that just return information like GetTexWidth() and
+// FillDXArray() are called after LayoutText() and before DrawText().
+
+// Another important questions is which parts of an ImplLayoutArgs can
+// be changed by callers between LayoutText() and AdjustLayout()
+// calls. It probably makes sense only if one assumes that the "string
+// related inputs" part are not changed after LayoutText().
+
+// But why use the same ImplLayoutArgs structure as parameter for both
+// LayoutText() and AdjustLayout() in the first place? And why
+// duplicate some of the fields in both SalLayout and ImplLayoutArgs
+// (mnMinCharPos, mnEndCharPos, mnLayoutFlags==mnFlags,
+// mnOrientation)? Lost in history...
+
 class VCL_PLUGIN_PUBLIC SalLayout
 {
 public:
