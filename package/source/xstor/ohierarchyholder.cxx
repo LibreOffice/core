@@ -20,6 +20,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess2.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include "ohierarchyholder.hxx"
