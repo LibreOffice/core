@@ -185,6 +185,18 @@ void ScOrcusSheet::set_shared_formula(row_t row, col_t col, size_t sindex)
     mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
 }
 
+void ScOrcusSheet::set_array_formula(
+    row_t /*row*/, col_t /*col*/, formula_grammar_t /*grammar*/,
+    const char* /*p*/, size_t /*n*/, row_t /*array_rows*/, col_t /*array_cols*/)
+{
+}
+
+void ScOrcusSheet::set_array_formula(
+    row_t /*row*/, col_t /*col*/, formula_grammar_t /*grammar*/,
+    const char* /*p*/, size_t /*n*/, const char* /*p_range*/, size_t /*n_range*/)
+{
+}
+
 void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
 {
     // Calc does not yet support shared strings so we have to
@@ -199,6 +211,11 @@ void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
 void ScOrcusSheet::set_value(row_t row, col_t col, double value)
 {
     mrDoc.SetValue( col, row, mnTab, value );
+}
+
+void ScOrcusSheet::set_bool(row_t row, col_t col, bool value)
+{
+    mrDoc.SetValue(col, row, mnTab, value ? 1.0 : 0.0);
 }
 
 size_t ScOrcusSharedStrings::append(const char* s, size_t n)
@@ -334,6 +351,14 @@ size_t ScOrcusStyles::commit_cell_protection()
     return 0;
 }
 
+void ScOrcusStyles::set_number_format(const char* /*s*/, size_t /*n*/)
+{
+}
+
+size_t ScOrcusStyles::commit_number_format()
+{
+    return 0;
+}
 
 // cell style xf
 

@@ -71,17 +71,31 @@ public:
     // Orcus import interface
     virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n);
     virtual void set_format(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t xf_index);
+
     virtual void set_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n);
     virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n);
+
     virtual void set_shared_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,
         const char* p_formula, size_t n_formula);
+
     virtual void set_shared_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,
         const char* p_formula, size_t n_formula, const char* p_range, size_t n_range);
+
     virtual void set_shared_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex);
+
+    virtual void set_array_formula(
+        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar,
+        const char* p, size_t n, orcus::spreadsheet::row_t array_rows, orcus::spreadsheet::col_t array_cols);
+
+    virtual void set_array_formula(
+        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar,
+        const char* p, size_t n, const char* p_range, size_t n_range);
+
     virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex);
     virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value);
+    virtual void set_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, bool value);
 
     SCTAB getIndex() const { return mnTab; }
 };
@@ -118,6 +132,10 @@ public:
     virtual void set_cell_hidden(bool b);
     virtual void set_cell_locked(bool b);
     virtual size_t commit_cell_protection();
+
+    // number format
+    virtual void set_number_format(const char* s, size_t n);
+    virtual size_t commit_number_format();
 
     // cell style xf
 

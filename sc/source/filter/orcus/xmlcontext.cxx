@@ -159,7 +159,7 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
 
     // TODO: Use our own stream loading call instead of one from orcus.
     std::string aStrm;
-    orcus::load_file_content(path, aStrm);
+//  orcus::load_file_content(path, aStrm);
 
     if (aStrm.empty())
         return false;
