@@ -1315,6 +1315,9 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
         return;
     }
 
+    if ( mbFormat )
+        Format();
+
     --nLastItem;
     const size_t nCurPos = mnSelItemId ? GetItemPos( mnSelItemId )
                                        : mpNoneItem ? VALUESET_ITEM_NONEITEM : 0;
