@@ -30,6 +30,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 
 #include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/basemutex.hxx>
