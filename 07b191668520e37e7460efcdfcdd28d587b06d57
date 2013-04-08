@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///qU\u003d",
+        "filename": "xmlscript/source/xml_helper/xml_impctx.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-04-08T08:20:03Z",
+      "side": 1,
+      "message": "This should be \u003e\u003d.",
+      "revId": "07b191668520e37e7460efcdfcdd28d587b06d57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///qQ\u003d",
+        "filename": "xmlscript/source/xmldlg_imexp/xmldlg_export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-04-08T08:20:03Z",
+      "side": 1,
+      "message": "This should be desc.foo || desc.bar || ...",
+      "revId": "07b191668520e37e7460efcdfcdd28d587b06d57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///qM\u003d",
+        "filename": "xmlscript/source/xmldlg_imexp/xmldlg_import.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-04-08T08:20:03Z",
+      "side": 1,
+      "message": "Just for the future, .getStr() can be also removed here.",
+      "revId": "07b191668520e37e7460efcdfcdd28d587b06d57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
