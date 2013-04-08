@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///nU\u003d",
+        "filename": "oox/Library_oox.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-04-08T18:38:53Z",
+      "side": 1,
+      "message": "I assume this is just a leftover, which is no longer needed?",
+      "revId": "60a21548c537062143b8d3c82a05b5dff4d832c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
