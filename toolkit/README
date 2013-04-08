@@ -5,3 +5,7 @@ or Java.
 Note that the "awt" here has no relation to the Java awt, as far as I know. It
 might be inspired by it API-wise, perhaps. (If you know differently, feel free
 to improve this REDAME file.)
+
+Note that toolkit/ is itself not really a toolkit, it is at root a
+reasonably simple wrapper of vcl/ - if you came here looking for a
+toolkit, please checkout vcl/ instead.

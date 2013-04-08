@@ -1,5 +1,7 @@
 Visual Components Library is responsible for the widgets (windowing, buttons, controls, file-pickers etc.) operating system abstraction, including basic rendering (e.g. the output device).
 
+VCL provides a graphical toolkit similar to gtk+, Qt, SWING etc.
+
 source/
 	+ the main cross-platform chunk of source
 
