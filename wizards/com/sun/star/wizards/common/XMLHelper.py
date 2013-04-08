@@ -19,8 +19,8 @@ class XMLHelper:
 
     @classmethod
     def addElement(self, parent, name, attNames, attValues):
-        doc = parent.ownerDocument
-        if (doc == None):
+        doc = parent.getOwnerDocument()
+        if (doc is None):
             doc = parent
         e = doc.createElement(name)
         for i in range(len(attNames)):

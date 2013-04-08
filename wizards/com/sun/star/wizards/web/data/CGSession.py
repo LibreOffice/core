@@ -25,8 +25,6 @@ from .CGDesign import CGDesign
 from .CGGeneralInfo import CGGeneralInfo
 from .CGPublish import CGPublish
 
-from xml.dom.minidom import Document
-
 class CGSession(ConfigGroup):
 
     cp_Index = -1
@@ -39,10 +37,10 @@ class CGSession(ConfigGroup):
     cp_Publishing = WebConfigSet(CGPublish)
     valid = False
 
-    def createDOM(self, parent):
-        root = XMLHelper.addElement(
-            parent, "session", ["name", "screen-size"],
-            [self.cp_Name, self.getScreenSize()])
+    def createDOM(self, doc):
+        root = XMLHelper.addElement(doc, "session",
+                                    ["name", "screen-size"],
+                                    [self.cp_Name, self.getScreenSize()])
         self.cp_GeneralInfo.createDOM(root)
         self.cp_Content.createDOM(root)
         return root
@@ -65,6 +63,7 @@ class CGSession(ConfigGroup):
         return self.root.cp_Styles.getElement(self.cp_Design.cp_Style)
 
     def createDOM1(self):
-        doc = Document()
+        factory = self.root.xmsf.createInstance("com.sun.star.xml.dom.DocumentBuilder")
+        doc = factory.newDocument()
         self.createDOM(doc)
         return doc
