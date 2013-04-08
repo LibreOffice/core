@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///qw\u003d",
+        "filename": "sw/source/ui/utlui/uitool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-04-08T07:51:52Z",
+      "side": 1,
+      "message": "Please don\u0027t do /// -\u003e // conversion, that makes doxygen unhappy.",
+      "revId": "59d14f8bb0deeb249c5e8c22044d03256f2adadc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
