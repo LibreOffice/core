@@ -971,8 +971,20 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
     if ( nPos == THUMBNAILVIEW_ITEM_NOTFOUND )
         return;
 
-    if ( nPos < mItemList.size() ) {
-        ValueItemList::iterator it = mItemList.begin();
+    if ( nPos < mFilteredItemList.size() ) {
+
+        // delete item from the thumbnail list
+        for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+        {
+            if (mItemList[i]->mnId == nItemId)
+            {
+                mItemList.erase(mItemList.begin()+i);
+                break;
+            }
+        }
+
+        // delete item from the filter item list
+        ValueItemList::iterator it = mFilteredItemList.begin();
         ::std::advance( it, nPos );
 
         if ((*it)->isSelected())
@@ -982,7 +994,8 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
         }
 
         delete *it;
-        mItemList.erase( it );
+        mFilteredItemList.erase( it );
+        mpStartSelRange = mFilteredItemList.end();
     }
 
     // reset variables
@@ -1026,8 +1039,8 @@ void ThumbnailView::updateItems (const std::vector<ThumbnailViewItem*> &items)
 
 size_t ThumbnailView::GetItemPos( sal_uInt16 nItemId ) const
 {
-    for ( size_t i = 0, n = mItemList.size(); i < n; ++i ) {
-        if ( mItemList[i]->mnId == nItemId ) {
+    for ( size_t i = 0, n = mFilteredItemList.size(); i < n; ++i ) {
+        if ( mFilteredItemList[i]->mnId == nItemId ) {
             return i;
         }
     }
@@ -1036,7 +1049,7 @@ size_t ThumbnailView::GetItemPos( sal_uInt16 nItemId ) const
 
 sal_uInt16 ThumbnailView::GetItemId( size_t nPos ) const
 {
-    return ( nPos < mItemList.size() ) ? mItemList[nPos]->mnId : 0 ;
+    return ( nPos < mFilteredItemList.size() ) ? mFilteredItemList[nPos]->mnId : 0 ;
 }
 
 sal_uInt16 ThumbnailView::GetItemId( const Point& rPos ) const
@@ -1073,11 +1086,11 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
     if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
         return;
 
-    ThumbnailViewItem* pItem = mItemList[nItemPos];
+    ThumbnailViewItem* pItem = mFilteredItemList[nItemPos];
     if (!pItem->isSelected())
     {
-        mItemList[nItemPos]->setSelection(true);
-        maItemStateHdl.Call(mItemList[nItemPos]);
+        pItem->setSelection(true);
+        maItemStateHdl.Call(pItem);
 
         if (IsReallyVisible() && IsUpdateMode())
             Invalidate();
@@ -1156,11 +1169,11 @@ void ThumbnailView::DeselectItem( sal_uInt16 nItemId )
     if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
         return;
 
-    ThumbnailViewItem* pItem = mItemList[nItemPos];
+    ThumbnailViewItem* pItem = mFilteredItemList[nItemPos];
     if (pItem->isSelected())
     {
-        mItemList[nItemPos]->setSelection(false);
-        maItemStateHdl.Call(mItemList[nItemPos]);
+        pItem->setSelection(false);
+        maItemStateHdl.Call(pItem);
 
         if (IsReallyVisible() && IsUpdateMode())
             Invalidate();
@@ -1175,7 +1188,7 @@ bool ThumbnailView::IsItemSelected( sal_uInt16 nItemId ) const
     if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
         return false;
 
-    ThumbnailViewItem* pItem = mItemList[nItemPos];
+    ThumbnailViewItem* pItem = mFilteredItemList[nItemPos];
     return pItem->isSelected();
 }
 
@@ -1201,7 +1214,7 @@ OUString ThumbnailView::GetItemText( sal_uInt16 nItemId ) const
     size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
-        return mItemList[nPos]->maTitle;
+        return mFilteredItemList[nPos]->maTitle;
 
     return OUString();
 }
