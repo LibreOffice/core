@@ -54,7 +54,6 @@ public:
     virtual long    FillDXArray( sal_Int32* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
-    virtual bool    GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
     const PhysicalFontFace* GetFallbackFontData( sal_GlyphId ) const;
@@ -1180,7 +1179,6 @@ void ATSLayout::InvalidateMeasurements()
 
 // glyph fallback is supported directly by Aqua
 // so methods used only by MultiSalLayout can be dummy implementated
-bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const { return false; }
 void ATSLayout::InitFont() const {}
 void ATSLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void ATSLayout::DropGlyph( int /*nStart*/ ) {}
