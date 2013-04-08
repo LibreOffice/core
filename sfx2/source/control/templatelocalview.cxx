@@ -398,7 +398,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
         aTemplateItem.nDocId = nTargetIdx;
         aTemplateItem.nRegionId = nTargetRegion;
         aTemplateItem.aName = pViewItem->maTitle;
-        aTemplateItem.aPath = pViewItem->getPath();
+        aTemplateItem.aPath = mpDocTemplates->GetPath(nTargetRegion,nTargetIdx);
         aTemplateItem.aThumbnail = pViewItem->maPreview1;
 
         pTarget->maTemplates.push_back(aTemplateItem);
@@ -495,7 +495,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
             aTemplateItem.nDocId = nTargetIdx;
             aTemplateItem.nRegionId = nTargetRegion;
             aTemplateItem.aName = pViewItem->maTitle;
-            aTemplateItem.aPath = pViewItem->getPath();
+            aTemplateItem.aPath = mpDocTemplates->GetPath(nTargetRegion,nTargetIdx);
             aTemplateItem.aThumbnail = pViewItem->maPreview1;
 
             pTarget->maTemplates.push_back(aTemplateItem);
