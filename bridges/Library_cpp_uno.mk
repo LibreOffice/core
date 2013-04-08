@@ -135,7 +135,8 @@ bridge_noopt_objects := callvirtualmethod
 bridge_exception_objects := abi cpp2uno except uno2cpp
 else ifeq ($(OS),MACOSX)
 bridges_SELECTED_BRIDGE := gcc3_macosx_x86-64
-bridge_exception_objects := abi call callvirtualmethod cpp2uno except uno2cpp
+bridge_exception_objects := abi call cpp2uno except uno2cpp
+bridge_noopt_objects := callvirtualmethod
 else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_x86-64
 bridge_exception_objects := cpp2uno dllinit uno2cpp
