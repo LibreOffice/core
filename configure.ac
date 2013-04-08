@@ -5585,14 +5585,14 @@ struct A
         AC_MSG_RESULT([no])
     fi
 else
-    AC_MSG_RESULT([no (C++11 disabled)])
+    AC_MSG_RESULT([no])
 fi
 
 dnl ==================================
 dnl Check for C++11 "override" support
 dnl ==================================
 
-AC_MSG_CHECKING([whether $CXX supports C++11 override syntax])
+AC_MSG_CHECKING([whether $CXX supports C++11 "override" syntax])
 if test "$HAVE_CXX0X" = "TRUE"; then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -5618,7 +5618,76 @@ struct B : A
         AC_MSG_RESULT([no])
     fi
 else
-    AC_MSG_RESULT([no (C++11 disabled)])
+    AC_MSG_RESULT([no])
+fi
+
+dnl ==================================
+dnl Check for C++11 "final" support
+dnl ==================================
+
+AC_MSG_CHECKING([whether $CXX supports C++11 "final" syntax])
+if test "$HAVE_CXX0X" = "TRUE"; then
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+// First check that this correct program that uses "final" compiles
+struct A final
+{
+};
+
+struct B
+{
+        virtual void test();
+};
+
+struct C : B
+{
+        void test() final;
+};
+]])],[have_final=yes],[])
+
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+// Then check that the "final" works as expected,
+// that this program fails to compile
+struct A final
+{
+};
+
+struct B : A
+{
+};
+]])],[],[final_class_works=yes])
+
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+// Also this should fail to compile
+struct B
+{
+        virtual void test();
+};
+
+struct C : B
+{
+        void test() final;
+};
+
+struct D : C
+{
+        void test();
+};
+]])],[],[final_method_works=yes])
+    AC_LANG_POP([C++])
+
+    CXXFLAGS=$save_CXXFLAGS
+
+    if test "$have_final" = yes -a "$final_class_works" = yes -a "$final_method_works" = yes; then
+        AC_MSG_RESULT([yes])
+        AC_DEFINE([HAVE_CXX11_FINAL])
+    else
+        AC_MSG_RESULT([no])
+    fi
+else
+    AC_MSG_RESULT([no])
 fi
 
 dnl ===================================================================

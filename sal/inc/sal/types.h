@@ -409,6 +409,18 @@ namespace css = ::com::sun::star;
 #define SAL_OVERRIDE
 #endif
 
+/** C++11 "final" feature.
+
+    With HAVE_CXX11_FINAL, mark a class as non-derivable or a method as non-overridable.
+
+    @since LibreOffice 4.1
+*/
+#if HAVE_CXX11_FINAL
+#define SAL_FINAL final
+#else
+#define SAL_FINAL
+#endif
+
 #endif /* __cplusplus */
 
 #ifdef __cplusplus
