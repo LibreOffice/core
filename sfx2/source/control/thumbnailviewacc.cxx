@@ -348,7 +348,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
 
         if( THUMBNAILVIEW_ITEM_NONEITEM != nItemPos )
         {
-            ThumbnailViewItem *const pItem = mpParent->mItemList[nItemPos];
+            ThumbnailViewItem *const pItem = mpParent->mFilteredItemList[nItemPos];
             xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
         }
     }
