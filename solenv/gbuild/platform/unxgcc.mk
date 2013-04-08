@@ -202,6 +202,15 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
 		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)))
 	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1))
+	$(if $(filter Library,$(TARGETTYPE)),\
+		readelf -d $(1) | grep SONAME > $(1).exports.tmp ; \
+		$(NM) --dynamic --extern-only --defined-only --format=posix $(1) \
+			| cut -d' ' -f1-2 \
+			>> $(1).exports.tmp && \
+		if cmp -s $(1).exports.tmp $(1).exports; \
+			then rm $(1).exports.tmp; \
+			else mv $(1).exports.tmp $(1).exports; touch -r $(1) $(1).exports; \
+		fi)
 endef
 
 define gb_LinkTarget__command_staticlink

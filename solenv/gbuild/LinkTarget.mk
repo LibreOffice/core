@@ -402,6 +402,7 @@ $(call gb_LinkTarget_get_clean_target,%) :
 		$(call gb_LinkTarget_get_headers_target,$*) \
 		$(call gb_LinkTarget_get_external_headers_target,$*) \
 		$(call gb_LinkTarget_get_objects_list,$*) \
+		$(call gb_LinkTarget_get_target,$*).exports \
 		$(DLLTARGET) \
 		$(AUXTARGETS)) && \
 		cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -fr && \
@@ -441,6 +442,14 @@ $(if $(EXTRAOBJECTLISTS),cat $(EXTRAOBJECTLISTS) >> $${TEMPFILE} && ) \
 mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2))
 
 endef
+
+# Target for the .exports of the shared library, to speed up incremental build.
+# This deliberately does nothing if the file exists; the file is actually
+# written in gb_LinkTarget__command_dynamiclink.
+# Put this pattern rule here so it overrides the one below.
+# (this is rather ugly: because of % the functions cannot be used)
+$(call gb_LinkTarget_get_target,Library/%.exports) : $(gb_Library_OUTDIRLOCATION)/%
+	$(if $(wildcard $@),true,touch $@)
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
 	$(call gb_LinkTarget__command,$@,$*)
@@ -830,7 +839,10 @@ endif
 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(3)
 
-$(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(3),$(call gb_Library_get_target,$(lib)))
+# depend on the exports of the library, not on the library itself
+# for faster incremental builds when the ABI is unchanged
+$(call gb_LinkTarget_get_target,$(1)) : \
+	$(foreach lib,$(3),$(call gb_Library_get_exports_target,$(lib)))
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 
