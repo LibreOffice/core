@@ -698,95 +698,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="MailCommandLineProfile">
-      <info>
-        <deprecated>Without replacement.</deprecated>
-        <desc>Contains the command line profile for external mail
-        applications.</desc>
-      </info>
-      <group oor:name="FormatStrings">
-        <info>
-          <desc>Contains the different string tokens for "to" and "cc" etc.
-          Addresses will be concatenated to create the command line.</desc>
-        </info>
-        <prop oor:name="base" oor:type="xs:string">
-          <info>
-            <desc>Contains the fixed text (optional) preceding the mail
-            arguments.</desc>
-          </info>
-        </prop>
-        <prop oor:name="from" oor:type="xs:string">
-          <info>
-            <desc>Contains the string token describing the "from" address
-            field.</desc>
-          </info>
-        </prop>
-        <prop oor:name="to" oor:type="xs:string">
-          <info>
-            <desc>Contains the string token describing the "to" address
-            field.</desc>
-          </info>
-        </prop>
-        <prop oor:name="cc" oor:type="xs:string">
-          <info>
-            <desc>Contains the string token describing the "cc" address
-            field.</desc>
-          </info>
-        </prop>
-        <prop oor:name="bcc" oor:type="xs:string">
-          <info>
-            <desc>Contains the string token describing the "bcc" address
-            field.</desc>
-          </info>
-        </prop>
-        <prop oor:name="subject" oor:type="xs:string">
-          <info>
-            <desc>Contains the string token describing the subject.</desc>
-          </info>
-        </prop>
-        <prop oor:name="attachment" oor:type="xs:string">
-          <info>
-            <desc>Contains the string token describing the attachments of the
-            message.</desc>
-          </info>
-        </prop>
-        <prop oor:name="body" oor:type="xs:string">
-          <info>
-            <desc>Contains the string token describing the body of the
-            message.</desc>
-          </info>
-        </prop>
-      </group>
-      <group oor:name="EnumDelimiters">
-        <info>
-          <desc>Contains the delimiters used to separate values for various
-          command line parameters of the external mailer.</desc>
-        </info>
-        <prop oor:name="base" oor:type="xs:string">
-          <info>
-            <desc>Contains the delimiter used between the external mailer name
-            and the "to" field.</desc>
-          </info>
-        </prop>
-        <prop oor:name="cc" oor:type="xs:string">
-          <info>
-            <desc>Contains the delimiters between different cc
-            addressees.</desc>
-          </info>
-        </prop>
-        <prop oor:name="bcc" oor:type="xs:string">
-          <info>
-            <desc>Contains the delimiters between different bcc
-            addressees.</desc>
-          </info>
-        </prop>
-        <prop oor:name="attachment" oor:type="xs:string">
-          <info>
-            <desc>Contains the delimiters between different attachments.</desc>
-          </info>
-        </prop>
-      </group>
-    </group>
     <group oor:name="JobDescription">
       <info>
         <deprecated>Use cfg package Jobs instead of this.</deprecated>
@@ -1682,30 +1593,6 @@
           <desc>Contains the global path settings, mainly those of the Options
           dialog.</desc>
         </info>
-        <prop
-            oor:name="OfficeInstall" oor:type="xs:string" oor:nillable="false">
-          <!-- OldLocation:NEW-->
-          <info>
-            <deprecated/>
-            <desc>Contains the Office installation path.</desc>
-          </info>
-          <value/>
-          <!-- JB: Empty default inserted into empty property node. Remove if
-               NIL was intended -->
-        </prop>
-        <prop
-            oor:name="OfficeInstallURL" oor:type="xs:string"
-            oor:nillable="false">
-          <!-- OldLocation:NEW-->
-          <info>
-            <deprecated/>
-            <desc>Contains the Office installation path in URL notation. Must
-            match the UCB configuration.</desc>
-          </info>
-          <value/>
-          <!-- JB: Empty default inserted into empty property node. Remove if
-               NIL was intended -->
-        </prop>
         <prop oor:name="Addin" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Specifies the directory that contains spreadsheet add-ins
@@ -2180,17 +2067,6 @@
         <desc>Specifies Gallery options.</desc>
         <label>Gallery Options</label>
       </info>
-      <prop oor:name="ID_Dialog" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Common/Peets-ID-Dialog -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: If entry is set to True, activate context menu on gallery
-             theme -->
-        <info>
-          <deprecated/>
-          <desc>Deprecated.</desc>
-        </info>
-        <value>false</value>
-      </prop>
     </group>
     <group oor:name="Menus">
       <info>
@@ -4008,30 +3884,6 @@
           </constraints>
           <value>256</value>
         </prop>
-        <prop oor:name="PosterColor" oor:type="xs:short" oor:nillable="false">
-          <!-- OldPath: Image/Colors -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools  Options - Picture  Colors  [Section] Poster
-               colors -->
-          <info>
-            <deprecated/>
-            <desc>Deprecated.</desc>
-            <label>Number</label>
-          </info>
-          <constraints>
-            <minInclusive oor:value="1">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="64">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-          <value>16</value>
-        </prop>
         <prop oor:name="Brightness" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Image/Colors -->
           <!-- OldLocation: Soffice.cfg -->
@@ -4079,66 +3931,6 @@
             </maxInclusive>
           </constraints>
           <value>10</value>
-        </prop>
-        <prop oor:name="RotationAngle" oor:type="xs:int" oor:nillable="false">
-          <!-- OldPath: Image/Colors -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools  Options - Picture  Colors  [Section] Rotation -->
-          <info>
-            <deprecated/>
-            <desc>Deprecated.</desc>
-            <label>Angle</label>
-          </info>
-          <constraints>
-            <minInclusive oor:value="0">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="36000">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-          <value>4500</value>
-        </prop>
-        <prop oor:name="LeftRight" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Image/Colors -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools  Options - Picture  Colors  [Section] Rotation -->
-          <info>
-            <deprecated/>
-            <desc>Deprecated.</desc>
-            <label>To the left / To the right</label>
-          </info>
-          <value>true</value>
-        </prop>
-        <prop
-            oor:name="BlackWhiteThreshold" oor:type="xs:int"
-            oor:nillable="false">
-          <!-- OldPath: Image/Colors -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools  Options - Picture  Colors  [Section] Black &
-               White -->
-          <info>
-            <deprecated/>
-            <desc>Deprecated.</desc>
-            <label>Threshold value</label>
-          </info>
-          <constraints>
-            <minInclusive oor:value="0">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="100">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-          <value>50</value>
         </prop>
         <group oor:name="RGB">
           <info>
@@ -4224,52 +4016,6 @@
           <desc>Specifies the effects options for images.</desc>
           <label>Image Effects</label>
         </info>
-        <prop oor:name="MosaicX_Tile" oor:type="xs:short" oor:nillable="false">
-          <!-- OldPath: Image/Effects -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools  Options - Picture  Effects - [Section] Mosaic -->
-          <info>
-            <deprecated/>
-            <desc>Deprecated.</desc>
-            <label>X Tile</label>
-          </info>
-          <constraints>
-            <minInclusive oor:value="1">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="999">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-          <value>4</value>
-        </prop>
-        <prop oor:name="MosaicY_Tile" oor:type="xs:short" oor:nillable="false">
-          <!-- OldPath: Image/Effects -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools  Options - Picture  Effects - [Section] Mosaic -->
-          <info>
-            <deprecated/>
-            <desc>Deprecated.</desc>
-            <label>Y Tile</label>
-          </info>
-          <constraints>
-            <minInclusive oor:value="1">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="999">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-          <value>4</value>
-        </prop>
         <prop oor:name="Definition" oor:type="xs:short" oor:nillable="false">
           <!-- OldPath: Image/Effects -->
           <!-- OldLocation: Soffice.cfg -->
@@ -4303,32 +4049,6 @@
           </constraints>
           <value>2</value>
         </prop>
-        <prop
-            oor:name="SolarizationThreshold" oor:type="xs:int"
-            oor:nillable="false">
-          <!-- OldPath: Image/Effects -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools  Options - Picture  Effects - [Section]
-               Solarization -->
-          <info>
-            <deprecated/>
-            <desc>Deprecated.</desc>
-            <label>Threshold value</label>
-          </info>
-          <constraints>
-            <minInclusive oor:value="0">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="100">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-          <value>10</value>
-        </prop>
         <prop oor:name="Invert" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Image/Effects -->
           <!-- OldLocation: Soffice.cfg -->
@@ -4340,52 +4060,6 @@
             <label>Invert</label>
           </info>
           <value>false</value>
-        </prop>
-        <prop oor:name="TileX_Tile" oor:type="xs:short" oor:nillable="false">
-          <!-- OldPath: Image/Effects -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools  Options - Picture  Effects - [Section] Tile -->
-          <info>
-            <deprecated/>
-            <desc>Deprecated.</desc>
-            <label>X Tile</label>
-          </info>
-          <constraints>
-            <minInclusive oor:value="1">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="999">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-          <value>4</value>
-        </prop>
-        <prop oor:name="TileY_Tile" oor:type="xs:short" oor:nillable="false">
-          <!-- OldPath: Image/Effects -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools  Options - Picture  Effects - [Section] Tile -->
-          <info>
-            <deprecated/>
-            <desc>Deprecated.</desc>
-            <label>Y Tile</label>
-          </info>
-          <constraints>
-            <minInclusive oor:value="1">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="999">
-              <info>
-                <desc>Deprecated.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-          <value>4</value>
         </prop>
         <prop oor:name="Degree" oor:type="xs:short" oor:nillable="false">
           <!-- OldPath: Image/Effects -->
@@ -6974,13 +6648,6 @@
         <value>false</value>
       </prop>
     </group>
-    <set oor:name="OfficeObjects" oor:node-type="ObjectNames">
-      <info>
-        <deprecated>Replaced by
-        org.openoffice.Office.Embedding/ObjectNames.</deprecated>
-        <desc>Deprecated</desc>
-      </info>
-    </set>
     <group oor:name="ExternalApps" oor:extensible="true">
       <info>
         <deprecated>Without replacement.</deprecated>
@@ -6992,32 +6659,12 @@
         <desc>Specifies an external mail application to be used for Send as
         email.</desc>
       </info>
-      <prop oor:name="UseDefaultMailer" oor:type="xs:boolean">
-        <info>
-          <deprecated>Without replacement.</deprecated>
-          <desc>Indicates if the mail application in the OS specific user
-          settings should be used.</desc>
-        </info>
-      </prop>
       <prop oor:name="Program" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Specifies the external mail application to be used.</desc>
         </info>
         <value/>
       </prop>
-      <prop oor:name="CommandProfile" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <deprecated>Without replacement.</deprecated>
-          <desc>Specifies the default external mail application.</desc>
-        </info>
-        <value>Mozilla 1.0 - 1.2</value>
-      </prop>
-      <set oor:name="Profiles" oor:node-type="MailCommandLineProfile">
-        <info>
-          <deprecated>Without replacement.</deprecated>
-          <desc>Contains a set of supported command line profiles.</desc>
-        </info>
-      </set>
     </group>
     <group oor:name="I18N">
       <info>
