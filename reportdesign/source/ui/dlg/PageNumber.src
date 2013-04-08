@@ -157,10 +157,8 @@ ModalDialog RID_PAGENUMBERS
 String STR_RPT_PN_PAGE
 {
     Text [ en-US ] = "\"Page \" & #PAGENUMBER#" ;
-    Text [ x-comment ] = "The space after the word is no error. #PAGENUMBER# is a replacement and & must not be translated as well as \"";
 };
 String STR_RPT_PN_PAGE_OF
 {
     Text [ en-US ] = " & \" of \" & #PAGECOUNT#" ;
-    Text [ x-comment ] = "The space before and after the word is no error. #PAGECOUNT# is a replacement and & must not be translated  as well as \"";
 };

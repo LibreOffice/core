@@ -33,32 +33,26 @@ InfoBox MSG_NO_RULER
 String STR_GRFILTER_OPENERROR
 {
         Text [ en-US ] = "Graphics file cannot be opened" ;
-    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_IOERROR
 {
         Text [ en-US ] = "Graphics file cannot be read" ;
-    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_FORMATERROR
 {
         Text [ en-US ] = "Unknown graphic format" ;
-    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_VERSIONERROR
 {
         Text [ en-US ] = "This graphic file version is not supported" ;
-    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_FILTERERROR
 {
         Text [ en-US ] = "Graphics filter not found" ;
-    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_TOOBIG
 {
     Text [ en-US ] = "Not enough memory to insert the picture." ;
-    Text [ x-comment ] = " ";
 };
 String STR_INSERT_GRAPHIC
 {
@@ -67,231 +61,186 @@ String STR_INSERT_GRAPHIC
 String STR_NO_ADDRESSBOOK
 {
         Text [ en-US ] = "An Address Book does not exist" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NOTIZ_INSERT
 {
         Text [ en-US ] = "Insert Note" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_COMMENT
 {
         Text [ en-US ] = "Comment: " ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_INSERTED
 {
         Text [ en-US ] = "Insertion" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_DELETED
 {
         Text [ en-US ] = "Deletion" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_AUTOFMT
 {
         Text [ en-US ] = "AutoCorrect";
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_FORMATED
 {
         Text [ en-US ] = "Formats" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_TABLECHG
 {
         Text [ en-US ] = "Table Changes" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_FMTCOLLSET
 {
         Text [ en-US ] = "Applied Paragraph Styles";
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_TITLE
 {
         Text [ en-US ] = "AutoCorrect";
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_MSG
 {
         Text [ en-US ] = "AutoCorrect completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_ACCEPT_ALL
 {
         Text [ en-US ] = "Accept All";
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_REJECT_ALL
 {
         Text [ en-US ] = "Reject All";
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_EDIT
 {
         Text [ en-US ] = "Edit Changes";
-    Text [ x-comment ] = " ";
 };
 QueryBox DLG_IMPORT_DBNAME
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
     Message [ en-US ] = "Use database name as default database for the document?" ;
-    Message [ x-comment ] = " ";
 };
 String STR_PAGE
 {
         Text [ en-US ] = "Page " ;
-    Text [ x-comment ] = " ";
 };
 String RID_TEXT_TOOLBOX
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textobjektleiste : Textleiste */
         Text [ en-US ] = "Text Object Bar" ;
-    Text [ x-comment ] = " ";
 };
 String RID_TABLE_TOOLBOX
 {
         Text [ en-US ] = "Table Object Bar" ;
-    Text [ x-comment ] = " ";
 };
 String RID_FRAME_TOOLBOX
 {
         Text [ en-US ] = "Frame Object Bar" ;
-    Text [ x-comment ] = " ";
 };
 String RID_GRAFIK_TOOLBOX
 {
         Text [ en-US ] = "Graphics Object Bar" ;
-    Text [ x-comment ] = " ";
 };
 String RID_OLE_TOOLBOX
 {
         Text [ en-US ] = "Object" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DRAW_TOOLBOX
 {
         Text [ en-US ] = "Draw Object Bar" ;
-    Text [ x-comment ] = " ";
 };
 String RID_BEZIER_TOOLBOX
 {
         Text [ en-US ] = "Bézier Object Bar" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DRAW_TEXT_TOOLBOX
 {
     Text [ en-US ] = "Text Object Bar/Graphics" ;
-    Text [ x-comment ] = " ";
 };
 String RID_NUM_TOOLBOX
 {
         Text [ en-US ] = "Numbering Object Bar" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_TEXT
 {
         Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_TABLE
 {
         Text [ en-US ] = "Table" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_FRAME
 {
         Text [ en-US ] = "Frame" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_GRAPHIC
 {
         Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_OBJECT
 {
         Text [ en-US ] = "Object" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_LIST
 {
         Text [ en-US ] = "List" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_DRAW
 {
         Text [ en-US ] = "Drawing" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_DRAWFORM
 {
         Text [ en-US ] = "Forms" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_BEZIER
 {
         Text [ en-US ] = "Bézier" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_DRAW_TEXT
 {
         Text [ en-US ] = "Draw text" ;
-    Text [ x-comment ] = " ";
 };
  //Strings fuer Gallery/Hintergrund
 String STR_SWBG_PARAGRAPH
 {
         Text [ en-US ] = "Paragraph" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SWBG_GRAPHIC
 {
         Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SWBG_OLE
 {
         Text [ en-US ] = "OLE object" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SWBG_FRAME
 {
         Text [ en-US ] = "Frame" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SWBG_TABLE
 {
         Text [ en-US ] = "Table" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SWBG_TABLE_ROW
 {
         Text [ en-US ] = "Table row" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SWBG_TABLE_CELL
 {
         Text [ en-US ] = "Table cell" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SWBG_PAGE
 {
         Text [ en-US ] = "Page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SWBG_HEADER
 {
         Text [ en-US ] = "Header" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SWBG_FOOTER
 {
         Text [ en-US ] = "Footer" ;
-    Text [ x-comment ] = " ";
 };
  //Ende: Strings fuer Gallery/Hintergrund
 

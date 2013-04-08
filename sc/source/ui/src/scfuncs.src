@@ -7500,12 +7500,10 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 10 // Name of Parameter 5
         {
             Text [ en-US ] = "sheet" ;
-            Text [ x-comment ] = "previously to OOo3.0 this was String resource RID_SC_FUNCTION_DESCRIPTIONS2.SC_OPCODE_ADDRESS 8" ;
         };
         String 11 // Description of Parameter 5
         {
             Text [ en-US ] = "The spreadsheet name of the cell reference." ;
-            Text [ x-comment ] = "previously to OOo3.0 this was String resource RID_SC_FUNCTION_DESCRIPTIONS2.SC_OPCODE_ADDRESS 9" ;
         };
     };
      // -=*# Resource for function BEREICHE #*=-
@@ -9278,7 +9276,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 11 // Description of Parameter 5
         {
             Text [ en-US ] = "If given and >=3, the intermediate result of a triangular conversion is rounded to that precision. If omitted, the result is not rounded.";
-            Text [ x-comment ] = "This description uses almost all available space in the dialog, make sure translations fit in size." ;
         };
     };
     Resource SC_OPCODE_NUMBERVALUE

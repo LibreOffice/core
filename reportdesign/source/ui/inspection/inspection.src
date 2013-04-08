@@ -32,12 +32,10 @@
 String RID_STR_PROPPAGE_DEFAULT
 {
     Text [ en-US ] = "General" ;
-    Text [ x-comment ] = " ";
 };
 String RID_STR_PROPPAGE_DATA
 {
     Text [ en-US ] = "Data" ;
-    Text [ x-comment ] = " ";
 };
 Resource RID_STR_BOOL
 {

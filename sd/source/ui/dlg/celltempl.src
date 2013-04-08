@@ -45,28 +45,24 @@ TabDialog TAB_CELL_TEMPLATE
             {
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
                 PageResID = RID_SVXPAGE_CHAR_NAME ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_BORDER;
                 PageResID = RID_SVXPAGE_BORDER;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA;
                 PageResID = RID_SVXPAGE_AREA;
-                Text [ de ] = "Hintergrund";
                 Text [ en-US ] = "Background";
             };
         };

@@ -114,7 +114,6 @@ String STR_LANGSTATUS_NONE
 String STR_RESET_TO_DEFAULT_LANGUAGE
 {
     Text [ en-US ] = "Reset to Default Language" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LANGSTATUS_MORE
 {

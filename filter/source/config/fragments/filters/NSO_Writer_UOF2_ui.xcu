@@ -21,15 +21,6 @@
 
     <node oor:name="NSO Writer UOF2">
         <prop oor:name="UIName">
-            <value xml:lang="el">Uniform Office Format 2 Text</value>
             <value xml:lang="en-US">Uniform Office Format 2 Text</value>
-            <value xml:lang="hu">Uniform Office Format 2 Text</value>
-            <value xml:lang="cs">Uniform Office Format 2 Text</value>
-            <value xml:lang="sk">Uniform Office Format 2 Text</value>
-            <value xml:lang="sl">Uniform Office Format 2 Text</value>
-            <value xml:lang="nl">Uniform Office Format 2 Text</value>
-            <value xml:lang="da">Uniform Office Format 2 Text</value>
-            <value xml:lang="de">Uniform Office Format 2 Text</value>
-            <value xml:lang="zh-CN">中文办公软件文档格式2 字处理文档</value>
         </prop>
     </node>

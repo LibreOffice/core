@@ -298,7 +298,6 @@ String RID_STR_FORMS_HELP_TEXT
 };
 String RID_STR_REPORT_HELP_TEXT
 {
-    Text [ de ] ="Erstellen Sie einen Bericht, indem Sie die Datensatzquelle, Steuerelemente und Steuerelementeigenschaften angeben." ;
     Text [ en-US ] = "Create a report by specifying the record source, controls, and control properties." ;
 };
 String RID_STR_FORMS_HELP_TEXT_WIZARD
@@ -430,13 +429,7 @@ String STR_SUB_DOCS_WITH_SCRIPTS
 
 String STR_SUB_DOCS_WITH_SCRIPTS_DETAIL
 {
-    Text [ en-US ] = "Macros should be embedded into the database document itself.\n\n"
-
-                    "You can continue to use your document as before, however, you are encouraged to migrate "
-                    "your macros. The menu item 'Tools / Migrate Macros ...' will assist you with this.\n\n"
-
-                    "Note that you won't be able to embed macros into the database document itself until "
-                    "this migration is done. ";
+    Text [ en-US ] = "Macros should be embedded into the database document itself.\n\nYou can continue to use your document as before, however, you are encouraged to migrate your macros. The menu item 'Tools / Migrate Macros ...' will assist you with this.\n\nNote that you won't be able to embed macros into the database document itself until this migration is done. ";
 };
 
 String RID_STR_EMBEDDED_DATABASE

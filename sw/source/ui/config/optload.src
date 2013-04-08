@@ -141,7 +141,6 @@ TabPage TP_OPTLOAD_PAGE
         Pos = MAP_APPFONT ( 12 , 111) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ en-US ] = "Use square page mode for text grid";
-        Text [ zh-CN ] = "使用稿纸模式";
     };
 };
 /**************************************************************************/

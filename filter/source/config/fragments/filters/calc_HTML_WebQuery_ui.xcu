@@ -22,6 +22,5 @@
     <node oor:name="calc_HTML_WebQuery">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Web Page Query (%productname% Calc)</value>
-                        <value xml:lang="x-translate">Web Page Query (%productname% Calc)</value>
         </prop>
     </node>

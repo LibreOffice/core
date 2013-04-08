@@ -39,15 +39,11 @@
 String STR_MOZILLA_ADDRESSBOOKS
 {
     Text [ en-US ] = "Mozilla/Seamonkey Addressbook Directory";
-    Text [ x-comment ] = "This must be the term referring to address books in the user's "
-        "Mozilla/Seamonkey profile in the system.";
 };
 
 String STR_THUNDERBIRD_ADDRESSBOOKS
 {
     Text [ en-US ] = "Thunderbird Addressbook Directory";
-    Text [ x-comment ] = "This must be the term referring to address books in the user's "
-        "Thunderbird profile in the system.";
 };
 
 String STR_OE_ADDRESSBOOK

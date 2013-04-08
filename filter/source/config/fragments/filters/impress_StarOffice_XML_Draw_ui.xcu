@@ -22,6 +22,5 @@
     <node oor:name="impress_StarOffice_XML_Draw">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%oooxmlformatname% %oooxmlformatversion% Drawing (%productname% Impress)</value>
-                        <value xml:lang="x-translate">%oooxmlformatname% %oooxmlformatversion% Drawing (%productname% Impress)</value>
         </prop>
     </node>

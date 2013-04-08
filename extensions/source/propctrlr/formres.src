@@ -1492,25 +1492,21 @@ Resource RID_RSC_ENUM_SHEET_ANCHOR_TYPE
 String RID_STR_FONTSTYLE_REGULAR
 {
     Text [ en-US ] = "Regular";
-    Text [ x-comment ] = "That's the 'Regular' as used for a font style (as opposed to 'italic' and 'bold'), so please use a consistent translation.";
 };
 
 String RID_STR_FONTSTYLE_BOLD_ITALIC
 {
     Text [ en-US ] = "Bold Italic";
-    Text [ x-comment ] = "That's the 'Bold Italic' as used for a font style, so please use a consistent translation.";
 };
 
 String RID_STR_FONTSTYLE_ITALIC
 {
     Text [ en-US ] = "Italic";
-    Text [ x-comment ] = "That's the 'Italic' as used for a font style, so please use a consistent translation.";
 };
 
 String RID_STR_FONTSTYLE_BOLD
 {
     Text [ en-US ] = "Bold";
-    Text [ x-comment ] = "That's the 'Bold' as used for a font style, so please use a consistent translation.";
 };
 
 String RID_STR_FONT_DEFAULT

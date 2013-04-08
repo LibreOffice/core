@@ -825,7 +825,6 @@ String RID_SVXITEMS_ULSPACE_LOWER
 String RID_SVXITEMS_LINES
 {
     Text [ en-US ] = "%1 Lines" ;
-    Text [ x-comment ] = "pb: %1 == will be replaced by the number of lines";
 };
 String RID_SVXITEMS_WIDOWS_COMPLETE
 {

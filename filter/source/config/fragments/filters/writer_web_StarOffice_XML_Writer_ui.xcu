@@ -22,6 +22,5 @@
     <node oor:name="writer_web_StarOffice_XML_Writer">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%oooxmlformatname% %oooxmlformatversion% Text Document (%productname% Writer/Web)</value>
-                        <value xml:lang="x-translate">%oooxmlformatname% %oooxmlformatversion% Text Document (%productname% Writer/Web)</value>
         </prop>
     </node>

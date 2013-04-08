@@ -197,7 +197,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     String STR_DEL_MSG
     {
         /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das AutoFormat # wirklich l÷schen? */
-        Text [ en-US ] = "Do you really want to delete the # AutoFomat?" ;
+        Text [ en-US ] = "Do you really want to delete the # AutoFormat?" ;
     };
     String STR_BTN_CLOSE
     {

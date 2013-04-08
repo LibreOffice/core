@@ -367,20 +367,17 @@ String STR_VIEWDESIGN
 String STR_QUERY_SAVEMODIFIED
 {
     Text [ en-US ] = "$object$ has been changed.\nDo you want to save the changes?" ;
-    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource will be inserted.";
 };
 
 String STR_ERROR_PARSING_STATEMENT
 {
-    Text [ en-US ] = "$object$ is based on an SQL command which could not be parsed.";
-    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource "
+    Text [ en-US ] = "$object$ is based on an SQL command which could not be parsed."
         "(except \"SQL command\", which doesn't make sense here) will be inserted.";
 };
 
 String STR_INFO_OPENING_IN_SQL_VIEW
 {
-    Text [ en-US ] = "$object$ will be opened in SQL view.";
-    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource "
+    Text [ en-US ] = "$object$ will be opened in SQL view."
         "(except \"SQL command\", which doesn't make sense here) will be inserted.";
 };
 

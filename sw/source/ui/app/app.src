@@ -107,8 +107,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     {
         SfxStyleFamilyItem
         {
-            Text [ en-US ] = "Paragraph Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            Text [ en-US ] = "Paragraph Styles" ;
         FilterList [ en-US ] =
         {
          < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
@@ -126,8 +126,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
         SfxStyleFamilyItem
         {
-            Text [ en-US ] = "Character Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_CHAR ;
+            Text [ en-US ] = "Character Styles" ;
             FilterList [ en-US ] =
             {
                 < "All" ; SFXSTYLEBIT_ALL ; > ;
@@ -137,8 +137,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
         SfxStyleFamilyItem
         {
-            Text [ en-US ] = "Frame Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_FRAME ;
+            Text [ en-US ] = "Frame Styles" ;
             FilterList [ en-US ] =
             {
                 < "All" ; SFXSTYLEBIT_ALL ; > ;
@@ -148,8 +148,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
         SfxStyleFamilyItem
         {
-            Text [ en-US ] = "Page Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_PAGE ;
+            Text [ en-US ] = "Page Styles" ;
             FilterList [ en-US ] =
             {
                 < "All" ; SFXSTYLEBIT_ALL ; > ;
@@ -160,13 +160,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem
         {
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
+            Text [ en-US ] = "List Styles" ;
             FilterList [ en-US ] =
             {
                 < "All" ; SFXSTYLEBIT_ALL ; > ;
                 < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
                 < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
             };
-            Text [ en-US ] = "List Styles" ;
     };
     };
 

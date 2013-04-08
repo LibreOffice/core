@@ -471,13 +471,11 @@ String STR_ERROR_DELETE_TEMPLATE_DIR
 String STR_DOCINFO_INFOFIELD
 {
     Text [ en-US ] = "Info %1";
-    Text [ x-comment ] = "pb: %1 == a number [1-4]";
 };
 
 String STR_SHARED
 {
     Text [ en-US ] = " (shared)";
-    Text [ x-comment ] = "Used in the title of a shared document.";
 };
 
 String STR_XMLSEC_ODF12_EXPECTED

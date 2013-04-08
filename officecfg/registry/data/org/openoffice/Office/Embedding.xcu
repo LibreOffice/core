@@ -27,7 +27,6 @@
     <node oor:name="PRIMARY" oor:op="replace">
       <prop oor:name="VerbUIName">
         <value>Primary</value>
-        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>0</value>
@@ -43,7 +42,6 @@
       <prop oor:name="VerbUIName">
 
         <value xml:lang="en-US">~Edit</value>
-        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-1</value>
@@ -59,7 +57,6 @@
       <prop oor:name="VerbUIName">
 
         <value xml:lang="en-US">~Open</value>
-        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-2</value>
@@ -74,7 +71,6 @@
     <node oor:name="HIDE" oor:op="replace">
       <prop oor:name="VerbUIName">
         <value>Hide</value>
-        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-3</value>
@@ -89,7 +85,6 @@
     <node oor:name="UIACTIVATE" oor:op="replace">
       <prop oor:name="VerbUIName">
         <value>UI activate</value>
-        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-4</value>
@@ -104,7 +99,6 @@
     <node oor:name="IPACTIVATE" oor:op="replace">
       <prop oor:name="VerbUIName">
         <value>Activate inplace</value>
-        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-5</value>
@@ -120,7 +114,6 @@
       <prop oor:name="VerbUIName">
 
         <value xml:lang="en-US">Propert~ies...</value>
-        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-7</value>
@@ -136,7 +129,6 @@
       <prop oor:name="VerbUIName">
 
         <value xml:lang="en-US">Save Copy ~as...</value>
-        <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
       </prop>
       <prop oor:name="VerbID">
         <value>-8</value>

@@ -153,6 +153,5 @@ ModalDialog RID_DLG_FORMLINKS
     String STR_ERROR_RETRIEVING_COLUMNS
     {
         Text [ en-US ] = "The columns of '#' could not be retrieved.";
-        Text [ x-comment ] ="# will be replace with a name.";
     };
 };

@@ -428,7 +428,6 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
         Pos = MAP_APPFONT ( 137 , 78 ) ;
         Size = MAP_APPFONT ( 111 , 10 ) ;
         Text [ en-US ] = "~AutoInclude";
-        Text [ en-US ] = "~AutoInclude" ;
         TabStop = TRUE ;
     };
     FixedLine FL_DOUBLECAPS
@@ -476,7 +475,6 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
         HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCORR_EXCEPT:CB_AUTOCAPS";
         Pos = MAP_APPFONT ( 137 , 169 ) ;
         Size = MAP_APPFONT ( 111 , 10 ) ;
-        Text [ en-US ] = "A~utoInclude";
         Text [ en-US ] = "A~utoInclude" ;
     };
     String STR_PB_NEWABBREV

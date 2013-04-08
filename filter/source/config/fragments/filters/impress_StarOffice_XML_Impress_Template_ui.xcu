@@ -22,6 +22,5 @@
     <node oor:name="impress_StarOffice_XML_Impress_Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%oooxmlformatname% %oooxmlformatversion% Presentation Template</value>
-                        <value xml:lang="x-translate">%oooxmlformatname% %oooxmlformatversion% Presentation Template</value>
         </prop>
     </node>

@@ -47,7 +47,6 @@ ModalDialog RID_DLG_ALIEN_WARNING
         Size = MAP_APPFONT( DIALOG_WIDTH-AW_COL_2-RSC_SP_DLG_INNERBORDER_RIGHT, INFO_TEXT_LINES*RSC_CD_FIXEDTEXT_HEIGHT );
         NoLabel = TRUE;
         Wordbreak = TRUE;
-        Text [ en-US-old ] = "This document may contain formatting or content that cannot be saved in the %FORMATNAME file format. Do you want to save the document in this format anyway?\n\n- Click 'Yes' to save in %FORMATNAME file format.\n- Click 'No' to use the latest OpenDocument file format and be sure all formatting and content is saved correctly.";
         Text [ en-US ] = "This document may contain formatting or content that cannot be saved in the %FORMATNAME file format. Do you want to save the document in this format anyway?\n\nUse the latest ODF file format and be sure all formatting and content is saved correctly.";
     };
     OKButton PB_NO

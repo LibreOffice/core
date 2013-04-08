@@ -347,9 +347,7 @@ String STR_MEDIAOBJECTBARSHELL
 
 String STR_TABLEOBJECTBARSHELL
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_POWERPOINT_IMPORT

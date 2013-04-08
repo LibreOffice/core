@@ -22,6 +22,5 @@
     <node oor:name="StarOffice XML (Calc)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%oooxmlformatname% %oooxmlformatversion% Spreadsheet</value>
-                        <value xml:lang="x-translate">%oooxmlformatname% %oooxmlformatversion% Spreadsheet</value>
         </prop>
     </node>

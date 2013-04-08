@@ -29,7 +29,6 @@ TabDialog RID_SVX_FORMAT_CELLS_DLG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Zellen formatieren" ;
     Text [ en-US ] = "Format Cells" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -44,33 +43,25 @@ TabDialog RID_SVX_FORMAT_CELLS_DLG
             {
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
                 PageResID = RID_SVXPAGE_CHAR_NAME ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_BORDER;
                 PageResID = RID_SVXPAGE_BORDER;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA;
                 PageResID = RID_SVXPAGE_AREA;
-                Text [ de ] = "Hintergrund";
                 Text [ en-US ] = "Background";
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -97,12 +88,9 @@ TabDialog RID_SVX_FORMAT_CELLS_DLG
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
-        Text [ de ] = "ZurÃ¼ck" ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 

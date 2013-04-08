@@ -319,35 +319,28 @@ String STR_UNTITLED_DOCUMENT
 String STR_LANGSTATUS_MULTIPLE_LANGUAGES
 {
     Text [ en-US ] = "Multiple Languages" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LANGSTATUS_NONE
 {
     Text [ en-US ] = "None (Do not check spelling)" ;
-    Text [ x-comment ] = " ";
 };
 String STR_RESET_TO_DEFAULT_LANGUAGE
 {
     Text [ en-US ] = "Reset to Default Language" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LANGSTATUS_MORE
 {
     Text [ en-US ] = "More..." ;
-    Text [ x-comment ] = " ";
 };
 String STR_SET_LANGUAGE_FOR_SELECTION
 {
     Text [ en-US ] = "Set Language for Selection" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SET_LANGUAGE_FOR_PARAGRAPH
 {
     Text [ en-US ] = "Set Language for Paragraph" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SET_LANGUAGE_FOR_ALL_TEXT
 {
     Text [ en-US ] = "Set Language for all Text" ;
-    Text [ x-comment ] = " ";
 };

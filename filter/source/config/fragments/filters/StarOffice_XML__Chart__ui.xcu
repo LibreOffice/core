@@ -22,6 +22,5 @@
     <node oor:name="StarOffice XML (Chart)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%oooxmlformatname% %oooxmlformatversion% Chart</value>
-                        <value xml:lang="x-translate">%oooxmlformatname% %oooxmlformatversion% Chart</value>
         </prop>
     </node>

@@ -62,7 +62,6 @@ TabPage TP_TEXTGRID_PAGE
         Pos = MAP_APPFONT ( 14 , 53 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text [ en-US ] = "~Snap to characters" ;
-        Text [ zh-CN ] = "文字对齐字符网格" ;
     };
     Window          WN_EXAMPLE
     {
@@ -150,7 +149,6 @@ TabPage TP_TEXTGRID_PAGE
         Pos = MAP_APPFONT ( 133 , 98 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "Character ~width" ;
-        Text [ zh-CN ] = "字符跨度" ;
     };
     MetricField     MF_CHARWIDTH
     {

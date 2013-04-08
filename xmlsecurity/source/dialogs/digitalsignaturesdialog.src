@@ -199,8 +199,7 @@ ErrorBox RID_XMLSECDLG_OLD_ODF_FORMAT
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message [ en-US ] =
-        "This document contains signatures in ODF 1.1 format. "
+    Message [ en-US ] = "This document contains signatures in ODF 1.1 format. "
         "Signing documents in %PRODUCTNAME %PRODUCTVERSION requires ODF 1.2 format version. "
         "Thus no signatures can be added or removed to this document.\n\n"
         "Save document in ODF 1.2 format and add all desired signatures again.";
