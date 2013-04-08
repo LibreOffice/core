@@ -48,6 +48,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/borderline.hxx>
+#include "editeng/flditem.hxx"
 #include <dbdata.hxx>
 #include "validat.hxx"
 #include "formulacell.hxx"
@@ -1756,6 +1757,15 @@ void ScFiltersTest::testRichTextContentODS()
     pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_MESSAGE("Date field item not found.", pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
+
+    // URL for a file in the same directory. It should be converted into an absolute URL on import.
+    aPos.IncRow();
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the URL data.", pData && pData->GetClassId() == text::textfield::Type::URL);
+    const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
+    CPPUNIT_ASSERT_MESSAGE("URL is not absolute with respect to the file system.", pURLData->GetURL().startsWith("file:///"));
 
     xDocSh->DoClose();
 }

@@ -256,6 +256,11 @@ const SvxFieldItem* EditTextObject::GetField() const
     return mpImpl->GetField();
 }
 
+const SvxFieldData* EditTextObject::GetFieldData(size_t nPara, size_t nPos, sal_Int32 nType) const
+{
+    return mpImpl->GetFieldData(nPara, nPos, nType);
+}
+
 bool EditTextObject::HasField( sal_Int32 nType ) const
 {
     return mpImpl->HasField(nType);
@@ -701,6 +706,41 @@ const SvxFieldItem* EditTextObjectImpl::GetField() const
         }
     }
     return 0;
+}
+
+const SvxFieldData* EditTextObjectImpl::GetFieldData(size_t nPara, size_t nPos, sal_Int32 nType) const
+{
+    if (nPara >= aContents.size())
+        return NULL;
+
+    const ContentInfo& rC = aContents[nPara];
+    if (nPos >= rC.aAttribs.size())
+        // URL position is out-of-bound.
+        return NULL;
+
+    ContentInfo::XEditAttributesType::const_iterator it = rC.aAttribs.begin(), itEnd = rC.aAttribs.end();
+    size_t nCurPos = 0;
+    for (; it != itEnd; ++it)
+    {
+        const XEditAttribute& rAttr = *it;
+        if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
+            // Skip attributes that are not fields.
+            continue;
+
+        const SvxFieldItem* pField = static_cast<const SvxFieldItem*>(rAttr.GetItem());
+        const SvxFieldData* pFldData = pField->GetField();
+        if (nType != text::textfield::Type::UNSPECIFIED && nType != pFldData->GetClassId())
+            // Field type doesn't match. Skip it.  UNSPECIFIED matches all field types.
+            continue;
+
+        if (nCurPos == nPos)
+            // Found it!
+            return pFldData;
+
+        ++nCurPos;
+    }
+
+    return NULL; // field not found.
 }
 
 bool EditTextObjectImpl::HasField( sal_Int32 nType ) const

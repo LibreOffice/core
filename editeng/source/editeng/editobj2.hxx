@@ -221,6 +221,8 @@ public:
 
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;
+    const SvxFieldData* GetFieldData(size_t nPara, size_t nPos, sal_Int32 nType) const;
+
     bool HasField( sal_Int32 nType = com::sun::star::text::textfield::Type::UNSPECIFIED ) const;
 
     const SfxItemSet& GetParaAttribs(size_t nPara) const;
