@@ -165,15 +165,19 @@ void CoreTextLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
 
 void CoreTextLayout::Justify( long nNewWidth )
 {
-    CTLineRef justifiedLine = CTLineCreateJustifiedLine( mpLine, 1.0, nNewWidth );
+    CTLineRef justifiedLine = CTLineCreateJustifiedLine( mpLine, 1.0, nNewWidth - CTLineGetTrailingWhitespaceWidth( mpLine ) );
     if ( !justifiedLine ) {
-        SAL_INFO( "vcl.coretext.layout", "ApplyDXArray(): CTLineCreateJustifiedLine() failed" );
+        SAL_INFO( "vcl.coretext.layout", "Justify(): CTLineCreateJustifiedLine() failed" );
     } else {
         CFRelease( mpLine );
         mpLine = justifiedLine;
+        // Justification can change the number of glyphs!
+        int oldGLyphCount = mnGlyphCount;
+        mnGlyphCount = CTLineGetGlyphCount( mpLine );
+        if ( mnGlyphCount != oldGLyphCount )
+            SAL_INFO( "vcl.coretext.layout", "  glyph count changed, mnGlyphCount=" << mnGlyphCount );
+        GetMeasurements();
     }
-
-    GetMeasurements();
 }
 
 void CoreTextLayout::InvalidateMeasurements()
@@ -375,7 +379,7 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
     if( !mpRuns ) {
         mpRuns = CTLineGetGlyphRuns(mpLine);
     }
-    CFIndex nb_runs = CFArrayGetCount( mpRuns );
+    CFIndex nRuns = CFArrayGetCount( mpRuns );
     CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex( mpRuns, mnCurrentRunIndex );
     CFIndex nb_glyphs = CTRunGetGlyphCount( run );
 
@@ -384,7 +388,7 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
     while( i < nLen ) {
         if( mnCurrentGlyphRunIndex >= nb_glyphs ) {
             mnCurrentRunIndex += 1;
-            if( mnCurrentRunIndex >= nb_runs ) {
+            if( mnCurrentRunIndex >= nRuns ) {
                 break;
             }
             run = (CTRunRef)CFArrayGetValueAtIndex( mpRuns, mnCurrentRunIndex );
@@ -568,10 +572,10 @@ void CoreTextLayout::GetMeasurements()
     mpGlyphPositions = new CGPoint[ mnGlyphCount ];
 
     CFArrayRef runs = CTLineGetGlyphRuns( mpLine );
-    CFIndex nb_runs = CFArrayGetCount( runs );
+    const CFIndex nRuns = CFArrayGetCount( runs );
 
     CFIndex lineGlyphIx = 0;
-    for ( CFIndex runIx = 0; runIx < nb_runs; runIx++ )
+    for ( CFIndex runIx = 0; runIx < nRuns; runIx++ )
     {
         CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex( runs, runIx );
         if ( !run )
