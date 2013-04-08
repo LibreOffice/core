@@ -50,6 +50,8 @@ public:
 
     OUString getRegionName(const sal_uInt16 nRegionId) const;
 
+    OUString getRegionItemName(const sal_uInt16 nItemId) const;
+
     std::vector<OUString> getFolderNames ();
 
     std::vector<TemplateItemProperties>

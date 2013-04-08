@@ -194,6 +194,17 @@ OUString TemplateLocalView::getRegionName(const sal_uInt16 nRegionId) const
     return mpDocTemplates->GetRegionName(nRegionId);
 }
 
+OUString TemplateLocalView::getRegionItemName(const sal_uInt16 nItemId) const
+{
+    for (size_t i = 0; i < maRegions.size(); ++i)
+    {
+        if (maRegions[i]->mnId == nItemId)
+            return maRegions[i]->maTitle;
+    }
+
+    return OUString();
+}
+
 std::vector<OUString> TemplateLocalView::getFolderNames()
 {
     size_t n = maRegions.size();
