@@ -358,6 +358,7 @@ void OKeySet::ensureStatement( )
         makeNewStatement();
         std::pair< vStatements_t::iterator, bool > insert_result
             (m_vStatements.insert(vStatements_t::value_type(FilterColumnsNULL, m_xStatement)));
+        (void) insert_result; // WaE: unused variable
         assert(insert_result.second);
     }
     else
