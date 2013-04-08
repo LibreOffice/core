@@ -114,7 +114,7 @@
           </packing>
         </child>
         <child>
-          <object class="dbaui-OpenDocumentListBox" id="documentList">
+          <object class="dbulo-OpenDocumentListBox" id="documentList">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
@@ -135,7 +135,7 @@
       </packing>
     </child>
     <child>
-      <object class="dbaui-OpenDocumentButton" id="openDatabase">
+      <object class="dbulo-OpenDocumentButton" id="openDatabase">
         <property name="label">Open</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>

@@ -159,11 +159,11 @@
                         generic-name="Reference Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
-    <glade-widget-class title="Open Document ListBox" name="dbaui-OpenDocumentListBox"
+    <glade-widget-class title="Open Document ListBox" name="dbulo-OpenDocumentListBox"
                         generic-name="Open Document ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
 
-    <glade-widget-class title="Open Document Button" name="dbaui-OpenDocumentButton"
+    <glade-widget-class title="Open Document Button" name="dbulo-OpenDocumentButton"
                         generic-name="Open Document Button" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
 
