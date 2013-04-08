@@ -696,6 +696,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
             ::std::pair< bootstrap_map::t::iterator, bool > insertion(
                 p_bootstrap_map->insert(
                     bootstrap_map::t::value_type( iniName, that ) ) );
+            (void) insertion; // WaE: unused variable
             OSL_ASSERT( insertion.second );
         }
         else
