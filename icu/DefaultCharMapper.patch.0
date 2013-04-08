@@ -1,0 +1,22 @@
+--- source/layout/DefaultCharMapper.h	2013-03-15 23:16:44.000000000 +0100
++++ source/layout/DefaultCharMapper.h	2013-04-08 17:18:39.710138077 +0200
+@@ -23,7 +23,7 @@
+  *
+  * @see LECharMapper
+  */
+-class DefaultCharMapper : public UMemory, public LECharMapper
++class U_LAYOUT_API DefaultCharMapper : public UMemory, public LECharMapper
+ {
+ private:
+     le_bool fFilterControls;
+--- source/layout/LEFontInstance.h	2013-03-15 23:16:42.000000000 +0100
++++ source/layout/LEFontInstance.h	2013-04-08 17:18:40.826139346 +0200
+@@ -25,7 +25,7 @@
+  *
+  * @stable ICU 3.2
+  */
+-class LECharMapper /* not : public UObject because this is an interface/mixin class */
++class U_LAYOUT_API LECharMapper /* not : public UObject because this is an interface/mixin class */
+ {
+ public:
+     /**
