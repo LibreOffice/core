@@ -776,7 +776,7 @@ uno::Reference< frame::XFrame2 > DocumentHolder::DocumentFrame()
         // is loaded into the frame in ::show() method the terminate listener will be removed
         // this is so only for outplace activation
         if( xFrame.is() )
-            m_xFrame = xFrame->findFrame( OUString("_blank"), 0 );
+            m_xFrame.set( xFrame->findFrame( OUString("_blank"), 0 ), uno::UNO_QUERY_THROW );
 
         uno::Reference< util::XCloseBroadcaster > xBroadcaster(
             m_xFrame, uno::UNO_QUERY );
