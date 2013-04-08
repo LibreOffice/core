@@ -19,7 +19,6 @@
 
 #include "sc.hrc"   // -> RID_SCDLG_DELCELL
                     // -> RID_SCDLG_INSCELL
-                    // -> RID_SCDLG_DELCONT
                     // -> RID_SCDLG_INSCONT
                     // -> RID_SCDLG_MOVETAB
                     // -> RID_SCDLG_STRINPUT
@@ -49,15 +48,7 @@
 #define BTN_INSROWS     16
 #define BTN_INSCOLS     17
 
-// Insert/Delete Contents Dialog
-#define BTN_DELALL      10
-#define BTN_DELSTRINGS  11
-#define BTN_DELNUMBERS  12
-#define BTN_DELDATETIME 13
-#define BTN_DELFORMULAS 14
-#define BTN_DELATTRS    15
-#define BTN_DELNOTES    16
-#define BTN_DELOBJECTS  17
+// Insert Contents Dialog
 #define BTN_INSALL      20
 #define BTN_INSSTRINGS  21
 #define BTN_INSNUMBERS  22

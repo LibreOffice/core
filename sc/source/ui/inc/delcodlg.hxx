@@ -21,7 +21,6 @@
 #define SC_DELCODLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include "global.hxx"
 
@@ -30,18 +29,15 @@
 class ScDeleteContentsDlg : public ModalDialog
 {
 private:
-    FixedLine       aFlFrame;
-    CheckBox        aBtnDelAll;
-    CheckBox        aBtnDelStrings;
-    CheckBox        aBtnDelNumbers;
-    CheckBox        aBtnDelDateTime;
-    CheckBox        aBtnDelFormulas;
-    CheckBox        aBtnDelNotes;
-    CheckBox        aBtnDelAttrs;
-    CheckBox        aBtnDelObjects;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    CheckBox*        aBtnDelAll;
+    CheckBox*        aBtnDelStrings;
+    CheckBox*        aBtnDelNumbers;
+    CheckBox*        aBtnDelDateTime;
+    CheckBox*        aBtnDelFormulas;
+    CheckBox*        aBtnDelNotes;
+    CheckBox*        aBtnDelAttrs;
+    CheckBox*        aBtnDelObjects;
+    OKButton*        aBtnOk;
 
     sal_Bool            bObjectsDisabled;
 
@@ -62,6 +58,5 @@ public:
 
 
 #endif // SC_DELCODLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
