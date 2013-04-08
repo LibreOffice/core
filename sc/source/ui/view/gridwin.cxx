@@ -2995,6 +2995,9 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         else if ( !bMouse )
         {
             //  non-edit menu by keyboard -> use lower right of cell cursor position
+            ScDocument* aDoc = pViewData->GetDocument();
+            SCTAB nTabNo = pViewData->GetTabNo();
+            sal_Bool bLayoutIsRTL = aDoc->IsLayoutRTL(nTabNo);
 
             SCCOL nCurX = pViewData->GetCurX();
             SCROW nCurY = pViewData->GetCurY();
@@ -3002,7 +3005,8 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             long nSizeXPix;
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nCurX, nCurY, nSizeXPix, nSizeYPix );
-            aMenuPos.X() += nSizeXPix;
+            // fdo#55432 take the correct position for RTL sheet
+            aMenuPos.X() += bLayoutIsRTL ? -nSizeXPix : nSizeXPix;
             aMenuPos.Y() += nSizeYPix;
 
             if (pViewData)
