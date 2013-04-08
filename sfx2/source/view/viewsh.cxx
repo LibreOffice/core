@@ -517,60 +517,57 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 break;
 
 
+            SfxMailModel  aModel;
+            OUString aDocType;
+
+            SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT, sal_False );
+            if ( pMailSubject )
+                aModel.SetSubject( pMailSubject->GetValue() );
+
+            SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT, sal_False );
+            if ( pMailRecipient )
             {
-                SfxMailModel  aModel;
-                OUString aDocType;
+                String aRecipient( pMailRecipient->GetValue() );
+                String aMailToStr(OUString("mailto:"));
 
-                SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT, sal_False );
-                if ( pMailSubject )
-                    aModel.SetSubject( pMailSubject->GetValue() );
+                if ( aRecipient.Search( aMailToStr ) == 0 )
+                    aRecipient = aRecipient.Erase( 0, aMailToStr.Len() );
+                aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
+            }
+            SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME, sal_False );
+            if ( pMailDocType )
+                aDocType = pMailDocType->GetValue();
 
-                SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT, sal_False );
-                if ( pMailRecipient )
-                {
-                    String aRecipient( pMailRecipient->GetValue() );
-                    String aMailToStr(OUString("mailto:"));
+            uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
+            SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_ERROR;
 
-                    if ( aRecipient.Search( aMailToStr ) == 0 )
-                        aRecipient = aRecipient.Erase( 0, aMailToStr.Len() );
-                    aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
-                }
-                SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME, sal_False );
-                if ( pMailDocType )
-                    aDocType = pMailDocType->GetValue();
-
-                uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
-                SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_ERROR;
-
-                if ( nId == SID_MAIL_SENDDOC )
-                    eResult = aModel.SaveAndSend( xFrame, OUString() );
-                else if ( nId == SID_MAIL_SENDDOCASPDF )
-                    eResult = aModel.SaveAndSend( xFrame, OUString( "pdf_Portable_Document_Format" ));
-                else if ( nId == SID_MAIL_SENDDOCASMS )
-                {
-                    aDocType = impl_searchFormatTypeForApp(xFrame, E_MS_DOC);
-                    if (!aDocType.isEmpty())
-                        eResult = aModel.SaveAndSend( xFrame, aDocType );
-                }
-                else if ( nId == SID_MAIL_SENDDOCASOOO )
-                {
-                    aDocType = impl_searchFormatTypeForApp(xFrame, E_OOO_DOC);
-                    if (!aDocType.isEmpty())
-                        eResult = aModel.SaveAndSend( xFrame, aDocType );
-                }
-
-                if ( eResult == SfxMailModel::SEND_MAIL_ERROR )
-                {
-                    InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
-                    aBox.Execute();
-                    rReq.Ignore();
-                }
-                else
-                    rReq.Done();
+            if ( nId == SID_MAIL_SENDDOC )
+                eResult = aModel.SaveAndSend( xFrame, OUString() );
+            else if ( nId == SID_MAIL_SENDDOCASPDF )
+                eResult = aModel.SaveAndSend( xFrame, OUString( "pdf_Portable_Document_Format" ));
+            else if ( nId == SID_MAIL_SENDDOCASMS )
+            {
+                aDocType = impl_searchFormatTypeForApp(xFrame, E_MS_DOC);
+                if (!aDocType.isEmpty())
+                    eResult = aModel.SaveAndSend( xFrame, aDocType );
+            }
+            else if ( nId == SID_MAIL_SENDDOCASOOO )
+            {
+                aDocType = impl_searchFormatTypeForApp(xFrame, E_OOO_DOC);
+                if (!aDocType.isEmpty())
+                    eResult = aModel.SaveAndSend( xFrame, aDocType );
             }
 
-            break;
+            if ( eResult == SfxMailModel::SEND_MAIL_ERROR )
+            {
+                InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
+                aBox.Execute();
+                rReq.Ignore();
+            }
+            else
+                rReq.Done();
         }
+        break;
 
         case SID_BLUETOOTH_SENDDOC:
         {
