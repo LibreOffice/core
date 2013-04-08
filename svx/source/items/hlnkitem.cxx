@@ -282,8 +282,7 @@ void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 
 void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
 {
-    if ( pMacroTable )
-        delete pMacroTable;
+    delete pMacroTable;
 
     pMacroTable = new SvxMacroTableDtor ( rTbl );
 }

@@ -96,9 +96,7 @@ SdrObjEditView::~SdrObjEditView()
 {
     pTextEditWin = NULL;            // so there's no ShowCursor in SdrEndTextEdit
     if (IsTextEdit()) SdrEndTextEdit();
-    if (pTextEditOutliner!=NULL) {
-        delete pTextEditOutliner;
-    }
+    delete pTextEditOutliner;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

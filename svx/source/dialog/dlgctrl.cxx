@@ -165,8 +165,7 @@ void SvxRectCtl::Resize_Impl()
 
 void SvxRectCtl::InitRectBitmap( void )
 {
-    if( pBitmap )
-        delete pBitmap;
+    delete pBitmap;
 
     const StyleSettings&    rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;

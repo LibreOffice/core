@@ -306,8 +306,7 @@ SdrModel::~SdrModel()
         OSL_FAIL(aStr.getStr());
     }
 #endif
-    if (pAktUndoGroup!=NULL)
-        delete pAktUndoGroup;
+    delete pAktUndoGroup;
 
     ClearModel(sal_True);
 
@@ -346,8 +345,7 @@ SdrModel::~SdrModel()
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->release();
 
-    if(mpNumberFormatter)
-        delete mpNumberFormatter;
+    delete mpNumberFormatter;
 
     delete mpImpl->mpUndoFactory;
     delete mpImpl;
@@ -1515,7 +1513,7 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 void SdrModel::DeleteMasterPage(sal_uInt16 nPgNum)
 {
     SdrPage* pPg=RemoveMasterPage(nPgNum);
-    if (pPg!=NULL) delete pPg;
+    delete pPg;
 }
 
 SdrPage* SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)

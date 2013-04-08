@@ -1584,8 +1584,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
 
 void SAL_CALL Cell::setAllPropertiesToDefault(  ) throw (RuntimeException)
 {
-    if( mpProperties )
-        delete mpProperties;
+    delete mpProperties;
     mpProperties = new sdr::properties::CellProperties( static_cast< SdrTableObj& >( GetObject() ), this );
 
     SdrOutliner& rOutliner = GetObject().ImpGetDrawOutliner();

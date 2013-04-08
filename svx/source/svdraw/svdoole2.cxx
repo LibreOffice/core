@@ -795,11 +795,9 @@ SdrOle2Obj::~SdrOle2Obj()
     if ( mpImpl->mbConnected )
         Disconnect();
 
-    if( pGraphic!=NULL )
-        delete pGraphic;
+    delete pGraphic;
 
-    if(mpImpl->pGraphicObject!=NULL)
-        delete mpImpl->pGraphicObject;
+    delete mpImpl->pGraphicObject;
 
     if(pModifyListener)
     {

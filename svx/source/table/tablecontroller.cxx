@@ -482,8 +482,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
         }
         nWhich = aIter.NextWhich();
     }
-    if( pSet )
-        delete pSet;
+    delete pSet;
 }
 
 // --------------------------------------------------------------------

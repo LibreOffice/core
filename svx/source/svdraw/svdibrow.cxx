@@ -217,11 +217,9 @@ _SdrItemBrowserControl::_SdrItemBrowserControl(Window* pParent, WinBits nBits):
 
 _SdrItemBrowserControl::~_SdrItemBrowserControl()
 {
-    if(pEditControl)
-        delete pEditControl;
+    delete pEditControl;
 
-    if(pAktChangeEntry)
-        delete pAktChangeEntry;
+    delete pAktChangeEntry;
 
     Clear();
 }

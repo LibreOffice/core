@@ -26,7 +26,7 @@ void SdrDragStat::Clear(bool bLeaveOne)
         delete aPnts.back();
         aPnts.pop_back();
     }
-    if (pUser!=NULL) delete pUser;
+    delete pUser;
     pUser=NULL;
     aPnts.clear();
     if (bLeaveOne) {

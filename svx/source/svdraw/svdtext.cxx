@@ -84,8 +84,7 @@ void SdrText::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
                 mpModel->GetHitTestOutliner().SetTextObj( 0 );
         }
 
-        if( mpOutlinerParaObject )
-            delete mpOutlinerParaObject;
+        delete mpOutlinerParaObject;
 
         mpOutlinerParaObject = pTextObject;
 

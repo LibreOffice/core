@@ -70,10 +70,7 @@ SvxRedlinEntry::SvxRedlinEntry()
 SvxRedlinEntry::~SvxRedlinEntry()
 {
     RedlinData* pRedDat=(RedlinData*) GetUserData();
-    if(pRedDat!=NULL)
-    {
-        delete pRedDat;
-    }
+    delete pRedDat;
 }
 
 // Functions in the inserts Items of SvxRedlinTable
@@ -149,8 +146,7 @@ SvxRedlinTable::SvxRedlinTable(SvxSimpleTableContainer& rParent,WinBits nBits)
 
 SvxRedlinTable::~SvxRedlinTable()
 {
-    if(pCommentSearcher!=NULL)
-        delete pCommentSearcher;
+    delete pCommentSearcher;
 }
 
 StringCompare SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
@@ -301,7 +297,7 @@ void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
 {
     if(pSearchPara!=NULL)
     {
-        if(pCommentSearcher!=NULL) delete pCommentSearcher;
+        delete pCommentSearcher;
 
         pCommentSearcher=new utl::TextSearch(*pSearchPara, LANGUAGE_SYSTEM );
     }

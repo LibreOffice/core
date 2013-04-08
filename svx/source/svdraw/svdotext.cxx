@@ -193,11 +193,9 @@ SdrTextObj::~SdrTextObj()
             rOutl.SetTextObj( NULL );
     }
 
-    if(mpText!=NULL)
-        delete mpText;
+    delete mpText;
 
-    if (pFormTextBoundRect!=NULL)
-        delete pFormTextBoundRect;
+    delete pFormTextBoundRect;
 
     ImpLinkAbmeldung();
 }

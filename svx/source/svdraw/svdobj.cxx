@@ -275,9 +275,9 @@ SdrObjPlusData::SdrObjPlusData():
 
 SdrObjPlusData::~SdrObjPlusData()
 {
-    if (pBroadcast   !=NULL) delete pBroadcast;
-    if (pUserDataList!=NULL) delete pUserDataList;
-    if (pGluePoints  !=NULL) delete pGluePoints;
+    delete pBroadcast;
+    delete pUserDataList;
+    delete pGluePoints;
 }
 
 SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
@@ -484,7 +484,7 @@ SdrObject::~SdrObject()
 
     DBG_DTOR(SdrObject,NULL);
     SendUserCall(SDRUSERCALL_DELETE, GetLastBoundRect());
-    if (pPlusData!=NULL) delete pPlusData;
+    delete pPlusData;
 
     if(mpProperties)
     {

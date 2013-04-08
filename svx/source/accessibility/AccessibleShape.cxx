@@ -112,10 +112,8 @@ AccessibleShape::AccessibleShape (
 
 AccessibleShape::~AccessibleShape (void)
 {
-    if (mpChildrenManager != NULL)
-        delete mpChildrenManager;
-    if (mpText != NULL)
-        delete mpText;
+    delete mpChildrenManager;
+    delete mpText;
     OSL_TRACE ("~AccessibleShape");
 
     // Unregistering from the various broadcasters should be unnecessary

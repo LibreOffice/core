@@ -301,20 +301,14 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
 
 SdrUndoAttrObj::~SdrUndoAttrObj()
 {
-    if(pUndoSet)
-        delete pUndoSet;
-    if(pRedoSet)
-        delete pRedoSet;
-    if(pRepeatSet)
-        delete pRepeatSet;
-    if(pUndoGroup)
-        delete pUndoGroup;
-    if(pTextUndo)
-        delete pTextUndo;
+    delete pUndoSet;
+    delete pRedoSet;
+    delete pRepeatSet;
+    delete pUndoGroup;
+    delete pTextUndo;
 
     // #i8508#
-    if(pTextRedo)
-        delete pTextRedo;
+    delete pTextRedo;
 }
 
 void SdrUndoAttrObj::Undo()
@@ -331,10 +325,7 @@ void SdrUndoAttrObj::Undo()
         {
             bHaveToTakeRedoSet = sal_False;
 
-            if(pRedoSet)
-            {
-                delete pRedoSet;
-            }
+            delete pRedoSet;
 
             pRedoSet = new SfxItemSet(pObj->GetMergedItemSet());
 
@@ -603,9 +594,9 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj):
 
 SdrUndoGeoObj::~SdrUndoGeoObj()
 {
-    if (pUndoGeo!=NULL) delete pUndoGeo;
-    if (pRedoGeo!=NULL) delete pRedoGeo;
-    if (pUndoGroup!=NULL) delete pUndoGroup;
+    delete pUndoGeo;
+    delete pRedoGeo;
+    delete pUndoGroup;
 }
 
 void SdrUndoGeoObj::Undo()
@@ -622,7 +613,7 @@ void SdrUndoGeoObj::Undo()
     }
     else
     {
-        if (pRedoGeo!=NULL) delete pRedoGeo;
+        delete pRedoGeo;
         pRedoGeo=pObj->GetGeoData();
         pObj->SetGeoData(*pUndoGeo);
     }
@@ -639,7 +630,7 @@ void SdrUndoGeoObj::Redo()
     }
     else
     {
-        if (pUndoGeo!=NULL) delete pUndoGeo;
+        delete pUndoGeo;
         pUndoGeo=pObj->GetGeoData();
         pObj->SetGeoData(*pRedoGeo);
     }
@@ -1095,10 +1086,8 @@ SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
 
 SdrUndoObjSetText::~SdrUndoObjSetText()
 {
-    if ( pOldText )
-        delete pOldText;
-    if ( pNewText )
-        delete pNewText;
+    delete pOldText;
+    delete pNewText;
 }
 
 void SdrUndoObjSetText::AfterSetText()
@@ -1495,9 +1484,7 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg):
 
 SdrUndoDelPage::~SdrUndoDelPage()
 {
-    if (pUndoGroup!=NULL) {
-        delete pUndoGroup;
-    }
+    delete pUndoGroup;
 }
 
 void SdrUndoDelPage::Undo()
