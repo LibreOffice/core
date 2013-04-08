@@ -5996,7 +5996,7 @@ namespace osl_Directory
             if (tmp_x.lastIndexOf('/') != (tmp_x.getLength() - 1))
                 tmp_x += rtl::OString('/');
 
-#if !defined(WNT) && !defined(ANDROID)
+#if !defined(WNT) && !defined(ANDROID) && !defined(AIX)
             // FIXME would be nice to create unique dir even on Windows
             tmp_x += rtl::OString("XXXXXX");
             char *out = mkdtemp(const_cast<char*>(tmp_x.getStr()));
