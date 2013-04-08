@@ -1145,6 +1145,17 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
     if( xCell.is() )
     {
         nX += mpImpl->mpLayouter->getColumnWidth( rnX );
+
+        //Fix for fdo#62673 : non-editable cell in table on cell merge
+        sal_Int32 i=1;
+        xCell=mpImpl->getCell( CellPos( rnX+i, rnY) );
+        while(xCell.is() && xCell->isMerged())
+        {
+            nX += mpImpl->mpLayouter->getColumnWidth( rnX+i );
+            i++;
+            xCell=mpImpl->getCell( CellPos( rnX+i, rnY) );
+        }
+
         if( nX < xCell->GetTextLeftDistance() )
             return SDRTABLEHIT_CELL;
     }
