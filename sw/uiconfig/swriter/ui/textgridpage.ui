@@ -2,32 +2,12 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkAdjustment" id="adjustmentCHARSPERLINE">
-    <property name="lower">1</property>
-    <property name="upper">233</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentLINESPERPAGE">
-    <property name="lower">1</property>
-    <property name="upper">154</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentMetric">
-    <property name="lower">1</property>
-    <property name="upper">5600</property>
-    <property name="value">10</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkBox" id="TextGridPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="frameGrid">
         <property name="visible">True</property>
@@ -75,7 +55,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radioRB_CHARSGRID</property>
                       </object>
@@ -93,13 +72,31 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radioRB_NOGRID</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="checkCB_SNAPTOCHARS">
+                        <property name="label" translatable="yes">_Snap to characters</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin_left">12</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -170,217 +167,231 @@
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
-                    <property name="row_homogeneous">True</property>
+                    <property name="column_spacing">18</property>
                     <child>
-                      <object class="GtkCheckButton" id="checkCB_SNAPTOCHARS">
-                        <property name="label" translatable="yes">_Snap to characters</property>
+                      <object class="GtkGrid" id="grid4">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="halign">start</property>
-                        <property name="margin_left">12</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">start</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <property name="row_homogeneous">True</property>
+                        <child>
+                          <object class="GtkLabel" id="labelFT_CHARSPERLINE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Characters per line:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinNF_CHARSPERLINE</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="spinNF_CHARSPERLINE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="invisible_char_set">True</property>
+                            <property name="adjustment">adjustmentCHARSPERLINE</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="labelFT_CHARRANGE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">( 1 - 45 )</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="labelFT_LINESPERPAGE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Lines per page:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinNF_LINESPERPAGE</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="spinNF_LINESPERPAGE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="invisible_char_set">True</property>
+                            <property name="input_purpose">digits</property>
+                            <property name="adjustment">adjustmentLINESPERPAGE</property>
+                            <property name="numeric">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="labelFT_LINERANGE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="ypad">4</property>
+                            <property name="label" translatable="yes">( 1 - 48 )</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinMF_CHARWIDTH:0pt">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
-                        <property name="adjustment">adjustmentMetric</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">4</property>
-                        <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="labelFT_CHARWIDTH">
+                      <object class="GtkGrid" id="grid3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Character _width:</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="labelFT_CHARSPERLINE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Characters per line:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinNF_CHARSPERLINE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
-                        <property name="adjustment">adjustmentCHARSPERLINE</property>
+                        <property name="valign">start</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <property name="row_homogeneous">True</property>
+                        <child>
+                          <object class="GtkSpinButton" id="spinMF_CHARWIDTH:0pt">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="invisible_char_set">True</property>
+                            <property name="adjustment">adjustmentMetric</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="labelFT_CHARWIDTH">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Character _width:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinMF_CHARWIDTH:0pt</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="labelFT_RUBYSIZE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Max. Ruby text size:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinMF_RUBYSIZE:0pt</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="spinMF_RUBYSIZE:0pt">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="invisible_char_set">True</property>
+                            <property name="adjustment">adjustmentMetric</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="labelFT_TEXTSIZE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Max. base text size:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinMF_TEXTSIZE:0pt</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="spinMF_TEXTSIZE:0pt">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="invisible_char_set">True</property>
+                            <property name="adjustment">adjustmentMetric</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="labelFT_CHARRANGE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">( 1 - 45 )</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="labelFT_RUBYSIZE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Max. Ruby text size:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinMF_RUBYSIZE:0pt">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
-                        <property name="adjustment">adjustmentMetric</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">4</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="labelFT_LINESPERPAGE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Lines per page:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinNF_LINESPERPAGE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
-                        <property name="input_purpose">digits</property>
-                        <property name="adjustment">adjustmentLINESPERPAGE</property>
-                        <property name="numeric">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="labelFT_LINERANGE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="ypad">4</property>
-                        <property name="label" translatable="yes">( 1 - 48 )</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="labelFT_TEXTSIZE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Max. base text size:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinMF_TEXTSIZE:0pt">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
-                        <property name="adjustment">adjustmentMetric</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">4</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -480,6 +491,8 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">Grid color:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">listLB_COLOR</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -529,5 +542,25 @@
         <property name="position">2</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentCHARSPERLINE">
+    <property name="lower">1</property>
+    <property name="upper">233</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentLINESPERPAGE">
+    <property name="lower">1</property>
+    <property name="upper">154</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentMetric">
+    <property name="lower">1</property>
+    <property name="upper">5600</property>
+    <property name="value">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>
