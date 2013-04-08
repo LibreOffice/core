@@ -1650,7 +1650,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
         sal_Int32 nStartPos;
         while( bNotSync )
         {
-            if( mnLeftTextPortionLength <= 0 )
+            if( mnLeftTextPortionLength <= 0  || !mrCurrentTextPortion.is() )
             {
                 if( !nextTextPortion() )
                     break;
