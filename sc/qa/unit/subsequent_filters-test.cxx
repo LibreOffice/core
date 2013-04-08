@@ -1731,6 +1731,32 @@ void ScFiltersTest::testRichTextContentODS()
     }
     CPPUNIT_ASSERT_MESSAGE("Second line should be underlined.", bHasUnderline);
 
+    // URL with formats applied.  For now, we'll check whether or not the
+    // field objects gets imported.  Later we should add checks for the
+    // formats.
+    aPos.IncRow();
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_MESSAGE("URL field item not found.", pEditText->HasField(text::textfield::Type::URL));
+
+    // Sheet name with formats applied.
+    aPos.IncRow();
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.", pEditText->HasField(text::textfield::Type::TABLE));
+
+    // Date with formats applied.
+    aPos.IncRow();
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_MESSAGE("Date field item not found.", pEditText->HasField(text::textfield::Type::DATE));
+
+    // Document title with formats applied.
+    aPos.IncRow();
+    pEditText = pDoc->GetEditText(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
+    CPPUNIT_ASSERT_MESSAGE("Date field item not found.", pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
+
     xDocSh->DoClose();
 }
 
