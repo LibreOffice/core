@@ -15,26 +15,37 @@
  * implementations should not be exposed to the caller directly.
  */
 
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/signals2.hpp>
-
-/*
- * FIXME: need to use smart ptrs everywhere.
- */
 
 namespace SlideHack {
 
+#define SLIDEHACK_BASE public boost::enable_shared_from_this<BitmapDevice>,
+                       private boost::noncopyable
+
+typedef boost::shared_ptr< class Store > StorePtr;
+typedef boost::shared_ptr< class Group > GroupPtr;
+typedef boost::shared_ptr< class GroupMeta > GroupMetaPtr;
+typedef boost::shared_ptr< class VersionData > VersionDataPtr;
+typedef boost::shared_ptr< class Alternatives > AlternativesPtr;
+
 /// version history
-class VersionData
+class VersionData : SLIDEHACK_BASE
 {
+public:
+    virtual ~VersionData() {}
     virtual OUString getVersion() = 0;
     virtual Date     getCheckinDate() = 0;
     virtual OUString getCheckinComment() = 0;
 };
 
 /// Defines information about a group of slides
-class GroupMeta
+class GroupMeta : SLIDEHACK_BASE
 {
 public:
+    virtual ~GroupMeta() {}
     virtual OUString getName() = 0;
     virtual OUString getUserName() = 0;
     virtual OUString getTopic() = 0;
@@ -43,56 +54,58 @@ public:
     virtual int      getLength() = 0;
 
     // Cedric: can this be easily fetched in one chunk ?
-    virtual VersionData *getVersionData() = 0;
+    virtual VersionDataPtr getVersionData() = 0;
 };
 
 /// Defines a group of slides on a related topic
-class Group
+class Group : SLIDEHACK_BASE
 {
 public:
+    virtual ~Group() {}
+
     virtual GroupMeta *getMetaData() = 0;
 
     /// fetches slide data from the potentially remote store
 
-    ///    FIXME: <we want a boost callback - this is lame !>
-    virtual void   readData( GroupDataCallback *pCallback ) = 0;
-    virtual void   cancelReadData( GroupDataCallback *pCallback ) = 0;
-
-    /// retrieve slide data - but only after a readData has completed
-    virtual BitmapEx getSlide( sal_uInt32 nSlide ) = 0;
-    /// get slide data as flat odp ?
-    virtual OUString getSlideFodp( sal_uInt32 nSlide ) = 0;
+    /// initiate reading the slide thumbnail and/or ODP
+    virtual void fetchData( bool bThumbnail, bool bODPStream ) = 0;
+    /// data fetch completed signal - always in the main thread
+    boost::signals2< BitmapEx &, SvStream * > maDataComplete;
 
     /// start fetch of all version numbers
     virtual void     getVersions() = 0;
     /// version number fetch completed - ver history is linear
-    boost::signals2< VersionData * > maVersions;
+    boost::signals2< std:vector< VersionDataPtr > > maVersions;
 };
 
+
 /// We can have multiple (different length) pitches for the same topic
-class Alternatives
+class Alternatives : SLIDEHACK_BASE
 {
 public:
-    std::vector< Group * > getAlternatives() = 0;
+    virtual ~Alternatives() {}
+    std::vector< GroupPtr > getAlternatives() = 0;
 };
 
 /// Overall factory and store for these guys
-class Store
+class Store : SLIDEHACK_BASE
 {
 public:
+    virtual ~Store() {}
+
     /// initiate search returns a handle
     virtual sal_uInt32 search( OUString aSearchEntry ) = 0;
     /// cancel a running search
     virtual void  cancelSearch( sal_uInt32 nHandle ) = 0;
     /// search completed signal - always in the main thread
-    boost::signals2< sal_uInt32, std::vector<Alternatives *> > maSearchCompleted;
+    boost::signals2< sal_uInt32, std::vector< AlternativesPtr > > maSearchCompleted;
 
     /// used to create a group handle from a stored slide, so we can
     /// check for updated versions etc.
-    virtual Group *createGroup( OUString aName, OUString aVersion ) = 0;
+    virtual GroupPtr createGroup( OUString aName, OUString aVersion ) = 0;
 
     /// factory function: to get the root
-    static SlideHackStore *getStore();
+    static StorePtr getStore();
 };
 
 }
