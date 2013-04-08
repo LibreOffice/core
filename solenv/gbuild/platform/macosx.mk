@@ -163,6 +163,14 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(MACOSX_CODESIGNING_IDENTITY), \
 		$(if $(filter Executable,$(TARGETTYPE)), \
 			codesign --timestamp=none --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) $(1) &&)) \
+	$(if $(filter Library,$(TARGETTYPE)),\
+		otool -l $(1) | grep -A 5 LC_ID_DYLIB > $(1).exports.tmp && \
+		$(NM) -g -P $(1) | cut -d' ' -f1-2 | grep -v U$$ \
+			>> $(1).exports.tmp && \
+		if cmp -s $(1).exports.tmp $(1).exports; \
+			then rm $(1).exports.tmp; \
+			else mv $(1).exports.tmp $(1).exports; touch -r $(1) $(1).exports; \
+		fi &&) \
 	:)
 endef
 

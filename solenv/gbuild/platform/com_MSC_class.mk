@@ -351,6 +351,11 @@ define gb_Library_get_dllname
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_DLLFILENAMES)))
 endef
 
+# this is nerfed, it just points to the library to disable the .exports
+define gb_Library_get_exports_target
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1)))
+endef
+
 
 # StaticLibrary class
 
