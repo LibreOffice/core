@@ -102,3 +102,28 @@ class OMouseListenerProcAdapter( unohelper.Base, XMouseListener ):
     def mousePressed(self, MouseEvent):
         if callable( self.oProcToCall ):
             self.oProcToCall(MouseEvent)
+
+from com.sun.star.io import XStreamListener
+class StreamListenerProcAdapter( unohelper.Base, XStreamListener ):
+    def __init__(self, parent, terminatedCall, startedCall, closedCall, errorCall):
+        self.parent = parent
+        self.terminatedCall = terminatedCall
+        self.startedCall = startedCall
+        self.closedCall = closedCall
+        self.errorCall = errorCall
+
+    def terminated(self):
+        if callable( self. terminatedCall):
+            self.terminatedCall(self)
+
+    def started(self):
+        if callable( self.startedCall ):
+            self.startedCall(self, self.parent)
+
+    def closed(self):
+        if callable( self.closedCall ):
+            self.closedCall(self)
+
+    def error(self, aException):
+        if callable( self.errorCall ):
+            self.errorCall(self, aException)
