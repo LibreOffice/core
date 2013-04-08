@@ -15,15 +15,29 @@
  * implementations should not be exposed to the caller directly.
  */
 
+// Would be nice if boost::signals2 was less dirty ...
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wshadow"
+#  pragma GCC diagnostic ignored "-Wundef"
+#  pragma GCC diagnostic ignored "-Wempty-body"
+#endif
+
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/signals2.hpp>
 
-namespace SlideHack {
+#ifdef __GNUC__
+#  pragma GCC diagnostic pop
+#  pragma GCC diagnostic pop
+#  pragma GCC diagnostic pop
+#endif
 
-#define SLIDEHACK_BASE public boost::enable_shared_from_this<BitmapDevice>,
-                       private boost::noncopyable
+#include <rtl/ustring.hxx>
+#include <tools/datetime.hxx>
+#include <vcl/bitmapex.hxx>
+
+namespace SlideHack {
 
 typedef boost::shared_ptr< class Store > StorePtr;
 typedef boost::shared_ptr< class Group > GroupPtr;
@@ -32,17 +46,19 @@ typedef boost::shared_ptr< class VersionData > VersionDataPtr;
 typedef boost::shared_ptr< class Alternatives > AlternativesPtr;
 
 /// version history
-class VersionData : SLIDEHACK_BASE
+class VersionData : public boost::enable_shared_from_this< VersionData >,
+                    private boost::noncopyable
 {
 public:
     virtual ~VersionData() {}
     virtual OUString getVersion() = 0;
-    virtual Date     getCheckinDate() = 0;
+    virtual DateTime getCheckinTime() = 0;
     virtual OUString getCheckinComment() = 0;
 };
 
 /// Defines information about a group of slides
-class GroupMeta : SLIDEHACK_BASE
+class GroupMeta : public boost::enable_shared_from_this< GroupMeta >,
+                  private boost::noncopyable
 {
 public:
     virtual ~GroupMeta() {}
@@ -58,7 +74,8 @@ public:
 };
 
 /// Defines a group of slides on a related topic
-class Group : SLIDEHACK_BASE
+class Group : public boost::enable_shared_from_this< Group >,
+              private boost::noncopyable
 {
 public:
     virtual ~Group() {}
@@ -70,25 +87,26 @@ public:
     /// initiate reading the slide thumbnail and/or ODP
     virtual void fetchData( bool bThumbnail, bool bODPStream ) = 0;
     /// data fetch completed signal - always in the main thread
-    boost::signals2< BitmapEx &, SvStream * > maDataComplete;
+    boost::signals2::signal< void (BitmapEx &, SvStream *) > maDataComplete;
 
     /// start fetch of all version numbers
     virtual void     getVersions() = 0;
     /// version number fetch completed - ver history is linear
-    boost::signals2< std:vector< VersionDataPtr > > maVersions;
+    boost::signals2::signal< void (const std::vector< VersionDataPtr > &) > maVersions;
 };
 
-
 /// We can have multiple (different length) pitches for the same topic
-class Alternatives : SLIDEHACK_BASE
+class Alternatives : public boost::enable_shared_from_this< Alternatives >,
+                     private boost::noncopyable
 {
 public:
     virtual ~Alternatives() {}
-    std::vector< GroupPtr > getAlternatives() = 0;
+    virtual std::vector< GroupPtr > getAlternatives() = 0;
 };
 
 /// Overall factory and store for these guys
-class Store : SLIDEHACK_BASE
+class Store : public boost::enable_shared_from_this< Store >,
+              private boost::noncopyable
 {
 public:
     virtual ~Store() {}
@@ -98,7 +116,7 @@ public:
     /// cancel a running search
     virtual void  cancelSearch( sal_uInt32 nHandle ) = 0;
     /// search completed signal - always in the main thread
-    boost::signals2< sal_uInt32, std::vector< AlternativesPtr > > maSearchCompleted;
+    boost::signals2::signal< void(sal_uInt32, std::vector< AlternativesPtr >) > maSearchCompleted;
 
     /// used to create a group handle from a stored slide, so we can
     /// check for updated versions etc.
