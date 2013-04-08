@@ -71,7 +71,7 @@ PlaceWareExporter::~PlaceWareExporter()
 class PageEntry
 {
 private:
-    TempFile maTempFile;
+    PlaceWareTempFile maTempFile;
     OUString maName;
     OUString maTitle;
     OUString maNotes;
@@ -97,7 +97,7 @@ public:
 };
 
 PageEntry::PageEntry()
-: maTempFile( TempFile::createTempFileURL() )
+: maTempFile( PlaceWareTempFile::createTempFileURL() )
 {
 }
 
@@ -259,7 +259,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
         }
     }
 
-    TempFile aInfoFile( TempFile::createTempFileURL() );
+    PlaceWareTempFile aInfoFile( PlaceWareTempFile::createTempFileURL() );
 
     osl::File::RC nRC;
     sal_uInt64 nTemp;
@@ -309,7 +309,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     osl::File::RC nRC;
 
 #ifndef PLACEWARE_DEBUG
-    TempFile aTempFile( TempFile::createTempFileURL() );
+    PlaceWareTempFile aTempFile( PlaceWareTempFile::createTempFileURL() );
     nRC = aTempFile.open( osl_File_OpenFlag_Write|osl_File_OpenFlag_Read );
 #else
     OUString aURL("file:///e:/test.zip");

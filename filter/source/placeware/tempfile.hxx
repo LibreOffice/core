@@ -23,11 +23,11 @@
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 
-class TempFile : public osl::File
+class PlaceWareTempFile : public osl::File
 {
 public:
-    TempFile( const OUString& aURL );
-    ~TempFile();
+    PlaceWareTempFile( const OUString& aURL );
+    ~PlaceWareTempFile();
 
     static OUString createTempFileURL();
     OUString   getFileURL();

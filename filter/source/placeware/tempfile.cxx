@@ -118,12 +118,12 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 
 #include "tempfile.hxx"
 
-TempFile::TempFile( const OUString& rTempFileURL )
+PlaceWareTempFile::PlaceWareTempFile( const OUString& rTempFileURL )
 :osl::File( rTempFileURL ), maURL( rTempFileURL )
 {
 }
 
-TempFile::~TempFile()
+PlaceWareTempFile::~PlaceWareTempFile()
 {
     close();
 
@@ -131,7 +131,7 @@ TempFile::~TempFile()
         osl::File::remove( maURL );
 }
 
-OUString TempFile::createTempFileURL()
+OUString PlaceWareTempFile::createTempFileURL()
 {
     OUString aTempFileURL;
 
@@ -168,7 +168,7 @@ OUString TempFile::createTempFileURL()
     return aTempFileURL;
 }
 
-OUString TempFile::getFileURL()
+OUString PlaceWareTempFile::getFileURL()
 {
     return maURL;
 }
