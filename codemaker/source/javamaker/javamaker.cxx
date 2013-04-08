@@ -28,12 +28,13 @@
 #include "javaoptions.hxx"
 #include "javatype.hxx"
 
+using ::rtl::OUString;
+using ::rtl::OString;
 sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
                          rtl::Reference< TypeManager > const & typeMgr,
                          codemaker::GeneratedTypeSet & generated,
                          JavaOptions* pOptions,
                          sal_Bool bFullScope)
-    throw( CannotDumpException )
 {
     OString typeName = typeMgr->getTypeName(rTypeKey);
 
@@ -85,7 +86,6 @@ sal_Bool produceAllTypes(const OString& typeName,
                          codemaker::GeneratedTypeSet & generated,
                          JavaOptions* pOptions,
                          sal_Bool bFullScope)
-    throw( CannotDumpException )
 {
     if (!produceType(typeName, typeMgr, generated, pOptions))
     {
@@ -159,6 +159,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         typeMgr->setBase(options.getOption("-B"));
     }
 
+    for (std::vector< rtl::OString >::const_iterator i(
+             options.getExtraInputFiles().begin());
+         i != options.getExtraInputFiles().end(); ++i)
+    {
+        typeMgr->loadProvider(b2u(*i), false);
+    }
+    for (std::vector< rtl::OString >::const_iterator i(
+             options.getInputFiles().begin());
+         i != options.getInputFiles().end(); ++i)
+    {
+        typeMgr->loadProvider(b2u(*i), true);
+    }
+
     try
     {
         if (options.isValid("-T"))
@@ -226,7 +239,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         fprintf(stderr, "%s ERROR: %s\n",
                 options.getProgramName().getStr(),
-                e.m_message.getStr());
+                u2b(e.getMessage()).getStr());
         exit(99);
     }
 

@@ -17,50 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cstdlib>
 
 #include "rtl/alloc.h"
 #include "codemaker/typemanager.hxx"
 #include "registry/reader.hxx"
 #include "registry/version.h"
+#include "unoidl/unoidl.hxx"
 
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
-sal_Bool TypeManager::isBaseType(const OString& name)
-{
-    if ( name == "short" )
-        return sal_True;
-    if ( name == "unsigned short" )
-        return sal_True;
-    if ( name == "long" )
-        return sal_True;
-    if ( name == "unsigned long" )
-        return sal_True;
-    if ( name == "hyper" )
-        return sal_True;
-    if ( name == "unsigned hyper" )
-        return sal_True;
-    if ( name == "string" )
-        return sal_True;
-    if ( name == "boolean" )
-        return sal_True;
-    if ( name == "char" )
-        return sal_True;
-    if ( name == "byte" )
-        return sal_True;
-    if ( name == "any" )
-        return sal_True;
-    if ( name == "type" )
-        return sal_True;
-    if ( name == "float" )
-        return sal_True;
-    if ( name == "double" )
-        return sal_True;
-    if ( name == "void" )
-        return sal_True;
-
-    return sal_False;
-}
-
-TypeManager::TypeManager() {}
+TypeManager::TypeManager(): m_base("UCR"), manager_(new unoidl::Manager) {}
 
 TypeManager::~TypeManager()
 {
@@ -104,7 +76,7 @@ sal_Bool TypeManager::init(
     return sal_True;
 }
 
-OString TypeManager::getTypeName(RegistryKey& rTypeKey) const
+::rtl::OString TypeManager::getTypeName(RegistryKey& rTypeKey) const
 {
     OString typeName = OUStringToOString(rTypeKey.getName(), RTL_TEXTENCODING_UTF8);
 
@@ -243,9 +215,9 @@ void TypeManager::setBase(const OString& base)
 {
 
     if (base.lastIndexOf('/') == (base.getLength() - 1))
-        m_base += base.copy(0, base.lastIndexOf('/') - 1);
+        m_base = base.copy(0, base.lastIndexOf('/') - 1);
     else
-        m_base += base;
+        m_base = base;
 }
 
 void TypeManager::freeRegistries()
@@ -302,7 +274,7 @@ RegistryKey TypeManager::searchTypeKey(const OString& name_, sal_Bool * pIsExtra
     return key;
 }
 
-RegistryKeyList TypeManager::getTypeKeys(const OString& name_) const
+RegistryKeyList TypeManager::getTypeKeys(const ::rtl::OString& name_) const
 {
     RegistryKeyList keyList= RegistryKeyList();
     OString tmpName;
@@ -344,6 +316,132 @@ RegistryKeyList TypeManager::getTypeKeys(const OString& name_) const
     }
 
     return keyList;
+}
+
+
+void TypeManager::loadProvider(rtl::OUString const & uri, bool primary) {
+    rtl::Reference< unoidl::Provider > prov(
+        unoidl::loadProvider(manager_, uri));
+    manager_->addProvider(prov);
+    if (primary) {
+        primaryProviders_.push_back(prov);
+    }
+}
+
+bool TypeManager::foundAtPrimaryProvider(rtl::OUString const & name) const {
+    if (name.isEmpty()) {
+        return !primaryProviders_.empty();
+    }
+    for (std::vector< rtl::Reference< unoidl::Provider > >::const_iterator i(
+             primaryProviders_.begin());
+         i != primaryProviders_.end(); ++i)
+    {
+        if ((*i)->findEntity(name).is()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+codemaker::UnoType::Sort TypeManager::getSort(
+    rtl::OUString const & name, rtl::Reference< unoidl::Entity > * entity,
+    rtl::Reference< unoidl::MapCursor > * cursor) const
+{
+    if (name.isEmpty()) {
+        if (cursor != 0) {
+            *cursor = manager_->createCursor("");
+        }
+        return codemaker::UnoType::SORT_MODULE;
+    }
+    if (name == "void") {
+        return codemaker::UnoType::SORT_VOID;
+    }
+    if (name == "boolean") {
+        return codemaker::UnoType::SORT_BOOLEAN;
+    }
+    if (name == "byte") {
+        return codemaker::UnoType::SORT_BYTE;
+    }
+    if (name == "short") {
+        return codemaker::UnoType::SORT_SHORT;
+    }
+    if (name == "unsigned short") {
+        return codemaker::UnoType::SORT_UNSIGNED_SHORT;
+    }
+    if (name == "long") {
+        return codemaker::UnoType::SORT_LONG;
+    }
+    if (name == "unsigned long") {
+        return codemaker::UnoType::SORT_UNSIGNED_LONG;
+    }
+    if (name == "hyper") {
+        return codemaker::UnoType::SORT_HYPER;
+    }
+    if (name == "unsigned hyper") {
+        return codemaker::UnoType::SORT_UNSIGNED_HYPER;
+    }
+    if (name == "float") {
+        return codemaker::UnoType::SORT_FLOAT;
+    }
+    if (name == "double") {
+        return codemaker::UnoType::SORT_DOUBLE;
+    }
+    if (name == "char") {
+        return codemaker::UnoType::SORT_CHAR;
+    }
+    if (name == "string") {
+        return codemaker::UnoType::SORT_STRING;
+    }
+    if (name == "type") {
+        return codemaker::UnoType::SORT_TYPE;
+    }
+    if (name == "any") {
+        return codemaker::UnoType::SORT_ANY;
+    }
+    if (name.startsWith("[")) {
+        return codemaker::UnoType::SORT_SEQUENCE_TYPE;
+    }
+    if (name.indexOf('<') != -1) {
+        return codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE;
+    }
+    rtl::Reference< unoidl::Entity > ent(manager_->findEntity(name));
+    if (!ent.is()) {
+        throw CannotDumpException("Unknown entity '" + name + "'");
+    }
+    if (entity != 0) {
+        *entity = ent;
+    }
+    switch (ent->getSort()) {
+    case unoidl::Entity::SORT_MODULE:
+        if (cursor != 0) {
+            *cursor = manager_->createCursor(name);
+        }
+        return codemaker::UnoType::SORT_MODULE;
+    case unoidl::Entity::SORT_ENUM_TYPE:
+        return codemaker::UnoType::SORT_ENUM_TYPE;
+    case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
+        return codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE;
+    case unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+        return codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE;
+    case unoidl::Entity::SORT_EXCEPTION_TYPE:
+        return codemaker::UnoType::SORT_EXCEPTION_TYPE;
+    case unoidl::Entity::SORT_INTERFACE_TYPE:
+        return codemaker::UnoType::SORT_INTERFACE_TYPE;
+    case unoidl::Entity::SORT_TYPEDEF:
+        return codemaker::UnoType::SORT_TYPEDEF;
+    case unoidl::Entity::SORT_CONSTANT_GROUP:
+        return codemaker::UnoType::SORT_CONSTANT_GROUP;
+    case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+        return codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE;
+    case unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
+        return codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE;
+    case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
+        return codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON;
+    case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
+        return codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON;
+    default:
+        for (;;) { std::abort(); } // this cannot happen
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

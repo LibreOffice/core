@@ -56,7 +56,7 @@ void printType(std::ostream & o,
         case codemaker::UnoType::SORT_STRING:
         case codemaker::UnoType::SORT_TYPE:
         case codemaker::UnoType::SORT_ANY:
-        case codemaker::UnoType::SORT_COMPLEX:
+        case codemaker::UnoType::SORT_COMPLEX: default: //TODO
             break;
         }
     }
@@ -147,7 +147,7 @@ bool printConstructorParameters(std::ostream & o,
             codemaker::convertString(reader.getSuperTypeName(0)));
         typereg::Reader superReader(manager->getTypeReader(super));
         if (!superReader.isValid())
-            throw CannotDumpException("Bad type library entity " + super);
+            throw CannotDumpException("Bad type library entity " + b2u(super));
 
         previous = printConstructorParameters(o,
             options, manager, superReader, outerReader, arguments);
@@ -318,10 +318,10 @@ void printSetPropertyMixinBody(std::ostream & o,
             o << "    v <<= " << buffer2.makeStringAndClear() << ";\n\n";
         }
 
-        o << "    prepareSet(\n        OUString(\""
+        o << "    prepareSet(\n        rtl::OUString(\""
           << fieldname << "\"),\n        css::uno::Any(), v, ";
     } else {
-        o << "    prepareSet(\n        OUString(\""
+        o << "    prepareSet(\n        rtl::OUString(\""
           << fieldname << "\"),\n        css::uno::Any(), css::uno::Any(), ";
     }
 
@@ -409,9 +409,9 @@ void printMethods(std::ostream & o,
     if (body && options.componenttype == 2) {
         if (type.equals("com/sun/star/lang/XServiceName")) {
             o << "// ::com::sun::star::lang::XServiceName:\n"
-                "OUString SAL_CALL " << classname << "getServiceName() "
+                "::rtl::OUString SAL_CALL " << classname << "getServiceName() "
                 "throw (css::uno::RuntimeException)\n{\n    "
-                "return OUString("
+                "return ::rtl::OUString("
                 "sADDIN_SERVICENAME);\n}\n";
             generated.add(type);
             return;
@@ -461,9 +461,7 @@ void printMethods(std::ostream & o,
                         reader.getSuperTypeName(i))));
             if (!super.isValid()) {
                 throw CannotDumpException(
-                    "Bad type library entity "
-                    + codemaker::convertString(
-                        reader.getSuperTypeName(i)));
+                    "Bad type library entity " + reader.getSuperTypeName(i));
             }
 
             printMethods(o, options, manager, super, generated, delegate,
@@ -732,7 +730,7 @@ void generateDocumentation(std::ostream & o,
     OString const & type, OString const & delegate)
 {
     if (type.indexOf('/') >= 0)
-        throw CannotDumpException("Illegal type name " + type);
+        throw CannotDumpException("Illegal type name " + b2u(type));
 
     OString binType(type.replace('.', '/'));
     RTTypeClass typeClass;
@@ -762,7 +760,7 @@ void generateDocumentation(std::ostream & o,
         } else {
             typereg::Reader reader(manager->getTypeReader(name));
             if (!reader.isValid())
-                throw CannotDumpException("Bad type library entity " + name);
+                throw CannotDumpException("Bad type library entity " + b2u(name));
 
             switch (typeClass)
             {
@@ -841,7 +839,7 @@ void generateDocumentation(std::ostream & o,
     } else {
         typereg::Reader reader(manager->getTypeReader(name));
         if (!reader.isValid())
-            throw CannotDumpException("Bad type library entity " + name);
+            throw CannotDumpException("Bad type library entity " + b2u(name));
 
         switch (typeClass)
         {

@@ -17,65 +17,62 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_DEPENDENCIES_HXX
-#define INCLUDED_CODEMAKER_DEPENDENCIES_HXX
+#ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DEPENDENCIES_HXX
+#define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DEPENDENCIES_HXX
 
 #include "sal/config.h"
 
 #include <map>
 
+#include "boost/noncopyable.hpp"
 #include "rtl/ref.hxx"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
 
+namespace rtl { class OUString; }
 class TypeManager;
 
 /// @HTML
 
-namespace codemaker {
+namespace codemaker { namespace cppumaker {
 
 /**
-   A simple class to track which other types a given type depends on.
+   A simple class to track which other entites a given entity depends on.
 
    <p>This class is not multi-thread&ndash;safe.</p>
  */
-class Dependencies {
+class Dependencies: private boost::noncopyable {
 public:
     /**
-       Flags to distinguish whether or not one type depends on another type
+       Flags to distinguish whether or not one entity depends on another entity
        because the second is a direct base of the first.
      */
     enum Kind { KIND_NO_BASE, KIND_BASE };
 
-    typedef std::map< OString, Kind > Map;
+    typedef std::map< rtl::OUString, Kind > Map;
 
     /**
-       Constructs the dependencies for a given type.
+       Constructs the dependencies for a given entity.
 
-       <p>If the given type is not successfully available at the given type
-       manager, <code>isValid()</code> will return <code>false</code>.</p>
+       @param manager a type manager, to obtain information about the given
+       entity; must not be null
 
-       @param manager a type manager, to obtain information about the given type
-
-       @param type the UNO type registry name of an enum type, plain struct
-       type, polymorphic struct type template, exception type, interface type,
-       typedef, module, constant group, service, or singleton
+       @param name the UNOIDL name of an enum type, plain struct type,
+       polymorphic struct type template, exception type, interface type,
+       typedef, constant group, single-interface--based service, or
+       interface-based singleton entity
      */
     Dependencies(
         rtl::Reference< TypeManager > const & manager,
-        OString const & type);
+        rtl::OUString const & name);
 
     ~Dependencies();
 
     /**
-       Add a special dependency (which is not obvious from the type's data
+       Add a special dependency (which is not obvious from the entity's data
        available at the type manager).
 
-       @param type a UNO type registry name
+       @param name a UNOIDL entity name
      */
-    void add(OString const & type) { insert(type, false); }
-
-    bool isValid() const { return m_valid; }
+    void add(rtl::OUString const & name) { insert(name); }
 
     Map const & getMap() const { return m_map; }
 
@@ -114,15 +111,10 @@ public:
     bool hasSequenceDependency() const { return m_sequenceDependency; }
 
 private:
-    Dependencies(Dependencies &); // not implemented
-    void operator =(Dependencies); // not implemented
+    void insert(rtl::OUString const & name, bool base = false);
 
-    void insert(OUString const & type, bool base);
-
-    void insert(OString const & type, bool base);
-
+    rtl::Reference< TypeManager > m_manager;
     Map m_map;
-    bool m_valid;
     bool m_voidDependency;
     bool m_booleanDependency;
     bool m_byteDependency;
@@ -141,8 +133,8 @@ private:
     bool m_sequenceDependency;
 };
 
-}
+} }
 
-#endif // INCLUDED_CODEMAKER_DEPENDENCIES_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

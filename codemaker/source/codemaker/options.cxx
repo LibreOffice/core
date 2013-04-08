@@ -20,6 +20,7 @@
 
 #include "codemaker/options.hxx"
 
+using ::rtl::OString;
 
 Options::Options()
 {
@@ -35,21 +36,19 @@ const OString& Options::getProgramName() const
     return m_program;
 }
 
-sal_Bool Options::isValid(const OString& option)
+sal_Bool Options::isValid(const OString& option) const
 {
-    return (m_options.count(option) > 0);
+    return m_options.find(option) != m_options.end();
 }
 
-const OString Options::getOption(const OString& option)
+const OString Options::getOption(const OString& option) const
     throw( IllegalArgument )
 {
-    if (m_options.count(option) > 0)
-    {
-        return m_options[option];
-    } else
-    {
+    OptionMap::const_iterator i(m_options.find(option));
+    if (i == m_options.end()) {
         throw IllegalArgument("Option is not valid or currently not set.");
     }
+    return i->second;
 }
 
 const StringVector& Options::getInputFiles()

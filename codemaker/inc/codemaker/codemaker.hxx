@@ -28,17 +28,21 @@
 
 #include <vector>
 
+namespace rtl {
+    class OString;
+    class OUString;
+}
 class TypeManager;
 
 namespace codemaker {
 
-OString convertString(OUString const & string);
+rtl::OString convertString(rtl::OUString const & string);
 
 codemaker::UnoType::Sort decomposeAndResolve(
-    rtl::Reference< TypeManager > const & manager, OString const & type,
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
-    RTTypeClass * typeClass, OString * name, sal_Int32 * rank,
-    std::vector< OString > * arguments);
+    RTTypeClass * typeClass, rtl::OString * name, sal_Int32 * rank,
+    std::vector< rtl::OString > * arguments);
 
 }
 

@@ -940,9 +940,8 @@ void generateSkeleton(ProgramOptions const & options,
             delete pofs;
             OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, sal_False));
         }
-    } catch(const CannotDumpException& e) {
-
-        std::cerr << "ERROR: " << e.m_message.getStr() << "\n";
+    } catch (CannotDumpException & e) {
+        std::cerr << "ERROR: " << e.getMessage() << "\n";
         if ( !standardout ) {
             if (pofs && ((std::ofstream*)pofs)->is_open()) {
                 ((std::ofstream*)pofs)->close();

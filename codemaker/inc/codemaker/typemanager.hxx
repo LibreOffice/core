@@ -21,14 +21,23 @@
 #define INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 
 #include "codemaker/global.hxx"
+#include "codemaker/unotype.hxx"
 #include "registry/registry.hxx"
 #include "registry/types.h"
+#include "rtl/ref.hxx"
 #include "salhelper/simplereferenceobject.hxx"
 
 #include <boost/unordered_map.hpp>
 #include <list>
+#include <vector>
 
 namespace typereg { class Reader; }
+namespace unoidl {
+    class Entity;
+    class Manager;
+    class MapCursor;
+    class Provider;
+}
 
 //typedef ::std::list< Registry* >  RegistryList;
 typedef ::std::vector< Registry* >  RegistryList;
@@ -37,7 +46,7 @@ typedef ::std::vector< KeyPair >    RegistryKeyList;
 
 typedef ::boost::unordered_map
 <
-    OString, // Typename
+    ::rtl::OString, // Typename
     RTTypeClass,    // TypeClass
     HashString,
     EqualString
@@ -50,39 +59,59 @@ public:
 
     sal_Bool init(const StringVector& regFiles, const StringVector& extraFiles = StringVector() );
 
-    OString getTypeName(RegistryKey& rTypeKey) const;
+    ::rtl::OString getTypeName(RegistryKey& rTypeKey) const;
 
-    sal_Bool    isValidType(const OString& name) const
+    sal_Bool    isValidType(const ::rtl::OString& name) const
         { return searchTypeKey(name, 0).isValid(); }
     RegistryKey getTypeKey(
-        const OString& name, sal_Bool * pIsExtraType = 0 ) const
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const
         { return searchTypeKey(name, pIsExtraType); }
-    RegistryKeyList getTypeKeys(const OString& name) const;
+    RegistryKeyList getTypeKeys(const ::rtl::OString& name) const;
     typereg::Reader getTypeReader(
-        const OString& name, sal_Bool * pIsExtraType = 0 ) const;
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
     typereg::Reader getTypeReader(RegistryKey& rTypeKey) const;
-    RTTypeClass getTypeClass(const OString& name) const;
+    RTTypeClass getTypeClass(const ::rtl::OString& name) const;
     RTTypeClass getTypeClass(RegistryKey& rTypeKey) const;
 
-    void setBase(const OString& base);
-    OString getBase() const { return m_base; }
+    void setBase(const ::rtl::OString& base);
+    ::rtl::OString getBase() const { return m_base; }
 
     sal_Int32 getSize() const { return m_t2TypeClass.size(); }
 
-    static sal_Bool isBaseType(const OString& name);
+
+    void loadProvider(rtl::OUString const & uri, bool primary);
+
+    bool foundAtPrimaryProvider(rtl::OUString const & name) const;
+
+    codemaker::UnoType::Sort getSort(
+        rtl::OUString const & name,
+        rtl::Reference< unoidl::Entity > * entity = 0,
+        rtl::Reference< unoidl::MapCursor > * cursor = 0) const;
 
 private:
     virtual ~TypeManager();
 
     RegistryKey searchTypeKey(
-        const OString& name, sal_Bool * pIsExtraType = 0 ) const;
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
     void        freeRegistries();
 
     mutable T2TypeClassMap m_t2TypeClass;
     RegistryList    m_registries;
     RegistryList    m_extra_registries;
-    OString  m_base;
+    ::rtl::OString  m_base;
+
+    rtl::Reference< unoidl::Manager > manager_;
+    std::vector< rtl::Reference< unoidl::Provider > > primaryProviders_;
 };
+
+
+inline rtl::OString u2b(rtl::OUString const & s) {
+    return rtl::OUStringToOString(s, RTL_TEXTENCODING_UTF8);
+}
+
+inline rtl::OUString b2u(rtl::OString const & s) {
+    return rtl::OStringToOUString(s, RTL_TEXTENCODING_UTF8);
+}
 
 #endif // INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 

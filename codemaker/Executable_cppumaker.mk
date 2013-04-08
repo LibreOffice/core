@@ -32,6 +32,7 @@ $(eval $(call gb_Executable_use_libraries,cppumaker,\
     reg \
     sal \
     salhelper \
+    unoidl \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,cppumaker,\
@@ -43,6 +44,7 @@ $(eval $(call gb_Executable_add_exception_objects,cppumaker,\
     codemaker/source/cppumaker/cppumaker \
     codemaker/source/cppumaker/cppuoptions \
     codemaker/source/cppumaker/cpputype \
+    codemaker/source/cppumaker/dependencies \
     codemaker/source/cppumaker/dumputils \
     codemaker/source/cppumaker/includes \
 ))

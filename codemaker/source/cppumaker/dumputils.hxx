@@ -20,22 +20,23 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DUMPUTILS_HXX
 #define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DUMPUTILS_HXX
 
-#include <rtl/ustring.hxx>
+#include "sal/config.h"
 
+namespace rtl { class OUString; }
 class FileStream;
 
 namespace codemaker { namespace cppumaker {
 
 bool dumpNamespaceOpen(
-    FileStream & out, OString const & registryType, bool fullModuleType);
+    FileStream & out, rtl::OUString const & entityName, bool fullModuleType);
 
 bool dumpNamespaceClose(
-    FileStream & out, OString const & registryType, bool fullModuleType);
+    FileStream & out, rtl::OUString const & entityName, bool fullModuleType);
 
-void dumpTypeIdentifier(FileStream & out, OString const & registryType);
+void dumpTypeIdentifier(FileStream & out, rtl::OUString const & entityName);
 
 } }
 
-#endif // INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DUMPUTILS_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

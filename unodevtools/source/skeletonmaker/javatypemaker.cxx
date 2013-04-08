@@ -60,7 +60,7 @@ void printType(std::ostream & o,
         case codemaker::UnoType::SORT_STRING:
         case codemaker::UnoType::SORT_TYPE:
         case codemaker::UnoType::SORT_ANY:
-        case codemaker::UnoType::SORT_COMPLEX:
+        case codemaker::UnoType::SORT_COMPLEX: default: //TODO
             break;
         }
     }
@@ -140,7 +140,7 @@ bool printConstructorParameters(std::ostream & o,
             codemaker::convertString(reader.getSuperTypeName(0)));
         typereg::Reader superReader(manager->getTypeReader(super));
         if ( !superReader.isValid() ) {
-            throw CannotDumpException("Bad type library entity " + super);
+            throw CannotDumpException("Bad type library entity " + b2u(super));
         }
         previous = printConstructorParameters(o,
             options, manager, superReader, outerReader, arguments);
@@ -389,9 +389,7 @@ void printMethods(std::ostream & o,
                         reader.getSuperTypeName(i))));
             if ( !super.isValid() ) {
                 throw CannotDumpException(
-                    "Bad type library entity "
-                    + codemaker::convertString(
-                        reader.getSuperTypeName(i)));
+                    "Bad type library entity " + reader.getSuperTypeName(i));
             }
             printMethods(o, options, manager, super, generated, delegate,
                          indentation, defaultvalue, usepropertymixin);
@@ -632,7 +630,7 @@ void generateDocumentation(std::ostream & o,
     OString const & type, OString const & delegate)
 {
     if ( type.indexOf('/') >= 0 ) {
-        throw CannotDumpException("Illegal type name " + type);
+        throw CannotDumpException("Illegal type name " + b2u(type));
     }
     OString binType(type.replace('.', '/'));
     RTTypeClass typeClass;
@@ -660,7 +658,7 @@ void generateDocumentation(std::ostream & o,
         } else {
             typereg::Reader reader(manager->getTypeReader(name));
             if ( !reader.isValid() ) {
-                throw CannotDumpException("Bad type library entity " + name);
+                throw CannotDumpException("Bad type library entity " + b2u(name));
             }
             switch ( typeClass ) {
             case RT_TYPE_INTERFACE:
@@ -738,7 +736,7 @@ void generateDocumentation(std::ostream & o,
     } else {
         typereg::Reader reader(manager->getTypeReader(name));
         if ( !reader.isValid() ) {
-            throw CannotDumpException("Bad type library entity " + name);
+            throw CannotDumpException("Bad type library entity " + b2u(name));
         }
         switch ( typeClass ) {
         case RT_TYPE_INTERFACE:

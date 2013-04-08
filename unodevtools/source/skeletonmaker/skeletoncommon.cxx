@@ -32,7 +32,7 @@ using namespace ::codemaker::cpp;
 
 namespace skeletonmaker {
 
-void printLicenseHeader(std::ostream& o, OString const & filename)
+void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
 {
     sal_Int32 index = -1;
 #ifdef SAL_UNX
@@ -77,9 +77,8 @@ bool getOutputStream(ProgramOptions const & options,
 
     if( !file.isValid() )
     {
-        OString message("cannot open ");
-        message += targetSourceFileName + " for writing";
-        throw CannotDumpException(message);
+        throw CannotDumpException(
+            "cannot open " + b2u(targetSourceFileName) + " for writing");
     } else {
         tmpSourceFileName = file.getName();
     }
@@ -145,8 +144,7 @@ void checkAttributes(rtl::Reference< TypeManager > const & manager,
                                       reader.getSuperTypeName(i))));
         if ( !supertype.isValid() ) {
             throw CannotDumpException(
-                "Bad type library entity "
-                + codemaker::convertString(reader.getSuperTypeName(i)));
+                "Bad type library entity " + reader.getSuperTypeName(i));
         }
         checkAttributes(manager, supertype, attributes, propinterfaces);
     }
@@ -177,7 +175,7 @@ void checkType(rtl::Reference< TypeManager > const & manager,
     OString binType(type.replace('.', '/'));
     typereg::Reader reader(manager->getTypeReader(binType));
     if ( !reader.isValid() ) {
-        throw CannotDumpException("Bad type library entity " + binType);
+        throw CannotDumpException("Bad type library entity " + b2u(binType));
     }
 
     switch ( reader.getTypeClass() )
@@ -211,7 +209,7 @@ void checkType(rtl::Reference< TypeManager > const & manager,
                     if ( !supertype.isValid() ) {
                         throw CannotDumpException(
                             "Bad type library entity "
-                            + codemaker::convertString(reader.getSuperTypeName(0)));
+                            + reader.getSuperTypeName(0));
                     }
                 }
 
@@ -343,8 +341,7 @@ OString checkPropertyHelper(
                 if ( !supertype.isValid() ) {
                     throw CannotDumpException(
                         "Bad type library entity "
-                        + codemaker::convertString(
-                            reader.getSuperTypeName(0)));
+                        + reader.getSuperTypeName(0));
                 }
 
                 checkAttributes(manager, supertype, attributes, propinterfaces);
@@ -385,9 +382,7 @@ bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
                     reader.getSuperTypeName(i))));
         if ( !super.isValid() ) {
             throw CannotDumpException(
-                "Bad type library entity "
-                + codemaker::convertString(
-                    reader.getSuperTypeName(i)));
+                "Bad type library entity " + reader.getSuperTypeName(i));
         }
         if ( checkXComponentSupport(manager, super) )
             return true;
@@ -529,12 +524,10 @@ void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
         if ( !checkAddinType(
                  manager, sReturnType, bLastAny, bHasXPropertySet, true) )
         {
-            OStringBuffer msg("the return type of the calc add-in function '");
-            msg.append(sType);
-            msg.append(":");
-            msg.append(sMethod);
-            msg.append("' is invalid. Please check your IDL defintion.");
-            throw CannotDumpException(msg.makeStringAndClear());
+            throw CannotDumpException(
+                "the return type of the calc add-in function '" + b2u(sType)
+                + ":" + b2u(sMethod)
+                + "' is invalid. Please check your IDL defintion.");
         }
 
         bHasXPropertySet = false;
@@ -546,21 +539,20 @@ void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
                                 bLastAny, bHasXPropertySet, false) ||
                  bLastAny )
             {
-                OStringBuffer msg("the type of the ");
-                msg.append((sal_Int32)p+1);
-                msg.append(". parameter of the calc add-in function '");
-                msg.append(sType);
-                msg.append(":");
-                msg.append(sMethod);
-                msg.append("' is invalid.");
-                if ( bLastAny )
-                    msg.append(" The type 'sequence<any>' is allowed as last "
-                               "parameter only.");
-                if ( bHasXPropertySet )
-                    msg.append(" The type 'XPropertySet' is allowed only once.");
-
-                msg.append(" Please check your IDL definition.");
-                throw CannotDumpException(msg.makeStringAndClear());
+                throw CannotDumpException(
+                    "the type of the " + OUString::number(p + 1)
+                    + ". parameter of the calc add-in function '" + b2u(sType)
+                    + ":" + b2u(sMethod) + "' is invalid."
+                    + (bLastAny
+                       ? OUString(
+                           " The type 'sequence<any>' is allowed as last"
+                           " parameter only.")
+                       : OUString())
+                    + (bHasXPropertySet
+                       ? OUString(
+                           " The type 'XPropertySet' is allowed only once.")
+                       : OUString())
+                    + " Please check your IDL definition.");
             }
         }
     }
@@ -595,9 +587,7 @@ void generateFunctionParamterMap(std::ostream& o,
                     reader.getSuperTypeName(i))));
         if ( !super.isValid() ) {
             throw CannotDumpException(
-                "Bad type library entity "
-                + codemaker::convertString(
-                    reader.getSuperTypeName(i)));
+                "Bad type library entity " + reader.getSuperTypeName(i));
         }
         generateFunctionParamterMap(o, options, manager, super, generated, bFirst);
     }
@@ -639,7 +629,7 @@ void generateFunctionParamterMap(std::ostream& o,
         for ( sal_uInt16 p = 0; p < reader.getMethodParameterCount(m); ++p ) {
             if ( options.language == 2 ) {
                 o << "        fpm[" << p
-                  << "] = OUString(\""
+                  << "] = ::rtl::OUString(\""
                   << codemaker::convertString(reader.getMethodParameterName(m, p))
                   << "\");\n";
             }
@@ -658,7 +648,7 @@ void generateFunctionParamterMap(std::ostream& o,
         }
 
         if ( options.language == 2 ) {
-            o << "        m_functionMap[OUString(\""
+            o << "        m_functionMap[::rtl::OUString(\""
               << sMethod << "\")] = fpm;\n\n";
         }
         else {
@@ -679,9 +669,7 @@ void generateFunctionParameterMap(std::ostream& o,
         typereg::Reader reader(manager->getTypeReader((*iter).replace('.','/')));
         if (!reader.isValid()) {
             throw CannotDumpException(
-                "Bad type library entity "
-                + codemaker::convertString(
-                    reader.getTypeName()));
+                "Bad type library entity " + reader.getTypeName());
         }
 
         generateFunctionParamterMap(o, options, manager, reader, generated, bFirst);

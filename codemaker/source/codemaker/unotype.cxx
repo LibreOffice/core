@@ -46,10 +46,6 @@ codemaker::UnoType::Sort codemaker::UnoType::getSort(OString const & type)
         : SORT_COMPLEX;
 }
 
-bool codemaker::UnoType::isSequenceType(OString const & type) {
-    return !type.isEmpty() && type[0] == '[';
-}
-
 OString codemaker::UnoType::decompose(
     OString const & type, sal_Int32 * rank,
     std::vector< OString > * arguments)

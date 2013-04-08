@@ -24,6 +24,9 @@
 #include "osl/thread.h"
 #include "osl/process.h"
 
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'
@@ -90,32 +93,6 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     }
 
                     m_options["-O"] = OString(s);
-                    break;
-                case 'B':
-                    if (av[i][2] == '\0')
-                    {
-                        if (i < ac - 1 && av[i+1][0] != '-')
-                        {
-                            i++;
-                            s = av[i];
-                        }
-                        else
-                        {
-                            OString tmp("'-B', please check");
-                            if (i <= ac - 1)
-                            {
-                                tmp += " your input '" + OString(av[i+1]) + "'";
-                            }
-
-                            throw IllegalArgument(tmp);
-                        }
-                    }
-                    else
-                    {
-                        s = av[i] + 2;
-                    }
-
-                    m_options["-B"] = OString(s);
                     break;
                 case 'T':
                     if (av[i][2] == '\0')
@@ -337,8 +314,6 @@ OString CppuOptions::prepareHelp()
     help += "      [t1;...]   type is generated. If no '-T' option is specified,\n";
     help += "                 then output for all types is generated.\n";
     help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
-    help += "    -B<name>   = name specifies the base node. All types are searched under this\n";
-    help += "                 node. Default is the root '/' of the registry files.\n";
     help += "    -L         = UNO type functions are generated lightweight, that means only\n";
     help += "                 the name and typeclass are given and everything else is retrieved\n";
     help += "                 from the type library dynamically. The default is that UNO type\n";

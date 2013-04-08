@@ -43,6 +43,7 @@ $(eval $(call gb_Executable_use_libraries,uno-skeletonmaker,\
     salhelper \
     cppu \
     cppuhelper \
+    unoidl \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,uno-skeletonmaker,\

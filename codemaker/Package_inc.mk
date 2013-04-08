@@ -30,7 +30,6 @@ $(eval $(call gb_Package_add_file,codemaker_inc,inc/codemaker/codemaker.hxx,code
 $(eval $(call gb_Package_add_file,codemaker_inc,inc/codemaker/commoncpp.hxx,codemaker/commoncpp.hxx))
 $(eval $(call gb_Package_add_file,codemaker_inc,inc/codemaker/commonjava.hxx,codemaker/commonjava.hxx))
 $(eval $(call gb_Package_add_file,codemaker_inc,inc/codemaker/commonjava.hxx,codemaker/commonjava.hxx))
-$(eval $(call gb_Package_add_file,codemaker_inc,inc/codemaker/dependencies.hxx,codemaker/dependencies.hxx))
 $(eval $(call gb_Package_add_file,codemaker_inc,inc/codemaker/exceptiontree.hxx,codemaker/exceptiontree.hxx))
 $(eval $(call gb_Package_add_file,codemaker_inc,inc/codemaker/generatedtypeset.hxx,codemaker/generatedtypeset.hxx))
 $(eval $(call gb_Package_add_file,codemaker_inc,inc/codemaker/global.hxx,codemaker/global.hxx))

@@ -34,10 +34,10 @@ $(eval $(call gb_StaticLibrary_use_packages,codemaker,\
 	registry_odk_headers \
 	sal_generated \
 	sal_odk_headers \
+	unoidl_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,codemaker,\
-	codemaker/source/codemaker/dependencies \
 	codemaker/source/codemaker/exceptiontree \
 	codemaker/source/codemaker/global \
 	codemaker/source/codemaker/options \

@@ -39,7 +39,7 @@
 
 namespace {
 
-void checkNoTypeArguments(std::vector< OString > const & arguments) {
+void checkNoTypeArguments(std::vector< rtl::OString > const & arguments) {
     if (!arguments.empty()) {
         throw CannotDumpException("Bad type information");
             //TODO
@@ -50,8 +50,8 @@ void checkNoTypeArguments(std::vector< OString > const & arguments) {
 
 namespace codemaker {
 
-OString convertString(OUString const & string) {
-    OString s;
+rtl::OString convertString(rtl::OUString const & string) {
+    rtl::OString s;
     if (!string.convertToString(
             &s, RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
@@ -63,18 +63,18 @@ OString convertString(OUString const & string) {
 }
 
 codemaker::UnoType::Sort decomposeAndResolve(
-    rtl::Reference< TypeManager > const & manager, OString const & type,
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
-    RTTypeClass * typeClass, OString * name, sal_Int32 * rank,
-    std::vector< OString > * arguments)
+    RTTypeClass * typeClass, rtl::OString * name, sal_Int32 * rank,
+    std::vector< rtl::OString > * arguments)
 {
     OSL_ASSERT(typeClass != 0 && name != 0 && rank != 0 && arguments != 0);
     *rank = 0;
-    for (OString t(type);;) {
+    for (rtl::OString t(type);;) {
         sal_Int32 n = 0;
         *name = codemaker::UnoType::decompose(t, &n, arguments);
         if (n > SAL_MAX_INT32 - *rank) {
-            throw CannotDumpException("Bad type information: " + type);
+            throw CannotDumpException("Bad type information: " + b2u(type));
             //TODO
         }
         *rank += n;
@@ -86,7 +86,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
         switch (sort) {
         case codemaker::UnoType::SORT_VOID:
             if (!allowVoid) {
-                throw CannotDumpException("Bad type information: " + type);
+                throw CannotDumpException("Bad type information: " + b2u(type));
                 //TODO
             }
         default:
@@ -109,7 +109,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                         || (static_cast< sal_uInt16 >(arguments->size())
                             != reader.getReferenceCount())))
                 {
-                    throw CannotDumpException("Bad type information: " + type);
+                    throw CannotDumpException("Bad type information: " + b2u(type));
                     //TODO
                 }
                 return sort;
@@ -120,7 +120,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
             case RT_TYPE_SINGLETON:
             case RT_TYPE_CONSTANTS:
                 if (!allowExtraEntities) {
-                    throw CannotDumpException("Bad type information: " + type);
+                    throw CannotDumpException("Bad type information: " + b2u(type));
                     //TODO
                 }
                 checkNoTypeArguments(*arguments);
@@ -142,7 +142,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                     }
                 }
             default:
-                throw CannotDumpException("Bad type information: " + type);
+                throw CannotDumpException("Bad type information: " + b2u(type));
                 //TODO
             }
         }

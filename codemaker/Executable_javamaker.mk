@@ -32,6 +32,7 @@ $(eval $(call gb_Executable_use_libraries,javamaker,\
     reg \
     sal \
     salhelper \
+    unoidl \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,javamaker,\

@@ -33,11 +33,11 @@ namespace codemaker { namespace cpp {
     Use common namespace aliases instead of fully specified (nested)
     namespace. currently replaces com::sun::star with css.
  */
-OString scopedCppName(OString const & type, bool ns_alias=true);
+rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias=true);
 
-OString translateUnoToCppType(
+rtl::OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    OString const & nucleus, bool shortname);
+    rtl::OString const & nucleus, bool shortname);
 
 enum IdentifierTranslationMode {
     ITM_GLOBAL,
@@ -45,10 +45,10 @@ enum IdentifierTranslationMode {
     ITM_KEYWORDSONLY
 };
 
-OString translateUnoToCppIdentifier(
-    OString const & identifier, OString const & prefix,
+rtl::OString translateUnoToCppIdentifier(
+    rtl::OString const & identifier, rtl::OString const & prefix,
     IdentifierTranslationMode transmode = ITM_GLOBAL,
-    OString const * forbidden = 0);
+    rtl::OString const * forbidden = 0);
 
 } }
 

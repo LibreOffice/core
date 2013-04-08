@@ -20,9 +20,10 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
 #define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
 
-#include "codemaker/dependencies.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
+
+#include "dependencies.hxx"
 
 class FileStream;
 class TypeManager;
@@ -33,11 +34,11 @@ class Includes {
 public:
     Includes(
         rtl::Reference< TypeManager > const & manager,
-        codemaker::Dependencies const & dependencies, bool hpp);
+        Dependencies const & dependencies, bool hpp);
 
     ~Includes();
 
-    void add(OString const & registryType);
+    void add(OString const & entityName);
     void addCassert() { m_includeCassert = true; }
     void addAny() { m_includeAny = true; }
     void addReference() { m_includeReference = true; }
@@ -59,20 +60,19 @@ public:
     void addTypelibTypeclassH() { m_includeTypelibTypeclassH = true; }
     void addTypelibTypedescriptionH()
         { m_includeTypelibTypedescriptionH = true; }
-    void dump(FileStream & out, OString const * companionHdl);
+    void dump(FileStream & out, OUString const * companionHdl);
 
     static void dumpInclude(
-        FileStream & out, OString const & registryType, bool hpp,
-        OString const & suffix = OString());
+        FileStream & out, OString const & entityName, bool hpp);
 
 private:
     Includes(Includes &); // not implemented
     void operator =(Includes); // not implemented;
 
-    bool isInterfaceType(OString const & registryType) const;
+    bool isInterfaceType(OString const & entityName) const;
 
     rtl::Reference< TypeManager > m_manager;
-    codemaker::Dependencies::Map m_map;
+    Dependencies::Map m_map;
     bool m_hpp;
     bool m_includeCassert;
     bool m_includeAny;

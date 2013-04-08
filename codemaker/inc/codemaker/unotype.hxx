@@ -21,17 +21,16 @@
 #define INCLUDED_CODEMAKER_UNOTYPE_HXX
 
 #include "sal/types.h"
-#include <rtl/ustring.hxx>
 
 #include <vector>
+
+namespace rtl { class OString; }
 
 namespace codemaker {
 
 namespace UnoType {
     /**
-       An enumeration of all the sorts of UNO types.
-
-       All complex UNO types are subsumed under SORT_COMPLEX.
+       An enumeration of all the sorts of relevant UNOIDL entities.
      */
     enum Sort {
         SORT_VOID,
@@ -49,10 +48,26 @@ namespace UnoType {
         SORT_STRING,
         SORT_TYPE,
         SORT_ANY,
-        SORT_COMPLEX
+
+        SORT_SEQUENCE_TYPE,
+        SORT_MODULE,
+        SORT_ENUM_TYPE,
+        SORT_PLAIN_STRUCT_TYPE,
+        SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE,
+        SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE,
+        SORT_EXCEPTION_TYPE,
+        SORT_INTERFACE_TYPE,
+        SORT_TYPEDEF,
+        SORT_CONSTANT_GROUP,
+        SORT_SINGLE_INTERFACE_BASED_SERVICE,
+        SORT_ACCUMULATION_BASED_SERVICE,
+        SORT_INTERFACE_BASED_SINGLETON,
+        SORT_SERVICE_BASED_SINGLETON
+
+        ,SORT_COMPLEX=SORT_SEQUENCE_TYPE //TODO
     };
 
-    /**
+    /** TODO
        Maps from a binary UNO type name or UNO type registry name to its type
        sort.
 
@@ -63,20 +78,9 @@ namespace UnoType {
        is a UNO type registry name that denotes something other than a UNO type,
        SORT_COMPLEX is returned)
      */
-    Sort getSort(OString const & type);
+    Sort getSort(rtl::OString const & type);
 
-    /**
-       Determines whether a UNO type name or UNO type registry name denotes a
-       UNO sequence type.
-
-       @param type a binary UNO type name or UNO type registry name
-
-       @return true iff the given type denotes a UNO sequence type; the
-       detection is purely syntactical
-     */
-    bool isSequenceType(OString const & type);
-
-    /**
+    /** TODO
        Decomposes a UNO type name or UNO type registry name.
 
        @param type a binary UNO type name or UNO type registry name
@@ -91,9 +95,9 @@ namespace UnoType {
 
        @return the base part of the given type
      */
-    OString decompose(
-        OString const & type, sal_Int32 * rank = 0,
-        std::vector< OString > * arguments = 0);
+    rtl::OString decompose(
+        rtl::OString const & type, sal_Int32 * rank = 0,
+        std::vector< rtl::OString > * arguments = 0);
 }
 
 }

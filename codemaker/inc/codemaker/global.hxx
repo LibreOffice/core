@@ -32,7 +32,7 @@
 
 struct EqualString
 {
-    sal_Bool operator()(const OString& str1, const OString& str2) const
+    sal_Bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
     {
         return (str1 == str2);
     }
@@ -40,7 +40,7 @@ struct EqualString
 
 struct HashString
 {
-    size_t operator()(const OString& str) const
+    size_t operator()(const ::rtl::OString& str) const
     {
         return str.hashCode();
     }
@@ -48,15 +48,15 @@ struct HashString
 
 struct LessString
 {
-    sal_Bool operator()(const OString& str1, const OString& str2) const
+    sal_Bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
     {
         return (str1 < str2);
     }
 };
 
-typedef ::std::list< OString >               StringList;
-typedef ::std::vector< OString >             StringVector;
-typedef ::std::set< OString, LessString >    StringSet;
+typedef ::std::list< ::rtl::OString >               StringList;
+typedef ::std::vector< ::rtl::OString >             StringVector;
+typedef ::std::set< ::rtl::OString, LessString >    StringSet;
 
 //*************************************************************************
 // FileStream
@@ -77,58 +77,58 @@ public:
 
     sal_Bool isValid();
 
-    void createTempFile(const OString& sPath);
+    void createTempFile(const ::rtl::OString& sPath);
     void close();
 
-    OString  getName() { return m_name; }
+    ::rtl::OString  getName() { return m_name; }
 
     bool write(void const * buffer, sal_uInt64 size);
 
     // friend functions
     friend FileStream &operator<<(FileStream& o, sal_uInt32 i);
     friend FileStream &operator<<(FileStream& o, char const * s);
-    friend FileStream &operator<<(FileStream& o, OString* s);
-    friend FileStream &operator<<(FileStream& o, const OString& s);
-    friend FileStream &operator<<(FileStream& o, OStringBuffer* s);
-    friend FileStream &operator<<(FileStream& o, const OStringBuffer& s);
+    friend FileStream &operator<<(FileStream& o, ::rtl::OString* s);
+    friend FileStream &operator<<(FileStream& o, const ::rtl::OString& s);
+    friend FileStream &operator<<(FileStream& o, ::rtl::OStringBuffer* s);
+    friend FileStream &operator<<(FileStream& o, const ::rtl::OStringBuffer& s);
+    friend FileStream & operator <<(FileStream & out, rtl::OUString const & s);
 
 private:
     oslFileHandle m_file;
-    OString  m_name;
+    ::rtl::OString  m_name;
 };
 
 
 //*************************************************************************
 // Helper functions
 //*************************************************************************
-OString getTempDir(const OString& sFileName);
+::rtl::OString getTempDir(const ::rtl::OString& sFileName);
 
-OString createFileNameFromType(const OString& destination,
-                                      const OString type,
-                                      const OString postfix,
+::rtl::OString createFileNameFromType(const ::rtl::OString& destination,
+                                      const ::rtl::OString type,
+                                      const ::rtl::OString postfix,
                                       sal_Bool bLowerCase=sal_False,
-                                      const OString prefix="");
+                                      const ::rtl::OString prefix="");
 
-sal_Bool fileExists(const OString& fileName);
-sal_Bool makeValidTypeFile(const OString& targetFileName,
-                           const OString& tmpFileName,
+sal_Bool fileExists(const ::rtl::OString& fileName);
+sal_Bool makeValidTypeFile(const ::rtl::OString& targetFileName,
+                           const ::rtl::OString& tmpFileName,
                            sal_Bool bFileCheck);
-sal_Bool removeTypeFile(const OString& fileName);
+sal_Bool removeTypeFile(const ::rtl::OString& fileName);
 
-OUString convertToFileUrl(const OString& fileName);
+::rtl::OUString convertToFileUrl(const ::rtl::OString& fileName);
 
-//*************************************************************************
-// Global exception to signal problems when a type cannot be dumped
-//*************************************************************************
-class CannotDumpException
-{
+class CannotDumpException {
 public:
-    CannotDumpException(const OString& msg)
-        : m_message(msg) {}
+    CannotDumpException(OUString const & message): message_(message) {}
 
-    OString  m_message;
+    virtual ~CannotDumpException() throw ();
+
+    OUString getMessage() const { return message_; }
+
+private:
+    OUString message_;
 };
-
 
 #endif // INCLUDED_CODEMAKER_GLOBAL_HXX
 

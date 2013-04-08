@@ -55,53 +55,53 @@ public:
 
         void instrAastore();
         void instrAconstNull();
-        void instrAnewarray(OString const & type);
+        void instrAnewarray(rtl::OString const & type);
         void instrAreturn();
         void instrAthrow();
-        void instrCheckcast(OString const & type);
+        void instrCheckcast(rtl::OString const & type);
         void instrDup();
 
         void instrGetstatic(
-            OString const & type, OString const & name,
-            OString const & descriptor);
+            rtl::OString const & type, rtl::OString const & name,
+            rtl::OString const & descriptor);
 
         Branch instrIfAcmpne();
         Branch instrIfeq();
         Branch instrIfnull();
 
-        void instrInstanceof(OString const & type);
+        void instrInstanceof(rtl::OString const & type);
 
         void instrInvokeinterface(
-            OString const & type, OString const & name,
-            OString const & descriptor, sal_uInt8 args);
+            rtl::OString const & type, rtl::OString const & name,
+            rtl::OString const & descriptor, sal_uInt8 args);
 
         void instrInvokespecial(
-            OString const & type, OString const & name,
-            OString const & descriptor);
+            rtl::OString const & type, rtl::OString const & name,
+            rtl::OString const & descriptor);
 
         void instrInvokestatic(
-            OString const & type, OString const & name,
-            OString const & descriptor);
+            rtl::OString const & type, rtl::OString const & name,
+            rtl::OString const & descriptor);
 
         void instrInvokevirtual(
-            OString const & type, OString const & name,
-            OString const & descriptor);
+            rtl::OString const & type, rtl::OString const & name,
+            rtl::OString const & descriptor);
 
         void instrLookupswitch(
             Code const * defaultBlock,
             std::list< std::pair< sal_Int32, Code * > > const & blocks);
 
-        void instrNew(OString const & type);
+        void instrNew(rtl::OString const & type);
         void instrNewarray(codemaker::UnoType::Sort sort);
         void instrPop();
 
         void instrPutfield(
-            OString const & type, OString const & name,
-            OString const & descriptor);
+            rtl::OString const & type, rtl::OString const & name,
+            rtl::OString const & descriptor);
 
         void instrPutstatic(
-            OString const & type, OString const & name,
-            OString const & descriptor);
+            rtl::OString const & type, rtl::OString const & name,
+            rtl::OString const & descriptor);
 
         void instrReturn();
         void instrSwap();
@@ -111,7 +111,7 @@ public:
             std::list< Code * > const & blocks);
 
         void loadIntegerConstant(sal_Int32 value);
-        void loadStringConstant(OString const & value);
+        void loadStringConstant(rtl::OString const & value);
         void loadLocalInteger(sal_uInt16 index);
         void loadLocalLong(sal_uInt16 index);
         void loadLocalFloat(sal_uInt16 index);
@@ -122,7 +122,7 @@ public:
 
         void addException(
             Position start, Position end, Position handler,
-            OString const & type);
+            rtl::OString const & type);
 
         void setMaxStackAndLocals(sal_uInt16 maxStack, sal_uInt16 maxLocals)
         { m_maxStack = maxStack; m_maxLocals = maxLocals; }
@@ -151,8 +151,8 @@ public:
     };
 
     ClassFile(
-        AccessFlags accessFlags, OString const & thisClass,
-        OString const & superClass, OString const & signature);
+        AccessFlags accessFlags, rtl::OString const & thisClass,
+        rtl::OString const & superClass, rtl::OString const & signature);
 
     ~ClassFile();
 
@@ -163,53 +163,53 @@ public:
     sal_uInt16 addLongInfo(sal_Int64 value);
     sal_uInt16 addDoubleInfo(double value);
 
-    void addInterface(OString const & interface);
+    void addInterface(rtl::OString const & interface);
 
     void addField(
-        AccessFlags accessFlags, OString const & name,
-        OString const & descriptor, sal_uInt16 constantValueIndex,
-        OString const & signature);
+        AccessFlags accessFlags, rtl::OString const & name,
+        rtl::OString const & descriptor, sal_uInt16 constantValueIndex,
+        rtl::OString const & signature);
 
     void addMethod(
-        AccessFlags accessFlags, OString const & name,
-        OString const & descriptor, Code const * code,
-        std::vector< OString > const & exceptions,
-        OString const & signature);
+        AccessFlags accessFlags, rtl::OString const & name,
+        rtl::OString const & descriptor, Code const * code,
+        std::vector< rtl::OString > const & exceptions,
+        rtl::OString const & signature);
 
     void write(FileStream & file) const; //TODO
 
 private:
-    typedef std::map< OString, sal_uInt16 > Map;
+    typedef std::map< rtl::OString, sal_uInt16 > Map;
 
     ClassFile(ClassFile &); // not implemented
     void operator =(ClassFile); // not implemented
 
     sal_uInt16 nextConstantPoolIndex(sal_uInt16 width);
-    sal_uInt16 addUtf8Info(OString const & value);
-    sal_uInt16 addClassInfo(OString const & type);
-    sal_uInt16 addStringInfo(OString const & value);
+    sal_uInt16 addUtf8Info(rtl::OString const & value);
+    sal_uInt16 addClassInfo(rtl::OString const & type);
+    sal_uInt16 addStringInfo(rtl::OString const & value);
 
     sal_uInt16 addFieldrefInfo(
-        OString const & type, OString const & name,
-        OString const & descriptor);
+        rtl::OString const & type, rtl::OString const & name,
+        rtl::OString const & descriptor);
 
     sal_uInt16 addMethodrefInfo(
-        OString const & type, OString const & name,
-        OString const & descriptor);
+        rtl::OString const & type, rtl::OString const & name,
+        rtl::OString const & descriptor);
 
     sal_uInt16 addInterfaceMethodrefInfo(
-        OString const & type, OString const & name,
-        OString const & descriptor);
+        rtl::OString const & type, rtl::OString const & name,
+        rtl::OString const & descriptor);
 
     sal_uInt16 addNameAndTypeInfo(
-        OString const & name, OString const & descriptor);
+        rtl::OString const & name, rtl::OString const & descriptor);
 
     void appendSignatureAttribute(
-        std::vector< unsigned char > & stream, OString const & signature);
+        std::vector< unsigned char > & stream, rtl::OString const & signature);
 
     sal_uInt16 m_constantPoolCount;
     std::vector< unsigned char > m_constantPool;
-    std::map< OString, sal_uInt16 > m_utf8Infos;
+    std::map< rtl::OString, sal_uInt16 > m_utf8Infos;
     std::map< sal_Int32, sal_uInt16 > m_integerInfos;
     std::map< sal_Int64, sal_uInt16 > m_longInfos;
     std::map< float, sal_uInt16 > m_floatInfos;

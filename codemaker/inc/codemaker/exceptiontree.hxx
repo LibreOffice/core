@@ -37,7 +37,7 @@ struct ExceptionTreeNode {
     typedef std::vector< ExceptionTreeNode * > Children;
 
     // Internally used by ExceptionTree:
-    ExceptionTreeNode(OString const & theName):
+    ExceptionTreeNode(rtl::OString const & theName):
         name(theName), present(false) {}
 
     // Internally used by ExceptionTree:
@@ -47,9 +47,9 @@ struct ExceptionTreeNode {
     void setPresent() { present = true; clearChildren(); }
 
     // Internally used by ExceptionTree:
-    ExceptionTreeNode * add(OString const & theName);
+    ExceptionTreeNode * add(rtl::OString const & theName);
 
-    OString name;
+    rtl::OString name;
     bool present;
     Children children;
 
@@ -69,15 +69,15 @@ private:
    subtypes that are hidden by supertypes are pruned from the hierarchy).  The
    exception com.sun.star.uno.RuntimeException and its subtypes are pruned
    completely from the hierarchy.  Each node of the hierarchy is represented by
-   an instance of ExceptionTreeNode, where name gives the slashified name of
-   the UNO exception type, present is true iff the given exception type is a
-   member of the set S, and children contains all the relevant direct subtypes
-   of the given exception type, in no particular order (for nodes other than the
-   root node it holds that children is non-empty iff present is false).
+   an instance of ExceptionTreeNode, where name gives the name of the UNO
+   exception type, present is true iff the given exception type is a member of
+   the set S, and children contains all the relevant direct subtypes of the
+   given exception type, in no particular order (for nodes other than the root
+   node it holds that children is non-empty iff present is false).
  */
 class ExceptionTree {
 public:
-    ExceptionTree(): m_root("com/sun/star/uno/Exception") {}
+    ExceptionTree(): m_root("com.sun.star.uno.Exception") {}
 
     ~ExceptionTree() {}
 
@@ -86,17 +86,16 @@ public:
 
        This function can be called more than once for the same exception name.
 
-       @param name the name of a UNO exception type, in slashified form; it is
-       an error if the given name does not represent a UNO exception type
+       @param name the name of a UNO exception type; it is an error if the given
+       name does not represent a UNO exception type
 
        @param manager a type manager, used to resolve type names; it is an error
        if different calls to this member function use different, incompatible
        type managers
      */
     void add(
-        OString const & name,
-        rtl::Reference< TypeManager > const & manager)
-        throw( CannotDumpException );
+        rtl::OString const & name,
+        rtl::Reference< TypeManager > const & manager);
 
     /**
        Gives access to the resultant exception hierarchy.

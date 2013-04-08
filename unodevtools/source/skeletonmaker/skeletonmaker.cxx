@@ -330,7 +330,7 @@ SAL_IMPLEMENT_MAIN()
 
     } catch (const CannotDumpException & e) {
         std::cout.flush();
-        std::cerr << "\nError: " << e.m_message << std::endl;
+        std::cerr << "\nError: " << e.getMessage() << std::endl;
     } catch(const Exception& e) {
         std::cout.flush();
         std::cerr

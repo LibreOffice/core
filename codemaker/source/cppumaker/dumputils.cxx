@@ -30,52 +30,48 @@
 namespace codemaker { namespace cppumaker {
 
 bool dumpNamespaceOpen(
-    FileStream & out, OString const & registryType, bool fullModuleType)
+    FileStream & out, rtl::OUString const & entityName, bool fullModuleType)
 {
     bool output = false;
-    if (registryType != "/") {
-        bool first = true;
-        for (sal_Int32 i = 0; i >= 0;) {
-            OString id(registryType.getToken(0, '/', i));
-            if (fullModuleType || i >= 0) {
-                if (!first) {
-                    out << " ";
-                }
-                out << "namespace " << id << " {";
-                first = false;
-                output = true;
+    bool first = true;
+    for (sal_Int32 i = 0; i >= 0;) {
+        rtl::OUString id(entityName.getToken(0, '.', i));
+        if (fullModuleType || i >= 0) {
+            if (!first) {
+                out << " ";
             }
+            out << "namespace " << id << " {";
+            first = false;
+            output = true;
         }
     }
     return output;
 }
 
 bool dumpNamespaceClose(
-    FileStream & out, OString const & registryType, bool fullModuleType)
+    FileStream & out, rtl::OUString const & entityName, bool fullModuleType)
 {
     bool output = false;
-    if (registryType != "/") {
-        bool first = true;
-        for (sal_Int32 i = 0; i >= 0;) {
-            i = registryType.indexOf('/', i);
-            if (i >= 0) {
-                ++i;
+    bool first = true;
+    for (sal_Int32 i = 0; i >= 0;) {
+        i = entityName.indexOf('.', i);
+        if (i >= 0) {
+            ++i;
+        }
+        if (fullModuleType || i >= 0) {
+            if (!first) {
+                out << " ";
             }
-            if (fullModuleType || i >= 0) {
-                if (!first) {
-                    out << " ";
-                }
-                out << "}";
-                first = false;
-                output = true;
-            }
+            out << "}";
+            first = false;
+            output = true;
         }
     }
     return output;
 }
 
-void dumpTypeIdentifier(FileStream & out, OString const & registryType) {
-    out << registryType.copy(registryType.lastIndexOf('/') + 1);
+void dumpTypeIdentifier(FileStream & out, rtl::OUString const & entityName) {
+    out << entityName.copy(entityName.lastIndexOf('.') + 1);
 }
 
 } }
