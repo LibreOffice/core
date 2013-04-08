@@ -1490,7 +1490,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
                     aTemplateList = aTemplateList + "\n" + (*pIter)->maTitle;
             }
 
-            OUString aDst = maView->GetItemText(nItemId);
+            OUString aDst = maView->getRegionItemName(nItemId);
             OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",aDst);
             ErrorBox(this, WB_OK,aMsg.replaceFirst( "$2",aTemplateList)).Execute();
@@ -1546,7 +1546,7 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
         {
             OUString aMsg(SfxResId(STR_MSG_ERROR_REMOTE_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",mpOnlineView->getCurRegionName());
-            aMsg = aMsg.replaceFirst("$2",maView->GetItemText(nItemId));
+            aMsg = aMsg.replaceFirst("$2",maView->getRegionItemName(nItemId));
             ErrorBox(this,WB_OK,aMsg.replaceFirst("$1",aTemplateList)).Execute();
         }
     }
@@ -1600,7 +1600,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
         if (!aTemplateList.isEmpty())
         {
-            OUString aDst = maView->GetItemText(nItemId);
+            OUString aDst = maView->getRegionItemName(nItemId);
             OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",aDst);
             ErrorBox(this, WB_OK,aMsg.replaceFirst( "$2",aTemplateList)).Execute();
