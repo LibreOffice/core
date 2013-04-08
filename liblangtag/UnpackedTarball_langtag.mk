@@ -18,7 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
     # <https://github.com/tagoh/liblangtag/pull/8> "Use xmlDocCopyNode to merge
     #  nodes into different docs"
 
-ifeq ($(OS),MACOSX)
+ifeq ($(filter-out MACOSX AIX,$(OS)),)
 $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	liblangtag/liblangtag-0.4.0-mac.patch \
 	liblangtag/liblangtag-0.4.0-configure-atomic-cflag-pollution.patch \
