@@ -34,23 +34,26 @@ class CoreTextLayout : public SalLayout
 {
 public:
     CoreTextLayout( QuartzSalGraphics* graphics, CoreTextStyleInfo* style);
-    virtual         ~CoreTextLayout();
+    ~CoreTextLayout();
 
-    virtual void AdjustLayout( ImplLayoutArgs& );
-    virtual void DrawText( SalGraphics& ) const;
-    virtual void DropGlyph( int nStart );
-    virtual long FillDXArray( sal_Int32* pDXArray ) const;
-    virtual bool GetBoundRect( SalGraphics&, Rectangle& ) const;
-    virtual void GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
-    virtual bool GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const;
-    virtual int GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                               sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;
-    virtual int GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
-    virtual long GetTextWidth() const;
-    virtual void InitFont() const;
-    virtual bool LayoutText( ImplLayoutArgs& );
-    virtual void MoveGlyph( int nStart, long nNewXPos );
-    virtual void Simplify( bool bIsBase );
+    // Overrides in same order as in base class, without "virtual" and
+    // with explicit SAL_OVERRIDE. Just a question of taste;)
+    bool LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
+    void AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
+    void DrawText( SalGraphics& ) const SAL_OVERRIDE;
+
+    int GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const SAL_OVERRIDE;
+    long FillDXArray( sal_Int32* pDXArray ) const SAL_OVERRIDE;
+    long GetTextWidth() const SAL_OVERRIDE;
+    void GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
+
+    int GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
+                       sal_Int32* pGlyphAdvances, int* pCharIndexes ) const SAL_OVERRIDE;
+    bool GetBoundRect( SalGraphics&, Rectangle& ) const SAL_OVERRIDE;
+
+    void MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE;
+    void DropGlyph( int nStart ) SAL_OVERRIDE;
+    void Simplify( bool bIsBase ) SAL_OVERRIDE;
 
 private:
     void GetMeasurements();
@@ -138,9 +141,10 @@ void CoreTextLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 #ifndef NDEBUG
     assert( mnSavedMinCharPos == rArgs.mnMinCharPos );
     assert( mnSavedEndCharPos == rArgs.mnEndCharPos );
-    assert( memcmp( &mpSavedStr[mnSavedMinCharPos],
+    assert( mnCharCount == (mnSavedEndCharPos - mnSavedMinCharPos) );
+    assert( memcmp( &mpSavedStr[0],
                     &rArgs.mpStr[mnSavedMinCharPos],
-                    (mnSavedEndCharPos - mnSavedMinCharPos) * sizeof( sal_Unicode ) ) == 0 );
+                    mnCharCount * sizeof( sal_Unicode ) ) == 0 );
 #endif
 
     SalLayout::AdjustLayout( rArgs );
@@ -351,11 +355,6 @@ void CoreTextLayout::GetCaretPositions( int max_index, sal_Int32* caret_position
     }
 }
 
-bool CoreTextLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const
-{
-    return false;
-}
-
 int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int& nStart,
                                    sal_Int32* pGlyphAdvances, int* pCharIndexes ) const
 {
@@ -486,12 +485,6 @@ long CoreTextLayout::GetTextWidth() const
     SAL_INFO( "vcl.coretext.layout", "GetTextWidth(" << this << ") returning " << w );
 
     return w;
-}
-
-// not needed. CoreText manage fallback directly
-void CoreTextLayout::InitFont() const
-{
-    SAL_INFO( "vcl.coretext.layout", "InitFont(" << this << ")" );
 }
 
 bool CoreTextLayout::LayoutText( ImplLayoutArgs& rArgs)
