@@ -3029,7 +3029,8 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     if(!basegfx::fTools::equalZero(fShearX))
     {
         GeoStat aGeoStat;
-        aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
+        // #i121932# do *not* forget to invert shearX(!)
+        aGeoStat.nShearWink = FRound((atan(-fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, sal_False);
     }
@@ -3108,11 +3109,11 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
             }
             // mirror polygon and move it a bit
             Polygon aPol0(aPol);
-            aPol[0]=aPol0[3]; // This was WRONG for vertical (!)
-            aPol[1]=aPol0[2];
-            aPol[2]=aPol0[1];
-            aPol[3]=aPol0[0];
-            aPol[4]=aPol0[3];
+            aPol[0]=aPol0[1]; // This was WRONG for vertical (!)
+            aPol[1]=aPol0[0]; // #i121932# Despite my own coment above
+            aPol[2]=aPol0[3]; // it was *not* wrong even when the reordering
+            aPol[3]=aPol0[2]; // *seems* to be specific for X-Mirrorings. Oh
+            aPol[4]=aPol0[1]; // will I be happy when this old stuff is |gone| with aw080 (!)
             Poly2Rect(aPol,aRectangle,aNewGeo);
         }
     }
