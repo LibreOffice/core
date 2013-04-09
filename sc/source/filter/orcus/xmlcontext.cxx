@@ -14,6 +14,7 @@
 
 #include "svtools/treelistbox.hxx"
 #include "svtools/treelistentry.hxx"
+#include "ucbhelper/content.hxx"
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/xml_structure_tree.hpp>
@@ -21,7 +22,14 @@
 #include <orcus/orcus_xml.hpp>
 #include <orcus/global.hpp>
 
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+
 #include <string>
+#include <sstream>
+
+#define BUFFER_SIZE 4096
+
+using namespace com::sun::star;
 
 namespace {
 
@@ -143,6 +151,26 @@ public:
     }
 };
 
+void loadContentFromURL(const OUString& rURL, std::string& rStrm)
+{
+    ucbhelper::Content aContent(
+        rURL, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
+    uno::Reference<io::XInputStream> xStrm = aContent.openStream();
+
+    std::ostringstream aStrmBuf;
+    uno::Sequence<sal_Int8> aBytes;
+    size_t nBytesRead = 0;
+    do
+    {
+        nBytesRead = xStrm->readBytes(aBytes, BUFFER_SIZE);
+        const sal_Int8* p = aBytes.getConstArray();
+        aStrmBuf << std::string(p, p + nBytesRead);
+    }
+    while (nBytesRead == BUFFER_SIZE);
+
+    rStrm = aStrmBuf.str();
+}
+
 }
 
 ScOrcusXMLContextImpl::ScOrcusXMLContextImpl(ScDocument& rDoc, const OUString& rPath) :
@@ -154,12 +182,8 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
 {
     rParam.maUserDataStore.clear();
 
-    OString aSysPath = ScOrcusFiltersImpl::toSystemPath(maPath);
-    const char* path = aSysPath.getStr();
-
-    // TODO: Use our own stream loading call instead of one from orcus.
     std::string aStrm;
-//  orcus::load_file_content(path, aStrm);
+    loadContentFromURL(maPath, aStrm);
 
     if (aStrm.empty())
         return false;

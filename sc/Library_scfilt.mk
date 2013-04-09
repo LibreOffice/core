@@ -61,6 +61,7 @@ $(eval $(call gb_Library_use_libraries,scfilt,\
 	svxcore \
 	tk \
 	tl \
+	ucbhelper \
 	utl \
 	vcl \
 	i18nlangtag \
