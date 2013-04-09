@@ -279,7 +279,7 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
         {
             if ( pFrame->ImplGetGraphics() )
             {
-                // MT: Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler.
+                // Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler
                 OutputDevice *pDevice = (OutputDevice*)pFrame;
                 pDevice->mpGraphics->ClearDevFontCache();
                 pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mpFontList);
@@ -483,7 +483,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
         case DEFAULTFONT_CJK_SPREADSHEET:
         case DEFAULTFONT_CJK_HEADING:
         case DEFAULTFONT_CJK_DISPLAY:
-            aFont.SetFamily( FAMILY_SYSTEM );   // don't care, but don't use font subst config later...
+            aFont.SetFamily( FAMILY_SYSTEM ); // don't care, but don't use font subst config later...
             break;
 
         case DEFAULTFONT_CTL_TEXT:
@@ -491,7 +491,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
         case DEFAULTFONT_CTL_SPREADSHEET:
         case DEFAULTFONT_CTL_HEADING:
         case DEFAULTFONT_CTL_DISPLAY:
-            aFont.SetFamily( FAMILY_SYSTEM );   // don't care, but don't use font subst config later...
+            aFont.SetFamily( FAMILY_SYSTEM ); // don't care, but don't use font subst config later...
             break;
     }
 
@@ -1026,7 +1026,7 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
         // TODO: is it cheaper to calc matching attributes now or on demand?
         // calc matching attributes if other entries are already initialized
 
-        // MT: Perform05: Do lazy, quite expensive, not needed in start-up!
+        // Do lazy, quite expensive, not needed in start-up!
         // const FontSubstConfiguration& rFontSubst = *FontSubstConfiguration::get();
         // InitMatchData( rFontSubst, maSearchName );
         // mbMatchData=true; // Somewhere else???
@@ -1101,7 +1101,7 @@ PhysicalFontFace* ImplDevFontListData::FindBestFontFace( const FontSelectPattern
     &&   rSearchName.Equals( maSearchName, 0, maSearchName.Len() ) )
         pTargetStyleName = rSearchName.GetBuffer() + maSearchName.Len() + 1;
 
-    // linear search, TODO: improve?
+    // TODO: linear search improve!
     PhysicalFontFace* pFontFace = mpFirst;
     PhysicalFontFace* pBestFontFace = pFontFace;
     FontMatchStatus aFontMatchStatus = {0,0,0, pTargetStyleName};
@@ -1228,7 +1228,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
     for( const char** ppNames = &aGlyphFallbackList[0];; ++ppNames )
     {
         // advance to next sub-list when end-of-sublist marker
-        if( !**ppNames )    // #i46456# check for empty string, i.e., deref string itself not only ptr to it
+        if( !**ppNames ) // #i46456# check for empty string, i.e., deref string itself not only ptr to it
         {
             if( nBestQuality > 0 )
                 if( ++nMaxLevel >= MAX_FALLBACK )
@@ -1330,11 +1330,11 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
             else
                 rFontSelData.maSearchName = OUString();
 
-            //See fdo#32665 for an example. FreeSerif that has glyphs in normal
-            //font, but not in the italic or bold version
+            // See fdo#32665 for an example. FreeSerif that has glyphs in normal
+            // font, but not in the italic or bold version
             bool bSubSetOfFontRequiresPropertyFaking = rFontSelData.mbEmbolden || rFontSelData.maItalicMatrix != ItalicMatrix();
 
-            // cache the result even if there was no match, unless its from part of a font for which the properties need
+            // Cache the result even if there was no match, unless its from part of a font for which the properties need
             // to be faked. We need to rework this cache to take into account that fontconfig can return different fonts
             // for different input sizes, weights, etc. Basically the cache is way to naive
             if (!bSubSetOfFontRequiresPropertyFaking)
@@ -1455,7 +1455,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAliasName(const OUString& rSearc
 
 ImplDevFontListData* ImplDevFontList::FindFontFamily( const String& rFontName ) const
 {
-    // normalize the font fomily name and
+    // normalize the font family name and
     OUString aName = rFontName;
     GetEnglishSearchFontName( aName );
     ImplDevFontListData* pFound = ImplFindBySearchName( aName );
@@ -1736,7 +1736,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchTyp
             nTestMatch -= 1000000;
 
         // test font name substrings
-    // TODO: calculate name matching score using e.g. Levenstein distance
+        // TODO: calculate name matching score using e.g. Levenstein distance
         if( (rSearchFamilyName.getLength() >= 4) && (pData->maMatchFamilyName.Len() >= 4)
         &&    ((rSearchFamilyName.indexOf( pData->maMatchFamilyName ) != -1)
             || (pData->maMatchFamilyName.Search( rSearchFamilyName ) != STRING_NOTFOUND)) )
@@ -1945,7 +1945,6 @@ ImplDevFontListData* ImplDevFontList::FindDefaultFont() const
 ImplDevFontList* ImplDevFontList::Clone( bool bScalable, bool bEmbeddable ) const
 {
     ImplDevFontList* pClonedList = new ImplDevFontList;
-//  pClonedList->mbMatchData    = mbMatchData;
     pClonedList->mbMapNames     = mbMapNames;
     pClonedList->mpPreMatchHook = mpPreMatchHook;
     pClonedList->mpFallbackHook = mpFallbackHook;
@@ -2156,7 +2155,7 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
     // check font face attributes
     if( (rA.GetWeight()       != rB.GetWeight())
     ||  (rA.GetSlant()       != rB.GetSlant())
-//    ||  (rA.meFamily       != rB.meFamily) // TODO: remove this mostly obsolete member
+//  ||  (rA.meFamily       != rB.meFamily) // TODO: remove this mostly obsolete member
     ||  (rA.GetPitch()     != rB.GetPitch()) )
         return false;
 
@@ -2318,8 +2317,8 @@ namespace
 {
     OUString stripCharSetFromName(OUString aName)
     {
-        //I worry that someone will have a font which *does* have
-        //e.g. "Greek" legitimately at the end of its name :-(
+        // I worry that someone will have a font which *does* have
+        // e.g. "Greek" legitimately at the end of its name :-(
         const char*suffixes[] =
         {
             " baltic",
@@ -2333,7 +2332,7 @@ namespace
             " (vietnamese)"
         };
 
-        //These can be crazily piled up, e.g. Times New Roman CYR Greek
+        // These can be crazily piled up, e.g. Times New Roman CYR Greek
         bool bFinished = false;
         while (!bFinished)
         {
@@ -2435,10 +2434,10 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         rFSD.maTargetName = aBaseFontName;
 #endif
 
-        //Related: fdo#49271 RTF files often contain weird-ass
-        //Win 3.1/Win95 style fontnames which attempt to put the
-        //charset encoding into the filename
-        //http://www.webcenter.ru/~kazarn/eng/fonts_ttf.htm
+        // Related: fdo#49271 RTF files often contain weird-ass
+        // Win 3.1/Win95 style fontnames which attempt to put the
+        // charset encoding into the filename
+        // http://www.webcenter.ru/~kazarn/eng/fonts_ttf.htm
         OUString sStrippedName = stripCharSetFromName(rFSD.maTargetName);
         if (!sStrippedName.equals(rFSD.maTargetName))
         {
@@ -2513,7 +2512,6 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
                                         eSearchWeight, eSearchWidth, nSearchType );
 
     // note: the search name was already translated to english (if possible)
-
     // use the font's shortened name if needed
     if ( aSearchShortName != aSearchName )
     {
@@ -2595,7 +2593,6 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         }
 
         // use a font name from font fallback list to determine font attributes
-
         // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
         const FontSubstConfiguration& rFontSubst = FontSubstConfiguration::get();
@@ -3449,7 +3446,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     long nStartX = nBaseX + nDistX;
     long nStartY = nBaseY + nDistY;
 
-    // Bei Hoehe von 1 Pixel reicht es, eine Linie auszugeben
+    // If the height is 1 pixel, it's enough ouput a line
     if ( (nLineWidth == 1) && (nHeight == 1) )
     {
         mpGraphics->SetLineColor( ImplColorToSal( rColor ) );
@@ -3477,7 +3474,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         long    nPixWidth;
         long    nPixHeight;
         sal_Bool    bDrawPixAsRect;
-        // Auf Druckern die Pixel per DrawRect() ausgeben
+        // On printers that ouput pixel via DrawRect()
         if ( (GetOutDevType() == OUTDEV_PRINTER) || (nLineWidth > 1) )
         {
             if ( mbLineColor || mbInitLineColor )
@@ -3759,9 +3756,8 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                     }
                     nDashWidth = ((nDashWidth*mnDPIX)+1270)/2540;
                     nSpaceWidth = ((nSpaceWidth*mnDPIX)+1270)/2540;
-                    // DashWidth wird gegebenenfalls verbreitert, wenn
-                    // die dicke der Linie im Verhaeltnis zur Laenge
-                    // zu dick wird
+                    // DashWidth will be increased if the line is getting too thick
+                    // in proportion to the line's length
                     if ( nDashWidth < nMinDashWidth )
                         nDashWidth = nMinDashWidth;
                     if ( nSpaceWidth < nMinSpaceWidth )
@@ -3785,9 +3781,8 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                     nDotWidth /= mnDPIY;
                     long nDashWidth = ((100*mnDPIX)+1270)/2540;
                     long nMinDashWidth = nDotWidth*4;
-                    // DashWidth wird gegebenenfalls verbreitert, wenn
-                    // die dicke der Linie im Verhaeltnis zur Laenge
-                    // zu dick wird
+                    // DashWidth will be increased if the line is getting too thick
+                    // in proportion to the line's length
                     if ( nDashWidth < nMinDashWidth )
                         nDashWidth = nMinDashWidth;
                     long nTempDotWidth = nDotWidth;
@@ -3816,9 +3811,8 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                     nDotWidth /= mnDPIY;
                     long nDashWidth = ((100*mnDPIX)+1270)/2540;
                     long nMinDashWidth = nDotWidth*4;
-                    // DashWidth wird gegebenenfalls verbreitert, wenn
-                    // die dicke der Linie im Verhaeltnis zur Laenge
-                    // zu dick wird
+                    // DashWidth will be increased if the line is getting too thick
+                    // in proportion to the line's length
                     if ( nDashWidth < nMinDashWidth )
                         nDashWidth = nMinDashWidth;
                     long nTempDotWidth = nDotWidth;
@@ -3918,8 +3912,8 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
-    //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
-    //to tweak this
+    // See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
+    // to tweak this
     if (!nWidth)
         return;
 
@@ -4080,8 +4074,9 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
     if( bWordLine )
     {
         // draw everything relative to the layout base point
-     const Point aStartPt = rSalLayout.DrawBase();
-     // calculate distance of each word from the base point
+        const Point aStartPt = rSalLayout.DrawBase();
+
+        // calculate distance of each word from the base point
         Point aPos;
         sal_Int32 nDist = 0, nWidth = 0, nAdvance=0;
         for( int nStart = 0;;)
@@ -4111,7 +4106,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
             }
             else if( nWidth > 0 )
             {
-             // draw the textline for each word
+                // draw the textline for each word
                 ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), nDist, nWidth,
                     eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                 nWidth = 0;
@@ -4212,7 +4207,7 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, sal_Bool& rPolyL
                 Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
                 rPolyPoly.Insert( aPoly );
             }
-            rYOff = ((nHeight*250)/1000)/2; // Center to the anthoer EmphasisMarks
+            rYOff = ((nHeight*250)/1000)/2; // Center to the another EmphasisMarks
             rWidth = nDotSize;
             break;
 
@@ -4524,9 +4519,8 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, sal_Bool bTextLine
         }
         else if( IsRTLEnabled() )
         {
-            //long w = meOutDevType == OUTDEV_VIRDEV ? mnOutWidth : mpGraphics->GetGraphicsWidth();
-            //long x = rSalLayout.DrawBase().X();
             OutputDevice *pOutDevRef = (OutputDevice *)this;
+
             // mirror this window back
             long devX = pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
             rSalLayout.DrawBase().X() = pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) + devX;
@@ -4730,25 +4724,24 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                     const com::sun::star::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
                     xub_StrLen nSoftBreak = _rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
-                    //aHyphOptions.hyphenIndex = nSoftBreak;
                     i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
                     nBreakPos = (xub_StrLen)aLBR.breakIndex;
                     if ( nBreakPos <= nPos )
                         nBreakPos = nSoftBreak;
                     if ( (nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION) == TEXT_DRAW_WORDBREAK_HYPHENATION )
                     {
-                        // Egal ob Trenner oder nicht: Das Wort nach dem Trenner durch
-                        // die Silbentrennung jagen...
-                        // nMaxBreakPos ist das letzte Zeichen was in die Zeile passt,
-                        // nBreakPos ist der Wort-Anfang
-                        // Ein Problem gibt es, wenn das Dok so schmal ist, dass ein Wort
-                        // auf mehr als Zwei Zeilen gebrochen wird...
+                        // Whether hyphen or not: Put the word after the hyphen through
+                        // word boundary.
+                        //
+                        // nMaxBreakPos the last char that fits into the line
+                        // nBreakPos is the word's start
+                        //
+                        // We run into a problem if the doc is so narrow, that a word
+                        // is broken into more than two lines ...
                         if ( xHyph.is() )
                         {
                             sal_Unicode cAlternateReplChar = 0;
                             i18n::Boundary aBoundary = xBI->getWordBoundary( aText, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
-                //          sal_uInt16 nWordStart = nBreakPos;
-                //          sal_uInt16 nBreakPos_OLD = nBreakPos;
                             sal_Int32 nWordStart = nPos;
                             sal_Int32 nWordEnd = (sal_Int32) aBoundary.endPos;
                             DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
@@ -4759,7 +4752,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                 // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
                                 // DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
                                 String aWord( aText, nWordStart, nWordLen );
-                                sal_uInt16 nMinTrail = static_cast<sal_uInt16>(nWordEnd-nSoftBreak+1);  //+1: Vor dem angeknacksten Buchstaben
+                                sal_uInt16 nMinTrail = static_cast<sal_uInt16>(nWordEnd-nSoftBreak+1);  //+1: Before the "broken off" char
                                 uno::Reference< linguistic2::XHyphenatedWord > xHyphWord;
                                 if (xHyph.is())
                                     xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.Len() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
@@ -4778,27 +4771,27 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                         {
                                             String aAlt( xHyphWord->getHyphenatedWord() );
 
-                                            // Wir gehen von zwei Faellen aus, die nun
-                                            // vorliegen koennen:
-                                            // 1) packen wird zu pak-ken
-                                            // 2) Schiffahrt wird zu Schiff-fahrt
-                                            // In Fall 1 muss ein Zeichen ersetzt werden,
-                                            // in Fall 2 wird ein Zeichen hinzugefuegt.
-                                            // Die Identifikation wird erschwert durch Worte wie
-                                            // "Schiffahrtsbrennesseln", da der Hyphenator alle
-                                            // Position des Wortes auftrennt und "Schifffahrtsbrennnesseln"
-                                            // ermittelt. Wir koennen also eigentlich nicht unmittelbar vom
-                                            // Index des AlternativWord auf aWord schliessen.
-
-                                            // Das ganze geraffel wird durch eine Funktion am
-                                            // Hyphenator vereinfacht werden, sobald AMA sie einbaut...
+                                            // We can have two cases:
+                                            // 1) "packen" turns into "pak-ken"
+                                            // 2) "Schiffahrt" turns into "Schiff-fahrt"
+                                            //
+                                            // In case 1 we need to replace a char
+                                            // In case 2 we add a char
+                                            //
+                                            // Correct recognition is made harder by words such as
+                                            // "Schiffahrtsbrennesseln", as the Hyphenator splits all
+                                            // positions of the word and comes up with "Schifffahrtsbrennnesseln"
+                                            // Thus, we cannot infer the aWord from the AlternativWord's
+                                            // index.
+                                            // TODO: The whole junk will be made easier by a function in
+                                            // the Hyphenator, as soon as AMA adds it.
                                             sal_uInt16 nAltStart = _nWordLen - 1;
                                             sal_uInt16 nTxtStart = nAltStart - (aAlt.Len() - aWord.Len());
                                             sal_uInt16 nTxtEnd = nTxtStart;
                                             sal_uInt16 nAltEnd = nAltStart;
 
-                                            // Die Bereiche zwischen den nStart und nEnd ist
-                                            // die Differenz zwischen Alternativ- und OriginalString.
+                                            // The area between nStart and nEnd is the difference
+                                            // between AlternativString and OriginalString
                                             while( nTxtEnd < aWord.Len() && nAltEnd < aAlt.Len() &&
                                                    aWord.GetChar(nTxtEnd) != aAlt.GetChar(nAltEnd) )
                                             {
@@ -4806,7 +4799,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                                 ++nAltEnd;
                                             }
 
-                                            // Wenn ein Zeichen hinzugekommen ist, dann bemerken wir es jetzt:
+                                            // If a char was added, we notice it now:
                                             if( nAltEnd > nTxtEnd && nAltStart == nAltEnd &&
                                                 aWord.GetChar( nTxtEnd ) == aAlt.GetChar(nAltEnd) )
                                             {
@@ -4815,7 +4808,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                                 ++nTxtEnd;
                                             }
 
-                                            DBG_ASSERT( ( nAltEnd - nAltStart ) == 1, "Alternate: Falsche Annahme!" );
+                                            DBG_ASSERT( ( nAltEnd - nAltStart ) == 1, "Alternate: Wrong assumption!" );
 
                                             if ( nTxtEnd > nTxtStart )
                                                 cAlternateReplChar = aAlt.GetChar( nAltStart );
@@ -4824,10 +4817,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                             if ( cAlternateReplChar )
                                                 nBreakPos++;
                                         }
-                                    } // if (xHyphWord.is())
-                                } // if ( ( nWordEnd >= nSoftBreak ) && ( nWordLen > 3 ) )
-                            } // if ( xHyph.is() )
-                        } // if ( (nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION) == TEXT_DRAW_WORDBREAK_HYPHENATION )
+                                    }
+                                }
+                            }
+                        }
                     }
                     nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
                 }
@@ -5638,7 +5631,7 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
     // if requested move caret position to cell limits
     if( bCellBreaking )
     {
-        ; // TODO
+        ; // FIXME
     }
 
     return true;
@@ -5760,7 +5753,6 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         bRightAlign = true;
     // SSA: hack for western office, ie text get right aligned
     //      for debugging purposes of mirrored UI
-    //static const char* pEnv = getenv( "SAL_RTL_MIRRORTEXT" );
     bool bRTLWindow = IsRTLEnabled();
     bRightAlign ^= bRTLWindow;
     if( bRightAlign )
@@ -5922,8 +5914,8 @@ SalLayout* OutputDevice::getFallbackFontThatFits(ImplFontEntry &rFallbackFont,
 
     pFallback->AdjustLayout( rLayoutArgs );
 
-    //All we care about here is getting the vertical bounds of this text and
-    //make sure it will fit inside the available space
+    // All we care about here is getting the vertical bounds of this text and
+    // make sure it will fit inside the available space
     Point aPos;
     for( int nStart = 0;;)
     {
@@ -5944,7 +5936,7 @@ SalLayout* OutputDevice::getFallbackFontThatFits(ImplFontEntry &rFallbackFont,
         }
     }
 
-    //Shrink it down if it won't fit
+    // Shrink it down if it won't fit
     if (bHaveBounding)
     {
         long  nGlyphsAscent = -aBoundRect.Top();
@@ -6208,12 +6200,6 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         {
             // draw disabled text always without shadow
             // as it fits better with native look
-            /*
-            SetTextColor( GetSettings().GetStyleSettings().GetLightColor() );
-            Rectangle aRect = rRect;
-            aRect.Move( 1, 1 );
-            DrawText( aRect, rOrigStr, nStyle & ~TEXT_DRAW_DISABLE );
-            */
             rTargetDevice.SetTextColor( rTargetDevice.GetSettings().GetStyleSettings().GetDisableColor() );
         }
     }
@@ -6236,7 +6222,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
     const bool bDrawMnemonics = !(rTargetDevice.GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector;
 
-    // Mehrzeiligen Text behandeln wir anders
+    // We treat multiline text differently
     if ( nStyle & TEXT_DRAW_MULTILINE )
     {
 
@@ -6258,12 +6244,12 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             {
                 if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
                 {
-                    // Letzte Zeile zusammenbauen und kuerzen
+                    // Create last line and shorten it
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
                     aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
-                    // Alle LineFeed's durch Spaces ersetzen
+                    // Replace all LineFeeds with Spaces
                     xub_StrLen nLastLineLen = aLastLine.Len();
                     for ( i = 0; i < nLastLineLen; i++ )
                     {
@@ -6281,30 +6267,30 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     nStyle &= ~TEXT_DRAW_CLIP;
             }
 
-            // Muss in der Hoehe geclippt werden?
+            // Do we need to clip the height?
             if ( nFormatLines*nTextHeight > nHeight )
                 nStyle |= TEXT_DRAW_CLIP;
 
-            // Clipping setzen
+            // Set clipping
             if ( nStyle & TEXT_DRAW_CLIP )
             {
                 rTargetDevice.Push( PUSH_CLIPREGION );
                 rTargetDevice.IntersectClipRegion( rRect );
             }
 
-            // Vertikales Alignment
+            // Vertical alignment
             if ( nStyle & TEXT_DRAW_BOTTOM )
                 aPos.Y() += nHeight-(nFormatLines*nTextHeight);
             else if ( nStyle & TEXT_DRAW_VCENTER )
                 aPos.Y() += (nHeight-(nFormatLines*nTextHeight))/2;
 
-            // Font Alignment
+            // Font alignment
             if ( eAlign == ALIGN_BOTTOM )
                 aPos.Y() += nTextHeight;
             else if ( eAlign == ALIGN_BASELINE )
                 aPos.Y() += rTargetDevice.GetFontMetric().GetAscent();
 
-            // Alle Zeilen ausgeben, bis auf die letzte
+            // Output all lines except for the last one
             for ( i = 0; i < nFormatLines; i++ )
             {
                 pLineInfo = aMultiLineInfo.GetLine( i );
@@ -6341,12 +6327,11 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             }
 
 
-            // Gibt es noch eine letzte Zeile, dann diese linksbuendig ausgeben,
-            // da die Zeile gekuerzt wurde
+            // If there still is a last line, we output it left-aligned as the line would be clipped
             if ( aLastLine.Len() )
                 _rLayout.DrawText( aPos, aLastLine, 0, STRING_LEN, pVector, pDisplayText );
 
-            // Clipping zuruecksetzen
+            // Reset clipping
             if ( nStyle & TEXT_DRAW_CLIP )
                 rTargetDevice.Pop();
         }
@@ -6355,7 +6340,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     {
         long nTextWidth = _rLayout.GetTextWidth( aStr, 0, -1 );
 
-        // Evt. Text kuerzen
+        // Clip text if needed
         if ( nTextWidth > nWidth )
         {
             if ( nStyle & TEXT_DRAW_ELLIPSIS )
@@ -6389,9 +6374,9 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         else if ( nStyle & TEXT_DRAW_VCENTER )
             aPos.Y() += (nHeight-nTextHeight)/2;
 
-        long        nMnemonicX = 0;
-        long        nMnemonicY = 0;
-        long        nMnemonicWidth = 0;
+        long nMnemonicX = 0;
+        long nMnemonicY = 0;
+        long nMnemonicWidth = 0;
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
             sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.Len() );
@@ -6720,7 +6705,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
         else if ( nStyle & TEXT_DRAW_NEWSELLIPSIS )
         {
             static sal_Char const   pSepChars[] = ".";
-            // Letztes Teilstueck ermitteln
+            // Determine last section
             sal_Int32 nLastContent = aStr.getLength();
             while ( nLastContent )
             {
@@ -6749,7 +6734,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                 while ( (nFirstContent < nLastContent) &&
                         ImplIsCharIn( aStr[ nFirstContent ], pSepChars ) )
                     nFirstContent++;
-                //MEM continue here
+                // MEM continue here
                 if ( nFirstContent >= nLastContent )
                     aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
                 else
@@ -6847,7 +6832,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                 // #106952#
                 // may occur in BiDi-Strings: the '~' is sometimes found behind the last char
                 // due to some strange BiDi text editors
-                // ->place the underline behind the string to indicate a failure
+                // -> place the underline behind the string to indicate a failure
                 bInvalidPos = sal_True;
                 nMnemonicPos = nLen-1;
             }
@@ -7561,11 +7546,9 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     if( bRet || (OUTDEV_PRINTER == meOutDevType) || !mpFontEntry )
         return bRet;
 
-    // fall back to bitmap conversion ------------------------------------------
-
+    // fall back to bitmap conversion
     // Here, we can savely assume that the mapping between characters and glyphs
     // is one-to-one. This is most probably valid for the old bitmap fonts.
-
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font
     pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nTWidth, pDXArray );
@@ -7626,8 +7609,8 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     bRet = true;
     bool bRTL = false;
     OUString aStr( rStr ); // prepare for e.g. localized digits
-    sal_Int32 nIndex2 = nIndex;  // only needed until nIndex is sal_Int32
-    sal_Int32 nLen2 = nLen;  // only needed until nLen is sal_Int32
+    sal_Int32 nIndex2 = nIndex; // only needed until nIndex is sal_Int32
+    sal_Int32 nLen2 = nLen; // only needed until nLen is sal_Int32
     ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nIndex2, nLen2, 0, NULL );
     for( int nCharPos = -1; aLayoutArgs.GetNextPos( &nCharPos, &bRTL);)
     {
@@ -7773,7 +7756,7 @@ sal_Bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     if( !mpFontEntry )
         return sal_False;
 
-#ifdef ENABLE_IFC_CACHE    // a little font charmap cache helps considerably
+#ifdef ENABLE_IFC_CACHE // a little font charmap cache helps considerably
     static const int NMAXITEMS = 16;
     static int nUsedItems = 0, nCurItem = 0;
 
@@ -7786,11 +7769,11 @@ sal_Bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     for( i = nUsedItems; --i >= 0; )
         if( pFontData == aCache[i].mpFontData )
             break;
-    if( i >= 0 )    // found in cache
+    if( i >= 0 ) // found in cache
     {
         rFontCharMap.Reset( aCache[i].maCharMap.mpImpl );
     }
-    else            // need to cache
+    else // need to cache
 #endif // ENABLE_IFC_CACHE
     {
         const ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();

@@ -59,8 +59,6 @@ using namespace com::sun::star::configuration;
 
 int nImplSysDialog = 0;
 
-// =======================================================================
-
 namespace
 {
     static Paper ImplGetPaperFormat( long nWidth100thMM, long nHeight100thMM )
@@ -70,8 +68,6 @@ namespace
         return aInfo.getPaper();
     }
 
-// -----------------------------------------------------------------------
-
     static const PaperInfo& ImplGetEmptyPaper()
     {
         static PaperInfo aInfo(PAPER_USER);
@@ -79,7 +75,6 @@ namespace
     }
 }
 
-// =======================================================================
 
 void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
 {
@@ -103,10 +98,7 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
     }
 }
 
-// ------------------
-// - PrinterOptions -
-// ------------------
-
+// PrinterOptions
 PrinterOptions::PrinterOptions() :
     mbReduceTransparency( sal_False ),
     meReducedTransparencyMode( PRINTER_TRANSPARENCY_AUTO ),
@@ -122,7 +114,6 @@ PrinterOptions::PrinterOptions() :
 {
 }
 
-// -----------------------------------------------------------------------
 
 PrinterOptions::~PrinterOptions()
 {
@@ -222,17 +213,13 @@ void Printer::SetPrinterOptions( const PrinterOptions& i_rOptions )
     *mpPrinterOptions = i_rOptions;
 }
 
-// -------------
-// - QueueInfo -
-// -------------
-
+// QueueInfo
 QueueInfo::QueueInfo()
 {
     mnStatus    = 0;
     mnJobs      = 0;
 }
 
-// -----------------------------------------------------------------------
 
 QueueInfo::QueueInfo( const QueueInfo& rInfo ) :
     maPrinterName( rInfo.maPrinterName ),
@@ -244,13 +231,11 @@ QueueInfo::QueueInfo( const QueueInfo& rInfo ) :
 {
 }
 
-// -----------------------------------------------------------------------
 
 QueueInfo::~QueueInfo()
 {
 }
 
-// -----------------------------------------------------------------------
 
 bool QueueInfo::operator==( const QueueInfo& rInfo ) const
 {
@@ -263,7 +248,6 @@ bool QueueInfo::operator==( const QueueInfo& rInfo ) const
         mnJobs          == rInfo.mnJobs;
 }
 
-// -----------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStream, const QueueInfo& rInfo )
 {
@@ -279,7 +263,6 @@ SvStream& operator<<( SvStream& rOStream, const QueueInfo& rInfo )
     return rOStream;
 }
 
-// -----------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStream, QueueInfo& rInfo )
 {
@@ -295,7 +278,6 @@ SvStream& operator>>( SvStream& rIStream, QueueInfo& rInfo )
     return rIStream;
 }
 
-// =======================================================================
 
 SalPrinterQueueInfo::SalPrinterQueueInfo()
 {
@@ -304,13 +286,11 @@ SalPrinterQueueInfo::SalPrinterQueueInfo()
     mpSysData   = NULL;
 }
 
-// -----------------------------------------------------------------------
 
 SalPrinterQueueInfo::~SalPrinterQueueInfo()
 {
 }
 
-// -----------------------------------------------------------------------
 
 ImplPrnQueueList::~ImplPrnQueueList()
 {
@@ -322,7 +302,6 @@ ImplPrnQueueList::~ImplPrnQueueList()
     }
 }
 
-// -----------------------------------------------------------------------
 
 void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 {
@@ -346,7 +325,6 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
     }
 }
 
-// -----------------------------------------------------------------------
 
 ImplPrnQueueData* ImplPrnQueueList::Get( const OUString& rPrinter )
 {
@@ -358,7 +336,6 @@ ImplPrnQueueData* ImplPrnQueueList::Get( const OUString& rPrinter )
     return pData;
 }
 
-// =======================================================================
 
 static void ImplInitPrnQueueList()
 {
@@ -371,7 +348,6 @@ static void ImplInitPrnQueueList()
         pSVData->mpDefInst->GetPrinterQueueInfo( pSVData->maGDIData.mpPrinterQueueList );
 }
 
-// -----------------------------------------------------------------------
 
 void ImplDeletePrnQueueList()
 {
@@ -385,17 +361,15 @@ void ImplDeletePrnQueueList()
     }
 }
 
-// -----------------------------------------------------------------------
 
 const std::vector<OUString>& Printer::GetPrinterQueues()
 {
-    ImplSVData*         pSVData = ImplGetSVData();
+    ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maGDIData.mpPrinterQueueList )
         ImplInitPrnQueueList();
     return pSVData->maGDIData.mpPrinterQueueList->m_aPrinterList;
 }
 
-// -----------------------------------------------------------------------
 const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStatusUpdate )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -423,7 +397,6 @@ const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStat
     return NULL;
 }
 
-// -----------------------------------------------------------------------
 
 OUString Printer::GetDefaultPrinterName()
 {
@@ -437,7 +410,6 @@ OUString Printer::GetDefaultPrinterName()
     return OUString();
 }
 
-// =======================================================================
 
 void Printer::ImplInitData()
 {
@@ -461,7 +433,7 @@ void Printer::ImplInitData()
     mbIsQueuePrinter    = sal_False;
     mpPrinterOptions    = new PrinterOptions;
 
-    // Printer in die Liste eintragen
+    // Add printer to the list
     ImplSVData* pSVData = ImplGetSVData();
     mpNext = pSVData->maGDIData.mpFirstPrinter;
     mpPrev = NULL;
@@ -472,7 +444,6 @@ void Printer::ImplInitData()
     pSVData->maGDIData.mpFirstPrinter = this;
 }
 
-// -----------------------------------------------------------------------
 
 void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 {
@@ -480,7 +451,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     // #i74084# update info for this specific SalPrinterQueueInfo
     pSVData->mpDefInst->GetPrinterQueueState( pInfo );
 
-    // Testen, ob Treiber ueberhaupt mit dem JobSetup uebereinstimmt
+    // Test whether the driver actually matches the JobSetup
     ImplJobSetup* pJobSetup = maJobSetup.ImplGetData();
 
     if ( pJobSetup->mpDriverData )
@@ -494,11 +465,11 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
         }
     }
 
-    // Printernamen merken
+    // Remember printer name
     maPrinterName = pInfo->maPrinterName;
     maDriver = pInfo->maDriver;
 
-    // In JobSetup den Printernamen eintragen
+    // Add printer name to JobSetup
     pJobSetup->maPrinterName = maPrinterName;
     pJobSetup->maDriver = maDriver;
 
@@ -520,14 +491,13 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
         return;
     }
 
-    // Daten initialisieren
+    // Init data
     ImplUpdatePageData();
     mpFontList = new ImplDevFontList();
     mpFontCache = new ImplFontCache( sal_True );
     mpGraphics->GetDevFontList( mpFontList );
 }
 
-// -----------------------------------------------------------------------
 
 void Printer::ImplInitDisplay( const Window* pWindow )
 {
@@ -547,7 +517,6 @@ void Printer::ImplInitDisplay( const Window* pWindow )
     mnDPIY              = mpDisplayDev->mnDPIY;
 }
 
-// -----------------------------------------------------------------------
 
 SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
                                                 const OUString* pDriver )
@@ -593,7 +562,6 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
     return NULL;
 }
 
-// -----------------------------------------------------------------------
 
 void Printer::ImplUpdatePageData()
 {
@@ -608,14 +576,12 @@ void Printer::ImplUpdatePageData()
                                 maPaperSize.Width(), maPaperSize.Height() );
 }
 
-// -----------------------------------------------------------------------
 
 void Printer::ImplUpdateFontList()
 {
     ImplUpdateFontData( sal_True );
 }
 
-// -----------------------------------------------------------------------
 
 Printer::Printer()
 {
@@ -631,7 +597,6 @@ Printer::Printer()
         ImplInitDisplay( NULL );
 }
 
-// -----------------------------------------------------------------------
 
 Printer::Printer( const JobSetup& rJobSetup ) :
     maJobSetup( rJobSetup )
@@ -651,7 +616,6 @@ Printer::Printer( const JobSetup& rJobSetup ) :
     }
 }
 
-// -----------------------------------------------------------------------
 
 Printer::Printer( const QueueInfo& rQueueInfo )
 {
@@ -664,7 +628,6 @@ Printer::Printer( const QueueInfo& rQueueInfo )
         ImplInitDisplay( NULL );
 }
 
-// -----------------------------------------------------------------------
 
 Printer::Printer( const OUString& rPrinterName )
 {
@@ -676,7 +639,6 @@ Printer::Printer( const OUString& rPrinterName )
         ImplInitDisplay( NULL );
 }
 
-// -----------------------------------------------------------------------
 
 Printer::~Printer()
 {
@@ -692,8 +654,8 @@ Printer::~Printer()
         delete mpDisplayDev;
     else
     {
-        // OutputDevice-Dtor versucht das gleiche, deshalb muss hier
-        // der FontEntry auch auf NULL gesetzt werden
+        // OutputDevice Dtor is tryig the same thing; that why we need to set
+        // the FontEntry to NULL here
         // TODO: consolidate duplicate cleanup by Printer and OutputDevice
         if ( mpFontEntry )
         {
@@ -715,7 +677,7 @@ Printer::~Printer()
         // font list deleted by OutputDevice dtor
     }
 
-    // Printer aus der Liste eintragen
+    // Add printer from the list
     ImplSVData* pSVData = ImplGetSVData();
     if ( mpPrev )
         mpPrev->mpNext = mpNext;
@@ -727,7 +689,6 @@ Printer::~Printer()
         pSVData->maGDIData.mpLastPrinter = mpPrev;
 }
 
-// -----------------------------------------------------------------------
 void Printer::Compat_OldPrinterMetrics( bool bSet )
 {
     // propagate flag
@@ -738,7 +699,6 @@ void Printer::Compat_OldPrinterMetrics( bool bSet )
     ImplUpdateFontData( sal_True );
 }
 
-// -----------------------------------------------------------------------
 
 sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
 {
@@ -751,7 +711,6 @@ sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::HasSupport( PrinterSupport eFeature ) const
 {
@@ -780,7 +739,6 @@ sal_Bool Printer::HasSupport( PrinterSupport eFeature ) const
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::SetJobSetup( const JobSetup& rSetup )
 {
@@ -803,7 +761,6 @@ sal_Bool Printer::SetJobSetup( const JobSetup& rSetup )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
 
 
 sal_Bool Printer::Setup( Window* pWindow )
@@ -841,7 +798,6 @@ sal_Bool Printer::Setup( Window* pWindow )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
 {
@@ -860,7 +816,7 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
 
     if ( pPrinter->IsDisplayPrinter() )
     {
-        // Alten Printer zerstoeren
+        // Destroy old printer
         if ( !IsDisplayPrinter() )
         {
             ImplReleaseGraphics();
@@ -891,12 +847,12 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
             mpInfoPrinter = NULL;
         }
 
-        // Neuen Printer bauen
+        // Construct new printer
         ImplInitDisplay( NULL );
         return sal_True;
     }
 
-    // Alten Printer zerstoeren?
+    // Destroy old printer?
     if ( GetName() != pPrinter->GetName() )
     {
         ImplReleaseGraphics();
@@ -933,7 +889,7 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
             mpInfoPrinter = NULL;
         }
 
-        // Neuen Printer bauen
+        // Construct new printer
         OUString aDriver = pPrinter->GetDriverName();
         SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( pPrinter->GetName(), &aDriver );
         if ( pInfo )
@@ -950,7 +906,6 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::SetOrientation( Orientation eOrientation )
 {
@@ -987,14 +942,12 @@ sal_Bool Printer::SetOrientation( Orientation eOrientation )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
 
 Orientation Printer::GetOrientation() const
 {
     return maJobSetup.ImplGetConstData()->meOrientation;
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
 {
@@ -1032,14 +985,12 @@ sal_Bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
 
 sal_uInt16 Printer::GetPaperBin() const
 {
     return maJobSetup.ImplGetConstData()->mnPaperBin;
 }
 
-// -----------------------------------------------------------------------
 
 // Map user paper format to a available printer paper formats
 void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNearest )
@@ -1052,7 +1003,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
 
     PaperInfo aInfo(pSetupData->mnPaperWidth, pSetupData->mnPaperHeight);
 
-    // Alle Papierformate vergleichen und ein passendes raussuchen
+    // Compare all paper formats and get the appropriate one
     for ( int i = 0; i < nPaperCount; i++ )
     {
         const PaperInfo& rPaperInfo = GetPaperInfo( i );
@@ -1101,7 +1052,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
          {
              const PaperInfo& rPaperInfo = GetPaperInfo( i );
 
-             // check protrait match
+             // check portrait match
              sal_Int64 nDX = pSetupData->mnPaperWidth - rPaperInfo.getWidth();
              sal_Int64 nDY = pSetupData->mnPaperHeight - rPaperInfo.getHeight();
              sal_Int64 nMatch = nDX*nDX + nDY*nDY;
@@ -1130,7 +1081,6 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
     }
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::SetPaper( Paper ePaper )
 {
@@ -1175,7 +1125,6 @@ sal_Bool Printer::SetPaper( Paper ePaper )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::SetPaperSizeUser( const Size& rSize )
 {
@@ -1226,7 +1175,6 @@ sal_Bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
 
 int Printer::GetPaperInfoCount() const
 {
@@ -1237,7 +1185,6 @@ int Printer::GetPaperInfoCount() const
     return mpInfoPrinter->m_aPaperFormats.size();
 }
 
-// -----------------------------------------------------------------------
 
 OUString Printer::GetPaperName( Paper ePaper )
 {
@@ -1269,7 +1216,6 @@ OUString Printer::GetPaperName( Paper ePaper )
     return (it != pSVData->mpPaperNames->end()) ? it->second : OUString();
 }
 
-// -----------------------------------------------------------------------
 
 OUString Printer::GetPaperName( bool i_bPaperUser ) const
 {
@@ -1280,7 +1226,6 @@ OUString Printer::GetPaperName( bool i_bPaperUser ) const
     return (ePaper != PAPER_USER || i_bPaperUser ) ? GetPaperName( ePaper ) : OUString();
 }
 
-// -----------------------------------------------------------------------
 
 const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
 {
@@ -1293,7 +1238,6 @@ const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
     return mpInfoPrinter->m_aPaperFormats[nPaper];
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::SetDuplexMode( DuplexMode eDuplex )
 {
@@ -1330,21 +1274,18 @@ sal_Bool Printer::SetDuplexMode( DuplexMode eDuplex )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
 
 int Printer::GetLandscapeAngle() const
 {
     return mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle( maJobSetup.ImplGetConstData() ) : 900;
 }
 
-// -----------------------------------------------------------------------
 
 Paper Printer::GetPaper() const
 {
     return maJobSetup.ImplGetConstData()->mePaperFormat;
 }
 
-// -----------------------------------------------------------------------
 
 sal_uInt16 Printer::GetPaperBinCount() const
 {
@@ -1354,7 +1295,6 @@ sal_uInt16 Printer::GetPaperBinCount() const
     return (sal_uInt16)mpInfoPrinter->GetPaperBinCount( maJobSetup.ImplGetConstData() );
 }
 
-// -----------------------------------------------------------------------
 
 OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
 {
@@ -1367,7 +1307,6 @@ OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
         return ImplGetSVEmptyStr();
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::SetCopyCount( sal_uInt16 nCopy, sal_Bool bCollate )
 {
@@ -1376,14 +1315,12 @@ sal_Bool Printer::SetCopyCount( sal_uInt16 nCopy, sal_Bool bCollate )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
 
 void Printer::Error()
 {
     maErrorHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
 
 
 sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
@@ -1405,7 +1342,6 @@ sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
     return nVCLError;
 }
 
-// -----------------------------------------------------------------------
 
 sal_Bool Printer::EndJob()
 {
@@ -1429,9 +1365,9 @@ sal_Bool Printer::EndJob()
 
         mbDevOutput = sal_False;
         bRet = mpPrinter->EndJob();
-        // Hier den Drucker nicht asyncron zerstoeren, da es
-        // W95 nicht verkraftet, wenn gleichzeitig gedruckt wird
-        // und ein Druckerobjekt zerstoert wird
+        // FIXME: Do not destroy the printer asynchronously as Win95
+        // can't handle destroying a printer object and printing
+        // at the same time
         ImplGetSVData()->mpDefInst->DestroyPrinter( mpPrinter );
         mpPrinter = NULL;
     }
@@ -1439,7 +1375,6 @@ sal_Bool Printer::EndJob()
     return bRet;
 }
 
-// -----------------------------------------------------------------------
 
 void Printer::ImplStartPage()
 {
@@ -1466,7 +1401,6 @@ void Printer::ImplStartPage()
     }
 }
 
-// -----------------------------------------------------------------------
 
 void Printer::ImplEndPage()
 {
@@ -1486,7 +1420,6 @@ void Printer::ImplEndPage()
     }
 }
 
-// -----------------------------------------------------------------------
 
 void Printer::updatePrinters()
 {
