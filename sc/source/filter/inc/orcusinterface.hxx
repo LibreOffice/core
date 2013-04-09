@@ -16,6 +16,7 @@
 #include <orcus/spreadsheet/import_interface.hpp>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/unordered_map.hpp>
 
 #include <map>
 
@@ -26,10 +27,10 @@ class ScRangeData;
 
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
 {
-    std::vector<OUString>& mrStrings;
+    ScOrcusFactory& mrFactory;
 
 public:
-    ScOrcusSharedStrings(std::vector<OUString>& rStrings);
+    ScOrcusSharedStrings(ScOrcusFactory& rFactory);
 
     virtual size_t append(const char* s, size_t n);
     virtual size_t add(const char* s, size_t n);
@@ -161,10 +162,14 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
         StringCellCache(const ScAddress& rPos, size_t nIndex);
     };
 
+    typedef boost::unordered_map<OUString, size_t, OUStringHash> StringHashType;
     typedef std::vector<StringCellCache> StringCellCaches;
 
     ScDocument& mrDoc;
+
     std::vector<OUString> maStrings;
+    StringHashType maStringHash;
+
     StringCellCaches maStringCells;
     ScOrcusSharedStrings maSharedStrings;
     boost::ptr_vector<ScOrcusSheet> maSheets;
@@ -178,6 +183,9 @@ public:
     virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings();
     virtual orcus::spreadsheet::iface::import_styles* get_styles();
     virtual void finalize();
+
+    size_t appendString(const OUString& rStr);
+    size_t addString(const OUString& rStr);
 
     void pushStringCell(const ScAddress& rPos, size_t nStrIndex);
 };

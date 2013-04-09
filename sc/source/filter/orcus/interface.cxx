@@ -24,7 +24,7 @@ using orcus::spreadsheet::formula_grammar_t;
 ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t nIndex) :
     maPos(rPos), mnIndex(nIndex) {}
 
-ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) : mrDoc(rDoc), maSharedStrings(maStrings) {}
+ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) : mrDoc(rDoc), maSharedStrings(*this) {}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char* sheet_name, size_t sheet_name_length)
 {
@@ -93,6 +93,25 @@ void ScOrcusFactory::finalize()
 
         mrDoc.SetString(it->maPos, maStrings[it->mnIndex], &aParam);
     }
+}
+
+size_t ScOrcusFactory::appendString(const OUString& rStr)
+{
+    size_t nPos = maStrings.size();
+    maStrings.push_back(rStr);
+    maStringHash.insert(StringHashType::value_type(rStr, nPos));
+
+    return nPos;
+}
+
+size_t ScOrcusFactory::addString(const OUString& rStr)
+{
+    // Add only if the string is not yet present in the string pool.
+    StringHashType::iterator it = maStringHash.find(rStr);
+    if (it != maStringHash.end())
+        return it->second;
+
+    return appendString(rStr);
 }
 
 void ScOrcusFactory::pushStringCell(const ScAddress& rPos, size_t nStrIndex)
@@ -241,23 +260,19 @@ void ScOrcusSheet::set_bool(row_t row, col_t col, bool value)
     mrDoc.SetValue(col, row, mnTab, value ? 1.0 : 0.0);
 }
 
-ScOrcusSharedStrings::ScOrcusSharedStrings(std::vector<OUString>& rStrings) :
-    mrStrings(rStrings) {}
+ScOrcusSharedStrings::ScOrcusSharedStrings(ScOrcusFactory& rFactory) :
+    mrFactory(rFactory) {}
 
 size_t ScOrcusSharedStrings::append(const char* s, size_t n)
 {
     OUString aNewString(s, n, RTL_TEXTENCODING_UTF8);
-    mrStrings.push_back(aNewString);
-
-    return mrStrings.size() - 1;
+    return mrFactory.appendString(aNewString);
 }
 
 size_t ScOrcusSharedStrings::add(const char* s, size_t n)
 {
     OUString aNewString(s, n, RTL_TEXTENCODING_UTF8);
-    mrStrings.push_back(aNewString);
-
-    return mrStrings.size() - 1;
+    return mrFactory.addString(aNewString);
 }
 
 void ScOrcusSharedStrings::set_segment_bold(bool /*b*/)
