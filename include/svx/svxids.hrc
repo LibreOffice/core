@@ -437,7 +437,6 @@
 #define SID_FORMTEXT_SHDWCOLOR                          ( SID_SVX_START + 264 )
 #define SID_FORMTEXT_SHDWXVAL                           ( SID_SVX_START + 265 )
 #define SID_FORMTEXT_SHDWYVAL                           ( SID_SVX_START + 266 )
-#define SID_FORMTEXT_STDFORM                            ( SID_SVX_START + 267 )
 #define SID_FORMTEXT_HIDEFORM                           ( SID_SVX_START + 268 )
 #define SID_GALLERY_ENABLE_ADDCOPY                      ( SID_SVX_START + 276 )
 #define SID_GALLERY_BG_POS                              ( SID_SVX_START + 278 )

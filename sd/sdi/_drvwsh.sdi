@@ -1769,11 +1769,6 @@ interface DrawView
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
     ]
-    SID_FORMTEXT_STDFORM // ole : no, status : ?
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-    ]
     SID_GALLERY // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;

@@ -433,13 +433,6 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_FORMTEXT_STDFORM // api:
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
     SID_THESAURUS // api:
     [
         ExecMethod = ExecDrawLingu ;

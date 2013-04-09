@@ -203,20 +203,6 @@
 // FontWork dialog
 #define RID_SVXDLG_FONTWORK                 (RID_SVX_START +  93)
 
-// FontWork ValueSet bitmaps
-#define RID_SVXBMP_FONTWORK_FORM1           (RID_SVX_START +  94)
-#define RID_SVXBMP_FONTWORK_FORM2           (RID_SVX_START +  95)
-#define RID_SVXBMP_FONTWORK_FORM3           (RID_SVX_START +  96)
-#define RID_SVXBMP_FONTWORK_FORM4           (RID_SVX_START +  97)
-#define RID_SVXBMP_FONTWORK_FORM5           (RID_SVX_START +  98)
-#define RID_SVXBMP_FONTWORK_FORM6           (RID_SVX_START +  99)
-#define RID_SVXBMP_FONTWORK_FORM7           (RID_SVX_START + 100)
-#define RID_SVXBMP_FONTWORK_FORM8           (RID_SVX_START + 101)
-#define RID_SVXBMP_FONTWORK_FORM9           (RID_SVX_START + 102)
-#define RID_SVXBMP_FONTWORK_FORM10          (RID_SVX_START + 103)
-#define RID_SVXBMP_FONTWORK_FORM11          (RID_SVX_START + 104)
-#define RID_SVXBMP_FONTWORK_FORM12          (RID_SVX_START + 105)
-
 #define RID_SVXCTRL_COLOR                   (RID_SVX_START + 117)
 
 // for Toolbox-Control style
@@ -321,21 +307,6 @@
 
 // Close (in TabDialog line/aria)
 #define RID_SVXSTR_CLOSE                    (RID_SVX_START + 260)
-
-// FontWork-ValueSet-Strings
-#define RID_SVXSTR_FONTWORK_FORM1           (RID_SVX_START + 261)
-#define RID_SVXSTR_FONTWORK_FORM2           (RID_SVX_START + 262)
-#define RID_SVXSTR_FONTWORK_FORM3           (RID_SVX_START + 263)
-#define RID_SVXSTR_FONTWORK_FORM4           (RID_SVX_START + 264)
-#define RID_SVXSTR_FONTWORK_FORM5           (RID_SVX_START + 265)
-#define RID_SVXSTR_FONTWORK_FORM6           (RID_SVX_START + 266)
-#define RID_SVXSTR_FONTWORK_FORM7           (RID_SVX_START + 267)
-#define RID_SVXSTR_FONTWORK_FORM8           (RID_SVX_START + 268)
-#define RID_SVXSTR_FONTWORK_FORM9           (RID_SVX_START + 269)
-#define RID_SVXSTR_FONTWORK_FORM10          (RID_SVX_START + 270)
-#define RID_SVXSTR_FONTWORK_FORM11          (RID_SVX_START + 271)
-#define RID_SVXSTR_FONTWORK_FORM12          (RID_SVX_START + 272)
-#define RID_SVXSTR_FONTWORK_UNDOCREATE      (RID_SVX_START + 273)
 
 // Color strings
 #define RID_SVXSTR_BLACK                    (RID_SVX_START + 275)

@@ -1874,11 +1874,6 @@ String SIP_XA_FORMTXTSHDWYVAL
     Text [ en-US ] = "Fontwork shadow offset Y";
 };
 
-String SIP_XA_FORMTXTSTDFORM
-{
-    Text [ en-US ] = "Fontwork default form";
-};
-
 String SIP_XA_FORMTXTHIDEFORM
 {
     Text [ en-US ] = "Hide fontwork outline";

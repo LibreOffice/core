@@ -111,7 +111,6 @@ XOutdevItemPool::XOutdevItemPool(
     mppLocalPoolDefaults[XATTR_FORMTXTSHDWCOLOR   -XATTR_START] = new XFormTextShadowColorItem(aNullStr,aNullShadowCol);
     mppLocalPoolDefaults[XATTR_FORMTXTSHDWXVAL    -XATTR_START] = new XFormTextShadowXValItem;
     mppLocalPoolDefaults[XATTR_FORMTXTSHDWYVAL    -XATTR_START] = new XFormTextShadowYValItem;
-    mppLocalPoolDefaults[XATTR_FORMTXTSTDFORM     -XATTR_START] = new XFormTextStdFormItem;
     mppLocalPoolDefaults[XATTR_FORMTXTHIDEFORM    -XATTR_START] = new XFormTextHideFormItem;
     mppLocalPoolDefaults[XATTR_FORMTXTSHDWTRANSP  -XATTR_START] = new XFormTextShadowTranspItem;
 
@@ -154,7 +153,6 @@ XOutdevItemPool::XOutdevItemPool(
     mpLocalItemInfos[XATTR_FORMTXTSHDWCOLOR -XATTR_START]._nSID = SID_FORMTEXT_SHDWCOLOR;
     mpLocalItemInfos[XATTR_FORMTXTSHDWXVAL  -XATTR_START]._nSID = SID_FORMTEXT_SHDWXVAL;
     mpLocalItemInfos[XATTR_FORMTXTSHDWYVAL  -XATTR_START]._nSID = SID_FORMTEXT_SHDWYVAL;
-    mpLocalItemInfos[XATTR_FORMTXTSTDFORM   -XATTR_START]._nSID = SID_FORMTEXT_STDFORM;
     mpLocalItemInfos[XATTR_FORMTXTHIDEFORM  -XATTR_START]._nSID = SID_FORMTEXT_HIDEFORM;
 
     // associate new slots for panels with known items

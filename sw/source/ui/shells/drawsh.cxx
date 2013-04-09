@@ -27,7 +27,6 @@
 #include <sfx2/objface.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/srchitem.hxx>
-#include <svx/xftsfit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/tbxcustomshapes.hxx>
@@ -389,7 +388,6 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
-        const SfxPoolItem* pItem;
 
         if ( pDrView->IsTextEdit() )
         {
@@ -397,24 +395,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
             GetView().AttrChangedNotify(&rSh);
         }
 
-        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem) ==
-             SFX_ITEM_SET &&
-            ((const XFormTextStdFormItem*) pItem)->GetValue() != XFTFORM_NONE )
-        {
-
-            const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
-
-            SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(GetView().GetViewFrame()->
-                                        GetChildWindow(nId)->GetWindow());
-
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
-                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
-                                   ((const XFormTextStdFormItem*) pItem)->
-                                   GetValue());
-
-        }
-        else
-            pDrView->SetAttributes(rSet);
+        pDrView->SetAttributes(rSet);
     }
     if (pDrView->GetModel()->IsChanged())
         rSh.SetModified();
@@ -456,7 +437,6 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
         rSet.DisableItem(XATTR_FORMTXTDISTANCE);
         rSet.DisableItem(XATTR_FORMTXTSTART);
         rSet.DisableItem(XATTR_FORMTXTMIRROR);
-        rSet.DisableItem(XATTR_FORMTXTSTDFORM);
         rSet.DisableItem(XATTR_FORMTXTHIDEFORM);
         rSet.DisableItem(XATTR_FORMTXTOUTLINE);
         rSet.DisableItem(XATTR_FORMTXTSHADOW);

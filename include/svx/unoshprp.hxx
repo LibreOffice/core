@@ -200,7 +200,6 @@
     { MAP_CHAR_LEN("FontWorkShadowColor"),      XATTR_FORMTXTSHDWCOLOR,     &::getCppuType((const sal_Int32*)0),            0,  0}, \
     { MAP_CHAR_LEN("FontWorkShadowOffsetX"),    XATTR_FORMTXTSHDWXVAL,      &::getCppuType((const sal_Int32*)0),            0,  SFX_METRIC_ITEM}, \
     { MAP_CHAR_LEN("FontWorkShadowOffsetY"),    XATTR_FORMTXTSHDWYVAL,      &::getCppuType((const sal_Int32*)0),            0,  SFX_METRIC_ITEM}, \
-    { MAP_CHAR_LEN("FontWorkForm"),             XATTR_FORMTXTSTDFORM,       /*ENUM*/&::getCppuType((const sal_Int32*)0),    0,  0}, \
     { MAP_CHAR_LEN("FontWorkHideForm"),         XATTR_FORMTXTHIDEFORM,      &::getBooleanCppuType(),                        0,  0}, \
     { MAP_CHAR_LEN("FontWorkShadowTransparence"),XATTR_FORMTXTSHDWTRANSP,   &::getCppuType((const sal_Int16*)0),            0,  0},
 

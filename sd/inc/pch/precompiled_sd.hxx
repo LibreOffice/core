@@ -758,7 +758,6 @@
 #include <svx/xftdiit.hxx>
 #include <svx/xftmrit.hxx>
 #include <svx/xftouit.hxx>
-#include <svx/xftsfit.hxx>
 #include <svx/xftshcit.hxx>
 #include <svx/xftshit.hxx>
 #include <svx/xftshxy.hxx>

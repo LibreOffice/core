@@ -519,7 +519,6 @@
 #define SIP_XA_FORMTXTSHDWCOLOR             (SIP_Begin +  56)
 #define SIP_XA_FORMTXTSHDWXVAL              (SIP_Begin +  57)
 #define SIP_XA_FORMTXTSHDWYVAL              (SIP_Begin +  58)
-#define SIP_XA_FORMTXTSTDFORM               (SIP_Begin +  59)
 #define SIP_XA_FORMTXTHIDEFORM              (SIP_Begin +  60)
 #define SIP_XA_FORMTXTSHDWTRANSP            (SIP_Begin +  61)
 #define SIP_XA_FTRESERVED2                  (SIP_Begin +  62)

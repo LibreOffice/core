@@ -167,7 +167,6 @@ item INT32  XFormTextDistanceItem;      // SfxInt32Item
 item INT32  XFormTextStartItem;         // SfxInt32Item
 item BOOL   XFormTextMirrorItem;        // SfxBoolItem
 
-item INT32  XFormTextStdFormItem;       // SfxEnumItem
 item BOOL   XFormTextHideFormItem;      // SfxBoolItem
 item BOOL   XFormTextOutlineItem;       // SfxBoolItem
 item INT32  XFormTextShadowItem;        // SfxEnumItem

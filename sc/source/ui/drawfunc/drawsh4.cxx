@@ -66,7 +66,6 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
         rSet.DisableItem(XATTR_FORMTXTDISTANCE);
         rSet.DisableItem(XATTR_FORMTXTSTART);
         rSet.DisableItem(XATTR_FORMTXTMIRROR);
-        rSet.DisableItem(XATTR_FORMTXTSTDFORM);
         rSet.DisableItem(XATTR_FORMTXTHIDEFORM);
         rSet.DisableItem(XATTR_FORMTXTOUTLINE);
         rSet.DisableItem(XATTR_FORMTXTSHADOW);

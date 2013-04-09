@@ -32,11 +32,6 @@ enum XFormTextStyle     { XFT_ROTATE, XFT_UPRIGHT, XFT_SLANTX, XFT_SLANTY,
                           XFT_NONE };
 enum XFormTextAdjust    { XFT_LEFT, XFT_RIGHT, XFT_AUTOSIZE, XFT_CENTER };
 enum XFormTextShadow    { XFTSHADOW_NONE, XFTSHADOW_NORMAL, XFTSHADOW_SLANT};
-enum XFormTextStdForm   { XFTFORM_NONE = 0, XFTFORM_TOPCIRC, XFTFORM_BOTCIRC,
-                          XFTFORM_LFTCIRC, XFTFORM_RGTCIRC, XFTFORM_TOPARC,
-                          XFTFORM_BOTARC, XFTFORM_LFTARC, XFTFORM_RGTARC,
-                          XFTFORM_BUTTON1, XFTFORM_BUTTON2,
-                          XFTFORM_BUTTON3, XFTFORM_BUTTON4};
 enum XBitmapType        { XBITMAP_IMPORT, XBITMAP_8X8 };
 
 

@@ -491,13 +491,6 @@ shell SwDrawShell : SwDrawBaseShell
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_FORMTEXT_STDFORM
-    [
-        ExecMethod = ExecFormText ;
-        StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
     FN_FORMAT_FOOTNOTE_DLG // status()
     [
         ExecMethod = Execute;

@@ -29,7 +29,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/xftsfit.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
@@ -212,10 +211,7 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
-        const SfxPoolItem* pItem;
 
-        //ask for the ViewFrame here - "this" may not be valid any longer!
-        SfxViewFrame* pVFrame = GetView().GetViewFrame();
         if ( pDrView->IsTextEdit() )
         {
             //#111733# Sometimes SdrEndTextEdit() initiates the change in selection and
@@ -226,22 +222,7 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
             rTempView.AttrChangedNotify(&rSh);
         }
 
-        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem) ==
-             SFX_ITEM_SET &&
-            ((const XFormTextStdFormItem*) pItem)->GetValue() != XFTFORM_NONE )
-        {
-
-            const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
-            SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(
-                    pVFrame->GetChildWindow(nId)->GetWindow());
-
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
-                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
-                                   ((const XFormTextStdFormItem*) pItem)->
-                                   GetValue());
-        }
-        else
-            pDrView->SetAttributes(rSet);
+        pDrView->SetAttributes(rSet);
     }
 
 }
@@ -279,7 +260,6 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
         rSet.DisableItem(XATTR_FORMTXTDISTANCE);
         rSet.DisableItem(XATTR_FORMTXTSTART);
         rSet.DisableItem(XATTR_FORMTXTMIRROR);
-        rSet.DisableItem(XATTR_FORMTXTSTDFORM);
         rSet.DisableItem(XATTR_FORMTXTHIDEFORM);
         rSet.DisableItem(XATTR_FORMTXTOUTLINE);
         rSet.DisableItem(XATTR_FORMTXTSHADOW);

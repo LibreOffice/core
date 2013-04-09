@@ -65,7 +65,6 @@
 #include <svx/xftshit.hxx>
 #include <svx/xftshcit.hxx>
 #include <svx/xftshxy.hxx>
-#include <svx/xftsfit.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/grafctrl.hxx>

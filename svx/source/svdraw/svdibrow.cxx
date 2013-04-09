@@ -734,7 +734,6 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         case XATTR_FORMTXTSHDWCOLOR :
         case XATTR_FORMTXTSHDWXVAL  :
         case XATTR_FORMTXTSHDWYVAL  :
-        case XATTR_FORMTXTSTDFORM   :
         case XATTR_FORMTXTHIDEFORM  :
         case XATTR_FORMTXTSHDWTRANSP: {
             rIndent=1;
@@ -882,11 +881,10 @@ sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
         case XATTR_FILLBMP_STRETCH      : nWhich=XATTR_FILLBMP_TILEOFFSETY  ; break;
 
         // Fontwork
-        case XATTR_FORMTXTSHADOW        : nWhich=XATTR_FORMTXTSTDFORM       ; break;
+        case XATTR_FORMTXTSHADOW        : nWhich=XATTR_FORMTXTSHDWXVAL      ; break;
         case XATTR_FORMTXTSHDWCOLOR     : nWhich=XATTR_FORMTXTHIDEFORM      ; break;
         case XATTR_FORMTXTSHDWXVAL      : nWhich=XATTR_FORMTXTSHADOW        ; break;
         case XATTR_FORMTXTSHDWYVAL      : nWhich=XATTR_FORMTXTSHDWCOLOR     ; break;
-        case XATTR_FORMTXTSTDFORM       : nWhich=XATTR_FORMTXTSHDWXVAL      ; break;
         case XATTR_FORMTXTHIDEFORM      : nWhich=XATTR_FORMTXTSHDWYVAL      ; break;
 
         // Misc

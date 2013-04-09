@@ -22,6 +22,9 @@
 #include "fontwork.hrc"
 #include "helpid.hrc"
 
+#define REDUCED_WIDTH               6
+#define REMOVED_VS_FORMS_HEIGHT     (30 + 6)
+
  // RID_SVXDLG_FONTWORK ---------------------------------------------------
 DockingWindow RID_SVXDLG_FONTWORK
 {
@@ -30,25 +33,17 @@ DockingWindow RID_SVXDLG_FONTWORK
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 89 , 193 ) ;
+    Size = MAP_APPFONT ( 89 - REDUCED_WIDTH , 193 - REMOVED_VS_FORMS_HEIGHT ) ;
     Text [ en-US ] = "Fontwork" ;
     Moveable = TRUE ;
     Zoomable = TRUE ;
     Closeable = TRUE ;
     Dockable = TRUE ;
     EnableResizing = TRUE ;
-    Control VS_FORMS
-    {
-        HelpId = HID_FONTWORK_CTL_FORMS ;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 71 , 30 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
     ToolBox TBX_STYLE
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 41 ) ;
+        Pos = MAP_APPFONT ( 6 , 41 - REMOVED_VS_FORMS_HEIGHT ) ;
         ItemList  =
         {
             ToolBoxItem
@@ -99,7 +94,7 @@ DockingWindow RID_SVXDLG_FONTWORK
     ToolBox TBX_ADJUST
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 63 ) ;
+        Pos = MAP_APPFONT ( 6 , 63 - REMOVED_VS_FORMS_HEIGHT ) ;
         ItemList  =
         {
             ToolBoxItem
@@ -150,14 +145,14 @@ DockingWindow RID_SVXDLG_FONTWORK
     };
     FixedImage FB_DISTANCE
     {
-        Pos = MAP_APPFONT ( 10 , 84 ) ;
+        Pos = MAP_APPFONT ( 10 , 84 - REMOVED_VS_FORMS_HEIGHT ) ;
         Size = MAP_APPFONT ( 14 , 15 ) ;
     };
     MetricField MTR_FLD_DISTANCE
     {
         HelpID = "svx:MetricField:RID_SVXDLG_FONTWORK:MTR_FLD_DISTANCE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 29 , 85 ) ;
+        Pos = MAP_APPFONT ( 29 , 85 - REMOVED_VS_FORMS_HEIGHT ) ;
         Size = MAP_APPFONT ( 48 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -175,14 +170,14 @@ DockingWindow RID_SVXDLG_FONTWORK
     };
     FixedImage FB_TEXTSTART
     {
-        Pos = MAP_APPFONT ( 10 , 99 ) ;
+        Pos = MAP_APPFONT ( 10 , 99 - REMOVED_VS_FORMS_HEIGHT ) ;
         Size = MAP_APPFONT ( 14 , 15 ) ;
     };
     MetricField MTR_FLD_TEXTSTART
     {
         HelpID = "svx:MetricField:RID_SVXDLG_FONTWORK:MTR_FLD_TEXTSTART";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 29 , 100 ) ;
+        Pos = MAP_APPFONT ( 29 , 100 - REMOVED_VS_FORMS_HEIGHT ) ;
         Size = MAP_APPFONT ( 48 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -198,7 +193,7 @@ DockingWindow RID_SVXDLG_FONTWORK
     ToolBox TBX_SHADOW
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 122 ) ;
+        Pos = MAP_APPFONT ( 6 , 122 - REMOVED_VS_FORMS_HEIGHT ) ;
         ItemList  =
         {
             ToolBoxItem
@@ -249,14 +244,14 @@ DockingWindow RID_SVXDLG_FONTWORK
     };
     FixedImage FB_SHADOW_X
     {
-        Pos = MAP_APPFONT ( 10 , 143 ) ;
+        Pos = MAP_APPFONT ( 10 , 143 - REMOVED_VS_FORMS_HEIGHT ) ;
         Size = MAP_APPFONT ( 14 , 15 ) ;
     };
     MetricField MTR_FLD_SHADOW_X
     {
         HelpID = "svx:MetricField:RID_SVXDLG_FONTWORK:MTR_FLD_SHADOW_X";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 29 , 144 ) ;
+        Pos = MAP_APPFONT ( 29 , 144 - REMOVED_VS_FORMS_HEIGHT ) ;
         Size = MAP_APPFONT ( 48 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -274,14 +269,14 @@ DockingWindow RID_SVXDLG_FONTWORK
     };
     FixedImage FB_SHADOW_Y
     {
-        Pos = MAP_APPFONT ( 10 , 158 ) ;
+        Pos = MAP_APPFONT ( 10 , 158 - REMOVED_VS_FORMS_HEIGHT ) ;
         Size = MAP_APPFONT ( 14 , 15 ) ;
     };
     MetricField MTR_FLD_SHADOW_Y
     {
         HelpID = "svx:MetricField:RID_SVXDLG_FONTWORK:MTR_FLD_SHADOW_Y";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 29 , 159 ) ;
+        Pos = MAP_APPFONT ( 29 , 159 - REMOVED_VS_FORMS_HEIGHT ) ;
         Size = MAP_APPFONT ( 48 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -299,7 +294,7 @@ DockingWindow RID_SVXDLG_FONTWORK
     {
         HelpID = "svx:ListBox:RID_SVXDLG_FONTWORK:CLB_SHADOW_COLOR";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 174 ) ;
+        Pos = MAP_APPFONT ( 6 , 174 - REMOVED_VS_FORMS_HEIGHT ) ;
         Size = MAP_APPFONT ( 71 , 60 ) ;
         DropDown = TRUE ;
         QuickHelpText [ en-US ] = "Shadow Color" ;
@@ -342,109 +337,5 @@ DockingWindow RID_SVXDLG_FONTWORK
         FONTWORK_IDLIST
     };
 };
- // Bitmaps ---------------------------------------------------------------
-Bitmap RID_SVXBMP_FONTWORK_FORM1
-{
-    File = "fwthcirc.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM2
-{
-    File = "fwbhcirc.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM3
-{
-    File = "fwlhcirc.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM4
-{
-    File = "fwrhcirc.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM5
-{
-    File = "fwtoparc.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM6
-{
-    File = "fwbotarc.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM7
-{
-    File = "fwlftarc.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM8
-{
-    File = "fwrgtarc.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM9
-{
-    File = "fwbuttn1.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM10
-{
-    File = "fwbuttn2.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM11
-{
-    File = "fwbuttn3.bmp" ;
-};
-Bitmap RID_SVXBMP_FONTWORK_FORM12
-{
-    File = "fwbuttn4.bmp" ;
-};
-
- // Strings ---------------------------------------------------------------
-String RID_SVXSTR_FONTWORK_FORM1
-{
-    Text [ en-US ] = "Upper Semicircle" ;
-};
-String RID_SVXSTR_FONTWORK_FORM2
-{
-    Text [ en-US ] = "Lower Semicircle" ;
-};
-String RID_SVXSTR_FONTWORK_FORM3
-{
-    Text [ en-US ] = "Left Semicircle" ;
-};
-String RID_SVXSTR_FONTWORK_FORM4
-{
-    Text [ en-US ] = "Right Semicircle" ;
-};
-String RID_SVXSTR_FONTWORK_FORM5
-{
-    Text [ en-US ] = "Upper Arc" ;
-};
-String RID_SVXSTR_FONTWORK_FORM6
-{
-    Text [ en-US ] = "Lower Arc" ;
-};
-String RID_SVXSTR_FONTWORK_FORM7
-{
-    Text [ en-US ] = "Left Arc" ;
-};
-String RID_SVXSTR_FONTWORK_FORM8
-{
-    Text [ en-US ] = "Right Arc" ;
-};
-String RID_SVXSTR_FONTWORK_FORM9
-{
-    Text [ en-US ] = "Open Circle" ;
-};
-String RID_SVXSTR_FONTWORK_FORM10
-{
-    Text [ en-US ] = "Closed Circle" ;
-};
-String RID_SVXSTR_FONTWORK_FORM11
-{
-    Text [ en-US ] = "Closed Circle II" ;
-};
-String RID_SVXSTR_FONTWORK_FORM12
-{
-    Text [ en-US ] = "Open Circle Vertical" ;
-};
-String RID_SVXSTR_FONTWORK_UNDOCREATE
-{
-    Text [ en-US ] = "Create Fontwork object" ;
-};
- // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
