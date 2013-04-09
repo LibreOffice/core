@@ -79,10 +79,6 @@
 #include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::beans;
 #include <svl/ctypeitm.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/syslocale.hxx>
@@ -113,6 +109,8 @@ using namespace ::com::sun::star::beans;
 #if defined(DBG_UTIL) && defined(WNT)
 unsigned SfxStack::nLevel = 0;
 #endif
+
+using namespace com::sun::star;
 
 namespace
 {
@@ -380,13 +378,15 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     SfxFilterFlags nMust,
     SfxFilterFlags nDont ) const
 {
-    Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(OUString("com.sun.star.document.TypeDetection")), UNO_QUERY );
+    uno::Reference<document::XTypeDetection> xDetection(
+        comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
+
     OUString sTypeName;
     try
     {
         sTypeName = xDetection->queryTypeByURL( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
     }
-    catch( Exception& )
+    catch (uno::Exception&)
     {
     }
 
@@ -415,7 +415,9 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
     const SfxFilter* pOldFilter = *ppFilter;
 
     // no detection service -> nothing to do !
-    Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(OUString("com.sun.star.document.TypeDetection")), UNO_QUERY );
+    uno::Reference<document::XTypeDetection> xDetection(
+        comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
+
     if (!xDetection.is())
         return ERRCODE_ABORT;
 
@@ -426,7 +428,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
         // Otherwhise it will be tried more then once and show the same interaction more then once ...
 
         OUString sURL( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInStream = rMedium.GetInputStream();
+        uno::Reference< io::XInputStream > xInStream = rMedium.GetInputStream();
         OUString aFilterName;
 
         // stream exists => deep detection (with preselection ... if possible)
@@ -447,7 +449,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
                 aDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= OUString( pOldFilter->GetFilterName() );
             }
 
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
+            uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
             sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, sal_True); // lDescriptor is used as In/Out param ... dont use aDescriptor.getAsConstPropertyValueList() directly!
 
             for (sal_Int32 i = 0; i < lDescriptor.getLength(); ++i)
@@ -475,7 +477,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
                 // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
                 // The DocumentService property is only a preselection, and all preselections are considered as optional!
                 // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lQuery(1);
+                uno::Sequence< beans::NamedValue > lQuery(1);
                 lQuery[0].Name = OUString("Name");
                 lQuery[0].Value <<= sTypeName;
 
@@ -489,7 +491,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
             }
         }
     }
-    catch(const Exception&)
+    catch (const uno::Exception&)
     {}
 
     return ERRCODE_ABORT;
@@ -605,16 +607,16 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
     return nErr;
 }
 
-const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue >& aSeq, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno::Sequence < beans::NamedValue >& aSeq, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery > xTypeCFG;
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    uno::Reference< container::XContainerQuery > xTypeCFG;
     if( xServiceManager.is() == sal_True )
-        xTypeCFG   = ::com::sun::star::uno::Reference < com::sun::star::container::XContainerQuery >( xServiceManager->createInstance( "com.sun.star.document.TypeDetection" ), ::com::sun::star::uno::UNO_QUERY );
+        xTypeCFG   = uno::Reference < com::sun::star::container::XContainerQuery >( xServiceManager->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
     if ( xTypeCFG.is() )
     {
         // make query for all types matching the properties
-        ::com::sun::star::uno::Reference < com::sun::star::container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
+        uno::Reference < com::sun::star::container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
         while ( xEnum->hasMoreElements() )
         {
             ::comphelper::SequenceAsHashMap aProps( xEnum->nextElement() );
@@ -738,7 +740,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const String& rExt, SfxF
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
     aSeq[0].Name = OUString("Extensions");
-    ::com::sun::star::uno::Sequence < OUString > aExts(1);
+    uno::Sequence < OUString > aExts(1);
     aExts[0] = sExt;
     aSeq[0].Value <<= aExts;
     return GetFilterForProps( aSeq, nMust, nDont );
@@ -788,13 +790,13 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
 
     if ( bFirstRead )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     xFilterCFG                                                ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     xTypeCFG                                                  ;
+        uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+        uno::Reference< container::XNameAccess >     xFilterCFG                                                ;
+        uno::Reference< container::XNameAccess >     xTypeCFG                                                  ;
         if( xServiceManager.is() == sal_True )
         {
-            xFilterCFG = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), ::com::sun::star::uno::UNO_QUERY );
-            xTypeCFG   = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), ::com::sun::star::uno::UNO_QUERY );
+            xFilterCFG = uno::Reference< container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
+            xTypeCFG   = uno::Reference< container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
         }
 
         if( xFilterCFG.is() && xTypeCFG.is() )
@@ -891,7 +893,7 @@ const SfxFilter* SfxFilterMatcherIter::Next()
     helper to build own formated string from given stringlist by
     using given seperator
   ---------------------------------------------------------------*/
-OUString implc_convertStringlistToString( const ::com::sun::star::uno::Sequence< OUString >& lList     ,
+OUString implc_convertStringlistToString( const uno::Sequence< OUString >& lList     ,
                                                  const sal_Unicode&                                        cSeperator,
                                                  const OUString&                                    sPrefix   )
 {
@@ -916,22 +918,22 @@ OUString implc_convertStringlistToString( const ::com::sun::star::uno::Sequence<
 
 void SfxFilterContainer::ReadSingleFilter_Impl(
     const OUString& rName,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xTypeCFG,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,
+    const uno::Reference< container::XNameAccess >& xTypeCFG,
+    const uno::Reference< container::XNameAccess >& xFilterCFG,
     sal_Bool bUpdate
     )
 {
     OUString sFilterName( rName );
     SfxFilterList_Impl& rList = *pFilterArr;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lFilterProperties;
-    ::com::sun::star::uno::Any aResult;
+    uno::Sequence< beans::PropertyValue > lFilterProperties;
+    uno::Any aResult;
     try
     {
         aResult = xFilterCFG->getByName( sFilterName );
     }
-    catch( ::com::sun::star::container::NoSuchElementException& )
+    catch( container::NoSuchElementException& )
     {
-        aResult = ::com::sun::star::uno::Any();
+        aResult = uno::Any();
     }
 
     if( aResult >>= lFilterProperties )
@@ -975,7 +977,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             }
             else if ( lFilterProperties[nFilterProperty].Name == "UserData" )
             {
-                ::com::sun::star::uno::Sequence< OUString > lUserData;
+                uno::Sequence< OUString > lUserData;
                 lFilterProperties[nFilterProperty].Value >>= lUserData;
                 sUserData = implc_convertStringlistToString( lUserData, ',', OUString() );
             }
@@ -999,12 +1001,12 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                 {
                     aResult = xTypeCFG->getByName( sType );
                 }
-                catch (const ::com::sun::star::container::NoSuchElementException&)
+                catch (const container::NoSuchElementException&)
                 {
-                    aResult = ::com::sun::star::uno::Any();
+                    aResult = uno::Any();
                 }
 
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lTypeProperties;
+                uno::Sequence< beans::PropertyValue > lTypeProperties;
                 if( aResult >>= lTypeProperties )
                 {
                     // get indirect available properties then (types)
@@ -1028,14 +1030,14 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                         {
                             if (sExtension.isEmpty())
                             {
-                                ::com::sun::star::uno::Sequence< OUString > lExtensions;
+                                uno::Sequence< OUString > lExtensions;
                                 lTypeProperties[nTypeProperty].Value >>= lExtensions;
                                 sExtension = implc_convertStringlistToString( lExtensions, ';', "*." );
                             }
                         }
                         else if ( lTypeProperties[nTypeProperty].Name == "URLPattern" )
                         {
-                                ::com::sun::star::uno::Sequence< OUString > lPattern;
+                                uno::Sequence< OUString > lPattern;
                                 lTypeProperties[nTypeProperty].Value >>= lPattern;
                                 sPattern = implc_convertStringlistToString( lPattern, ';', OUString() );
                         }
@@ -1123,13 +1125,13 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
     try
     {
         // get the FilterFactory service to access the registered filters ... and types!
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     xFilterCFG                                                ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     xTypeCFG                                                  ;
+        uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+        uno::Reference< container::XNameAccess >     xFilterCFG                                                ;
+        uno::Reference< container::XNameAccess >     xTypeCFG                                                  ;
         if( xServiceManager.is() == sal_True )
         {
-            xFilterCFG = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), ::com::sun::star::uno::UNO_QUERY );
-            xTypeCFG   = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), ::com::sun::star::uno::UNO_QUERY );
+            xFilterCFG = uno::Reference< container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
+            xTypeCFG   = uno::Reference< container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
         }
 
         if(
@@ -1138,7 +1140,7 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
           )
         {
             // select right query to get right set of filters for search modul
-            ::com::sun::star::uno::Sequence< OUString > lFilterNames = xFilterCFG->getElementNames();
+            uno::Sequence< OUString > lFilterNames = xFilterCFG->getElementNames();
             if ( lFilterNames.getLength() )
             {
                 // If list of filters already exist ...
@@ -1169,7 +1171,7 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
             }
         }
     }
-    catch(const ::com::sun::star::uno::Exception&)
+    catch(const uno::Exception&)
     {
         DBG_ASSERT( sal_False, "SfxFilterContainer::ReadFilter()\nException detected. Possible not all filters could be cached.\n" );
     }
