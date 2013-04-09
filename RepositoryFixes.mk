@@ -71,14 +71,6 @@ gb_Library_DLLFILENAMES := $(patsubst rdf:rdf%,rdf:librdf%,$(gb_Library_DLLFILEN
 # libpyuno_wrapper.dll => pyuno.pyd
 gb_Library_DLLFILENAMES := $(patsubst pyuno:pyuno.dll,pyuno:pyuno.pyd,$(gb_Library_DLLFILENAMES))
 
-gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst tl:itl%,tl:itools%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst vbahelper:ivbahelper%,vbahelper:vbahelper%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst curl:icurl%,curl:libcurl%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst npsoplugin:inpsoplugin%,npsoplugin:npsoplugin%,$(gb_Library_FILENAMES))
-
 gb_StaticLibrary_FILENAMES := $(patsubst png:png%,png:libpng%,$(gb_StaticLibrary_FILENAMES))
 gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
 
@@ -107,22 +99,14 @@ gb_Library_DLLFILENAMES := $(patsubst ssl:ssl%,ssl:ssleay32%,$(gb_Library_DLLFIL
 
 else # $(COM) != GCC
 
-gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:icppunit_dll%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:libeay32%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst crypto:libcrypto%,crypto:libcrypto_static%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst db47:idb47%,db47:libdb47%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst exslt:iexslt%,exslt:libexslt%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst lpsolve55:ilpsolve55%,lpsolve55:lpsolve55%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst package2:ipackage2%,package2:ipackage%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ssl:issl%,ssl:ssleay32%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ssl:libssl%,ssl:libssl_static%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:libxml2%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xmlsec1:ixmlsec1%,xmlsec1:libxmlsec%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xmlsec1-mscrypto:ixmlsec1-mscrypto%,xmlsec1-mscrypto:libxmlsec-mscrypto%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xmlsec1-nss:ixmlsec1-nss%,xmlsec1-nss:libxmlsec-nss%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 
 
@@ -131,15 +115,28 @@ gb_Library_NOILIBFILENAMES := \
     icudt icuin icule icuuc \
     langtag \
     lcms2 \
+    lpsolve55 \
     xpcom \
     xpcom_core \
     nspr4 \
     nss3 \
     smime3 \
-    uwinapi \
 
-gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
-gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT))
+# these have prefix "lib" instead of "i"
+gb_Library_LIBLIBFILENAMES := \
+	curl \
+	exslt \
+	rdf \
+	xml2 \
+	xslt \
+
+gb_Library_FILENAMES := \
+	$(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%) \
+				 $(foreach lib,$(gb_Library_LIBLIBFILENAMES),$(lib):%) \
+		,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES += \
+	$(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_LIBLIBFILENAMES),$(lib):lib$(lib)$(gb_Library_PLAINEXT))
 
 endif # ifeq ($(COM),GCC)
 
