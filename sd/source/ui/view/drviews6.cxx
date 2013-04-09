@@ -54,6 +54,7 @@
 #include "DrawDocShell.hxx"
 #include "sdabstdlg.hxx"
 #include "framework/FrameworkHelper.hxx"
+#include <svx/svdoashp.hxx>
 
 namespace sd {
 
@@ -122,8 +123,14 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-    if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
-        !((SdrTextObj*) pObj)->HasText() )
+    const SdrTextObj* pTextObj = dynamic_cast< const SdrTextObj* >(pObj);
+    const bool bDeactivate(
+        !pObj ||
+        !pTextObj ||
+        !pTextObj->HasText() ||
+        dynamic_cast< const SdrObjCustomShape* >(pObj)); // #121538# no FontWork for CustomShapes
+
+    if(bDeactivate)
     {
 // automatic open/close the FontWork-Dialog; first deactivate it
 

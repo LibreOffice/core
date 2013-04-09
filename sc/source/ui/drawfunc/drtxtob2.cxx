@@ -33,7 +33,7 @@
 #include <sfx2/request.hxx>
 #include <sot/formats.hxx>
 #include <svl/whiter.hxx>
-
+#include <svx/svdoashp.hxx>
 #include "sc.hrc"
 #include "drtxtob.hxx"
 #include "viewdata.hxx"
@@ -236,8 +236,14 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-    if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
-        !((SdrTextObj*) pObj)->HasText() )
+    const SdrTextObj* pTextObj = dynamic_cast< const SdrTextObj* >(pObj);
+    const bool bDeactivate(
+        !pObj ||
+        !pTextObj ||
+        !pTextObj->HasText() ||
+        dynamic_cast< const SdrObjCustomShape* >(pObj)); // #121538# no FontWork for CustomShapes
+
+    if(bDeactivate)
     {
         if ( pDlg )
             pDlg->SetActive(false);
