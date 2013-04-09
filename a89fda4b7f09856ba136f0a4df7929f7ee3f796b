@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///kI\u003d",
+        "filename": "vcl/unx/gtk/app/gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-04-09T17:03:00Z",
+      "side": 0,
+      "message": "This is all good - thanks :-)",
+      "revId": "a89fda4b7f09856ba136f0a4df7929f7ee3f796b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///kE\u003d",
+        "filename": "vcl/unx/gtk/app/gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-04-09T17:03:00Z",
+      "side": 0,
+      "message": "If this is never called - then we need to remove the method, it\u0027s signature in the header, and all call-sites for it (right?).",
+      "revId": "a89fda4b7f09856ba136f0a4df7929f7ee3f796b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///kA\u003d",
+        "filename": "vcl/unx/gtk/app/gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-04-09T17:03:00Z",
+      "side": 0,
+      "message": "Same for Grab and UnGrab I think.",
+      "revId": "a89fda4b7f09856ba136f0a4df7929f7ee3f796b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

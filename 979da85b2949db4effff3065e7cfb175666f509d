@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///kQ\u003d",
+        "filename": "vcl/unx/gtk/app/gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-04-09T17:03:00Z",
+      "side": 1,
+      "message": "Better to use #error here if we can I think :-)",
+      "revId": "979da85b2949db4effff3065e7cfb175666f509d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///kM\u003d",
+        "filename": "vcl/unx/gtk/app/gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-04-09T17:03:00Z",
+      "side": 1,
+      "message": "If we don\u0027t need the parameter, it\u0027d be great not to pass it rather than this warning reduction ;-)",
+      "revId": "979da85b2949db4effff3065e7cfb175666f509d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///j8\u003d",
+        "filename": "vcl/unx/gtk/app/gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-04-09T17:03:00Z",
+      "side": 1,
+      "message": "We need to turn the g_error warning about gtk+ version into a:\n\ng_warning(\"require a newer gtk than %d for gdk_threads_set_lock_functions\");\n\nand spew that out - and return NULL for the create_SalInstance - IFF we have an old version - we can check gtk_major and gtk_minor version to do that; but you\u0027ll need to read the git logs in a gtk+ git checkout to see which version that method was introduced in I think.",
+      "revId": "979da85b2949db4effff3065e7cfb175666f509d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
