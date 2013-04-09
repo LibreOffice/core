@@ -25,7 +25,9 @@ $(eval $(call gb_ExternalPackage_add_file,xmlsec,bin/libxmlsec.dll,win32/binarie
 endif
 else ifeq ($(OS),ANDROID)
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1.a,src/.libs/libxmlsec1.a))
+ifneq ($(DISABLE_OPENSSL),YES)
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1-openssl.a,src/openssl/.libs/libxmlsec1-openssl.a))
+endif # DISABLE_OPENSSL
 else
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1.a,src/.libs/libxmlsec1.a))
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1-nss.a,src/nss/.libs/libxmlsec1-nss.a))
