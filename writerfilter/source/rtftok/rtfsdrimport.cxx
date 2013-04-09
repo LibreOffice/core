@@ -179,7 +179,11 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if (i->first == "fillColor" && xPropertySet.is())
         {
             aAny <<= msfilter::util::BGRToRGB(i->second.toInt32());
-            xPropertySet->setPropertyValue("FillColor", aAny);
+            if (bTextFrame)
+                xPropertySet->setPropertyValue("BackColor", aAny);
+            else
+                xPropertySet->setPropertyValue("FillColor", aAny);
+            xPropertySet->setPropertyValue("BackColorTransparency", uno::makeAny(sal_Int32(0)));
         }
         else if ( i->first == "fillBackColor" )
             ; // Ignore: complementer of fillColor
