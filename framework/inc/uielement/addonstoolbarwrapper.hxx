@@ -51,7 +51,6 @@ class AddonsToolBarWrapper : public UIElementWrapperBase
     private:
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >                             m_xServiceManager;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                                       m_xToolBarManager;
-        com::sun::star::uno::Reference< com::sun::star::awt::XWindow >                                           m_xToolBarWindow;
         com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > m_aConfigData;
 };
 

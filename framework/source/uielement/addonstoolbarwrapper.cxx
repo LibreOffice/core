@@ -78,7 +78,6 @@ void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException )
     if ( m_xToolBarManager.is() )
         m_xToolBarManager->dispose();
     m_xToolBarManager.clear();
-    m_xToolBarWindow.clear();
 
     m_bDisposed = sal_True;
 }
@@ -119,7 +118,6 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
                     sal_uLong nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
                     pToolBar = new ToolBar( pWindow, nStyles );
-                    m_xToolBarWindow = VCLUnoHelper::GetInterface( pToolBar );
                     pToolBarManager = new AddonsToolBarManager( comphelper::getComponentContext(m_xServiceManager), xFrame, m_aResourceURL, pToolBar );
                     pToolBar->SetToolBarManager( pToolBarManager );
                     m_xToolBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
