@@ -83,6 +83,9 @@ class SwPaMPrinter(object):
             children.append(("prev", prev))
         return children.__iter__()
 
+class SwUnoCrsrPrinter(SwPaMPrinter):
+    '''Prints SwUnoCrsr.'''
+
 class SwRectPrinter(object):
     '''Prints SwRect.'''
 
@@ -116,6 +119,23 @@ class SwIMarkPrinter(object):
             pos2 = unoMark['m_pPos2']
             children = [ ( 'pos1', pos1), ( 'pos2', pos2 ) ]
             return children.__iter__()
+        else:
+            return self._iterator(self.value)
+
+class SwModifyPrinter(object):
+    '''Prints SwModify.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return "%s" % (self.typename)
+
+    def children(self):
+        if str(self.value.dynamic_type) == "SwUnoCrsr":
+            unoCrsr = self.value.cast(self.value.dynamic_type)
+            return SwUnoCrsrPrinter(self.typename, unoCrsr).children()
         else:
             return self._iterator(self.value)
 
@@ -279,11 +299,13 @@ def build_pretty_printers():
     printer.add('SwNodeIndex', SwNodeIndexPrinter)
     printer.add('SwIndex', SwIndexPrinter)
     printer.add('SwPaM', SwPaMPrinter)
+    printer.add('SwUnoCrsr', SwUnoCrsrPrinter)
     printer.add('SwRect', SwRectPrinter)
     printer.add('sw::mark::IMark', SwIMarkPrinter)
     printer.add('SwXTextRange::Impl', SwXTextRangeImplPrinter)
     printer.add('sw::UnoImplPtr', SwUnoImplPtrPrinter)
     printer.add('SwXTextRange', SwXTextRangePrinter)
+    printer.add('SwModify', SwModifyPrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
