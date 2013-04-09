@@ -534,7 +534,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
     // otherwise - create new help task
     Reference< XFrame2 > xHelpTask(
         xDesktop->findFrame(  "OFFICE_HELP_TASK", FrameSearchFlag::TASKS | FrameSearchFlag::CREATE),
-        UNO_QUERY_THROW);
+        UNO_QUERY);
     if (!xHelpTask.is())
         return 0;
 
@@ -755,7 +755,7 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
     // search must be done here; search one desktop level could return an arbitraty frame
     Reference< XFrame2 > xHelp(
         xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
-        UNO_QUERY_THROW);
+        UNO_QUERY);
     Reference< XFrame > xHelpContent = xDesktop->findFrame(
         OUString("OFFICE_HELP"),
         FrameSearchFlag::CHILDREN);

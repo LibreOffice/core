@@ -1772,7 +1772,7 @@ void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInter
 
     /* SAFE { */
         WriteGuard aWriteLock( m_aLock );
-            m_xLayoutManager.set(p1, css::uno::UNO_QUERY_THROW);
+            m_xLayoutManager.set(p1, css::uno::UNO_QUERY);
         aWriteLock.unlock();
     /* } SAFE */
 }
