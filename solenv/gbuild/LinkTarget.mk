@@ -1082,6 +1082,8 @@ $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Cannot import objects library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
 $(call gb_LinkTarget__use_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_Library_get_linktargetname,$(lib))))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) : \
+	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 
 endef
 
