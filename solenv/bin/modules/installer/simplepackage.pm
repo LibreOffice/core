@@ -410,6 +410,44 @@ sub create_package
 
             chdir $localfrom;
         }
+        else
+        {
+            if (($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev') &&
+                defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
+            {
+                # Just sign the .app as a whole, which means signing
+                # the CFBundleExecutable from Info.plist,
+                # i.e. soffice, plus the contents of the Resources
+                # treee (which is not much, far from all of our
+                # non-code "resources").
+
+                # Don't bother here in the 4.0 branch to sign each
+                # individual .dylib, or each additional binary. See
+                # master for more work plus possibly eventually
+                # re-organising the app bundle structure to be more
+                # Mac-like (the "program" symlink, eek!) and actually
+                # putting all non-code resources (including extension
+                # scripts!)  into Resources so that they participate
+                # in the signing and their validity can be guaranteed.
+
+                $systemcall = "codesign --sign $ENV{'MACOSX_CODESIGNING_IDENTITY'} -v -v -v $tempdir/$packagename/$volume_name_classic_app.app";
+                print "... $systemcall ...\n";
+                my $returnvalue = system($systemcall);
+                $infoline = "Systemcall: $systemcall\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                if ($returnvalue)
+                {
+                    $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+                else
+                {
+                    $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+            }
+        }
 
         $systemcall = "cd $localtempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDBZ $installdir/tmp.dmg -o $archive && ";
         if (( $ref ne "" ) && ( $$ref ne "" )) {
