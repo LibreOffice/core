@@ -477,7 +477,7 @@ ImageList RID_IMGLST_LAYOUT
 };
 Image RID_IMG_LOCKED
 {
-    ImageBitmap = Bitmap { File = "locked.bmp" ; };
+    ImageBitmap = Bitmap { File = "lock.png" ; };
     MASKCOLOR
 };
 
