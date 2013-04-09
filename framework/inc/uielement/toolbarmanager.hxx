@@ -179,7 +179,6 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
              m_bSmallSymbols : 1,
              m_bModuleIdentified : 1,
              m_bAddedToTaskPaneList : 1,
-             m_bVerticalTextEnabled : 1,
              m_bFrameActionRegistered : 1,
              m_bUpdateControllers : 1,
              m_bImageOrientationRegistered : 1,
