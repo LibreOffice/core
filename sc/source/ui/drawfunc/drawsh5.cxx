@@ -46,7 +46,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/xdef.hxx>
-#include <svx/xftsfit.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -682,25 +681,7 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
         if ( pDrView->IsTextEdit() )
             pDrView->ScEndTextEdit();
 
-        if (    SFX_ITEM_SET ==
-                rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem)
-             && XFTFORM_NONE !=
-                ((const XFormTextStdFormItem*) pItem)->GetValue() )
-        {
-
-            sal_uInt16 nId              = SvxFontWorkChildWindow::GetChildWindowId();
-            SfxViewFrame* pViewFrm  = pViewData->GetViewShell()->GetViewFrame();
-            SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)
-                                       (pViewFrm->
-                                            GetChildWindow(nId)->GetWindow());
-
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
-                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
-                                   ((const XFormTextStdFormItem*) pItem)->
-                                   GetValue());
-        }
-        else
-            pDrView->SetAttributes(rSet);
+        pDrView->SetAttributes(rSet);
     }
 }
 

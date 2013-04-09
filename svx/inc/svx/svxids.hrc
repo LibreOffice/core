@@ -622,7 +622,6 @@
 #define SID_FORMTEXT_SHDWCOLOR                          ( SID_SVX_START + 264 )
 #define SID_FORMTEXT_SHDWXVAL                           ( SID_SVX_START + 265 )
 #define SID_FORMTEXT_SHDWYVAL                           ( SID_SVX_START + 266 )
-#define SID_FORMTEXT_STDFORM                            ( SID_SVX_START + 267 )
 #define SID_FORMTEXT_HIDEFORM                           ( SID_SVX_START + 268 )
 #define SID_FORMTEXT_RESERVED1                          ( SID_SVX_START + 269 )
 #define SID_FORMTEXT_RESERVED2                          ( SID_SVX_START + 270 )

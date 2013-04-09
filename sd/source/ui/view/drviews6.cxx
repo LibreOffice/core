@@ -46,7 +46,6 @@
 #ifndef _IMAPDLG_HXX
 #include <svx/imapdlg.hxx>
 #endif
-#include <svx/xftsfit.hxx>
 #include <svx/colrctrl.hxx>
 #include <svx/f3dchild.hxx>
 #include "optsitem.hxx"
@@ -107,29 +106,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
         if ( mpDrawView->IsTextEdit() )
             mpDrawView->SdrEndTextEdit();
 
-        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem) ==
-             SFX_ITEM_SET &&
-            ((const XFormTextStdFormItem*) pItem)->GetValue() != XFTFORM_NONE )
-        {
-
-            sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
-
-            SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)GetViewFrame()->
-                                        GetChildWindow(nId)->GetWindow();
-
-            pDlg->CreateStdFormObj(*mpDrawView, *mpDrawView->GetSdrPageView(),
-                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
-                                   ((const XFormTextStdFormItem*) pItem)->
-                                   GetValue());
-
-            if(HasCurrentFunction(SID_BEZIER_EDIT))
-            {   // ggf. die richtige Editfunktion aktivieren
-                GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
-                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-            }
-        }
-        else
-            mpDrawView->SetAttributes(rSet);
+        mpDrawView->SetAttributes(rSet);
     }
 }
 
@@ -171,7 +148,6 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
         rSet.DisableItem(XATTR_FORMTXTDISTANCE);
         rSet.DisableItem(XATTR_FORMTXTSTART);
         rSet.DisableItem(XATTR_FORMTXTMIRROR);
-        rSet.DisableItem(XATTR_FORMTXTSTDFORM);
         rSet.DisableItem(XATTR_FORMTXTHIDEFORM);
         rSet.DisableItem(XATTR_FORMTXTOUTLINE);
         rSet.DisableItem(XATTR_FORMTXTSHADOW);

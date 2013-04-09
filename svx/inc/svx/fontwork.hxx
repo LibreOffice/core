@@ -48,7 +48,6 @@ class XFormTextAdjustItem;
 class XFormTextDistanceItem;
 class XFormTextStartItem;
 class XFormTextMirrorItem;
-class XFormTextStdFormItem;
 class XFormTextHideFormItem;
 class XFormTextOutlineItem;
 class XFormTextShadowItem;
@@ -97,11 +96,9 @@ class SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 
 class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 {
- #define CONTROLLER_COUNT 12
+#define CONTROLLER_COUNT 11
 
     SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
-
-    ValueSet        aFormSet;
 
     ToolBox         aTbxStyle;
     ToolBox         aTbxAdjust;
@@ -148,7 +145,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     DECL_LINK( ModifyInputHdl_Impl, void * );
     DECL_LINK( InputTimoutHdl_Impl, void * );
 
-    DECL_LINK( FormSelectHdl_Impl, void * );
     DECL_LINK( ColorSelectHdl_Impl, void * );
 
     void SetStyle_Impl(const XFormTextStyleItem*);
@@ -156,11 +152,9 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void SetDistance_Impl(const XFormTextDistanceItem*);
     void SetStart_Impl(const XFormTextStartItem*);
     void SetMirror_Impl(const XFormTextMirrorItem*);
-    void SetStdForm_Impl(const XFormTextStdFormItem*);
     void SetShowForm_Impl(const XFormTextHideFormItem*);
     void SetOutline_Impl(const XFormTextOutlineItem*);
-    void SetShadow_Impl(const XFormTextShadowItem*,
-                        sal_Bool bRestoreValues = sal_False);
+    void SetShadow_Impl(const XFormTextShadowItem*, sal_Bool bRestoreValues = sal_False);
     void SetShadowColor_Impl(const XFormTextShadowColorItem*);
     void SetShadowXVal_Impl(const XFormTextShadowXValItem*);
     void SetShadowYVal_Impl(const XFormTextShadowYValItem*);
@@ -183,10 +177,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
     void SetColorTable(const XColorTable* pTable);
     void SetActive(sal_Bool bActivate = sal_True);
-
-    void CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
-                          const SfxItemSet& rAttr, SdrObject& rOldObj,
-                          XFormTextStdForm eForm);
 };
 
 #endif      // _SVX_FONTWORK_HXX

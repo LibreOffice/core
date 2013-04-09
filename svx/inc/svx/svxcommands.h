@@ -171,7 +171,6 @@
 #define CMD_SID_ATTR_CHAR_CTL_FONTHEIGHT            ".uno:FontHeightCTL"
 #define CMD_SID_FONTWORK                            ".uno:FontWork"
 #define CMD_SID_FORMTEXT_ADJUST                     ".uno:FontWorkTextAdjust"
-#define CMD_SID_FORMTEXT_STDFORM                    ".uno:FontWorkTextClearAttributes"
 #define CMD_SID_FORMTEXT_DISTANCE                   ".uno:FontWorkTextDistance"
 #define CMD_SID_FORMTEXT_MIRROR                     ".uno:FontWorkTextMirror"
 #define CMD_SID_FORMTEXT_OUTLINE                    ".uno:FontWorkTextOutline"

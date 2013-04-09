@@ -20,7 +20,6 @@
  *************************************************************/
 
 
-#define VS_FORMS 1
 #define TBX_STYLE 1
 #define TBX_ADJUST 2
 #define TBX_SHADOW 3
