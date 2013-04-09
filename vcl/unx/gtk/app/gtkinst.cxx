@@ -111,22 +111,15 @@ extern "C"
     }
     static bool hookLocks( oslModule pModule )
     {
-        typedef void (*GdkLockFn) (GCallback enter_fn, GCallback leave_fn);
-
-        GdkLockFn gdk_threads_set_lock_functions =
-                (GdkLockFn) osl_getAsciiFunctionSymbol( pModule, "gdk_threads_set_lock_functions" );
-        if ( !gdk_threads_set_lock_functions )
-        {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Failed to hook gdk threads locks\n" );
+#if !GTK_CHECK_VERSION(2,4,0)
+        g_error("no lock hooking!");
 #endif
-            return false;
-        }
-
         gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
+
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "Hooked gdk threads locks\n" );
 #endif
+        (void)pModule;
         return true;
     }
 
@@ -168,12 +161,6 @@ extern "C"
 
         if ( hookLocks( pModule ) )
             pYieldMutex = new GtkHookedYieldMutex();
-        else
-#if GTK_CHECK_VERSION(3,0,0)
-            g_error ("impossible case for gtk3");
-#else
-            pYieldMutex = new GtkYieldMutex();
-#endif
 
         gdk_threads_init();
 
@@ -354,135 +341,30 @@ GtkYieldMutex::GtkYieldMutex()
 
 void GtkYieldMutex::acquire()
 {
-#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
-    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
-    // protect member manipulation
-    SolarMutexObject::acquire();
-    if( mnCount > 0 && mnThreadId == aCurrentThread )
-    {
-        mnCount++;
-        SolarMutexObject::release();
-        return;
-    }
-    SolarMutexObject::release();
-
-    // obtain gdk mutex
-    gdk_threads_enter();
-
-    // obtained gdk mutex, now lock count is one by definition
-    SolarMutexObject::acquire();
-    mnCount = 1;
-    mnThreadId = aCurrentThread;
-    SolarMutexObject::release();
-#else
     g_error ("never called");
-#endif
 }
 
 void GtkYieldMutex::release()
 {
-#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
-    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
-    // protect member manipulation
-    SolarMutexObject::acquire();
-    // strange things happen, do nothing if we don't own the mutex
-    if( mnThreadId == aCurrentThread )
-    {
-        mnCount--;
-        if( mnCount == 0 )
-        {
-            gdk_threads_leave();
-            mnThreadId = 0;
-        }
-    }
-    SolarMutexObject::release();
-#else
     g_error ("never called");
-#endif
 }
 
 sal_Bool GtkYieldMutex::tryToAcquire()
 {
-#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
-    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
-    // protect member manipulation
-    SolarMutexObject::acquire();
-    if( mnCount > 0 )
-    {
-        if( mnThreadId == aCurrentThread )
-        {
-            mnCount++;
-            SolarMutexObject::release();
-            return sal_True;
-        }
-        else
-        {
-            SolarMutexObject::release();
-            return sal_False;
-        }
-    }
-    SolarMutexObject::release();
-
-    // HACK: gdk_threads_mutex is private, we shouldn't use it.
-    // how to we do a try_lock without having a gdk_threads_try_enter ?
-    if( ! g_mutex_trylock( gdk_threads_mutex ) )
-        return sal_False;
-
-    // obtained gdk mutex, now lock count is one by definition
-    SolarMutexObject::acquire();
-    mnCount = 1;
-    mnThreadId = aCurrentThread;
-    SolarMutexObject::release();
-
-#else
     g_error ("never called");
-#endif
     return sal_True;
 }
 
 int GtkYieldMutex::Grab()
 {
-#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
-    // this MUST only be called by gdk/gtk callbacks:
-    // they are entered with gdk mutex locked; the mutex
-    // was unlocked by GtkYieldMutex befor yielding which
-    // is now locked again by gtk implicitly
-
-    // obtained gdk mutex, now lock count is one by definition
-    SolarMutexObject::acquire();
-    int nRet = mnCount;
-    if( mnCount == 0 ) // recursive else
-        mnThreadId = osl::Thread::getCurrentIdentifier();
-#if OSL_DEBUG_LEVEL > 1
-    else if( mnThreadId != osl::Thread::getCurrentIdentifier() )
-    {
-        fprintf( stderr, "Yield mutex grabbed in different thread !\n" );
-        abort();
-    }
-#endif
-    mnCount = 1;
-    SolarMutexObject::release();
-    return nRet;
-#else
     g_error ("never called");
     return sal_True;
-#endif
 }
 
 void GtkYieldMutex::Ungrab( int nGrabs )
 {
-#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
-    // this MUST only be called when leaving the callback
-    // that locked the mutex with Grab()
-    SolarMutexObject::acquire();
-    mnCount = nGrabs;
-    if( mnCount == 0 )
-        mnThreadId = 0;
-    SolarMutexObject::release();
-#else
     (void)nGrabs;
     g_error ("never called");
-#endif
 }
 
 SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
