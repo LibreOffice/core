@@ -34,6 +34,7 @@ $(eval $(call gb_StaticLibrary_use_packages,codemaker,\
 	registry_odk_headers \
 	sal_generated \
 	sal_odk_headers \
+	salhelper_odk_headers \
 	unoidl_inc \
 ))
 

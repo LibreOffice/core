@@ -34,6 +34,7 @@ $(eval $(call gb_StaticLibrary_use_packages,codemaker_java,\
 	registry_odk_headers \
 	sal_generated \
 	sal_odk_headers \
+	salhelper_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,codemaker_java,\
