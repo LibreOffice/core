@@ -110,6 +110,8 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
 
 using namespace ::com::sun::star;
@@ -232,7 +234,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     {
         // slot is a property
         const SfxType* pType = pSlot->GetType();
-        SfxPoolItem* pItem = pType->CreateItem();
+        boost::scoped_ptr<SfxPoolItem> pItem(pType->CreateItem());
+
         if ( !pItem )
         {
 #ifdef DBG_UTIL
@@ -338,8 +341,6 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 rSet.Put( *pItem );
         }
 
-        delete pItem;
-
         return;
     }
 
@@ -355,7 +356,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     for ( sal_uInt16 nArgs=0; nArgs<nMaxArgs; nArgs++ )
     {
         const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArgs] : pSlot->GetFormalArgument( nArgs );
-        SfxPoolItem* pItem = rArg.CreateItem();
+        boost::scoped_ptr<SfxPoolItem> pItem(rArg.CreateItem());
         if ( !pItem )
         {
 #ifdef DBG_UTIL
@@ -472,8 +473,6 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 
             }
         }
-
-        delete pItem;
     }
 
     // special additional parameters for some slots not seen in the slot definitions
