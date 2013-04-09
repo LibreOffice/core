@@ -109,7 +109,15 @@ constants ItemStyle
     /** specifies if an icon is placed on left side of the text, like an entry in a taskbar.
         <p>This style is only valid if the item describes a toolbar item and visible if
         style of the toolbar is set to symboltext.</p>
-        <p> This style can also be used for custom toolbars and menus, in a custom toolbar an item's Style setting can used to override the toolbar container setting, the style can be bitwise OR-ed with <member scope="::com::sun::star::ui::ItemStyle">TEXT</member> to define text, text+icon or icon only is to be displayed. Similarly for menu items, an items Style can override the application setting to display either text or icon ( note: for menu an icon only setting interpreted as icon+text ) </p>
+
+        <p>This style can also be used for custom toolbars and menus, in a
+        custom toolbar an item's Style setting can used to override the
+        toolbar container setting, the style can be bitwise OR-ed with <member
+        scope="::com::sun::star::ui::ItemStyle">TEXT</member> to define text,
+        text+icon or icon only is to be displayed. Similarly for menu items,
+        an items Style can override the application setting to display either
+        text or icon (note: for menu an icon only setting interpreted as
+        icon+text)</p>
     */
     const short ICON          = 128;
 
@@ -130,7 +138,15 @@ constants ItemStyle
     */
     const short DROPDOWN_ONLY = 1024;
     /** indicates if icon, text or text+icon is displayed for the item.
-        <p> This style can be used for custom toolbars and menus, in a custom toolbar an item's Style setting can used to override the toolbar container setting, the style can be bitwise OR-ed with <member scope="com::sun::star::ui::ItemStyle">ICON</member> to define text, text+icon or icon only is to be displayed. Similarly for menu items, an items Style can override the application setting to display either text or icon ( note: for menu an icon only setting interpreted as icon+text ) </p>
+
+        <p>This style can be used for custom toolbars and menus, in a custom
+        toolbar an item's Style setting can used to override the toolbar
+        container setting, the style can be bitwise OR-ed with <member
+        scope="com::sun::star::ui::ItemStyle">ICON</member> to define text,
+        text+icon or icon only is to be displayed. Similarly for menu items,
+        an items Style can override the application setting to display either
+        text or icon (note: for menu an icon only setting interpreted as
+        icon+text)</p>
     */
     const short TEXT = 2048;
 };
