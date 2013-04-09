@@ -43,6 +43,8 @@ namespace writerfilter {
                 void resolve(RTFShape& rShape);
                 void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder);
                 void resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
+                /// These are the default in Word, but not in Writer.
+                std::vector<beans::PropertyValue> getTextFrameDefaults();
             private:
                 void createShape(OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
 

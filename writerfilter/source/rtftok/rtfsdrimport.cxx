@@ -32,6 +32,8 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 
@@ -65,6 +67,35 @@ void RTFSdrImport::createShape(OUString aStr, uno::Reference<drawing::XShape>& x
     if (m_rImport.getModelFactory().is())
         xShape.set(m_rImport.getModelFactory()->createInstance(aStr), uno::UNO_QUERY);
     xPropertySet.set(xShape, uno::UNO_QUERY);
+}
+
+std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults()
+{
+    std::vector<beans::PropertyValue> aRet;
+    beans::PropertyValue aPropertyValue;
+
+    aPropertyValue.Name = "HoriOrient";
+    aPropertyValue.Value <<= text::HoriOrientation::NONE;
+    aRet.push_back(aPropertyValue);
+    aPropertyValue.Name = "VertOrient";
+    aPropertyValue.Value <<= text::VertOrientation::NONE;
+    aRet.push_back(aPropertyValue);
+    aPropertyValue.Name = "BackColorTransparency";
+    aPropertyValue.Value <<= sal_Int32(100);
+    aRet.push_back(aPropertyValue);
+    aPropertyValue.Name = "LeftBorderDistance";
+    aPropertyValue.Value <<= sal_Int32(0);
+    aRet.push_back(aPropertyValue);
+    aPropertyValue.Name = "RightBorderDistance";
+    aPropertyValue.Value <<= sal_Int32(0);
+    aRet.push_back(aPropertyValue);
+    aPropertyValue.Name = "TopBorderDistance";
+    aPropertyValue.Value <<= sal_Int32(0);
+    aRet.push_back(aPropertyValue);
+    aPropertyValue.Name = "BottomBorderDistance";
+    aPropertyValue.Value <<= sal_Int32(0);
+    aRet.push_back(aPropertyValue);
+    return aRet;
 }
 
 void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder)
@@ -113,8 +144,13 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                     createShape("com.sun.star.drawing.LineShape", xShape, xPropertySet);
                     break;
                 case ESCHER_ShpInst_TextBox:
-                    createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
-                    bTextFrame = true;
+                    {
+                        createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
+                        bTextFrame = true;
+                        std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults();
+                        for (size_t j = 0; j < aDefaults.size(); ++j)
+                            xPropertySet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
+                    }
                     break;
                 default:
                     bCustom = true;

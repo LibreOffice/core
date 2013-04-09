@@ -2551,29 +2551,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                         case RTF_DPTXBX:
                             {
                                 m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
-                                // These are the default in Word, but not in Writer
-                                beans::PropertyValue aPropertyValue;
-                                aPropertyValue.Name = "HoriOrient";
-                                aPropertyValue.Value <<= text::HoriOrientation::NONE;
-                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
-                                aPropertyValue.Name = "VertOrient";
-                                aPropertyValue.Value <<= text::VertOrientation::NONE;
-                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
-                                aPropertyValue.Name = "BackColorTransparency";
-                                aPropertyValue.Value <<= sal_Int32(100);
-                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
-                                aPropertyValue.Name = "LeftBorderDistance";
-                                aPropertyValue.Value <<= sal_Int32(0);
-                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
-                                aPropertyValue.Name = "RightBorderDistance";
-                                aPropertyValue.Value <<= sal_Int32(0);
-                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
-                                aPropertyValue.Name = "TopBorderDistance";
-                                aPropertyValue.Value <<= sal_Int32(0);
-                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
-                                aPropertyValue.Name = "BottomBorderDistance";
-                                aPropertyValue.Value <<= sal_Int32(0);
-                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                std::vector<beans::PropertyValue> aDefaults = m_pSdrImport->getTextFrameDefaults();
+                                for (size_t i = 0; i < aDefaults.size(); ++i)
+                                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
                             }
                             break;
                         default:
