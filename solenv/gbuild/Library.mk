@@ -116,7 +116,7 @@ endef
 # gb_Library__get_final_target has been invented for that purpose...
 define gb_Library_set_componentfile
 $(call gb_Library_get_target,$(gb_Library__get_name)) : \
-	COMPONENT := $$(if $$(and $$(COMPONENT),$(filter-out $(gb_MERGEDLIBS),$(1))),\
+	COMPONENT := $$(if $$(and $$(COMPONENT),$(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(1))),\
 	  $$(call gb_Output_error,$(1) already has a component file $$(COMPONENT)))$(2)
 $(call gb_ComponentTarget_ComponentTarget,$(2),\
 	$(call gb_Library__get_componentprefix,$(gb_Library__get_name)),\
@@ -129,7 +129,7 @@ $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_clean_target,$(2))
 endef
 
-gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))
+gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(if $(filter $(1),$(gb_URELIBS)),urelibs,$(1)))
 
 gb_Library__get_componentprefix = \
 	$(call gb_Library__get_layer_componentprefix,$(call \

@@ -291,7 +291,14 @@ File gid_File_Dl_Xmlreader
     Styles = (PACKED);
 End
 
-
+#ifdef URELIBS
+File gid_File_Dl_Urelibs
+    LIB_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = SCP2_URE_DL_NORMAL("urelibs");
+    Styles = (PACKED);
+End
+#endif
 
 #ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Store
@@ -1007,6 +1014,9 @@ Module gid_Module_Root_Ure_Hidden
             gid_Unixlink_File_Dl_Store,
             gid_File_Dl_Unoidl,
             gid_File_Dl_Xmlreader,
+#ifdef URELIBS
+            gid_File_Dl_Urelibs,
+#endif
             gid_File_Dl_Jvmaccess,
             gid_Unixlink_File_Dl_Jvmaccess,
             gid_File_Dl_Jvmfwk,

@@ -11642,6 +11642,7 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(MERGELIBS)
+AC_SUBST([URELIBS])
 
 # ===================================================================
 # Create hardlinks on deliver instead of copying for smaller size and speed up

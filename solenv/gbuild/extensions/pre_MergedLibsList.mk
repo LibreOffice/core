@@ -143,6 +143,21 @@ gb_MERGEDLIBS := \
 	xo \
 	xstor \
 
+ifneq (,$(URELIBS))
+gb_URELIBS := \
+	cppu \
+	cppuhelper \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmaccess) \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmfwk) \
+	reg \
+	sal \
+	salhelper \
+	store \
+	unoidl \
+	xmlreader \
+
+endif
+
 endif
 
 # vim: set noet sw=4 ts=4:

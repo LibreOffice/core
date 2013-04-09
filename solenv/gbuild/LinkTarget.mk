@@ -442,10 +442,8 @@ mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2))
 
 endef
 
-# If object files from this library are merged, create just empty file
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
-	$(if $(filter $*,$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))), \
-		echo > $@, $(call gb_LinkTarget__command,$@,$*))
+	$(call gb_LinkTarget__command,$@,$*)
 	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -824,8 +822,8 @@ define gb_LinkTarget__use_libraries
 
 # used by bin/module-deps.pl
 ifneq ($(ENABLE_PRINT_DEPS),)
-# exclude libraries in Library_merged
-ifeq ($(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))),)
+# exclude libraries in Library_merged Librery_urelibs
+ifeq ($(filter $(1),$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))),)
 $$(eval $$(call gb_PrintDeps_info,$(4),$(3)))
 endif
 endif
@@ -838,18 +836,31 @@ $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
 
 endef
 
+define gb_Linktarget__is_build_tool
+$(if $(filter $(1),$(addprefix Executable/,cppumaker idlc regcompare regmerge)),$(true),$(false))
+endef
+
 define gb_LinkTarget_use_libraries
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
 
+ifeq ($(call gb_Linktarget__is_build_tool,$(1)),$(true))
+$(call gb_LinkTarget__use_libraries,$(1),$(2),$(2),$(4))
+
+else
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(strip \
 	$(if $(filter $(gb_MERGEDLIBS),$(2)), \
-		$(if $(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))),, merged)) \
-	$(filter-out $(gb_MERGEDLIBS),$(2)) \
+		$(if $(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))), \
+			$(filter $(gb_MERGEDLIBS),$(2)), merged)) \
+	$(if $(filter $(gb_URELIBS),$(2)), \
+		$(if $(filter $(1),$(foreach lib,$(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))), \
+		$(filter $(gb_URELIBS),$(2)), urelibs)) \
+	$(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(2)) \
 	),$(4))
 
+endif
 endef
 
 define gb_LinkTarget_add_linked_static_libs

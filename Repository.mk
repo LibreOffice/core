@@ -442,6 +442,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	sunpro5_uno \
     unoidl \
     unsafe_uno \
+	urelibs \
     xmlreader \
 ))
 

@@ -29,6 +29,7 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/ure))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/ure,\
 	SYSTEM_LIBXML \
+	URELIBS \
 ))
 
 $(eval $(call gb_InstallModule_define_value_if_set,scp2/ure,\

@@ -66,7 +66,7 @@ $(call gb_Pagein_get_outdir_target,$(1)) :| $(dir $(call gb_Pagein_get_outdir_ta
 endef
 
 define gb_Pagein_add_object
-$(call gb_Pagein_get_target,$(1)) : OBJECTS += $(filter-out $(gb_MERGEDLIBS),$(2))
+$(call gb_Pagein_get_target,$(1)) : OBJECTS += $(filter-out $(gb_URELIBS) $(gb_MERGEDLIBS),$(2))
 
 endef
 
