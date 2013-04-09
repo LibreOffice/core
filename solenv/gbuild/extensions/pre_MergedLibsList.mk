@@ -53,7 +53,6 @@ gb_EXTRAMERGEDLIBS := \
 	fwm \
 	hwp \
 	hyphen \
-+	i18npool \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),javaloader) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),javavm) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),java_uno) \
