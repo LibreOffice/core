@@ -447,11 +447,11 @@ Resource RID_GLOBSTR
     };
     String STR_MSSG_SOLVE_1
     {
-        Text [ en-US ] = "Insert result (" ;
+        Text [ en-US ] = "Result (" ;
     };
     String STR_MSSG_SOLVE_2
     {
-        Text [ en-US ] = ") into current cell?" ;
+        Text [ en-US ] = "). Apply setting to spreadsheet?" ;
     };
     String STR_MSSG_SOLVE_3
     {
