@@ -710,13 +710,6 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
 
 namespace {
 
-#if 0
-// TODO: We will reinstate this function later, so don't remove this!
-bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>&, OUString&, OUString&)
-{
-    return false;
-}
-#else
 bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescriptor, OUString& rType, OUString& rFilter)
 {
     // depending on the experimental mode
@@ -741,25 +734,31 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
     if (aURL.isEmpty() || aURL.copy(0,8).equalsIgnoreAsciiCase("private:"))
         return false;
 
-    if(aURL.endsWith(".gnumeric"))
+    // TODO : Type must be set to be generic_Text (or any other type that
+    // exists) in order to find a usable loader. Exploit it as a temporary
+    // hack.
+
+    if (aURL.endsWith(".gnumeric"))
     {
         rType = "generic_Text";
-        rFilter = "orcus-gnumeric";
+        rFilter = "gnumeric";
         return true;
     }
-#if 0
-    else if (aURL.endsWith(".csv"))
+    else if (aURL.endsWith(".xlsx"))
     {
-        // Use .csv as the first test file type.
         rType = "generic_Text";
-        rFilter = "orcus-test-filter";
+        rFilter = "xlsx";
         return true;
     }
-#endif
+    else if (aURL.endsWith(".ods"))
+    {
+        rType = "generic_Text";
+        rFilter = "ods";
+        return true;
+    }
 
     return false;
 }
-#endif
 
 }
 
