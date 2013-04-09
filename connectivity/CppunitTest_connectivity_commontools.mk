@@ -9,6 +9,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,connectivity_commontools))
 
+$(eval $(call gb_CppunitTest_use_packages,connectivity_commontools,\
+	connectivity_inc \
+))
+
 $(eval $(call gb_CppunitTest_set_include,connectivity_commontools,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
