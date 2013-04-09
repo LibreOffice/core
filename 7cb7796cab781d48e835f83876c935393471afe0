@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///ls\u003d",
+        "filename": "codemaker/source/codemaker/exceptiontree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2013-04-09T11:05:19Z",
+      "side": 1,
+      "message": "This whitespace change should not be part of your commit as you should only alter the README based on the commit message.",
+      "revId": "7cb7796cab781d48e835f83876c935393471afe0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
