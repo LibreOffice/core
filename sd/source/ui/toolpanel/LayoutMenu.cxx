@@ -405,6 +405,7 @@ void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
             case ViewShell::ST_HANDOUT:
             case ViewShell::ST_NOTES:
             case ViewShell::ST_SLIDE_SORTER:
+            case ViewShell::ST_JOCKEY_SORTER:
             default:
                 bIsEnabled = true;
                 break;
@@ -668,6 +669,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             case ViewShell::ST_IMPRESS:
             case ViewShell::ST_NOTES:
             case ViewShell::ST_SLIDE_SORTER:
+            case ViewShell::ST_JOCKEY_SORTER:
                 pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
                 break;
             default:

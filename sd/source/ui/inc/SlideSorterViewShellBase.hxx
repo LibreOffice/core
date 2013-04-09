@@ -22,11 +22,10 @@
 
 #include "ImpressViewShellBase.hxx"
 
-
 namespace sd {
 
-/** This class exists to be able to register a factory that creates a
-    slide sorter view shell as default.
+/** This class exists to be able to register a factory that
+    creates a slide sorter view shell as default.
 */
 class SlideSorterViewShellBase
     : public ImpressViewShellBase
@@ -38,8 +37,27 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    SlideSorterViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
-    virtual ~SlideSorterViewShellBase (void);
+    SlideSorterViewShellBase (SfxViewFrame *_pFrame, SfxViewShell *_pOldShell)
+        : ImpressViewShellBase (_pFrame, _pOldShell) {}
+    virtual ~SlideSorterViewShellBase (void) {}
+};
+
+/** This class exists to be able to register a factory that
+    creates a slide jockey view shell as default.
+*/
+class SlideJockeyViewShellBase
+    : public ImpressViewShellBase
+{
+public:
+    TYPEINFO();
+    SFX_DECL_VIEWFACTORY(SlideJockeyViewShellBase);
+
+    /** This constructor is used by the view factory of the SFX
+        macros.
+    */
+    SlideJockeyViewShellBase (SfxViewFrame *_pFrame, SfxViewShell *_pOldShell)
+        : ImpressViewShellBase (_pFrame, _pOldShell) {}
+    virtual ~SlideJockeyViewShellBase (void) {}
 };
 
 } // end of namespace sd

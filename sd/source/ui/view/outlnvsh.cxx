@@ -548,6 +548,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_NOTESMODE:
         case SID_HANDOUTMODE:
         case SID_DIAMODE:
+        case SID_JOCKEYMODE:
         case SID_OUTLINEMODE:
             framework::FrameworkHelper::Instance(GetViewShellBase())->HandleModeChangeSlot(
                 nSlot,

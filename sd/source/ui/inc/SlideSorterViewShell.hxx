@@ -186,7 +186,7 @@ protected:
     */
     virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
 
-private:
+protected:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;
     bool mbIsArrangeGUIElementsPending;
 
@@ -205,6 +205,32 @@ private:
 };
 
 typedef ::boost::shared_ptr<SlideSorterViewShell::PageSelection> SharedPageSelection;
+
+/// Slide jockey mode - for rapid construction and editing of slide decks
+class SlideJockeyViewShell
+    : public SlideSorterViewShell
+{
+    friend class controller::SlotManager;
+
+public:
+    TYPEINFO();
+    SFX_DECL_INTERFACE(SD_IF_SDSLIDEJOCKEYVIEWSHELL)
+
+    static ::boost::shared_ptr<SlideJockeyViewShell> Create(
+        SfxViewFrame* pFrame,
+        ViewShellBase& rViewShellBase,
+        ::Window* pParentWindow,
+        FrameView* pFrameView,
+        const bool bIsCenterPane);
+
+private:
+    SlideJockeyViewShell (
+        SfxViewFrame* pFrame,
+        ViewShellBase& rViewShellBase,
+        ::Window* pParentWindow,
+        FrameView* pFrameView);
+};
+
 
 } } // end of namespace ::sd::slidesorter
 

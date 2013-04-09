@@ -153,7 +153,8 @@ void FormShellManager::RegisterAtCenterPane (void)
 
     // No form shell for the slide sorter.  Besides that it is not
     // necessary, using both together results in crashes.
-    if (pShell->GetShellType() == ViewShell::ST_SLIDE_SORTER)
+    if (pShell->GetShellType() == ViewShell::ST_SLIDE_SORTER &&
+        pShell->GetShellType() == ViewShell::ST_JOCKEY_SORTER)
         return;
 
     mpMainViewShellWindow = pShell->GetActiveWindow();

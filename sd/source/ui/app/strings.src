@@ -140,6 +140,10 @@ String STR_SLIDE_MODE
 {
     Text [ en-US ] = "Slide Sorter" ;
 };
+String STR_JOCKEY_MODE
+{
+    Text [ en-US ] = "Slide Jockey" ;
+};
 String STR_DRAW_MODE
 {
     Text [ en-US ] = "Normal" ;

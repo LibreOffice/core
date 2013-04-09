@@ -346,6 +346,11 @@ String STR_SLIDESORTERVIEWSHELL
     Text [ en-US ] = "Slide Sorter" ;
 };
 
+String STR_SLIDEJOCKEYVIEWSHELL
+{
+    Text [ en-US ] = "Slide Jockey" ;
+};
+
 String STR_TOOL_PANEL_SHELL
 {
     Text [ en-US ] = "Tool Panel" ;

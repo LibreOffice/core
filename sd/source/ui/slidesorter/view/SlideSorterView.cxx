@@ -18,6 +18,7 @@
  */
 
 
+#include "slidehack.hxx"
 #include "view/SlideSorterView.hxx"
 
 #include "ViewShellBase.hxx"

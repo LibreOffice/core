@@ -51,6 +51,7 @@
 #define CMD_SID_DELETE_PAGE                         ".uno:DeletePage"
 #define CMD_SID_DELETE_SNAPITEM                     ".uno:DeleteSnapItem"
 #define CMD_SID_DIAMODE                             ".uno:DiaMode"
+#define CMD_SID_JOCKEYMODE                          ".uno:JockeyMode"
 #define CMD_SID_DISMANTLE                           ".uno:Dismantle"
 #define CMD_SID_DRAWINGMODE                         ".uno:DrawingMode"
 #define CMD_SID_CUSTOM_ANIMATION_PANEL              ".uno:CustomAnimation"

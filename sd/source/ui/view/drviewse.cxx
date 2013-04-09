@@ -887,6 +887,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_DRAWINGMODE:
         case SID_DIAMODE:
+        case SID_JOCKEYMODE:
         case SID_OUTLINEMODE:
             // Let the sub-shell manager handle the slot handling.
             framework::FrameworkHelper::Instance(GetViewShellBase())->HandleModeChangeSlot(

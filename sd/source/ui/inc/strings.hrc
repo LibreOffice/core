@@ -75,6 +75,7 @@
 #define STR_SLIDE_MODE              (RID_APP_START+121)
 #define STR_DRAW_MODE               (RID_APP_START+122)
 #define STR_OUTLINE_MODE            (RID_APP_START+123)
+#define STR_JOCKEY_MODE              (RID_APP_START+124)
 
 #define STR_UNDO_BEZCLOSE           (RID_APP_START+127)
 

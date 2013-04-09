@@ -62,6 +62,15 @@
         Text [ en-US ] = "~Slide Sorter" ; \
     };
 
+#define MN_JOCKEYMODE \
+    MenuItem\
+    {\
+        Identifier = SID_JOCKEYMODE ; \
+        HelpId = CMD_SID_JOCKEYMODE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "Slide ~Jockey" ; \
+    };
+
 #define MN_PRESENTATION \
     MenuItem\
     {\

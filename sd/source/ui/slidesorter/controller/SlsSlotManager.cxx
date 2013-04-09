@@ -369,6 +369,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         case SID_NOTESMODE:
         case SID_HANDOUTMODE:
         case SID_DIAMODE:
+        case SID_JOCKEYMODE:
         case SID_OUTLINEMODE:
         {
             ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
@@ -523,6 +524,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     }
     rSet.Put( SfxBoolItem( SID_DRAWINGMODE, sal_False ) );
     rSet.Put( SfxBoolItem( SID_DIAMODE, sal_True ) );
+    rSet.Put( SfxBoolItem( SID_JOCKEYMODE, sal_True ) );
     rSet.Put( SfxBoolItem( SID_OUTLINEMODE, sal_False ) );
     rSet.Put( SfxBoolItem( SID_NOTESMODE, sal_False ) );
     rSet.Put( SfxBoolItem( SID_HANDOUTMODE, sal_False ) );

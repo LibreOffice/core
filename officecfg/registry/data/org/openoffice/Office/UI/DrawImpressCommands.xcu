@@ -624,6 +624,11 @@
           <value xml:lang="en-US">Sli~de Sorter</value>
         </prop>
       </node>
+      <node oor:name=".uno:JockeyMode" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Slide ~Jockey</value>
+        </prop>
+      </node>
       <node oor:name=".uno:PreviewQualityContrast" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~High Contrast</value>

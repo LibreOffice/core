@@ -73,6 +73,7 @@ public:
     static const OUString msNotesViewURL;
     static const OUString msHandoutViewURL;
     static const OUString msSlideSorterURL;
+    static const OUString msJockeySorterURL;
     static const OUString msPresentationViewURL;
     static const OUString msTaskPaneURL;
 

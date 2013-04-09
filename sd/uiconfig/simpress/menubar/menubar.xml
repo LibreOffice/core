@@ -93,6 +93,7 @@
             <menu:menuitem menu:id=".uno:NormalMultiPaneGUI" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:OutlineMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:DiaMode" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:JockeyMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:Presentation" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:NotesMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:HandoutMode" menu:style="radio"/>

@@ -381,6 +381,7 @@ Menu RID_OUTLINE_POPUP
         SEPARATOR
         MN_DRAWINGMODE
         MN_DIAMODE
+        MN_JOCKEYMODE
         MN_PRESENTATION
     };
 };

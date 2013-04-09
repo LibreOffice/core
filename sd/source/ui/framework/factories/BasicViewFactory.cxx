@@ -321,6 +321,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             mxConfigurationController->addResourceFactory(FrameworkHelper::msPresentationViewURL, this);
             mxConfigurationController->addResourceFactory(FrameworkHelper::msTaskPaneURL, this);
             mxConfigurationController->addResourceFactory(FrameworkHelper::msSlideSorterURL, this);
+            mxConfigurationController->addResourceFactory(FrameworkHelper::msJockeySorterURL, this);
         }
         catch (RuntimeException&)
         {
@@ -402,7 +403,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
                 PK_STANDARD,
                 pFrameView));
     }
-    else if (rsViewURL.equals(FrameworkHelper::msDrawViewURL))
+    else if (rsViewURL == FrameworkHelper::msDrawViewURL)
     {
         pViewShell.reset(
             new GraphicViewShell (
@@ -411,7 +412,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
                 &rWindow,
                 pFrameView));
     }
-    else if (rsViewURL.equals(FrameworkHelper::msOutlineViewURL))
+    else if (rsViewURL == FrameworkHelper::msOutlineViewURL)
     {
         pViewShell.reset(
             new OutlineViewShell (
@@ -420,7 +421,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
                 &rWindow,
                 pFrameView));
     }
-    else if (rsViewURL.equals(FrameworkHelper::msNotesViewURL))
+    else if (rsViewURL == FrameworkHelper::msNotesViewURL)
     {
         pViewShell.reset(
             new DrawViewShell(
@@ -430,7 +431,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
                 PK_NOTES,
                 pFrameView));
     }
-    else if (rsViewURL.equals(FrameworkHelper::msHandoutViewURL))
+    else if (rsViewURL == FrameworkHelper::msHandoutViewURL)
     {
         pViewShell.reset(
             new DrawViewShell(
@@ -440,7 +441,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
                 PK_HANDOUT,
                 pFrameView));
     }
-    else if (rsViewURL.equals(FrameworkHelper::msPresentationViewURL))
+    else if (rsViewURL == FrameworkHelper::msPresentationViewURL)
     {
         pViewShell.reset(
             new PresentationViewShell(
@@ -449,7 +450,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
                 &rWindow,
                 pFrameView));
     }
-    else if (rsViewURL.equals(FrameworkHelper::msTaskPaneURL))
+    else if (rsViewURL == FrameworkHelper::msTaskPaneURL)
     {
         pViewShell.reset(
             new ::sd::toolpanel::ToolPanelViewShell(
@@ -458,9 +459,18 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
                 &rWindow,
                 pFrameView));
     }
-    else if (rsViewURL.equals(FrameworkHelper::msSlideSorterURL))
+    else if (rsViewURL == FrameworkHelper::msSlideSorterURL)
     {
         pViewShell = ::sd::slidesorter::SlideSorterViewShell::Create (
+            &rFrame,
+            *mpBase,
+            &rWindow,
+            pFrameView,
+            bIsCenterPane);
+    }
+    else if (rsViewURL == FrameworkHelper::msJockeySorterURL)
+    {
+        pViewShell = ::sd::slidesorter::SlideJockeyViewShell::Create (
             &rFrame,
             *mpBase,
             &rWindow,

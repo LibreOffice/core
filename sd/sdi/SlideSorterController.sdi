@@ -309,3 +309,15 @@ shell SlideSorterViewShell
 {
     import SlideSorterView[Automation];
 }
+
+shell SlideJockeyController
+{
+    // FIXME - tweak and/or extend in future
+    import SlideSorterView[Automation];
+}
+
+shell SlideJockeyViewShell
+{
+    // FIXME - tweak and/or extend in future
+    import SlideSorterView[Automation];
+}

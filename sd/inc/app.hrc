@@ -69,6 +69,7 @@
 #define SID_PAGESETUP                       (SID_SD_START+2)
 #define SID_COPYOBJECTS                     (SID_SD_START+4)
 #define SID_MANAGE_LINKS                    (SID_SD_START+5)
+#define SID_JOCKEYMODE                       (SID_SD_START+7)
 #define SID_CONVERT_TO_3D_LATHE             (SID_SD_START+8)
 #define SID_DRAWINGMODE                     (SID_SD_START+9)
 #define SID_OUTLINEMODE                     (SID_SD_START+10)

@@ -112,6 +112,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                             break;
 
                         case ViewShell::ST_SLIDE_SORTER:
+                        case ViewShell::ST_JOCKEY_SORTER:
                             mnPresViewShellId = SID_VIEWSHELL1;
                             break;
 

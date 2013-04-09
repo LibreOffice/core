@@ -34,9 +34,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
-
 namespace sd { namespace framework {
-
 
 //===== SlideSorterModule ==================================================
 
@@ -74,9 +72,6 @@ SlideSorterModule::SlideSorterModule (
     }
 }
 
-
-
-
 SlideSorterModule::~SlideSorterModule (void)
 {
 }
@@ -90,7 +85,6 @@ void SlideSorterModule::SaveResourceState (void)
     SvtSlideSorterBarOptions().SetVisibleSlideSorterView(IsResourceActive(FrameworkHelper::msSlideSorterURL));
     SvtSlideSorterBarOptions().SetVisibleDrawView(IsResourceActive(FrameworkHelper::msDrawViewURL));
 }
-
 
 void SAL_CALL SlideSorterModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -137,23 +131,31 @@ void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
 
     if (xBar.is())
     {
-        TabBarButton aButtonA;
-        aButtonA.ResourceId = FrameworkHelper::CreateResourceId(
-            FrameworkHelper::msSlideSorterURL,
-            FrameworkHelper::msCenterPaneURL);
-        aButtonA.ButtonLabel = String(SdResId(STR_SLIDE_MODE));
-
-        TabBarButton aButtonB;
-        aButtonB.ResourceId = FrameworkHelper::CreateResourceId(
+        TabBarButton aButtonPos;
+        // lookup the position
+        aButtonPos.ResourceId = FrameworkHelper::CreateResourceId(
             FrameworkHelper::msHandoutViewURL,
             FrameworkHelper::msCenterPaneURL);
 
-        if ( ! xBar->hasTabBarButton(aButtonA))
-            xBar->addTabBarButtonAfter(aButtonA, aButtonB);
+        TabBarButton aButtonSorter;
+        aButtonSorter.ResourceId = FrameworkHelper::CreateResourceId(
+            FrameworkHelper::msSlideSorterURL,
+            FrameworkHelper::msCenterPaneURL);
+        aButtonSorter.ButtonLabel = String(SdResId(STR_SLIDE_MODE));
+
+        TabBarButton aButtonJockey;
+        aButtonJockey.ResourceId = FrameworkHelper::CreateResourceId(
+            FrameworkHelper::msJockeySorterURL,
+            FrameworkHelper::msCenterPaneURL);
+        aButtonJockey.ButtonLabel = String(SdResId(STR_JOCKEY_MODE));
+
+        if (!xBar->hasTabBarButton(aButtonSorter))
+            xBar->addTabBarButtonAfter(aButtonSorter, aButtonPos);
+
+        if (!xBar->hasTabBarButton(aButtonJockey))
+            xBar->addTabBarButtonAfter(aButtonJockey, aButtonSorter);
     }
 }
-
-
 
 } } // end of namespace sd::framework
 
