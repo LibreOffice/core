@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -743,6 +743,23 @@
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/changesbar" oor:op="replace">
+        <prop oor:name="Docked" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Changes</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
     </node>
