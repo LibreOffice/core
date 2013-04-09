@@ -44,23 +44,13 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	$(gb_UWINAPI) \
 ))
 
-ifneq ($(OS),IOS)
-$(eval $(call gb_Library_use_static_libraries,merged,\
-	writerperfect \
-))
-endif
-
 $(eval $(call gb_Library_use_externals,merged,\
 	boostdatetime \
-	$(if $(filter-out IOS,$(OS)),cdr) \
 	$(call gb_Helper_optional,DESKTOP,clucene) \
-	cmis \
-	cppunit \
 	cups \
 	curl \
 	expat \
 	hunspell \
-	hyphen \
 	icui18n \
 	icule \
 	icuuc \
@@ -69,23 +59,9 @@ $(eval $(call gb_Library_use_externals,merged,\
 	libxml2 \
 	$(call gb_Helper_optional,DESKTOP,libxslt) \
 	$(if $(filter-out IOS,$(OS)),lpsolve) \
-	$(if $(filter-out IOS,$(OS)),mspub) \
-	$(if $(filter-out IOS,$(OS)),mwaw) \
 	mythes \
 	nss3 \
-	openssl \
-	orcus \
-	$(call gb_Helper_optional,PYUNO,python) \
-	$(if $(filter-out IOS,$(OS)),wpd) \
-	$(if $(filter-out IOS,$(OS)),wpg) \
-	$(if $(filter-out IOS,$(OS)),wps) \
-	$(if $(filter-out IOS,$(OS)),visio) \
 	zlib \
-))
-
-$(eval $(call gb_Library_use_static_libraries,merged,\
-	sax_shared \
-	ulingu \
 ))
 
 ifeq ($(ENABLE_GRAPHITE),TRUE)
