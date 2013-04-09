@@ -258,9 +258,13 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     pArray->Fill(_aTokenList, NULL);
     return pArray;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
-// =============================================================================
+
 } // rptui
-// =============================================================================
+
+// for mysterious reasons Apple llvm-g++ 4.2.1 needs these explicit
+// template instantiations; otherwise linking fails with unresolved symbols
+template class ::std::auto_ptr<formula::FormulaTokenArray>;
+template std::auto_ptr<formula::FormulaTokenArray>::operator std::auto_ptr_ref<formula::FormulaTokenArray>();
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
