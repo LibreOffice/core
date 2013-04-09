@@ -75,7 +75,6 @@ void DeviceCopy (
         rSourceDevice);
 }
 
-
 void ForAllRectangles (const Region& rRegion, ::boost::function<void(const Rectangle&)> aFunction)
 {
     OSL_ASSERT(aFunction);
@@ -141,9 +140,6 @@ public:
     ~LayerContainer (void) {}
 };
 
-
-
-
 //===== LayeredDevice =========================================================
 
 LayeredDevice::LayeredDevice (const SharedSdWindow& rpTargetWindow)
@@ -155,15 +151,9 @@ LayeredDevice::LayeredDevice (const SharedSdWindow& rpTargetWindow)
     mpBackBuffer->SetOutputSizePixel(mpTargetWindow->GetSizePixel());
 }
 
-
-
-
 LayeredDevice::~LayeredDevice (void)
 {
 }
-
-
-
 
 void LayeredDevice::Invalidate (
     const Rectangle& rInvalidationArea,
@@ -172,14 +162,12 @@ void LayeredDevice::Invalidate (
     if (nLayer<0 || size_t(nLayer)>=mpLayers->size())
     {
         OSL_ASSERT(nLayer>=0 && size_t(nLayer)<mpLayers->size());
-        return;
     }
-
-    (*mpLayers)[nLayer]->InvalidateRectangle(rInvalidationArea);
+    else
+    {
+        (*mpLayers)[nLayer]->InvalidateRectangle(rInvalidationArea);
+    }
 }
-
-
-
 
 void LayeredDevice::InvalidateAllLayers (const Rectangle& rInvalidationArea)
 {
@@ -187,17 +175,11 @@ void LayeredDevice::InvalidateAllLayers (const Rectangle& rInvalidationArea)
         (*mpLayers)[nLayer]->InvalidateRectangle(rInvalidationArea);
 }
 
-
-
-
 void LayeredDevice::InvalidateAllLayers (const Region& rInvalidationRegion)
 {
     for (sal_uInt32 nLayer=0; nLayer<mpLayers->size(); ++nLayer)
         (*mpLayers)[nLayer]->InvalidateRegion(rInvalidationRegion);
 }
-
-
-
 
 void LayeredDevice::RegisterPainter (
     const SharedILayerPainter& rpPainter,
@@ -233,9 +215,6 @@ void LayeredDevice::RegisterPainter (
         SharedILayerInvalidator(new LayerInvalidator(shared_from_this(),mpTargetWindow,nLayer)));
 }
 
-
-
-
 void LayeredDevice::RemovePainter (
     const SharedILayerPainter& rpPainter,
     const sal_Int32 nLayer)
@@ -260,9 +239,6 @@ void LayeredDevice::RemovePainter (
         mpLayers->erase(mpLayers->end()-1);
 }
 
-
-
-
 void LayeredDevice::Repaint (const Region& rRepaintRegion)
 {
     // Validate the contents of all layers (that have their own devices.)
@@ -273,9 +249,6 @@ void LayeredDevice::Repaint (const Region& rRepaintRegion)
 
     ForAllRectangles(rRepaintRegion, ::boost::bind(&LayeredDevice::RepaintRectangle, this, _1));
 }
-
-
-
 
 void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
 {
@@ -301,9 +274,6 @@ void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
     }
 }
 
-
-
-
 void LayeredDevice::Resize (void)
 {
     const Size aSize (mpTargetWindow->GetSizePixel());
@@ -311,17 +281,11 @@ void LayeredDevice::Resize (void)
     ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Resize, _1, aSize));
 }
 
-
-
-
 void LayeredDevice::Dispose (void)
 {
     ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Dispose, _1));
     mpLayers->clear();
 }
-
-
-
 
 bool LayeredDevice::HandleMapModeChange (void)
 {
@@ -386,9 +350,6 @@ bool LayeredDevice::HandleMapModeChange (void)
     return true;
 }
 
-
-
-
 //===== Layer =================================================================
 
 Layer::Layer (void)
@@ -398,47 +359,28 @@ Layer::Layer (void)
 {
 }
 
-
-
-
 Layer::~Layer (void)
 {
 }
 
-
-
-
 void Layer::Initialize (const SharedSdWindow& rpTargetWindow)
 {
-#if 0
-    (void)rpTargetWindow;
-#else
-    if ( ! mpLayerDevice)
+    if (!mpLayerDevice)
     {
         mpLayerDevice.reset(new VirtualDevice(*rpTargetWindow));
         mpLayerDevice->SetOutputSizePixel(rpTargetWindow->GetSizePixel());
     }
-#endif
 }
-
-
-
 
 void Layer::InvalidateRectangle (const Rectangle& rInvalidationBox)
 {
     maInvalidationRegion.Union(rInvalidationBox);
 }
 
-
-
-
 void Layer::InvalidateRegion (const Region& rInvalidationRegion)
 {
     maInvalidationRegion.Union(rInvalidationRegion);
 }
-
-
-
 
 void Layer::Validate (const MapMode& rMapMode)
 {
@@ -453,9 +395,6 @@ void Layer::Validate (const MapMode& rMapMode)
             ::boost::bind(&Layer::ValidateRectangle, this, _1));
     }
 }
-
-
-
 
 void Layer::ValidateRectangle (const Rectangle& rBox)
 {
@@ -475,9 +414,6 @@ void Layer::ValidateRectangle (const Rectangle& rBox)
 
     mpLayerDevice->SetClipRegion(aSavedClipRegion);
 }
-
-
-
 
 void Layer::Repaint (
     OutputDevice& rTargetDevice,
@@ -499,9 +435,6 @@ void Layer::Repaint (
     }
 }
 
-
-
-
 void Layer::Resize (const Size& rSize)
 {
     if (mpLayerDevice)
@@ -511,18 +444,12 @@ void Layer::Resize (const Size& rSize)
     }
 }
 
-
-
-
 void Layer::AddPainter (const SharedILayerPainter& rpPainter)
 {
     OSL_ASSERT(::std::find(maPainters.begin(), maPainters.end(), rpPainter) == maPainters.end());
 
     maPainters.push_back(rpPainter);
 }
-
-
-
 
 void Layer::RemovePainter (const SharedILayerPainter& rpPainter)
 {
@@ -538,22 +465,15 @@ void Layer::RemovePainter (const SharedILayerPainter& rpPainter)
     }
 }
 
-
-
-
 bool Layer::HasPainter (void) const
 {
     return !maPainters.empty();
 }
 
-
-
-
 void Layer::Dispose (void)
 {
     maPainters.clear();
 }
-
 
 } } } // end of namespace ::sd::slidesorter::view
 
