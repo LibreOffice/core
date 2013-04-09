@@ -80,6 +80,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "rtl/bootstrap.hxx"
 #include <vcl/svapp.hxx>
 
 const char PROP_TYPES[] = "Types";
@@ -734,6 +735,10 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
     if (aURL.isEmpty() || aURL.copy(0,8).equalsIgnoreAsciiCase("private:"))
         return false;
 
+    OUString aUseOrcus;
+    rtl::Bootstrap::get("LIBO_USE_ORCUS", aUseOrcus);
+    bool bUseOrcus = (aUseOrcus == "YES");
+
     // TODO : Type must be set to be generic_Text (or any other type that
     // exists) in order to find a usable loader. Exploit it as a temporary
     // hack.
@@ -744,7 +749,11 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
         rFilter = "gnumeric";
         return true;
     }
-    else if (aURL.endsWith(".xlsx"))
+
+    if (!bUseOrcus)
+        return false;
+
+    if (aURL.endsWith(".xlsx"))
     {
         rType = "generic_Text";
         rFilter = "xlsx";
