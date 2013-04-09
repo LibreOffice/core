@@ -354,7 +354,7 @@ static PyObject* initPoniesMode(
         // guess casting pFunc is undefined behavior but don't see a better way
         ((void (SAL_CALL *)(XMultiServiceFactory*)) pFunc) (xMSF.get());
     }
-    catch (const com::sun::star::uno::Exception & e)
+    catch (const com::sun::star::uno::Exception &)
     {
         abort();
     }
