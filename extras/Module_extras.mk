@@ -20,11 +20,11 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_newfiles \
 	Package_palettes \
 	Package_wordbook \
+	Package_database \
 	Zip_autotextuser \
 	Zip_cfgsrvbitmapunx \
 	Zip_cfgsrvnolang \
 	Zip_cfgusr \
-	Zip_database \
 	Zip_databasebiblio \
 	Zip_gallbullets \
 	Zip_gallhtmlexpo \

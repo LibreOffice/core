@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,database,$(SRCDIR)/extras/source/database))
+$(eval $(call gb_Package_Package,extras_database,$(SRCDIR)/extras/source/database))
 
-$(eval $(call gb_Zip_add_files,database,\
+$(eval $(call gb_Package_set_outdir,extras_database,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_database,presets/database,\
 	biblio.odb \
 	evolocal.odb \
 ))
