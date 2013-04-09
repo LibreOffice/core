@@ -344,615 +344,617 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         }
 
         delete pItem;
+
+        return;
     }
-    else if ( nCount )
+
+    OSL_ASSERT(nCount > 0);
+
+#ifdef DBG_UTIL
+    // detect parameters that don't match to any formal argument or one of its members
+    sal_Int32 nFoundArgs = 0;
+#endif
+    // slot is a method
+    bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
+    sal_uInt16 nMaxArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
+    for ( sal_uInt16 nArgs=0; nArgs<nMaxArgs; nArgs++ )
     {
-#ifdef DBG_UTIL
-        // detect parameters that don't match to any formal argument or one of its members
-        sal_Int32 nFoundArgs = 0;
-#endif
-        // slot is a method
-        bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
-        sal_uInt16 nMaxArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
-        for ( sal_uInt16 nArgs=0; nArgs<nMaxArgs; nArgs++ )
+        const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArgs] : pSlot->GetFormalArgument( nArgs );
+        SfxPoolItem* pItem = rArg.CreateItem();
+        if ( !pItem )
         {
-            const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArgs] : pSlot->GetFormalArgument( nArgs );
-            SfxPoolItem* pItem = rArg.CreateItem();
-            if ( !pItem )
+#ifdef DBG_UTIL
+            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("No creator method for argument: "));
+            aStr.append(rArg.pName);
+            OSL_FAIL( aStr.getStr() );
+#endif
+            return;
+        }
+
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
+        sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+        pItem->SetWhich( nWhich );
+        const SfxType* pType = rArg.pType;
+        sal_uInt16 nSubCount = pType->nAttribs;
+        if ( nSubCount == 0 )
+        {
+            // "simple" (base type) argument
+            for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-#ifdef DBG_UTIL
-                OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("No creator method for argument: "));
-                aStr.append(rArg.pName);
-                OSL_FAIL( aStr.getStr() );
-#endif
-                return;
-            }
-
-            sal_uInt16 nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
-            sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
-            pItem->SetWhich( nWhich );
-            const SfxType* pType = rArg.pType;
-            sal_uInt16 nSubCount = pType->nAttribs;
-            if ( nSubCount == 0 )
-            {
-                // "simple" (base type) argument
-                for ( sal_uInt16 n=0; n<nCount; n++ )
+                const beans::PropertyValue& rProp = pPropsVal[n];
+                String aName = rProp.Name;
+                if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
                 {
-                    const beans::PropertyValue& rProp = pPropsVal[n];
-                    String aName = rProp.Name;
-                    if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
-                    {
 #ifdef DBG_UTIL
-                        ++nFoundArgs;
+                    ++nFoundArgs;
 #endif
-                        if( pItem->PutValue( rProp.Value ) )
-                            // only use successfully converted items
-                            rSet.Put( *pItem );
-#ifdef DBG_UTIL
-                        else
-                        {
-                            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
-                            aStr.append(rArg.pName);
-                            OSL_FAIL( aStr.getStr() );
-                        }
-#endif
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                // complex argument, could be passed in one struct
-                sal_Bool bAsWholeItem = sal_False;
-                for ( sal_uInt16 n=0; n<nCount; n++ )
-                {
-                    const beans::PropertyValue& rProp = pPropsVal[n];
-                    String aName = rProp.Name;
-                    if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
-                    {
-                        bAsWholeItem = sal_True;
-#ifdef DBG_UTIL
-                        ++nFoundArgs;
-#endif
-                        if( pItem->PutValue( rProp.Value ) )
-                            // only use successfully converted items
-                            rSet.Put( *pItem );
-#ifdef DBG_UTIL
-                        else
-                        {
-                            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
-                            aStr.append(rArg.pName);
-                            OSL_FAIL( aStr.getStr() );
-                        }
-#endif
-                    }
-                }
-
-                if ( !bAsWholeItem )
-                {
-                    // complex argument; collect sub items from argument array and reconstruct complex item
-                    // only put item if at least one member was found and had the correct type
-                    // (is this a good idea?! Should we ask for *all* members?)
-                    sal_Bool bRet = sal_False;
-                    for ( sal_uInt16 n=0; n<nCount; n++ )
-                    {
-                        const beans::PropertyValue& rProp = pPropsVal[n];
-                        for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
-                        {
-                            // search sub item by name
-                            OStringBuffer aStr;
-                            aStr.append(rArg.pName).append('.').append(pType->aAttrib[nSub].pName);
-                            if ( rProp.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
-                            {
-                                // at least one member found ...
-                                bRet = sal_True;
-#ifdef DBG_UTIL
-                                ++nFoundArgs;
-#endif
-                                sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[nSub].nAID;
-                                if ( bConvertTwips )
-                                    nSubId |= CONVERT_TWIPS;
-                                if (!pItem->PutValue( rProp.Value, nSubId ) )
-                                {
-                                    // ... but it was not convertible
-                                    bRet = sal_False;
-#ifdef DBG_UTIL
-                                    OStringBuffer aDbgStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
-                                    aDbgStr.append(rArg.pName);
-                                    OSL_FAIL( aDbgStr.getStr() );
-#endif
-                                }
-
-                                break;
-                            }
-                        }
-                    }
-
-                    if ( bRet )
+                    if( pItem->PutValue( rProp.Value ) )
                         // only use successfully converted items
                         rSet.Put( *pItem );
-
-                }
-            }
-
-            delete pItem;
-        }
-
-        // special additional parameters for some slots not seen in the slot definitions
-        // Some of these slots are not considered to be used for macro recording, because they shouldn't be recorded as slots,
-        // but as dispatching or factory or arbitrary URLs to the frame
-        // Some also can use additional arguments that are not recordable (will be changed later,
-        // f.e. "SaveAs" shouldn't support parameters not in the slot definition!)
-        if ( nSlotId == SID_NEWWINDOW )
-        {
-            for ( sal_uInt16 n=0; n<nCount; n++ )
-            {
-                const beans::PropertyValue& rProp = pPropsVal[n];
-                OUString aName = rProp.Name;
-                if ( aName == sFrame )
-                {
-                    Reference< XFrame > xFrame;
-                    OSL_VERIFY( rProp.Value >>= xFrame );
-                    rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
-                }
-                else
-                if ( aName == sHidden )
-                {
-                    sal_Bool bVal = sal_False;
-                    if (rProp.Value >>= bVal)
-                        rSet.Put( SfxBoolItem( SID_HIDDEN, bVal ) );
-                }
-            }
-        }
-        else if ( bIsMediaDescriptor )
-        {
-            for ( sal_uInt16 n=0; n<nCount; n++ )
-            {
 #ifdef DBG_UTIL
-                ++nFoundArgs;
-#endif
-                const beans::PropertyValue& rProp = pPropsVal[n];
-                OUString aName = rProp.Name;
-                if ( aName == sModel )
-                    rSet.Put( SfxUnoAnyItem( SID_DOCUMENT, rProp.Value ) );
-                else if ( aName == sComponentData )
-                {
-                    rSet.Put( SfxUnoAnyItem( SID_COMPONENTDATA, rProp.Value ) );
-                }
-                else if ( aName == sComponentContext )
-                {
-                    rSet.Put( SfxUnoAnyItem( SID_COMPONENTCONTEXT, rProp.Value ) );
-                }
-                else if ( aName == sStatusInd )
-                {
-                    Reference<task::XStatusIndicator> xVal;
-                    sal_Bool bOK = (rProp.Value >>= xVal);
-                    DBG_ASSERT( bOK, "invalid type for StatusIndicator" );
-                    if (bOK && xVal.is())
-                        rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
-                }
-                else if ( aName == sInteractionHdl )
-                {
-                    Reference<task::XInteractionHandler> xVal;
-                    sal_Bool bOK = (rProp.Value >>= xVal);
-                    DBG_ASSERT( bOK, "invalid type for InteractionHandler" );
-                    if (bOK && xVal.is())
-                        rSet.Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, rProp.Value ) );
-                }
-                else if ( aName == sViewData )
-                    rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
-                else if ( aName == sFilterData )
-                    rSet.Put( SfxUnoAnyItem( SID_FILTER_DATA, rProp.Value ) );
-                else if ( aName == sInputStream )
-                {
-                    Reference< XInputStream > xVal;
-                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for InputStream" );
-                    if (bOK)
-                        rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
-                }
-                else if ( aName == sStream )
-                {
-                    Reference< XInputStream > xVal;
-                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for Stream" );
-                    if (bOK)
-                        rSet.Put( SfxUnoAnyItem( SID_STREAM, rProp.Value ) );
-                }
-                else if ( aName == sUCBContent )
-                {
-                    Reference< XContent > xVal;
-                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for UCBContent" );
-                    if (bOK)
-                        rSet.Put( SfxUnoAnyItem( SID_CONTENT, rProp.Value ) );
-                }
-                else if ( aName == sOutputStream )
-                {
-                    Reference< XOutputStream > xVal;
-                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                    DBG_ASSERT( bOK, "invalid type for OutputStream" );
-                    if (bOK)
-                        rSet.Put( SfxUnoAnyItem( SID_OUTPUTSTREAM, rProp.Value ) );
-                }
-                else if ( aName == sPostData )
-                {
-                    Reference< XInputStream > xVal;
-                    sal_Bool bOK = (rProp.Value >>= xVal);
-                    DBG_ASSERT( bOK, "invalid type for PostData" );
-                    if (bOK)
-                        rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
-                }
-                else if ( aName == sFrame )
-                {
-                    Reference< XFrame > xFrame;
-                    sal_Bool bOK = (rProp.Value >>= xFrame);
-                    DBG_ASSERT( bOK, "invalid type for Frame" );
-                    if (bOK)
-                        rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
-                }
-                else if ( aName == sAsTemplate )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for AsTemplate" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_TEMPLATE, bVal ) );
-                }
-                else if ( aName == sOpenNewView )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for OpenNewView" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, bVal ) );
-                }
-                else if ( aName == sFailOnWarning )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for FailOnWarning" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_FAIL_ON_WARNING, bVal ) );
-                }
-                else if ( aName == sViewId )
-                {
-                    sal_Int16 nVal = -1;
-                    sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                    DBG_ASSERT( bOK, "invalid type for ViewId" );
-                    if (bOK)
-                        rSet.Put( SfxUInt16Item( SID_VIEW_ID, nVal ) );
-                }
-                else if ( aName == sPluginMode )
-                {
-                    sal_Int16 nVal = -1;
-                    sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                    DBG_ASSERT( bOK, "invalid type for PluginMode" );
-                    if (bOK)
-                        rSet.Put( SfxUInt16Item( SID_PLUGIN_MODE, nVal ) );
-                }
-                else if ( aName == sReadOnly )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for ReadOnly" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_DOC_READONLY, bVal ) );
-                }
-                else if ( aName == sDdeReconnect )
-                {
-                    sal_Bool bVal = sal_True;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for DDEReconnect" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_DDE_RECONNECT_ONLOAD, bVal ) );
-                }
-                else if ( aName == sStartPresentation )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for StartPresentation" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, bVal ) );
-                }
-                else if ( aName == sSelectionOnly )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for SelectionOnly" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_SELECTION, bVal ) );
-                }
-                else if ( aName == sHidden )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for Hidden" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_HIDDEN, bVal ) );
-                }
-                else if ( aName == sMinimized )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for Minimized" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_MINIMIZED, bVal ) );
-                }
-                else if ( aName == sSilent )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for Silent" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_SILENT, bVal ) );
-                }
-                else if ( aName == sPreview )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for Preview" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_PREVIEW, bVal ) );
-                }
-                else if ( aName == sViewOnly )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for ViewOnly" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_VIEWONLY, bVal ) );
-                }
-                else if ( aName == sDontEdit )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for ViewOnly" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_EDITDOC, !bVal ) );
-                }
-                else if ( aName == sUseSystemDialog )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for ViewOnly" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_FILE_DIALOG, bVal ) );
-                }
-                else if ( aName == sStandardDir )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for StandardDir" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
-                }
-                else if ( aName == sBlackList )
-                {
-                    uno::Sequence<OUString> xVal;
-                    sal_Bool bOK = (rProp.Value >>= xVal);
-                    DBG_ASSERT( bOK, "invalid type or value for BlackList" );
-                    if (bOK)
+                    else
                     {
-                        SfxStringListItem stringList(SID_BLACK_LIST);
-                        stringList.SetStringList( xVal );
-                        rSet.Put( stringList );
+                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
+                        aStr.append(rArg.pName);
+                        OSL_FAIL( aStr.getStr() );
                     }
-                }
-                else if ( aName == sFileName )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for FileName" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
-                }
-                else if ( aName == sSalvagedFile )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvagedFile" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
-                }
-                else if ( aName == sFolderName )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for FolderName" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_PATH, sVal ) );
-                }
-                else if ( aName == sFrameName )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type for FrameName" );
-                    if (bOK && !sVal.isEmpty())
-                        rSet.Put( SfxStringItem( SID_TARGETNAME, sVal ) );
-                }
-                else if ( aName == sMediaType )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for MediaType" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
-                }
-                else if ( aName == sTemplateName )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for TemplateName" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, sVal ) );
-                }
-                else if ( aName == sTemplateRegionName )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for TemplateRegionName" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, sVal ) );
-                }
-                else if ( aName == sJumpMark )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for JumpMark" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_JUMPMARK, sVal ) );
-                }
-                else if ( aName == sCharacterSet )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for CharacterSet" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_CHARSET, sVal ) );
-                }
-                else if ( aName == sFilterFlags )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for FilterFlags" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
-                }
-                else if ( aName == sMacroExecMode )
-                {
-                    sal_Int16 nVal =-1;
-                    sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                    DBG_ASSERT( bOK, "invalid type for MacroExecMode" );
-                    if (bOK)
-                        rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, nVal ) );
-                }
-                else if ( aName == sUpdateDocMode )
-                {
-                    sal_Int16 nVal =-1;
-                    sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                    DBG_ASSERT( bOK, "invalid type for UpdateDocMode" );
-                    if (bOK)
-                        rSet.Put( SfxUInt16Item( SID_UPDATEDOCMODE, nVal ) );
-                }
-                else if ( aName == sRepairPackage )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for RepairPackage" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, bVal ) );
-                }
-                else if ( aName == sDocumentTitle )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for DocumentTitle" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_DOCINFO_TITLE, sVal ) );
-                }
-                else if ( aName == sDocumentBaseURL )
-                {
-                    OUString sVal;
-                    // the base url can be set to empty ( for embedded objects for example )
-                    sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for DocumentBaseURL" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_DOC_BASEURL, sVal ) );
-                }
-                else if ( aName == sHierarchicalDocumentName )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for HierarchicalDocumentName" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_DOC_HIERARCHICALNAME, sVal ) );
-                }
-                else if ( aName == sCopyStreamIfPossible )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for CopyStreamIfPossible" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_COPY_STREAM_IF_POSSIBLE, bVal ) );
-                }
-                else if ( aName == sNoAutoSave )
-                {
-                    sal_Bool bVal = sal_False;
-                    sal_Bool bOK = (rProp.Value >>= bVal);
-                    DBG_ASSERT( bOK, "invalid type for NoAutoSave" );
-                    if (bOK)
-                        rSet.Put( SfxBoolItem( SID_NOAUTOSAVE, bVal ) );
-                }
-                else if ( aName == sModifyPasswordInfo )
-                {
-                    rSet.Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, rProp.Value ) );
-                }
-                else if ( aName == sEncryptionData )
-                {
-                    rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, rProp.Value ) );
-                }
-                else if ( aName == sSuggestedSaveAsDir )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsDir" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASDIR, sVal ) );
-                }
-                else if ( aName == sSuggestedSaveAsName )
-                {
-                    OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsName" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASNAME, sVal ) );
-                }
-                else if (aName == sDocumentService)
-                {
-                    OUString aVal;
-                    bool bOK = ((rProp.Value >>= aVal) && !aVal.isEmpty());
-                    if (bOK)
-                        rSet.Put(SfxStringItem(SID_DOC_SERVICE, aVal));
-                }
-#ifdef DBG_UTIL
-                else
-                    --nFoundArgs;
 #endif
+                    break;
+                }
             }
         }
-        // API to raise options dialog with a specified options ab page (#i83757#)
         else
         {
-            // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
-            String sSlotName( "OptionsTreeDialog" );
-            String sPropName( "OptionsPageURL" );
-            if ( sSlotName.EqualsAscii( pSlot->pUnoName ) )
+            // complex argument, could be passed in one struct
+            sal_Bool bAsWholeItem = sal_False;
+            for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-                for ( sal_uInt16 n = 0; n < nCount; ++n )
+                const beans::PropertyValue& rProp = pPropsVal[n];
+                String aName = rProp.Name;
+                if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
                 {
-                    const PropertyValue& rProp = pPropsVal[n];
-                    String sName( rProp.Name );
-                    if ( sName == sPropName )
+                    bAsWholeItem = sal_True;
+#ifdef DBG_UTIL
+                    ++nFoundArgs;
+#endif
+                    if( pItem->PutValue( rProp.Value ) )
+                        // only use successfully converted items
+                        rSet.Put( *pItem );
+#ifdef DBG_UTIL
+                    else
                     {
-                        OUString sURL;
-                        if ( rProp.Value >>= sURL )
-                            rSet.Put( SfxStringItem( SID_OPTIONS_PAGEURL, sURL ) );
-                        break;
+                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
+                        aStr.append(rArg.pName);
+                        OSL_FAIL( aStr.getStr() );
                     }
+#endif
+                }
+            }
+
+            if ( !bAsWholeItem )
+            {
+                // complex argument; collect sub items from argument array and reconstruct complex item
+                // only put item if at least one member was found and had the correct type
+                // (is this a good idea?! Should we ask for *all* members?)
+                sal_Bool bRet = sal_False;
+                for ( sal_uInt16 n=0; n<nCount; n++ )
+                {
+                    const beans::PropertyValue& rProp = pPropsVal[n];
+                    for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
+                    {
+                        // search sub item by name
+                        OStringBuffer aStr;
+                        aStr.append(rArg.pName).append('.').append(pType->aAttrib[nSub].pName);
+                        if ( rProp.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
+                        {
+                            // at least one member found ...
+                            bRet = sal_True;
+#ifdef DBG_UTIL
+                            ++nFoundArgs;
+#endif
+                            sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[nSub].nAID;
+                            if ( bConvertTwips )
+                                nSubId |= CONVERT_TWIPS;
+                            if (!pItem->PutValue( rProp.Value, nSubId ) )
+                            {
+                                // ... but it was not convertible
+                                bRet = sal_False;
+#ifdef DBG_UTIL
+                                OStringBuffer aDbgStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
+                                aDbgStr.append(rArg.pName);
+                                OSL_FAIL( aDbgStr.getStr() );
+#endif
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+                if ( bRet )
+                    // only use successfully converted items
+                    rSet.Put( *pItem );
+
+            }
+        }
+
+        delete pItem;
+    }
+
+    // special additional parameters for some slots not seen in the slot definitions
+    // Some of these slots are not considered to be used for macro recording, because they shouldn't be recorded as slots,
+    // but as dispatching or factory or arbitrary URLs to the frame
+    // Some also can use additional arguments that are not recordable (will be changed later,
+    // f.e. "SaveAs" shouldn't support parameters not in the slot definition!)
+    if ( nSlotId == SID_NEWWINDOW )
+    {
+        for ( sal_uInt16 n=0; n<nCount; n++ )
+        {
+            const beans::PropertyValue& rProp = pPropsVal[n];
+            OUString aName = rProp.Name;
+            if ( aName == sFrame )
+            {
+                Reference< XFrame > xFrame;
+                OSL_VERIFY( rProp.Value >>= xFrame );
+                rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
+            }
+            else
+            if ( aName == sHidden )
+            {
+                sal_Bool bVal = sal_False;
+                if (rProp.Value >>= bVal)
+                    rSet.Put( SfxBoolItem( SID_HIDDEN, bVal ) );
+            }
+        }
+    }
+    else if ( bIsMediaDescriptor )
+    {
+        for ( sal_uInt16 n=0; n<nCount; n++ )
+        {
+#ifdef DBG_UTIL
+            ++nFoundArgs;
+#endif
+            const beans::PropertyValue& rProp = pPropsVal[n];
+            OUString aName = rProp.Name;
+            if ( aName == sModel )
+                rSet.Put( SfxUnoAnyItem( SID_DOCUMENT, rProp.Value ) );
+            else if ( aName == sComponentData )
+            {
+                rSet.Put( SfxUnoAnyItem( SID_COMPONENTDATA, rProp.Value ) );
+            }
+            else if ( aName == sComponentContext )
+            {
+                rSet.Put( SfxUnoAnyItem( SID_COMPONENTCONTEXT, rProp.Value ) );
+            }
+            else if ( aName == sStatusInd )
+            {
+                Reference<task::XStatusIndicator> xVal;
+                sal_Bool bOK = (rProp.Value >>= xVal);
+                DBG_ASSERT( bOK, "invalid type for StatusIndicator" );
+                if (bOK && xVal.is())
+                    rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
+            }
+            else if ( aName == sInteractionHdl )
+            {
+                Reference<task::XInteractionHandler> xVal;
+                sal_Bool bOK = (rProp.Value >>= xVal);
+                DBG_ASSERT( bOK, "invalid type for InteractionHandler" );
+                if (bOK && xVal.is())
+                    rSet.Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, rProp.Value ) );
+            }
+            else if ( aName == sViewData )
+                rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
+            else if ( aName == sFilterData )
+                rSet.Put( SfxUnoAnyItem( SID_FILTER_DATA, rProp.Value ) );
+            else if ( aName == sInputStream )
+            {
+                Reference< XInputStream > xVal;
+                sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                DBG_ASSERT( bOK, "invalid type for InputStream" );
+                if (bOK)
+                    rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
+            }
+            else if ( aName == sStream )
+            {
+                Reference< XInputStream > xVal;
+                sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                DBG_ASSERT( bOK, "invalid type for Stream" );
+                if (bOK)
+                    rSet.Put( SfxUnoAnyItem( SID_STREAM, rProp.Value ) );
+            }
+            else if ( aName == sUCBContent )
+            {
+                Reference< XContent > xVal;
+                sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                DBG_ASSERT( bOK, "invalid type for UCBContent" );
+                if (bOK)
+                    rSet.Put( SfxUnoAnyItem( SID_CONTENT, rProp.Value ) );
+            }
+            else if ( aName == sOutputStream )
+            {
+                Reference< XOutputStream > xVal;
+                sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                DBG_ASSERT( bOK, "invalid type for OutputStream" );
+                if (bOK)
+                    rSet.Put( SfxUnoAnyItem( SID_OUTPUTSTREAM, rProp.Value ) );
+            }
+            else if ( aName == sPostData )
+            {
+                Reference< XInputStream > xVal;
+                sal_Bool bOK = (rProp.Value >>= xVal);
+                DBG_ASSERT( bOK, "invalid type for PostData" );
+                if (bOK)
+                    rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
+            }
+            else if ( aName == sFrame )
+            {
+                Reference< XFrame > xFrame;
+                sal_Bool bOK = (rProp.Value >>= xFrame);
+                DBG_ASSERT( bOK, "invalid type for Frame" );
+                if (bOK)
+                    rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
+            }
+            else if ( aName == sAsTemplate )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for AsTemplate" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_TEMPLATE, bVal ) );
+            }
+            else if ( aName == sOpenNewView )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for OpenNewView" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, bVal ) );
+            }
+            else if ( aName == sFailOnWarning )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for FailOnWarning" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_FAIL_ON_WARNING, bVal ) );
+            }
+            else if ( aName == sViewId )
+            {
+                sal_Int16 nVal = -1;
+                sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
+                DBG_ASSERT( bOK, "invalid type for ViewId" );
+                if (bOK)
+                    rSet.Put( SfxUInt16Item( SID_VIEW_ID, nVal ) );
+            }
+            else if ( aName == sPluginMode )
+            {
+                sal_Int16 nVal = -1;
+                sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
+                DBG_ASSERT( bOK, "invalid type for PluginMode" );
+                if (bOK)
+                    rSet.Put( SfxUInt16Item( SID_PLUGIN_MODE, nVal ) );
+            }
+            else if ( aName == sReadOnly )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for ReadOnly" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_DOC_READONLY, bVal ) );
+            }
+            else if ( aName == sDdeReconnect )
+            {
+                sal_Bool bVal = sal_True;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for DDEReconnect" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_DDE_RECONNECT_ONLOAD, bVal ) );
+            }
+            else if ( aName == sStartPresentation )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for StartPresentation" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, bVal ) );
+            }
+            else if ( aName == sSelectionOnly )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for SelectionOnly" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_SELECTION, bVal ) );
+            }
+            else if ( aName == sHidden )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for Hidden" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_HIDDEN, bVal ) );
+            }
+            else if ( aName == sMinimized )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for Minimized" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_MINIMIZED, bVal ) );
+            }
+            else if ( aName == sSilent )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for Silent" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_SILENT, bVal ) );
+            }
+            else if ( aName == sPreview )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for Preview" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_PREVIEW, bVal ) );
+            }
+            else if ( aName == sViewOnly )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for ViewOnly" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_VIEWONLY, bVal ) );
+            }
+            else if ( aName == sDontEdit )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for ViewOnly" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_EDITDOC, !bVal ) );
+            }
+            else if ( aName == sUseSystemDialog )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for ViewOnly" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_FILE_DIALOG, bVal ) );
+            }
+            else if ( aName == sStandardDir )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for StandardDir" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
+            }
+            else if ( aName == sBlackList )
+            {
+                uno::Sequence<OUString> xVal;
+                sal_Bool bOK = (rProp.Value >>= xVal);
+                DBG_ASSERT( bOK, "invalid type or value for BlackList" );
+                if (bOK)
+                {
+                    SfxStringListItem stringList(SID_BLACK_LIST);
+                    stringList.SetStringList( xVal );
+                    rSet.Put( stringList );
+                }
+            }
+            else if ( aName == sFileName )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for FileName" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
+            }
+            else if ( aName == sSalvagedFile )
+            {
+                OUString sVal;
+                sal_Bool bOK = (rProp.Value >>= sVal);
+                DBG_ASSERT( bOK, "invalid type or value for SalvagedFile" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
+            }
+            else if ( aName == sFolderName )
+            {
+                OUString sVal;
+                sal_Bool bOK = (rProp.Value >>= sVal);
+                DBG_ASSERT( bOK, "invalid type or value for FolderName" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_PATH, sVal ) );
+            }
+            else if ( aName == sFrameName )
+            {
+                OUString sVal;
+                sal_Bool bOK = (rProp.Value >>= sVal);
+                DBG_ASSERT( bOK, "invalid type for FrameName" );
+                if (bOK && !sVal.isEmpty())
+                    rSet.Put( SfxStringItem( SID_TARGETNAME, sVal ) );
+            }
+            else if ( aName == sMediaType )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for MediaType" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
+            }
+            else if ( aName == sTemplateName )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for TemplateName" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, sVal ) );
+            }
+            else if ( aName == sTemplateRegionName )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for TemplateRegionName" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, sVal ) );
+            }
+            else if ( aName == sJumpMark )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for JumpMark" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_JUMPMARK, sVal ) );
+            }
+            else if ( aName == sCharacterSet )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for CharacterSet" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_CHARSET, sVal ) );
+            }
+            else if ( aName == sFilterFlags )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for FilterFlags" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
+            }
+            else if ( aName == sMacroExecMode )
+            {
+                sal_Int16 nVal =-1;
+                sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
+                DBG_ASSERT( bOK, "invalid type for MacroExecMode" );
+                if (bOK)
+                    rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, nVal ) );
+            }
+            else if ( aName == sUpdateDocMode )
+            {
+                sal_Int16 nVal =-1;
+                sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
+                DBG_ASSERT( bOK, "invalid type for UpdateDocMode" );
+                if (bOK)
+                    rSet.Put( SfxUInt16Item( SID_UPDATEDOCMODE, nVal ) );
+            }
+            else if ( aName == sRepairPackage )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for RepairPackage" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, bVal ) );
+            }
+            else if ( aName == sDocumentTitle )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for DocumentTitle" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_DOCINFO_TITLE, sVal ) );
+            }
+            else if ( aName == sDocumentBaseURL )
+            {
+                OUString sVal;
+                // the base url can be set to empty ( for embedded objects for example )
+                sal_Bool bOK = (rProp.Value >>= sVal);
+                DBG_ASSERT( bOK, "invalid type or value for DocumentBaseURL" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_DOC_BASEURL, sVal ) );
+            }
+            else if ( aName == sHierarchicalDocumentName )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for HierarchicalDocumentName" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_DOC_HIERARCHICALNAME, sVal ) );
+            }
+            else if ( aName == sCopyStreamIfPossible )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for CopyStreamIfPossible" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_COPY_STREAM_IF_POSSIBLE, bVal ) );
+            }
+            else if ( aName == sNoAutoSave )
+            {
+                sal_Bool bVal = sal_False;
+                sal_Bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT( bOK, "invalid type for NoAutoSave" );
+                if (bOK)
+                    rSet.Put( SfxBoolItem( SID_NOAUTOSAVE, bVal ) );
+            }
+            else if ( aName == sModifyPasswordInfo )
+            {
+                rSet.Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, rProp.Value ) );
+            }
+            else if ( aName == sEncryptionData )
+            {
+                rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, rProp.Value ) );
+            }
+            else if ( aName == sSuggestedSaveAsDir )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsDir" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASDIR, sVal ) );
+            }
+            else if ( aName == sSuggestedSaveAsName )
+            {
+                OUString sVal;
+                sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsName" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASNAME, sVal ) );
+            }
+            else if (aName == sDocumentService)
+            {
+                OUString aVal;
+                bool bOK = ((rProp.Value >>= aVal) && !aVal.isEmpty());
+                if (bOK)
+                    rSet.Put(SfxStringItem(SID_DOC_SERVICE, aVal));
+            }
+#ifdef DBG_UTIL
+            else
+                --nFoundArgs;
+#endif
+        }
+    }
+    // API to raise options dialog with a specified options ab page (#i83757#)
+    else
+    {
+        // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
+        String sSlotName( "OptionsTreeDialog" );
+        String sPropName( "OptionsPageURL" );
+        if ( sSlotName.EqualsAscii( pSlot->pUnoName ) )
+        {
+            for ( sal_uInt16 n = 0; n < nCount; ++n )
+            {
+                const PropertyValue& rProp = pPropsVal[n];
+                String sName( rProp.Name );
+                if ( sName == sPropName )
+                {
+                    OUString sURL;
+                    if ( rProp.Value >>= sURL )
+                        rSet.Put( SfxStringItem( SID_OPTIONS_PAGEURL, sURL ) );
+                    break;
                 }
             }
         }
-#ifdef DB_UTIL
-        if ( nFoundArgs == nCount )
-        {
-            // except for the "special" slots: assure that every argument was convertible
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("MacroPlayer: Some properties didn't match to any formal argument for slot: "));
-            aStr.append(pSlot->pUnoName);
-            DBG_WARNING( aStr.getStr() );
-        }
-#endif
     }
+#ifdef DB_UTIL
+    if ( nFoundArgs == nCount )
+    {
+        // except for the "special" slots: assure that every argument was convertible
+        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("MacroPlayer: Some properties didn't match to any formal argument for slot: "));
+        aStr.append(pSlot->pUnoName);
+        DBG_WARNING( aStr.getStr() );
+    }
+#endif
 }
 
 void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<beans::PropertyValue>& rArgs, const SfxSlot* pSlot )
