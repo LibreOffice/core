@@ -2873,11 +2873,28 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     pImp->m_pSet = pParams;
     TransformParameters( SID_OPENDOC, aArgs, *pParams );
 
-    String aFilterName;
-    SFX_ITEMSET_ARG( pImp->m_pSet, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, false );
-    if( pFilterNameItem )
-        aFilterName = pFilterNameItem->GetValue();
-    pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+    OUString aFilterProvider;
+    {
+        const SfxPoolItem* pItem = NULL;
+        if (pImp->m_pSet->HasItem(SID_FILTER_PROVIDER, &pItem))
+            aFilterProvider = static_cast<const SfxStringItem*>(pItem)->GetValue();
+    }
+
+    fprintf(stdout, "SfxMedium::SfxMedium:   filter provider = '%s'\n", rtl::OUStringToOString(aFilterProvider, RTL_TEXTENCODING_UTF8).getStr());
+    if (aFilterProvider.isEmpty())
+    {
+        // This is a conventional filter type.
+        OUString aFilterName;
+        SFX_ITEMSET_ARG( pImp->m_pSet, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, false );
+        if( pFilterNameItem )
+            aFilterName = pFilterNameItem->GetValue();
+        pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+    }
+    else
+    {
+        // This filter is from an external provider such as orcus.
+
+    }
 
     SFX_ITEMSET_ARG( pImp->m_pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
     if( pSalvageItem )

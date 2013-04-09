@@ -248,10 +248,10 @@ class SfxFilterMatcher_Impl
 {
 public:
     OUString     aName;
-    SfxFilterList_Impl* pList;      // is created on demand
+    mutable SfxFilterList_Impl* pList;      // is created on demand
 
     void InitForIterating() const;
-    void Update();
+    void Update() const;
     SfxFilterMatcher_Impl(const OUString &rName)
         : aName(rName)
         , pList(0)
@@ -321,7 +321,7 @@ SfxFilterMatcher::~SfxFilterMatcher()
         aImplArr.clear();
 }
 
-void SfxFilterMatcher_Impl::Update()
+void SfxFilterMatcher_Impl::Update() const
 {
     if ( pList )
     {
@@ -348,13 +348,13 @@ void SfxFilterMatcher_Impl::InitForIterating() const
     if ( !aName.isEmpty() )
     {
         // matcher of factory: use only filters of that document type
-        ((SfxFilterMatcher_Impl*)this)->pList = new SfxFilterList_Impl;
-        ((SfxFilterMatcher_Impl*)this)->Update();
+        pList = new SfxFilterList_Impl;
+        Update();
     }
     else
     {
         // global matcher: use global filter array
-        ((SfxFilterMatcher_Impl*)this)->pList = pFilterArr;
+        pList = pFilterArr;
     }
 }
 
