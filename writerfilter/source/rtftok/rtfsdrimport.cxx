@@ -86,6 +86,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     int nType = -1;
     bool bPib = false;
     bool bCustom = false;
+    bool bTextFrame = false;
 
     uno::Reference<drawing::XShape> xShape;
     uno::Reference<beans::XPropertySet> xPropertySet;
@@ -111,6 +112,10 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 case 20: // Line
                     createShape("com.sun.star.drawing.LineShape", xShape, xPropertySet);
                     break;
+                case ESCHER_ShpInst_TextBox:
+                    createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
+                    bTextFrame = true;
+                    break;
                 default:
                     bCustom = true;
                     break;
@@ -118,7 +123,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
 
             // Defaults
             aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
-            if (xPropertySet.is())
+            if (xPropertySet.is() && !bTextFrame)
                 xPropertySet->setPropertyValue("FillColor", aAny);
         }
         else if ( i->first == "wzName" )
@@ -291,7 +296,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
 
     if (xPropertySet.is())
     {
-        xPropertySet->setPropertyValue("LineColor", aLineColor);
+        if (!bTextFrame)
+            xPropertySet->setPropertyValue("LineColor", aLineColor);
         xPropertySet->setPropertyValue("LineWidth", aLineWidth);
         if (rShape.oZ)
             resolveDhgt(xPropertySet, *rShape.oZ);
@@ -304,7 +310,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         return;
     }
 
-    if (m_xDrawPage.is())
+    if (m_xDrawPage.is() && !bTextFrame)
         m_xDrawPage->add(xShape);
     if (bCustom && xShape.is())
     {
@@ -344,7 +350,13 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     // Set position and size
     if (xShape.is())
     {
-        xShape->setPosition(awt::Point(rShape.nLeft, rShape.nTop));
+        if (bTextFrame)
+        {
+            xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny(rShape.nLeft));
+            xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny(rShape.nTop));
+        }
+        else
+            xShape->setPosition(awt::Point(rShape.nLeft, rShape.nTop));
         xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
         if (rShape.nHoriOrientRelation != 0)
             xPropertySet->setPropertyValue("HoriOrientRelation", uno::makeAny(rShape.nHoriOrientRelation));
