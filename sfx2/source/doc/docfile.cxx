@@ -88,12 +88,6 @@
 #include <rtl/logfile.hxx>
 #include <osl/file.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::io;
-
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -130,7 +124,14 @@ using namespace ::com::sun::star::io;
 #include "sfxacldetect.hxx"
 #include "officecfg/Office/Common.hxx"
 
-//==========================================================
+#include <boost/noncopyable.hpp>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::io;
+
 namespace {
 
 static const sal_Int8 LOCK_UI_NOLOCK = 0;
@@ -243,8 +244,7 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
         m_xInter->handle( xRequest );
 }
 
-//----------------------------------------------------------------
-class SfxMedium_Impl
+class SfxMedium_Impl : boost::noncopyable
 {
 public:
     StreamMode m_nStorOpenMode;
