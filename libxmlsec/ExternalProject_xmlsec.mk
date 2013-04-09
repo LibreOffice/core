@@ -53,7 +53,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		$(if $(filter MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") autoreconf \
 		&& ./configure \
 			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls \
-			$(if $(filter ANDROID,$(OS)),--with-openssl=$(OUTDIR),--without-openssl) \
+			$(if $(and $(filter ANDROID,$(OS)),$(filter-out YES,$(DISABLE_OPENSSL))),--with-openssl=$(OUTDIR),--without-openssl) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter NO,$(SYSTEM_NSS))$(filter MACOSX,$(OS)),--disable-pkgconfig) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
