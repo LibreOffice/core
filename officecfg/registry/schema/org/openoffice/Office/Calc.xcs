@@ -1558,7 +1558,7 @@
                             </info>
                         </enumeration>
                     </constraints>
-                    <value>1</value>
+                    <value>0</value>
                 </prop>
             </group>
         </group>
