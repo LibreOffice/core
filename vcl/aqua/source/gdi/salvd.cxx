@@ -190,9 +190,15 @@ sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             {
                 // get the first matching frame
                 pSalFrame = *GetSalData()->maFrames.begin();
-                // update the frame reference
-                mpGraphics->setGraphicsFrame( pSalFrame );
             }
+            else
+            {
+                // ensure we don't reuse a dead AquaSalFrame on the very
+                // unlikely case of no other frame to use
+                pSalFrame = NULL;
+            }
+            // update the frame reference
+            mpGraphics->setGraphicsFrame( pSalFrame );
         }
         if( pSalFrame )
         {
