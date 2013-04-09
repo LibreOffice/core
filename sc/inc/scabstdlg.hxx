@@ -395,11 +395,7 @@ public:
         SCTAB nTabCount, bool bFromFile) = 0;
 
     virtual AbstractScSelEntryDlg * CreateScSelEntryDlg ( Window* pParent, // add for ScSelEntryDlg
-                                                            sal_uInt16  nResId,
-                                                        const String& aTitle,
-                                                        const String& aLbTitle,
-                                                        const std::vector<String> &rEntryList,
-                                                            int nId ) = 0;
+                                                          const std::vector<String> &rEntryList ) = 0;
     virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg (  Window* pParent, int nId) = 0; //add for ScLinkedAreaDlg
 
     virtual AbstractScMetricInputDlg * CreateScMetricInputDlg (  Window*        pParent, //add for ScMetricInputDlg

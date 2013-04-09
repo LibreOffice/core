@@ -95,7 +95,6 @@
 
 #define HID_SC_NAVIGATOR                                        "SC_HID_SC_NAVIGATOR"
 
-#define HID_SC_SELENTRY_LIST                                    "SC_HID_SC_SELENTRY_LIST"
 #define HID_SC_GROUP_COLS                                       "SC_HID_SC_GROUP_COLS"
 #define HID_SC_GROUP_ROWS                                       "SC_HID_SC_GROUP_ROWS"
 

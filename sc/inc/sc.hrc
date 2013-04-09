@@ -716,8 +716,8 @@
 #define SCSTR_MODIFY            (STR_START + 19)
 #define SCSTR_SHOWTABLE         (STR_START + 20)
 #define SCSTR_HIDDENTABLES      (STR_START + 21)
-#define SCSTR_SELECTDB          (STR_START + 22)
-#define SCSTR_AREAS             (STR_START + 23)
+
+
 #define SCSTR_TABLE             (STR_START + 24)
 #define SCSTR_NAME              (STR_START + 25)
 #define SCSTR_INSTABLE          (STR_START + 26)
@@ -1035,7 +1035,7 @@
 #define RID_SCDLG_ROW_OPT               (SC_DIALOGS_START + 107)
 
 // derivations from RID_SCDLG_SELENTRY
-#define RID_SCDLG_SELECTDB              (SC_DIALOGS_START + 108)
+
 #define RID_SCDLG_SHOW_TAB              (SC_DIALOGS_START + 109)
 
 // derivations from RID_SCDLG_GROUP

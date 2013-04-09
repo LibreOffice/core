@@ -245,16 +245,6 @@ String SCSTR_HIDDENTABLES
     Text [ en-US ] = "Hidden Sheets" ;
 };
 
-String SCSTR_SELECTDB
-{
-    Text [ en-US ] = "Select Database Range" ;
-};
-
-String SCSTR_AREAS
-{
-    Text [ en-US ] = "Ranges" ;
-};
-
 String SCSTR_TABLE
 {
     Text [ en-US ] = "Sheet" ;

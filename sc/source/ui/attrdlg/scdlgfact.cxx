@@ -1000,25 +1000,10 @@ AbstractScInsertTableDlg * ScAbstractDialogFactory_Impl::CreateScInsertTableDlg(
 
 // add for ScSelEntryDlg begin
 AbstractScSelEntryDlg * ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( Window* pParent,
-                                                            sal_uInt16  nResId,
-                                                        const String& aTitle,
-                                                        const String& aLbTitle,
-                                                        const std::vector<String> &rEntryList,
-                                                            int nId )
+                                                        const std::vector<String> &rEntryList )
 {
-    ScSelEntryDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_SELECTDB :
-            pDlg = new ScSelEntryDlg( pParent, nResId,aTitle, aLbTitle, rEntryList );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScSelEntryDlg_Impl( pDlg );
-    return 0;
+    ScSelEntryDlg * pDlg = new ScSelEntryDlg( pParent, rEntryList );
+    return new AbstractScSelEntryDlg_Impl( pDlg );
 }
 // add for ScSelEntryDlg end
 

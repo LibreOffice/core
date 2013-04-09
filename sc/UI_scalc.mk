@@ -17,6 +17,7 @@ $(eval $(call gb_UI_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/insertsheet \
 	sc/uiconfig/scalc/ui/printeroptions \
 	sc/uiconfig/scalc/ui/sheetprintpage \
+	sc/uiconfig/scalc/ui/selectrange \
 	sc/uiconfig/scalc/ui/sortcriteriapage \
 	sc/uiconfig/scalc/ui/sortkey \
 	sc/uiconfig/scalc/ui/sortoptionspage \

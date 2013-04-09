@@ -34,23 +34,14 @@
 class ScSelEntryDlg : public ModalDialog
 {
 private:
-    FixedLine       aFlLbTitle;
-    ListBox         aLb;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    ListBox* m_pLb;
 
     DECL_LINK( DblClkHdl, void * );
 
 public:
-            ScSelEntryDlg(      Window* pParent,
-                                sal_uInt16  nResId,
-                          const String& aTitle,
-                          const String& aLbTitle,
-                          const std::vector<String> &rEntryList );
-            ~ScSelEntryDlg();
+    ScSelEntryDlg(Window* pParent, const std::vector<String> &rEntryList);
 
-    String GetSelectEntry() const;
+    OUString GetSelectEntry() const;
 };
 
 

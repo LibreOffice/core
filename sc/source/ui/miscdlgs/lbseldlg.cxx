@@ -30,43 +30,29 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-
 //==================================================================
 
-ScSelEntryDlg::ScSelEntryDlg(      Window*  pParent,
-                                   sal_uInt16   nResId,
-                             const String&  aTitle,
-                             const String&  aLbTitle,
-                             const std::vector<String> &rEntryList ) :
-    ModalDialog     ( pParent, ScResId( nResId ) ),
-    //
-    aFlLbTitle      ( this, ScResId( FL_ENTRYLIST ) ),
-    aLb             ( this, ScResId( LB_ENTRYLIST ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) )
+ScSelEntryDlg::ScSelEntryDlg(Window*  pParent, const std::vector<String> &rEntryList)
+    : ModalDialog(pParent, "SelectRangeDialog", "modules/scalc/ui/selectrange.ui")
 {
-    SetText( aTitle );
-    aFlLbTitle.SetText( aLbTitle );
-    aLb.Clear();
-    aLb.SetDoubleClickHdl( LINK( this, ScSelEntryDlg, DblClkHdl ) );
+    get(m_pLb, "treeview");
+    m_pLb->SetDropDownLineCount(8);
+    m_pLb->set_width_request(m_pLb->approximate_char_width() * 32);
+    m_pLb->SetDoubleClickHdl( LINK( this, ScSelEntryDlg, DblClkHdl ) );
 
     std::vector<String>::const_iterator pIter;
     for ( pIter = rEntryList.begin(); pIter != rEntryList.end(); ++pIter )
-        aLb.InsertEntry(*pIter);
+        m_pLb->InsertEntry(*pIter);
 
-    if ( aLb.GetEntryCount() > 0 )
-        aLb.SelectEntryPos( 0 );
-
-    //-------------
-    FreeResource();
+    if ( m_pLb->GetEntryCount() > 0 )
+        m_pLb->SelectEntryPos( 0 );
 }
 
 //------------------------------------------------------------------------
 
-String ScSelEntryDlg::GetSelectEntry() const
+OUString ScSelEntryDlg::GetSelectEntry() const
 {
-    return aLb.GetSelectEntry();
+    return m_pLb->GetSelectEntry();
 }
 
 //------------------------------------------------------------------------
@@ -77,13 +63,5 @@ IMPL_LINK_NOARG_INLINE_START(ScSelEntryDlg, DblClkHdl)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(ScSelEntryDlg, DblClkHdl)
-
-//------------------------------------------------------------------------
-
-ScSelEntryDlg::~ScSelEntryDlg()
-{
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

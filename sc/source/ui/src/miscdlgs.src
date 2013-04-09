@@ -911,55 +911,6 @@ ModalDialog RID_SCDLG_ROW_OPT
     };
 };
 
-
- // RID_SCDLG_SELENTRY als Basis fuer RID_SCDLG_SELECTDB und RID_SCDLG_SHOW_TAB
- // gibt es nicht mehr, weil die beiden jetzt unterschiedlich sind
-
-ModalDialog RID_SCDLG_SELECTDB
-{
-    HelpId = CMD_SID_SELECT_DB ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 168 , 100 ) ;
-    Text [ en-US ] = "Select" ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 112 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 112 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 112 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    ListBox LB_ENTRYLIST
-    {
-         // HelpID aus Zeiten, als noch abgeleitet wurde
-        HelpId = HID_SC_SELENTRY_LIST ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 91 , 80 ) ;
-        TabStop = TRUE ;
-        Sort = TRUE ;
-    };
-    FixedLine FL_ENTRYLIST
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-    };
-};
-
 ModalDialog RID_SCDLG_SHOW_TAB
 {
     HelpId = CMD_FID_TABLE_SHOW ;
