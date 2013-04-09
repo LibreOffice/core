@@ -365,7 +365,7 @@ void SdXMLShapeContext::EndElement()
         OUString sLink(  "Hyperlink"  );
         if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName( sLink ) )
             xProp->setPropertyValue( sLink, uno::Any( msHyperlink ) );
-        Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY_THROW );
+        Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY );
         const OUString sBookmark(  "Bookmark"  );
 
         if( xEventsSupplier.is() )
