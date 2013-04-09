@@ -2880,7 +2880,6 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
             aFilterProvider = static_cast<const SfxStringItem*>(pItem)->GetValue();
     }
 
-    fprintf(stdout, "SfxMedium::SfxMedium:   filter provider = '%s'\n", rtl::OUStringToOString(aFilterProvider, RTL_TEXTENCODING_UTF8).getStr());
     if (aFilterProvider.isEmpty())
     {
         // This is a conventional filter type.
