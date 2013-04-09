@@ -1854,8 +1854,11 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         OUString aFilterProvider = getFilterProvider(seqArguments);
         if (!aFilterProvider.isEmpty())
         {
-            if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium, aFilterProvider))
+            if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium))
+            {
                 delete pMedium;
+                return;
+            }
 
             pMedium->SetUpdatePickList(false);
             return;

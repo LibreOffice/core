@@ -30,6 +30,10 @@ public:
 
     virtual bool importGnumeric(ScDocument& rDoc, const OUString& rPath) const = 0;
 
+    virtual bool importXLSX(ScDocument& rDoc, const OUString& rPath) const = 0;
+
+    virtual bool importODS(ScDocument& rDoc, const OUString& rPath) const = 0;
+
     /**
      * Create a context for XML file.  The context object stores session
      * information for each unique XML file.  You must create a new context

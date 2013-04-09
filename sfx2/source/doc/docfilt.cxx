@@ -40,6 +40,12 @@ using namespace ::com::sun::star;
 
 DBG_NAME(SfxFilter)
 
+SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
+    maFilterName(rFilterName),
+    maProvider(rProvider)
+{
+}
+
 SfxFilter::SfxFilter( const OUString &rName,
                       const OUString &rWildCard,
                       SfxFilterFlags nType,
@@ -54,8 +60,8 @@ SfxFilter::SfxFilter( const OUString &rName,
     aUserData(rUsrDat),
     aServiceName(rServiceName),
     aMimeType(rMimeType),
-    aFilterName(rName),
-    aUIName(aFilterName),
+    maFilterName(rName),
+    aUIName(maFilterName),
     nFormatType(nType),
     nVersion(SOFFICE_FILEFORMAT_50),
     lFormat(lFmt),
@@ -99,6 +105,11 @@ SfxFilter::~SfxFilter()
 OUString SfxFilter::GetDefaultExtension() const
 {
     return comphelper::string::getToken(GetWildcard().getGlob(), 0, ';');
+}
+
+const OUString& SfxFilter::GetProviderName() const
+{
+    return maProvider;
 }
 
 void SfxFilter::SetURLPattern( const OUString& rStr )

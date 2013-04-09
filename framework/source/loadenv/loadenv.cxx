@@ -744,7 +744,6 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
         rFilter = "gnumeric";
         return true;
     }
-#if 0
     else if (aURL.endsWith(".xlsx"))
     {
         rType = "generic_Text";
@@ -757,7 +756,12 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
         rFilter = "ods";
         return true;
     }
-#endif
+    else if (aURL.endsWith(".csv"))
+    {
+        rType = "generic_Text";
+        rFilter = "csv";
+        return true;
+    }
 
     return false;
 }

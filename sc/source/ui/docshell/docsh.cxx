@@ -1493,16 +1493,39 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     return bRet;
 }
 
-bool ScDocShell::LoadExternal(SfxMedium& rMed, const OUString& rProvider)
+bool ScDocShell::LoadExternal( SfxMedium& rMed )
 {
-    if (rProvider == "orcus")
+    const SfxFilter* pFilter = rMed.GetFilter();
+    if (!pFilter)
+        return false;
+
+    if (pFilter->GetProviderName() == "orcus")
     {
         ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
         if (!pOrcus)
             return false;
 
-        if (!pOrcus->importGnumeric(aDocument, rMed.GetName()))
-            return false;
+        const OUString& rFilterName = pFilter->GetName();
+        if (rFilterName == "gnumeric")
+        {
+            if (!pOrcus->importGnumeric(aDocument, rMed.GetName()))
+                return false;
+        }
+        else if (rFilterName == "csv")
+        {
+            if (!pOrcus->importCSV(aDocument, rMed.GetName()))
+                return false;
+        }
+        else if (rFilterName == "xlsx")
+        {
+            if (!pOrcus->importXLSX(aDocument, rMed.GetName()))
+                return false;
+        }
+        else if (rFilterName == "ods")
+        {
+            if (!pOrcus->importODS(aDocument, rMed.GetName()))
+                return false;
+        }
 
         FinishedLoading(SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES);
         return true;

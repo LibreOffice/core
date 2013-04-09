@@ -1087,7 +1087,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         }
         else
         {
-            pFilter->aFilterName  = sFilterName;
+            pFilter->maFilterName  = sFilterName;
             pFilter->aWildCard    = WildCard(sExtension, ';');
             pFilter->nFormatType  = nFlags;
             pFilter->lFormat      = nClipboardId;

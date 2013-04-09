@@ -17,6 +17,8 @@
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>
 #include <orcus/orcus_gnumeric.hpp>
+#include <orcus/orcus_xlsx.hpp>
+#include <orcus/orcus_ods.hpp>
 #include <orcus/global.hpp>
 
 #ifdef WNT
@@ -65,6 +67,46 @@ bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, const OUString& rPath)
     catch (const std::exception& e)
     {
         SAL_WARN("sc", "Unable to load gnumeric file! " << e.what());
+        return false;
+    }
+
+    return true;
+}
+
+bool ScOrcusFiltersImpl::importXLSX(ScDocument& rDoc, const OUString& rPath) const
+{
+    ScOrcusFactory aFactory(rDoc);
+    OString aSysPath = toSystemPath(rPath);
+    const char* path = aSysPath.getStr();
+
+    try
+    {
+        orcus::orcus_xlsx filter(&aFactory);
+        filter.read_file(path);
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("sc", "Unable to load xlsx file! " << e.what());
+        return false;
+    }
+
+    return true;
+}
+
+bool ScOrcusFiltersImpl::importODS(ScDocument& rDoc, const OUString& rPath) const
+{
+    ScOrcusFactory aFactory(rDoc);
+    OString aSysPath = toSystemPath(rPath);
+    const char* path = aSysPath.getStr();
+
+    try
+    {
+        orcus::orcus_ods filter(&aFactory);
+        filter.read_file(path);
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("sc", "Unable to load ods file! " << e.what());
         return false;
     }
 

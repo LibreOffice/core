@@ -34,12 +34,12 @@
 
 #include <sfx2/sfxdefs.hxx>
 
-//========================================================================
 class SfxFilterContainer;
 class SotStorage;
+
 class SFX2_DLLPUBLIC SfxFilter
 {
-friend class SfxFilterContainer;
+    friend class SfxFilterContainer;
 
     WildCard        aWildCard;
 
@@ -47,10 +47,16 @@ friend class SfxFilterContainer;
     OUString aUserData;
     OUString aServiceName;
     OUString aMimeType;
-    OUString aFilterName;
+    OUString maFilterName;
     OUString aPattern;
     OUString aUIName;
     OUString aDefaultTemplate;
+
+    /**
+     * Custom provider name in case the filter is provided via external
+     * libraries.  Empty for conventional filter types.
+     */
+    OUString maProvider;
 
     SfxFilterFlags  nFormatType;
     sal_uIntPtr     nVersion;
@@ -58,6 +64,8 @@ friend class SfxFilterContainer;
     sal_uInt16      nDocIcon;
 
 public:
+    SfxFilter( const OUString& rProvider, const OUString& rFilterName );
+
     SfxFilter( const OUString &rName,
                const OUString &rWildCard,
                SfxFilterFlags nFormatType,
@@ -77,9 +85,9 @@ public:
     bool CanExport() const { return nFormatType & SFX_FILTER_EXPORT; }
     bool IsInternal() const { return nFormatType & SFX_FILTER_INTERNAL; }
     SfxFilterFlags  GetFilterFlags() const  { return nFormatType; }
-    const OUString& GetFilterName() const { return aFilterName; }
+    const OUString& GetFilterName() const { return maFilterName; }
     const OUString& GetMimeType() const { return aMimeType; }
-    const OUString& GetName() const { return  aFilterName; }
+    const OUString& GetName() const { return  maFilterName; }
     const WildCard& GetWildcard() const { return aWildCard; }
     const OUString& GetRealTypeName() const { return aTypeName; }
     sal_uIntPtr         GetFormat() const { return lFormat; }
@@ -98,6 +106,7 @@ public:
     OUString GetSuffixes() const;
     OUString GetDefaultExtension() const;
     const OUString& GetServiceName() const { return aServiceName; }
+    const OUString& GetProviderName() const;
 
     static const SfxFilter* GetDefaultFilter( const String& rName );
     static const SfxFilter* GetFilterByName( const String& rName );

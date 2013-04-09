@@ -22,6 +22,8 @@ public:
 
     virtual bool importCSV(ScDocument& rDoc, const OUString& rPath) const;
     virtual bool importGnumeric(ScDocument& rDoc, const OUString& rPath) const;
+    virtual bool importXLSX(ScDocument& rDoc, const OUString& rPath) const;
+    virtual bool importODS(ScDocument& rDoc, const OUString& rPath) const;
 
     virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const OUString& rPath) const;
 };

@@ -858,10 +858,10 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     return bOk;
 }
 
-bool SfxObjectShell::DoLoadExternal(SfxMedium *pMed, const OUString& rProvider)
+bool SfxObjectShell::DoLoadExternal( SfxMedium *pMed )
 {
     pMedium = pMed;
-    return LoadExternal(*pMedium, rProvider);
+    return LoadExternal(*pMedium);
 }
 
 sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc )
@@ -3606,7 +3606,7 @@ void SfxObjectShell::UpdateLinks()
 {
 }
 
-bool SfxObjectShell::LoadExternal(SfxMedium&, const OUString&)
+bool SfxObjectShell::LoadExternal( SfxMedium& )
 {
     // Not implemented. It's an error if the code path ever comes here.
     return false;

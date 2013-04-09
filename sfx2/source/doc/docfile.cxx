@@ -125,6 +125,7 @@
 #include "officecfg/Office/Common.hxx"
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -278,6 +279,8 @@ public:
     mutable INetURLObject* m_pURLObj;
 
     const SfxFilter* m_pFilter;
+    boost::scoped_ptr<SfxFilter> m_pCustomFilter;
+
     SfxMedium*       pAntiImpl;
     SvStream* m_pInStream;
     SvStream* m_pOutStream;
@@ -2869,26 +2872,26 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     pImp->m_pSet = pParams;
     TransformParameters( SID_OPENDOC, aArgs, *pParams );
 
-    OUString aFilterProvider;
+    OUString aFilterProvider, aFilterName;
     {
         const SfxPoolItem* pItem = NULL;
         if (pImp->m_pSet->HasItem(SID_FILTER_PROVIDER, &pItem))
             aFilterProvider = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+        if (pImp->m_pSet->HasItem(SID_FILTER_NAME, &pItem))
+            aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
     }
 
     if (aFilterProvider.isEmpty())
     {
         // This is a conventional filter type.
-        OUString aFilterName;
-        SFX_ITEMSET_ARG( pImp->m_pSet, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, false );
-        if( pFilterNameItem )
-            aFilterName = pFilterNameItem->GetValue();
         pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
     }
     else
     {
         // This filter is from an external provider such as orcus.
-
+        pImp->m_pCustomFilter.reset(new SfxFilter(aFilterProvider, aFilterName));
+        pImp->m_pFilter = pImp->m_pCustomFilter.get();
     }
 
     SFX_ITEMSET_ARG( pImp->m_pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
