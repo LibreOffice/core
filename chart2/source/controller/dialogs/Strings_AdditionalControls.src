@@ -46,6 +46,21 @@ String STR_TEXT_SEPARATOR
     Text [ en-US ] = "Separator";
 };
 
+String STR_LINETYPE_STRAIGHT
+{
+    Text [ en-US ] = "Straight";
+};
+
+String STR_LINETYPE_SMOOTH
+{
+    Text [ en-US ] = "Smooth";
+};
+
+String STR_LINETYPE_STEPPED
+{
+    Text [ en-US ] = "Stepped";
+};
+
 //-----------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

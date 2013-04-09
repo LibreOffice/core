@@ -440,9 +440,6 @@ public:
 private:
     DECL_LINK( SplineTypeListBoxHdl, void* );
 
-    void adjustControlPositions();
-    void adjustSize();
-
 private:
     ListBox* m_pLB_Spline_Type;
 
@@ -517,6 +514,83 @@ IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl)
 }
 
 //--------------------------------------------------------------------------
+class SteppedPropertiesDialog : public ModalDialog
+{
+public:
+    SteppedPropertiesDialog( Window* pParent );
+    virtual ~SteppedPropertiesDialog();
+
+    void fillControls( const ChartTypeParameter& rParameter );
+    void fillParameter( ChartTypeParameter& rParameter, bool bSteppedLines );
+
+    virtual void StateChanged( StateChangedType nType );
+
+private:
+
+private:
+    RadioButton* m_pRB_Start;
+    RadioButton* m_pRB_End;
+    RadioButton* m_pRB_CenterX;
+    RadioButton* m_pRB_CenterY;
+};
+
+SteppedPropertiesDialog::SteppedPropertiesDialog( Window* pParent )
+        : ModalDialog( pParent, "SteppedLinesDialog", "modules/schart/ui/steppedlinesdlg.ui")
+{
+    get(m_pRB_Start, "step_start_rb");
+    get(m_pRB_End, "step_end_rb");
+    get(m_pRB_CenterX, "step_center_x_rb");
+    get(m_pRB_CenterY, "step_center_y_rb");
+
+    this->SetText( String( SchResId( STR_DLG_STEPPED_LINE_PROPERTIES ) ) );
+}
+
+SteppedPropertiesDialog::~SteppedPropertiesDialog()
+{
+}
+
+void SteppedPropertiesDialog::StateChanged( StateChangedType nType )
+{
+    Dialog::StateChanged( nType );
+}
+
+void SteppedPropertiesDialog::fillControls( const ChartTypeParameter& rParameter )
+{
+    switch(rParameter.eCurveStyle)
+    {
+        case CurveStyle_STEP_END:
+            m_pRB_End->Check();
+            break;
+        case CurveStyle_STEP_CENTER_X:
+            m_pRB_CenterX->Check();
+            break;
+        case CurveStyle_STEP_CENTER_Y:
+            m_pRB_CenterY->Check();
+            break;
+        default: // includes CurveStyle_STEP_START
+            m_pRB_Start->Check();
+            break;
+    }
+}
+void SteppedPropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool bSteppedLines )
+{
+    if (!bSteppedLines)
+        rParameter.eCurveStyle=CurveStyle_LINES;
+    else if(m_pRB_CenterY->IsChecked())
+        rParameter.eCurveStyle=CurveStyle_STEP_CENTER_Y;
+    else if(m_pRB_Start->IsChecked())
+        rParameter.eCurveStyle=CurveStyle_STEP_START;
+    else if(m_pRB_End->IsChecked())
+        rParameter.eCurveStyle=CurveStyle_STEP_END;
+    else if(m_pRB_CenterX->IsChecked())
+        rParameter.eCurveStyle=CurveStyle_STEP_CENTER_X;
+}
+
+//--------------------------------------------------------------------------
+
+#define POS_LINETYPE_STRAIGHT    0
+#define POS_LINETYPE_SMOOTH      1
+#define POS_LINETYPE_STEPPED     2
 
 class SplineResourceGroup : public ChangingResource
 {
@@ -533,24 +607,33 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK( SplineChangeHdl, void* );
+    DECL_LINK( LineTypeChangeHdl, void* );
     DECL_LINK( SplineDetailsDialogHdl, void* );
+    DECL_LINK( SteppedDetailsDialogHdl, void* );
     SplinePropertiesDialog& getSplinePropertiesDialog();
+    SteppedPropertiesDialog& getSteppedPropertiesDialog();
 
 private:
-    CheckBox    m_aCB_Splines;
+    FixedText   m_aFT_LineType;
+    ListBox     m_aLB_LineType;
     PushButton  m_aPB_DetailsDialog;
     ::std::auto_ptr< SplinePropertiesDialog > m_pSplinePropertiesDialog;
+    ::std::auto_ptr< SteppedPropertiesDialog > m_pSteppedPropertiesDialog;
 };
 SplineResourceGroup::SplineResourceGroup( Window* pWindow )
         : ChangingResource()
-        , m_aCB_Splines( pWindow, SchResId( CB_SPLINES ) )
+        , m_aFT_LineType( pWindow, SchResId( FT_LINETYPE ) )
+        , m_aLB_LineType( pWindow, SchResId( LB_LINETYPE ) )
         , m_aPB_DetailsDialog( pWindow, SchResId( PB_SPLINE_DIALOG ) )
         , m_pSplinePropertiesDialog()
 {
-    m_aCB_Splines.SetToggleHdl( LINK( this, SplineResourceGroup, SplineChangeHdl ) );
-    m_aPB_DetailsDialog.SetClickHdl( LINK( this, SplineResourceGroup, SplineDetailsDialogHdl ) );
-    m_aPB_DetailsDialog.SetQuickHelpText( String( SchResId(STR_DLG_SMOOTH_LINE_PROPERTIES) ) );
+    m_aLB_LineType.InsertEntry(String(SchResId(STR_LINETYPE_STRAIGHT)));
+    m_aLB_LineType.InsertEntry(String(SchResId(STR_LINETYPE_SMOOTH)));
+    m_aLB_LineType.InsertEntry(String(SchResId(STR_LINETYPE_STEPPED)));
+    m_aLB_LineType.SetDropDownLineCount(3);
+    m_aLB_LineType.SetSelectHdl( LINK( this, SplineResourceGroup, LineTypeChangeHdl ) );
+    m_aLB_LineType.SetAccessibleName(m_aFT_LineType.GetText());
+    m_aLB_LineType.SetAccessibleRelationLabeledBy(&m_aFT_LineType);
 
     Size aButtonSize( m_aPB_DetailsDialog.GetSizePixel() );
     Size aMinSize( m_aPB_DetailsDialog.CalcMinimumSize() );
@@ -572,61 +655,114 @@ SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
         m_pSplinePropertiesDialog = ::std::auto_ptr< SplinePropertiesDialog >( new SplinePropertiesDialog( m_aPB_DetailsDialog.GetParent() ) );
     return *m_pSplinePropertiesDialog;
 }
+SteppedPropertiesDialog& SplineResourceGroup::getSteppedPropertiesDialog()
+{
+    if( !m_pSteppedPropertiesDialog.get() )
+    {
+        m_pSteppedPropertiesDialog = ::std::auto_ptr< SteppedPropertiesDialog >( new SteppedPropertiesDialog( m_aPB_DetailsDialog.GetParent() ) );
+    }
+    return *m_pSteppedPropertiesDialog;
+}
 void SplineResourceGroup::showControls( bool bShow )
 {
-    m_aCB_Splines.Show(bShow);
+    m_aFT_LineType.Show(bShow);
+    m_aLB_LineType.Show(bShow);
     m_aPB_DetailsDialog.Show(bShow);
 }
 Point SplineResourceGroup::getPosition()
 {
-    return m_aCB_Splines.GetPosPixel();
+    return m_aLB_LineType.GetPosPixel();
 }
 long SplineResourceGroup::getHeight()
 {
-    return m_aCB_Splines.GetSizePixel().Height() + m_aPB_DetailsDialog.LogicToPixel( Size(0,2), MapMode(MAP_APPFONT) ).Height();
+    return m_aLB_LineType.GetSizePixel().Height() + m_aPB_DetailsDialog.LogicToPixel( Size(0,2), MapMode(MAP_APPFONT) ).Height();
 }
 void SplineResourceGroup::setPosition( const Point& rPoint )
 {
-    Size aSize( m_aCB_Splines.CalcMinimumSize() );
-    Size aDistanceSize( m_aCB_Splines.LogicToPixel( Size(RSC_SP_CTRL_GROUP_X,1), MapMode(MAP_APPFONT) ) );
-    m_aCB_Splines.SetSizePixel( aSize );
+    Size aSizeFT( m_aFT_LineType.CalcMinimumSize() );
+    Size aDistanceSizeFT( m_aFT_LineType.LogicToPixel( Size(RSC_SP_CTRL_GROUP_X,1), MapMode(MAP_APPFONT) ) );
+    m_aFT_LineType.SetSizePixel( aSizeFT );
+
+    Size aSizeLB( m_aLB_LineType.CalcMinimumSize() );
+    Size aDistanceSizeLB( m_aLB_LineType.LogicToPixel( Size(RSC_SP_CTRL_GROUP_X,1), MapMode(MAP_APPFONT) ) );
+    m_aLB_LineType.SetSizePixel( aSizeLB );
 
     Point aOld = this->getPosition();
     long nDiffY = rPoint.Y() - aOld.Y();
     long nDiffX = rPoint.X() - aOld.X();
 
     Point aNew( aOld.X()+nDiffX, aOld.Y()+nDiffY );
-    m_aCB_Splines.SetPosPixel( aNew );
+    m_aFT_LineType.SetPosPixel( aNew );
 
-    aNew.X() += ( aSize.Width() + aDistanceSize.Width() );
-    aNew.Y() -= 3*aDistanceSize.Height();
+    aNew.X() += ( aSizeFT.Width() + aDistanceSizeFT.Width() );
+    aNew.Y() -= 3*aDistanceSizeFT.Height();
+    m_aLB_LineType.SetPosPixel( aNew );
+
+    aNew.X() += ( aSizeLB.Width() + aDistanceSizeLB.Width() );
+    aNew.Y() -= 3*aDistanceSizeLB.Height();
     m_aPB_DetailsDialog.SetPosPixel( aNew );
 }
 
 void SplineResourceGroup::fillControls( const ChartTypeParameter& rParameter )
 {
-    m_aCB_Splines.Check( rParameter.eCurveStyle!=CurveStyle_LINES );
-    getSplinePropertiesDialog().fillControls( rParameter );
+    switch (rParameter.eCurveStyle)
+    {
+        case CurveStyle_LINES:
+            m_aLB_LineType.SelectEntryPos(POS_LINETYPE_STRAIGHT);
+            m_aPB_DetailsDialog.Enable(false);
+            break;
+        case CurveStyle_CUBIC_SPLINES:
+        case CurveStyle_B_SPLINES:
+            m_aLB_LineType.SelectEntryPos(POS_LINETYPE_SMOOTH);
+            m_aPB_DetailsDialog.Enable(true);
+            m_aPB_DetailsDialog.SetClickHdl( LINK( this, SplineResourceGroup, SplineDetailsDialogHdl ) );
+            m_aPB_DetailsDialog.SetQuickHelpText( String( SchResId(STR_DLG_SMOOTH_LINE_PROPERTIES) ) );
+            getSplinePropertiesDialog().fillControls( rParameter );
+            break;
+        case CurveStyle_STEP_START:
+        case CurveStyle_STEP_END:
+        case CurveStyle_STEP_CENTER_X:
+        case CurveStyle_STEP_CENTER_Y:
+            m_aLB_LineType.SelectEntryPos(POS_LINETYPE_STEPPED);
+            m_aPB_DetailsDialog.Enable(true);
+            m_aPB_DetailsDialog.SetClickHdl( LINK( this, SplineResourceGroup, SteppedDetailsDialogHdl ) );
+            m_aPB_DetailsDialog.SetQuickHelpText( String( SchResId(STR_DLG_STEPPED_LINE_PROPERTIES) ) );
+            getSteppedPropertiesDialog().fillControls( rParameter );
+            break;
+        default:
+            m_aLB_LineType.SetNoSelection();
+            m_aPB_DetailsDialog.Enable(false);
+    }
 }
 void SplineResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
-    getSplinePropertiesDialog().fillParameter( rParameter, m_aCB_Splines.IsChecked() );
+    switch (m_aLB_LineType.GetSelectEntryPos())
+    {
+        case POS_LINETYPE_SMOOTH:
+            getSplinePropertiesDialog().fillParameter( rParameter, true );
+            break;
+        case POS_LINETYPE_STEPPED:
+            getSteppedPropertiesDialog().fillParameter( rParameter, true );
+            break;
+        default: // includes POS_LINETYPE_STRAIGHT
+            rParameter.eCurveStyle = CurveStyle_LINES;
+            break;
+    }
 }
-IMPL_LINK_NOARG(SplineResourceGroup, SplineChangeHdl)
+IMPL_LINK_NOARG(SplineResourceGroup, LineTypeChangeHdl)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
     return 0;
 }
-
 IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl)
 {
 
     ChartTypeParameter aOldParameter;
-    getSplinePropertiesDialog().fillParameter( aOldParameter, m_aCB_Splines.IsChecked() );
+    getSplinePropertiesDialog().fillParameter( aOldParameter, POS_LINETYPE_SMOOTH == m_aLB_LineType.GetSelectEntryPos() );
 
-    sal_Bool bOldSmoothLines = m_aCB_Splines.IsChecked();
-    m_aCB_Splines.Check();
+    sal_uInt16 iOldLineTypePos = m_aLB_LineType.GetSelectEntryPos();
+    m_aLB_LineType.SelectEntryPos(POS_LINETYPE_SMOOTH);
     if( RET_OK == getSplinePropertiesDialog().Execute() )
     {
         if( m_pChangeListener )
@@ -635,8 +771,29 @@ IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl)
     else
     {
         //restore old state:
-        m_aCB_Splines.Check( bOldSmoothLines );
+        m_aLB_LineType.SelectEntryPos( iOldLineTypePos );
         getSplinePropertiesDialog().fillControls( aOldParameter );
+    }
+    return 0;
+}
+IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl)
+{
+
+    ChartTypeParameter aOldParameter;
+    getSteppedPropertiesDialog().fillParameter( aOldParameter, POS_LINETYPE_STEPPED == m_aLB_LineType.GetSelectEntryPos() );
+
+    sal_uInt16 iOldLineTypePos = m_aLB_LineType.GetSelectEntryPos();
+    m_aLB_LineType.SelectEntryPos(POS_LINETYPE_STEPPED);
+    if( RET_OK == getSteppedPropertiesDialog().Execute() )
+    {
+        if( m_pChangeListener )
+            m_pChangeListener->stateChanged(this);
+    }
+    else
+    {
+        //restore old state:
+        m_aLB_LineType.SelectEntryPos( iOldLineTypePos );
+        getSteppedPropertiesDialog().fillControls( aOldParameter );
     }
     return 0;
 }

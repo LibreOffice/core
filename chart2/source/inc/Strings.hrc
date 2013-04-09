@@ -77,6 +77,10 @@
 #define STR_3DSCHEME_REALISTIC               (RID_APP_START + 232)
 #define STR_3DSCHEME_CUSTOM                  (RID_APP_START + 259)
 
+#define STR_LINETYPE_STRAIGHT                (RID_APP_START + 297)
+#define STR_LINETYPE_SMOOTH                  (RID_APP_START + 298)
+#define STR_LINETYPE_STEPPED                 (RID_APP_START + 299)
+
 //additional strings
 #define STR_TEXT_SEPARATOR                   (RID_APP_START + 20)
 
@@ -236,6 +240,7 @@
 #define STR_PAGE_CHART_LOCATION              (RID_APP_START + 230)
 
 #define STR_DLG_SMOOTH_LINE_PROPERTIES              (RID_APP_START + 239)
+#define STR_DLG_STEPPED_LINE_PROPERTIES             (RID_APP_START + 270)
 #define STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE   (RID_APP_START + 266)
 
 #define STR_PAGE_POSITIONING  (RID_APP_START + 277)
