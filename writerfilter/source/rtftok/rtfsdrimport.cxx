@@ -337,6 +337,14 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             xPropertySet->setPropertyValue("RightBorderDistance", uno::makeAny(i->second.toInt32() / 360));
         else if (i->first == "dyTextBottom")
             xPropertySet->setPropertyValue("BottomBorderDistance", uno::makeAny(i->second.toInt32() / 360));
+        else if (i->first == "dxWrapDistLeft")
+            xPropertySet->setPropertyValue("LeftMargin", uno::makeAny(i->second.toInt32() / 360));
+        else if (i->first == "dyWrapDistTop")
+            xPropertySet->setPropertyValue("TopMargin", uno::makeAny(i->second.toInt32() / 360));
+        else if (i->first == "dxWrapDistRight")
+            xPropertySet->setPropertyValue("RightMargin", uno::makeAny(i->second.toInt32() / 360));
+        else if (i->first == "dyWrapDistBottom")
+            xPropertySet->setPropertyValue("BottomMargin", uno::makeAny(i->second.toInt32() / 360));
         else
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle shape property '" <<
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr() << "':'" <<
