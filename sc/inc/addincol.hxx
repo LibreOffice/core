@@ -76,6 +76,15 @@ struct ScAddInArgDesc
 
 class ScUnoAddInFuncData
 {
+public:
+    struct LocalizedName
+    {
+        OUString    maLocale;
+        OUString    maName;
+
+                    LocalizedName( const OUString& rLocale, const OUString& rName )
+                        : maLocale( rLocale), maName( rName) { }
+    };
 private:
     OUString     aOriginalName;      ///< kept in formula
     OUString     aLocalName;         ///< for display
@@ -89,7 +98,7 @@ private:
     long                nCallerPos;
     sal_uInt16          nCategory;
     OString        sHelpId;
-    mutable com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName> aCompNames;
+    mutable ::std::vector< LocalizedName > maCompNames;
     mutable sal_Bool        bCompInitialized;
 
 public:
@@ -117,14 +126,14 @@ public:
     sal_uInt16              GetCategory() const         { return nCategory; }
     const OString      GetHelpId() const           { return sHelpId; }
 
-    const com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName>&  GetCompNames() const;
+    const ::std::vector< LocalizedName >&  GetCompNames() const;
     sal_Bool                    GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const;
 
     void    SetFunction( const com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod>& rNewFunc,
                          const com::sun::star::uno::Any& rNewObj );
     void    SetArguments( long nNewCount, const ScAddInArgDesc* pNewDescs );
     void    SetCallerPos( long nNewPos );
-    void    SetCompNames( const com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName>& rNew );
+    void    SetCompNames( const ::std::vector< LocalizedName >& rNew );
 };
 
 //------------------------------------------------------------------------

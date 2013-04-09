@@ -92,7 +92,7 @@ ScUnoAddInFuncData::~ScUnoAddInFuncData()
     delete[] pArgDescs;
 }
 
-const uno::Sequence<sheet::LocalizedName>& ScUnoAddInFuncData::GetCompNames() const
+const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetCompNames() const
 {
     if ( !bCompInitialized )
     {
@@ -105,21 +105,17 @@ const uno::Sequence<sheet::LocalizedName>& ScUnoAddInFuncData::GetCompNames() co
             if ( xComp.is() && xFunction.is() )
             {
                 OUString aMethodName = xFunction->getName();
-                aCompNames = xComp->getCompatibilityNames( aMethodName );
-
-                //  change all locale entries to default case
-                //  (language in lower case, country in upper case)
-                //  for easier searching
-
-                long nSeqLen = aCompNames.getLength();
+                uno::Sequence< sheet::LocalizedName> aCompNames( xComp->getCompatibilityNames( aMethodName ));
+                maCompNames.clear();
+                sal_Int32 nSeqLen = aCompNames.getLength();
                 if ( nSeqLen )
                 {
-                    sheet::LocalizedName* pArray = aCompNames.getArray();
-                    for (long i=0; i<nSeqLen; i++)
+                    const sheet::LocalizedName* pArray = aCompNames.getArray();
+                    for (sal_Int32 i=0; i<nSeqLen; i++)
                     {
-                        lang::Locale& rLocale = pArray[i].Locale;
-                        rLocale.Language = rLocale.Language.toAsciiLowerCase();
-                        rLocale.Country  = rLocale.Country.toAsciiUpperCase();
+                        maCompNames.push_back( LocalizedName(
+                                    LanguageTag( pArray[i].Locale).getBcp47( false),
+                                    pArray[i].Name));
                     }
                 }
             }
@@ -127,76 +123,77 @@ const uno::Sequence<sheet::LocalizedName>& ScUnoAddInFuncData::GetCompNames() co
 
         bCompInitialized = sal_True;        // also if not successful
     }
-    return aCompNames;
+    return maCompNames;
 }
 
-void ScUnoAddInFuncData::SetCompNames( const uno::Sequence< sheet::LocalizedName>& rNew )
+void ScUnoAddInFuncData::SetCompNames( const ::std::vector< ScUnoAddInFuncData::LocalizedName >& rNew )
 {
     OSL_ENSURE( !bCompInitialized, "SetCompNames after initializing" );
 
-    aCompNames = rNew;
-
-    //  change all locale entries to default case
-    //  (language in lower case, country in upper case)
-    //  for easier searching
-
-    long nSeqLen = aCompNames.getLength();
-    if ( nSeqLen )
-    {
-        sheet::LocalizedName* pArray = aCompNames.getArray();
-        for (long i=0; i<nSeqLen; i++)
-        {
-            lang::Locale& rLocale = pArray[i].Locale;
-            rLocale.Language = rLocale.Language.toAsciiLowerCase();
-            rLocale.Country  = rLocale.Country.toAsciiUpperCase();
-        }
-    }
+    maCompNames = rNew;
 
     bCompInitialized = sal_True;
 }
 
 sal_Bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const
 {
-    const uno::Sequence<sheet::LocalizedName>& rSequence = GetCompNames();
-    long nSeqLen = rSequence.getLength();
-    if ( nSeqLen )
+    const ::std::vector<LocalizedName>& rCompNames = GetCompNames();
+    if ( !rCompNames.empty() )
     {
-        const sheet::LocalizedName* pArray = rSequence.getConstArray();
-        long i;
+        LanguageTag aLanguageTag( eDestLang);
+        const OUString aSearch( aLanguageTag.getBcp47());
 
-        /* FIXME-BCP47: we may want to handle language tags here as well. */
-        OUString aLangStr, aCountryStr;
-        LanguageTag( eDestLang ).getIsoLanguageCountry( aLangStr, aCountryStr );
-        OUString aUserLang = aLangStr.toAsciiLowerCase();
-        OUString aUserCountry = aCountryStr.toAsciiUpperCase();
-
-        //  first check for match of both language and country
-
-        for ( i=0; i<nSeqLen; i++)
-            if ( pArray[i].Locale.Language == aUserLang &&
-                    pArray[i].Locale.Country  == aUserCountry )
+        // First, check exact match without fallback overhead.
+        ::std::vector<LocalizedName>::const_iterator itNames( rCompNames.begin());
+        for ( ; itNames != rCompNames.end(); ++itNames)
+        {
+            if ((*itNames).maLocale == aSearch)
             {
-                rRetExcelName = pArray[i].Name;
-                return sal_True;
+                rRetExcelName = (*itNames).maName;
+                return true;
             }
+        }
 
-        //  second: check only language
-
-        for ( i=0; i<nSeqLen; i++)
-            if ( pArray[i].Locale.Language == aUserLang )
+        // Second, try match of fallback search with fallback locales,
+        // appending also 'en-US' and 'en' to search if not queried.
+        ::std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings());
+        if (aSearch != "en-US")
+        {
+            aFallbackSearch.push_back( "en-US");
+            if (aSearch != "en")
             {
-                rRetExcelName = pArray[i].Name;
-                return sal_True;
+                aFallbackSearch.push_back( "en");
             }
+        }
+        bool bFirst = true;
+        ::std::vector< OUString >::const_iterator itSearch( aFallbackSearch.begin());
+        for ( ; itSearch != aFallbackSearch.end(); ++itSearch)
+        {
+            itNames = rCompNames.begin();
+            for ( ; itNames != rCompNames.end(); ++itNames)
+            {
+                ::std::vector< OUString > aFallbackLocales( LanguageTag( (*itNames).maLocale).getFallbackStrings());
+                ::std::vector< OUString >::const_iterator itLocales( aFallbackLocales.begin());
+                if (bFirst)
+                {
+                    // We checked already the full tag, start with second.
+                    if (itLocales != aFallbackLocales.end())
+                        ++itLocales;
+                }
+                for ( ; itLocales != aFallbackLocales.end(); ++itLocales)
+                {
+                    if (*itLocales == *itSearch)
+                    {
+                        rRetExcelName = (*itNames).maName;
+                        return true;
+                    }
+                }
+            }
+            bFirst = false;
+        }
 
-        // third: #i57772# fall-back to en-US
-
-        if ( eDestLang != LANGUAGE_ENGLISH_US )
-            return GetExcelName( LANGUAGE_ENGLISH_US, rRetExcelName );
-
-        //  forth: use first (default) entry
-
-        rRetExcelName = pArray[0].Name;
+        // Third, last resort, use first (default) entry.
+        rRetExcelName = rCompNames[0].maName;
         return sal_True;
     }
     return false;
@@ -471,7 +468,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 // get compatibility names
 
-                uno::Sequence<sheet::LocalizedName> aCompNames;
+                ::std::vector<ScUnoAddInFuncData::LocalizedName> aCompNames;
 
                 OUString aCompPath = aFuncPropPath;
                 aCompPath += OUString(CFGSTR_COMPATIBILITYNAME);
@@ -484,30 +481,17 @@ void ScUnoAddInCollection::ReadConfiguration()
                     if ( aCompProperties[0] >>= aLocalEntries )
                     {
                         sal_Int32 nLocaleCount = aLocalEntries.getLength();
-                        aCompNames.realloc( nLocaleCount );
                         const beans::PropertyValue* pConfigArray = aLocalEntries.getConstArray();
-                        sheet::LocalizedName* pCompArray = aCompNames.getArray();
 
                         for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
                         {
-                            const sal_Unicode cLocaleSep = '-';     // separator in configuration locale strings
-
-                            // PropertyValue name is the locale (convert from string to Locale struct)
-
-                            const OUString& rLocaleStr = pConfigArray[nLocale].Name;
-                            lang::Locale& rLocale = pCompArray[nLocale].Locale;
-                            sal_Int32 nSepPos = rLocaleStr.indexOf( cLocaleSep );
-                            if ( nSepPos >= 0 )
-                            {
-                                rLocale.Language = rLocaleStr.copy( 0, nSepPos );
-                                rLocale.Country = rLocaleStr.copy( nSepPos+1 );
-                            }
-                            else
-                                rLocale.Language = rLocaleStr;      // leave country empty (default ctor from sequence)
-
+                            // PropertyValue name is the locale ("convert" from
+                            // string to string to canonicalize)
+                            OUString aLocale( LanguageTag( pConfigArray[nLocale].Name, true).getBcp47( false));
                             // PropertyValue value is the localized value (string in this case)
-
-                            pConfigArray[nLocale].Value >>= pCompArray[nLocale].Name;
+                            OUString aName;
+                            pConfigArray[nLocale].Value >>= aName;
+                            aCompNames.push_back( ScUnoAddInFuncData::LocalizedName( aLocale, aName));
                         }
                     }
                 }
@@ -647,13 +631,13 @@ sal_Bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString
         ScUnoAddInFuncData* pFuncData = ppFuncData[i];
         if ( pFuncData )
         {
-            const uno::Sequence<sheet::LocalizedName>& rSequence = pFuncData->GetCompNames();
-            long nSeqLen = rSequence.getLength();
-            if ( nSeqLen )
+            const ::std::vector<ScUnoAddInFuncData::LocalizedName>& rNames = pFuncData->GetCompNames();
+            if ( !rNames.empty() )
             {
-                const sheet::LocalizedName* pArray = rSequence.getConstArray();
-                for ( long nName=0; nName<nSeqLen; nName++)
-                    if ( ScGlobal::pCharClass->uppercase( pArray[nName].Name ) == aUpperCmp )
+                ::std::vector<ScUnoAddInFuncData::LocalizedName>::const_iterator it( rNames.begin());
+                for ( ; it != rNames.end(); ++it)
+                {
+                    if ( ScGlobal::pCharClass->uppercase( (*it).maName ) == aUpperCmp )
                     {
                         //! store upper case for comparing?
 
@@ -661,6 +645,7 @@ sal_Bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString
                         rRetCalcName = pFuncData->GetOriginalName();
                         return sal_True;
                     }
+                }
             }
         }
     }
