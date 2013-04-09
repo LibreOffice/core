@@ -64,7 +64,7 @@ class UnoReferencePrinter(object):
         iface = self.value['_pInterface']
         if iface:
             try:
-                impl = iface.cast(_itype).dereference()
+                impl = iface.cast(iface.dynamic_type).dereference()
                 return '%s to %s' % (self.typename, str(impl))
             except:
                 # fallback for potential problem:
@@ -73,9 +73,6 @@ class UnoReferencePrinter(object):
 
         else:
             return "empty %s" % self.typename
-
-    def _itype(self):
-        return self.value.type.template_argument(0).pointer()
 
 class UnoSequencePrinter(object):
     '''Prints UNO Sequence'''
