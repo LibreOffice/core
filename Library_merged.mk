@@ -34,7 +34,8 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	cppu \
 	cppuhelper \
 	i18nlangtag \
-    jvmfwk \
+	jvmaccess \
+	jvmfwk \
 	sal \
 	salhelper \
 	tl \
