@@ -274,9 +274,6 @@ public:
     OUString m_aLogicName;
     OUString m_aLongName;
 
-    uno::Reference < embed::XStorage > xStorage;
-    uno::Reference<io::XInputStream> m_xInputStreamToLoadFrom;
-
     mutable SfxItemSet* m_pSet;
     mutable INetURLObject* m_pURLObj;
 
@@ -297,26 +294,25 @@ public:
 
     ::utl::TempFile*           pTempFile;
 
-    uno::Reference < embed::XStorage > m_xZipStorage;
-    Reference < XInputStream > xInputStream;
-    Reference < XStream > xStream;
-
-    uno::Reference< io::XStream > m_xLockingStream;
+    uno::Reference<embed::XStorage> xStorage;
+    uno::Reference<embed::XStorage> m_xZipStorage;
+    uno::Reference<io::XInputStream> m_xInputStreamToLoadFrom;
+    uno::Reference<io::XInputStream> xInputStream;
+    uno::Reference<io::XStream> xStream;
+    uno::Reference<io::XStream> m_xLockingStream;
+    uno::Reference<task::XInteractionHandler> xInteraction;
+    uno::Reference<logging::XSimpleLogRing> m_xLogRing;
 
     sal_uInt32                  nLastStorageError;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
-
     OUString m_aBackupURL;
 
-    // the following member is changed and makes sence only during saving
+    // the following member is changed and makes sense only during saving
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
     //             in this case the member will hold this information
     sal_uInt16      m_nSignatureState;
 
     util::DateTime m_aDateTime;
-
-    uno::Reference< logging::XSimpleLogRing > m_xLogRing;
 
     SfxMedium_Impl( SfxMedium* pAntiImplP );
     ~SfxMedium_Impl();
@@ -619,13 +615,13 @@ void SfxMedium::CloseInStream_Impl()
         pImp->m_pSet->ClearItem( SID_INPUTSTREAM );
 
     CloseZipStorage_Impl();
-    pImp->xInputStream = uno::Reference< io::XInputStream >();
+    pImp->xInputStream.clear();
 
     if ( !pImp->m_pOutStream )
     {
         // output part of the stream is not used so the whole stream can be closed
         // TODO/LATER: is it correct?
-        pImp->xStream = uno::Reference< io::XStream >();
+        pImp->xStream.clear();
         if ( pImp->m_pSet )
             pImp->m_pSet->ClearItem( SID_STREAM );
     }
@@ -685,7 +681,7 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
     {
         // input part of the stream is not used so the whole stream can be closed
         // TODO/LATER: is it correct?
-        pImp->xStream = uno::Reference< io::XStream >();
+        pImp->xStream.clear();
         if ( pImp->m_pSet )
             pImp->m_pSet->ClearItem( SID_STREAM );
     }
@@ -1403,7 +1399,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
 
     if ( bResetStorage )
     {
-        pImp->xStorage = 0;
+        pImp->xStorage.clear();
         if ( pImp->m_pInStream )
             pImp->m_pInStream->Seek( 0L );
     }
@@ -1454,7 +1450,7 @@ void SfxMedium::CloseZipStorage_Impl()
         } catch( const uno::Exception& )
         {}
 
-        pImp->m_xZipStorage = uno::Reference< embed::XStorage >();
+        pImp->m_xZipStorage.clear();
     }
 }
 
@@ -1474,7 +1470,7 @@ void SfxMedium::CloseStorage()
             }
         }
 
-        pImp->xStorage = 0;
+        pImp->xStorage.clear();
         pImp->bStorageBasedOnInStream = false;
     }
 
@@ -2675,7 +2671,7 @@ void SfxMedium::UnlockFile( sal_Bool bReleaseLockStream )
             {}
         }
 
-        pImp->m_xLockingStream = uno::Reference< io::XStream >();
+        pImp->m_xLockingStream.clear();
     }
 
     if ( pImp->m_bLocked )
@@ -2705,7 +2701,7 @@ void SfxMedium::CloseAndReleaseStreams_Impl()
 
         // if the locking stream is closed here the related member should be cleaned
         if ( pImp->xStream == pImp->m_xLockingStream )
-            pImp->m_xLockingStream = uno::Reference< io::XStream >();
+            pImp->m_xLockingStream.clear();
     }
 
     // The probably exsisting SvStream wrappers should be closed first
