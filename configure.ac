@@ -8109,6 +8109,10 @@ if test -n "$with_tls"; then
     openssl)
         AC_DEFINE(USE_TLS_OPENSSL)
         TLS=OPENSSL
+
+        # warn that OpenSSL has been selected but not all TLS code has this option
+        AC_MSG_WARN([TLS/SSL implementation to use is OpenSSL but some code may still be depending on NSS or GNUTLS])
+        add_warning "TLS/SSL implementation to use is OpenSSL but some code may still be depending on NSS or GNUTLS"
         ;;
     nss)
         AC_DEFINE(USE_TLS_NSS)
