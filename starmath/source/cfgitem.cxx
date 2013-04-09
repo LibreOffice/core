@@ -98,7 +98,6 @@ static const char * aMathPropNames[] =
     "Print/Size",
     "Print/ZoomFactor",
     "LoadSave/IsSaveOnlyUsedSymbols",
-    //"Misc/NoSymbolsWarning",  @deprecated
     "Misc/IgnoreSpacesRight",
     "View/ToolboxVisible",
     "View/AutoRedraw",
@@ -193,7 +192,6 @@ struct SmCfgOther
     bool            bToolboxVisible;
     bool            bAutoRedraw;
     bool            bFormulaCursor;
-    //sal_Bool            bNoSymbolsWarning;
 
     SmCfgOther();
 };
