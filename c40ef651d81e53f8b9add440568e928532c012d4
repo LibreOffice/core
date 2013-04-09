@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///mw\u003d",
+        "filename": "vcl/source/edit/texteng.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-04-09T07:37:19Z",
+      "side": 1,
+      "message": "Hmm, this hunk must be some sort of accident. :-)",
+      "revId": "c40ef651d81e53f8b9add440568e928532c012d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
