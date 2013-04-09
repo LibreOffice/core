@@ -970,7 +970,7 @@ sal_Bool SmDocShell::ConvertTo( SfxMedium &rMedium )
             aEquation.SetFlat(sal_True);
             bRet = aEquation.Export(rMedium);
         }
-        else if( pFlt->GetFilterName().EqualsAscii("MathType 3.x"))
+        else if (pFlt->GetFilterName().equalsAscii("MathType 3.x"))
             bRet = WriteAsMathType3( rMedium );
     }
     return bRet;

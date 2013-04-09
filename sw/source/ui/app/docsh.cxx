@@ -193,7 +193,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
     nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
-    if( pFlt->GetDefaultTemplate().Len() )
+    if (!pFlt->GetDefaultTemplate().isEmpty())
         pRead->SetTemplateName( pFlt->GetDefaultTemplate() );
 
     if( pRead == ReadAscii && 0 != rMedium.GetInStream() &&

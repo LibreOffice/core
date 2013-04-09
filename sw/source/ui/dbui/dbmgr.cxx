@@ -1140,7 +1140,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
                                 //convert fields to text if we are exporting to PDF
                                 //this prevents a second merge while updating the fields in SwXTextDocument::getRendererCount()
-                                if( pStoreToFilter && pStoreToFilter->GetFilterName().EqualsAscii("writer_pdf_Export"))
+                                if( pStoreToFilter && pStoreToFilter->GetFilterName().equalsAscii("writer_pdf_Export"))
                                     rWorkShell.ConvertFieldsToText();
                                 xWorkDocSh->DoSaveAs(*pDstMed);
                                 xWorkDocSh->DoSaveCompleted(pDstMed);

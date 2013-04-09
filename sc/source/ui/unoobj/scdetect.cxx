@@ -432,9 +432,9 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                 SvStream* pStream = aMedium.GetInStream();
                 const SfxFilter* pPreselectedFilter = pFilter;
                 bool bCsvSelected = (pPreselectedFilter &&
-                        pPreselectedFilter->GetFilterName().EqualsAscii( pFilterAscii ));
+                        pPreselectedFilter->GetFilterName().equalsAscii(pFilterAscii));
                 bool bExcelSelected = (pPreselectedFilter &&
-                        (pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND));
+                        (pPreselectedFilter->GetName().indexOf("Excel") >= 0));
                 bool bIsXLS = (bExcelSelected || (bCsvSelected && !aPreselectedFilterName.Len()));
                 pFilter = 0;
                 if ( pStream )
@@ -671,7 +671,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                                     pFilter = aMatcher.GetFilter4FilterName( OUString(pFilterAscii) );
                                 bFakeXLS = true;
                             }
-                            else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
+                            else if ( pPreselectedFilter->GetName().equalsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
                                 pFilter = pPreselectedFilter;
                             else if ( bCsvSelected && bMaybeText )
                                 pFilter = pPreselectedFilter;
@@ -686,7 +686,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                                 // "foo <br> bar" with a preselected CSV
                                 // filter. So keep this detection to the end.
 
-                                if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
+                                if (pPreselectedFilter->GetName().equalsAscii(pFilterHtml))
                                 {
                                     pFilter = pPreselectedFilter;
                                 }
