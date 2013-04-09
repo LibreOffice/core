@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH///ig\u003d",
+        "filename": "vcl/unx/gtk/app/gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2013-04-09T20:11:59Z",
+      "side": 1,
+      "message": "Actually even better when looking on configure.ac there is:\nPKG_CHECK_MODULES(GTK, gtk+-2.0 \u003e\u003d 2.4...\n\nSo we can say that this is always true and the check can be dropped as whole.",
+      "parentUuid": "AAAAXH///kQ\u003d",
+      "revId": "979da85b2949db4effff3065e7cfb175666f509d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH///kM\u003d",
         "filename": "vcl/unx/gtk/app/gtkinst.cxx",
         "patchSetId": 1
