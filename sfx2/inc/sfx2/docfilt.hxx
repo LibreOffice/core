@@ -42,30 +42,32 @@ class SFX2_DLLPUBLIC SfxFilter
 friend class SfxFilterContainer;
 
     WildCard        aWildCard;
-    sal_uIntPtr     lFormat;
-    String          aTypeName;
-    OUString   aUserData;
+
+    OUString aTypeName;
+    OUString aUserData;
+    OUString aServiceName;
+    OUString aMimeType;
+    OUString aFilterName;
+    OUString aPattern;
+    OUString aUIName;
+    OUString aDefaultTemplate;
+
     SfxFilterFlags  nFormatType;
-    sal_uInt16      nDocIcon;
-    OUString   aServiceName;
-    OUString   aMimeType;
-    String          aFilterName;
-    String          aPattern;
     sal_uIntPtr     nVersion;
-    String          aUIName;
-    String          aDefaultTemplate;
+    sal_uIntPtr     lFormat;
+    sal_uInt16      nDocIcon;
 
 public:
-                    SfxFilter( const String &rName,
-                               const String &rWildCard,
-                               SfxFilterFlags nFormatType,
-                               sal_uInt32 lFormat,
-                               const String &rTypeName,
-                               sal_uInt16 nDocIcon,
-                               const String &rMimeType,
-                               const String &rUserData,
-                               const String& rServiceName );
-                    ~SfxFilter();
+    SfxFilter( const OUString &rName,
+               const OUString &rWildCard,
+               SfxFilterFlags nFormatType,
+               sal_uInt32 lFormat,
+               const OUString &rTypeName,
+               sal_uInt16 nDocIcon,
+               const OUString &rMimeType,
+               const OUString &rUserData,
+               const OUString& rServiceName );
+    ~SfxFilter();
 
     bool IsAllowedAsTemplate() const { return nFormatType & SFX_FILTER_TEMPLATE; }
     bool IsOwnFormat() const { return nFormatType & SFX_FILTER_OWN; }
@@ -75,26 +77,26 @@ public:
     bool CanExport() const { return nFormatType & SFX_FILTER_EXPORT; }
     bool IsInternal() const { return nFormatType & SFX_FILTER_INTERNAL; }
     SfxFilterFlags  GetFilterFlags() const  { return nFormatType; }
-    const String&   GetFilterName() const { return aFilterName; }
+    const OUString& GetFilterName() const { return aFilterName; }
     const OUString& GetMimeType() const { return aMimeType; }
-    const String&   GetName() const { return  aFilterName; }
+    const OUString& GetName() const { return  aFilterName; }
     const WildCard& GetWildcard() const { return aWildCard; }
-    const String&   GetRealTypeName() const { return aTypeName; }
+    const OUString& GetRealTypeName() const { return aTypeName; }
     sal_uIntPtr         GetFormat() const { return lFormat; }
-    const String&   GetTypeName() const { return aTypeName; }
-    const String&   GetUIName() const { return aUIName; }
+    const OUString& GetTypeName() const { return aTypeName; }
+    const OUString& GetUIName() const { return aUIName; }
     sal_uInt16          GetDocIconId() const { return nDocIcon; }
     const OUString& GetUserData() const { return aUserData; }
-    const String&   GetDefaultTemplate() const { return aDefaultTemplate; }
+    const OUString& GetDefaultTemplate() const { return aDefaultTemplate; }
     void            SetDefaultTemplate( const String& rStr ) { aDefaultTemplate = rStr; }
-    sal_Bool            UsesStorage() const { return GetFormat() != 0; }
-    void            SetURLPattern( const String& rStr ) { aPattern = rStr; aPattern.ToLowerAscii(); }
-    String          GetURLPattern() const { return aPattern; }
+    bool            UsesStorage() const { return GetFormat() != 0; }
+    void SetURLPattern( const OUString& rStr );
+    OUString GetURLPattern() const { return aPattern; }
     void            SetUIName( const String& rName ) { aUIName = rName; }
     void            SetVersion( sal_uIntPtr nVersionP ) { nVersion = nVersionP; }
     sal_uIntPtr           GetVersion() const { return nVersion; }
-    String          GetSuffixes() const;
-    String          GetDefaultExtension() const;
+    OUString GetSuffixes() const;
+    OUString GetDefaultExtension() const;
     const OUString& GetServiceName() const { return aServiceName; }
 
     static const SfxFilter* GetDefaultFilter( const String& rName );

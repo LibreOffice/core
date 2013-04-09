@@ -809,7 +809,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
                 {
                     const SfxFilter* pFilter = (*pFilterArr)[i];
                     SfxFilterFlags nFlags = pFilter->GetFilterFlags();
-                    if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetFilterName().CompareIgnoreCaseToAscii( aName ) == COMPARE_EQUAL )
+                    if ((nFlags & nMust) == nMust && !(nFlags & nDont) && pFilter->GetFilterName().equalsIgnoreAsciiCase(aName))
                         return pFilter;
                 }
             }
@@ -826,7 +826,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
     {
         const SfxFilter* pFilter = (*pList)[i];
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
-        if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetFilterName().CompareIgnoreCaseToAscii( aName ) == COMPARE_EQUAL )
+        if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetFilterName().equalsIgnoreAsciiCase(aName))
             return pFilter;
     }
 

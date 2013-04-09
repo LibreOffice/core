@@ -807,7 +807,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 sal_Bool SfxObjectShell::IsHelpDocument() const
 {
     const SfxFilter* pFilter = GetMedium()->GetFilter();
-    return ( pFilter && pFilter->GetFilterName().CompareToAscii("writer_web_HTML_help") == COMPARE_EQUAL );
+    return (pFilter && pFilter->GetFilterName() == "writer_web_HTML_help");
 }
 
 void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const String& rFileName )

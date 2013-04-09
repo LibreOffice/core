@@ -40,67 +40,73 @@ using namespace ::com::sun::star;
 
 DBG_NAME(SfxFilter)
 
-SfxFilter::SfxFilter(  const String &rName,
-                       const String &rWildCard,
-                       SfxFilterFlags nType,
-                       sal_uInt32 lFmt,
-                       const String &rTypNm,
-                       sal_uInt16 nIcon,
-                       const String &rMimeType,
-                       const String &rUsrDat,
-                       const String &rServiceName ):
+SfxFilter::SfxFilter( const OUString &rName,
+                      const OUString &rWildCard,
+                      SfxFilterFlags nType,
+                      sal_uInt32 lFmt,
+                      const OUString &rTypNm,
+                      sal_uInt16 nIcon,
+                      const OUString &rMimeType,
+                      const OUString &rUsrDat,
+                      const OUString &rServiceName ):
     aWildCard(rWildCard, ';'),
-    lFormat(lFmt),
     aTypeName(rTypNm),
     aUserData(rUsrDat),
+    aServiceName(rServiceName),
+    aMimeType(rMimeType),
+    aFilterName(rName),
+    aUIName(aFilterName),
     nFormatType(nType),
-    nDocIcon(nIcon),
-    aServiceName( rServiceName ),
-    aMimeType( rMimeType ),
-    aFilterName( rName )
+    nVersion(SOFFICE_FILEFORMAT_50),
+    lFormat(lFmt),
+    nDocIcon(nIcon)
 {
-    String aExts = GetWildcard().getGlob();
-    String aShort, aLong;
-    String aRet;
+    OUString aExts = GetWildcard().getGlob();
+    OUString aShort, aLong;
+    OUString aRet;
     sal_uInt16 nMaxLength = USHRT_MAX;
     OUString aTest;
     sal_uInt16 nPos = 0;
-    while( ( aRet = aExts.GetToken( nPos++, ';' ) ).Len() )
+    while (!(aRet = aExts.getToken(nPos++, ';')).isEmpty() )
     {
         aTest = aRet;
         aTest = aTest.replaceFirst( "*." , "" );
         if( aTest.getLength() <= nMaxLength )
         {
-            if( aShort.Len() ) aShort += ';';
+            if (!aShort.isEmpty())
+                aShort += ";";
             aShort += aRet;
         }
         else
         {
-            if( aLong.Len() ) aLong += ';';
+            if (!aLong.isEmpty())
+                aLong += ";";
             aLong += aRet;
         }
     }
-    if( aShort.Len() && aLong.Len() )
+    if (!aShort.isEmpty() && !aLong.isEmpty())
     {
-        aShort += ';';
+        aShort += ";";
         aShort += aLong;
     }
     aWildCard.setGlob(aShort);
-
-    nVersion = SOFFICE_FILEFORMAT_50;
-    aUIName = aFilterName;
 }
 
 SfxFilter::~SfxFilter()
 {
 }
 
-String SfxFilter::GetDefaultExtension() const
+OUString SfxFilter::GetDefaultExtension() const
 {
     return comphelper::string::getToken(GetWildcard().getGlob(), 0, ';');
 }
 
-String SfxFilter::GetSuffixes() const
+void SfxFilter::SetURLPattern( const OUString& rStr )
+{
+    aPattern = rStr.toAsciiLowerCase();
+}
+
+OUString SfxFilter::GetSuffixes() const
 {
     String aRet = GetWildcard().getGlob();
     while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND ) ;

@@ -1636,7 +1636,7 @@ void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
     {
         const SfxFilter* pFilter =
             mpMatcher->GetFilter4UIName( _rFilter, m_nMustFlags, m_nDontFlags );
-        _rFilter = pFilter ? pFilter->GetFilterName() : _rFilter.Erase();
+        _rFilter = pFilter ? String(pFilter->GetFilterName()) : _rFilter.Erase();
     }
 }
 
