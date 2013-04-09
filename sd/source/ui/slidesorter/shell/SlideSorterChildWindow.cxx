@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlideSorterChildWindow.hxx"
 
 #include "app.hrc"
@@ -43,13 +42,6 @@ SlideSorterChildWindow::SlideSorterChildWindow (
     static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
     //  SetHideNotDelete (sal_True);
 }
-
-
-
-
-SlideSorterChildWindow::~SlideSorterChildWindow (void)
-{}
-
 
 SFX_IMPL_DOCKINGWINDOW(SlideSorterChildWindow, SID_SLIDE_BROWSER)
 

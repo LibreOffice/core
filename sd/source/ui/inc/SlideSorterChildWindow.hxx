@@ -38,8 +38,7 @@ public:
         sal_uInt16,
         SfxBindings*,
         SfxChildWinInfo*);
-
-    virtual ~SlideSorterChildWindow (void);
+    virtual ~SlideSorterChildWindow () {}
 
     SFX_DECL_CHILDWINDOW (SlideBrowserChildWindow);
 };

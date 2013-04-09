@@ -587,9 +587,6 @@ private:
     void SetupRulers (void);
 };
 
-
-
-
 ::Window* ViewShell::GetParentWindow (void) const
 {
     return mpParentWindow;
