@@ -7,17 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq ($(COM),GCC)
-bridge_lib_name := gcc3_uno
-else ifeq ($(COM),MSC)
-ifeq ($(CPU),I)
-bridge_lib_name := msci_uno
-else ifeq ($(CPU),X)
-bridge_lib_name := mscx_uno
-endif # COM=WNT
-endif
-
-$(eval $(call gb_Library_Library,$(bridge_lib_name)))
+$(eval $(call gb_Library_Library,$(gb_CPPU_ENV)_uno))
 
 ifeq ($(OS)$(CPU),AIXP)
 
@@ -157,24 +147,24 @@ bridge_exception_objects := except
 
 endif
 
-$(eval $(call gb_Library_use_external,$(bridge_lib_name),boost_headers))
+$(eval $(call gb_Library_use_external,$(gb_CPPU_ENV)_uno,boost_headers))
 
-$(eval $(call gb_Library_use_internal_comprehensive_api,$(bridge_lib_name),\
+$(eval $(call gb_Library_use_internal_comprehensive_api,$(gb_CPPU_ENV)_uno,\
 	udkapi \
 ))
 
-$(eval $(call gb_Library_set_include,$(bridge_lib_name),\
+$(eval $(call gb_Library_set_include,$(gb_CPPU_ENV)_uno,\
 	-I$(SRCDIR)/bridges/inc \
 	$$(INCLUDE) \
 ))
 
 ifeq ($(HAVE_POSIX_FALLOCATE),YES)
-$(eval $(call gb_Library_add_defs,$(bridge_lib_name),\
+$(eval $(call gb_Library_add_defs,$(gb_CPPU_ENV)_uno,\
 	-DHAVE_POSIX_FALLOCATE \
 ))
 endif
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_defs,$(bridge_lib_name),\
+$(eval $(call gb_Library_add_defs,$(gb_CPPU_ENV)_uno,\
 	$(if $(filter GCC,$(COM)),\
 	$(if $(filter sjlj,$(EXCEPTIONS)),\
 		-DBROKEN_ALLOCA \
@@ -205,31 +195,31 @@ $(eval $(call gb_Library_add_libs,gcc3_uno,\
 endif
 endif
 
-$(eval $(call gb_Library_use_libraries,$(bridge_lib_name),\
+$(eval $(call gb_Library_use_libraries,$(gb_CPPU_ENV)_uno,\
 	cppu \
 	sal \
 ))
 
 $(foreach obj,$(bridge_exception_objects),\
-	$(eval $(call gb_Library_add_exception_objects,$(bridge_lib_name),\
+	$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj))) \
 )
 
 $(foreach obj,$(bridge_noopt_objects),\
-	$(eval $(call gb_Library_add_cxxobjects,$(bridge_lib_name),\
+	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
 	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
 )
 $(foreach obj,$(bridge_cxx_objects),\
-	$(eval $(call gb_Library_add_cxxobjects,$(bridge_lib_name),\
+	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj))) \
 )
 $(foreach obj,$(bridge_asm_objects),\
-$(eval $(call gb_Library_add_asmobjects,$(bridge_lib_name),\
+$(eval $(call gb_Library_add_asmobjects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj))) \
 )
 
-$(eval $(call gb_Library_add_exception_objects,$(bridge_lib_name),\
+$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/shared/bridge \
 	bridges/source/cpp_uno/shared/component \
 	bridges/source/cpp_uno/shared/types \
@@ -238,7 +228,7 @@ $(eval $(call gb_Library_add_exception_objects,$(bridge_lib_name),\
 	bridges/source/cpp_uno/shared/vtables \
 ))
 
-$(eval $(call gb_Library_add_cxxobjects,$(bridge_lib_name),\
+$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/shared/cppinterfaceproxy \
 	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))

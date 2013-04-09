@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-gb_CPPU_ENV := msc6
+gb_CPPU_ENV := mscx
 gb_CPUDEFS := -D_AMD64_=1
 
 include $(GBUILDDIR)/platform/com_MSC_defs.mk

@@ -430,7 +430,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     affine_uno \
 	cli_cppuhelper \
 	cli_uno \
-	gcc3_uno \
+	$(gb_CPPU_ENV)_uno \
 	getuid \
 	java_uno \
     jpipe \
@@ -449,8 +449,6 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     jpipx \
-	msci_uno \
-	mscx_uno \
 ))
 
 endif
