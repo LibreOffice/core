@@ -344,7 +344,7 @@ static PyObject* initPoniesMode(
         if (!outdir) { abort(); }
         OStringBuffer libname(outdir);
         libname.append("/lib/");
-        libname.append(SAL_DLLPREFIX "test" SAL_DLLEXTENSION);
+        libname.append(SAL_MODULENAME("test"));
         oslModule const mod( osl_loadModuleAscii(libname.getStr(),
                                 SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL) );
         if (!mod) { abort(); }
