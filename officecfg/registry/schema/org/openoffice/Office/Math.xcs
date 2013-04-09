@@ -318,17 +318,6 @@
 			<info>
 				<desc>Contains miscellaneous settings.</desc>
 			</info>
-			<prop oor:name="NoSymbolsWarning" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/Misc -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: - -->
-				<info>
-					<deprecated/>
-					<desc>Specifies that, if true, a warning message is shown when the symbol file used by the formulas is missing.</desc>
-					<label>Missing symbols warning.</label>
-				</info>
-				<value>true</value>
-			</prop>
 			<prop oor:name="IgnoreSpacesRight" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Math/Misc -->
 				<!-- OldLocation: Soffice.cfg -->
