@@ -56,7 +56,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	cppunit \
 	cups \
 	curl \
-	expat_utf8 \
+	expat \
 	hunspell \
 	hyphen \
 	icui18n \

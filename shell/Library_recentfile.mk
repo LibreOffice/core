@@ -33,7 +33,7 @@ $(eval $(call gb_Library_set_include,recentfile,\
 ))
 
 $(eval $(call gb_Library_use_externals,recentfile,\
-	expat_utf8 \
+	expat \
 ))
 
 $(eval $(call gb_Library_use_libraries,recentfile,\

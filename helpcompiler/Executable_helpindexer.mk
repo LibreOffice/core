@@ -36,7 +36,7 @@ $(eval $(call gb_Executable_use_libraries,HelpIndexer,\
 ))
 
 $(eval $(call gb_Executable_use_externals,HelpIndexer,\
-    expat_utf8 \
+    expat \
     libxslt \
     libxml2 \
     clucene \

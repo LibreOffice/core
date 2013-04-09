@@ -54,7 +54,7 @@ $(eval $(call gb_Library_add_defs,propertyhdl_x64,\
 ))
 
 $(eval $(call gb_Library_use_externals,propertyhdl_x64,\
-	expat_utf8_x64 \
+	expat_x64 \
 	zlib_x64 \
 ))
 

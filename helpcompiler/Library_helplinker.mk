@@ -54,7 +54,7 @@ $(eval $(call gb_Library_use_internal_api,helplinker,\
 
 $(eval $(call gb_Library_use_externals,helplinker,\
     boost_headers \
-    expat_utf8 \
+    expat \
     libxslt \
     libxml2 \
     clucene \

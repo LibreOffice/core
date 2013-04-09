@@ -36,7 +36,7 @@ $(eval $(call gb_Executable_use_libraries,helpex,\
 ))
 
 $(eval $(call gb_Executable_use_externals,helpex,\
-	expat_utf8 \
+	expat \
 	boost_headers \
 	icu_headers \
     libxml2 \

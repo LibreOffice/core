@@ -58,7 +58,7 @@ $(eval $(call gb_Library_use_sdk_api,ucpchelp1))
 $(eval $(call gb_Library_use_externals,ucpchelp1,\
 	boost_headers \
 	clucene \
-	expat_utf8 \
+	expat \
 	libxml2 \
 	libxslt \
 ))

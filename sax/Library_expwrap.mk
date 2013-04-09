@@ -19,7 +19,7 @@ $(eval $(call gb_Library_set_include,expwrap,\
 $(eval $(call gb_Library_use_sdk_api,expwrap))
 
 $(eval $(call gb_Library_use_externals,expwrap,\
-    expat_utf8 \
+    expat \
 ))
 
 $(eval $(call gb_Library_use_libraries,expwrap,\

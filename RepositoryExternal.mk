@@ -406,8 +406,8 @@ endif # SYSTEM_MYTHES
 
 ifeq ($(SYSTEM_EXPAT),YES)
 
-define gb_LinkTarget__use_expat
-$(if $(2),,$(error gb_LinkTarget__use_expat needs additional parameter))
+define gb_LinkTarget__use_expat_impl
+$(if $(2),,$(error gb_LinkTarget__use_expat_impl needs additional parameter))
 
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DSYSTEM_EXPAT \
@@ -426,8 +426,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	expat_x64 \
 ))
 
-define gb_LinkTarget__use_expat
-$(if $(2),,$(error gb_LinkTarget__use_expat needs additional parameter))
+define gb_LinkTarget__use_expat_impl
+$(if $(2),,$(error gb_LinkTarget__use_expat_impl needs additional parameter))
 
 $(call gb_LinkTarget_set_include,$(1),\
     -I$(OUTDIR)/inc/external/expat \
@@ -452,13 +452,13 @@ endef
 
 endif # SYSTEM_EXPAT
 
-define gb_LinkTarget__use_expat_utf8
-$(call gb_LinkTarget__use_expat,$(1),expat)
+define gb_LinkTarget__use_expat
+$(call gb_LinkTarget__use_expat_impl,$(1),expat)
 
 endef
 
-define gb_LinkTarget__use_expat_utf8_x64
-$(call gb_LinkTarget__use_expat,$(1),expat_x64)
+define gb_LinkTarget__use_expat_x64
+$(call gb_LinkTarget__use_expat_impl,$(1),expat_x64)
 
 endef
 

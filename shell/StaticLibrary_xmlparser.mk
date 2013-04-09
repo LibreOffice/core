@@ -33,7 +33,7 @@ $(eval $(call gb_StaticLibrary_set_include,shell_xmlparser,\
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,shell_xmlparser,\
-	expat_utf8 \
+	expat \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,shell_xmlparser,\

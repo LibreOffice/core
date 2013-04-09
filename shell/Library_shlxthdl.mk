@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_defs,shlxthdl,\
 ))
 
 $(eval $(call gb_Library_use_externals,shlxthdl,\
-	expat_utf8 \
+	expat \
 	zlib \
 ))
 
