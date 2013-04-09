@@ -69,9 +69,6 @@ private:
 };
 }
 
-
-
-
 //===== SlideSorter ===========================================================
 
 ::boost::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
@@ -92,9 +89,6 @@ private:
     return pSlideSorter;
 }
 
-
-
-
 ::boost::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter (
     ViewShellBase& rBase,
     ViewShell* pViewShell,
@@ -108,9 +102,6 @@ private:
     pSlideSorter->Init();
     return pSlideSorter;
 }
-
-
-
 
 SlideSorter::SlideSorter (
     ViewShell& rViewShell,
@@ -136,9 +127,6 @@ SlideSorter::SlideSorter (
 {
 }
 
-
-
-
 SlideSorter::SlideSorter (
     ViewShellBase& rBase,
     ViewShell* pViewShell,
@@ -160,9 +148,6 @@ SlideSorter::SlideSorter (
       mpTheme(new view::Theme(mpProperties))
 {
 }
-
-
-
 
 void SlideSorter::Init (void)
 {
@@ -208,9 +193,6 @@ void SlideSorter::Init (void)
     }
 }
 
-
-
-
 SlideSorter::~SlideSorter (void)
 {
     mbIsValid = false;
@@ -246,33 +228,11 @@ SlideSorter::~SlideSorter (void)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 model::SlideSorterModel& SlideSorter::GetModel (void) const
 {
     OSL_ASSERT(mpSlideSorterModel.get()!=NULL);
     return *mpSlideSorterModel;
 }
-
-
-
 
 view::SlideSorterView& SlideSorter::GetView (void) const
 {
@@ -280,26 +240,17 @@ view::SlideSorterView& SlideSorter::GetView (void) const
     return *mpSlideSorterView;
 }
 
-
-
-
 controller::SlideSorterController& SlideSorter::GetController (void) const
 {
     OSL_ASSERT(mpSlideSorterController.get()!=NULL);
     return *mpSlideSorterController;
 }
 
-
-
-
 Reference<frame::XController> SlideSorter::GetXController (void) const
 {
     Reference<frame::XController> xController(mxControllerWeak);
     return xController;
 }
-
-
-
 
 void SlideSorter::Paint (const Rectangle& rRepaintArea)
 {
@@ -308,29 +259,11 @@ void SlideSorter::Paint (const Rectangle& rRepaintArea)
         GetContentWindow().get());
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void SlideSorter::SetupControls (::Window* )
 {
     GetVerticalScrollBar()->Show();
     mpSlideSorterController->GetScrollBarManager().LateInitialization();
 }
-
-
-
 
 void SlideSorter::SetupListeners (void)
 {
@@ -359,9 +292,6 @@ void SlideSorter::SetupListeners (void)
     mpSlideSorterController->GetScrollBarManager().Connect();
 }
 
-
-
-
 void SlideSorter::ReleaseListeners (void)
 {
     mpSlideSorterController->GetScrollBarManager().Disconnect();
@@ -387,9 +317,6 @@ void SlideSorter::ReleaseListeners (void)
             WindowEventHandler));
 }
 
-
-
-
 void SlideSorter::CreateModelViewController (void)
 {
     mpSlideSorterModel.reset(CreateModel());
@@ -411,9 +338,6 @@ void SlideSorter::CreateModelViewController (void)
     mpSlideSorterView->Init();
 }
 
-
-
-
 model::SlideSorterModel* SlideSorter::CreateModel (void)
 {
     // Get pointers to the document.
@@ -428,16 +352,10 @@ model::SlideSorterModel* SlideSorter::CreateModel (void)
         return NULL;
 }
 
-
-
-
 view::SlideSorterView* SlideSorter::CreateView (void)
 {
     return new view::SlideSorterView (*this);
 }
-
-
-
 
 controller::SlideSorterController* SlideSorter::CreateController (void)
 {
@@ -445,9 +363,6 @@ controller::SlideSorterController* SlideSorter::CreateController (void)
         = new controller::SlideSorterController (*this);
     return pController;
 }
-
-
-
 
 void SlideSorter::ArrangeGUIElements (
     const Point& rOffset,
@@ -473,9 +388,6 @@ void SlideSorter::ArrangeGUIElements (
     }
 }
 
-
-
-
 SvBorder SlideSorter::GetBorder (void)
 {
     SvBorder aBorder;
@@ -490,9 +402,6 @@ SvBorder SlideSorter::GetBorder (void)
 
     return aBorder;
 }
-
-
-
 
 bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
 {
@@ -527,9 +436,6 @@ bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
     return true;
 }
 
-
-
-
 void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
 {
     if (GetViewShell() != NULL)
@@ -545,26 +451,17 @@ void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
     }
 }
 
-
-
-
 ::boost::shared_ptr<controller::Properties> SlideSorter::GetProperties (void) const
 {
     OSL_ASSERT(mpProperties);
     return mpProperties;
 }
 
-
-
-
 ::boost::shared_ptr<view::Theme> SlideSorter::GetTheme (void) const
 {
     OSL_ASSERT(mpTheme);
     return mpTheme;
 }
-
-
-
 
 //===== ContentWindow =========================================================
 
@@ -581,31 +478,19 @@ ContentWindow::ContentWindow(
     SetStyle(GetStyle() | WB_NOPOINTERFOCUS);
 }
 
-
-
-
 ContentWindow::~ContentWindow (void)
 {
 }
-
-
-
 
 void ContentWindow::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
 {
     mpCurrentFunction = rpFunction;
 }
 
-
-
-
 void ContentWindow::Paint (const Rectangle& rRect)
 {
     mrSlideSorter.Paint(rRect);
 }
-
-
-
 
 void ContentWindow::KeyInput (const KeyEvent& rEvent)
 {
@@ -613,17 +498,11 @@ void ContentWindow::KeyInput (const KeyEvent& rEvent)
         mpCurrentFunction->KeyInput(rEvent);
 }
 
-
-
-
 void ContentWindow::MouseMove (const MouseEvent& rEvent)
 {
     if (mpCurrentFunction.is())
         mpCurrentFunction->MouseMove(rEvent);
 }
-
-
-
 
 void ContentWindow::MouseButtonUp(const MouseEvent& rEvent)
 {
@@ -631,17 +510,11 @@ void ContentWindow::MouseButtonUp(const MouseEvent& rEvent)
         mpCurrentFunction->MouseButtonUp(rEvent);
 }
 
-
-
-
 void ContentWindow::MouseButtonDown(const MouseEvent& rEvent)
 {
     if (mpCurrentFunction.is())
         mpCurrentFunction->MouseButtonDown(rEvent);
 }
-
-
-
 
 void ContentWindow::Command(const CommandEvent& rEvent)
 {
@@ -649,21 +522,12 @@ void ContentWindow::Command(const CommandEvent& rEvent)
         mpCurrentFunction->Command(rEvent);
 }
 
-
-
-
 bool ContentWindow::Notify (NotifyEvent&)
 {
     return false;
 }
 
-
-
 } // end of anonymous namespace
-
-
-
-
 
 } } // end of namespace ::sd::slidesorter
 

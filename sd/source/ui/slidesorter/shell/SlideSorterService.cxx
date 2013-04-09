@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlideSorterService.hxx"
 #include "facreg.hxx"
 #include "controller/SlideSorterController.hxx"
@@ -54,9 +53,6 @@ namespace {
     };
 }
 
-
-
-
 //===== Service ===============================================================
 
 Reference<XInterface> SAL_CALL SlideSorterService_createInstance (
@@ -65,26 +61,17 @@ Reference<XInterface> SAL_CALL SlideSorterService_createInstance (
     return Reference<XInterface>(static_cast<drawing::XDrawView*>(new SlideSorterService(rxContext)));
 }
 
-
-
-
 OUString SlideSorterService_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.SlideSorter");
 }
 
-
-
-
 Sequence<OUString> SAL_CALL SlideSorterService_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const OUString sServiceName("com.sun.star.drawing.SlideSorter");
+    const OUString sServiceName("com.sun.star.drawing.SlideSorter");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
 
 //===== SlideSorterService ==========================================================
 
@@ -96,15 +83,9 @@ SlideSorterService::SlideSorterService (const Reference<XComponentContext>& rxCo
     (void)rxContext;
 }
 
-
-
-
 SlideSorterService::~SlideSorterService (void)
 {
 }
-
-
-
 
 void SAL_CALL SlideSorterService::disposing (void)
 {
@@ -115,9 +96,6 @@ void SAL_CALL SlideSorterService::disposing (void)
         mxParentWindow->removeWindowListener(this);
     }
 }
-
-
-
 
 //----- XInitialization -------------------------------------------------------
 
@@ -169,9 +147,6 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
     }
 }
 
-
-
-
 //----- XView -----------------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL SlideSorterService::getResourceId (void)
@@ -180,17 +155,11 @@ Reference<XResourceId> SAL_CALL SlideSorterService::getResourceId (void)
     return mxViewId;
 }
 
-
-
-
 sal_Bool SAL_CALL SlideSorterService::isAnchorOnly (void)
     throw (RuntimeException, std::exception)
 {
     return sal_False;
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -203,18 +172,11 @@ void SAL_CALL SlideSorterService::windowResized (const awt::WindowEvent& rEvent)
     Resize();
 }
 
-
-
-
-
 void SAL_CALL SlideSorterService::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL SlideSorterService::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
@@ -224,18 +186,12 @@ void SAL_CALL SlideSorterService::windowShown (const lang::EventObject& rEvent)
     Resize();
 }
 
-
-
-
 void SAL_CALL SlideSorterService::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
-
-
-
 
 //----- lang::XEventListener --------------------------------------------------
 
@@ -245,9 +201,6 @@ void SAL_CALL SlideSorterService::disposing (const lang::EventObject& rEvent)
     if (rEvent.Source == mxParentWindow)
         mxParentWindow = NULL;
 }
-
-
-
 
 //----- XDrawView -------------------------------------------------------------
 
@@ -260,9 +213,6 @@ void SAL_CALL SlideSorterService::setCurrentPage(const Reference<drawing::XDrawP
             mpSlideSorter->GetModel().GetIndex(rxSlide));
 }
 
-
-
-
 Reference<drawing::XDrawPage> SAL_CALL SlideSorterService::getCurrentPage (void)
     throw (RuntimeException, std::exception)
 {
@@ -273,20 +223,13 @@ Reference<drawing::XDrawPage> SAL_CALL SlideSorterService::getCurrentPage (void)
         return NULL;
 }
 
-
-
-
 //----- attributes ------------------------------------------------------------
-
 
 Reference<container::XIndexAccess> SAL_CALL SlideSorterService::getDocumentSlides (void)
     throw (RuntimeException, std::exception)
 {
     return mpSlideSorter->GetModel().GetDocumentSlides();
 }
-
-
-
 
 void SAL_CALL SlideSorterService::setDocumentSlides (
     const Reference<container::XIndexAccess >& rxSlides)
@@ -297,9 +240,6 @@ void SAL_CALL SlideSorterService::setDocumentSlides (
         mpSlideSorter->GetController().SetDocumentSlides(rxSlides);
 }
 
-
-
-
 sal_Bool SAL_CALL SlideSorterService::getIsHighlightCurrentSlide (void)
     throw (RuntimeException, std::exception)
 {
@@ -309,9 +249,6 @@ sal_Bool SAL_CALL SlideSorterService::getIsHighlightCurrentSlide (void)
     else
         return mpSlideSorter->GetProperties()->IsHighlightCurrentSlide();
 }
-
-
-
 
 void SAL_CALL SlideSorterService::setIsHighlightCurrentSlide (sal_Bool bValue)
     throw (RuntimeException, std::exception)
@@ -325,9 +262,6 @@ void SAL_CALL SlideSorterService::setIsHighlightCurrentSlide (sal_Bool bValue)
     }
 }
 
-
-
-
 sal_Bool SAL_CALL SlideSorterService::getIsShowSelection (void)
     throw (RuntimeException, std::exception)
 {
@@ -338,9 +272,6 @@ sal_Bool SAL_CALL SlideSorterService::getIsShowSelection (void)
         return mpSlideSorter->GetProperties()->IsShowSelection();
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setIsShowSelection (sal_Bool bValue)
     throw (RuntimeException, std::exception)
 {
@@ -348,9 +279,6 @@ void SAL_CALL SlideSorterService::setIsShowSelection (sal_Bool bValue)
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetShowSelection(bValue);
 }
-
-
-
 
 sal_Bool SAL_CALL SlideSorterService::getIsShowFocus (void)
     throw (RuntimeException, std::exception)
@@ -362,9 +290,6 @@ sal_Bool SAL_CALL SlideSorterService::getIsShowFocus (void)
         return mpSlideSorter->GetProperties()->IsShowFocus();
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setIsShowFocus (sal_Bool bValue)
     throw (RuntimeException, std::exception)
 {
@@ -372,9 +297,6 @@ void SAL_CALL SlideSorterService::setIsShowFocus (sal_Bool bValue)
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetShowFocus(bValue);
 }
-
-
-
 
 sal_Bool SAL_CALL SlideSorterService::getIsCenterSelection (void)
     throw (RuntimeException, std::exception)
@@ -386,9 +308,6 @@ sal_Bool SAL_CALL SlideSorterService::getIsCenterSelection (void)
         return mpSlideSorter->GetProperties()->IsCenterSelection();
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setIsCenterSelection (sal_Bool bValue)
     throw (RuntimeException, std::exception)
 {
@@ -396,9 +315,6 @@ void SAL_CALL SlideSorterService::setIsCenterSelection (sal_Bool bValue)
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetCenterSelection(bValue);
 }
-
-
-
 
 sal_Bool SAL_CALL SlideSorterService::getIsSuspendPreviewUpdatesDuringFullScreenPresentation (void)
     throw (RuntimeException, std::exception)
@@ -411,9 +327,6 @@ sal_Bool SAL_CALL SlideSorterService::getIsSuspendPreviewUpdatesDuringFullScreen
             ->IsSuspendPreviewUpdatesDuringFullScreenPresentation();
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setIsSuspendPreviewUpdatesDuringFullScreenPresentation (
     sal_Bool bValue)
     throw (RuntimeException, std::exception)
@@ -423,9 +336,6 @@ void SAL_CALL SlideSorterService::setIsSuspendPreviewUpdatesDuringFullScreenPres
         mpSlideSorter->GetProperties()
             ->SetSuspendPreviewUpdatesDuringFullScreenPresentation(bValue);
 }
-
-
-
 
 sal_Bool SAL_CALL SlideSorterService::getIsOrientationVertical (void)
     throw (RuntimeException, std::exception)
@@ -437,9 +347,6 @@ sal_Bool SAL_CALL SlideSorterService::getIsOrientationVertical (void)
         return mpSlideSorter->GetView().GetOrientation() != Layouter::HORIZONTAL;
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setIsOrientationVertical (sal_Bool bValue)
     throw (RuntimeException, std::exception)
 {
@@ -449,9 +356,6 @@ void SAL_CALL SlideSorterService::setIsOrientationVertical (sal_Bool bValue)
             ? Layouter::GRID
             : Layouter::HORIZONTAL);
 }
-
-
-
 
 sal_Bool SAL_CALL SlideSorterService::getIsSmoothScrolling (void)
     throw (RuntimeException, std::exception)
@@ -463,9 +367,6 @@ sal_Bool SAL_CALL SlideSorterService::getIsSmoothScrolling (void)
         return mpSlideSorter->GetProperties()->IsSmoothSelectionScrolling();
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setIsSmoothScrolling (sal_Bool bValue)
     throw (RuntimeException, std::exception)
 {
@@ -473,9 +374,6 @@ void SAL_CALL SlideSorterService::setIsSmoothScrolling (sal_Bool bValue)
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetSmoothSelectionScrolling(bValue);
 }
-
-
-
 
 util::Color SAL_CALL SlideSorterService::getBackgroundColor (void)
     throw (RuntimeException, std::exception)
@@ -488,9 +386,6 @@ util::Color SAL_CALL SlideSorterService::getBackgroundColor (void)
             mpSlideSorter->GetProperties()->GetBackgroundColor().GetColor());
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setBackgroundColor (util::Color aBackgroundColor)
     throw (RuntimeException, std::exception)
 {
@@ -498,9 +393,6 @@ void SAL_CALL SlideSorterService::setBackgroundColor (util::Color aBackgroundCol
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetBackgroundColor(Color(aBackgroundColor));
 }
-
-
-
 
 util::Color SAL_CALL SlideSorterService::getTextColor (void)
     throw (css::uno::RuntimeException, std::exception)
@@ -513,9 +405,6 @@ util::Color SAL_CALL SlideSorterService::getTextColor (void)
             mpSlideSorter->GetProperties()->GetTextColor().GetColor());
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setTextColor (util::Color aTextColor)
     throw (RuntimeException, std::exception)
 {
@@ -523,9 +412,6 @@ void SAL_CALL SlideSorterService::setTextColor (util::Color aTextColor)
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetTextColor(Color(aTextColor));
 }
-
-
-
 
 util::Color SAL_CALL SlideSorterService::getSelectionColor (void)
     throw (RuntimeException, std::exception)
@@ -538,9 +424,6 @@ util::Color SAL_CALL SlideSorterService::getSelectionColor (void)
             mpSlideSorter->GetProperties()->GetSelectionColor().GetColor());
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setSelectionColor (util::Color aSelectionColor)
     throw (RuntimeException, std::exception)
 {
@@ -548,9 +431,6 @@ void SAL_CALL SlideSorterService::setSelectionColor (util::Color aSelectionColor
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetSelectionColor(Color(aSelectionColor));
 }
-
-
-
 
 util::Color SAL_CALL SlideSorterService::getHighlightColor (void)
     throw (RuntimeException, std::exception)
@@ -563,9 +443,6 @@ util::Color SAL_CALL SlideSorterService::getHighlightColor (void)
             mpSlideSorter->GetProperties()->GetHighlightColor().GetColor());
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setHighlightColor (util::Color aHighlightColor)
     throw (RuntimeException, std::exception)
 {
@@ -573,8 +450,6 @@ void SAL_CALL SlideSorterService::setHighlightColor (util::Color aHighlightColor
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetHighlightColor(Color(aHighlightColor));
 }
-
-
 
 sal_Bool SAL_CALL SlideSorterService::getIsUIReadOnly (void)
     throw (RuntimeException, std::exception)
@@ -586,9 +461,6 @@ sal_Bool SAL_CALL SlideSorterService::getIsUIReadOnly (void)
         return mpSlideSorter->GetProperties()->IsUIReadOnly();
 }
 
-
-
-
 void SAL_CALL SlideSorterService::setIsUIReadOnly (sal_Bool bIsUIReadOnly)
     throw (RuntimeException, std::exception)
 {
@@ -596,11 +468,6 @@ void SAL_CALL SlideSorterService::setIsUIReadOnly (sal_Bool bIsUIReadOnly)
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetUIReadOnly(bIsUIReadOnly);
 }
-
-
-
-
-
 
 void SlideSorterService::Resize (void)
 {
@@ -613,19 +480,16 @@ void SlideSorterService::Resize (void)
     }
 }
 
-
-
-
 void SlideSorterService::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {
-    if (SlideSorterServiceInterfaceBase::rBHelper.bDisposed || SlideSorterServiceInterfaceBase::rBHelper.bInDispose)
+    if (SlideSorterServiceInterfaceBase::rBHelper.bDisposed ||
+        SlideSorterServiceInterfaceBase::rBHelper.bInDispose)
     {
         throw lang::DisposedException ("SlideSorterService object has already been disposed",
-            static_cast<drawing::XDrawView*>(this));
+                                       static_cast<drawing::XDrawView*>(this));
     }
 }
-
 
 } } // end of namespace ::sd::presenter
 

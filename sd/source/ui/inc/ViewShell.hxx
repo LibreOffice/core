@@ -591,9 +591,6 @@ private:
     void SetupRulers (void);
 };
 
-
-
-
 SdrView* ViewShell::GetDrawView (void) const
 {
     return static_cast<SdrView*>(mpView);
