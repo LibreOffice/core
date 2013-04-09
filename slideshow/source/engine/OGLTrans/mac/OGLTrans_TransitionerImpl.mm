@@ -28,9 +28,6 @@
 
 #include "sal/config.h"
 
-#if MACOSX_SDK_VERSION < 1070
-#define GLX_GLXEXT_PROTOTYPES 1
-#endif
 #include "OGLTrans_TransitionImpl.hxx"
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
