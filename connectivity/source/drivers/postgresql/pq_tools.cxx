@@ -438,28 +438,28 @@ OUString extractTableFromInsert( const OUString & sql )
 {
     OUString ret;
     int i = 0;
-    for( ; i < sql.getLength() && isWhitespace(sql[i])  ; i++ );
+    while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
 
     if( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
             &sql.getStr()[i], sql.getLength() - i, "insert" , 6 ) )
     {
         i += 6;
-        for( ; i < sql.getLength() && isWhitespace(sql[i]) ; i++ );
+        while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
         if( 0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
             &sql.getStr()[i], sql.getLength() - i, "into" , 4 ) )
         {
             i +=4;
-            for( ; i < sql.getLength() && isWhitespace(sql[i]) ; i++ );
+            while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
             int start = i;
             bool quote = (sql[i] == '"');
             for( i++ ; i < sql.getLength() ; i ++ )
             {
                 if( quote && sql[i] == '"' )
                 {
-                    for( i++ ; i < sql.getLength() && isWhitespace(sql[i]) ; i++ );
+                    while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
                     if( '.' == sql[i] )
                     {
-                        for( i++ ; i < sql.getLength() && isWhitespace(sql[i]) ; i++ );
+                        while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
                         if( '"' == sql[i] )
                         {
                             // the second part of the table name does not use quotes
