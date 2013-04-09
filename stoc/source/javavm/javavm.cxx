@@ -358,24 +358,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
             pjvm->pushProp(httpNonProxyHosts);
             pjvm->pushProp(ftpNonProxyHosts);
         }
-
-        // read socks settings
-/*      Reference<XRegistryKey> socksProxy_name = xRegistryRootKey->openKey("Settings/ooInetSOCKSProxyName");
-        if (socksProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
-            OUString socksHost = "socksProxyHost=";
-            socksHost += socksProxy_name->getStringValue();
-
-            // read http proxy port
-            Reference<XRegistryKey> socksProxy_port = xRegistryRootKey->openKey("Settings/ooInetSOCKSProxyPort");
-            if (socksProxy_port.is() && socksProxy_port->getLongValue()) {
-                OUString socksPort = "socksProxyPort=";
-                socksPort += OUString::valueOf(socksProxy_port->getLongValue());
-
-                pjvm->pushProp(socksHost);
-                pjvm->pushProp(socksPort);
-            }
-        }
-*/  }
+    }
     xConfRegistry_simple->close();
 }
 
