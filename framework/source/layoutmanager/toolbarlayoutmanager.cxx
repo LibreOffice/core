@@ -20,6 +20,7 @@
 #include <toolbarlayoutmanager.hxx>
 #include <helpers.hxx>
 #include <services.h>
+#include <services/layoutmanager.hxx>
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
@@ -1574,135 +1575,8 @@ void ToolbarLayoutManager::implts_destroyDockingAreaWindows()
 
 sal_Bool ToolbarLayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
 {
-    WriteGuard aWriteLock( m_aLock );
-    uno::Reference< container::XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
-    bool bGetSettingsState( false );
-    aWriteLock.unlock();
-
-    if ( xPersistentWindowState.is() )
-    {
-        aWriteLock.lock();
-        bool bGlobalSettings( m_bGlobalSettings );
-        GlobalSettings* pGlobalSettings( 0 );
-        if ( m_pGlobalSettings == 0 )
-        {
-            m_pGlobalSettings = new GlobalSettings( m_xContext );
-            bGetSettingsState = true;
-        }
-        pGlobalSettings = m_pGlobalSettings;
-        aWriteLock.unlock();
-
-        try
-        {
-            uno::Sequence< beans::PropertyValue > aWindowState;
-            if ( xPersistentWindowState->getByName( aName ) >>= aWindowState )
-            {
-                sal_Bool bValue( sal_False );
-                for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
-                {
-                    if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKED ))
-                    {
-                        if ( aWindowState[n].Value >>= bValue )
-                            rElementData.m_bFloating = !bValue;
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_VISIBLE ))
-                    {
-                        if ( aWindowState[n].Value >>= bValue )
-                            rElementData.m_bVisible = bValue;
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKINGAREA ))
-                    {
-                        ui::DockingArea eDockingArea;
-                        if ( aWindowState[n].Value >>= eDockingArea )
-                            rElementData.m_aDockedData.m_nDockedArea = sal_Int16( eDockingArea );
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKPOS ))
-                    {
-                        awt::Point aPoint;
-                        if ( aWindowState[n].Value >>= aPoint )
-                            rElementData.m_aDockedData.m_aPos = aPoint;
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_POS ))
-                    {
-                        awt::Point aPoint;
-                        if ( aWindowState[n].Value >>= aPoint )
-                            rElementData.m_aFloatingData.m_aPos = aPoint;
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_SIZE ))
-                    {
-                        awt::Size aSize;
-                        if ( aWindowState[n].Value >>= aSize )
-                            rElementData.m_aFloatingData.m_aSize = aSize;
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_UINAME ))
-                        aWindowState[n].Value >>= rElementData.m_aUIName;
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_STYLE ))
-                    {
-                        sal_Int32 nStyle = 0;
-                        if ( aWindowState[n].Value >>= nStyle )
-                            rElementData.m_nStyle = sal_Int16( nStyle );
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_LOCKED ))
-                    {
-                        if ( aWindowState[n].Value >>= bValue )
-                            rElementData.m_aDockedData.m_bLocked = bValue;
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXT ))
-                    {
-                        if ( aWindowState[n].Value >>= bValue )
-                            rElementData.m_bContextSensitive = bValue;
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_NOCLOSE ))
-                    {
-                        if ( aWindowState[n].Value >>= bValue )
-                            rElementData.m_bNoClose = bValue;
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXTACTIVE ))
-                    {
-                        if ( aWindowState[n].Value >>= bValue )
-                            rElementData.m_bContextActive = bValue;
-                    }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_SOFTCLOSE ))
-                    {
-                        if ( aWindowState[n].Value >>= bValue )
-                            rElementData.m_bSoftClose = bValue;
-                    }
-                }
-            }
-
-            // oversteer values with global settings
-            if ( pGlobalSettings && ( bGetSettingsState || bGlobalSettings ))
-            {
-                if ( pGlobalSettings->HasStatesInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR ))
-                {
-                    WriteGuard aWriteLock2( m_aLock );
-                    m_bGlobalSettings = true;
-                    aWriteLock2.unlock();
-
-                    uno::Any aValue;
-                    sal_Bool bValue = sal_Bool();
-                    if ( pGlobalSettings->GetStateInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR,
-                                                        GlobalSettings::STATEINFO_LOCKED,
-                                                        aValue ))
-                        aValue >>= rElementData.m_aDockedData.m_bLocked;
-                    if ( pGlobalSettings->GetStateInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR,
-                                                        GlobalSettings::STATEINFO_DOCKED,
-                                                        aValue ))
-                    {
-                        if ( aValue >>= bValue )
-                            rElementData.m_bFloating = !bValue;
-                    }
-                }
-            }
-
-            return sal_True;
-        }
-        catch (const container::NoSuchElementException&)
-        {
-        }
-    }
-
-    return sal_False;
+    return LayoutManager::readWindowStateData( aName, rElementData, m_aLock, m_xPersistentWindowState,
+            m_pGlobalSettings, m_bGlobalSettings, m_xContext );
 }
 
 void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElementData )
@@ -3308,9 +3182,9 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
                         xPersistentWindowState->getByName( aWindowElements[i] ) >>= aPropValueSeq;
                         for ( sal_Int32 j = 0; j < aPropValueSeq.getLength(); j++ )
                         {
-                            if ( aPropValueSeq[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKINGAREA ))
+                            if ( aPropValueSeq[j].Name == WINDOWSTATE_PROPERTY_DOCKINGAREA )
                                 aPropValueSeq[j].Value >>= nDockedArea;
-                            else if ( aPropValueSeq[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKPOS ))
+                            else if ( aPropValueSeq[j].Name == WINDOWSTATE_PROPERTY_DOCKPOS )
                                 aPropValueSeq[j].Value >>= aDockedPos;
                         }
 

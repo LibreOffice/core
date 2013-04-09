@@ -187,6 +187,12 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             virtual void requestLayout( Hint eHint );
 
+            /// Reading of settings - shared with ToolbarLayoutManager.
+            static sal_Bool readWindowStateData( const OUString& rName, UIElement& rElementData,
+                    LockHelper &rLock, const css::uno::Reference< css::container::XNameAccess > &rPersistentWindowState,
+                    GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
+                    const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
+
         protected:
             DECL_LINK(AsyncLayoutHdl, void *);
 

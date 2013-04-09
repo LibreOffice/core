@@ -482,23 +482,32 @@ uno::Reference< ui::XUIElement > LayoutManager::implts_findElement( const OUStri
 
 sal_Bool LayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
 {
-    sal_Bool bGetSettingsState( sal_False );
+    return readWindowStateData( aName, rElementData, m_aLock, m_xPersistentWindowState,
+            m_pGlobalSettings, m_bGlobalSettings, comphelper::getComponentContext(m_xSMGR) );
+}
 
-    WriteGuard aWriteLock( m_aLock );
-    Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
+sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElementData,
+        LockHelper &rLock, const Reference< XNameAccess > &rPersistentWindowState,
+        GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
+        const Reference< XComponentContext > &rComponentContext )
+{
+    bool bGetSettingsState( false );
+
+    WriteGuard aWriteLock( rLock );
+    Reference< XNameAccess > xPersistentWindowState( rPersistentWindowState );
     aWriteLock.unlock();
 
     if ( xPersistentWindowState.is() )
     {
         aWriteLock.lock();
-        sal_Bool bGlobalSettings( m_bGlobalSettings );
+        bool bGlobalSettings( bInGlobalSettings );
         GlobalSettings* pGlobalSettings( 0 );
-        if ( m_pGlobalSettings == 0 )
+        if ( rGlobalSettings == 0 )
         {
-            m_pGlobalSettings = new GlobalSettings( comphelper::getComponentContext(m_xSMGR) );
-            bGetSettingsState = sal_True;
+            rGlobalSettings = new GlobalSettings( rComponentContext );
+            bGetSettingsState = true;
         }
-        pGlobalSettings = m_pGlobalSettings;
+        pGlobalSettings = rGlobalSettings;
         aWriteLock.unlock();
 
         try
@@ -584,12 +593,12 @@ sal_Bool LayoutManager::implts_readWindowStateData( const OUString& aName, UIEle
             {
                 if ( pGlobalSettings->HasStatesInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR ))
                 {
-                    WriteGuard aWriteLock2( m_aLock );
-                    m_bGlobalSettings = sal_True;
+                    WriteGuard aWriteLock2( rLock );
+                    bInGlobalSettings = true;
                     aWriteLock2.unlock();
 
                     uno::Any aValue;
-                    sal_Bool      bValue = sal_Bool();
+                    sal_Bool bValue = sal_Bool();
                     if ( pGlobalSettings->GetStateInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR,
                                                         GlobalSettings::STATEINFO_LOCKED,
                                                         aValue ))
