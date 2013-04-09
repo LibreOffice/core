@@ -1164,6 +1164,7 @@ void RTFDocumentImpl::text(OUString& rString)
 
 void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
 {
+    bool bShapeText = !m_aShapetextBuffer.empty();
     while (rBuffer.size())
     {
         std::pair<RTFBufferTypes, RTFValue::Pointer_t> aPair = rBuffer.front();
@@ -1201,7 +1202,13 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
         else if (aPair.first == BUFFER_ENDRUN)
             Mapper().endCharacterGroup();
         else if (aPair.first == BUFFER_PAR)
-            parBreak();
+        {
+            if (!rBuffer.empty() || !bShapeText)
+                // RTF may have a fake paragraph at the end of the shape text,
+                // that would cause an additional empty paragraph at the end of
+                // the shape text.
+                parBreak();
+        }
         else
             SAL_WARN("writerfilter", "should not happen");
     }
