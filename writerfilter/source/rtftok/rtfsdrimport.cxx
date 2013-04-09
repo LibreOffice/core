@@ -144,9 +144,10 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             nType = i->second.toInt32();
             switch (nType)
             {
-                case 20: // Line
+                case ESCHER_ShpInst_Line:
                     createShape("com.sun.star.drawing.LineShape", xShape, xPropertySet);
                     break;
+                case ESCHER_ShpInst_Rectangle:
                 case ESCHER_ShpInst_TextBox:
                     {
                         createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
@@ -346,9 +347,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if (i->first == "dyWrapDistBottom")
             xPropertySet->setPropertyValue("BottomMargin", uno::makeAny(i->second.toInt32() / 360));
         else
-            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle shape property '" <<
-                    OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr() << "':'" <<
-                    OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr() << "'");
+            SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
 
     if (xPropertySet.is())
