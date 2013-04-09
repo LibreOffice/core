@@ -321,18 +321,6 @@ namespace framework
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             GlobalSettings*                                                             m_pGlobalSettings;
             OUString                                                               m_aModuleIdentifier;
-            OUString                                                               m_aStatusBarAlias;
-            OUString                                                               m_aProgressBarAlias;
-            OUString                                                               m_aPropDocked;
-            OUString                                                               m_aPropVisible;
-            OUString                                                               m_aPropDockingArea;
-            OUString                                                               m_aPropDockPos;
-            OUString                                                               m_aPropPos;
-            OUString                                                               m_aPropSize;
-            OUString                                                               m_aPropUIName;
-            OUString                                                               m_aPropStyle;
-            OUString                                                               m_aPropLocked;
-            OUString                                                               m_aCustomizeCmd;
             sal_Int16                                                                   m_eSymbolsSize;
             sal_Int16                                                                   m_eSymbolsStyle;
         Timer                                                                       m_aAsyncLayoutTimer;

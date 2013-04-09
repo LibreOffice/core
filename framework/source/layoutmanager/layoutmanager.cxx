@@ -99,6 +99,9 @@ using namespace ::com::sun::star::frame;
 // You have to change BOTH values, see sfx2/inc/sfx2/sfxsids.hrc (SID_DOCKWIN_START)
 static const sal_Int32 DOCKWIN_ID_BASE = 9800;
 
+static const char STATUS_BAR_ALIAS[] = "private:resource/statusbar/statusbar";
+static const char PROGRESS_BAR_ALIAS[] = "private:resource/progressbar/progressbar";
+
 namespace framework
 {
 
@@ -134,26 +137,14 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , m_xUIElementFactoryManager( ui::UIElementFactoryManager::create(comphelper::getComponentContext(xServiceManager)) )
         , m_xPersistentWindowStateSupplier( ui::WindowStateConfiguration::create( comphelper::getComponentContext(xServiceManager) ) )
         , m_pGlobalSettings( 0 )
-        , m_aStatusBarAlias( "private:resource/statusbar/statusbar" )
-        , m_aProgressBarAlias( "private:resource/progressbar/progressbar" )
-        , m_aPropDocked( WINDOWSTATE_PROPERTY_DOCKED )
-        , m_aPropVisible( WINDOWSTATE_PROPERTY_VISIBLE )
-        , m_aPropDockingArea( WINDOWSTATE_PROPERTY_DOCKINGAREA )
-        , m_aPropDockPos( WINDOWSTATE_PROPERTY_DOCKPOS )
-        , m_aPropPos( WINDOWSTATE_PROPERTY_POS )
-        , m_aPropSize( WINDOWSTATE_PROPERTY_SIZE )
-        , m_aPropUIName( WINDOWSTATE_PROPERTY_UINAME )
-        , m_aPropStyle( WINDOWSTATE_PROPERTY_STYLE )
-        , m_aPropLocked( WINDOWSTATE_PROPERTY_LOCKED )
-        , m_aCustomizeCmd( "ConfigureDialog" )
         , m_aListenerContainer( m_aLock.getShareableOslMutex() )
         , m_pToolbarManager( 0 )
         , m_xToolbarManager( 0 )
 {
     // Initialize statusbar member
     const sal_Bool bRefreshVisibility = sal_False;
-    m_aStatusBarElement.m_aType = OUString( "statusbar" );
-    m_aStatusBarElement.m_aName = m_aStatusBarAlias;
+    m_aStatusBarElement.m_aType = "statusbar";
+    m_aStatusBarElement.m_aName = STATUS_BAR_ALIAS;
 
     m_pToolbarManager = new ToolbarLayoutManager( comphelper::getComponentContext(xServiceManager), Reference<XUIElementFactory>(m_xUIElementFactoryManager, UNO_QUERY_THROW), this );
     m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
@@ -518,49 +509,49 @@ sal_Bool LayoutManager::implts_readWindowStateData( const OUString& aName, UIEle
                 sal_Bool bValue( sal_False );
                 for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
                 {
-                    if ( aWindowState[n].Name == m_aPropDocked )
+                    if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_DOCKED )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bFloating = !bValue;
                     }
-                    else if ( aWindowState[n].Name == m_aPropVisible )
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_VISIBLE )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bVisible = bValue;
                     }
-                    else if ( aWindowState[n].Name == m_aPropDockingArea )
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_DOCKINGAREA )
                     {
                         ui::DockingArea eDockingArea;
                         if ( aWindowState[n].Value >>= eDockingArea )
                             rElementData.m_aDockedData.m_nDockedArea = sal_Int16( eDockingArea );
                     }
-                    else if ( aWindowState[n].Name == m_aPropDockPos )
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_DOCKPOS )
                     {
                         awt::Point aPoint;
                         if ( aWindowState[n].Value >>= aPoint )
                             rElementData.m_aDockedData.m_aPos = aPoint;
                     }
-                    else if ( aWindowState[n].Name == m_aPropPos )
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_POS )
                     {
                         awt::Point aPoint;
                         if ( aWindowState[n].Value >>= aPoint )
                             rElementData.m_aFloatingData.m_aPos = aPoint;
                     }
-                    else if ( aWindowState[n].Name == m_aPropSize )
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_SIZE )
                     {
                         awt::Size aSize;
                         if ( aWindowState[n].Value >>= aSize )
                             rElementData.m_aFloatingData.m_aSize = aSize;
                     }
-                    else if ( aWindowState[n].Name == m_aPropUIName )
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_UINAME )
                         aWindowState[n].Value >>= rElementData.m_aUIName;
-                    else if ( aWindowState[n].Name == m_aPropStyle )
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_STYLE )
                     {
                         sal_Int32 nStyle = 0;
                         if ( aWindowState[n].Value >>= nStyle )
                             rElementData.m_nStyle = sal_Int16( nStyle );
                     }
-                    else if ( aWindowState[n].Name == m_aPropLocked )
+                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_LOCKED )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_aDockedData.m_bLocked = bValue;
@@ -657,25 +648,25 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
         {
             Sequence< PropertyValue > aWindowState( 8 );
 
-            aWindowState[0].Name  = m_aPropDocked;
+            aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
             aWindowState[0].Value = makeAny( sal_Bool( !rElementData.m_bFloating ));
-            aWindowState[1].Name  = m_aPropVisible;
+            aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
             aWindowState[1].Value = makeAny( sal_Bool( rElementData.m_bVisible ));
 
-            aWindowState[2].Name  = m_aPropDockingArea;
+            aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
             aWindowState[2].Value = makeAny( static_cast< DockingArea >( rElementData.m_aDockedData.m_nDockedArea ) );
 
-            aWindowState[3].Name = m_aPropDockPos;
+            aWindowState[3].Name = WINDOWSTATE_PROPERTY_DOCKPOS;
             aWindowState[3].Value <<= rElementData.m_aDockedData.m_aPos;
 
-            aWindowState[4].Name = m_aPropPos;
+            aWindowState[4].Name = WINDOWSTATE_PROPERTY_POS;
             aWindowState[4].Value <<= rElementData.m_aFloatingData.m_aPos;
 
-            aWindowState[5].Name  = m_aPropSize;
+            aWindowState[5].Name  = WINDOWSTATE_PROPERTY_SIZE;
             aWindowState[5].Value <<= rElementData.m_aFloatingData.m_aSize;
-            aWindowState[6].Name  = m_aPropUIName;
+            aWindowState[6].Name  = WINDOWSTATE_PROPERTY_UINAME;
             aWindowState[6].Value = makeAny( rElementData.m_aUIName );
-            aWindowState[7].Name  = m_aPropLocked;
+            aWindowState[7].Name  = WINDOWSTATE_PROPERTY_LOCKED;
             aWindowState[7].Value = makeAny( rElementData.m_aDockedData.m_bLocked );
 
             if ( xPersistentWindowState->hasByName( aName ))
@@ -1066,7 +1057,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
         bInternalStatusBar = xStatusBar != xWindow;
     }
     m_aProgressBarElement.m_bVisible = sal_False;
-    implts_readStatusBarState( m_aStatusBarAlias );
+    implts_readStatusBarState( STATUS_BAR_ALIAS );
     bHideStatusBar = !m_aStatusBarElement.m_bVisible;
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -1807,7 +1798,7 @@ throw (RuntimeException)
         {
             aWriteLock.unlock();
 
-            implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
+            implts_writeWindowStateData( STATUS_BAR_ALIAS, m_aStatusBarElement );
             bMustLayout = true;
             bResult     = true;
             bNotify     = true;
@@ -1900,7 +1891,7 @@ throw (RuntimeException)
         if ( m_aStatusBarElement.m_xUIElement.is() && !m_aStatusBarElement.m_bMasterHide &&
              implts_hideStatusBar( sal_True ))
         {
-            implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
+            implts_writeWindowStateData( STATUS_BAR_ALIAS, m_aStatusBarElement );
             bMustLayout = sal_True;
             bNotify     = sal_True;
         }
@@ -2496,8 +2487,8 @@ throw (uno::RuntimeException)
 ::Size LayoutManager::implts_getStatusBarSize()
 {
     ReadGuard aReadLock( m_aLock );
-    bool bStatusBarVisible( isElementVisible( m_aStatusBarAlias ));
-    bool bProgressBarVisible( isElementVisible( m_aProgressBarAlias ));
+    bool bStatusBarVisible( isElementVisible( STATUS_BAR_ALIAS ));
+    bool bProgressBarVisible( isElementVisible( PROGRESS_BAR_ALIAS ));
     bool bVisible( m_bVisible );
     Reference< XUIElement > xStatusBar( m_aStatusBarElement.m_xUIElement );
     Reference< XUIElement > xProgressBar( m_aProgressBarElement.m_xUIElement );
