@@ -148,6 +148,7 @@
 #define SID_CHECKOUT                        (SID_SFX_START + 512)
 #define SID_CANCELCHECKOUT                  (SID_SFX_START + 513)
 #define SID_CHECKIN                         (SID_SFX_START + 514)
+#define SID_FILTER_PROVIDER                 (SID_SFX_START + 515)
 
 #define SID_FORCERELOAD                     (SID_SFX_START + 1502)
 #define SID_FILE_DIALOG                     (SID_SFX_START + 304)

@@ -203,6 +203,7 @@ static char const sSuggestedSaveAsName[] = "SuggestedSaveAsName";
 static char const sEncryptionData[] = "EncryptionData";
 static char const sFailOnWarning[] = "FailOnWarning";
 static char const sDocumentService[] = "DocumentService";
+static char const sFilterProvider[] = "FilterProvider";
 
 static bool isMediaDescriptor( sal_uInt16 nSlotId )
 {
@@ -509,7 +510,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             ++nFoundArgs;
 #endif
             const beans::PropertyValue& rProp = pPropsVal[n];
-            OUString aName = rProp.Name;
+            const OUString& aName = rProp.Name;
             if ( aName == sModel )
                 rSet.Put( SfxUnoAnyItem( SID_DOCUMENT, rProp.Value ) );
             else if ( aName == sComponentData )
@@ -912,6 +913,13 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 if (bOK)
                     rSet.Put(SfxStringItem(SID_DOC_SERVICE, aVal));
             }
+            else if (aName == sFilterProvider)
+            {
+                OUString aVal;
+                bool bOK = ((rProp.Value >>= aVal) && !aVal.isEmpty());
+                if (bOK)
+                    rSet.Put(SfxStringItem(SID_FILTER_PROVIDER, aVal));
+            }
 #ifdef DBG_UTIL
             else
                 --nFoundArgs;
@@ -1138,6 +1146,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_SERVICE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if (rSet.HasItem(SID_FILTER_PROVIDER))
+                ++nAdditional;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1276,6 +1286,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     if ( nId == SID_ENCRYPTIONDATA )
                         continue;
                     if ( nId == SID_DOC_SERVICE )
+                        continue;
+                    if (nId == SID_FILTER_PROVIDER)
                         continue;
 
                     // used only internally
@@ -1683,6 +1695,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             if ( rSet.GetItemState( SID_DOC_SERVICE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = OUString(sDocumentService);
+                pValue[nActProp++].Value <<= OUString(static_cast<const SfxStringItem*>(pItem)->GetValue());
+            }
+            if (rSet.HasItem(SID_FILTER_PROVIDER, &pItem))
+            {
+                pValue[nActProp].Name = sFilterProvider;
                 pValue[nActProp++].Value <<= OUString(static_cast<const SfxStringItem*>(pItem)->GetValue());
             }
         }
