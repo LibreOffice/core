@@ -27,16 +27,13 @@
 
 ifeq ($(MERGELIBS),TRUE)
 
-# we link all object files from these libraries into one, merged library
-gb_MERGEDLIBS := \
+# FIXME: just retaining these for now - they currently crash & need thought.
+# set of libraries to link even more stuff into one merged library
+gb_EXTRAMERGEDLIBS := \
 	analysis \
-	avmedia \
 	$(if $(filter unx,$(GUIBASE)),basebmp) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
-	canvastools \
 	chartcore \
-	configmgr \
-	cppcanvas \
 	ctl \
 	cui \
 	date \
@@ -44,99 +41,108 @@ gb_MERGEDLIBS := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbase) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
-	deploymentmisc \
-	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
-	desktopbe1 \
-	drawinglayer \
-	editeng \
 	embobj \
 	evtatt \
 	fastsax \
 	$(call gb_Helper_optional,DBCONNECTIVITY,file) \
-	fileacc \
-	filterconfig \
 	$(call gb_Helper_optional,DBCONNECTIVITY,flat) \
 	for \
 	forui \
 	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
-	fsstorage \
-	fwe \
-	fwi \
-	fwk \
 	fwl \
 	fwm \
-	$(call gb_Helper_optional,DESKTOP,helplinker) \
 	hwp \
 	hyphen \
-	i18nutil \
++	i18npool \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),javaloader) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),javavm) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),java_uno) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),juh) \
 	$(if $(filter-out IOS,$(OS)),jvmaccess) \
 	jvmfwk \
-	lng \
 	lnth \
-	localebe1 \
 	localedata_en \
 	localedata_es \
 	localedata_euro \
 	localedata_others \
-	msfilter \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbc) \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
 	oox \
-	package2 \
 	pricing \
 	$(call gb_Helper_optional,PYUNO,pythonloader) \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rptui) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rptxml) \
-	sax \
-	sb \
 	sc \
 	$(if $(DISABLE_SCRIPTING),,scriptframe) \
 	scui \
 	scfilt \
 	sd \
 	sdui \
-	sfx \
-	sofficeapp \
 	$(if $(filter-out IOS,$(OS)),solver) \
-	sot \
 	spell \
-	spl \
 	$(if $(DISABLE_SCRIPTING),,stringresource) \
 	subsequenttest \
-	svl \
-	svt \
-	svx \
-	svxcore \
 	sw \
 	swui \
 	swd \
 	test \
 	textfd \
-	tk \
-	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
-	ucb1 \
 	ucpcmis1 \
-	ucpfile1 \
 	unotest \
-	utl \
-	uui \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
-	vcl \
 	$(if $(filter-out IOS,$(OS)),wpftdraw) \
 	$(if $(filter-out IOS,$(OS)),wpftwriter) \
 	writerfilter \
 	xmlfa \
 	xmlfd \
+	xmlsecurity
+
+# we link all object files from these libraries into one, merged library
+gb_MERGEDLIBS := \
+	avmedia \
+	canvastools \
+	configmgr \
+	cppcanvas \
+	deploymentmisc \
+	desktopbe1 \
+	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
+	drawinglayer \
+	editeng \
+	fileacc \
+	filterconfig \
+	fsstorage \
+	fwe \
+	fwi \
+	fwk \
+	$(call gb_Helper_optional,DESKTOP,helplinker) \
+	i18npool \
+	i18nutil \
+	lng \
+	localebe1 \
+	msfilter \
+	package2 \
+	sax \
+	sb \
+	sfx \
+	sofficeapp \
+	sot \
+	spl \
+	svl \
+	svt \
+	svx \
+	svxcore \
+	tk \
+	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
+	ucb1 \
+	ucpfile1 \
+	utl \
+	uui \
+	vcl \
 	xmlscript \
-	xmlsecurity \
 	xo \
-	xstor
+	xstor \
 
 endif
 
