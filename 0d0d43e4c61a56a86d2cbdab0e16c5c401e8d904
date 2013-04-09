@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///lQ\u003d",
+        "filename": "extras/source/autotext/lang/sv/acor/DocumentList.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-04-09T11:22:50Z",
+      "side": 1,
+      "message": "character corruption here (and below)",
+      "revId": "0d0d43e4c61a56a86d2cbdab0e16c5c401e8d904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
