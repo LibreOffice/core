@@ -92,30 +92,21 @@ using namespace ::com::sun::star;
 namespace framework
 {
 
-static const char   ITEM_DESCRIPTOR_COMMANDURL[]    = "CommandURL";
-static const char   ITEM_DESCRIPTOR_HELPURL[]       = "HelpURL";
-static const char   ITEM_DESCRIPTOR_TOOLTIP[]       = "Tooltip";
-static const char   ITEM_DESCRIPTOR_CONTAINER[]     = "ItemDescriptorContainer";
-static const char   ITEM_DESCRIPTOR_LABEL[]         = "Label";
-static const char   ITEM_DESCRIPTOR_TYPE[]          = "Type";
-static const char   ITEM_DESCRIPTOR_VISIBLE[]       = "IsVisible";
-static const char   ITEM_DESCRIPTOR_WIDTH[]         = "Width";
-static const char   ITEM_DESCRIPTOR_STYLE[]         = "Style";
+static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
+static const char ITEM_DESCRIPTOR_HELPURL[]    = "HelpURL";
+static const char ITEM_DESCRIPTOR_TOOLTIP[]    = "Tooltip";
+static const char ITEM_DESCRIPTOR_CONTAINER[]  = "ItemDescriptorContainer";
+static const char ITEM_DESCRIPTOR_LABEL[]      = "Label";
+static const char ITEM_DESCRIPTOR_TYPE[]       = "Type";
+static const char ITEM_DESCRIPTOR_VISIBLE[]    = "IsVisible";
+static const char ITEM_DESCRIPTOR_WIDTH[]      = "Width";
+static const char ITEM_DESCRIPTOR_STYLE[]      = "Style";
 
-static const sal_Int32 ITEM_DESCRIPTOR_COMMANDURL_LEN  = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_COMMANDURL);
-static const sal_Int32 ITEM_DESCRIPTOR_HELPURL_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_HELPURL);
-static const sal_Int32 ITEM_DESCRIPTOR_TOOLTIP_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_TOOLTIP);
-static const sal_Int32 ITEM_DESCRIPTOR_CONTAINER_LEN   = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_CONTAINER);
-static const sal_Int32 ITEM_DESCRIPTOR_LABEL_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_LABEL);
-static const sal_Int32 ITEM_DESCRIPTOR_TYPE_LEN        = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_TYPE);
-static const sal_Int32 ITEM_DESCRIPTOR_VISIBLE_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_VISIBLE);
-static const sal_Int32 ITEM_DESCRIPTOR_WIDTH_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_WIDTH);
-static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_STYLE);
+static const char MENUPREFIX[]                 = "private:resource/menubar/";
 
-static const char   HELPID_PREFIX_TESTTOOL[]        = ".HelpId:";
-static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU     = 1000;
+static const char HELPID_PREFIX_TESTTOOL[]     = ".HelpId:";
 
-#define MENUPREFIX "private:resource/menubar/"
+static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU = 1000;
 
 class ImageOrientationListener : public svt::FrameStatusListener
 {
