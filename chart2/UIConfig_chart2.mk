@@ -31,6 +31,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/schart,\
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/smoothlinesdlg \
+	chart2/uiconfig/ui/steppedlinesdlg \
 ))
 
 # vim: set noet sw=4 ts=4:

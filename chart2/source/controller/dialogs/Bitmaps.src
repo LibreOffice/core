@@ -68,6 +68,26 @@ Image IMG_TYPE_BUBBLE
     ImageBitmap = Bitmap { File = "typebubble_16.png" ; };
     MaskColor = STD_MASKCOLOR;
 };
+Image IMG_STEP_START
+{
+    ImageBitmap = Bitmap { File = "step_start_30.png" ; };
+    MaskColor = STD_MASKCOLOR;
+};
+Image IMG_STEP_END
+{
+    ImageBitmap = Bitmap { File = "step_end_30.png" ; };
+    MaskColor = STD_MASKCOLOR;
+};
+Image IMG_STEP_CENTER_X
+{
+    ImageBitmap = Bitmap { File = "step_center_x_30.png" ; };
+    MaskColor = STD_MASKCOLOR;
+};
+Image IMG_STEP_CENTER_Y
+{
+    ImageBitmap = Bitmap { File = "step_center_y_30.png" ; };
+    MaskColor = STD_MASKCOLOR;
+};
 Bitmap BMP_BUBBLE_1
 {
     File = "bubble_52x60.png" ;
@@ -322,6 +342,43 @@ Bitmap BMP_LINE_O_STACKED_SMOOTH
 Bitmap BMP_LINE3D_STACKED_SMOOTH
 {
     File = "stacksmooth3d_52x60.png" ;
+};
+//---------------------
+Bitmap BMP_LINE_P_XVALUES_STEPPED
+{
+    File = "valueaxissteppedboth_52x60.png" ;
+};
+Bitmap BMP_LINE_O_XVALUES_STEPPED
+{
+    File = "valueaxissteppedlines_52x60.png" ;
+};
+Bitmap BMP_LINE3D_XVALUES_STEPPED
+{
+    File = "valueaxisstepped3d_52x60.png" ;
+};
+Bitmap BMP_LINE_P_XCATEGORY_STEPPED
+{
+    File = "nostacksteppedboth_52x60.png" ;
+};
+Bitmap BMP_LINE_O_XCATEGORY_STEPPED
+{
+    File = "nostacksteppedlines_52x60.png" ;
+};
+Bitmap BMP_LINE3D_XCATEGORY_STEPPED
+{
+    File = "nostackstepped3d_52x60.png" ;
+};
+Bitmap BMP_LINE_P_STACKED_STEPPED
+{
+    File = "stacksteppedboth_52x60.png" ;
+};
+Bitmap BMP_LINE_O_STACKED_STEPPED
+{
+    File = "stacksteppedlines_52x60.png" ;
+};
+Bitmap BMP_LINE3D_STACKED_STEPPED
+{
+    File = "stackstepped3d_52x60.png" ;
 };
 //---------------------
 Bitmap BMP_NET

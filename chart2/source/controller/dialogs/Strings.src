@@ -28,6 +28,11 @@ String STR_DLG_SMOOTH_LINE_PROPERTIES
     Text [ en-US ] = "Smooth Lines" ;
 };
 
+String STR_DLG_STEPPED_LINE_PROPERTIES
+{
+    Text [ en-US ] = "Stepped Lines" ;
+};
+
 String STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE
 {
     Text [ en-US ] = "Number Format for Percentage Value" ;

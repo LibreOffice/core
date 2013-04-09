@@ -678,40 +678,60 @@ void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
 {
     rSubTypeList.Clear();
 
-    if( CurveStyle_LINES==rParameter.eCurveStyle )
+    switch( rParameter.eCurveStyle )
     {
-        //direct lines
-        if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
-        {
-            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XCATEGORY )));
-            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XCATEGORY )));
-            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XCATEGORY )));
-            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XCATEGORY )));
-        }
-        else
-        {
-            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_STACKED )));
-            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_STACKED )));
-            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_STACKED )));
-            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_STACKED )));
-        }
-    }
-    else //CurveStyle_LINES
-    {
-        if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
-        {
-            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XCATEGORY )));
-            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XCATEGORY_SMOOTH )));
-            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XCATEGORY_SMOOTH )));
-            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XCATEGORY_SMOOTH )));
-        }
-        else
-        {
-            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_STACKED )));
-            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_STACKED_SMOOTH )));
-            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_STACKED_SMOOTH )));
-            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_STACKED_SMOOTH )));
-        }
+        case CurveStyle_CUBIC_SPLINES:
+        case CurveStyle_B_SPLINES:
+            if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
+            {
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XCATEGORY )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XCATEGORY_SMOOTH )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XCATEGORY_SMOOTH )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XCATEGORY_SMOOTH )));
+            }
+            else
+            {
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_STACKED )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_STACKED_SMOOTH )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_STACKED_SMOOTH )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_STACKED_SMOOTH )));
+            }
+            break;
+        case CurveStyle_STEP_START:
+        case CurveStyle_STEP_END:
+        case CurveStyle_STEP_CENTER_X:
+        case CurveStyle_STEP_CENTER_Y:
+            if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
+            {
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XCATEGORY )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XCATEGORY_STEPPED )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XCATEGORY_STEPPED )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XCATEGORY_STEPPED )));
+            }
+            else
+            {
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_STACKED )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_STACKED_STEPPED )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_STACKED_STEPPED )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_STACKED_STEPPED )));
+            }
+            break;
+        default: // includes CurveStyle_LINES
+            //direct lines
+            if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
+            {
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XCATEGORY )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XCATEGORY )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XCATEGORY )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XCATEGORY )));
+            }
+            else
+            {
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_STACKED )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_STACKED )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_STACKED )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_STACKED )));
+            }
     }
 
     rSubTypeList.SetItemText( 1, String( SchResId( STR_POINTS_ONLY )) );
@@ -800,20 +820,33 @@ void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Cha
 {
     rSubTypeList.Clear();
 
-    if( CurveStyle_LINES==rParameter.eCurveStyle )
+    switch (rParameter.eCurveStyle)
     {
-        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XVALUES )));
-        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XVALUES )));
-        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XVALUES )));
-        rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XVALUES )));
-    }
-    else //CurveStyle_LINES
-    {
-        //smooth lines
-        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XVALUES )));
-        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XVALUES_SMOOTH )));
-        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XVALUES_SMOOTH )));
-        rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XVALUES_SMOOTH )));
+        case CurveStyle_CUBIC_SPLINES:
+        case CurveStyle_B_SPLINES:
+        {
+            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XVALUES )));
+            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XVALUES_SMOOTH )));
+            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XVALUES_SMOOTH )));
+            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XVALUES_SMOOTH )));
+            break;
+        }
+        case CurveStyle_STEP_START:
+        case CurveStyle_STEP_END:
+        case CurveStyle_STEP_CENTER_X:
+        case CurveStyle_STEP_CENTER_Y:
+        {
+            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XVALUES )));
+            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XVALUES_STEPPED )));
+            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XVALUES_STEPPED )));
+            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XVALUES_STEPPED )));
+            break;
+        }
+        default: // includes CurveStyle_LINES
+            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XVALUES )));
+            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XVALUES )));
+            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XVALUES )));
+            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XVALUES )));
     }
 
     rSubTypeList.SetItemText( 1, String( SchResId( STR_POINTS_ONLY )) );

@@ -145,6 +145,22 @@ TabPage TP_CHARTTYPE
         Text [ en-US ] = "Deep";
     };
 
+    FixedText FT_LINETYPE
+    {
+        Pos = MAP_APPFONT ( POS_X_IMAGELIST , POS_Y_SPLINES ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Line type";
+    };
+    ListBox LB_LINETYPE
+    {
+        HelpID = "chart2:ListBox:TP_CHARTTYPE:LB_LINETYPE";
+        Border = TRUE;
+        TabStop = TRUE;
+        DropDown = TRUE;
+        Pos = MAP_APPFONT ( POS_X_IMAGELIST, POS_Y_SPLINES ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+    };
     CheckBox CB_SPLINES
     {
         HelpID = "chart2:CheckBox:TP_CHARTTYPE:CB_SPLINES";
@@ -152,12 +168,11 @@ TabPage TP_CHARTTYPE
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text [ en-US ] = "S~mooth lines" ;
     };
-
     PushButton PB_SPLINE_DIALOG
     {
         HelpID = "chart2:PushButton:TP_CHARTTYPE:PB_SPLINE_DIALOG";
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( POS_X_IMAGELIST , POS_Y_SPLINES-6 ) ;
+        Pos = MAP_APPFONT ( POS_X_IMAGELIST , POS_Y_SPLINES ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         Text [ en-US ] = "Properties..." ;
     };
