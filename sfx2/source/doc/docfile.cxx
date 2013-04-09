@@ -2866,7 +2866,7 @@ SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter 
     Init_Impl();
 }
 
-SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) :
+SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     pImp(new SfxMedium_Impl(this))
 {
     SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
