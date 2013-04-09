@@ -50,7 +50,7 @@ endif
 ifeq ($(SYSTEM_ZLIB),NO)
 liborcus_CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib
 endif
-ifneq (,$(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)))
+ifneq (,$(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID MACOSX,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
 liborcus_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif

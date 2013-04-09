@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 			$(if $(filter WNT,$(OS)),LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
 			$(if $(filter SOLARIS,$(OS)),LIBS="-lm") \
 			$(if $(filter ANDROID,$(OS)),LIBS="-lgnustl_shared -lm") \
-			CXXFLAGS="$(if $(filter GCC,$(COM)),$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)),$(if $(filter TRUE,$(ENABLE_DBGUTIL)),-D_GLIBCXX_DEBUG),$(if $(filter WNT,$(OS)),-mthreads))) \
+			CXXFLAGS="$(if $(filter GCC,$(COM)),$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID MACOSX,$(OS)),$(if $(filter TRUE,$(ENABLE_DBGUTIL)),-D_GLIBCXX_DEBUG),$(if $(filter WNT,$(OS)),-mthreads))) \
 			$(if $(debug),-g)" \
 		&& cd src \
 		&& $(MAKE) \

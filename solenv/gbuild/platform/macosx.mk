@@ -77,6 +77,13 @@ gb_COMPILERDEFS += \
 
 endif
 
+# enable debug STL
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+gb_COMPILERDEFS += \
+	-D_GLIBCXX_DEBUG \
+
+endif
+
 ifeq ($(HAVE_GCC_NO_LONG_DOUBLE),TRUE)
 gb_CXXFLAGS += -Wno-long-double
 endif
