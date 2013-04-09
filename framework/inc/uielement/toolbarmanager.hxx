@@ -38,6 +38,7 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -49,20 +50,6 @@
 
 #include <vcl/toolbox.hxx>
 #include <vcl/accel.hxx>
-
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace frame
-            {
-                class XLayoutManager;
-            }
-        }
-    }
-}
 
 namespace framework
 {
