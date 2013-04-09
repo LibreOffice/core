@@ -33,7 +33,7 @@ namespace swui
     }
 }
 
-#if defined(DISABLE_DYNLOADING) || defined (LIBO_MERGELIBS)
+#ifdef DISABLE_DYNLOADING
 #define CreateDialogFactory SwCreateDialogFactory
 #endif
 
