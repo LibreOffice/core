@@ -99,6 +99,64 @@ class SwRectPrinter(object):
         children = [ ( 'point', point), ( 'size', size ) ]
         return children.__iter__()
 
+class SwIMarkPrinter(object):
+    '''Prints sw::mark::IMark.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return "%s" % (self.typename)
+
+    def children(self):
+        if str(self.value.dynamic_type) == "sw::mark::UnoMark":
+            unoMark = self.value.cast(self.value.dynamic_type)
+            pos1 = unoMark['m_pPos1']
+            pos2 = unoMark['m_pPos2']
+            children = [ ( 'pos1', pos1), ( 'pos2', pos2 ) ]
+            return children.__iter__()
+        else:
+            return self._iterator(self.value)
+
+class SwXTextRangeImplPrinter(object):
+    '''Prints SwXTextRange::Impl.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return "%s" % (self.typename)
+
+    def children(self):
+        mark = self.value['m_pMark'].dereference()
+        children = [('mark', mark)]
+        return children.__iter__()
+
+class SwUnoImplPtrPrinter(object):
+    """Prints sw::UnoImplPtr"""
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        if self.value['m_p']:
+            return "%s %s" % (self.typename, self.value['m_p'].dereference())
+        else:
+            return "empty %s" % (self.typename,)
+
+class SwXTextRangePrinter(object):
+    '''Prints SwXTextRange.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return "%s %s" % (self.typename, self.value['m_pImpl'])
+
 class BigPtrArrayPrinter(object):
     '''Prints BigPtrArray.'''
 
@@ -222,6 +280,10 @@ def build_pretty_printers():
     printer.add('SwIndex', SwIndexPrinter)
     printer.add('SwPaM', SwPaMPrinter)
     printer.add('SwRect', SwRectPrinter)
+    printer.add('sw::mark::IMark', SwIMarkPrinter)
+    printer.add('SwXTextRange::Impl', SwXTextRangeImplPrinter)
+    printer.add('sw::UnoImplPtr', SwUnoImplPtrPrinter)
+    printer.add('SwXTextRange', SwXTextRangePrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
