@@ -434,6 +434,10 @@ $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
 )
 
+$(call gb_LinkTarget_use_packages,$(1),\
+	expat_inc \
+)
+
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	$(2) \
 )
