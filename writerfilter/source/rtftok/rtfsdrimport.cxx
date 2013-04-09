@@ -33,6 +33,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
@@ -94,6 +95,9 @@ std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults()
     aRet.push_back(aPropertyValue);
     aPropertyValue.Name = "BottomBorderDistance";
     aPropertyValue.Value <<= sal_Int32(0);
+    aRet.push_back(aPropertyValue);
+    aPropertyValue.Name = "SizeType";
+    aPropertyValue.Value <<= text::SizeType::FIX;
     aRet.push_back(aPropertyValue);
     return aRet;
 }
