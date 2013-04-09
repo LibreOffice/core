@@ -25,17 +25,6 @@
 			<info>
 				<desc>Contains Internet-related configurations (servers, proxies, etc.).</desc>
 			</info>
-			<prop oor:name="ooInetDNSServer" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Inet/DNS -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools - Options - Internet - Protocol -->
-				<info>
-					<deprecated/>
-					<desc>Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
 			<prop oor:name="ooInetNoProxy" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Inet/NoProxy -->
 				<!-- OldLocation: soffice.ini -->
@@ -161,61 +150,7 @@
 					</maxInclusive>
 				</constraints>
 			</prop>
-			<prop oor:name="ooInetSOCKSProxyName" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Inet/SOCKSProxyName -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<deprecated/>
-					<desc>Specifies the name of the Socks proxy server.</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="ooInetSOCKSProxyPort" oor:type="xs:int">
-				<!-- OldPath: Inet/SOCKSProxyPort -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<deprecated/>
-					<desc>Specifies the port of the Socks proxy server.</desc>
-				</info>
-				<constraints>
-					<minInclusive oor:value="0">
-						<info>
-							<desc>Specifies the minimum allowed port number.</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="65535">
-						<info>
-							<desc>Specifies the maximum allowed port number.</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-			</prop>
 		</group>
 	</component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
