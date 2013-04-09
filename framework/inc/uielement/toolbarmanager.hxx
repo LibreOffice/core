@@ -175,15 +175,15 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
 
         typedef ::boost::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > > MenuDescriptionMap;
-        sal_Bool                                                                               m_bDisposed : 1,
-                                                                                               m_bSmallSymbols : 1,
-                                                                                               m_bModuleIdentified : 1,
-                                                                                               m_bAddedToTaskPaneList : 1,
-                                                                                               m_bVerticalTextEnabled : 1,
-                                                                                               m_bFrameActionRegistered : 1,
-                                                                                               m_bUpdateControllers : 1;
-        sal_Bool                                                                               m_bImageOrientationRegistered : 1,
-                                                                                               m_bImageMirrored : 1;
+        bool m_bDisposed : 1,
+             m_bSmallSymbols : 1,
+             m_bModuleIdentified : 1,
+             m_bAddedToTaskPaneList : 1,
+             m_bVerticalTextEnabled : 1,
+             m_bFrameActionRegistered : 1,
+             m_bUpdateControllers : 1,
+             m_bImageOrientationRegistered : 1,
+             m_bImageMirrored : 1;
         long                                                                                   m_lImageRotation;
         ToolBar*                                                                               m_pToolBar;
         OUString                                                                          m_aModuleIdentifier;

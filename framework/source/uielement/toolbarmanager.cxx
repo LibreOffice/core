@@ -213,14 +213,14 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 ToolBar* pToolBar ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
-    m_bDisposed( sal_False ),
+    m_bDisposed( false ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
-    m_bModuleIdentified( sal_False ),
-    m_bAddedToTaskPaneList( sal_True ),
-    m_bFrameActionRegistered( sal_False ),
-    m_bUpdateControllers( sal_False ),
-    m_bImageOrientationRegistered( sal_False ),
-    m_bImageMirrored( sal_False ),
+    m_bModuleIdentified( false ),
+    m_bAddedToTaskPaneList( true ),
+    m_bFrameActionRegistered( false ),
+    m_bUpdateControllers( false ),
+    m_bImageOrientationRegistered( false ),
+    m_bImageMirrored( false ),
     m_lImageRotation( 0 ),
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
@@ -296,7 +296,7 @@ void ToolBarManager::Destroy()
 
         if ( pWindow )
             ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( m_pToolBar );
-        m_bAddedToTaskPaneList = sal_False;
+        m_bAddedToTaskPaneList = false;
     }
 
     // Delete the additional add-ons data
@@ -465,7 +465,7 @@ void ToolBarManager::UpdateControllers()
 
     if ( !m_bUpdateControllers )
     {
-        m_bUpdateControllers = sal_True;
+        m_bUpdateControllers = true;
         ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
 
         while ( pIter != m_aControllerMap.end() )
@@ -482,7 +482,7 @@ void ToolBarManager::UpdateControllers()
             ++pIter;
         }
     }
-    m_bUpdateControllers = sal_False;
+    m_bUpdateControllers = false;
 }
 
 //for update toolbar controller via Support Visible
@@ -492,7 +492,7 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
 
     if ( !m_bUpdateControllers )
     {
-        m_bUpdateControllers = sal_True;
+        m_bUpdateControllers = true;
         try
         {   if(xController.is())
             {
@@ -507,7 +507,7 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
 
 
     }
-    m_bUpdateControllers = sal_False;
+    m_bUpdateControllers = false;
 }
 
 void ToolBarManager::frameAction( const FrameActionEvent& Action )
@@ -666,7 +666,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
         m_xModuleAcceleratorManager.clear();
         m_xDocAcceleratorManager.clear();
 
-        m_bDisposed = sal_True;
+        m_bDisposed = true;
     }
 }
 
@@ -817,7 +817,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
             Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
             Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
 
-            m_bModuleIdentified = sal_True;
+            m_bModuleIdentified = true;
             m_aModuleIdentifier = xModuleManager->identify( xIfac );
 
             if ( !m_aModuleIdentifier.isEmpty() )
@@ -1124,7 +1124,7 @@ void ToolBarManager::AddFrameActionListener()
 {
     if ( !m_bFrameActionRegistered && m_xFrame.is() )
     {
-        m_bFrameActionRegistered = sal_True;
+        m_bFrameActionRegistered = true;
         m_xFrame->addFrameActionListener( Reference< XFrameActionListener >(
                                             static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ));
     }
@@ -1134,7 +1134,7 @@ void ToolBarManager::AddImageOrientationListener()
 {
     if ( !m_bImageOrientationRegistered && m_xFrame.is() )
     {
-        m_bImageOrientationRegistered = sal_True;
+        m_bImageOrientationRegistered = true;
         ImageOrientationListener* pImageOrientation = new ImageOrientationListener(
             Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ),
             m_xContext,
