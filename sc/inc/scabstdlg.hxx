@@ -363,8 +363,8 @@ public:
     //for dataform
     virtual AbstractScDataFormDlg * CreateScDataFormDlg( Window* pParent, int nId, ScTabViewShell*      pTabViewShell ) = 0 ; //add for ScDataFormDlg
 
-    virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(Window* pParent,int nId, //add for ScDeleteContentsDlg
-                                                                 sal_uInt16  nCheckDefaults = 0 ) = 0;
+    virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(Window* pParent, //add for ScDeleteContentsDlg
+                                                                    sal_uInt16  nCheckDefaults = 0) = 0;
     virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( Window*        pParent, //add for ScFillSeriesDlg
                                                             ScDocument& rDocument,
                                                             FillDir     eFillDir,

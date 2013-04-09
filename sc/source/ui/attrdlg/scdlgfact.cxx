@@ -873,22 +873,11 @@ AbstractScDataFormDlg* ScAbstractDialogFactory_Impl::CreateScDataFormDlg( Window
 
 
 
-AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(Window* pParent,int nId,
-                                                                 sal_uInt16  nCheckDefaults )
+AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(Window* pParent,
+                                                                                     sal_uInt16  nCheckDefaults)
 {
-    ScDeleteContentsDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_DELCONT :
-            pDlg = new ScDeleteContentsDlg( pParent, nCheckDefaults );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScDeleteContentsDlg_Impl( pDlg );
-    return 0;
+    ScDeleteContentsDlg* pDlg = new ScDeleteContentsDlg(pParent, nCheckDefaults);
+    return new AbstractScDeleteContentsDlg_Impl( pDlg );
 }
 
 
