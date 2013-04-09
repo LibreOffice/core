@@ -64,7 +64,11 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
                              EE_ITEMS_START, EE_ITEMS_END );
-        aNewAttr.Put( aEditAttr, sal_False );
+
+        // fdo#47018 if for some reason the numering attribute wasn't set, don't copy
+        // them to avoid crash
+        if ( aEditAttr.GetItemState( SID_ATTR_NUMBERING_RULE, sal_False) == SFX_ITEM_ON )
+            aNewAttr.Put( aEditAttr, sal_False );
 
         // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
