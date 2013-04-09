@@ -29,114 +29,48 @@ ifeq ($(MERGELIBS),TRUE)
 
 # we link all object files from these libraries into one, merged library
 gb_MERGEDLIBS := \
-	analysis \
 	avmedia \
-	$(if $(filter unx,$(GUIBASE)),basebmp) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
 	canvastools \
-	chartcore \
 	configmgr \
 	cppcanvas \
-	ctl \
-	cui \
-	date \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbase) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	deploymentmisc \
-	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
 	desktopbe1 \
+	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
 	drawinglayer \
 	editeng \
-	embobj \
-	evtatt \
-	fastsax \
-	$(call gb_Helper_optional,DBCONNECTIVITY,file) \
 	fileacc \
 	filterconfig \
-	$(call gb_Helper_optional,DBCONNECTIVITY,flat) \
-	for \
-	forui \
-	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fsstorage \
 	fwe \
 	fwi \
 	fwk \
-	fwl \
-	fwm \
 	$(call gb_Helper_optional,DESKTOP,helplinker) \
-	hwp \
-	hyphen \
+	i18npool \
 	i18nutil \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),javaloader) \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),javavm) \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),java_uno) \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),juh) \
-	$(if $(filter-out IOS,$(OS)),jvmaccess) \
-	jvmfwk \
 	lng \
-	lnth \
 	localebe1 \
-	localedata_en \
-	localedata_es \
-	localedata_euro \
-	localedata_others \
 	msfilter \
-	$(if $(filter-out ANDROID IOS,$(OS)),odbc) \
-	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
-	oox \
 	package2 \
-	pricing \
-	$(call gb_Helper_optional,PYUNO,pythonloader) \
-	$(call gb_Helper_optional,PYUNO,pyuno) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,rptui) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,rptxml) \
 	sax \
 	sb \
-	sc \
-	$(if $(DISABLE_SCRIPTING),,scriptframe) \
-	scui \
-	scfilt \
-	sd \
-	sdui \
 	sfx \
 	sofficeapp \
-	$(if $(filter-out IOS,$(OS)),solver) \
 	sot \
-	spell \
 	spl \
-	$(if $(DISABLE_SCRIPTING),,stringresource) \
-	subsequenttest \
 	svl \
 	svt \
 	svx \
 	svxcore \
-	sw \
-	swui \
-	swd \
-	test \
-	textfd \
 	tk \
 	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
 	ucb1 \
-	ucpcmis1 \
 	ucpfile1 \
-	unotest \
 	utl \
 	uui \
-	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
-	$(if $(filter-out IOS,$(OS)),wpftdraw) \
-	$(if $(filter-out IOS,$(OS)),wpftwriter) \
-	writerfilter \
-	xmlfa \
-	xmlfd \
 	xmlscript \
-	xmlsecurity \
 	xo \
-	xstor
+	xstor \
 
 endif
 
