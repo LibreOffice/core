@@ -125,6 +125,26 @@ endef
 
 endif
 
+ifeq ($(OS)$(COM),WNTMSC)
+
+define gb_ExternalProject__use_unistd_headers
+$(call gb_ExternalProject_use_package,$(1),soltools_inc)
+
+endef
+
+define gb_LinkTarget__use_unistd_headers
+$(call gb_LinkTarget_use_package,$(1),soltools_inc)
+
+endef
+
+else # ! ($(OS)$(COM),WNTMSC)
+
+gb_ExternalProject__use_unistd_headers :=
+
+gb_LinkTarget__use_unistd_headers :=
+
+endif
+
 ifeq ($(SYSTEM_VIGRA),YES)
 
 gb_LinkTarget__use_vigra_headers :=

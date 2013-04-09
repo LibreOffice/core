@@ -11,8 +11,9 @@ $(eval $(call gb_ExternalProject_ExternalProject,nss))
 
 $(eval $(call gb_ExternalProject_use_unpacked,nss,nss))
 
-$(eval $(call gb_ExternalProject_use_package,nss,soltools_inc))
-
+$(eval $(call gb_ExternalProject_use_externals,nss,\
+	unistd_headers \
+))
 
 $(eval $(call gb_ExternalProject_register_targets,nss,\
 	configure \

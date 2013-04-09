@@ -32,15 +32,16 @@ $(eval $(call gb_Executable_set_include,idlc,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_use_external,idlc,boost_headers))
+$(eval $(call gb_Executable_use_externals,idlc,\
+	boost_headers \
+	unistd_headers \
+))
 
 $(eval $(call gb_Executable_use_libraries,idlc,\
     reg \
     sal \
     salhelper \
 ))
-
-$(eval $(call gb_Executable_use_package,idlc,soltools_inc))
 
 $(eval $(call gb_Executable_add_grammars,idlc,\
     idlc/source/parser \
