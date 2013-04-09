@@ -63,8 +63,6 @@ class SfxEvents_Impl : public ::cppu::WeakImplHelper2< css::container::XNameRepl
     ::osl::Mutex                    maMutex;
     SfxObjectShell                 *mpObjShell;
 
-    sal_Bool                    Warn_Impl( const String& );
-
 public:
                                 SfxEvents_Impl( SfxObjectShell* pShell,
                                                 css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster );
