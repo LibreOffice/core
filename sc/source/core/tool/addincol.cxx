@@ -121,7 +121,7 @@ const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetC
             }
         }
 
-        bCompInitialized = sal_True;        // also if not successful
+        bCompInitialized = true;        // also if not successful
     }
     return maCompNames;
 }
@@ -132,10 +132,10 @@ void ScUnoAddInFuncData::SetCompNames( const ::std::vector< ScUnoAddInFuncData::
 
     maCompNames = rNew;
 
-    bCompInitialized = sal_True;
+    bCompInitialized = true;
 }
 
-sal_Bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const
+bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const
 {
     const ::std::vector<LocalizedName>& rCompNames = GetCompNames();
     if ( !rCompNames.empty() )
@@ -194,7 +194,7 @@ sal_Bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRe
 
         // Third, last resort, use first (default) entry.
         rRetExcelName = rCompNames[0].maName;
-        return sal_True;
+        return true;
     }
     return false;
 }
@@ -319,7 +319,7 @@ void ScUnoAddInCollection::Initialize()
     // when argument information is needed).
     ReadConfiguration();
 
-    bInitialized = sal_True;        // with or without functions
+    bInitialized = true;        // with or without functions
 }
 // -----------------------------------------------------------------------------
 
@@ -610,7 +610,7 @@ void ScUnoAddInCollection::LoadComponent( const ScUnoAddInFuncData& rFuncData )
     }
 }
 
-sal_Bool ScUnoAddInCollection::GetExcelName( const OUString& rCalcName,
+bool ScUnoAddInCollection::GetExcelName( const OUString& rCalcName,
                                         LanguageType eDestLang, OUString& rRetExcelName )
 {
     const ScUnoAddInFuncData* pFuncData = GetFuncData( rCalcName );
@@ -619,7 +619,7 @@ sal_Bool ScUnoAddInCollection::GetExcelName( const OUString& rCalcName,
     return false;
 }
 
-sal_Bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rRetCalcName )
+bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rRetCalcName )
 {
     if (!bInitialized)
         Initialize();
@@ -643,7 +643,7 @@ sal_Bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString
 
                         //  use the first function that has this name for any language
                         rRetCalcName = pFuncData->GetOriginalName();
-                        return sal_True;
+                        return true;
                     }
                 }
             }
@@ -652,12 +652,12 @@ sal_Bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString
     return false;
 }
 
-inline sal_Bool IsTypeName( const OUString& rName, const uno::Type& rType )
+inline bool IsTypeName( const OUString& rName, const uno::Type& rType )
 {
     return rName == rType.getTypeName();
 }
 
-static sal_Bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClass )
+static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClass )
 {
     //  this must match with ScUnoAddInCall::SetResult
 
@@ -677,7 +677,7 @@ static sal_Bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>
         case uno::TypeClass_FLOAT:
         case uno::TypeClass_DOUBLE:
         case uno::TypeClass_STRING:
-            return sal_True;                        // values or string
+            return true;                        // values or string
 
         case uno::TypeClass_INTERFACE:
             {
@@ -811,7 +811,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                         //  leave out internal functions
                         uno::Reference<reflection::XIdlClass> xClass =
                                         xFunc->getDeclaringClass();
-                        sal_Bool bSkip = sal_True;
+                        bool bSkip = true;
                         if ( xClass.is() )
                         {
                             //! XIdlClass needs getType() method!
@@ -831,7 +831,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                             uno::Reference<reflection::XIdlClass> xReturn =
                                         xFunc->getReturnType();
                             if ( !lcl_ValidReturnType( xReturn ) )
-                                bSkip = sal_True;
+                                bSkip = true;
                         }
                         if (!bSkip)
                         {
@@ -844,7 +844,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                             aFuncNameBuffer.append(aFuncU);
                             OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
 
-                            sal_Bool bValid = sal_True;
+                            bool bValid = true;
                             long nVisibleCount = 0;
                             long nCallerPos = SC_CALLERPOS_NONE;
 
@@ -930,7 +930,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                 aArgDesc = "###";
                                             }
 
-                                            sal_Bool bOptional =
+                                            bool bOptional =
                                                 ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||
                                                   eArgType == SC_ADDINARG_VARARGS );
 
@@ -1059,7 +1059,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                     // Local names and descriptions from pOldData are looked up using the
                     // internal argument name.
 
-                    sal_Bool bValid = sal_True;
+                    bool bValid = true;
                     long nVisibleCount = 0;
                     long nCallerPos = SC_CALLERPOS_NONE;
 
@@ -1107,7 +1107,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                                     else
                                         aDesc.aName = aDesc.aDescription = "###";
 
-                                    sal_Bool bOptional =
+                                    bool bOptional =
                                         ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||
                                           eArgType == SC_ADDINARG_VARARGS );
 
@@ -1137,7 +1137,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     }
 }
 
-OUString ScUnoAddInCollection::FindFunction( const OUString& rUpperName, sal_Bool bLocalFirst )
+OUString ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bLocalFirst )
 {
     if (!bInitialized)
         Initialize();
@@ -1224,7 +1224,7 @@ long ScUnoAddInCollection::GetFuncCount()
     return nFuncCount;
 }
 
-sal_Bool ScUnoAddInCollection::FillFunctionDesc( long nFunc, ScFuncDesc& rDesc )
+bool ScUnoAddInCollection::FillFunctionDesc( long nFunc, ScFuncDesc& rDesc )
 {
     if (!bInitialized)
         Initialize();
@@ -1237,11 +1237,11 @@ sal_Bool ScUnoAddInCollection::FillFunctionDesc( long nFunc, ScFuncDesc& rDesc )
     return FillFunctionDescFromData( rFuncData, rDesc );
 }
 
-sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc )
+bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc )
 {
     rDesc.Clear();
 
-    sal_Bool bIncomplete = !rFuncData.GetFunction().is();       //! extra flag?
+    bool bIncomplete = !rFuncData.GetFunction().is();       //! extra flag?
 
     long nArgCount = rFuncData.GetArgumentCount();
     if ( nArgCount > USHRT_MAX )
@@ -1266,7 +1266,7 @@ sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncDat
     rDesc.nArgCount = (sal_uInt16)nArgCount;
     if ( nArgCount )
     {
-        sal_Bool bMultiple = false;
+        bool bMultiple = false;
         const ScAddInArgDesc* pArgs = rFuncData.GetArguments();
 
         rDesc.ppDefArgNames = new OUString*[nArgCount];
@@ -1289,7 +1289,7 @@ sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncDat
 
             //  last argument repeated?
             if ( nArg+1 == nArgCount && ( pArgs[nArg].eType == SC_ADDINARG_VARARGS ) )
-                bMultiple = sal_True;
+                bMultiple = true;
         }
 
         if ( bMultiple )
@@ -1298,7 +1298,7 @@ sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncDat
 
     rDesc.bIncomplete = bIncomplete;
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1308,7 +1308,7 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rNa
                                 long nParamCount ) :
     bValidCount( false ),
     nErrCode( errNoCode ),      // before function was called
-    bHasString( sal_True ),
+    bHasString( true ),
     fValue( 0.0 ),
     xMatrix( NULL )
 {
@@ -1325,12 +1325,12 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rNa
         {
             long nVarCount = nParamCount - ( nDescCount - 1 );  // size of last argument
             aVarArg.realloc( nVarCount );
-            bValidCount = sal_True;
+            bValidCount = true;
         }
         else if ( nParamCount <= nDescCount )
         {
             //  all args behind nParamCount must be optional
-            bValidCount = sal_True;
+            bValidCount = true;
             for (long i=nParamCount; i<nDescCount; i++)
                 if ( !pArgs[i].bOptional )
                     bValidCount = false;
@@ -1347,7 +1347,7 @@ ScUnoAddInCall::~ScUnoAddInCall()
     // pFuncData is deleted with ScUnoAddInCollection
 }
 
-sal_Bool ScUnoAddInCall::ValidParamCount()
+bool ScUnoAddInCall::ValidParamCount()
 {
     return bValidCount;
 }
@@ -1369,7 +1369,7 @@ ScAddInArgumentType ScUnoAddInCall::GetArgType( long nPos )
     return SC_ADDINARG_VALUE_OR_ARRAY;      //! error code !!!!
 }
 
-sal_Bool ScUnoAddInCall::NeedsCaller() const
+bool ScUnoAddInCall::NeedsCaller() const
 {
     return pFuncData && pFuncData->GetCallerPos() != SC_CALLERPOS_NONE;
 }
@@ -1546,7 +1546,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
         case uno::TypeClass_STRING:
             {
                 rNewRes >>= aString;
-                bHasString = sal_True;
+                bHasString = true;
             }
             break;
 
