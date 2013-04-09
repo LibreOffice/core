@@ -11,8 +11,6 @@ $(eval $(call gb_ExternalProject_ExternalProject,icu))
 
 $(eval $(call gb_ExternalProject_use_unpacked,icu,icu))
 
-$(eval $(call gb_ExternalProject_use_package,icu,icu_data))
-
 $(eval $(call gb_ExternalProject_register_targets,icu,\
 	build \
 ))
