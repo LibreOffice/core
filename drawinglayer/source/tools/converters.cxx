@@ -44,6 +44,9 @@ namespace drawinglayer
             sal_uInt32 nMaxQuadratPixels)
         {
             BitmapEx aRetval;
+#ifdef DBG_UTIL
+            static bool bDoSaveForVisualControl(false);
+#endif
 
             if(rSeq.hasElements() && nDiscreteWidth && nDiscreteHeight)
             {
@@ -75,13 +78,14 @@ namespace drawinglayer
                 // prepare vdev
                 maContent.SetOutputSizePixel(aSizePixel, false);
                 maContent.SetMapMode(aMapModePixel);
-                maContent.SetAntialiasing(true);
 
                 // set to all white
                 maContent.SetBackground(Wallpaper(Color(COL_WHITE)));
                 maContent.Erase();
 
-                // create pixel processor
+                // create pixel processor, also already takes care of AAing and
+                // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
+                // not wanted, change after this call as needed
                 processor2d::BaseProcessor2D* pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
                     maContent,
                     aViewInformation2D);
@@ -95,21 +99,29 @@ namespace drawinglayer
                     maContent.EnableMapMode(false);
                     const Bitmap aContent(maContent.GetBitmap(aEmptyPoint, aSizePixel));
 
+#ifdef DBG_UTIL
+                    if(bDoSaveForVisualControl)
+                    {
+                        SvFileStream aNew(OUString("c:\\test_content.png"), STREAM_WRITE|STREAM_TRUNC);
+                        ::vcl::PNGWriter aPNGWriter(aContent);
+                        aPNGWriter.Write(aNew);
+                    }
+#endif
                     // prepare for mask creation
                     maContent.SetMapMode(aMapModePixel);
-                    maContent.SetAntialiasing(true);
 
                     // set alpha to all white (fully transparent)
                     maContent.Erase();
 
                     // embed primitives to paint them black
+                    static basegfx::BColorModifyMode aMode = basegfx::BCOLORMODIFYMODE_REPLACE;
                     const primitive2d::Primitive2DReference xRef(
                         new primitive2d::ModifiedColorPrimitive2D(
                             aSequence,
                             basegfx::BColorModifier(
                                 basegfx::BColor(0.0, 0.0, 0.0),
                                 0.5,
-                                basegfx::BCOLORMODIFYMODE_REPLACE)));
+                                aMode)));
                     const primitive2d::Primitive2DSequence xSeq(&xRef, 1);
 
                     // render
@@ -118,22 +130,28 @@ namespace drawinglayer
 
                     // get alpha cahannel from vdev
                     maContent.EnableMapMode(false);
-                    const AlphaMask aAlphaMask(maContent.GetBitmap(aEmptyPoint, aSizePixel));
+                    const Bitmap aAlpha(maContent.GetBitmap(aEmptyPoint, aSizePixel));
+#ifdef DBG_UTIL
+                    if(bDoSaveForVisualControl)
+                    {
+                        SvFileStream aNew(OUString("c:\\test_alpha.png"), STREAM_WRITE|STREAM_TRUNC);
+                        ::vcl::PNGWriter aPNGWriter(aAlpha);
+                        aPNGWriter.Write(aNew);
+                    }
+#endif
 
                     // create BitmapEx result
-                    aRetval = BitmapEx(aContent, aAlphaMask);
+                    aRetval = BitmapEx(aContent, AlphaMask(aAlpha));
+#ifdef DBG_UTIL
+                    if(bDoSaveForVisualControl)
+                    {
+                        SvFileStream aNew(OUString("c:\\test_combined.png"), STREAM_WRITE|STREAM_TRUNC);
+                        ::vcl::PNGWriter aPNGWriter(aRetval);
+                        aPNGWriter.Write(aNew);
+                    }
+#endif
                 }
             }
-
-#ifdef DBG_UTIL
-            static bool bDoSaveForVisualControl(false);
-            if(bDoSaveForVisualControl)
-            {
-                SvFileStream aNew(OUString("c:\\test.png"), STREAM_WRITE|STREAM_TRUNC);
-                ::vcl::PNGWriter aPNGWriter(aRetval);
-                aPNGWriter.Write(aNew);
-            }
-#endif
 
             return aRetval;
         }
