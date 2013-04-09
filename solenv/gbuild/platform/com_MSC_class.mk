@@ -505,6 +505,11 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(RCFILE) )
 endef
 
+define gb_WinResTarget_WinResTarget_platform
+$(call gb_WinResTarget_get_target,$(1)) : $(call gb_Package_get_target,solenv_inc)
+
+endef
+
 $(eval $(call gb_Helper_make_dep_targets,\
 	WinResTarget \
 ))

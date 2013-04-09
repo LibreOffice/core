@@ -2,6 +2,9 @@
 
 # WinResTarget class
 
+# defined by platform:
+#  gb_WinResTarget_WinResTarget_platform
+
 gb_WinResTarget_DEFAULTDEFS := $(gb_RCDEFS)
 
 define gb_WinResTarget_WinResTarget
@@ -16,6 +19,8 @@ $(call gb_WinResTarget_get_target,$(1)) : DEFS := $(gb_WinResTarget_DEFAULTDEFS)
 $(call gb_WinResTarget_get_target,$(1)) : INCLUDE := $(subst -isystem,-I,$(SOLARINC)) -I$(SRCDIR)/config_$(gb_Side)
 $(call gb_WinResTarget_get_clean_target,$(1)) : RCFILE :=
 $(call gb_WinResTarget_get_target,$(1)) : RCFILE :=
+
+$(call gb_WinResTarget_WinResTarget_platform,$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_WinResTarget_get_dep_target,$(1)) : DEFS := $$(gb_WinResTarget_DEFAULTDEFS)
@@ -33,7 +38,7 @@ $(call gb_WinResTarget_get_dep_target,%) : $(gb_WinResTarget__command_target)
 endif
 
 
-$(call gb_WinResTarget_get_target,%) : $(call gb_Package_get_target,solenv_inc)
+$(call gb_WinResTarget_get_target,%) :
 	$(call gb_WinResTarget__command,$@,$*,$<)
 
 $(call gb_WinResTarget_get_clean_target,%) :
