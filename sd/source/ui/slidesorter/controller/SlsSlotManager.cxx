@@ -19,6 +19,8 @@
 
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
 #include <editeng/outlobj.hxx>
 
@@ -91,6 +93,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::beans;
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -138,6 +141,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
     switch (rRequest.GetSlot())
     {
         case SID_PRESENTATION:
+        case SID_PRESENTATION_THIS_SLIDE:
         case SID_REHEARSE_TIMINGS:
             ShowSlideShow (rRequest);
             pShell->Cancel();
@@ -882,9 +886,29 @@ void SlotManager::ShowSlideShow( SfxRequest& rReq)
     if( xPresentation.is() )
     {
         if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
-            xPresentation->start();
+        {
+            if( (SID_PRESENTATION == rReq.GetSlot() ) )
+            {
+                Sequence< PropertyValue > aArguments(1);
+                PropertyValue aPage;
+                OUString sValue("0");
+
+                aPage.Name = "FirstPage";
+                aPage.Value <<= sValue;
+
+                aArguments[0] = aPage;
+
+                xPresentation->startWithArguments( aArguments );
+            }
+            else
+            {
+                xPresentation->start();
+            }
+        }
         else
+        {
             xPresentation->rehearseTimings();
+        }
     }
 }
 

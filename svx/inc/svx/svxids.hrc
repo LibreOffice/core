@@ -351,6 +351,7 @@
 #define SID_OUTLINE_COLLAPSE_ALL                        ( SID_SVX_START + 155 )
 #define SID_OUTLINE_BULLET                              ( SID_SVX_START + 156 )
 #define SID_PRESENTATION                                ( SID_SVX_START + 157 )
+#define SID_PRESENTATION_THIS_SLIDE                     ( SID_SVX_START + 158 )
 #define SID_REHEARSE_TIMINGS                            ( SID_SVX_START + 159 )
 #define SID_HIDE_SLIDE                                  ( SID_SVX_START + 161 )
 #define SID_CHOOSE_POLYGON                              ( SID_SVX_START + 162 )

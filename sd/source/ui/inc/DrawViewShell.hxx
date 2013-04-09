@@ -403,6 +403,7 @@ protected:
     void            GetMenuStateSel(SfxItemSet& rSet);
 
 private:
+    void ShowSlideShow(SfxRequest& rReq);
     /** This flag controls whether the layer mode is active, i.e. the layer
         dialog is visible.
     */

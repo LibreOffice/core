@@ -21,6 +21,8 @@
 #include "OutlineViewShell.hxx"
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
 #include "app.hrc"
 #include <svx/hlnkitem.hxx>
@@ -64,6 +66,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::beans;
 
 namespace sd {
 
@@ -229,18 +232,11 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         break;
 
         case SID_PRESENTATION:
+        case SID_PRESENTATION_THIS_SLIDE:
         case SID_REHEARSE_TIMINGS:
         {
             pOlView->PrepareClose();
-
-            Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
-            if( xPresentation.is() )
-            {
-                if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
-                    xPresentation->start();
-                else
-                    xPresentation->rehearseTimings();
-            }
+            ShowSlideShow(rReq);
             Cancel();
             rReq.Done();
         }
@@ -333,6 +329,38 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
     Invalidate(SID_CUT);
     Invalidate(SID_COPY);
     Invalidate(SID_PASTE);
+}
+
+void OutlineViewShell::ShowSlideShow(SfxRequest& rReq)
+{
+    Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
+    if( xPresentation.is() )
+    {
+        if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
+        {
+            if( (SID_PRESENTATION == rReq.GetSlot() ) )
+            {
+                Sequence< PropertyValue > aArguments(1);
+                PropertyValue aPage;
+                OUString sValue("0");
+
+                aPage.Name = "FirstPage";
+                aPage.Value <<= sValue;
+
+                aArguments[0] = aPage;
+
+                xPresentation->startWithArguments( aArguments );
+            }
+            else
+            {
+                xPresentation->start();
+            }
+        }
+        else
+        {
+            xPresentation->rehearseTimings();
+        }
+    }
 }
 
 void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)

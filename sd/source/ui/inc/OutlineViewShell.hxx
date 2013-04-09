@@ -151,6 +151,7 @@ public:
     bool UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
 
 private:
+    void ShowSlideShow(SfxRequest& rReq);
     OutlineView* pOlView;
     SdPage*         pLastPage; // Zur performanten Aufbereitung der Preview
     TransferableClipboardListener* pClipEvtLstnr;

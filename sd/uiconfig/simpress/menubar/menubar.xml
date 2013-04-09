@@ -300,6 +300,7 @@
     <menu:menu menu:id=".uno:SlideShowMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:Presentation"/>
+            <menu:menuitem menu:id=".uno:PresentationThisSlide"/>
             <menu:menuitem menu:id=".uno:PresentationDialog"/>
             <menu:menuitem menu:id=".uno:RehearseTimings"/>
             <menu:menuitem menu:id=".uno:Remote"/>

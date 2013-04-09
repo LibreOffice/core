@@ -23,6 +23,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -97,6 +99,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::beans;
 
 namespace sd {
 
@@ -681,16 +684,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         break;
 
         case SID_PRESENTATION:
+        case SID_PRESENTATION_THIS_SLIDE:
         case SID_REHEARSE_TIMINGS:
         {
-            Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
-            if( xPresentation.is() )
-            {
-                if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
-                    xPresentation->start();
-                else
-                    xPresentation->rehearseTimings();
-            }
+            ShowSlideShow(rReq);
             rReq.Ignore ();
         }
         break;
@@ -1647,6 +1644,38 @@ void DrawViewShell::ShowUIControls (bool bVisible)
     //        LayerDialogChildWindow::GetChildWindowId(),
     //        IsLayerModeActive() && bVisible);
     maTabControl.Show (bVisible);
+}
+
+void DrawViewShell::ShowSlideShow(SfxRequest& rReq)
+{
+    Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
+    if( xPresentation.is() )
+    {
+        if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
+        {
+            if( (SID_PRESENTATION == rReq.GetSlot() ) )
+            {
+                Sequence< PropertyValue > aArguments(1);
+                PropertyValue aPage;
+                OUString sValue("0");
+
+                aPage.Name = "FirstPage";
+                aPage.Value <<= sValue;
+
+                aArguments[0] = aPage;
+
+                xPresentation->startWithArguments( aArguments );
+            }
+            else
+            {
+                xPresentation->start();
+            }
+        }
+        else
+        {
+            xPresentation->rehearseTimings();
+        }
+    }
 }
 
 void DrawViewShell::StopSlideShow (bool /*bCloseFrame*/)

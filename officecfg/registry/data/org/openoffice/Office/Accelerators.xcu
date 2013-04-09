@@ -2234,6 +2234,11 @@
     </node>
     <node oor:name="F5_SHIFT" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:PresentationThisSlide</value>
+     </prop>
+    </node>
+    <node oor:name="F5_SHIFT_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:RestoreEditingView</value>
      </prop>
     </node>

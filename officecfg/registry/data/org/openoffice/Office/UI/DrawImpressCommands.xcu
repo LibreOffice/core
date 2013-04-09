@@ -37,6 +37,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:PresentationThisSlide" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Sl~ide Show From This Slide</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Remote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Impress R~emote</value>

@@ -5196,6 +5196,31 @@ SfxVoidItem Presentation SID_PRESENTATION
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem PresentationThisSlide SID_PRESENTATION_THIS_SLIDE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem PresentationDialog SID_PRESENTATION_DLG
 ()
 [
