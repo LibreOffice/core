@@ -1676,6 +1676,7 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     //draview
     rSet.Put(SfxBoolItem(SID_DIAMODE, false));
     rSet.Put(SfxBoolItem(SID_OUTLINEMODE, false));
+    rSet.Put(SfxBoolItem(SID_JOCKEYMODE, false));
     if (mePageKind == PK_NOTES)
     {
         rSet.Put(SfxBoolItem(SID_DRAWINGMODE, false));
@@ -1720,6 +1721,9 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
 
         rSet.ClearItem( SID_DIAMODE );
         rSet.DisableItem( SID_DIAMODE );
+
+        rSet.ClearItem( SID_JOCKEYMODE );
+        rSet.DisableItem( SID_JOCKEYMODE );
     }
 
     if (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
@@ -1736,6 +1740,9 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
 
         rSet.ClearItem( SID_HANDOUTMODE );
         rSet.DisableItem( SID_HANDOUTMODE );
+
+        rSet.ClearItem( SID_JOCKEYMODE );
+        rSet.DisableItem( SID_JOCKEYMODE );
     }
 
     svx::ExtrusionBar::getState( mpDrawView, rSet );

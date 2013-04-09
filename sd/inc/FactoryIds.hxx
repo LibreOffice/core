@@ -34,7 +34,8 @@ enum ViewShellFactoryIds
     DRAW_FACTORY_ID = 1,
     SLIDE_SORTER_FACTORY_ID = 2,
     OUTLINE_FACTORY_ID = 3,
-    PRESENTATION_FACTORY_ID = 4
+    PRESENTATION_FACTORY_ID = 4,
+    SLIDE_JOCKEY_FACTORY_ID = 5
 };
 
 } // end of namespace sd

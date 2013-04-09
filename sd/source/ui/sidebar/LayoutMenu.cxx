@@ -273,9 +273,6 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
     return ui::LayoutSize(nPreferredHeight,nPreferredHeight,nPreferredHeight);
 }
 
-
-
-
 void LayoutMenu::Paint (const Rectangle& rRect)
 {
     if (mbSelectionUpdatePending)
@@ -459,6 +456,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             case ViewShell::ST_IMPRESS:
             case ViewShell::ST_NOTES:
             case ViewShell::ST_SLIDE_SORTER:
+            case ViewShell::ST_JOCKEY_SORTER:
                 pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
                 break;
             default:

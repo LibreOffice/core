@@ -1186,6 +1186,7 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
             break;
 
         case ViewShell::ST_SLIDE_SORTER:
+        case ViewShell::ST_JOCKEY_SORTER:
             mpToolBarManager->AddToolBar(
                 ToolBarManager::TBG_PERMANENT,
                 ToolBarManager::msViewerToolBar);

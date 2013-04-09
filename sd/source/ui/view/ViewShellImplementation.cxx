@@ -307,6 +307,9 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
         case ViewShell::ST_SLIDE_SORTER:
             return SLIDE_SORTER_FACTORY_ID;
 
+        case ViewShell::ST_JOCKEY_SORTER:
+            return SLIDE_JOCKEY_FACTORY_ID;
+
         case ViewShell::ST_PRESENTATION:
             return PRESENTATION_FACTORY_ID;
 

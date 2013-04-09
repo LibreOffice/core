@@ -44,6 +44,7 @@ static sal_uInt16 SidArraySpell[] = {
             SID_DRAWINGMODE,
             SID_OUTLINEMODE,
             SID_DIAMODE,
+            SID_JOCKEYMODE,
             SID_NOTESMODE,
             SID_HANDOUTMODE,
             0 };

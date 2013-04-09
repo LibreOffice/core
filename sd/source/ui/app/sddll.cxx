@@ -114,6 +114,8 @@ void SdDLL::RegisterFactorys()
             ::sd::OUTLINE_FACTORY_ID);
         ::sd::PresentationViewShellBase::RegisterFactory (
             ::sd::PRESENTATION_FACTORY_ID);
+        ::sd::SlideJockeyViewShellBase::RegisterFactory (
+            ::sd::SLIDE_JOCKEY_FACTORY_ID);
     }
     if (SvtModuleOptions().IsDraw())
     {

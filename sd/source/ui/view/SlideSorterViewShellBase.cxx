@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlideSorterViewShellBase.hxx"
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
@@ -34,6 +33,7 @@ TYPEINIT1(SlideSorterViewShellBase, ViewShellBase);
 // new SlideSorterViewShellBase object has been constructed.
 
 SfxViewFactory* SlideSorterViewShellBase::pFactory;
+
 SfxViewShell* SlideSorterViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
@@ -42,45 +42,33 @@ SfxViewShell* SlideSorterViewShellBase::CreateInstance (
     return pBase;
 }
 
-
-
-
 void SlideSorterViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
     pFactory = new SfxViewFactory(&CreateInstance,nPrio,"SlideSorter");
     InitFactory();
 }
 
+void SlideSorterViewShellBase::InitFactory() { SFX_VIEW_REGISTRATION(DrawDocShell); }
 
+TYPEINIT1(SlideJockeyViewShellBase, ViewShellBase);
 
+SfxViewFactory* SlideJockeyViewShellBase::pFactory;
 
-void SlideSorterViewShellBase::InitFactory()
+SfxViewShell* SlideJockeyViewShellBase::CreateInstance (
+    SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
-    SFX_VIEW_REGISTRATION(DrawDocShell);
+    SlideJockeyViewShellBase* pBase = new SlideJockeyViewShellBase(pFrame, pOldView);
+    pBase->LateInit(framework::FrameworkHelper::msJockeySorterURL);
+    return pBase;
 }
 
-
-
-
-
-
-
-SlideSorterViewShellBase::SlideSorterViewShellBase (
-    SfxViewFrame* _pFrame,
-    SfxViewShell* pOldShell)
-    : ImpressViewShellBase (_pFrame, pOldShell)
+void SlideJockeyViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
+    pFactory = new SfxViewFactory(&CreateInstance,nPrio,"SlideJockey");
+    InitFactory();
 }
 
-
-
-
-SlideSorterViewShellBase::~SlideSorterViewShellBase (void)
-{
-}
-
-
-
+void SlideJockeyViewShellBase::InitFactory() { SFX_VIEW_REGISTRATION(DrawDocShell); }
 
 } // end of namespace sd
 

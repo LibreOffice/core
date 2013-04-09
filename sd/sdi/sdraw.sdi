@@ -1958,6 +1958,34 @@ SfxBoolItem DiaMode SID_DIAMODE
     GroupId = GID_VIEW;
 ]
 
+//--------------------------------------------------------------------------
+SfxBoolItem JockeyMode SID_JOCKEYMODE
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem Dismantle SID_DISMANTLE
 ()
 [

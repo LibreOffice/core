@@ -49,9 +49,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-
 namespace {
-
 
 //----- CallbackCaller --------------------------------------------------------
 
@@ -111,8 +109,6 @@ private:
 };
 
 
-
-
 //----- LifetimeController ----------------------------------------------------
 
 typedef ::cppu::WeakComponentImplHelper1 <
@@ -156,9 +152,6 @@ private:
     */
     void Update (void);
 };
-
-
-
 } // end of anonymous namespace
 
 namespace sd { namespace framework {
@@ -205,6 +198,7 @@ const OUString FrameworkHelper::msOutlineViewURL( msViewURLPrefix + "OutlineView
 const OUString FrameworkHelper::msNotesViewURL( msViewURLPrefix + "NotesView");
 const OUString FrameworkHelper::msHandoutViewURL( msViewURLPrefix + "HandoutView");
 const OUString FrameworkHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
+const OUString FrameworkHelper::msJockeySorterURL( msViewURLPrefix + "JockeySorter");
 const OUString FrameworkHelper::msPresentationViewURL( msViewURLPrefix + "PresentationView");
 const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView");
 
@@ -296,9 +290,6 @@ public:
     ViewURLMap (void) {}
 };
 
-
-
-
 //----- Framework::DiposeListener ---------------------------------------------
 
 namespace {
@@ -324,9 +315,6 @@ private:
     ::boost::shared_ptr<FrameworkHelper> mpHelper;
 };
 
-
-
-
 //----- FrameworkHelper::Deleter ----------------------------------------------
 
 class FrameworkHelper::Deleter
@@ -338,17 +326,11 @@ public:
     }
 };
 
-
-
-
 //----- FrameworkHelper -------------------------------------------------------
 
 ::boost::scoped_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new ViewURLMap());
 
-
 FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
-
-
 
 ::boost::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (
     const Reference<frame::XController>& rxController)
@@ -369,9 +351,6 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
 
     return ::boost::shared_ptr<FrameworkHelper>();
 }
-
-
-
 
 ::boost::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
 {
@@ -402,9 +381,6 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
     return pHelper;
 }
 
-
-
-
 void FrameworkHelper::DisposeInstance (ViewShellBase& rBase)
 {
     InstanceMap::iterator iHelper (maInstanceMap.find(&rBase));
@@ -414,18 +390,12 @@ void FrameworkHelper::DisposeInstance (ViewShellBase& rBase)
     }
 }
 
-
-
-
 void FrameworkHelper::ReleaseInstance (ViewShellBase& rBase)
 {
     InstanceMap::iterator iHelper (maInstanceMap.find(&rBase));
     if (iHelper != maInstanceMap.end())
         maInstanceMap.erase(iHelper);
 }
-
-
-
 
 FrameworkHelper::FrameworkHelper (ViewShellBase& rBase)
     : mrBase(rBase),
@@ -442,23 +412,14 @@ FrameworkHelper::FrameworkHelper (ViewShellBase& rBase)
     new LifetimeController(mrBase);
 }
 
-
-
-
 void FrameworkHelper::Initialize (void)
 {
     mxDisposeListener = new DisposeListener(shared_from_this());
 }
 
-
-
-
 FrameworkHelper::~FrameworkHelper (void)
 {
 }
-
-
-
 
 void FrameworkHelper::Dispose (void)
 {
@@ -467,16 +428,10 @@ void FrameworkHelper::Dispose (void)
     mxConfigurationController = NULL;
 }
 
-
-
-
 bool FrameworkHelper::IsValid (void)
 {
     return mxConfigurationController.is();
 }
-
-
-
 
 ::boost::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const OUString& rsPaneURL)
 {
@@ -487,16 +442,10 @@ bool FrameworkHelper::IsValid (void)
     return lcl_getViewShell( lcl_getFirstViewInPane( mxConfigurationController, xPaneId ) );
 }
 
-
-
-
 ::boost::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const Reference<XView>& rxView)
 {
     return lcl_getViewShell( rxView.get() );
 }
-
-
-
 
 Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneOrViewId)
 {
@@ -526,9 +475,6 @@ Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneO
 
     return xView;
 }
-
-
-
 
 Reference<XResourceId> FrameworkHelper::RequestView (
     const OUString& rsResourceURL,
@@ -562,9 +508,6 @@ Reference<XResourceId> FrameworkHelper::RequestView (
     return xViewId;
 }
 
-
-
-
 ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
 {
     if (mpViewURLMap->empty())
@@ -575,6 +518,7 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
         (*mpViewURLMap)[msNotesViewURL] = ViewShell::ST_NOTES;
         (*mpViewURLMap)[msHandoutViewURL] = ViewShell::ST_HANDOUT;
         (*mpViewURLMap)[msSlideSorterURL] = ViewShell::ST_SLIDE_SORTER;
+        (*mpViewURLMap)[msJockeySorterURL] = ViewShell::ST_JOCKEY_SORTER;
         (*mpViewURLMap)[msPresentationViewURL] = ViewShell::ST_PRESENTATION;
         (*mpViewURLMap)[msSidebarViewURL] = ViewShell::ST_SIDEBAR;
     }
@@ -584,9 +528,6 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
     else
         return ViewShell::ST_NONE;
 }
-
-
-
 
 OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
 {
@@ -598,15 +539,13 @@ OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
         case ViewShell::ST_NOTES : return msNotesViewURL;
         case ViewShell::ST_HANDOUT : return msHandoutViewURL;
         case ViewShell::ST_SLIDE_SORTER : return msSlideSorterURL;
+        case ViewShell::ST_JOCKEY_SORTER : return msJockeySorterURL;
         case ViewShell::ST_PRESENTATION : return msPresentationViewURL;
         case ViewShell::ST_SIDEBAR : return msSidebarViewURL;
         default:
             return OUString();
     }
 }
-
-
-
 
 void FrameworkHelper::HandleModeChangeSlot (
     sal_uLong nSlotId,
@@ -623,6 +562,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         case SID_NOTESMODE:
         case SID_HANDOUTMODE:
         case SID_DIAMODE:
+        case SID_JOCKEYMODE:
         case SID_OUTLINEMODE:
         {
             const SfxItemSet* pRequestArguments = rRequest.GetArgs();
@@ -668,8 +608,12 @@ void FrameworkHelper::HandleModeChangeSlot (
                     sRequestedView = FrameworkHelper::msHandoutViewURL;
                     break;
 
-                case SID_SLIDE_SORTER_MULTI_PANE_GUI:
+                case SID_JOCKEYMODE:
+                    sRequestedView = FrameworkHelper::msJockeySorterURL;
+                    break;
+
                 case SID_DIAMODE:
+                case SID_SLIDE_SORTER_MULTI_PANE_GUI:
                     sRequestedView = FrameworkHelper::msSlideSorterURL;
                     break;
 
@@ -711,9 +655,6 @@ void FrameworkHelper::HandleModeChangeSlot (
     }
 }
 
-
-
-
 void FrameworkHelper::RunOnConfigurationEvent(
     const OUString& rsEventType,
     const Callback& rCallback)
@@ -723,9 +664,6 @@ void FrameworkHelper::RunOnConfigurationEvent(
         FrameworkHelperAllPassFilter(),
         rCallback);
 }
-
-
-
 
 void FrameworkHelper::RunOnResourceActivation(
     const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
@@ -757,9 +695,6 @@ private:
     bool& mrFlag;
 };
 
-
-
-
 void FrameworkHelper::RequestSynchronousUpdate (void)
 {
     rtl::Reference<ConfigurationController> pCC (
@@ -767,9 +702,6 @@ void FrameworkHelper::RequestSynchronousUpdate (void)
     if (pCC.is())
         pCC->RequestSynchronousUpdate();
 }
-
-
-
 
 void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
 {
@@ -793,16 +725,10 @@ void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
     }
 }
 
-
-
-
 void FrameworkHelper::WaitForUpdate (void) const
 {
     WaitForEvent(msConfigurationUpdateEndEvent);
 }
-
-
-
 
 void FrameworkHelper::RunOnEvent(
     const OUString& rsEventType,
@@ -812,17 +738,11 @@ void FrameworkHelper::RunOnEvent(
     new CallbackCaller(mrBase,rsEventType,rFilter,rCallback);
 }
 
-
-
-
 void FrameworkHelper::disposing (const lang::EventObject& rEventObject)
 {
     if (rEventObject.Source == mxConfigurationController)
         mxConfigurationController = NULL;
 }
-
-
-
 
 void FrameworkHelper::UpdateConfiguration (void)
 {
@@ -844,9 +764,6 @@ void FrameworkHelper::UpdateConfiguration (void)
     }
 }
 
-
-
-
 OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxResourceId)
 {
     OUString sString;
@@ -866,16 +783,10 @@ OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxRe
     return sString;
 }
 
-
-
-
 Reference<XResourceId> FrameworkHelper::CreateResourceId (const OUString& rsResourceURL)
 {
     return new ::sd::framework::ResourceId(rsResourceURL);
 }
-
-
-
 
 Reference<XResourceId> FrameworkHelper::CreateResourceId (
     const OUString& rsResourceURL,
@@ -883,9 +794,6 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
 {
     return new ::sd::framework::ResourceId(rsResourceURL, rsAnchorURL);
 }
-
-
-
 
 Reference<XResourceId> FrameworkHelper::CreateResourceId (
     const OUString& rsResourceURL,
@@ -900,13 +808,6 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
         return new ::sd::framework::ResourceId(rsResourceURL);
 }
 
-
-
-
-
-
-
-
 //----- FrameworkHelper::DisposeListener --------------------------------------
 
 FrameworkHelper::DisposeListener::DisposeListener (
@@ -919,15 +820,9 @@ FrameworkHelper::DisposeListener::DisposeListener (
         xComponent->addEventListener(this);
 }
 
-
-
-
 FrameworkHelper::DisposeListener::~DisposeListener (void)
 {
 }
-
-
-
 
 void SAL_CALL FrameworkHelper::DisposeListener::disposing (void)
 {
@@ -938,18 +833,12 @@ void SAL_CALL FrameworkHelper::DisposeListener::disposing (void)
     mpHelper.reset();
 }
 
-
-
-
 void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObject& rEventObject)
     throw(RuntimeException, std::exception)
 {
     if (mpHelper.get() != NULL)
         mpHelper->disposing(rEventObject);
 }
-
-
-
 
 //===== FrameworkHelperResourceIdFilter =======================================
 
@@ -958,7 +847,6 @@ FrameworkHelperResourceIdFilter::FrameworkHelperResourceIdFilter (
     : mxResourceId(rxResourceId)
 {
 }
-
 
 } } // end of namespace sd::framework
 
@@ -1004,15 +892,9 @@ CallbackCaller::CallbackCaller (
     }
 }
 
-
-
-
 CallbackCaller::~CallbackCaller (void)
 {
 }
-
-
-
 
 void CallbackCaller::disposing (void)
 {
@@ -1031,9 +913,6 @@ void CallbackCaller::disposing (void)
     }
 }
 
-
-
-
 void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
 {
@@ -1043,9 +922,6 @@ void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
         maCallback(false);
     }
 }
-
-
-
 
 void SAL_CALL CallbackCaller::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -1067,9 +943,6 @@ void SAL_CALL CallbackCaller::notifyConfigurationChange (
         }
     }
 }
-
-
-
 
 //----- LifetimeController -------------------------------------------------
 
@@ -1096,23 +969,14 @@ LifetimeController::LifetimeController (::sd::ViewShellBase& rBase)
     }
 }
 
-
-
-
 LifetimeController::~LifetimeController (void)
 {
     OSL_ASSERT(!mbListeningToController && !mbListeningToViewShellBase);
 }
 
-
-
-
 void LifetimeController::disposing (void)
 {
 }
-
-
-
 
 void SAL_CALL LifetimeController::disposing (const lang::EventObject& rEvent)
     throw(RuntimeException, std::exception)
@@ -1121,9 +985,6 @@ void SAL_CALL LifetimeController::disposing (const lang::EventObject& rEvent)
     mbListeningToController = false;
     Update();
 }
-
-
-
 
 void LifetimeController::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 {
@@ -1136,9 +997,6 @@ void LifetimeController::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rH
         release();
     }
 }
-
-
-
 
 void LifetimeController::Update (void)
 {
@@ -1162,8 +1020,6 @@ void LifetimeController::Update (void)
         ::sd::framework::FrameworkHelper::ReleaseInstance(mrBase);
     }
 }
-
-
 
 } // end of anonymous namespace.
 

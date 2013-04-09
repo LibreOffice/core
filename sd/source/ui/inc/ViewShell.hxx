@@ -91,6 +91,7 @@ public:
         ST_HANDOUT,
         ST_OUTLINE,
         ST_SLIDE_SORTER,
+        ST_JOCKEY_SORTER,
         ST_PRESENTATION,
         ST_SIDEBAR
     };
