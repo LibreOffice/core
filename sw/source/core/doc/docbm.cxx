@@ -127,7 +127,7 @@ namespace
             rMarks.begin(),
             rMarks.end(),
             rPos,
-            boost::bind(&IMark::StartsAfter, _2, _1)); // finds the first that is starting after
+            sw::mark::CompareIMarkStartsAfter());
         if(pMarkAfter == rMarks.end()) return NULL;
         return pMarkAfter->get();
     };
@@ -141,7 +141,7 @@ namespace
             rMarks.begin(),
             rMarks.end(),
             rPos,
-            boost::bind(&IMark::StartsAfter, _2, _1));
+            sw::mark::CompareIMarkStartsAfter());
         vCandidates.reserve(pCandidatesEnd - rMarks.begin());
         // only marks ending before are candidates
         remove_copy_if(
@@ -205,7 +205,7 @@ namespace
         for(IDocumentMarkAccess::iterator_t ppCurrentMark = lower_bound(
                 rMarks.begin(), rMarks.end(),
                 rPos,
-                boost::bind(&IMark::StartsBefore, _1, _2));
+                sw::mark::CompareIMarkStartsBefore());
             ppCurrentMark != rMarks.end();
             ++ppCurrentMark)
         {
@@ -756,7 +756,7 @@ namespace sw { namespace mark
         iterator_t pMarkLow = lower_bound(
             m_vMarks.begin(), m_vMarks.end(),
             pMark->GetMarkStart(),
-            boost::bind(&IMark::StartsBefore, _1, _2));
+            sw::mark::CompareIMarkStartsBefore());
         // finds the first Mark that pMark is starting before
         // (pMark < pMarkHigh)
         //iterator_t pMarkHigh = upper_bound(

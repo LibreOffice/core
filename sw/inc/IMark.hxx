@@ -23,6 +23,7 @@
 #include <calbck.hxx>
 #include <pam.hxx>
 #include <boost/operators.hpp>
+#include <boost/shared_ptr.hpp>
 #include <map>
 #include "swdll.hxx"
 
@@ -36,6 +37,7 @@ struct SwPosition;
 
 namespace sw { namespace mark
 {
+
     class SAL_DLLPUBLIC_EXPORT IMark
         : virtual public SwModify // inherited as interface
         , public ::boost::totally_ordered<IMark>
@@ -108,6 +110,53 @@ namespace sw { namespace mark
             virtual bool IsChecked() const =0;
             virtual void SetChecked(bool checked) =0;
     };
+
+    // Apple llvm-g++ 4.2.1 with _GLIBCXX_DEBUG won't eat boost::bind for this
+    // Neither will MSVC 2008 with _DEBUG
+    struct CompareIMarkStartsAfter
+    {
+        bool operator()(SwPosition const& rPos,
+                        boost::shared_ptr<sw::mark::IMark> const& pMark)
+        {
+            return pMark->StartsAfter(rPos);
+        }
+#ifdef DBG_UTIL
+        bool operator()(boost::shared_ptr<sw::mark::IMark> const& pMark,
+                        SwPosition const& rPos)
+        {
+            return pMark->StartsBefore(rPos);
+        }
+        bool operator()(boost::shared_ptr<sw::mark::IMark> const& pMark1,
+                        boost::shared_ptr<sw::mark::IMark> const& pMark2)
+        {
+            return (*pMark1) < (*pMark2);
+        }
+#endif
+    };
+
+    // MSVC 2008 with _DEBUG calls this with parameters in wrong order
+    // so it needs 3 overloads...
+    struct CompareIMarkStartsBefore
+    {
+        bool operator()(boost::shared_ptr<sw::mark::IMark> const& pMark,
+                        SwPosition const& rPos)
+        {
+            return pMark->StartsBefore(rPos);
+        }
+#ifdef DBG_UTIL
+        bool operator()(SwPosition const& rPos,
+                        boost::shared_ptr<sw::mark::IMark> const& pMark)
+        {
+            return pMark->StartsAfter(rPos);
+        }
+        bool operator()(boost::shared_ptr<sw::mark::IMark> const& pMark1,
+                        boost::shared_ptr<sw::mark::IMark> const& pMark2)
+        {
+            return (*pMark1) < (*pMark2);
+        }
+#endif
+    };
+
 }}
 #endif
 

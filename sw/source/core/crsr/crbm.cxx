@@ -20,7 +20,6 @@
 #include "crsrsh.hxx"
 #include "ndtxt.hxx"
 #include <docary.hxx>
-#include <boost/bind.hpp>
 
 #include "IMark.hxx"
 #include "callnk.hxx"
@@ -135,11 +134,11 @@ bool SwCrsrShell::GoNextBookmark()
     IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
     IDocumentMarkAccess::container_t vCandidates;
     remove_copy_if(
-        upper_bound(
+        upper_bound( // finds the first that is starting after
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
             *GetCrsr()->GetPoint(),
-            boost::bind(&::sw::mark::IMark::StartsAfter, _2, _1)), // finds the first that is starting after
+            sw::mark::CompareIMarkStartsAfter()),
         pMarkAccess->getBookmarksEnd(),
         back_inserter(vCandidates),
         &lcl_IsInvisibleBookmark);
@@ -175,7 +174,7 @@ bool SwCrsrShell::GoPrevBookmark()
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
             *GetCrsr()->GetPoint(),
-            boost::bind(&::sw::mark::IMark::StartsAfter, _2, _1)),
+            sw::mark::CompareIMarkStartsAfter()),
         back_inserter(vCandidates),
         &lcl_IsInvisibleBookmark);
     sort(

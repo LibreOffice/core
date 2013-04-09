@@ -31,7 +31,6 @@
 #include <IMark.hxx>
 #include <numrule.hxx>
 #include <swerror.h>
-#include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -173,7 +172,7 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
         pMarkAccess->getMarksBegin(),
         pMarkAccess->getMarksEnd(),
         rPos,
-        ::boost::bind(&::sw::mark::IMark::StartsBefore, _1, _2)); // find the first Mark that does not start before
+        sw::mark::CompareIMarkStartsBefore()); // find the first Mark that does not start before
     if(ppBkmk != pMarkAccess->getMarksEnd())
         return ppBkmk - pMarkAccess->getMarksBegin();
     return -1;

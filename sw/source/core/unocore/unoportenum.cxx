@@ -56,7 +56,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <set>
 #include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
 #include <algorithm>
 #include <stack>
 
@@ -124,7 +123,6 @@ namespace
     };
     typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
 
-
     static void lcl_FillBookmarkArray(SwDoc& rDoc, SwUnoCrsr& rUnoCrsr, SwXBookmarkPortion_ImplList& rBkmArr)
     {
         IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
@@ -138,7 +136,7 @@ namespace
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
             aEndOfPara,
-            boost::bind(&::sw::mark::IMark::StartsAfter, _2, _1)); // finds the first that starts after
+            sw::mark::CompareIMarkStartsAfter()); // finds the first that starts after
 
         // search for all bookmarks that start or end in this paragraph
         const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
