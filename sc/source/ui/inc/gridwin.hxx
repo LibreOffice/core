@@ -114,6 +114,8 @@ private:
 
 private:
     ScViewData*             pViewData;
+    ScDocument*             pScGridDocument;
+    SCTAB                   TabNumber;
     ScSplitPos              eWhich;
     ScHSplitPos             eHWhich;
     ScVSplitPos             eVWhich;
