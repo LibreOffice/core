@@ -42,21 +42,6 @@ public:
     const OUString& getByIndex(size_t index) const;
 };
 
-class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
-{
-    ScDocument& mrDoc;
-    boost::ptr_vector<ScOrcusSheet> maSheets;
-    ScOrcusSharedStrings maSharedStrings;
-
-public:
-    ScOrcusFactory(ScDocument& rDoc);
-
-    virtual orcus::spreadsheet::iface::import_sheet* append_sheet(const char *sheet_name, size_t sheet_name_length);
-    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length);
-    virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings();
-    virtual orcus::spreadsheet::iface::import_styles* get_styles();
-};
-
 class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 {
     ScDocument& mrDoc;
@@ -163,6 +148,22 @@ public:
     virtual void set_cell_style_xf(size_t index);
     virtual void set_cell_style_builtin(size_t index);
     virtual size_t commit_cell_style();
+};
+
+class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
+{
+    ScDocument& mrDoc;
+    boost::ptr_vector<ScOrcusSheet> maSheets;
+    ScOrcusSharedStrings maSharedStrings;
+    ScOrcusStyles maStyles;
+
+public:
+    ScOrcusFactory(ScDocument& rDoc);
+
+    virtual orcus::spreadsheet::iface::import_sheet* append_sheet(const char *sheet_name, size_t sheet_name_length);
+    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length);
+    virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings();
+    virtual orcus::spreadsheet::iface::import_styles* get_styles();
 };
 
 #endif

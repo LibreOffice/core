@@ -73,7 +73,7 @@ orcus::spreadsheet::iface::import_shared_strings* ScOrcusFactory::get_shared_str
 orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
 {
     // We don't support it yet.
-    return new ScOrcusStyles;
+    return &maStyles;
 }
 
 ScOrcusSheet::ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusSharedStrings& rSharedStrings) :
@@ -239,7 +239,7 @@ const OUString& ScOrcusSharedStrings::getByIndex(size_t nIndex) const
     if(nIndex < maSharedStrings.size())
         return maSharedStrings[nIndex];
 
-    throw std::exception();
+    return EMPTY_OUSTRING;
 }
 
 void ScOrcusSharedStrings::set_segment_bold(bool /*b*/)
