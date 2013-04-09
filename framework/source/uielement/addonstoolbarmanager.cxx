@@ -74,7 +74,6 @@ namespace framework
 {
 
 static const char   TOOLBOXITEM_SEPARATOR_STR[] = "private:separator";
-static const sal_uInt16 TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
 
 AddonsToolBarManager::AddonsToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,
@@ -243,7 +242,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
         if ( IsCorrectContext( aModuleIdentifier, aContext ))
         {
-            if ( aURL.equalsAsciiL( TOOLBOXITEM_SEPARATOR_STR, TOOLBOXITEM_SEPARATOR_STR_LEN ))
+            if ( aURL == TOOLBOXITEM_SEPARATOR_STR )
             {
                 sal_uInt16 nCount = m_pToolBar->GetItemCount();
                 if ( nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != TOOLBOXITEM_SEPARATOR ) && nElements > 0 )

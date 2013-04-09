@@ -130,7 +130,6 @@ void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) t
 // class SfxMailModel -----------------------------------------------
 
 static const char       PDF_DOCUMENT_TYPE[]   = "pdf_Portable_Document_Format";
-static const sal_uInt32 PDF_DOCUMENT_TYPE_LEN = 28;
 
 void SfxMailModel::ClearList( AddressList_Impl* pList )
 {
@@ -212,7 +211,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                             uno::Sequence< beans::PropertyValue > aPropsForDialog(1);
                             uno::Reference< document::XExporter > xExporter( xFilterDialog, uno::UNO_QUERY );
 
-                            if ( rType.equalsAsciiL( PDF_DOCUMENT_TYPE, PDF_DOCUMENT_TYPE_LEN ))
+                            if ( rType == PDF_DOCUMENT_TYPE )
                             {
                                 //add an internal property, used to tell the dialog we want to set a different
                                 //string for the ok button
@@ -300,7 +299,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     OUString& rFileNamePath )
 {
     SaveResult  eRet( SAVE_ERROR );
-    bool        bSendAsPDF = (rType.equalsAsciiL( PDF_DOCUMENT_TYPE, PDF_DOCUMENT_TYPE_LEN ));
+    bool        bSendAsPDF = ( rType == PDF_DOCUMENT_TYPE );
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = ::comphelper::getProcessServiceFactory();
     css::uno::Reference< css::uno::XComponentContext > xContext  = ::comphelper::getProcessComponentContext();

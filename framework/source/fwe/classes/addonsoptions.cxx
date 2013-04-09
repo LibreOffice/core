@@ -51,7 +51,6 @@ using namespace ::com::sun::star;
 #define ROOTNODE_ADDONMENU                              OUString("Office.Addons" )
 #define PATHDELIMITER                                   OUString("/"             )
 #define SEPARATOR_URL_STR                               "private:separator"
-#define SEPARATOR_URL_LEN                               17
 #define SEPARATOR_URL                                   OUString( SEPARATOR_URL_STR )
 
 #define PROPERTYNAME_URL                                ADDONSMENUITEM_PROPERTYNAME_URL
@@ -1100,7 +1099,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
         }
     }
     else if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_URL ] >>= aStrValue ) &&
-              aStrValue.equalsAsciiL( SEPARATOR_URL_STR, SEPARATOR_URL_LEN ))
+              aStrValue == SEPARATOR_URL_STR )
     {
         // Separator
         aMenuItem[ OFFSET_MENUITEM_URL              ].Value <<= aStrValue;

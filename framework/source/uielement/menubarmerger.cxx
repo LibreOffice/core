@@ -24,21 +24,14 @@
 using namespace ::com::sun::star;
 
 static const char SEPARATOR_STRING[]               = "private:separator";
-static const sal_uInt32 SEPARATOR_STRING_LEN       = 17;
 
 static const char MERGECOMMAND_ADDAFTER[]          = "AddAfter";
-static const sal_uInt32 MERGECOMMAND_ADDAFTER_LEN  = 8;
 static const char MERGECOMMAND_ADDBEFORE[]         = "AddBefore";
-static const sal_uInt32 MERGECOMMAND_ADDBEFORE_LEN = 9;
 static const char MERGECOMMAND_REPLACE[]           = "Replace";
-static const sal_uInt32 MERGECOMMAND_REPLACE_LEN   = 7;
 static const char MERGECOMMAND_REMOVE[]            = "Remove";
-static const sal_uInt32 MERGECOMMAND_REMOVE_LEN    = 6;
 
 static const char MERGEFALLBACK_ADDPATH[]           = "AddPath";
-static const char MERGEFALLBACK_ADDPATH_LEN         = 7;
 static const char MERGEFALLBACK_IGNORE[]            = "Ignore";
-static const char MERGEFALLBACK_IGNORE_LEN          = 6;
 
 
 namespace framework
@@ -176,7 +169,7 @@ bool MenuBarMerger::CreateSubMenu(
 
         if ( IsCorrectContext( rMenuItem.aContext, rModuleIdentifier ))
         {
-            if ( rMenuItem.aURL.equalsAsciiL( SEPARATOR_STRING, SEPARATOR_STRING_LEN ))
+            if ( rMenuItem.aURL == SEPARATOR_STRING )
             {
                 pSubMenu->InsertSeparator();
             }
@@ -217,7 +210,7 @@ bool MenuBarMerger::MergeMenuItems(
 
         if ( IsCorrectContext( rMenuItem.aContext, rModuleIdentifier ))
         {
-            if ( rMenuItem.aURL.equalsAsciiL( SEPARATOR_STRING, SEPARATOR_STRING_LEN ))
+            if ( rMenuItem.aURL == SEPARATOR_STRING )
             {
                 pMenu->InsertSeparator(OString(), nPos+nModIndex+nIndex);
             }
@@ -288,21 +281,21 @@ bool MenuBarMerger::ProcessMergeOperation(
 {
     sal_uInt16 nModIndex( 0 );
 
-    if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDBEFORE, MERGECOMMAND_ADDBEFORE_LEN ))
+    if ( rMergeCommand == MERGECOMMAND_ADDBEFORE )
     {
         nModIndex = 0;
         return MergeMenuItems( pMenu, nPos, nModIndex, nItemId, rModuleIdentifier, rAddonMenuItems );
     }
-    else if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDAFTER, MERGECOMMAND_ADDAFTER_LEN ))
+    else if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
     {
         nModIndex = 1;
         return MergeMenuItems( pMenu, nPos, nModIndex, nItemId, rModuleIdentifier, rAddonMenuItems );
     }
-    else if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_REPLACE, MERGECOMMAND_REPLACE_LEN ))
+    else if ( rMergeCommand == MERGECOMMAND_REPLACE )
     {
         return ReplaceMenuItem( pMenu, nPos, nItemId, rModuleIdentifier, rAddonMenuItems );
     }
-    else if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_REMOVE, MERGECOMMAND_REMOVE_LEN ))
+    else if ( rMergeCommand == MERGECOMMAND_REMOVE )
     {
         return RemoveMenuItems( pMenu, nPos, rMergeCommandParameter );
     }
@@ -319,13 +312,13 @@ bool MenuBarMerger::ProcessFallbackOperation(
     const OUString&                  rModuleIdentifier,
     const AddonMenuContainer&               rAddonMenuItems )
 {
-    if (( rMergeFallback.equalsAsciiL( MERGEFALLBACK_IGNORE, MERGEFALLBACK_IGNORE_LEN )) ||
-        ( rMergeCommand.equalsAsciiL(  MERGECOMMAND_REPLACE, MERGECOMMAND_REPLACE_LEN )) ||
-        ( rMergeCommand.equalsAsciiL(  MERGECOMMAND_REMOVE, MERGECOMMAND_REMOVE_LEN   )) )
+    if (( rMergeFallback == MERGEFALLBACK_IGNORE ) ||
+        ( rMergeCommand  == MERGECOMMAND_REPLACE ) ||
+        ( rMergeCommand  == MERGECOMMAND_REMOVE  ) )
     {
         return true;
     }
-    else if ( rMergeFallback.equalsAsciiL( MERGEFALLBACK_ADDPATH, MERGEFALLBACK_ADDPATH_LEN ))
+    else if ( rMergeFallback == MERGEFALLBACK_ADDPATH )
     {
         Menu*            pCurrMenu( aRefPathInfo.pPopupMenu );
         sal_Int32        nLevel( aRefPathInfo.nLevel );
@@ -342,7 +335,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
                     const AddonMenuItem& rMenuItem = rAddonMenuItems[i];
                     if ( IsCorrectContext( rMenuItem.aContext, rModuleIdentifier ))
                     {
-                        if ( rMenuItem.aURL.equalsAsciiL( SEPARATOR_STRING, SEPARATOR_STRING_LEN ))
+                        if ( rMenuItem.aURL == SEPARATOR_STRING )
                             pCurrMenu->InsertSeparator(OString(), MENU_APPEND);
                         else
                         {
@@ -398,21 +391,21 @@ void MenuBarMerger::GetMenuEntry(
     for ( sal_Int32 i = 0; i < rAddonMenuEntry.getLength(); i++ )
     {
         OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
-        if ( aMenuEntryPropName.equalsAsciiL( ADDONSMENUITEM_STRING_URL, ADDONSMENUITEM_URL_LEN ))
+        if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_URL )
             rAddonMenuEntry[i].Value >>= rAddonMenuItem.aURL;
-        else if ( aMenuEntryPropName.equalsAsciiL( ADDONSMENUITEM_STRING_TITLE, ADDONSMENUITEM_TITLE_LEN ))
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TITLE )
             rAddonMenuEntry[i].Value >>= rAddonMenuItem.aTitle;
-        else if ( aMenuEntryPropName.equalsAsciiL( ADDONSMENUITEM_STRING_TARGET, ADDONSMENUITEM_TARGET_LEN ))
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TARGET )
             rAddonMenuEntry[i].Value >>= rAddonMenuItem.aTarget;
-        else if ( aMenuEntryPropName.equalsAsciiL( ADDONSMENUITEM_STRING_SUBMENU, ADDONSMENUITEM_SUBMENU_LEN ))
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_SUBMENU )
         {
             uno::Sequence< uno::Sequence< beans::PropertyValue > > aSubMenu;
             rAddonMenuEntry[i].Value >>= aSubMenu;
             GetSubMenu( aSubMenu, rAddonMenuItem.aSubMenu );
         }
-        else if ( aMenuEntryPropName.equalsAsciiL( ADDONSMENUITEM_STRING_CONTEXT, ADDONSMENUITEM_CONTEXT_LEN ))
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_CONTEXT )
             rAddonMenuEntry[i].Value >>= rAddonMenuItem.aContext;
-        else if ( aMenuEntryPropName.equalsAsciiL( ADDONSMENUITEM_STRING_IMAGEIDENTIFIER, ADDONSMENUITEM_IMAGEIDENTIFIER_LEN ))
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_IMAGEIDENTIFIER )
             rAddonMenuEntry[i].Value >>= rAddonMenuItem.aImageId;
     }
 }
