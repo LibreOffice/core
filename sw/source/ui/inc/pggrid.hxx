@@ -30,7 +30,6 @@
  --------------------------------------------------------------------*/
 class SwTextGridPage: public SfxTabPage
 {
-    FixedLine*       m_pGridTypeFL;
     RadioButton*     m_pNoGridRB;
     RadioButton*     m_pLinesGridRB;
     RadioButton*     m_pCharsGridRB;
