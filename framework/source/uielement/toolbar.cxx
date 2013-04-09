@@ -26,17 +26,11 @@ namespace framework
 
 ToolBar::ToolBar( Window* pParent, WinBits nWinBits ) :
     ToolBox( pParent, nWinBits )
-    ,   m_pToolBarManager( 0 )
 {
 }
 
 ToolBar::~ToolBar()
 {
-}
-
-void ToolBar::SetToolBarManager( ToolBarManager* pTbMgr )
-{
-    m_pToolBarManager = pTbMgr;
 }
 
 void ToolBar::Command( const CommandEvent& rCEvt )

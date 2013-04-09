@@ -119,7 +119,6 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 
                     pToolBar = new ToolBar( pWindow, nStyles );
                     pToolBarManager = new AddonsToolBarManager( comphelper::getComponentContext(m_xServiceManager), xFrame, m_aResourceURL, pToolBar );
-                    pToolBar->SetToolBarManager( pToolBarManager );
                     m_xToolBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
                 }
             }

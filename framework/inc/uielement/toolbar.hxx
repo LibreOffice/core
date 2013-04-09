@@ -36,10 +36,6 @@ class ToolBar : public ToolBox
         virtual void    StateChanged( StateChangedType nType );
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-        // Toolbar manager
-        void            SetToolBarManager( ToolBarManager* pTbMgr );
-        ToolBarManager* GetToolBarManager() const { return m_pToolBarManager; }
-
         // Provide additional handlers to support external implementations
         void            SetCommandHdl( const Link& aLink ) { m_aCommandHandler = aLink; }
         const Link&     GetCommandHdl() const { return m_aCommandHandler; }
@@ -52,7 +48,6 @@ class ToolBar : public ToolBox
         Link            m_aCommandHandler;
         Link            m_aStateChangedHandler;
         Link            m_aDataChangedHandler;
-        ToolBarManager* m_pToolBarManager;
 };
 
 }
