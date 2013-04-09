@@ -178,7 +178,7 @@ namespace
 {
     long DelayDeleteAbstractDialog( void *pAbstractDialog, void * /*pArg*/ )
     {
-        delete reinterpret_cast<VclAbstractDialog*>( pAbstractDialog );
+        delete reinterpret_cast<SfxAbstractTabDialog*>( pAbstractDialog );
         return 0;
     }
 }
