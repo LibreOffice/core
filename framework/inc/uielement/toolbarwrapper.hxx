@@ -74,7 +74,6 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
 
     private:
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xToolBarManager;
-        com::sun::star::uno::Reference< com::sun::star::awt::XWindow >                  m_xToolBarWindow;
 };
 
 }
