@@ -29,55 +29,32 @@ namespace framework
 {
 
 static const char MERGE_TOOLBAR_URL[]              = "URL";
-static const sal_uInt32 MERGE_TOOLBAR_URL_LEN      = 3;
 static const char MERGE_TOOLBAR_TITLE[]            = "Title";
-static const sal_uInt32 MERGE_TOOLBAR_TITLE_LEN    = 5;
 static const char MERGE_TOOLBAR_IMAGEID[]          = "ImageIdentifier";
-static const sal_uInt32 MERGE_TOOLBAR_IMAGEID_LEN  = 15;
 static const char MERGE_TOOLBAR_CONTEXT[]          = "Context";
-static const sal_uInt32 MERGE_TOOLBAR_CONTEXT_LEN  = 7;
 static const char MERGE_TOOLBAR_TARGET[]           = "Target";
-static const sal_uInt32 MERGE_TOOLBAR_TARGET_LEN   = 6;
 static const char MERGE_TOOLBAR_CONTROLTYPE[]      = "ControlType";
-static const char MERGE_TOOLBAR_CONTROLTYPE_LEN    = 11;
 static const char MERGE_TOOLBAR_WIDTH[]            = "Width";
-static const char MERGE_TOOLBAR_WIDTH_LEN          = 5;
 
 static const char MERGECOMMAND_ADDAFTER[]          = "AddAfter";
-static const sal_uInt32 MERGECOMMAND_ADDAFTER_LEN  = 8;
 static const char MERGECOMMAND_ADDBEFORE[]         = "AddBefore";
-static const sal_uInt32 MERGECOMMAND_ADDBEFORE_LEN = 9;
 static const char MERGECOMMAND_REPLACE[]           = "Replace";
-static const sal_uInt32 MERGECOMMAND_REPLACE_LEN   = 7;
 static const char MERGECOMMAND_REMOVE[]            = "Remove";
-static const sal_uInt32 MERGECOMMAND_REMOVE_LEN    = 6;
 
 static const char MERGEFALLBACK_ADDLAST[]          = "AddLast";
-static const char MERGEFALLBACK_ADDLAST_LEN        = 7;
 static const char MERGEFALLBACK_ADDFIRST[]         = "AddFirst";
-static const char MERGEFALLBACK_ADDFIRST_LEN       = 8;
 static const char MERGEFALLBACK_IGNORE[]           = "Ignore";
-static const char MERGEFALLBACK_IGNORE_LEN         = 6;
 
 static const char TOOLBARCONTROLLER_BUTTON[]              = "Button";
-static const sal_uInt32 TOOLBARCONTROLLER_BUTTON_LEN      = 6;
 static const char TOOLBARCONTROLLER_COMBOBOX[]            = "Combobox";
-static const sal_uInt32 TOOLBARCONTROLLER_COMBOBOX_LEN    = 8;
 static const char TOOLBARCONTROLLER_EDIT[]                = "Editfield";
-static const sal_uInt32 TOOLBARCONTROLLER_EDIT_LEN        = 9;
 static const char TOOLBARCONTROLLER_SPINFIELD[]           = "Spinfield";
-static const sal_uInt32 TOOLBARCONTROLLER_SPINFIELD_LEN   = 9;
 static const char TOOLBARCONTROLLER_IMGBUTTON[]           = "ImageButton";
-static const sal_uInt32 TOOLBARCONTROLLER_IMGBUTTON_LEN   = 11;
 static const char TOOLBARCONTROLLER_DROPDOWNBOX[]         = "Dropdownbox";
-static const sal_uInt32 TOOLBARCONTROLLER_DROPDOWNBOX_LEN = 11;
 static const char TOOLBARCONTROLLER_DROPDOWNBTN[]         = "DropdownButton";
-static const sal_uInt32 TOOLBARCONTROLLER_DROPDOWNBTN_LEN = 14;
 static const char TOOLBARCONTROLLER_TOGGLEDDBTN[]         = "ToggleDropdownButton";
-static const sal_uInt32 TOOLBARCONTROLLER_TOGGLEDDBTN_LEN = 20;
 
 static const char   TOOLBOXITEM_SEPARATOR_STR[]   = "private:separator";
-static const sal_uInt16 TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
 
 using namespace ::com::sun::star;
 
@@ -215,19 +192,19 @@ void ToolBarMerger::ConvertSequenceToValues(
 {
     for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
     {
-        if ( rSequence[i].Name.equalsAsciiL( MERGE_TOOLBAR_URL, MERGE_TOOLBAR_URL_LEN ))
+        if ( rSequence[i].Name == MERGE_TOOLBAR_URL )
             rSequence[i].Value >>= rCommandURL;
-        else if ( rSequence[i].Name.equalsAsciiL( MERGE_TOOLBAR_TITLE, MERGE_TOOLBAR_TITLE_LEN ))
+        else if ( rSequence[i].Name == MERGE_TOOLBAR_TITLE )
             rSequence[i].Value >>= rLabel;
-        else if ( rSequence[i].Name.equalsAsciiL( MERGE_TOOLBAR_IMAGEID, MERGE_TOOLBAR_IMAGEID_LEN ))
+        else if ( rSequence[i].Name == MERGE_TOOLBAR_IMAGEID )
             rSequence[i].Value >>= rImageIdentifier;
-        else if ( rSequence[i].Name.equalsAsciiL( MERGE_TOOLBAR_CONTEXT, MERGE_TOOLBAR_CONTEXT_LEN ))
+        else if ( rSequence[i].Name == MERGE_TOOLBAR_CONTEXT )
             rSequence[i].Value >>= rContext;
-        else if ( rSequence[i].Name.equalsAsciiL( MERGE_TOOLBAR_TARGET, MERGE_TOOLBAR_TARGET_LEN ))
+        else if ( rSequence[i].Name == MERGE_TOOLBAR_TARGET )
             rSequence[i].Value >>= rTarget;
-        else if ( rSequence[i].Name.equalsAsciiL( MERGE_TOOLBAR_CONTROLTYPE, MERGE_TOOLBAR_CONTROLTYPE_LEN ))
+        else if ( rSequence[i].Name == MERGE_TOOLBAR_CONTROLTYPE )
             rSequence[i].Value >>= rControlType;
-        else if ( rSequence[i].Name.equalsAsciiL( MERGE_TOOLBAR_WIDTH, MERGE_TOOLBAR_WIDTH_LEN ))
+        else if ( rSequence[i].Name == MERGE_TOOLBAR_WIDTH )
         {
             sal_Int32 aValue = 0;
             rSequence[i].Value >>= aValue;
@@ -347,13 +324,13 @@ bool ToolBarMerger::ProcessMergeOperation(
     const OUString&                 rMergeCommandParameter,
     const AddonToolbarItemContainer&       rItems )
 {
-    if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDAFTER, MERGECOMMAND_ADDAFTER_LEN ))
+    if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
         return MergeItems( xFrame, pToolbar, nPos, 1, rItemId, rCommandMap, rModuleIdentifier, rItems );
-    else if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDBEFORE, MERGECOMMAND_ADDBEFORE_LEN ))
+    else if ( rMergeCommand == MERGECOMMAND_ADDBEFORE )
         return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
-    else if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_REPLACE, MERGECOMMAND_REPLACE_LEN ))
+    else if ( rMergeCommand == MERGECOMMAND_REPLACE )
         return ReplaceItem( xFrame, pToolbar, nPos, rItemId, rCommandMap, rModuleIdentifier, rItems );
-    else if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_REMOVE, MERGECOMMAND_REMOVE_LEN ))
+    else if ( rMergeCommand == MERGECOMMAND_REMOVE )
         return RemoveItems( pToolbar, nPos, rMergeCommandParameter );
 
     return false;
@@ -416,18 +393,18 @@ bool ToolBarMerger::ProcessMergeFallback(
     const OUString&           rMergeFallback,
     const AddonToolbarItemContainer& rItems )
 {
-    if (( rMergeFallback.equalsAsciiL( MERGEFALLBACK_IGNORE, MERGEFALLBACK_IGNORE_LEN )) ||
-        ( rMergeCommand.equalsAsciiL(  MERGECOMMAND_REPLACE, MERGECOMMAND_REPLACE_LEN )) ||
-        ( rMergeCommand.equalsAsciiL(  MERGECOMMAND_REMOVE, MERGECOMMAND_REMOVE_LEN   )) )
+    if (( rMergeFallback == MERGEFALLBACK_IGNORE ) ||
+        ( rMergeCommand == MERGECOMMAND_REPLACE ) ||
+        ( rMergeCommand == MERGECOMMAND_REMOVE ) )
     {
         return true;
     }
-    else if (( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDBEFORE, MERGECOMMAND_ADDBEFORE_LEN )) ||
-             ( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDAFTER, MERGECOMMAND_ADDAFTER_LEN   )) )
+    else if (( rMergeCommand == MERGECOMMAND_ADDBEFORE ) ||
+             ( rMergeCommand == MERGECOMMAND_ADDAFTER ) )
     {
-        if ( rMergeFallback.equalsAsciiL( MERGEFALLBACK_ADDFIRST, MERGEFALLBACK_ADDFIRST_LEN ))
+        if ( rMergeFallback == MERGEFALLBACK_ADDFIRST )
             return MergeItems( xFrame, pToolbar, 0, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
-        else if ( rMergeFallback.equalsAsciiL( MERGEFALLBACK_ADDLAST, MERGEFALLBACK_ADDLAST_LEN ))
+        else if ( rMergeFallback == MERGEFALLBACK_ADDLAST )
             return MergeItems( xFrame, pToolbar, TOOLBOX_APPEND, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
     }
 
@@ -499,7 +476,7 @@ bool ToolBarMerger::MergeItems(
             if ( nInsPos > sal_Int32( pToolbar->GetItemCount() ))
                 nInsPos = TOOLBOX_APPEND;
 
-            if ( rItem.aCommandURL.equalsAsciiL( TOOLBOXITEM_SEPARATOR_STR, TOOLBOXITEM_SEPARATOR_STR_LEN ))
+            if ( rItem.aCommandURL == TOOLBOXITEM_SEPARATOR_STR )
                 pToolbar->InsertSeparator( sal_uInt16( nInsPos ));
             else
             {
@@ -660,22 +637,22 @@ bool ToolBarMerger::RemoveItems(
 {
     ::cppu::OWeakObject* pResult( 0 );
 
-    if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_BUTTON, TOOLBARCONTROLLER_BUTTON_LEN ))
+    if ( rControlType == TOOLBARCONTROLLER_BUTTON )
         pResult = new ButtonToolbarController( rxContext, pToolbar, rCommandURL );
-    else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_COMBOBOX, TOOLBARCONTROLLER_COMBOBOX_LEN ))
+    else if ( rControlType == TOOLBARCONTROLLER_COMBOBOX )
         pResult = new ComboboxToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
-    else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_EDIT, TOOLBARCONTROLLER_EDIT_LEN ))
+    else if ( rControlType == TOOLBARCONTROLLER_EDIT )
         pResult = new EditToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
-    else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_SPINFIELD, TOOLBARCONTROLLER_SPINFIELD_LEN ))
+    else if ( rControlType == TOOLBARCONTROLLER_SPINFIELD )
         pResult = new SpinfieldToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
-    else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_IMGBUTTON, TOOLBARCONTROLLER_IMGBUTTON_LEN ))
+    else if ( rControlType == TOOLBARCONTROLLER_IMGBUTTON )
         pResult = new ImageButtonToolbarController( rxContext, xFrame, pToolbar, nId, rCommandURL );
-    else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_DROPDOWNBOX, TOOLBARCONTROLLER_DROPDOWNBOX_LEN ))
+    else if ( rControlType == TOOLBARCONTROLLER_DROPDOWNBOX )
         pResult = new DropdownToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
-    else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_DROPDOWNBTN, TOOLBARCONTROLLER_DROPDOWNBTN_LEN ))
+    else if ( rControlType == TOOLBARCONTROLLER_DROPDOWNBTN )
         pResult = new ToggleButtonToolbarController( rxContext, xFrame, pToolbar, nId,
                                                      ToggleButtonToolbarController::STYLE_DROPDOWNBUTTON, rCommandURL );
-    else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_TOGGLEDDBTN, TOOLBARCONTROLLER_TOGGLEDDBTN_LEN ))
+    else if ( rControlType == TOOLBARCONTROLLER_TOGGLEDDBTN )
         pResult = new ToggleButtonToolbarController( rxContext, xFrame, pToolbar, nId,
                                                      ToggleButtonToolbarController::STYLE_TOGGLE_DROPDOWNBUTTON, rCommandURL );
     else
