@@ -60,6 +60,7 @@ void ExceptionTree::add(
         list.push_back(n);
         rtl::Reference< unoidl::Entity > ent;
         codemaker::UnoType::Sort s = manager->getSort(b2u(n), &ent);
+        (void) s; // WaE: unused variable
         assert(s == codemaker::UnoType::SORT_EXCEPTION_TYPE);
         n = u2b(
             static_cast< unoidl::ExceptionTypeEntity * >(ent.get())->
