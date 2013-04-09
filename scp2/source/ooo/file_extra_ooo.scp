@@ -86,10 +86,10 @@ File gid_File_Extra_Common_Pl
 End
 
 File gid_File_Extra_Database
-    Dir = gid_Dir_Database;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    Name = "database.zip";
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Name = "extras_database.filelist";
 End
 
 File gid_File_Extra_Databasebiblio
