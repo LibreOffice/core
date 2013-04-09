@@ -1392,8 +1392,6 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
 //we sort these into a best-tab-order sequence
 bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, const Window *pB) const
 {
-    if (pA == pB)
-        return false;
     //sort child order within parent list by grid position
     sal_Int32 nTopA = pA->get_grid_top_attach();
     sal_Int32 nTopB = pB->get_grid_top_attach();
