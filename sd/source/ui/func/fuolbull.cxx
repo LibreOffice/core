@@ -22,6 +22,7 @@
 #include <svl/intitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/numitem.hxx>
 #include <sfx2/request.hxx>
 
 #include <editeng/editdata.hxx>
@@ -64,7 +65,16 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
                              EE_ITEMS_START, EE_ITEMS_END );
-        aNewAttr.Put( aEditAttr, sal_False );
+
+        // fdo#47018 verify numbering rule
+        const SfxPoolItem* pItem;
+        sal_uInt16 nWhich = aEditAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        aEditAttr.GetItemState(nWhich, sal_False, &pItem);
+        const sal_uInt16 levelCount = (*((SvxNumBulletItem*)pItem)->GetNumRule()).GetLevelCount();
+
+        // check if the attribute is valid
+        if ( levelCount )
+            aNewAttr.Put( aEditAttr, sal_False );
 
         // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
