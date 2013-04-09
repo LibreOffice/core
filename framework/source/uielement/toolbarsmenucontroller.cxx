@@ -269,9 +269,9 @@ static void fillHashMap( const Sequence< Sequence< ::com::sun::star::beans::Prop
         const PropertyValue* pProperties = rSeqToolBars[i].getConstArray();
         for ( sal_Int32 j = 0; j < rSeqToolBars[i].getLength(); j++ )
         {
-            if ( pProperties[j].Name.equalsAscii( ITEM_DESCRIPTOR_RESOURCEURL) )
+            if ( pProperties[j].Name == ITEM_DESCRIPTOR_RESOURCEURL )
                 pProperties[j].Value >>= aResourceURL;
-            else if ( pProperties[j].Name.equalsAscii( ITEM_DESCRIPTOR_UINAME) )
+            else if ( pProperties[j].Name == ITEM_DESCRIPTOR_UINAME )
                 pProperties[j].Value >>= aUIName;
         }
 
@@ -401,13 +401,13 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                     {
                         for ( sal_Int32 i = 0; i < aWindowState.getLength(); i++ )
                         {
-                            if ( aWindowState[i].Name.equalsAscii( WINDOWSTATE_PROPERTY_UINAME ))
+                            if ( aWindowState[i].Name == WINDOWSTATE_PROPERTY_UINAME )
                                 aWindowState[i].Value >>= aUIName;
-                            else if ( aWindowState[i].Name.equalsAscii( WINDOWSTATE_PROPERTY_HIDEFROMENU ))
+                            else if ( aWindowState[i].Name == WINDOWSTATE_PROPERTY_HIDEFROMENU )
                                 aWindowState[i].Value >>= bHideFromMenu;
-                            else if ( aWindowState[i].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXT ))
+                            else if ( aWindowState[i].Name == WINDOWSTATE_PROPERTY_CONTEXT )
                                 aWindowState[i].Value >>= bContextSensitive;
-                            else if ( aWindowState[i].Name.equalsAscii( WINDOWSTATE_PROPERTY_VISIBLE ))
+                            else if ( aWindowState[i].Name == WINDOWSTATE_PROPERTY_VISIBLE )
                                 aWindowState[i].Value >>= bVisible;
                         }
                     }
@@ -471,15 +471,15 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         }
 
         // Create commands for non-toolbars
-        if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
+        if ( m_aModuleIdentifier == "com.sun.star.text.TextDocument" ||
+             m_aModuleIdentifier == "com.sun.star.text.WebDocument" ||
+             m_aModuleIdentifier == "com.sun.star.text.GlobalDocument" ||
+             m_aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" ||
+             m_aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" ||
+             m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
         {
-            if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
-                 m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
+            if ( m_aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" ||
+                 m_aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" )
                 addCommand( m_xPopupMenu, OUString( CMD_COLORBAR ), aEmptyString );
             else if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
                 addCommand( m_xPopupMenu, OUString( CMD_INPUTLINEBAR ), aEmptyString );
@@ -645,12 +645,12 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                                     sal_Int32 nVisibleIndex( -1 );
                                     for ( sal_Int32 j = 0; j < aWindowState.getLength(); j++ )
                                     {
-                                        if ( aWindowState[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_VISIBLE ))
+                                        if ( aWindowState[j].Name == WINDOWSTATE_PROPERTY_VISIBLE )
                                         {
                                             aWindowState[j].Value >>= bVisible;
                                             nVisibleIndex = j;
                                         }
-                                        else if ( aWindowState[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXT ))
+                                        else if ( aWindowState[j].Name == WINDOWSTATE_PROPERTY_CONTEXT )
                                             aWindowState[j].Value >>= bContextSensitive;
                                     }
 
@@ -782,7 +782,7 @@ void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) thr
                 xDispatch->removeStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
             }
         }
-        else if ( aCmdVector[i].equalsAscii( CMD_RESTOREVISIBILITY ))
+        else if ( aCmdVector[i] == CMD_RESTOREVISIBILITY )
         {
             // Special code to determine the enable/disable state of this command
             FeatureStateEvent aFeatureStateEvent;
