@@ -58,7 +58,21 @@ extern "C"
         pYieldMutex->ThreadsLeave();
     }
 
-    VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule )
+    static bool hookLocks( oslModule pModule )
+    {
+#if !GTK_CHECK_VERSION(2,4,0)
+        g_error("no lock hooking!");
+#endif
+        gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
+
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "Hooked gdk threads locks\n" );
+#endif
+        (void)pModule;
+        return true;
+    }
+
+    VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
         SAL_INFO(
             "vcl.gtk",
@@ -70,7 +84,6 @@ extern "C"
             g_warning("require a newer gtk than %d.%d for gdk_threads_set_lock_functions", (int) gtk_major_version, gtk_minor_version);
             return NULL;
         }
-
         /* #i92121# workaround deadlocks in the X11 implementation
         */
         static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
@@ -98,13 +111,8 @@ extern "C"
         if ( !g_thread_supported() )
             g_thread_init( NULL );
 
-#if !GTK_CHECK_VERSION(2,4,0)
-#error "Requires gtk 2.4.0+ for lock hooking"
-#endif
-        gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
-        SAL_INFO("vcl.gtk", "Hooked gdk threads locks");
-
-        pYieldMutex = new GtkYieldMutex();
+        if ( hookLocks( pModule ) )
+            pYieldMutex = new GtkHookedYieldMutex();
 
         gdk_threads_init();
 
@@ -298,12 +306,20 @@ GtkYieldMutex::GtkYieldMutex()
 
 void GtkYieldMutex::acquire()
 {
+<<<<<<< HEAD
     SalYieldMutex::acquire();
+=======
+    g_error ("never called");
+>>>>>>> Remove code marked by HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL tag.
 }
 
 void GtkYieldMutex::release()
 {
+<<<<<<< HEAD
     SalYieldMutex::release();
+=======
+    g_error ("never called");
+>>>>>>> Remove code marked by HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL tag.
 }
 
 /*
@@ -315,6 +331,7 @@ void GtkYieldMutex::release()
  */
 void GtkYieldMutex::ThreadsEnter()
 {
+<<<<<<< HEAD
     acquire();
     if( !aYieldStack.empty() )
     { /* Previously called ThreadsLeave() */
@@ -323,10 +340,15 @@ void GtkYieldMutex::ThreadsEnter()
         while( nCount-- > 1 )
             acquire();
     }
+=======
+    g_error ("never called");
+    return sal_True;
+>>>>>>> Remove code marked by HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL tag.
 }
 
 void GtkYieldMutex::ThreadsLeave()
 {
+<<<<<<< HEAD
     aYieldStack.push_front( mnCount );
 
     SAL_WARN_IF(
@@ -336,6 +358,16 @@ void GtkYieldMutex::ThreadsLeave()
     while( mnCount > 1 )
         release();
     release();
+=======
+    g_error ("never called");
+    return sal_True;
+}
+
+void GtkYieldMutex::Ungrab( int nGrabs )
+{
+    (void)nGrabs;
+    g_error ("never called");
+>>>>>>> Remove code marked by HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL tag.
 }
 
 SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
