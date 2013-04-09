@@ -21,13 +21,16 @@
 
 class ScDocument;
 class ScOrcusSheet;
+class ScOrcusFactory;
 class ScRangeData;
 
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
 {
-    std::vector<OUString> maSharedStrings;
+    std::vector<OUString>& mrStrings;
 
 public:
+    ScOrcusSharedStrings(std::vector<OUString>& rStrings);
+
     virtual size_t append(const char* s, size_t n);
     virtual size_t add(const char* s, size_t n);
 
@@ -38,20 +41,18 @@ public:
     virtual void append_segment(const char* s, size_t n);
 
     virtual size_t commit_segments();
-
-    const OUString& getByIndex(size_t index) const;
 };
 
 class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 {
     ScDocument& mrDoc;
     SCTAB mnTab;
-    ScOrcusSharedStrings& mrSharedStrings;
+    ScOrcusFactory& mrFactory;
 
     typedef std::map<size_t, ScRangeData*> SharedFormulaContainer;
     SharedFormulaContainer maSharedFormulas;
 public:
-    ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusSharedStrings& rSharedStrings);
+    ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
 
     // Orcus import interface
     virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n);
@@ -152,9 +153,21 @@ public:
 
 class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 {
+    struct StringCellCache
+    {
+        ScAddress maPos;
+        size_t mnIndex;
+
+        StringCellCache(const ScAddress& rPos, size_t nIndex);
+    };
+
+    typedef std::vector<StringCellCache> StringCellCaches;
+
     ScDocument& mrDoc;
-    boost::ptr_vector<ScOrcusSheet> maSheets;
+    std::vector<OUString> maStrings;
+    StringCellCaches maStringCells;
     ScOrcusSharedStrings maSharedStrings;
+    boost::ptr_vector<ScOrcusSheet> maSheets;
     ScOrcusStyles maStyles;
 
 public:
@@ -164,6 +177,9 @@ public:
     virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length);
     virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings();
     virtual orcus::spreadsheet::iface::import_styles* get_styles();
+    virtual void finalize();
+
+    void pushStringCell(const ScAddress& rPos, size_t nStrIndex);
 };
 
 #endif

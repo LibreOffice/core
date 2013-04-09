@@ -13,14 +13,18 @@
 #include "formulacell.hxx"
 #include "rangenam.hxx"
 #include "tokenarray.hxx"
-#include <formula/token.hxx>
+#include "stringutil.hxx"
 
+#include <formula/token.hxx>
 
 using orcus::spreadsheet::row_t;
 using orcus::spreadsheet::col_t;
 using orcus::spreadsheet::formula_grammar_t;
 
-ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) : mrDoc(rDoc) {}
+ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t nIndex) :
+    maPos(rPos), mnIndex(nIndex) {}
+
+ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) : mrDoc(rDoc), maSharedStrings(maStrings) {}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char* sheet_name, size_t sheet_name_length)
 {
@@ -29,7 +33,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char
         return NULL;
 
     SCTAB nTab = mrDoc.GetTableCount() - 1;
-    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab, maSharedStrings));
+    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab, *this));
     return &maSheets.back();
 }
 
@@ -61,7 +65,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
         return &(*it);
 
     // Create a new orcus sheet instance for this.
-    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab, maSharedStrings));
+    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab, *this));
     return &maSheets.back();
 }
 
@@ -76,8 +80,28 @@ orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
     return &maStyles;
 }
 
-ScOrcusSheet::ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusSharedStrings& rSharedStrings) :
-    mrDoc(rDoc), mnTab(nTab), mrSharedStrings(rSharedStrings) {}
+void ScOrcusFactory::finalize()
+{
+    ScSetStringParam aParam;
+    aParam.setTextInput();
+    StringCellCaches::const_iterator it = maStringCells.begin(), itEnd = maStringCells.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->mnIndex >= maStrings.size())
+            // String index out-of-bound!  Something is up.
+            continue;
+
+        mrDoc.SetString(it->maPos, maStrings[it->mnIndex], &aParam);
+    }
+}
+
+void ScOrcusFactory::pushStringCell(const ScAddress& rPos, size_t nStrIndex)
+{
+    maStringCells.push_back(StringCellCache(rPos, nStrIndex));
+}
+
+ScOrcusSheet::ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusFactory& rFactory) :
+    mrDoc(rDoc), mnTab(nTab), mrFactory(rFactory) {}
 
 void ScOrcusSheet::set_auto(row_t row, col_t col, const char* p, size_t n)
 {
@@ -199,13 +223,12 @@ void ScOrcusSheet::set_array_formula(
 
 void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
 {
-    // Calc does not yet support shared strings so we have to
-    // workaround by importing shared strings into a temporary
-    // shared string container and writing into calc model as
-    // normal string
+    // We need to defer string cells since the shared string pool is not yet
+    // populated at the time this method is called.  Orcus imports string
+    // table after the cells get imported.  We won't need to do this once we
+    // implement true shared strings in Calc core.
 
-    const OUString& rSharedString = mrSharedStrings.getByIndex(sindex);
-    mrDoc.SetTextCell(ScAddress(col,row,mnTab), rSharedString);
+    mrFactory.pushStringCell(ScAddress(col, row, mnTab), sindex);
 }
 
 void ScOrcusSheet::set_value(row_t row, col_t col, double value)
@@ -218,28 +241,23 @@ void ScOrcusSheet::set_bool(row_t row, col_t col, bool value)
     mrDoc.SetValue(col, row, mnTab, value ? 1.0 : 0.0);
 }
 
+ScOrcusSharedStrings::ScOrcusSharedStrings(std::vector<OUString>& rStrings) :
+    mrStrings(rStrings) {}
+
 size_t ScOrcusSharedStrings::append(const char* s, size_t n)
 {
     OUString aNewString(s, n, RTL_TEXTENCODING_UTF8);
-    maSharedStrings.push_back(aNewString);
+    mrStrings.push_back(aNewString);
 
-    return maSharedStrings.size() - 1;
+    return mrStrings.size() - 1;
 }
 
 size_t ScOrcusSharedStrings::add(const char* s, size_t n)
 {
     OUString aNewString(s, n, RTL_TEXTENCODING_UTF8);
-    maSharedStrings.push_back(aNewString);
+    mrStrings.push_back(aNewString);
 
-    return maSharedStrings.size() - 1;
-}
-
-const OUString& ScOrcusSharedStrings::getByIndex(size_t nIndex) const
-{
-    if(nIndex < maSharedStrings.size())
-        return maSharedStrings[nIndex];
-
-    return EMPTY_OUSTRING;
+    return mrStrings.size() - 1;
 }
 
 void ScOrcusSharedStrings::set_segment_bold(bool /*b*/)
