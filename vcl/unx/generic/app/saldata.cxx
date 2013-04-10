@@ -39,10 +39,13 @@
 #include <sys/time.h>
 #endif
 
+#include <tools/prex.h>
+#include <X11/Xproto.h>
+#include <tools/postx.h>
+
 #include <osl/process.h>
 #include <osl/mutex.hxx>
 
-#include "unx/Xproto.h"
 #include "unx/saldisp.hxx"
 #include "unx/saldata.hxx"
 #include "unx/salframe.h"

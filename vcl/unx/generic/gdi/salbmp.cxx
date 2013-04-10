@@ -26,15 +26,16 @@
 #include <sys/types.h>
 #endif
 
+#include <tools/prex.h>
+#include <X11/Xproto.h>
+#include <tools/postx.h>
+
 #include <osl/endian.h>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/salbtype.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
-#include <tools/prex.h>
-#include "unx/Xproto.h"
-#include <tools/postx.h>
 #include <unx/salunx.h>
 #include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>

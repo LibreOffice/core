@@ -17,6 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_graphite.h>
+
+#include <vector>
+#include <queue>
+#include <set>
+
+#include <tools/prex.h>
+#include <X11/Xproto.h>
+#include <tools/postx.h>
+
 #include "tools/debug.hxx"
 
 #include "basegfx/polygon/b2dpolygon.hxx"
@@ -32,7 +42,6 @@
 
 #include "vcl/jobdata.hxx"
 
-#include "unx/Xproto.h"
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
@@ -44,12 +53,6 @@
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
 #include "region.h"
-
-#include <vector>
-#include <queue>
-#include <set>
-
-#include <config_graphite.h>
 
 #define STATIC_POINTS 64
 
