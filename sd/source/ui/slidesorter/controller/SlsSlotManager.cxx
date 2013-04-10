@@ -150,8 +150,11 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
 
         case SID_GROUP_SLIDES:
+            GroupSlides();
+            break;
+
         case SID_UNGROUP_SLIDES:
-            fprintf (stderr, "Execute group / un-group\n");
+            UnGroupSlides();
             break;
 
         case SID_PAGES_PER_ROW:
@@ -1285,6 +1288,42 @@ SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
 }
 
 } // end of anonymous namespace
+
+void SlotManager::GroupSlides()
+{
+    PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
+    View* pDrView = &mrSlideSorter.GetView();
+
+    fprintf (stderr, "Execute -group\n");
+
+    model::PageEnumeration aSelectedPages (
+        model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
+                mrSlideSorter.GetModel()));
+    std::vector< SdPage * > aPagesToGroup;
+    while (aSelectedPages.HasMoreElements())
+    {
+        SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
+        aPagesToGroup.push_back( pPage );
+    }
+    if( aPagesToGroup.size() > 0 )
+    {
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+        VclAbstractDialog *pDialog = pFact->CreateSdGroupDialog(
+                mrSlideSorter.GetContentWindow().get(), /* TESTME: window ? */
+                mrSlideSorter.GetModel().GetDocument(),
+                aPagesToGroup);
+        if ( pDialog->Execute() == RET_OK )
+        {
+//            mrSlideSorter.Redraw(); // FIXME ...
+        }
+        delete pDialog;
+    }
+}
+
+void SlotManager::UnGroupSlides()
+{
+    fprintf (stderr, "Execute un-group\n");
+}
 
 } } } // end of namespace ::sd::slidesorter::controller
 

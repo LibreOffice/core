@@ -256,8 +256,9 @@ public:
     virtual AbstractSdPublishingDlg*    CreateSdPublishingDlg( ::Window* pWindow, DocumentType eDocType) SAL_OVERRIDE;
 
     virtual VclAbstractDialog* CreateSdPhotoAlbumDialog( ::Window* pWindow, SdDrawDocument* pDoc) SAL_OVERRIDE;
+    virtual VclAbstractDialog*          CreateSdGroupDialog( ::Window* pWindow, SdDrawDocument *pDoc, const std::vector< SdPage * > &rPagesToGroup ) SAL_OVERRIDE;
 
-      virtual VclAbstractDialog*          CreateMasterLayoutDialog( ::Window* pParent,
+    virtual VclAbstractDialog*          CreateMasterLayoutDialog( ::Window* pParent,
                                                                   SdDrawDocument* pDoc,
                                                                   SdPage* ) SAL_OVERRIDE;
 
