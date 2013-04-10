@@ -31,7 +31,7 @@ $(eval $(call gb_Library_set_soversion_script,store,3,$(SRCDIR)/store/util/store
 $(eval $(call gb_Library_use_external,store,boost_headers))
 
 $(eval $(call gb_Library_use_packages,store,\
-	store_odk_headers \
+	store_inc \
 ))
 
 $(eval $(call gb_Library_add_defs,store,\
