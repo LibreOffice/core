@@ -670,10 +670,20 @@ void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUSt
 {
     OStringVector vec;
     tokenizeSQL( OUStringToOString( source, RTL_TEXTENCODING_UTF8 ), vec );
-    if( vec.size() == 3 )
+    switch (vec.size())
     {
-        *first = OStringToOUString( vec[0] , RTL_TEXTENCODING_UTF8 );
+    case 1:
+        *first  = OUString();
+        *second = OStringToOUString( vec[0], RTL_TEXTENCODING_UTF8 );
+        break;
+    case 3:
+        *first  = OStringToOUString( vec[0], RTL_TEXTENCODING_UTF8 );
         *second = OStringToOUString( vec[2], RTL_TEXTENCODING_UTF8 );
+        break;
+    default:
+         SAL_WARN("connectivity.postgresql",
+                  "pq_tools::splitConcatenatedIdentifier unexpected number of tokens in identifier: "
+                  << vec.size());
     }
 }
 

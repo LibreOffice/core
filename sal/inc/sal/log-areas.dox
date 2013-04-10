@@ -55,6 +55,7 @@ certain functionality.
 @li @c connectivity.commontools
 @li @c connectivity.mork
 @li @c connectivity.parse
+@li @c connectivity.postgresql
 
 @section cui
 
