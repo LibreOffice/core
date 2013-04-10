@@ -617,6 +617,11 @@ RTFBuffer_t RTFDocumentImpl::getShapetextBuffer()
     return m_aShapetextBuffer;
 }
 
+oox::GraphicHelper& RTFDocumentImpl::getGraphicHelper()
+{
+    return *m_pGraphicHelper;
+}
+
 void RTFDocumentImpl::resolve(Stream & rMapper)
 {
     m_pMapperStream = &rMapper;

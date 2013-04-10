@@ -480,6 +480,7 @@ namespace writerfilter {
                 RTFParserState& getDefaultState();
                 /// Get the shape text buffer;
                 RTFBuffer_t getShapetextBuffer();
+                oox::GraphicHelper& getGraphicHelper();
 
             private:
                 SvStream& Strm();

@@ -47,6 +47,10 @@
 #include "../dmapper/GraphicHelpers.hxx"
 #include <rtfsdrimport.hxx>
 
+#include <oox/vml/vmlformatting.hxx>
+#include <oox/helper/modelobjecthelper.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/helper/propertyset.hxx>
 
 namespace writerfilter {
 namespace rtftok {
@@ -117,6 +121,26 @@ void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet
         xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
 }
 
+static OString impl_ConvertColor( const Color &rColor )
+{
+    OString color( "auto" );
+    if ( rColor.GetColor() != COL_AUTO )
+    {
+        const char pHexDigits[] = "0123456789ABCDEF";
+        char pBuffer[] = "000000";
+
+        pBuffer[0] = pHexDigits[ ( rColor.GetRed()   >> 4 ) & 0x0F ];
+        pBuffer[1] = pHexDigits[   rColor.GetRed()          & 0x0F ];
+        pBuffer[2] = pHexDigits[ ( rColor.GetGreen() >> 4 ) & 0x0F ];
+        pBuffer[3] = pHexDigits[   rColor.GetGreen()        & 0x0F ];
+        pBuffer[4] = pHexDigits[ ( rColor.GetBlue()  >> 4 ) & 0x0F ];
+        pBuffer[5] = pHexDigits[   rColor.GetBlue()         & 0x0F ];
+
+        color = OString( pBuffer );
+    }
+    return color;
+}
+
 void RTFSdrImport::resolve(RTFShape& rShape)
 {
     int nType = -1;
@@ -137,6 +161,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
     text::WritingMode eWritingMode = text::WritingMode_LR_TB;
+    // Used for gradients, let the VML import do the hard work.
+    oox::vml::FillModel aFillModel;
 
     for (std::vector< std::pair<OUString, OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
@@ -196,10 +222,15 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 xPropertySet->setPropertyValue("BackColor", aAny);
             else
                 xPropertySet->setPropertyValue("FillColor", aAny);
+
+            // fillType will decide, possible it'll be the start color of a gradient.
+            aFillModel.moColor.set(OUString("#") + OStringToOUString(impl_ConvertColor(aAny.get<sal_Int32>()), RTL_TEXTENCODING_UTF8));
+
             xPropertySet->setPropertyValue("BackColorTransparency", uno::makeAny(sal_Int32(0)));
         }
         else if ( i->first == "fillBackColor" )
-            ; // Ignore: complementer of fillColor
+            // fillType will decide, possible it'll be the end color of a gradient.
+            aFillModel.moColor2.set(OUString("#") + OStringToOUString(impl_ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32())), RTL_TEXTENCODING_UTF8));
         else if (i->first == "lineColor")
             aLineColor <<= msfilter::util::BGRToRGB(i->second.toInt32());
         else if ( i->first == "lineBackColor" )
@@ -360,6 +391,20 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             xPropertySet->setPropertyValue("RightMargin", uno::makeAny(i->second.toInt32() / 360));
         else if (i->first == "dyWrapDistBottom")
             xPropertySet->setPropertyValue("BottomMargin", uno::makeAny(i->second.toInt32() / 360));
+        else if (i->first == "fillType")
+        {
+            switch (i->second.toInt32())
+            {
+                case 7: // Shade using the fillAngle
+                    aFillModel.moType.set(oox::XML_gradient);
+                break;
+                default:
+                    SAL_INFO("writerfilter", "TODO handle fillType value '" << i->second << "'");
+                break;
+            }
+        }
+        else if (i->first == "fillFocus")
+            aFillModel.moFocus.set(i->second.toDouble() / 100); // percent
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
@@ -439,6 +484,14 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             xPropertySet->setPropertyValue("VertOrientRelation", uno::makeAny(rShape.nVertOrientRelation));
         if (rShape.nWrap != -1)
             xPropertySet->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode(rShape.nWrap)));
+        if (aFillModel.moType.has())
+        {
+            oox::ModelObjectHelper aModelObjectHelper(m_rImport.getModelFactory());
+            oox::drawingml::ShapePropertyMap aPropMap(aModelObjectHelper);
+            aFillModel.pushToPropMap(aPropMap, m_rImport.getGraphicHelper());
+            // Sets the FillStyle and FillGradient UNO properties.
+            oox::PropertySet(xShape).setProperties(aPropMap);
+        }
     }
 
     // Send it to dmapper
