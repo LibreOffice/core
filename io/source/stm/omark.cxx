@@ -147,7 +147,6 @@ private:
 
 OMarkableOutputStream::OMarkableOutputStream( )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_pBuffer = new MemRingBuffer;
     m_nCurrentPos = 0;
     m_nCurrentMark = 0;
@@ -156,7 +155,6 @@ OMarkableOutputStream::OMarkableOutputStream( )
 OMarkableOutputStream::~OMarkableOutputStream()
 {
     delete m_pBuffer;
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 
@@ -573,7 +571,6 @@ private:
 
 OMarkableInputStream::OMarkableInputStream()
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_nCurrentPos = 0;
     m_nCurrentMark = 0;
     m_pBuffer = new MemRingBuffer;
@@ -585,7 +582,6 @@ OMarkableInputStream::~OMarkableInputStream()
     if( m_pBuffer ) {
         delete m_pBuffer;
     }
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 

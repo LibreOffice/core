@@ -19,7 +19,6 @@
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <rtl/unload.h>
 
 #include <stdio.h>
 #include "target.hxx"
@@ -37,12 +36,8 @@ using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
 #define WM_REGISTERDRAGDROP WM_USER + 1
 #define WM_REVOKEDRAGDROP WM_USER + 2
-//--> TRA
 extern Reference< XTransferable > g_XTransferable;
 
-//<-- TRA
-
-extern rtl_StandardModuleCount g_moduleCount;
 DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
 
 DropTarget::DropTarget( const Reference<XComponentContext>& rxContext):
@@ -59,17 +54,11 @@ DropTarget::DropTarget( const Reference<XComponentContext>& rxContext):
     m_nCurrentDropAction( ACTION_NONE),
     m_nLastDropAction(0),
     m_bDropComplete(false)
-
-
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
-
 
 DropTarget::~DropTarget()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-
 }
 // called from WeakComponentImplHelperX::dispose
 // WeakComponentImplHelper calls disposing before it destroys

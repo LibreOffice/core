@@ -108,7 +108,6 @@ Pump::Pump() : m_aThread( 0 ),
                m_cnt( m_aMutex ),
                m_closeFired( sal_False )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 Pump::~Pump()
@@ -119,7 +118,6 @@ Pump::~Pump()
         osl_joinWithThread( m_aThread );
         osl_destroyThread( m_aThread );
     }
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void Pump::fireError( const  Any & exception )

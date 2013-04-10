@@ -18,7 +18,6 @@
  */
 
 #include "idroptarget.hxx"
-#include <rtl/unload.h>
 
 #ifdef __MINGW32__
 #if defined __uuidof
@@ -27,17 +26,13 @@
 #define __uuidof(I) IID_##I
 #endif
 
-extern rtl_StandardModuleCount g_moduleCount;
-
 IDropTargetImpl::IDropTargetImpl( DropTarget& pTarget): m_nRefCount( 0),
                                     m_rDropTarget( pTarget)
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 IDropTargetImpl::~IDropTargetImpl()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 

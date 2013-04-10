@@ -20,7 +20,6 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
 #include "DragSourceContext.hxx"
-#include <rtl/unload.h>
 
 
 using namespace com::sun::star::datatransfer::dnd;

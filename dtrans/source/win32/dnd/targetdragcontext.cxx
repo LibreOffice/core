@@ -17,14 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/unload.h>
-
 #include "targetdragcontext.hxx"
 
-extern rtl_StandardModuleCount g_moduleCount;
 TargetDragContext::TargetDragContext( DropTarget* p)
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_pDropTarget= p;
     p->acquire();
 }
@@ -32,7 +28,6 @@ TargetDragContext::TargetDragContext( DropTarget* p)
 TargetDragContext::~TargetDragContext()
 {
     m_pDropTarget->release();
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void SAL_CALL TargetDragContext::acceptDrag( sal_Int8 dragOperation )

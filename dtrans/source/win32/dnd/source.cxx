@@ -21,7 +21,6 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
-#include <rtl/unload.h>
 
 #include <process.h>
 #include <memory>
@@ -51,20 +50,10 @@ using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 
-
-extern rtl_StandardModuleCount g_moduleCount;
-
-//--> TRA
-
 extern Reference< XTransferable > g_XTransferable;
-
-//<-- TRA
 
 unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 
-//----------------------------------------------------
-/** Ctor
-*/
 DragSource::DragSource( const Reference<XComponentContext>& rxContext):
     WeakComponentImplHelper3< XDragSource, XInitialization, XServiceInfo >(m_mutex),
     m_xContext( rxContext ),
@@ -73,15 +62,10 @@ DragSource::DragSource( const Reference<XComponentContext>& rxContext):
     m_MouseButton(0),
     m_RunningDndOperationCount(0)
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
-//----------------------------------------------------
-/** Dtor
-*/
 DragSource::~DragSource()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 //----------------------------------------------------

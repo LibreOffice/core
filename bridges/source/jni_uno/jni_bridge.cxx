@@ -22,7 +22,6 @@
 
 #include "jvmaccess/unovirtualmachine.hxx"
 #include "rtl/ref.hxx"
-#include "rtl/unload.h"
 #include "rtl/strbuf.hxx"
 #include "uno/lbnames.h"
 
@@ -195,8 +194,6 @@ void SAL_CALL Bridge_free( uno_Mapping * mapping )
 
 }
 
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
 }
 
 namespace jni_uno
@@ -264,8 +261,6 @@ Bridge::Bridge(
     m_uno2java.release = Mapping_release;
     m_uno2java.mapInterface = Mapping_map_to_java;
     m_uno2java.m_bridge = this;
-
-    (*g_moduleCount.modCnt.acquire)( &g_moduleCount.modCnt );
 }
 
 //______________________________________________________________________________
@@ -273,8 +268,6 @@ Bridge::~Bridge() SAL_THROW(())
 {
     (*m_java_env->release)( m_java_env );
     (*((uno_Environment *)m_uno_env)->release)( (uno_Environment *)m_uno_env );
-
-    (*g_moduleCount.modCnt.release)( &g_moduleCount.modCnt );
 }
 
 
@@ -552,17 +545,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
         *ppMapping = mapping;
     }
 }
-
-#ifndef DISABLE_DYNLOADING
-
-//------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
-    SAL_THROW_EXTERN_C()
-{
-    return (*g_moduleCount.canUnload)( &g_moduleCount, pTime );
-}
-
-#endif
 
 }
 

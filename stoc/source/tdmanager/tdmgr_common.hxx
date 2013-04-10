@@ -20,8 +20,6 @@
 #ifndef _STOC_TDMGR_COMMON_HXX
 #define _STOC_TDMGR_COMMON_HXX
 
-#include <rtl/unload.h>
-
 #include "com/sun/star/reflection/XTypeDescription.hpp"
 
 #define ARLEN(x) (sizeof (x) / sizeof *(x))
@@ -29,7 +27,6 @@
 
 namespace stoc_tdmgr
 {
-    extern rtl_StandardModuleCount g_moduleCount;
 
 struct IncompatibleTypeException
 {

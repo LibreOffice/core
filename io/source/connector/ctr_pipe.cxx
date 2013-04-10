@@ -33,7 +33,6 @@ namespace stoc_connector {
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription )
     {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         // make it unique
         m_sDescription += ",uniqueValue=";
         m_sDescription += OUString::valueOf(
@@ -44,7 +43,6 @@ namespace stoc_connector {
 
     PipeConnection::~PipeConnection()
     {
-        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )

@@ -127,7 +127,6 @@ private:
 
 OPipeImpl::OPipeImpl()
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_nBytesToSkip  = 0;
 
     m_bOutputStreamClosed   = sal_False;
@@ -141,7 +140,6 @@ OPipeImpl::~OPipeImpl()
 {
     osl_destroyCondition( m_conditionBytesAvail );
     delete m_pFIFO;
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 

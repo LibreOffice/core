@@ -162,7 +162,6 @@ namespace io_acceptor {
         _closed(sal_False),
         _error(sal_False)
     {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         // make it unique
         m_sDescription += ",uniqueValue=" ;
         m_sDescription += OUString::valueOf(
@@ -173,7 +172,6 @@ namespace io_acceptor {
 
     SocketConnection::~SocketConnection()
     {
-        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     void SocketConnection::completeConnectionString()

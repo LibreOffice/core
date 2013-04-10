@@ -20,11 +20,9 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
 #include "sourcecontext.hxx"
-#include <rtl/unload.h>
 
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
-extern rtl_StandardModuleCount g_moduleCount;
 
 SourceContext::SourceContext( DragSource* pSource,
                              const Reference<XDragSourceListener>& listener):
@@ -32,7 +30,6 @@ SourceContext::SourceContext( DragSource* pSource,
         m_pDragSource( pSource),
         m_dragSource( static_cast<XDragSource*>( m_pDragSource) )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 #if OSL_DEBUG_LEVEL > 1
     if( listener.is())
 #endif
@@ -41,7 +38,6 @@ SourceContext::SourceContext( DragSource* pSource,
 
 SourceContext::~SourceContext()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void SAL_CALL SourceContext::addDragSourceListener(

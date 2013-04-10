@@ -20,8 +20,6 @@
 
 #include "bridges/cpp_uno/shared/bridge.hxx"
 
-#include "component.hxx"
-
 #include "bridges/cpp_uno/shared/cppinterfaceproxy.hxx"
 #include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
 
@@ -188,9 +186,6 @@ Bridge::Bridge(
     , pUnoEnv( pUnoEnv_ )
     , bExportCpp2Uno( bExportCpp2Uno_ )
 {
-    bridges::cpp_uno::shared::g_moduleCount.modCnt.acquire(
-        &bridges::cpp_uno::shared::g_moduleCount.modCnt );
-
     aCpp2Uno.pBridge = this;
     aCpp2Uno.acquire = acquireMapping;
     aCpp2Uno.release = releaseMapping;
@@ -209,8 +204,6 @@ Bridge::~Bridge() SAL_THROW(())
 {
     (*((uno_Environment *)pUnoEnv)->release)( (uno_Environment *)pUnoEnv );
     (*((uno_Environment *)pCppEnv)->release)( (uno_Environment *)pCppEnv );
-    bridges::cpp_uno::shared::g_moduleCount.modCnt.release(
-        &bridges::cpp_uno::shared::g_moduleCount.modCnt );
 }
 
 } } }

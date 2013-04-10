@@ -60,7 +60,6 @@ public:
     ODataInputStream( )
         : m_bValidStream( sal_False )
         {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
 
     ~ODataInputStream();
@@ -121,7 +120,6 @@ protected:
 
 ODataInputStream::~ODataInputStream()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XInputStream
@@ -520,7 +518,6 @@ public:
     ODataOutputStream()
         : m_bValidStream( sal_False )
         {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
     ~ODataOutputStream();
 
@@ -578,7 +575,6 @@ protected:
 
 ODataOutputStream::~ODataOutputStream()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 
@@ -951,7 +947,6 @@ public:
         : m_nMaxId(0) ,
           m_bValidMarkable(sal_False)
         {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
 
     ~OObjectOutputStream();
@@ -1024,7 +1019,6 @@ private:
 
 OObjectOutputStream::~OObjectOutputStream()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
@@ -1228,7 +1222,6 @@ public:
         , m_rCxt( r )
         , m_bValidMarkable(sal_False)
         {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
     ~OObjectInputStream();
 
@@ -1311,7 +1304,6 @@ private:
 
 OObjectInputStream::~OObjectInputStream()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
