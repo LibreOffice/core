@@ -620,8 +620,6 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             aExcMsg,
             Reference< XInterface >() );
     }
-
-    rtl_registerModuleForUnloading( lib);
     return xRet;
 }
 

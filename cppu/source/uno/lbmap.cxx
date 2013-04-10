@@ -443,7 +443,6 @@ static Mapping loadExternalMapping(
                 OSL_ASSERT( aExt.is() );
                 if (aExt.is())
                 {
-                    ::rtl_registerModuleForUnloading( hModule );
                     return aExt;
                 }
             }

@@ -1092,8 +1092,6 @@ static bool loadEnv(OUString const  & cLibStem,
 #endif
 
     (*fpInit)( pEnv ); // init of environment
-    ::rtl_registerModuleForUnloading( hMod );
-
     return true;
 }
 
