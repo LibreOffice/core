@@ -352,7 +352,11 @@ bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt
 
                     pIter = pItem->maTemplates.erase(pIter);
 
-                    RemoveItem(nItemId);
+                    if (maRegions[i]->mnRegionId == mnCurRegionId-1)
+                    {
+                        RemoveItem(nItemId);
+                        Invalidate();
+                    }
 
                     // Update Doc Idx for all templates that follow
                     for (; pIter != pItem->maTemplates.end(); ++pIter)
