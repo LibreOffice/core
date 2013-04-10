@@ -93,10 +93,10 @@ File gid_File_Extra_Database
 End
 
 File gid_File_Extra_Databasebiblio
-    Dir = gid_Dir_Database_Biblio;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    Name = "databasebiblio.zip";
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Name = "extras_databasebiblio.filelist";
 End
 
 File gid_File_Extra_Edit_Asp
