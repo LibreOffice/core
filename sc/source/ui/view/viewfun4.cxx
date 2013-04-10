@@ -760,7 +760,7 @@ bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
     ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
 
     const EditTextObject* pData = pDoc->GetEditText(aPos);
-    if (pData)
+    if (!pData)
         return false;
 
     if (!pData->IsFieldObject())
