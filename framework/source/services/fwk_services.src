@@ -67,27 +67,27 @@ Resource RES_BACKING_IMAGES
     };
     Bitmap BMP_BACKING_WRITER
     {
-        File = "odt_32.png";
+        File = "odt_32_8.png";
     };
     Bitmap BMP_BACKING_CALC
     {
-        File = "ods_32.png";
+        File = "ods_32_8.png";
     };
     Bitmap BMP_BACKING_IMPRESS
     {
-        File = "odp_32.png";
+        File = "odp_32_8.png";
     };
     Bitmap BMP_BACKING_DRAW
     {
-        File = "odg_32.png";
+        File = "odg_32_8.png";
     };
     Bitmap BMP_BACKING_DATABASE
     {
-        File = "odb_32.png";
+        File = "odb_32_8.png";
     };
     Bitmap BMP_BACKING_FORMULA
     {
-        File = "odf_32.png";
+        File = "odf_32_8.png";
     };
     Bitmap BMP_BACKING_OPENFILE
     {
