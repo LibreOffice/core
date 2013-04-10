@@ -51,8 +51,8 @@ namespace
                 return PC_TitleBar;
             else if (rPanel.GetTitleBar()->GetToolBox().HasFocus())
                 return PC_ToolBox;
-            else
-                return PC_None;
+
+    return PC_None;
     }
 }
 
@@ -418,8 +418,8 @@ void FocusManager::HandleKeyEvent (
         return;
 
     const sal_Int32 nPanelIndex (GetPanelIndex(rWindow));
-    const bool bIsPanelTitleFocused (nPanelIndex>=0 && maPanels[nPanelIndex] != &rWindow);
-    const bool bIsPanelToolBoxFocused (nPanelIndex>=0 && maPanels[nPanelIndex] != &rWindow);
+    // const bool bIsPanelTitleFocused (nPanelIndex>=0 && maPanels[nPanelIndex] != &rWindow);
+    // const bool bIsPanelToolBoxFocused (nPanelIndex>=0 && maPanels[nPanelIndex] != &rWindow);
     sal_Int32 nButtonIndex (nPanelIndex==-1 ? GetButtonIndex(rWindow) : -1);
 
     switch (rKeyCode.GetCode())
