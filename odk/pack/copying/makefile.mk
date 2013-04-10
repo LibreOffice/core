@@ -81,7 +81,7 @@ LIBLIST = \
     $(DESTDIRLIB)/icppu.lib 	\
     $(DESTDIRLIB)/icppuhelper.lib 	\
     $(DESTDIRLIB)/irmcxt.lib \
-    $(DESTDIRLIB)/ipurpenvhelper3MSC.lib
+    $(DESTDIRLIB)/ipurpenvhelper.lib
 .ENDIF
 
 .IF "$(OS)"=="LINUX"
