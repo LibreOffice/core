@@ -1472,7 +1472,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
             {
                 aSingleType = rType.GetToken( 0, FILEDIALOG_DEF_EXTSEP, nIdx );
 #ifdef UNX
-                if ( aSingleType.CompareTo( _rFilter ) == COMPARE_EQUAL )
+                if ( aSingleType == _rFilter )
 #else
                 if ( aSingleType.CompareIgnoreCaseToAscii( _rFilter ) == COMPARE_EQUAL )
 #endif
@@ -1480,7 +1480,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
             }
         }
 #ifdef UNX
-        else if ( rType.CompareTo( _rFilter ) == COMPARE_EQUAL )
+        else if ( rType == _rFilter )
 #else
         else if ( rType.CompareIgnoreCaseToAscii( _rFilter ) == COMPARE_EQUAL )
 #endif

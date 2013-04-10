@@ -1912,7 +1912,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
 
     sal_Bool bVoid = !Value.hasValue();
 
-    if ( 0 == PropertyName.compareTo( FM_PROP_TEXTLINECOLOR ) )
+    if ( PropertyName == FM_PROP_TEXTLINECOLOR )
     {
         ::Color aTextLineColor( bVoid ? COL_TRANSPARENT : ::comphelper::getINT32( Value ) );
         if (bVoid)
@@ -1944,21 +1944,21 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
         if (isDesignMode())
             pGrid->Invalidate();
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_FONTEMPHASISMARK ) )
+    else if ( PropertyName == FM_PROP_FONTEMPHASISMARK )
     {
         Font aGridFont = pGrid->GetControlFont();
         sal_Int16 nValue = ::comphelper::getINT16(Value);
         aGridFont.SetEmphasisMark( nValue );
         pGrid->SetControlFont( aGridFont );
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_FONTRELIEF ) )
+    else if ( PropertyName == FM_PROP_FONTRELIEF )
     {
         Font aGridFont = pGrid->GetControlFont();
         sal_Int16 nValue = ::comphelper::getINT16(Value);
         aGridFont.SetRelief( (FontRelief)nValue );
         pGrid->SetControlFont( aGridFont );
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_HELPURL ) )
+    else if ( PropertyName == FM_PROP_HELPURL )
     {
         OUString sHelpURL;
         OSL_VERIFY( Value >>= sHelpURL );
@@ -1967,11 +1967,11 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
             sHelpURL = aHID.GetURLPath();
         pGrid->SetHelpId( OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_DISPLAYSYNCHRON ) )
+    else if ( PropertyName == FM_PROP_DISPLAYSYNCHRON )
     {
         pGrid->setDisplaySynchron(::comphelper::getBOOL(Value));
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_CURSORCOLOR ) )
+    else if ( PropertyName == FM_PROP_CURSORCOLOR )
     {
         if (bVoid)
             pGrid->SetCursorColor(COL_TRANSPARENT);
@@ -1980,13 +1980,13 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
         if (isDesignMode())
             pGrid->Invalidate();
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_ALWAYSSHOWCURSOR ) )
+    else if ( PropertyName == FM_PROP_ALWAYSSHOWCURSOR )
     {
         pGrid->EnablePermanentCursor(::comphelper::getBOOL(Value));
         if (isDesignMode())
             pGrid->Invalidate();
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_FONT ) )
+    else if ( PropertyName == FM_PROP_FONT )
     {
         if ( bVoid )
             pGrid->SetControlFont( Font() );
@@ -2020,7 +2020,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
             }
         }
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_BACKGROUNDCOLOR ) )
+    else if ( PropertyName == FM_PROP_BACKGROUNDCOLOR )
     {
         if ( bVoid )
         {
@@ -2033,7 +2033,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
             pGrid->SetControlBackground( aColor );
         }
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_TEXTCOLOR ) )
+    else if ( PropertyName == FM_PROP_TEXTCOLOR )
     {
         if ( bVoid )
         {
@@ -2046,7 +2046,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
             pGrid->SetControlForeground( aColor );
         }
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_ROWHEIGHT ) )
+    else if ( PropertyName == FM_PROP_ROWHEIGHT )
     {
         sal_Int32 nLogHeight(0);
         if (Value >>= nLogHeight)
@@ -2059,19 +2059,19 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
         else if (bVoid)
             pGrid->SetDataRowHeight(0);
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_HASNAVIGATION ) )
+    else if ( PropertyName == FM_PROP_HASNAVIGATION )
     {
         sal_Bool bValue( sal_True );
         OSL_VERIFY( Value >>= bValue );
         pGrid->EnableNavigationBar( bValue );
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_RECORDMARKER ) )
+    else if ( PropertyName == FM_PROP_RECORDMARKER )
     {
         sal_Bool bValue( sal_True );
         OSL_VERIFY( Value >>= bValue );
         pGrid->EnableHandle( bValue );
     }
-    else if ( 0 == PropertyName.compareTo( FM_PROP_ENABLED ) )
+    else if ( PropertyName == FM_PROP_ENABLED )
     {
         sal_Bool bValue( sal_True );
         OSL_VERIFY( Value >>= bValue );
@@ -2125,37 +2125,37 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
         FmGridControl* pGrid = (FmGridControl*) GetWindow();
         Window* pDataWindow  = &pGrid->GetDataWindow();
 
-        if ( 0 == _rPropertyName.compareTo( FM_PROP_NAME ) )
+        if ( _rPropertyName == FM_PROP_NAME )
         {
             Font aFont = pDataWindow->GetControlFont();
             aProp <<= ImplCreateFontDescriptor( aFont );
         }
-        else if ( 0 == _rPropertyName.compareTo( FM_PROP_TEXTCOLOR ) )
+        else if ( _rPropertyName == FM_PROP_TEXTCOLOR )
         {
             aProp <<= (sal_Int32)pDataWindow->GetControlForeground().GetColor();
         }
-        else if ( 0 == _rPropertyName.compareTo( FM_PROP_BACKGROUNDCOLOR ) )
+        else if ( _rPropertyName == FM_PROP_BACKGROUNDCOLOR )
         {
             aProp <<= (sal_Int32)pDataWindow->GetControlBackground().GetColor();
         }
-        else if ( 0 == _rPropertyName.compareTo( FM_PROP_ROWHEIGHT ) )
+        else if ( _rPropertyName == FM_PROP_ROWHEIGHT )
         {
             sal_Int32 nPixelHeight = pGrid->GetDataRowHeight();
             // take the zoom factor into account
             nPixelHeight = pGrid->CalcReverseZoom(nPixelHeight);
             aProp <<= (sal_Int32)pGrid->PixelToLogic(Point(0,nPixelHeight),MAP_10TH_MM).Y();
         }
-        else if ( 0 == _rPropertyName.compareTo( FM_PROP_HASNAVIGATION ) )
+        else if ( _rPropertyName == FM_PROP_HASNAVIGATION )
         {
             sal_Bool bHasNavBar = pGrid->HasNavigationBar();
             aProp <<= (sal_Bool)bHasNavBar;
         }
-        else if ( 0 == _rPropertyName.compareTo( FM_PROP_RECORDMARKER ) )
+        else if ( _rPropertyName == FM_PROP_RECORDMARKER )
         {
             sal_Bool bHasHandle = pGrid->HasHandle();
             aProp <<= (sal_Bool)bHasHandle;
         }
-        else if ( 0 == _rPropertyName.compareTo( FM_PROP_ENABLED ) )
+        else if ( _rPropertyName == FM_PROP_ENABLED )
         {
             aProp <<= (sal_Bool)pDataWindow->IsEnabled();
         }
@@ -2936,7 +2936,7 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
             if (m_pDispatchers[i].is())
             {
                 // commit any changes done so far, if it's not the undoRecord URL
-                if ( 0 == pUrls->Complete.compareTo( FMURL_RECORD_UNDO ) || commit() )
+                if ( pUrls->Complete == FMURL_RECORD_UNDO || commit() )
                     m_pDispatchers[i]->dispatch(*pUrls, Sequence< PropertyValue>());
 
                 return 1;   // handled

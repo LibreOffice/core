@@ -272,7 +272,7 @@ sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
     Sequence < OUString > SupportedServicesNames = Component_getSupportedServiceNames();
 
     for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
+        if ( SupportedServicesNames[n] == ServiceName )
             return sal_True;
 
     return sal_False;
