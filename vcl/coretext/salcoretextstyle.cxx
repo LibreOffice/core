@@ -119,6 +119,8 @@ std::ostream &operator <<(std::ostream& s, CoreTextStyleInfo &rStyle)
 #else
     s << "{Font=" << rStyle.GetFont();
     s << ",Color=" << rStyle.GetColor();
+    if (rStyle.GetFontStretchFactor() != 1)
+        s << ",Stretch=" << rStyle.GetFontStretchFactor();
     s << "}";
 #endif
     return s;
