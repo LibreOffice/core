@@ -2001,7 +2001,9 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 ifeq ($(OS)$(COM),WNTMSC)
-$(call gb_LinkTarget_use_external,$(1),openssl)
+$(if $(filter-out YES,$(DISABLE_OPENSSL)), \
+	$(call gb_LinkTarget_use_external,$(1),openssl) \
+)
 
 $(call gb_LinkTarget_use_system_win32_libs,$(1),\
 	secur32 \

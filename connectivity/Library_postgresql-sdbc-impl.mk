@@ -61,7 +61,9 @@ $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
 	boost_headers \
 	postgresql \
 	$(if $(filter-out MSC,$(COM)), \
-		openssl \
+		$(if $(filter-out YES,$(DISABLE_OPENSSL)), \
+			openssl \
+		) \
 		openldap \
 		nss3 \
 		plc4 \
