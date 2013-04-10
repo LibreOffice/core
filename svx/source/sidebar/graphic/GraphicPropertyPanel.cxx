@@ -174,7 +174,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyTransHdl, void *, EMPTYARG )
 
 //////////////////////////////////////////////////////////////////////////////
 
-IMPL_LINK( GraphicPropertyPanel, ClickColorModeHdl, ToolBox *, pBox )
+IMPL_LINK( GraphicPropertyPanel, ClickColorModeHdl, ToolBox *, /* pBox */)
 {
     sal_Int16 nTrans = mpLBColorMode->GetSelectEntryPos();
     SfxInt16Item aTransItem( SID_ATTR_GRAF_MODE, nTrans );
