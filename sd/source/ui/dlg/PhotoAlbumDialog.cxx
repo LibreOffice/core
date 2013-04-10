@@ -594,18 +594,18 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
             // Write out configuration
             try
             {
-                Reference< XInterface > xCfg = ::comphelper::ConfigurationHelper::openConfig(
+                Reference< XInterface > xCfgWriter = ::comphelper::ConfigurationHelper::openConfig(
                     ::comphelper::getProcessComponentContext(),
                     OUString("/org.openoffice.Office.Impress/"),
                     ::comphelper::ConfigurationHelper::E_STANDARD);
 
                 ::comphelper::ConfigurationHelper::writeRelativeKey(
-                    xCfg,
+                    xCfgWriter,
                     OUString("Pictures"),
                     OUString("Path"),
                     uno::makeAny(sUrl));
 
-                ::comphelper::ConfigurationHelper::flush(xCfg);
+                ::comphelper::ConfigurationHelper::flush(xCfgWriter);
             }
             catch(const Exception&)
             {
