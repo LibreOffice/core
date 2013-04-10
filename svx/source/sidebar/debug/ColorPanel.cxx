@@ -130,7 +130,7 @@ int ColorPanel::CalculateRowCount (const Size&, int nColumnCount)
 
 
 
-void ColorPanel::DataChanged (const DataChangedEvent& rEvent)
+void ColorPanel::DataChanged (const DataChangedEvent& /* rEvent */)
 {
     Fill();
 }
