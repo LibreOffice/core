@@ -65,14 +65,14 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
       maMtrTrgrCenterY(this, SVX_RES(MTR_TRGR_CENTER_Y)),
       maFtTrgrAngle(this, SVX_RES(FT_TRGR_ANGLE)),
       maMtrTrgrAngle(this, SVX_RES(MTR_TRGR_ANGLE)),
+      maBtnLeft45(this, SVX_RES(BTN_LEFT_SECOND)),
+      maBtnRight45(this, SVX_RES(BTN_RIGHT_FIRST)),
       maFtTrgrStartValue(this, SVX_RES(FT_TRGR_START_VALUE)),
       maMtrTrgrStartValue(this, SVX_RES(MTR_TRGR_START_VALUE)),
       maFtTrgrEndValue(this, SVX_RES(FT_TRGR_END_VALUE)),
       maMtrTrgrEndValue(this, SVX_RES(MTR_TRGR_END_VALUE)),
       maFtTrgrBorder(this, SVX_RES(FT_TRGR_BORDER)),
       maMtrTrgrBorder(this, SVX_RES(MTR_TRGR_BORDER)),
-      maBtnLeft45(this, SVX_RES(BTN_LEFT_SECOND)),
-      maBtnRight45(this, SVX_RES(BTN_RIGHT_FIRST)),
       maRotLeft( SVX_RES(IMG_ROT_LEFT)),
       maRotRight( SVX_RES(IMG_ROT_RIGHT)),
       mrAreaPropertyPanel(rPanel),
@@ -304,7 +304,7 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
 
 
 
-IMPL_LINK(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl, void *, pControl)
+IMPL_LINK(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl, void *, /* pControl */)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue.GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue.GetValue() * 255) / 100);
@@ -315,7 +315,7 @@ IMPL_LINK(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl, void *, pContro
 
 
 
-IMPL_LINK(AreaTransparencyGradientControl, Left_Click45_Impl, void *, pControl)
+IMPL_LINK(AreaTransparencyGradientControl, Left_Click45_Impl, void *, /* pControl */)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue.GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue.GetValue() * 255) / 100);
@@ -331,7 +331,7 @@ IMPL_LINK(AreaTransparencyGradientControl, Left_Click45_Impl, void *, pControl)
 
 
 
-IMPL_LINK(AreaTransparencyGradientControl, Right_Click45_Impl, void *, pControl)
+IMPL_LINK(AreaTransparencyGradientControl, Right_Click45_Impl, void *, /* pControl */)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue.GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue.GetValue() * 255) / 100);
