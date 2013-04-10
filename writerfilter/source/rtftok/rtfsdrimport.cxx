@@ -26,6 +26,7 @@
  * instead of those above.
  */
 
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -171,7 +172,15 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 xPropertySet->setPropertyValue("FillColor", aAny);
         }
         else if ( i->first == "wzName" )
-            xPropertySet->setPropertyValue("Name", uno::makeAny(i->second));
+        {
+            if (bTextFrame)
+            {
+                uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
+                xNamed->setName(i->second);
+            }
+            else
+                xPropertySet->setPropertyValue("Name", uno::makeAny(i->second));
+        }
         else if ( i->first == "wzDescription" )
             xPropertySet->setPropertyValue("Description", uno::makeAny(i->second));
         else if ( i->first == "pib" )
