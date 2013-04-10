@@ -32,7 +32,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <rtl/unload.h>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase6.hxx>
@@ -428,8 +427,6 @@ struct OServiceManagerMutex
     Mutex m_mutex;
 };
 
-extern "C" void SAL_CALL smgrUnloadingListener(void* id);
-
 typedef WeakComponentImplHelper7<
     lang::XMultiServiceFactory, lang::XMultiComponentFactory, lang::XServiceInfo,
     lang::XInitialization,
@@ -441,8 +438,6 @@ class OServiceManager
     , public t_OServiceManager_impl
 {
 public:
-    friend void SAL_CALL smgrUnloadingListener(void* id);
-
     OServiceManager( Reference< XComponentContext > const & xContext );
     virtual ~OServiceManager();
 
@@ -527,14 +522,8 @@ protected:
 
     Reference< beans::XPropertySetInfo > m_xPropertyInfo;
 
-    sal_Int32 m_nUnloadingListenerId;
-
-    // Does clean up when the unloading mechanism has been set off. It is called from
-    // the listener function smgrUnloadingListener.
-    void onUnloadingNotify();
     // factories which have been loaded and not inserted( by XSet::insert)
-    // are remembered by this set. Those factories
-    // are not released on a call to onUnloadingNotify
+    // are remembered by this set.
     HashSet_Ref m_SetLoadedFactories;
 private:
 
@@ -765,7 +754,6 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
     , m_bInDisposing( false )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    m_nUnloadingListenerId= rtl_addUnloadingListener( smgrUnloadingListener, this);
 }
 
 /**
@@ -773,106 +761,7 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
  */
 OServiceManager::~OServiceManager()
 {
-    if( m_nUnloadingListenerId != 0)
-        rtl_removeUnloadingListener( m_nUnloadingListenerId );
-
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
-
-// Removes entries in m_ServiceMap, m_ImplementationNameMap and m_ImplementationNameMap
-// if those entries have not been inserted through XSet::insert. Therefore the entries
-// are compared with the entries in m_SetLoadedFactories.
-void OServiceManager::onUnloadingNotify()
-{
-    MutexGuard aGuard( m_mutex);
-
-    typedef HashSet_Ref::const_iterator CIT_S;
-    typedef HashMultimap_OWString_Interface::iterator IT_MM;
-
-    CIT_S it_SetEnd= m_SetLoadedFactories.end();
-    IT_MM it_end1= m_ServiceMap.end();
-    list<IT_MM> listDeleteServiceMap;
-    typedef list<IT_MM>::const_iterator CIT_DMM;
-    // find occurrences in m_ServiceMap
-    for(IT_MM it_i1= m_ServiceMap.begin(); it_i1 != it_end1; ++it_i1)
-    {
-        if( m_SetLoadedFactories.find( it_i1->second) != it_SetEnd)
-        {
-            Reference<XUnloadingPreference> xunl( it_i1->second, UNO_QUERY);
-            if( xunl.is())
-            {
-                if( xunl->releaseOnNotification())
-                    listDeleteServiceMap.push_front( it_i1);
-            }
-            else
-                listDeleteServiceMap.push_front( it_i1);
-        }
-    }
-    // delete elements from m_ServiceMap
-    CIT_DMM it_end2= listDeleteServiceMap.end();
-    for( CIT_DMM it_i2= listDeleteServiceMap.begin(); it_i2 != it_end2; ++it_i2)
-        m_ServiceMap.erase( *it_i2);
-
-    // find elements in m_ImplementationNameMap
-    typedef HashMap_OWString_Interface::iterator IT_M;
-    IT_M it_end3= m_ImplementationNameMap.end();
-    list<IT_M> listDeleteImplementationNameMap;
-    typedef list<IT_M>::const_iterator CIT_DM;
-    for( IT_M it_i3= m_ImplementationNameMap.begin();  it_i3 != it_end3; ++it_i3)
-    {
-        if( m_SetLoadedFactories.find( it_i3->second) != it_SetEnd)
-        {
-            Reference<XUnloadingPreference> xunl( it_i3->second, UNO_QUERY);
-            if( xunl.is())
-            {
-                if( xunl->releaseOnNotification())
-                    listDeleteImplementationNameMap.push_front( it_i3);
-            }
-            else
-                listDeleteImplementationNameMap.push_front( it_i3);
-        }
-    }
-    // delete elements from m_ImplementationNameMap
-    CIT_DM it_end4= listDeleteImplementationNameMap.end();
-    for( CIT_DM it_i4= listDeleteImplementationNameMap.begin(); it_i4 != it_end4; ++it_i4)
-        m_ImplementationNameMap.erase( *it_i4);
-
-    // find elements in m_ImplementationMap
-    typedef HashSet_Ref::iterator IT_S;
-    IT_S it_end5= m_ImplementationMap.end();
-    list<IT_S> listDeleteImplementationMap;
-    typedef list<IT_S>::const_iterator CIT_DS;
-    for( IT_S it_i5= m_ImplementationMap.begin(); it_i5 != it_end5; ++it_i5)
-    {
-        if( m_SetLoadedFactories.find( *it_i5) != it_SetEnd)
-        {
-            Reference<XUnloadingPreference> xunl( *it_i5, UNO_QUERY);
-            if( xunl.is())
-            {
-                if( xunl->releaseOnNotification())
-                    listDeleteImplementationMap.push_front( it_i5);
-            }
-            else
-                listDeleteImplementationMap.push_front( it_i5);
-        }
-    }
-    // delete elements from m_ImplementationMap
-    CIT_DS it_end6= listDeleteImplementationMap.end();
-    for( CIT_DS it_i6= listDeleteImplementationMap.begin(); it_i6 != it_end6; ++it_i6)
-        m_ImplementationMap.erase( *it_i6);
-
-    // remove Event listener before the factories are released.
-    IT_S it_end7= m_SetLoadedFactories.end();
-
-    Reference<XEventListener> xlistener= getFactoryListener();
-    for( IT_S it_i7= m_SetLoadedFactories.begin(); it_i7 != it_end7; ++it_i7)
-    {
-        Reference<XComponent> xcomp( *it_i7, UNO_QUERY);
-        if( xcomp.is())
-            xcomp->removeEventListener( xlistener);
-    }
-    // release the factories in m_SetLoadedFactories
-    m_SetLoadedFactories.clear();
 }
 
 // XComponent
@@ -929,10 +818,6 @@ void OServiceManager::disposing()
 
     // not only the Event should hold the object
     OSL_ASSERT( m_refCount != 1 );
-
-    // Revoke this service manager as unloading listener
-    rtl_removeUnloadingListener( m_nUnloadingListenerId);
-    m_nUnloadingListenerId=0;
 }
 
 // XPropertySet
@@ -1853,18 +1738,6 @@ Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
             return Any();
     }
     return OServiceManager::getPropertyValue( PropertyName );
-}
-
-/* This is the listener function used by the service manager in order
-to implement the unloading mechanism, id is the this pointer of the
-service manager instances. On notification, that is the function is being called
-by rtl_unloadUnusedModules, the cached factroies are being removed from the
-service manager ( except manually inserted factories).
-*/
-extern "C" void SAL_CALL smgrUnloadingListener(void* id)
-{
-    stoc_smgr::OServiceManager* pMgr= reinterpret_cast<stoc_smgr::OServiceManager*>( id);
-      pMgr->onUnloadingNotify();
 }
 
 } // namespace
