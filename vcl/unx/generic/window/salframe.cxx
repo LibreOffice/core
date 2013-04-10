@@ -50,7 +50,6 @@
 #include "unx/saldisp.hxx"
 #include "unx/salgdi.h"
 #include "unx/salframe.h"
-#include "unx/soicon.hxx"
 #include "unx/sm.hxx"
 #include "unx/wmadaptor.hxx"
 #include "generic/genprn.h"
@@ -65,6 +64,9 @@
 
 #include <sal/macros.h>
 #include <com/sun/star/uno/Exception.hpp>
+
+#include "svids.hrc"
+#include "impbmp.hxx"
 
 #include <algorithm>
 
@@ -189,6 +191,80 @@ void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
                 False, NoEventMask, &aEvent );
     XSync( pDisplay_->GetDisplay(), False );
     GetGenericData()->ErrorTrapPop();
+}
+
+static sal_Bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen,
+                                         sal_uInt16 nIcon, sal_uInt16 iconSize,
+                                         Pixmap& icon_pixmap, Pixmap& icon_mask)
+{
+    if( ! ImplGetResMgr() )
+        return sal_False;
+
+    sal_uInt16 nIconSizeOffset;
+
+    if( iconSize >= 48 )
+        nIconSizeOffset = SV_ICON_SIZE48_START;
+    else if( iconSize >= 32 )
+        nIconSizeOffset = SV_ICON_SIZE32_START;
+    else if( iconSize >= 16 )
+        nIconSizeOffset = SV_ICON_SIZE16_START;
+    else
+        return sal_False;
+
+    BitmapEx aIcon( ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()));
+    if( sal_True == aIcon.IsEmpty() )
+        return sal_False;
+
+    SalTwoRect aRect;
+    aRect.mnSrcX = 0; aRect.mnSrcY = 0;
+    aRect.mnSrcWidth = iconSize; aRect.mnSrcHeight = iconSize;
+    aRect.mnDestX = 0; aRect.mnDestY = 0;
+    aRect.mnDestWidth = iconSize; aRect.mnDestHeight = iconSize;
+
+    X11SalBitmap *pBitmap = static_cast < X11SalBitmap * >
+        (aIcon.ImplGetBitmapImpBitmap()->ImplGetSalBitmap());
+
+    icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(),
+                                 pDisplay->GetRootWindow( nXScreen ),
+                                 iconSize, iconSize,
+                                 DefaultDepth( pDisplay->GetDisplay(),
+                                               nXScreen.getXScreen() )
+                                 );
+
+    pBitmap->ImplDraw( icon_pixmap,
+                       nXScreen,
+                       DefaultDepth( pDisplay->GetDisplay(),
+                                     nXScreen.getXScreen() ),
+                       aRect,
+                       DefaultGC( pDisplay->GetDisplay(),
+                                  nXScreen.getXScreen() ) );
+
+    icon_mask = None;
+
+    if( TRANSPARENT_BITMAP == aIcon.GetTransparentType() )
+    {
+        icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
+                                   pDisplay->GetRootWindow( pDisplay->GetDefaultXScreen() ),
+                                   iconSize, iconSize, 1);
+
+        XGCValues aValues;
+        aValues.foreground = 0xffffffff;
+        aValues.background = 0;
+        aValues.function = GXcopy;
+        GC aMonoGC = XCreateGC( pDisplay->GetDisplay(), icon_mask,
+            GCFunction|GCForeground|GCBackground, &aValues );
+
+        Bitmap aMask = aIcon.GetMask();
+        aMask.Invert();
+
+        X11SalBitmap *pMask = static_cast < X11SalBitmap * >
+            (aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+
+        pMask->ImplDraw(icon_mask, nXScreen, 1, aRect, aMonoGC);
+        XFreeGC( pDisplay->GetDisplay(), aMonoGC );
+    }
+
+    return sal_True;
 }
 
 void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemParentData* pParentData, bool bUseGeometry )
@@ -401,10 +477,10 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
             bool bOk=false;
             try
             {
-                bOk=SelectAppIconPixmap( pDisplay_, m_nXScreen,
-                                         mnIconID != 1 ? mnIconID :
-                                         (mpParent ? mpParent->mnIconID : 1), 32,
-                                         Hints.icon_pixmap, Hints.icon_mask );
+                bOk = lcl_SelectAppIconPixmap( pDisplay_, m_nXScreen,
+                                               mnIconID != 1 ? mnIconID :
+                                               (mpParent ? mpParent->mnIconID : 1), 32,
+                                               Hints.icon_pixmap, Hints.icon_mask );
             }
             catch( com::sun::star::uno::Exception& )
             {
@@ -931,15 +1007,15 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
         }
         pHints = &Hints;
 
-        sal_Bool bOk = SelectAppIconPixmap( GetDisplay(), m_nXScreen,
-                                        nIcon, iconSize,
-                                        pHints->icon_pixmap, pHints->icon_mask );
+        sal_Bool bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
+                                                nIcon, iconSize,
+                                                pHints->icon_pixmap, pHints->icon_mask );
         if ( !bOk )
         {
             // load default icon (0)
-            bOk = SelectAppIconPixmap( GetDisplay(), m_nXScreen,
-                                       0, iconSize,
-                                       pHints->icon_pixmap, pHints->icon_mask );
+            bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
+                                           0, iconSize,
+                                           pHints->icon_pixmap, pHints->icon_mask );
         }
         if( bOk )
         {
