@@ -1,0 +1,1 @@
+reject: if the ctor throws, the dtor is not called anyway
