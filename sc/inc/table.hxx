@@ -820,6 +820,14 @@ public:
 
     ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
 
+    /** Replace behaves differently to the Search; adjust the rCol and rRow accordingly.
+
+        'Replace' replaces at the 'current' position, but in order to achieve
+        that, we have to 'shift' the rCol / rRow to the 'previous' position -
+        what it is depends on various settings in rSearchItem.
+    */
+    static void UpdateSearchItemAddressForReplace( const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow );
+
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd,

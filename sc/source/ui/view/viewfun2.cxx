@@ -61,6 +61,7 @@
 #include "rangenam.hxx"
 #include "rangeutl.hxx"
 #include "refundo.hxx"
+#include "table.hxx"
 #include "tablink.hxx"
 #include "tabvwsh.hxx"
 #include "uiitems.hxx"
@@ -1575,13 +1576,16 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     if (bAddUndo && !pDoc->IsUndoEnabled())
         bAddUndo = false;
 
-    SCCOL nCol = GetViewData()->GetCurX();
-    SCROW nRow = GetViewData()->GetCurY();
-    SCTAB nTab = GetViewData()->GetTabNo();
+    SCCOL nCol, nOldCol;
+    SCROW nRow, nOldRow;
+    SCTAB nTab, nOldTab;
+    nCol = nOldCol = GetViewData()->GetCurX();
+    nRow = nOldRow = GetViewData()->GetCurY();
+    nTab = nOldTab = GetViewData()->GetTabNo();
+
     sal_uInt16 nCommand = pSearchItem->GetCommand();
     bool bAllTables = pSearchItem->IsAllTables();
     std::set<SCTAB> aOldSelectedTables;
-    SCTAB nOldTab = nTab;
     SCTAB nLastTab = pDoc->GetTableCount() - 1;
     SCTAB nStartTab, nEndTab;
     if ( bAllTables )
@@ -1769,10 +1773,24 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             if ( nCommand == SVX_SEARCHCMD_REPLACE )
             {
                 pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID );
-                SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
-                aSearchItem.SetCommand(SVX_SEARCHCMD_FIND);
-                aSearchItem.SetWhich(SID_SEARCH_ITEM);
-                GetViewData()->GetDispatcher().Execute( FID_SEARCH_NOW, SFX_CALLMODE_STANDARD, &aSearchItem, 0L );
+
+                // jump to next cell if we replaced everything in the cell
+                // where the cursor was positioned (but avoid switching tabs)
+                if ( nCol == nOldCol && nRow == nOldRow && nTab == nOldTab )
+                {
+                    SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
+                    aSearchItem.SetCommand(SVX_SEARCHCMD_FIND);
+                    aSearchItem.SetWhich(SID_SEARCH_ITEM);
+
+                    ScRangeList aMatchedRanges;
+                    ScTable::UpdateSearchItemAddressForReplace( aSearchItem, nCol, nRow );
+                    if ( pDoc->SearchAndReplace( aSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr, NULL ) &&
+                            ( nTab == nOldTab ) &&
+                            ( nCol != nOldCol || nRow != nOldRow ) )
+                    {
+                        SetCursor( nCol, nRow, true );
+                    }
+                }
             }
             else
                 pDocSh->PostPaintGridAll();

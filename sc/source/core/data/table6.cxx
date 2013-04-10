@@ -442,26 +442,32 @@ bool ScTable::SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMar
     return bEverFound;
 }
 
+void ScTable::UpdateSearchItemAddressForReplace( const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow )
+{
+    if (rSearchItem.GetBackward())
+    {
+        if (rSearchItem.GetRowDirection())
+            rCol += 1;
+        else
+            rRow += 1;
+    }
+    else
+    {
+        if (rSearchItem.GetRowDirection())
+            rCol -= 1;
+        else
+            rRow -= 1;
+    }
+}
+
 bool ScTable::Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                       const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = false;
     SCCOL nCol = rCol;
     SCROW nRow = rRow;
-    if (rSearchItem.GetBackward())
-    {
-        if (rSearchItem.GetRowDirection())
-            nCol += 1;
-        else
-            nRow += 1;
-    }
-    else
-    {
-        if (rSearchItem.GetRowDirection())
-            nCol -= 1;
-        else
-            nRow -= 1;
-    }
+
+    UpdateSearchItemAddressForReplace( rSearchItem, nCol, nRow );
     bFound = Search(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
     if (bFound)
     {
