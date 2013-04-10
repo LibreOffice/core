@@ -27,6 +27,7 @@
 #include "dpobject.hxx"
 #include "dpglobal.hxx"
 #include "dputil.hxx"
+#include "globalnames.hxx"
 
 #include <rtl/math.hxx>
 
@@ -47,8 +48,6 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 
 using ::std::vector;
 using ::boost::shared_ptr;
-
-#define D_TIMEFACTOR              86400.0
 
 const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
 
@@ -155,7 +154,7 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
         // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
 
         double time = rCellData.GetValue() - approxFloor(rCellData.GetValue());
-        long seconds = static_cast<long>(approxFloor(time*D_TIMEFACTOR + 0.5));
+        long seconds = static_cast<long>(approxFloor(time*DATE_TIME_FACTOR + 0.5));
 
         switch (nGroupType)
         {

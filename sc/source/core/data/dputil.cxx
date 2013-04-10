@@ -30,6 +30,7 @@
 #include "global.hxx"
 #include "dpitemdata.hxx"
 #include "dpnumgroupinfo.hxx"
+#include "globalnames.hxx"
 
 #include "comphelper/string.hxx"
 #include "unotools/localedatawrapper.hxx"
@@ -39,8 +40,6 @@
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-
-#define D_TIMEFACTOR 86400.0
 
 using namespace com::sun::star;
 
@@ -314,7 +313,7 @@ sal_Int32 ScDPUtil::getDatePartValue(
         // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
 
         double fTime = fValue - rtl::math::approxFloor(fValue);
-        long nSeconds = (long)rtl::math::approxFloor(fTime*D_TIMEFACTOR+0.5);
+        long nSeconds = (long)rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5);
 
         switch (nDatePart)
         {

@@ -36,6 +36,8 @@
 
 #define TEXTWIDTH_DIRTY 0xffff
 
+#define DATE_TIME_FACTOR 86400.0
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

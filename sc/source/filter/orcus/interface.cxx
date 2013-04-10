@@ -14,11 +14,10 @@
 #include "rangenam.hxx"
 #include "tokenarray.hxx"
 #include "stringutil.hxx"
+#include "globalnames.hxx"
 
 #include "formula/token.hxx"
 #include "tools/datetime.hxx"
-
-#define D_TIMEFACTOR              86400.0
 
 using orcus::spreadsheet::row_t;
 using orcus::spreadsheet::col_t;
@@ -169,7 +168,7 @@ void ScOrcusSheet::set_date_time(
         aTime.GetMin() * 60.0 +
         aTime.GetHour() * 3600.0;
 
-    fTime /= D_TIMEFACTOR;
+    fTime /= DATE_TIME_FACTOR;
 
     mrDoc.SetValue(col, row, mnTab, nDateDiff + fTime);
 }

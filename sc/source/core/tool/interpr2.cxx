@@ -43,14 +43,13 @@
 #include "dpobject.hxx"
 #include "postit.hxx"
 #include "tokenarray.hxx"
+#include "globalnames.hxx"
 
 #include <string.h>
 #include <math.h>
 
 using namespace formula;
-// STATIC DATA -----------------------------------------------------------
 
-#define D_TIMEFACTOR              86400.0
 #define SCdEpsilon                1.0E-7
 
 //-----------------------------------------------------------------------------
@@ -117,7 +116,7 @@ void ScInterpreter::ScGetActTime()
     double nTime = ((double)aActTime.Get100Sec() / 100 +
                     (double)(aActTime.GetSec()        +
                             (aActTime.GetMin()  * 60) +
-                            (aActTime.GetHour() * 3600))) / D_TIMEFACTOR;
+                            (aActTime.GetHour() * 3600))) / DATE_TIME_FACTOR;
     PushDouble( (double) nDiff + nTime );
 }
 
@@ -150,7 +149,7 @@ void ScInterpreter::ScGetMin()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetMin" );
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
-    long nVal = (long)::rtl::math::approxFloor(fTime*D_TIMEFACTOR+0.5) % 3600;
+    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % 3600;
     PushDouble( (double) (nVal/60) );
 }
 
@@ -159,7 +158,7 @@ void ScInterpreter::ScGetSec()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetSec" );
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
-    long nVal = (long)::rtl::math::approxFloor(fTime*D_TIMEFACTOR+0.5) % 60;
+    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % 60;
     PushDouble( (double) nVal );
 }
 
@@ -168,7 +167,7 @@ void ScInterpreter::ScGetHour()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetHour" );
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
-    long nVal = (long)::rtl::math::approxFloor(fTime*D_TIMEFACTOR+0.5) / 3600;
+    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) / 3600;
     PushDouble((double) nVal);
 }
 
@@ -289,7 +288,7 @@ void ScInterpreter::ScGetTime()
         double nSec = GetDouble();
         double nMin = GetDouble();
         double nHour = GetDouble();
-        double fTime = fmod( (nHour * 3600) + (nMin * 60) + nSec, D_TIMEFACTOR) / D_TIMEFACTOR;
+        double fTime = fmod( (nHour * 3600) + (nMin * 60) + nSec, DATE_TIME_FACTOR) / DATE_TIME_FACTOR;
         if (fTime < 0)
             PushIllegalArgument();
         else

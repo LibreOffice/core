@@ -43,13 +43,11 @@
 #include "formulacell.hxx"
 #include "markdata.hxx"
 #include "drawview.hxx"
+#include "globalnames.hxx"
 
 #include <vector>
 
 using ::std::vector;
-
-#define D_TIMEFACTOR              86400.0
-
 
 void ScViewFunc::DetectiveAddPred()
 {
@@ -255,7 +253,7 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     double fTime =
         aActTime.Get100Sec() / 100.0 + aActTime.GetSec() +
         (aActTime.GetMin() * 60.0) + (aActTime.GetHour() * 3600.0);
-    fTime /= D_TIMEFACTOR;
+    fTime /= DATE_TIME_FACTOR;
     pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
     pDocSh->GetDocFunc().SetValueCell(aCurPos, fDate+fTime, true);
 
