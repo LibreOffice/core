@@ -377,9 +377,6 @@ Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() 
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
-
     SQLExceptionInfo aError;
     SharedConnection xConnection = ensureConnection( &aError );
     if ( !xConnection.is() )

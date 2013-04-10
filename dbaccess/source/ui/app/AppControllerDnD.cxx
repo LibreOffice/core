@@ -327,20 +327,63 @@ void OApplicationController::deleteEntries()
     }
 }
 // -----------------------------------------------------------------------------
+// DO NOT CALL with getMutex() held!!
 const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
 
-    if ( !m_xDataSourceConnection.is() )
+    // This looks like double checked locking, but it is not,
+    // because every access (read *or* write) to  m_xDataSourceConnection
+    // is mutexed.
+    // See http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
+    // for what I'm refering to.
+    // We cannot use the TLS (thread-local storage) solution
+    // since support for TLS is not up to the snuff on Windows :-(
+
     {
-        WaitObject aWO(getView());
+        ::osl::MutexGuard aGuard( getMutex() );
+
+        if ( m_xDataSourceConnection.is() )
+            return m_xDataSourceConnection;
+    }
+
+    WaitObject aWO(getView());
+    Reference<XConnection> conn;
+    {
+        SolarMutexGuard aSolarGuard;
+
         OUString sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
         sConnectingContext = sConnectingContext.replaceFirst("$name$", getStrippedDatabaseName());
 
-        m_xDataSourceConnection.reset( connect( getDatabaseName(), sConnectingContext, _pErrorInfo ) );
+        // do the connection *without* holding getMutex() to avoid deadlock
+        // when we are not in the main thread and we need username/password
+        // (and thus to display a dialog, which will be done by the main thread)
+        // and there is an event that needs getMutex() *before* us in the main thread's queue
+        // See fdo#63391
+        conn.set( connect( getDatabaseName(), sConnectingContext, _pErrorInfo ) );
+    }
+
+    if (conn.is())
+    {
+        ::osl::MutexGuard aGuard( getMutex() );
         if ( m_xDataSourceConnection.is() )
         {
+            Reference< XComponent > comp (conn, UNO_QUERY);
+            if(comp.is())
+            {
+                try
+                {
+                    comp->dispose();
+                }
+                catch( const Exception& )
+                {
+                    OSL_FAIL( "dbaui::OApplicationController::ensureConnection could not dispose of temporary unused connection" );
+                }
+            }
+            conn.clear();
+        }
+        else
+        {
+            m_xDataSourceConnection.reset(conn);
             SQLExceptionInfo aError;
             try
             {
@@ -362,11 +405,13 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
                 }
                 else
                 {
+                    SolarMutexGuard aSolarGuard;
                     showError( aError );
                 }
             }
         }
     }
+
     return m_xDataSourceConnection;
 }
 // -----------------------------------------------------------------------------

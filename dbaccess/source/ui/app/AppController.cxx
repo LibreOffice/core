@@ -304,7 +304,6 @@ OApplicationController::OApplicationController(const Reference< XComponentContex
     ,m_aTableCopyHelper(this)
     ,m_pClipbordNotifier(NULL)
     ,m_nAsyncDrop(0)
-    ,m_aControllerConnectedEvent( LINK( this, OApplicationController, OnFirstControllerConnected ) )
     ,m_aSelectContainerEvent( LINK( this, OApplicationController, OnSelectContainer ) )
     ,m_ePreviewMode(E_PREVIEWNONE)
     ,m_eCurrentType(E_NONE)
@@ -361,8 +360,6 @@ void OApplicationController::disconnect()
 //--------------------------------------------------------------------
 void SAL_CALL OApplicationController::disposing()
 {
-    m_aControllerConnectedEvent.CancelCall();
-
     ::std::for_each(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),XContainerFunctor(this));
     m_aCurrentContainers.clear();
     m_pSubComponentManager->disposing();
@@ -2644,14 +2641,12 @@ void OApplicationController::onAttachedFrame()
         return;
     }
 
-    m_aControllerConnectedEvent.Call();
+    OnFirstControllerConnected();
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
+void OApplicationController::OnFirstControllerConnected()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
-
     if ( !m_xModel.is() )
     {
         OSL_FAIL( "OApplicationController::OnFirstControllerConnected: too late!" );
@@ -2665,7 +2660,7 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
         // no need to show this warning, obviously the document supports embedding scripts
         // into itself, so there are no "old-style" forms/reports which have macros/scripts
         // themselves
-        return 0L;
+        return;
     }
 
     try
@@ -2674,12 +2669,12 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
         // In this case, we should not show the warning, again.
         ::comphelper::NamedValueCollection aModelArgs( m_xModel->getArgs() );
         if ( aModelArgs.getOrDefault( "SuppressMigrationWarning", sal_False ) )
-            return 0L;
+            return;
 
         // also, if the document is read-only, then no migration is possible, and the
         // respective menu entry is hidden. So, don't show the warning in this case, too.
         if ( Reference< XStorable >( m_xModel, UNO_QUERY_THROW )->isReadonly() )
-            return 0L;
+            return;
 
         SQLWarning aWarning;
         aWarning.Message = OUString( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS ) );
@@ -2695,12 +2690,14 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    return 1L;
+    return;
 }
 
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame ) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( getMutex() );
+
     OApplicationController_CBASE::attachFrame( i_rxFrame );
     if ( getFrame().is() )
         onAttachedFrame();
