@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef _SD_SLIDEHACK_HXX
+#define _SD_SLIDEHACK_HXX
+
 /*
  * This API is asynchronous, and will emit its callbacks in the LibreOffice
  * main-thread, ie. it is not necessarily thread-safe, take the solar mutex
@@ -22,6 +25,7 @@
 #  pragma GCC diagnostic ignored "-Wempty-body"
 #endif
 
+#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/noncopyable.hpp>
@@ -37,6 +41,8 @@
 #include <tools/datetime.hxx>
 #include <vcl/bitmapex.hxx>
 
+class SdPage;
+
 namespace SlideHack {
 
 typedef boost::shared_ptr< class Store > StorePtr;
@@ -44,7 +50,7 @@ typedef boost::shared_ptr< class Group > GroupPtr;
 typedef boost::shared_ptr< class Origin > OriginPtr;
 typedef boost::shared_ptr< class GroupMeta > GroupMetaPtr;
 typedef boost::shared_ptr< class VersionData > VersionDataPtr;
-typedef boost::shared_ptr< class Alternatives > AlternativesPtr;
+typedef boost::shared_ptr< class OriginDetails > OriginDetailsPtr;
 
 /// version history
 class VersionData : public boost::enable_shared_from_this< VersionData >,
@@ -70,7 +76,7 @@ public:
 };
 
 /// Tracking where a single slide came from and some policy around that
-class OriginDetails : Origin
+class OriginDetails : public Origin
 {
 public:
     /// how should we set about updating data from this origin ?
@@ -115,7 +121,7 @@ class Group : public boost::enable_shared_from_this< Group >,
 public:
     virtual ~Group() {}
 
-    virtual GroupMeta *getMetaData() = 0;
+    virtual GroupMetaPtr getMetaData() = 0;
 
     /// fetches slide data from the potentially remote store
 
@@ -130,15 +136,6 @@ public:
     boost::signals2::signal< void (const std::vector< VersionDataPtr > &) > maVersions;
 };
 
-/// We can have multiple (different length) pitches for the same topic
-class Alternatives : public boost::enable_shared_from_this< Alternatives >,
-                     private boost::noncopyable
-{
-public:
-    virtual ~Alternatives() {}
-    virtual std::vector< GroupPtr > getAlternatives() = 0;
-};
-
 /// Overall factory and store for these guys
 class Store : public boost::enable_shared_from_this< Store >,
               private boost::noncopyable
@@ -151,16 +148,21 @@ public:
     /// cancel a running search
     virtual void  cancelSearch( sal_uInt32 nHandle ) = 0;
     /// search completed signal - always in the main thread
-    boost::signals2::signal< void(sal_uInt32, std::vector< AlternativesPtr >) > maSearchCompleted;
+    boost::signals2::signal< void(sal_uInt32, std::vector< GroupPtr >) > maSearchCompleted;
 
     /// used to create a group handle from a stored slide, so we can
     /// check for updated versions etc.
-    virtual GroupPtr createGroup( OriginPtr pOrigin ) = 0;
+    virtual GroupPtr lookupGroup( OriginPtr pOrigin ) = 0;
+    virtual GroupPtr createGroup( const OUString &rName,
+                                  const OUString &rKeywords,
+                                  const std::vector< SdPage * > &rPages ) = 0;
 
     /// factory function: to get the root
     static StorePtr getStore();
 };
 
 }
+
+#endif // _SD_SLIDEHACK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
