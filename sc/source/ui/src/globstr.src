@@ -1839,6 +1839,10 @@ Resource RID_GLOBSTR
     {
         Text [en-US] = "Scope";
     };
+    String STR_MULTI_SELECT
+    {
+        Text [en-US] = "(multiple)";
+    };
     String STR_GLOBAL_SCOPE
     {
         Text [ en-US ] = "Document (Global)" ;

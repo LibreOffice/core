@@ -15,6 +15,7 @@ $(eval $(call gb_UI_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/formatcellsdialog \
 	sc/uiconfig/scalc/ui/insertname \
 	sc/uiconfig/scalc/ui/insertsheet \
+	sc/uiconfig/scalc/ui/managenamesdialog \
 	sc/uiconfig/scalc/ui/printeroptions \
 	sc/uiconfig/scalc/ui/sheetprintpage \
 	sc/uiconfig/scalc/ui/selectrange \

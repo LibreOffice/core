@@ -668,7 +668,9 @@
 #define STR_COND_ABOVE_EQUAL_AVERAGE 535
 #define STR_COND_BELOW_EQUAL_AVERAGE 536
 
-#define STR_COUNT                   537
+#define STR_MULTI_SELECT            537
+
+#define STR_COUNT                   538
 
 #endif
 

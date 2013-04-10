@@ -23,7 +23,6 @@
 #include "docfunc.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "namedlg.hrc"
 #include "namedlg.hxx"
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
@@ -51,47 +50,37 @@
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         ScViewData*       ptrViewData,
         const ScAddress&  aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap  )
+    : ScAnyRefDlg(pB, pCW, pParent, "ManageNamesDialog", "modules/scalc/ui/managenamesdialog.ui")
 
-:   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_NAMES ),
+    , maGlobalNameStr(ScGlobal::GetRscString(STR_GLOBAL_SCOPE))
+    , maErrInvalidNameStr(ScGlobal::GetRscString(STR_ERR_NAME_INVALID))
+    , maErrNameInUse(ScGlobal::GetRscString(STR_ERR_NAME_EXISTS))
+    , maStrMultiSelect(ScGlobal::GetRscString(STR_MULTI_SELECT))
     //
-    maEdName         ( this, ScResId( ED_NAME2 ) ),
-    maEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
-    aRbAssign       ( this, ScResId( RB_ASSIGN ), &maEdAssign, &maEdName, this ),
-    maLbScope( this, ScResId(LB_SCOPE) ),
-    //
-    maBtnMore        ( this, ScResId( BTN_MORE ) ),
-    maBtnPrintArea   ( this, ScResId( BTN_PRINTAREA ) ),
-    maBtnColHeader   ( this, ScResId( BTN_COLHEADER ) ),
-    maBtnCriteria    ( this, ScResId( BTN_CRITERIA ) ),
-    maBtnRowHeader   ( this, ScResId( BTN_ROWHEADER ) ),
-    //
-    maBtnAdd         ( this, ScResId( BTN_ADD ) ),
-    maBtnDelete      ( this, ScResId( BTN_DELETE ) ),
-    maBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    maBtnOk          ( this, ScResId( BTN_NAME_OK ) ),
-    maBtnCancel      ( this, ScResId( BTN_NAME_CANCEL ) ),
-    //
-    maFtScope( this, ScResId(FT_SCOPE) ),
-    maFtRange( this, ScResId(FT_RANGE) ),
-    maFtName( this,  ScResId(FT_NAME) ),
-    maFlDiv          ( this, ScResId( FL_DIV ) ),
-    maFtInfo         ( this, ScResId( FT_INFO ) ),
-    //
-    maNameMgrCtrl   ( this, ScResId( CTRL_MANAGENAMES ) ),
-    //
-    maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
-    maErrInvalidNameStr( ScGlobal::GetRscString(STR_ERR_NAME_INVALID)),
-    maErrNameInUse   ( ScGlobal::GetRscString(STR_ERR_NAME_EXISTS)),
-    maStrInfoDefault ( SC_RESSTR(STR_DEFAULT_INFO)),
-    maStrMultiSelect ( SC_RESSTR(STR_MULTI_SELECT)),
-    //
-    mpViewData       ( ptrViewData ),
-    mpDoc            ( ptrViewData->GetDocument() ),
-    maCursorPos      ( aCursorPos ),
-    mbNeedUpdate     ( true ),
-    mbDataChanged    ( false ),
-    mbCloseWithoutUndo( false )
+    , mpViewData(ptrViewData)
+    , mpDoc(ptrViewData->GetDocument())
+    , maCursorPos(aCursorPos)
+    , mbNeedUpdate(true)
+    , mbDataChanged(false)
+    , mbCloseWithoutUndo(false)
 {
+    get(m_pEdName, "name");
+    get(m_pEdAssign, "range");
+    get(m_pRbAssign, "assign");
+    m_pRbAssign->SetReferences(this, m_pEdAssign, m_pEdName);
+    get(m_pLbScope, "scope");
+    get(m_pBtnPrintArea, "printrange");
+    get(m_pBtnColHeader, "colheader");
+    get(m_pBtnCriteria, "filter");
+    get(m_pBtnRowHeader, "rowheader");
+    get(m_pBtnAdd, "add");
+    get(m_pBtnDelete, "delete");
+    get(m_pBtnOk, "ok");
+    get(m_pBtnCancel, "cancel");
+    get(m_pFtInfo, "info");
+    maStrInfoDefault = m_pFtInfo->GetText();
+    m_pFtInfo->SetText(OUString());
+
     if (!pRangeMap)
     {
         std::map<OUString, ScRangeName*> aRangeMap;
@@ -108,12 +97,11 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         maRangeMap.swap(*pRangeMap);
     }
     Init();
-    FreeResource();
 }
 
 ScNameDlg::~ScNameDlg()
 {
-    delete mpRangeManagerTable;
+    delete m_pRangeManagerTable;
 }
 
 void ScNameDlg::Init()
@@ -123,45 +111,42 @@ void ScNameDlg::Init()
     OSL_ENSURE( mpViewData && mpDoc, "ViewData oder Document nicht gefunden!" );
 
     //init UI
-    maFtInfo.SetStyle(WB_VCENTER);
+    m_pFtInfo->SetStyle(WB_VCENTER);
 
-    mpRangeManagerTable = new ScRangeManagerTable(maNameMgrCtrl, maRangeMap, maCursorPos);
-    mpRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
-    mpRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
+    SvxSimpleTableContainer *pCtrl = get<SvxSimpleTableContainer>("names");
+    pCtrl->set_height_request(pCtrl->GetTextHeight()*12);
 
-    maBtnOk.SetClickHdl  ( LINK( this, ScNameDlg, OkBtnHdl ) );
-    maBtnCancel.SetClickHdl  ( LINK( this, ScNameDlg, CancelBtnHdl ) );
-    maBtnAdd.SetClickHdl     ( LINK( this, ScNameDlg, AddBtnHdl ) );
-    maEdAssign.SetGetFocusHdl( LINK( this, ScNameDlg, AssignGetFocusHdl ) );
-    maEdAssign.SetModifyHdl  ( LINK( this, ScNameDlg, EdModifyHdl ) );
-    maEdName.SetModifyHdl ( LINK( this, ScNameDlg, EdModifyHdl ) );
-    maLbScope.SetSelectHdl( LINK(this, ScNameDlg, ScopeChangedHdl) );
-    maBtnDelete.SetClickHdl ( LINK( this, ScNameDlg, RemoveBtnHdl ) );
-    maBtnMore.SetClickHdl   ( LINK( this, ScNameDlg, MoreBtnHdl ) );
-    maBtnPrintArea.SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
-    maBtnCriteria.SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
-    maBtnRowHeader.SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
-    maBtnColHeader.SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
+    m_pRangeManagerTable = new ScRangeManagerTable(*pCtrl, maRangeMap, maCursorPos);
+    m_pRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
+    m_pRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
 
-    maBtnCriteria .Hide();
-    maBtnPrintArea.Hide();
-    maBtnColHeader.Hide();
-    maBtnRowHeader.Hide();
+    m_pBtnOk->SetClickHdl  ( LINK( this, ScNameDlg, OkBtnHdl ) );
+    m_pBtnCancel->SetClickHdl  ( LINK( this, ScNameDlg, CancelBtnHdl ) );
+    m_pBtnAdd->SetClickHdl     ( LINK( this, ScNameDlg, AddBtnHdl ) );
+    m_pEdAssign->SetGetFocusHdl( LINK( this, ScNameDlg, AssignGetFocusHdl ) );
+    m_pEdAssign->SetModifyHdl  ( LINK( this, ScNameDlg, EdModifyHdl ) );
+    m_pEdName->SetModifyHdl ( LINK( this, ScNameDlg, EdModifyHdl ) );
+    m_pLbScope->SetSelectHdl( LINK(this, ScNameDlg, ScopeChangedHdl) );
+    m_pBtnDelete->SetClickHdl ( LINK( this, ScNameDlg, RemoveBtnHdl ) );
+    m_pBtnPrintArea->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
+    m_pBtnCriteria->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
+    m_pBtnRowHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
+    m_pBtnColHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
 
     // Initialize scope list.
-    maLbScope.InsertEntry(maGlobalNameStr);
-    maLbScope.SelectEntryPos(0);
+    m_pLbScope->InsertEntry(maGlobalNameStr);
+    m_pLbScope->SelectEntryPos(0);
     SCTAB n = mpDoc->GetTableCount();
     for (SCTAB i = 0; i < n; ++i)
     {
         OUString aTabName;
         mpDoc->GetName(i, aTabName);
-        maLbScope.InsertEntry(aTabName);
+        m_pLbScope->InsertEntry(aTabName);
     }
 
 
 
-    if (mpRangeManagerTable->GetSelectionCount())
+    if (m_pRangeManagerTable->GetSelectionCount())
     {
         SelectionChanged();
     }
@@ -172,25 +157,25 @@ void ScNameDlg::Init()
 
 sal_Bool ScNameDlg::IsRefInputMode() const
 {
-    return maEdAssign.IsEnabled();
+    return m_pEdAssign->IsEnabled();
 }
 
 void ScNameDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
-    EdModifyHdl(&maEdAssign);
+    EdModifyHdl(m_pEdAssign);
 }
 
 void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( maEdAssign.IsEnabled() )
+    if ( m_pEdAssign->IsEnabled() )
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(&maEdAssign);
+            RefInputStart(m_pEdAssign);
         String aRefStr;
         rRef.Format( aRefStr, ABS_DREF3D, pDocP,
                 ScAddress::Details(pDocP->GetAddressConvention(), 0, 0) );
-        maEdAssign.SetRefString( aRefStr );
+        m_pEdAssign->SetRefString( aRefStr );
     }
 }
 
@@ -203,32 +188,32 @@ sal_Bool ScNameDlg::Close()
 
 void ScNameDlg::CheckForEmptyTable()
 {
-    if (!mpRangeManagerTable->GetEntryCount())
+    if (!m_pRangeManagerTable->GetEntryCount())
     {
-        maBtnDelete.Disable();
-        maEdAssign.Disable();
-        aRbAssign.Disable();
-        maEdName.Disable();
-        maLbScope.Disable();
+        m_pBtnDelete->Disable();
+        m_pEdAssign->Disable();
+        m_pRbAssign->Disable();
+        m_pEdName->Disable();
+        m_pLbScope->Disable();
 
-        maBtnCriteria.Disable();
-        maBtnPrintArea.Disable();
-        maBtnColHeader.Disable();
-        maBtnRowHeader.Disable();
+        m_pBtnCriteria->Disable();
+        m_pBtnPrintArea->Disable();
+        m_pBtnColHeader->Disable();
+        m_pBtnRowHeader->Disable();
     }
     else
     {
-        maBtnDelete.Enable();
-        maEdAssign.Enable();
-        aRbAssign.Enable();
-        maEdName.Enable();
-        maLbScope.Enable();
+        m_pBtnDelete->Enable();
+        m_pEdAssign->Enable();
+        m_pRbAssign->Enable();
+        m_pEdName->Enable();
+        m_pLbScope->Enable();
 
 
-        maBtnCriteria.Enable();
-        maBtnPrintArea.Enable();
-        maBtnColHeader.Enable();
-        maBtnRowHeader.Enable();
+        m_pBtnCriteria->Enable();
+        m_pBtnPrintArea->Enable();
+        m_pBtnColHeader->Enable();
+        m_pBtnRowHeader->Enable();
     }
 }
 
@@ -239,7 +224,7 @@ void ScNameDlg::CancelPushed()
 
 void ScNameDlg::SetActive()
 {
-    maEdAssign.GrabFocus();
+    m_pEdAssign->GrabFocus();
     RefInputDone();
 }
 
@@ -251,28 +236,28 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
     // handlers, triggering handlers while already processing a handler can
     // ( and does in this case ) corrupt the internal data
 
-    maBtnCriteria.SetToggleHdl( Link() );
-    maBtnPrintArea.SetToggleHdl( Link() );
-    maBtnColHeader.SetToggleHdl( Link() );
-    maBtnRowHeader.SetToggleHdl( Link() );
+    m_pBtnCriteria->SetToggleHdl( Link() );
+    m_pBtnPrintArea->SetToggleHdl( Link() );
+    m_pBtnColHeader->SetToggleHdl( Link() );
+    m_pBtnRowHeader->SetToggleHdl( Link() );
 
-    maBtnCriteria .Check( pData->HasType( RT_CRITERIA ) );
-    maBtnPrintArea.Check( pData->HasType( RT_PRINTAREA ) );
-    maBtnColHeader.Check( pData->HasType( RT_COLHEADER ) );
-    maBtnRowHeader.Check( pData->HasType( RT_ROWHEADER ) );
+    m_pBtnCriteria->Check( pData->HasType( RT_CRITERIA ) );
+    m_pBtnPrintArea->Check( pData->HasType( RT_PRINTAREA ) );
+    m_pBtnColHeader->Check( pData->HasType( RT_COLHEADER ) );
+    m_pBtnRowHeader->Check( pData->HasType( RT_ROWHEADER ) );
 
     // Restore handlers so user input is processed again
     Link aToggleHandler = LINK( this, ScNameDlg, EdModifyHdl );
-    maBtnCriteria.SetToggleHdl( aToggleHandler );
-    maBtnPrintArea.SetToggleHdl( aToggleHandler );
-    maBtnColHeader.SetToggleHdl( aToggleHandler );
-    maBtnRowHeader.SetToggleHdl( aToggleHandler );
+    m_pBtnCriteria->SetToggleHdl( aToggleHandler );
+    m_pBtnPrintArea->SetToggleHdl( aToggleHandler );
+    m_pBtnColHeader->SetToggleHdl( aToggleHandler );
+    m_pBtnRowHeader->SetToggleHdl( aToggleHandler );
 }
 
 bool ScNameDlg::IsNameValid()
 {
-    OUString aScope = maLbScope.GetSelectEntry();
-    OUString aName = maEdName.GetText();
+    OUString aScope = m_pLbScope->GetSelectEntry();
+    OUString aName = m_pEdName->GetText();
     aName = aName.trim();
 
     if (aName.isEmpty())
@@ -282,17 +267,17 @@ bool ScNameDlg::IsNameValid()
 
     if (!ScRangeData::IsNameValid( aName, mpDoc ))
     {
-        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
-        maFtInfo.SetText(maErrInvalidNameStr);
+        m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        m_pFtInfo->SetText(maErrInvalidNameStr);
         return false;
     }
     else if (pRangeName && pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
     {
-        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
-        maFtInfo.SetText(maErrNameInUse);
+        m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        m_pFtInfo->SetText(maErrNameInUse);
         return false;
     }
-    maFtInfo.SetText( maStrInfoDefault );
+    m_pFtInfo->SetText( maStrInfoDefault );
     return true;
 }
 
@@ -300,10 +285,10 @@ bool ScNameDlg::IsFormulaValid()
 {
     ScCompiler aComp( mpDoc, maCursorPos);
     aComp.SetGrammar( mpDoc->GetGrammar() );
-    ScTokenArray* pCode = aComp.CompileString(maEdAssign.GetText());
+    ScTokenArray* pCode = aComp.CompileString(m_pEdAssign->GetText());
     if (pCode->GetCodeError())
     {
-        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         delete pCode;
         return false;
     }
@@ -349,14 +334,14 @@ void ScNameDlg::SetEntry(const OUString& rName, const OUString& rScope)
         ScRangeNameLine aLine;
         aLine.aName = rName;
         aLine.aScope = rScope;
-        mpRangeManagerTable->SetEntry(aLine);
+        m_pRangeManagerTable->SetEntry(aLine);
     }
 }
 
 void ScNameDlg::RemovePushed()
 {
-    std::vector<ScRangeNameLine> maEntries = mpRangeManagerTable->GetSelectedEntries();
-    mpRangeManagerTable->DeleteSelectedEntries();
+    std::vector<ScRangeNameLine> maEntries = m_pRangeManagerTable->GetSelectedEntries();
+    m_pRangeManagerTable->DeleteSelectedEntries();
     for (std::vector<ScRangeNameLine>::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         ScRangeName* pRangeName = GetRangeName(itr->aScope);
@@ -374,11 +359,11 @@ void ScNameDlg::RemovePushed()
 void ScNameDlg::NameModified()
 {
     ScRangeNameLine aLine;
-    mpRangeManagerTable->GetCurrentLine(aLine);
+    m_pRangeManagerTable->GetCurrentLine(aLine);
     OUString aOldName = aLine.aName;
-    OUString aNewName = maEdName.GetText();
+    OUString aNewName = m_pEdName->GetText();
     aNewName = aNewName.trim();
-    maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
+    m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     if (aNewName != aOldName)
     {
         if (!IsNameValid())
@@ -386,7 +371,7 @@ void ScNameDlg::NameModified()
     }
     else
     {
-        maFtInfo.SetText( maStrInfoDefault );
+        m_pFtInfo->SetText( maStrInfoDefault );
     }
 
     if (!IsFormulaValid())
@@ -399,8 +384,8 @@ void ScNameDlg::NameModified()
     //empty table
     if (aOldScope.isEmpty())
         return;
-    OUString aExpr = maEdAssign.GetText();
-    OUString aNewScope = maLbScope.GetSelectEntry();
+    OUString aExpr = m_pEdAssign->GetText();
+    OUString aNewScope = m_pLbScope->GetSelectEntry();
 
     ScRangeName* pOldRangeName = GetRangeName( aOldScope );
     ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->uppercase(aOldName) );
@@ -411,12 +396,12 @@ void ScNameDlg::NameModified()
     {
         pOldRangeName->erase(*pData);
         mbNeedUpdate = false;
-        mpRangeManagerTable->DeleteSelectedEntries();
+        m_pRangeManagerTable->DeleteSelectedEntries();
         RangeType nType = RT_NAME |
-            (maBtnRowHeader.IsChecked() ? RT_ROWHEADER : RangeType(0))
-            |(maBtnColHeader.IsChecked() ? RT_COLHEADER : RangeType(0))
-            |(maBtnPrintArea.IsChecked() ? RT_PRINTAREA : RangeType(0))
-            |(maBtnCriteria.IsChecked()  ? RT_CRITERIA  : RangeType(0));
+            (m_pBtnRowHeader->IsChecked() ? RT_ROWHEADER : RangeType(0))
+            |(m_pBtnColHeader->IsChecked() ? RT_COLHEADER : RangeType(0))
+            |(m_pBtnPrintArea->IsChecked() ? RT_PRINTAREA : RangeType(0))
+            |(m_pBtnCriteria->IsChecked()  ? RT_CRITERIA  : RangeType(0));
 
         ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
                 maCursorPos, nType);
@@ -424,7 +409,7 @@ void ScNameDlg::NameModified()
         aLine.aName = aNewName;
         aLine.aExpression = aExpr;
         aLine.aScope = aNewScope;
-        mpRangeManagerTable->addEntry(aLine);
+        m_pRangeManagerTable->addEntry(aLine);
         mbNeedUpdate = true;
         mbDataChanged = true;
     }
@@ -440,85 +425,43 @@ void ScNameDlg::SelectionChanged()
         return;
     }
 
-    if (mpRangeManagerTable->IsMultiSelection())
+    if (m_pRangeManagerTable->IsMultiSelection())
     {
-        maEdName.SetText(maStrMultiSelect);
-        maEdAssign.SetText(maStrMultiSelect);
+        m_pEdName->SetText(maStrMultiSelect);
+        m_pEdAssign->SetText(maStrMultiSelect);
 
-        maEdName.Disable();
-        maEdAssign.Disable();
-        aRbAssign.Disable();
-        maLbScope.Disable();
-        maBtnRowHeader.Disable();
-        maBtnColHeader.Disable();
-        maBtnPrintArea.Disable();
-        maBtnCriteria.Disable();
+        m_pEdName->Disable();
+        m_pEdAssign->Disable();
+        m_pRbAssign->Disable();
+        m_pLbScope->Disable();
+        m_pBtnRowHeader->Disable();
+        m_pBtnColHeader->Disable();
+        m_pBtnPrintArea->Disable();
+        m_pBtnCriteria->Disable();
     }
     else
     {
         ScRangeNameLine aLine;
-        mpRangeManagerTable->GetCurrentLine(aLine);
-        maEdAssign.SetText(aLine.aExpression);
-        maEdName.SetText(aLine.aName);
-        maLbScope.SelectEntry(aLine.aScope);
+        m_pRangeManagerTable->GetCurrentLine(aLine);
+        m_pEdAssign->SetText(aLine.aExpression);
+        m_pEdName->SetText(aLine.aName);
+        m_pLbScope->SelectEntry(aLine.aScope);
         ShowOptions(aLine);
-        maBtnDelete.Enable();
-        maEdName.Enable();
-        maEdAssign.Enable();
-        aRbAssign.Enable();
-        maLbScope.Enable();
-        maBtnRowHeader.Enable();
-        maBtnColHeader.Enable();
-        maBtnPrintArea.Enable();
-        maBtnCriteria.Enable();
+        m_pBtnDelete->Enable();
+        m_pEdName->Enable();
+        m_pEdAssign->Enable();
+        m_pRbAssign->Enable();
+        m_pLbScope->Enable();
+        m_pBtnRowHeader->Enable();
+        m_pBtnColHeader->Enable();
+        m_pBtnPrintArea->Enable();
+        m_pBtnCriteria->Enable();
     }
 }
 
 void ScNameDlg::ScopeChanged()
 {
     NameModified();
-}
-
-namespace {
-
-void MoveWindow( Window& rButton, long nPixel)
-{
-    Point aPoint = rButton.GetPosPixel();
-    aPoint.Y() += nPixel;
-    rButton.SetPosPixel(aPoint);
-}
-
-}
-
-void ScNameDlg::MorePushed()
-{
-    Size nSize = GetSizePixel();
-
-    //depending on the state of the button, move all elements below up/down
-    long nPixel = 60;
-    if (!maBtnMore.GetState())
-    {
-        nPixel *= -1;
-        maBtnRowHeader.Hide();
-        maBtnColHeader.Hide();
-        maBtnPrintArea.Hide();
-        maBtnCriteria.Hide();
-    }
-    else
-    {
-        maBtnRowHeader.Show();
-        maBtnColHeader.Show();
-        maBtnPrintArea.Show();
-        maBtnCriteria.Show();
-    }
-    nSize.Height() += nPixel;
-    SetSizePixel(nSize);
-    MoveWindow(maBtnAdd, nPixel);
-    MoveWindow(maBtnDelete, nPixel);
-    MoveWindow(maBtnHelp, nPixel);
-    MoveWindow(maBtnOk, nPixel);
-    MoveWindow(maBtnCancel, nPixel);
-    MoveWindow(maFlDiv, nPixel);
 }
 
 void ScNameDlg::GetRangeNames(boost::ptr_map<OUString, ScRangeName>& rRangeMap)
@@ -557,7 +500,7 @@ IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl)
 
 IMPL_LINK_NOARG(ScNameDlg, AssignGetFocusHdl)
 {
-    EdModifyHdl( &maEdAssign );
+    EdModifyHdl(m_pEdAssign);
     return 0;
 }
 
@@ -573,9 +516,4 @@ IMPL_LINK_NOARG(ScNameDlg, ScopeChangedHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScNameDlg, MoreBtnHdl)
-{
-    MorePushed();
-    return 0;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

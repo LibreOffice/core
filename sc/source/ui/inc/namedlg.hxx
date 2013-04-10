@@ -46,37 +46,30 @@ class ScDocument;
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
-    Edit            maEdName;
-    formula::RefEdit        maEdAssign;
-    formula::RefButton      aRbAssign;
-    ListBox         maLbScope;
+    Edit*               m_pEdName;
+    formula::RefEdit*   m_pEdAssign;
+    formula::RefButton* m_pRbAssign;
+    ListBox*            m_pLbScope;
 
-    DisclosureButton maBtnMore;
-    CheckBox        maBtnPrintArea;
-    CheckBox        maBtnColHeader;
-    CheckBox        maBtnCriteria;
-    CheckBox        maBtnRowHeader;
+    CheckBox*           m_pBtnPrintArea;
+    CheckBox*           m_pBtnColHeader;
+    CheckBox*           m_pBtnCriteria;
+    CheckBox*           m_pBtnRowHeader;
 
-    PushButton      maBtnAdd;
-    PushButton      maBtnDelete;
-    HelpButton      maBtnHelp;
-    PushButton      maBtnOk;
-    PushButton      maBtnCancel;
+    PushButton*         m_pBtnAdd;
+    PushButton*         m_pBtnDelete;
+    PushButton*         m_pBtnOk;
+    PushButton*         m_pBtnCancel;
 
-    FixedText       maFtScope;
-    FixedText       maFtRange;
-    FixedText       maFtName;
-    FixedLine       maFlDiv;
-    FixedText       maFtInfo;
+    FixedText*          m_pFtInfo;
 
-    SvxSimpleTableContainer maNameMgrCtrl;
-    ScRangeManagerTable* mpRangeManagerTable;
+    ScRangeManagerTable* m_pRangeManagerTable;
 
     const OUString maGlobalNameStr;
     const OUString maErrInvalidNameStr;
     const OUString maErrNameInUse;
-    const OUString maStrInfoDefault;
     const OUString maStrMultiSelect;
+    OUString maStrInfoDefault;
 
     ScViewData*     mpViewData;
     ScDocument*     mpDoc;
@@ -111,7 +104,6 @@ private:
     void NameSelected();
     void ScopeChanged();
     void NameModified();
-    void MorePushed();
 
     void SelectionChanged();
 
@@ -125,7 +117,6 @@ private:
     DECL_LINK( AssignGetFocusHdl, void * );
     DECL_LINK( SelectionChangedHdl_Impl, void* );
     DECL_LINK( ScopeChangedHdl, void* );
-    DECL_LINK( MoreBtnHdl, void* );
 
 protected:
     virtual void    RefInputDone( sal_Bool bForced = sal_False );

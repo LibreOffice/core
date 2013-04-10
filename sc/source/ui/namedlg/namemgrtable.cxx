@@ -33,7 +33,6 @@
 #include "docfunc.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "namedlg.hrc"
 #include "namedlg.hxx"
 #include "viewdata.hxx"
 #include "globalnames.hxx"
