@@ -38,10 +38,6 @@ then
     then
 	rm $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh
     fi
-    if [ -r $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.csh ]
-    then
-	rm $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.csh
-    fi
     shift
 elif [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ -n "$1" ]
 then
@@ -52,7 +48,6 @@ then
     echo "   --force-configure : force a new configuration of your SDK environment."
     echo "                       Alternatively can you edit your SDK environment scripts directly:"
     echo "                        $HOME/$OO_SDK_NAME/setsdkenv_unix.sh"
-    echo "                        $HOME/$OO_SDK_NAME/setsdkenv_unix.csh"
     echo "   -h, --help        : print this help and exit"
     echo
     exit 1

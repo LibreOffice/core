@@ -33,7 +33,7 @@ else
 odk_CONFIGLIST := configure.pl \
 	setsdkenv_unix \
 	setsdkenv_unix.sh.in \
-	setsdkenv_unix.csh.in
+
 endif
 
 define odk_config

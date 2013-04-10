@@ -514,11 +514,8 @@ else
     $main::SDK_AUTO_DEPLOYMENT = "NO";
 }
 
-prepareScriptFile("setsdkenv_unix.sh.in", "setsdkenv_unix.sh", 1);
+prepareScriptFile("setsdkenv_unix.sh.in", "setsdkenv_unix.sh");
 chmod 0644, "$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.sh";
-
-prepareScriptFile("setsdkenv_unix.csh.in", "setsdkenv_unix.csh", 2);
-chmod 0644, "$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.csh";
 
 print "\n";
 print " ************************************************************************\n";
@@ -527,7 +524,6 @@ print " * For each time you want to use this configured SDK environment, you\n";
 print " * have to run the \"setsdkenv_unix\" script file!\n";
 print " * Alternatively can you source one of the scripts\n";
 print " *   \"$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.sh\"\n";
-print " *   \"$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.csh\"\n";
 print " * to get an environment without starting a new shell.\n";
 print " ************************************************************************\n\n";
 
@@ -776,9 +772,6 @@ sub prepareScriptFile()
 {
     my $inputFile = shift;
     my $outputFile = shift;
-    # shell mode 1 = sh
-    #            2 = csh
-    my $shellMode = shift;
 
     if ( ! -d "$main::OO_SDK_CONFIG_HOME/$main::hostname" )
     {

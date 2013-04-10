@@ -138,10 +138,6 @@ if (-d "$StartDir") {
         print "\nERROR: \"$StartDir/setsdkenv_unix.sh.in\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/setsdkenv_unix.csh.in") {
-        print "\nERROR: \"$StartDir/setsdkenv_unix.csh.in\" is missing\n";
-        $return++;
-    }
     }
     print "\n";
 
