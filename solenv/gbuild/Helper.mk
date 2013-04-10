@@ -183,7 +183,7 @@ $$(eval $$(call gb_Output_error,$(2) is not a valid install module for libraries
 endif
 $(call gb_Helper_register_libraries,$(1),$(3))
 
-gb_Library_MODULE_$(2) += $(3)
+gb_Library_MODULE_$(2) += $(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(3))
 
 endef
 
