@@ -43,7 +43,7 @@ class GalleryBrowser2;
 class GallerySplitter;
 class Gallery;
 
-class GalleryBrowser : public SfxDockingWindow
+class SVX_DLLPUBLIC GalleryBrowser : public SfxDockingWindow
 {
     friend class GalleryBrowser1;
     friend class GalleryBrowser2;
@@ -51,16 +51,16 @@ class GalleryBrowser : public SfxDockingWindow
     using Window::KeyInput;
 
 private:
-
     Size                    maLastSize;
     GallerySplitter*        mpSplitter;
     GalleryBrowser1*        mpBrowser1;
     GalleryBrowser2*        mpBrowser2;
     Gallery*                mpGallery;
 
+    /// bitfield
     void                    InitSettings();
 
-    virtual sal_Bool            Close();
+    virtual sal_Bool        Close();
     virtual void            Resize();
     virtual void            GetFocus();
 

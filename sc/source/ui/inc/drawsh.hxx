@@ -23,16 +23,22 @@
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/svdmark.hxx>
 #include <tools/link.hxx>
+#include <rtl/ref.hxx>
 
 class AbstractSvxNameDialog;
 class ScViewData;
 class ScDrawView;
+namespace svx { namespace sidebar {
+class SelectionChangeHandler;
+} }
 
 class ScDrawShell : public SfxShell
 {
     ScViewData* pViewData;
+    ::rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 
     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
 
@@ -75,6 +81,9 @@ public:
     ScDrawView* GetDrawView();
 
     sal_Bool    AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark);
+
+    void GetDrawAttrStateForIFBX( SfxItemSet& rSet );
+    ::sfx2::sidebar::EnumContext::Context GetContextForSelection (void);
 };
 
 

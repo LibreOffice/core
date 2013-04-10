@@ -523,6 +523,9 @@ public:
     sal_Bool HasNumber() const;
     sal_Bool HasBullet() const;
 
+    sal_Bool SelectionHasNumber() const;
+    sal_Bool SelectionHasBullet() const;
+
     String GetUniqueNumRuleName( const String* pChkStr = 0, bool bAutoNum = true ) const;
     void ChgNumRuleFmts( const SwNumRule& rRule );
 

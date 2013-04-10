@@ -173,6 +173,7 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/UI/DrawWindowState.xcu \
 	org/openoffice/Office/UI/ImpressWindowState.xcu \
 	org/openoffice/Office/UI/MathWindowState.xcu \
+	org/openoffice/Office/UI/Sidebar.xcu \
 	org/openoffice/Office/UI/StartModuleWindowState.xcu \
 	org/openoffice/Office/UI/WriterWindowState.xcu \
 	org/openoffice/Office/UI/XFormsWindowState.xcu \

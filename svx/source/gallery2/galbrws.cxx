@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/split.hxx>
 #include <vcl/ctrl.hxx>
 #include <unotools/pathoptions.hxx>
@@ -29,46 +28,9 @@
 #include "galbrws1.hxx"
 #include "galbrws2.hxx"
 #include "svx/galbrws.hxx"
+#include "GallerySplitter.hxx"
 
-// -------------------
-// - GallerySplitter -
-// -------------------
-DBG_NAME(GallerySplitter)
-
-class GallerySplitter : public Splitter
-{
-protected:
-
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-
-public:
-
-                    GallerySplitter( Window* pParent, const ResId& rResId );
-    virtual         ~GallerySplitter();
-};
-
-// -----------------------------------------------------------------------------
-
-GallerySplitter::GallerySplitter( Window* pParent, const ResId& rResId ) :
-    Splitter( pParent, rResId )
-{
-    DBG_CTOR(GallerySplitter,NULL);
-}
-
-// -----------------------------------------------------------------------------
-
-GallerySplitter::~GallerySplitter()
-{
-    DBG_DTOR(GallerySplitter,NULL);
-}
-
-// -----------------------------------------------------------------------------
-
-void GallerySplitter::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Splitter::DataChanged( rDCEvt );
-    static_cast< GalleryBrowser* >( GetParent() )->InitSettings();
-}
+#include <boost/bind.hpp>
 
 // -------------------------
 // - SvxGalleryChildWindow -
@@ -101,24 +63,40 @@ SFX_IMPL_DOCKINGWINDOW_WITHID( GalleryChildWindow, SID_GALLERY )
 // ------------------
 DBG_NAME(GalleryBrowser)
 
-GalleryBrowser::GalleryBrowser( SfxBindings* _pBindings, SfxChildWindow* pCW,
-                                Window* pParent, const ResId& rResId ) :
-    SfxDockingWindow( _pBindings, pCW, pParent, rResId )
+GalleryBrowser::GalleryBrowser(
+    SfxBindings* _pBindings,
+    SfxChildWindow* pCW,
+    Window* pParent,
+    const ResId& rResId)
+:   SfxDockingWindow(_pBindings, pCW, pParent, rResId),
+    maLastSize(GetOutputSizePixel()),
+    mpSplitter(0),
+    mpBrowser1(0),
+    mpBrowser2(0),
+    mpGallery(0)
 {
     DBG_CTOR(GalleryBrowser,NULL);
 
     mpGallery = Gallery::GetGalleryInstance();
-    mpBrowser1 = new GalleryBrowser1( this, GAL_RES( GALLERY_BROWSER1 ), mpGallery );
-    mpSplitter = new GallerySplitter( this, GAL_RES( GALLERY_SPLITTER ) );
+    mpBrowser1 = new GalleryBrowser1(
+        this,
+        GAL_RES( GALLERY_BROWSER1 ),
+        mpGallery,
+        ::boost::bind(&GalleryBrowser::KeyInput,this,_1,_2),
+        ::boost::bind(&GalleryBrowser::ThemeSelectionHasChanged, this));
+    mpSplitter = new GallerySplitter( this, GAL_RES( GALLERY_SPLITTER ),
+        ::boost::bind(&GalleryBrowser::InitSettings, this));
     mpBrowser2 = new GalleryBrowser2( this, GAL_RES( GALLERY_BROWSER2 ), mpGallery );
 
     FreeResource();
-    SetMinOutputSizePixel( maLastSize = GetOutputSizePixel() );
+    SetMinOutputSizePixel(maLastSize);
 
     mpBrowser1->SelectTheme( 0 );
     mpBrowser1->Show( sal_True );
     mpBrowser2->Show( sal_True );
 
+    const bool bLayoutHorizontal(maLastSize.Width() > maLastSize.Height());
+    mpSplitter->SetHorizontal(bLayoutHorizontal);
     mpSplitter->SetSplitHdl( LINK( this, GalleryBrowser, SplitHdl ) );
     mpSplitter->Show( sal_True );
 
@@ -161,22 +139,62 @@ void GalleryBrowser::InitSettings()
 
 void GalleryBrowser::Resize()
 {
+    // call parent
     SfxDockingWindow::Resize();
 
-    const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
-    const long  nFrameWidth2 = nFrameWidth << 1;
-    Size        aNewSize( GetOutputSizePixel() );
-    Point       aSplitPos( mpSplitter->GetPosPixel() );
-    const Size  aSplitSize( mpSplitter->GetOutputSizePixel() );
+    // update hor/ver
+    const Size aNewSize( GetOutputSizePixel() );
+    const bool bNewLayoutHorizontal(aNewSize.Width() > aNewSize.Height());
+    const bool bOldLayoutHorizontal(mpSplitter->IsHorizontal());
+    const long nSplitPos( bOldLayoutHorizontal ? mpSplitter->GetPosPixel().X() : mpSplitter->GetPosPixel().Y());
+    const long nSplitSize( bOldLayoutHorizontal ? mpSplitter->GetOutputSizePixel().Width() : mpSplitter->GetOutputSizePixel().Height());
 
-    mpBrowser1->SetPosSizePixel( Point( nFrameWidth, nFrameWidth ),
-                                 Size( aSplitPos.X() - nFrameWidth, aNewSize.Height() - nFrameWidth2 ) );
+    if(bNewLayoutHorizontal != bOldLayoutHorizontal)
+    {
+        mpSplitter->SetHorizontal(bNewLayoutHorizontal);
+    }
 
-    mpSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aNewSize.Height() ) );
-    mpSplitter->SetDragRectPixel( Rectangle( Point( nFrameWidth2, 0 ), Size( aNewSize.Width() - ( nFrameWidth2 << 1 ) - aSplitSize.Width(), aNewSize.Height() ) ) );
+    const long nFrameLen = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
+    const long nFrameLen2 = nFrameLen << 1;
 
-    mpBrowser2->SetPosSizePixel( Point( aSplitPos.X() + aSplitSize.Width(), nFrameWidth ),
-                                 Size( aNewSize.Width() - aSplitSize.Width() - aSplitPos.X() - nFrameWidth, aNewSize.Height() - nFrameWidth2 ) );
+    if(bNewLayoutHorizontal)
+    {
+        mpBrowser1->SetPosSizePixel(
+            Point( nFrameLen, nFrameLen ),
+            Size(nSplitPos - nFrameLen, aNewSize.Height() - nFrameLen2) );
+
+        mpSplitter->SetPosSizePixel(
+            Point( nSplitPos, 0),
+            Size( nSplitSize, aNewSize.Height() ) );
+
+        mpSplitter->SetDragRectPixel(
+            Rectangle(
+                Point( nFrameLen2, 0 ),
+                Size( aNewSize.Width() - ( nFrameLen2 << 1 ) - nSplitSize, aNewSize.Height() ) ) );
+
+        mpBrowser2->SetPosSizePixel(
+            Point( nSplitPos + nSplitSize, nFrameLen ),
+            Size( aNewSize.Width() - nSplitSize - nSplitPos - nFrameLen, aNewSize.Height() - nFrameLen2 ) );
+    }
+    else
+    {
+        mpBrowser1->SetPosSizePixel(
+            Point( nFrameLen, nFrameLen ),
+            Size(aNewSize.Width() - nFrameLen2, nSplitPos - nFrameLen));
+
+        mpSplitter->SetPosSizePixel(
+            Point( 0, nSplitPos),
+            Size( aNewSize.Width(), nSplitSize ) );
+
+        mpSplitter->SetDragRectPixel(
+            Rectangle(
+                Point( 0, nFrameLen2 ),
+                Size( aNewSize.Width(), aNewSize.Height() - ( nFrameLen2 << 1 ) - nSplitSize ) ));
+
+        mpBrowser2->SetPosSizePixel(
+            Point( nFrameLen, nSplitPos + nSplitSize ),
+            Size( aNewSize.Width() - nFrameLen2, aNewSize.Height() - nSplitSize - nSplitPos - nFrameLen ));
+    }
 
     maLastSize = aNewSize;
 }
@@ -272,7 +290,15 @@ sal_Bool GalleryBrowser::IsLinkage() const
 
 IMPL_LINK_NOARG(GalleryBrowser, SplitHdl)
 {
-    mpSplitter->SetPosPixel( Point( mpSplitter->GetSplitPosPixel(), mpSplitter->GetPosPixel().Y() ) );
+    if(mpSplitter->IsHorizontal())
+    {
+        mpSplitter->SetPosPixel( Point( mpSplitter->GetSplitPosPixel(), mpSplitter->GetPosPixel().Y() ) );
+    }
+    else
+    {
+        mpSplitter->SetPosPixel( Point( mpSplitter->GetPosPixel().X(), mpSplitter->GetSplitPosPixel() ) );
+    }
+
     Resize();
 
     return 0L;

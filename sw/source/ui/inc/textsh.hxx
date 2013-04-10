@@ -57,6 +57,7 @@ public:
     void    ExecMoveLingu(SfxRequest &);
     void    ExecMoveMisc(SfxRequest &);
     void    ExecField(SfxRequest &rReq);
+    void    ExecSetNumber(SfxRequest &);
     void    StateField(SfxItemSet &);
     void    ExecIdx(SfxRequest &);
     void    GetIdxState(SfxItemSet &);

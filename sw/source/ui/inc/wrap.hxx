@@ -76,7 +76,6 @@ class SwWrapTabPage: public SfxTabPage
     CheckBox            aWrapOutsideCB;
 
     ImageList           aWrapIL;
-    ImageList           aWrapILH;
 
     sal_uInt16              nOldLeftMargin;
     sal_uInt16              nOldRightMargin;

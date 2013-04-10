@@ -401,13 +401,16 @@ public:
                                                 sal_Bool            bFmt     = sal_False,
                                                 sal_uInt16          nDefPage = 0,
                                                 const String*   pFmtStr  = 0) = 0;  //add for SwFrmDlg
+    // @param nSlot
+    // Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
+    // Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
-                                                sal_uInt16              nRegion,
-                                                sal_uInt16              nPageId = 0,
+                                                sal_uInt16          nRegion,
+                                                const sal_uInt16 nSlot = 0,
                                                 SwWrtShell*         pActShell = 0,
-                                                sal_Bool                bNew = sal_False ) = 0; //add for SwTemplateDlg
+                                                sal_Bool            bNew = sal_False ) = 0; //add for SwTemplateDlg
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0; //add for SwGlossaryDlg

@@ -79,11 +79,12 @@ void XHatchList::impCreate()
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XDashList: no VirtualDevice created!" );
         pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(Size(BITMAP_WIDTH, BITMAP_HEIGHT)));
+        const Size aSize(pVirDev->PixelToLogic(Size(getUiBitmapWidth(), getUiBitmapHeight())));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
+        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
 
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XDashList: no SdrModel created!" );
@@ -116,12 +117,10 @@ void XHatchList::impDestroy()
     mpData = NULL;
 }
 
-XHatchList::XHatchList( const String& rPath,
-                        XOutdevItemPool* pInPool )
+XHatchList::XHatchList(const String& rPath, XOutdevItemPool* pInPool)
   : XPropertyList( XHATCH_LIST, rPath, pInPool ),
-    mpData( NULL )
+    mpData(0)
 {
-    pBmpList = new BitmapList_impl();
 }
 
 XHatchList::~XHatchList()
@@ -167,31 +166,7 @@ sal_Bool XHatchList::Create()
     return( sal_True );
 }
 
-sal_Bool XHatchList::CreateBitmapsForUI()
-{
-    impCreate();
-
-    for( long i = 0; i < Count(); i++)
-    {
-        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
-        DBG_ASSERT( pBmp, "XHatchList: Bitmap(UI) konnte nicht erzeugt werden!" );
-
-        if( pBmp )
-        {
-            if ( (size_t)i < pBmpList->size() ) {
-                pBmpList->insert( pBmpList->begin() + i, pBmp );
-            } else {
-                pBmpList->push_back( pBmp );
-            }
-        }
-    }
-
-    impDestroy();
-
-    return( sal_True );
-}
-
-Bitmap* XHatchList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
+Bitmap XHatchList::CreateBitmapForUI( long nIndex )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();
@@ -206,15 +181,11 @@ Bitmap* XHatchList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
     sdr::contact::DisplayInfo aDisplayInfo;
 
+    pVD->Erase();
     aPainter.ProcessDisplay(aDisplayInfo);
 
     const Point aZero(0, 0);
-    Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
-
-    if(bDelete)
-        impDestroy();
-
-    return pBitmap;
+    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

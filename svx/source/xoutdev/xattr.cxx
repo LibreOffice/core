@@ -3318,7 +3318,7 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) co
 
 /*************************************************************************
 |*
-|*    const XGradient& XFillGradientItem::GetValue(const XGradientTable* pTable)
+|*    const XGradient& XFillGradientItem::GetValue(const XGradientList* pTable)
 |*                                                                 const
 |*
 *************************************************************************/
@@ -3913,7 +3913,7 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XHatch& XFillHatchItem::GetValue(const XHatchTable* pTable) const
+|*    const XHatch& XFillHatchItem::GetValue(const XHatchList* pTable) const
 |*
 *************************************************************************/
 

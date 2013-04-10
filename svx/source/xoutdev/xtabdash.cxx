@@ -82,11 +82,12 @@ void XDashList::impCreate()
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XDashList: no VirtualDevice created!" );
         pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(Size(BITMAP_WIDTH * 2, BITMAP_HEIGHT)));
+        const Size aSize(pVirDev->PixelToLogic(Size(getUiBitmapWidth() * 2, getUiBitmapHeight())));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
+        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
 
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XDashList: no SdrModel created!" );
@@ -110,8 +111,8 @@ void XDashList::impCreate()
         pLineObject->SetModel(pSdrModel);
         pLineObject->SetMergedItem(XLineStyleItem(XLINE_DASH));
         pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
-        pLineObject->SetMergedItem(XLineWidthItem(30));
-
+        const Size aLineWidth(pVirDev->PixelToLogic(Size(getUiBitmapLineWidth(), 0)));
+        pLineObject->SetMergedItem(XLineWidthItem(aLineWidth.getWidth()));
         mpData = new impXDashList(pVirDev, pSdrModel, pBackgroundObject, pLineObject);
         OSL_ENSURE(0 != mpData, "XDashList: data creation went wrong!" );
     }
@@ -123,12 +124,13 @@ void XDashList::impDestroy()
     mpData = 0;
 }
 
-XDashList::XDashList( const String& rPath,
-                      XOutdevItemPool* pInPool) :
-    XPropertyList( XDASH_LIST, rPath, pInPool ),
-    mpData(0)
+XDashList::XDashList(const String& rPath, XOutdevItemPool* pInPool )
+:   XPropertyList( XDASH_LIST, rPath, pInPool ),
+    mpData(0),
+    maBitmapSolidLine(),
+    maStringSolidLine(),
+    maStringNoLine()
 {
-    pBmpList = new BitmapList_impl();
 }
 
 XDashList::~XDashList()
@@ -173,38 +175,21 @@ sal_Bool XDashList::Create()
     return sal_True;
 }
 
-sal_Bool XDashList::CreateBitmapsForUI()
-{
-    impCreate();
-
-    for( long i = 0; i < Count(); i++)
-    {
-        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
-        DBG_ASSERT( pBmp, "XDashList: Bitmap(UI) konnte nicht erzeugt werden!" );
-
-        if( pBmp )
-        {
-            if ( (size_t)i < pBmpList->size() ) {
-                pBmpList->insert( pBmpList->begin() + i, pBmp );
-            } else {
-                pBmpList->push_back( pBmp );
-            }
-        }
-    }
-
-    impDestroy();
-
-    return sal_True;
-}
-
-Bitmap* XDashList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
+Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();
     SdrObject* pLine = mpData->getLineObject();
 
-    pLine->SetMergedItem(XLineStyleItem(XLINE_DASH));
-    pLine->SetMergedItem(XLineDashItem(String(), GetDash(nIndex)->GetDash()));
+    if(pDash)
+    {
+        pLine->SetMergedItem(XLineStyleItem(XLINE_DASH));
+        pLine->SetMergedItem(XLineDashItem(String(), *pDash));
+    }
+    else
+    {
+        pLine->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+    }
 
     sdr::contact::SdrObjectVector aObjectVector;
     aObjectVector.push_back(mpData->getBackgroundObject());
@@ -212,15 +197,50 @@ Bitmap* XDashList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
     sdr::contact::DisplayInfo aDisplayInfo;
 
+    pVD->Erase();
     aPainter.ProcessDisplay(aDisplayInfo);
 
     const Point aZero(0, 0);
-    Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
+    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
+}
 
-    if(bDelete)
-        impDestroy();
+Bitmap XDashList::CreateBitmapForUI( long nIndex )
+{
+    const XDash& rDash = GetDash(nIndex)->GetDash();
 
-    return pBitmap;
+    return ImpCreateBitmapForXDash(&rDash);
+}
+
+Bitmap XDashList::GetBitmapForUISolidLine() const
+{
+    if(maBitmapSolidLine.IsEmpty())
+    {
+        const_cast< XDashList* >(this)->maBitmapSolidLine = const_cast< XDashList* >(this)->ImpCreateBitmapForXDash(0);
+    }
+
+    return maBitmapSolidLine;
+}
+
+String XDashList::GetStringForUiSolidLine() const
+{
+    if(!maStringSolidLine.Len())
+    {
+        const_cast< XDashList* >(this)->maStringSolidLine = String(ResId(RID_SVXSTR_SOLID, DIALOG_MGR()));
+    }
+
+    return maStringSolidLine;
+}
+
+String XDashList::GetStringForUiNoLine() const
+{
+    if(!maStringNoLine.Len())
+    {
+        // formally was RID_SVXSTR_INVISIBLE, but tomake equal
+        // everywhere, use RID_SVXSTR_NONE
+        const_cast< XDashList* >(this)->maStringNoLine = String(ResId(RID_SVXSTR_NONE, DIALOG_MGR()));
+    }
+
+    return maStringNoLine;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

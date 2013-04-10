@@ -37,6 +37,7 @@
 #include <sfx2/bindings.hxx>
 #include <svx/fontwork.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editstat.hxx>
@@ -131,6 +132,7 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     rSh.NoEdit(true);
     SetName(OUString("ObjectText"));
     SetHelpId(SW_DRWTXTSHELL);
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawText));
 }
 
 SwDrawTextShell::~SwDrawTextShell()
@@ -486,6 +488,28 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 }
             }
             break;
+        case SID_TABLE_VERT_NONE:
+        case SID_TABLE_VERT_CENTER:
+        case SID_TABLE_VERT_BOTTOM:
+            {
+                sal_uInt16 nSId = rReq.GetSlot();
+                if (pSdrView->AreObjectsMarked())
+                {
+                    SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_TOP;
+                    if (nSId == SID_TABLE_VERT_CENTER)
+                        eTVA = SDRTEXTVERTADJUST_CENTER;
+                    else if (nSId == SID_TABLE_VERT_BOTTOM)
+                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
+
+                    SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool() );
+                    pSdrView->GetAttributes( aNewAttr );
+                    aNewAttr.Put(SdrTextVertAdjustItem(eTVA));
+                    pSdrView->SetAttributes(aNewAttr);
+                    rReq.Done();
+                }
+
+            }
+            break;
 
         default:
             OSL_ENSURE(!this, "unexpected slot-id");
@@ -814,6 +838,57 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     pSdrView = rSh.GetDrawView();
     SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
     return &pOutliner->GetUndoManager();
+}
+
+void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
+{
+    SfxWhichIter    aIter( rSet );
+    sal_uInt16 nWhich = aIter.FirstWhich();
+
+    SwWrtShell &rSh = GetShell();
+    pSdrView = rSh.GetDrawView();
+
+    SfxItemSet aAttrs( pSdrView->GetModel()->GetItemPool() );
+    pSdrView->GetAttributes( aAttrs );
+
+    while ( nWhich )
+    {
+        sal_uInt16 nSlotId = SfxItemPool::IsWhich(nWhich)
+            ? GetPool().GetSlotId(nWhich)
+            : nWhich;
+        switch ( nSlotId )
+        {
+            case SID_TABLE_VERT_NONE:
+            case SID_TABLE_VERT_CENTER:
+            case SID_TABLE_VERT_BOTTOM:
+                sal_Bool bContour = sal_False;
+                SfxItemState eConState = aAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
+                if( eConState != SFX_ITEM_DONTCARE )
+                {
+                    bContour = ( ( const SdrTextContourFrameItem& )aAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+                }
+                if (bContour) break;
+
+                SfxItemState eVState = aAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
+                //SfxItemState eHState = aAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
+
+                //if(SFX_ITEM_DONTCARE != eVState && SFX_ITEM_DONTCARE != eHState)
+                if(SFX_ITEM_DONTCARE != eVState)
+                {
+                    SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+                    sal_Bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
+                            (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
+                            (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);
+                    rSet.Put(SfxBoolItem(nSlotId, bSet));
+                }
+                else
+                {
+                    rSet.Put(SfxBoolItem(nSlotId, sal_False));
+                }
+                break;
+        }
+        nWhich = aIter.NextWhich();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

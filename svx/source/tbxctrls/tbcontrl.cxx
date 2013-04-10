@@ -1269,7 +1269,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
                 long nCount = pColorList->Count();
                 XColorEntry* pEntry = NULL;
                 ::Color aColWhite( COL_WHITE );
-                String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
+                String aStrWhite( EditResId(RID_SVXITEMS_COLOR_WHITE) );
 
                 // ScrollBar on or off
                 WinBits nBits = aColorSet.GetStyle();

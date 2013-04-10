@@ -85,4 +85,7 @@
   <implementation name="stardiv.StarCalc.ScSpreadsheetSettings">
     <service name="com.sun.star.sheet.GlobalSheetSettings"/>
   </implementation>
+  <implementation name="org.apache.openoffice.comp.sc.sidebar.ScPanelFactory">
+    <service name="com.sun.star.ui.UIElementFactory"/>
+  </implementation>
 </component>

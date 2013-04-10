@@ -43,11 +43,13 @@
 
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/svdopage.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <vcl/virdev.hxx>
 
 #include "app.hrc"
@@ -70,6 +72,7 @@
 #include "undo/undomanager.hxx"
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdotable.hxx>
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
@@ -80,6 +83,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
@@ -89,6 +93,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace sdr::table;
 namespace sd {
 
 TYPEINIT1(View, FmFormView);
@@ -690,6 +695,10 @@ sal_Bool View::SdrBeginTextEdit(
         pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus);
 
+    ContextChangeEventMultiplexer::NotifyContextChange(
+        &GetViewShell()->GetViewShellBase(),
+        ::sfx2::sidebar::EnumContext::Context_DrawText);
+
     if (bReturn)
     {
         ::Outliner* pOL = GetTextEditOutliner();
@@ -705,11 +714,15 @@ sal_Bool View::SdrBeginTextEdit(
             {
                 aBackground = pObj->GetPage()->GetPageBackgroundColor(pPV);
             }
-            pOL->SetBackgroundColor( aBackground  );
+            if (pOL != NULL)
+                pOL->SetBackgroundColor( aBackground  );
         }
 
-        pOL->SetParaInsertedHdl(LINK(this, View, OnParagraphInsertedHdl));
-        pOL->SetParaRemovingHdl(LINK(this, View, OnParagraphRemovingHdl));
+        if (pOL != NULL)
+        {
+            pOL->SetParaInsertedHdl(LINK(this, View, OnParagraphInsertedHdl));
+            pOL->SetParaRemovingHdl(LINK(this, View, OnParagraphRemovingHdl));
+        }
     }
 
     return(bReturn);
@@ -746,10 +759,16 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
         }
     }
 
-    GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT, (void*)xObj.get() );
+    GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
+        sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT,
+        (void*)xObj.get() );
 
     if( xObj.is() )
     {
+        ContextChangeEventMultiplexer::NotifyContextChange(
+            &GetViewShell()->GetViewShellBase(),
+            ::sfx2::sidebar::EnumContext::Context_Default);
+
         SdPage* pPage = dynamic_cast< SdPage* >( xObj->GetPage() );
         if( pPage )
             pPage->onEndTextEdit( xObj.get() );
@@ -1206,6 +1225,169 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
             }
         }
     }
+}
+
+sal_Bool View::ShouldToggleOn(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet)
+{
+    // If setting bullets/numbering by the dialog, always should toggle on.
+    if (!bBulletOnOffMode)
+        return sal_True;
+    SdrModel* pSdrModel = GetModel();
+    if (!pSdrModel)
+        return sal_False;
+
+    sal_Bool bToggleOn = sal_False;
+    SdrOutliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel);
+    sal_uInt32 nMarkCount = GetMarkedObjectCount();
+    for (sal_uInt32 nIndex = 0; nIndex < nMarkCount && !bToggleOn; nIndex++)
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(GetMarkedObjectByIndex(nIndex));
+        if (!pTextObj || pTextObj->IsTextEditActive())
+            continue;
+        if (pTextObj->ISA(SdrTableObj))
+        {
+            SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >(pTextObj);
+            if (!pTableObj)
+                continue;
+            CellPos aStart, aEnd;
+            SvxTableController* pTableController = dynamic_cast< SvxTableController* >(getSelectionController().get());
+            if (pTableController)
+            {
+                pTableController->getSelectedCells(aStart, aEnd);
+            }
+            else
+            {
+                aStart = pTableObj->getFirstCell();
+                aEnd = pTableObj->getLastCell();
+            }
+            sal_Int32 nColCount = pTableObj->getColumnCount();
+            for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow && !bToggleOn; nRow++)
+            {
+                for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol && !bToggleOn; nCol++)
+                {
+                    sal_Int32 nCellIndex = nRow * nColCount + nCol;
+                    SdrText* pText = pTableObj->getText(nCellIndex);
+                    if (!pText || !pText->GetOutlinerParaObject())
+                        continue;
+                    pOutliner->SetText(*(pText->GetOutlinerParaObject()));
+                    sal_Int16 nStatus = pOutliner->GetBulletsNumberingStatus();
+                    bToggleOn = ((bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1)) ? sal_True : bToggleOn;
+                    pOutliner->Clear();
+                }
+            }
+        }
+        else
+        {
+            OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+            if (!pParaObj)
+                continue;
+            pOutliner->SetText(*pParaObj);
+            sal_Int16 nStatus = pOutliner->GetBulletsNumberingStatus();
+            bToggleOn = ((bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1)) ? sal_True : bToggleOn;
+            pOutliner->Clear();
+        }
+    }
+    delete pOutliner;
+    return bToggleOn;
+}
+
+void View::ToggleMarkedObjectsBullets(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet, sal_Bool bMasterView, SvxNumRule* pNumRule, sal_Bool bForceBulletOnOff)
+{
+    SdrModel* pSdrModel = GetModel();
+    Window* pWindow = dynamic_cast< Window* >(GetFirstOutputDevice());
+    if (!pSdrModel || !pWindow)
+        return;
+
+    sal_Bool bUndoEnabled = pSdrModel->IsUndoEnabled();
+    sal_Bool bToggleOn = ShouldToggleOn(bBulletOnOffMode, bNormalBullet);
+    if ( bForceBulletOnOff ) {
+        bToggleOn = bBulletOnOffMode;
+    }
+    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(*pSdrModel);
+    SdrOutliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel);
+    OutlinerView* pOutlinerView = new OutlinerView(pOutliner, pWindow);
+
+    sal_uInt32 nMarkCount = GetMarkedObjectCount();
+    for (sal_uInt32 nIndex = 0; nIndex < nMarkCount; nIndex++)
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(GetMarkedObjectByIndex(nIndex));
+        if (!pTextObj || pTextObj->IsTextEditActive())
+            continue;
+        if (pTextObj->ISA(SdrTableObj))
+        {
+            SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >(pTextObj);
+            if (!pTableObj)
+                continue;
+            CellPos aStart, aEnd;
+            SvxTableController* pTableController = dynamic_cast< SvxTableController* >(getSelectionController().get());
+            if (pTableController)
+            {
+                pTableController->getSelectedCells(aStart, aEnd);
+            }
+            else
+            {
+                aStart = pTableObj->getFirstCell();
+                aEnd = pTableObj->getLastCell();
+            }
+            sal_Int32 nColCount = pTableObj->getColumnCount();
+            for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
+            {
+                for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
+                {
+                    sal_Int32 nCellIndex = nRow * nColCount + nCol;
+                    SdrText* pText = pTableObj->getText(nCellIndex);
+                    if (!pText || !pText->GetOutlinerParaObject())
+                        continue;
+
+                    pOutliner->SetText(*(pText->GetOutlinerParaObject()));
+                    if (bUndoEnabled)
+                    {
+                        SdrUndoObjSetText* pTxtUndo = dynamic_cast< SdrUndoObjSetText* >(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nCellIndex));
+                        pUndoGroup->AddAction(pTxtUndo);
+                    }
+                    pOutlinerView->ToggleAllParagraphsBullets(bBulletOnOffMode, bNormalBullet, bToggleOn, bMasterView, pNumRule);
+                    sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
+                    pText->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
+                    pOutliner->Clear();
+                }
+            }
+            // Broadcast the object change event.
+            if (!pTextObj->AdjustTextFrameWidthAndHeight())
+            {
+                pTextObj->SetChanged();
+                pTextObj->BroadcastObjectChange();
+            }
+        }
+        else
+        {
+            OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+            if (!pParaObj)
+                continue;
+            pOutliner->SetText(*pParaObj);
+            if (bUndoEnabled)
+            {
+                SdrUndoObjSetText* pTxtUndo = dynamic_cast< SdrUndoObjSetText* >(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, 0));
+                pUndoGroup->AddAction(pTxtUndo);
+            }
+            pOutlinerView->ToggleAllParagraphsBullets(bBulletOnOffMode, bNormalBullet, bToggleOn, bMasterView, pNumRule);
+            sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
+            pTextObj->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
+            pOutliner->Clear();
+        }
+    }
+
+    if (pUndoGroup->GetActionCount() > 0 && bUndoEnabled)
+    {
+        pSdrModel->BegUndo();
+        pSdrModel->AddUndo(pUndoGroup);
+        pSdrModel->EndUndo();
+    }
+    else
+    {
+        delete pUndoGroup;
+    }
+    delete pOutliner;
+    delete pOutlinerView;
 }
 
 } // end of namespace sd

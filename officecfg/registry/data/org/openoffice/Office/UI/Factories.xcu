@@ -76,18 +76,60 @@
           <value>com.sun.star.comp.framework.StatusBarFactory</value>
         </prop>
       </node>
-      <node oor:name="org.openoffice.Office.Impress.ImpressToolPanelFactory" oor:op="replace">
+      <node oor:name="SvxPanelFactory" oor:op="replace">
         <prop oor:name="Type">
           <value>toolpanel</value>
         </prop>
         <prop oor:name="Name">
-          <value>DrawingFramework</value>
+          <value>SvxPanelFactory</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.presentation.PresentationDocument</value>
+          <value/>
         </prop>
         <prop oor:name="FactoryImplementation">
-          <value>com.sun.star.drawing.DefaultToolPanelFactory</value>
+          <value>org.apache.openoffice.comp.svx.sidebar.PanelFactory</value>
+        </prop>
+      </node>
+      <node oor:name="SdPanelFactory" oor:op="replace">
+        <prop oor:name="Type">
+          <value>toolpanel</value>
+        </prop>
+        <prop oor:name="Name">
+          <value>SdPanelFactory</value>
+        </prop>
+        <prop oor:name="Module">
+          <value></value>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+          <value>org.openoffice.comp.Draw.framework.PanelFactory</value>
+        </prop>
+      </node>
+      <node oor:name="ScPanelFactory" oor:op="replace">
+        <prop oor:name="Type">
+          <value>toolpanel</value>
+        </prop>
+        <prop oor:name="Name">
+          <value>ScPanelFactory</value>
+        </prop>
+        <prop oor:name="Module">
+          <value></value>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+          <value>org.apache.openoffice.comp.sc.sidebar.ScPanelFactory</value>
+        </prop>
+      </node>
+      <node oor:name="SwPanelFactory" oor:op="replace">
+        <prop oor:name="Type">
+          <value>toolpanel</value>
+        </prop>
+        <prop oor:name="Name">
+          <value>SwPanelFactory</value>
+        </prop>
+        <prop oor:name="Module">
+          <value></value>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+          <value>org.apache.openoffice.comp.sw.sidebar.SwPanelFactory</value>
         </prop>
       </node>
     </node>

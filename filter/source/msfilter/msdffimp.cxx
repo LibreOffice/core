@@ -997,11 +997,11 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         if ( eShapeType == mso_sptMin )
             eLineJointDefault = mso_lineJoinRound;
         MSO_LineJoin eLineJoint = (MSO_LineJoin)GetPropertyValue( DFF_Prop_lineJoinStyle, eLineJointDefault );
-        XLineJoint eXLineJoint( XLINEJOINT_MITER );
+        com::sun::star::drawing::LineJoint eXLineJoint( com::sun::star::drawing::LineJoint_MITER );
         if ( eLineJoint == mso_lineJoinBevel )
-            eXLineJoint = XLINEJOINT_BEVEL;
+            eXLineJoint = com::sun::star::drawing::LineJoint_BEVEL;
         else if ( eLineJoint == mso_lineJoinRound )
-            eXLineJoint = XLINEJOINT_ROUND;
+            eXLineJoint = com::sun::star::drawing::LineJoint_ROUND;
         rSet.Put( XLineJointItem( eXLineJoint ) );
 
         if ( nLineFlags & 0x10 )

@@ -596,6 +596,7 @@
 #define SID_SEARCH_OPTIONS                  (SID_SVX_START + 281)
 #define SID_ZOOM                            (SID_SVX_START + 289)
 #define SID_SEARCH_ITEM                     (SID_SVX_START + 291)
+#define SID_SIDEBAR                         (SID_SVX_START + 336)
 #define SID_HYPERLINK_GETLINK               (SID_SVX_START + 361)
 #define SID_HYPERLINK_SETLINK               (SID_SVX_START + 362)
 #define SID_INFOBARCONTAINER                (SID_SVX_START + 365)

@@ -235,6 +235,7 @@ public:
     void SetMarkedObjRect(const Rectangle& rRect, sal_Bool bCopy=sal_False);
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
+    void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bCopy, const bool bWdh, const bool bHgt);
     long GetMarkedObjRotate() const;
     void RotateMarkedObj(const Point& rRef, long nWink, bool bCopy=false);
     void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);

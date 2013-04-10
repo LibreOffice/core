@@ -353,14 +353,9 @@ sal_Bool XColorList::Create()
     return Count() == 104;
 }
 
-sal_Bool XColorList::CreateBitmapsForUI()
+Bitmap XColorList::CreateBitmapForUI( long /*nIndex*/ )
 {
-    return sal_False;
-}
-
-Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return NULL;
+    return Bitmap();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

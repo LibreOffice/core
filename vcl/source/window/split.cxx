@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/rc.h>
 #include <tools/poly.hxx>
 
@@ -66,32 +65,39 @@ void Splitter::ImplInitSplitterData()
 
 // -----------------------------------------------------------------------
 
+void Splitter::ImplInitHorVer(bool bNew)
+{
+    if(bNew != (bool)mbHorzSplit)
+    {
+        mbHorzSplit = bNew;
+
+        PointerStyle ePointerStyle;
+        const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+
+        if ( mbHorzSplit )
+        {
+            ePointerStyle = POINTER_HSPLIT;
+            SetSizePixel( Size( rSettings.GetSplitSize(), rSettings.GetScrollBarSize() ) );
+        }
+        else
+        {
+            ePointerStyle = POINTER_VSPLIT;
+            SetSizePixel( Size( rSettings.GetScrollBarSize(), rSettings.GetSplitSize() ) );
+        }
+
+        SetPointer( Pointer( ePointerStyle ) );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
 {
     Window::ImplInit( pParent, nWinStyle, NULL );
 
     mpRefWin = pParent;
 
-    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    long nA = rSettings.GetScrollBarSize();
-    long nB = rSettings.GetSplitSize();
-
-    PointerStyle ePointerStyle;
-
-    if ( nWinStyle & WB_HSCROLL )
-    {
-        ePointerStyle = POINTER_HSPLIT;
-        mbHorzSplit = sal_True;
-        SetSizePixel( Size( nB, nA ) );
-    }
-    else
-    {
-        ePointerStyle = POINTER_VSPLIT;
-        mbHorzSplit = sal_False;
-        SetSizePixel( Size( nA, nB ) );
-    }
-
-    SetPointer( Pointer( ePointerStyle ) );
+    ImplInitHorVer(nWinStyle & WB_HSCROLL);
 
     if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
         SetBackground( ImplWhiteWall::get() );
@@ -178,6 +184,16 @@ Splitter::~Splitter()
 {
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
     pTList->RemoveWindow( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Splitter::SetHorizontal(bool bNew)
+{
+    if(bNew != (bool)mbHorzSplit)
+    {
+        ImplInitHorVer(bNew);
+    }
 }
 
 // -----------------------------------------------------------------------

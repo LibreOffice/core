@@ -94,14 +94,9 @@ sal_Bool XBitmapList::Create()
     return sal_True;
 }
 
-sal_Bool XBitmapList::CreateBitmapsForUI()
+Bitmap XBitmapList::CreateBitmapForUI( long /*nIndex*/ )
 {
-    return sal_False;
-}
-
-Bitmap* XBitmapList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return NULL;
+    return Bitmap();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

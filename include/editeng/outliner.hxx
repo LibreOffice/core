@@ -25,6 +25,7 @@
 #include <svl/brdcst.hxx>
 
 #include <editeng/editdata.hxx>
+#include <editeng/numitem.hxx>
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
@@ -332,7 +333,8 @@ public:
         or disables numbering for the selected paragraphs if the numbering of the first paragraph is on
     */
     void        ToggleBullets();
-
+    sal_Bool    ToggleBullets(sal_Bool bBulletOnOff, sal_Bool bNormalBullet, sal_Bool bMasterView, SvxNumRule* pNumRule = NULL, sal_Bool bForceBulletOnOff = false);
+    sal_Bool        ToggleAllParagraphsBullets(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet, sal_Bool bToggleOn, sal_Bool bMasterView, SvxNumRule* pNumRule = NULL);
     /** enables numbering for the selected paragraphs that are not enabled and ignore all selected
         paragraphs that already have numbering enabled.
     */
@@ -986,6 +988,8 @@ public:
 
     virtual sal_Bool IsParaIsNumberingRestart( sal_Int32 nPara );
     virtual void SetParaIsNumberingRestart( sal_Int32 nPara, sal_Bool bParaIsNumberingRestart );
+
+    sal_Int32 GetBulletsNumberingStatus();
 };
 
 #endif

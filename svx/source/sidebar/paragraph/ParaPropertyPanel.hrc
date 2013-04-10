@@ -1,0 +1,372 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "svx/dialogs.hrc"
+
+#define BT_SUBSTLEFT                                 1
+#define BT_SUBSTCENTER                               2
+#define BT_SUBSTRIGHT                                3
+#define BT_SUBSTJUSTIFY                              4
+#define BT_BTX_LINESP                                1
+#define BT_TBX_INDENT_INC                            1
+#define BT_TBX_INDENT_DEC                            2
+#define BT_TBX_UL_INC                                1
+#define BT_TBX_UL_DEC                                2
+#define ID_HANGING_INDENT                            3
+#define BT_TBX_INDENT_PROMOTE                        1
+#define BT_TBX_INDENT_DEMOTE                         2
+#define SD_HANGING_INDENT                            3
+#define MF_BEFORE_INDENT                             2
+#define MF_AFTER_INDENT                              4
+#define MF_FL_INDENT                                 6
+#define TBX_HORIZONTALALIGNMENT                      5
+#define IMG_LEFT_PARA                                7
+#define IMG_CENTER_PARA                              8
+#define IMG_RIGHT_PARA                               9
+#define IMG_JUSTIFY_PARA                             10
+#define IMG_INDENT_INC                               11
+#define IMG_INDENT_DEC                               12
+#define IMG_PARA_INC                                 13
+#define IMG_PARA_DEC                                 14
+#define IMG_INDENT_HANG                              15
+#define FT_INDENT                                    16
+#define TBX_INDENT_INC_DEC                           17
+#define FI_SPACE1                                    18
+#define FI_SPACE2                                    19
+#define FI_INDENT1                                   20
+#define FI_INDENT2                                   21
+#define FI_INDENT3                                   22
+#define IMG_SPACE3                                   23
+#define TBX_LINESP                                   25
+#define IMG_SPACE1                                   26
+#define IMG_INDENT1                                  27
+#define IMG_INDENT2                                  28
+#define IMG_SPACE2                                   29
+#define IMG_INDENT3                                  30
+#define FT_SPACING                                   31
+#define TBX_UL_INC_DEC                               33
+#define MF_ABOVE_PARASPACING                         32
+#define MF_BELOW_PARASPACING                         34
+#define TBX_INDENT_PRO_DEMOTE                        35
+#define TBX_VERT_ALIGN      40
+#define IL_VERT_ALIGN       41
+#define ILH_VERT_ALIGN      42
+#define TBX_NUM_BULLET      44
+#define IL_NUM_BULLET       45
+#define ILH_NUM_BULLET      46
+#define FT_BACK_COLOR       47
+#define TBX_BACK_COLOR      48
+#define TBI_BACK_COLOR      49
+#define IMG_BACK_COLOR      50
+#define IMG_BACK_COLOR_H    51
+#define IL_NUM_BULLET_RTL       52  //sym2_7380
+#define TBI_VERT_ALIGN_TOP      60
+#define TBI_VERT_ALIGN_CENTER   61
+#define TBI_VERT_ALIGN_BOT      62
+#define TBI_NUMBERING           63
+#define TBI_BULLET              64
+#define TBI_HOR_ALIGN_LEFT      65
+#define TBI_HOR_ALIGN_CENTER    66
+#define TBI_HOR_ALIGN_RIGHT     67
+#define TBI_HOR_ALIGN_JUSTIFY   68
+#define TBI_INDENT_INC          69
+#define TBI_INDENT_DEC          70
+#define TBI_UL_INC              71
+#define TBI_UL_DEC              72
+#define IMG_INDENT_INC_BD       73
+#define IMG_INDENT_DEC_BD       74
+
+//for vertical alignment
+#define IID_VERT_TOP        1
+#define IID_VERT_CENTER     2
+#define IID_VERT_BOTTOM     3
+
+//for numbering and bullett
+#define IID_BULLET          1
+#define IID_NUMBER          2
+//============================== popup bullet and numbering & back color =========================
+#define VS_VALUES           1
+#define IL_BULLET_BITMAPS   2
+#define CB_BULLET_MORE      4
+#define BMP_BULLET_MORE     5
+#define IMG_SEPERATOR_BULLET    7
+
+#define VS_NUMBERING        10
+#define CB_NUMBERING_MORE   12
+#define BMP_NUMERING_MORE   13
+#define IMG_SEPERATOR_NUMBERING 15
+#define VS_FONT_COLOR       1
+#define STR_NOFILL          2
+
+//============================== line space popup page ==============================
+
+#define LB_LINE_SPACING                    1
+#define ED_SBINDE_LINEDISTPERCENT          2
+#define ED_SBINDE_LINEDISTPOINT            3
+
+#define FT_CUSTOM                          14
+#define FT_LINE_SPACING                    15
+#define FT_OF                              16
+#define IMG_SPACING1                       18
+#define IMG_SPACING115                     19
+#define IMG_SPACING15                      20
+#define IMG_SPACING2                       21
+#define IMG_SPACINGLCUSTOM                 22
+#define IMG_SEL_SPACING1                   23
+#define IMG_SEL_SPACING115                 24
+#define IMG_SEL_SPACING15                  25
+#define IMG_SEL_SPACING2                   26
+#define IMG_LPCUSTOMNOBORDER               27
+#define FI_CUSTOM_NOBORDER_LSPACE          28
+#define LINE_SPACING                       29
+#define STR_SPACING1                       30
+#define STR_SPACING115                     31
+#define STR_SPACING15                      32
+#define STR_SPACING2                       33
+#define IMG_CUSTOM                         34
+#define IMG_CUSTOM_GRAY                    35
+#define STR_LCVALUE                        36
+#define STR_LS_SINGLE                      37
+#define STR_LS_115                         38
+#define STR_LS_15                          39
+#define STR_LS_DOUBLE                      40
+#define STR_LSPACING                       41
+#define STR_LS_OF                          42
+
+//============================== Help ID ==============================
+#define HID_TBX_HORIZONTALALIGNMENT "HID_TBX_HORIZONTALALIGNMENT"
+#define HID_TBI_HOR_ALIGN_LEFT      "HID_TBI_HOR_ALIGN_LEFT"
+#define HID_TBI_HOR_ALIGN_CENTER    "HID_TBI_HOR_ALIGN_CENTER"
+#define HID_TBI_HOR_ALIGN_RIGHT     "HID_TBI_HOR_ALIGN_RIGHT"
+#define HID_TBI_HOR_ALIGN_JUSTIFY   "HID_TBI_HOR_ALIGN_JUSTIFY"
+
+#define HID_TBX_VERT_ALIGN          "HID_TBX_VERT_ALIGN"
+#define HID_TBI_VERT_ALIGN_TOP      "HID_TBI_VERT_ALIGN_TOP"
+#define HID_TBI_VERT_ALIGN_CENTER   "HID_TBI_VERT_ALIGN_CENTER"
+#define HID_TBI_VERT_ALIGN_BOT      "HID_TBI_VERT_ALIGN_BOT"
+
+#define HID_TBX_INDENT "HID_TBX_INDENT"
+#define HID_TBI_INDENT "HID_TBI_INDENT"
+//#define HID_TBX_LINESP 705263129
+//#define HID_TBI_LINESP 705262617
+#define HID_TBX_GRSPACE "HID_TBX_GRSPACE"
+#define HID_TBI_GRSPACE "HID_TBI_GRSPACE"
+#define HID_TBX_BACK_COLOR  "HID_TBX_BACK_COLOR"
+#define HID_TBI_BACK_COLOR  "HID_TBI_BACK_COLOR"
+
+//#define HID_TBX_INDENT_INC_DEC 705263121
+//#define HID_TBI_INDENT_DEC 705262662
+//#define HID_TBI_INDENT_INC 705262661
+//#define HID_TBX_UL_INC_DEC 705263137
+//#define HID_TBI_UL_INC 705262663
+//#define HID_TBI_UL_DEC 705262664
+
+//#define HID_TBX_NUM_BULLET 705263148
+//#define HID_TBI_NUMBERING 705262655
+//#define HID_TBI_BULLET    705262656
+
+#define HID_POPUP_BULLET_CB_BULLET_MORE "HID_POPUP_BULLET_CB_BULLET_MORE"
+#define HID_POPUP_BULLET_VS_VALUES      "HID_POPUP_BULLET_VS_VALUES"
+#define HID_POPUP_NUM_CB_NUMBERING_MORE "HID_POPUP_NUM_CB_NUMBERING_MORE"
+#define HID_POPUP_NUM_VS_NUMBERING      "HID_POPUP_NUM_VS_NUMBERING"
+
+#define HID_POPUP_INDENT_ED_INDENT_LEFTINDENT   "HID_POPUP_INDENT_ED_INDENT_LEFTINDENT"
+#define HID_POPUP_INDENT_ED_INDENT_RIGHTINDENT  "HID_POPUP_INDENT_ED_INDENT_RIGHTINDENT"
+#define HID_POPUP_INDENT_ED_INDENT_FLINDENT     "HID_POPUP_INDENT_ED_INDENT_FLINDENT"
+#define HID_POPUP_INDENT_TBX_INDENT_NONE    "HID_POPUP_INDENT_TBX_INDENT_NONE"
+#define HID_POPUP_INDENT_TBI_INDENT_NONE    "HID_POPUP_INDENT_TBI_INDENT_NONE"
+#define HID_POPUP_INDENT_TBX_INDENT_BEFORE1 "HID_POPUP_INDENT_TBX_INDENT_BEFORE1"
+#define HID_POPUP_INDENT_TBI_INDENT_BEFORE1 "HID_POPUP_INDENT_TBI_INDENT_BEFORE1"
+#define HID_POPUP_INDENT_TBX_INDENT_BEFORE2 "HID_POPUP_INDENT_TBX_INDENT_BEFORE2"
+#define HID_POPUP_INDENT_TBI_INDENT_BEFORE2 "HID_POPUP_INDENT_TBI_INDENT_BEFORE2"
+#define HID_POPUP_INDENT_TBX_INDENT_FLINE   "HID_POPUP_INDENT_TBX_INDENT_FLINE"
+#define HID_POPUP_INDENT_TBI_INDENT_FLINE   "HID_POPUP_INDENT_TBI_INDENT_FLINE"
+#define HID_POPUP_INDENT_TBX_INDENT_HANGING "HID_POPUP_INDENT_TBX_INDENT_HANGING"
+#define HID_POPUP_INDENT_TBI_INDENT_HANGING "HID_POPUP_INDENT_TBI_INDENT_HANGING"
+#define HID_POPUP_INDENT_TBX_INDENT_LCUSTOM "HID_POPUP_INDENT_TBX_INDENT_LCUSTOM"
+#define HID_POPUP_INDENT_TBI_INDENT_LCUSTOM "HID_POPUP_INDENT_TBI_INDENT_LCUSTOM"
+
+#define HID_POPUP_LS_LB_LINE_SPACING            "HID_POPUP_LS_LB_LINE_SPACING"
+#define HID_POPUP_LS_ED_SBINDE_LINEDISTPERCENT  "HID_POPUP_LS_ED_SBINDE_LINEDISTPERCENT"
+#define HID_POPUP_LS_ED_SBINDE_LINEDISTPOINT     "HID_POPUP_LS_ED_SBINDE_LINEDISTPOINT"
+#define HID_POPUP_LS_TBX_LINESP_1               "HID_POPUP_LS_TBX_LINESP_1"
+#define HID_POPUP_LS_TBI_LINESP_1               "HID_POPUP_LS_TBI_LINESP_1"
+#define HID_POPUP_LS_TBX_LINESP_15              "HID_POPUP_LS_TBX_LINESP_15"
+#define HID_POPUP_LS_TBI_LINESP_15              "HID_POPUP_LS_TBI_LINESP_15"
+#define HID_POPUP_LS_TBX_LINESP_2               "HID_POPUP_LS_TBX_LINESP_2"
+#define HID_POPUP_LS_TBI_LINESP_2               "HID_POPUP_LS_TBI_LINESP_2"
+#define HID_POPUP_LS_TBX_LINESP_115             "HID_POPUP_LS_TBX_LINESP_115"
+#define HID_POPUP_LS_TBI_LINESP_115             "HID_POPUP_LS_TBI_LINESP_115"
+#define HID_POPUP_LS_TBX_LINESP_LCUSTOM         "HID_POPUP_LS_TBX_LINESP_LCUSTOM"
+#define HID_POPUP_LS_TBI_LINESP_LCUSTOM         "HID_POPUP_LS_TBI_LINESP_LCUSTOM"
+
+#define HID_POPUP_PS_ED_SBINDE_TOPDIST      "HID_POPUP_PS_ED_SBINDE_TOPDIST"
+#define HID_POPUP_PS_ED_SBINDE_BOTTOMDIST   "HID_POPUP_PS_ED_SBINDE_BOTTOMDIST"
+#define HID_POPUP_PS_TBX_NORMAL             "HID_POPUP_PS_TBX_NORMAL"
+#define HID_POPUP_PS_TBI_NORMAL             "HID_POPUP_PS_TBI_NORMAL"
+#define HID_POPUP_PS_TBX_NARROW             "HID_POPUP_PS_TBX_NARROW"
+#define HID_POPUP_PS_TBI_NARROW             "HID_POPUP_PS_TBI_NARROW"
+#define HID_POPUP_PS_TBX_WIDE               "HID_POPUP_PS_TBX_WIDE"
+#define HID_POPUP_PS_TBI_WIDE               "HID_POPUP_PS_TBI_WIDE"
+#define HID_POPUP_PS_TBX_LASTCUSTOM         "HID_POPUP_PS_TBX_LASTCUSTOM"
+#define HID_POPUP_PS_TBI_LASTCUSTOM         "HID_POPUP_PS_TBI_LASTCUSTOM"
+
+//============================== Property ==============================
+#define _FIXED_TEXT_HEIGHT          9
+#define _FIXED_TEXT_WIDTH           40
+#define CONTROL_HEIGHT              15
+#define CONTROL_WIDTH               45
+#define ALIGNMENT_TBX_HEIGHT        17
+#define ALIGNMENT_TBX_WIDTH         13
+#define LISTBOX_HEIGHT              80
+#define IMAGE_SIZE                  16
+#define POPUP_TOOLBOX_SIZE          32
+#define TOOLBOX_HEIGHT              22
+#define TOOLBOX_WIDTH               23
+#define TEXT_SPACING_VERTICAL       2
+#define BUTTON_SPACING              18
+//#define TOOLBOX_ITEM_HEIGHT           17
+#define VS_SPACING_WIDTH            78
+
+//==============================Section page position==============================
+
+#define TBX_HORI_ALIGN_X    SECTIONPAGE_MARGIN_HORIZONTAL + TBX_OUT_BORDER_OFFSET_X/2
+#define TBX_HORI_ALIGN_Y    SECTIONPAGE_MARGIN_VERTICAL_TOP
+
+#define TBX_VERT_ALIGN_X    TBX_HORI_ALIGN_X + TBX_OUT_BORDER_OFFSET_X*2 + TOOLBOX_ITEM_WIDTH * 4 + CONTROL_SPACING_HORIZONTAL
+#define TBX_VERT_ALIGN_Y    TBX_HORI_ALIGN_Y
+
+#define TBX_NUM_BULLET_X    TBX_HORI_ALIGN_X
+#define TBX_NUM_BULLET_Y    TBX_HORI_ALIGN_Y + TOOLBOX_ITEM_HEIGHT + CONTROL_SPACING_VERTICAL - 1
+
+#define TBX_BACK_COLOR_X    TBX_HORI_ALIGN_X + TBX_OUT_BORDER_OFFSET_X*2 + TOOLBOX_ITEM_WIDTH * 3 + CONTROL_SPACING_HORIZONTAL
+#define TBX_BACK_COLOR_Y    TBX_NUM_BULLET_Y
+
+#define FT_PARA_SPACE_X     SECTIONPAGE_MARGIN_HORIZONTAL
+#define FT_PARA_SPACE_Y     TBX_NUM_BULLET_Y + TOOLBOX_ITEM_HEIGHT + CONTROL_SPACING_VERTICAL - 3
+#define FT_PARA_SPACE_Y2    TBX_HORI_ALIGN_Y + TOOLBOX_ITEM_HEIGHT + CONTROL_SPACING_VERTICAL - 2
+
+#define TBX_PARA_SPACE_INC_DEC_X    TBX_HORI_ALIGN_X
+#define TBX_PARA_SPACE_INC_DEC_Y    FT_PARA_SPACE_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
+#define TBX_PARA_SPACE_INC_DEC_Y2   FT_PARA_SPACE_Y2 + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
+
+#define FT_PARA_INDENT_X    TBX_VERT_ALIGN_X
+#define FT_PARA_INDENT_Y    FT_PARA_SPACE_Y
+#define FT_PARA_INDENT_Y2   FT_PARA_SPACE_Y2
+
+#define TBX_PARA_INDENT_INC_DEC_X   TBX_VERT_ALIGN_X
+#define TBX_PARA_INDENT_INC_DEC_Y   TBX_PARA_SPACE_INC_DEC_Y
+#define TBX_PARA_INDENT_INC_DEC_Y2  TBX_PARA_SPACE_INC_DEC_Y2
+
+#define MBX_TOP_DIST_X      FT_PARA_SPACE_X + TOOLBOX_ITEM_WIDTH
+#define MBX_TOP_DIST_Y      TBX_PARA_SPACE_INC_DEC_Y + TOOLBOX_ITEM_WIDTH + CONTROL_SPACING_VERTICAL + 4*TBX_OUT_BORDER_OFFSET_Y - 1
+#define MBX_TOP_DIST_Y2     TBX_PARA_SPACE_INC_DEC_Y2 + TOOLBOX_ITEM_WIDTH + CONTROL_SPACING_VERTICAL + 4*TBX_OUT_BORDER_OFFSET_Y - 1
+#define MBX_BOT_DIST_X      MBX_TOP_DIST_X
+#define MBX_BOT_DIST_Y      MBX_TOP_DIST_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
+#define MBX_BOT_DIST_Y2     MBX_TOP_DIST_Y2 + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
+
+#define IMG_SPACE_X         FT_PARA_SPACE_X - 3
+#define IMG_SPACE1_Y        MBX_TOP_DIST_Y  - 1
+#define IMG_SPACE2_Y        MBX_BOT_DIST_Y  - 1
+#define IMG_SPACE1_Y2       MBX_TOP_DIST_Y2  - 1
+#define IMG_SPACE2_Y2       MBX_BOT_DIST_Y2  - 1
+
+#define MBX_LEFT_DIST_X     FT_PARA_INDENT_X + TOOLBOX_ITEM_WIDTH
+#define MBX_LEFT_DIST_Y     MBX_TOP_DIST_Y
+#define MBX_LEFT_DIST_Y2    MBX_TOP_DIST_Y2
+#define MBX_RIGHT_DIST_X    MBX_LEFT_DIST_X
+#define MBX_RIGHT_DIST_Y    MBX_BOT_DIST_Y
+#define MBX_RIGHT_DIST_Y2   MBX_BOT_DIST_Y2
+#define MBX_FLINE_DIST_X    MBX_LEFT_DIST_X
+#define MBX_FLINE_DIST_Y    MBX_RIGHT_DIST_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
+#define MBX_FLINE_DIST_Y2   MBX_RIGHT_DIST_Y2 + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
+
+#define IMG_INDENT_X        FT_PARA_INDENT_X - 4
+#define IMG_INDENT1_Y       MBX_LEFT_DIST_Y - 1
+#define IMG_INDENT2_Y       MBX_RIGHT_DIST_Y - 1
+#define IMG_INDENT3_Y       MBX_FLINE_DIST_Y - 1
+#define IMG_INDENT1_Y2      MBX_LEFT_DIST_Y2 - 1
+#define IMG_INDENT2_Y2      MBX_RIGHT_DIST_Y2- 1
+#define IMG_INDENT3_Y2      MBX_FLINE_DIST_Y2- 1
+
+#define TBX_LINE_SPACE_X    TBX_HORI_ALIGN_X
+#define TBX_LINE_SPACE_Y    MBX_FLINE_DIST_Y
+#define TBX_LINE_SPACE_Y2   MBX_FLINE_DIST_Y2
+
+#define PARA_SECTIONPAGE_HEIGHT     MBX_FLINE_DIST_Y + TOOLBOX_ITEM_HEIGHT + SECTIONPAGE_MARGIN_VERTICAL_BOT
+#define PARA_SECTIONPAGE_HEIGHT_2   MBX_FLINE_DIST_Y2 + TOOLBOX_ITEM_HEIGHT + SECTIONPAGE_MARGIN_VERTICAL_BOT
+
+#define LINE_X_WHITE        FT_PARA_INDENT_X - 5
+#define LINE_TOP_Y          FT_PARA_INDENT_Y + 1
+#define LINE_TOP_Y2         FT_PARA_INDENT_Y2 + 1
+#define LINE_BOT_Y          TBX_LINE_SPACE_Y + TOOLBOX_ITEM_HEIGHT - 1
+#define LINE_BOT_Y2         TBX_LINE_SPACE_Y2 + TOOLBOX_ITEM_HEIGHT - 1
+
+//==============================numbering and bullet==============================
+#define NB_MARGIN_VERTICAL      POPUPPANEL_MARGIN_VERTICAL
+#define NB_MARGIN_HORIZONTAL    POPUPPANEL_MARGIN_HORIZONTAL
+#define SPACING_VERTICAL_S3         8
+//#define SPACING_VERTICAL_S1       12
+#define POPUPPANEL_MARGIN_NB   4
+
+#define NB_IMAGE_WIDTH      25
+#define NB_IMAGE_HEIGHT     25
+#define NB_IMAGE_SPACING    5
+
+#define BULLET_IMAGE_WIDTH      NB_IMAGE_WIDTH
+#define BULLET_IMAGE_HEIGHT     NB_IMAGE_HEIGHT
+#define BULLET_IMAGE_SPACING    NB_IMAGE_SPACING
+
+#define NUM_IMAGE_WIDTH     25
+#define NUM_IMAGE_HEIGHT    35
+#define NUM_IMAGE_SPACING   NB_IMAGE_SPACING
+
+#define FIXED_TEXT_HEIGHT        13
+#define FIXED_TEXT_WIDTH         80
+#define CUST_MORE_BUTTON_HEIGHT  15
+
+#define VS_WIDTH_BULLET     BULLET_IMAGE_WIDTH*3+BULLET_IMAGE_SPACING*2
+#define VS_HEIGHT_BULLET    BULLET_IMAGE_HEIGHT*4+BULLET_IMAGE_SPACING*3
+#define VS_WIDTH_NUM        NUM_IMAGE_WIDTH*3+NB_IMAGE_SPACING*2
+#define VS_HEIGHT_NUM       NUM_IMAGE_HEIGHT*3+NB_IMAGE_SPACING*2
+
+#define POPUP_WIDTH_BULLET  VS_WIDTH_BULLET + POPUPPANEL_MARGIN_NB * 2
+#define POPUP_HEIGHT_BULLET VS_HEIGHT_BULLET + POPUPPANEL_MARGIN_NB * 3 + CUST_MORE_BUTTON_HEIGHT
+#define POPUP_WIDTH_NUM     VS_WIDTH_NUM + POPUPPANEL_MARGIN_NB * 2
+#define POPUP_HEIGHT_NUM    VS_HEIGHT_NUM + POPUPPANEL_MARGIN_NB * 3 + CUST_MORE_BUTTON_HEIGHT
+
+#define CUST_MORE_BUTTON_X  1
+#define CUST_MORE_BUTTON_IMG_OFF_X      2   //NB_MARGIN_HORIZONTAL - CUST_MORE_BUTTON_X + OFFSET_X
+
+//==============================Line Spacing popup page=======================
+
+#define POPUP_PAGE_HEIGHT    POP_BORDER_Y + BD_HEIGHT + POPUPPANEL_MARGIN_NB + OFFSET_Y
+#define POP_FT_CUSTOM_X      POPUPPANEL_MARGIN_NB + OFFSET_X
+#define POP_FT_CUSTOM_Y      POPUPPANEL_MARGIN_SMALL * 2 + 17 * 5
+#define POP_BORDER_X         POPUPPANEL_MARGIN_NB + OFFSET_X + 1
+#define POP_BORDER_Y         POPUPPANEL_MARGIN_SMALL * 3 + 17 * 5 + TEXT_HEIGHT
+#define BD_WIDTH             VS_SPACING_WIDTH - 6
+#define BD_HEIGHT            TEXT_HEIGHT*2 + CONTROL_HEIGHT*2 + CONTROL_SPACING_VERTICAL*3 + TEXT_CONTROL_SPACING_VERTICAL*2 - 4
+
+#define FT_1_X               POP_BORDER_X + POPUPPANEL_MARGIN_LARGE
+#define FT_1_Y               POP_BORDER_Y + CONTROL_SPACING_VERTICAL
+#define EDIT_1_X             FT_1_X
+#define EDIT_1_Y             FT_1_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
+#define FT_2_X               FT_1_X
+#define FT_2_Y               EDIT_1_Y + CONTROL_HEIGHT + CONTROL_SPACING_VERTICAL - 3
+#define EDIT_2_X             FT_1_X
+#define EDIT_2_Y             FT_2_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL

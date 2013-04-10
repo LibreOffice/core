@@ -81,11 +81,21 @@ class SdNavigatorWin
     : public Window
 {
 public:
+    typedef ::boost::function<void(void)> UpdateRequestFunctor;
+
+    /** Create a new instance of the navigator.
+        @param bUseActiveUpdate
+            When <TRUE/>, the default, then the SdNavigatorWin object
+            will make a SID_NAVIGATOR_INIT call whenever it thinks an
+            update is necessary.  When <FALSE/> the navigator will
+            rely on others to trigger updates.
+    */
     SdNavigatorWin(
         ::Window* pParent,
         ::sd::NavigatorChildWindow* pChildWinContext,
         const SdResId& rSdResId,
-        SfxBindings* pBindings );
+        SfxBindings* pBindings,
+        const UpdateRequestFunctor& rUpdateRequest);
     virtual ~SdNavigatorWin();
 
     virtual void                KeyInput( const KeyEvent& rKEvt );
@@ -128,7 +138,7 @@ private:
     /** This flag controls whether all shapes or only the named shapes are
         shown.
     */
-    bool                        mbShowAllShapes;
+    //    bool                        mbShowAllShapes;
 
     sal_uInt16                      GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool bImage = sal_False );
     NavDocInfo*                 GetDocInfo();
@@ -157,7 +167,8 @@ private:
 class SdNavigatorControllerItem : public SfxControllerItem
 {
 public:
-    SdNavigatorControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings* );
+    SdNavigatorControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings*,
+        const SdNavigatorWin::UpdateRequestFunctor& rUpdateRequest);
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
@@ -165,6 +176,7 @@ protected:
 
 private:
     SdNavigatorWin* pNavigatorWin;
+    const SdNavigatorWin::UpdateRequestFunctor maUpdateRequest;
 };
 
 
@@ -175,7 +187,8 @@ private:
 class SdPageNameControllerItem : public SfxControllerItem
 {
 public:
-    SdPageNameControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings* );
+    SdPageNameControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings*,
+        const SdNavigatorWin::UpdateRequestFunctor& rUpdateRequest);
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
@@ -183,6 +196,7 @@ protected:
 
 private:
     SdNavigatorWin* pNavigatorWin;
+    const SdNavigatorWin::UpdateRequestFunctor maUpdateRequest;
 };
 
 #endif

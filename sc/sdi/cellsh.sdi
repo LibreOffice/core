@@ -87,6 +87,8 @@ interface CellSelection
     SID_SELECT_SCENARIO     [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_CELL_FORMAT         [ ExecMethod = Execute; StateMethod = GetBlockState; ]
     SID_ENABLE_HYPHENATION  [ ExecMethod = Execute; StateMethod = GetBlockState; ]
+    SID_CELL_FORMAT_BORDER  [ ExecMethod = Execute; ]
+    SID_CHAR_DLG_EFFECT     [ ExecMethod = Execute; ]
     FID_ROW_HEIGHT          [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_ROW_OPT_HEIGHT      [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_ROW_HIDE            [ ExecMethod = Execute; StateMethod = GetState; ]

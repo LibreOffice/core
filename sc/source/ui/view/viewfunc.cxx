@@ -2758,6 +2758,11 @@ void ScViewFunc::ChangeIndent( sal_Bool bIncrement )
     {
         pDocSh->UpdateOle(pViewData);
         StartFormatArea();
+
+        // stuff for sidebar panels
+        SfxBindings& rBindings = GetViewData()->GetBindings();
+        rBindings.Invalidate( SID_H_ALIGNCELL );
+        rBindings.Invalidate( SID_ATTR_ALIGN_INDENT );
     }
 }
 

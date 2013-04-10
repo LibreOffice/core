@@ -26,7 +26,7 @@ Control DLG_TABLEDESIGNPANE
     DialogControl = TRUE;
     Border = FALSE;
 
-    Size = MAP_APPFONT( 264, 160 );
+    Size = MAP_APPFONT( 264, 134 );
     Text [ en-US ] = "Table Design";
 
     FixedLine FL_STYLE_OPTIONS+1
@@ -39,7 +39,7 @@ Control DLG_TABLEDESIGNPANE
 
     CheckBox CB_HEADER_ROW+1
     {
-        Pos = MAP_APPFONT ( 146, 16 ) ;
+        Pos = MAP_APPFONT ( 146, 3 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Header Row" ;
@@ -47,7 +47,7 @@ Control DLG_TABLEDESIGNPANE
 
     CheckBox CB_TOTAL_ROW+1
     {
-        Pos = MAP_APPFONT ( 146, 29 ) ;
+        Pos = MAP_APPFONT ( 146, 16 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Tot~al Row" ;
@@ -55,7 +55,7 @@ Control DLG_TABLEDESIGNPANE
 
     CheckBox CB_BANDED_ROWS+1
     {
-        Pos = MAP_APPFONT ( 146, 42 ) ;
+        Pos = MAP_APPFONT ( 146, 29 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Banded Rows" ;
@@ -63,7 +63,7 @@ Control DLG_TABLEDESIGNPANE
 
     CheckBox CB_FIRST_COLUMN+1
     {
-        Pos = MAP_APPFONT ( 146, 55 ) ;
+        Pos = MAP_APPFONT ( 146, 42 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Fi~rst Column" ;
@@ -71,7 +71,7 @@ Control DLG_TABLEDESIGNPANE
 
     CheckBox CB_LAST_COLUMN+1
     {
-        Pos = MAP_APPFONT ( 146, 68 ) ;
+        Pos = MAP_APPFONT ( 146, 55 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Last Column" ;
@@ -79,7 +79,7 @@ Control DLG_TABLEDESIGNPANE
 
     CheckBox CB_BANDED_COLUMNS+1
     {
-        Pos = MAP_APPFONT ( 146, 82 ) ;
+        Pos = MAP_APPFONT ( 146, 68 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Ba~nded Columns" ;
@@ -95,7 +95,7 @@ Control DLG_TABLEDESIGNPANE
 
     Control CT_TABLE_STYLES+1
     {
-        Pos = MAP_APPFONT ( 6, 14 ) ;
+        Pos = MAP_APPFONT ( 4, 3 ) ;
         Size = MAP_APPFONT( 120, 143 );
         Border = TRUE ;
         TabStop = TRUE ;

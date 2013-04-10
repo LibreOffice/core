@@ -191,7 +191,8 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             // in the tool pane.
             if (mrSlideSorter.GetViewShellBase() != NULL)
                 framework::FrameworkHelper::Instance(*mrSlideSorter.GetViewShellBase())
-                    ->RequestTaskPanel(sd::framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
+                    ->RequestSidebarPanel(
+                        sd::framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
             rRequest.Ignore ();
             break;
         }

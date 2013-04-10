@@ -23,10 +23,30 @@
 #include "app.hrc"
 #include "navigatr.hrc"
 #include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <svl/eitem.hxx>
+#include <boost/bind.hpp>
+
 
 namespace sd {
 
 SFX_IMPL_CHILDWINDOWCONTEXT(NavigatorChildWindow, SID_NAVIGATOR)
+
+void RequestNavigatorUpdate (SfxBindings* pBindings)
+{
+    if (pBindings != NULL
+        && pBindings->GetDispatcher() != NULL)
+    {
+        SfxBoolItem aItem (SID_NAVIGATOR_INIT, sal_True);
+        pBindings->GetDispatcher()->Execute(
+            SID_NAVIGATOR_INIT,
+            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+            &aItem,
+            0L);
+    }
+}
+
 
 NavigatorChildWindow::NavigatorChildWindow (
     ::Window* pParent,
@@ -35,8 +55,12 @@ NavigatorChildWindow::NavigatorChildWindow (
     SfxChildWinInfo* )
     : SfxChildWindowContext( nId )
 {
-    SdNavigatorWin* pNavWin = new SdNavigatorWin( pParent, this,
-                                        SdResId( FLT_NAVIGATOR ), pBindings );
+    SdNavigatorWin* pNavWin = new SdNavigatorWin(
+        pParent,
+        this,
+        SdResId( FLT_NAVIGATOR ),
+        pBindings,
+        ::boost::bind(RequestNavigatorUpdate, pBindings));
 
     SetWindow( pNavWin );
 }

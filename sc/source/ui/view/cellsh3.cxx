@@ -357,6 +357,14 @@ void ScCellShell::Execute( SfxRequest& rReq )
             pTabViewShell->ExecuteCellFormatDlg(rReq, "alignment");
             break;
 
+        case SID_CELL_FORMAT_BORDER:
+            pTabViewShell->ExecuteCellFormatDlg( rReq, "borders" );
+            break;
+
+        case SID_CHAR_DLG_EFFECT:
+            pTabViewShell->ExecuteCellFormatDlg( rReq, "fonteffects" );
+            break;
+
         case SID_OPENDLG_SOLVE:
             {
                 sal_uInt16          nId  = ScSolverDlgWrapper::GetChildWindowId();

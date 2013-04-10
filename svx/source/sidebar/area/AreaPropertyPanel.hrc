@@ -1,0 +1,82 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+//  RID_SIDEBAR_AREA_PANEL--------------------------------------------------------------
+#define FT_COLOR_LIST                        1
+#define TB_COLOR            2
+#define TBI_COLOR           3
+#define IMG_COLOR           5
+
+#define VS_COLOR            1
+
+#define TBI_LEFT                            1
+#define TBI_RIGHT                           1
+#define TBI_BTX_GRADIENT                    51
+#define FL_TRSP_TEXT                         4
+
+#define LB_TRGR_TYPES   6
+#define MTR_TRANSPARENT 7
+#define BTN_GRADIENT    8
+
+#define FT_TRGR_CENTER_X    9
+#define MTR_TRGR_CENTER_X   10
+#define FT_TRGR_CENTER_Y    11
+#define MTR_TRGR_CENTER_Y   12
+#define FT_TRGR_ANGLE       13
+#define MTR_TRGR_ANGLE      14
+#define FT_TRGR_START_VALUE 15
+#define MTR_TRGR_START_VALUE 16
+#define FT_TRGR_END_VALUE   17
+#define MTR_TRGR_END_VALUE  18
+#define FT_TRGR_BORDER      19
+#define MTR_TRGR_BORDER     20
+#define STR_HELP_LEFT       24
+#define STR_HELP_RIGHT      25
+
+#define BTN_LEFT_SECOND         22
+#define BTN_RIGHT_FIRST         23
+
+#define IMG_AXIAL              24
+#define IMG_ELLI               25
+#define IMG_QUAD               26
+#define IMG_RADIAL              27
+#define IMG_SQUARE              28
+#define IMG_LINEAR              29
+#define IMG_ROT_LEFT            30
+#define IMG_ROT_RIGHT           31
+#define STR_HELP_TYPE           32
+#define STR_HELP_ATTR           33
+#define STR_HELP_COLOR          41
+#define STR_HELP_GRADIENT       42
+
+#define FIXED_TEXT_HEIGHT   9
+#define FIXED_TEXT_WIDTH   40
+#define MBOX_WIDTH         50
+#define CONTROL_HEIGHT      12
+#define CONTROL_WIDTH           45
+#define LISTBOX_HEIGHT     80
+#define ROTATE_BUTTON_WIDTH        13
+#define ROTATE_BUTTON_SPACING      15
+#define POP_WIDTH   2*POPUPPANEL_MARGIN_HORIZONTAL+2*CONTROL_WIDTH+CONTROL_SPACING_HORIZONTAL
+#define POP_HEIGHT  2*POPUPPANEL_MARGIN_VERTICAL + 4*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL + MBOX_HEIGHT ) + 3*CONTROL_SPACING_VERTICAL
+#define POP_HEIGHT2  2*POPUPPANEL_MARGIN_VERTICAL + 3*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL + MBOX_HEIGHT ) + 2*CONTROL_SPACING_VERTICAL
+#define LEFT_RIGHT_X1    POPUPPANEL_MARGIN_HORIZONTAL+CONTROL_WIDTH+CONTROL_SPACING_HORIZONTAL + 1
+#define LEFT_RIGHT_Y1    POPUPPANEL_MARGIN_VERTICAL + FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL - 2
+#define LEFT_RIGHT_X2    POPUPPANEL_MARGIN_HORIZONTAL+CONTROL_WIDTH+CONTROL_SPACING_HORIZONTAL + ROTATE_BUTTON_SPACING
+#define LEFT_RIGHT_Y2    POPUPPANEL_MARGIN_VERTICAL + 2*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL)+MBOX_HEIGHT+CONTROL_SPACING_VERTICAL - 2
+
+// eof

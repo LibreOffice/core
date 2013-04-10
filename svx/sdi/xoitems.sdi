@@ -137,6 +137,28 @@ enum SvxLineStyle
 
 item SvxLineStyle XLineStyleItem;
 
+enum SvxLineJoint
+{
+    // com::sun::star::drawing::LineJoint
+    SVX_LINEJOINT_NONE,     // no rounding
+    SVX_LINEJOINT_MIDDLE,   // calc middle value between joints
+    SVX_LINEJOINT_BEVEL,    // join edges with line
+    SVX_LINEJOINT_MITER,    // extend till cut
+    SVX_LINEJOINT_ROUND     // create arc
+};
+
+item SvxLineJoint XLineJointItem;
+
+enum SvxLineCap
+{
+    // com::sun::star::drawing::LineCap
+    SVX_LINECAP_BUTT,
+    SVX_LINECAP_ROUND,
+    SVX_LINECAP_SQUARE
+};
+
+item SvxLineCap XLineCapItem;
+
 item INT32  XLineWidthItem;
 item INT32  XFormTextStyleItem;
 item INT32  XFormTextAdjustItem;
@@ -152,3 +174,7 @@ item INT32  XFormTextShadowItem;        // SfxEnumItem
 item INT32  XFormTextShadowColorItem;   // XColorItem
 item INT32  XFormTextShadowXValItem;    // SfxMetricItem/SfxInt32Item
 item INT32  XFormTextShadowYValItem;    // SfxMetricItem/SfxInt32Item
+
+item XFillGradient XFillFloatTransparenceItem;  // XFillGradient
+
+// eof

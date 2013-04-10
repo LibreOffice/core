@@ -825,61 +825,6 @@
           <value>true</value>
         </prop>
       </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/MasterPages" oor:op="replace">
-        <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Master Pages</value>
-        </prop>
-        <prop oor:name="ImageURL" oor:type="xs:string">
-          <value>private:commandimage/PresentationLayout</value>
-        </prop>
-      </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/Layouts" oor:op="replace">
-        <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Layouts</value>
-        </prop>
-        <prop oor:name="ImageURL" oor:type="xs:string">
-          <value>private:commandimage/ModifyPage</value>
-        </prop>
-      </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/TableDesign" oor:op="replace">
-        <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Table Design</value>
-        </prop>
-        <prop oor:name="ImageURL" oor:type="xs:string">
-          <value>private:commandimage/InsertTable</value>
-        </prop>
-      </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/CustomAnimations" oor:op="replace">
-        <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Custom Animation</value>
-        </prop>
-        <prop oor:name="ImageURL" oor:type="xs:string">
-          <value>private:commandimage/CustomAnimation</value>
-        </prop>
-      </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/SlideTransitions" oor:op="replace">
-        <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>false</value>
-        </prop>
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Slide Transition</value>
-        </prop>
-        <prop oor:name="ImageURL" oor:type="xs:string">
-          <value>private:commandimage/RehearseTimings</value>
-        </prop>
-      </node>
       <node oor:name="private:resource/toolbar/optimizetablebar" oor:op="replace">
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>false</value>

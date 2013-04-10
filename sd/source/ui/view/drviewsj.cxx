@@ -75,6 +75,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_TITLE_DESCRIPTION ) ||
 
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_STYLE ) ||
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_TRANSPARENCE ) ||
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_FLOATTRANSPARENCE ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CHANGEBEZIER ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CHANGEPOLYGON ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_LINEEND_POLYGON ) ||
@@ -166,6 +168,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 //rSet.DisableItem( SID_ATTRIBUTES_AREA ); // remove again!
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
+                rSet.DisableItem( SID_ATTR_FILL_TRANSPARENCE );
+                rSet.DisableItem( SID_ATTR_FILL_FLOATTRANSPARENCE );
             }
             if( (!pObj->ISA( SdrPathObj ) && !aInfoRec.bCanConvToPath) || pObj->ISA( SdrObjGroup ) ) // As long as JOE handles it incorrectly!
             { // JOE: a group object may can be converted into a PathObj
@@ -364,6 +368,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             if( bLine && !bText && !bDrawObj &&!b3dObj)
             {
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
+                rSet.DisableItem( SID_ATTR_FILL_TRANSPARENCE );
+                rSet.DisableItem( SID_ATTR_FILL_FLOATTRANSPARENCE );
             }
             if( !bEdgeObj )
                 rSet.DisableItem( SID_CONNECTION_DLG );
@@ -482,6 +488,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem( SID_COPYOBJECTS );
         rSet.DisableItem( SID_HORIZONTAL );
         rSet.DisableItem( SID_VERTICAL );
+        rSet.DisableItem( SID_FLIP_HORIZONTAL );
+        rSet.DisableItem( SID_FLIP_VERTICAL );
         rSet.DisableItem( SID_GROUP );
         rSet.DisableItem( SID_UNGROUP );
         rSet.DisableItem( SID_NAME_GROUP );

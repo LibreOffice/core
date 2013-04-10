@@ -27,6 +27,7 @@
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>
 #include <svx/xdef.hxx>
+#include <svx/AffineMatrixItem.hxx>
 
 /************************************************************************/
 
@@ -113,7 +114,7 @@ TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
 
 // -----------------------------------------------------------------------------
 
-XLineJointItem::XLineJointItem( XLineJoint eLineJoint ) :
+XLineJointItem::XLineJointItem( com::sun::star::drawing::LineJoint eLineJoint ) :
     SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< sal_uInt16 >(eLineJoint))
 {
 }
@@ -139,7 +140,7 @@ SfxPoolItem* XLineJointItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
     XLineJointItem* pRet = new XLineJointItem( rIn );
 
     if(nVer < 1)
-        pRet->SetValue(XLINEJOINT_ROUND);
+        pRet->SetValue(com::sun::star::drawing::LineJoint_ROUND);
 
     return pRet;
 }
@@ -154,7 +155,7 @@ SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
 // -----------------------------------------------------------------------------
 
 SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
-                                                     SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
+    SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
     rText = OUString();
 
@@ -169,26 +170,27 @@ SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, 
 
             switch( GetValue() )
             {
-                case( XLINEJOINT_NONE ):
+                case( com::sun::star::drawing::LineJoint_MAKE_FIXED_SIZE ):
+                case( com::sun::star::drawing::LineJoint_NONE ):
                     nId = RID_SVXSTR_LINEJOINT_NONE;
                 break;
 
-                case( XLINEJOINT_MIDDLE ):
+                case( com::sun::star::drawing::LineJoint_MIDDLE ):
                     nId = RID_SVXSTR_LINEJOINT_MIDDLE;
                 break;
 
 
-                case( XLINEJOINT_BEVEL ):
+                case( com::sun::star::drawing::LineJoint_BEVEL ):
                     nId = RID_SVXSTR_LINEJOINT_BEVEL;
                 break;
 
 
-                case( XLINEJOINT_MITER ):
+                case( com::sun::star::drawing::LineJoint_MITER ):
                     nId = RID_SVXSTR_LINEJOINT_MITER;
                 break;
 
 
-                case( XLINEJOINT_ROUND ):
+                case( com::sun::star::drawing::LineJoint_ROUND ):
                     nId = RID_SVXSTR_LINEJOINT_ROUND;
                 break;
             }
@@ -207,28 +209,7 @@ SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, 
 
 bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    ::com::sun::star::drawing::LineJoint eJoint = ::com::sun::star::drawing::LineJoint_NONE;
-
-    switch( GetValue() )
-    {
-    case XLINEJOINT_NONE:
-        break;
-    case XLINEJOINT_MIDDLE:
-        eJoint = ::com::sun::star::drawing::LineJoint_MIDDLE;
-        break;
-    case XLINEJOINT_BEVEL:
-        eJoint = ::com::sun::star::drawing::LineJoint_BEVEL;
-        break;
-    case XLINEJOINT_MITER:
-        eJoint = ::com::sun::star::drawing::LineJoint_MITER;
-        break;
-    case XLINEJOINT_ROUND:
-        eJoint = ::com::sun::star::drawing::LineJoint_ROUND;
-        break;
-    default:
-        OSL_FAIL( "Unknown LineJoint enum value!" );
-    }
-
+    const ::com::sun::star::drawing::LineJoint eJoint = GetValue();
     rVal <<= eJoint;
     return true;
 }
@@ -237,7 +218,6 @@ bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*n
 
 bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    XLineJoint eJoint = XLINEJOINT_NONE;
     ::com::sun::star::drawing::LineJoint eUnoJoint;
 
     if(!(rVal >>= eUnoJoint))
@@ -249,25 +229,7 @@ bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
         eUnoJoint = (::com::sun::star::drawing::LineJoint)nLJ;
     }
 
-    switch( eUnoJoint )
-    {
-    case ::com::sun::star::drawing::LineJoint_MIDDLE:
-        eJoint = XLINEJOINT_MIDDLE;
-        break;
-    case ::com::sun::star::drawing::LineJoint_BEVEL:
-        eJoint = XLINEJOINT_BEVEL;
-        break;
-    case ::com::sun::star::drawing::LineJoint_MITER:
-        eJoint = XLINEJOINT_MITER;
-        break;
-    case ::com::sun::star::drawing::LineJoint_ROUND:
-        eJoint = XLINEJOINT_ROUND;
-        break;
-    default:
-        break;
-    }
-
-    SetValue( sal::static_int_cast< sal_uInt16 >( eJoint ) );
+    SetValue( sal::static_int_cast< sal_uInt16 >( eUnoJoint ) );
 
     return true;
 }
@@ -278,6 +240,116 @@ sal_uInt16 XLineJointItem::GetValueCount() const
 {
     // don't forget to update the api interface also
     return 5;
+}
+
+//---------------------
+// class AffineMatrixItem
+//---------------------
+
+TYPEINIT1_AUTOFACTORY(AffineMatrixItem, SfxPoolItem);
+
+AffineMatrixItem::AffineMatrixItem(const com::sun::star::geometry::AffineMatrix2D* pMatrix)
+:   SfxPoolItem(SID_ATTR_TRANSFORM_MATRIX)
+{
+    if(pMatrix)
+    {
+        maMatrix = *pMatrix;
+    }
+    else
+    {
+        maMatrix.m00 = 1.0;
+        maMatrix.m01 = 0.0;
+        maMatrix.m02 = 0.0;
+        maMatrix.m10 = 0.0;
+        maMatrix.m11 = 1.0;
+        maMatrix.m12 = 0.0;
+    }
+}
+
+AffineMatrixItem::AffineMatrixItem(SvStream& rIn)
+:   SfxPoolItem(SID_ATTR_TRANSFORM_MATRIX)
+{
+    rIn >> maMatrix.m00;
+    rIn >> maMatrix.m01;
+    rIn >> maMatrix.m02;
+    rIn >> maMatrix.m10;
+    rIn >> maMatrix.m11;
+    rIn >> maMatrix.m12;
+}
+
+AffineMatrixItem::AffineMatrixItem(const AffineMatrixItem& rRef)
+:   SfxPoolItem(SID_ATTR_TRANSFORM_MATRIX)
+{
+    maMatrix = rRef.maMatrix;
+}
+
+AffineMatrixItem::~AffineMatrixItem()
+{
+}
+
+int AffineMatrixItem::operator==(const SfxPoolItem& rRef) const
+{
+    if(!SfxPoolItem::operator==(rRef))
+    {
+        return 0;
+    }
+
+    const AffineMatrixItem* pRef = dynamic_cast< const AffineMatrixItem* >(&rRef);
+
+    if(!pRef)
+    {
+        return 0;
+    }
+
+    return (maMatrix.m00 == pRef->maMatrix.m00
+        && maMatrix.m01 == pRef->maMatrix.m01
+        && maMatrix.m02 == pRef->maMatrix.m02
+        && maMatrix.m10 == pRef->maMatrix.m10
+        && maMatrix.m11 == pRef->maMatrix.m11
+        && maMatrix.m12 == pRef->maMatrix.m12);
+}
+
+SfxPoolItem* AffineMatrixItem::Clone( SfxItemPool* /*pPool*/ ) const
+{
+    return new AffineMatrixItem(*this);
+}
+
+SfxPoolItem* AffineMatrixItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/ ) const
+{
+    return new AffineMatrixItem(rIn);
+}
+
+SvStream& AffineMatrixItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
+{
+    rStream << maMatrix.m00;
+    rStream << maMatrix.m01;
+    rStream << maMatrix.m02;
+    rStream << maMatrix.m10;
+    rStream << maMatrix.m11;
+    rStream << maMatrix.m12;
+    return rStream;
+}
+
+bool AffineMatrixItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+{
+    rVal <<= maMatrix;
+    return true;
+}
+
+bool AffineMatrixItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+{
+    if (rVal >>= maMatrix)
+    {
+        return true;
+    }
+
+    OSL_ENSURE(false, "AffineMatrixItem::PutValue - Wrong type!");
+    return false;
+}
+
+const com::sun::star::geometry::AffineMatrix2D& AffineMatrixItem::GetAffineMatrix2D() const
+{
+    return maMatrix;
 }
 
 //-----------------------

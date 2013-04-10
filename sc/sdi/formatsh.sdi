@@ -69,6 +69,7 @@ interface FormatForSelection
     SID_ATTR_ALIGN_INDENT [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
     SID_ATTR_ALIGN_HYPHENATION [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
     SID_ATTR_ALIGN_DEGREES     [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
+    SID_ATTR_ALIGN_STACKED     [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
     SID_ATTR_ALIGN_LOCKPOS     [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
     SID_ATTR_ALIGN_MARGIN      [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
 
@@ -98,6 +99,7 @@ interface FormatForSelection
     SID_ALIGNCENTERVER  [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
     SID_ALIGNBLOCK      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
     SID_ALIGNCENTERHOR  [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_SCGRIDSHOW      [ ExecMethod = ExecViewOptions; StateMethod = GetViewOptions; ]
 
     SID_V_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_H_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
@@ -121,6 +123,8 @@ interface FormatForSelection
     SID_NUMBER_INCDEC       [ ExecMethod = ExecuteNumFormat;]
     SID_NUMBER_DECDEC       [ ExecMethod = ExecuteNumFormat;]
 
+    SID_NUMBER_TYPE_FORMAT  [ ExecMethod = ExecuteNumFormat;StateMethod = GetNumFormatState; ]
+
     SID_ATTR_BORDER             [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]   //XXX
     SID_ATTR_BORDER_INNER       [                           StateMethod = GetBorderState; ] // status()
     SID_ATTR_BORDER_OUTER       [ ExecMethod = ExecuteAttr; StateMethod = GetBorderState; ]
@@ -128,6 +132,8 @@ interface FormatForSelection
     SID_ATTR_ALIGN_LINEBREAK    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_FRAME_LINESTYLE         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_FRAME_LINECOLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_BORDER_DIAG_TLBR   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_BORDER_DIAG_BLTR   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
 
     SID_FORMATPAINTBRUSH    [ ExecMethod = ExecFormatPaintbrush; StateMethod = StateFormatPaintbrush; ]
 }

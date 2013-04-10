@@ -20,7 +20,6 @@
 
 #include "framework/ViewShellWrapper.hxx"
 #include "framework/Pane.hxx"
-#include "taskpane/ToolPanelViewShell.hxx"
 #include "sdpage.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"
@@ -55,7 +54,6 @@ using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::rendering::XCanvas;
 using ::com::sun::star::lang::DisposedException;
 
-using ::sd::toolpanel::ToolPanelViewShell;
 
 namespace sd { namespace framework {
 

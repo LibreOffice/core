@@ -56,7 +56,9 @@ public:
         SdDrawDocument* pDoc );
     virtual ~SlideTransitionPane();
 
+    // Window
     virtual void Resize();
+    virtual void DataChanged (const DataChangedEvent& rEvent);
 
     void onSelectionChanged();
     void onChangeCurrentPage();
@@ -79,6 +81,8 @@ private:
 
     ::sd::slidesorter::SharedPageSelection getSelectedPages (void) const;
 
+    void UpdateLook (void);
+
     DECL_LINK( ApplyToAllButtonClicked, void * );
     DECL_LINK( PlayButtonClicked, void * );
     DECL_LINK( SlideShowButtonClicked, void * );
@@ -93,7 +97,6 @@ private:
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
     DECL_LINK(LateInitCallback, void *);
 
-private:
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;
     Size              maMinSize;

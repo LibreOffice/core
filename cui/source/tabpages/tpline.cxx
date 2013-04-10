@@ -513,7 +513,7 @@ void SvxLineTabPage::FillListboxes()
 {
     // Line styles
     sal_uInt16 nOldSelect = aLbLineStyle.GetSelectEntryPos();
-    aLbLineStyle.FillStyles();
+    // aLbLineStyle.FillStyles();
     aLbLineStyle.Fill( pDashList );
     aLbLineStyle.SelectEntryPos( nOldSelect );
 
@@ -887,22 +887,22 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         {
             case 0: // Rounded, default
             {
-                pNew = new XLineJointItem(XLINEJOINT_ROUND);
+                pNew = new XLineJointItem(com::sun::star::drawing::LineJoint_ROUND);
                 break;
             }
             case 1: // - none -
             {
-                pNew = new XLineJointItem(XLINEJOINT_NONE);
+                pNew = new XLineJointItem(com::sun::star::drawing::LineJoint_NONE);
                 break;
             }
             case 2: // Miter
             {
-                pNew = new XLineJointItem(XLINEJOINT_MITER);
+                pNew = new XLineJointItem(com::sun::star::drawing::LineJoint_MITER);
                 break;
             }
             case 3: // Bevel
             {
-                pNew = new XLineJointItem(XLINEJOINT_BEVEL);
+                pNew = new XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL);
                 break;
             }
         }
@@ -1053,22 +1053,22 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
         {
             case 0: // Rounded, default
             {
-                rXLSet.Put(XLineJointItem(XLINEJOINT_ROUND));
+                rXLSet.Put(XLineJointItem(com::sun::star::drawing::LineJoint_ROUND));
                 break;
             }
             case 1: // - none -
             {
-                rXLSet.Put(XLineJointItem(XLINEJOINT_NONE));
+                rXLSet.Put(XLineJointItem(com::sun::star::drawing::LineJoint_NONE));
                 break;
             }
             case 2: // Miter
             {
-                rXLSet.Put(XLineJointItem(XLINEJOINT_MITER));
+                rXLSet.Put(XLineJointItem(com::sun::star::drawing::LineJoint_MITER));
                 break;
             }
             case 3: // Bevel
             {
-                rXLSet.Put(XLineJointItem(XLINEJOINT_BEVEL));
+                rXLSet.Put(XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL));
                 break;
             }
         }
@@ -1480,15 +1480,16 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     }
     else if(SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_LINEJOINT))
     {
-        XLineJoint eLineJoint = ((const XLineJointItem&)(rAttrs.Get(XATTR_LINEJOINT))).GetValue();
+        const com::sun::star::drawing::LineJoint eLineJoint = ((const XLineJointItem&)(rAttrs.Get(XATTR_LINEJOINT))).GetValue();
 
         switch(eLineJoint)
         {
-            case XLINEJOINT_ROUND : maLBEdgeStyle.SelectEntryPos(0); break;
-            case XLINEJOINT_NONE : maLBEdgeStyle.SelectEntryPos(1); break;
-            case XLINEJOINT_MITER : maLBEdgeStyle.SelectEntryPos(2); break;
-            case XLINEJOINT_BEVEL : maLBEdgeStyle.SelectEntryPos(3); break;
-            case XLINEJOINT_MIDDLE : break;
+            case com::sun::star::drawing::LineJoint_MAKE_FIXED_SIZE: // fallback to round, unused value
+            case com::sun::star::drawing::LineJoint_MIDDLE : // fallback to round, unused value
+            case com::sun::star::drawing::LineJoint_ROUND : maLBEdgeStyle.SelectEntryPos(0); break;
+            case com::sun::star::drawing::LineJoint_NONE : maLBEdgeStyle.SelectEntryPos(1); break;
+            case com::sun::star::drawing::LineJoint_MITER : maLBEdgeStyle.SelectEntryPos(2); break;
+            case com::sun::star::drawing::LineJoint_BEVEL : maLBEdgeStyle.SelectEntryPos(3); break;
         }
     }
     else

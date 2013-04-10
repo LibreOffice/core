@@ -238,6 +238,8 @@ public:
     virtual SfxItemSet*         CreateItemSet( sal_uInt16 nId );
     virtual void                ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
 
+    void                        SetContextName (const ::rtl::OUString& rsContextName);
+
 #ifndef _SFXSH_HXX
     SAL_DLLPRIVATE bool CanExecuteSlot_Impl( const SfxSlot &rSlot );
     SAL_DLLPRIVATE void DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);

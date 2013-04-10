@@ -174,6 +174,24 @@ interface _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_ATTR_PARA_LRSPACE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_LINESPACE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_ULSPACE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+    ]
+
     FN_INSERT_STRING
     [
             ExecMethod = Exec ;
@@ -198,6 +216,13 @@ interface _Annotation
     SID_ATTR_CHAR_COLOR // api:
     [
         ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CHAR_DLG_EFFECT
+    [
+        ExecMethod = Exec ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]

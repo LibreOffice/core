@@ -239,6 +239,8 @@
 #define FN_NUM_BULLET_OFF       (FN_EDIT + 37)  /* Numerierung aus */
 #define FN_NUM_BULLET_ON        (FN_EDIT + 38)  /* Numerierung mit Bullets an */
 #define FN_NUM_NUMBERING_ON     (FN_EDIT + 44)  /* Numerierung an */
+#define FN_BUL_NUM_RULE_INDEX   (FN_EDIT + 120) /* Achieving num rule index */
+#define FN_NUM_NUM_RULE_INDEX   (FN_EDIT + 121)
 
 #define FN_INSERT               (SID_SW_START +  300)
 #define FN_DELETE_BOOKMARK      (FN_INSERT + 1)
@@ -476,6 +478,9 @@
 #define SID_TWAIN_TRANSFER                              ( SID_SVX_START + 332 )
 #define SID_CONTOUR_DLG                                 ( SID_SVX_START + 334 )
 #define SID_CONTOUR_EXEC                                ( SID_SVX_START + 335 )
+
+//#define SID_SIDEBAR                                   ( SID_SVX_START + 336 )   -> sfxsids.hrc
+
 #define SID_BORDER_OBJECT                               ( SID_SVX_START + 340 )
 #define SID_SB_CONNECTIONPOOLING                        ( SID_SVX_START + 348 )
 #define SID_SB_DBREGISTEROPTIONS                        ( SID_SVX_START + 349 )
@@ -922,18 +927,37 @@
 #define SID_INSERT_FORM_HSCROLL                         (SID_SVX_START+1112)
 #define SID_EXTERNAL_EDIT                               (SID_SVX_START+1113)
 #define SID_ATTR_PAGE_SHARED_FIRST                      (SID_SVX_START+1114)
+#define SID_CHANGE_PICTURE                              (SID_SVX_START+1115)
 #define SID_SAVE_GRAPHIC                                (SID_SVX_START+1116)
 #define SID_COMPRESS_GRAPHIC                            (SID_SVX_START+1117)
 #define SID_FRAME_UP                                    (SID_SVX_START+1118)
 #define SID_FRAME_DOWN                                  (SID_SVX_START+1119)
 #define SID_ATTR_SPECIALCHAR                            (SID_SVX_START+1120)
-#define SID_CHANGE_PICTURE                              (SID_SVX_START+1125)
-#define SID_ROTATE_GRAPHIC_LEFT                         (SID_SVX_START+1126)
-#define SID_ROTATE_GRAPHIC_RIGHT                        (SID_SVX_START+1127)
-#define SID_MENU_MANAGE_GRAPHIC                         (SID_SVX_START+1128)
+#define SID_ROTATE_GRAPHIC_LEFT                         (SID_SVX_START+1121)
+#define SID_ROTATE_GRAPHIC_RIGHT                        (SID_SVX_START+1122)
+#define SID_MENU_MANAGE_GRAPHIC                         (SID_SVX_START+1123)
+
+// new slots for panels
+#define SID_ATTR_FILL_TRANSPARENCE                      (SID_SVX_START+1124)
+#define SID_ATTR_FILL_FLOATTRANSPARENCE                 (SID_SVX_START+1125)
+#define SID_ATTR_LINE_TRANSPARENCE                      (SID_SVX_START+1126)
+#define SID_FLIP_HORIZONTAL                             (SID_SVX_START+1127)
+#define SID_FLIP_VERTICAL                               (SID_SVX_START+1128)
+#define SID_ATTR_LINE_JOINT                             (SID_SVX_START+1129)
+#define SID_ATTR_LINE_CAP                               (SID_SVX_START+1130)
+#define SID_ATTR_TRANSFORM_MATRIX                       (SID_SVX_START+1131)
+
+#define SID_CELL_FORMAT_BORDER                          (SID_SVX_START+1132)
+#define SID_CHAR_DLG_EFFECT                             (SID_SVX_START+1133)
+#define SID_ATTR_PARA_LEFT                              (SID_SVX_START+1134)
+#define SID_ATTR_PARA_RIGHT                             (SID_SVX_START+1135)
+
+#define FN_SVX_SET_NUMBER                               (SID_SVX_START+1136)
+#define FN_SVX_SET_BULLET                               (SID_SVX_START+1137)
+
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_MENU_MANAGE_GRAPHIC + 1)
+#define SID_SVX_FIRSTFREE                               (FN_SVX_SET_BULLET + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

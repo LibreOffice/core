@@ -108,7 +108,10 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aTimer.SetTimeout(200);
     aTimer.SetTimeoutHdl(LINK( this, ScFunctionDockWin, TimerHdl));
 
-    eSfxNewAlignment=GetAlignment();
+    if (pCW != NULL)
+        eSfxNewAlignment=GetAlignment();
+    else
+        eSfxNewAlignment=SFX_ALIGN_RIGHT;
     eSfxOldAlignment=eSfxNewAlignment;
     aFiFuncDesc.SetUpdateMode(sal_True);
     pAllFuncList=&aFuncList;

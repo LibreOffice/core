@@ -18,10 +18,13 @@
  */
 
 
+#include <cmdid.h>
 #include <svx/svdmodel.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/paperinf.hxx>
 #include "editeng/frmdiritem.hxx"
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
@@ -417,6 +420,18 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     {
         GetIDocumentUndoRedo().DelAllUndoObj();
     }
+
+    SfxBindings* pBindings =
+        ( GetDocShell() && GetDocShell()->GetDispatcher() ) ? GetDocShell()->GetDispatcher()->GetBindings() : 0;
+    if ( pBindings )
+    {
+        pBindings->Invalidate( SID_ATTR_PAGE_COLUMN );
+        pBindings->Invalidate( SID_ATTR_PAGE );
+        pBindings->Invalidate( SID_ATTR_PAGE_SIZE );
+        pBindings->Invalidate( SID_ATTR_PAGE_ULSPACE );
+        pBindings->Invalidate( SID_ATTR_PAGE_LRSPACE );
+    }
+
 }
 
 /// All descriptors whose Follow point to the to-be-deleted have to be adapted.

@@ -35,6 +35,7 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/svdobj.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 
 #define ScDrawFormShell
 #include "scslots.hxx"
@@ -54,12 +55,11 @@ ScDrawFormShell::ScDrawFormShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_DRAWFORMSH);
     SetName(OUString("DrawForm"));
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Form));
 }
 
 ScDrawFormShell::~ScDrawFormShell()
 {
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

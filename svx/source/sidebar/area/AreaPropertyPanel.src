@@ -1,0 +1,389 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "AreaPropertyPanel.hrc"
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
+#include <svx/dialogs.hrc>
+#include "helpid.hrc"
+
+#define TOOLBOX_WIDTH       50
+#define TOOLBOX_HEIGHT      17
+
+Control RID_SIDEBAR_AREA_PANEL
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+    Size = MAP_APPFONT( PROPERTYPAGE_WIDTH, SECTIONPAGE_MARGIN_VERTICAL_TOP + SECTIONPAGE_MARGIN_VERTICAL_BOT + 2*( FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL + CBOX_HEIGHT) + CONTROL_SPACING_VERTICAL );
+    HelpID = HID_PROPERTYPANEL_AREA_SECTION ;
+    Text [ en-US ] = "Area";
+
+    FixedText FT_COLOR_LIST
+    {
+        Pos     = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP  ) ;
+        Size    = MAP_APPFONT ( FIXED_TEXT_WIDTH + 50, FIXED_TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Fill:";
+    };
+    FixedText FL_TRSP_TEXT
+    {
+        Pos     = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL ) ;
+        Size    = MAP_APPFONT ( FIXED_TEXT_WIDTH + 50, FIXED_TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Transparency:";
+    };
+    ToolBox TB_COLOR
+    {
+        HelpID = HID_PPROPERTYPANEL_AREA_TBX_COLOR;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL, SECTIONPAGE_MARGIN_VERTICAL_TOP + FIXED_TEXT_HEIGHT + 1) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH ,TOOLBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text = "Color";
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_COLOR ;
+                HelpID = HID_PPROPERTYPANEL_AREA_TBI_COLOR;
+                DropDown = TRUE ;
+                Text = "Color" ;
+            };
+        };
+    };
+    String STR_HELP_COLOR
+    {
+        Text [ en-US ] = "Select the color to apply." ;
+    };
+    String STR_HELP_TYPE
+    {
+        Text [en-US] = "Select the fill type to apply.";
+    };
+    String STR_HELP_ATTR
+    {
+        Text [en-US] = "Select the effect to apply.";
+    };
+    Image IMG_AXIAL
+    {
+        ImageBitmap = Bitmap{File = "symphony/axial.png";};
+    };
+    Image IMG_ELLI
+    {
+        ImageBitmap = Bitmap{File = "symphony/ellipsoid.png";};
+    };
+    Image IMG_QUAD
+    {
+        ImageBitmap = Bitmap{File = "symphony/Quadratic.png";};
+    };
+    Image IMG_RADIAL
+    {
+        ImageBitmap = Bitmap{File = "symphony/radial.png";};
+    };
+    Image IMG_SQUARE
+    {
+        ImageBitmap = Bitmap{File = "symphony/Square.png";};
+    };
+    Image IMG_LINEAR
+    {
+        ImageBitmap = Bitmap{File = "symphony/linear.png";};
+    };
+    Image IMG_COLOR
+    {
+        ImageBitmap = Bitmap{File = "symphony/fill_color.png";};
+    };
+
+    //=====================================================================================================================================
+    ListBox LB_TRGR_TYPES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + 2*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH , LISTBOX_HEIGHT ) ;
+        QuickHelpText [ en-US ] = "Select the type of transparence to apply." ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        HelpID = HID_PPROPERTYPANEL_AREA_LB_TRGR_TYPES ;
+        StringList [ en-US ] =
+        {
+            < "None" ; Default ; > ;
+            < "Solid" ; Default ; > ;
+            < "Linear" ; Default ; > ;
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Ellipsoid" ; Default ; > ;
+            < "Quadratic" ; Default ; > ;
+            < "Square" ; Default ; > ;
+        };
+    };
+
+    MetricField MTR_TRANSPARENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + 2*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH + 1 ,MBOX_HEIGHT ) ;
+        HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRANSPARENT ;
+        QuickHelpText [ en-US ] = "Specify 0% for fully opaque through 100% for fully transparent." ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+
+    ToolBox BTN_GRADIENT
+    {
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + 2*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL ) ;
+        HelpID = HID_PPROPERTYPANEL_AREA_TBX_GRADIENT ;
+        SVLook = TRUE ;
+        Border = FALSE ;
+        TabStop = TRUE ;
+        Text = "Gradient";
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_BTX_GRADIENT ;
+                HelpID = HID_PPROPERTYPANEL_AREA_TBI_GRADIENT ;
+                ItemBitmap = Bitmap
+                {
+                    File = "symphony/linear.png" ;
+                };
+                DropDown = TRUE;
+                Text = "Gradient" ;
+            };
+        };
+    };
+    String STR_HELP_GRADIENT
+    {
+        Text [ en-US ] = "Specify the variation of gradient transparency." ;
+    };
+};
+
+Control RID_POPUPPANEL_AREAPAGE_TRGR
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+//  Size = MAP_APPFONT( POP_WIDTH, POP_HEIGHT );
+
+    FixedText FT_TRGR_CENTER_X
+    {
+        Size = MAP_APPFONT ( CONTROL_WIDTH , FIXED_TEXT_HEIGHT ) ;
+        Text [ en-US ] = "Center ~X:";
+    };
+    MetricField MTR_TRGR_CENTER_X
+    {
+        Border = TRUE ;
+        Size = MAP_APPFONT ( CONTROL_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRGR_CENTER_X ;
+        QuickHelpText [ en-US ] = "Specify the horizontal offset percentage from the center for the gradient shading style. 50% is the horizontal center." ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_TRGR_CENTER_Y
+    {
+        Size = MAP_APPFONT ( CONTROL_WIDTH + POPUPPANEL_MARGIN_HORIZONTAL, FIXED_TEXT_HEIGHT ) ;//wj
+        Text [ en-US ] = "Center ~Y:";
+    };
+    MetricField MTR_TRGR_CENTER_Y
+    {
+        Border = TRUE ;
+        Size = MAP_APPFONT ( CONTROL_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRGR_CENTER_Y ;
+        QuickHelpText [ en-US ] = "Specify the vertical offset percentage from the center for the gradient shading style.  50% is the vertical center." ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_TRGR_ANGLE
+    {
+        Size = MAP_APPFONT ( CONTROL_WIDTH * 2 + POPUPPANEL_MARGIN_HORIZONTAL + CONTROL_SPACING_HORIZONTAL, FIXED_TEXT_HEIGHT ) ;//wj
+        Text [ en-US ] = "~Angle:";
+    };
+    MetricField MTR_TRGR_ANGLE
+    {
+        Border = TRUE ;
+        Size = MAP_APPFONT ( CONTROL_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRGR_ANGLE ;
+        QuickHelpText [ en-US ] = "Specify the angle of rotation for the gradient shading style." ;
+        TabStop = FALSE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -9999 ;
+        Maximum = 9999 ;
+        Unit = FUNIT_CUSTOM ;
+        SpinSize = 1 ;
+        CustomUnitText [ en-US ] = " degrees";
+    };
+    FixedText FT_TRGR_START_VALUE
+    {
+        Size = MAP_APPFONT ( CONTROL_WIDTH , FIXED_TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Start value:";
+    };
+    MetricField MTR_TRGR_START_VALUE
+    {
+        Border = TRUE ;
+        Size = MAP_APPFONT ( CONTROL_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRGR_SVALUE ;
+        QuickHelpText [ en-US ] = "Enter a transparency value for the beginning point of the gradient, where 0% is fully opaque and 100% is fully transparent." ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_TRGR_END_VALUE
+    {
+        Size = MAP_APPFONT (CONTROL_WIDTH + POPUPPANEL_MARGIN_HORIZONTAL, FIXED_TEXT_HEIGHT ) ; //wj
+        Text [ en-US ] = "~End value:";
+    };
+    MetricField MTR_TRGR_END_VALUE
+    {
+        Border = TRUE ;
+        Size = MAP_APPFONT ( CONTROL_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRGR_EVALUE ;
+        QuickHelpText [ en-US ] = "Enter a transparency value for the endpoint of the gradient, where 0% is fully opaque and 100% is fully transparent." ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_TRGR_BORDER
+    {
+        Size = MAP_APPFONT (  CONTROL_WIDTH * 2 + POPUPPANEL_MARGIN_HORIZONTAL + CONTROL_SPACING_HORIZONTAL, FIXED_TEXT_HEIGHT ) ; //
+        Text [ en-US ] = "~Border:";
+    };
+    MetricField MTR_TRGR_BORDER
+    {
+        Border = TRUE ;
+        Size = MAP_APPFONT ( CONTROL_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRGR_BORDER ;
+        QuickHelpText [ en-US ] = "Specify the border value of gradient transparence." ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    //=====================================================================================================================================
+
+    ToolBox BTN_LEFT_SECOND
+    {
+        Border = FALSE ;
+        HelpID = HID_PPROPERTYPANEL_AREA_BTN_LEFT_SECOND ;
+        SVLook = TRUE ;
+        Border = FALSE ;
+        TabStop = TRUE ;
+        Text = "Rotate Left";
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_LEFT ;
+                Text = "Rotate Left" ;
+                ItemBitmap = Bitmap
+                {
+        //          File = "symphony/rotate_left.png" ;
+                };
+            };
+        };
+    };
+    ToolBox BTN_RIGHT_FIRST
+    {
+        Border = FALSE ;
+        HelpID = HID_PPROPERTYPANEL_AREA_BTN_RIGHT_FIRST ;
+        SVLook = TRUE ;
+        Border = FALSE ;
+        TabStop = TRUE ;
+        Text = "Rotate Right";
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_RIGHT ;
+                Text = "Rotate Right" ;
+                ItemBitmap = Bitmap
+                {
+        //          File = "symphony/rotate_right.png" ;
+                };
+            };
+        };
+    };
+    String STR_HELP_LEFT
+    {
+        Text [ en-US ] = "Rotate counterclockwise by 45 degrees." ;
+    };
+    String STR_HELP_RIGHT
+    {
+        Text [ en-US ] = "Rotate clockwise by 45 degrees." ;
+    };
+    Image IMG_ROT_LEFT
+    {
+        ImageBitmap = Bitmap{File = "symphony/rotate_left.png";};
+    };
+    Image IMG_ROT_RIGHT
+    {
+        ImageBitmap = Bitmap{File = "symphony/rotate_right.png";};
+    };
+};
+Control RID_POPUPPANEL_AERAPAGE_COLOR
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+    Size = MAP_APPFONT(  POPUP_COLOR_PICKER_WIDTH , POPUP_COLOR_PICKER_HEIGHT  );
+
+    Control VS_COLOR
+    {
+        HelpID = HID_PPROPERTYPANEL_AREA_COLOR_VS;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( OFFSET_X , OFFSET_Y );
+        Size = MAP_APPFONT (  POPUP_COLOR_PICKER_WIDTH - OFFSET_X * 2, POPUP_COLOR_PICKER_HEIGHT - OFFSET_Y * 2);
+        TabStop = TRUE ;
+        Text = "Color";
+    };
+};
+
+// eof

@@ -25,6 +25,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -58,6 +59,7 @@ ScChartShell::ScChartShell(ScViewData* pData) :
 {
     SetHelpId( HID_SCSHELL_CHARTSH );
     SetName( OUString("ChartObject") );
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Chart));
 }
 
 ScChartShell::~ScChartShell()
@@ -100,5 +102,10 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
     Invalidate();
 }
 
+void ScChartShell::HandleSelectionChange (void)
+{
+    // Do not call the implementation in the base class.  Let
+    // Activate()/Deactivate() handle context switches.
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,6 +53,8 @@ public:
     SfxShell* mpShell;
     ShellId mnId;
     ViewShellManager::SharedShellFactory mpFactory;
+    bool mbIsListenerAddedToWindow;
+
     ShellDescriptor ();
     ShellDescriptor (SfxShell* pShell, ShellId nId);
     ShellDescriptor (const ShellDescriptor& rDescriptor);
@@ -233,7 +235,7 @@ private:
         ShellId nShellId,
         ::Window* pParentWindow,
         FrameView* pFrameView);
-    void DestroyViewShell (const ShellDescriptor& rDescriptor);
+    void DestroyViewShell (ShellDescriptor& rDescriptor);
     void DestroySubShell (
         const SfxShell& rViewShell,
         const ShellDescriptor& rDescriptor);
@@ -511,8 +513,11 @@ void ViewShellManager::Implementation::ActivateViewShell (ViewShell* pViewShell)
     {
         ::Window* pWindow = aResult.GetWindow();
         if (pWindow != NULL)
+        {
             pWindow->AddEventListener(
                 LINK(this, ViewShellManager::Implementation, WindowEventHandler));
+            aResult.mbIsListenerAddedToWindow = true;
+        }
         else
         {
             DBG_ASSERT(false,
@@ -1160,6 +1165,23 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
 
             case VCLEVENT_WINDOW_LOSEFOCUS:
                 break;
+
+            case VCLEVENT_OBJECT_DYING:
+                // Remember that we do not have to remove the window
+                // listener for this window.
+                for (ActiveShellList::iterator
+                         iShell(maActiveViewShells.begin()),
+                         iEnd(maActiveViewShells.end());
+                     iShell!=iEnd;
+                     ++iShell)
+                {
+                    if (iShell->GetWindow() == pEventWindow)
+                    {
+                        iShell->mbIsListenerAddedToWindow = false;
+                        break;
+                    }
+                }
+                break;
         }
     }
     return sal_True;
@@ -1204,15 +1226,19 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
 
 
 void ViewShellManager::Implementation::DestroyViewShell (
-    const ShellDescriptor& rDescriptor)
+    ShellDescriptor& rDescriptor)
 {
     OSL_ASSERT(rDescriptor.mpShell != NULL);
 
-    ::Window* pWindow = rDescriptor.GetWindow();
-    if (pWindow != NULL)
+    if (rDescriptor.mbIsListenerAddedToWindow)
     {
-        pWindow->RemoveEventListener(
-            LINK(this, ViewShellManager::Implementation, WindowEventHandler));
+        rDescriptor.mbIsListenerAddedToWindow = false;
+        ::Window* pWindow = rDescriptor.GetWindow();
+        if (pWindow != NULL)
+        {
+            pWindow->RemoveEventListener(
+                LINK(this, ViewShellManager::Implementation, WindowEventHandler));
+        }
     }
 
     // Destroy the sub shell factories.
@@ -1374,7 +1400,8 @@ namespace {
 ShellDescriptor::ShellDescriptor (void)
     : mpShell(NULL),
       mnId(0),
-      mpFactory()
+      mpFactory(),
+      mbIsListenerAddedToWindow(false)
 {
 }
 
@@ -1386,7 +1413,8 @@ ShellDescriptor::ShellDescriptor (
     ShellId nId)
     : mpShell(pShell),
       mnId(nId),
-      mpFactory()
+      mpFactory(),
+      mbIsListenerAddedToWindow(false)
 {
 }
 
@@ -1394,9 +1422,10 @@ ShellDescriptor::ShellDescriptor (
 
 
 ShellDescriptor::ShellDescriptor (const ShellDescriptor& rDescriptor)
-        : mpShell(rDescriptor.mpShell),
-          mnId(rDescriptor.mnId),
-          mpFactory(rDescriptor.mpFactory)
+    : mpShell(rDescriptor.mpShell),
+      mnId(rDescriptor.mnId),
+      mpFactory(rDescriptor.mpFactory),
+      mbIsListenerAddedToWindow(rDescriptor.mbIsListenerAddedToWindow)
 {
 }
 
@@ -1405,9 +1434,13 @@ ShellDescriptor::ShellDescriptor (const ShellDescriptor& rDescriptor)
 
 ShellDescriptor& ShellDescriptor::operator= (const ShellDescriptor& rDescriptor)
 {
-    mpShell = rDescriptor.mpShell;
-    mnId = rDescriptor.mnId;
-    mpFactory = rDescriptor.mpFactory;
+    if (this != &rDescriptor)
+    {
+        mpShell = rDescriptor.mpShell;
+        mnId = rDescriptor.mnId;
+        mpFactory = rDescriptor.mpFactory;
+        mbIsListenerAddedToWindow = rDescriptor.mbIsListenerAddedToWindow;
+    }
     return *this;
 }
 

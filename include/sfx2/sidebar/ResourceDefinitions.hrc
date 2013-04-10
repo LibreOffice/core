@@ -1,0 +1,141 @@
+/**************************************************************
+* 
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+* 
+*   http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+* 
+*************************************************************/
+
+#ifndef _SFX_PROPERTYPANEL_HRC
+#define _SFX_PROPERTYPANEL_HRC
+
+#include <sfx2/sfx.hrc>
+
+//section page RID
+#define RC_PROPERTYPANEL_START                  RID_SFX_PROPERTYPANEL_START
+#define DLG_PROPERTY_DOCKING_WINDOW             ( RC_PROPERTYPANEL_START + 0 )
+#define BMP_PROPERTYPANEL_EXPAND                ( RC_PROPERTYPANEL_START + 1 )
+#define BMP_PROPERTYPANEL_COLLAPSE              ( RC_PROPERTYPANEL_START + 2 )
+#define BMP_PROPERTYPANEL_MOREPROPERTY          ( RC_PROPERTYPANEL_START + 5 )
+#define FT_PROPERTYPANEL_NOTSUPPORT_DESC        ( RC_PROPERTYPANEL_START + 7 )
+
+#define RID_PROPERTYPANEL_TEXTPAGE_TITLEBAR     ( RC_PROPERTYPANEL_START + 8 )
+#define RID_PROPERTYPANEL_PARAGRAPHPAGE_TITLEBAR    ( RC_PROPERTYPANEL_START + 9 )
+#define RID_PROPERTYPANEL_AREAPAGE_TITLEBAR     ( RC_PROPERTYPANEL_START + 10 )
+#define RID_PROPERTYPANEL_TBLDESIGNPAGE_TITLEBAR    ( RC_PROPERTYPANEL_START + 11 )
+#define RID_PROPERTYPANEL_LINEPAGE_TITLEBAR     ( RC_PROPERTYPANEL_START + 12 )
+#define RID_PROPERTYPANEL_POSIZEPAGE_TITLEBAR       ( RC_PROPERTYPANEL_START + 13 )
+#define RID_PROPERTYPANEL_GRAPHICPAGE_TITLEBAR      ( RC_PROPERTYPANEL_START + 14 )
+#define RID_PROPERTYPANEL_CELLAPPEARPAGE_TITLEBAR       ( RC_PROPERTYPANEL_START + 15 )
+#define RID_PROPERTYPANEL_SWPAGE_PAGE_TITLEBAR  (RC_PROPERTYPANEL_START + 16)
+#define RID_PROPERTYPANEL_SWOBJWRAP_PAGE_TITLEBAR  (RC_PROPERTYPANEL_START + 17)
+#define RID_PROPERTYPANEL_SCCELL_PAGE_TITLEBAR  (RC_PROPERTYPANEL_START + 18)
+#define RID_PROPERTYPANEL_SCALIGNMENT_PAGE_TITLEBAR  (RC_PROPERTYPANEL_START + 19)
+#define RID_PROPERTYPANEL_SD_PAGELAYOUT_TITLEBAR  (RC_PROPERTYPANEL_START+20)
+#define RID_PROPERTYPANEL_SD_PAGEPROPERTY_TITLEBAR  (RC_PROPERTYPANEL_START+21)
+#define RID_PROPERTYPANEL_SD_TABLEDESIGN_TITLEBAR   (RC_PROPERTYPANEL_START+22)
+#define RID_PROPERTYPANEL_NUMFORMAT_PAGE_TITLEBAR   (RC_PROPERTYPANEL_START+23)
+
+#define RID_PANELDOCK_WINDOW                ( RC_PROPERTYPANEL_START + 24 )
+#define STR_TITLE_DISCRIPTION               ( RC_PROPERTYPANEL_START + 25 )     //
+
+#ifndef STD_MASKCOLOR
+#define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
+#endif
+
+//unit pixel
+//panel common
+#define PROPERTYPAGE_WIDTH      109
+
+//about titlebar
+
+#define FI_EXPANSION_INDICATOR  1
+#define FT_TITLE                2
+#define STR_MOREPROPERTY_QUICKHELP  3
+
+#define TITLEBAR_WIDTH              PROPERTYPAGE_WIDTH
+#define TITLEBAR_HEIGHT             13
+
+#define TITLEBAR_MARGIN_HORIZONTAL          3
+#define TITLEBAR_CONTROL_SPACING_HORIZONTAL 3
+
+#define FI_EXPANSION_INDICATOR_WIDTH    6
+#define FI_EXPANSION_INDICATOR_HEIGTH   6
+#define FI_EXPANSION_INDICATOR_X        TITLEBAR_MARGIN_HORIZONTAL
+#define FI_EXPANSION_INDICATOR_Y        (TITLEBAR_HEIGHT - FI_EXPANSION_INDICATOR_HEIGTH)/2
+
+#define FT_TITLE_WIDTH          85
+#define FT_TITLE_HEIGHT         10
+#define FT_TITLE_X              FI_EXPANSION_INDICATOR_X + FI_EXPANSION_INDICATOR_WIDTH + TITLEBAR_CONTROL_SPACING_HORIZONTAL
+#define FT_TITLE_Y              (TITLEBAR_HEIGHT - FT_TITLE_HEIGHT)/2 + 1
+
+
+//about section page
+#define SECTIONPAGE_MARGIN_VERTICAL     12
+#define SECTIONPAGE_MARGIN_VERTICAL_TOP     1
+#define SECTIONPAGE_MARGIN_VERTICAL_BOT     5
+#define SECTIONPAGE_MARGIN_HORIZONTAL   3
+#define CONTROL_SPACING_VERTICAL        5
+#define CONTROL_SPACING_HORIZONTAL      3
+#define TEXT_CONTROL_SPACING_VERTICAL   2
+
+#define TEXT_HEIGHT         8
+#define CBOX_HEIGHT         12
+#define MBOX_HEIGHT         12
+
+#define TBX_OUT_BORDER_OFFSET_X     2
+#define TBX_OUT_BORDER_OFFSET_Y     1
+
+//for 16*16 pixel bmp
+#define TOOLBOX_ITEM_HEIGHT         15
+#define TOOLBOX_ITEM_WIDTH          13
+#define TOOLBOX_ITEM_DD_WIDTH       19
+
+//for 24*16 pixel bmp
+#define TOOLBOX_24_16_ITEM_HEIGHT       15
+#define TOOLBOX_24_16_ITEM_DD_WIDTH     23
+
+//for 24*24 pixel bmp
+#define TOOLBOX_24_24_ITEM_HEIGHT       18
+#define TOOLBOX_24_24_ITEM_DD_WIDTH     24
+
+//about popup panel
+#define POPUPPANEL_MARGIN_VERTICAL      7
+#define POPUPPANEL_MARGIN_HORIZONTAL    7
+
+//for 42*42 pixel bmp
+#define TOOLBOX_42_42_ITEM_HEIGHT       30
+#define TOOLBOX_42_42_ITEM_DD_WIDTH     27
+#define TB_BORDER               2
+
+#define POPUPPANEL_SEP_VERTICAL_1   10
+#define POPUPPANEL_SEP_VERTICAL_2   6
+#define POPUPPANEL_SEP_HEIGHT       1
+
+#define POPUP_BORDER_WIDTH      2
+#define POPUP_BORDER_HEIGHT     3
+#define OFFSET_X        1
+#define OFFSET_Y        1
+
+#define POPUP_TOP_GRADIENT_HEIGHT   4
+#define POPUP_BOT_GRADIENT_HEIGHT   6
+
+#define POPUP_COLOR_PICKER_WIDTH    97
+#define POPUP_COLOR_PICKER_HEIGHT   114
+//new
+#define POPUPPANEL_MARGIN_SMALL     2
+#define POPUPPANEL_MARGIN_LARGE     5
+#endif

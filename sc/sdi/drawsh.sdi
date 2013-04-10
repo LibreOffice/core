@@ -61,6 +61,7 @@ interface TableDraw
     SID_BITMAP_LIST         [ StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_DASH_LIST           [ StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_LINEEND_LIST        [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+
      // Flaechen-Attribute
     SID_ATTR_FILL_STYLE     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
 
@@ -76,15 +77,37 @@ interface TableDraw
     SID_ATTR_FILL_GRADIENT  [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_FILL_HATCH     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_FILL_BITMAP    [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_FILL_TRANSPARENCE [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_FILL_FLOATTRANSPARENCE [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+
      // ---- Linien-Attribute:
     SID_ATTR_LINE_STYLE     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_LINEEND_STYLE  [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
+    SID_ATTR_LINE_START [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
+    SID_ATTR_LINE_END [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
     SID_ATTR_LINE_DASH      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_LINE_WIDTH     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_LINE_COLOR     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_LINE_TRANSPARENCE [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_LINE_JOINT [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_LINE_CAP [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTRIBUTES_AREA     [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
     SID_ATTRIBUTES_LINE     [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
     SID_ATTR_TRANSFORM      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
+
+    // For the sidebar
+    SID_ATTR_TRANSFORM_WIDTH    [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_HEIGHT   [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_POS_X    [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_POS_Y    [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_ANGLE    [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_ROT_X    [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_ROT_Y    [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_PROTECT_POS  [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_PROTECT_SIZE [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_AUTOWIDTH [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+    SID_ATTR_TRANSFORM_AUTOHEIGHT [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
+
      // ---- Ausrichtungs - Funktionen:
      //!    PseudoSlots gibt Aerger mit Referenz-Dialogen ???
     SID_OBJECT_ALIGN
@@ -159,6 +182,8 @@ interface TableDraw
     ]
     */
     SID_MIRROR_VERTICAL     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_FLIP_HORIZONTAL     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_FLIP_VERTICAL       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_ANCHOR_PAGE         [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
     SID_ANCHOR_TOGGLE       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_ANCHOR_CELL         [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]

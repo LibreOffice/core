@@ -98,6 +98,7 @@
 
 #define RID_SFX_SFXLOCAL_START              (RID_SFX_START + 3082)
 #define RID_SFX_VIEW_START                  (RID_SFX_START + 4096)
+#define RID_SFX_SIDEBAR_START               (RID_SFX_START + 4150)
 //      RID_CNT_START2                      (RID_SFX_START + 4500)
 //      RID_SFX_CHAOSDOC_START              (RID_SFX_START + 5120)
 //      RID_SFX_TPLCOMPONENT_START          (RID_SFX_START + 6800)

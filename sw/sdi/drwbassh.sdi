@@ -27,6 +27,7 @@ interface TextDrawBase : BaseTextDrawBase
 shell SwDrawBaseShell: SwBaseShell
 {
         import TextDrawBase[Automation];
+        import Sidebar;
 
     SID_OBJECT_ALIGN
     [

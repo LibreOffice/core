@@ -305,10 +305,14 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_MIRROR_HORIZONTAL:
+        case SID_FLIP_HORIZONTAL:
             pView->MirrorAllMarkedHorizontal();
+            rBindings.Invalidate( SID_ATTR_TRANSFORM_ANGLE );
             break;
         case SID_MIRROR_VERTICAL:
+        case SID_FLIP_VERTICAL:
             pView->MirrorAllMarkedVertical();
+            rBindings.Invalidate( SID_ATTR_TRANSFORM_ANGLE );
             break;
 
         case SID_OBJECT_ALIGN_LEFT:

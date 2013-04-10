@@ -18,7 +18,8 @@
  */
 
 
-#include "tablecontroller.hxx"
+#include <svx/sdr/table/tablecontroller.hxx>
+#include <tablemodel.hxx>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

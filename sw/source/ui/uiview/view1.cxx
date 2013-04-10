@@ -21,6 +21,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/ruler.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <idxmrk.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

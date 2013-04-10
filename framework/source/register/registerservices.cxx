@@ -66,12 +66,12 @@
 #include <uiconfiguration/uicategorydescription.hxx>
 #include <services/sessionlistener.hxx>
 #include <services/taskcreatorsrv.hxx>
-
 #include <uielement/langselectionstatusbarcontroller.hxx>
 #include <uiconfiguration/imagemanager.hxx>
 #include <uifactory/windowcontentfactorymanager.hxx>
 #include <services/substitutepathvars.hxx>
 #include <services/pathsettings.hxx>
+#include <services/ContextChangeEventMultiplexer.hxx>
 
 COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::URLTransformer                          )   else
@@ -112,7 +112,8 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::WindowContentFactoryManager             )   else
                         IFFACTORY( ::framework::TabWindowService                        )   else
                         IFFACTORY( ::framework::SubstitutePathVariables                 )   else
-                        IFFACTORY( ::framework::PathSettings                            )
+                        IFFACTORY( ::framework::PathSettings                            )   else
+                        IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
             )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

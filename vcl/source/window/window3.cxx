@@ -18,9 +18,11 @@
  */
 
 
+#include "vcl/button.hxx"
 #include "vcl/window.hxx"
 #include "vcl/waitobj.hxx"
-#include "vcl/button.hxx"
+#include "brdwin.hxx"
+#include "window.h"
 
 // -----------------------------------------------------------------------
 
@@ -61,6 +63,24 @@ void Window::ImplAdjustNWFSizes()
         }
         break;
     }
+}
+
+void Window::EnableThemeSupport (void)
+{
+    mpWindowImpl->mbIsThemingEnabled = sal_True;
+}
+
+void Window::DisableThemeSupport (void)
+{
+    mpWindowImpl->mbIsThemingEnabled = sal_False;
+}
+
+ImplBorderWindow* Window::CreateBorderWindow (
+    Window* pParent,
+    const WinBits nStyle,
+    const sal_uInt16 nTypeStyle)
+{
+    return new ImplBorderWindow(pParent, nStyle, nTypeStyle);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

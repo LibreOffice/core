@@ -35,7 +35,7 @@ public:
                         SFX_DECL_CHILDWINDOW(SfxNavigatorWrapper);
 };
 
-class SfxNavigator : public SfxDockingWindow
+class SFX2_DLLPUBLIC SfxNavigator : public SfxDockingWindow
 {
     SfxChildWindow*     pWrapper;
 

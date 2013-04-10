@@ -56,6 +56,7 @@ private:
     SAL_DLLPRIVATE sal_Bool      ImplSplitterActive();
     SAL_DLLPRIVATE Splitter* ImplFindSibling();
     SAL_DLLPRIVATE void      ImplRestoreSplitter();
+    SAL_DLLPRIVATE void      ImplInitHorVer(bool bNew);
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE           Splitter (const Splitter &);
@@ -97,7 +98,8 @@ public:
     virtual void        SetSplitPosPixel( long nPos );
     long                GetSplitPosPixel() const { return mnSplitPos; }
 
-    sal_Bool                IsHorizontal() const { return mbHorzSplit; }
+    sal_Bool            IsHorizontal() const { return mbHorzSplit; }
+    void                SetHorizontal(bool bNew);
 
     // set the stepsize of the splitter for cursor movement
     // the default is 10% of the reference window's width/height

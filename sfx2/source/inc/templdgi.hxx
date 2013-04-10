@@ -230,7 +230,7 @@ protected:
 public:
     TYPEINFO();
 
-    SfxCommonTemplateDialog_Impl( SfxBindings* pB, SfxDockingWindow* );
+    SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window*, bool );
     ~SfxCommonTemplateDialog_Impl();
 
     DECL_LINK( MenuSelectHdl, Menu * );
@@ -286,9 +286,10 @@ private:
     friend class SfxTemplateControllerItem;
     friend class SfxTemplateDialogWrapper;
     friend class DropToolBox_Impl;
+    friend class SfxTemplatePanelControl;
 
-    SfxTemplateDialog*  m_pFloat;
-    sal_Bool                m_bZoomIn;
+    Window* m_pFloat;
+    sal_Bool            m_bZoomIn;
     DropToolBox_Impl    m_aActionTbL;
     ToolBox             m_aActionTbR;
 
@@ -319,8 +320,11 @@ public:
     friend class SfxTemplateDialog;
     TYPEINFO();
 
-    SfxTemplateDialog_Impl( Window* pParent, SfxBindings*, SfxTemplateDialog* pWindow );
+    SfxTemplateDialog_Impl( SfxBindings*, SfxTemplateDialog* pDlgWindow );
+    SfxTemplateDialog_Impl( SfxBindings*, SfxTemplatePanelControl* pDlgWindow );
     ~SfxTemplateDialog_Impl();
+
+    void Initialize (void);
 };
 
 #endif // #ifndef _SFX_TEMPDLGI_HXX

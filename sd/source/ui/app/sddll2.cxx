@@ -53,6 +53,7 @@
 
 #include <svx/layctrl.hxx>
 #include <svx/subtoolboxcontrol.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 
 #include "sddll.hxx"
 #include "sdmod.hxx"
@@ -125,7 +126,7 @@ void SdDLL::RegisterControllers()
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(0, pMod);
-    ::sd::ToolPanelChildWindow::RegisterChildWindow(0, pMod);
+    ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(0, pMod);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl::RegisterControl(0, pMod);

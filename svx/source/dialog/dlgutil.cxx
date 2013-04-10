@@ -73,4 +73,9 @@ bool GetApplyCharUnit( const SfxItemSet& rSet )
     return bUseCharUnit;
 }
 
+FieldUnit GetModuleFieldUnit()
+{
+    return SfxModule::GetCurrentFieldUnit();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

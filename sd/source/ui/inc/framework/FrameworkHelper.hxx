@@ -39,6 +39,9 @@ class ViewShell;
 class ViewShellBase;
 }
 
+namespace css = ::com::sun::star;
+namespace cssu = ::com::sun::star::uno;
+namespace cssdf = ::com::sun::star::drawing::framework;
 
 namespace sd { namespace framework {
 
@@ -47,10 +50,10 @@ namespace sd { namespace framework {
     It has three main tasks:
     1. Provide frequently used strings of resource URLs and event names.
     2. Provide shortcuts for accessing the sd framework.
-    3. Easy the migration to the drawing framwork.
+    3. Ease the migration to the drawing framwork.
 
     Note that a FrameworkHelper disposes itself when one of the resource
-    controllers called by it throw a DisposedException.
+    controllers called by it throws a DisposedException.
 */
 class FrameworkHelper
     : public ::boost::enable_shared_from_this<FrameworkHelper>,
@@ -63,7 +66,7 @@ public:
     static const OUString msFullScreenPaneURL;
     static const OUString msLeftImpressPaneURL;
     static const OUString msLeftDrawPaneURL;
-    static const OUString msRightPaneURL;
+    static const OUString msSidebarPaneURL;
 
     // URLs of frequently used views.
     static const OUString msViewURLPrefix;
@@ -74,7 +77,7 @@ public:
     static const OUString msHandoutViewURL;
     static const OUString msSlideSorterURL;
     static const OUString msPresentationViewURL;
-    static const OUString msTaskPaneURL;
+    static const OUString msSidebarViewURL;
 
     // URLs of frequently used tool bars.
     static const OUString msToolBarURLPrefix;
@@ -82,7 +85,9 @@ public:
 
     // URLs of task panels.
     static const OUString msTaskPanelURLPrefix;
-    static const OUString msMasterPagesTaskPanelURL;
+    static const OUString msAllMasterPagesTaskPanelURL;
+    static const OUString msRecentMasterPagesTaskPanelURL;
+    static const OUString msUsedMasterPagesTaskPanelURL;
     static const OUString msLayoutTaskPanelURL;
     static const OUString msTableDesignPanelURL;
     static const OUString msCustomAnimationTaskPanelURL;
@@ -93,6 +98,7 @@ public:
     static const OUString msResourceDeactivationRequestEvent;
     static const OUString msResourceActivationEvent;
     static const OUString msResourceDeactivationEvent;
+    static const OUString msResourceDeactivationEndEvent;
     static const OUString msConfigurationUpdateStartEvent;
     static const OUString msConfigurationUpdateEndEvent;
 
@@ -107,7 +113,7 @@ public:
     static ::boost::shared_ptr<FrameworkHelper> Instance (ViewShellBase& rBase);
 
     static ::boost::shared_ptr<FrameworkHelper> Instance (
-        const css::uno::Reference<css::frame::XController>& rxController);
+        const cssu::Reference<css::frame::XController>& rxController);
 
     /** Mark the FrameworkHelper object for the given ViewShellBase as
         disposed.  A following ReleaseInstance() call will destroy the
@@ -144,17 +150,15 @@ public:
             reference then an empty pointer is returned.
     */
     static ::boost::shared_ptr<ViewShell> GetViewShell (
-        const css::uno::Reference<css::drawing::framework::XView>& rxView);
+        const cssu::Reference<cssdf::XView>& rxView);
 
-    ~FrameworkHelper (void);
-
-    typedef ::boost::function<bool(const css::drawing::framework::ConfigurationChangeEvent&)>
+    typedef ::boost::function<bool(const cssdf::ConfigurationChangeEvent&)>
         ConfigurationChangeEventFilter;
     typedef ::boost::function<void(bool bEventSeen)> Callback;
     typedef ::boost::function<
         void(
-            const css::uno::Reference<
-                css::drawing::framework::XResourceId>&)
+            const cssu::Reference<
+                cssdf::XResourceId>&)
         > ResourceFunctor;
 
     /** Test whether the called FrameworkHelper object is valid.
@@ -187,10 +191,19 @@ public:
             of the involved objects does not support XTunnel (where
             necessary).
     */
-    css::uno::Reference<css::drawing::framework::XView>
-        GetView (
-            const css::uno::Reference<
-                css::drawing::framework::XResourceId>& rxPaneOrViewId);
+    cssu::Reference<cssdf::XView> GetView (
+        const cssu::Reference<cssdf::XResourceId>& rxPaneOrViewId);
+
+    /** Return the XWindow that is represented by the pane with the
+        given resource id.
+    */
+    cssu::Reference<css::awt::XWindow> GetPaneWindow (
+        const cssu::Reference<cssdf::XResourceId>& rxPaneId);
+
+    /** Return the XResource object with the given resource id.
+    */
+    cssu::Reference<cssdf::XResource> GetResource (
+        const cssu::Reference<cssdf::XResourceId>& rxResourceId);
 
     /** Request the specified view to be displayed in the specified pane.
         When the pane is not visible its creation is also requested.  The
@@ -204,24 +217,33 @@ public:
             the caller can, for example, call RunOnResourceActivation() to
             do some initialization after the requested view becomes active.
     */
-    css::uno::Reference<css::drawing::framework::XResourceId> RequestView (
+    cssu::Reference<cssdf::XResourceId> RequestView (
         const OUString& rsResourceURL,
         const OUString& rsAnchorURL);
 
-    /** Request the activation of the specified task panel in the standard
-        task pane.
-        @param rsTaskPanelURL
+    /** Request the activation of the specified panel in the
+        sidebar.
+        @param rsSidebarPanelURL
             The panel that is to be activated.
-        @param bEnsureTaskPaneIsVisible
-            When this is <TRUE/> then the task pane is activated when not
+        @param bEnsurePaneIsVisible
+            When this is <TRUE/> then the sidebar pane is activated when not
             yet active.
             When this flag is <FALSE/> then the requested panel
             is activated only when the task pane is already active.  When it
             is not active then this call is silently ignored.
+        @return
+            The resource id of the requested sidebar panel is returned.  With that
+            the caller can, for example, call RunOnResourceActivation() to
+            do some initialization after the requested view becomes active.
     */
-    void RequestTaskPanel (
-        const OUString& rsTaskPanelURL,
+    cssu::Reference<cssdf::XResourceId> RequestSidebarPanel (
+        const OUString& rsSidebarPanelURL,
         const bool bEnsureTaskPaneIsVisible = true);
+
+    /** Request the deactivation of the specified resource.
+    */
+    void RequestResourceDeactivation (
+        const cssu::Reference<cssdf::XResourceId>& rxResourceId);
 
     /** Process a slot call that requests a view shell change.
     */
@@ -251,8 +273,29 @@ public:
 
     */
     void RunOnResourceActivation(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const cssu::Reference<cssdf::XResourceId>& rxResourceId,
         const Callback& rCallback);
+
+    /** Run the given callback when the specified resource has been
+        deactivated.  When the resource is not active already when
+        this method is called then rCallback is called before this
+        method returns.
+        @param rxResourceId
+            Wait for the deactivation of this resource before calling
+            rCallback.
+        @param rCallback
+            The callback to be called when the resource is
+            deactivated.
+        @param bRunOnDeactivationEnd
+            The callback is run either when the deactivation starts
+            and the callback can still access the resource or when the
+            deactivatio is complete and the resource is no longer available.
+
+    */
+    void RunOnResourceDeactivation(
+        const cssu::Reference<cssdf::XResourceId>& rxResourceId,
+        const Callback& rCallback,
+        const bool bRunOnDeactivationEnd);
 
     /** Normally the requested changes of the configuration are executed
         asynchronously.  However, there is at least one situation (searching
@@ -287,21 +330,21 @@ public:
     /** Return a string representation of the given XResourceId object.
     */
     static OUString ResourceIdToString (
-        const css::uno::Reference<
-            css::drawing::framework::XResourceId>& rxResourceId);
+        const cssu::Reference<
+            cssdf::XResourceId>& rxResourceId);
 
     /** Create a new XResourceId object for the given resource URL.
     */
-    static css::uno::Reference<
-        css::drawing::framework::XResourceId>
+    static cssu::Reference<
+        cssdf::XResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL);
 
     /** Create a new XResourceId object for the given resource URL and a
         single anchor URL.
     */
-    static css::uno::Reference<
-        css::drawing::framework::XResourceId>
+    static cssu::Reference<
+        cssdf::XResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL,
                 const OUString& rsAnchorURL);
@@ -309,8 +352,8 @@ public:
     /** Create a new XResourceId object for the given resource URL and the
         two given anchor URLs.
     */
-    static css::uno::Reference<
-        css::drawing::framework::XResourceId>
+    static cssu::Reference<
+        cssdf::XResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL,
                 const OUString& rsFirstAnchorURL,
@@ -318,14 +361,14 @@ public:
 
     /** Create a new XResourceId object for the given resource URL.
     */
-    static css::uno::Reference<
-        css::drawing::framework::XResourceId>
+    static cssu::Reference<
+        cssdf::XResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL,
-                const css::uno::Reference<
-                    css::drawing::framework::XResourceId>& rxAnchor);
+                const cssu::Reference<
+                    cssdf::XResourceId>& rxAnchor);
 
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
+    cssu::Reference<cssdf::XConfigurationController>
         GetConfigurationController (void) const;
 
 
@@ -341,16 +384,18 @@ private:
     static ::boost::scoped_ptr<ViewURLMap> mpViewURLMap;
 
     ViewShellBase& mrBase;
-    css::uno::Reference<css::drawing::framework::XConfigurationController>
+    cssu::Reference<cssdf::XConfigurationController>
         mxConfigurationController;
 
     class DisposeListener;
     friend class DisposeListener;
-    css::uno::Reference<css::lang::XComponent>
+    cssu::Reference<css::lang::XComponent>
         mxDisposeListener;
 
     FrameworkHelper (ViewShellBase& rBase);
     FrameworkHelper (const FrameworkHelper& rHelper); // Not implemented.
+    ~FrameworkHelper (void);
+    class Deleter; friend class Deleter;
     FrameworkHelper& operator= (const FrameworkHelper& rHelper); // Not implemented.
 
     void Initialize (void);
@@ -390,7 +435,7 @@ namespace {
     class FrameworkHelperAllPassFilter
     {
     public:
-        bool operator() (const css::drawing::framework::ConfigurationChangeEvent&) { return true; }
+        bool operator() (const cssdf::ConfigurationChangeEvent&) { return true; }
     };
 
 
@@ -398,12 +443,12 @@ namespace {
     {
     public:
         FrameworkHelperResourceIdFilter (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
-        bool operator() (const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+            const cssu::Reference<cssdf::XResourceId>& rxResourceId);
+        bool operator() (const cssdf::ConfigurationChangeEvent& rEvent)
         { return mxResourceId.is() && rEvent.ResourceId.is()
                 && mxResourceId->compareTo(rEvent.ResourceId) == 0; }
     private:
-        css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
+        cssu::Reference<cssdf::XResourceId> mxResourceId;
     };
 
 } // end of anonymous namespace

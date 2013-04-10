@@ -1785,7 +1785,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                     if ( !IsHeaderFooterEdit() )
                         ToggleHeaderFooterEdit();
                     bCrsrSet = SetCrsrInHdFt(
-                            !rStyleName.Len() ? USHRT_MAX : nFrom,
+                            !rStyleName.Len() ? (sal_uInt16)0xFFFF : nFrom,
                             bHeader );
                 }
             }

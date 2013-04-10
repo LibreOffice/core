@@ -39,7 +39,7 @@ namespace {
 /** Implementation of the XPresenterHelper interface: functionality that can
     not be implemented in an extension.
 */
-    class PresenterHelper
+class PresenterHelper
     : private ::boost::noncopyable,
       private ::cppu::BaseMutex,
       public PresenterHelperInterfaceBase

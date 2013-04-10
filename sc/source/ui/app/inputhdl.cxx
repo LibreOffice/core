@@ -2367,6 +2367,12 @@ void ScInputHandler::InvalidateAttribs()
         rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
 
         rBindings.Invalidate( SID_HYPERLINK_GETLINK );
+
+        rBindings.Invalidate( SID_ATTR_CHAR_KERNING );
+        rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
+        rBindings.Invalidate( SID_SET_SUB_SCRIPT );
+        rBindings.Invalidate( SID_ATTR_CHAR_STRIKEOUT );
+        rBindings.Invalidate( SID_ATTR_CHAR_SHADOWED );
     }
 }
 

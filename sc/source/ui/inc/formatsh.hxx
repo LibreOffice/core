@@ -67,6 +67,9 @@ public:
     void        ExecFormatPaintbrush( SfxRequest& rReq );
     void        StateFormatPaintbrush( SfxItemSet& rSet );
 
+    void        ExecViewOptions( SfxRequest& rReq );
+    void        GetViewOptions( SfxItemSet& rSet );
+
 private:
     short       GetCurrentNumberFormatType();
 };

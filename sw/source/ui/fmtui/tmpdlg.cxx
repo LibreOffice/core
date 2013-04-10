@@ -76,7 +76,7 @@ extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                              SfxStyleSheetBase& rBase,
                              sal_uInt16             nRegion,
-                             sal_uInt16             nPageId,
+                             const sal_uInt16 nSlot,
                              SwWrtShell*        pActShell,
                              sal_Bool               bNew ) :
     SfxStyleDialog( pParent,
@@ -242,8 +242,14 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage(TP_FOOTER_PAGE,      String(SW_RES(STR_PAGE_FOOTER)),
                                             SvxFooterPage::Create,
                                             SvxFooterPage::GetRanges );
-            if(nPageId)
-                SetCurPageId(nPageId);
+            if ( nSlot == FN_FORMAT_PAGE_COLUMN_DLG )
+            {
+                SetCurPageId(TP_COLUMN);
+            }
+            else if ( nSlot == FN_FORMAT_PAGE_SETTING_DLG )
+            {
+                SetCurPageId(TP_PAGE_STD);
+            }
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");

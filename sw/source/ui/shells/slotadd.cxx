@@ -127,6 +127,11 @@
 #define SvxDrawAlignItem SfxAllEnumItem
 #define avmedia_MediaItem ::avmedia::MediaItem
 
+#include <svx/xflftrit.hxx>
+#include <svx/xlncapit.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/AffineMatrixItem.hxx>
+
 #define SFX_TYPEMAP
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"

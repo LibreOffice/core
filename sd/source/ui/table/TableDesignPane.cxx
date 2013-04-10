@@ -96,7 +96,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
 {
     Window* pControlParent = mbModal ? pParent : this;
 
-    mxControls[FL_TABLE_STYLES].reset( new FixedLine( pControlParent, SdResId( FL_TABLE_STYLES + 1 ) ) );
+    //  mxControls[FL_TABLE_STYLES].reset( new FixedLine( pControlParent, SdResId( FL_TABLE_STYLES + 1 ) ) );
 
     ValueSet* pValueSet = new ValueSet( pControlParent, SdResId( CT_TABLE_STYLES+1 ) );
     mxControls[CT_TABLE_STYLES].reset( pValueSet );
@@ -113,7 +113,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     }
     pValueSet->SetSelectHdl (LINK(this, TableDesignPane, implValueSetHdl));
 
-    mxControls[FL_STYLE_OPTIONS].reset( new FixedLine( pControlParent, SdResId( FL_STYLE_OPTIONS + 1 ) ) );
+    //  mxControls[FL_STYLE_OPTIONS].reset( new FixedLine( pControlParent, SdResId( FL_STYLE_OPTIONS + 1 ) ) );
     sal_uInt16 i;
     for( i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
     {
@@ -123,7 +123,14 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     }
 
     for( i = 0; i < DESIGNPANE_CONTROL_COUNT; i++ )
-        mnOrgOffsetY[i] = mxControls[i]->GetPosPixel().Y();
+    {
+        if (mxControls[i])
+            mnOrgOffsetY[i] = mxControls[i]->GetPosPixel().Y();
+        else if (i > 0)
+            mnOrgOffsetY[i] = mnOrgOffsetY[i-1];
+        else
+            mnOrgOffsetY[i] = 0;
+    }
 
     // get current controller and initialize listeners
     try
@@ -169,6 +176,60 @@ void TableDesignPane::Resize()
 {
     updateLayout();
 }
+
+
+
+
+LayoutSize TableDesignPane::GetHeightForWidth (const sal_Int32 nWidth)
+{
+    if ( ! IsVisible() || nWidth<=0)
+        return LayoutSize(0,0,0);
+
+    // Initialize the height with the offset above and below the value
+    // set and below the check boxes.
+    const Point aOffset (LogicToPixel( Point(3,3), MAP_APPFONT));
+    sal_Int32 nHeight (3 * aOffset.Y());
+
+    // Add the height for the check boxes.
+    nHeight += mnOrgOffsetY[CB_BANDED_COLUMNS] - mnOrgOffsetY[CB_HEADER_ROW]
+        + mxControls[CB_BANDED_COLUMNS]->GetSizePixel().Height();
+
+    // Setup minimal and maximal heights that include all check boxes
+    // and a small or large value set.
+    const sal_Int32 nMinimalHeight (nHeight+100);
+    const sal_Int32 nMaximalHeight (nHeight+450);
+
+    // Calculate the number of rows and columns and then add the
+    // preferred size of the value set.
+    ValueSet* pValueSet = static_cast< ValueSet* >( mxControls[CT_TABLE_STYLES].get() );
+    if (pValueSet->GetItemCount() > 0)
+    {
+        Image aImage = pValueSet->GetItemImage(pValueSet->GetItemId(0));
+        Size aItemSize = pValueSet->CalcItemSizePixel(aImage.GetSizePixel());
+        aItemSize.Width() += 10;
+        aItemSize.Height() += 10;
+
+        int nColumnCount = (pValueSet->GetSizePixel().Width() - pValueSet->GetScrollWidth()) / aItemSize.Width();
+        if (nColumnCount < 1)
+            nColumnCount = 1;
+
+        int nRowCount = (pValueSet->GetItemCount() + nColumnCount - 1) / nColumnCount;
+        if (nRowCount < 1)
+            nRowCount = 1;
+
+        nHeight += nRowCount * aItemSize.Height();
+    }
+
+    // Clip the requested height.
+    if (nHeight<nMinimalHeight)
+        nHeight = nMinimalHeight;
+    else if (nHeight>nMaximalHeight)
+        nHeight = nMaximalHeight;
+    return LayoutSize(nMinimalHeight, nMaximalHeight, nHeight);
+}
+
+
+
 
 // --------------------------------------------------------------------
 
@@ -366,16 +427,19 @@ void TableDesignPane::updateLayout()
 
             const long nStylesHeight = aPaneSize.Height() - nOptionsHeight;
 
-            // set with of controls to size of pane
+            // set width of controls to size of pane
             for( sal_Int32 nId = 0; nId < DESIGNPANE_CONTROL_COUNT; ++nId )
             {
-                Size aSize( mxControls[nId]->GetSizePixel() );
-                aSize.Width() = aPaneSize.Width() - aOffset.X() - mxControls[nId]->GetPosPixel().X();
-                mxControls[nId]->SetSizePixel( aSize );
-                mxControls[nId]->SetPaintTransparent(sal_True);
-                mxControls[nId]->SetBackground();
+                if (mxControls[nId])
+                {
+                    Size aSize( mxControls[nId]->GetSizePixel() );
+                    aSize.Width() = aPaneSize.Width() - aOffset.X() - mxControls[nId]->GetPosPixel().X();
+                    mxControls[nId]->SetSizePixel( aSize );
+                    mxControls[nId]->SetPaintTransparent(sal_True);
+                    mxControls[nId]->SetBackground();
+                }
             }
-            aValueSetSize = Size( pValueSet->GetSizePixel().Width(), nStylesHeight - mxControls[FL_TABLE_STYLES]->GetSizePixel().Height() - mnOrgOffsetY[FL_TABLE_STYLES]  );
+            aValueSetSize = Size( pValueSet->GetSizePixel().Width(), nStylesHeight  );
         }
         else
         {
@@ -437,18 +501,22 @@ void TableDesignPane::updateLayout()
 
             // shift show options section down
             const long nOptionsPos = aPos.Y() + aValueSetSize.Height();
-            for( sal_Int32 nId = FL_STYLE_OPTIONS; nId <= CB_BANDED_COLUMNS; ++nId )
+            sal_Int32 nMaxY (0);
+            for( sal_Int32 nId = FL_STYLE_OPTIONS+1; nId <= CB_BANDED_COLUMNS; ++nId )
             {
-                Point aCPos( mxControls[nId]->GetPosPixel() );
-                aCPos.X() = ( nId == FL_STYLE_OPTIONS ?  1 : 2 ) * aOffset.X();
-                aCPos.Y() = mnOrgOffsetY[nId] + nOptionsPos;
-                mxControls[nId]->SetPosPixel( aCPos );
+                if (mxControls[nId])
+                {
+                    Point aCPos( mxControls[nId]->GetPosPixel() );
+                    aCPos.X() = ( nId == FL_STYLE_OPTIONS ?  1 : 2 ) * aOffset.X();
+                    aCPos.Y() = mnOrgOffsetY[nId] + nOptionsPos;
+                    mxControls[nId]->SetPosPixel( aCPos );
+                    const sal_Int32 nBottom (aCPos.Y() + mxControls[nId]->GetSizePixel().Height());
+                    if (nBottom > nMaxY)
+                        nMaxY = nBottom;
+                }
             }
         }
     }
-
-    if( !mbModal )
-        SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 }
 
 // --------------------------------------------------------------------

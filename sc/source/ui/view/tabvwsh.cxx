@@ -27,6 +27,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/infobar.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -54,6 +55,7 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(SfxInfoBarContainerChild::GetChildWindowId());
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
+    SFX_CHILDWINDOW_REGISTRATION(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScNameDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScNameDefDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSolverDlgWrapper::GetChildWindowId());

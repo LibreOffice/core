@@ -116,7 +116,19 @@
 #include <wordcountdialog.hxx>
 #include <tools/diagnose_ex.h>
 
+#ifndef _NBDTMGFACT_HXX
+#include <svx/nbdtmgfact.hxx>
+#endif
+#ifndef _NBDTMG_HXX
+#include <svx/nbdtmg.hxx>
+#endif
+
+
+#include <numrule.hxx>
+
+
 using namespace ::com::sun::star;
+using namespace svx::sidebar;
 
 void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
 {
@@ -173,6 +185,10 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if( FN_INSERT_HYPERLINK == nSlot )
             pDlg->SetCurPageId("hyperlink");
+    }
+    if (nSlot == SID_CHAR_DLG_EFFECT)
+    {
+        pDlg->SetCurPageId(TP_CHAR_EXT);
     }
 
     const SfxItemSet* pSet = NULL;
@@ -818,6 +834,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // intentionally no break
         }
         case SID_CHAR_DLG:
+        case SID_CHAR_DLG_EFFECT:
         {
             sw_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
         }
@@ -842,6 +859,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_NUMBER_NEWSTART_AT :
         case FN_FORMAT_DROPCAPS :
         case FN_DROP_TEXT:
+        case SID_ATTR_PARA_LRSPACE:
         {
             sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
@@ -944,7 +962,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SfxItemSet* pSet = NULL;
             if ( !bUseDialog )
             {
-                pSet = (SfxItemSet*) pArgs;
+                if ( nSlot == SID_ATTR_PARA_LRSPACE)
+        {
+            SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)pArgs->Get(nSlot));
+            aParaMargin.SetWhich( RES_LR_SPACE);
+            aCoreSet.Put(aParaMargin);
+            pSet = &aCoreSet;
+
+        } else
+                    pSet = (SfxItemSet*) pArgs;
 
             }
             else if ( NULL != pDlg && pDlg->Execute() == RET_OK )
@@ -1012,14 +1038,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     //SetNumRuleStart(sal_True) restarts the numbering at the value
                     //that is defined at the starting point of the numbering level
                     //otherwise the SetNodeNumStart() value determines the start
-                    //if it's set to something different than USHRT_MAX
+                    //if it's set to something different than (sal_uInt16)0xFFFF
 
                     sal_Bool bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                    //
-                    // Default value for restart value has to be USHRT_MAX
+
+                    // Default value for restart value has to be (sal_uInt16)0xFFFF
                     // in order to indicate that the restart value of the list
                     // style has to be used on restart.
-                    sal_uInt16 nNumStart = USHRT_MAX;
+                    sal_uInt16 nNumStart = (sal_uInt16)0xFFFF;
                     if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
                         nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
@@ -1608,6 +1634,51 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                  else
                      rSet.DisableItem(nWhich);
             }
+            break;
+            case FN_NUM_NUMBERING_ON:
+                rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON,rSh.SelectionHasNumber()));
+            break;
+            case FN_NUM_BULLET_ON:
+                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON,rSh.SelectionHasBullet()));
+            break;
+            case FN_BUL_NUM_RULE_INDEX:
+            case FN_NUM_NUM_RULE_INDEX:
+        {
+            SwNumRule* pCurRule = (SwNumRule*)(GetShell().GetCurNumRule());
+            sal_uInt16  nActNumLvl = (sal_uInt16)0xFFFF;
+            rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,DEFAULT_NONE));
+            rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,DEFAULT_NONE));
+            if( pCurRule )
+            {
+                nActNumLvl = GetShell().GetNumLevel();
+                if( nActNumLvl < MAXLEVEL )
+                {
+                    nActNumLvl = 1<<nActNumLvl;
+                }
+                SvxNumRule aSvxRule = pCurRule->MakeSvxNumRule();
+                if ( GetShell().HasBullet())
+                {
+                    rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
+                    rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
+                    NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(eNBOType::MIXBULLETS);
+                    if ( pBullets )
+                    {
+                        sal_uInt16 nBulIndex = pBullets->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
+                        rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,nBulIndex));
+                    }
+                }else if ( GetShell().HasNumber() )
+                {
+                    rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
+                    rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
+                    NBOTypeMgrBase* pNumbering = NBOutlineTypeMgrFact::CreateInstance(eNBOType::NUMBERING);
+                    if ( pNumbering )
+                    {
+                        sal_uInt16 nBulIndex = pNumbering->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
+                        rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,nBulIndex));
+                    }
+                }
+            }
+        }
             break;
             case FN_NUM_CONTINUE:
             {

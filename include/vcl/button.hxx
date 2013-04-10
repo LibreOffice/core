@@ -446,13 +446,11 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE virtual void FillLayoutData() const;
-    SAL_DLLPRIVATE virtual const Font&
-                                GetCanonicalFont( const StyleSettings& _rStyle ) const;
-    SAL_DLLPRIVATE virtual const Color&
-                                GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
+    virtual void FillLayoutData() const;
+    virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
-    SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
+    virtual void ImplDrawCheckBoxState();
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
     SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
 

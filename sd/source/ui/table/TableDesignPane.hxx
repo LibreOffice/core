@@ -22,12 +22,14 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
+#include <com/sun/star/ui/LayoutSize.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <sfx2/sidebar/ILayoutableWindow.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -44,7 +46,7 @@ class ViewShellBase;
 
 // --------------------------------------------------------------------
 
-class TableDesignPane : public Control
+class TableDesignPane : public Control, public sfx2::sidebar::ILayoutableWindow
 {
 public:
     TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool bModal );
@@ -55,6 +57,9 @@ public:
 
     // Control
     virtual void Resize();
+
+    // ILayoutableWindow
+    virtual ::com::sun::star::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth);
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 

@@ -497,7 +497,6 @@ void SvxLineEndWindow::FillValueSet()
     if( pLineEndList.is() )
     {
         XLineEndEntry*      pEntry  = NULL;
-        Bitmap*             pBmp    = NULL;
         VirtualDevice       aVD;
 
         long nCount = pLineEndList->Count();
@@ -507,16 +506,16 @@ void SvxLineEndWindow::FillValueSet()
         basegfx::B2DPolyPolygon aNothing;
         pLineEndList->Insert( new XLineEndEntry( aNothing, SVX_RESSTR( RID_SVXSTR_NONE ) ) );
         pEntry = pLineEndList->GetLineEnd( nCount );
-        pBmp = pLineEndList->GetBitmap( nCount );
-        DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
+        Bitmap aBmp = pLineEndList->GetUiBitmap( nCount );
+        OSL_ENSURE( !aBmp.IsEmpty(), "UI-Bitmap wurde nicht erzeugt" );
 
-        aBmpSize = pBmp->GetSizePixel();
+        aBmpSize = aBmp.GetSizePixel();
         aVD.SetOutputSizePixel( aBmpSize, sal_False );
         aBmpSize.Width() = aBmpSize.Width() / 2;
         Point aPt0( 0, 0 );
         Point aPt1( aBmpSize.Width(), 0 );
 
-        aVD.DrawBitmap( Point(), *pBmp );
+        aVD.DrawBitmap( Point(), aBmp );
         aLineEndSet.InsertItem( 1, aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
         aLineEndSet.InsertItem( 2, aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
 
@@ -526,10 +525,10 @@ void SvxLineEndWindow::FillValueSet()
         {
             pEntry = pLineEndList->GetLineEnd( i );
             DBG_ASSERT( pEntry, "Konnte auf LineEndEntry nicht zugreifen" );
-            pBmp = pLineEndList->GetBitmap( i );
-            DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
+            aBmp = pLineEndList->GetUiBitmap( i );
+            OSL_ENSURE( !aBmp.IsEmpty(), "UI-Bitmap wurde nicht erzeugt" );
 
-            aVD.DrawBitmap( aPt0, *pBmp );
+            aVD.DrawBitmap( aPt0, aBmp );
             aLineEndSet.InsertItem( (sal_uInt16)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
             aLineEndSet.InsertItem( (sal_uInt16)((i+2L)*2L),    aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
         }

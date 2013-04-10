@@ -42,8 +42,6 @@
 #include "svx/linectrl.hxx"
 #include <svtools/colorcfg.hxx>
 
-#include "linectrl.hrc"
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -244,7 +242,7 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxLineBox::FillControl()
 {
-    FillStyles();
+    // FillStyles();
     if ( !mpSh )
         mpSh = SfxObjectShell::Current();
 

@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include "scitems.hxx"
+#include <editeng/borderline.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
@@ -1016,13 +1017,96 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             break;
 
         case SID_NUMBER_FORMAT:
-            if ( pReqArgs )
+            //if ( pReqArgs )
+            //{
+            //  const SfxPoolItem* pItem;
+            //  if(pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET)
+            //  {
+            //      String aCode = ((const SfxStringItem*)pItem)->GetValue();
+            //      pTabViewShell->SetNumFmtByStr( aCode );
+            //  }
+            //}
+
+            // symphony version with format interpretation
+            if(pReqArgs)
             {
                 const SfxPoolItem* pItem;
-                if(pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET)
+                ScDocument* pDoc = pViewData->GetDocument();
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                LanguageType eLanguage = ScGlobal::eLnge;
+                sal_Int16 eType = -1;
+                sal_uInt32 nCurrentNumberFormat;
+
+                pDoc->GetNumberFormat(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo(), nCurrentNumberFormat);
+                const SvNumberformat* pEntry = pFormatter->GetEntry(nCurrentNumberFormat);
+
+                if(pEntry)
+                {
+                    eLanguage = pEntry->GetLanguage();
+                    eType = pEntry->GetType();
+                }
+
+                //Just use eType to judge whether the command is fired for NUMBER/PERCENT/CURRENCY
+                //In sidebar, users can fire SID_NUMBER_FORMAT command by operating the related UI controls before they are disable
+                switch(eType)
+                {
+                case NUMBERFORMAT_ALL:
+                case NUMBERFORMAT_NUMBER:
+                case NUMBERFORMAT_NUMBER| NUMBERFORMAT_DEFINED:
+                case NUMBERFORMAT_PERCENT:
+                case NUMBERFORMAT_PERCENT| NUMBERFORMAT_DEFINED:
+                case NUMBERFORMAT_CURRENCY:
+                case NUMBERFORMAT_CURRENCY|NUMBERFORMAT_DEFINED:
+                    eType = 0;
+                    break;
+                default:
+                    eType =-1;
+                }
+
+                if(SFX_ITEM_SET == pReqArgs->GetItemState(nSlot, true, &pItem) && eType != -1)
                 {
                     String aCode = ((const SfxStringItem*)pItem)->GetValue();
-                    pTabViewShell->SetNumFmtByStr( aCode );
+                    sal_uInt16 aLen = aCode.Len();
+                    String* sFormat = new String[4];
+                    String sTmpStr = OUString();
+                    sal_uInt16 nCount(0);
+                    sal_uInt16 nStrCount(0);
+
+                    while(nCount < aLen)
+                    {
+                        sal_Unicode cChar = aCode.GetChar(nCount);
+
+                        if(cChar == sal_Unicode(','))
+                        {
+                            sFormat[nStrCount] = sTmpStr;
+                            sTmpStr = OUString();
+                            nStrCount++;
+                        }
+                        else
+                        {
+                            sTmpStr += cChar;
+                        }
+
+                        nCount++;
+
+                        if(nStrCount > 3)
+                            break;
+                    }
+
+                    const sal_Bool bThousand = (sal_Bool)sFormat[0].ToInt32();
+                    const sal_Bool bNegRed = (sal_Bool)sFormat[1].ToInt32();
+                    const sal_uInt16 nPrecision = (sal_uInt16)sFormat[2].ToInt32();
+                    const sal_uInt16 nLeadZeroes = (sal_uInt16)sFormat[3].ToInt32();
+
+                    aCode = pFormatter->GenerateFormat(
+                        nCurrentNumberFormat,//modify
+                        eLanguage,
+                        bThousand,
+                        bNegRed,
+                        nPrecision,
+                        nLeadZeroes);
+                    pTabViewShell->SetNumFmtByStr(aCode);
+                    delete[] sFormat;
                 }
             }
             break;
@@ -1043,6 +1127,49 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     aNewSet.Put( *pItem );
                     pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet, sal_True );
                 }
+            }
+            break;
+
+        case SID_NUMBER_TYPE_FORMAT:
+            {
+                SfxInt16Item aFormatItem((const SfxInt16Item&)rReq.GetArgs()->Get(nSlot));
+                sal_uInt16 nFormat = aFormatItem.GetValue();
+                switch(nFormat)
+                {
+                case 0:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER); //Modify
+                    break;
+                case 1:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER, 2 ); //Modify
+                    break;
+                case 2:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_PERCENT );
+                    break;
+                case 3:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_CURRENCY );
+                    break;
+                case 4:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_DATE );
+                    break;
+                case 5:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_TIME );
+                    break;
+                case 6:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_SCIENTIFIC );
+                    break;
+                case 7:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_FRACTION );
+                    break;
+                case 8:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_LOGICAL );
+                    break;
+                case 9:
+                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_TEXT );
+                    break;
+                default:
+                    ;
+                }
+                rReq.Done();
             }
             break;
 
@@ -1119,7 +1246,10 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
                 }
             }
     }
-
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNRIGHT );
     rBindings.Invalidate( SID_ALIGNCENTERHOR );
@@ -1647,6 +1777,43 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 }
                 break;
 
+            case SID_ATTR_BORDER_DIAG_TLBR:
+            case SID_ATTR_BORDER_DIAG_BLTR:
+                {
+                    const ScPatternAttr* pOldAttrs = pTabViewShell->GetSelectionPattern();
+                    SfxItemSet* pOldSet = new SfxItemSet(pOldAttrs->GetItemSet());
+                    SfxItemSet* pNewSet = new SfxItemSet(pOldAttrs->GetItemSet());
+                    const SfxPoolItem* pItem = 0;
+
+                    if(SID_ATTR_BORDER_DIAG_TLBR == nSlot)
+                    {
+                        if(SFX_ITEM_SET == pNewAttrs->GetItemState(ATTR_BORDER_TLBR, true, &pItem))
+                        {
+                            SvxLineItem aItem(ATTR_BORDER_TLBR);
+                            aItem.SetLine(((const SvxLineItem&)pNewAttrs->Get(ATTR_BORDER_TLBR)).GetLine());
+                            pNewSet->Put(aItem);
+                            rReq.AppendItem(aItem);
+                            pTabViewShell->ApplyAttributes(pNewSet, pOldSet);
+                        }
+                    }
+                    else // if( nSlot == SID_ATTR_BORDER_DIAG_BLTR )
+                    {
+                        if(SFX_ITEM_SET == pNewAttrs->GetItemState(ATTR_BORDER_BLTR, true, &pItem ))
+                        {
+                            SvxLineItem aItem(ATTR_BORDER_BLTR);
+                            aItem.SetLine(((const SvxLineItem&)pNewAttrs->Get(ATTR_BORDER_BLTR)).GetLine());
+                            pNewSet->Put(aItem);
+                            rReq.AppendItem(aItem);
+                            pTabViewShell->ApplyAttributes(pNewSet, pOldSet);
+                        }
+                    }
+
+                    delete pOldSet;
+                    delete pNewSet;
+                    rBindings.Invalidate(nSlot);
+                }
+                break;
+
             // ATTR_BACKGROUND (=SID_ATTR_BRUSH) muss ueber zwei IDs
             // gesetzt werden:
             case SID_BACKGROUND_COLOR:
@@ -1698,7 +1865,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet&    rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
-    const ::editeng::SvxBorderLine* pLine      = pTabViewShell->GetDefaultFrameLine();
+    //const ::editeng::SvxBorderLine* pLine      = pTabViewShell->GetDefaultFrameLine();
     const SvxBrushItem&  rBrushItem = (const SvxBrushItem&)rAttrSet.Get( ATTR_BACKGROUND );
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -1725,11 +1892,175 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             case SID_BACKGROUND_COLOR:
             {
                 rSet.Put( SvxColorItem( rBrushItem.GetColor(), SID_BACKGROUND_COLOR ) );
+
+                if(SFX_ITEM_DONTCARE == rAttrSet.GetItemState(ATTR_BACKGROUND))
+                {
+                    rSet.InvalidateItem(SID_BACKGROUND_COLOR);
+                }
             }
             break;
+            case SID_FRAME_LINESTYLE:
             case SID_FRAME_LINECOLOR:
             {
-                rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR ) );
+                // handled together because both need the cell border information for decisions
+                // rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR ) );
+                Color aCol = 0;
+                editeng::SvxBorderLine aLine(0,0,0,0);
+                bool bCol = 0;
+                bool bColDisable = 0, bStyleDisable = 0;
+                SvxBoxItem aBoxItem(ATTR_BORDER);
+                SvxBoxInfoItem aInfoItem(ATTR_BORDER_INNER);
+
+                pTabViewShell->GetSelectionFrame(aBoxItem, aInfoItem);
+
+                if( aBoxItem.GetTop() )
+                {
+                    bCol = 1;
+                    aCol = aBoxItem.GetTop()->GetColor() ;
+                    aLine.SetColor(aCol);
+                    aLine.SetWidth( aBoxItem.GetTop()->GetWidth());
+                    aLine.SetBorderLineStyle( aBoxItem.GetTop()->GetBorderLineStyle());
+                }
+
+                if( aBoxItem.GetBottom() )
+                {
+                    if(bCol == 0)
+                    {
+                        bCol = 1;
+                        aCol = aBoxItem.GetBottom()->GetColor() ;
+                        aLine.SetColor(aCol);
+                        aLine.SetWidth( aBoxItem.GetBottom()->GetWidth());
+                        aLine.SetBorderLineStyle( aBoxItem.GetBottom()->GetBorderLineStyle());
+                    }
+                    else
+                    {
+                        if(aCol != aBoxItem.GetBottom()->GetColor() )
+                            bColDisable = 1;
+                        if(!( aLine == *(aBoxItem.GetBottom())) )
+                            bStyleDisable = 1;
+                    }
+                }
+
+                if( aBoxItem.GetLeft() )
+                {
+                    if(bCol == 0)
+                    {
+                        bCol = 1;
+                        aCol = aBoxItem.GetLeft()->GetColor() ;
+                        aLine.SetColor(aCol);
+                        aLine.SetWidth( aBoxItem.GetLeft()->GetWidth());
+                        aLine.SetBorderLineStyle( aBoxItem.GetLeft()->GetBorderLineStyle());
+                    }
+                    else
+                    {
+                        if(aCol != aBoxItem.GetLeft()->GetColor() )
+                            bColDisable = 1;
+                        if(!( aLine == *(aBoxItem.GetLeft())) )
+                            bStyleDisable = 1;
+                    }
+                }
+
+                if( aBoxItem.GetRight() )
+                {
+                    if(bCol == 0)
+                    {
+                        bCol = 1;
+                        aCol = aBoxItem.GetRight()->GetColor() ;
+                        aLine.SetColor(aCol);
+                        aLine.SetWidth( aBoxItem.GetRight()->GetWidth());
+                        aLine.SetBorderLineStyle( aBoxItem.GetRight()->GetBorderLineStyle());
+                    }
+                    else
+                    {
+                        if(aCol != aBoxItem.GetRight()->GetColor() )
+                            bColDisable = 1;
+                        if(!( aLine == *(aBoxItem.GetRight())) )
+                            bStyleDisable = 1;
+                    }
+                }
+
+                if( aInfoItem.GetVert())
+                {
+                    if(bCol == 0)
+                    {
+                        bCol = 1;
+                        aCol = aInfoItem.GetVert()->GetColor() ;
+                        aLine.SetColor(aCol);
+                        aLine.SetWidth( aInfoItem.GetVert()->GetWidth());
+                        aLine.SetBorderLineStyle( aInfoItem.GetVert()->GetBorderLineStyle());
+                    }
+                    else
+                    {
+                        if(aCol != aInfoItem.GetVert()->GetColor() )
+                            bColDisable = 1;
+                        if(!( aLine == *(aInfoItem.GetVert())) )
+                            bStyleDisable = 1;
+                    }
+                }
+
+                if( aInfoItem.GetHori())
+                {
+                    if(bCol == 0)
+                    {
+                        bCol = 1;
+                        aCol = aInfoItem.GetHori()->GetColor() ;
+                        aLine.SetColor(aCol);
+                        aLine.SetWidth( aInfoItem.GetHori()->GetWidth());
+                        aLine.SetBorderLineStyle( aInfoItem.GetHori()->GetBorderLineStyle());
+                    }
+                    else
+                    {
+                        if(aCol != aInfoItem.GetHori()->GetColor() )
+                            bColDisable = 1;
+                        if(!( aLine == *(aInfoItem.GetHori())) )
+                            bStyleDisable = 1;
+                    }
+                }
+
+                if( !aInfoItem.IsValid( VALID_VERT )
+                    || !aInfoItem.IsValid( VALID_HORI )
+                    || !aInfoItem.IsValid( VALID_LEFT )
+                    || !aInfoItem.IsValid( VALID_RIGHT )
+                    || !aInfoItem.IsValid( VALID_TOP )
+                    || !aInfoItem.IsValid( VALID_BOTTOM ) )
+                {
+                    bColDisable = 1;
+                    bStyleDisable = 1;
+                }
+
+                if(SID_FRAME_LINECOLOR == nWhich)
+                {
+                    if(bColDisable) // if different lines have differernt colors
+                    {
+                        aCol = COL_TRANSPARENT;
+                        rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );
+                        rSet.InvalidateItem(SID_FRAME_LINECOLOR);
+                    }
+                    else if( bCol == 0 && bColDisable == 0) // if no line available
+                    {
+                        aCol = COL_AUTO;
+                        rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );
+                    }
+                    else
+                        rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );
+                }
+                else // if( nWhich == SID_FRAME_LINESTYLE)
+                {
+                    if(bStyleDisable) // if have several lines but don't have same style
+                    {
+                        aLine.SetWidth( 1 );
+                        SvxLineItem aItem(SID_FRAME_LINESTYLE);
+                        aItem.SetLine(&aLine);
+                        rSet.Put( aItem );
+                        rSet.InvalidateItem(SID_FRAME_LINESTYLE);
+                    }
+                    else // all the lines have same style or no line availavle, use initial value (0,0,0,0)
+                    {
+                        SvxLineItem aItem(SID_FRAME_LINESTYLE);
+                        aItem.SetLine(&aLine);
+                        rSet.Put( aItem );
+                    }
+                }
             }
             break;
             case SID_ATTR_BRUSH:
@@ -1739,6 +2070,13 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             break;
         }
         nWhich = aIter.NextWhich();
+    }
+
+    if(nWhich)
+    {
+        // stuff for sidebar panels
+        Invalidate(SID_ATTR_ALIGN_DEGREES);
+        Invalidate(SID_ATTR_ALIGN_STACKED);
     }
 }
 
@@ -2013,22 +2351,139 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
         switch ( nWhich )
         {
             case SID_NUMBER_FORMAT:
+                //{
+                //  String aFormatCode;         // bleibt leer, wenn dont-care
+                //
+                //  const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
+                //  if ( rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) != SFX_ITEM_DONTCARE )
+                //  {
+                //      sal_uLong nNumberFormat = ((const SfxUInt32Item&)rAttrSet.Get(
+                //                                  ATTR_VALUE_FORMAT )).GetValue();
+                //
+                //      SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                //      const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
+                //      if ( pFormatEntry )
+                //          aFormatCode = pFormatEntry->GetFormatstring();
+                //  }
+                //
+                //  rSet.Put( SfxStringItem( nWhich, aFormatCode ) );
+                //}
+
+                // symphony version with format interpretation
                 {
-                    String aFormatCode;         // bleibt leer, wenn dont-care
+                    const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
 
-                    const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
-                    if ( rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) != SFX_ITEM_DONTCARE )
+                    if(SFX_ITEM_DONTCARE != rAttrSet.GetItemState(ATTR_VALUE_FORMAT))
                     {
-                        sal_uLong nNumberFormat = ((const SfxUInt32Item&)rAttrSet.Get(
-                                                    ATTR_VALUE_FORMAT )).GetValue();
-
                         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                        sal_uInt32 nNumberFormat = ((const SfxUInt32Item&)rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
+                        bool bThousand(false);
+                        bool bNegRed(false);
+                        sal_uInt16 nPrecision(0);
+                        sal_uInt16 nLeadZeroes(0);
+
+                        pFormatter->GetFormatSpecialInfo(nNumberFormat,bThousand, bNegRed, nPrecision, nLeadZeroes);
+                        String aFormat;
+                        static String sBreak = OUString(",");
+                        const String sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
+                        const String sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));
+                        const String sPrecision = OUString::number(nPrecision);
+                        const String sLeadZeroes = OUString::number(nLeadZeroes);
+
+                        aFormat += sThousand;
+                        aFormat += sBreak;
+                        aFormat += sNegRed;
+                        aFormat += sBreak;
+                        aFormat += sPrecision;
+                        aFormat += sBreak;
+                        aFormat += sLeadZeroes;
+                        aFormat += sBreak;
+
+                        rSet.Put(SfxStringItem(nWhich, aFormat));
+                    }
+                    else
+                    {
+                        rSet.InvalidateItem( nWhich );
+                    }
+                }
+                break;
+
+            case SID_NUMBER_TYPE_FORMAT:
+                {
+                    sal_Int16 aFormatCode = -1;
+                    const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
+                    if ( rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) >= SFX_ITEM_AVAILABLE ) //Modify for more robust
+                    {
+                        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                        sal_uInt32 nNumberFormat = pTabViewShell->GetSelectionPattern()->GetNumberFormat( pFormatter );
                         const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
+                        bool bStandard = false;
+
                         if ( pFormatEntry )
-                            aFormatCode = pFormatEntry->GetFormatstring();
+                        {
+                            aFormatCode = pFormatEntry->GetType();
+                            bStandard = pFormatEntry->IsStandard();
+                        }
+
+                        switch(aFormatCode)
+                        {
+                        case NUMBERFORMAT_NUMBER:
+                        case NUMBERFORMAT_NUMBER| NUMBERFORMAT_DEFINED:
+                            //use format code and standard format code to judge whether it is General,
+                            //if (nNumberFormat == nStandardNumberFormat)
+                            if (bStandard)
+                                aFormatCode = 0;
+                            else
+                                aFormatCode = 1;
+                            break;
+                        case NUMBERFORMAT_PERCENT:
+                        case NUMBERFORMAT_PERCENT| NUMBERFORMAT_DEFINED:
+                            aFormatCode = 2;
+                            break;
+                        case NUMBERFORMAT_CURRENCY:
+                        case NUMBERFORMAT_CURRENCY| NUMBERFORMAT_DEFINED:
+                            aFormatCode = 3;
+                            break;
+                        case NUMBERFORMAT_DATE:
+                        case NUMBERFORMAT_DATE| NUMBERFORMAT_DEFINED:
+                            //Add
+                        case NUMBERFORMAT_DATETIME:
+                        case NUMBERFORMAT_DATETIME | NUMBERFORMAT_DEFINED:
+                            aFormatCode = 4;
+                            break;
+                        case NUMBERFORMAT_TIME:
+                        case NUMBERFORMAT_TIME| NUMBERFORMAT_DEFINED:
+                            aFormatCode = 5;
+                            break;
+                        case NUMBERFORMAT_SCIENTIFIC:
+                        case NUMBERFORMAT_SCIENTIFIC| NUMBERFORMAT_DEFINED:
+                            aFormatCode = 6;
+                            break;
+                        case NUMBERFORMAT_FRACTION:
+                        case NUMBERFORMAT_FRACTION| NUMBERFORMAT_DEFINED:
+                            aFormatCode = 7;
+                            break;
+                        case NUMBERFORMAT_LOGICAL:
+                        case NUMBERFORMAT_LOGICAL| NUMBERFORMAT_DEFINED:
+                            aFormatCode = 8;
+                            break;
+                        case NUMBERFORMAT_TEXT:
+                        case NUMBERFORMAT_TEXT| NUMBERFORMAT_DEFINED:
+                            aFormatCode = 9;
+                            break;
+                        default:
+                            aFormatCode = -1;   //for more roburst
+                        }
+                        if( aFormatCode == -1 )
+                            rSet.InvalidateItem( nWhich );
+                        else
+                            rSet.Put( SfxInt16Item( nWhich, aFormatCode ) );
+                    }
+                    else
+                    {
+                        rSet.InvalidateItem( nWhich );
                     }
 
-                    rSet.Put( SfxStringItem( nWhich, aFormatCode ) );
                 }
                 break;
             case SID_NUMBER_SCIENTIFIC:
@@ -2321,6 +2776,54 @@ short ScFormatShell::GetCurrentNumberFormatType()
         nType = pEntry ? pEntry->GetType() : 0;
     }
     return nType;
+}
+
+void  ScFormatShell::ExecViewOptions( SfxRequest& rReq )
+{
+    ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
+    SfxBindings&        rBindings = pViewData->GetBindings();
+    const SfxItemSet*   pNewAttrs = rReq.GetArgs();
+
+    if ( pNewAttrs )
+    {
+        sal_uInt16 nSlot = rReq.GetSlot();
+
+        if( nSlot  == SID_SCGRIDSHOW)
+        {
+
+            ScViewData*             pLclViewData = pTabViewShell->GetViewData();
+            const ScViewOptions&    rOldOpt = pLclViewData->GetOptions();
+            ScDocShell*             pDocSh  = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+            bool bState =   ((const SfxBoolItem &)pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot ) )).GetValue();
+
+            if ( (bool)rOldOpt.GetOption( VOPT_GRID ) !=  bState)
+            {
+                ScViewOptions rNewOpt(rOldOpt);
+                rNewOpt.SetOption( VOPT_GRID,  bState);
+                pLclViewData->SetOptions( rNewOpt );
+                pLclViewData->GetDocument()->SetViewOptions( rNewOpt );
+                pDocSh->SetDocumentModified();
+                //add , write the change to sc view config
+                ScModule*           pScMod      = SC_MOD();
+                pScMod->SetViewOptions( rNewOpt );
+                //add end
+                rBindings.Invalidate( nSlot );
+            }
+        }
+    }
+
+}
+
+void  ScFormatShell::GetViewOptions( SfxItemSet& rSet )
+{
+    ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
+    if( pTabViewShell )
+    {
+        ScViewOptions   aViewOpt = pTabViewShell->GetViewData()->GetOptions();
+        rSet.ClearItem(SID_SCGRIDSHOW);
+        SfxBoolItem aItem( SID_SCGRIDSHOW, aViewOpt.GetOption( VOPT_GRID ) );
+        rSet.Put(aItem);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

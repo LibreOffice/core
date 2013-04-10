@@ -40,7 +40,7 @@
 #include "FrameView.hxx"
 #include "DrawViewShell.hxx"
 #include "ViewShellHint.hxx"
-#include "taskpane/PanelId.hxx"
+#include "SidebarPanelId.hxx"
 #include "framework/FrameworkHelper.hxx"
 
 #include <sfx2/bindings.hxx>
@@ -126,8 +126,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
             // Make the layout menu visible in the tool pane.
             SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, sal_True);
-            SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
-                ::sd::toolpanel::PID_LAYOUT);
+            SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX, sidebar::PID_LAYOUT);
             SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
             if (pFrame!=NULL && pFrame->GetDispatcher()!=NULL)
             {
@@ -331,7 +330,7 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
         // Since we have to return a view id for every possible shell type
         // and there is not (yet) a proper ViewShellBase sub class for the
         // remaining types we chose the Impress factory as a fall back.
-        case ViewShell::ST_TASK_PANE:
+        case ViewShell::ST_SIDEBAR:
         case ViewShell::ST_NONE:
         default:
             return IMPRESS_FACTORY_ID;

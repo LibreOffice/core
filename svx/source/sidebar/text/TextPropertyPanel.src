@@ -1,0 +1,702 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "TextPropertyPanel.hrc"
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
+#include "helpid.hrc"
+
+#define CONTROL_HEIGHT_FONT_NAME        250
+#define CONTROL_HEIGHT_FONT_SIZE        180
+#define FONTNAME_WIDTH                  TOOLBOX_ITEM_WIDTH * 2 + TOOLBOX_ITEM_DD_WIDTH
+#define FONTSIZE_WIDTH                  TOOLBOX_ITEM_WIDTH * 2
+
+#define TB_SPACE                18
+#define TB_SPACE_V              4
+#define TEXT_WIDTH              TOOLBOX_42_42_ITEM_DD_WIDTH + TB_SPACE - 3
+
+#define FT_TB_SPACE             1
+#define BK_IMG                  20
+
+Control RID_SIDEBAR_TEXT_PANEL
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+    Size = MAP_APPFONT( PROPERTYPAGE_WIDTH, SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + TOOLBOX_ITEM_HEIGHT * 2 + CONTROL_SPACING_VERTICAL * 2 + SECTIONPAGE_MARGIN_VERTICAL_BOT );
+    HelpID = HID_PROPERTYPANEL_TEXT_SECTION ;
+    Text = "Text";
+
+    ComboBox CB_SBFONT_FONT
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP );
+        Size = MAP_APPFONT ( FONTNAME_WIDTH , CONTROL_HEIGHT_FONT_NAME  );
+        TabStop = TRUE;
+        DropDown = TRUE;
+        HelpID = HID_COMBO_FONT_NAME ;
+        QuickHelpText [ en-US ] = "Font";
+    };
+    MetricBox MB_SBFONT_FONTSIZE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + FONTNAME_WIDTH + 2, SECTIONPAGE_MARGIN_VERTICAL_TOP);
+        Size = MAP_APPFONT ( FONTSIZE_WIDTH - 1, CONTROL_HEIGHT_FONT_SIZE );
+        TabStop = TRUE;
+        DropDown = TRUE;
+        HelpID = HID_METRIC_FONT_SIZE;
+        QuickHelpText [ en-US ] = "Font Size";
+    };
+
+    ToolBox TB_INCREASE_DECREASE
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( PROPERTYPAGE_WIDTH - SECTIONPAGE_MARGIN_HORIZONTAL - TOOLBOX_ITEM_WIDTH * 2, SECTIONPAGE_MARGIN_VERTICAL_TOP) ;
+        Size = MAP_APPFONT ( TOOLBOX_ITEM_WIDTH * 2 ,TOOLBOX_ITEM_HEIGHT ) ;
+        TabStop = TRUE ;
+//      HelpID = HID_TB_INCREASE_DECREASE;
+        HelpID = HID_PPROPERTYPANEL_TEXT_TBX_FONTSIZE_INDE;
+        Text = "Font Size Adjusting" ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_INCREASE;
+                Text [ en-US ] = "Increase Font Size" ;
+//              HelpID = HID_TBI_INCREASE;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_INCREASE;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_DECREASE;
+                Text [ en-US ] = "Decrease Font Size" ;
+//              HelpID = HID_TBI_DECREASE;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_DECREASE;
+            };
+        };
+    };
+    ToolBox TB_FONT
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + 1, SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL  + 1) ;
+        Size = MAP_APPFONT ( TOOLBOX_ITEM_WIDTH * 4 + TOOLBOX_ITEM_DD_WIDTH, TOOLBOX_ITEM_HEIGHT ) ;
+        TabStop = TRUE ;
+//      HelpID = HID_TB_FONT;
+        HelpID = HID_PPROPERTYPANEL_TEXT_TBX_FONT;
+        Text = "Font Effects" ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_BOLD;
+                Text [ en-US ] = "Bold" ;
+//              HelpID = HID_TBI_FONT_BOLD;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_BOLD;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_ITALIC;
+                Text [ en-US ] = "Italic" ;
+//              HelpID = HID_TBI_FONT_ITALIC;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_ITALIC;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_UNDERLINE;
+                DropDown = TRUE ;
+                Text [ en-US ] = "Underline" ;
+//              HelpID = HID_TBI_FONT_UNDERLINE;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_UNDERLINE;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_STRIKEOUT;
+                Text [ en-US ] = "Strikethrough" ;
+//              HelpID = HID_TBI_FONT_STRIKEOUT;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_STRIKEOUT;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_SHADOWED;
+                Text [ en-US ] = "Shadow" ;
+//              HelpID = HID_TBI_FONT_SHADOWED;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SHADOWED;
+            };
+        };
+    };
+
+    String STR_QH_BOLD
+    {
+        Text [ en-US ] = "Bold (Ctrl+B)";
+    };
+    String STR_QH_ITALIC
+    {
+        Text [ en-US ] = "Italic (Ctrl+I)";
+    };
+    String STR_QH_UNDERLINE
+    {
+        Text [ en-US ] = "Underline (Ctrl+U)";
+    };
+
+
+    ToolBox TB_FONTCOLOR
+    {
+//      HelpID = HID_TB_COLOR;
+        HelpID = HID_PPROPERTYPANEL_TEXT_TBX_FONT_COLOR;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT (PROPERTYPAGE_WIDTH - SECTIONPAGE_MARGIN_HORIZONTAL - TOOLBOX_ITEM_WIDTH * 2, SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL  + 1) ;
+        Size = MAP_APPFONT (TOOLBOX_ITEM_DD_WIDTH ,TOOLBOX_ITEM_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text = "Font Color" ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_FONTCOLOR ;
+//              HelpID =  HID_TBI_COLOR;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_FONT_COLOR;
+                DropDown = TRUE ;
+                Text [ en-US ] = "Font Color" ;
+            };
+        };
+    };
+
+    ToolBox TB_HIGHLIGHT
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT (PROPERTYPAGE_WIDTH - SECTIONPAGE_MARGIN_HORIZONTAL  - TOOLBOX_ITEM_WIDTH * 2 , SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + (TOOLBOX_ITEM_HEIGHT + 2) + CONTROL_SPACING_VERTICAL * 2 + 1) ;
+        Size = MAP_APPFONT (TOOLBOX_ITEM_DD_WIDTH ,TOOLBOX_ITEM_HEIGHT ) ;
+        TabStop = TRUE ;
+//      HelpID = HID_TB_HIGHLIGHT;
+        HelpID = HID_PPROPERTYPANEL_TEXT_TBX_HIGHLIGHT_COLOR;
+        Text = "Highlight Color" ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_HIGHLIGHT ;
+//              HelpID =  HID_TBI_HIGHLIGHT;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_HIGHLIGHT_COLOR;
+                DropDown = TRUE ;
+                Text [ en-US ] = "Highlight Color" ;
+            };
+        };
+    };
+
+    ToolBox TB_SCRIPT_SW
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + 1 , SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL * 2 + (TOOLBOX_ITEM_HEIGHT + 2) + 1) ;
+        Size = MAP_APPFONT (TOOLBOX_ITEM_WIDTH * 2 ,TOOLBOX_ITEM_HEIGHT ) ;
+        TabStop = TRUE ;
+//      HelpID = HID_TB_SCRIPT_SW;
+        HelpID = HID_PPROPERTYPANEL_TEXT_TBX_SCRIPT_SW;
+        Text = "Font Position" ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_SUPER_SW;
+                Text [ en-US ] = "Superscript" ;
+//              HelpID = HID_TBI_SCRIPT_SW_SUPER;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUPER_SW;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_SUB_SW;
+                Text [ en-US ] = "Subscript" ;
+//              HelpID = HID_TBI_SCRIPT_SW_SUB;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUB_SW;
+            };
+        };
+    };
+    ToolBox TB_SCRIPT
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + 1 , SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL * 2 + (TOOLBOX_ITEM_HEIGHT + 2) + 1) ;
+        Size = MAP_APPFONT (TOOLBOX_ITEM_WIDTH * 2 ,TOOLBOX_ITEM_HEIGHT ) ;
+        TabStop = TRUE ;
+//      HelpID = HID_TB_SCRIPT;
+        HelpID = HID_PPROPERTYPANEL_TEXT_TBX_SCRIPT;
+        Text = "Font Position" ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_SUPER;
+                Text [ en-US ] = "Superscript" ;
+//              HelpID = HID_TBI_SCRIPT_SUPER;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUPER;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_SUB;
+                Text [ en-US ] = "Subscript" ;
+//              HelpID = HID_TBI_SCRIPT_SUB;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUB;
+            };
+        };
+    };
+
+    ToolBox TB_SPACING
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + 1 + TOOLBOX_ITEM_WIDTH * 2  + 4 , SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL * 2 + (TOOLBOX_ITEM_HEIGHT + 2) + 1) ;
+        Size = MAP_APPFONT (TOOLBOX_24_16_ITEM_DD_WIDTH, TOOLBOX_24_16_ITEM_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpID = HID_TB_SPACING;
+        Text = "Character Spacing" ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_SPACING;
+                DropDown = TRUE ;
+                Text [ en-US ] = "Character Spacing" ;
+                HelpID = HID_TBI_SPACING;
+            };
+        };
+    };
+
+    Image IMG_INCREASE
+    {
+        ImageBitmap = Bitmap{File = "symphony/enlarge font.png";};
+    //  MaskColor = IMAGE_MASK_COLOR;
+    };
+    Image IMG_DECREASE
+    {
+        ImageBitmap = Bitmap{File = "symphony/decrease font.png";};
+    };
+    Image IMG_BOLD
+    {
+        ImageBitmap = Bitmap{File = "symphony/sc_bold.png";};//sc_bold.bmp
+    };
+    Image IMG_ITALIC
+    {
+        ImageBitmap = Bitmap{File = "symphony/sc_italic.png";};//sc_italic.bmp
+    };
+    Image IMG_UNDERLINE
+    {
+        ImageBitmap = Bitmap{File = "symphony/sc_underline.png";};//sc_underline.png
+    };
+    Image IMG_STRIKEOUT
+    {
+        ImageBitmap = Bitmap{File = "symphony/sc_strikeout.png";};//sc_strikeout.png
+    };
+    Image IMG_SHADOWED
+    {
+        ImageBitmap = Bitmap{File = "symphony/sc_shadowed.png";};//sc_shadowed.png
+    };
+    Image IMG_FONTCOLOR
+    {
+        ImageBitmap = Bitmap{File = "symphony/sc_color.png";};
+    };
+    Image IMG_SUPSCRIPT
+    {
+        ImageBitmap = Bitmap{File = "symphony/sc_superscript.png";};
+    };
+    Image IMG_SUBSCRIPT
+    {
+        ImageBitmap = Bitmap{File = "symphony/sc_subscript.png";};
+    };
+//  Image IMG_SPACING
+//  {
+//      ImageBitmap = Bitmap{File = "symphony/icon_normal.png";};
+//  };
+    Image IMG_HIGHLIGHT
+    {
+        ImageBitmap = Bitmap{File = "symphony/Highlight.png";};//sc_backcolor
+    };
+
+    //small icon for spacing
+    Image IMG_SPACING_D
+    {
+        ImageBitmap = Bitmap{File = "symphony/icon_normal.png";};
+    };
+};
+
+Control RID_POPUPPANEL_TEXTPAGE_UNDERLINE
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+    Size = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH + VS_UNDERLINE_WIDTH,  13+ VS_UNDERLINE_HEIGHT + POPUP_BORDER_HEIGHT + POPUPPANEL_MARGIN_SMALL * 2 + POPUPPANEL_MARGIN_LARGE);
+    Control VS_UNDERLINE
+    {
+//      HelpID = HID_UNDERLINE_VS ;
+        HelpID = HID_PPROPERTYPANEL_TEXT_UNDERLINE_VS;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL + OFFSET_X , POPUPPANEL_MARGIN_SMALL + OFFSET_Y );
+        Size = MAP_APPFONT ( VS_UNDERLINE_WIDTH  ,VS_UNDERLINE_HEIGHT);
+        TabStop = TRUE ;
+        Text = "Underline";
+    };
+
+    PushButton PB_OPTIONS
+    {
+        HelpID = HID_UNDERLINE_BTN;
+        Pos = MAP_APPFONT (  POPUPPANEL_MARGIN_SMALL + OFFSET_X  , POPUPPANEL_MARGIN_SMALL * 2 + OFFSET_Y + VS_UNDERLINE_HEIGHT );
+        Size = MAP_APPFONT ( VS_UNDERLINE_WIDTH, 13 );
+        TabStop = TRUE;
+        Text [ en-US ] = "~More Options...";
+    };
+
+
+    Image IMG_SINGLE
+    {
+        ImageBitmap = Bitmap{File = "symphony/line1.bmp";};
+    };
+    Image IMG_DOUBLE
+    {
+        ImageBitmap = Bitmap{File = "symphony/line2.bmp";};
+    };
+    Image IMG_BOLD2
+    {
+        ImageBitmap = Bitmap{File = "symphony/line3.bmp";};
+    };
+    Image IMG_DOT
+    {
+        ImageBitmap = Bitmap{File = "symphony/line4.bmp";};
+    };
+    Image IMG_DOT_BOLD
+    {
+        ImageBitmap = Bitmap{File = "symphony/line5.bmp";};
+    };
+    Image IMG_DASH
+    {
+        ImageBitmap = Bitmap{File = "symphony/line6.bmp";};
+    };
+    Image IMG_DASH_LONG
+    {
+        ImageBitmap = Bitmap{File = "symphony/line7.bmp";};
+    };
+    Image IMG_DASH_DOT
+    {
+        ImageBitmap = Bitmap{File = "symphony/line8.bmp";};
+    };
+    Image IMG_DASH_DOT_DOT
+    {
+        ImageBitmap = Bitmap{File = "symphony/line9.bmp";};
+    };
+    Image IMG_WAVE
+    {
+        ImageBitmap = Bitmap{File = "symphony/line10.bmp";};
+    };
+
+    //image when selected
+    Image IMG_SINGLE_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line1.bmp";};
+    };
+    Image IMG_DOUBLE_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line2.bmp";};
+    };
+    Image IMG_BOLD2_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line3.bmp";};
+    };
+    Image IMG_DOT_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line4.bmp";};
+    };
+    Image IMG_DOT_BOLD_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line5.bmp";};
+    };
+    Image IMG_DASH_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line6.bmp";};
+    };
+    Image IMG_DASH_LONG_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line7.bmp";};
+    };
+    Image IMG_DASH_DOT_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line8.bmp";};
+    };
+    Image IMG_DASH_DOT_DOT_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line9.bmp";};
+    };
+    Image IMG_WAVE_SEL
+    {
+        ImageBitmap = Bitmap{File = "symphony/selected-line10.bmp";};
+    };
+
+//  //more button bmps
+//  Bitmap  BMP_UNDERLINE_MORE
+//  {
+//      File = "symphony/morebutton.bmp";
+//  };
+
+    //tips
+    String STR_SINGLE
+    {
+        Text [ en-US ] = "Single";
+    };
+    String STR_DOUBLE
+    {
+        Text [ en-US ] = "Double";
+    };
+    String STR_BOLD
+    {
+        Text [ en-US ] = "Bold";
+    };
+    String STR_DOT
+    {
+        Text [ en-US ] = "Dotted";
+    };
+    String STR_DOT_BOLD
+    {
+        Text [ en-US ] = "Dotted (Bold)";
+    };
+    String STR_DASH
+    {
+        Text [ en-US ] = "Dash";
+    };
+    String STR_DASH_LONG
+    {
+        Text [ en-US ] = "Long Dash";
+    };
+    String STR_DASH_DOT
+    {
+        Text [ en-US ] = "Dot Dash";
+    };
+    String STR_DASH_DOT_DOT
+    {
+        Text [ en-US ] = "Dot Dot Dash";
+    };
+    String STR_WAVE
+    {
+        Text [ en-US ] = "Wave";
+    };
+
+};
+
+
+Control RID_POPUPPANEL_TEXTPAGE_FONT_COLOR
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+    Size = MAP_APPFONT(  POPUP_COLOR_PICKER_WIDTH , POPUP_COLOR_PICKER_HEIGHT  );
+
+    Control VS_FONT_COLOR
+    {
+//      HelpID = HID_COLOR_VS ;
+        HelpID = HID_PPROPERTYPANEL_TEXT_COLOR_VS;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( OFFSET_X , OFFSET_Y );
+        Size = MAP_APPFONT (  POPUP_COLOR_PICKER_WIDTH - OFFSET_X * 2, POPUP_COLOR_PICKER_HEIGHT - OFFSET_Y * 2);
+        TabStop = TRUE ;
+        Text = "Color Picker";
+    };
+    String STR_AUTOMATICE
+    {
+        Text [ en-US ] = "Automatic";
+    };
+
+};
+
+Control RID_POPUPPANEL_TEXTPAGE_SPACING
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+    Size = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH + VS_SPACING_WIDTH , POPUPPANEL_MARGIN_SMALL * 3 + 15 * 6 + CUSTOM_HEIGHT + TEXT_HEIGHT + POPUPPANEL_MARGIN_LARGE + POPUP_BORDER_WIDTH + 1);
+
+    Control VS_SPACING
+    {
+        HelpId = HID_PPROPERTYPANEL_TEXT_SPACING_VS ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL + OFFSET_X , POPUPPANEL_MARGIN_SMALL + OFFSET_Y );
+        Size = MAP_APPFONT ( VS_SPACING_WIDTH  , 15 * 6);
+        TabStop = TRUE ;
+        Text  = "Character Spacing";
+    };
+
+    FixedText FT_LASTCUSTOM
+    {
+        Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_LARGE + OFFSET_X ,POPUPPANEL_MARGIN_SMALL + OFFSET_Y + POPUPPANEL_MARGIN_SMALL + 15 * 6) ;
+        Size = MAP_APPFONT ( CUSTOM_WIDTH , TEXT_HEIGHT );
+        Left = TRUE ;
+        Text [ en-US ] = "Custom:" ;
+    };
+    //custom area
+//  Control CT_BORDER
+//  {
+//      Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_LARGE + OFFSET_X + 1 , OFFSET_Y + POPUPPANEL_MARGIN_SMALL * 3 + 15 * 6 + TEXT_HEIGHT) ;
+//      Size = MAP_APPFONT (CUSTOM_WIDTH ,  CUSTOM_HEIGHT ) ;// TOOLBOX_42_42_ITEM_DD_WIDTH * 2 +  TB_SPACE * 2 - 5 + TEXT_WIDTH - 2
+//        DialogControl = TRUE;
+//  };
+    FixedText   FT_SPACING
+    {
+        Pos = MAP_APPFONT ( CUSTOM_X + POPUPPANEL_MARGIN_LARGE, CUSTOM_Y + POPUPPANEL_MARGIN_LARGE);
+        Size = MAP_APPFONT ( CUSTOM_WIDTH - POPUPPANEL_MARGIN_LARGE * 2 , TEXT_HEIGHT );
+        Left = TRUE ;
+        Text [ en-US ] = "~Character spacing: " ;
+    };
+    ListBox LB_KERNING
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( CUSTOM_X + POPUPPANEL_MARGIN_LARGE, CUSTOM_Y + POPUPPANEL_MARGIN_LARGE + TEXT_HEIGHT + POPUPPANEL_MARGIN_SMALL);//20
+        Size = MAP_APPFONT ( CUSTOM_WIDTH - POPUPPANEL_MARGIN_LARGE * 2 , 80 ) ;
+        TabStop = TRUE;
+        DropDown = TRUE ;
+        HelpID = HID_SPACING_CB_KERN;
+        StringList [ en-US ] =
+        {
+            < "Default" ; Default ; > ;
+            < "Expanded" ; Default ; > ;
+            < "Condensed" ; Default ; > ;
+        };
+    };
+    FixedText   FT_BY
+    {
+        Pos = MAP_APPFONT ( CUSTOM_X + POPUPPANEL_MARGIN_LARGE, CUSTOM_Y + POPUPPANEL_MARGIN_LARGE * 2 + TEXT_HEIGHT + POPUPPANEL_MARGIN_SMALL + CBOX_HEIGHT );
+        Size = MAP_APPFONT ( CUSTOM_WIDTH - POPUPPANEL_MARGIN_LARGE * 2 , TEXT_HEIGHT );
+        Left = TRUE ;
+        Text [ en-US ] = "Change ~by: " ;
+    };
+    MetricField ED_KERNING
+    {
+        HelpID = HID_SPACING_MB_KERN;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( CUSTOM_X + POPUPPANEL_MARGIN_LARGE, CUSTOM_Y + POPUPPANEL_MARGIN_LARGE * 2 + TEXT_HEIGHT * 2 + POPUPPANEL_MARGIN_SMALL * 2 + CBOX_HEIGHT);//60
+        Size = MAP_APPFONT ( CUSTOM_WIDTH - POPUPPANEL_MARGIN_LARGE * 2 , MBOX_HEIGHT );
+        TabStop = TRUE;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 1 ;
+        Unit = FUNIT_POINT ;
+        SpinSize = 10 ;
+    };
+
+    Image IMG_NORMAL
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_normal.bmp" ;};//"spacing_normal.bmp"
+    };
+    Image IMG_VERY_TIGHT
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_very tight.bmp";};
+    };
+    Image IMG_TIGHT
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_tight.bmp";};
+    };
+    Image IMG_LOOSE
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_loose.bmp";};
+    };
+    Image IMG_VERY_LOOSE
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_very loose.bmp";};
+    };
+
+    Image IMG_NORMAL_S
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_normal_s.bmp";};
+    };
+    Image IMG_VERY_TIGHT_S
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_very tight_s.bmp";};
+    };
+    Image IMG_TIGHT_S
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_tight_s.bmp";};
+    };
+    Image IMG_LOOSE_S
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_loose_s.bmp";};
+    };
+    Image IMG_VERY_LOOSE_S
+    {
+        ImageBitmap = Bitmap{File = "symphony/spacing_very loose_s.bmp";};
+    };
+
+    Image IMG_CUSTOM
+    {
+        ImageBitmap = Bitmap{File = "symphony/last_custom_common.png";};
+    };
+    Image IMG_CUSTOM_GRAY
+    {
+        ImageBitmap = Bitmap{File = "symphony/last_custom_common_grey.png";};
+    };
+
+    String STR_VERY_TIGHT
+    {
+        Text [ en-US ] = "Very Tight";
+    };
+    String STR_TIGHT
+    {
+        Text [ en-US ] = "Tight";
+    };
+    String STR_NORMAL
+    {
+        Text [ en-US ] = "Normal";
+    };
+    String STR_LOOSE
+    {
+        Text [ en-US ] = "Loose";
+    };
+    String STR_VERY_LOOSE
+    {
+        Text [ en-US ] = "Very Loose";
+    };
+    String STR_CUSTOM
+    {
+        Text [ en-US ] = "Last Custom Value";
+    };
+
+    String STR_VERY_TIGHT_TIP
+    {
+        Text [ en-US ] = " Spacing: Condensed By: 3pt";
+    };
+    String STR_TIGHT_TIP
+    {
+        Text [ en-US ] = " Spacing: Condensed By: 1.5pt";
+    };
+    String STR_NORMAL_TIP
+    {
+        Text [ en-US ] = " Spacing: Normal";
+    };
+    String STR_LOOSE_TIP
+    {
+        Text [ en-US ] = " Spacing: Expanded By: 3pt";
+    };
+    String STR_VERY_LOOSE_TIP
+    {
+        Text [ en-US ] = " Spacing: Expanded By: 6pt";
+    };
+    String STR_CUSTOM_C_TIP
+    {
+        Text [ en-US ] = " Spacing: Condensed By: ";
+    };
+    String STR_CUSTOM_E_TIP
+    {
+        Text [ en-US ] = " Spacing: Expanded By: ";
+    };
+    String STR_PT
+    {
+        Text[ en-US ] = "pt";
+    };
+};

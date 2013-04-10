@@ -20,6 +20,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
@@ -79,6 +80,7 @@ ScGraphicShell::ScGraphicShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_GRAPHIC);
     SetName(OUString("GraphicObject"));
+        SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Graphic));
 }
 
 ScGraphicShell::~ScGraphicShell()
@@ -241,4 +243,5 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
 
     Invalidate();
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

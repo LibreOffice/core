@@ -88,6 +88,7 @@ public:
     */
     virtual ::Window* GetWindow (void);
 
+    void SetWindow (::Window* pWindow);
 
     //----- XPane -------------------------------------------------------------
 

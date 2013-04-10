@@ -21,7 +21,7 @@
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
-
+#include <vcl/ctrl.hxx>
 #include <rsc/rscsfx.hxx>
 
 #include <sfx2/dockwin.hxx>
@@ -78,6 +78,30 @@ public:
 
     void            SetParagraphFamily();
 };
+
+// class SfxTemplatePanelControl -----------------------------------------
+
+class SFX2_DLLPUBLIC SfxTemplatePanelControl : public DockingWindow
+{
+public:
+    SfxTemplatePanelControl (SfxBindings* pBindings, Window* pParentWindow);
+    ~SfxTemplatePanelControl (void);
+
+    virtual void                Update();
+    virtual void                DataChanged( const DataChangedEvent& _rDCEvt );
+    virtual void                Resize();
+    virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment );
+    virtual void                StateChanged( StateChangedType nStateChange );
+    virtual void                FreeResource (void);
+
+    ISfxTemplateCommon*         GetISfxTemplateCommon();
+    void                        SetParagraphFamily();
+
+private:
+    SfxTemplateDialog_Impl*     pImpl;
+    SfxBindings* mpBindings;
+};
+
 
 #endif
 

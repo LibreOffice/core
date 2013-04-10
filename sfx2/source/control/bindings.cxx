@@ -994,7 +994,7 @@ void SfxBindings::Register( SfxControllerItem& rItem )
 
 void SfxBindings::Register_Impl( SfxControllerItem& rItem, sal_Bool bInternal )
 {
-    DBG_ASSERT( nRegLevel > 0, "registration without EnterRegistrations" );
+//    DBG_ASSERT( nRegLevel > 0, "registration without EnterRegistrations" );
     DBG_ASSERT( !pImp->bInNextJob, "SfxBindings::Register while status-updating" );
 
     // insert new cache if it does not already exist

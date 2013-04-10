@@ -157,7 +157,90 @@ bool SwEditShell::NoNum()
     return bRet;
 }
 // Loeschen, Splitten der Aufzaehlungsliste
+sal_Bool SwEditShell::SelectionHasNumber() const
+{
+    sal_Bool bResult = HasNumber();
+    const SwTxtNode * pTxtNd =
+        GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+    if (!bResult && pTxtNd && pTxtNd->Len()==0 && !pTxtNd->GetNumRule()) {
+        SwPamRanges aRangeArr( *GetCrsr() );
+        SwPaM aPam( *GetCrsr()->GetPoint() );
+        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+        {
+            aRangeArr.SetPam( n, aPam );
+            {
+                sal_uInt32 nStt = aPam.GetPoint()->nNode.GetIndex(),
+                      nEnd = aPam.GetMark()->nNode.GetIndex();
+                if( nStt > nEnd )
+                {
+                    sal_uInt32 nTmp = nStt; nStt = nEnd; nEnd = nTmp;
+                }
+                for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
+                {
+                    pTxtNd = mpDoc->GetNodes()[nPos]->GetTxtNode();
+                    if (pTxtNd && pTxtNd->Len()!=0)
+                    {
+                        bResult = pTxtNd->HasNumber();
 
+                        // --> OD 2005-10-26 #b6340308#
+                        // special case: outline numbered, not counted paragraph
+                        if ( bResult &&
+                            pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
+                            !pTxtNd->IsCountedInList() )
+                        {
+                            bResult = sal_False;
+                        }
+                        if (bResult==sal_False) {
+                            break;
+                        }
+                        // <--
+                    }
+                }
+            }
+        }
+
+    }
+
+    return bResult;
+}
+//Sym3_879 add a new function to determine number on/off status
+sal_Bool SwEditShell::SelectionHasBullet() const
+{
+    sal_Bool bResult = HasBullet();
+    const SwTxtNode * pTxtNd =
+        GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+    if (!bResult && pTxtNd && pTxtNd->Len()==0 && !pTxtNd->GetNumRule()) {
+        SwPamRanges aRangeArr( *GetCrsr() );
+        SwPaM aPam( *GetCrsr()->GetPoint() );
+        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+        {
+            aRangeArr.SetPam( n, aPam );
+            {
+                sal_uInt32 nStt = aPam.GetPoint()->nNode.GetIndex(),
+                      nEnd = aPam.GetMark()->nNode.GetIndex();
+                if( nStt > nEnd )
+                {
+                    sal_uInt32 nTmp = nStt; nStt = nEnd; nEnd = nTmp;
+                }
+                for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
+                {
+                    pTxtNd = mpDoc->GetNodes()[nPos]->GetTxtNode();
+                    if (pTxtNd && pTxtNd->Len()!=0)
+                    {
+                        bResult = pTxtNd->HasBullet();
+
+                        if (bResult==sal_False) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    return bResult;
+}
 // -> #i29560#
 sal_Bool SwEditShell::HasNumber() const
 {

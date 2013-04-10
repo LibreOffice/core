@@ -132,29 +132,29 @@ namespace drawinglayer
             }
         }
 
-        basegfx::B2DLineJoin XLineJointtoB2DLineJoin(XLineJoint eLineJoint)
+        basegfx::B2DLineJoin LineJointToB2DLineJoin(com::sun::star::drawing::LineJoint eLineJoint)
         {
             switch(eLineJoint)
             {
-                case XLINEJOINT_MIDDLE :
+                case com::sun::star::drawing::LineJoint_MIDDLE :
                 {
                     return basegfx::B2DLINEJOIN_MIDDLE;
                 }
-                case XLINEJOINT_BEVEL :
+                case com::sun::star::drawing::LineJoint_BEVEL :
                 {
                     return basegfx::B2DLINEJOIN_BEVEL;
                 }
-                case XLINEJOINT_MITER :
+                case com::sun::star::drawing::LineJoint_MITER :
                 {
                     return basegfx::B2DLINEJOIN_MITER;
                 }
-                case XLINEJOINT_ROUND :
+                case com::sun::star::drawing::LineJoint_ROUND :
                 {
                     return basegfx::B2DLINEJOIN_ROUND;
                 }
-                default :
+                default : // com::sun::star::drawing::LineJoint_NONE
                 {
-                    return basegfx::B2DLINEJOIN_NONE; // XLINEJOINT_NONE
+                    return basegfx::B2DLINEJOIN_NONE;
                 }
             }
         }
@@ -233,7 +233,7 @@ namespace drawinglayer
                 {
                     const sal_uInt32 nWidth(((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue());
                     const Color aColor(((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetColorValue());
-                    const XLineJoint eJoint(((const XLineJointItem&)(rSet.Get(XATTR_LINEJOINT))).GetValue());
+                    const com::sun::star::drawing::LineJoint eJoint(((const XLineJointItem&)(rSet.Get(XATTR_LINEJOINT))).GetValue());
                     const com::sun::star::drawing::LineCap eCap(((const XLineCapItem&)(rSet.Get(XATTR_LINECAP))).GetValue());
                     ::std::vector< double > aDotDashArray;
                     double fFullDotDashLen(0.0);
@@ -249,7 +249,7 @@ namespace drawinglayer
                     }
 
                     return attribute::SdrLineAttribute(
-                        XLineJointtoB2DLineJoin(eJoint),
+                        LineJointToB2DLineJoin(eJoint),
                         (double)nWidth,
                         (double)nTransparence * 0.01,
                         aColor.getBColor(),
@@ -390,6 +390,26 @@ namespace drawinglayer
                 if(nTransparence > 100)
                 {
                     nTransparence = 100;
+                }
+
+                if(100 != nTransparence)
+                {
+                    // need to check XFillFloatTransparence, object fill may still be completely transparent
+                    const SfxPoolItem* pGradientItem;
+
+                    if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, sal_True, &pGradientItem)
+                        && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled())
+                    {
+                        const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
+                        const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
+                        const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
+                        const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
+
+                        if(bCompletelyTransparent)
+                        {
+                            nTransparence = 100;
+                        }
+                    }
                 }
 
                 if(100 != nTransparence)
@@ -564,8 +584,13 @@ namespace drawinglayer
                 const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
                 const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
                 const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
+                const bool bNotTransparent(0x00 == nStartLuminance && 0x00 == nEndLuminance);
 
-                if(!bCompletelyTransparent)
+                // create nothing when completely transparent: This case is already checked for the
+                // normal fill attributes, XFILL_NONE will be used.
+                // create nothing when not transparent: use normal fill, no need t create a FillGradientAttribute.
+                // Both cases are optimizations, always creating FillGradientAttribute will work, too
+                if(!bNotTransparent && !bCompletelyTransparent)
                 {
                     const double fStartLum(nStartLuminance / 255.0);
                     const double fEndLum(nEndLuminance / 255.0);

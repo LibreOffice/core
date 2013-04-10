@@ -75,12 +75,20 @@
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/charreliefitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/kernitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/drawitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <svl/globalnameitem.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xlncapit.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/AffineMatrixItem.hxx>
 
 // #i25616#
 #include <svx/sdshitm.hxx>

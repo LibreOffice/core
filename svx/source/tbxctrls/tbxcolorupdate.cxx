@@ -98,7 +98,7 @@ namespace svx
         {
             BitmapEx            aBmpEx( aImage.GetBitmapEx() );
             Bitmap              aBmp( aBmpEx.GetBitmap() );
-            BitmapWriteAccess*  pBmpAcc = aBmp.AcquireWriteAccess();
+            BitmapWriteAccess*  pBmpAcc = aBmp.IsEmpty() ? NULL : aBmp.AcquireWriteAccess();
 
             maBmpSize = aBmp.GetSizePixel();
 
@@ -131,6 +131,20 @@ namespace svx
                     {
                         if( maBmpSize.Width() <= 16 )
                             maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
+                        else if(76 == maBmpSize.Width() && 12 == maBmpSize.Height())
+                        {
+                            maUpdRect.Left() = 22;
+                            maUpdRect.Top() = 2;
+                            maUpdRect.Right() = 73;
+                            maUpdRect.Bottom() = 9;
+                        }
+                        else if(30 == maBmpSize.Width() && 16 == maBmpSize.Height())
+                        {
+                            maUpdRect.Left() = 17;
+                            maUpdRect.Top() = 2;
+                            maUpdRect.Right() = 27;
+                            maUpdRect.Bottom() = 13;
+                        }
                         else
                             maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );
                     }

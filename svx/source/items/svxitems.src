@@ -206,7 +206,7 @@ String RID_SVXITEMS_BRUSHSTYLE_BITMAP
 {
     Text [ en-US ] = "Image" ;
 };
-
+// end enum ColorName -----------------------------------------------------------
 String RID_SVXITEMS_ORI_STANDARD
 {
     Text [ en-US ] = "Default orientation" ;

@@ -8487,3 +8487,54 @@ SfxVoidItem ExportAsGraphic SID_EXPORT_AS_GRAPHIC
     ToolBoxConfig = TRUE,
     GroupId = GID_CHART;
 ]
+
+//--------------------------------------------------------------------------
+SfxBoolItem ViewOption SID_SCGRIDSHOW
+[
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE, //TRUE
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config */
+    AccelConfig = FALSE, //TRUE
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE, //FALSE
+    GroupId = GID_DATA;
+]
+
+//--------------------------------------------------------------------------
+SfxUInt16Item NumberType SID_NUMBER_TYPE_FORMAT
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]

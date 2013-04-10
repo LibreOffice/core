@@ -25,13 +25,43 @@
 #include <sfx2/itemconnect.hxx>
 #include "svx/svxdllapi.h"
 
+#include <boost/scoped_ptr.hpp>
+
 class NumericField;
 
 namespace svx {
 
 // ============================================================================
 
-struct DialControl_Impl;
+class DialControlBmp : public VirtualDevice
+{
+public:
+    explicit            DialControlBmp( Window& rParent );
+
+    void                InitBitmap(const Font& rFont);
+    void                SetSize(const Size& rSize);
+    void                CopyBackground( const DialControlBmp& rSrc );
+    void                DrawBackground( const Size& rSize, bool bEnabled );
+    virtual void        DrawBackground();
+    virtual void        DrawElements( const String& rText, sal_Int32 nAngle );
+
+protected:
+    Rectangle           maRect;
+    bool                mbEnabled;
+
+private:
+    const Color&        GetBackgroundColor() const;
+    const Color&        GetTextColor() const;
+    const Color&        GetScaleLineColor() const;
+    const Color&        GetButtonLineColor() const;
+    const Color&        GetButtonFillColor( bool bMain ) const;
+
+    void                Init();
+
+    Window&             mrParent;
+    long                mnCenterX;
+    long                mnCenterY;
+};
 
 /** This control allows to input a rotation angle, visualized by a dial.
 
@@ -95,20 +125,44 @@ public:
     /** Compare value with the saved value */
     bool                IsValueModified();
 
-private:
+protected:
+    struct DialControl_Impl
+    {
+        ::boost::scoped_ptr<DialControlBmp>      mpBmpEnabled;
+        ::boost::scoped_ptr<DialControlBmp>      mpBmpDisabled;
+        ::boost::scoped_ptr<DialControlBmp>      mpBmpBuffered;
+        Link                maModifyHdl;
+        NumericField*       mpLinkField;
+        Size                maWinSize;
+        Font                maWinFont;
+        sal_Int32           mnAngle;
+        sal_Int32           mnInitialAngle;
+        sal_Int32           mnOldAngle;
+        long                mnCenterX;
+        long                mnCenterY;
+        bool                mbNoRot;
+
+        explicit            DialControl_Impl( Window& rParent );
+        void                Init( const Size& rWinSize, const Font& rWinFont );
+        void                SetSize( const Size& rWinSize );
+    };
+    std::auto_ptr< DialControl_Impl > mpImpl;
+
+    virtual void        HandleMouseEvent( const Point& rPos, bool bInitial );
+    virtual void        HandleEscapeEvent();
+
+    void                SetRotation( sal_Int32 nAngle, bool bBroadcast );
+
     void                Init( const Size& rWinSize, const Font& rWinFont );
     void                Init( const Size& rWinSize );
+
+private:
     void                InvalidateControl();
 
-    void                ImplSetRotation( sal_Int32 nAngle, bool bBroadcast );
     void                ImplSetFieldLink( const Link& rLink );
 
-    void                HandleMouseEvent( const Point& rPos, bool bInitial );
-    void                HandleEscapeEvent();
 
     DECL_LINK( LinkedFieldModifyHdl, NumericField* );
-
-    std::auto_ptr< DialControl_Impl > mpImpl;
 };
 
 // ============================================================================

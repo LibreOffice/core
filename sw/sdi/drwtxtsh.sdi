@@ -205,6 +205,24 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_ATTR_PARA_LRSPACE  //for indent
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_LINESPACE // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_ULSPACE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
     SID_ATTR_PARA_ADJUST_LEFT // api:
     [
         ExecMethod = Execute ;
@@ -289,6 +307,13 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_CHAR_DLG  // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CHAR_DLG_EFFECT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -571,6 +596,25 @@ interface TextDrawText
     SID_TWAIN_TRANSFER
     [
         StateMethod = StateDisableItems ;
+    ]
+
+    SID_TABLE_VERT_NONE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetStatePropPanelAttr ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TABLE_VERT_CENTER
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetStatePropPanelAttr ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TABLE_VERT_BOTTOM
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetStatePropPanelAttr ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 }
 

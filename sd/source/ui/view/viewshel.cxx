@@ -75,6 +75,11 @@
 #include "Window.hxx"
 #include "fupoor.hxx"
 
+#include <editeng/numitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/poolitem.hxx>
+#include <glob.hrc>
+
 namespace sd { namespace ui { namespace table {
     extern SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView );
 } } }
@@ -147,7 +152,8 @@ ViewShell::~ViewShell()
 {
     // Keep the content window from accessing in its destructor the
     // WindowUpdater.
-    mpContentWindow->SetViewShell(NULL);
+    if (mpContentWindow)
+        mpContentWindow->SetViewShell(NULL);
 
     delete mpZoomList;
 
@@ -156,6 +162,13 @@ ViewShell::~ViewShell()
     if (mpImpl->mpSubShellFactory.get() != NULL)
         GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(
             this,mpImpl->mpSubShellFactory);
+
+    if (mpContentWindow)
+    {
+        OSL_TRACE("destroying mpContentWindow at %x with parent %x", mpContentWindow.get(),
+            mpContentWindow->GetParent());
+        mpContentWindow.reset();
+    }
 }
 
 
@@ -729,7 +742,86 @@ void ViewShell::SetupRulers (void)
     }
 }
 
+const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId)
+{
+    const SfxPoolItem* pTmpItem = NULL;
 
+    if(aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem) == SFX_ITEM_SET)
+    {
+        return pTmpItem;
+    }
+    else
+    {
+        nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        SfxItemState eState = aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem);
+        if (eState == SFX_ITEM_SET)
+            return pTmpItem;
+        else
+        {
+            sal_Bool bOutliner = sal_False;
+            sal_Bool bTitle = sal_False;
+
+            if( mpView )
+                 {
+                const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+                const sal_uInt32 nCount = rMarkList.GetMarkCount();
+
+                for(sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+                {
+                    SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
+                    if( pObj->GetObjInventor() == SdrInventor )
+                    {
+                        switch(pObj->GetObjIdentifier())
+                        {
+                        case OBJ_TITLETEXT:
+                            bTitle = sal_True;
+                            break;
+                        case OBJ_OUTLINETEXT:
+                            bOutliner = sal_True;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            const SvxNumBulletItem *pItem = NULL;
+            if(bOutliner)
+            {
+                SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
+                String aStyleName((SdResId(STR_LAYOUT_OUTLINE)));
+                aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
+                SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
+                if( pFirstStyleSheet )
+                    pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pItem);
+            }
+
+            if( pItem == NULL )
+                pItem = (SvxNumBulletItem*) aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+
+            aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
+
+            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
+            {
+                SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,sal_True);
+                SvxNumRule* pRule = pBulletItem->GetNumRule();
+                if(pRule)
+                {
+                    SvxNumRule aNewRule( *pRule );
+                    aNewRule.SetFeatureFlag( NUM_NO_NUMBERS, sal_True );
+
+                    SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+                    aNewAttr.Put(aNewItem);
+                }
+            }
+
+            SfxItemState eNumState = aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem);
+            if (eNumState == SFX_ITEM_SET)
+                return pTmpItem;
+
+        }
+    }
+    return pTmpItem;
+}
 
 
 sal_Bool ViewShell::HasRuler (void)
@@ -885,9 +977,10 @@ void ViewShell::ArrangeGUIElements (void)
     {
         OSL_ASSERT (GetViewShell()!=NULL);
 
-        mpContentWindow->SetPosSizePixel(
-            Point(nLeft,nTop),
-            Size(nRight-nLeft,nBottom-nTop));
+        if (mpContentWindow)
+            mpContentWindow->SetPosSizePixel(
+                Point(nLeft,nTop),
+                Size(nRight-nLeft,nBottom-nTop));
     }
 
     // Windows in the center and rulers at the left and top side.

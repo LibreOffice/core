@@ -1,0 +1,114 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#define FT_BK_COLOR     1
+#define TB_BK_COLOR     2
+#define TBI_BK_COLOR    3
+#define FT_BORDER       4
+#define TB_APP_BORDER       5
+#define TBI_BORDER      6
+#define TB_BORDER_LINE_STYLE    7
+#define TBI_LINE_STYLE          8
+#define TB_BORDER_LINE_COLOR    9
+#define TBI_LINE_COLOR          10
+#define CBX_SHOW_GRID           11
+
+#define STR_QH_BK_COLOR         12
+#define STR_QH_BORDER           13
+#define STR_QH_BORDER_LINE_STYLE        14
+#define STR_QH_BORDER_LINE_COLOR        15
+
+#define IMG_BK_COLOR    21
+#define IMG_CELL_BORDER 22
+#define IMG_LINE_COLOR  23
+#define IMG_LINE_STYLE1         25
+#define IMG_LINE_STYLE2         26
+#define IMG_LINE_STYLE3         27
+#define IMG_LINE_STYLE4         28
+#define IMG_LINE_STYLE5         29
+#define IMG_LINE_STYLE6         30
+#define IMG_LINE_STYLE7         31
+#define IMG_LINE_STYLE8         32
+#define IMG_LINE_STYLE9         33
+
+//BACK_COLOR PAGE
+#define VS_BACK_COLOR   1
+#define STR_AUTOMATICE  2
+
+//LINE COLOR PAGE
+#define VS_LINE_COLOR   1
+
+//line style page
+#define VS_STYLE        1
+#define PB_OPTIONS      2
+#define BMP_UNDERLINE_MORE      3
+
+//line border page
+#define TB_BORDER1              1
+#define TB_BORDER2              2
+#define TB_BORDER3              3
+
+#define TBI_BORDER1_NONE        7
+#define TBI_BORDER1_ALL         8
+#define TBI_BORDER1_OUTER       9
+#define TBI_BORDER1_OUTERBOLD   10
+#define TBI_BORDER2_LEFT        11
+#define TBI_BORDER2_RIGHT       12
+#define TBI_BORDER2_TOP         13
+#define TBI_BORDER2_BOT         14
+#define TBI_BORDER2_BLTR        15
+#define TBI_BORDER2_TLBR        16
+#define TBI_BORDER2_TOPBOT      17
+#define TBI_BORDER2_LEFTRIGHT   18
+#define TBI_BORDER3_S1          19
+#define TBI_BORDER3_S2          20
+#define TBI_BORDER3_S3          21
+#define TBI_BORDER3_S4          22
+#define FL_1                    23
+#define FL_2                    24
+
+#define IMG_BORDER1             25
+#define IMG_BORDER2             26
+#define IMG_BORDER3             27
+#define IMG_BORDER4             28
+#define IMG_BORDER5             29
+#define IMG_BORDER6             30
+#define IMG_BORDER7             31
+#define IMG_BORDER8             32
+#define IMG_BORDER9             33
+#define IMG_BORDER10                34
+#define IMG_BORDER11                35
+#define IMG_BORDER12                36
+#define IMG_BORDER13                37
+#define IMG_BORDER14                38
+#define IMG_BORDER15                39
+#define IMG_BORDER16                40
+
+#define STR_BORDER_1            41
+#define STR_BORDER_2            42
+#define STR_BORDER_3            43
+#define STR_BORDER_4            44
+#define STR_BORDER_5            45
+#define STR_BORDER_6            46
+#define STR_BORDER_7            47
+#define STR_BORDER_8            48
+
+#define VS_FILLCOLOR            1
+#define VS_NOFILLCOLOR          2
+#define VS_LINECOLOR            1
+
+// eof

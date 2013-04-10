@@ -64,8 +64,10 @@ interface TableText
     SID_ATTR_CHAR_CONTOUR       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_SET_SUPER_SCRIPT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_SET_SUB_SCRIPT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_KERNING       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_CELL_FORMAT_RESET   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_CHAR_DLG            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CHAR_DLG_EFFECT     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_TOGGLE_REL          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
     SID_HYPERLINK_SETLINK   [ ExecMethod = Execute; Export = FALSE; ]

@@ -46,7 +46,7 @@ using ::com::sun::star::drawing::framework::ResourceActivationMode_REPLACE;
 
 SFX_IMPL_DOCKINGWINDOW_WITHID(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
 SFX_IMPL_DOCKINGWINDOW_WITHID(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
-SFX_IMPL_DOCKINGWINDOW_WITHID( ToolPanelChildWindow, SID_TASKPANE)
+SFX_IMPL_DOCKINGWINDOW_WITHID(ToolPanelChildWindow, SID_TASKPANE)
 
 //===== PaneChildWindow =======================================================
 
@@ -136,12 +136,6 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
 }
 
 
-
-
-//======================================================================================================================
-//= ToolPanelChildWindow
-//======================================================================================================================
-//----------------------------------------------------------------------------------------------------------------------
 ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, sal_uInt16 i_nId, SfxBindings* i_pBindings,
         SfxChildWinInfo* i_pChildWindowInfo )
     :PaneChildWindow( i_pParentWindow, i_nId, i_pBindings, i_pChildWindowInfo,
@@ -200,7 +194,7 @@ void ToolPanelChildWindow::ActivateToolPanel( const OUString& i_rPanelURL )
     if ( i_rPanelURL.indexOf( framework::FrameworkHelper::msTaskPanelURLPrefix ) == 0 )
     {
         // it's one of our standard panels known to the drawing framework
-        pFrameworkHelper->RequestTaskPanel( i_rPanelURL );
+        pFrameworkHelper->RequestSidebarPanel( i_rPanelURL ); // MMeeks
     }
     else
     {

@@ -122,6 +122,7 @@
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Navigator"/>
+      <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:Zoom">
         <menu:menupopup>

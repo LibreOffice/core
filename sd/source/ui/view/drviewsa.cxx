@@ -49,6 +49,7 @@
 #include <svx/fmshell.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
+#include <svx/sidebar/SelectionAnalyzer.hxx>
 #include "helpids.h"
 
 #include "view/viewoverlaymanager.hxx"
@@ -69,10 +70,14 @@
 #include "slideshow.hxx"
 #include "ToolBarManager.hxx"
 #include "annotationmanager.hxx"
+#include "DrawController.hxx"
+
+#include <boost/bind.hpp>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using sfx2::sidebar::EnumContext;
 
 namespace sd {
 
@@ -115,22 +120,31 @@ void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventOb
 
 
 DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
-: ViewShell (pFrame, pParentWindow, rViewShellBase)
-, maTabControl(this, pParentWindow)
-, mbIsLayerModeActive(false)
-, mbIsInSwitchPage(false)
+    : ViewShell (pFrame, pParentWindow, rViewShellBase)
+    , maTabControl(this, pParentWindow)
+    , mbIsLayerModeActive(false)
+    , mbIsInSwitchPage(false)
+    , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
+          ::boost::bind(&DrawViewShell::GetContextForSelection, this),
+          uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
+          sfx2::sidebar::EnumContext::Context_Default))
 {
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
     else
         mpFrameView = new FrameView(GetDoc());
     Construct(GetDocSh(), ePageKind);
+
+    mpSelectionChangeHandler->Connect();
+
     doShow();
 }
 
 
 DrawViewShell::~DrawViewShell()
 {
+    mpSelectionChangeHandler->Disconnect();
+
     mpAnnotationManager.reset();
     mpViewOverlayManager.reset();
 
@@ -807,6 +821,22 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 {
     if( mpAnnotationManager.get() )
         mpAnnotationManager->GetAnnotationState( rItemSet );
+}
+
+
+EnumContext::Context DrawViewShell::GetContextForSelection (void) const
+{
+    if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 1)
+        if (mpDrawView->GetTextEditObject() != NULL)
+            if (mpDrawView->GetTextEditOutlinerView() != NULL)
+                return EnumContext::Context_DrawText;
+
+    // All other cases are handled by the SelectionAnalyzer.
+    return ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SD(
+        mpDrawView->GetMarkedObjectList(),
+        meEditMode == EM_MASTERPAGE,
+        mePageKind == PK_HANDOUT,
+        mePageKind == PK_NOTES);
 }
 
 

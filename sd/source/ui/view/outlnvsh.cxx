@@ -46,6 +46,8 @@
 #include <editeng/editstat.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -117,6 +119,7 @@ SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( ::sd::SpellDialogChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
+    SFX_CHILDWINDOW_REGISTRATION(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 
 
@@ -208,6 +211,8 @@ OutlineViewShell::OutlineViewShell (
     mpFrameView->Connect();
 
     Construct(GetDocSh());
+
+    SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_OutlineText));
 
     doShow();
 }

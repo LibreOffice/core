@@ -80,12 +80,23 @@ interface TableDrawText
     SID_ALIGNCENTERHOR          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ALIGNRIGHT              [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ALIGNBLOCK              [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+
+    SID_ATTR_PARA_ADJUST_LEFT               [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_ADJUST_CENTER             [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_ADJUST_RIGHT              [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_ADJUST_BLOCK              [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_LRSPACE                   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_LINESPACE                 [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_ULSPACE                   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+
     SID_ATTR_PARA_LINESPACE_10  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_PARA_LINESPACE_15  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_PARA_LINESPACE_20  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_SET_SUPER_SCRIPT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_SET_SUB_SCRIPT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_KERNING       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_CHAR_DLG                [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_CHAR_DLG_EFFECT         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_PARA_DLG                [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
      // ---- FontWork:
     SID_FONTWORK    [ ExecMethod = ExecuteExtra; StateMethod = GetState; Export = FALSE; ]
@@ -130,6 +141,10 @@ interface TableDrawText
     SID_TRANSLITERATE_FULLWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_HIRAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_KATAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+
+    SID_TABLE_VERT_NONE [ExecMethod = ExecuteAttr ;StateMethod = GetStatePropPanelAttr ;]
+    SID_TABLE_VERT_CENTER [ExecMethod = ExecuteAttr ;StateMethod = GetStatePropPanelAttr ;]
+    SID_TABLE_VERT_BOTTOM [ExecMethod = ExecuteAttr ;StateMethod = GetStatePropPanelAttr ;]
 }
 
 

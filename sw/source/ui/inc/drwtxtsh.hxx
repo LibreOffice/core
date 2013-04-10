@@ -54,6 +54,7 @@ public:
 
     void        Execute(SfxRequest &);
     void        ExecDraw(SfxRequest &);
+    void        GetStatePropPanelAttr(SfxItemSet &);
     void        GetState(SfxItemSet &);
     void        GetDrawTxtCtrlState(SfxItemSet&);
 

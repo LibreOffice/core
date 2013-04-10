@@ -410,7 +410,7 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
 
                 rView.GetDocShell()->FormatPage(
                         rStyleName,
-                        nPageId, &rSh );
+                        nPageId, rSh );
             }
             break;
         case FN_HEADERFOOTER_BORDERBACK:

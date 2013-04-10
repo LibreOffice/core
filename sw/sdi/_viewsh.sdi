@@ -416,6 +416,31 @@ interface BaseTextEditView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+
+    SID_ATTR_PARA_ULSPACE
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+
+    SID_ATTR_PAGE_COLUMN
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+    SID_ATTR_PAGE_ULSPACE
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_PAGE_LRSPACE
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_THESAURUS // status(final|play)
     [
         ExecMethod = ExecLingu ;

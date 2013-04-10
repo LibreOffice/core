@@ -25,6 +25,7 @@
 #include <svl/whiter.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 
 #include "mediash.hxx"
 #include "sc.hrc"
@@ -48,6 +49,7 @@ ScMediaShell::ScMediaShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_MEDIA);
     SetName( String( ScResId( SCSTR_MEDIASHELL ) ) );
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Media));
 }
 
 ScMediaShell::~ScMediaShell()

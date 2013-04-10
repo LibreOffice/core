@@ -35,6 +35,7 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/svdobj.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 
 #define ScOleObjectShell
 #include "scslots.hxx"
@@ -54,12 +55,17 @@ ScOleObjectShell::ScOleObjectShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_OLEOBEJCTSH);
     SetName(OUString("OleObject"));
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_OLE));
 }
 
 ScOleObjectShell::~ScOleObjectShell()
 {
 }
 
-
+void ScOleObjectShell::HandleSelectionChange (void)
+{
+    // Do not call the implementation in the base class.  Let
+    // Activate()/Deactivate() handle context switches.
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

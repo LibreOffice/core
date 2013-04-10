@@ -111,7 +111,12 @@ void SwWrtShell::DrawSelChanged( )
     static sal_uInt16 const aInval[] =
     {
         SID_ATTR_FILL_STYLE, SID_ATTR_FILL_COLOR, SID_ATTR_LINE_STYLE,
-        SID_ATTR_LINE_WIDTH, SID_ATTR_LINE_COLOR, 0
+        SID_ATTR_LINE_WIDTH, SID_ATTR_LINE_COLOR,
+        /*AF: these may be needed for the sidebar.
+        SID_SVX_AREA_TRANSPARENCY, SID_SVX_AREA_TRANSP_GRADIENT,
+        SID_SVX_AREA_TRANS_TYPE,
+        */
+        0
     };
 
     GetView().GetViewFrame()->GetBindings().Invalidate(aInval);

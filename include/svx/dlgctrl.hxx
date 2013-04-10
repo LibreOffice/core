@@ -258,8 +258,9 @@ public:
     virtual void Fill(const XBitmapListRef &pList);
     virtual void UserDraw(const UserDrawEvent& rUDEvt);
 
-    void Append(XBitmapEntry* pEntry, BitmapEx* pBmpEx = NULL);
-    void Modify(XBitmapEntry* pEntry, sal_uInt16 nPos, BitmapEx* pBmpEx = NULL);
+    void Append(const Size& rSize, const XBitmapEntry& rEntry, BitmapEx* pBmpEx = 0);
+    void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos, BitmapEx* pBmpEx = 0);
+    void SelectEntryByList(const XBitmapList* pList, const String& rStr);
 
 private:
     VirtualDevice   maVD;
@@ -268,7 +269,7 @@ private:
     XBitmapListRef  mpList;
     bool            mbUserDraw;
 
-    SVX_DLLPRIVATE void SetVirtualDevice();
+    SVX_DLLPRIVATE void SetVirtualDevice(const Size& rSize);
 };
 
 /************************************************************************/
@@ -279,7 +280,7 @@ private:
     VirtualDevice   maVD;
     BitmapEx        maBitmapEx;
 
-    void SetVirtualDevice();
+    void SetVirtualDevice(const Size& rSize);
 
 public:
     FillAttrLB( Window* pParent, WinBits aWB );
@@ -313,9 +314,8 @@ public:
 
     virtual void Fill( const XDashListRef &pList );
 
-    void Append( XDashEntry* pEntry, Bitmap* pBmp = NULL );
-    void Modify( XDashEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
-    void FillStyles();
+    void Append( XDashEntry* pEntry, const Bitmap* pBmp = NULL );
+    void Modify( XDashEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp = NULL );
 };
 
 /************************************************************************/
@@ -324,14 +324,15 @@ class SVX_DLLPUBLIC LineEndLB : public ListBox
 {
 
 public:
-         LineEndLB( Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
-         LineEndLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
+                          LineEndLB( Window* pParent, ResId Id );
+                          LineEndLB( Window* pParent, WinBits aWB );
+                 virtual ~LineEndLB (void);
 
     virtual void Fill( const XLineEndListRef &pList, sal_Bool bStart = sal_True );
 
-    void    Append( XLineEndEntry* pEntry, Bitmap* pBmp = NULL,
+    void    Append( XLineEndEntry* pEntry, const Bitmap* pBmp = NULL,
                     sal_Bool bStart = sal_True );
-    void    Modify( XLineEndEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL,
+    void    Modify( XLineEndEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp = NULL,
                     sal_Bool bStart = sal_True );
 };
 

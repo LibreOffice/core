@@ -177,6 +177,10 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
     rBindings.Invalidate( SID_ATTR_CHAR_OVERLINE );
     rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNCENTERHOR );
     rBindings.Invalidate( SID_ALIGNRIGHT );
@@ -186,6 +190,9 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_20 );
     rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
     rBindings.Invalidate( SID_SET_SUB_SCRIPT );
+    rBindings.Invalidate( SID_ATTR_CHAR_KERNING );
+    rBindings.Invalidate( SID_ATTR_CHAR_STRIKEOUT );
+    rBindings.Invalidate( SID_ATTR_CHAR_SHADOWED );
     rBindings.Invalidate( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
     rBindings.Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
     rBindings.Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );

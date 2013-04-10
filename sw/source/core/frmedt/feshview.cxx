@@ -2475,7 +2475,7 @@ sal_uInt8 SwFEShell::IsSelObjProtected( sal_uInt16 eType ) const
                         {
                             // TODO/LATER: use correct aspect
                             const bool bNeverResize = (embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ));
-                            if ( (FLYPROTECT_CONTENT & eType) && bNeverResize )
+                            if ( ( (FLYPROTECT_CONTENT & eType) || (FLYPROTECT_SIZE & eType) ) && bNeverResize )
                             {
                                 nChk |= FLYPROTECT_SIZE;
                                 nChk |= FLYPROTECT_FIXED;

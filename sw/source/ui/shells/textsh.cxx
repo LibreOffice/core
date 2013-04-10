@@ -97,6 +97,7 @@
 
 #define SwTextShell
 #include <sfx2/msg.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <swslots.hxx>
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
@@ -913,6 +914,7 @@ SwTextShell::SwTextShell(SwView &_rView) :
 {
     SetName(OUString("Text"));
     SetHelpId(SW_TEXTSHELL);
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Text));
 }
 
 SwTextShell::~SwTextShell()

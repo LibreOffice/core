@@ -108,6 +108,10 @@ String SID_TASKPANE
 {
     Text [ en-US ] = "Task Pane";
 };
+String SID_SIDEBAR
+{
+    Text [ en-US ] = "Sidebar";
+};
 
 ErrorBox MSG_ERROR_WRONG_CONFIRM
 {

@@ -1,0 +1,104 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+//  RID_SIDEBAR_LINE_PANEL--------------------------------------------------------------
+#define CUSTOM_X    POPUPPANEL_MARGIN_LARGE + OFFSET_X
+#define CUSTOM_Y    POPUPPANEL_MARGIN_SMALL + OFFSET_Y + 12 * 9 + POPUPPANEL_MARGIN_SMALL * 2 + TEXT_HEIGHT
+#define CUSTOM_W    74
+#define CUSTOM_H    POPUPPANEL_MARGIN_LARGE * 2 +  TEXT_HEIGHT + 12 +  TEXT_CONTROL_SPACING_VERTICAL
+
+#define FT_COLOR            1
+#define TB_COLOR            2
+#define FT_WIDTH            3
+#define TB_WIDTH            4
+#define FT_STYLE            5
+#define LB_STYLE            6
+#define FT_ARROW            7
+#define FT_TRANSPARENT      8
+#define MF_TRANSPARENT      9
+#define LB_START            10
+#define LB_END              11
+#define TBI_COLOR           12
+#define TBI_WIDTH           13
+#define TBI_STYLE           14
+#define STR_QH_TB_WIDTH     15
+#define STR_QH_TB_COLOR     16
+
+#define FT_EDGESTYLE        18
+#define LB_EDGESTYLE        19
+#define FT_CAPSTYLE         20
+#define LB_CAPSTYLE         21
+
+#define IMG_COLOR           23
+#define IMG_COLOR_NO        24
+#define IMG_NONE_ICON       36
+
+#define IMG_WIDTH1_ICON     41
+#define IMG_WIDTH2_ICON     42
+#define IMG_WIDTH3_ICON     43
+#define IMG_WIDTH4_ICON     44
+#define IMG_WIDTH5_ICON     45
+#define IMG_WIDTH6_ICON     46
+#define IMG_WIDTH7_ICON     47
+#define IMG_WIDTH8_ICON     48
+
+//color popup page
+#define VS_COLOR        1
+#define STR_AUTOMATICE  2
+
+//style popup page
+#define VS_STYLE                1
+#define PB_OPTIONS              2
+
+#define IMG_LINE1           5
+#define IMG_LINE2               7
+#define IMG_LINE3           9
+#define IMG_LINE4           11
+#define IMG_LINE5               13
+#define IMG_LINE6           15
+#define IMG_LINE7           17
+#define IMG_LINE8               19
+#define IMG_LINE9           21
+#define IMG_LINE10              23
+#define IMG_LINE11          25
+
+// #define STR_STYLE_NONE_TIP       30
+#define STR_STYLE_NONE          31
+#define STR_STYLE_LINE1         32
+#define STR_STYLE_LINE2         33
+#define STR_STYLE_LINE3         34
+#define STR_STYLE_LINE4         35
+#define STR_STYLE_LINE5         36
+#define STR_STYLE_LINE6         37
+#define STR_STYLE_LINE7         38
+#define STR_STYLE_LINE8         39
+#define STR_STYLE_LINE9         40
+#define STR_STYLE_LINE10        41
+#define STR_STYLE_LINE11        42
+
+//width popup page
+#define VS_WIDTH        1
+#define MF_WIDTH        2
+#define FT_CUSTOME      3
+#define FT_LINE_WIDTH   4
+#define IMG_WIDTH_CUSTOM            5
+#define IMG_WIDTH_CUSTOM_GRAY       6
+#define CT_BORDER       7
+#define STR_WIDTH_LAST_CUSTOM       8
+#define STR_PT          9
+
+// eof

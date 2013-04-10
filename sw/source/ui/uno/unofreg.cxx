@@ -133,6 +133,8 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _crea
 
 }
 
+#include "SwPanelFactory.hxx"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -351,6 +353,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
                 LayoutDumpFilter_getImplementationName(),
                 LayoutDumpFilter_createInstance,
                 LayoutDumpFilter_getSupportedServiceNames() );
+        }
+        else if ( ::sw::sidebar::SwPanelFactory::getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                ::sw::sidebar::SwPanelFactory::getImplementationName(),
+                ::sw::sidebar::SwPanelFactory::createInstance,
+                ::sw::sidebar::SwPanelFactory::getSupportedServiceNames() );
         }
         else if( comp_FinalThreadManager::_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )

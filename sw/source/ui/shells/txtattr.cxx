@@ -30,6 +30,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -638,6 +639,19 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     rSet.Put(SvxAdjustItem((SvxAdjust)eAdjust, SID_ATTR_PARA_ADJUST ));
                 nSlot = 0;
             break;
+            case SID_ATTR_PARA_LRSPACE:
+            {
+                eState = aCoreSet.GetItemState(RES_LR_SPACE);
+                if( eState >= SFX_ITEM_DEFAULT )
+                {
+                    SvxLRSpaceItem aLR = ( (const SvxLRSpaceItem&) aCoreSet.Get( RES_LR_SPACE ) );
+                    aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
+                    rSet.Put(aLR);
+                }
+                else
+                    rSet.InvalidateItem(nSlot);
+                nSlot = 0;
+            }
 
             case SID_ATTR_PARA_LEFT_TO_RIGHT :
             case SID_ATTR_PARA_RIGHT_TO_LEFT :

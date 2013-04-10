@@ -46,6 +46,7 @@ public:
     virtual ~TextObjectBar (void);
 
     void GetAttrState( SfxItemSet& rSet );
+    void GetCharState( SfxItemSet& rSet );
     void Execute( SfxRequest &rReq );
 
     virtual void Command( const CommandEvent& rCEvt );

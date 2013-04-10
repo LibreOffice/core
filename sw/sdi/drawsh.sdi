@@ -28,6 +28,20 @@ interface TextDraw : TextDrawBase
         Export = FALSE;
     ]
 
+    SID_ATTR_LINE_START
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = DisableState ;
+        Export = FALSE;
+    ]
+
+    SID_ATTR_LINE_END
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = DisableState ;
+        Export = FALSE;
+    ]
+
     SID_ATTR_LINE_STYLE
     [
         Export = FALSE;
@@ -38,6 +52,30 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_LINE_DASH
     [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LINE_TRANSPARENCE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LINE_JOINT
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LINE_CAP
+    [
+        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
@@ -129,6 +167,22 @@ interface TextDraw : TextDrawBase
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_ATTR_FILL_TRANSPARENCE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_FLOATTRANSPARENCE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_ATTRIBUTES_LINE
     [
         ExecMethod = ExecDrawDlg ;
@@ -153,8 +207,20 @@ interface TextDraw : TextDrawBase
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_FLIP_VERTICAL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 
     FN_FLIP_HORZ_GRAFIC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_FLIP_HORIZONTAL
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

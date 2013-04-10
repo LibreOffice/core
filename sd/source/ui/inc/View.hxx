@@ -31,6 +31,7 @@
 #include "fupoor.hxx"
 
 #include "smarttag.hxx"
+#include <editeng/numitem.hxx>
 
 class SdDrawDocument;
 class SdPage;
@@ -193,6 +194,8 @@ public:
     virtual void CheckPossibilities();
     virtual sal_Bool MarkPoints(const ::Rectangle* pRect, sal_Bool bUnmark);
     using SdrMarkView::MarkPoints;
+    sal_Bool ShouldToggleOn(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet);
+    void ToggleMarkedObjectsBullets(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet, sal_Bool bMasterView, SvxNumRule* pNumRule = NULL, sal_Bool bForceBulletOnOff = false);
 
     void SetPossibilitiesDirty() { bPossibilitiesDirty = true; }
     void SetMoveAllowed( bool bSet ) { bMoveAllowed = bSet; }

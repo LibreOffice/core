@@ -27,9 +27,9 @@
 #define CMD_FN_FRAME_ALIGN_VERT_TOP                 ".uno:AlignTop"
 #define CMD_FN_FRAME_ALIGN_VERT_CENTER              ".uno:AlignVerticalCenter"
 #define CMD_FN_EDIT_AUTH_ENTRY_DLG                  ".uno:AuthoritiesEntryDialog"
-#define CMD_FN_TABLE_VERT_BOTTOM                    ".uno:CellVertBottom"
-#define CMD_FN_TABLE_VERT_CENTER                    ".uno:CellVertCenter"
-#define CMD_FN_TABLE_VERT_NONE                      ".uno:CellVertTop"
+#define CMD_SID_TABLE_VERT_BOTTOM                   ".uno:CellVertBottom"
+#define CMD_SID_TABLE_VERT_CENTER                   ".uno:CellVertCenter"
+#define CMD_SID_TABLE_VERT_NONE                     ".uno:CellVertTop"
 #define CMD_FN_CONVERT_TEXT_TABLE                   ".uno:ConvertTableText"
 #define CMD_FN_NUM_BULLET_DOWN                      ".uno:DecrementLevel"
 #define CMD_FN_TABLE_DELETE_COL                     ".uno:DeleteColumns"
@@ -134,3 +134,4 @@
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

@@ -52,6 +52,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_EXTRA2               (SID_SW_START + 2200)
 #define FN_PARAM2               (SID_SW_START + 2400)
 #define FN_NOTES                (SID_SW_START + 2500)
+#define FN_SIDEBAR              (SID_SW_START + 2550)
 #define FN_HEADERFOOTER         (SID_SW_START + 2600)
 #define FN_PAGEBREAK            (SID_SW_START + 2610)
 
@@ -323,6 +324,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_FLIP_HORZ_GRAFIC     (FN_FORMAT + 25) /* mirror horizontally */
 #define FN_FLIP_VERT_GRAFIC     (FN_FORMAT + 26) /* mirror vertically */
 
+#define FN_FORMAT_PAGE_SETTING_DLG  (FN_FORMAT + 42)  /*  */
 #define FN_NUM_FORMAT_TABLE_DLG     (FN_FORMAT + 45)  /* number format in table */
 #define FN_FORMAT_BORDER_DLG        (FN_FORMAT + 48)  /* */
 #define FN_FORMAT_PAGE_COLUMN_DLG   (FN_FORMAT + 49)  /* columns per page */
@@ -434,10 +436,9 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_FRAME_WRAP_CONTOUR       (FN_FORMAT + 184)  /* */
 
-#define FN_TABLE_VERT_NONE          (FN_FORMAT + 185)  /* vertical alignment in table cells */
-#define FN_TABLE_VERT_CENTER        (FN_FORMAT + 186)  /*  -"-  */
-#define FN_TABLE_VERT_BOTTOM        (FN_FORMAT + 187)  /*  -"-  */
-#define FN_TABLE_SET_VERT_ALIGN     (FN_FORMAT + 188)  /*  -"-  */
+// +185..+187 removed in favor of corresponding globally available slot
+
+#define FN_TABLE_SET_VERT_ALIGN     (FN_FORMAT + 188)  /* vertical alignment in Writer table cells */
 #define FN_TABLE_MODE_FIX           (FN_FORMAT + 189)  /* table mode */
 #define FN_TABLE_MODE_FIX_PROP      (FN_FORMAT + 190)  /*  -"-  */
 #define FN_TABLE_MODE_VARIABLE      (FN_FORMAT + 191)  /*  -"-  */
@@ -897,6 +898,11 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SET_FRM_ALT_NAME             (FN_FRAME + 18)
 #define FN_UNO_TITLE                    (FN_FRAME + 19)
 #define FN_UNO_DESCRIPTION              (FN_FRAME + 20)
+
+#define FN_PROPERTY_WRAP_DLG            (FN_SIDEBAR + 0)
+#define SID_ATTR_PAGE_COLUMN            (FN_SIDEBAR + 1)
+#define SID_ATTR_PAGE_ULSPACE           (FN_SIDEBAR + 2)
+#define SID_ATTR_PAGE_LRSPACE           (FN_SIDEBAR + 3)
 
 //Member IDs for Fill / SetVariable of items
 #define         MID_STYLE       0xe0

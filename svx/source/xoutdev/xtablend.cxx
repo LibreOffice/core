@@ -45,6 +45,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/xlnwtit.hxx>
 
 using namespace com::sun::star;
 
@@ -86,11 +87,13 @@ void XLineEndList::impCreate()
 
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XLineEndList: no VirtualDevice created!" );
-        const Size aSize(BITMAP_WIDTH * 2, BITMAP_HEIGHT);
+        pVirDev->SetMapMode(MAP_100TH_MM);
+        const Size aSize(pVirDev->PixelToLogic(Size(getUiBitmapWidth() * 2, getUiBitmapHeight())));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
+        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
 
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XLineEndList: no SdrModel created!" );
@@ -112,8 +115,11 @@ void XLineEndList::impCreate()
         SdrObject* pLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
         OSL_ENSURE(0 != pLineObject, "XLineEndList: no LineObject created!" );
         pLineObject->SetModel(pSdrModel);
-        pLineObject->SetMergedItem(XLineStartWidthItem(aSize.Height() - 2)); // fdo#48536: prevent the lineend from
-        pLineObject->SetMergedItem(XLineEndWidthItem(aSize.Height() - 2));   // exceeding the background area
+        const Size aLineWidth(pVirDev->PixelToLogic(Size(getUiBitmapLineWidth(), 0)));
+        pLineObject->SetMergedItem(XLineWidthItem(aLineWidth.getWidth()));
+        const sal_uInt32 nArrowHeight((aSize.Height() * 8) / 10);
+        pLineObject->SetMergedItem(XLineStartWidthItem(nArrowHeight));
+        pLineObject->SetMergedItem(XLineEndWidthItem(nArrowHeight));
         pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
 
         mpData = new impXLineEndList(pVirDev, pSdrModel, pBackgroundObject, pLineObject);
@@ -131,7 +137,6 @@ XLineEndList::XLineEndList( const String& rPath, XOutdevItemPool* _pXPool )
     : XPropertyList( XLINE_END_LIST, rPath, _pXPool ),
       mpData(NULL)
 {
-    pBmpList = new BitmapList_impl();
 }
 
 XLineEndList::~XLineEndList()
@@ -178,31 +183,7 @@ sal_Bool XLineEndList::Create()
     return sal_True;
 }
 
-sal_Bool XLineEndList::CreateBitmapsForUI()
-{
-    impCreate();
-
-    for( long i = 0; i < Count(); i++)
-    {
-        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
-        OSL_ENSURE(0 != pBmp, "XLineEndList: Bitmap(UI) could not be created!" );
-
-        if( pBmp )
-        {
-            if ( (size_t)i < pBmpList->size() ) {
-                pBmpList->insert( pBmpList->begin() + i, pBmp );
-            } else {
-                pBmpList->push_back( pBmp );
-            }
-        }
-    }
-
-    impDestroy();
-
-    return sal_True;
-}
-
-Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
+Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();
@@ -218,15 +199,11 @@ Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
     sdr::contact::DisplayInfo aDisplayInfo;
 
+    pVD->Erase();
     aPainter.ProcessDisplay(aDisplayInfo);
 
     const Point aZero(0, 0);
-    Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
-
-    if(bDelete)
-        impDestroy();
-
-    return pBitmap;
+    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3898,6 +3898,11 @@ sal_Bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, sal_Bool bIncrement, 
         pBindings->Invalidate( SID_ALIGNRIGHT );
         pBindings->Invalidate( SID_ALIGNBLOCK );
         pBindings->Invalidate( SID_ALIGNCENTERHOR );
+        pBindings->Invalidate( SID_ATTR_LRSPACE );
+        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
+        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
+        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
+        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
         // pseudo slots for Format menu
         pBindings->Invalidate( SID_ALIGN_ANY_HDEFAULT );
         pBindings->Invalidate( SID_ALIGN_ANY_LEFT );

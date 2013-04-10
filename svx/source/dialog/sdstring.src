@@ -39,7 +39,7 @@ String RID_SVXSTR_LINESTYLE
 };
 String RID_SVXSTR_INVISIBLE
 {
-    Text [ en-US ] = "Invisible" ;
+    Text [ en-US ] = "None" ;
 };
 String RID_SVXSTR_COLOR
 {

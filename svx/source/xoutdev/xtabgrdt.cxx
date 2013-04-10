@@ -73,11 +73,12 @@ void XGradientList::impCreate()
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XGradientList: no VirtualDevice created!" );
         pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(Size(BITMAP_WIDTH, BITMAP_HEIGHT)));
+        const Size aSize(pVirDev->PixelToLogic(Size(getUiBitmapWidth(), getUiBitmapHeight())));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
+        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
 
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XGradientList: no SdrModel created!" );
@@ -91,7 +92,7 @@ void XGradientList::impCreate()
         pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
         pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
         pBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
-        pBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((BITMAP_WIDTH + BITMAP_HEIGHT) / 3)));
+        pBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((getUiBitmapWidth() + getUiBitmapHeight()) / 3)));
 
         mpData = new impXGradientList(pVirDev, pSdrModel, pBackgroundObject);
         OSL_ENSURE(0 != mpData, "XGradientList: data creation went wrong!" );
@@ -107,11 +108,10 @@ void XGradientList::impDestroy()
     }
 }
 
-XGradientList::XGradientList( const String& rPath, XOutdevItemPool* pInPool ) :
-    XPropertyList( XGRADIENT_LIST, rPath, pInPool ),
-    mpData( NULL )
+XGradientList::XGradientList( const String& rPath, XOutdevItemPool* pInPool )
+:   XPropertyList( XGRADIENT_LIST, rPath, pInPool ),
+    mpData(0)
 {
-    pBmpList = new BitmapList_impl();
 }
 
 XGradientList::~XGradientList()
@@ -167,31 +167,7 @@ sal_Bool XGradientList::Create()
     return( sal_True );
 }
 
-sal_Bool XGradientList::CreateBitmapsForUI()
-{
-    impCreate();
-
-    for( long i = 0; i < Count(); i++)
-    {
-        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
-        DBG_ASSERT( pBmp, "XGradientList: Bitmap(UI) konnte nicht erzeugt werden!" );
-
-        if( pBmp )
-        {
-            if ( (size_t)i < pBmpList->size() ) {
-                pBmpList->insert( pBmpList->begin() + i, pBmp );
-            } else {
-                pBmpList->push_back( pBmp );
-            }
-        }
-    }
-
-    impDestroy();
-
-    return( sal_False );
-}
-
-Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
+Bitmap XGradientList::CreateBitmapForUI( long nIndex )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();
@@ -205,17 +181,11 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
     sdr::contact::DisplayInfo aDisplayInfo;
 
+    pVD->Erase();
     aPainter.ProcessDisplay(aDisplayInfo);
 
     const Point aZero(0, 0);
-    Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
-
-    if(bDelete)
-    {
-        impDestroy();
-    }
-
-    return pBitmap;
+    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -85,9 +85,12 @@ static sal_uInt16 SidArray[] = {
     SID_ATTR_CHAR_FONT,               //   10007
     SID_ATTR_CHAR_POSTURE,            //   10008
     SID_ATTR_CHAR_WEIGHT,             //   10009
+    SID_ATTR_CHAR_SHADOWED,     //10010
+    SID_ATTR_CHAR_STRIKEOUT,        //10013
     SID_ATTR_CHAR_UNDERLINE,          //   10014
     SID_ATTR_CHAR_FONTHEIGHT,         //   10015
     SID_ATTR_CHAR_COLOR,              //   10017
+    SID_ATTR_CHAR_KERNING,          //10018
     SID_ATTR_PARA_ADJUST_LEFT,        //   10028
     SID_ATTR_PARA_ADJUST_RIGHT,       //   10029
     SID_ATTR_PARA_ADJUST_CENTER,      //   10030
@@ -95,14 +98,26 @@ static sal_uInt16 SidArray[] = {
     SID_ATTR_PARA_LINESPACE_10,       //   10034
     SID_ATTR_PARA_LINESPACE_15,       //   10035
     SID_ATTR_PARA_LINESPACE_20,       //   10036
+    SID_ATTR_PARA_ULSPACE,         //   10042
     SID_ATTR_PARA_LRSPACE,            //   10043
+    SID_ATTR_TRANSFORM_POS_X, //  10088
+    SID_ATTR_TRANSFORM_POS_Y, //  10089
+    SID_ATTR_TRANSFORM_WIDTH, //  10090
+    SID_ATTR_TRANSFORM_HEIGHT,//  10091
+    SID_ATTR_TRANSFORM_ROT_X, //  10093
+    SID_ATTR_TRANSFORM_ROT_Y, //  10094
+    SID_ATTR_TRANSFORM_ANGLE, //  10095 //Added
     SID_OUTLINE_UP,                   //   10150
     SID_OUTLINE_DOWN,                 //   10151
     SID_OUTLINE_LEFT,                 //   10152
     SID_OUTLINE_RIGHT,                //   10153
+    SID_ATTR_TRANSFORM_PROTECT_POS,//  10236
+    SID_ATTR_TRANSFORM_PROTECT_SIZE,// 10237 //Added
     SID_FORMTEXT_STYLE,               //   10257
     SID_SET_SUPER_SCRIPT,             //   10294
     SID_SET_SUB_SCRIPT,               //   10295
+    SID_ATTR_TRANSFORM_AUTOWIDTH,//    10310
+    SID_ATTR_TRANSFORM_AUTOHEIGHT,//   10311 //Added
     SID_HYPERLINK_GETLINK,            //   10361
     SID_CHARMAP,                      //   10503
     SID_TEXTDIRECTION_LEFT_TO_RIGHT,  //   10907
@@ -1089,7 +1104,8 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, sal_Bool bQuickDrag)
                         {
                             // Move cursor to end of text
                             ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
-                            pOLV->SetSelection(aNewSelection);
+                            if (pOLV != NULL)
+                                pOLV->SetSelection(aNewSelection);
                         }
                     }
                     else

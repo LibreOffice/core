@@ -27,6 +27,12 @@ interface BaseTextGraphic
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_FLIP_VERTICAL
+    [
+        ExecMethod = ExecAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 
     FN_FLIP_HORZ_GRAFIC  // status(final|play)
     [
@@ -34,8 +40,20 @@ interface BaseTextGraphic
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_FLIP_HORIZONTAL
+    [
+        ExecMethod = ExecAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 
     FN_FORMAT_GRAFIC_DLG // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_PROPERTY_WRAP_DLG // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;

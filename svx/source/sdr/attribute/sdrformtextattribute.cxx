@@ -50,27 +50,27 @@
 
 namespace
 {
-    basegfx::B2DLineJoin impGetB2DLineJoin(XLineJoint eLineJoint)
+    basegfx::B2DLineJoin impGetB2DLineJoin(com::sun::star::drawing::LineJoint eLineJoint)
     {
         switch(eLineJoint)
         {
-            case XLINEJOINT_MIDDLE  :
+            case com::sun::star::drawing::LineJoint_MIDDLE :
             {
                 return basegfx::B2DLINEJOIN_MIDDLE;
             }
-            case XLINEJOINT_BEVEL   :
+            case com::sun::star::drawing::LineJoint_BEVEL :
             {
                 return basegfx::B2DLINEJOIN_BEVEL;
             }
-            case XLINEJOINT_MITER   :
+            case com::sun::star::drawing::LineJoint_MITER :
             {
                 return basegfx::B2DLINEJOIN_MITER;
             }
-            case XLINEJOINT_ROUND   :
+            case com::sun::star::drawing::LineJoint_ROUND :
             {
                 return basegfx::B2DLINEJOIN_ROUND;
             }
-            default :
+            default : // com::sun::star::drawing::LineJoint_NONE
             {
                 return basegfx::B2DLINEJOIN_NONE; // XLINEJOINT_NONE
             }
@@ -109,8 +109,7 @@ namespace
         }
 
         const sal_uInt32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
-        const XLineJoint eLineJoint = ((const XLineJointItem&)(rSet.Get(XATTR_LINEJOINT))).GetValue();
-
+        const com::sun::star::drawing::LineJoint eLineJoint = ((const XLineJointItem&)(rSet.Get(XATTR_LINEJOINT))).GetValue();
         const com::sun::star::drawing::LineCap eLineCap = ((const XLineCapItem&)(rSet.Get(XATTR_LINECAP))).GetValue();
 
         return drawinglayer::attribute::LineAttribute(

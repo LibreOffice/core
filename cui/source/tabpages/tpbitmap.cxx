@@ -555,8 +555,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
         if( pEntry )
         {
             pBitmapList->Insert( pEntry );
-
-            aLbBitmaps.Append( pEntry );
+            const Size aUiSize(pBitmapList->getUiBitmapWidth(), pBitmapList->getUiBitmapHeight());
+            aLbBitmaps.Append(aUiSize, *pEntry );
             aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
 
 #ifdef WNT
@@ -657,7 +657,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
                 XBitmapEntry* pEntry = new XBitmapEntry( aGraphic, aName );
                 pBitmapList->Insert( pEntry );
 
-                aLbBitmaps.Append( pEntry );
+                const Size aUiSize(pBitmapList->getUiBitmapWidth(), pBitmapList->getUiBitmapHeight());
+                aLbBitmaps.Append(aUiSize, *pEntry );
                 aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
 
 #ifdef WNT
@@ -705,6 +706,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
         long nCount = pBitmapList->Count();
         sal_Bool bDifferent = sal_False;
         sal_Bool bLoop = sal_True;
+        const Size aUiSize(pBitmapList->getUiBitmapWidth(), pBitmapList->getUiBitmapHeight());
 
         while( bLoop && pDlg->Execute() == RET_OK )
         {
@@ -729,7 +731,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
 
                 pEntry->SetGraphicObject(Graphic(aBitmapEx));
 
-                aLbBitmaps.Modify( pEntry, nPos );
+                aLbBitmaps.Modify( aUiSize, *pEntry, nPos );
                 aLbBitmaps.SelectEntryPos( nPos );
 
                 *pnBitmapListState |= CT_MODIFIED;

@@ -151,6 +151,8 @@
 #define HID_TASKPANE_WINDOW                                     "SFX2_HID_TASKPANE_WINDOW"
 #define HID_TASKPANE_VIEW_MENU                                  "SFX2_HID_TASKPANE_VIEW_MENU"
 
+#define HID_SIDEBAR_WINDOW                                     "SFX2_HID_SIDEBAR_WINDOW"
+
 #endif // #ifndef _SFX_HELPID_HRC
 
 // ******************************************************************* EOF

@@ -443,20 +443,20 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
                 SEPARATOR ; \
                 MenuItem\
                 {\
-                    Identifier = FN_TABLE_VERT_NONE ; \
-                    HelpId = CMD_FN_TABLE_VERT_NONE ; \
+                    Identifier = SID_TABLE_VERT_NONE ; \
+                    HelpId = CMD_SID_TABLE_VERT_NONE ; \
                     Text [ en-US ] = "~Top" ; \
                 };\
                 MenuItem\
                 {\
-                    Identifier = FN_TABLE_VERT_CENTER ; \
-                    HelpId = CMD_FN_TABLE_VERT_CENTER ; \
+                    Identifier = SID_TABLE_VERT_CENTER ; \
+                    HelpId = CMD_SID_TABLE_VERT_CENTER ; \
                     Text [ en-US ] = "C~enter" ; \
                 };\
                 MenuItem\
                 {\
-                    Identifier = FN_TABLE_VERT_BOTTOM ; \
-                    HelpId = CMD_FN_TABLE_VERT_BOTTOM ; \
+                    Identifier = SID_TABLE_VERT_BOTTOM ; \
+                    HelpId = CMD_SID_TABLE_VERT_BOTTOM ; \
                     Text [ en-US ] = "~Bottom" ; \
                 };\
                 SEPARATOR ; \

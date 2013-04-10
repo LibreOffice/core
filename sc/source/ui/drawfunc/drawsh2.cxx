@@ -33,6 +33,8 @@
 #include <svx/svdouno.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <svx/sidebar/SelectionChangeHandler.hxx>
+#include <svx/sidebar/SelectionAnalyzer.hxx>
 
 #include "drawsh.hxx"
 #include "drawview.hxx"
@@ -45,15 +47,23 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 
+#include <boost/bind.hpp>
+
+
 sal_uInt16 ScGetFontWorkId();       // in drtxtob
 
 using namespace com::sun::star;
+
 
 //------------------------------------------------------------------
 
 ScDrawShell::ScDrawShell( ScViewData* pData ) :
     SfxShell(pData->GetViewShell()),
-    pViewData( pData )
+    pViewData( pData ),
+    mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
+            ::boost::bind(&ScDrawShell::GetContextForSelection, this),
+            GetFrame()->GetFrame().GetController(),
+            sfx2::sidebar::EnumContext::Context_Cell))
 {
     SetPool( &pViewData->GetScDrawView()->GetModel()->GetItemPool() );
     ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
@@ -64,10 +74,13 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
     }
     SetHelpId( HID_SCSHELL_DRAWSH );
     SetName(OUString("Drawing"));
+
+    mpSelectionChangeHandler->Connect();
 }
 
 ScDrawShell::~ScDrawShell()
 {
+    mpSelectionChangeHandler->Disconnect();
 }
 
 void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
@@ -130,6 +143,8 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     {
         rSet.DisableItem( SID_MIRROR_HORIZONTAL );
         rSet.DisableItem( SID_MIRROR_VERTICAL );
+        rSet.DisableItem( SID_FLIP_HORIZONTAL );
+        rSet.DisableItem( SID_FLIP_VERTICAL );
     }
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -380,5 +395,22 @@ sal_Bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList
     return bResult;
 }
 
+void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
+{
+    ScDrawView* pView = pViewData->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    if( rMarkList.GetMark(0) != 0 )
+    {
+        SfxItemSet aNewAttr(pView->GetGeoAttrFromMarked());
+        rSet.Put(aNewAttr, sal_False);
+    }
+}
+
+sfx2::sidebar::EnumContext::Context ScDrawShell::GetContextForSelection (void)
+{
+    return ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(
+        GetDrawView()->GetMarkedObjectList());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

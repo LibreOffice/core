@@ -357,6 +357,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                     }
                 }
+                else
+                {
+                    pSdrView->SetGeoAttrToMarked( *pArgs );
+                }
             }
         }
         break;
@@ -724,6 +728,18 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 break;
         }
         nWhich = aIter.NextWhich();
+    }
+}
+
+void SwDrawBaseShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
+{
+    SwWrtShell *pSh = &GetShell();
+    SdrView*    pSdrView = pSh->GetDrawView();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    if( rMarkList.GetMark(0) != 0 )
+    {
+        SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
+        rSet.Put(aNewAttr,false);
     }
 }
 

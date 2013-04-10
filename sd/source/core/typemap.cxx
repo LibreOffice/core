@@ -32,6 +32,9 @@
 #include <editeng/fontitem.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/tstpitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <svx/chrtitem.hxx>
@@ -92,6 +95,10 @@
 #include <svl/rectitem.hxx>
 
 #include <sfx2/frame.hxx>
+#include <svx/xlncapit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/AffineMatrixItem.hxx>
 
 #define SFX_TYPEMAP
 #include "sdslots.hxx"

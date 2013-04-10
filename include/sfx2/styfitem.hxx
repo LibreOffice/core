@@ -68,9 +68,6 @@ class SFX2_DLLPUBLIC SfxStyleFamilies: public Resource
     SfxStyleFamilyList  aEntryList;
 
 public:
-    /** ctor
-        <p>Will automatically call updateImages with BMP_COLOR_NORMAL.</p>
-    */
                         SfxStyleFamilies( const ResId &);
                         SfxStyleFamilies( ) {};
                         ~SfxStyleFamilies();

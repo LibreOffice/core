@@ -1041,12 +1041,12 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog( int nRes
 SfxAbstractApplyTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
-                                                sal_uInt16              nRegion,
-                                                sal_uInt16              nPageId,
+                                                sal_uInt16          nRegion,
+                                                const sal_uInt16    nSlot,
                                                 SwWrtShell*         pActShell,
-                                                sal_Bool                bNew ) //add for SwTemplateDlg
+                                                sal_Bool            bNew ) //add for SwTemplateDlg
 {
-    SfxTabDialog* pDlg = new SwTemplateDlg( pParent, rBase, nRegion, nPageId, pActShell, bNew );
+    SfxTabDialog* pDlg = new SwTemplateDlg( pParent, rBase, nRegion, nSlot, pActShell, bNew );
     return new AbstractApplyTabDialog_Impl( pDlg );
 }
 

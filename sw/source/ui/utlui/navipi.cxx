@@ -224,19 +224,20 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         break;
         case FN_SHOW_CONTENT_BOX:
         case FN_SELECT_CONTENT:
-        if(pContextWin->GetFloatingWindow())
-        {
-            if(_IsZoomedIn() )
+            if(pContextWin!=NULL && pContextWin->GetFloatingWindow()!=NULL)
             {
-                _ZoomOut();
+                if(_IsZoomedIn() )
+                {
+                    _ZoomOut();
+                }
+                else
+                {
+                    _ZoomIn();
+                }
             }
-            else
-            {
-                _ZoomIn();
-            }
-        }
-        return sal_True;
+            return sal_True;
         // Functions that will trigger a direct action.
+
         case FN_SELECT_FOOTER:
         {
             rSh.MoveCrsr();
@@ -526,7 +527,7 @@ void SwNavigationPI::MakeMark()
 
 void SwNavigationPI::GotoPage()
 {
-    if ( pContextWin->GetFloatingWindow() && pContextWin->GetFloatingWindow()->IsRollUp())
+    if (pContextWin && pContextWin->GetFloatingWindow() && pContextWin->GetFloatingWindow()->IsRollUp())
         _ZoomIn();
     if(IsGlobalMode())
         ToggleTree();
@@ -538,14 +539,15 @@ void SwNavigationPI::_ZoomOut()
 {
     if (_IsZoomedIn())
     {
-        FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
+        FloatingWindow* pFloat = pContextWin!=NULL ? pContextWin->GetFloatingWindow() : NULL;
         bIsZoomedIn = sal_False;
         Size aSz(GetOutputSizePixel());
         aSz.Height() = nZoomOut;
         Size aMinOutSizePixel = ((SfxDockingWindow*)GetParent())->GetMinOutputSizePixel();
         ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel(Size(
                             aMinOutSizePixel.Width(),nZoomOutInit));
-        pFloat->SetOutputSizePixel(aSz);
+        if (pFloat != NULL)
+            pFloat->SetOutputSizePixel(aSz);
         FillBox();
         if(IsGlobalMode())
         {
@@ -566,53 +568,60 @@ void SwNavigationPI::_ZoomOut()
 
 void SwNavigationPI::_ZoomIn()
 {
-    FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
-    if (pFloat &&
-        (!_IsZoomedIn() || ( pContextWin->GetFloatingWindow()->IsRollUp())))
+    if (pContextWin != NULL)
     {
-        aContentTree.HideTree();
-        aDocListBox.Hide();
-        aGlobalTree.HideTree();
-        bIsZoomedIn = sal_True;
-        Size aSz(GetOutputSizePixel());
-        if( aSz.Height() > nZoomIn )
-            nZoomOut = ( short ) aSz.Height();
+        FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
+        if (pFloat &&
+            (!_IsZoomedIn() || ( pContextWin->GetFloatingWindow()->IsRollUp())))
+        {
+            aContentTree.HideTree();
+            aDocListBox.Hide();
+            aGlobalTree.HideTree();
+            bIsZoomedIn = sal_True;
+            Size aSz(GetOutputSizePixel());
+            if( aSz.Height() > nZoomIn )
+                nZoomOut = ( short ) aSz.Height();
 
-        aSz.Height() = nZoomIn;
-        Size aMinOutSizePixel = ((SfxDockingWindow*)GetParent())->GetMinOutputSizePixel();
-        ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel(Size(
-                            aMinOutSizePixel.Width(), aSz.Height()));
-        pFloat->SetOutputSizePixel(aSz);
-        SvTreeListEntry* pFirst = aContentTree.FirstSelected();
-        if(pFirst)
-            aContentTree.Select(pFirst, sal_True); // Enable toolbox
-        pConfig->SetSmall( sal_True );
-        aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, sal_False);
+            aSz.Height() = nZoomIn;
+            Size aMinOutSizePixel = ((SfxDockingWindow*)GetParent())->GetMinOutputSizePixel();
+            ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel(Size(
+                    aMinOutSizePixel.Width(), aSz.Height()));
+            pFloat->SetOutputSizePixel(aSz);
+            SvTreeListEntry* pFirst = aContentTree.FirstSelected();
+            if(pFirst)
+                aContentTree.Select(pFirst, sal_True); // Enable toolbox
+            pConfig->SetSmall( sal_True );
+            aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, sal_False);
+        }
     }
 }
 
 void SwNavigationPI::Resize()
 {
     Window* pParent = GetParent();
-    FloatingWindow* pFloat =  ((DockingWindow*)pParent)->GetFloatingWindow();
-    Size aNewSize;
     if( !_IsZoomedIn() )
     {
-        //change the minimum width depending on the dock status
-        Size aMinOutSizePixel = ((SfxDockingWindow*)pParent)->GetMinOutputSizePixel();
-        if( pFloat)
+        Size aNewSize (pParent->GetOutputSizePixel());
+
+        SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pParent);
+        if (pDockingParent != NULL)
         {
-            aNewSize = pFloat->GetOutputSizePixel();
-            aMinOutSizePixel.Width() = nWishWidth;
-            aMinOutSizePixel.Height() = _IsZoomedIn() ? nZoomIn : nZoomOutInit;
+            FloatingWindow* pFloat =  pDockingParent->GetFloatingWindow();
+            //change the minimum width depending on the dock status
+            Size aMinOutSizePixel = pDockingParent->GetMinOutputSizePixel();
+            if( pFloat)
+            {
+                aNewSize = pFloat->GetOutputSizePixel();
+                aMinOutSizePixel.Width() = nWishWidth;
+                aMinOutSizePixel.Height() = _IsZoomedIn() ? nZoomIn : nZoomOutInit;
+            }
+            else
+            {
+                aMinOutSizePixel.Width() = 0;
+                aMinOutSizePixel.Height() = 0;
+            }
+            pDockingParent->SetMinOutputSizePixel(aMinOutSizePixel);
         }
-        else
-        {
-            aNewSize = pParent->GetOutputSizePixel();
-            aMinOutSizePixel.Width() = 0;
-            aMinOutSizePixel.Height() = 0;
-        }
-        ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel(aMinOutSizePixel);
 
         const Point aPos = aContentTree.GetPosPixel();
         Point aLBPos = aDocListBox.GetPosPixel();
@@ -633,9 +642,8 @@ void SwNavigationPI::Resize()
         aNewSize.Height() += (nDist + nDocLBIniHeight + aPos.Y() - aGlobalTree.GetPosPixel().Y());
         aGlobalTree.SetSizePixel(aNewSize);
         aDocListBox.setPosSizePixel( aLBPos.X(), aLBPos.Y(),
-                                     aDocLBSz.Width(), aDocLBSz.Height(),
-                                      WINDOW_POSSIZE_X|WINDOW_POSSIZE_Y|WINDOW_POSSIZE_WIDTH);
-
+            aDocLBSz.Width(), aDocLBSz.Height(),
+            WINDOW_POSSIZE_X|WINDOW_POSSIZE_Y|WINDOW_POSSIZE_WIDTH);
     }
 }
 
@@ -734,21 +742,29 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     nWishWidth = aContentToolboxSize.Width();
     nWishWidth += 2 * aContentToolBox.GetPosPixel().X();
 
-    FloatingWindow* pFloat =  ((DockingWindow*)pParent)->GetFloatingWindow();
-    Size aMinSize(pFloat ? nWishWidth : 0, pFloat ? nZoomOutInit : 0);
-    ((SfxDockingWindow*)pParent)->SetMinOutputSizePixel(aMinSize);
-    SetOutputSizePixel( Size( nWishWidth, nZoomOutInit));
-    Size aTmpParentSize(((SfxDockingWindow*)pParent)->GetSizePixel());
-    if(
-        (
-           aTmpParentSize.Width() < aMinSize.Width() ||
-           aTmpParentSize.Height() < aMinSize.Height()
-        )
-        &&
-        ((SfxDockingWindow*)pParent)->GetFloatingWindow() &&
-        !((SfxDockingWindow*)pParent)->GetFloatingWindow()->IsRollUp()
-      )
-        ((SfxDockingWindow*)pParent)->SetOutputSizePixel(aMinSize);
+    DockingWindow* pDockingParent = dynamic_cast<DockingWindow*>(pParent);
+    if (pDockingParent != NULL)
+    {
+        FloatingWindow* pFloat =  pDockingParent->GetFloatingWindow();
+        Size aMinSize(pFloat ? nWishWidth : 0, pFloat ? nZoomOutInit : 0);
+        pDockingParent->SetMinOutputSizePixel(aMinSize);
+        SetOutputSizePixel( Size( nWishWidth, nZoomOutInit));
+
+        SfxDockingWindow* pSfxDockingParent = dynamic_cast<SfxDockingWindow*>(pParent);
+        if (pSfxDockingParent != NULL)
+        {
+            Size aTmpParentSize(pSfxDockingParent->GetSizePixel());
+            if (aTmpParentSize.Width() < aMinSize.Width()
+                || aTmpParentSize.Height() < aMinSize.Height())
+            {
+                if (pSfxDockingParent->GetFloatingWindow()
+                    && ! pSfxDockingParent->GetFloatingWindow()->IsRollUp())
+                {
+                    pSfxDockingParent->SetOutputSizePixel(aMinSize);
+                }
+            }
+        }
+    }
 
     aContentTree.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aContentTree.SetStyle( aContentTree.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
@@ -820,6 +836,15 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_CONTENT));
     aGlobalTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));
     aDocListBox.SetAccessibleName(aStatusArr[3]);
+
+    if (pContextWin == NULL)
+    {
+        // When the context window is missing then the navigator is
+        // displayed in the sidebar.  While the navigator could change
+        // its size, the sidebar can not, and the navigator would just
+        // waste space.  Therefore hide this button.
+        aContentToolBox.RemoveItem(aContentToolBox.GetItemPos(FN_SHOW_CONTENT_BOX));
+    }
 }
 
 SwNavigationPI::~SwNavigationPI()

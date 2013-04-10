@@ -26,7 +26,7 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 
 //---------------------
-// class LineStyleItem
+// class XLineCapItem
 //---------------------
 
 class SVX_DLLPUBLIC XLineCapItem : public SfxEnumItem

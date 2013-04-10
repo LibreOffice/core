@@ -318,6 +318,24 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/presenter/PresenterPreviewCache \
     sd/source/ui/presenter/PresenterTextView \
     sd/source/ui/presenter/SlideRenderer \
+    sd/source/ui/sidebar/AllMasterPagesSelector \
+    sd/source/ui/sidebar/CurrentMasterPagesSelector \
+    sd/source/ui/sidebar/CustomAnimationPanel \
+    sd/source/ui/sidebar/DocumentHelper \
+    sd/source/ui/sidebar/LayoutMenu \
+    sd/source/ui/sidebar/MasterPageContainer \
+    sd/source/ui/sidebar/MasterPageContainerFiller \
+    sd/source/ui/sidebar/MasterPageContainerProviders \
+    sd/source/ui/sidebar/MasterPageContainerQueue \
+    sd/source/ui/sidebar/MasterPageDescriptor \
+    sd/source/ui/sidebar/MasterPagesSelector \
+    sd/source/ui/sidebar/NavigatorWrapper \
+    sd/source/ui/sidebar/PanelBase \
+    sd/source/ui/sidebar/PanelFactory \
+    sd/source/ui/sidebar/PreviewValueSet \
+    sd/source/ui/sidebar/RecentlyUsedMasterPages \
+    sd/source/ui/sidebar/RecentMasterPagesSelector \
+    sd/source/ui/sidebar/SlideTransitionPanel \
     sd/source/ui/slideshow/PaneHider \
     sd/source/ui/slideshow/SlideShowRestarter \
     sd/source/ui/slideshow/showwin \

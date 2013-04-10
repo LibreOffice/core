@@ -1,0 +1,183 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "NumberFormatPropertyPanel.hrc"
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
+#include "sc.hrc"
+#include "helpids.h"
+
+Control RID_PROPERTYPANEL_SC_NUMBERFORMAT
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+    Size = MAP_APPFONT( PROPERTYPAGE_WIDTH, PROPERTYPAGE_HEIGHT );
+    HelpID = HID_PROPERTYPANEL_SC_NUM_SECTION ;
+    Text = "Number Format";
+
+    FixedText FT_CATEGORY
+    {
+        Pos = MAP_APPFONT ( FT_CATEGORY_X , FT_CATEGORY_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH*4 , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Category:" ;
+    };
+    ListBox LB_CATEGORY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( LB_CATEGORY_X , LB_CATEGORY_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH *2 , MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_NUMFMT_LB_CATEGORY;
+        QuickHelpText [ en-US ] = "Select a category of contents.";
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "General" ; Default ; > ;
+            < "Number" ;> ;
+            < "Percent" ;> ;
+            < "Currency" ;> ;
+            < "Date" ;> ;
+            < "Time" ;> ;
+            < "Scientific" ;> ;
+            < "Fraction" ;> ;
+            < "Boolean Value" ;> ;
+            < "Text" ;> ;
+        };
+    };
+    ToolBox TBX_CATEGORY
+    {
+        Pos = MAP_APPFONT ( TBX_CATEGORY_X , TBX_CATEGORY_Y );
+        SVLook = TRUE ;
+        Border = FALSE ;
+        HelpID = HID_PROPERTY_PANEL_NUMFMT_TBX_CATEGORY;
+        Text = "Format";
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = ID_NUMBER ;
+                Text [ en-US ] = "Number" ;
+                HelpID = HID_PROPERTY_PANEL_NUMFMT_ID_NUMBER;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_PERCENT ;
+                Text [ en-US ] = "Percent" ;
+                HelpID = HID_PROPERTY_PANEL_NUMFMT_ID_PERCENT;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_CURRENCY ;
+                Text [ en-US ] = "Currency" ;
+                HelpID = HID_PROPERTY_PANEL_NUMFMT_ID_CURRENCY;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_DATE ;
+                Text [ en-US ] = "Date" ;
+                HelpID = HID_PROPERTY_PANEL_NUMFMT_ID_DATE;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_TEXT ;
+                Text [ en-US ] = "Text" ;
+                HelpID = HID_PROPERTY_PANEL_NUMFMT_ID_TEXT;
+            };
+        };
+    };
+    FixedText FT_DECIMALS
+    {
+        Pos = MAP_APPFONT ( FT_DECIMALS_X , FT_DECIMALS_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH *2, TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Decimal places:" ;
+    };
+    NumericField ED_DECIMALS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( LB_DECIMALS_X , LB_DECIMALS_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_NUMFMT_ED_DECIMALS;
+        QuickHelpText [ en-US ] = "Enter the number of decimal places that you want to display.";
+        Spin = TRUE ;
+        Maximum = 20 ;
+        Last = 15 ;
+        First = 0 ;
+        StrictFormat = TRUE ;
+        SpinSize = 1 ;
+        Repeat = TRUE ;
+    };
+    FixedText FT_LEADZEROES
+    {
+        Pos = MAP_APPFONT ( FT_LEADZEROES_X , FT_LEADZEROES_Y ) ;
+        Size = MAP_APPFONT (PROPERTYPAGE_WIDTH -  MBOX_WIDTH *2 - SECTIONPAGE_MARGIN_HORIZONTAL * 2, TEXT_HEIGHT ) ; //
+        Text [ en-US ] = "Leading ~zeroes:" ;
+    };
+    NumericField ED_LEADZEROES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( LB_LEADZEROES_X , LB_LEADZEROES_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_NUMFMT_ED_LEADZEROES;
+        QuickHelpText [ en-US ] = "Enter the maximum number of zeroes to display before the decimal point.";
+        Spin = TRUE ;
+        Maximum = 20 ;
+        Last = 15 ;
+        First = 0 ;
+        StrictFormat = TRUE ;
+        SpinSize = 1 ;
+        Repeat = TRUE ;
+    };
+    CheckBox BTN_NEGRED
+    {
+        Pos = MAP_APPFONT ( BTN_NEGRED_X , BTN_NEGRED_Y ) ;
+        Size = MAP_APPFONT ( 100 , CHECKBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_NUMFMT_BTN_NEGRED;
+        QuickHelpText [ en-US ] = "Changes the font color of negative numbers to red.";
+        Text [ en-US ] = "~Negative numbers red" ;
+    };
+    CheckBox BTN_THOUSAND
+    {
+        Pos = MAP_APPFONT ( BTN_THOUSAND_X , BTN_THOUSAND_Y ) ;
+        Size = MAP_APPFONT ( 100 , CHECKBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_NUMFMT_BTN_THOUSAND;
+        QuickHelpText [ en-US ] = "Inserts a separator between thousands.";
+        Text [ en-US ] = "~Thousands separator" ;
+    };
+    Image IMG_NUMBER
+    {
+        ImageBitmap = Bitmap{File = "sidebar/123.png";};
+    };
+    Image IMG_PERCENT
+    {
+        ImageBitmap = Bitmap{File = "sidebar/percent.png";};
+    };
+    Image IMG_CURRENCY
+    {
+        ImageBitmap = Bitmap{File = "sidebar/money.png";};
+    };
+    Image IMG_DATE
+    {
+        ImageBitmap = Bitmap{File = "sidebar/canlendar.png";};
+    };
+    Image IMG_TEXT
+    {
+        ImageBitmap = Bitmap{File = "sidebar/ABC.png";};
+    };
+};
+
+// eof

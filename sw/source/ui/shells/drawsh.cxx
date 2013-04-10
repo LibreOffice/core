@@ -43,6 +43,8 @@
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
 #include <svx/xtable.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
+#include <svx/svdoashp.hxx>
 
 #include "swundo.hxx"
 #include "wrtsh.hxx"
@@ -158,9 +160,11 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_FLIP_HORZ_GRAFIC:
+        case SID_FLIP_HORIZONTAL:
             bMirror = false;
             /* no break */
         case FN_FLIP_VERT_GRAFIC:
+        case SID_FLIP_VERTICAL:
             rSh.MirrorSelection( bMirror );
             break;
 
@@ -321,11 +325,13 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
             break;
 
             case FN_FLIP_HORZ_GRAFIC:
+            case SID_FLIP_HORIZONTAL:
                 if ( !pSdrView->IsMirrorAllowed() || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FN_FLIP_VERT_GRAFIC:
+            case SID_FLIP_VERTICAL:
                 if ( !pSdrView->IsMirrorAllowed() || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
@@ -353,6 +359,8 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
 {
     SetHelpId(SW_DRAWSHELL);
     SetName(OUString("Draw"));
+
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Draw));
 }
 
 // Edit SfxRequests for FontWork

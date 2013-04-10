@@ -1,0 +1,196 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "PropertyPanel.hrc"
+
+#define FT_ORIENTATION          1
+#define TB_ORIENTATION          2
+#define FT_MARGIN               3
+#define TB_MARGIN               4
+#define FT_SIZE                 5
+#define TB_SIZE                 6
+#define FT_COLUMN               7
+#define TB_COLUMN               8
+#define TBI_MARGIN              9
+#define IMG_PORTRAIT            10
+#define IMG_LANDSCAPE           11
+#define STR_PORTRAIT            12
+#define STR_LANDSCAPE           13
+#define ED_SWPAPER_WIDTH        14
+#define ED_SWPAPER_HEIGHT       15
+#define LB_SWPAPER_TRAY         16
+#define LB_SWPAPER_SIZE         17
+#define MF_SWLEFT_MARGIN        18
+#define MF_SWRIGHT_MARGIN       19
+#define MF_SWTOP_MARGIN         20
+#define MF_SWBOTTOM_MARGIN      21
+#define TBI_SIZE                22
+#define VS_SIZE                 23
+#define STR_LCVALUE             24
+#define FT_CUSTOM               25
+#define FLD_WIDTH_HEIGHT        26
+
+#define TBI_ORIENTATION         28
+#define VS_ORIENTATION          29
+#define IMG_PAGE_PORTRAIT       30
+#define IMG_PAGE_LANDSCAPE      31
+#define IMG_NARROW              32
+#define IMG_NORMAL              33
+#define IMG_WIDE                34
+#define IMG_MIRRORED            35
+#define STR_NARROW              36
+#define STR_NORMAL              37
+#define STR_WIDE                38
+#define STR_MIRRORED            39
+#define VS_MARGIN               40
+#define IMG_CUSTOM              41
+#define FT_LEFT                 42
+#define FT_RIGHT                43
+#define FT_TOP                  44
+#define FT_BOTTOM               45
+#define FT_INNER                46
+#define FT_OUTER                47
+#define TBI_COLUMN              48
+#define VS_COLUMN               49
+#define MBOX_WIDTH              50
+#define IMG_ONE                 51
+#define IMG_TWO                 52
+#define IMG_THREE               53
+#define IMG_LEFT                54
+#define IMG_RIGHT               55
+#define STR_ONE                 56
+#define STR_TWO                 57
+#define STR_THREE               58
+#define STR_LEFT                59
+#define STR_RIGHT               60
+#define CB_COLUMN_MORE          61
+
+#define CB_SIZE_MORE            61
+
+#define IMG_PAGE_NARROW         64
+#define IMG_PAGE_NORMAL         65
+#define IMG_PAGE_WIDE           63
+#define IMG_PAGE_MIRRORED       67
+#define IMG_PAGE_MARGIN_CUSTOM  68
+#define IMG_PAGE_A3             69
+#define IMG_PAGE_A4             70
+#define IMG_PAGE_A5             71
+#define IMG_PAGE_B4             72
+#define IMG_PAGE_B5             73
+#define IMG_PAGE_C5             74
+#define IMG_PAGE_LETTER         75
+#define IMG_PAGE_LEGAL          76
+#define IMG_PAGE_COLUMN_1       77
+#define IMG_PAGE_COLUMN_2       78
+#define IMG_PAGE_COLUMN_3       79
+#define IMG_PAGE_COLUMN_LEFT    80
+#define IMG_PAGE_COLUMN_RIGHT   81
+#define IMG_PAGE_SIZE_NONE      82
+#define IMG_PAGE_COLUMN_NONE    83
+#define IMG_PAGE_COLUMN_1_L     84
+#define IMG_PAGE_COLUMN_2_L     85
+#define IMG_PAGE_COLUMN_3_L     86
+#define IMG_PAGE_COLUMN_LEFT_L  87
+#define IMG_PAGE_COLUMN_RIGHT_L 88
+#define IMG_PAGE_COLUMN_NONE_L  89
+#define IMG_ONE_L               90
+#define IMG_TWO_L               91
+#define IMG_THREE_L             92
+#define IMG_LEFT_L              93
+#define IMG_RIGHT_L             94
+#define IMG_PAGE_A3_L           95
+#define IMG_PAGE_A4_L           96
+#define IMG_PAGE_A5_L           97
+#define IMG_PAGE_B4_L           98
+#define IMG_PAGE_B5_L           99
+#define IMG_PAGE_C5_L           100
+#define IMG_PAGE_LETTER_L       101
+#define IMG_PAGE_LEGAL_L        102
+#define IMG_PAGE_SIZE_NONE_L    103
+#define IMG_PAGE_NARROW_L       104
+#define IMG_PAGE_NORMAL_L       105
+#define IMG_PAGE_WIDE_L         106
+#define IMG_PAGE_MIRRORED_L     107
+#define IMG_PAGE_MARGIN_CUSTOM_L    108
+#define IMG_NARROW_L            109
+#define IMG_NORMAL_L            110
+#define IMG_WIDE_L              111
+#define IMG_MIRRORED_L          112
+#define FLD_LEFT_MARGIN         113
+#define FLD_RIGHT_MARGIN        114
+#define FLD_TOP_MARGIN          115
+#define FLD_BOTTOM_MARGIN       116
+
+#define STR_QHELP_TB_ORIENTATION    117
+#define STR_QHELP_TB_MARGIN         118
+#define STR_QHELP_TB_SIZE           119
+#define STR_QHELP_TB_COLUMN         120
+#define IMG_CUSTOM_DIS          121
+//
+#define STR_MARGIN_TOOLTIP_LEFT             122
+#define STR_MARGIN_TOOLTIP_RIGHT                123
+#define STR_MARGIN_TOOLTIP_INNER                124
+#define STR_MARGIN_TOOLTIP_OUTER                125
+#define STR_MARGIN_TOOLTIP_TOP                  126
+#define STR_MARGIN_TOOLTIP_BOT                  127
+
+#define POPUP_MARGIN            4
+#define VS_WIDTH                78
+#define ITEM_HEIGHT             17
+#define ITEM_HEIGHT2            15
+
+//========================================Position==============================================
+
+#define FT_ORIENTATION_X            SECTIONPAGE_MARGIN_HORIZONTAL
+#define FT_ORIENTATION_Y            SECTIONPAGE_MARGIN_VERTICAL_TOP
+#define TBX_ORIENTATION_X           FT_ORIENTATION_X
+#define TBX_ORIENTATION_Y           FT_ORIENTATION_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
+#define FT_MARGIN_X                 FT_ORIENTATION_X + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL
+#define FT_MARGIN_Y                 FT_ORIENTATION_Y
+#define TBX_MARGIN_X                FT_MARGIN_X
+#define TBX_MARGIN_Y                TBX_ORIENTATION_Y
+#define FT_SIZE_X                   FT_ORIENTATION_X
+#define FT_SIZE_Y                   TBX_ORIENTATION_Y + 20 + CONTROL_SPACING_VERTICAL
+#define TBX_SIZE_X                  FT_SIZE_X
+#define TBX_SIZE_Y                  FT_SIZE_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
+#define FT_COLUMN_X                 FT_MARGIN_X
+#define FT_COLUMN_Y                 FT_SIZE_Y
+#define TBX_COLUMN_X                FT_COLUMN_X
+#define TBX_COLUMN_Y                TBX_SIZE_Y
+
+#define FT_CUSTOM_X                 POPUP_MARGIN + OFFSET_X
+#define FT_CUSTOM_Y                 POPUPPANEL_MARGIN_SMALL * 2 + ITEM_HEIGHT * 5
+
+#define POP_BORDER_X                        POPUP_MARGIN + OFFSET_X + 1
+#define POP_BORDER_Y                        POPUPPANEL_MARGIN_SMALL * 3 + ITEM_HEIGHT * 5 + TEXT_HEIGHT
+#define BD_WIDTH                            VS_WIDTH - 6
+#define BD_HEIGHT                           MBOX_HEIGHT*4 + CONTROL_SPACING_VERTICAL*5
+
+#define FT_X                                POP_BORDER_X +  CONTROL_SPACING_HORIZONTAL
+#define MF_X                                FT_X + 25 + CONTROL_SPACING_HORIZONTAL
+#define LEFT_MF_Y                           POP_BORDER_Y +  CONTROL_SPACING_VERTICAL
+#define RIGHT_MF_Y                          LEFT_MF_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
+#define TOP_MF_Y                            RIGHT_MF_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
+#define BOTTOM_MF_Y                         TOP_MF_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
+#define FT_LEFT_Y                           LEFT_MF_Y + 1
+#define FT_RIGHT_Y                          RIGHT_MF_Y + 1
+#define FT_TOP_Y                            TOP_MF_Y + 1
+#define FT_BOTTOM_Y                         BOTTOM_MF_Y + 1
+
+#define MARGIN_PANEL_HEIGHT                 POP_BORDER_Y +  BD_HEIGHT + POPUP_MARGIN + OFFSET_Y
+#define CUST_MORE_BUTTON_IMG_OFF_X          POPUPPANEL_MARGIN_HORIZONTAL + OFFSET_X
+#define PAGE_HEIGHT                         TBX_COLUMN_Y + 20 + SECTIONPAGE_MARGIN_VERTICAL_BOT

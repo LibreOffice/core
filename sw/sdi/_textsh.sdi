@@ -54,6 +54,7 @@ interface BaseText
     SID_ATTR_BRUSH_CHAR // status()
     [
         ExecMethod = Execute ;
+        StateMethod = GetTxtCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -722,6 +723,18 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    FN_BUL_NUM_RULE_INDEX // status(final|play)
+    [
+        ExecMethod = ExecEnterNum ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUM_NUM_RULE_INDEX // status(final|play)
+    [
+        ExecMethod = ExecEnterNum ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     FN_NUMBER_BULLETS // status(final|play)
     [
         ExecMethod = ExecEnterNum ;
@@ -779,6 +792,21 @@ interface BaseText
     [
         ExecMethod = ExecMoveMisc ;
         StateMethod = NoState ;
+    ]
+    FN_SVX_SET_NUMBER
+    [
+        ExecMethod = ExecSetNumber;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_SVX_SET_BULLET
+    [
+        ExecMethod = ExecSetNumber;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_OUTLINE_BULLET // status(final|play)
+    [
+        ExecMethod = ExecEnterNum ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     FN_INSERT_FOOTNOTE_DLG // status(final|play|rec)
@@ -1184,6 +1212,11 @@ interface BaseText
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_ATTR_PARA_LRSPACE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState;
+    ]
     FN_SELECT_PARA // status(final|play)
     [
         ExecMethod = Execute ;
@@ -1427,6 +1460,12 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_CHAR_DLG // status(final|play)
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CHAR_DLG_EFFECT
     [
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";

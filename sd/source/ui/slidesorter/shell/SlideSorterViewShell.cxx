@@ -46,6 +46,7 @@
 #include "sdresid.hxx"
 #include "AccessibleSlideSorterView.hxx"
 #include "DrawDocShell.hxx"
+#include "DrawViewShell.hxx"
 #include "FrameView.hxx"
 #include "SdUnoSlideView.hxx"
 #include "ViewShellManager.hxx"
@@ -57,7 +58,10 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <svx/svxids.hrc>
+#include <sfx2/sidebar/EnumContext.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <cppuhelper/bootstrap.hxx>
@@ -72,12 +76,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
+using ::sfx2::sidebar::EnumContext;
 
 namespace sd { namespace slidesorter {
 
 
 SFX_IMPL_INTERFACE(SlideSorterViewShell, SfxShell, SdResId(STR_SLIDESORTERVIEWSHELL))
 {
+    SFX_CHILDWINDOW_REGISTRATION(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 
 
@@ -215,12 +221,11 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
 {
     SlideSorterViewShell* pViewShell = NULL;
 
-    // Test the center, left, and then the right pane for showing a slide sorter.
+    // Test the center and left pane for showing a slide sorter.
     OUString aPaneURLs[] = {
         FrameworkHelper::msCenterPaneURL,
         FrameworkHelper::msFullScreenPaneURL,
         FrameworkHelper::msLeftImpressPaneURL,
-        FrameworkHelper::msRightPaneURL,
         OUString()};
 
     try
@@ -547,6 +552,50 @@ void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
     ViewShell::Activate(bIsMDIActivate);
     if (mbIsArrangeGUIElementsPending)
         ArrangeGUIElements();
+
+    // Determine and broadcast the context that belongs to the main view shell.
+    EnumContext::Context eContext = EnumContext::Context_Unknown;
+    ::boost::shared_ptr<ViewShell> pMainViewShell (GetViewShellBase().GetMainViewShell());
+    ViewShell::ShellType eMainViewShellType (
+        pMainViewShell
+            ? pMainViewShell->GetShellType()
+            : ViewShell::ST_NONE);
+    switch (eMainViewShellType)
+    {
+        case ViewShell::ST_IMPRESS:
+            eContext = EnumContext::Context_DrawPage;
+            if (pMainViewShell->ISA(DrawViewShell))
+            {
+                DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell.get());
+                if (pDrawViewShell && (pDrawViewShell->GetEditMode()== EM_MASTERPAGE))
+                    eContext = EnumContext::Context_MasterPage;
+            }
+            break;
+
+        case ViewShell::ST_SLIDE_SORTER:
+            eContext = EnumContext::Context_SlidesorterPage;
+            break;
+
+        case ViewShell::ST_NOTES:
+            eContext = EnumContext::Context_NotesPage;
+            break;
+
+        default:
+            break;
+    }
+    ContextChangeEventMultiplexer::NotifyContextChange(
+        &GetViewShellBase(),
+        eContext);
+}
+
+
+
+
+void SlideSorterViewShell::Deactivate (sal_Bool /*bIsMDIActivate*/)
+{
+    ContextChangeEventMultiplexer::NotifyContextChange(
+        &GetViewShellBase(),
+        EnumContext::Context_Default);
 }
 
 

@@ -334,6 +334,52 @@ void Outliner::SetParaIsNumberingRestart( sal_Int32 nPara, sal_Bool bParaIsNumbe
     }
 }
 
+sal_Int32 Outliner::GetBulletsNumberingStatus()
+{
+    sal_Bool bHasBulletsNumbering = FALSE;
+    sal_uInt32 nParaCount = (sal_uInt32)(pParaList->GetParagraphCount());
+    for (sal_uInt32 nPara = 0; nPara < nParaCount; nPara++)
+    {
+        if ((bHasBulletsNumbering = ImplHasBullet(nPara)))
+        {
+            break;
+        }
+    }
+    sal_uInt16 nBulletsCount = 0;
+    sal_uInt16 nNumberingCount = 0;
+    if (bHasBulletsNumbering)
+    {
+        // At least have one paragraph that having bullets or numbering.
+        for (sal_uInt32 nPara = 0; nPara < nParaCount; nPara++)
+        {
+            Paragraph* pPara = pParaList->GetParagraph(nPara);
+            if (!pPara)
+            {
+                continue;
+            }
+            const SvxNumberFormat* pFmt = GetNumberFormat(nPara);
+            if (!pFmt)
+            {
+                // At least, exists one paragraph that has no Bullets/Numbering.
+                break;
+            }
+            else if ((pFmt->GetNumberingType() == SVX_NUM_BITMAP) || (pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL))
+            {
+                // Having Bullets in this paragraph.
+                nBulletsCount++;
+            }
+            else
+            {
+                // Having Numbering in this paragraph.
+                nNumberingCount++;
+            }
+        }
+    }
+    sal_Int32 nValue = (nBulletsCount == nParaCount) ? 0 : 2;
+    nValue = (nNumberingCount == nParaCount) ? 1 : nValue;
+    return nValue;
+}
+
 OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
     DBG_CHKTHIS(Outliner,0);

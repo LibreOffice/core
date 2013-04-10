@@ -1,0 +1,199 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "svx/dialogs.hrc"
+
+#define VS_SPACING_WIDTH        80
+#define CUSTOM_HEIGHT           CBOX_HEIGHT +  MBOX_HEIGHT + POPUPPANEL_MARGIN_LARGE * 3 + POPUPPANEL_MARGIN_SMALL * 2 + TEXT_HEIGHT * 2
+#define CUSTOM_WIDTH            VS_SPACING_WIDTH - 8
+#define CUSTOM_X                POPUPPANEL_MARGIN_LARGE + OFFSET_X + 1
+#define CUSTOM_Y                OFFSET_Y + POPUPPANEL_MARGIN_SMALL * 3 + 15 * 6 + TEXT_HEIGHT
+#define VS_UNDERLINE_WIDTH  57
+#define VS_UNDERLINE_HEIGHT  12 * 10
+//#define FT_TEST                   1
+#define CB_SBFONT_FONT          2
+#define MB_SBFONT_FONTSIZE      3
+#define TB_FONT                 4
+#define TB_INCREASE_DECREASE    5
+#define TB_FONTCOLOR            6
+#define TB_SCRIPT_SW            7
+#define TB_HIGHLIGHT            8
+#define TB_SPACING              9
+#define TB_SCRIPT               10
+
+
+#define IMG_INCREASE            11
+#define IMG_DECREASE            13
+#define IMG_BOLD                15
+#define IMG_ITALIC              17
+#define IMG_UNDERLINE           19
+#define IMG_STRIKEOUT           21
+#define IMG_SHADOWED            23
+#define IMG_FONTCOLOR           25
+#define IMG_SUPSCRIPT           27
+#define IMG_SUBSCRIPT           29
+//#define IMG_SPACING               31
+#define IMG_HIGHLIGHT           33
+
+#define TBI_FONTCOLOR           50
+#define TBI_BOLD                51
+#define TBI_ITALIC              52
+#define TBI_UNDERLINE           53
+#define TBI_STRIKEOUT           54
+#define TBI_SHADOWED            55
+#define TBI_INCREASE            56
+#define TBI_DECREASE            57
+#define TBI_HIGHLIGHT           58
+#define TBI_SUPER               59
+#define TBI_SUB                 60
+#define TBI_SUPER_SW            61
+#define TBI_SUB_SW              62
+#define TBI_SPACING             63
+
+#define IMG_SPACING_D               71
+
+//popup window underline
+#define VS_UNDERLINE            1
+#define PB_OPTIONS              2
+#define BMP_UNDERLINE_MORE      3
+
+#define IMG_SINGLE              10
+#define IMG_DOUBLE              11
+#define IMG_BOLD2               12
+#define IMG_DOT                 13
+#define IMG_DOT_BOLD            14
+#define IMG_DASH                15
+#define IMG_DASH_LONG           16
+#define IMG_DASH_DOT            17
+#define IMG_DASH_DOT_DOT        18
+#define IMG_WAVE                19
+
+#define STR_SINGLE              20
+#define STR_DOUBLE              21
+#define STR_BOLD                22
+#define STR_DOT                 23
+#define STR_DOT_BOLD            24
+#define STR_DASH                25
+#define STR_DASH_LONG           26
+#define STR_DASH_DOT            27
+#define STR_DASH_DOT_DOT        28
+#define STR_WAVE                29
+
+#define IMG_SINGLE_SEL          40
+#define IMG_DOUBLE_SEL          41
+#define IMG_BOLD2_SEL           42
+#define IMG_DOT_SEL             43
+#define IMG_DOT_BOLD_SEL        44
+#define IMG_DASH_SEL            45
+#define IMG_DASH_LONG_SEL       46
+#define IMG_DASH_DOT_SEL        47
+#define IMG_DASH_DOT_DOT_SEL    48
+#define IMG_WAVE_SEL            49
+
+//popup window font color
+#define VS_FONT_COLOR           1
+#define STR_AUTOMATICE          2
+
+//POPUP WINDOW OF SPACING
+#define VS_SPACING                  1
+
+#define CT_BORDER                   7
+#define LB_KERNING                  8
+#define ED_KERNING                  9
+
+#define FT_SPACING                  18
+#define FT_BY                       19
+#define FT_LASTCUSTOM               20
+
+#define IMG_NORMAL                  31
+#define IMG_VERY_TIGHT              32
+#define IMG_TIGHT                   33
+#define IMG_LOOSE                   34
+#define IMG_VERY_LOOSE              35
+#define IMG_CUSTOM                  36
+#define IMG_CUSTOM_GRAY             37
+
+#define IMG_NORMAL_S                51
+#define IMG_VERY_TIGHT_S            52
+#define IMG_TIGHT_S                 53
+#define IMG_LOOSE_S                 54
+#define IMG_VERY_LOOSE_S            55
+
+#define STR_VERY_TIGHT              61
+#define STR_TIGHT                   62
+#define STR_NORMAL                  63
+#define STR_LOOSE                   64
+#define STR_VERY_LOOSE              65
+#define STR_CUSTOM                  66
+
+#define STR_VERY_TIGHT_TIP          67
+#define STR_TIGHT_TIP               68
+#define STR_NORMAL_TIP              69
+#define STR_LOOSE_TIP               70
+#define STR_VERY_LOOSE_TIP          71
+
+#define STR_CUSTOM_C_TIP            72
+#define STR_CUSTOM_E_TIP            73
+#define STR_PT                      74
+#define STR_QH_BOLD             75
+#define STR_QH_ITALIC           76
+#define STR_QH_UNDERLINE        77
+
+//help ids
+#define HID_COMBO_FONT_NAME             "SVX_HID_COMBO_FONT_NAME"
+#define HID_METRIC_FONT_SIZE            "SVX_HID_METRIC_FONT_SIZE"
+#define HID_TB_INCREASE_DECREASE        "SVX_HID_TB_INCREASE_DECREASE"
+#define HID_TBI_INCREASE                "SVX_HID_TBI_INCREASE"
+#define HID_TBI_DECREASE                "SVX_HID_TBI_DECREASE"
+#define HID_TB_FONT                     "SVX_HID_TB_FONT"
+#define HID_TBI_FONT_BOLD               "SVX_HID_TBI_FONT_BOLD"
+#define HID_TBI_FONT_ITALIC             "SVX_HID_TBI_FONT_ITALIC"
+#define HID_TBI_FONT_UNDERLINE          "SVX_HID_TBI_FONT_UNDERLINE"
+#define HID_TBI_FONT_STRIKEOUT          "SVX_HID_TBI_FONT_STRIKEOUT"
+#define HID_TBI_FONT_SHADOWED           "SVX_HID_TBI_FONT_SHADOWED"
+#define HID_TB_COLOR                    "SVX_HID_TB_COLOR"
+#define HID_TBI_COLOR                   "SVX_HID_TBI_COLOR"
+#define HID_TB_SCRIPT                   "SVX_HID_TB_SCRIPT"
+#define HID_TBI_SCRIPT_SUPER            "SVX_HID_TBI_SCRIPT_SUPER"
+#define HID_TBI_SCRIPT_SUB              "SVX_HID_TBI_SCRIPT_SUB"
+#define HID_TB_SCRIPT_SW                "SVX_HID_TB_SCRIPT_SW"
+#define HID_TBI_SCRIPT_SW_SUPER         "SVX_HID_TBI_SCRIPT_SW_SUPER"
+#define HID_TBI_SCRIPT_SW_SUB           "SVX_HID_TBI_SCRIPT_SW_SUB"
+#define HID_TB_SPACING                  "SVX_HID_TB_SPACING"
+#define HID_TBI_SPACING                 "SVX_HID_TBI_SPACING"
+#define HID_TB_HIGHLIGHT                "SVX_HID_TB_HIGHLIGHT"
+#define HID_TBI_HIGHLIGHT               "SVX_HID_TBI_HIGHLIGHT"
+
+#define HID_UNDERLINE_VS                "SVX_HID_UNDERLINE_VS"
+#define HID_UNDERLINE_BTN               "SVX_HID_UNDERLINE_BTN"
+
+#define HID_COLOR_VS                    "SVX_HID_COLOR_VS"
+
+#define HID_SPACING_TB_VERY_LOOSE       "SVX_HID_SPACING_TB_VERY_LOOSE"
+#define HID_SPACING_TBI_VERY_LOOSE      "SVX_HID_SPACING_TBI_VERY_LOOSE"
+#define HID_SPACING_TB_LOOSE            "SVX_HID_SPACING_TB_LOOSE"
+#define HID_SPACING_TBI_LOOSE           "SVX_HID_SPACING_TBI_LOOSE"
+#define HID_SPACING_TB_NORMAL           "SVX_HID_SPACING_TB_NORMAL"
+#define HID_SPACING_TBI_NORMAL          "SVX_HID_SPACING_TBI_NORMAL"
+#define HID_SPACING_TB_TIGHT            "SVX_HID_SPACING_TB_TIGHT"
+#define HID_SPACING_TBI_TIGHT           "SVX_HID_SPACING_TBI_TIGHT"
+#define HID_SPACING_TB_VERY_TIGHT       "SVX_HID_SPACING_TB_VERY_TIGHT"
+#define HID_SPACING_TBI_VERY_TIGHT      "SVX_HID_SPACING_TBI_VERY_TIGHT"
+#define HID_SPACING_TB_CUSTOM           "SVX_HID_SPACING_TB_CUSTOM"
+#define HID_SPACING_TBI_CUSTOM          "SVX_HID_SPACING_TBI_CUSTOM"
+#define HID_SPACING_CB_KERN             "SVX_HID_SPACING_CB_KERN"
+#define HID_SPACING_MB_KERN             "SVX_HID_SPACING_MB_KERN"

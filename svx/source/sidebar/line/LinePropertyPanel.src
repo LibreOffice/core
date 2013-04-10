@@ -1,0 +1,486 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "LinePropertyPanel.hrc"
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
+#include <svx/dialogs.hrc>
+#include "helpid.hrc"
+
+#define TOOLBOX_WIDTH       50
+#define TOOLBOX_HEIGHT      14
+#define LISTBOX_HEIGHT      99
+
+Control RID_SIDEBAR_LINE_PANEL
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+    Text = "Line";
+
+    Size = MAP_APPFONT(
+        PROPERTYPAGE_WIDTH,
+        SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*4 + TEXT_CONTROL_SPACING_VERTICAL*4 + TOOLBOX_HEIGHT*3  + CONTROL_SPACING_VERTICAL*3 + CBOX_HEIGHT + SECTIONPAGE_MARGIN_VERTICAL_BOT );
+    HelpID = HID_PROPERTYPANEL_LINE_SECTION ;
+
+    FixedText FT_WIDTH
+    {
+        Pos = MAP_APPFONT( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP ) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH  , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Width:" ;
+    };
+    ToolBox TB_WIDTH
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL, SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH ,TOOLBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpID = HID_PPROPERTYPANEL_LINE_TBX_WIDTH ;
+        Text = "Width";
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_WIDTH ;
+                DropDown = TRUE ;
+                Text [ en-US ] = "Width" ;
+                HelpID = HID_PPROPERTYPANEL_LINE_TBI_WIDTH;
+            };
+        };
+    };
+    String STR_QH_TB_WIDTH
+    {
+        Text [ en-US ] = "Select the width of the line.";
+    };
+
+    FixedText FT_COLOR
+    {
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH + 3, SECTIONPAGE_MARGIN_VERTICAL_TOP ) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH  , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Color:" ;
+    };
+    ToolBox TB_COLOR
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH + 4, SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH ,TOOLBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpID = HID_PPROPERTYPANEL_LINE_TBX_COLOR;
+        Text = "Color";
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_COLOR ;
+                DropDown = TRUE ;
+                Text [ en-US ] = "Color" ;
+                HelpID = HID_PPROPERTYPANEL_LINE_TBI_COLOR;
+            };
+        };
+    };
+    String STR_QH_TB_COLOR
+    {
+        Text [ en-US ] = "Select the color of the line.";
+    };
+
+    FixedText FT_STYLE
+    {
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL + TOOLBOX_HEIGHT  + CONTROL_SPACING_VERTICAL) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH  , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Style:" ;
+    };
+    ListBox LB_STYLE
+    {
+        Border = TRUE ;
+        HelpID = HID_PPROPERTYPANEL_LINE_TBX_STYLE;
+        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL, SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*2 + TEXT_CONTROL_SPACING_VERTICAL*2 + TOOLBOX_HEIGHT  + CONTROL_SPACING_VERTICAL) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH ,LISTBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        QuickHelpText [ en-US ] = "Select the style of the line.";
+    };
+
+    FixedText FT_TRANSPARENT
+    {
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH + 3 , SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL + TOOLBOX_HEIGHT  + CONTROL_SPACING_VERTICAL) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH  , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Transparency:" ;
+    };
+    MetricField MF_TRANSPARENT
+    {
+        Border = TRUE ;
+        HelpID = HID_PPROPERTYPANEL_LINE_MTR_TRANCEPARENCE;
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH + 3 , SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*2 + TEXT_CONTROL_SPACING_VERTICAL*2 + TOOLBOX_HEIGHT  + CONTROL_SPACING_VERTICAL) ;
+        Size = MAP_APPFONT ( TOOLBOX_WIDTH + 1 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+        QuickHelpText [ en-US ] = "Specify the transparency of the line.";
+    };
+
+    FixedText FT_ARROW
+    {
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL, SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*2 + TEXT_CONTROL_SPACING_VERTICAL*2 + TOOLBOX_HEIGHT*2  + CONTROL_SPACING_VERTICAL*2) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH * 2 + 3 , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Arrow:" ;
+    };
+    ListBox LB_START
+    {
+        Border = TRUE ;
+        HelpID = HID_PPROPERTYPANEL_LINE_LB_START;
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*3 + TEXT_CONTROL_SPACING_VERTICAL*3 + TOOLBOX_HEIGHT*2  + CONTROL_SPACING_VERTICAL*2 ) ;
+        Size = MAP_APPFONT ( TOOLBOX_WIDTH , LISTBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        QuickHelpText [ en-US ] = "Select the style of the beginning arrowhead.";
+    };
+    ListBox LB_END
+    {
+        Border = TRUE ;
+        HelpID = HID_PPROPERTYPANEL_LINE_LB_END;
+        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH + 3 , SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*3 + TEXT_CONTROL_SPACING_VERTICAL*3 + TOOLBOX_HEIGHT*2  + CONTROL_SPACING_VERTICAL*2 ) ;
+        Size = MAP_APPFONT ( TOOLBOX_WIDTH + 1, LISTBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        QuickHelpText [ en-US ] = "Select the style of the ending arrowhead.";
+    };
+
+    FixedText FT_EDGESTYLE
+    {
+        Pos = MAP_APPFONT (
+            SECTIONPAGE_MARGIN_HORIZONTAL,
+            SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*3 + TEXT_CONTROL_SPACING_VERTICAL*3 + TOOLBOX_HEIGHT*3  + CONTROL_SPACING_VERTICAL*3) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH * 2 + 3 , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Corner style" ;
+    };
+    ListBox LB_EDGESTYLE
+    {
+        HelpID = HID_PPROPERTYPANEL_LINE_LB_EDGESTYLE;
+        Border = TRUE ;
+        Pos = MAP_APPFONT (
+            SECTIONPAGE_MARGIN_HORIZONTAL ,
+            SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*4 + TEXT_CONTROL_SPACING_VERTICAL*4 + TOOLBOX_HEIGHT*3  + CONTROL_SPACING_VERTICAL*3 ) ;
+        Size = MAP_APPFONT ( TOOLBOX_WIDTH , LISTBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        QuickHelpText [ en-US ] = "Select the style of the edge connections.";
+        StringList [ en-US ] =
+        {
+            < "Rounded" ; Default ; > ;
+            < "- none -" ; > ;
+            < "Mitered" ; > ;
+            < "Beveled" ; > ;
+        };
+    };
+    FixedText FT_CAPSTYLE
+    {
+        Pos = MAP_APPFONT (
+            SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH + 3,
+            SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*3 + TEXT_CONTROL_SPACING_VERTICAL*3 + TOOLBOX_HEIGHT*3  + CONTROL_SPACING_VERTICAL*3) ;
+        Size = MAP_APPFONT (TOOLBOX_WIDTH * 2 + 3 , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "Ca~p style" ;
+    };
+    ListBox LB_CAPSTYLE
+    {
+        HelpID = HID_PPROPERTYPANEL_LINE_LB_CAPSTYLE;
+        Border = TRUE ;
+        Pos = MAP_APPFONT (
+            SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH + 3,
+            SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT*4 + TEXT_CONTROL_SPACING_VERTICAL*4 + TOOLBOX_HEIGHT*3  + CONTROL_SPACING_VERTICAL*3 ) ;
+        Size = MAP_APPFONT ( TOOLBOX_WIDTH , LISTBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        QuickHelpText [ en-US ] = "Select the style of the line caps.";
+        StringList [ en-US ] =
+        {
+            < "Flat" ; Default ; > ; // Same string as in Excel
+            < "Round" ; > ;
+            < "Square" ; > ;
+        };
+    };
+
+    Image IMG_COLOR
+    {
+        ImageBitmap = Bitmap{File = "symphony/Line_color.png";};
+    };
+    Image IMG_COLOR_NO
+    {
+        ImageBitmap = Bitmap{File = "symphony/no color.png";};
+    };
+
+    Image IMG_NONE_ICON
+    {
+        ImageBitmap = Bitmap{File = "symphony/blank.png";};
+    };
+
+    //WIDTH ICON
+    Image IMG_WIDTH1_ICON
+    {
+        ImageBitmap = Bitmap{File = "symphony/width1.png";};
+    };
+    Image IMG_WIDTH2_ICON
+    {
+        ImageBitmap = Bitmap{File = "symphony/width2.png";};
+    };
+    Image IMG_WIDTH3_ICON
+    {
+        ImageBitmap = Bitmap{File = "symphony/width3.png";};
+    };
+    Image IMG_WIDTH4_ICON
+    {
+        ImageBitmap = Bitmap{File = "symphony/width4.png";};
+    };
+    Image IMG_WIDTH5_ICON
+    {
+        ImageBitmap = Bitmap{File = "symphony/width5.png";};
+    };
+    Image IMG_WIDTH6_ICON
+    {
+        ImageBitmap = Bitmap{File = "symphony/width6.png";};
+    };
+    Image IMG_WIDTH7_ICON
+    {
+        ImageBitmap = Bitmap{File = "symphony/width7.png";};
+    };
+    Image IMG_WIDTH8_ICON
+    {
+        ImageBitmap = Bitmap{File = "symphony/width8.png";};
+    };
+
+};
+Control RID_POPUPPANEL_LINEPAGE_COLOR
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+    Size = MAP_APPFONT(  POPUP_COLOR_PICKER_WIDTH , POPUP_COLOR_PICKER_HEIGHT  );
+
+    Control VS_COLOR
+    {
+        HelpId = HID_PPROPERTYPANEL_LINE_VS_COLOR ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( OFFSET_X , OFFSET_Y );
+        Size = MAP_APPFONT (  POPUP_COLOR_PICKER_WIDTH - OFFSET_X * 2, POPUP_COLOR_PICKER_HEIGHT - OFFSET_Y * 2);
+        TabStop = TRUE ;
+        Text = "Color";
+    };
+    String STR_AUTOMATICE
+    {
+        Text [ en-US ] = "No Color";
+    };
+};
+Control RID_POPUPPANEL_LINEPAGE_STYLE
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+    Size = MAP_APPFONT(
+        POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH ,
+        13 + POPUP_BORDER_HEIGHT + POPUPPANEL_MARGIN_SMALL * 2 + POPUPPANEL_MARGIN_LARGE);
+
+    Control VS_STYLE
+    {
+        HelpId = HID_PPROPERTYPANEL_LINE_VS_STYLE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL + OFFSET_X , POPUPPANEL_MARGIN_SMALL + OFFSET_Y );
+        Size = MAP_APPFONT ( 93  , 13 * 12);
+        TabStop = TRUE ;
+        Text = "Style";
+    };
+
+    PushButton PB_OPTIONS
+    {
+        HelpId = HID_PPROPERTYPANEL_LINE_BTN_STYLE;
+        Pos = MAP_APPFONT (  POPUPPANEL_MARGIN_LARGE + OFFSET_X , POPUPPANEL_MARGIN_SMALL * 2 + OFFSET_Y  );
+        Size = MAP_APPFONT ( 93 , 13 );
+        TabStop = TRUE;
+        Text [ en-US ] = "~More Options...";
+    };
+
+    String STR_STYLE_NONE
+    {
+        Text [ en-US ] = "None";
+    };
+    String STR_STYLE_LINE1
+    {
+        Text [ en-US ] = "Continuous";
+    };
+    String STR_STYLE_LINE2
+    {
+        Text [ en-US ] = "Ultrafine dashed";
+    };
+    String STR_STYLE_LINE3
+    {
+        Text [ en-US ] = "Dashed (variable)";
+    };
+    String STR_STYLE_LINE4
+    {
+        Text [ en-US ] = "Fine dashed (variable)";
+    };
+    String STR_STYLE_LINE5
+    {
+        Text [ en-US ] = "Fine dashed";
+    };
+    String STR_STYLE_LINE6
+    {
+        Text [ en-US ] = "Fine dotted";
+    };
+    String STR_STYLE_LINE7
+    {
+        Text [ en-US ] = "Ultrafine dotted (variable)";
+    };
+    String STR_STYLE_LINE8
+    {
+        Text [ en-US ] = "3 dashes 3 dots (variable)";
+    };
+    String STR_STYLE_LINE9
+    {
+        Text [ en-US ] = "2 dots 1 dash";
+    };
+    String STR_STYLE_LINE10
+    {
+        Text [ en-US ] = "Ultrafine 2 dots 3 dashes";
+    };
+    String STR_STYLE_LINE11
+    {
+        Text [ en-US ] = "Line with fine dots";
+    };
+
+    Image IMG_LINE1
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line1.png";};
+    };
+    Image IMG_LINE2
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line2.png";};
+    };
+    Image IMG_LINE3
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line3.png";};
+    };
+    Image IMG_LINE4
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line4.png";};
+    };
+    Image IMG_LINE5
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line5.png";};
+    };
+    Image IMG_LINE6
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line6.png";};
+    };
+    Image IMG_LINE7
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line7.png";};
+    };
+    Image IMG_LINE8
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line8.png";};
+    };
+    Image IMG_LINE9
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line9.png";};
+    };
+    Image IMG_LINE10
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line10.png";};
+    };
+    Image IMG_LINE11
+    {
+        ImageBitmap = Bitmap{File = "symphony/style_line11.png";};
+    };
+};
+Control RID_POPUPPANEL_LINEPAGE_WIDTH
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+    Size = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH  + 80,    POPUPPANEL_MARGIN_SMALL + POPUPPANEL_MARGIN_LARGE + POPUP_BORDER_WIDTH + 12 * 9 + POPUPPANEL_MARGIN_SMALL * 2 + TEXT_HEIGHT + (POPUPPANEL_MARGIN_LARGE * 2 +  TEXT_HEIGHT + 12 +  TEXT_CONTROL_SPACING_VERTICAL));
+
+    Control VS_WIDTH
+    {
+        HelpId = HID_PPROPERTYPANEL_LINE_VS_WIDTH ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT( POPUPPANEL_MARGIN_SMALL + OFFSET_X , POPUPPANEL_MARGIN_SMALL + OFFSET_Y );
+        Size = MAP_APPFONT ( 80  , 12 * 9);
+        TabStop = TRUE ;
+        Text = "Width";
+    };
+    FixedText FT_CUSTOME
+    {
+        Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_LARGE + OFFSET_X, POPUPPANEL_MARGIN_SMALL + OFFSET_Y + 12 * 9 + POPUPPANEL_MARGIN_SMALL ) ;
+        Size = MAP_APPFONT ( 80  , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "Custom:" ;
+    };
+    FixedText FT_LINE_WIDTH
+    {
+        Pos = MAP_APPFONT ( CUSTOM_X + POPUPPANEL_MARGIN_LARGE, CUSTOM_Y + POPUPPANEL_MARGIN_LARGE) ;
+        Size = MAP_APPFONT (  74 - POPUPPANEL_MARGIN_LARGE * 2   , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "Line ~width:" ;
+    };
+    MetricField MF_WIDTH
+    {
+        Border = TRUE ;
+        HelpID = HID_PPROPERTYPANEL_LINE_MTR_WIDTH ;
+        Pos = MAP_APPFONT (  CUSTOM_X + POPUPPANEL_MARGIN_LARGE  , CUSTOM_Y + POPUPPANEL_MARGIN_LARGE + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Right = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 5000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Value = 1 ;
+        Unit = FUNIT_MM ;
+        Last = 5000 ;
+        SpinSize = 10 ;
+        QuickHelpText [ en-US ] = "Specify the width of the line.";
+    };
+
+    Image IMG_WIDTH_CUSTOM
+    {
+        ImageBitmap = Bitmap{File = "symphony/last_custom_common.png";};
+    };
+    Image IMG_WIDTH_CUSTOM_GRAY
+    {
+        ImageBitmap = Bitmap{File = "symphony/last_custom_common_grey.png";};
+    };
+    String STR_WIDTH_LAST_CUSTOM
+    {
+        Text [ en-US ] = "Last Custom Value";
+    };
+    String STR_PT
+    {
+        Text [ en-US ] = "pt";
+    };
+};
+
+// eof

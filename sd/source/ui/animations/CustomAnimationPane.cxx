@@ -54,6 +54,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/sidebar/Theme.hxx>
 
 #include <svx/unoapi.hxx>
 #include <svx/svxids.hrc>
@@ -239,6 +240,8 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     maLateInitTimer.SetTimeout(100);
     maLateInitTimer.SetTimeoutHdl(LINK(this, CustomAnimationPane, lateInitCallback));
     maLateInitTimer.Start();
+
+    UpdateLook();
 }
 
 CustomAnimationPane::~CustomAnimationPane()
@@ -1058,6 +1061,42 @@ void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
 
     updateControls();
 }
+
+
+
+
+void CustomAnimationPane::DataChanged (const DataChangedEvent& rEvent)
+{
+    (void)rEvent;
+    UpdateLook();
+}
+
+
+
+
+void CustomAnimationPane::UpdateLook (void)
+{
+    SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
+    if (mpFLModify != NULL)
+        mpFLModify->SetBackground(Wallpaper());
+    if (mpFLEffect != NULL)
+        mpFLEffect->SetBackground(Wallpaper());
+    if (mpFTStart != NULL)
+        mpFTStart->SetBackground(Wallpaper());
+    if (mpFTProperty != NULL)
+        mpFTProperty->SetBackground(Wallpaper());
+    if (mpFTSpeed != NULL)
+        mpFTSpeed->SetBackground(Wallpaper());
+    if (mpFTChangeOrder != NULL)
+        mpFTChangeOrder->SetBackground(Wallpaper());
+    if (mpFLSeperator1 != NULL)
+        mpFLSeperator1->SetBackground(Wallpaper());
+    if (mpFLSeperator2 != NULL)
+        mpFLSeperator2->SetBackground(Wallpaper());
+}
+
+
+
 
 void addValue( STLPropertySet* pSet, sal_Int32 nHandle, const Any& rValue )
 {
@@ -2457,8 +2496,10 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     if( pDocSh )
     {
         pWindow = new DialogListBox( pParent, WB_CLIPCHILDREN|WB_TABSTOP|WB_AUTOHSCROLL );
+        const Size aMinSize( pWindow->LogicToPixel( Size( 80, 256 ), MAP_APPFONT ) );
+        pWindow->SetSizePixel(aMinSize);
+        pWindow->SetBackground(Wallpaper(Color(COL_BLUE)));
 
-        Size aMinSize( pWindow->LogicToPixel( Size( 80, 256 ), MAP_APPFONT ) );
         ::Window* pPaneWindow = new CustomAnimationPane( pWindow, rBase, aMinSize );
         pWindow->SetChildWindow( pPaneWindow, aMinSize );
         pWindow->SetText( pPaneWindow->GetText() );
@@ -2468,6 +2509,15 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
 }
 
 
+
+
+sal_Int32 getCustomAnimationPanelMinimumHeight (::Window* pDialog)
+{
+    if (pDialog != NULL)
+        return pDialog->LogicToPixel(Size( 80, 256 ), MAP_APPFONT).Height();
+    else
+        return 0;
+}
 
 }
 

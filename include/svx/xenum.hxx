@@ -21,14 +21,6 @@
 #define _XENUM_HXX
 
 enum XLineStyle         { XLINE_NONE, XLINE_SOLID, XLINE_DASH };
-enum XLineJoint
-{
-    XLINEJOINT_NONE,        // no rounding
-    XLINEJOINT_MIDDLE,      // calc middle value between joints
-    XLINEJOINT_BEVEL,       // join edges with line
-    XLINEJOINT_MITER,       // extend till cut
-    XLINEJOINT_ROUND        // create arc
-};
 enum XDashStyle         { XDASH_RECT, XDASH_ROUND, XDASH_RECTRELATIVE,
                           XDASH_ROUNDRELATIVE };
 enum XFillStyle         { XFILL_NONE, XFILL_SOLID, XFILL_GRADIENT, XFILL_HATCH,

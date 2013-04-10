@@ -1,0 +1,158 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "Sidebar.hrc"
+
+Resource RID_SIDEBAR_RESOURCE
+{
+    Image IMAGE_SIDEBAR_PLUS
+    {
+        ImageBitmap = Bitmap { File = "plus.png" ;};
+    };
+
+    Image IMAGE_SIDEBAR_MINUS
+    {
+        ImageBitmap = Bitmap { File = "minus.png" ;};
+    };
+
+    Image IMAGE_SIDEBAR_GRIP
+    {
+        ImageBitmap = Bitmap { File = "grip.png" ;};
+    };
+
+    Image IMAGE_SIDEBAR_MENU
+    {
+        ImageBitmap = Bitmap { File = "symphony/open_more.png" ;};
+    };
+
+    Image IMAGE_SIDEBAR_DETAIL_DIALOG
+    {
+        ImageBitmap = Bitmap { File = "symphony/morebutton.png" ;};
+    };
+
+    Image IMAGE_SIDEBAR_TOOLBOX_SEPARATOR
+    {
+        ImageBitmap = Bitmap { File = "separator.png" ;};
+    };
+
+    Image IMAGE_SIDEBAR_DECK_3D_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_3D_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-3d-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_ANIMATION_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_ANIMATION_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-animation-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_COLORS_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_COLORS_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-colors-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_EYEDROPPER_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_EYEDROPPER_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-eyedropper-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_GALLERY_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_GALLERY_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-gallery-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_IMGANIM_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_IMGANIM_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-imganim-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_NAVIGATOR_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_NAVIGATOR_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-navigator-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_PROPERTIES_DECK_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-property-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_PROPERTIES_DECK_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-property-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_STYLE_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-style-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_STYLE_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-style-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_TEMPLATE_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-template-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_TEMPLATE_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-template-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_TRANSITION_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_TRANSITION_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-transition-small.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_FUNCTIONS_LARGE
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-large.png" ;};
+    };
+    Image IMAGE_SIDEBAR_DECK_FUNCTIONS_SMALL
+    {
+        ImageBitmap = Bitmap { File = "symphony/sidebar-functions-small.png" ;};
+    };
+    String STRING_CUSTOMIZATION
+    {
+    Text [en-US] = "Customization";
+    };
+    String STRING_RESTORE
+    {
+    Text [en-US] = "Restore Default";
+    };
+};
+
+

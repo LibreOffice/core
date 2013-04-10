@@ -45,8 +45,7 @@ namespace {
         CenterPaneId,
         FullScreenPaneId,
         LeftImpressPaneId,
-        LeftDrawPaneId,
-        RightPaneId
+        LeftDrawPaneId
     };
 
     static const sal_Int32 gnConfigurationUpdateStartEvent(0);
@@ -194,7 +193,7 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
             mxConfigurationControllerWeak = xCC;
 
             // Add pane factories for the two left panes (one for Impress and one for
-            // Draw), the center pane, and the right pane.
+            // Draw) and the center pane.
             if (xController.is() && xCC.is())
             {
                 PaneDescriptor aDescriptor;
@@ -218,11 +217,6 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
 
                 aDescriptor.msPaneURL = FrameworkHelper::msLeftDrawPaneURL;
                 aDescriptor.mePaneId = LeftDrawPaneId;
-                mpPaneContainer->push_back(aDescriptor);
-                xCC->addResourceFactory(aDescriptor.msPaneURL, this);
-
-                aDescriptor.msPaneURL = FrameworkHelper::msRightPaneURL;
-                aDescriptor.mePaneId = RightPaneId;
                 mpPaneContainer->push_back(aDescriptor);
                 xCC->addResourceFactory(aDescriptor.msPaneURL, this);
             }
@@ -293,7 +287,6 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
 
                 case LeftImpressPaneId:
                 case LeftDrawPaneId:
-                case RightPaneId:
                     xPane = CreateChildWindowPane(
                         rxPaneId,
                         *iDescriptor);
@@ -477,11 +470,6 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
             case LeftDrawPaneId:
                 pShell.reset(new LeftDrawPaneShell());
                 nChildWindowId = ::sd::LeftPaneDrawChildWindow::GetChildWindowId();
-                break;
-
-            case RightPaneId:
-                pShell.reset(new ToolPanelPaneShell());
-                nChildWindowId = ::sd::ToolPanelChildWindow::GetChildWindowId();
                 break;
 
             default:

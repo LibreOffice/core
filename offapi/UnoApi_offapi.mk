@@ -3939,6 +3939,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\
 	ActionTriggerSeparatorType \
 	ConfigurationEvent \
+	ContextChangeEventMultiplexer \
+	ContextChangeEventObject \
 	ContextMenuExecuteEvent \
 	ContextMenuInterceptorAction \
 	DockingArea \
@@ -3946,14 +3948,19 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\
 	ImageType \
 	ItemStyle \
 	ItemType \
+	LayoutSize \
 	UIElementType \
 	XAcceleratorConfiguration \
+	XContextChangeEventListener \
+	XContextChangeEventMultiplexer \
 	XContextMenuInterception \
 	XContextMenuInterceptor \
 	XDockingAreaAcceptor \
 	XImageManager \
 	XModuleUIConfigurationManager \
 	XModuleUIConfigurationManagerSupplier \
+	XSidebar \
+	XSidebarPanel \
 	XToolPanel \
 	XUIConfiguration \
 	XUIConfigurationListener \

@@ -569,7 +569,7 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
         long nLineWidth = 35 * ::std::min( rLineData.mnWidth, EXC_OBJ_LINE_THICK );
         rSdrObj.SetMergedItem( XLineWidthItem( nLineWidth ) );
         rSdrObj.SetMergedItem( XLineColorItem( EMPTY_STRING, GetPalette().GetColor( rLineData.mnColorIdx ) ) );
-        rSdrObj.SetMergedItem( XLineJointItem( XLINEJOINT_MITER ) );
+        rSdrObj.SetMergedItem( XLineJointItem( com::sun::star::drawing::LineJoint_MITER ) );
 
         sal_uLong nDotLen = ::std::max< sal_uLong >( 70 * rLineData.mnWidth, 35 );
         sal_uLong nDashLen = 3 * nDotLen;

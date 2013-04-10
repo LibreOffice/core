@@ -101,11 +101,20 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SW_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16);
 
     /// Methods for StyleSheets
-    SW_DLLPRIVATE sal_uInt16                    Edit( const String &rName, const String& rParent, sal_uInt16 nFamily,
-                                    sal_uInt16 nMask, sal_Bool bNew,
-                                    sal_uInt16 nPageId = 0,
-                                    SwWrtShell* pActShell = 0,
-                                    sal_Bool bBasic = sal_False );
+
+    // @param nSlot
+    // Only used for nFamily == SFX_STYLE_FAMILY_PAGE. Identifies optional Slot by which the edit is triggered.
+    // Used to activate certain dialog pane
+    SW_DLLPRIVATE sal_uInt16 Edit(
+        const String &rName,
+        const String& rParent,
+        const sal_uInt16 nFamily,
+        sal_uInt16 nMask,
+        const sal_Bool bNew,
+        const sal_uInt16 nSlot = 0,
+        SwWrtShell* pActShell = 0,
+        const sal_Bool bBasic = sal_False );
+
     SW_DLLPRIVATE sal_uInt16                    Delete(const String &rName, sal_uInt16 nFamily);
     SW_DLLPRIVATE sal_uInt16                    Hide(const String &rName, sal_uInt16 nFamily, bool bHidden);
     SW_DLLPRIVATE sal_uInt16                    ApplyStyles(const String &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0,
@@ -244,10 +253,13 @@ public:
 
     void _LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrentDocument );
 
-    /// Display dialog for page style. If required display column page.
-    void FormatPage( const String& rPage,
-                        sal_uInt16 nPageId = 0,
-                        SwWrtShell*     pActShell = 0 );
+    // Show page style format dialog
+    // @param nSlot
+    // Identifies slot by which the dialog is triggered. Used to activate certain dialog pane
+    void FormatPage(
+        const String& rPage,
+        const sal_uInt16 nSlot,
+        SwWrtShell& rActShell );
 
     // #i59688#
     /** linked graphics are now loaded on demand.

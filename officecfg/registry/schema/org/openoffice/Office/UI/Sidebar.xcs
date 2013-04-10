@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
+<oor:component-schema
+    xmlns:oor="http://openoffice.org/2001/registry"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    oor:name="Sidebar"
+    oor:package="org.openoffice.Office.UI"
+    xml:lang="en-US">
+  <info>
+    <author>Andre Fischer</author>
+    <desc>Specification of decks and content panels of the sidebar.</desc>
+  </info>
+  <templates>
+    <group oor:name="Deck">
+      <info>
+        <desc>Specification of a sidebar deck which is a container of content panels.</desc>
+      </info>
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>The deck title is displayed above the content panels.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="Id" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>Internally used to identify the deck.  Not displayed in the UI.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="IconURL" oor:type="xs:string">
+        <info>
+          <desc>This icon is displayed in the sidebar tab bar.
+          Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service is suitable here.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="HighContrastIconURL" oor:type="xs:string">
+        <info>
+          <desc>This icon is displayed in the sidebar tab bar when high contrast mode is active.
+          Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service is suitable here.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="HelpURL" oor:type="xs:string">
+        <info>
+          <desc>Help about the sidebar deck.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="ContextList" oor:type="oor:string-list">
+        <info><desc>
+          List of context descriptors.  Each context descriptor is a string that contains four comma
+          separated values (note that values are case sensitive):
+          1  Application name. Valid values are
+                 com.sun.star.text.TextDocument
+                 com.sun.star.sheet.SpreadsheetDocument
+                 com.sun.star.presentation.PresentationDocument
+                 com.sun.star.drawing.DrawingDocument
+             
+             Recognized shortcuts:
+                 Writer
+                 Calc
+                 Impress
+                 Draw
+
+             Shortcuts for multiple applications:
+                 DrawImpress
+                 WriterAndWeb
+             These shortcuts exist for even more convenience and handle the frequent case of Draw
+	     and Impress as well as Writer and WriterWeb having otherwise identical context descriptions.
+             
+             Special values:
+                 any
+                 none
+
+          2  Context name
+              Know context names are 3DObject, Annotation, Auditing, Cell, Chart, Draw, DrawPage, DrawText,
+              EditCell, Form, Frame, Graphic, HandoutPage, MasterPage, Media, Multiobj, OLE, OutlineText,
+              Pivot, SlidesorterPage, Table, Text, TextObject,
+              default
+
+             Special values:
+                 any
+
+          3  Panel state.  One of 
+             visible  Panel is initially visible and expanded
+             hidden   Panel is initially collapsed, ie only its title bar is visible
+
+          4  (Optional, only used for panels) UNO command that overrides the DefaultMenuCommand.  Use 
+             the special value none to override the DefaultMenuCommand to the empty string and thereby
+             disable the showing of a) the menu button in the panel titlebar and b) the showing of a dialog.
+        </desc></info>
+      </prop>
+      <prop oor:name="OrderIndex" oor:type="xs:int">
+        <info>
+          <desc>Index used for ordering decks in the tab bar.  Smaller values correspond to positions nearer to the top of the tab bar.</desc>
+        </info>
+        <value>10000</value>
+      </prop>
+    </group>
+    <group oor:name="Panel">
+      <info>
+        <desc>Specification of a sidebar content panel.</desc>
+      </info>
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>The panel title is displayed above the content panel.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+        <info>
+          <desc>When true then the title bar can be ommitted when the panel is the only panel in a deck.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="Id" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>Internally used to identify the panel.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="DeckId" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>Id of the deck to which the panel belongs.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="HelpURL" oor:type="xs:string">
+        <info>
+          <desc>Help about the sidebar content panel.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="DefaultMenuCommand" oor:type="xs:string">
+        <info><desc>
+          The default UNO command to execute when the user clicks on the menu button in the panel title bar.
+          Can be overriden in the ContextList to provide context dependent menu dialogs.
+          When empty then the menu icon is not shown in the panel title bar.
+        </desc></info>
+        <value></value>
+      </prop>
+      <prop oor:name="ContextList" oor:type="oor:string-list">
+        <info>
+          <desc>For documentation, please see the Deck/ContextList.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImplementationURL" oor:type="xs:string">
+        <info>
+          <desc>URL by which the implementation of the panel is known by its factory.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="OrderIndex" oor:type="xs:int">
+        <info>
+          <desc>Index used for ordering panels inside a deck.  Smaller values correspond to positions nearer to the top of the deck.</desc>
+        </info>
+        <value>10000</value>
+      </prop>
+      <prop oor:name="WantsCanvas" oor:type="xs:boolean">
+        <info>
+          <desc>Experimental: Set to true when panel wants to paint its content via a XCanvas.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Content">
+      <info>
+        <desc>Description of the decks and panels that can be displayed in the content area of the sidebar.</desc>
+      </info>
+      <set oor:name="DeckList" oor:node-type="Deck">
+        <info>
+          <desc>Contains all registered sidebar decks.</desc>
+        </info>
+      </set>
+      <set oor:name="PanelList" oor:node-type="Panel">
+        <info>
+          <desc>Contains all registered sidebar content panels.</desc>
+        </info>
+      </set>
+    </group>
+  </component>
+</oor:component-schema>

@@ -26,6 +26,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
@@ -251,6 +252,7 @@ SwDrawFormShell::SwDrawFormShell(SwView &_rView) :
     SetHelpId(SW_DRAWFORMSHELL);
     GetShell().NoEdit(true);
     SetName(OUString("DrawForm"));
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Form));
 }
 
 SwDrawFormShell::~SwDrawFormShell()

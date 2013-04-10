@@ -47,7 +47,7 @@ void ImpressModule::Initialize (Reference<frame::XController>& rxController)
         FrameworkHelper::msLeftImpressPaneURL);
     new ToolPanelModule(
         rxController,
-        FrameworkHelper::msRightPaneURL);
+        FrameworkHelper::msSidebarViewURL);
     new ToolBarModule(rxController);
     new ShellStackGuard(rxController);
 }

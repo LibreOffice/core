@@ -32,18 +32,21 @@ class SwTemplateDlg: public SfxStyleDialog
 
     sal_uInt16      nType;
     sal_uInt16      nHtmlMode;
-    SwWrtShell* pWrtShell;
+    SwWrtShell*     pWrtShell;
     sal_Bool        bNewStyle;
 
     DECL_LINK( NumOptionsHdl, PushButton* );
 
 public:
+    // @param nSlot
+    // Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
+    // Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane
     SwTemplateDlg(  Window*             pParent,
                     SfxStyleSheetBase&  rBase,
-                    sal_uInt16              nRegion,
-                    sal_uInt16              nPageId = 0,
+                    sal_uInt16          nRegion,
+                    const sal_uInt16    nSlot = 0,
                     SwWrtShell*         pActShell = 0,
-                    sal_Bool                bNew = sal_False );
+                    sal_Bool            bNew = sal_False );
 
     ~SwTemplateDlg();
     const SfxItemSet* GetRefreshedSet();

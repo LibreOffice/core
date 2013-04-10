@@ -1,0 +1,213 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "AlignmentPropertyPanel.hrc"
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
+#include "sc.hrc"
+#include "helpids.h"
+
+Control RID_PROPERTYPANEL_SC_ALIGNMENT
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+    Size = MAP_APPFONT( PROPERTYPAGE_WIDTH, PANEL_HEIGHT );
+    HelpID = HID_PROPERTYPANEL_SC_ALIGN_SECTION;
+    Text [ en-US ] = "Alignment";
+
+    //------------ Alignment -------------
+    ToolBox TBX_HORIZONTAL_ALIGNMENT
+    {
+        Pos = MAP_APPFONT ( ALIGNMENT_X , ALIGNMENT_Y );
+        Size = MAP_APPFONT ( ALIGNMENT_TBX_WIDTH*4 ,ALIGNMENT_TBX_HEIGHT);
+        SVLook = TRUE ;
+        Border = FALSE ;
+        HelpID = HID_PROPERTY_PANEL_ALIGN_TBX_HOR;
+        Text [ en-US ] = "Horizontal Alignment" ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = ID_SUBSTLEFT ;
+                Text [ en-US ] = "Align Left" ;
+                HelpID = HID_PROPERTY_PANEL_ALIGN_TBI_HOR_L;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_SUBSTCENTER ;
+                Text [ en-US ] = "Align Center" ;
+                HelpID = HID_PROPERTY_PANEL_ALIGN_TBI_HOR_C;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_SUBSTRIGHT ;
+                Text [ en-US ] = "Align Right" ;
+                HelpID = HID_PROPERTY_PANEL_ALIGN_TBI_HOR_R;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_SUBSTJUSTIFY ;
+                Text [ en-US ] = "Align Justified" ;
+                HelpID = HID_PROPERTY_PANEL_ALIGN_TBI_HOR_J;
+            };
+        };
+    };
+    ToolBox TBX_VERTICAL_ALIGN
+    {
+        SVLook = TRUE ;
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( ALIGNMENT_VERT_X,  ALIGNMENT_VERT_Y ) ;
+        Size = MAP_APPFONT ( TOOLBOX_ITEM_WIDTH * 3 ,  TOOLBOX_ITEM_HEIGHT) ;
+        TabStop = TRUE ;
+        HelpID = HID_PROPERTY_PANEL_ALIGN_TBX_VER;
+        Text [ en-US ] = "Vertical Alignment" ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = IID_VERT_TOP ;
+                Text [ en-US ] = "Align Top" ;
+                HelpID = HID_PROPERTY_PANEL_ALIGN_TBI_VER_T;
+            };
+
+            ToolBoxItem
+            {
+                Identifier = IID_VERT_CENTER ;
+                Text [ en-US ] = "Align Center Vertically" ;
+                HelpID = HID_PROPERTY_PANEL_ALIGN_TBI_VER_C;
+            };
+
+            ToolBoxItem
+            {
+                Identifier = IID_VERT_BOTTOM ;
+                Text [ en-US ] = "Align Bottom" ;
+                HelpID = HID_PROPERTY_PANEL_ALIGN_TBI_VER_B;
+            };
+        };
+    };
+    //------------ Left indent ------------
+    FixedText FT_LEFT_INDENT
+    {
+        Pos = MAP_APPFONT ( FT_LEFTINDENT_X, FT_LEFTINDENT_Y );
+        Size = MAP_APPFONT (CBX_WRAP_X - FT_LEFTINDENT_X - 1 , TEXT_HEIGHT) ; //MBOX_WIDTH
+        Text [ en-US ] = "Left ~indent:";
+    };
+    MetricField MF_LEFT_INDENT
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( MTR_LEFTINDENT_X , MTR_LEFTINDENT_Y );
+        Size = MAP_APPFONT ( MBOX_WIDTH, MBOX_HEIGHT ) ;
+        TabStop = TRUE;
+        Repeat = TRUE;
+        Spin = TRUE;
+        Minimum = 0;
+        Maximum = 990;
+        Unit = FUNIT_POINT;
+        SpinSize = 10;
+        QuickHelpText [ en-US ] = "Indents from the left edge.";
+        HelpID = HID_PROPERTY_PANEL_ALIGN_MBX_INDENT;
+    };
+    CheckBox CBX_WRAP
+    {
+        Pos = MAP_APPFONT ( CBX_WRAP_X , CBX_WRAP_Y ) ;
+        Size = MAP_APPFONT (PROPERTYPAGE_WIDTH - CBX_WRAP_X - 1 , CBOX_HEIGHT ) ;//
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Wrap text" ;
+        QuickHelpText [ en-US ] = "Wrap texts automatically.";
+        HelpID = HID_PROPERTY_PANEL_ALIGN_CBX_WRAP;
+    };
+    CheckBox CBX_MERGE
+    {
+        Pos = MAP_APPFONT ( CBX_MERGE_X , CBX_MERGE_Y ) ;
+        Size = MAP_APPFONT ( PROPERTYPAGE_WIDTH - CBX_WRAP_X - 1 , CBOX_HEIGHT ) ;//
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Merge cells" ;
+        QuickHelpText [ en-US ] = "Joins the selected cells into one.";
+        HelpID = HID_PROPERTY_PANEL_ALIGN_CBX_MERGE;
+    };
+    //------------ Text orientation ------------
+    FixedText FT_ORIENT
+    {
+        Pos = MAP_APPFONT ( FT_ORIENT_X, FT_ORIENT_Y );
+        Size = MAP_APPFONT ( TEXT_WIDTH + 50, TEXT_HEIGHT) ;
+        Text [ en-US ] = "Text ~orientation:";
+    };
+    MetricBox CBOX_ANGLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( COMOBX_ROTATION_X , COMOBX_ROTATION_Y );
+        Size = MAP_APPFONT ( MBOX_WIDTH + 20, MBOX_HEIGHT ) ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText [ en-US ] = " degrees";
+        DecimalDigits = 0;
+        Minimum = 0;
+        Maximum = 359;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        QuickHelpText [ en-US ] = "Select the angle for rotation.";
+        HelpID = HID_PROPERTY_PANEL_ALIGN_MBX_ANGLE;
+    };
+
+    Control DIAL_CONTROL
+    {
+        Pos = MAP_APPFONT ( ROTATE_CONTROL_X , ROTATE_CONTROL_Y );
+        Size = MAP_PIXEL( 50, 50 );
+        HelpID = HID_PROPERTY_PANEL_ALIGN_DIAL_CONTROL;
+        QuickHelpText [ en-US ] = "Drag to change the rotation value.";
+    };
+    CheckBox CBX_VERT
+    {
+        Pos = MAP_APPFONT ( CBX_VERT_X , CBX_VERT_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH + 20 , CBOX_HEIGHT + 5 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Vertically stacked" ;
+        QuickHelpText [ en-US ] = "Aligns text vertically.";
+        HelpID = HID_PROPERTY_PANEL_ALIGN_CBX_VERT;
+    };
+
+    Image IMG_ALIGN_LEFT
+    {
+        ImageBitmap = Bitmap{File = "sidebar/sc_alignleft.png";};
+    };
+    Image IMG_ALIGN_CENTER
+    {
+        ImageBitmap = Bitmap{File = "sidebar/sc_aligncenter.png";};
+    };
+    Image IMG_ALIGN_RIGHT
+    {
+        ImageBitmap = Bitmap{File = "sidebar/sc_alignright.png";};
+    };
+    Image IMG_ALIGN_JUST
+    {
+        ImageBitmap = Bitmap{File = "sidebar/sc_alignjust.png";};
+    };
+    Image IMG_ALIGN_TOP
+    {
+        ImageBitmap = Bitmap{File = "sidebar/sc_aligntop.png";};
+    };
+    Image IMG_ALIGN_CENTER_V
+    {
+        ImageBitmap = Bitmap{File = "sidebar/sc_aligncenter_v.png";};
+    };
+    Image IMG_ALIGN_BOTTOM
+    {
+        ImageBitmap = Bitmap{File = "sidebar/sc_alignbottom.png";};
+    };
+};
+
+// eof

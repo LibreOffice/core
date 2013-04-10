@@ -1,0 +1,253 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include "GraphicPropertyPanel.hrc"
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
+#include <svx/dialogs.hrc>
+#include "helpid.hrc"
+
+Control RID_SIDEBAR_GRAPHIC_PANEL
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+    Size = MAP_APPFONT( PROPERTYPAGE_WIDTH, PAGE_HEIGHT );
+    HelpID = HID_PROPERTYPANEL_GRAPHIC_SECTION ;
+    Text = "Graphic";
+
+    FixedText FT_BRIGHTNESS
+    {
+        Pos = MAP_APPFONT ( FT_BRIGHTNESS_X, FT_BRIGHTNESS_Y );
+        Size = MAP_APPFONT ( MBOX_WIDTH , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Brightness:";
+    };
+    MetricField MTR_BRIGHTNESS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MTR_BRIGHTNESS_X, MTR_BRIGHTNESS_Y );
+        Size = MAP_APPFONT ( MBOX_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_GRAPHIC_MTR_BRIGHT;
+        QuickHelpText [ en-US ] = "Specify the luminance of the graphic.";
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Minimum = -100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        SpinSize = 1 ;
+    };
+    FixedText FT_CONTRAST
+    {
+        Pos = MAP_APPFONT ( FT_CONTRAST_X, FT_CONTRAST_Y );
+        Size = MAP_APPFONT ( MBOX_WIDTH, TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Contrast:";
+    };
+    MetricField MTR_CONTRAST
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MTR_CONTRAST_X, MTR_CONTRAST_Y );
+        Size = MAP_APPFONT ( MBOX_WIDTH , MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_GRAPHIC_MTR_CONTRAST;
+        QuickHelpText [ en-US ] = "Specify the degree of difference between the lightest and darkest parts of the graphic.";
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Minimum = -100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        SpinSize = 1 ;
+    };
+    FixedText FT_COLOR_MODE
+    {
+        Pos = MAP_APPFONT ( FT_COLOR_MODE_X, FT_COLOR_MODE_Y );
+        Size = MAP_APPFONT ( MBOX_WIDTH, TEXT_HEIGHT ) ;
+        Text [ en-US ] = "Color ~mode:";
+    };
+    ListBox LB_COLOR_MODE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( LBX_COLOR_MODE_X , LBX_COLOR_MODE_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH , 100 ) ;
+        HelpID = HID_PROPERTY_PANEL_GRAPHIC_LB_COLORMODE;
+        QuickHelpText [ en-US ] = "Select the color mode of the graphic.";
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_TRANSPARENT
+    {
+        Pos = MAP_APPFONT ( FT_TRANSPARENT_X, FT_TRANSPARENT_Y );
+        Size = MAP_APPFONT ( MBOX_WIDTH , TEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Transparency:";
+    };
+    MetricField MTR_TRANSPARENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MTR_TRANS_X, MTR_TRANS_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH ,MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_GRAPHIC_MTR_TRANSP;
+        QuickHelpText [ en-US ] = "Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.";
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        SpinSize = 1 ;
+    };
+    MetricField MF_RED
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MF_RED_X + 10, MF_RED_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH - 10,MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_GRAPHIC_MTR_RED;
+        QuickHelpText [ en-US ] = "Red";
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Minimum = -100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        SpinSize = 1 ;
+    };
+    MetricField MF_GREEN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MF_GREEN_X + 10, MF_GREEN_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH - 10 ,MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_GRAPHIC_MTR_GREEN;
+        QuickHelpText [ en-US ] = "Green";
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Minimum = -100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        SpinSize = 1 ;
+    };
+    MetricField MF_BLUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MF_BLUE_X + 10, MF_BLUE_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH - 10 ,MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_GRAPHIC_MTR_BLUE;
+        QuickHelpText [ en-US ] = "Blue";
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Minimum = -100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        SpinSize = 1 ;
+    };
+    MetricField MF_GAMMA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MF_GAMMA_X + 10, MF_GAMMA_Y ) ;
+        Size = MAP_APPFONT ( MBOX_WIDTH - 10 ,MBOX_HEIGHT ) ;
+        HelpID = HID_PROPERTY_PANEL_GRAPHIC_MTR_GAMMA;
+        QuickHelpText [ en-US ] = "Specify the gamma value that affects the brightness of the midtone values.";
+        TabStop = TRUE;
+        Repeat = TRUE;
+        Spin = TRUE;
+        Minimum = 10;
+        Maximum = 1000;
+        DecimalDigits = 2;
+        SpinSize = 10;
+    };
+    Image IMG_NORMAL
+    {
+        ImageBitmap = Bitmap{File = "symphony/ColorModeNormal_16x16.png";};
+    };
+    Image IMG_BW
+    {
+        ImageBitmap = Bitmap{File = "symphony/ColorModeBlackWhite_16x16.png";};
+    };
+    Image IMG_GRAY
+    {
+        ImageBitmap = Bitmap{File = "symphony/ColorModeGrey_16x16.png";};
+    };
+    Image IMG_WATER
+    {
+        ImageBitmap = Bitmap{File = "symphony/ColorModeWaterMark_16x16.png";};
+    };
+    FixedImage IMG_RED
+    {
+        Pos = MAP_APPFONT( MF_RED_X, MF_RED_Y );
+        Size = MAP_APPFONT( 10, 12 );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "symphony/AdjustColorRed_16x16.png"; };
+        };
+    };
+    FixedImage IMG_GREEN
+    {
+        Pos = MAP_APPFONT( MF_GREEN_X, MF_GREEN_Y );
+        Size = MAP_APPFONT( 10, 12 );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "symphony/AdjustColorGreen_16x16.png"; };
+        };
+    };
+    FixedImage IMG_BLUE
+    {
+        Pos = MAP_APPFONT( MF_BLUE_X, MF_BLUE_Y );
+        Size = MAP_APPFONT( 10, 12 );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "symphony/AdjustColorBlue_16x16.png"; };
+        };
+    };
+    FixedImage IMG_GAMMA
+    {
+        Pos = MAP_APPFONT( MF_GAMMA_X, MF_GAMMA_Y );
+        Size = MAP_APPFONT( 10, 12 );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "symphony/AdjustColorGamma_16x16.png"; };
+        };
+    };
+    String STR_NORMAL
+    {
+        Text [ en-US ] = "Normal";
+    };
+    String STR_BW
+    {
+        Text [ en-US ] = "Black/White";
+    };
+    String STR_GRAY
+    {
+        Text [ en-US ] = "Grayscale";
+    };
+    String STR_WATER
+    {
+        Text [ en-US ] = "Watermark";
+    };
+};
+
+// eof

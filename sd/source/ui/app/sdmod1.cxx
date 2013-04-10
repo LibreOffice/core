@@ -729,7 +729,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase(pViewFrame);
             if (pBase != NULL)
             {
-                FrameworkHelper::Instance(*pBase)->RequestTaskPanel(
+                FrameworkHelper::Instance(*pBase)->RequestSidebarPanel(
                     FrameworkHelper::msLayoutTaskPanelURL);
             }
         }

@@ -46,6 +46,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include "GalleryControl.hxx"
 
 #undef GALLERY_USE_CLIPBOARD
 
@@ -265,7 +266,7 @@ void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
 
 DBG_NAME(GalleryBrowser2)
 
-GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery ) :
+GalleryBrowser2::GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery* pGallery ) :
     Control             ( pParent, rResId ),
     mpGallery           ( pGallery ),
     mpCurTheme          ( NULL ),
@@ -501,7 +502,16 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
     Point       aSelPos;
     const sal_uIntPtr   nItemId = ImplGetSelectedItemId( NULL, aSelPos );
-    sal_Bool        bRet = static_cast< GalleryBrowser* >( GetParent() )->KeyInput( rKEvt, pWindow );
+    GalleryBrowser* pParentBrowser = dynamic_cast<GalleryBrowser*>(GetParent());
+    sal_Bool bRet = sal_False;
+    if (pParentBrowser != NULL)
+        bRet = pParentBrowser->KeyInput( rKEvt, pWindow );
+    else
+    {
+        svx::sidebar::GalleryControl* pParentControl = dynamic_cast<svx::sidebar::GalleryControl*>(GetParent());
+        if (pParentControl != NULL)
+            bRet = pParentControl->GalleryKeyInput(rKEvt, pWindow);
+    }
 
     if( !bRet && !maViewBox.HasFocus() && nItemId && mpCurTheme )
     {

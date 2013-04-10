@@ -2335,8 +2335,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             delete pDlg;
         }
         break;
-        case FN_FORMAT_PAGE_COLUMN_DLG:
         case FN_FORMAT_PAGE_DLG:
+        case FN_FORMAT_PAGE_COLUMN_DLG:
+        case FN_FORMAT_PAGE_SETTING_DLG:
         {
             if( !bBackground )
             {
@@ -2345,11 +2346,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Temporary view, because the shell does not need to be valid after the dialogue
                 // for example disable header
                 SwView& rTempView = GetView();
-                sal_uInt16 nPageId = 0;
-                if ( nSlot == FN_FORMAT_PAGE_COLUMN_DLG )
-                    nPageId = TP_COLUMN ;
-                rTempView.GetDocShell()->FormatPage(rPageDesc.GetName(),
-                                    nPageId, &rSh );
+                rTempView.GetDocShell()->FormatPage(
+                    rPageDesc.GetName(),
+                    nSlot,
+                    rSh );
                 rTempView.InvalidateRulerPos();
             }
         }

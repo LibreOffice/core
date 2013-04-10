@@ -88,6 +88,9 @@ public:
     virtual void onDoubleClick();
     virtual void onContextMenu( sal_uInt16 nSelectedPopupEntry );
 
+    // Window
+    virtual void DataChanged (const DataChangedEvent& rEvent);
+
     void addUndo();
 
     void updatePathFromMotionPathTag( const rtl::Reference< MotionPathTag >& xTag );
@@ -111,6 +114,7 @@ private:
 
     ::com::sun::star::uno::Any getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect );
     bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const ::com::sun::star::uno::Any& rValue );
+    void UpdateLook (void);
 
     DECL_LINK( implControlHdl, Control* );
     DECL_LINK(implPropertyHdl, void *);

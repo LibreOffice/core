@@ -42,9 +42,9 @@ namespace sd { namespace framework {
 
 ToolPanelModule::ToolPanelModule (
     const Reference<frame::XController>& rxController,
-    const OUString& rsRightPaneURL)
+    const OUString& rsSidebarPaneURL)
     : ResourceManager(rxController,
-        FrameworkHelper::CreateResourceId(FrameworkHelper::msTaskPaneURL, rsRightPaneURL)),
+        FrameworkHelper::CreateResourceId(FrameworkHelper::msSidebarViewURL, rsSidebarPaneURL)),
       mxControllerManager(rxController,UNO_QUERY)
 {
     if (mxConfigurationController.is())

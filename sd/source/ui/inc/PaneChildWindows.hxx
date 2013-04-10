@@ -65,28 +65,6 @@ public:
 };
 
 
-
-
-//======================================================================================================================
-//= ToolPanelChildWindow
-//======================================================================================================================
-class ToolPanelChildWindow  :public PaneChildWindow
-                            ,public ::sfx2::ITaskPaneToolPanelAccess
-{
-public:
-    ToolPanelChildWindow(
-        ::Window* i_pParentWindow,
-        sal_uInt16 i_nId,
-        SfxBindings* i_pBindings,
-        SfxChildWinInfo* i_pChildWindowInfo );
-
-    SFX_DECL_CHILDWINDOW_WITHID( ToolPanelChildWindow );
-
-    // ::sfx2::ITaskPaneToolPanelAccess
-    virtual void ActivateToolPanel( const OUString& i_rPanelURL );
-};
-
-
 } // end of namespace ::sd
 
 #endif

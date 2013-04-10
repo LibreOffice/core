@@ -1,0 +1,53 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include <sfx2/sfx.hrc>
+
+#define RID_SIDEBAR_RESOURCE  (RID_SFX_SIDEBAR_START +  0)
+
+#define IMAGE_SIDEBAR_PLUS                        1
+#define IMAGE_SIDEBAR_MINUS                       3
+#define IMAGE_SIDEBAR_GRIP                        5
+#define IMAGE_SIDEBAR_MENU                        7
+#define IMAGE_SIDEBAR_DETAIL_DIALOG               9
+#define IMAGE_SIDEBAR_TOOLBOX_SEPARATOR          11
+#define IMAGE_SIDEBAR_DECK_3D_LARGE              20
+#define IMAGE_SIDEBAR_DECK_3D_SMALL              22
+#define IMAGE_SIDEBAR_DECK_ANIMATION_LARGE       30
+#define IMAGE_SIDEBAR_DECK_ANIMATION_SMALL       32
+#define IMAGE_SIDEBAR_DECK_COLORS_LARGE          40
+#define IMAGE_SIDEBAR_DECK_COLORS_SMALL          42
+#define IMAGE_SIDEBAR_DECK_EYEDROPPER_LARGE      50
+#define IMAGE_SIDEBAR_DECK_EYEDROPPER_SMALL      52
+#define IMAGE_SIDEBAR_DECK_GALLERY_LARGE         60
+#define IMAGE_SIDEBAR_DECK_GALLERY_SMALL         62
+#define IMAGE_SIDEBAR_DECK_IMGANIM_LARGE         70
+#define IMAGE_SIDEBAR_DECK_IMGANIM_SMALL         72
+#define IMAGE_SIDEBAR_DECK_NAVIGATOR_LARGE       80
+#define IMAGE_SIDEBAR_DECK_NAVIGATOR_SMALL       82
+#define IMAGE_SIDEBAR_PROPERTIES_DECK_LARGE      90
+#define IMAGE_SIDEBAR_PROPERTIES_DECK_SMALL      92
+#define IMAGE_SIDEBAR_DECK_STYLE_LARGE          100
+#define IMAGE_SIDEBAR_DECK_STYLE_SMALL          102
+#define IMAGE_SIDEBAR_DECK_TEMPLATE_LARGE       110
+#define IMAGE_SIDEBAR_DECK_TEMPLATE_SMALL       112
+#define IMAGE_SIDEBAR_DECK_TRANSITION_LARGE     120
+#define IMAGE_SIDEBAR_DECK_TRANSITION_SMALL     122
+#define IMAGE_SIDEBAR_DECK_FUNCTIONS_LARGE      130
+#define IMAGE_SIDEBAR_DECK_FUNCTIONS_SMALL      132
+#define STRING_CUSTOMIZATION                    200
+#define STRING_RESTORE                          201

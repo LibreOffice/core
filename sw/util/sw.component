@@ -94,4 +94,7 @@
   <implementation name="com.sun.star.comp.Writer.LayoutDump">
     <service name="com.sun.star.comp.Writer.LayoutDump"/>
   </implementation>
+  <implementation name="org.apache.openoffice.comp.sw.sidebar.SwPanelFactory">
+    <service name="com.sun.star.ui.UIElementFactory"/>
+  </implementation>
 </component>

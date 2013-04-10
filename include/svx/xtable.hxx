@@ -33,20 +33,17 @@
 
 #include <cppuhelper/weak.hxx>
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <svtools/grfmgr.hxx>
+#include <svx/XPropertyEntry.hxx>
 
 class Color;
 class Bitmap;
 class VirtualDevice;
 class XOutdevItemPool;
-
-// Breite und Hoehe der LB-Bitmaps
-#define BITMAP_WIDTH  32
-#define BITMAP_HEIGHT 12
 
 // Standard-Vergleichsstring
 extern sal_Unicode pszStandard[]; // "standard"
@@ -54,24 +51,6 @@ extern sal_Unicode pszStandard[]; // "standard"
 // Funktion zum Konvertieren in echte RGB-Farben, da mit
 // enum COL_NAME nicht verglichen werden kann.
 SVX_DLLPUBLIC Color RGB_Color( ColorData nColorName );
-
-// ---------------------
-// class XPropertyEntry
-// ---------------------
-
-class XPropertyEntry
-{
-protected:
-    String  aName;
-
-            XPropertyEntry(const String& rName) : aName(rName) {}
-            XPropertyEntry(const XPropertyEntry& rOther): aName(rOther.aName) {}
-public:
-
-    virtual        ~XPropertyEntry() {}
-    void            SetName(const String& rName)    { aName = rName; }
-    String&         GetName()                       { return aName; }
-};
 
 // ------------------
 // class XColorEntry
@@ -230,26 +209,25 @@ protected:
     typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
     typedef ::std::vector< Bitmap* > BitmapList_impl;
 
-    XPropertyListType   eType;
-    String              aName; // not persistent
-    String              aPath;
-    XOutdevItemPool*    pXPool;
+    XPropertyListType   meType;
+    String              maName; // not persistent
+    String              maPath;
+    XOutdevItemPool*    mpXPool;
 
-    XPropertyEntryList_impl aList;
-    BitmapList_impl*        pBmpList;
+    XPropertyEntryList_impl maList;
 
-    bool                bListDirty;
-    bool                bBitmapsDirty;
-    bool                bOwnPool;
-    bool                bEmbedInDocument;
+    bool                mbListDirty;
+    bool                mbEmbedInDocument;
 
                         XPropertyList( XPropertyListType t, const String& rPath,
                                        XOutdevItemPool* pXPool = NULL );
 
+    virtual Bitmap      CreateBitmapForUI( long nIndex ) = 0;
+
 public:
     virtual             ~XPropertyList();
 
-    XPropertyListType   Type() const { return eType; }
+    XPropertyListType   Type() const { return meType; }
     long                Count() const;
 
     void                Insert( XPropertyEntry* pEntry, long nIndex = CONTAINER_APPEND );
@@ -259,22 +237,21 @@ public:
                         // Note: Get(long) & Get( String& ) are ambiguous
     XPropertyEntry*     Get( long nIndex, sal_uInt16 nDummy ) const;
     long                Get(const String& rName);
+    Bitmap              GetUiBitmap( long nIndex ) const;
 
-    Bitmap*             GetBitmap( long nIndex ) const;
-
-    const String&       GetName() const { return aName; }
+    const String&       GetName() const { return maName; }
     void                SetName( const String& rString );
-    const String&       GetPath() const { return aPath; }
-    void                SetPath( const String& rString ) { aPath = rString; }
-    sal_Bool            IsDirty() const { return bListDirty && bBitmapsDirty; }
-    void                SetDirty( sal_Bool bDirty = sal_True )
-                            { bListDirty = bDirty; bBitmapsDirty = bDirty; }
-    bool                IsEmbedInDocument() const { return bEmbedInDocument; }
-    void                SetEmbedInDocument(bool b) { bEmbedInDocument = b; }
+    const String&       GetPath() const { return maPath; }
+    void                SetPath( const String& rString ) { maPath = rString; }
+    bool                IsDirty() const { return mbListDirty; }
+    void                SetDirty( bool bDirty = sal_True )
+                            { mbListDirty = bDirty; }
+    bool                IsEmbedInDocument() const { return mbEmbedInDocument; }
+    void                SetEmbedInDocument(bool b) { mbEmbedInDocument = b; }
 
     static OUString GetDefaultExt(XPropertyListType t);
     static OUString GetDefaultExtFilter(XPropertyListType t);
-    OUString        GetDefaultExt() const { return GetDefaultExt( eType ); }
+    OUString        GetDefaultExt() const { return GetDefaultExt( meType ); }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
         createInstance() = 0;
@@ -288,8 +265,6 @@ public:
                                   const OUString &rURL,
                                   OUString *pOptName );
     virtual sal_Bool    Create() = 0;
-    virtual sal_Bool    CreateBitmapsForUI() = 0;
-    virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;
 
     // Factory method for sub-classes
     static XPropertyListRef CreatePropertyList( XPropertyListType t,
@@ -307,6 +282,10 @@ public:
     inline XBitmapListRef AsBitmapList();
     inline XLineEndListRef AsLineEndList();
     inline XGradientListRef AsGradientList();
+
+    sal_uInt32 getUiBitmapWidth() const;
+    sal_uInt32 getUiBitmapHeight() const;
+    sal_uInt32 getUiBitmapLineWidth() const;
 };
 
 // ------------------
@@ -315,6 +294,9 @@ public:
 
 class SVX_DLLPUBLIC XColorList : public XPropertyList
 {
+protected:
+    virtual Bitmap  CreateBitmapForUI( long nIndex );
+
 public:
     explicit        XColorList( const String& rPath,
                                 XOutdevItemPool* pXInPool = NULL ) :
@@ -329,8 +311,6 @@ public:
     XColorEntry*         GetColor(long nIndex) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool     Create();
-    virtual sal_Bool     CreateBitmapsForUI();
-    virtual Bitmap*      CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
 
     static XColorListRef CreateStdColorList();
     static XColorListRef GetStdColorList(); // returns a singleton
@@ -349,6 +329,9 @@ private:
     void impCreate();
     void impDestroy();
 
+protected:
+    virtual Bitmap CreateBitmapForUI(long nIndex);
+
 public:
     explicit        XLineEndList(
                         const String& rPath,
@@ -363,8 +346,6 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool Create();
-    virtual sal_Bool CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
 };
 
 // -------------------
@@ -376,9 +357,16 @@ class SVX_DLLPUBLIC XDashList : public XPropertyList
 {
 private:
     impXDashList*       mpData;
+    Bitmap              maBitmapSolidLine;
+    String              maStringSolidLine;
+    String              maStringNoLine;
 
     void impCreate();
     void impDestroy();
+
+protected:
+    Bitmap ImpCreateBitmapForXDash(const XDash* pDash);
+    virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
     explicit            XDashList(
@@ -396,8 +384,16 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap*     CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
+
+    // Special call to get a bitmap for the solid line representation. It
+    // creates a bitmap fitting in size and style to the ones you get by
+    // using GetUiBitmap for existing entries.
+    Bitmap GetBitmapForUISolidLine() const;
+
+    // Special calls to get the translated strings for the UI entry for no
+    // line style (XLINE_NONE) and solid line style (XLINE_SOLID) for dialogs
+    String GetStringForUiSolidLine() const;
+    String GetStringForUiNoLine() const;
 };
 
 // -------------------
@@ -413,6 +409,9 @@ private:
     void impCreate();
     void impDestroy();
 
+protected:
+    virtual Bitmap CreateBitmapForUI(long nIndex);
+
 public:
     explicit XHatchList( const String& rPath,
                          XOutdevItemPool* pXPool = 0 );
@@ -427,8 +426,6 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool Create();
-    virtual sal_Bool CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
 };
 
 // -------------------
@@ -443,6 +440,9 @@ private:
 
     void impCreate();
     void impDestroy();
+
+protected:
+    virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
     explicit    XGradientList(
@@ -460,8 +460,6 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap*     CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
 };
 
 // -------------------
@@ -470,6 +468,9 @@ public:
 
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
+protected:
+    virtual Bitmap CreateBitmapForUI( long nIndex );
+
 public:
     explicit        XBitmapList( const String& rPath,
                                  XOutdevItemPool* pXInPool = NULL )
@@ -483,8 +484,6 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
 };
 
 

@@ -228,6 +228,37 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/menu/virtmenu \
     sfx2/source/notify/eventsupplier \
     sfx2/source/notify/hintpost \
+    sfx2/source/sidebar/SidebarChildWindow \
+    sfx2/source/sidebar/SidebarDockingWindow \
+    sfx2/source/sidebar/SidebarController \
+    sfx2/source/sidebar/SidebarPanelBase \
+    sfx2/source/sidebar/SidebarToolBox \
+    sfx2/source/sidebar/AsynchronousCall \
+    sfx2/source/sidebar/Context \
+    sfx2/source/sidebar/ContextChangeBroadcaster \
+    sfx2/source/sidebar/ContextList \
+    sfx2/source/sidebar/ControlFactory \
+    sfx2/source/sidebar/ControllerItem \
+    sfx2/source/sidebar/CustomImageRadioButton \
+    sfx2/source/sidebar/Deck \
+    sfx2/source/sidebar/DeckDescriptor \
+    sfx2/source/sidebar/DeckLayouter \
+    sfx2/source/sidebar/DeckTitleBar \
+    sfx2/source/sidebar/DrawHelper \
+    sfx2/source/sidebar/EnumContext \
+    sfx2/source/sidebar/FocusManager \
+    sfx2/source/sidebar/MenuButton \
+    sfx2/source/sidebar/Paint \
+    sfx2/source/sidebar/Panel \
+    sfx2/source/sidebar/PanelDescriptor \
+    sfx2/source/sidebar/PanelTitleBar \
+    sfx2/source/sidebar/ResourceManager \
+    sfx2/source/sidebar/TabBar \
+    sfx2/source/sidebar/TabItem \
+    sfx2/source/sidebar/TitleBar \
+    sfx2/source/sidebar/Theme \
+    sfx2/source/sidebar/Tools \
+    sfx2/source/sidebar/ToolBoxBackground \
     sfx2/source/statbar/stbitem \
     sfx2/source/toolbox/imgmgr \
     sfx2/source/toolbox/tbxitem \

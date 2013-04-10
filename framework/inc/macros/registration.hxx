@@ -71,7 +71,7 @@ ________________________________________________________________________________
         {                                                                                                                               \
             LOG_REGISTRATION_GETFACTORY( "\t\tpImplementationName and pServiceManager are valid ...\n" )                                \
             /* Define variables which are used in following macros. */                                                                  \
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >   xFactory            ;                   \
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   xFactory            ;                   \
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xServiceManager     ;                   \
             xServiceManager = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager )  ;                   \
             /* These parameter will expand to      */                                                                                   \

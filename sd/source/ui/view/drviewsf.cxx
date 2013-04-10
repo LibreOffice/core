@@ -58,6 +58,16 @@
 #include "cfgids.hxx"
 #include "anminfo.hxx"
 
+#include <editeng/lspcitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/escapementitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <svx/nbdtmgfact.hxx>
+#include <svx/nbdtmg.hxx>
+
+using namespace svx::sidebar;
 using namespace ::com::sun::star;
 
 namespace sd {
@@ -277,17 +287,133 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             : nWhich;
         switch ( nSlotId )
         {
+            case SID_ATTR_PARA_ADJUST_LEFT:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+
+                SvxAdjustItem aItem= ( (const SvxAdjustItem&) aAttrs.Get( EE_PARA_JUST ) );
+                SvxAdjust eAdj = aItem.GetAdjust();
+                if ( eAdj == SVX_ADJUST_LEFT)
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, sal_True ) );
+                }
+
+                bAttr = sal_True;
+
+                Invalidate(nSlotId);
+            }
+            break;
+            case SID_ATTR_PARA_ADJUST_CENTER:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+
+                SvxAdjustItem aItem= ( (const SvxAdjustItem&) aAttrs.Get( EE_PARA_JUST ) );
+                SvxAdjust eAdj = aItem.GetAdjust();
+                if ( eAdj == SVX_ADJUST_CENTER)
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, sal_True ) );
+                }
+
+                bAttr = sal_True;
+
+                Invalidate(nSlotId);
+            }
+            break;
+            case SID_ATTR_PARA_ADJUST_RIGHT:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+
+                SvxAdjustItem aItem= ( (const SvxAdjustItem&) aAttrs.Get( EE_PARA_JUST ) );
+                SvxAdjust eAdj = aItem.GetAdjust();
+                if ( eAdj == SVX_ADJUST_RIGHT)
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, sal_True ) );
+                }
+
+                bAttr = sal_True;
+
+                Invalidate(nSlotId);
+            }
+            break;
+            case SID_ATTR_PARA_ADJUST_BLOCK:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+
+                SvxAdjustItem aItem= ( (const SvxAdjustItem&) aAttrs.Get( EE_PARA_JUST ) );
+                SvxAdjust eAdj = aItem.GetAdjust();
+                if ( eAdj == SVX_ADJUST_BLOCK)
+                {
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, sal_True ) );
+                }
+
+                bAttr = sal_True;
+
+                Invalidate(nSlotId);
+            }
+            break;
+            case SID_ATTR_PARA_LRSPACE:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+                SvxLRSpaceItem aLRSpace = ( (const SvxLRSpaceItem&) aAttrs.Get( EE_PARA_LRSPACE ) );
+                aLRSpace.SetWhich(SID_ATTR_PARA_LRSPACE);
+                rSet.Put(aLRSpace);
+                bAttr = sal_True;
+                Invalidate(SID_ATTR_PARA_LRSPACE);
+            }
+            break;
+            case SID_ATTR_PARA_LINESPACE:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+                SvxLineSpacingItem aLineLR = ( (const SvxLineSpacingItem&) aAttrs.Get( EE_PARA_SBL ) );
+                rSet.Put(aLineLR);
+                bAttr = sal_True;
+                Invalidate(SID_ATTR_PARA_LINESPACE);
+            }
+            break;
+            case SID_ATTR_PARA_ULSPACE:
+            {
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aAttrs );
+                SvxULSpaceItem aULSP = ( (const SvxULSpaceItem&) aAttrs.Get( EE_PARA_ULSPACE ) );
+                aULSP.SetWhich(SID_ATTR_PARA_ULSPACE);
+                rSet.Put(aULSP);
+                bAttr = sal_True;
+                Invalidate(SID_ATTR_PARA_ULSPACE);
+            }
+            break;
             case SID_ATTR_FILL_STYLE:
             case SID_ATTR_FILL_COLOR:
             case SID_ATTR_FILL_GRADIENT:
             case SID_ATTR_FILL_HATCH:
             case SID_ATTR_FILL_BITMAP:
             case SID_ATTR_FILL_SHADOW:
+            case SID_ATTR_FILL_TRANSPARENCE:
+            case SID_ATTR_FILL_FLOATTRANSPARENCE:
             case SID_ATTR_LINE_STYLE:
             case SID_ATTR_LINE_DASH:
             case SID_ATTR_LINE_WIDTH:
             case SID_ATTR_LINE_COLOR:
+            case SID_ATTR_LINE_TRANSPARENCE:
+            case SID_ATTR_LINE_JOINT:
+            case SID_ATTR_LINE_CAP:
             case SID_ATTR_TEXT_FITTOSIZE:
+            case SID_ATTR_CHAR_FONT:
+            case SID_ATTR_CHAR_FONTHEIGHT:
+            case SID_ATTR_CHAR_SHADOWED:
+            case SID_ATTR_CHAR_POSTURE:
+            case SID_ATTR_CHAR_UNDERLINE:
+            case SID_ATTR_CHAR_STRIKEOUT:
+            case SID_ATTR_CHAR_WEIGHT:
+            case SID_ATTR_CHAR_COLOR:
+            case SID_ATTR_CHAR_KERNING:
+            case SID_SET_SUB_SCRIPT:
+            case SID_SET_SUPER_SCRIPT:
             {
                 bAttr = sal_True;
             }
@@ -427,6 +553,118 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 }
             }
             break;
+            case FN_BUL_NUM_RULE_INDEX:
+            case FN_NUM_NUM_RULE_INDEX:
+            {
+                SfxItemSet aEditAttr( GetDoc()->GetPool() );
+                mpDrawView->GetAttributes( aEditAttr );
+
+                SfxItemSet aNewAttr( GetPool(), EE_ITEMS_START, EE_ITEMS_END );
+                aNewAttr.Put( aEditAttr, sal_False );
+
+
+                sal_uInt16 nActNumLvl = (sal_uInt16)0xFFFF;
+                SvxNumRule* pNumRule = NULL;
+                const SfxPoolItem* pTmpItem=NULL;
+                sal_uInt16 nNumItemId = SID_ATTR_NUMBERING_RULE;
+
+                //if(SFX_ITEM_SET == aNewAttr.GetItemState(SID_PARAM_CUR_NUM_LEVEL, sal_False, &pTmpItem))
+                //  nActNumLvl = ((const SfxUInt16Item*)pTmpItem)->GetValue();
+                rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,DEFAULT_NONE));
+                rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,DEFAULT_NONE));
+                nActNumLvl = mpDrawView->GetSelectionLevel();
+                pTmpItem=GetNumBulletItem(aNewAttr, nNumItemId);
+
+                if (pTmpItem)
+                    pNumRule = new SvxNumRule(*((SvxNumBulletItem*)pTmpItem)->GetNumRule());
+
+                if ( pNumRule )
+                {
+                    sal_uInt16 nMask = 1;
+                    sal_uInt16 nCount = 0;
+                    sal_uInt16 nCurLevel = (sal_uInt16)0xFFFF;
+                    for(sal_uInt16 i = 0; i < pNumRule->GetLevelCount(); i++)
+                    {
+                        if(nActNumLvl & nMask)
+                        {
+                            nCount++;
+                            nCurLevel = i;
+                        }
+                        nMask <<= 1;
+                    }
+                    if ( nCount == 1 )
+                    {
+                        sal_Bool bBullets = sal_False;
+                        const SvxNumberFormat* pNumFmt = pNumRule->Get(nCurLevel);
+                        if ( pNumFmt )
+                        {
+                            switch(pNumFmt->GetNumberingType())
+                            {
+                                case SVX_NUM_CHAR_SPECIAL:
+                                case SVX_NUM_BITMAP:
+                                    bBullets = sal_True;
+                                    break;
+
+                                default:
+                                    bBullets = sal_False;
+                            }
+
+                            rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
+                            rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
+                            if ( bBullets )
+                            {
+                                NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(eNBOType::MIXBULLETS);
+                                if ( pBullets )
+                                {
+                                    sal_uInt16 nBulIndex = pBullets->GetNBOIndexForNumRule(*pNumRule,nActNumLvl);
+                                     rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,nBulIndex));
+                                }
+                            }else
+                            {
+                                NBOTypeMgrBase* pNumbering = NBOutlineTypeMgrFact::CreateInstance(eNBOType::NUMBERING);
+                                if ( pNumbering )
+                                {
+                                    sal_uInt16 nBulIndex = pNumbering->GetNBOIndexForNumRule(*pNumRule,nActNumLvl);
+                                     rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,nBulIndex));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+                    break;
+            //End
+            // Added by Li Hui for story 179.
+            case FN_NUM_BULLET_ON:
+            case FN_NUM_NUMBERING_ON:
+            {
+                sal_Bool bEnable = sal_False;
+                const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+                const sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
+                for (sal_uInt32 nIndex = 0; nIndex < nMarkCount; nIndex++)
+                {
+                    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(rMarkList.GetMark(nIndex)->GetMarkedSdrObj());
+                    if (pTextObj && pTextObj->GetObjInventor() == SdrInventor)
+                    {
+                        if (pTextObj->GetObjIdentifier() != OBJ_OLE2)
+                        {
+                            bEnable = sal_True;
+                            break;
+                        }
+                    }
+                }
+                if (bEnable)
+                {
+                    rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_False));
+                    rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON, sal_False));
+                }
+                else
+                {
+                    rSet.DisableItem(FN_NUM_BULLET_ON);
+                    rSet.DisableItem(FN_NUM_NUMBERING_ON);
+                }
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
@@ -461,9 +699,45 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 nWhich = aNewIter.NextWhich();
             }
         }
+
+        SfxItemState eState = pSet->GetItemState( EE_PARA_LRSPACE );
+        if ( eState == SFX_ITEM_DONTCARE )
+        {
+            rSet.InvalidateItem(EE_PARA_LRSPACE);
+            rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
+        }
+        eState = pSet->GetItemState( EE_PARA_SBL );
+        if ( eState == SFX_ITEM_DONTCARE )
+        {
+            rSet.InvalidateItem(EE_PARA_SBL);
+            rSet.InvalidateItem(SID_ATTR_PARA_LINESPACE);
+        }
+        eState = pSet->GetItemState( EE_PARA_ULSPACE );
+        if ( eState == SFX_ITEM_DONTCARE )
+        {
+            rSet.InvalidateItem(EE_PARA_ULSPACE);
+            rSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
+        }
+
+        SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+                        pSet->Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+        if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
+        {
+            rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, sal_True ) );
+        }
+        else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
+        {
+            rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, sal_True ) );
+        }
+
+        eState = pSet->GetItemState( EE_CHAR_KERNING, sal_True );
+        if ( eState == SFX_ITEM_DONTCARE )
+        {
+            rSet.InvalidateItem(EE_CHAR_KERNING);
+            rSet.InvalidateItem(SID_ATTR_CHAR_KERNING);
+        }
         delete pSet;
     }
-
 }
 
 

@@ -1774,11 +1774,12 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_GETFOCUS )
     {
-        pBindings->SetActiveFrame( pMgr->GetFrame() );
+        if (pMgr != NULL)
+            pBindings->SetActiveFrame( pMgr->GetFrame() );
 
         if ( pImp->pSplitWin )
             pImp->pSplitWin->SetActiveWindow_Impl( this );
-        else
+        else if (pMgr != NULL)
             pMgr->Activate_Impl();
 
         Window* pWindow = rEvt.GetWindow();
@@ -1809,7 +1810,8 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {
         pBindings->SetActiveFrame( NULL );
-        pMgr->Deactivate_Impl();
+        if (pMgr != NULL)
+            pMgr->Deactivate_Impl();
     }
 
     return DockingWindow::Notify( rEvt );

@@ -34,6 +34,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/spltitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/widwitem.hxx>
@@ -99,6 +101,7 @@
 #include <svx/dialogs.hrc>
 
 #include <svx/svxids.hrc>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
@@ -146,6 +149,7 @@ SwAnnotationShell::SwAnnotationShell( SwView& r )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     SetPool(rSh.GetAttrPool().GetSecondaryPool());
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Annotation));
 }
 
 SwAnnotationShell::~SwAnnotationShell()
@@ -181,6 +185,35 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     sal_uInt16 nEEWhich = 0;
     switch (nSlot)
     {
+        case SID_ATTR_PARA_LRSPACE:
+            {
+                SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)rReq.
+                                        GetArgs()->Get(nSlot));
+                aParaMargin.SetWhich( EE_PARA_LRSPACE );
+
+                aNewAttr.Put(aParaMargin);
+                rReq.Done();
+                break;
+            }
+        case SID_ATTR_PARA_LINESPACE:
+            {
+                SvxLineSpacingItem aParaMargin = (const SvxLineSpacingItem&)pNewAttrs->Get(
+                                                            GetPool().GetWhich(nSlot));
+                aParaMargin.SetWhich( EE_PARA_SBL );
+
+                aNewAttr.Put(aParaMargin);
+                rReq.Done();
+                break;
+            }
+        case SID_ATTR_PARA_ULSPACE:
+            {
+                SvxULSpaceItem aULSpace = (const SvxULSpaceItem&)pNewAttrs->Get(
+                    GetPool().GetWhich(nSlot));
+                aULSpace.SetWhich( EE_PARA_ULSPACE );
+                aNewAttr.Put( aULSpace );
+                rReq.Done();
+            }
+            break;
         case SID_ATTR_CHAR_FONT:
         case SID_ATTR_CHAR_FONTHEIGHT:
         case SID_ATTR_CHAR_WEIGHT:
@@ -198,8 +231,19 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
         case SID_ATTR_CHAR_UNDERLINE:
         {
-             FontUnderline eFU = ((const SvxUnderlineItem&)aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
-            aNewAttr.Put(SvxUnderlineItem(eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE));
+            if( rReq.GetArgs() )
+            {
+                SFX_REQUEST_ARG( rReq, pItem, SvxUnderlineItem, SID_ATTR_CHAR_UNDERLINE , sal_False );
+                if (pItem)
+                {
+                    aNewAttr.Put(*pItem);
+                }
+                else
+                {
+                    FontUnderline eFU = ( (const SvxUnderlineItem&) aEditAttr.Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
+                    aNewAttr.Put( SvxUnderlineItem( eFU != UNDERLINE_NONE ?UNDERLINE_NONE : UNDERLINE_SINGLE,  EE_CHAR_UNDERLINE ) );
+                }
+            }
             break;
         }
         case SID_ATTR_CHAR_OVERLINE:
@@ -412,6 +456,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             }
         }
         break;
+        case SID_CHAR_DLG_EFFECT:
         case SID_CHAR_DLG:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -433,8 +478,12 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg(rView.GetWindow(), rView, aDlgAttr, 0, sal_True);
+                SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( rView.GetWindow(), rView, aDlgAttr, 0, sal_True );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                if (nSlot == SID_CHAR_DLG_EFFECT)
+                {
+                    pDlg->SetCurPageId(TP_CHAR_EXT);
+                }
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
@@ -576,6 +625,44 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
         sal_uInt16 nSlotId = GetPool().GetSlotId( nWhich );
         switch( nSlotId )
         {
+            case SID_ATTR_PARA_LRSPACE:
+            {
+                SfxItemState eState = aEditAttr.GetItemState( EE_PARA_LRSPACE );
+                if( eState >= SFX_ITEM_DEFAULT )
+                {
+                    SvxLRSpaceItem aLR = ( (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE ) );
+                    aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
+                    rSet.Put(aLR);
+                }
+                else
+                    rSet.InvalidateItem(nSlotId);
+            }
+            break;
+            case SID_ATTR_PARA_LINESPACE:
+            {
+                SfxItemState eState = aEditAttr.GetItemState( EE_PARA_SBL );
+                if( eState >= SFX_ITEM_DEFAULT )
+                {
+                    SvxLineSpacingItem aLR = ( (const SvxLineSpacingItem&) aEditAttr.Get( EE_PARA_SBL ) );
+                    rSet.Put(aLR);
+                }
+                else
+                    rSet.InvalidateItem(nSlotId);
+            }
+            break;
+            case SID_ATTR_PARA_ULSPACE:
+                {
+                    SfxItemState eState = aEditAttr.GetItemState( EE_PARA_ULSPACE );
+                    if( eState >= SFX_ITEM_DEFAULT )
+                    {
+                        SvxULSpaceItem aULSpace = (const SvxULSpaceItem&) aEditAttr.Get( EE_PARA_ULSPACE );
+                        aULSpace.SetWhich(SID_ATTR_PARA_ULSPACE);
+                        rSet.Put(aULSpace);
+                    }
+                    else
+                        rSet.InvalidateItem(nSlotId);
+                }
+                    break;
             case SID_ATTR_CHAR_FONT:
             case SID_ATTR_CHAR_FONTHEIGHT:
             case SID_ATTR_CHAR_WEIGHT:
@@ -606,6 +693,8 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_SHADOWED:  nEEWhich = EE_CHAR_SHADOW;break;
             case SID_ATTR_CHAR_STRIKEOUT: nEEWhich = EE_CHAR_STRIKEOUT;break;
             case SID_ATTR_CHAR_LANGUAGE    : nEEWhich = EE_CHAR_LANGUAGE;break;
+            case SID_ATTR_CHAR_ESCAPEMENT: nEEWhich = EE_CHAR_ESCAPEMENT;break;
+            case SID_ATTR_CHAR_KERNING:  nEEWhich = EE_CHAR_KERNING;break;
             case FN_SET_SUPER_SCRIPT:
             case FN_SET_SUB_SCRIPT:
             {
@@ -742,7 +831,17 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
         }
 
         if(nEEWhich)
+        {
             rSet.Put(aEditAttr.Get(nEEWhich, sal_True), nWhich);
+        if(nEEWhich == EE_CHAR_KERNING)
+        {
+            SfxItemState eState = aEditAttr.GetItemState( EE_CHAR_KERNING, sal_True );
+            if ( eState == SFX_ITEM_DONTCARE )
+            {
+                rSet.InvalidateItem(EE_CHAR_KERNING);
+            }
+        }
+        }
 
         if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()==SwPostItHelper::DELETED)
             rSet.DisableItem( nWhich );

@@ -1,0 +1,84 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+// RID_PROPERTYPANEL_SC_ALIGNMENT--------------------------------------------------------------
+#define FT_ORIENT                                            1
+#define CBX_WRAP                                             5
+#define FT_LEFT_INDENT                                       7
+#define MF_LEFT_INDENT                                       8
+#define CBX_MERGE                                            9
+#define CBX_VERT                                            10
+#define CTL_SBSHAPE_POSREFERENCE                            12
+#define CBOX_ANGLE                                      14
+#define TBX_HORIZONTAL_ALIGNMENT                        15
+#define TBX_VERTICAL_ALIGN                              16
+#define DIAL_CONTROL                                    17
+#define ID_SUBSTLEFT                20
+#define ID_SUBSTCENTER              21
+#define ID_SUBSTRIGHT               22
+#define ID_SUBSTJUSTIFY             23
+#define IID_VERT_TOP                24
+#define IID_VERT_CENTER             25
+#define IID_VERT_BOTTOM             26
+
+#define MBOX_WIDTH                      45
+#define TEXT_WIDTH                      40
+#define FLIP_BUTTON_SIZE                13
+#define ALIGNMENT_TBX_HEIGHT            17
+#define ALIGNMENT_TBX_WIDTH             13
+
+#define IMG_ALIGN_LEFT                  50
+#define IMG_ALIGN_CENTER                51
+#define IMG_ALIGN_RIGHT                 52
+#define IMG_ALIGN_JUST                  53
+#define IMG_ALIGN_TOP                   54
+#define IMG_ALIGN_CENTER_V              55
+#define IMG_ALIGN_BOTTOM                56
+
+//---------------position-----------------
+
+#define ALIGNMENT_X                             SECTIONPAGE_MARGIN_HORIZONTAL
+#define ALIGNMENT_Y                             SECTIONPAGE_MARGIN_VERTICAL_TOP
+#define ALIGNMENT_VERT_X                        (ALIGNMENT_X + TBX_OUT_BORDER_OFFSET_X*2 + TOOLBOX_ITEM_WIDTH * 4 + CONTROL_SPACING_HORIZONTAL)
+#define ALIGNMENT_VERT_Y                        ALIGNMENT_Y
+
+#define FT_LEFTINDENT_X                         ALIGNMENT_X
+#define FT_LEFTINDENT_Y                         (ALIGNMENT_Y + TOOLBOX_ITEM_HEIGHT + TBX_OUT_BORDER_OFFSET_Y + CONTROL_SPACING_VERTICAL)
+#define MTR_LEFTINDENT_X                        ALIGNMENT_X
+#define MTR_LEFTINDENT_Y                        (FT_LEFTINDENT_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL)
+
+#define CBX_WRAP_X                              (ALIGNMENT_X + TEXT_WIDTH + 10 + CONTROL_SPACING_HORIZONTAL)
+#define CBX_WRAP_Y                              (FT_LEFTINDENT_Y + 2)
+
+#define CBX_MERGE_X                             CBX_WRAP_X
+#define CBX_MERGE_Y                             CBX_WRAP_Y + CBOX_HEIGHT + 2
+
+#define FT_ORIENT_X                             ALIGNMENT_X
+#define FT_ORIENT_Y                             MTR_LEFTINDENT_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
+
+#define COMOBX_ROTATION_X                       FT_ORIENT_X + 30 + CONTROL_SPACING_HORIZONTAL
+#define COMOBX_ROTATION_Y                       FT_ORIENT_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL + 5
+
+#define ROTATE_CONTROL_X                        FT_ORIENT_X
+#define ROTATE_CONTROL_Y                        COMOBX_ROTATION_Y - 3
+
+#define CBX_VERT_X                              COMOBX_ROTATION_X
+#define CBX_VERT_Y                              COMOBX_ROTATION_Y + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL + 2
+
+#define PANEL_HEIGHT                            CBX_VERT_Y + 6 + SECTIONPAGE_MARGIN_VERTICAL_BOT
+
+// eof

@@ -83,6 +83,26 @@
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 
+#include <editeng/escapementitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <svx/xtable.hxx>
+#include <svx/svdobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
+
+#include <svl/whiter.hxx>
+
 #include "app.hrc"
 #include "glob.hrc"
 #include "strings.hrc"
@@ -131,6 +151,7 @@
 #include "futransf.hxx"
 #include "futxtatt.hxx"
 #include "fuvect.hxx"
+#include "futext.hxx"
 #include "fuzoom.hxx"
 #include "helpids.h"
 #include "optsitem.hxx"
@@ -237,12 +258,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_FILL_HATCH:
         case SID_ATTR_FILL_BITMAP:
         case SID_ATTR_FILL_SHADOW:
+        case SID_ATTR_FILL_TRANSPARENCE:
+        case SID_ATTR_FILL_FLOATTRANSPARENCE:
 
         case SID_ATTR_LINE_STYLE:
         case SID_ATTR_LINE_DASH:
         case SID_ATTR_LINE_WIDTH:
         case SID_ATTR_LINE_COLOR:
         case SID_ATTR_LINEEND_STYLE:
+        case SID_ATTR_LINE_START:
+        case SID_ATTR_LINE_END:
+        case SID_ATTR_LINE_TRANSPARENCE:
+        case SID_ATTR_LINE_JOINT:
+        case SID_ATTR_LINE_CAP:
 
         case SID_ATTR_TEXT_FITTOSIZE:
         {
@@ -389,12 +417,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     case SID_ATTR_FILL_GRADIENT:
                     case SID_ATTR_FILL_HATCH:
                     case SID_ATTR_FILL_BITMAP:
+                    case SID_ATTR_FILL_TRANSPARENCE:
+                    case SID_ATTR_FILL_FLOATTRANSPARENCE:
                         GetViewFrame()->GetDispatcher()->Execute( SID_ATTRIBUTES_AREA, SFX_CALLMODE_ASYNCHRON );
                         break;
                     case SID_ATTR_LINE_STYLE:
                     case SID_ATTR_LINE_DASH:
                     case SID_ATTR_LINE_WIDTH:
                     case SID_ATTR_LINE_COLOR:
+                    case SID_ATTR_LINE_TRANSPARENCE:
+                    case SID_ATTR_LINE_JOINT:
+                    case SID_ATTR_LINE_CAP:
                         GetViewFrame()->GetDispatcher()->Execute( SID_ATTRIBUTES_LINE, SFX_CALLMODE_ASYNCHRON );
                         break;
                     case SID_ATTR_TEXT_FITTOSIZE:
@@ -1143,6 +1176,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_CHAR_DLG_EFFECT:
         case SID_CHAR_DLG:  // BASIC
         {
             SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
@@ -1157,7 +1191,25 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case FN_NUM_BULLET_ON:
+        {
+            // The value (sal_uInt16)0xFFFF means set bullet on/off.
+            SfxUInt16Item aItem(FN_SVX_SET_BULLET, (sal_uInt16)0xFFFF);
+            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_BULLET, SFX_CALLMODE_RECORD, &aItem, 0L );
+        }
+        break;
+
+        case FN_NUM_NUMBERING_ON:
+        {
+            // The value (sal_uInt16)0xFFFF means set bullet on/off.
+            SfxUInt16Item aItem(FN_SVX_SET_NUMBER, (sal_uInt16)0xFFFF);
+            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_NUMBER, SFX_CALLMODE_RECORD, &aItem, 0L );
+        }
+        break;
+
         case SID_OUTLINE_BULLET:
+        case FN_SVX_SET_BULLET:
+        case FN_SVX_SET_NUMBER:
         {
             SetCurrentFunction( FuOutlineBullet::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
@@ -2467,6 +2519,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_HORIZONTAL:  // BASIC
+        case SID_FLIP_HORIZONTAL:
         {
             mpDrawView->MirrorAllMarkedHorizontal();
             Cancel();
@@ -2475,6 +2528,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_VERTICAL:  // BASIC
+        case SID_FLIP_VERTICAL:
         {
             mpDrawView->MirrorAllMarkedVertical();
             Cancel();
@@ -2766,7 +2820,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // Make the slide transition panel visible (expand it) in the
             // tool pane.
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestSidebarPanel(
                 framework::FrameworkHelper::msCustomAnimationTaskPanelURL);
 
             Cancel();
@@ -2778,7 +2832,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // Make the slide transition panel visible (expand it) in the
             // tool pane.
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestSidebarPanel(
                 framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
 
             Cancel();
@@ -2945,6 +2999,177 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
     }
 }
 
+void DrawViewShell::ExecChar( SfxRequest &rReq )
+{
+    SdDrawDocument* pDoc = GetDoc();
+    if (!pDoc || !mpDrawView)
+    return;
+
+    SfxItemSet aEditAttr( pDoc->GetPool() );
+    mpDrawView->GetAttributes( aEditAttr );
+
+    //modified by wj for sym2_1580, if put old itemset into new set,
+    //when mpDrawView->SetAttributes(aNewAttr) it will invalidate all the item
+    // and use old attr to update all the attributes
+//  SfxItemSet aNewAttr( GetPool(),
+//  EE_ITEMS_START, EE_ITEMS_END );
+//  aNewAttr.Put( aEditAttr, sal_False );
+    SfxItemSet aNewAttr( pDoc->GetPool() );
+    //modified end
+
+    sal_uInt16 nSId = rReq.GetSlot();
+
+    MapSlot( nSId );
+
+    switch ( nSId )
+    {
+    case SID_ATTR_CHAR_FONT:
+        if( rReq.GetArgs() )
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SvxFontItem, SID_ATTR_CHAR_FONT , sal_False );
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+    case SID_ATTR_CHAR_FONTHEIGHT:
+        if( rReq.GetArgs() )
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SvxFontHeightItem, SID_ATTR_CHAR_FONTHEIGHT , sal_False );
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+    case SID_ATTR_CHAR_WEIGHT:
+        if( rReq.GetArgs() )
+        {
+            //const SvxWeightItem *pItem = (const SvxWeightItem*) rReq.GetArg( SID_ATTR_CHAR_WEIGHT, sal_False, TYPE(SvxWeightItem) );
+            SFX_REQUEST_ARG( rReq, pItem, SvxWeightItem, SID_ATTR_CHAR_WEIGHT , sal_False );
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+    case SID_ATTR_CHAR_POSTURE:
+        if( rReq.GetArgs() )
+        {
+            //const SvxPostureItem *pItem = (const SvxPostureItem*) rReq.GetArg( SID_ATTR_CHAR_POSTURE, sal_False, TYPE(SvxPostureItem) );
+            SFX_REQUEST_ARG( rReq, pItem, SvxPostureItem, SID_ATTR_CHAR_POSTURE , sal_False );
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+    case SID_ATTR_CHAR_UNDERLINE:
+        if( rReq.GetArgs() )
+        {
+            //<<modify by wj for sym2_1873
+            //SFX_REQUEST_ARG( rReq, pItem, SvxTextLineItem, SID_ATTR_CHAR_UNDERLINE , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxUnderlineItem, SID_ATTR_CHAR_UNDERLINE , sal_False );
+            //end>>
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+            else
+            {
+                FontUnderline eFU = ( (const SvxUnderlineItem&) aEditAttr.Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
+                aNewAttr.Put( SvxUnderlineItem( eFU != UNDERLINE_NONE ?UNDERLINE_NONE : UNDERLINE_SINGLE,  EE_CHAR_UNDERLINE ) );
+            }//aNewAttr.Put( (const SvxUnderlineItem&)aEditAttr.Get( EE_CHAR_UNDERLINE ) );
+        }
+        break;
+    case SID_ATTR_CHAR_SHADOWED:
+        if( rReq.GetArgs() )
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SvxShadowedItem, SID_ATTR_CHAR_SHADOWED , sal_False );
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+    case SID_ATTR_CHAR_STRIKEOUT:
+        if( rReq.GetArgs() )
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SvxCrossedOutItem, SID_ATTR_CHAR_STRIKEOUT , sal_False );
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+    case SID_ATTR_CHAR_COLOR:
+        if( rReq.GetArgs() )
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SvxColorItem, SID_ATTR_CHAR_COLOR , sal_False );
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+    case SID_ATTR_CHAR_KERNING:
+        if( rReq.GetArgs() )
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SvxKerningItem, SID_ATTR_CHAR_KERNING , sal_False );
+            if (pItem)
+            {
+                aNewAttr.Put(*pItem);
+            }
+        }
+        break;
+    case SID_SET_SUB_SCRIPT:
+        if( rReq.GetArgs() )
+        {
+            SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
+            SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
+                            aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+            if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
+                aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+            else
+                aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
+            aNewAttr.Put( aItem );
+        }
+        break;
+    case SID_SET_SUPER_SCRIPT:
+        if( rReq.GetArgs() )
+        {
+            SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
+            SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
+                            aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+            if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
+                aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+            else
+                aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
+            aNewAttr.Put( aItem );
+        }
+        break;
+    case SID_SHRINK_FONT_SIZE:
+        case SID_GROW_FONT_SIZE:
+        //if (rReq.GetArgs())
+        {
+            const SvxFontListItem* pFonts = dynamic_cast<const SvxFontListItem*>(GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
+            const FontList* pFontList = pFonts->GetFontList();
+            if( pFontList )
+            {
+                FuText::ChangeFontSize( nSId == SID_GROW_FONT_SIZE, NULL, pFontList, mpView );
+                GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+            }
+        }
+    default:
+        ;
+    }
+
+    mpDrawView->SetAttributes(aNewAttr);
+    rReq.Done();
+    Cancel();
+}
+
 /** This method consists basically of three parts:
     1. Process the arguments of the SFX request.
     2. Use the model to create a new page or duplicate an existing one.
@@ -2966,6 +3191,88 @@ SdPage* DrawViewShell::CreateOrDuplicatePage (
         pNewPage = ViewShell::CreateOrDuplicatePage (rRequest, ePageKind, pPage, nInsertPosition);
     }
     return pNewPage;
+}
+
+void DrawViewShell::ExecutePropPanelAttr (SfxRequest& rReq)
+{
+    if(SlideShow::IsRunning( GetViewShellBase() ))
+        return;
+
+    SdDrawDocument* pDoc = GetDoc();
+    if (!pDoc || !mpDrawView)
+        return;
+
+    sal_uInt16 nSId = rReq.GetSlot();
+    SfxItemSet aAttrs( pDoc->GetPool() );
+
+    switch ( nSId )
+    {
+    case SID_TABLE_VERT_NONE:
+    case SID_TABLE_VERT_CENTER:
+    case SID_TABLE_VERT_BOTTOM:
+        SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_TOP;
+        if (nSId == SID_TABLE_VERT_CENTER)
+            eTVA = SDRTEXTVERTADJUST_CENTER;
+        else if (nSId == SID_TABLE_VERT_BOTTOM)
+            eTVA = SDRTEXTVERTADJUST_BOTTOM;
+
+        aAttrs.Put( SdrTextVertAdjustItem(eTVA) );
+        mpDrawView->SetAttributes(aAttrs);
+
+        break;
+    }
+}
+
+void DrawViewShell::GetStatePropPanelAttr(SfxItemSet& rSet)
+{
+    SfxWhichIter    aIter( rSet );
+    sal_uInt16          nWhich = aIter.FirstWhich();
+
+    SdDrawDocument* pDoc = GetDoc();
+    if (!pDoc || !mpDrawView)
+        return;
+
+    SfxItemSet aAttrs( pDoc->GetPool() );
+    mpDrawView->GetAttributes( aAttrs );
+
+    while ( nWhich )
+    {
+        sal_uInt16 nSlotId = SfxItemPool::IsWhich(nWhich)
+            ? GetPool().GetSlotId(nWhich)
+            : nWhich;
+        switch ( nSlotId )
+        {
+            case SID_TABLE_VERT_NONE:
+            case SID_TABLE_VERT_CENTER:
+            case SID_TABLE_VERT_BOTTOM:
+                sal_Bool bContour = sal_False;
+                SfxItemState eConState = aAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
+                if( eConState != SFX_ITEM_DONTCARE )
+                {
+                    bContour = ( ( const SdrTextContourFrameItem& )aAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+                }
+                if (bContour) break;
+
+                SfxItemState eVState = aAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
+                //SfxItemState eHState = aAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
+
+                //if(SFX_ITEM_DONTCARE != eVState && SFX_ITEM_DONTCARE != eHState)
+                if(SFX_ITEM_DONTCARE != eVState)
+                {
+                    SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+                    sal_Bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
+                            (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
+                            (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);
+                    rSet.Put(SfxBoolItem(nSlotId, bSet));
+                }
+                else
+                {
+                    rSet.Put(SfxBoolItem(nSlotId, sal_False));
+                }
+                break;
+        }
+        nWhich = aIter.NextWhich();
+    }
 }
 
 } // end of namespace sd

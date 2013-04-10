@@ -212,6 +212,18 @@ void ScTabView::InvalidateAttribs()
 
     rBindings.Invalidate( SID_ATTR_CHAR_OVERLINE );
 
+    rBindings.Invalidate( SID_ATTR_CHAR_KERNING );
+    rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
+    rBindings.Invalidate( SID_SET_SUB_SCRIPT );
+    rBindings.Invalidate( SID_ATTR_CHAR_STRIKEOUT );
+    rBindings.Invalidate( SID_ATTR_CHAR_SHADOWED );
+
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
+    rBindings.Invalidate( SID_NUMBER_TYPE_FORMAT);
+
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNRIGHT );
     rBindings.Invalidate( SID_ALIGNBLOCK );
@@ -220,6 +232,21 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_ALIGNTOP );
     rBindings.Invalidate( SID_ALIGNBOTTOM );
     rBindings.Invalidate( SID_ALIGNCENTERVER );
+
+    // stuff for sidebar panels
+    {
+        rBindings.Invalidate( SID_H_ALIGNCELL );
+        rBindings.Invalidate( SID_V_ALIGNCELL );
+        rBindings.Invalidate( SID_ATTR_ALIGN_INDENT );
+        rBindings.Invalidate( SID_FRAME_LINECOLOR );
+        rBindings.Invalidate( SID_FRAME_LINESTYLE );
+        rBindings.Invalidate( SID_ATTR_BORDER_OUTER );
+        rBindings.Invalidate( SID_ATTR_BORDER_INNER );
+        rBindings.Invalidate( SID_SCGRIDSHOW );
+        rBindings.Invalidate( SID_ATTR_BORDER_DIAG_TLBR );
+        rBindings.Invalidate( SID_ATTR_BORDER_DIAG_BLTR );
+        rBindings.Invalidate( SID_NUMBER_TYPE_FORMAT );
+    }
 
     rBindings.Invalidate( SID_BACKGROUND_COLOR );
 

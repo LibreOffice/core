@@ -343,19 +343,19 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         switch(maLineJoin)
         {
             default : // basegfx::B2DLINEJOIN_NONE
-                mpLineAttr->Put(XLineJointItem(XLINEJOINT_NONE));
+                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_NONE));
                 break;
             case basegfx::B2DLINEJOIN_MIDDLE:
-                mpLineAttr->Put(XLineJointItem(XLINEJOINT_MIDDLE));
+                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_MIDDLE));
                 break;
             case basegfx::B2DLINEJOIN_BEVEL:
-                mpLineAttr->Put(XLineJointItem(XLINEJOINT_BEVEL));
+                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL));
                 break;
             case basegfx::B2DLINEJOIN_MITER:
-                mpLineAttr->Put(XLineJointItem(XLINEJOINT_MITER));
+                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_MITER));
                 break;
             case basegfx::B2DLINEJOIN_ROUND:
-                mpLineAttr->Put(XLineJointItem(XLINEJOINT_ROUND));
+                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_ROUND));
                 break;
         }
 

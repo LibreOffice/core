@@ -504,7 +504,7 @@ public:
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16              nRegion,
-                                                sal_uInt16          nPageId = 0,
+                                                const sal_uInt16 nSlot = 0,
                                                 SwWrtShell*         pActShell = 0,
                                                 sal_Bool                bNew = sal_False ); //add for SwTemplateDlg
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,

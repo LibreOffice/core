@@ -1,0 +1,125 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_ui_XContextChangeEventMultiplexer_idl__
+#define __com_sun_star_ui_XContextChangeEventMultiplexer_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_ui_XContextChangeEventListener_idl__
+#include <com/sun/star/ui/XContextChangeEventListener.idl>
+#endif
+
+#ifndef __com_sun_star_ui_ContextChangeEventObject_idl__
+#include <com/sun/star/ui/ContextChangeEventObject.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+
+module com { module sun { module star { module ui {
+
+/** Provide a central access point for a group of events.
+
+    Listeners can be added with a simple restriction on the event source.
+    They are only called for events that originate at the specified source.
+
+    Event providers can broadcast an event to all interested listeners.
+
+    The XEventMultiplexer interface is typically implemented as a singleton
+*/
+interface XContextChangeEventMultiplexer : ::com::sun::star::uno::XInterface
+{
+    /** Add an event listener that is called only when events are broadcast for the specified
+        event focus.
+
+        @param xListener
+            An empty reference results in an InvalidArgumentException.
+
+            One listener may be added more than once for different
+            event foci.  Adding a listener a second time for the same
+            event focus results in an InvalidArgumentException.
+
+        @param xEventFocus
+            An empty reference is a valid value.  In this case the
+            registered listener will be called for every event
+            broadcast, regardless of its event focus.
+
+            The event focus may or may not be the source of the event.
+
+            A typical example for an event focus is the XController of
+            a view.  Using an XController restricts events passed to
+            a listener to events that belong to one view.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+
+    */
+    void addContextChangeEventListener (
+        [in] com::sun::star::ui::XContextChangeEventListener xListener,
+        [in] com::sun::star::uno::XInterface xEventFocus)
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Remove an event listener for the specified event focus.
+
+        When the same listener was added for other event foci then
+        these associations remain unmodified.
+
+        @param xListener
+            An empty reference results in an InvalidArgumentException.
+
+            When the listener is not registered for the given event
+            focus then an InvalidArgumentException is thrown.
+
+        @param xEventFocus
+            The listener is only removed for this event focus.
+            An empty reference is a valid value.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+    */
+    void removeContextChangeEventListener (
+        [in] com::sun::star::ui::XContextChangeEventListener xListener,
+        [in] com::sun::star::uno::XInterface xEventFocus)
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Remove an event listener for all event foci.
+
+        @param xListener
+            An empty reference results in an InvalidArgumentException.
+
+            It is not an error when the listener is not registered for any event focus.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+    */
+    void removeAllContextChangeEventListeners (
+        [in] com::sun::star::ui::XContextChangeEventListener xListener)
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+
+    /** Call all event listeners that where added for the specified event focus.
+    */
+    void broadcastContextChangeEvent (
+        [in] com::sun::star::ui::ContextChangeEventObject aEvent,
+        [in] com::sun::star::uno::XInterface xEventFocus);
+} ;
+
+} ; } ; } ; } ;
+
+#endif

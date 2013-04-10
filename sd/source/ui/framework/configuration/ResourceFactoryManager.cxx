@@ -32,6 +32,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
+#undef VERBOSE
+//#define VERBOSE 1
+
 namespace sd { namespace framework {
 
 ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManager>& rxManager)
@@ -75,10 +78,22 @@ void ResourceFactoryManager::AddFactory (
     {
         // The URL is a URL pattern not an single URL.
         maFactoryPatternList.push_back(FactoryPatternList::value_type(rsURL, rxFactory));
+
+#if defined VERBOSE && VERBOSE>=1
+        OSL_TRACE("ResourceFactoryManager::AddFactory pattern %s %x\n",
+            OUStringToOString(rsURL, RTL_TEXTENCODING_UTF8).getStr(),
+            rxFactory.get());
+#endif
     }
     else
     {
         maFactoryMap[rsURL] = rxFactory;
+
+#if defined VERBOSE && VERBOSE>=1
+        OSL_TRACE("ResourceFactoryManager::AddFactory fixed %s %x\n",
+            OUStringToOString(rsURL, RTL_TEXTENCODING_UTF8).getStr(),
+            rxFactory.get());
+#endif
     }
 }
 

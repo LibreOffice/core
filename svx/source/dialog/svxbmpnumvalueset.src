@@ -53,7 +53,8 @@ String RID_SVXSTR_BULLET_DESCRIPTION_7
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_0
 {
-    Text [en-US] = "Number 1) 2) 3)";
+    //Text [en-US] = "Number 1) 2) 3)";
+    Text [en-US] = "Number %NUMBERINGSAMPLE";
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_1
 {

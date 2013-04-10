@@ -41,6 +41,11 @@ interface Window
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
     ]
+    SID_SIDEBAR // status(final|play)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
     SID_SHOW_BROWSER // ole(no) api(final/play/rec)
     [
         ExecMethod = ChildWindowExecute ;

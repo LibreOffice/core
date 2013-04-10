@@ -39,9 +39,6 @@ public:
 
                 ScDrawFormShell(ScViewData* pData);
     virtual     ~ScDrawFormShell();
-
-//  void        Execute(SfxRequest &);
-//  void        GetState(SfxItemSet &);
 };
 
 #endif

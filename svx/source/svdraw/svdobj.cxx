@@ -2020,6 +2020,23 @@ const SfxPoolItem& SdrObject::GetObjectItem(const sal_uInt16 nWhich) const
     return GetObjectItemSet().Get(nWhich);
 }
 
+SfxMapUnit SdrObject::GetObjectMapUnit() const
+{
+    SfxMapUnit aRetval(SFX_MAPUNIT_100TH_MM);
+    SdrItemPool* pPool = GetObjectItemPool();
+
+    if(pPool)
+    {
+        aRetval = pPool->GetMetric(0);
+    }
+    else
+    {
+        OSL_ENSURE(pPool, "SdrObjects always need a pool (!)");
+    }
+
+    return aRetval;
+}
+
 const SfxPoolItem& SdrObject::GetMergedItem(const sal_uInt16 nWhich) const
 {
     return GetMergedItemSet().Get(nWhich);
@@ -3073,7 +3090,7 @@ sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     }
 
     // force MapUnit to 100th mm
-    SfxMapUnit eMapUnit = GetObjectItemSet().GetPool()->GetMetric(0);
+    const SfxMapUnit eMapUnit(GetObjectMapUnit());
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)
@@ -3124,7 +3141,7 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     }
 
     // force metric to pool metric
-    SfxMapUnit eMapUnit = GetObjectItemSet().GetPool()->GetMetric(0);
+    const SfxMapUnit eMapUnit(GetObjectMapUnit());
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)

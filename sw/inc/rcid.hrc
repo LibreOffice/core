@@ -67,6 +67,7 @@
 #define RC_UNDO                     (RC_BASE + 3750)
 #define RC_SMARTTAG                    (RC_BASE + 3950)  // SMARTTAGS
 #define RC_UNOCORE                  (RC_BASE + 4050)
+#define RC_PROPERTYPANEL            (RC_BASE + 4070)
 #define RC_ANNOTATION               (RC_BASE + 4150)
 #define RC_PAGEFRM                  (RC_BASE + 4250)
 #define RC_IDXTXT                   (RC_BASE + 4350)
@@ -255,6 +256,9 @@
 #define RC_IDXTXT_BEGIN             RC_IDXTXT
 #define RC_IDXTXT_END               (RC_IDXTXT + 10)
 
+// property panel
+#define RC_PROPERTYPANEL_BEGIN            RC_PROPERTYPANEL
+#define RC_PROPERTYPANEL_END              (RC_PROPERTYPANEL + 10)
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

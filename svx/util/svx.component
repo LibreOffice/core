@@ -67,4 +67,7 @@
   <implementation name="com.sun.star.svx.ExitFindbarToolboxController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="org.apache.openoffice.comp.svx.sidebar.PanelFactory">
+    <service name="com.sun.star.ui.UIElementFactory"/>
+  </implementation>
 </component>
