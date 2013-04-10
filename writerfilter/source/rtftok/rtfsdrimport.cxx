@@ -373,7 +373,11 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if ( i->first == "geoBottom" )
             aViewBox.Height = i->second.toInt32();
         else if ( i->first == "dhgt" )
+        {
             resolveDhgt(xPropertySet, i->second.toInt32());
+            // dhgt is Word 2007, \shpz is Word 97-2003, the previous has priority.
+            rShape.oZ.reset();
+        }
         // These are in EMU, convert to mm100.
         else if (i->first == "dxTextLeft")
             xPropertySet->setPropertyValue("LeftBorderDistance", uno::makeAny(i->second.toInt32() / 360));
