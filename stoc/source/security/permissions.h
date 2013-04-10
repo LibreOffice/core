@@ -19,7 +19,6 @@
 #ifndef _STOC_SEC_PERMISSIONS_H_
 #define _STOC_SEC_PERMISSIONS_H_
 
-#include <rtl/unload.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -27,8 +26,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-
-extern ::rtl_StandardModuleCount g_moduleCount;
 
 namespace stoc_sec
 {

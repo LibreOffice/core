@@ -20,8 +20,6 @@
 // http://stackoverflow.com/questions/5839292/error-c1189-after-installing-visual-studio-2010
 #define _WIN32_WINNT 0x0403
 
-
-#include <rtl/unload.h>
 #include <osl/time.h>
 #include "ole2uno.hxx"
 #include "servprov.hxx"
@@ -110,12 +108,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL oleautobridge_component_getFacto
     }
 
     return pRet;
-}
-
-extern "C"  SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-oleautobridge_component_canUnload( TimeValue* libUnused)
-{
-    return globalModuleCount.canUnload( &globalModuleCount, libUnused);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

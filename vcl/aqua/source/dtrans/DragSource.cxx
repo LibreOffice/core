@@ -22,7 +22,6 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 
-#include "rtl/unload.h"
 #include "rtl/ustring.hxx"
 
 #include "comphelper/makesequence.hxx"

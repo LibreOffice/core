@@ -52,7 +52,6 @@
 #include "osl/mutex.hxx"
 #include "sal/types.h"
 #include "rtl/ref.hxx"
-#include "rtl/unload.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 

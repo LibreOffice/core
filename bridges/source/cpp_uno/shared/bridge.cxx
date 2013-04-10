@@ -20,14 +20,13 @@
 
 #include "bridges/cpp_uno/shared/bridge.hxx"
 
-#include "component.hxx"
-
 #include "bridges/cpp_uno/shared/cppinterfaceproxy.hxx"
 #include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
 
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
+#include "rtl/unload.h"
 #include "rtl/ustring.h"
 #include "sal/types.h"
 #include "typelib/typedescription.h"
@@ -36,6 +35,8 @@
 #include "uno/mapping.h"
 
 namespace bridges { namespace cpp_uno { namespace shared {
+
+extern rtl_StandardModuleCount g_moduleCount;
 
 void freeMapping(uno_Mapping * pMapping)
 {
