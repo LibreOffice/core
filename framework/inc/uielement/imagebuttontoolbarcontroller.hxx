@@ -25,21 +25,21 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/image.hxx>
+
+class ToolBox;
 
 namespace framework
 {
 
-class ToolBar;
 class ImageButtonToolbarController : public ComplexToolbarController
 
 {
     public:
         ImageButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                       const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                      ToolBox*             pToolBar,
-                                      sal_uInt16               nID,
+                                      ToolBox* pToolBar,
+                                      sal_uInt16 nID,
                                       const OUString& aCommand );
         virtual ~ImageButtonToolbarController();
 

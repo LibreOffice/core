@@ -145,7 +145,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/statusbarwrapper \
     framework/source/uielement/statusindicatorinterfacewrapper \
     framework/source/uielement/togglebuttontoolbarcontroller \
-    framework/source/uielement/toolbar \
     framework/source/uielement/toolbarmanager \
     framework/source/uielement/toolbarmerger \
     framework/source/uielement/toolbarwrapper \

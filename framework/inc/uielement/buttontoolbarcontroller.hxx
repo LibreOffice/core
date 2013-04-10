@@ -30,15 +30,16 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/weak.hxx>
-#include <vcl/toolbox.hxx>
+
+class ToolBox;
 
 namespace framework
 {
 
-class ToolBar;
 class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
                                 public ::com::sun::star::frame::XToolbarController,
                                 public ::com::sun::star::lang::XInitialization,
@@ -49,7 +50,7 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
 {
     public:
         ButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                 ToolBox*             pToolBar,
+                                 ToolBox* pToolBar,
                                  const OUString& aCommand );
         virtual ~ButtonToolbarController();
 

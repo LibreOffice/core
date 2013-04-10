@@ -37,20 +37,18 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-#include <vcl/toolbox.hxx>
-
+class ToolBox;
 
 namespace framework
 {
 
-class ToolBar;
 class AddonsToolBarManager : public ToolBarManager
 {
     public:
         AddonsToolBarManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                               const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                               const OUString& rResourceName,
-                              ToolBar* pToolBar );
+                              ToolBox* pToolBar );
         virtual ~AddonsToolBarManager();
 
         // XComponent

@@ -19,7 +19,6 @@
 
 #include <uielement/toolbarmanager.hxx>
 
-#include <uielement/toolbar.hxx>
 #include <uielement/generictoolbarcontroller.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
@@ -68,6 +67,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <vcl/toolbox.hxx>
 #include <rtl/logfile.hxx>
 #include <svtools/menuoptions.hxx>
 #include <boost/bind.hpp>
@@ -201,7 +201,7 @@ DEFINE_XTYPEPROVIDER_6                  (   ToolBarManager                      
 ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,
                                 const OUString& rResourceName,
-                                ToolBar* pToolBar ) :
+                                ToolBox* pToolBar ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
     m_bDisposed( false ),
@@ -751,7 +751,7 @@ void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap
 {
     const ::std::vector< sal_uInt16 >& _rIDs = _pIter->second.aIds;
     m_pToolBar->SetItemImage( _pIter->second.nId, _aImage );
-    ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBar::SetItemImage,m_pToolBar,_1,_aImage));
+    ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBox::SetItemImage,m_pToolBar,_1,_aImage));
 }
 
 void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)

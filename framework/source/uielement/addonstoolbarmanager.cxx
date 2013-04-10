@@ -20,7 +20,6 @@
 #include <uielement/addonstoolbarmanager.hxx>
 #include <uielement/toolbarmerger.hxx>
 
-#include <uielement/toolbar.hxx>
 #include <uielement/generictoolbarcontroller.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
@@ -55,6 +54,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <vcl/toolbox.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -78,7 +78,7 @@ static const char   TOOLBOXITEM_SEPARATOR_STR[] = "private:separator";
 AddonsToolBarManager::AddonsToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,
                                 const OUString& rResourceName,
-                                ToolBar* pToolBar ) :
+                                ToolBox* pToolBar ) :
     ToolBarManager( rxContext, rFrame, rResourceName, pToolBar )
 {
     m_pToolBar->SetMenuType( TOOLBOX_MENUTYPE_CLIPPEDITEMS );

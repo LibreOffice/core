@@ -20,8 +20,6 @@
 
 #include "uielement/comboboxtoolbarcontroller.hxx"
 
-#include "uielement/toolbar.hxx"
-
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

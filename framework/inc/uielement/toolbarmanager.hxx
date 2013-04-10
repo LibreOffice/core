@@ -43,18 +43,22 @@
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-#include <vcl/toolbox.hxx>
-#include <vcl/accel.hxx>
+#include <tools/link.hxx>
+#include <vcl/window.hxx>
+#include <vcl/timer.hxx>
+
+class PopupMenu;
+class ToolBox;
 
 namespace framework
 {
 
-class ToolBar;
 class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener         ,
                        public ::com::sun::star::frame::XStatusListener              ,
                        public ::com::sun::star::lang::XComponent                    ,
@@ -67,7 +71,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         ToolBarManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                         const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                         const OUString& rResourceName,
-                        ToolBar* pToolBar );
+                        ToolBox* pToolBar );
         virtual ~ToolBarManager();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -175,6 +179,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
 
         typedef ::boost::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > > MenuDescriptionMap;
+
         bool m_bDisposed : 1,
              m_bSmallSymbols : 1,
              m_bModuleIdentified : 1,
@@ -183,10 +188,14 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
              m_bUpdateControllers : 1,
              m_bImageOrientationRegistered : 1,
              m_bImageMirrored : 1;
-        long                                                                                   m_lImageRotation;
-        ToolBar*                                                                               m_pToolBar;
-        OUString                                                                          m_aModuleIdentifier;
-        OUString                                                                          m_aResourceName;
+
+        long m_lImageRotation;
+
+        ToolBox* m_pToolBar;
+
+        OUString m_aModuleIdentifier;
+        OUString m_aResourceName;
+
         com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >              m_xURLTransformer;
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                        m_xFrame;
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >               m_xUICommandLabels;

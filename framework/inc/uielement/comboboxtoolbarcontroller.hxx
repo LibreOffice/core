@@ -26,10 +26,11 @@
 
 #include <uielement/complextoolbarcontroller.hxx>
 
+#include <vcl/event.hxx>
+
 namespace framework
 {
 
-class ToolBar;
 class ComboBoxControl;
 
 class IComboBoxListener

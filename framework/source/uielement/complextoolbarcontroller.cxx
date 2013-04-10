@@ -20,8 +20,6 @@
 
 #include "uielement/complextoolbarcontroller.hxx"
 
-#include "uielement/toolbar.hxx"
-
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -37,6 +35,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;

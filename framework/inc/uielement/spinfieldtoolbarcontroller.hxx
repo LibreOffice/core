@@ -25,13 +25,13 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/spinfld.hxx>
+
+class ToolBox;
 
 namespace framework
 {
 
-class ToolBar;
 class SpinfieldControl;
 
 class ISpinfieldListener
@@ -60,9 +60,9 @@ class SpinfieldToolbarController : public ISpinfieldListener,
     public:
         SpinfieldToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                     const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                    ToolBox*             pToolBar,
-                                    sal_uInt16               nID,
-                                    sal_Int32            nWidth,
+                                    ToolBox* pToolBar,
+                                    sal_uInt16 nID,
+                                    sal_Int32 nWidth,
                                     const OUString& aCommand );
         virtual ~SpinfieldToolbarController();
 

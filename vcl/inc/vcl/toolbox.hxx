@@ -207,6 +207,9 @@ private:
     Link                maDeactivateHdl;
     Link                maHighlightHdl;
     Link                maSelectHdl;
+    Link                maCommandHandler;
+    Link                maStateChangedHandler;
+    Link                maDataChangedHandler;
 
     public:
     using Window::ImplInit;
@@ -509,6 +512,12 @@ public:
     const Link&         GetHighlightHdl() const { return maHighlightHdl; }
     void                SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
     const Link&         GetSelectHdl() const { return maSelectHdl; }
+    void                SetCommandHdl( const Link& aLink ) { maCommandHandler = aLink; }
+    const Link&         GetCommandHdl() const { return maCommandHandler; }
+    void                SetStateChangedHdl( const Link& aLink ) { maStateChangedHandler = aLink; }
+    const Link&         GetStateChangedHdl() const { return maStateChangedHandler; }
+    void                SetDataChangedHdl( const Link& aLink ) { maDataChangedHandler = aLink; }
+    const Link&         GetDataChangedHdl() { return maDataChangedHandler; }
 
     // support for custom menu (eg for configuration)
     // note: this menu will also be used to display currently

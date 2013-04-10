@@ -21,23 +21,24 @@
 #define __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX_
 
 #include <svtools/toolboxcontroller.hxx>
-#include <vcl/toolbox.hxx>
 #include <memory>
 
+#include <tools/link.hxx>
+
 class PopupMenu;
+class ToolBox;
 
 namespace framework
 {
 
 struct ExecuteInfo;
-class ToolBar;
 class GenericToolbarController : public svt::ToolboxController
 {
     public:
         GenericToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
-                                  sal_uInt16   nID,
+                                  sal_uInt16 nID,
                                   const OUString& aCommand );
         virtual ~GenericToolbarController();
 
@@ -50,7 +51,7 @@ class GenericToolbarController : public svt::ToolboxController
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
-         DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
+        DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
 
     protected:
         ToolBox*        m_pToolbar;
@@ -70,7 +71,7 @@ class MenuToolbarController : public GenericToolbarController
         MenuToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
-                                  sal_uInt16   nID,
+                                  sal_uInt16 nID,
                                   const OUString& aCommand,
                                   const OUString& aModuleIdentifier,
                                   const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xMenuDesc );

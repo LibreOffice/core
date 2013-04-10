@@ -20,8 +20,6 @@
 
 #include "uielement/buttontoolbarcontroller.hxx"
 
-#include "uielement/toolbar.hxx"
-
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -42,6 +40,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/toolbox.hxx>
 #include <svtools/miscopt.hxx>
 
 using namespace ::com::sun::star;

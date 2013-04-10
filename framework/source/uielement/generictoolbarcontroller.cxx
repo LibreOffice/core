@@ -20,8 +20,6 @@
 
 #include "uielement/generictoolbarcontroller.hxx"
 
-#include "uielement/toolbar.hxx"
-
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

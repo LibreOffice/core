@@ -4414,6 +4414,9 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
 
 void ToolBox::Command( const CommandEvent& rCEvt )
 {
+    if ( maCommandHandler.IsSet() )
+        maCommandHandler.Call( (void *)( &rCEvt ));
+
     // depict StartDrag on MouseButton/Left/Alt
     if ( (rCEvt.GetCommand() == COMMAND_STARTDRAG) && rCEvt.IsMouseEvent() &&
          mbCustomize && !mbDragging && !mbDrag && !mbSelection &&
@@ -4506,6 +4509,9 @@ void ToolBox::StateChanged( StateChangedType nType )
         ImplInitSettings( sal_False, sal_False, sal_True ); // font, foreground, background
         Invalidate();
     }
+
+    if ( maStateChangedHandler.IsSet() )
+        maStateChangedHandler.Call( &nType );
 }
 
 // -----------------------------------------------------------------------
@@ -4525,6 +4531,9 @@ void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
+
+    if ( maDataChangedHandler.IsSet() )
+        maDataChangedHandler.Call( (void*)&rDCEvt );
 }
 
 // -----------------------------------------------------------------------

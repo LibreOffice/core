@@ -25,13 +25,14 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/image.hxx>
+#include <tools/link.hxx>
+
+class Menu;
+class ToolBox;
 
 namespace framework
 {
 
-class ToolBar;
 class ToggleButtonToolbarController : public ComplexToolbarController
 
 {
@@ -45,9 +46,9 @@ class ToggleButtonToolbarController : public ComplexToolbarController
 
         ToggleButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                        const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                       ToolBox*             pToolBar,
-                                       sal_uInt16               nID,
-                                       Style                eStyle,
+                                       ToolBox* pToolBar,
+                                       sal_uInt16 nID,
+                                       Style eStyle,
                                        const OUString& aCommand );
         virtual ~ToggleButtonToolbarController();
 

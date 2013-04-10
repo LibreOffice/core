@@ -27,8 +27,10 @@
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
+#include <tools/link.hxx>
 
-#include <vcl/toolbox.hxx>
+class ToolBox;
+class Window;
 
 namespace framework
 {
@@ -48,15 +50,13 @@ struct NotifyInfo
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >                    aInfoSeq;
 };
 
-class ToolBar;
-
 class ComplexToolbarController : public svt::ToolboxController
 
 {
     public:
         ComplexToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                  ToolBox*     pToolBar,
+                                  ToolBox* pToolBar,
                                   sal_uInt16       nID,
                                   const OUString& aCommand );
         virtual ~ComplexToolbarController();
