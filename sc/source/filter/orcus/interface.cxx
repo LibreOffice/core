@@ -15,7 +15,10 @@
 #include "tokenarray.hxx"
 #include "stringutil.hxx"
 
-#include <formula/token.hxx>
+#include "formula/token.hxx"
+#include "tools/datetime.hxx"
+
+#define D_TIMEFACTOR              86400.0
 
 using orcus::spreadsheet::row_t;
 using orcus::spreadsheet::col_t;
@@ -148,9 +151,27 @@ void ScOrcusSheet::set_bool(row_t row, col_t col, bool value)
     mrDoc.SetValue(col, row, mnTab, value ? 1.0 : 0.0);
 }
 
-void ScOrcusSheet::set_date(row_t row, col_t col, const char* p, size_t n)
+void ScOrcusSheet::set_date_time(
+    row_t row, col_t col, int year, int month, int day, int hour, int minute, double second)
 {
-    set_auto(row, col, p, n);
+    SvNumberFormatter* pFormatter = mrDoc.GetFormatTable();
+
+    Date aDate(day, month, year);
+    sal_uIntPtr nSec = floor(second);
+    sal_uIntPtr nSec100 = (second - nSec) * 100;
+    Time aTime(hour, minute, nSec, nSec100);
+    Date aNullDate(*pFormatter->GetNullDate());
+    long nDateDiff = aDate - aNullDate;
+
+    double fTime =
+        static_cast<double>(aTime.Get100Sec()) / 100.0 +
+        aTime.GetSec() +
+        aTime.GetMin() * 60.0 +
+        aTime.GetHour() * 3600.0;
+
+    fTime /= D_TIMEFACTOR;
+
+    mrDoc.SetValue(col, row, mnTab, nDateDiff + fTime);
 }
 
 void ScOrcusSheet::set_format(row_t /*row*/, col_t /*col*/, size_t /*xf_index*/)
