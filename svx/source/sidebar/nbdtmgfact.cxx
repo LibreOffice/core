@@ -46,6 +46,8 @@ NBOTypeMgrBase* NBOutlineTypeMgrFact::CreateInstance(const NBOType aType)
     {
         return OutlineTypeMgr::GetInstance();
     }
+
+    return NULL;
 }
 }}
 
