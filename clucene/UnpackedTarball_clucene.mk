@@ -29,6 +29,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	clucene/patches/clucene-narrowing-conversions.patch \
 	clucene/patches/clucene-nullptr.patch \
 	clucene/patches/clucene-warnings.patch \
+	clucene/patches/clucene-aix.patch \
 ))
 
 ifeq ($(OS),WNT)

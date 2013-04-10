@@ -1,0 +1,40 @@
+diff -rc clucene.orig/src/core/CLucene/store/MMapInput.cpp clucene/src/core/CLucene/store/MMapInput.cpp
+*** src/core/CLucene/store/MMapInput.cpp	Wed Apr 10 10:57:37 2013
+--- src/core/CLucene/store/MMapInput.cpp	Wed Apr 10 10:58:30 2013
+***************
+*** 115,121 ****
+  	{
+    }
+    
+!   bool MMapIndexInput::open(const char* path, IndexInput*& ret, CLuceneError& error, int32_t __bufferSize )    {
+  
+  	//Func - Constructor.
+  	//       Opens the file named path
+--- 115,121 ----
+  	{
+    }
+    
+!   bool MMapIndexInput::Open(const char* path, IndexInput*& ret, CLuceneError& error, int32_t __bufferSize )    {
+  
+  	//Func - Constructor.
+  	//       Opens the file named path
+diff -rc clucene.orig/src/core/CLucene/store/_MMapIndexInput.h clucene/src/core/CLucene/store/_MMapIndexInput.h
+*** src/core/CLucene/store/_MMapIndexInput.h	Wed Apr 10 10:57:37 2013
+--- src/core/CLucene/store/_MMapIndexInput.h	Wed Apr 10 10:58:53 2013
+***************
+*** 18,24 ****
+    MMapIndexInput(const MMapIndexInput& clone);
+    MMapIndexInput(Internal* _internal);
+  public:
+!   static bool open(const char* path, IndexInput*& ret, CLuceneError& error, int32_t __bufferSize);
+  
+    ~MMapIndexInput();
+    IndexInput* clone() const;
+--- 18,24 ----
+    MMapIndexInput(const MMapIndexInput& clone);
+    MMapIndexInput(Internal* _internal);
+  public:
+!   static bool Open(const char* path, IndexInput*& ret, CLuceneError& error, int32_t __bufferSize);
+  
+    ~MMapIndexInput();
+    IndexInput* clone() const;
