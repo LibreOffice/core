@@ -28,11 +28,6 @@ using ::rtl::OUString;
 
 namespace sfx2 { namespace sidebar {
 
-namespace {
-    static const sal_Char* gsAny = "any";
-}
-
-
 
 ContextList::ContextList (void)
     : maEntries()
