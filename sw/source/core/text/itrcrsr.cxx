@@ -1612,7 +1612,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
                 if ( nSpaceAdd )
                 {
-                    sal_Int32 nCharCnt;
+                    sal_Int32 nCharCnt = 0;
                     // #i41860# Thai justified alignemt needs some
                     // additional information:
                     aDrawInf.SetNumberOfBlanks( pPor->InTxtGrp() ?
