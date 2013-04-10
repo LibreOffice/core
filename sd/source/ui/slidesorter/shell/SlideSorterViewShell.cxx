@@ -62,6 +62,11 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 
+// pieces for SlideJockeyView which doesn't truly belong here.
+#include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
+
 using namespace ::sd::slidesorter;
 #define SlideSorterViewShell
 #define SlideJockeyViewShell
@@ -688,9 +693,15 @@ SlideJockeyViewShell::SlideJockeyViewShell ( SfxViewFrame* _pFrame,
                                              FrameView* _pFrameView ) :
     SlideSorterViewShell( _pFrame, _rViewShellBase, _pParentWindow, _pFrameView )
 {
-    fprintf( stderr, "Create slide jockey\n" );
     meShellType = ST_JOCKEY_SORTER;
-    SetName (OUString("SlideJockeyViewShell"));
+    SetName(OUString("SlideJockeyViewShell"));
+}
+
+SlideJockeyViewShell::~SlideJockeyViewShell()
+{
+    // FIXME: need to delete this early - it holds references on random widgets.
+    mpSlideSorter.reset();
+    fprintf(stderr, "Delete slide jockey %p\n", this);
 }
 
 ::boost::shared_ptr<SlideJockeyViewShell> SlideJockeyViewShell::Create (
@@ -716,6 +727,122 @@ SlideJockeyViewShell::SlideJockeyViewShell ( SfxViewFrame* _pFrame,
         pViewShell.reset();
     }
     return pViewShell;
+}
+
+class SlideSorterContainer : public VclBin
+{
+public:
+    ::boost::shared_ptr<SlideSorter> mpSlideSorter;
+    Size maRequisition;
+
+    SlideSorterContainer( VclContainer *pParent, SlideJockeyViewShell *pShell )
+        : VclBin( pParent )
+    {
+        mpSlideSorter = SlideSorter::CreateSlideSorter( pShell->GetViewShellBase(), pShell, *pParent );
+        Show();
+        mpSlideSorter->GetContentWindow()->Show();
+    }
+    virtual void setAllocation(const Size& rAllocation)
+    {
+        fprintf(stderr, "setAllocation %d,%d %dx%d\n",
+                (int)GetPosPixel().X(), (int)GetPosPixel().Y(),
+                (int)rAllocation.Width(), (int)rAllocation.Height());
+
+        mpSlideSorter->ArrangeGUIElements(GetPosPixel(), rAllocation);
+
+        VclBin::setAllocation( rAllocation );
+    }
+    virtual Size calculateRequisition() const
+    {
+        return maRequisition;
+    }
+    void setRequisition(const Size &rSize)
+    {
+        maRequisition = rSize;
+        Resize();
+    }
+    virtual void Paint( const Rectangle& rRect )
+    { // for reasons unknown the background is not painted at all here [!]
+      // who should do that ?
+        fprintf(stderr,"SlideSortercontainer::Paint ...\n");
+        Erase();
+        VclBin::Paint( rRect );
+    }
+/*  virtual Window *get_child()
+    {
+       return mpSlideSorter->GetView().Show();
+    } */
+};
+
+void SlideJockeyViewShell::Initialize (void)
+{
+    fprintf( stderr, "Create custom slide jockey layout\n" );
+
+// FIXME: I need to write a layout enabled GtkPaned replacement
+//        using a splitter manually is just -too- bad ...
+
+    mpPaned.reset( new VclVBox( mpContentWindow.get(), true, 8 ) );
+    mpPaned->set_fill( true );
+    mpPaned->Show();
+
+    mpTopHBox.reset( new VclHBox( mpPaned.get(), false, 8 ) );
+    mpTopHBox->set_pack_type( VCL_PACK_START );
+    mpTopHBox->set_vexpand( false );
+    mpTopHBox->set_fill( false );
+    mpTopHBox->Show();
+    mpLabel.reset( new FixedText( mpTopHBox.get() ) );
+    mpLabel->SetText( "Search:" ); // FIXME: i18n ...
+    mpLabel->set_hexpand( false );
+    mpLabel->set_fill( true );
+    mpLabel->Show();
+    mpSearchEdit.reset( new Edit( mpTopHBox.get() ) );
+    mpSearchEdit->set_hexpand( true );
+    mpSearchEdit->SetPlaceholderText( "<enter slide search terms>" ); // FIXME: i18n ...
+    mpSearchEdit->Show();
+
+    mpSorterContainer.reset( new ::SlideSorterContainer( mpPaned.get(), this ) );
+    mpSorterContainer->set_vexpand( true );
+    mpSorterContainer->set_hexpand( true );
+    mpSorterContainer->set_fill( true );
+    mpSlideSorter = mpSorterContainer->mpSlideSorter;
+    mpView = &mpSlideSorter->GetView();
+
+    doShow();
+
+    SetPool( &GetDoc()->GetPool() );
+    SetUndoManager( GetDoc()->GetDocSh()->GetUndoManager() );
+
+    // For accessibility we have to shortly hide the content window.
+    // This triggers the construction of a new accessibility object for
+    // the new view shell.  (One is created earlier while the construtor
+    // of the base class is executed.  At that time the correct
+    // accessibility object can not be constructed.)
+    SharedSdWindow pWindow( mpSlideSorter->GetContentWindow() );
+    if ( pWindow )
+    {
+        pWindow->Hide();
+        pWindow->Show();
+    }
+}
+
+void SlideJockeyViewShell::ArrangeGUIElements (void)
+{
+    if (IsActive())
+    {
+        fprintf(stderr, "Arrange elements size %d %d\n",
+                (int) maViewSize.Width(), (int)maViewSize.Height() );
+
+        OSL_ASSERT(mpSlideSorter.get()!=NULL);
+
+        mpPaned->SetPosSizePixel(maViewPos, maViewSize);
+// FIXME: should trickle down the stack ...
+//        mpSorterContainer->setRequisition( maViewSize );
+//        mpSorterContainer->Resize();
+
+        mbIsArrangeGUIElementsPending = false;
+    }
+    else
+        mbIsArrangeGUIElementsPending = true;
 }
 
 } } // end of namespace ::sd::slidesorter
