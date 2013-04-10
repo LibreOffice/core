@@ -988,7 +988,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetStart(1);
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
-            SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , sal_False);
+            SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, NUM_RULE_DEFAULT_LEVEL , sal_False);
 
             for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
@@ -1044,7 +1044,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
             SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,
-                                 10, sal_False );
+                                 NUM_RULE_DEFAULT_LEVEL, sal_False );
             for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
                 aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34

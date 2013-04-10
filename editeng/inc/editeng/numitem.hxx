@@ -55,6 +55,9 @@ namespace com{namespace sun{ namespace star{
 #define NUM_ENABLE_LINKED_BMP   0x0100 // linked bitmaps are available
 #define NUM_ENABLE_EMBEDDED_BMP 0x0200 // embedded bitmaps are available
 
+//Level Depth
+#define NUM_RULE_DEFAULT_LEVEL  10
+
 #define SVX_NO_NUM              200 // Marker for no numbering
 #define SVX_NO_NUMLEVEL         0x20
 

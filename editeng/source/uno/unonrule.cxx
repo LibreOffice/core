@@ -490,7 +490,7 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
     }
     else
     {
-        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , sal_False);
+        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, NUM_RULE_DEFAULT_LEVEL , sal_False);
         return new SvxUnoNumberingRules( aDefaultRule );
     }
 }
