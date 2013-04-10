@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -113,23 +112,15 @@ SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet);
 
 } // end of anonymous namespace
 
-
-
 SlotManager::SlotManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       maCommandQueue()
 {
 }
 
-
-
-
 SlotManager::~SlotManager (void)
 {
 }
-
-
-
 
 void SlotManager::FuTemporary (SfxRequest& rRequest)
 {
@@ -156,6 +147,11 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_SHOW_SLIDE:
             ChangeSlideExclusionState(model::SharedPageDescriptor(), false);
+            break;
+
+        case SID_GROUP_SLIDES:
+        case SID_UNGROUP_SLIDES:
+            fprintf (stderr, "Execute group / un-group\n");
             break;
 
         case SID_PAGES_PER_ROW:
@@ -289,9 +285,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
     }
 }
-
-
-
 
 void SlotManager::FuPermanent (SfxRequest& rRequest)
 {
@@ -439,9 +432,6 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
     }
 }
 
-
-
-
 void SlotManager::ExecCtrl (SfxRequest& rRequest)
 {
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
@@ -503,9 +493,6 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
             break;
     }
 }
-
-
-
 
 void SlotManager::GetAttrState (SfxItemSet& rSet)
 {
@@ -645,7 +632,6 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         }
     }
 
-
     // Disable the rename slots when there are no or more than one slides/master
     // pages selected; disable the duplicate slot when there are no slides
     // selected:
@@ -694,6 +680,11 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         }
     }
 
+    if (rSet.GetItemState(SID_GROUP_SLIDES) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_UNGROUP_SLIDES)  == SFX_ITEM_AVAILABLE)
+    {
+        fprintf(stderr, "Determine if we can show group vs. un-group\n");
+    }
 
     PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
     if ((eEditMode == EM_MASTERPAGE) && (ePageKind != PK_HANDOUT))
@@ -715,9 +706,6 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
             rSet.DisableItem(SID_DUPLICATE_PAGE);
     }
 }
-
-
-
 
 void SlotManager::GetClipboardState ( SfxItemSet& rSet)
 {
@@ -837,9 +825,6 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
         }
     }
 }
-
-
-
 
 void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 {
@@ -1050,9 +1035,6 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
     return bSuccess;
 }
 
-
-
-
 /** Insert a slide.  The insertion position depends on a) the selection and
     b) the mouse position when there is no selection.
 
@@ -1119,9 +1101,6 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
     mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
     mrSlideSorter.GetController().GetPageSelector().SelectPage(pNewPage);
 }
-
-
-
 
 void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
 {
@@ -1209,9 +1188,6 @@ void SlotManager::ChangeSlideExclusionState (
     mrSlideSorter.GetModel().GetDocument()->SetChanged();
 }
 
-
-
-
 sal_Int32 SlotManager::GetInsertionPosition (void)
 {
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
@@ -1259,9 +1235,6 @@ sal_Int32 SlotManager::GetInsertionPosition (void)
     }
 }
 
-
-
-
 void SlotManager::NotifyEditModeChange (void)
 {
     SfxBindings& rBindings (mrSlideSorter.GetViewShell()->GetViewFrame()->GetBindings());
@@ -1270,14 +1243,7 @@ void SlotManager::NotifyEditModeChange (void)
     rBindings.Invalidate(SID_DUPLICATE_PAGE);
 }
 
-
-
-
-
-
 namespace {
-
-
 
 SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
 {

@@ -243,6 +243,8 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
         pViewShell->Invalidate (SID_SUMMARY_PAGE);
         pViewShell->Invalidate(SID_SHOW_SLIDE);
         pViewShell->Invalidate(SID_HIDE_SLIDE);
+        pViewShell->Invalidate(SID_GROUP_SLIDES);
+        pViewShell->Invalidate(SID_UNGROUP_SLIDES);
         pViewShell->Invalidate(SID_DELETE_PAGE);
         pViewShell->Invalidate(SID_DELETE_MASTER_PAGE);
         pViewShell->Invalidate(SID_ASSIGN_LAYOUT);

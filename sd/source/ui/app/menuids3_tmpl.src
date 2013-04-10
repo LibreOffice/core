@@ -131,4 +131,20 @@
         Text [ en-US ] = "~Hide Slide" ; \
     };
 
+#define MN_GROUP_SLIDES \
+    MenuItem\
+    {\
+        Identifier = SID_GROUP_SLIDES ; \
+        HelpId = CMD_SID_GROUP_SLIDES ; \
+        Text [ en-US ] = "~Group Slide(s)" ; \
+    };
+
+#define MN_UNGROUP_SLIDES \
+    MenuItem\
+    {\
+        Identifier = SID_UNGROUP_SLIDES ; \
+        HelpId = CMD_SID_UNGROUP_SLIDES ; \
+        Text [ en-US ] = "~Un-Group Slide(s)" ; \
+    };
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
