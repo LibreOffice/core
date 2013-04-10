@@ -41,6 +41,7 @@ namespace SlideHack {
 
 typedef boost::shared_ptr< class Store > StorePtr;
 typedef boost::shared_ptr< class Group > GroupPtr;
+typedef boost::shared_ptr< class Origin > OriginPtr;
 typedef boost::shared_ptr< class GroupMeta > GroupMetaPtr;
 typedef boost::shared_ptr< class VersionData > VersionDataPtr;
 typedef boost::shared_ptr< class Alternatives > AlternativesPtr;
@@ -56,18 +57,52 @@ public:
     virtual OUString getCheckinComment() = 0;
 };
 
+/// Tracking where a single slide came from
+class Origin
+{
+    friend class Store;
+private:
+    Origin( const OUString &rURL );
+public:
+    virtual ~Origin() {}
+    /// get a URL for our origin, which encodes version, alternative, etc.
+    OUString getURL();
+};
+
+/// Tracking where a single slide came from and some policy around that
+class OriginDetails : Origin
+{
+public:
+    /// how should we set about updating data from this origin ?
+    enum UpdateType { ORIGIN_UPDATE_NEVER, ORIGIN_UPDATE_AUTO, ORIGIN_UPDATE_MANUAL };
+
+    OriginDetails( const Origin &rOrigin, UpdateType eUpdateType );
+    virtual ~OriginDetails() {}
+
+    UpdateType getUpdateType() { return meUpdateType; }
+    void setUpdateType( UpdateType eUpdateType) { meUpdateType = eUpdateType; }
+
+    /// for save
+    OUString toString();
+    /// for load
+    OUString fromString();
+private:
+    UpdateType meUpdateType;
+};
+
 /// Defines information about a group of slides
 class GroupMeta : public boost::enable_shared_from_this< GroupMeta >,
                   private boost::noncopyable
 {
 public:
     virtual ~GroupMeta() {}
-    virtual OUString getName() = 0;
-    virtual OUString getUserName() = 0;
-    virtual OUString getTopic() = 0;
+    virtual OUString   getName() = 0;
+    virtual OUString   getUserName() = 0;
+    virtual OUString   getTopic() = 0;
 
     /// number of slides
-    virtual int      getLength() = 0;
+    virtual int        getLength() = 0;
+    virtual OriginPtr  getOriginForSlide( sal_uInt32 nSlide ) = 0;
 
     // Cedric: can this be easily fetched in one chunk ?
     virtual VersionDataPtr getVersionData() = 0;
@@ -120,7 +155,7 @@ public:
 
     /// used to create a group handle from a stored slide, so we can
     /// check for updated versions etc.
-    virtual GroupPtr createGroup( OUString aName, OUString aVersion ) = 0;
+    virtual GroupPtr createGroup( OriginPtr pOrigin ) = 0;
 
     /// factory function: to get the root
     static StorePtr getStore();
