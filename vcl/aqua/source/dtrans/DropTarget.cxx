@@ -20,7 +20,6 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
-#include <rtl/unload.h>
 
 #include "comphelper/makesequence.hxx"
 #include <cppuhelper/interfacecontainer.hxx>

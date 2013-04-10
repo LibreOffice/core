@@ -577,8 +577,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL javavm_component_getFactory(sal_
                                             aServiceImplementation);
 }
 
-// There is no component_canUnload, as the library cannot be unloaded.
-
 JavaVirtualMachine::JavaVirtualMachine(
     css::uno::Reference< css::uno::XComponentContext > const & rContext):
     JavaVirtualMachine_Impl(*static_cast< osl::Mutex * >(this)),

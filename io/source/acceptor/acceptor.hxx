@@ -19,13 +19,10 @@
 
 #include <osl/pipe.hxx>
 #include <osl/socket.hxx>
-#include <rtl/unload.h>
 
 #include <com/sun/star/connection/XConnection.hpp>
 
 namespace io_acceptor {
-
-    extern rtl_StandardModuleCount g_moduleCount;
 
     class PipeAcceptor
     {

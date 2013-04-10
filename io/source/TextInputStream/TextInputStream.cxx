@@ -20,8 +20,6 @@
 #include <string.h>
 #include <osl/diagnose.h>
 
-#include <rtl/unload.h>
-
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
@@ -484,20 +482,10 @@ static struct ImplementationEntry g_entries[] =
     { 0, 0, 0, 0, 0, 0 }
 };
 
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
-{
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
-}
-
-//==================================================================================================
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL textinstream_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL textinstream_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

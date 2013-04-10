@@ -16,11 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <rtl/unload.h>
 
 namespace io_stm {
-
-extern rtl_StandardModuleCount g_moduleCount;
 
 // OPipeImpl
 Reference< XInterface > SAL_CALL OPipeImpl_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);

@@ -85,7 +85,6 @@ namespace stoc_connector {
         _error(sal_False)
     {
         // make it unique
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         m_sDescription += ",uniqueValue=";
         m_sDescription += OUString::valueOf(
             sal::static_int_cast< sal_Int64 >(
@@ -95,7 +94,6 @@ namespace stoc_connector {
 
     SocketConnection::~SocketConnection()
     {
-        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     void SocketConnection::completeConnectionString()

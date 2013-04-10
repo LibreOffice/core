@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/unload.h>
-
 #include "targetdropcontext.hxx"
 
 using namespace ::com::sun::star::datatransfer::dnd;
@@ -26,10 +24,8 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-extern rtl_StandardModuleCount g_moduleCount;
 TargetDropContext::TargetDropContext( DropTarget* p)
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_pDropTarget= p;
     p->acquire();
 }
@@ -37,7 +33,6 @@ TargetDropContext::TargetDropContext( DropTarget* p)
 TargetDropContext::~TargetDropContext()
 {
     m_pDropTarget->release();
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void SAL_CALL TargetDropContext::acceptDrop( sal_Int8 dropOperation )

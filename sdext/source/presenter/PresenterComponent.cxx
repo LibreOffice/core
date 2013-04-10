@@ -49,19 +49,10 @@ static struct ImplementationEntry gServiceEntries[] =
     { 0, 0, 0, 0, 0, 0 }
 };
 
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL presenter_component_canUnload( TimeValue *pTime )
-    {
-        return g_moduleCount.canUnload( &g_moduleCount , pTime );
-    }
-
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL presenter_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL presenter_component_getFactory(
         const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-    {
-        return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , gServiceEntries);
-    }
-
+{
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , gServiceEntries);
 }
 
 } } // end of namespace sdext::presenter

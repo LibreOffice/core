@@ -45,14 +45,11 @@
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
 #include "rtl/textenc.h"
-#include "rtl/unload.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
 #include "bootstrapservices.hxx"
-
-extern rtl_StandardModuleCount g_moduleCount;
 
 namespace {
 
@@ -61,9 +58,9 @@ class SimpleRegistry:
         css::registry::XSimpleRegistry, css::lang::XServiceInfo >
 {
 public:
-    SimpleRegistry() { g_moduleCount.modCnt.acquire(&g_moduleCount.modCnt); }
+    SimpleRegistry() {}
 
-    ~SimpleRegistry() { g_moduleCount.modCnt.release(&g_moduleCount.modCnt); }
+    ~SimpleRegistry() {}
 
     osl::Mutex mutex_;
 

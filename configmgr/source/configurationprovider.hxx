@@ -25,7 +25,6 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "cppuhelper/factory.hxx"
-#include "rtl/unload.h"
 #include "sal/types.h"
 
 namespace com { namespace sun { namespace star {

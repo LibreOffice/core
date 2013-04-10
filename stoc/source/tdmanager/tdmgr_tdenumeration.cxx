@@ -23,8 +23,6 @@
 
 using namespace com::sun::star;
 
-extern rtl_StandardModuleCount g_moduleCount;
-
 namespace stoc_tdmgr
 {
 
@@ -47,14 +45,12 @@ TypeDescriptionEnumerationImpl::TypeDescriptionEnumerationImpl(
   m_eDepth( eDepth ),
   m_aChildren( rTDEAS )
 {
-    ::g_moduleCount.modCnt.acquire( &::g_moduleCount.modCnt );
 }
 
 //=========================================================================
 // virtual
 TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl()
 {
-    ::g_moduleCount.modCnt.release( &::g_moduleCount.modCnt );
 }
 
 //=========================================================================

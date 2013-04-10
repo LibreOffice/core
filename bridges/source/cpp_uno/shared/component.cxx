@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "component.hxx"
-
 #include "bridges/cpp_uno/shared/bridge.hxx"
 
 #include "com/sun/star/uno/Reference.hxx"
@@ -29,7 +26,6 @@
 #include "osl/mutex.hxx"
 #include "osl/time.h"
 #include "rtl/process.h"
-#include "rtl/unload.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -40,8 +36,6 @@
 #include "cppu/EnvDcp.hxx"
 
 namespace bridges { namespace cpp_uno { namespace shared {
-
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 } } }
 
@@ -183,18 +177,7 @@ static void SAL_CALL releaseInterface( uno_ExtEnvironment * pExtEnv, void * pCpp
 static void SAL_CALL environmentDisposing(
     SAL_UNUSED_PARAMETER uno_Environment * ) SAL_THROW(())
 {
-    bridges::cpp_uno::shared::g_moduleCount.modCnt.release(
-        &bridges::cpp_uno::shared::g_moduleCount.modCnt );
 }
-
-#ifndef DISABLE_DYNLOADING
-
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload(TimeValue * pTime) SAL_THROW_EXTERN_C() {
-    return bridges::cpp_uno::shared::g_moduleCount.canUnload(
-        &bridges::cpp_uno::shared::g_moduleCount, pTime);
-}
-
-#endif
 
 #ifdef DISABLE_DYNLOADING
 #define uno_initEnvironment CPPU_ENV_uno_initEnvironment
@@ -209,8 +192,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv
              pCppEnv->pTypeName->buffer, rtl_str_getLength(CPPU_CURRENT_LANGUAGE_BINDING_NAME), CPPU_CURRENT_LANGUAGE_BINDING_NAME )
         == 0,
         "### wrong environment type!" );
-    bridges::cpp_uno::shared::g_moduleCount.modCnt.acquire(
-        &bridges::cpp_uno::shared::g_moduleCount.modCnt );
     ((uno_ExtEnvironment *)pCppEnv)->computeObjectIdentifier
         = computeObjectIdentifier;
     ((uno_ExtEnvironment *)pCppEnv)->acquireInterface = acquireInterface;

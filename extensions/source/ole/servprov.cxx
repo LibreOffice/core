@@ -33,8 +33,6 @@
 #include "servprov.hxx"
 #include "unoobjw.hxx"
 #include "oleobjw.hxx"
-#include <rtl/unload.h>
-
 
 using namespace cppu;
 using namespace osl;
@@ -52,8 +50,6 @@ namespace ole_adapter
 // GUID used since 5.2 ( src569 m)
 // {82154420-0FBF-11d4-8313-005004526AB4}
 DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
-
-extern  rtl_StandardModuleCount globalModuleCount;
 
 /*****************************************************************************
 
@@ -332,8 +328,6 @@ OleConverter_Impl2::OleConverter_Impl2( const Reference<XMultiServiceFactory> &s
     UnoConversionUtilities<OleConverter_Impl2>( smgr)
 
 {
-    // library unloading support
-    globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
 }
 
 // The XMultiServiceFactory is later set by XInitialization
@@ -341,13 +335,10 @@ OleConverter_Impl2::OleConverter_Impl2( const  Reference<XMultiServiceFactory>& 
     UnoConversionUtilities<OleConverter_Impl2>( smgr, unoWrapperClass, comWrapperClass  )
 
 {
-    //library unloading support
-    globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
 }
 
 OleConverter_Impl2::~OleConverter_Impl2()
 {
-    globalModuleCount.modCnt.release( &globalModuleCount.modCnt);
 }
 
 // XBridgeSupplier --------------------------------------------------------------
@@ -490,8 +481,6 @@ Reference< XInterface > OleConverter_Impl2::createComWrapperInstance()
 OleClient_Impl::OleClient_Impl( const Reference<XMultiServiceFactory>& smgr):
     UnoConversionUtilities<OleClient_Impl>( smgr)
 {
-    // library unloading support
-    globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
     Reference<XInterface> xInt;// = m_smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
 
     if (xInt.is())
@@ -504,8 +493,6 @@ OleClient_Impl::OleClient_Impl( const Reference<XMultiServiceFactory>& smgr):
 
 OleClient_Impl::~OleClient_Impl()
 {
-    // library unloading support
-    globalModuleCount.modCnt.release( &globalModuleCount.modCnt);
 }
 
 Sequence< OUString >    SAL_CALL OleClient_Impl::getAvailableServiceNames() throw( RuntimeException )
@@ -610,8 +597,6 @@ Reference< XInterface > OleClient_Impl::createComWrapperInstance( )
 OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
     m_smgr( smgr)
 {
-    //library unloading support
-    globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
     Reference<XInterface> xInt = m_smgr->createInstance(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.BridgeSupplier"));
 
     if (xInt.is())
@@ -633,8 +618,6 @@ OleServer_Impl::~OleServer_Impl()
         (*m_wrapperList.begin())->Release();
         m_wrapperList.pop_front();
     }
-    //library unloading support
-    globalModuleCount.modCnt.release( &globalModuleCount.modCnt);
 }
 // XInterface --------------------------------------------------
 Any SAL_CALL OleServer_Impl::queryInterface( const Type& aType ) throw(RuntimeException)

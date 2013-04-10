@@ -16,11 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <rtl/unload.h>
 
 namespace animcore {
-
-extern rtl_StandardModuleCount g_moduleCount;
 
 #define DECL_NODE_FACTORY(N)\
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance_##N( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rSMgr ) throw (::com::sun::star::uno::Exception);\
