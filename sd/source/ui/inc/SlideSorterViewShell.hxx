@@ -31,9 +31,15 @@ namespace sd { namespace slidesorter { namespace controller {
 class SlotManager;
 } } }
 
+class Edit;
+class VclVBox;
+class VclHBox;
+class FixedText;
+
 namespace sd { namespace slidesorter {
 
 class SlideSorter;
+class SlideSorterContainer;
 
 class SlideSorterViewShell
     : public ViewShell
@@ -202,7 +208,7 @@ protected:
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
         FrameView* pFrameView);
-    void Initialize (void);
+    virtual void Initialize (void);
 
     /** This method overwrites the one from our base class:  We do our own
         scroll bar and the base class call is thus unnecessary.  It simply
@@ -218,10 +224,17 @@ class SlideJockeyViewShell
     : public SlideSorterViewShell
 {
     friend class controller::SlotManager;
+    ::std::auto_ptr<VclVBox> mpPaned;
+    ::std::auto_ptr<VclHBox> mpTopHBox;
+    ::std::auto_ptr<FixedText> mpLabel;
+    ::std::auto_ptr<Edit> mpSearchEdit;
+    ::std::auto_ptr<SlideSorterContainer> mpSorterContainer;
 
 public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDSLIDEJOCKEYVIEWSHELL)
+
+    virtual ~SlideJockeyViewShell();
 
     static ::boost::shared_ptr<SlideJockeyViewShell> Create(
         SfxViewFrame* pFrame,
@@ -229,6 +242,12 @@ public:
         ::Window* pParentWindow,
         FrameView* pFrameView,
         const bool bIsCenterPane);
+
+    /// Place and size our contents
+    virtual void ArrangeGUIElements (void);
+
+protected:
+    virtual void Initialize (void);
 
 private:
     /// SfxInterface initializer.
