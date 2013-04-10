@@ -64,8 +64,7 @@ class UnoReferencePrinter(object):
         iface = self.value['_pInterface']
         if iface:
             try:
-                impl = iface.cast(iface.dynamic_type).dereference()
-                return '%s to %s' % (self.typename, str(impl))
+                return '%s to (%s) %s' % (self.typename, str(iface.dynamic_type), str(iface))
             except:
                 # fallback for potential problem:
                 # base class 'com::sun::star::uno::XInterface' is ambiguous
