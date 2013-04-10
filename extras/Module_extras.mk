@@ -21,11 +21,11 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_palettes \
 	Package_wordbook \
 	Package_database \
+	Package_databasebiblio \
 	Zip_autotextuser \
 	Zip_cfgsrvbitmapunx \
 	Zip_cfgsrvnolang \
 	Zip_cfgusr \
-	Zip_databasebiblio \
 	Zip_gallbullets \
 	Zip_gallhtmlexpo \
 	Zip_gallroot \

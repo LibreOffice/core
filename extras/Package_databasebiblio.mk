@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,databasebiblio,$(SRCDIR)/extras/source/database))
+$(eval $(call gb_Package_Package,extras_databasebiblio,$(SRCDIR)/extras/source/database))
 
-$(eval $(call gb_Zip_add_files,databasebiblio,\
+$(eval $(call gb_Package_set_outdir,extras_databasebiblio,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_databasebiblio,presets/database/biblio,\
 	biblio.dbf \
 	biblio.dbt \
 ))
