@@ -7731,6 +7731,13 @@ dnl ===================================================================
 if test "x$enable_postgresql_sdbc" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_POSTGRESQL_SDBC"
 
+    if test "$with_krb5" = "yes" -a "$enable_openssl" = "no"; then
+        AC_MSG_ERROR([krb5 needs OpenSSL, but --disable-openssl was given.])
+    fi
+    if test "$with_gssapi" = "yes" -a "$enable_openssl" = "no"; then
+        AC_MSG_ERROR([GSSAPI needs OpenSSL, but --disable-openssl was given.])
+    fi
+
     AC_MSG_CHECKING([PostgreSQL C interface])
     if test "$with_system_postgresql" = "yes"; then
         AC_MSG_RESULT([external PostgreSQL])
