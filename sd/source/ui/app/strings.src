@@ -1268,4 +1268,14 @@ String STRING_DRAG_AND_DROP_SLIDES
      Text [ en-US ] = "Drag and Drop Slides" ;
 };
 
+String STR_PHOTO_ALBUM_TITLE
+{
+     Text [ en-US ] = "Photo Album" ;
+};
+
+String STR_PHOTO_ALBUM_AUTHOR
+{
+     Text [ en-US ] = "Author:" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

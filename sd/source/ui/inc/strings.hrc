@@ -415,6 +415,9 @@
 
 #define STR_ACC_DIALOG_DESC                             (RID_APP_START+728)
 
+#define STR_PHOTO_ALBUM_TITLE                           (RID_APP_START+729)
+#define STR_PHOTO_ALBUM_AUTHOR                          (RID_APP_START+730)
+
 /******************************************************************************
 * The ids in glob.hrc start at RID_APP_START+750!
 ******************************************************************************/

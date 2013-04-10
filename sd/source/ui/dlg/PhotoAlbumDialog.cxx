@@ -7,8 +7,6 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#include "PhotoAlbumDialog.hxx"
-
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -30,6 +28,10 @@
 
 #include <vcl/msgbox.hxx>
 #include <svx/unoshape.hxx>
+
+#include "PhotoAlbumDialog.hxx"
+#include "strings.hrc"
+#include "sdresid.hxx"
 
 namespace sd
 {
@@ -107,12 +109,12 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
         SdrObject* pTitleObj = pFirstSlide->GetPresObj(PRESOBJ_TITLE, 0);
         SvxShapeText* pTitleText = new SvxShapeText(pTitleObj);
         pTitleText->SetShapeType("com.sun.star.presentation.TitleTextShape");
-        pTitleText->setString(OUString("Photoalbum\n"));
+        pTitleText->setString(SD_RESSTR(STR_PHOTO_ALBUM_TITLE));
 
         SdrObject* pTextObj = pFirstSlide->GetPresObj(PRESOBJ_TEXT, 0);
         SvxShapeText* pTextShape = new SvxShapeText(pTextObj);
         pTextShape->SetShapeType("com.sun.star.presentation.TextShape");
-        pTextShape->setString(OUString("Author: ") + aUserOptions.GetFullName());
+        pTextShape->setString(SD_RESSTR(STR_PHOTO_ALBUM_AUTHOR) + " " + aUserOptions.GetFullName());
 
         Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
