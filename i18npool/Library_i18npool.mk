@@ -148,7 +148,8 @@ $(call gb_CxxObject_get_target,i18npool/source/collator/collator_unicode) :| \
 $(eval $(call gb_Library_add_generated_cobjects,i18npool,\
 	CustomTarget/i18npool/breakiterator/OpenOffice_dat \
 	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/breakiterator/data/*.txt),\
-		CustomTarget/i18npool/breakiterator/$(notdir $(basename $(txt)))_brk) \
+		CustomTarget/i18npool/breakiterator/$(notdir $(basename $(txt)))_brk),\
+	$(if $(filter GCC,$(COM)),-Wno-unused-macros) \
 ))
 
 # i18npool dlopens localedata_* libraries.
