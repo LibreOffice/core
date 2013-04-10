@@ -75,6 +75,8 @@
 #define CMD_SID_HELPLINES_VISIBLE                   ".uno:HelplinesVisible"
 #define CMD_SID_HIDE_SLIDE                          ".uno:HideSlide"
 #define CMD_SID_SHOW_SLIDE                          ".uno:ShowSlide"
+#define CMD_SID_GROUP_SLIDES                        ".uno:GroupSlides"
+#define CMD_SID_UNGROUP_SLIDES                      ".uno:UnGroupSlides"
 #define CMD_SID_INSERTLAYER                         ".uno:InsertLayer"
 #define CMD_SID_INSERTPAGE                          ".uno:InsertPage"
 #define CMD_SID_DUPLICATE_PAGE                      ".uno:DuplicatePage"
