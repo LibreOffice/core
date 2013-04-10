@@ -43,14 +43,11 @@ bool SwWrtShell::_SttWrd()
     Combine();
     return true;
 }
-/*
- * Das Ende eines Wortes ist das Folgen von Trennzeichen auf
- * nicht-Trennzeichen.  Unter dem Ende eines Wortes wird
- * ebenfalls die Folge von Worttrennzeichen auf Interpunktions-
- * zeichen verstanden. Das Absatzende ist ebenfalls Wortende.
- */
 
-
+// The end of a word is the follow of seperator to nonseperator.
+// The end of a word is also the sequence of wordseperators to
+// punctuation marks.
+// The end of a paragraph is also the end of a word.
 
 bool SwWrtShell::_EndWrd()
 {
@@ -67,8 +64,6 @@ bool SwWrtShell::_EndWrd()
     Combine();
     return true;
 }
-
-
 
 sal_Bool SwWrtShell::_NxtWrd()
 {
