@@ -982,19 +982,19 @@ table_exp:
 
 from_clause:
 		SQL_TOKEN_FROM table_ref_commalist
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);}
+			{ $$ = SQL_NEW_RULE;
+			  $$->append($1);
+			  $$->append($2); }
 	;
 
 table_ref_commalist:
 
 		table_ref
-			{$$ = SQL_NEW_COMMALISTRULE;
-			$$->append($1);}
+			{ $$ = SQL_NEW_COMMALISTRULE;
+			  $$->append($1); }
 	|       table_ref_commalist ',' table_ref
-			{$1->append($3);
-			$$ = $1;}
+			{ $1->append($3);
+			  $$ = $1; }
 	;
 
 opt_as:
@@ -1008,10 +1008,11 @@ opt_row:
 table_primary_as_range_column:
         {$$ = SQL_NEW_RULE;}
 	|   opt_as SQL_TOKEN_NAME op_column_commalist
-		{$$ = SQL_NEW_RULE;
+		{
+		    $$ = SQL_NEW_RULE;
 		    $$->append($1);
 		    $$->append($2);
-			$$->append($3);
+		    $$->append($3);
 		}
     ;
 table_ref:
@@ -1026,7 +1027,7 @@ table_ref:
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
-		    $$->append($3);
+			$$->append($3);
 		}
 	|	joined_table
 	|	'{' SQL_TOKEN_OJ joined_table '}'
