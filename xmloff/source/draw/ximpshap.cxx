@@ -1231,6 +1231,15 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
+        if(mnCX != 0 || mnCY != 0 || mnRX != 1 || mnRY != 1)
+        {
+            // #121972# center/radius is used, put to pos and size
+            maSize.Width = 2 * mnRX;
+            maSize.Height = 2 * mnRY;
+            maPosition.X = mnCX - mnRX;
+            maPosition.Y = mnCY - mnRY;
+        }
+
         // set pos, size, shear and rotate
         SetTransformation();
 
