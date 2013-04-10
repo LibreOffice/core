@@ -18,11 +18,11 @@
  */
 
 
-#include <unx/svunx.h>
-#include <unx/desktops.hxx>
 #include <tools/prex.h>
 #include <X11/Xatom.h>
 #include <tools/postx.h>
+
+#include <unx/desktops.hxx>
 
 #include "rtl/process.h"
 #include "rtl/ustrbuf.hxx"

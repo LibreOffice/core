@@ -24,7 +24,7 @@
 }
 #endif
 
-/* X-Types */
+/* X Types */
 #undef Window
 #undef BYTE
 #undef INT8
@@ -45,7 +45,6 @@
 #undef Success
 
 #undef Printer
-/* #undef FontInfo */
 #undef Orientation
 
 #undef GetToken

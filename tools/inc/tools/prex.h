@@ -20,16 +20,20 @@
 #ifndef _PREX_H
 #define _PREX_H
 
-#define Window      XLIB_Window
-#define Font        XLIB_Font
+/* Types from <X11/X.h> that clash with LO's identifiers
+ * and we don't need.
+ */
+#define Boolean     HIDE_XLIB_Boolean
+#define Font        HIDE_XLIB_Font
+#define Icon        HIDE_XLIB_Icon
+#define String      HIDE_XLIB_String
+
+/* Types from <X11/X.h> that clash, but we do use. */
 #define Cursor      XLIB_Cursor
-#define String      XLIB_String
 #define KeyCode     XLIB_KeyCode
 #define Region      XLIB_Region
-#define Icon        XLIB_Icon
 #define Time        XLIB_Time
-#define Region      XLIB_Region
-#define Boolean     XLIB_Boolean
+#define Window      XLIB_Window
 
 #if defined __cplusplus
 extern "C" {
@@ -41,18 +45,15 @@ extern "C" {
 #include <X11/StringDefs.h>
 #include <X11/extensions/Xrender.h>
 #include <X11/XKBlib.h>
+
+/* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
 
-#undef  DestroyAll
-#define DestroyAll      XLIB_DestroyAll
-#define XLIB_DestroyAll 0
 #undef  String
-#define String          XLIB_String
+#define String      XLIB_String
 
 #undef  KeyCode
 #define KeyCode         XLIB_KeyCode //undef in intrinsics
-
-#define __Ol_OlXlibExt_h__
 
 #endif
 

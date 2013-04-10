@@ -21,17 +21,15 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
+
+#include <tools/prex.h>
+#include <X11/extensions/shape.h>
+#include <tools/postx.h>
 #include <tools/debug.hxx>
 
 #include <vcl/keycodes.hxx>
 
-#include <tools/prex.h>
-#include <X11/Xlib.h>
-#include <X11/extensions/shape.h>
-#include <tools/postx.h>
-
 #include <unx/salunx.h>
-#include <unx/salstd.hxx>
 #include <unx/saldata.hxx>
 #include <unx/salinst.h>
 #include <unx/saldisp.hxx>

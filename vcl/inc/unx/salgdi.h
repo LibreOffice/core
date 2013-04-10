@@ -20,12 +20,13 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
-#include "tools/fract.hxx"
+#include <tools/prex.h>
+#include <tools/postx.h>
+#include <tools/fract.hxx>
 
 #include "vcl/salgtype.hxx"
 #include "vcl/vclenum.hxx"
 
-#include "salstd.hxx"
 #include "salgdi.hxx"
 #include "sallayout.hxx"
 #include "vclpluginapi.h"

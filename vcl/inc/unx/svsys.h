@@ -19,7 +19,8 @@
 #ifndef _SV_SVSYS_H
 #define _SV_SVSYS_H
 
-#include <unx/svunx.h>
+#include <tools/prex.h>
+#include <tools/postx.h>
 
 #endif // _SV_SVSYS_H
 

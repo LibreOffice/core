@@ -20,9 +20,11 @@
 #ifndef _SV_SALDATA_HXX
 #define _SV_SALDATA_HXX
 
+#include <tools/prex.h>
+#include <tools/postx.h>
+
 #include <unx/salunx.h>
 #include <vcl/salgtype.hxx>
-#include <unx/salstd.hxx>
 #include <salframe.hxx>
 #include <unx/salinst.h>
 #include <generic/gendata.hxx>

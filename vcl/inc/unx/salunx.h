@@ -20,9 +20,10 @@
 #ifndef _SALUNX_H
 #define _SALUNX_H
 
+#include <tools/prex.h>
+#include <tools/postx.h>
+
 #include "unx/salunxtime.h"
-#include <unx/svunx.h>
-#include <unx/salstd.hxx>
 
 inline long Divide( long nDividend, long nDivisor )
 { return (nDividend + nDivisor/2) / nDivisor; }
