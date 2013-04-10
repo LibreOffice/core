@@ -1268,7 +1268,7 @@ sal_Bool    OutlinerView::ToggleBullets(sal_Bool bBulletOnOff, sal_Bool bNormalB
                 Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
                 DBG_ASSERT(pPara, "OutlinerView::ToggleBullets(), illegal selection?");
 
-                const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
+                // const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
                 if( pPara )
                 {
                     const SvxNumberFormat* pFmt = pOwner ->GetNumberFormat(nPara);
