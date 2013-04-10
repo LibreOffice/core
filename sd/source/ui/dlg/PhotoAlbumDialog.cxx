@@ -560,10 +560,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
     );
     // Read configuration
     OUString sUrl(".");
-    Reference< XInterface > xCfg;
     try
     {
-        xCfg = ::comphelper::ConfigurationHelper::openConfig(
+        Reference< XInterface > xCfg = ::comphelper::ConfigurationHelper::openConfig(
             ::comphelper::getProcessComponentContext(),
             OUString("/org.openoffice.Office.Impress/"),
             ::comphelper::ConfigurationHelper::E_READONLY);
