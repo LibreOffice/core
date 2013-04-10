@@ -245,6 +245,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
         mpViewBar->RemoveItem(nPos);
     }
 
+    SetMinOutputSizePixel(GetOutputSizePixel());
+
     mpViewBar->Show();
     mpActionBar->Show();
 
