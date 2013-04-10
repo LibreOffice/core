@@ -782,7 +782,7 @@ void SwDrawBaseShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     if( rMarkList.GetMark(0) != 0 )
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();//OST_IFBX@WL2
+        // SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();//OST_IFBX@WL2
         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
         rSet.Put(aNewAttr,false);
     }

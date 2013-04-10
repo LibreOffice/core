@@ -413,7 +413,6 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
-        const SfxPoolItem* pItem;
 
         if ( pDrView->IsTextEdit() )
         {

@@ -292,10 +292,9 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
-        const SfxPoolItem* pItem;
 
         //ask for the ViewFrame here - "this" may not be valid any longer!
-        SfxViewFrame* pVFrame = GetView().GetViewFrame();
+    // SfxViewFrame* pVFrame = GetView().GetViewFrame();
         if ( pDrView->IsTextEdit() )
         {
             //#111733# Sometimes SdrEndTextEdit() initiates the change in selection and
