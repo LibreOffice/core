@@ -62,7 +62,7 @@ void  LineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     sal_uInt16  nItemId = rUDEvt.GetItemId();
 
     long nRectHeight = aRect.GetHeight();
-    long nRectWidth = aRect.GetWidth();
+    // long nRectWidth = aRect.GetWidth();
     Point aBLPos = aRect.TopLeft();
     if(nItemId == 1)
     {
