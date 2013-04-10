@@ -146,6 +146,8 @@ void LocaleDataWrapper::invalidateData()
 }
 
 
+/* FIXME-BCP47: locale data should provide a language tag instead that could be
+ * passed on. */
 ::com::sun::star::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
 {
     try
@@ -259,7 +261,7 @@ void LocaleDataWrapper::invalidateData()
 
     if ( !rInstalledLocales.getLength() )
     {
-        LocaleDataWrapper aLDW( ::comphelper::getProcessComponentContext(), LanguageTag( lang::Locale()) );
+        LocaleDataWrapper aLDW( ::comphelper::getProcessComponentContext(), LanguageTag( LANGUAGE_SYSTEM) );
         aLDW.getAllInstalledLocaleNames();
     }
     return rInstalledLocales;
@@ -281,37 +283,14 @@ void LocaleDataWrapper::invalidateData()
     sal_Int32 nLanguages = 0;
     for ( sal_Int32 i=0; i<nCount; i++ )
     {
-        String aDebugLocale;
+        LanguageTag aLanguageTag( xLoc[i] );
+        OUString aDebugLocale;
         if (areChecksEnabled())
         {
-            /* FIXME-BCP47: handle language tags! */
-            aDebugLocale = xLoc[i].Language;
-            if ( !xLoc[i].Country.isEmpty() )
-            {
-                aDebugLocale += '-';
-                aDebugLocale += String( xLoc[i].Country);
-                if ( !xLoc[i].Variant.isEmpty() )
-                {
-                    aDebugLocale += '-';
-                    aDebugLocale += String( xLoc[i].Variant);
-                }
-            }
+            aDebugLocale = aLanguageTag.getBcp47( false);
         }
 
-        if ( !xLoc[i].Variant.isEmpty() )
-        {
-            if (areChecksEnabled())
-            {
-                OUStringBuffer aMsg("LocaleDataWrapper::getInstalledLanguageTypes: Variants not supported, locale\n");
-                aMsg.append(aDebugLocale);
-                outputCheckMessage(aMsg.makeStringAndClear());
-            }
-            continue;
-        }
-        LanguageTag aLanguageTag( xLoc[i] );
-        LanguageType eLang = aLanguageTag.getLanguageType();
-
-        // In checks, exclude known problems because no MS-LCID defined.
+        LanguageType eLang = aLanguageTag.getLanguageType( false);
         if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW)
         {
             OUStringBuffer aMsg("ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n");
@@ -333,10 +312,10 @@ void LocaleDataWrapper::invalidateData()
                 // In checks, exclude known problems because no MS-LCID defined
                 // and default for Language found.
                 if ( areChecksEnabled()
-                        && !aDebugLocale.EqualsAscii( "ar-SD" ) // Sudan/ar
-                        && !aDebugLocale.EqualsAscii( "en-CB" ) // Carribean is not a country
-//                      && !aDebugLocale.EqualsAscii( "en-BG" ) // ?!? Bulgaria/en
-//                      && !aDebugLocale.EqualsAscii( "es-BR" ) // ?!? Brazil/es
+                        && aDebugLocale != "ar-SD"  // Sudan/ar
+                        && aDebugLocale != "en-CB"  // Carribean is not a country
+//                      && aDebugLocale != "en-BG"  // ?!? Bulgaria/en
+//                      && aDebugLocale != "es-BR"  // ?!? Brazil/es
                     )
                 {
                     OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
