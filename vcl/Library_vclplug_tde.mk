@@ -68,7 +68,8 @@ $(eval $(call gb_Library_use_libraries,vclplug_tde,\
     cppuhelper \
     i18nlangtag \
     i18nutil \
-    jvmaccess \
+    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+        jvmaccess) \
     cppu \
     sal \
 ))
