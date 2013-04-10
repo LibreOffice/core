@@ -44,7 +44,7 @@ namespace svtools {
 ODocumentInfoPreview::ODocumentInfoPreview(Window * pParent, WinBits nBits):
     Window(pParent, WB_DIALOGCONTROL), m_pEditWin(this, nBits),
     m_pInfoTable(new SvtDocInfoTable_Impl),
-    m_aLocale(SvtPathOptions().GetLocale()) // detect application language
+    m_aLanguageTag(SvtPathOptions().GetLanguageTag()) // detect application language
 {
     m_pEditWin.SetLeftMargin(10);
     m_pEditWin.Show();
@@ -91,7 +91,7 @@ void ODocumentInfoPreview::fill(
         }
         else
         {
-            insertNonempty( DI_MIMETYPE, INetContentTypes::GetPresentation(eTypeID, LanguageTag(m_aLocale)));
+            insertNonempty( DI_MIMETYPE, INetContentTypes::GetPresentation(eTypeID, m_aLanguageTag));
         }
     }
 

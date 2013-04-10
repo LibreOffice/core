@@ -21,7 +21,7 @@
 
 #include "unotools/unotoolsdllapi.h"
 #include <tools/string.hxx>
-#include <com/sun/star/lang/Locale.hpp>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/options.hxx>
 
 #define SVT_SEARCHPATH_DELIMITER      ';'
@@ -121,7 +121,7 @@ public:
     String          ExpandMacros( const String& rPath ) const;
     String          UseVariable( const String& rVar ) const;
     sal_Bool        SearchFile( String& rIniFile, Paths ePath = PATH_USERCONFIG );
-    ::com::sun::star::lang::Locale GetLocale() const;
+    const LanguageTag& GetLanguageTag() const;
     sal_Bool        IsReadonly() const;
 };
 

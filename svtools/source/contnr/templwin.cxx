@@ -598,9 +598,6 @@ OUString SvtDocInfoTable_Impl::GetString( long nId ) const
 SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent )
   : Window( pParent )
 {
-    // detect application language
-    aLocale = SvtPathOptions().GetLocale();
-
     // create windows and frame
     pEditWin = new ODocumentInfoPreview( this ,WB_LEFT | WB_VSCROLL | WB_READONLY | WB_BORDER | WB_3DLOOK);
     pTextWin = new Window( this );

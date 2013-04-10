@@ -23,7 +23,7 @@
 #include "sal/config.h"
 
 #include "boost/scoped_ptr.hpp"
-#include "com/sun/star/lang/Locale.hpp"
+#include "i18nlangtag/languagetag.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "svtools/svmedit2.hxx"
 #include "svtools/svtdllapi.h"
@@ -57,7 +57,7 @@ public:
 private:
     ExtMultiLineEdit m_pEditWin;
     boost::scoped_ptr< SvtDocInfoTable_Impl > m_pInfoTable;
-    com::sun::star::lang::Locale m_aLocale;
+    LanguageTag m_aLanguageTag;
 
     void insertEntry(OUString const & title, OUString const & value);
 

@@ -111,7 +111,7 @@ class SvtPathOptions_Impl
         mutable EnumToHandleMap             m_aMapEnumToPropHandle;
         VarNameToEnumMap                    m_aMapVarNamesToEnum;
 
-        ::com::sun::star::lang::Locale      m_aLocale;
+        LanguageTag                         m_aLanguageTag;
         String                              m_aEmptyString;
         mutable ::osl::Mutex                m_aMutex;
 
@@ -174,7 +174,7 @@ class SvtPathOptions_Impl
         OUString   ExpandMacros( const OUString& rPath ) const;
         OUString   UsePathVariables( const OUString& rPath ) const;
 
-        ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
+        const LanguageTag& GetLanguageTag() const { return m_aLanguageTag; }
 };
 
 // global ----------------------------------------------------------------
@@ -411,7 +411,8 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
 // -----------------------------------------------------------------------
 
 SvtPathOptions_Impl::SvtPathOptions_Impl() :
-    m_aPathArray( (sal_Int32)SvtPathOptions::PATH_COUNT )
+    m_aPathArray( (sal_Int32)SvtPathOptions::PATH_COUNT ),
+    m_aLanguageTag( LANGUAGE_DONTKNOW )
 {
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
@@ -469,12 +470,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 
     // Set language type!
-    /* FIXME-BCP47 */
-    OUString aLocaleStr( ConfigManager::getLocale() );
-    sal_Int32 nIndex = 0;
-    m_aLocale.Language = aLocaleStr.getToken(0, '-', nIndex );
-    m_aLocale.Country = aLocaleStr.getToken(0, '-', nIndex );
-    m_aLocale.Variant = aLocaleStr.getToken(0, '-', nIndex );
+    m_aLanguageTag.reset( ConfigManager::getLocale() );
 }
 
 // -----------------------------------------------------------------------
@@ -979,9 +975,9 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Paths ePath )
 
 // -----------------------------------------------------------------------
 
-::com::sun::star::lang::Locale SvtPathOptions::GetLocale() const
+const LanguageTag& SvtPathOptions::GetLanguageTag() const
 {
-    return pImp->GetLocale();
+    return pImp->GetLanguageTag();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
