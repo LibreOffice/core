@@ -200,7 +200,7 @@ struct StrokeModel
 // ============================================================================
 
 /** The fill model structure contains all shape fill properties. */
-struct FillModel
+struct OOX_DLLPUBLIC FillModel
 {
     OptValue< bool >    moFilled;               ///< Shape fill on/off.
     OptValue< OUString > moColor;        ///< Solid fill color.

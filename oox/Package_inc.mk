@@ -84,6 +84,7 @@ $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/propertymap.hxx,oox/hel
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/propertyset.hxx,oox/helper/propertyset.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/attributelist.hxx,oox/helper/attributelist.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/progressbar.hxx,oox/helper/progressbar.hxx))
+$(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/modelobjecthelper.hxx,oox/helper/modelobjecthelper.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/mathml/export.hxx,oox/mathml/export.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/mathml/import.hxx,oox/mathml/import.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/mathml/importutils.hxx,oox/mathml/importutils.hxx))

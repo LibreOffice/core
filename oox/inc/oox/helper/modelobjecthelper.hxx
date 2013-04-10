@@ -21,6 +21,7 @@
 #define OOX_HELPER_MODELOBJECTHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Gradient; }
@@ -36,7 +37,7 @@ namespace oox {
 
 /** This helper manages named objects in a container, which is created on demand.
  */
-class ObjectContainer
+class OOX_DLLPUBLIC ObjectContainer
 {
 public:
     explicit            ObjectContainer(
@@ -74,7 +75,7 @@ private:
     in the same filter (e.g. embedded charts) which carry their own drawing
     object tables.
  */
-class ModelObjectHelper
+class OOX_DLLPUBLIC ModelObjectHelper
 {
 public:
     explicit            ModelObjectHelper(
