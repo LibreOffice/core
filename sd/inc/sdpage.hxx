@@ -96,6 +96,11 @@ namespace sd {
     class UndoAttrObject;
 }
 
+namespace SlideHack {
+    class OriginDetails;
+    typedef boost::shared_ptr< class OriginDetails > OriginDetailsPtr;
+}
+
 class SD_DLLPUBLIC SdPage : public FmFormPage, public SdrObjUserCall
 {
 friend class SdGenericDrawPage;
@@ -382,8 +387,12 @@ public:
     OString stringify() const;
 
 
+    SlideHack::OriginDetailsPtr getOrigin() { return mpOrigin; }
+    void setOrigin(SlideHack::OriginDetailsPtr pOrigin) { mpOrigin = pOrigin; }
+
 private:
     bool mbIsPrecious;
+    SlideHack::OriginDetailsPtr mpOrigin;
 
     /** clone the animations from this and set them to rTargetPage
     */
