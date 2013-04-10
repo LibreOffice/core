@@ -11,6 +11,8 @@
 
 #include <cstdlib>
 
+#include "osl/module.h"
+#include "osl/time.h"
 #include "sal/types.h"
 
 // Stubs for removed functionality, to be killed when we bump sal SONAME
@@ -66,6 +68,32 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_moveMemory(
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_zeroMemory(void *, sal_Size) {
+    std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL rtl_registerModuleForUnloading(oslModule)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_unregisterModuleForUnloading(oslModule)
+{
+    std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_unloadUnusedModules(TimeValue *)
+{
+    std::abort();
+}
+
+typedef void (SAL_CALL *rtl_unloadingListenerFunc)(void *id);
+SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_addUnloadingListener(rtl_unloadingListenerFunc, void *)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_removeUnloadingListener(sal_Int32)
+{
     std::abort();
 }
 
