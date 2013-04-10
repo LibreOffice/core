@@ -38,11 +38,11 @@ namespace svx { namespace sidebar {
 
 ParaBulletsControl::ParaBulletsControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel):
     PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_BULLETS)),
-    mrParaPropertyPanel(rPanel),
-    mpBindings(NULL),
     maBulletsVS(this,SVX_RES(VS_VALUES)),
     maFISep(this,SVX_RES(IMG_SEPERATOR_BULLET)),
-    maMoreButton(this,SVX_RES(CB_BULLET_MORE))
+    maMoreButton(this,SVX_RES(CB_BULLET_MORE)),
+    mrParaPropertyPanel(rPanel),
+    mpBindings(NULL)
 {
     FreeResource();
     mpBindings = mrParaPropertyPanel.GetBindings();
