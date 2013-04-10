@@ -911,7 +911,7 @@ size_t ScMatrixImpl::Count(bool bCountStrings) const
 void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
 {
     SCSIZE nRowSize = maCachedSize.first;
-    rC = nIndex / nRowSize;
+    rC = nRowSize > 1 ? nIndex / nRowSize : nIndex;
     rR = nIndex - rC*nRowSize;
 }
 
