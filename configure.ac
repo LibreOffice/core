@@ -709,9 +709,10 @@ AC_ARG_ENABLE([hardlink-deliver],
 )
 
 AC_ARG_ENABLE(mergelibs,
-    AS_HELP_STRING([--enable-mergelibs],
+    AS_HELP_STRING([--enable-mergelibs=<all/yes>],
         [Enables linking of big, merged, library. Experimental feature tested
-        only on Linux and Android.])
+        only on Linux and Android. All will link a lot more libraries into libmerged
+        while yes or no argument will simply enable a core set of libraries.])
 )
 
 AC_ARG_ENABLE(graphite,
@@ -11632,16 +11633,21 @@ fi
 # ===================================================================
 AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
-if test "$enable_mergelibs" = "yes"; then
+if test "$enable_mergelibs" != "no"; then
     if test $_os != Linux -a $_os != Android -a $_os != WINNT; then
         add_warning "--enable-mergelibs is not tested for this platform"
     fi
-    MERGELIBS="TRUE"
+    if test "$enable_mergelibs" = "all"; then
+        MERGELIBS="ALL"
+        URELIBS="TRUE"
+    else
+        MERGELIBS="CORE"
+    fi
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
 fi
-AC_SUBST(MERGELIBS)
+AC_SUBST([MERGELIBS])
 AC_SUBST([URELIBS])
 
 # ===================================================================

@@ -25,31 +25,44 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-ifeq ($(MERGELIBS),TRUE)
-
-# FIXME: just retaining these for now - they currently crash & need thought.
+ifneq ($(MERGELIBS),)
 # set of libraries to link even more stuff into one merged library
 gb_EXTRAMERGEDLIBS := \
-	analysis \
 	$(if $(filter unx,$(GUIBASE)),basebmp) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
 	chartcore \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,file) \
+	for \
+	forui \
+	fwl \
+	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
+	oox \
+	$(call gb_Helper_optional,PYUNO,pyuno) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
+	sc \
+	sd \
+	sw \
+	swd \
+	test \
+	unotest \
+	$(if $(DISABLE_SCRIPTING),,vbahelper) \
+	xmlsecurity
+
+# FIXME: just retaining these for now - they currently crash & need thought.
+#gb_EXTRAMERGEDLIBS := \
+	analysis \
+	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
 	ctl \
 	cui \
 	date \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbase) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	embobj \
 	evtatt \
 	fastsax \
-	$(call gb_Helper_optional,DBCONNECTIVITY,file) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,flat) \
-	for \
-	forui \
 	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
-	fwl \
 	fwm \
 	hwp \
 	hyphen \
@@ -65,38 +78,26 @@ gb_EXTRAMERGEDLIBS := \
 	localedata_euro \
 	localedata_others \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbc) \
-	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
-	oox \
 	pricing \
 	$(call gb_Helper_optional,PYUNO,pythonloader) \
-	$(call gb_Helper_optional,PYUNO,pyuno) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rptui) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rptxml) \
-	sc \
 	$(if $(DISABLE_SCRIPTING),,scriptframe) \
 	scui \
 	scfilt \
-	sd \
 	sdui \
 	$(if $(filter-out IOS,$(OS)),solver) \
 	spell \
 	$(if $(DISABLE_SCRIPTING),,stringresource) \
 	subsequenttest \
-	sw \
 	swui \
-	swd \
-	test \
 	textfd \
 	ucpcmis1 \
-	unotest \
-	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	$(if $(filter-out IOS,$(OS)),wpftdraw) \
 	$(if $(filter-out IOS,$(OS)),wpftwriter) \
 	writerfilter \
 	xmlfa \
 	xmlfd \
-	xmlsecurity
 
 # we link all object files from these libraries into one, merged library
 gb_MERGEDLIBS := \
@@ -142,6 +143,7 @@ gb_MERGEDLIBS := \
 	xmlscript \
 	xo \
 	xstor \
+	$(if $(filter ALL,$(MERGELIBS)),$(gb_EXTRAMERGEDLIBS))
 
 ifneq (,$(URELIBS))
 gb_URELIBS := \

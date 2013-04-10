@@ -237,7 +237,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,ZLIB,zlib) \
 ))
 
-ifeq ($(MERGELIBS),TRUE)
+ifneq ($(MERGELIBS),)
 $(eval $(call gb_Module_add_targets,libreoffice,\
 	Library_merged \
 	$(if $(URELIBS),Library_urelibs) \
@@ -267,7 +267,7 @@ $(eval $(call repositorymodule_serialize,\
 	sc msword swui sw sd \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \
 	writerfilter cui chartcontroller oox \
-	$(if $(filter TRUE,$(MERGELIBS)),merged,svxcore) \
+	$(if $(MERGELIBS),merged,svxcore) \
 	xo vcl \
 ))
 endif
