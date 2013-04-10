@@ -98,7 +98,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems = new SfxPoolItem*[EDITITEMCOUNT];
 
         // Paragraph attributes:
-        SvxNumRule aTmpNumRule( 0, 0, sal_False );
+        SvxNumRule aTmpNumRule( NUM_BULLET_REL_SIZE, 10, sal_False );
 
         ppDefItems[0]  = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
         ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
