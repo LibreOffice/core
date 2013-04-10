@@ -1755,7 +1755,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_BORDER_DIAG_TLBR:
             case SID_ATTR_BORDER_DIAG_BLTR:
                 {
-                    ScDocument* pDoc = GetViewData()->GetDocument();
+                    // ScDocument* pDoc = GetViewData()->GetDocument();
                     const ScPatternAttr* pOldAttrs = pTabViewShell->GetSelectionPattern();
                     SfxItemSet* pOldSet = new SfxItemSet(pOldAttrs->GetItemSet());
                     SfxItemSet* pNewSet = new SfxItemSet(pOldAttrs->GetItemSet());
@@ -1841,7 +1841,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet&    rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
-    const SvxBorderLine* pLine      = pTabViewShell->GetDefaultFrameLine();
+    // const SvxBorderLine* pLine      = pTabViewShell->GetDefaultFrameLine();
     const SvxBrushItem&  rBrushItem = (const SvxBrushItem&)rAttrSet.Get( ATTR_BACKGROUND );
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -1881,7 +1881,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                 // handled together because both need the cell border information for decisions
                 // rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR ) );
                 Color aCol = 0;
-                sal_uInt16 nOut = 0, nIn = 0, nDis = 0;
+                // sal_uInt16 nOut = 0, nIn = 0, nDis = 0;
                 SvxBorderLine aLine(0,0,0,0);
                 bool bCol = 0;
                 bool bColDisable = 0, bStyleDisable = 0;
