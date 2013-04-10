@@ -1504,9 +1504,9 @@ void BitmapLB::SetVirtualDevice(const Size& rSize)
     {
         const Size aBitmapSize(maBitmapEx.GetSizePixel());
 
-        for(sal_uInt32 y(0); y < rSize.Height(); y += aBitmapSize.Height())
+        for(sal_Int32 y(0); y < rSize.Height(); y += aBitmapSize.Height())
         {
-            for(sal_uInt32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
+            for(sal_Int32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
             {
                 maVD.DrawBitmapEx(
                     Point(x, y),
@@ -1694,9 +1694,9 @@ void FillAttrLB::SetVirtualDevice(const Size& rSize)
     {
         const Size aBitmapSize(maBitmapEx.GetSizePixel());
 
-        for(sal_uInt32 y(0); y < rSize.Height(); y += aBitmapSize.Height())
+        for(sal_Int32 y(0); y < rSize.Height(); y += aBitmapSize.Height())
         {
-            for(sal_uInt32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
+            for(sal_Int32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
             {
                 maVD.DrawBitmapEx(
                     Point(x, y),
