@@ -49,6 +49,7 @@
 #include <editeng/bulletitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/numdef.hxx>
 #include <svl/itempool.hxx>
 
 #include "stlpool.hxx"
@@ -989,7 +990,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetStart(1);
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
-            SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , sal_False);
+            SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, SVX_MAX_NUM , sal_False);
 
             for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
@@ -1045,7 +1046,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
             SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,
-                                 10, sal_False );
+                                 SVX_MAX_NUM, sal_False );
             for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
                 aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34

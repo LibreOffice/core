@@ -40,6 +40,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/numdef.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>                  // SVX_RESSTR
 #include <editeng/bulletitem.hxx>
@@ -1223,7 +1224,7 @@ void SdDrawDocument::SetTextDefaults() const
     aNumberFormat.SetStart(1);
     aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
-    SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10, sal_False);
+    SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, SVX_MAX_NUM, sal_False);
 
     aNumberFormat.SetLSpace( 0 );
     aNumberFormat.SetAbsLSpace( 0 );

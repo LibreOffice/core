@@ -36,6 +36,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
+#include <editeng/numdef.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/virdev.hxx>
 
@@ -98,14 +99,15 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems = new SfxPoolItem*[EDITITEMCOUNT];
 
         // Paragraph attributes:
-        SvxNumRule aTmpNumRule( 0, 0, sal_False );
+        SvxNumRule aDefaultNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE,
+                                    SVX_MAX_NUM, sal_False );
 
         ppDefItems[0]  = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
         ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
         ppDefItems[2]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, sal_False );
         ppDefItems[3]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, sal_True );
         ppDefItems[4]  = new SvxScriptSpaceItem( sal_True, EE_PARA_ASIANCJKSPACING );
-        ppDefItems[5]  = new SvxNumBulletItem( aTmpNumRule, EE_PARA_NUMBULLET );
+        ppDefItems[5]  = new SvxNumBulletItem( aDefaultNumRule, EE_PARA_NUMBULLET );
         ppDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, sal_False );
         ppDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE, sal_True );
         ppDefItems[8]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
