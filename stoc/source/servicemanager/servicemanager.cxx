@@ -32,7 +32,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <rtl/unload.h>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase6.hxx>
@@ -527,8 +526,6 @@ protected:
 
     Reference< beans::XPropertySetInfo > m_xPropertyInfo;
 
-    sal_Int32 m_nUnloadingListenerId;
-
     // Does clean up when the unloading mechanism has been set off. It is called from
     // the listener function smgrUnloadingListener.
     void onUnloadingNotify();
@@ -765,7 +762,6 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
     , m_bInDisposing( false )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    m_nUnloadingListenerId= rtl_addUnloadingListener( smgrUnloadingListener, this);
 }
 
 /**
@@ -773,9 +769,6 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
  */
 OServiceManager::~OServiceManager()
 {
-    if( m_nUnloadingListenerId != 0)
-        rtl_removeUnloadingListener( m_nUnloadingListenerId );
-
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
@@ -929,10 +922,6 @@ void OServiceManager::disposing()
 
     // not only the Event should hold the object
     OSL_ASSERT( m_refCount != 1 );
-
-    // Revoke this service manager as unloading listener
-    rtl_removeUnloadingListener( m_nUnloadingListenerId);
-    m_nUnloadingListenerId=0;
 }
 
 // XPropertySet
