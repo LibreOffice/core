@@ -98,11 +98,11 @@ Rectangle DeckLayouter::LayoutPanels (
     Rectangle aBox (PlaceVerticalScrollBar(rVerticalScrollBar, aContentArea, bShowVerticalScrollBar));
 
     const sal_Int32 nWidth (aBox.GetWidth());
-    const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight));
+    // const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight));
 
     // Prepare the separators, horizontal lines above and below the
     // panel titels.
-    const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
+    // const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
 
     // Get the requested heights of the panels and the available
     // height that is left when all panel titles and separators are
