@@ -6444,6 +6444,17 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/aix"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
+
+        case "$JDK" in
+        [Ii][Bb][Mm]*)
+            JAVA_ARCH=
+            JRE_BASE_DIR="$JAVA_HOME/jre/bin"
+            JAVALIB="-L$JRE_BASE_DIR -L$JRE_BASE_DIR/classic"
+            ;;
+        *)
+            ;;
+        esac
+
         ;;
 
     cygwin*)
