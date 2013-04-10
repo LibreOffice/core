@@ -23,9 +23,16 @@
 #include <vcl/graphicfilter.hxx>
 #include <svx/svdotext.hxx>
 
+#include <slidehack.hxx>
+
 class SdrTextObj;
 class SdDrawDocument;
 class SdPage;
+
+namespace SlideHack {
+    class Group;
+    typedef boost::shared_ptr< class Group > GroupPtr;
+}
 
 namespace sd
 {
@@ -38,12 +45,26 @@ public:
     ~SdGroupSlidesDialog();
 
 private:
-    CancelButton*   pCancelBtn;
-
-    SdDrawDocument* pDoc;
+    SdDrawDocument* mpDoc;
     std::vector< SdPage * > maPages;
 
-    DECL_LINK(CancelHdl, void*);
+    CancelButton  *mpCancelBtn;
+    PushButton    *mpAddBtn;
+
+    ComboBox*      mpGroupCombo;
+    std::vector< SlideHack::GroupPtr > maGroups;
+    void addGroupsToCombo( ComboBox *pBox, SdDrawDocument *pDoc );
+
+    Edit          *mpTitle;
+    Edit          *mpKeywords;
+
+    DECL_LINK( AddHdl, void* );
+    DECL_LINK( CancelHdl, void* );
+    DECL_LINK( GroupSelectHdl, void* );
+    DECL_LINK( GroupDoubleClickHdl, void* );
+
+    int  endDialog( bool bSuccessSoSave );
+    void populateEdits( SlideHack::GroupPtr pGroup );
 };
 
 }

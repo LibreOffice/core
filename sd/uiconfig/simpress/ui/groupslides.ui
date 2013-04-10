@@ -19,7 +19,7 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="create_btn">
+              <object class="GtkButton" id="add_btn">
                 <property name="label" translatable="yes">Add to group</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -112,7 +112,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBoxText" id="comboboxtext1">
+                          <object class="GtkComboBoxText" id="cb_group">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -139,19 +139,11 @@
                           </packing>
                         </child>
                         <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entry1">
+                          <object class="GtkEntry" id="ed_title">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
+                            <property name="placeholder_text">&lt;title for your group of slides&gt;</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -161,10 +153,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="entry2">
+                          <object class="GtkEntry" id="ed_keywords">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
+                            <property name="placeholder_text">&lt;topics and keywords for searching&gt;</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -172,6 +165,15 @@
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                     </child>
@@ -299,7 +301,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">create_btn</action-widget>
+      <action-widget response="0">add_btn</action-widget>
       <action-widget response="0">cancel_btn</action-widget>
     </action-widgets>
   </object>
