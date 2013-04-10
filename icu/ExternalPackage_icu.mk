@@ -15,13 +15,13 @@ $(eval $(call gb_ExternalPackage_use_external_project,icu,icu))
 ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicudata.dll.a,source/data/lib.lib))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicuuc.dll.a,source/lib/libicuuc.lib))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicui18n.dll.a,source/lib/libicuin.lib))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicule.dll.a,source/lib/libicule.lib))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu.dll.a,source/lib/libicutu.lib))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/icudt$(ICU_MAJOR).dll,source/lib/libicudt$(ICU_MAJOR).dll))
+$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicudata.dll.a,source/stubdata/icudt.lib))
+$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicuuc.dll.a,source/lib/icuuc.lib))
+$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicui18n.dll.a,source/lib/icuin.lib))
+$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicule.dll.a,source/lib/icule.lib))
+$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu.dll.a,source/lib/icutu.lib))
 $(eval $(call gb_ExternalPackage_add_files,icu,bin,\
+	source/lib/icudt$(ICU_MAJOR).dll \
 	source/lib/icuuc$(ICU_MAJOR).dll \
 	source/lib/icuin$(ICU_MAJOR).dll \
 	source/lib/icule$(ICU_MAJOR).dll \
