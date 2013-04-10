@@ -13,8 +13,13 @@ $(eval $(call gb_ExternalProject_use_unpacked,python3,python3))
 
 $(eval $(call gb_ExternalProject_use_externals,python3,\
 	expat \
+))
+
+ifneq ($(DISABLE_OPENSSL),YES)
+$(eval $(call gb_ExternalProject_use_externals,python3,\
 	openssl \
 ))
+endif
 
 $(eval $(call gb_ExternalProject_register_targets,python3,\
 	build \
@@ -79,6 +84,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		) \
 		CC="$(strip $(CC) \
 			$(if $(filter NO,$(SYSTEM_OPENSSL)),-I$(call gb_UnpackedTarball_get_dir,openssl)/include) \
+			$(if $(and $(filter NO,$(SYSTEM_OPENSSL)), $(filter-out YES,$(DISABLE_OPENSSL))),-I$(call gb_UnpackedTarball_get_dir,openssl)/include) \
 			$(if $(filter NO,$(SYSTEM_EXPAT)),-I$(OUTDIR)/inc/external/expat) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
