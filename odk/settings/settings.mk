@@ -87,6 +87,7 @@ SALLIB=isal.lib
 CPPULIB=icppu.lib
 CPPUHELPERLIB=icppuhelper.lib
 SALHELPERLIB=isalhelper.lib
+PURPENVHELPERLIB=ipurpenvhelper.lib
 REGLIB=ireg.lib
 STORELIB=istore.lib
 
@@ -203,6 +204,7 @@ SALLIB=-luno_sal
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
+PURPENVHELPERLIB=-luno_purpenvhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 
@@ -327,6 +329,7 @@ SALLIB=-luno_sal
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
+PURPENVHELPERLIB=-luno_purpenvhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 
@@ -433,6 +436,7 @@ SALLIB=-luno_sal
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
+PURPENVHELPERLIB=-luno_purpenvhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 
@@ -546,6 +550,7 @@ SALLIB=-luno_sal
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
+PURPENVHELPERLIB=-luno_purpenvhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 
