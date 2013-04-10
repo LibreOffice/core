@@ -28,7 +28,7 @@ namespace rtl
 {
 /** Check for ASCII character.
 
-    @param nUtf32  Some UCS-4 character.
+    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
 
     @return  True if nChar is a ASCII character (0x00--0x7F).
 
@@ -41,7 +41,7 @@ inline bool isAscii(sal_uInt32 nUtf32)
 
 /** Check for ASCII lower case character.
 
-    @param nUtf32  Some UCS-4 character.
+    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
 
     @return  True if nChar is a US-ASCII lower case alphabetic character
     (ASCII 'a'--'z').
@@ -55,7 +55,7 @@ inline bool isAsciiLowerCase(sal_uInt32 nUtf32)
 
 /** Check for US-ASCII upper case character.
 
-    @param nUtf32  Some UCS-4 character.
+    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
 
     @return  True if nChar is a US-ASCII upper case alphabetic character
     (US-ASCII 'A'--'Z').
@@ -69,7 +69,7 @@ inline bool isAsciiUpperCase(sal_uInt32 nUtf32)
 
 /** Check for ASCII alphanumeric character.
 
-    @param nUtf32  Some UCS-4 character.
+    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
 
     @return  True if nUtf32 is a US-ASCII alphanumeric character
     (ASCII '0'--'9', 'A'--'Z' or 'a'--'z').
@@ -83,7 +83,7 @@ inline bool isAsciiAlpha(sal_uInt32 nUtf32)
 
 /** Check for ASCII digit character.
 
-    @param nUtf32  Some UCS-4 character.
+    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
 
     @return  True if nChar is a ASCII (decimal) digit character
     (ASCII '0'--'9').
@@ -97,7 +97,7 @@ inline bool isAsciiDigit(sal_uInt32 nUtf32)
 
 /** Check for US-ASCII alphanumeric character.
 
-    @param nUtf32  Some UCS-4 character.
+    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
 
     @return  True if nChar is a US-ASCII alphanumeric character (US-ASCII
     '0'--'9', 'A'--'Z' or 'a'--'z').
@@ -111,7 +111,7 @@ inline bool isAsciiAlphanumeric(sal_uInt32 nUtf32)
 
 /** Check for US-ASCII canonic hexadecimal digit character.
 
-    @param nUtf32  Some UCS-4 character.
+    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
 
     @return  True if nChar is a US-ASCII canonic (i.e., upper case)
     hexadecimal digit character (US-ASCII '0'--'9' or 'A'--'F').
@@ -125,7 +125,7 @@ inline bool isAsciiCanonicHexDigit(sal_uInt32 nUtf32)
 
 /** Check for US-ASCII hexadecimal digit character.
 
-    @param nUtf32  Some UCS-4 character.
+    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
 
     @return  True if nChar is a US-ASCII hexadecimal digit character (US-
     ASCII '0'--'9', 'A'--'F', 'a'--'f').
