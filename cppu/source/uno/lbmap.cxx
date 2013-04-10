@@ -24,7 +24,6 @@
 #include <set>
 #include <algorithm>
 
-#include "rtl/unload.h"
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "osl/module.h"
@@ -443,7 +442,6 @@ static Mapping loadExternalMapping(
                 OSL_ASSERT( aExt.is() );
                 if (aExt.is())
                 {
-                    ::rtl_registerModuleForUnloading( hModule );
                     return aExt;
                 }
             }
