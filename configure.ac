@@ -5236,6 +5236,7 @@ if test "$WITH_MINGW" = "yes"; then
           [AC_MSG_RESULT([not found])
            AC_MSG_ERROR([cannot determine MinGW sysroot])])
 fi
+AC_SUBST([MINGW_DLLS])
 AC_SUBST([MINGW_SYSROOT])
 
 dnl ===================================================================
@@ -7036,14 +7037,13 @@ if test "$with_system_jpeg" = "yes"; then
         [AC_MSG_ERROR(jpeg.h not found. install libjpeg)], [])
     AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ JPEG3RDLIB=-ljpeg ],
     [AC_MSG_CHECKING(jpeg library not found or fuctional)], [])
-    libo_MINGW_CHECK_DLL([JPEG], [libjpeg])
+    libo_MINGW_CHECK_DLL([libjpeg])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_JPEG=NO
     BUILD_TYPE="$BUILD_TYPE JPEG"
 fi
 AC_SUBST(SYSTEM_JPEG)
-AC_SUBST([MINGW_JPEG_DLL])
 
 
 dnl ===================================================================
@@ -7093,14 +7093,13 @@ if test "$with_system_expat" = "yes"; then
         [AC_MSG_ERROR(expat.h not found. install expat)], [])
     AC_CHECK_LIB([expat], [XML_ParserCreate], [:],
         [AC_MSG_RESULT(expat library not found or functional.)], [])
-    libo_MINGW_CHECK_DLL([EXPAT], [libexpat])
+    libo_MINGW_CHECK_DLL([libexpat])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_EXPAT=NO
     BUILD_TYPE="$BUILD_TYPE EXPAT"
 fi
 AC_SUBST(SYSTEM_EXPAT)
-AC_SUBST([MINGW_EXPAT_DLL])
 
 dnl ===================================================================
 dnl Check for system libcdr
@@ -7150,7 +7149,7 @@ dnl ===================================================================
 dnl Check for system lcms2
 dnl ===================================================================
 if test "$with_system_lcms2" = "yes"; then
-    libo_MINGW_CHECK_DLL([LCMS2], [liblcms2])
+    libo_MINGW_CHECK_DLL([liblcms2])
 else
     SYSTEM_LCMS2=NO
 fi
@@ -7158,7 +7157,6 @@ libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2],["-I${WORKDIR}/UnpackedTarball/
 if test "$GCC" = "yes"; then
     LCMS2_CFLAGS="${LCMS2_CFLAGS} -Wno-long-long"
 fi
-AC_SUBST([MINGW_LCMS2_DLL])
 
 dnl ===================================================================
 dnl Check for system cppunit
@@ -7250,9 +7248,9 @@ if test "$with_system_libxml" = "yes"; then
         AC_MSG_ERROR([xsltproc is required])
     fi
 
-    libo_MINGW_CHECK_DLL([LIBXSLT], [libxslt])
-    libo_MINGW_CHECK_DLL([LIBEXSLT], [libexslt])
-    libo_MINGW_TRY_DLL([ICONV], [iconv])
+    libo_MINGW_CHECK_DLL([libxslt])
+    libo_MINGW_CHECK_DLL([libexslt])
+    libo_MINGW_TRY_DLL([iconv])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXSLT=NO
@@ -7278,9 +7276,6 @@ AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
 AC_SUBST(LIBXSLT_MAJOR)
 AC_SUBST(XSLTPROC)
-AC_SUBST([MINGW_LIBEXSLT_DLL])
-AC_SUBST([MINGW_LIBXSLT_DLL])
-AC_SUBST([MINGW_ICONV_DLL])
 
 # ===================================================================
 # Check for system libxml
@@ -7309,8 +7304,8 @@ if test "$with_system_libxml" = "yes"; then
         AC_MSG_ERROR([xmllint is required])
     fi
 
-    libo_MINGW_CHECK_DLL([LIBXML],[libxml2])
-    libo_MINGW_TRY_DLL([ZLIB],[zlib1])
+    libo_MINGW_CHECK_DLL([libxml2])
+    libo_MINGW_TRY_DLL([zlib1])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=NO
@@ -7320,8 +7315,6 @@ AC_SUBST(SYSTEM_LIBXML)
 AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
 AC_SUBST(XMLLINT)
-AC_SUBST([MINGW_LIBXML_DLL])
-AC_SUBST([MINGW_ZLIB_DLL])
 
 # =====================================================================
 # Checking for a Python interpreter with version >= 2.5 needed to build LO.
@@ -7455,9 +7448,9 @@ if test $enable_python = system; then
                        MINGW_PYTHON_EXE=python.exe],
                       [AC_MSG_RESULT([not found])
                        AC_MSG_ERROR([could not find python.exe])])
-                libo_MINGW_CHECK_DLL([PYTHON], [libpython$python_version])
-                libo_MINGW_CHECK_DLL([READLINE], [libreadline6])
-                libo_MINGW_CHECK_DLL([TERMCAP], [libtermcap])
+                libo_MINGW_CHECK_DLL([libpython$python_version])
+                libo_MINGW_CHECK_DLL([libreadline6])
+                libo_MINGW_CHECK_DLL([libtermcap])
                 # could we somehow extract the really mingw python version from
                 # actual distro package?
                 # 2.6.2 currently on OpenSUSE 12.1?
@@ -7545,9 +7538,6 @@ AC_SUBST(PYTHON_VERSION)
 AC_SUBST(PYTHON_VERSION_MAJOR)
 AC_SUBST(PYTHON_VERSION_MINOR)
 AC_SUBST([MINGW_PYTHON_EXE])
-AC_SUBST([MINGW_PYTHON_DLL])
-AC_SUBST([MINGW_READLINE_DLL])
-AC_SUBST([MINGW_TERMCAP_DLL])
 
 AC_MSG_CHECKING([whether to build the MariaDB/MySQL Connector extension])
 if test "x$enable_ext_mariadb_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
@@ -7898,18 +7888,18 @@ if test "$with_system_curl" = "yes"; then
         ;;
     esac
 
-    libo_MINGW_CHECK_DLL([CURL], [libcurl])
-    libo_MINGW_TRY_DLL([INTL], [libintl])
-    libo_MINGW_TRY_DLL([IDN], [libidn])
-    libo_MINGW_TRY_DLL([NSPR4], [libnspr4])
-    libo_MINGW_TRY_DLL([NSSUTIL3], [nssutil3])
-    libo_MINGW_TRY_DLL([PLC4], [libplc4])
-    libo_MINGW_TRY_DLL([PLDS4], [libplds4])
-    libo_MINGW_TRY_DLL([NSS3], [nss3])
-    libo_MINGW_TRY_DLL([SSL3], [ssl3])
-    libo_MINGW_TRY_DLL([GPG_ERROR], [libgpg-error])
-    libo_MINGW_TRY_DLL([GCRYPT], [libgcrypt])
-    libo_MINGW_TRY_DLL([SSH2], [libssh2])
+    libo_MINGW_CHECK_DLL([libcurl])
+    libo_MINGW_TRY_DLL([libintl])
+    libo_MINGW_TRY_DLL([libidn])
+    libo_MINGW_TRY_DLL([libnspr4])
+    libo_MINGW_TRY_DLL([nssutil3])
+    libo_MINGW_TRY_DLL([libplc4])
+    libo_MINGW_TRY_DLL([libplds4])
+    libo_MINGW_TRY_DLL([nss3])
+    libo_MINGW_TRY_DLL([ssl3])
+    libo_MINGW_TRY_DLL([libgpg-error])
+    libo_MINGW_TRY_DLL([libgcrypt])
+    libo_MINGW_TRY_DLL([libssh2])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=NO
@@ -7918,18 +7908,6 @@ fi
 AC_SUBST(SYSTEM_CURL)
 AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
-AC_SUBST([MINGW_CURL_DLL])
-AC_SUBST([MINGW_GCRYPT_DLL])
-AC_SUBST([MINGW_GPG_ERROR_DLL])
-AC_SUBST([MINGW_IDN_DLL])
-AC_SUBST([MINGW_INTL_DLL])
-AC_SUBST([MINGW_NSPR4_DLL])
-AC_SUBST([MINGW_NSS3_DLL])
-AC_SUBST([MINGW_NSSUTIL3_DLL])
-AC_SUBST([MINGW_PLC4_DLL])
-AC_SUBST([MINGW_PLDS4_DLL])
-AC_SUBST([MINGW_SSH2_DLL])
-AC_SUBST([MINGW_SSL3_DLL])
 
 dnl ===================================================================
 dnl Check for system boost
@@ -7941,11 +7919,10 @@ if test "$with_system_boost" = "yes"; then
     AX_BOOST_BASE
     AX_BOOST_DATE_TIME
     mingw_boost_date_time_dll=`echo $BOOST_DATE_TIME_LIB | sed -e 's/^-l//' -e 's/\.dll$//'`
-    libo_MINGW_TRY_DLL([BOOST_DATE_TIME], [$mingw_boost_date_time_dll])
+    libo_MINGW_TRY_DLL([$mingw_boost_date_time_dll])
     if test -z "$MINGW_BOOST_DATE_TIME_DLL"; then
         # if not found, try again with 'lib' prefix
-        libo_MINGW_CHECK_DLL([BOOST_DATE_TIME],
-                             [lib$mingw_boost_date_time_dll])
+        libo_MINGW_CHECK_DLL([lib$mingw_boost_date_time_dll])
     fi
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
@@ -7972,7 +7949,6 @@ else
     BUILD_TYPE="$BUILD_TYPE BOOST"
     SYSTEM_BOOST=NO
 fi
-AC_SUBST([MINGW_BOOST_DATE_TIME_DLL])
 AC_SUBST(SYSTEM_BOOST)
 
 dnl ===================================================================
@@ -8135,13 +8111,13 @@ dnl Check for system NSS
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
 if test "$with_system_nss" = "yes"; then
-    libo_MINGW_CHECK_DLL([NSPR4], [libnspr4])
-    libo_MINGW_CHECK_DLL([PLC4], [libplc4])
-    libo_MINGW_CHECK_DLL([PLDS4], [libplds4])
-    libo_MINGW_CHECK_DLL([NSS3], [nss3])
-    libo_MINGW_CHECK_DLL([NSSUTIL3], [nssutil3])
-    libo_MINGW_CHECK_DLL([SMIME3], [smime3])
-    libo_MINGW_CHECK_DLL([SSL3], [ssl3])
+    libo_MINGW_CHECK_DLL([libnspr4])
+    libo_MINGW_CHECK_DLL([libplc4])
+    libo_MINGW_CHECK_DLL([libplds4])
+    libo_MINGW_CHECK_DLL([nss3])
+    libo_MINGW_CHECK_DLL([nssutil3])
+    libo_MINGW_CHECK_DLL([smime3])
+    libo_MINGW_CHECK_DLL([ssl3])
 else
     NSS_MAJOR="3"
     NSS_MINOR="13"
@@ -8150,7 +8126,6 @@ fi
 AC_SUBST(NSS_MAJOR)
 AC_SUBST(NSS_MINOR)
 AC_SUBST(NSS_PATCH)
-AC_SUBST(MINGW_SMIME3_DLL)
 
 dnl ===================================================================
 dnl Check for system mozilla headers
@@ -8312,9 +8287,9 @@ You can use --with-system-icu-for-build=force to use it anyway.])
        fi
     fi
 
-    libo_MINGW_CHECK_DLL([ICUDATA], [icudata][$ICU_MAJOR][$ICU_MINOR])
-    libo_MINGW_CHECK_DLL([ICUI18N], [icui18n][$ICU_MAJOR][$ICU_MINOR])
-    libo_MINGW_CHECK_DLL([ICUUC], [icuuc][$ICU_MAJOR][$ICU_MINOR])
+    libo_MINGW_CHECK_DLL([icudata][$ICU_MAJOR][$ICU_MINOR])
+    libo_MINGW_CHECK_DLL([icui18n][$ICU_MAJOR][$ICU_MINOR])
+    libo_MINGW_CHECK_DLL([icuuc][$ICU_MAJOR][$ICU_MINOR])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU="NO"
@@ -8330,9 +8305,6 @@ AC_SUBST(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
 AC_SUBST(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
 AC_SUBST(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER)
 AC_SUBST(ICU_RECLASSIFIED_HEBREW_LETTER)
-AC_SUBST([MINGW_ICUDATA_DLL])
-AC_SUBST([MINGW_ICUI18N_DLL])
-AC_SUBST([MINGW_ICUUC_DLL])
 
 dnl ===================================================================
 dnl Graphite
@@ -8345,13 +8317,12 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "$enable_graphite" = "" -o 
     AC_DEFINE(ENABLE_GRAPHITE)
     libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
     if test "$with_system_graphite" = "yes"; then
-        libo_MINGW_CHECK_DLL([GRAPHITE2], [libgraphite2])
+        libo_MINGW_CHECK_DLL([libgraphite2])
     fi
 else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_GRAPHITE)
-AC_SUBST([MINGW_GRAPHITE2_DLL])
 
 dnl ===================================================================
 dnl Check for NPAPI interface to plug browser plugins into LibreOffice documents
@@ -8505,16 +8476,13 @@ dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.26.0])
 if test "$with_system_neon" = "yes"; then
     NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
-    libo_MINGW_CHECK_DLL([NEON], [libneon])
-    libo_MINGW_TRY_DLL([TASN1], [libtasn1])
-    libo_MINGW_TRY_DLL([GNUTLS], [libgnutls])
+    libo_MINGW_CHECK_DLL([libneon])
+    libo_MINGW_TRY_DLL([libtasn1])
+    libo_MINGW_TRY_DLL([libgnutls])
 else
     NEON_VERSION=0295
 fi
 AC_SUBST(NEON_VERSION)
-AC_SUBST([MINGW_GNUTLS_DLL])
-AC_SUBST([MINGW_NEON_DLL])
-AC_SUBST([MINGW_TASN1_DLL])
 fi
 
 dnl ===================================================================
@@ -8544,11 +8512,9 @@ else
     libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
 fi
 if test "$with_system_openssl" = "yes"; then
-    libo_MINGW_CHECK_DLL([SSL], [libssl])
-    libo_MINGW_CHECK_DLL([CRYPTO], [libcrypto])
+    libo_MINGW_CHECK_DLL([libssl])
+    libo_MINGW_CHECK_DLL([libcrypto])
 fi
-AC_SUBST([MINGW_SSL_DLL])
-AC_SUBST([MINGW_CRYPTO_DLL])
 
 dnl ===================================================================
 dnl Check for system redland
@@ -8558,10 +8524,10 @@ libo_CHECK_SYSTEM_MODULE([redland],[REDLAND],[redland >= 1.0.8])
 if test "$with_system_redland" = "yes"; then
     # need at least 2.0.7 for CVE-2012-0037
     PKG_CHECK_MODULES([RAPTOR2],[raptor2 >= 2.0.7])
-    libo_MINGW_CHECK_DLL([REDLAND], [librdf])
-    libo_MINGW_TRY_DLL([RAPTOR], [libraptor])
-    libo_MINGW_TRY_DLL([RASQAL], [librasqal])
-    libo_MINGW_TRY_DLL([SQLITE3], [libsqlite3])
+    libo_MINGW_CHECK_DLL([librdf])
+    libo_MINGW_TRY_DLL([libraptor])
+    libo_MINGW_TRY_DLL([librasqal])
+    libo_MINGW_TRY_DLL([libsqlite3])
 else
     RAPTOR_MAJOR="0"
     RASQAL_MAJOR="3"
@@ -8570,10 +8536,6 @@ fi
 AC_SUBST(RAPTOR_MAJOR)
 AC_SUBST(RASQAL_MAJOR)
 AC_SUBST(REDLAND_MAJOR)
-AC_SUBST([MINGW_RAPTOR_DLL])
-AC_SUBST([MINGW_RASQAL_DLL])
-AC_SUBST([MINGW_REDLAND_DLL])
-AC_SUBST([MINGW_SQLITE3_DLL])
 
 dnl ===================================================================
 dnl Check for system orcus
@@ -8629,7 +8591,7 @@ if test "$with_system_hunspell" = "yes"; then
         HUNSPELL_LIBS=-lhunspell
     fi
     AC_LANG_POP([C++])
-    libo_MINGW_CHECK_DLL([HUNSPELL], [libhunspell-1.3])
+    libo_MINGW_CHECK_DLL([libhunspell-1.3])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
@@ -8640,7 +8602,6 @@ fi
 AC_SUBST(SYSTEM_HUNSPELL)
 AC_SUBST(HUNSPELL_CFLAGS)
 AC_SUBST(HUNSPELL_LIBS)
-AC_SUBST([MINGW_HUNSPELL_DLL])
 
 dnl ===================================================================
 dnl Checking for altlinuxhyph
@@ -8664,7 +8625,7 @@ if test "$with_system_altlinuxhyph" = "yes"; then
         AC_CHECK_LIB(hnj, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhnj],
            [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
     fi
-    libo_MINGW_CHECK_DLL([HYPHEN], [libhyphen])
+    libo_MINGW_CHECK_DLL([libhyphen])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=NO
@@ -8672,7 +8633,6 @@ else
 fi
 AC_SUBST(SYSTEM_HYPH)
 AC_SUBST(HYPHEN_LIB)
-AC_SUBST([MINGW_HYPHEN_DLL])
 
 dnl ===================================================================
 dnl Checking for mythes
@@ -8697,7 +8657,7 @@ if test "$with_system_mythes" = "yes"; then
     fi
     fi
     AC_LANG_POP([C++])
-    libo_MINGW_CHECK_DLL([MYTHES], [libmythes-1.2])
+    libo_MINGW_CHECK_DLL([libmythes-1.2])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MYTHES=NO
@@ -8706,7 +8666,6 @@ fi
 AC_SUBST(SYSTEM_MYTHES)
 AC_SUBST(MYTHES_CFLAGS)
 AC_SUBST(MYTHES_LIBS)
-AC_SUBST([MINGW_MYTHES_DLL])
 
 dnl ===================================================================
 dnl Checking for lpsolve
@@ -8724,14 +8683,13 @@ if test "$with_system_lpsolve" = "yes"; then
     AC_CHECK_LIB([lpsolve55], [make_lp], [:],
         [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
     LIBS=$save_LIBS
-    libo_MINGW_CHECK_DLL([LPSOLVE], [lpsolve55])
+    libo_MINGW_CHECK_DLL([lpsolve55])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LPSOLVE=NO
     BUILD_TYPE="$BUILD_TYPE LPSOLVE"
 fi
 AC_SUBST(SYSTEM_LPSOLVE)
-AC_SUBST([MINGW_LPSOLVE_DLL])
 
 
 
@@ -9570,7 +9528,7 @@ if test "$_os" != Android -a "$_os" != iOS -a "$ENABLE_PDFIMPORT" != FALSE; then
       CXXFLAGS=$save_CXXFLAGS
       CPPFLAGS=$save_CPPFLAGS
       AC_LANG_POP([C++])
-      libo_MINGW_CHECK_DLL([POPPLER], [libpoppler])
+      libo_MINGW_CHECK_DLL([libpoppler])
   else
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
@@ -9584,7 +9542,6 @@ AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
-AC_SUBST([MINGW_POPPLER_DLL])
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
@@ -10893,11 +10850,11 @@ if test "$test_cairo" = "yes"; then
                 AC_LANG_POP([C])
             fi
         fi
-        libo_MINGW_CHECK_DLL([CAIRO], [libcairo])
-        libo_MINGW_TRY_DLL([FONTCONFIG], [libfontconfig])
-        libo_MINGW_TRY_DLL([FREETYPE], [libfreetype])
-        libo_MINGW_TRY_DLL([PIXMAN], [libpixman])
-        libo_MINGW_TRY_DLL([PNG15], [libpng15])
+        libo_MINGW_CHECK_DLL([libcairo])
+        libo_MINGW_TRY_DLL([libfontconfig])
+        libo_MINGW_TRY_DLL([libfreetype])
+        libo_MINGW_TRY_DLL([libpixman])
+        libo_MINGW_TRY_DLL([libpng15])
     else
         SYSTEM_CAIRO=NO
         AC_MSG_RESULT([no])
@@ -10910,11 +10867,6 @@ fi
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
-AC_SUBST([MINGW_CAIRO_DLL])
-AC_SUBST([MINGW_FONTCONFIG_DLL])
-AC_SUBST([MINGW_FREETYPE_DLL])
-AC_SUBST([MINGW_PIXMAN_DLL])
-AC_SUBST([MINGW_PNG15_DLL])
 
 dnl ===================================================================
 dnl Test whether to use liblangtag
@@ -10930,7 +10882,7 @@ if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != 
         SYSTEM_LIBLANGTAG=YES
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.4.0)
-        libo_MINGW_CHECK_DLL([LIBLANGTAG], [liblangtag])
+        libo_MINGW_CHECK_DLL([liblangtag])
     else
         SYSTEM_LIBLANGTAG=NO
         AC_MSG_RESULT([no])
@@ -10944,7 +10896,6 @@ AC_SUBST(ENABLE_LIBLANGTAG)
 AC_SUBST(SYSTEM_LIBLANGTAG)
 AC_SUBST(LIBLANGTAG_CFLAGS)
 AC_SUBST(LIBLANGTAG_LIBS)
-AC_SUBST([MINGW_LIBLANGTAG_DLL])
 
 dnl ===================================================================
 dnl Test whether to build libpng or rely on the system version

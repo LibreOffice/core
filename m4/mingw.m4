@@ -24,10 +24,10 @@ dnl the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 dnl in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 dnl instead of those above.
 
-# libo_MINGW_CHECK_DLL(variable-infix,dll-name-stem,[action-if-found],[action-if-not-found])
+# libo_MINGW_CHECK_DLL(dll-name-stem,[action-if-found],[action-if-not-found])
 #
-# Checks for presence of dll dll-name-stem . Sets variable
-# MINGW_variable-infix_DLL if found, issues an error otherwise.
+# Checks for presence of dll dll-name-stem . Appends the dll name to
+# variable MINGW_DLLS if found, issues an error otherwise.
 #
 # It recognizes these dll patterns (x, y match any character, but they
 # are supposed to be numerals):
@@ -38,62 +38,63 @@ dnl instead of those above.
 #
 #
 # Example:
-# libo_MINGW_CHECK_DLL([EXPAT], [libexpat])
-# might result in MINGW_EXPAT_DLL=libexpat-1.dll being set.
+# MINGW_DLLS=
+# libo_MINGW_CHECK_DLL([libexpat])
+# might result in MINGW_DLLS containing libexpat-1.dll .
 #
-# uses CC, WITH_MINGW
+# uses MINGW_SYSROOT, WITH_MINGW
+# changes MINGW_DLLS
 # ------------------------------------------------------------------------------------------
 AC_DEFUN([libo_MINGW_CHECK_DLL],
-[AC_ARG_VAR([MINGW_][$1][_DLL],[output variable containing the found dll name])dnl
+[dnl
 
 if test -n "$WITH_MINGW"; then
     _libo_mingw_dlldir="[$MINGW_SYSROOT]"/bin
     _libo_mingw_dllname=
-    AC_MSG_CHECKING([for $2 dll])
+    AC_MSG_CHECKING([for $1 dll])
 
     dnl try one- or two-numbered version
-    _libo_mingw_try_dll([$2][-?.dll])
+    _libo_mingw_try_dll([$1][-?.dll])
     if test "$_libo_mingw_dllname" = ""; then
-        _libo_mingw_try_dll([$2][-??.dll])
+        _libo_mingw_try_dll([$1][-??.dll])
     fi
     dnl maybe the version contains a dot (e.g., libdb)
     if test "$_libo_mingw_dllname" = ""; then
-        _libo_mingw_try_dll([$2][-?.?.dll])
+        _libo_mingw_try_dll([$1][-?.?.dll])
     fi
     dnl maybe the version contains a dash (e.g., libpixman)
     if test "$_libo_mingw_dllname" = ""; then
-        _libo_mingw_try_dll([$2][-?-?.dll])
+        _libo_mingw_try_dll([$1][-?-?.dll])
     fi
     dnl maybe it is not versioned
     if test "$_libo_mingw_dllname" = ""; then
-        _libo_mingw_try_dll([$2][.dll])
+        _libo_mingw_try_dll([$1][.dll])
     fi
 
     if test "$_libo_mingw_dllname" = ""; then
         AC_MSG_RESULT([no])
-        m4_default([$4],[AC_MSG_ERROR([no dll found for $2])])
+        m4_default([$3],[AC_MSG_ERROR([no dll found for $1])])
     else
         AC_MSG_RESULT([$_libo_mingw_dllname])
-        [MINGW_][$1][_DLL]="$_libo_mingw_dllname"
-        m4_default([$3],[])
+        MINGW_DLLS="$MINGW_DLLS $_libo_mingw_dllname"
+        m4_default([$2],[])
     fi
 fi[]dnl
 ]) # libo_MINGW_CHECK_DLL
 
-# libo_MINGW_TRY_DLL(variable-infix,dll-name-stem)
+# libo_MINGW_TRY_DLL(dll-name-stem)
 #
-# Checks for presence of dll dll-name-stem . Sets variable
-# MINGW_variable-infix_DLL if found, does nothing otherwise.
+# Checks for presence of dll dll-name-stem . Appends the dll name to
+# variable MINGW_DLLS if found, does nothing otherwise.
 #
 # See libo_MINGW_CHECK_DLL for further info.
 #
-# uses CC, WITH_MINGW
+# uses MINGW_SYSROOT, WITH_MINGW
+# changes MINGW_DLLS
 # ------------------------------------------------
 AC_DEFUN([libo_MINGW_TRY_DLL],
-[dnl shortcut: do not test for already found dlls
-if test -z "$[MINGW_][$1][_DLL]"; then
-    libo_MINGW_CHECK_DLL([$1],[$2],[[]],[[]])
-fi[]dnl
+[dnl TODO: ignore already tested for dlls
+libo_MINGW_CHECK_DLL([$1],[[]],[[]])dnl
 ]) # libo_MINGW_TRY_DLL
 
 # _libo_mingw_try_dll(dll-name,dll-dir)

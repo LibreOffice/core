@@ -70,11 +70,6 @@ $(call gb_InstallModuleTarget_define_value_if_set,$(1),$(2))
 
 endef
 
-define gb_InstallModule_define_mingw_dll_if_set
-$(call gb_InstallModuleTarget_define_mingw_dll_if_set,$(1),$(2))
-
-endef
-
 define gb_InstallModule_add_scpfile
 $(call gb_InstallModuleTarget_add_scpfile,$(1),$(2))
 

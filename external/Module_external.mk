@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,external,\
 	CustomTarget_wine \
 	Package_jawt \
 	Package_mingw_dlls \
+	Package_mingw_gccdlls \
 	Package_wine \
 ))
 endif

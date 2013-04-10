@@ -273,13 +273,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 
 endef
 
-define gb_InstallModuleTarget_define_mingw_dll_if_set
-$(call gb_InstallModuleTarget_add_defs,$(1),\
-	$(foreach def,$(2),$(if $($(def)),-DNEEDS_$(def) -D$(def)=\""$($(def))"\")) \
-)
-
-endef
-
 define gb_InstallModuleTarget_use_auto_install_libs
 $(call gb_InstallModuleTarget_get_external_target,$(1)) : $(call gb_AutoInstallLibs_get_target,$(2))
 
