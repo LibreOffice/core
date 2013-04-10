@@ -1118,10 +1118,6 @@ STD_LIB_FILE( gid_File_Lib_Swui, swui)
 
 STD_LIB_FILE( gid_File_Lib_Msword, msword )
 
-#ifdef MERGELIBS
-STD_LIB_FILE( gid_File_Lib_Merged, merged )
-#endif
-
 #if ! defined UNX
 File gid_File_Lib_Sysdtrans
     LIB_FILE_BODY;
@@ -1330,12 +1326,6 @@ File gid_File_Lib_eXslt
   #endif
 End
 #endif
-
-
-STD_LIB_FILE( gid_File_Lib_Unoxml, unoxml )
-
-// AVMedia
-STD_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
 
 #if defined ENABLE_GSTREAMER
 SPECIAL_LIB_FILE( gid_File_Lib_AVMediaGStreamer, avmediagst )
@@ -1553,11 +1543,6 @@ File gid_File_Lib_Rdf
 End
 #endif // SYSTEM_REDLAND
 
-STD_LIB_FILE(gid_File_Lib_Unordf, unordf)
-
-STD_LIB_FILE( gid_File_Lib_For, for)
-STD_LIB_FILE( gid_File_Lib_Forui, forui)
-
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_sellangmsi
@@ -1568,8 +1553,3 @@ File gid_File_Lib_sellangmsi
 End
 
 #endif
-
-#ifdef ENABLE_TELEPATHY
-STD_LIB_FILE( gid_File_Lib_Tubes , tubes)
-#endif
-

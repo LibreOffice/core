@@ -217,24 +217,14 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 endif
 
-ifeq ($(DISABLE_SCRIPTING),)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
-    basctl \
-))
-endif
-ifeq ($(OS),WNT)
-ifeq ($(DISABLE_ATL),)
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
-    emser \
-))
-endif
-endif
-
-
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
+	avmedia \
+	$(if $(DISABLE_SCRIPTING),,basctl) \
     bib \
+    canvastools \
     chartcore \
     chartcontroller \
+    cppcanvas \
     ctl \
     cui \
     dba \
@@ -243,7 +233,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dbtools \
     dbaxml \
     drawinglayer \
+    $(if $(filter WNT,$(OS)),$(if $(DISABLE_ATL),,emser)) \
 	file \
+    for \
+    forui \
     frm \
     fwe \
 	fwi \
@@ -251,9 +244,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 	fwm \
     lng \
     lwpft \
+    $(if $(MERGELIBS),merged) \
     sdbt \
     odbcbase \
     t602filter \
+	$(if $(ENABLE_TELEPATHY),tubes) \
+    unordf \
+    unoxml \
     wpftwriter \
     writerfilter \
 ))
@@ -270,21 +267,17 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     $(if $(filter $(OS),ANDROID),, \
 		basebmp \
     ) \
-    canvastools \
     communi \
     date \
     evtatt \
-    forui \
     odbc \
     oox \
 	ooxml \
     sdbc \
     AppleRemote \
-    avmedia \
     avmediaQuickTime \
     basegfx \
     calc \
-    cppcanvas \
     dbp \
     dbu \
     deploymentmisc \
@@ -305,7 +298,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	filtertracer \
 	flash \
 	flat \
-    for \
     fwk \
     graphicfilter \
     guesslang \
@@ -330,7 +322,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lnth \
     log \
 	MacOSXSpell \
-    merged \
     mork \
     mozab2 \
     mozabdrv \
@@ -385,9 +376,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     textfd \
     tk \
     tl \
-	tubes \
-    unordf \
-    unoxml \
     updatecheckui \
     utl \
     uui \

@@ -55,7 +55,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_OPENGL \
 	ENABLE_TDE \
 	ENABLE_TDEAB \
-	ENABLE_TELEPATHY \
 	MERGELIBS \
 	SYSTEM_APACHE_COMMONS \
 	SYSTEM_BOOST \
