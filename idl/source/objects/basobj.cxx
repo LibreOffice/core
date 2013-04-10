@@ -182,6 +182,7 @@ void SvMetaName::ReadAttributesSvIdl( SvIdlDataBase & rBase,
         if( !SetName( aName.getString(), &rBase ) )
             rInStm.Seek( nTokPos );
     }
+
     aHelpContext.ReadSvIdl( rBase, SvHash_HelpContext(), rInStm );
     aHelpText.ReadSvIdl( rBase, rInStm );
     aConfigName.ReadSvIdl( SvHash_ConfigName(), rInStm );

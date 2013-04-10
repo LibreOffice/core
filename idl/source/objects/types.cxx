@@ -218,7 +218,13 @@ sal_Bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
             bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
     }
     else
-        rBase.SetError( "unknown type", rInStm.GetToken() );
+    {
+        SvToken *pTok = rInStm.GetToken();
+        rBase.SetError( "unknown type of token. Each new SID needs an "
+                        "item statement in an SDI file, eg. "
+                        "SfxVoidItem FooItem  " + pTok->GetTokenAsString() +
+                        " ... which describes the slot more fully", pTok );
+    }
 
     if( !bOk )
         rInStm.Seek( nTokPos );

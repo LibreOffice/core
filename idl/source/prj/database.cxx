@@ -160,7 +160,7 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
 void SvIdlDataBase::SetError( const OString& rError, SvToken * pTok )
 {
     if( pTok->GetLine() > 10000 )
-        aError.SetText( "hgchcg" );
+        aError.SetText( "line count overflow" );
 
     if( aError.nLine < pTok->GetLine()
       || (aError.nLine == pTok->GetLine() && aError.nColumn < pTok->GetColumn()) )
