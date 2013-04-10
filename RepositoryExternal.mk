@@ -1187,6 +1187,7 @@ endef
 endif # SYSTEM_ICU
 
 
+ifneq ($(DISABLE_OPENSSL),YES)
 ifeq ($(SYSTEM_OPENSSL),YES)
 
 gb_LinkTarget__use_openssl_headers:=
@@ -1251,6 +1252,7 @@ endif
 endef
 
 endif # SYSTEM_OPENSSL
+endif # DISABLE_OPENSSL
 
 
 ifeq ($(SYSTEM_CDR),YES)
