@@ -11,6 +11,7 @@
 #define __SC_ORCUSINTERFACE_HXX__
 
 #include "address.hxx"
+#include "rtl/strbuf.hxx"
 
 #define __ORCUS_STATIC_LIB
 #include <orcus/spreadsheet/import_interface.hpp>
@@ -29,6 +30,7 @@ class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_str
 {
     ScOrcusFactory& mrFactory;
 
+    OStringBuffer maCurSegment;
 public:
     ScOrcusSharedStrings(ScOrcusFactory& rFactory);
 

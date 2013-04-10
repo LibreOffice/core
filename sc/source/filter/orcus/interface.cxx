@@ -278,22 +278,28 @@ size_t ScOrcusSharedStrings::add(const char* s, size_t n)
 void ScOrcusSharedStrings::set_segment_bold(bool /*b*/)
 {
 }
+
 void ScOrcusSharedStrings::set_segment_italic(bool /*b*/)
 {
 }
+
 void ScOrcusSharedStrings::set_segment_font_name(const char* /*s*/, size_t /*n*/)
 {
 }
+
 void ScOrcusSharedStrings::set_segment_font_size(double /*point*/)
 {
 }
-void ScOrcusSharedStrings::append_segment(const char* /*s*/, size_t /*n*/)
+
+void ScOrcusSharedStrings::append_segment(const char* s, size_t n)
 {
+    maCurSegment.append(s, n);
 }
 
 size_t ScOrcusSharedStrings::commit_segments()
 {
-    return 0;
+    OString aStr = maCurSegment.makeStringAndClear();
+    return mrFactory.addString(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
 }
 
 void ScOrcusStyles::set_font_count(size_t /*n*/)
