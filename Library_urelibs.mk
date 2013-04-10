@@ -14,6 +14,11 @@ $(eval $(call gb_Library_use_library_objects,urelibs,\
 	$(gb_URELIBS) \
 ))
 
+# needed to generate proper deps for module-deps.pl
+$(eval $(call gb_Library_use_libraries,urelibs,\
+	$(gb_UWINAPI) \
+))
+
 $(eval $(call gb_Library_use_static_libraries,urelibs,\
 	findsofficepath \
 ))
