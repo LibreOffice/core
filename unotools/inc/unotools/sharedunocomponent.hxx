@@ -191,7 +191,7 @@ namespace utl
 #endif
 
 //        SharedUNOComponent& operator=( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent );
-        // this operator is not implemented by intention. There is no canonic ownership after this operatoer
+        // This operator is intentionally not implemented. There is no canonic ownership after this operator
         // would have been applied: Should the SharedUNOComponent have the ownership of the component,
         // or shouldn't it? Hard to guess, and probably wrong in 50 percent of all cases, anyway. So,
         // instead of tempting clients of this class to use such a dangerous operator, we do
