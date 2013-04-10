@@ -23,7 +23,6 @@
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
 #include "osl/module.hxx"
-#include "rtl/unload.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/instance.hxx"
 #include "uno/environment.h"
@@ -620,8 +619,6 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             aExcMsg,
             Reference< XInterface >() );
     }
-
-    rtl_registerModuleForUnloading( lib);
     return xRet;
 }
 

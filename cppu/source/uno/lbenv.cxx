@@ -28,7 +28,6 @@
 #include "osl/module.h"
 #include "osl/process.h"
 #include "rtl/process.h"
-#include "rtl/unload.h"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -1092,8 +1091,6 @@ static bool loadEnv(OUString const  & cLibStem,
 #endif
 
     (*fpInit)( pEnv ); // init of environment
-    ::rtl_registerModuleForUnloading( hMod );
-
     return true;
 }
 
