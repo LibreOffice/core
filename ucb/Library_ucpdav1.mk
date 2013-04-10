@@ -45,8 +45,11 @@ $(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \
 	libxml2 \
 	neon \
-	openssl \
 ))
+
+ifneq ($(DISABLE_OPENSSL),YES)
+$(eval $(call gb_Library_use_externals,ucpdav1,openssl))
+endif # DISABLE_OPENSSL
 
 $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-neon/ContentProperties \
