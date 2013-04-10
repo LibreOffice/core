@@ -240,7 +240,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 ifeq ($(MERGELIBS),TRUE)
 $(eval $(call gb_Module_add_targets,libreoffice,\
 	Library_merged \
-	Library_urelibs \
+	$(if $(URELIBS),Library_urelibs) \
 ))
 endif
 
