@@ -48,18 +48,25 @@ $(eval $(call gb_Library_use_externals,merged,\
 	$(call gb_Helper_optional,DESKTOP,clucene) \
 	cups \
 	curl \
+	dbus \
 	expat \
+	gconf \
+	gio \
+	graphite \
+	$(if $(ENABLE_GTK),gtk) \
 	hunspell \
 	icui18n \
 	icule \
 	icuuc \
 	jpeg \
 	lcms2 \
+	liblangtag \
 	libxml2 \
 	libxslt \
 	$(if $(filter-out IOS,$(OS)),lpsolve) \
 	mythes \
 	nss3 \
+	telepathy \
 	zlib \
 ))
 
@@ -68,12 +75,6 @@ $(eval $(call gb_Library_use_externals,merged,\
 	cppunit \
 	libexslt \
 	$(call gb_Helper_optional,PYUNO,python) \
-))
-endif
-
-ifeq ($(ENABLE_GRAPHITE),TRUE)
-$(eval $(call gb_Library_use_externals,merged,\
-	graphite \
 ))
 endif
 
@@ -137,49 +138,6 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,merged,\
 	CoreFoundation \
 	CoreServices \
 	QuickTime \
-))
-endif
-
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_use_libraries,merged,\
-	libotouch \
-))
-
-$(eval $(call gb_Library_add_libs,merged,\
-	-llog \
-	-landroid \
-	-llo-bootstrap \
-))
-
-$(eval $(call gb_Library_use_externals,merged,\
-	fontconfig \
-	freetype \
-))
-endif
-
-ifeq ($(OS),IOS)
-$(eval $(call gb_Library_use_system_darwin_frameworks,merged,\
-	CoreFoundation \
-	UIKit \
-))
-endif
-
-ifeq ($(ENABLE_TELEPATHY),TRUE)
-$(eval $(call gb_Library_use_externals,merged,\
-	gtk \
-	telepathy \
-))
-endif
-
-ifeq ($(ENABLE_DBUS),TRUE)
-$(eval $(call gb_Library_use_externals,merged,\
-	dbus \
-))
-endif
-
-ifeq ($(ENABLE_LIBLANGTAG),YES)
-$(eval $(call gb_Library_use_externals,merged,\
-	liblangtag \
 ))
 endif
 

@@ -712,17 +712,6 @@ File gid_File_Lib_Localedata_Others
     Styles = (PACKED);
 End
 
-File gid_File_Lib_Mcnttype
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libmcnttype,UNXSUFFIX));
-  #else
-    Name = "mcnttype.dll";
-  #endif
-End
-
 #if defined(WNT)
 
 #if defined WITH_MOZAB4WIN
@@ -790,8 +779,6 @@ STD_LIB_FILE( gid_File_Lib_Pcr, pcr)
 STD_LIB_FILE( gid_File_Lib_Log, log)
 
 STD_LIB_FILE( gid_File_Lib_Pdffilter, pdffilter)
-
-SPECIAL_LIB_FILE(gid_File_Lib_Deployment,deployment)
 
 SPECIAL_LIB_FILE(gid_File_Lib_DeploymentGui,deploymentgui)
 
@@ -1131,8 +1118,6 @@ SPECIAL_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
-
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpcmis, ucpcmis1.uno)
 

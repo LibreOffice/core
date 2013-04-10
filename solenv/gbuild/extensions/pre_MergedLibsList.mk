@@ -104,6 +104,7 @@ gb_MERGEDLIBS := \
 	canvastools \
 	configmgr \
 	cppcanvas \
+	deployment \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
@@ -120,6 +121,7 @@ gb_MERGEDLIBS := \
 	i18nutil \
 	lng \
 	localebe1 \
+	mcnttype \
 	msfilter \
 	package2 \
 	sax \
@@ -136,7 +138,9 @@ gb_MERGEDLIBS := \
 	tl \
 	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
 	ucb1 \
+	ucpexpand1 \
 	ucpfile1 \
+	unoxml \
 	utl \
 	uui \
 	vcl \

@@ -445,8 +445,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,OOO, \
+	deployment \
 	fileacc \
 	i18nutil \
+	mcnttype \
 	package2 \
 	sofficeapp \
 	ucb1 \
@@ -461,7 +463,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     cached1 \
     collator_data \
     dbpool2 \
-    deployment \
     deploymentgui \
     dict_ja \
     dict_zh \
@@ -477,7 +478,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     localedata_others \
     macab1 \
     macabdrv1 \
-    mcnttype \
     mozbootstrap \
     officebean \
     pyuno \
@@ -569,6 +569,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
 	fsstorage \
 	i18npool \
 	localebe1 \
+	ucpexpand1 \
 ))
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     PresenterScreen \
@@ -607,7 +608,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     syssh \
     tdebe1 \
     ucpcmis1 \
-    ucpexpand1 \
     ucpext \
     ucpgio1 \
     ucpgvfs1 \
