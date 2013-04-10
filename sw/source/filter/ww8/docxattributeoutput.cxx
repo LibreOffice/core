@@ -191,7 +191,6 @@ class FieldMarkParamsHelper
         return bResult;
     }
 };
-static OString impl_ConvertColor( const Color &rColor );
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
 {
     if (bIsRTL)
@@ -276,7 +275,7 @@ void lcl_TextFrameShadow(FSHelperPtr pSerializer, const SwFrmFmt& rFrmFmt)
     if (aOffset.isEmpty())
         return;
 
-    OString aShadowColor = impl_ConvertColor(aShadowItem.GetColor());
+    OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
     pSerializer->singleElementNS(XML_v, XML_shadow,
             XML_on, "t",
             XML_color, "#" + aShadowColor,
@@ -1400,26 +1399,6 @@ void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
     m_pSerializer->singleElementNS( XML_w, XML_pStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
-static OString impl_ConvertColor( const Color &rColor )
-{
-    OString color( "auto" );
-    if ( rColor.GetColor() != COL_AUTO )
-    {
-        const char pHexDigits[] = "0123456789ABCDEF";
-        char pBuffer[] = "000000";
-
-        pBuffer[0] = pHexDigits[ ( rColor.GetRed()   >> 4 ) & 0x0F ];
-        pBuffer[1] = pHexDigits[   rColor.GetRed()          & 0x0F ];
-        pBuffer[2] = pHexDigits[ ( rColor.GetGreen() >> 4 ) & 0x0F ];
-        pBuffer[3] = pHexDigits[   rColor.GetGreen()        & 0x0F ];
-        pBuffer[4] = pHexDigits[ ( rColor.GetBlue()  >> 4 ) & 0x0F ];
-        pBuffer[5] = pHexDigits[   rColor.GetBlue()         & 0x0F ];
-
-        color = OString( pBuffer );
-    }
-    return color;
-}
-
 static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist )
 {
     FastAttributeList* pAttr = pSerializer->createAttrList();
@@ -1512,7 +1491,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
         pAttr->add( FSNS( XML_w, XML_space ), OString::valueOf( sal_Int32( nDist / 20 ) ) );
 
         // Get the color code as an RRGGBB hex value
-        OString sColor( impl_ConvertColor( pBorderLine->GetColor( ) ) );
+        OString sColor( msfilter::util::ConvertColor( pBorderLine->GetColor( ) ) );
         pAttr->add( FSNS( XML_w, XML_color ), sColor );
     }
 
@@ -1932,7 +1911,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     else
         aColor = COL_AUTO;
 
-    OString sColor = impl_ConvertColor( aColor );
+    OString sColor = msfilter::util::ConvertColor( aColor );
     m_pSerializer->singleElementNS( XML_w, XML_shd,
             FSNS( XML_w, XML_fill ), sColor.getStr( ),
             FSNS( XML_w, XML_val ), "clear",
@@ -2397,7 +2376,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         // Distance is measured diagonally from corner
         double nShadowDist = sqrt((aShadowItem.GetWidth()*aShadowItem.GetWidth())*2.0);
         OString aShadowDist( OString::valueOf( TwipsToEMU( nShadowDist ) ) );
-        OString aShadowColor = impl_ConvertColor( aShadowItem.GetColor() );
+        OString aShadowColor = msfilter::util::ConvertColor( aShadowItem.GetColor() );
         sal_uInt32 nShadowDir = 0;
         switch ( aShadowItem.GetLocation() )
         {
@@ -3356,7 +3335,7 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
     const Color aColor( rColor.GetValue() );
     OString aColorString;
 
-    aColorString = impl_ConvertColor( aColor );
+    aColorString = msfilter::util::ConvertColor( aColor );
 
     m_pSerializer->singleElementNS( XML_w, XML_color,
             FSNS( XML_w, XML_val ), aColorString.getStr(), FSEND );
@@ -3553,7 +3532,7 @@ void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
 void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 {
     m_pSerializer->singleElementNS( XML_w, XML_shd,
-            FSNS( XML_w, XML_fill ), impl_ConvertColor( rBrush.GetColor() ).getStr(),
+            FSNS( XML_w, XML_fill ), msfilter::util::ConvertColor( rBrush.GetColor() ).getStr(),
             FSNS( XML_w, XML_val ), "clear",
             FSEND );
 }
@@ -4623,7 +4602,7 @@ void DocxAttributeOutput::FormatAnchor( const SwFmtAnchor& )
 
 void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
-    OString sColor = impl_ConvertColor( rBrush.GetColor( ) );
+    OString sColor = msfilter::util::ConvertColor( rBrush.GetColor( ) );
     if (m_bTextFrameSyntax)
         m_pFlyAttrList->add(XML_fillcolor, "#" + sColor);
     else if ( !m_rExport.bOutPageDescs )
@@ -4648,9 +4627,9 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         m_pFlyFillAttrList->add(XML_type, "gradient");
 
         const XGradient& rGradient = rFillGradient.GetGradientValue();
-        OString sStartColor = impl_ConvertColor(rGradient.GetStartColor());
+        OString sStartColor = msfilter::util::ConvertColor(rGradient.GetStartColor());
         m_pFlyFillAttrList->add(XML_color2, "#" + sStartColor);
-        OString sEndColor = impl_ConvertColor(rGradient.GetEndColor());
+        OString sEndColor = msfilter::util::ConvertColor(rGradient.GetEndColor());
         m_pFlyAttrList->add(XML_fillcolor, "#" + sEndColor);
 
         switch (rGradient.GetGradientStyle())
@@ -4679,7 +4658,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         if (pLeft && pRight && pTop && pBottom &&
                 *pLeft == *pRight && *pLeft == *pTop && *pLeft == *pBottom)
         {
-            OString sColor("#" + impl_ConvertColor(pTop->GetColor()));
+            OString sColor("#" + msfilter::util::ConvertColor(pTop->GetColor()));
             m_pFlyAttrList->add(XML_strokecolor, sColor);
 
             double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));

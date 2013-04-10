@@ -181,7 +181,6 @@ OString OutStringUpr(const sal_Char *pToken, const String &rStr, rtl_TextEncodin
     aRet.append("}}}");
     return aRet.makeStringAndClear();
 }
-
 }
 }
 

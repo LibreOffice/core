@@ -31,6 +31,7 @@
 
 #include <rtl/textenc.h>
 #include <tools/datetime.hxx>
+#include <tools/color.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include "filter/msfilter/msfilterdllapi.h"
 
@@ -87,6 +88,9 @@ enum TextCategory
   as a proposed resolution.
 */
 MSFILTER_DLLPUBLIC TextCategory categorizeCodePoint(sal_uInt32 codePoint, const OUString &rBcp47LanguageTag);
+
+/// Converts tools Color to HTML color (without leading hashmark).
+MSFILTER_DLLPUBLIC OString ConvertColor( const Color &rColor );
 
 }
 }

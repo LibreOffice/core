@@ -306,6 +306,25 @@ TextCategory categorizeCodePoint(sal_uInt32 codePoint, const OUString &rBcp47Lan
     return eRet;
 }
 
+OString ConvertColor( const Color &rColor )
+{
+    OString color( "auto" );
+    if ( rColor.GetColor() != COL_AUTO )
+    {
+        const char pHexDigits[] = "0123456789ABCDEF";
+        char pBuffer[] = "000000";
+
+        pBuffer[0] = pHexDigits[ ( rColor.GetRed()   >> 4 ) & 0x0F ];
+        pBuffer[1] = pHexDigits[   rColor.GetRed()          & 0x0F ];
+        pBuffer[2] = pHexDigits[ ( rColor.GetGreen() >> 4 ) & 0x0F ];
+        pBuffer[3] = pHexDigits[   rColor.GetGreen()        & 0x0F ];
+        pBuffer[4] = pHexDigits[ ( rColor.GetBlue()  >> 4 ) & 0x0F ];
+        pBuffer[5] = pHexDigits[   rColor.GetBlue()         & 0x0F ];
+
+        color = OString( pBuffer );
+    }
+    return color;
+}
 }
 }
 

@@ -121,26 +121,6 @@ void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet
         xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
 }
 
-static OString impl_ConvertColor( const Color &rColor )
-{
-    OString color( "auto" );
-    if ( rColor.GetColor() != COL_AUTO )
-    {
-        const char pHexDigits[] = "0123456789ABCDEF";
-        char pBuffer[] = "000000";
-
-        pBuffer[0] = pHexDigits[ ( rColor.GetRed()   >> 4 ) & 0x0F ];
-        pBuffer[1] = pHexDigits[   rColor.GetRed()          & 0x0F ];
-        pBuffer[2] = pHexDigits[ ( rColor.GetGreen() >> 4 ) & 0x0F ];
-        pBuffer[3] = pHexDigits[   rColor.GetGreen()        & 0x0F ];
-        pBuffer[4] = pHexDigits[ ( rColor.GetBlue()  >> 4 ) & 0x0F ];
-        pBuffer[5] = pHexDigits[   rColor.GetBlue()         & 0x0F ];
-
-        color = OString( pBuffer );
-    }
-    return color;
-}
-
 void RTFSdrImport::resolve(RTFShape& rShape)
 {
     int nType = -1;
@@ -224,13 +204,13 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 xPropertySet->setPropertyValue("FillColor", aAny);
 
             // fillType will decide, possible it'll be the start color of a gradient.
-            aFillModel.moColor.set(OUString("#") + OStringToOUString(impl_ConvertColor(aAny.get<sal_Int32>()), RTL_TEXTENCODING_UTF8));
+            aFillModel.moColor.set(OUString("#") + OStringToOUString(msfilter::util::ConvertColor(aAny.get<sal_Int32>()), RTL_TEXTENCODING_UTF8));
 
             xPropertySet->setPropertyValue("BackColorTransparency", uno::makeAny(sal_Int32(0)));
         }
         else if ( i->first == "fillBackColor" )
             // fillType will decide, possible it'll be the end color of a gradient.
-            aFillModel.moColor2.set(OUString("#") + OStringToOUString(impl_ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32())), RTL_TEXTENCODING_UTF8));
+            aFillModel.moColor2.set(OUString("#") + OStringToOUString(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32())), RTL_TEXTENCODING_UTF8));
         else if (i->first == "lineColor")
             aLineColor <<= msfilter::util::BGRToRGB(i->second.toInt32());
         else if ( i->first == "lineBackColor" )
