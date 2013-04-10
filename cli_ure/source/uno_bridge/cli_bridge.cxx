@@ -335,14 +335,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     *ppMapping = mapping;
 }
 
-
-//##################################################################################################
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * )
-    SAL_THROW_EXTERN_C()
-{
-    return true;
-}
-
 }
 }
 

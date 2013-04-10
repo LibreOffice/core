@@ -954,22 +954,11 @@ static struct ::cppu::ImplementationEntry g_entries[] =
     { 0, 0, 0, 0, 0, 0 }
 };
 
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload(
-    TimeValue *pTime )
-{
-    return ::stoc_invadp::g_moduleCount.canUnload(
-        &::stoc_invadp::g_moduleCount, pTime );
-}
-
-//==============================================================================
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL invocadapt_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL invocadapt_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(
         pImplName, pServiceManager, pRegistryKey , g_entries );
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

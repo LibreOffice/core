@@ -112,10 +112,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL oleautobridge_component_getFacto
     return pRet;
 }
 
-extern "C"  SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-oleautobridge_component_canUnload( TimeValue* libUnused)
-{
-    return globalModuleCount.canUnload( &globalModuleCount, libUnused);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

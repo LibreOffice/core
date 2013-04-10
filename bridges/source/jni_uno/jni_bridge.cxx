@@ -553,17 +553,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     }
 }
 
-#ifndef DISABLE_DYNLOADING
-
-//------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
-    SAL_THROW_EXTERN_C()
-{
-    return (*g_moduleCount.canUnload)( &g_moduleCount, pTime );
-}
-
-#endif
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
