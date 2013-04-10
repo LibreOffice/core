@@ -162,7 +162,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
             ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
         void* pLib = dlopen(pModuleName, rtld_mode);
 
-        SAL_WARN_IF(
+        SAL_INFO_IF(
             pLib == 0, "sal.osl",
             "dlopen(" << pModuleName << ", " << rtld_mode << "): "
                 << dlerror());
