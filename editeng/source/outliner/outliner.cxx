@@ -389,7 +389,7 @@ sal_Int16 Outliner::GetBulletsNumberingStatus()
         for (sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
         {
             Paragraph* pPara = pParaList->GetParagraph(nPara);
-            const SfxItemSet& rAttrs = GetParaAttribs(nPara);
+            // const SfxItemSet& rAttrs = GetParaAttribs(nPara);
             if (!pPara)
             {
                 continue;
