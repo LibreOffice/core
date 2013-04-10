@@ -48,7 +48,7 @@ CustomImageRadioButton::~CustomImageRadioButton (void)
 }
 
 
-void CustomImageRadioButton::Paint (const Rectangle& rUpdateArea)
+void CustomImageRadioButton::Paint (const Rectangle& /* rUpdateArea */)
 {
     Rectangle aPaintRect( Rectangle(Point(0,0), GetSizePixel() ) );
     SetMouseRect( aPaintRect );
