@@ -912,7 +912,6 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         }
         else if( nSlot == SID_ATTR_PARA_LINESPACE )
         {
-            sal_uInt16 nId = SID_ATTR_PARA_LINESPACE;
             SvxLineSpacingItem aLineSpaceItem = (const SvxLineSpacingItem&)pArgs->Get(
                                                                 GetPool().GetWhich(nSlot));
             SfxItemSet aEditAttr( GetPool(), EE_PARA_SBL, EE_PARA_SBL );
@@ -925,7 +924,6 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         }
         else if( nSlot == SID_ATTR_PARA_ULSPACE )
         {
-            sal_uInt16 nId = SID_ATTR_PARA_ULSPACE;
             SvxULSpaceItem aULSpaceItem = (const SvxULSpaceItem&)pArgs->Get(
                                                                 GetPool().GetWhich(nSlot));
             SfxItemSet aEditAttr( GetPool(), EE_PARA_ULSPACE, EE_PARA_ULSPACE );
