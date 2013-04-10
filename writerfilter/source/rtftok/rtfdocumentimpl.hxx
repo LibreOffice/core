@@ -478,6 +478,8 @@ namespace writerfilter {
                 rtl_TextEncoding getEncoding(sal_uInt32 nFontIndex);
                 /// Get the default parser state.
                 RTFParserState& getDefaultState();
+                /// Get the shape text buffer;
+                RTFBuffer_t getShapetextBuffer();
 
             private:
                 SvStream& Strm();

@@ -612,6 +612,11 @@ RTFParserState& RTFDocumentImpl::getDefaultState()
         return m_pSuperstream->getDefaultState();
 }
 
+RTFBuffer_t RTFDocumentImpl::getShapetextBuffer()
+{
+    return m_aShapetextBuffer;
+}
+
 void RTFDocumentImpl::resolve(Stream & rMapper)
 {
     m_pMapperStream = &rMapper;

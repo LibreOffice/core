@@ -46,6 +46,7 @@
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -401,10 +402,14 @@ void Test::testFdo45187()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     // There should be two shapes.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
-#if 0
+
     // They should be anchored to different paragraphs.
-    CPPUNIT_ASSERT(getProperty<awt::Point>(xDraws->getByIndex(0), "AnchorPosition").Y != getProperty<awt::Point>(xDraws->getByIndex(1), "AnchorPosition").Y);
-#endif
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xAnchor0 = uno::Reference<text::XTextContent>(xDraws->getByIndex(0), uno::UNO_QUERY)->getAnchor();
+    uno::Reference<text::XTextRange> xAnchor1 = uno::Reference<text::XTextContent>(xDraws->getByIndex(1), uno::UNO_QUERY)->getAnchor();
+    // Was 0 ("starts at the same position"), should be 1 ("starts before")
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xTextRangeCompare->compareRegionStarts(xAnchor0, xAnchor1));
 }
 
 void Test::testFdo46662()
@@ -752,11 +757,9 @@ void Test::testFdo52066()
      * xray ThisComponent.DrawPage(0).Size.Height
      */
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-#if 0
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(19)), xShape->getSize().Height);
-#endif
 }
 
 void Test::testFdo48033_53594()
@@ -1167,7 +1170,6 @@ void Test::testFdo59638()
 
 void Test::testFdo60722()
 {
-#if 0
     // The problem was that the larger shape was over the smaller one, and not the other way around.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
@@ -1183,7 +1185,6 @@ void Test::testFdo60722()
     xShape.set(xDraws->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), getProperty<sal_uInt32>(xShape, "LineWidth"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "LineColor"));
-#endif
 }
 
 void Test::testFdo61909()

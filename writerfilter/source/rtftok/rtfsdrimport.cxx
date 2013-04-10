@@ -149,6 +149,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                     break;
                 case ESCHER_ShpInst_Rectangle:
                 case ESCHER_ShpInst_TextBox:
+                    if (!m_rImport.getShapetextBuffer().empty())
                     {
                         createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
                         bTextFrame = true;
@@ -156,6 +157,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                         for (size_t j = 0; j < aDefaults.size(); ++j)
                             xPropertySet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
                     }
+                    else
+                        bCustom = true;
                     break;
                 default:
                     bCustom = true;
