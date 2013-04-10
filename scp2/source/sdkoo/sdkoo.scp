@@ -180,20 +180,6 @@ File gid_File_Zip_Odkheaders_cppuhelper
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
 End
 
-File gid_File_Zip_Odkheaders_store
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "store_odk_headers.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
-End
-
-File gid_File_Zip_Odkheaders_registry
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "registry_odk_headers.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
-End
-
 #if (!defined(WNT) && !defined( MACOSX) )
 Directory gid_Dir_Lib_Sdk    
     Styles = (CREATE);

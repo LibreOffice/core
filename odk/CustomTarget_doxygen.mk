@@ -14,8 +14,8 @@ odkcommon_ZIPDEPS += $(odk_WORKDIR)/docs/cpp/ref/index.html
 
 CPPDOCREFNAME := "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"
 
-odk_INCDIRLIST := sal salhelper rtl osl store typelib uno cppu cppuhelper \
-	registry $(if $(filter WNT,$(OS)),systools)
+odk_INCDIRLIST := sal salhelper rtl osl typelib uno cppu cppuhelper \
+	$(if $(filter WNT,$(OS)),systools)
 odk_INCFILELIST := com/sun/star/uno/Any.h \
 	com/sun/star/uno/Any.hxx \
 	com/sun/star/uno/genfunc.h \
@@ -41,8 +41,6 @@ DOXY_DEPS := $(SRCDIR)/odk/pack/gendocu/Doxyfile \
 	$(call gb_Package_get_target,salhelper_odk_headers) \
 	$(call gb_Package_get_target,cppu_odk_headers) \
 	$(call gb_Package_get_target,cppuhelper_odk_headers) \
-	$(call gb_Package_get_target,store_odk_headers) \
-	$(call gb_Package_get_target,registry_odk_headers)
 
 
 $(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/cpp/ref,index.html))

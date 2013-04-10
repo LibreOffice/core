@@ -88,8 +88,6 @@ CPPULIB=icppu.lib
 CPPUHELPERLIB=icppuhelper.lib
 SALHELPERLIB=isalhelper.lib
 PURPENVHELPERLIB=ipurpenvhelper.lib
-REGLIB=ireg.lib
-STORELIB=istore.lib
 
 BLANK= 
 EMPTYSTRING=
@@ -198,15 +196,11 @@ CPPU_ENV=gcc3
 #CPPULIB=-luno_cppu
 #CPPUHELPERLIB=-luno_cppuhelperC52
 #SALHELPERLIB=-luno_salhelperC52
-#REGLIB=-lreg
-#STORELIB=-lstore
 SALLIB=-luno_sal
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 PURPENVHELPERLIB=-luno_purpenvhelper$(COMID)
-REGLIB=-lreg
-STORELIB=-lstore
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -330,8 +324,6 @@ CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 PURPENVHELPERLIB=-luno_purpenvhelper$(COMID)
-REGLIB=-lreg
-STORELIB=-lstore
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -437,12 +429,10 @@ CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 PURPENVHELPERLIB=-luno_purpenvhelper$(COMID)
-REGLIB=-lreg
-STORELIB=-lstore
 
-INSTALL_NAME_URELIBS=$(XCRUN) install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/urelibs/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/urelibs/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/urelibs/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/urelibs/libstore.dylib.3
+INSTALL_NAME_URELIBS=$(XCRUN) install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/urelibs/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/urelibs/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_salhelper$(COMID).dylib.3
 
-INSTALL_NAME_URELIBS_BIN=$(XCRUN) install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 libstore.dylib.3
+INSTALL_NAME_URELIBS_BIN=$(XCRUN) install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 libuno_salhelper$(COMID).dylib.3
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -551,8 +541,6 @@ CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 PURPENVHELPERLIB=-luno_purpenvhelper$(COMID)
-REGLIB=-lreg
-STORELIB=-lstore
 
 EMPTYSTRING=
 PATH_SEPARATOR=:

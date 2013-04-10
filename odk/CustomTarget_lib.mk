@@ -20,8 +20,7 @@ $(odk_WORKDIR)/lib/$(notdir $(1)) : $(1)
 endef
 
 ifeq ($(COM),MSC)
-odk_LIBLIST := store \
-	reg \
+odk_LIBLIST := \
 	sal \
 	salhelper \
 	cppu \

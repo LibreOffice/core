@@ -40,7 +40,5 @@ Module gid_Module_Optional_Sdkoo
         gid_File_Zip_Odkheaders_sal,
         gid_File_Zip_Odkheaders_salhelper,
         gid_File_Zip_Odkheaders_cppu,
-        gid_File_Zip_Odkheaders_cppuhelper,
-        gid_File_Zip_Odkheaders_store,
-        gid_File_Zip_Odkheaders_registry);
+        gid_File_Zip_Odkheaders_cppuhelper);
 End
