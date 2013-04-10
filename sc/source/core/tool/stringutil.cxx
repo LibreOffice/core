@@ -358,7 +358,10 @@ ScInputStringType ScStringUtil::parseInputString(
         sal_uInt32 nNumFormat = rFormatter.GetStandardIndex(eLang);
 
         if (rFormatter.IsNumberFormat(rStr, nNumFormat, aRet.mfValue))
+        {
+            aRet.meType = ScInputStringType::Number;
             aRet.mnFormatType = rFormatter.GetType(nNumFormat);
+        }
         else if (!rStr.isEmpty())
             aRet.meType = ScInputStringType::Text;
 
