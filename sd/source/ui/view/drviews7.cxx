@@ -211,8 +211,6 @@ IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper
 
 void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
 {
-    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-
     SfxItemSet aSet( mpDrawView->GetGeoAttrFromMarked() );
     rSet.Put(aSet,sal_False);
 }
