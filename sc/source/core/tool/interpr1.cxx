@@ -4720,6 +4720,13 @@ void ScInterpreter::ScColumn()
                 SCCOL nCols;
                 SCROW nRows;
                 pMyFormulaCell->GetMatColsRows( nCols, nRows);
+                if (nCols == 0)
+                {
+                    // Happens if called via ScViewFunc::EnterMatrix()
+                    // ScFormulaCell::GetResultDimensions() as of course a
+                    // matrix result is not available yet.
+                    nCols = 1;
+                }
                 ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCols), 1);
                 if (pResMat)
                 {
@@ -4796,6 +4803,13 @@ void ScInterpreter::ScRow()
                 SCCOL nCols;
                 SCROW nRows;
                 pMyFormulaCell->GetMatColsRows( nCols, nRows);
+                if (nRows == 0)
+                {
+                    // Happens if called via ScViewFunc::EnterMatrix()
+                    // ScFormulaCell::GetResultDimensions() as of course a
+                    // matrix result is not available yet.
+                    nRows = 1;
+                }
                 ScMatrixRef pResMat = GetNewMat( 1, static_cast<SCSIZE>(nRows));
                 if (pResMat)
                 {
