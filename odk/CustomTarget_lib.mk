@@ -10,9 +10,10 @@
 $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/lib))
 
 define odk_lib
-odkcommon_ZIPLIST += lib/$(1)
-$(call gb_CustomTarget_get_target,odk/odkcommon/lib): $(odk_WORKDIR)/lib/$(1)
-$(odk_WORKDIR)/lib/$(1): $(call gb_Library_get_target,$(1))
+odkcommon_ZIPLIST += lib/$(notdir $(1))
+$(call gb_CustomTarget_get_target,odk/odkcommon/lib) : \
+	$(odk_WORKDIR)/lib/$(notdir $(1))
+$(odk_WORKDIR)/lib/$(notdir $(1)) : $(1)
 	mkdir -p $$(dir $$@)
 	$$(call gb_Output_announce,$$(subst $$(WORKDIR)/,,$$@),build,CPY,1)
 	cp $$< $$@
@@ -27,7 +28,7 @@ odk_LIBLIST := store \
 	cppuhelper \
 	purpenvhelper
 
-$(foreach lib,$(odk_LIBLIST),$(eval $(call odk_lib,$(lib))))
+$(foreach lib,$(odk_LIBLIST),$(eval $(call odk_lib,$(call gb_Library_get_target,$(lib)))))
 else ifeq ($(OS),LINUX)
 odkcommon_ZIPLIST += lib/libsalcpprt.a
 $(eval $(call gb_CustomTarget_register_target,odk/odkcommon/lib,libsalcpprt.a))
