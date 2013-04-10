@@ -162,7 +162,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		ln -sf $(notdir $(1)) $(basename $(1)).jnilib &&) \
 	$(if $(MACOSX_CODESIGNING_IDENTITY), \
 		$(if $(filter Executable,$(TARGETTYPE)), \
-			codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) $(1) &&)) \
+			codesign --timestamp=none --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) $(1) &&)) \
 	:)
 endef
 
