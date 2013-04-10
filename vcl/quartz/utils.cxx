@@ -72,7 +72,10 @@ std::ostream &operator <<(std::ostream& s, CGRect &rRect)
 #ifndef SAL_LOG_INFO
     (void) rRect;
 #else
-    s << rRect.size << "@" << rRect.origin;
+    if (CGRectIsNull(rRect))
+        s << "NULL";
+    else
+        s << rRect.size << "@" << rRect.origin;
 #endif
     return s;
 }
