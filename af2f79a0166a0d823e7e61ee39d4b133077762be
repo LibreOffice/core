@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///c4\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1930,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-10T21:24:20Z",
+      "side": 1,
+      "message": "I recommend against using type double for variables that are meant to be incremented one by one, due to the nature of how IEEE 754 values are stored and roundoff errors. Use either sal_uInt32, or in the unlikely case that would not be sufficient sal_uInt64 instead.\n\nAnd yes, ScFunctionData::nCount probably should be sal_uInt32 instead of long.\n\nThe declaration and initialization of a variable also should be as close as possible to the code where it is used first time. So, nhiddenCellCount should be moved just above the while(){} block below. And btw it should be nHiddenCellCount instead ;-)",
+      "revId": "af2f79a0166a0d823e7e61ee39d4b133077762be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///cs\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1948,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-10T21:24:20Z",
+      "side": 1,
+      "message": "Using all rows from nExStartRow to nExEndRow does not work for multi-selections. The ScMarkData rMark needs to be evaluated for the ranges of this column.",
+      "revId": "af2f79a0166a0d823e7e61ee39d4b133077762be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///cw\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1950,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-10T21:24:20Z",
+      "side": 1,
+      "message": "Instead of asking for every row whether it is hidden or not, it is much better performance-wise to ask for the boundaries where hidden/non-hidden changes, i.e. by using a ScFlatBoolRowSegments::RangeIterator and its getFirst() and getNext() methods. In the best case, which is also the usual case, where no rows are hidden you only need one call to determine that all rows within a given range are not hidden.",
+      "revId": "af2f79a0166a0d823e7e61ee39d4b133077762be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///c0\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1956,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-10T21:24:20Z",
+      "side": 1,
+      "message": "This entire while(){} block is unnecessarily executed if function is not SUBTOTAL_FUNC_SELECTION_COUNT",
+      "revId": "af2f79a0166a0d823e7e61ee39d4b133077762be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///co\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-10T21:24:20Z",
+      "side": 1,
+      "message": "Same remarks about double type as above.",
+      "revId": "af2f79a0166a0d823e7e61ee39d4b133077762be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///cg\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1985,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-10T21:24:20Z",
+      "side": 1,
+      "message": "Above comment about using ScFlatBoolRowSegments::RangeIterator instead applies also here.",
+      "revId": "af2f79a0166a0d823e7e61ee39d4b133077762be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///ck\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1991,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-10T21:24:20Z",
+      "side": 1,
+      "message": "Also here, this entire while(){} block is unnecessarily executed if function is not SUBTOTAL_FUNC_SELECTION_COUNT",
+      "revId": "af2f79a0166a0d823e7e61ee39d4b133077762be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///cc\u003d",
+        "filename": "sc/source/filter/xml/XMLConverter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-10T21:24:20Z",
+      "side": 1,
+      "message": "But it still needs a break; statement to end the case ;-)",
+      "revId": "af2f79a0166a0d823e7e61ee39d4b133077762be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
