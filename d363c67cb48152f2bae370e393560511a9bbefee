@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///g8\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-04-10T08:46:37Z",
+      "side": 1,
+      "message": "Just for the future: \"improve linear search\" would be better.",
+      "revId": "d363c67cb48152f2bae370e393560511a9bbefee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///gg\u003d",
+        "filename": "vcl/source/gdi/print.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-04-10T08:46:37Z",
+      "side": 1,
+      "message": "This is probably something we no longer have to fix, since LO no longer runs on Win95. ;-)",
+      "revId": "d363c67cb48152f2bae370e393560511a9bbefee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
