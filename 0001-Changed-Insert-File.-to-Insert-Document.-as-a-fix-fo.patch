@@ -1,0 +1,41 @@
+From f3b05d61fb02877aac4ea7a8268b16457c234775 Mon Sep 17 00:00:00 2001
+From: kesha <kesha@kesha-VPCEH38FN.(none)>
+Date: Wed, 10 Apr 2013 13:48:01 +0530
+Subject: [PATCH] Changed Insert->File... to Insert->Document... as a fix for
+ bug 62097
+
+Change-Id: Ib8b6df1b76d7a1d9139c0fa96676b686a72e2547
+---
+ .../org/openoffice/Office/UI/GenericCommands.xcu   |    2 +-
+ scripting/workben/bindings/drawmenubar.xml         |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu b/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu
+index 925d513..4251ce6 100644
+--- a/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu
++++ b/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu
+@@ -2220,7 +2220,7 @@
+             </node>
+             <node oor:name=".uno:InsertDoc" oor:op="replace">
+                 <prop oor:name="Label" oor:type="xs:string">
+-                    <value xml:lang="en-US">~File...</value>
++                    <value xml:lang="en-US">~Document...</value>
+                 </prop>
+                 <prop oor:name="Properties" oor:type="xs:int">
+                     <value>1</value>
+diff --git a/scripting/workben/bindings/drawmenubar.xml b/scripting/workben/bindings/drawmenubar.xml
+index 4f0d1e9..fa05dbf 100644
+--- a/scripting/workben/bindings/drawmenubar.xml
++++ b/scripting/workben/bindings/drawmenubar.xml
+@@ -197,7 +197,7 @@
+    <menu:menuitem menu:id="slot:10140" menu:helpid="10140" menu:label="Chart"/>
+    <menu:menuitem menu:id="slot:5563" menu:helpid="5563" menu:label="Float~ing Frame..."/>
+    <menu:menuseparator/>
+-   <menu:menuitem menu:id="slot:27015" menu:helpid="27015" menu:label="~File..."/>
++   <menu:menuitem menu:id="slot:27015" menu:helpid="27015" menu:label="~Drawing File..."/>
+   </menu:menupopup>
+  </menu:menu>
+  <menu:menu menu:id="slot:22" menu:label="F~ormat">
+-- 
+1.7.9.5
+
