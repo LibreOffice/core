@@ -48,7 +48,7 @@ ContextPanel::~ContextPanel (void)
 
 
 
-sal_Int32 ContextPanel::GetPreferredHeight (sal_Int32 nWidth)
+sal_Int32 ContextPanel::GetPreferredHeight (sal_Int32 /* nWidth */)
 {
     const sal_Int32 nHeight (maContextName.GetPosPixel().Y() + maContextName.GetSizePixel().Height() + 5);
     return nHeight;
