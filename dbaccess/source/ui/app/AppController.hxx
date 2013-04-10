@@ -121,8 +121,7 @@ namespace dbaui
         OTableCopyHelper        m_aTableCopyHelper;
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
-        sal_uLong                   m_nAsyncDrop;
-        OAsyncronousLink        m_aControllerConnectedEvent;
+        sal_uLong               m_nAsyncDrop;
         OAsyncronousLink        m_aSelectContainerEvent;
         PreviewMode             m_ePreviewMode;             // the mode of the preview
         ElementType             m_eCurrentType;
@@ -458,6 +457,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getActiveConnection() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > SAL_CALL getSubComponents() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
+        // DO NOT CALL with getMutex() held!!
         virtual void SAL_CALL connect(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::beans::Pair< ::sal_Int32, OUString > SAL_CALL identifySubComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& SubComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL closeSubComponents(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -480,6 +480,8 @@ namespace dbaui
 
             If an error occurs, then this is either stored in the location pointed to by <arg>_pErrorInfo</arg>,
             or, if <code>_pErrorInfo</code> is <NULL/>, then the error is displayed to the user.
+
+            DO NOT CALL with getMutex() held!!
         */
         const SharedConnection& ensureConnection( ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL );
 
@@ -541,7 +543,7 @@ namespace dbaui
         DECL_LINK( OnAsyncDrop, void* );
         DECL_LINK( OnCreateWithPilot, void* );
         DECL_LINK( OnSelectContainer, void* );
-        DECL_LINK( OnFirstControllerConnected, void* );
+        void OnFirstControllerConnected();
 
     protected:
         using OApplicationController_CBASE::connect;
