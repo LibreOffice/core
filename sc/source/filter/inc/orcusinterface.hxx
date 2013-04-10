@@ -59,6 +59,11 @@ public:
 
     // Orcus import interface
     virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n);
+    virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex);
+    virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value);
+    virtual void set_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, bool value);
+    virtual void set_date(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n);
+
     virtual void set_format(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t xf_index);
 
     virtual void set_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n);
@@ -81,10 +86,6 @@ public:
     virtual void set_array_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar,
         const char* p, size_t n, const char* p_range, size_t n_range);
-
-    virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex);
-    virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value);
-    virtual void set_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, bool value);
 
     SCTAB getIndex() const { return mnTab; }
 };

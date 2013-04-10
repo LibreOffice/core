@@ -128,6 +128,31 @@ void ScOrcusSheet::set_auto(row_t row, col_t col, const char* p, size_t n)
     mrDoc.SetString(col, row, mnTab, aVal);
 }
 
+void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
+{
+    // We need to defer string cells since the shared string pool is not yet
+    // populated at the time this method is called.  Orcus imports string
+    // table after the cells get imported.  We won't need to do this once we
+    // implement true shared strings in Calc core.
+
+    mrFactory.pushStringCell(ScAddress(col, row, mnTab), sindex);
+}
+
+void ScOrcusSheet::set_value(row_t row, col_t col, double value)
+{
+    mrDoc.SetValue( col, row, mnTab, value );
+}
+
+void ScOrcusSheet::set_bool(row_t row, col_t col, bool value)
+{
+    mrDoc.SetValue(col, row, mnTab, value ? 1.0 : 0.0);
+}
+
+void ScOrcusSheet::set_date(row_t row, col_t col, const char* p, size_t n)
+{
+    set_auto(row, col, p, n);
+}
+
 void ScOrcusSheet::set_format(row_t /*row*/, col_t /*col*/, size_t /*xf_index*/)
 {
 }
@@ -238,26 +263,6 @@ void ScOrcusSheet::set_array_formula(
     row_t /*row*/, col_t /*col*/, formula_grammar_t /*grammar*/,
     const char* /*p*/, size_t /*n*/, const char* /*p_range*/, size_t /*n_range*/)
 {
-}
-
-void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
-{
-    // We need to defer string cells since the shared string pool is not yet
-    // populated at the time this method is called.  Orcus imports string
-    // table after the cells get imported.  We won't need to do this once we
-    // implement true shared strings in Calc core.
-
-    mrFactory.pushStringCell(ScAddress(col, row, mnTab), sindex);
-}
-
-void ScOrcusSheet::set_value(row_t row, col_t col, double value)
-{
-    mrDoc.SetValue( col, row, mnTab, value );
-}
-
-void ScOrcusSheet::set_bool(row_t row, col_t col, bool value)
-{
-    mrDoc.SetValue(col, row, mnTab, value ? 1.0 : 0.0);
 }
 
 ScOrcusSharedStrings::ScOrcusSharedStrings(ScOrcusFactory& rFactory) :
