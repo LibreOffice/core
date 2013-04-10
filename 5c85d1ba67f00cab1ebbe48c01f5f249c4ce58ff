@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///iE\u003d",
+        "filename": "extras/Package_database.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-10T03:32:01Z",
+      "side": 1,
+      "message": "The correct destination directory is presets/database .",
+      "revId": "5c85d1ba67f00cab1ebbe48c01f5f249c4ce58ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
