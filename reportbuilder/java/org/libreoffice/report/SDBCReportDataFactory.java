@@ -254,7 +254,15 @@ public class SDBCReportDataFactory implements DataSourceFactory
                             try
                             {
                                 column = UnoRuntime.queryInterface(XPropertySet.class, columns.getByName(expression));
-                                expression = quote + column.getPropertyValue("TableName") + quote + "." + quote + expression + quote;
+                                String prefix;
+                                prefix = (String)column.getPropertyValue("TableName");
+                                if (prefix == null)
+                                    prefix = "";
+                                if (!prefix.isEmpty())
+                                {
+                                    prefix = quote + prefix + quote + ".";
+                                }
+                                expression = prefix + quote + expression + quote;
                             }
                             catch (Exception ex)
                             {
