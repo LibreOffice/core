@@ -23,6 +23,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 		CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols $(subst ;, -L,$(ILIB))" \
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
+		$(if $(and $(filter YES,$(SYSTEM_LIBXML)),$(filter GCC,$(COM))),PATH="$(MINGW_SYSROOT)/bin:$$PATH") \
 		./configure --disable-static --enable-shared --disable-gtk-doc \
 			--enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
 			--with-www=xml \
