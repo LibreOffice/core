@@ -278,7 +278,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XColorList* pColTab = new XColorList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
                         pColTab->SetName( aURL.getName() );
                         if( pColTab->Load() )
                         {

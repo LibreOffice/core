@@ -41,7 +41,7 @@ public:
     ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper );
     virtual ~ViewElementListProvider();
 
-    XColorTable*    GetColorTable() const;
+    XColorList*    GetColorTable() const;
     XDashList*      GetDashList() const;
     XLineEndList*   GetLineEndList() const;
     XGradientList*  GetGradientList() const;

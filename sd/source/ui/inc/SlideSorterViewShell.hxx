@@ -115,6 +115,7 @@ public:
     virtual void ArrangeGUIElements (void);
 
     virtual void Activate (sal_Bool IsMDIActivate);
+    virtual void Deactivate (sal_Bool IsMDIActivate);
 
     //===== Drag and Drop =====================================================
 

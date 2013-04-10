@@ -97,8 +97,6 @@ SdrObjGroup::SdrObjGroup()
     pSub->SetOwnerObj(this);
     pSub->SetListKind(SDROBJLIST_GROUPOBJ);
     bRefPoint=sal_False;
-    nDrehWink=0;
-    nShearWink=0;
     bClosedObj=sal_False;
 }
 
@@ -308,8 +306,6 @@ void SdrObjGroup::operator=(const SdrObject& rObj)
         pSub->CopyObjects(*rObj.GetSubList());
 
         // copy local paremeters
-        nDrehWink  =((SdrObjGroup&)rObj).nDrehWink;
-        nShearWink =((SdrObjGroup&)rObj).nShearWink;
         aRefPoint  =((SdrObjGroup&)rObj).aRefPoint;
         bRefPoint  =((SdrObjGroup&)rObj).bRefPoint;
     }
@@ -388,13 +384,33 @@ FASTBOOL SdrObjGroup::BegCreate(SdrDragStat& /*rStat*/)
 
 long SdrObjGroup::GetRotateAngle() const
 {
-    return nDrehWink;
+    const sal_uInt32 nObjCount(pSub->GetObjCount());
+    long nRetval(0);
+
+    if(nObjCount)
+    {
+        SdrObject* pObj = pSub->GetObj(0);
+
+        nRetval = pObj->GetRotateAngle();
+    }
+
+    return nRetval;
 }
 
 
 long SdrObjGroup::GetShearAngle(FASTBOOL /*bVertical*/) const
 {
-    return nShearWink;
+    const sal_uInt32 nObjCount(pSub->GetObjCount());
+    long nRetval(0);
+
+    if(nObjCount)
+    {
+        SdrObject* pObj = pSub->GetObj(0);
+
+        nRetval = pObj->GetShearAngle();
+    }
+
+    return nRetval;
 }
 
 
@@ -476,7 +492,6 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 void SdrObjGroup::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
     SetGlueReallyAbsolute(sal_True);
-    nDrehWink=NormAngle360(nDrehWink+nWink);
     RotatePoint(aRefPoint,rRef,sn,cs);
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
@@ -507,7 +522,6 @@ void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 void SdrObjGroup::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
     SetGlueReallyAbsolute(sal_True);
-    nShearWink+=nWink;
     ShearPoint(aRefPoint,rRef,tn);
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
@@ -647,7 +661,6 @@ void SdrObjGroup::Rotate(const Point& rRef, long nWink, double sn, double cs)
     if (nWink!=0) {
         SetGlueReallyAbsolute(sal_True);
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        nDrehWink=NormAngle360(nDrehWink+nWink);
         RotatePoint(aRefPoint,rRef,sn,cs);
         // #32383# Erst die Verbinder verschieben, dann den Rest
         SdrObjList* pOL=pSub;
@@ -700,7 +713,6 @@ void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShe
     if (nWink!=0) {
         SetGlueReallyAbsolute(sal_True);
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        nShearWink+=nWink;
         ShearPoint(aRefPoint,rRef,tn);
         // #32383# Erst die Verbinder verschieben, dann den Rest
         SdrObjList* pOL=pSub;

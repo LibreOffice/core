@@ -24,26 +24,12 @@
 #define _XATTR_HXX
 
 // include ---------------------------------------------------------------
-
-#ifndef _XDEF_HXX
-//#include <svx/xdef.hxx>
-#endif
-#ifndef _XENUM_HXX
-//#include <svx/xenum.hxx>
-#endif
-#ifndef _XPOLY_HXX
-//#include <svx/xpoly.hxx>
-#endif
-#ifndef _SVX_RECTENUM_HXX
-//#include <svx/rectenum.hxx>
-#endif
-
-class XColorTable;
-class XDashTable;
-class XLineEndTable;
-class XHatchTable;
-class XBitmapTable;
-class XGradientTable;
+class XColorList;
+class XDashList;
+class XLineEndList;
+class XHatchList;
+class XBitmapList;
+class XGradientList;
 
 #include <svx/xit.hxx>
 #include <svx/xcolit.hxx>

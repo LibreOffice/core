@@ -27,16 +27,17 @@
 #include <svl/eitem.hxx>
 #include <svx/xenum.hxx>
 #include "svx/svxdllapi.h"
+#include <com/sun/star/drawing/LineJoint.hpp>
 
 //---------------------
-// class LineStyleItem
+// class XLineJointItem
 //---------------------
 
 class SVX_DLLPUBLIC XLineJointItem : public SfxEnumItem
 {
 public:
                             TYPEINFO();
-                            XLineJointItem( XLineJoint eLineJoint = XLINEJOINT_ROUND );
+                            XLineJointItem( com::sun::star::drawing::LineJoint eLineJoint = com::sun::star::drawing::LineJoint_ROUND );
                             XLineJointItem( SvStream& rIn );
 
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const;
@@ -49,8 +50,8 @@ public:
                                     SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual sal_uInt16          GetValueCount() const;
-    XLineJoint              GetValue() const { return (XLineJoint) SfxEnumItem::GetValue(); }
+    virtual sal_uInt16                 GetValueCount() const;
+    com::sun::star::drawing::LineJoint GetValue() const { return (com::sun::star::drawing::LineJoint) SfxEnumItem::GetValue(); }
 };
 
 #endif // _SVX_XLINJOIT_HXX

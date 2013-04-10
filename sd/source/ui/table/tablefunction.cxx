@@ -206,7 +206,7 @@ SfxViewShell* pViewShell = GetViewShell();
         {
             // Make the slide transition panel visible (expand it) in the
             // tool pane.
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestSidebarPanel(
                 framework::FrameworkHelper::msTableDesignPanelURL);
         }
 

@@ -108,6 +108,7 @@
 #define TextFont
 #define DropCap
 #include <sfx2/msg.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <swslots.hxx>
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
@@ -1027,6 +1028,7 @@ SwTextShell::SwTextShell(SwView &_rView) :
 {
     SetName(String::CreateFromAscii("Text"));
     SetHelpId(SW_TEXTSHELL);
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Text));
 }
 
 /*--------------------------------------------------------------------
@@ -1214,5 +1216,3 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         }
     }
 }
-
-

@@ -39,8 +39,8 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorTable*        pColorTab;
-    XColorTable*        mpNewColorTab;
+    XColorList*        pColorTab;
+    XColorList*        mpNewColorTab;
     XDashList*          pDashList;
     XDashList*          pNewDashList;
     XLineEndList*       pLineEndList;
@@ -84,9 +84,9 @@ public:
     XLineEndList*       GetNewLineEndList() const { return pNewLineEndList; }
     const XLineEndList* GetLineEndList() const { return pLineEndList; }
 
-    void                SetNewColorTable( XColorTable* pColTab ) { mpNewColorTab = pColTab; }
-    XColorTable*        GetNewColorTable() const { return mpNewColorTab; }
-    const XColorTable*  GetColorTable() const { return pColorTab; }
+    void                SetNewColorTable( XColorList* pColTab ) { mpNewColorTab = pColTab; }
+    XColorList*        GetNewColorTable() const { return mpNewColorTab; }
+    const XColorList*  GetColorTable() const { return pColorTab; }
 };
 
 /*************************************************************************
@@ -166,7 +166,7 @@ private:
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
-    XColorTable*        pColorTab;
+    XColorList*        pColorTab;
     XDashList*          pDashList;
     XLineEndList*       pLineEndList;
 
@@ -231,7 +231,7 @@ public:
 
     virtual void FillUserData();
 
-    void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
+    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
     void    SetDashList( XDashList* pDshLst ) { pDashList = pDshLst; }
     void    SetLineEndList( XLineEndList* pLneEndLst) { pLineEndList = pLneEndLst; }
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }

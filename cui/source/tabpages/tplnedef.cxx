@@ -626,8 +626,8 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
             long nDashCount = pDashList->Count();
             pDashList->Insert( pEntry, nDashCount );
-            Bitmap* pBitmap = pDashList->GetBitmap( nDashCount );
-            aLbLineStyles.Append( pEntry, pBitmap );
+            const Bitmap aBitmap = pDashList->GetUiBitmap( nDashCount );
+            aLbLineStyles.Append( pEntry, &aBitmap );
 
             aLbLineStyles.SelectEntryPos( aLbLineStyles.GetEntryCount() - 1 );
 
@@ -707,8 +707,8 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
                 XDashEntry* pEntry = new XDashEntry( aDash, aName );
 
                 delete pDashList->Replace( pEntry, nPos );
-                Bitmap* pBitmap = pDashList->GetBitmap( nPos );
-                aLbLineStyles.Modify( pEntry, nPos, pBitmap );
+                const Bitmap aBitmap = pDashList->GetUiBitmap( nPos );
+                aLbLineStyles.Modify( pEntry, nPos, &aBitmap );
 
                 aLbLineStyles.SelectEntryPos( nPos );
 

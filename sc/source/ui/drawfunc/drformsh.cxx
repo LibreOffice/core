@@ -50,6 +50,7 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/svdobj.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 
 #define ScDrawFormShell
 #include "scslots.hxx"
@@ -69,11 +70,9 @@ ScDrawFormShell::ScDrawFormShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_DRAWFORMSH);
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DrawForm")));
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Form));
 }
 
 ScDrawFormShell::~ScDrawFormShell()
 {
 }
-
-
-

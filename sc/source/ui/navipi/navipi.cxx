@@ -576,7 +576,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
                                     SfxChildWinInfo* /* pInfo */ ) :
         SfxChildWindowContext( nId )
 {
-    pNavigator = new ScNavigatorDlg( pBind, this, pParent );
+    pNavigator = new ScNavigatorDlg( pBind, this, pParent, true );
     SetWindow( pNavigator );
 
     //  Einstellungen muessen anderswo gemerkt werden,
@@ -652,7 +652,8 @@ void __EXPORT ScNavigatorDialogWrapper::Resizing( Size& rSize )
 #define REGISTER_SLOT(i,id) \
     ppBoundItems[i]=new ScNavigatorControllerItem(id,*this,rBindings);
 
-ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent ) :
+ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent,
+    const bool bUseStyleSettingsBackground) :
         Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
         rBindings   ( *pB ),                                // is used in CommandToolBox ctor
         aCmdImageList( ScResId( IL_CMD ) ),
@@ -678,7 +679,8 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         nCurCol     ( 0 ),
         nCurRow     ( 0 ),
         nCurTab     ( 0 ),
-        bFirstBig   ( sal_False )
+        bFirstBig   ( sal_False ),
+        mbUseStyleSettingsBackground(bUseStyleSettingsBackground)
 {
     ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
     nDropMode = rCfg.GetDragMode();
@@ -767,6 +769,16 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     aLbEntries.SetAccessibleRelationLabeledBy(&aLbEntries);
     aTbxCmd.SetAccessibleRelationLabeledBy(&aTbxCmd);
     aLbDocuments.SetAccessibleName(aStrActiveWin);
+
+    if (pContextWin == NULL)
+    {
+        // When the context window is missing then the navigator is
+        // displayed in the sidebar and has the whole deck to fill.
+        // Therefore hide the button that hides all controls below the
+        // top two rows of buttons.
+        aTbxCmd.Select(IID_ZOOMOUT);
+        aTbxCmd.RemoveItem(aTbxCmd.GetItemPos(IID_ZOOMOUT));
+    }
 }
 
 //------------------------------------------------------------------------
@@ -790,7 +802,7 @@ __EXPORT ScNavigatorDlg::~ScNavigatorDlg()
 
 void __EXPORT ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
 {
-    FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
+    FloatingWindow* pFloat = pContextWin!=NULL ? pContextWin->GetFloatingWindow() : NULL;
     if ( pFloat )
     {
         Size aMinOut = pFloat->GetMinOutputSizePixel();
@@ -814,13 +826,21 @@ void __EXPORT ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
 
 void ScNavigatorDlg::Paint( const Rectangle& rRec )
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetFaceColor();
-    Wallpaper aBack( aBgColor );
+    if (mbUseStyleSettingsBackground)
+    {
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        Color aBgColor = rStyleSettings.GetFaceColor();
+        Wallpaper aBack( aBgColor );
 
-    SetBackground( aBack );
-    aFtCol.SetBackground( aBack );
-    aFtRow.SetBackground( aBack );
+        SetBackground( aBack );
+        aFtCol.SetBackground( aBack );
+        aFtRow.SetBackground( aBack );
+    }
+    else
+    {
+        aFtCol.SetBackground(Wallpaper());
+        aFtRow.SetBackground(Wallpaper());
+    }
 
     Window::Paint( rRec );
 }
@@ -897,9 +917,12 @@ void ScNavigatorDlg::DoResize()
     //@@ 03.11.97 end
 
     sal_Bool bListMode = (eListMode != NAV_LMODE_NONE);
-    FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
-    if ( pFloat && bListMode )
-        nListModeHeight = nTotalHeight;
+    if (pContextWin != NULL)
+    {
+        FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
+        if ( pFloat && bListMode )
+            nListModeHeight = nTotalHeight;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -1233,7 +1256,7 @@ void ScNavigatorDlg::SetListMode( NavListMode eMode, sal_Bool bSetSize )
 
 void ScNavigatorDlg::ShowList( sal_Bool bShow, sal_Bool bSetSize )
 {
-    FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
+    FloatingWindow* pFloat = pContextWin!=NULL ? pContextWin->GetFloatingWindow() : NULL;
     Size aSize = GetParent()->GetOutputSizePixel();
 
     if ( bShow )
@@ -1267,10 +1290,13 @@ void ScNavigatorDlg::ShowList( sal_Bool bShow, sal_Bool bSetSize )
     }
     else
     {
-        SfxNavigator* pNav = (SfxNavigator*)GetParent();
-        Size aFloating = pNav->GetFloatingSize();
-        aFloating.Height() = aSize.Height();
-        pNav->SetFloatingSize( aFloating );
+        SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(GetParent());
+        if (pNav != NULL)
+        {
+            Size aFloating = pNav->GetFloatingSize();
+            aFloating.Height() = aSize.Height();
+            pNav->SetFloatingSize( aFloating );
+        }
     }
 }
 
@@ -1278,7 +1304,7 @@ void ScNavigatorDlg::ShowList( sal_Bool bShow, sal_Bool bSetSize )
 
 void ScNavigatorDlg::ShowScenarios( sal_Bool bShow, sal_Bool bSetSize )
 {
-    FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
+    FloatingWindow* pFloat = pContextWin!=NULL ? pContextWin->GetFloatingWindow() : NULL;
     Size aSize = GetParent()->GetOutputSizePixel();
 
     if ( bShow )

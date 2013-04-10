@@ -116,6 +116,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/services/backingcomp \
     framework/source/services/backingwindow \
     framework/source/services/desktop \
+    framework/source/services/ContextChangeEventMultiplexer \
     framework/source/services/frame \
     framework/source/services/modelwinservice \
     framework/source/services/modulemanager \

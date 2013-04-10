@@ -125,7 +125,7 @@ SfxTemplateDialog::SfxTemplateDialog
 */
     : SfxDockingWindow( pBind, pCW, pParent, SfxResId(DLG_STYLE_DESIGNER) ),
 
-    pImpl( new SfxTemplateDialog_Impl( pParent, pBind, this ) )
+    pImpl( new SfxTemplateDialog_Impl( pBind, this ) )
 
 {
     pImpl->updateNonFamilyImages();
@@ -404,6 +404,135 @@ void SfxTemplateDialogWrapper::SetParagraphFamily()
     // forward to SfxTemplateDialog, because SfxTemplateDialog isn't exported
     static_cast< SfxTemplateDialog* >( GetWindow() )->SetParagraphFamily();
 }
+
+
+
+//===== SfxTemplatePanelControl ===============================================
+
+SfxTemplatePanelControl::SfxTemplatePanelControl (
+    SfxBindings* pBindings,
+    Window* pParentWindow)
+    : DockingWindow(pParentWindow, SfxResId(DLG_STYLE_DESIGNER) ),
+      pImpl(new SfxTemplateDialog_Impl(pBindings, this)),
+      mpBindings(pBindings)
+{
+    OSL_ASSERT(mpBindings!=NULL);
+
+    pImpl->updateNonFamilyImages();
+}
+
+
+
+
+SfxTemplatePanelControl::~SfxTemplatePanelControl (void)
+{
+    delete pImpl;
+}
+
+
+
+
+ISfxTemplateCommon* SfxTemplatePanelControl::GetISfxTemplateCommon()
+{
+    return pImpl->GetISfxTemplateCommon();
+}
+
+
+
+
+void SfxTemplatePanelControl::SetParagraphFamily()
+{
+    // first select the paragraph family
+    pImpl->FamilySelect( SFX_STYLE_FAMILY_PARA );
+    // then select the automatic filter
+    pImpl->SetAutomaticFilter();
+}
+
+
+
+
+void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
+{
+    if ( ( DATACHANGED_SETTINGS == _rDCEvt.GetType() ) &&
+         ( 0 != ( SETTINGS_STYLE & _rDCEvt.GetFlags() ) ) )
+    {
+        pImpl->updateFamilyImages();
+        pImpl->updateNonFamilyImages();
+    }
+
+    DockingWindow::DataChanged( _rDCEvt );
+}
+
+
+
+
+void SfxTemplatePanelControl::Update()
+{
+    pImpl->Update();
+}
+
+
+
+
+void SfxTemplatePanelControl::Resize()
+{
+    if(pImpl)
+        pImpl->Resize();
+    DockingWindow::Resize();
+}
+
+
+void SfxTemplatePanelControl::FreeResource (void)
+{
+    DockingWindow::FreeResource();
+}
+
+
+SfxChildAlignment SfxTemplatePanelControl::CheckAlignment(SfxChildAlignment eActAlign,SfxChildAlignment eAlign)
+{
+    switch (eAlign)
+    {
+        case SFX_ALIGN_TOP:
+        case SFX_ALIGN_HIGHESTTOP:
+        case SFX_ALIGN_LOWESTTOP:
+        case SFX_ALIGN_BOTTOM:
+        case SFX_ALIGN_LOWESTBOTTOM:
+        case SFX_ALIGN_HIGHESTBOTTOM:
+            return eActAlign;
+
+        case SFX_ALIGN_LEFT:
+        case SFX_ALIGN_RIGHT:
+        case SFX_ALIGN_FIRSTLEFT:
+        case SFX_ALIGN_LASTLEFT:
+        case SFX_ALIGN_FIRSTRIGHT:
+        case SFX_ALIGN_LASTRIGHT:
+            return eAlign;
+
+        default:
+            return eAlign;
+    }
+}
+
+
+void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
+{
+    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        SfxViewFrame *pFrame = mpBindings->GetDispatcher_Impl()->GetFrame();
+        Window* pEditWin = pFrame->GetViewShell()->GetWindow();
+
+        Size aSize = pEditWin->GetSizePixel();
+        Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
+        aPoint = GetParent()->ScreenToOutputPixel( aPoint );
+        Size aWinSize = GetSizePixel();
+        aPoint.X() += aSize.Width() - aWinSize.Width() - 20;
+        aPoint.Y() += aSize.Height() / 2 - aWinSize.Height() / 2;
+        //      SetFloatingPos( aPoint );
+    }
+
+    DockingWindow::StateChanged( nStateChange );
+}
+
 
 //=========================================================================
 SV_DECL_PTRARR_DEL(ExpandedEntries, StringPtr,16,8)
@@ -740,7 +869,7 @@ SvLBoxEntry* FillBox_Impl(SvTreeListBox *pBox,
 
 // Konstruktor
 
-SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, SfxDockingWindow* pW ) :
+SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window* pW, bool ) :
 
     aISfxTemplateCommon     ( this ),
     pBindings               ( pB ),
@@ -788,7 +917,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
 
 //-------------------------------------------------------------------------
 
-SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, ModalDialog* pW ) :
+SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window* pW ) :
 
     aISfxTemplateCommon     ( this ),
     pBindings               ( pB ),
@@ -2321,10 +2450,11 @@ PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu( void )
 
 // ------------------------------------------------------------------------
 
-SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
-    Window* /*pParent*/, SfxBindings* pB, SfxTemplateDialog* pDlgWindow ) :
 
-    SfxCommonTemplateDialog_Impl( pB, pDlgWindow ),
+SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
+    SfxBindings* pB, SfxTemplateDialog* pDlgWindow ) :
+
+    SfxCommonTemplateDialog_Impl( pB, pDlgWindow, true ),
 
     m_pFloat            ( pDlgWindow ),
     m_bZoomIn           ( sal_False ),
@@ -2333,7 +2463,23 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
 
 {
     pDlgWindow->FreeResource();
+    Initialize();
+}
 
+SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
+    SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow )
+    : SfxCommonTemplateDialog_Impl( pB, pDlgWindow, true ),
+      m_pFloat          ( pDlgWindow ),
+      m_bZoomIn         ( sal_False ),
+      m_aActionTbL        ( pDlgWindow, this ),
+      m_aActionTbR      ( pDlgWindow, SfxResId( TB_ACTION ) )
+{
+    pDlgWindow->FreeResource();
+    Initialize();
+}
+
+void SfxTemplateDialog_Impl::Initialize (void)
+{
     // Read the filter stored in the configuration
     // This is already done in ReadResource(), invoked by Initialize()
     // and stored in nActFilter, but we can't rely on nActFilter's value
@@ -2343,7 +2489,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     const sal_uInt16 nConfigFilter = pCurObjShell ?
         static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) ) : 0;
 
-    Initialize();
+    SfxCommonTemplateDialog_Impl::Initialize();
 
     m_aActionTbL.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxLSelect));
     m_aActionTbR.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRSelect));
@@ -2405,7 +2551,11 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
         return;
 
     // let the families collection update the images
-    sal_Bool bIsHighContrast = m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode();
+    sal_Bool bIsHighContrast;
+    if (m_pFloat != NULL)
+        bIsHighContrast = m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode();
+    else
+        bIsHighContrast = false;
     pStyleFamilies->updateImages( *m_pStyleFamiliesId, bIsHighContrast ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL );
 
     // and set the new images on our toolbox
@@ -2421,8 +2571,9 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
 // ------------------------------------------------------------------------
 void SfxTemplateDialog_Impl::updateNonFamilyImages()
 {
-    m_aActionTbR.SetImageList( ImageList( SfxResId(
-        m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_LST_STYLE_DESIGNER_HC
+    if (m_pFloat != NULL)
+        m_aActionTbR.SetImageList( ImageList( SfxResId(
+                    m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_LST_STYLE_DESIGNER_HC
                                                              : DLG_STYLE_DESIGNER ) ) );
 }
 
@@ -2477,7 +2628,8 @@ void SfxTemplateDialog_Impl::LoadedFamilies()
 // Die Groesse der Listboxen wird angepasst
 void SfxTemplateDialog_Impl::Resize()
 {
-    FloatingWindow *pF = m_pFloat->GetFloatingWindow();
+    SfxDockingWindow* pDockingWindow = dynamic_cast<SfxDockingWindow*>(m_pFloat);
+    FloatingWindow *pF = pDockingWindow!=NULL ? pDockingWindow->GetFloatingWindow() : NULL;
     if ( pF )
     {
 //      if(pF->IsZoomedIn() && m_bZoomIn==sal_False)
@@ -2489,6 +2641,8 @@ void SfxTemplateDialog_Impl::Resize()
             return;
     }
 
+    if (m_pFloat == NULL)
+        return;
     Size aDlgSize=m_pFloat->PixelToLogic(m_pFloat->GetOutputSizePixel());
     Size aSizeATL=m_pFloat->PixelToLogic(m_aActionTbL.CalcWindowSizePixel());
     Size aSizeATR=m_pFloat->PixelToLogic(m_aActionTbR.CalcWindowSizePixel());
@@ -2551,23 +2705,29 @@ void SfxTemplateDialog_Impl::Resize()
 
 Size SfxTemplateDialog_Impl::GetMinOutputSizePixel()
 {
-    Size aSizeATL=m_pFloat->PixelToLogic(m_aActionTbL.CalcWindowSizePixel());
-    Size aSizeATR=m_pFloat->PixelToLogic(m_aActionTbR.CalcWindowSizePixel());
-    Size aMinSize=Size(
-        aSizeATL.Width()+aSizeATR.Width()+
-        2*SFX_TEMPLDLG_HFRAME + SFX_TEMPLDLG_MIDHSPACE,
-        4*aSizeATL.Height()+2*SFX_TEMPLDLG_MIDVSPACE);
-    return aMinSize;
+    if (m_pFloat != NULL)
+    {
+        Size aSizeATL=m_pFloat->PixelToLogic(m_aActionTbL.CalcWindowSizePixel());
+        Size aSizeATR=m_pFloat->PixelToLogic(m_aActionTbR.CalcWindowSizePixel());
+        Size aMinSize=Size(
+            aSizeATL.Width()+aSizeATR.Width()+
+                2*SFX_TEMPLDLG_HFRAME + SFX_TEMPLDLG_MIDHSPACE,
+            4*aSizeATL.Height()+2*SFX_TEMPLDLG_MIDVSPACE);
+        return aMinSize;
+    }
+    else
+        return Size(0,0);
 }
 
 //-------------------------------------------------------------------------
 
 void SfxTemplateDialog_Impl::Command( const CommandEvent& rCEvt )
 {
-    if(COMMAND_CONTEXTMENU  == rCEvt.GetCommand())
-        ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), m_pFloat );
-    else
-        m_pFloat->Command(rCEvt);
+    if (m_pFloat != NULL)
+        if(COMMAND_CONTEXTMENU  == rCEvt.GetCommand())
+            ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), m_pFloat );
+        else
+            m_pFloat->Command(rCEvt);
 }
 
 //-------------------------------------------------------------------------

@@ -51,6 +51,7 @@
 #include <sfx2/mnumgr.hxx>
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
+#include <sfx2/sidebar/ContextChangeBroadcaster.hxx>
 
 //====================================================================
 
@@ -86,6 +87,8 @@ struct SfxShell_Impl: public SfxBroadcaster
     svtools::AsynchronLink*     pUpdater;
     SfxVerbSlotArr_Impl         aSlotArr;
     com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aVerbList;
+    ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
+
     SfxShell_Impl()  : pExecuter( 0 ), pUpdater( 0 ) {}
     ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
 };
@@ -189,6 +192,8 @@ SfxShell::~SfxShell()
 
 {
     DBG_DTOR(SfxShell, 0);
+
+
     delete pImp;
 }
 
@@ -764,6 +769,9 @@ void SfxShell::Activate
 */
 
 {
+    SfxViewFrame* pViewFrame = GetFrame();
+    if (pViewFrame != NULL)
+        pImp->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
 }
 
 //--------------------------------------------------------------------
@@ -797,6 +805,9 @@ void SfxShell::Deactivate
 */
 
 {
+    SfxViewFrame* pViewFrame = GetFrame();
+    if (pViewFrame != NULL)
+        pImp->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
 }
 
 void SfxShell::ParentActivate
@@ -1273,6 +1284,11 @@ SfxItemSet* SfxShell::CreateItemSet( sal_uInt16 )
 
 void SfxShell::ApplyItemSet( sal_uInt16, const SfxItemSet& )
 {
+}
+
+void SfxShell::SetContextName (const ::rtl::OUString& rsContextName)
+{
+    pImp->maContextChangeBroadcaster.Initialize(rsContextName);
 }
 
 void SfxShell::SetViewShell_Impl( SfxViewShell* pView )

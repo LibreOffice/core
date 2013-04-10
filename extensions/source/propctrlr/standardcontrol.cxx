@@ -682,7 +682,7 @@ namespace pcr
         :OColorControl_Base( PropertyControlType::ColorListBox, pParent, nWinStyle )
     {
         // initialize the color listbox
-        XColorTable* pColorTable = NULL;
+        XColorList* pColorTable = NULL;
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         const SfxPoolItem* pItem = pDocSh ? pDocSh->GetItem( SID_COLOR_TABLE ) : NULL;
         if ( pItem )
@@ -693,7 +693,7 @@ namespace pcr
 
         if ( !pColorTable )
         {
-            pColorTable = XColorTable::GetStdColorTable();
+            pColorTable = XColorList::GetStdColorList();
         }
 
 

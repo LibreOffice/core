@@ -89,7 +89,7 @@ void ScDocument::EndDrawUndo()
         delete pDrawLayer->GetCalcUndo();
 }
 
-XColorTable* ScDocument::GetColorTable()
+XColorList* ScDocument::GetColorTable()
 {
     if (pDrawLayer)
         return pDrawLayer->GetColorTable();
@@ -98,7 +98,7 @@ XColorTable* ScDocument::GetColorTable()
         if (!pColorTable)
         {
             SvtPathOptions aPathOpt;
-            pColorTable = new XColorTable( aPathOpt.GetPalettePath() );
+            pColorTable = new XColorList( aPathOpt.GetPalettePath() );
         }
 
         return pColorTable;

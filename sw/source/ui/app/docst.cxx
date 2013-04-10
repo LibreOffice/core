@@ -283,7 +283,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY,
             sal_False, &pItem ))
         {
-            sal_uInt16 nFamily = ((const SfxUInt16Item*)pItem)->GetValue();
+            const sal_uInt16 nFamily = ((const SfxUInt16Item*)pItem)->GetValue();
 
             String sName;
             sal_uInt16 nMask = 0;
@@ -298,7 +298,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 sal_False, &pItem ))
                 sParent = ((const SfxStringItem*)pItem)->GetValue();
 
-            nRet = Edit( sName, sParent, nFamily, nMask, sal_True, sal_False, 0, rReq.IsAPI() );
+            nRet = Edit( sName, sParent, nFamily, nMask, sal_True, 0, 0, rReq.IsAPI() );
         }
         break;
 
@@ -458,7 +458,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 switch(nSlot)
                 {
                     case SID_STYLE_EDIT:
-                        nRet = Edit(aParam, aEmptyStr, nFamily, nMask, sal_False, sal_False, pActShell );
+                        nRet = Edit(aParam, aEmptyStr, nFamily, nMask, sal_False, 0, pActShell );
                         break;
                     case SID_STYLE_DELETE:
                         nRet = Delete(aParam, nFamily);
@@ -509,9 +509,15 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
  --------------------------------------------------------------------*/
 
 
-sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uInt16 nFamily, sal_uInt16 nMask,
-                         sal_Bool bNew, sal_Bool bColumn, SwWrtShell* pActShell,
-                         sal_Bool bBasic )
+sal_uInt16 SwDocShell::Edit(
+    const String &rName,
+    const String &rParent,
+    const sal_uInt16 nFamily,
+    sal_uInt16 nMask,
+    const sal_Bool bNew,
+    const sal_uInt16 nSlot,
+    SwWrtShell* pActShell,
+    const sal_Bool bBasic )
 {
     ASSERT(GetWrtShell(), "Keine Shell, keine Styles");
     SfxStyleSheetBase *pStyle = 0;
@@ -677,7 +683,7 @@ sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uIn
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
         SfxAbstractTabDialog* pDlg = pFact->CreateTemplateDialog( DLG_TEMPLATE_BASE,
-                                                    0, *(xTmp.get()), nFamily, bColumn,
+                                                    0, *(xTmp.get()), nFamily, nSlot,
                                                     pActShell ? pActShell : pWrtShell, bNew);
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         if(RET_OK == pDlg->Execute())
@@ -1286,9 +1292,12 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrent
 }
 
 
-void SwDocShell::FormatPage( const String& rPage, sal_Bool bColumn, SwWrtShell*     pActShell )
+void SwDocShell::FormatPage(
+    const String& rPage,
+    const sal_uInt16 nSlot,
+    SwWrtShell& rActShell )
 {
-    Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, bColumn, pActShell);
+    Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, nSlot, &rActShell);
 }
 
 Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily, BmpColorMode eColorMode )

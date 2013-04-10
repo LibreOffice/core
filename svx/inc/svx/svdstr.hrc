@@ -785,8 +785,11 @@
 #define SIP_SA_CROP_MARKERS                 (SIP_Begin + 276)
 #define SIP_SA_CROP_FINE_MARKERS            (SIP_Begin + 277)
 #define SIP_SA_ACCESSIBILITY_CROP_MARKERS   (SIP_Begin + 278)
+#define IMG_DIACONTROL_NORMAL               (SIP_Begin + 279)
+#define IMG_DIACONTROL_H                    (SIP_Begin + 280)
 
-#define SIP_End                             (SIP_SA_ACCESSIBILITY_CROP_MARKERS)
+
+#define SIP_End                             (IMG_DIACONTROL_H)
 
 #define SDR_ResourceEnd                     (SIP_End)
 

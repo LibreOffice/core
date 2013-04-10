@@ -1609,7 +1609,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         DBG_ASSERT( pDocSh, "DocShell not found!" );
-        XColorTable* pColorTable = NULL;
+        XColorList* pColorTable = NULL;
         FASTBOOL bKillTable = sal_False;
         if ( pDocSh )
         {
@@ -1620,7 +1620,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
 
         if ( !pColorTable )
         {
-            pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+            pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
             bKillTable = sal_True;
         }
 

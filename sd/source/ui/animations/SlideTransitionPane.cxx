@@ -57,6 +57,7 @@
 #include "framework/FrameworkHelper.hxx"
 
 #include "DialogListBox.hxx"
+#include <sfx2/sidebar/Theme.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -515,6 +516,8 @@ SlideTransitionPane::SlideTransitionPane(
     maLateInitTimer.SetTimeout(200);
     maLateInitTimer.SetTimeoutHdl(LINK(this, SlideTransitionPane, LateInitCallback));
     maLateInitTimer.Start();
+
+    UpdateLook();
 }
 
 SlideTransitionPane::~SlideTransitionPane()
@@ -527,6 +530,33 @@ void SlideTransitionPane::Resize()
 {
     updateLayout();
 }
+
+
+
+
+void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)
+{
+    (void)rEvent;
+    UpdateLook();
+}
+
+
+
+
+void SlideTransitionPane::UpdateLook (void)
+{
+    SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
+    maFL_APPLY_TRANSITION.SetBackground(Wallpaper());
+    maFL_MODIFY_TRANSITION.SetBackground(Wallpaper());;
+    maFT_SPEED.SetBackground(Wallpaper());
+    maFT_SOUND.SetBackground(Wallpaper());
+    maFL_ADVANCE_SLIDE.SetBackground(Wallpaper());
+    maFL_EMPTY1.SetBackground(Wallpaper());
+    maFL_EMPTY2.SetBackground(Wallpaper());
+}
+
+
+
 
 void SlideTransitionPane::onSelectionChanged()
 {
@@ -1311,6 +1341,17 @@ IMPL_LINK( SlideTransitionPane, LateInitCallback, Timer*, EMPTYARG )
     }
 
     return pWindow;
+}
+
+
+
+
+sal_Int32 getSlideTransitionPanelMinimumHeight (::Window* pDialog)
+{
+    if (pDialog != NULL)
+        return pDialog->LogicToPixel(Size( 72, 216 ), MAP_APPFONT).Height();
+    else
+        return 0;
 }
 
 

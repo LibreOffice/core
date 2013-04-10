@@ -51,7 +51,7 @@ class SfxObjectShell;
 class SfxObjectShellLock;
 class SvxFieldData;
 class GDIMetaFile;
-class XColorTable;
+class XColorList;
 class SdDrawDocument;
 class SfxMedium;
 class SdrObject;
@@ -182,7 +182,7 @@ public:
     static SdAbstractDialogFactory*     Create();
 
     virtual VclAbstractDialog*          CreateBreakDlg(::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount ) = 0;
-    virtual AbstractCopyDlg*            CreateCopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, XColorTable* pColTab, ::sd::View* pView ) = 0;
+    virtual AbstractCopyDlg*            CreateCopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, XColorList* pColTab, ::sd::View* pView ) = 0;
     virtual AbstractSdCustomShowDlg*    CreateSdCustomShowDlg( ::Window* pWindow, SdDrawDocument& rDrawDoc ) = 0;
     virtual SfxAbstractTabDialog*       CreateSdTabCharDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell ) = 0;
     virtual SfxAbstractTabDialog*       CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, sal_Bool bAreaPage = sal_True ) = 0;

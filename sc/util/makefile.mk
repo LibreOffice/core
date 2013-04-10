@@ -41,6 +41,7 @@ RESLIB1LIST=\
     $(SRS)$/ui.srs		\
     $(SRS)$/dbgui.srs	\
     $(SRS)$/drawfunc.srs \
+    $(SRS)$/sidebar.srs \
     $(SRS)$/core.srs 	\
     $(SRS)$/styleui.srs	\
     $(SRS)$/formdlgs.srs \
@@ -125,6 +126,7 @@ LIB3FILES=	\
     $(SLB)$/dbgui.lib \
     $(SLB)$/pagedlg.lib \
     $(SLB)$/drawfunc.lib \
+    $(SLB)$/sidebar.lib \
     $(SLB)$/navipi.lib
 
 LIB3FILES+= \

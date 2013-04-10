@@ -75,6 +75,7 @@
 #endif
 
 #include <sfx2/objface.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediaitem.hxx>
@@ -215,4 +216,5 @@ SwMediaShell::SwMediaShell(SwView &_rView) :
 {
     SetName(String::CreateFromAscii("Media Playback"));
     SetHelpId(SW_MEDIASHELL);
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Media));
 }

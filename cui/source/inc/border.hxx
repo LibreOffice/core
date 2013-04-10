@@ -37,7 +37,6 @@
 // forward ---------------------------------------------------------------
 
 class SvxBorderLine;
-class XColorTable;
 
 #include <svx/flagsdef.hxx>
 

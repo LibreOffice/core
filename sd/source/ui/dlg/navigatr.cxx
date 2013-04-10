@@ -72,18 +72,19 @@ SdNavigatorWin::SdNavigatorWin(
     ::Window* pParent,
     ::sd::NavigatorChildWindow* pChWinCtxt,
     const SdResId& rSdResId,
-    SfxBindings* pInBindings )
-:   ::Window( pParent, rSdResId )
-,   maToolbox        ( this, SdResId( 1 ) )
-,   maTlbObjects( this, SdResId( TLB_OBJECTS ) )
-,   maLbDocs         ( this, SdResId( LB_DOCS ) )
-,   mpChildWinContext( pChWinCtxt )
-,   mbDocImported   ( sal_False )
-    // Bei Aenderung des DragTypes: SelectionMode der TLB anpassen!
-,   meDragType      ( NAVIGATOR_DRAGTYPE_EMBEDDED )
-,   mpBindings      ( pInBindings )
-,   maImageList     ( SdResId( IL_NAVIGATR ) )
-,   maImageListH    ( SdResId( ILH_NAVIGATR ) )
+    SfxBindings* pInBindings,
+    const UpdateRequestFunctor& rUpdateRequest)
+    : ::Window( pParent, rSdResId ),
+      maToolbox        ( this, SdResId( 1 ) ),
+      maTlbObjects( this, SdResId( TLB_OBJECTS ) ),
+      maLbDocs         ( this, SdResId( LB_DOCS ) ),
+      mpChildWinContext( pChWinCtxt ),
+      mbDocImported ( sal_False ),
+      // Bei Aenderung des DragTypes: SelectionMode der TLB anpassen!
+      meDragType        ( NAVIGATOR_DRAGTYPE_EMBEDDED ),
+      mpBindings        ( pInBindings ),
+      maImageList       ( SdResId( IL_NAVIGATR ) ),
+      maImageListH  ( SdResId( ILH_NAVIGATR ) )
 {
     maTlbObjects.SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
@@ -91,8 +92,8 @@ SdNavigatorWin::SdNavigatorWin(
 
     maTlbObjects.SetAccessibleName(String(SdResId(STR_OBJECTS_TREE)));
 
-    mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings );
-    mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings );
+    mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings, rUpdateRequest);
+    mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings, rUpdateRequest);
     mpDocList = new List();
 
     ApplyImageList(); // load images *before* calculating sizes to get something useful !!!
@@ -137,13 +138,13 @@ SdNavigatorWin::SdNavigatorWin(
     if( nMinWidth > maMinSize.Width() )
         maMinSize.Width() = nMinWidth;
     maMinSize.Height() -= 40;
-    ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel( maMinSize );
+    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(GetParent());
+    if (pDockingParent != NULL)
+        pDockingParent->SetMinOutputSizePixel( maMinSize );
 
     // InitTlb; Wird ueber Slot initiiert
-    SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
-    mpBindings->GetDispatcher()->Execute(
-        SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-
+    if (rUpdateRequest)
+        rUpdateRequest();
 }
 
 // -----------------------------------------------------------------------
@@ -882,11 +883,14 @@ void SdNavigatorWin::ApplyImageList()
 |*
 \************************************************************************/
 
-SdNavigatorControllerItem::SdNavigatorControllerItem( sal_uInt16 _nId,
-                                SdNavigatorWin* pNavWin,
-                                SfxBindings*    _pBindings) :
-    SfxControllerItem( _nId, *_pBindings ),
-    pNavigatorWin( pNavWin )
+SdNavigatorControllerItem::SdNavigatorControllerItem(
+    sal_uInt16 _nId,
+    SdNavigatorWin* pNavWin,
+    SfxBindings*    _pBindings,
+    const SdNavigatorWin::UpdateRequestFunctor& rUpdateRequest)
+    : SfxControllerItem( _nId, *_pBindings ),
+      pNavigatorWin( pNavWin ),
+      maUpdateRequest(rUpdateRequest)
 {
 }
 
@@ -954,9 +958,8 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
             if( nState & NAVTLB_UPDATE )
             {
                 // InitTlb; Wird ueber Slot initiiert
-                SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
-                GetBindings().GetDispatcher()->Execute(
-                    SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+                if (maUpdateRequest)
+                    maUpdateRequest();
             }
         }
     }
@@ -968,11 +971,14 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
 |*
 \************************************************************************/
 
-SdPageNameControllerItem::SdPageNameControllerItem( sal_uInt16 _nId,
-                                SdNavigatorWin* pNavWin,
-                                SfxBindings*    _pBindings) :
-    SfxControllerItem( _nId, *_pBindings ),
-    pNavigatorWin( pNavWin )
+SdPageNameControllerItem::SdPageNameControllerItem(
+    sal_uInt16 _nId,
+    SdNavigatorWin* pNavWin,
+    SfxBindings*    _pBindings,
+    const SdNavigatorWin::UpdateRequestFunctor& rUpdateRequest)
+    : SfxControllerItem( _nId, *_pBindings ),
+      pNavigatorWin( pNavWin ),
+      maUpdateRequest(rUpdateRequest)
 {
 }
 

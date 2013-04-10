@@ -169,7 +169,7 @@ void ScDocShell::InitItems()
     else
     {
         //  always use global color table instead of local copy
-        PutItem( SvxColorTableItem( XColorTable::GetStdColorTable(), SID_COLOR_TABLE ) );
+        PutItem( SvxColorTableItem( XColorList::GetStdColorList(), SID_COLOR_TABLE ) );
     }
 
     if ( !aDocument.GetForbiddenCharacters().isValid() ||

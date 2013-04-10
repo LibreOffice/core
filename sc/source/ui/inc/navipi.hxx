@@ -273,6 +273,7 @@ private:
     SCROW           nCurRow;
     SCTAB           nCurTab;
     sal_Bool            bFirstBig;
+    bool mbUseStyleSettingsBackground;
 
     ScNavigatorControllerItem** ppBoundItems;
 
@@ -325,7 +326,8 @@ protected:
     virtual void    Resizing( Size& rSize );
 
 public:
-                ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent );
+                ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent,
+                    const bool bUseStyleSettingsBackground);
                 ~ScNavigatorDlg();
 
     using Window::Notify;

@@ -62,7 +62,7 @@ namespace sd {
 CopyDlg::CopyDlg(
     ::Window* pWindow,
     const SfxItemSet& rInAttrs,
-    XColorTable* pColTab,
+    XColorList* pColTab,
     ::sd::View* pInView )
     : SfxModalDialog     ( pWindow, SdResId( DLG_COPY ) ),
       maFtCopies           ( this, SdResId( FT_COPIES ) ),

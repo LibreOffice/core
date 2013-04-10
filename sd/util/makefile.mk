@@ -125,15 +125,14 @@ LIB3FILES=      \
             $(SLB)$/controller.lib
 
 LIB5TARGET=$(SLB)$/sdraw3_2.lib
-LIB5FILES=      \
-            $(SLB)$/html.lib		\
-            $(SLB)$/filter.lib		\
-            $(SLB)$/unoidl.lib		\
-            $(SLB)$/animui.lib		\
+LIB5FILES=     							\
+            $(SLB)$/html.lib			\
+            $(SLB)$/filter.lib			\
+            $(SLB)$/unoidl.lib			\
+            $(SLB)$/animui.lib			\
             $(SLB)$/accessibility.lib	\
-            $(SLB)$/toolpanel.lib		\
             $(SLB)$/uitools.lib			\
-            $(SLB)$/tpcontrols.lib
+            $(SLB)$/sidebar.lib
 
 LIB6TARGET=$(SLB)$/sdraw3_3.lib
 LIB6FILES=      								\

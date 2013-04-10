@@ -230,7 +230,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorTable* pColorTable = NULL;
+    XColorList* pColorTable = NULL;
     bool bKillTable = false;
     const SfxPoolItem* pItem = NULL;
 
@@ -239,7 +239,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
 
     if ( !pColorTable )
     {
-        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
         bKillTable = sal_True;
     }
 
@@ -1250,7 +1250,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorTable* pColorTable = NULL;
+    XColorList* pColorTable = NULL;
     bool bKillTable = false;
     const SfxPoolItem* pItem = NULL;
 
@@ -1259,7 +1259,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
     if ( !pColorTable )
     {
-        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
         bKillTable = sal_True;
     }
 

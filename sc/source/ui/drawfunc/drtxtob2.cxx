@@ -257,7 +257,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
             if ( pDocSh )
             {
                 const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-                XColorTable*        pColorTable = NULL;
+                XColorList*     pColorTable = NULL;
 
                 if ( pItem )
                     pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();

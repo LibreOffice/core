@@ -76,8 +76,8 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
         SetObjectShell( pDocSh );
         SvxColorTableItem* pColItem = ( SvxColorTableItem* )
                                 ( pDocSh->GetItem( SID_COLOR_TABLE ) );
-        XColorTable *pXCol = pColItem ? pColItem->GetColorTable() :
-                                        XColorTable::GetStdColorTable();
+        XColorList *pXCol = pColItem ? pColItem->GetColorTable() :
+                                        XColorList::GetStdColorList();
         SetColorTable( pXCol );
 
         if ( !pColItem )
@@ -92,7 +92,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
         SetObjectShell( pDocSh );
     }
     else
-        SetColorTable( XColorTable::GetStdColorTable() );
+        SetColorTable( XColorList::GetStdColorList() );
 
     // copy all the default values to the SdrModel
     SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();

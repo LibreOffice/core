@@ -33,7 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>
 
-class XColorTable;
+class XColorList;
 
 namespace sd {
 
@@ -49,7 +49,7 @@ class CopyDlg
 {
 public:
     CopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs,
-        XColorTable* pColTab, ::sd::View* pView );
+        XColorList* pColTab, ::sd::View* pView );
     ~CopyDlg();
 
     void    GetAttr( SfxItemSet& rOutAttrs );
@@ -86,7 +86,7 @@ private:
     PushButton          maBtnSetDefault;
 
     const SfxItemSet&   mrOutAttrs;
-    XColorTable*        mpColorTab;
+    XColorList*     mpColorTab;
     Fraction            maUIScale;
     ::sd::View*         mpView;
 

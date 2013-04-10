@@ -1710,7 +1710,7 @@ sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
     }
 
     // force MapUnit to 100th mm
-    SfxMapUnit eMapUnit = GetObjectItemSet().GetPool()->GetMetric(0);
+    const SfxMapUnit eMapUnit(GetObjectMapUnit());
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)
@@ -1772,7 +1772,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     aGeo.RecalcTan();
 
     // force metric to pool metric
-    SfxMapUnit eMapUnit = GetObjectItemSet().GetPool()->GetMetric(0);
+    const SfxMapUnit eMapUnit(GetObjectMapUnit());
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)

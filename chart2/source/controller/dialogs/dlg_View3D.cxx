@@ -55,7 +55,7 @@ using namespace ::com::sun::star::chart2;
 
 sal_uInt16 View3DDialog::m_nLastPageId = 0;
 
-View3DDialog::View3DDialog(Window* pParent, const uno::Reference< frame::XModel > & xChartModel, XColorTable* pColorTable )
+View3DDialog::View3DDialog(Window* pParent, const uno::Reference< frame::XModel > & xChartModel, XColorList* pColorTable )
     : TabDialog(pParent,SchResId(DLG_3D_VIEW))
     , m_aTabControl(this,SchResId(TABCTRL))
     , m_aBtnOK(this,SchResId(BTN_OK))

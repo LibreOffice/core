@@ -54,6 +54,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 
 
 #include <fmtornt.hxx>
@@ -1178,16 +1179,17 @@ void SwTableShell::Execute(SfxRequest &rReq)
             aMgr.ColWidthDlg(GetView().GetWindow());
         }
         break;
-        case FN_TABLE_VERT_NONE:
-        case FN_TABLE_VERT_CENTER:
-        case FN_TABLE_VERT_BOTTOM:
+        case SID_TABLE_VERT_NONE:
+        case SID_TABLE_VERT_CENTER:
+        case SID_TABLE_VERT_BOTTOM:
         {
-            sal_uInt16 nAlign = nSlot == FN_TABLE_VERT_NONE ?
+                sal_uInt16 nAlign = nSlot == SID_TABLE_VERT_NONE ?
                                 text::VertOrientation::NONE :
-                                    nSlot == FN_TABLE_VERT_CENTER ?
+                                    nSlot == SID_TABLE_VERT_CENTER ?
                                         text::VertOrientation::CENTER : text::VertOrientation::BOTTOM;
             rSh.SetBoxAlign(nAlign);
             bCallDone = sal_True;
+
         }
         break;
 
@@ -1321,14 +1323,15 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case RES_UL_SPACE:
                 rSet.Put(pFmt->GetULSpace());
             break;
-            case FN_TABLE_VERT_NONE:
-            case FN_TABLE_VERT_CENTER:
-            case FN_TABLE_VERT_BOTTOM:
+
+            case SID_TABLE_VERT_NONE:
+            case SID_TABLE_VERT_CENTER:
+            case SID_TABLE_VERT_BOTTOM:
             {
                 sal_uInt16 nAlign = rSh.GetBoxAlign();
-                sal_Bool bSet = (nSlot == FN_TABLE_VERT_NONE && nAlign == text::VertOrientation::NONE) ||
-                            (nSlot == FN_TABLE_VERT_CENTER && nAlign == text::VertOrientation::CENTER) ||
-                            (nSlot == FN_TABLE_VERT_BOTTOM && nAlign == text::VertOrientation::BOTTOM);
+                sal_Bool bSet = nSlot == SID_TABLE_VERT_NONE && nAlign == text::VertOrientation::NONE||
+                            nSlot == SID_TABLE_VERT_CENTER && nAlign == text::VertOrientation::CENTER ||
+                            nSlot == SID_TABLE_VERT_BOTTOM && nAlign == text::VertOrientation::BOTTOM;
                 rSet.Put(SfxBoolItem(nSlot, bSet));
             }
             break;
@@ -1433,6 +1436,7 @@ SwTableShell::SwTableShell(SwView &_rView) :
 {
     SetName(String::CreateFromAscii("Table"));
     SetHelpId(SW_TABSHELL);
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Table));
 }
 
 /*--------------------------------------------------------------------
@@ -1591,4 +1595,3 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     }
 
 }
-

@@ -55,7 +55,7 @@ SvxColorTableItem::SvxColorTableItem()
 
 // -----------------------------------------------------------------------
 
-SvxColorTableItem::SvxColorTableItem( XColorTable* pTable, sal_uInt16 nW ) :
+SvxColorTableItem::SvxColorTableItem( XColorList* pTable, sal_uInt16 nW ) :
     SfxPoolItem( nW ),
     pColorTable( pTable )
 {
@@ -120,7 +120,7 @@ sal_Bool SvxColorTableItem::PutValue( const com::sun::star::uno::Any& rVal, sal_
     sal_Int64 aValue = 0;
     if ( rVal >>= aValue )
     {
-        pColorTable = (XColorTable *)(sal_uLong)aValue;
+        pColorTable = (XColorList*)(sal_uLong)aValue;
         return sal_True;
     }
 

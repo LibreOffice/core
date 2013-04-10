@@ -38,6 +38,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"
@@ -65,6 +66,7 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
+    SFX_CHILDWINDOW_REGISTRATION(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScNameDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSolverDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScOptSolverDlgWrapper::GetChildWindowId());

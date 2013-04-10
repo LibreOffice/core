@@ -5332,6 +5332,11 @@
                     <value xml:lang="en-US">Task Pane</value>
                 </prop>
             </node>
+            <node oor:name=".uno:Sidebar" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Sidebar</value>
+                </prop>
+            </node>
             <node oor:name=".uno:TestMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Test Mode On/Off</value>

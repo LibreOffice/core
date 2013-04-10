@@ -834,7 +834,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
-    XColorTable* pColorTable = NULL;
+    XColorList* pColorTable = NULL;
     sal_Bool bKillTable = sal_False;
     const Size aSize12( 13, 13 );
 
@@ -844,7 +844,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
     if ( !pColorTable )
     {
-        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
         bKillTable = sal_True;
     }
 
@@ -1014,7 +1014,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     {
         if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorTableItem )))
         {
-            XColorTable* pColorTable = pState ? ((SvxColorTableItem *)pState)->GetColorTable() : NULL;
+            XColorList* pColorTable = pState ? ((SvxColorTableItem *)pState)->GetColorTable() : NULL;
 
             if ( pColorTable )
             {

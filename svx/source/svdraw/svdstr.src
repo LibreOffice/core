@@ -2870,6 +2870,16 @@ Bitmap SIP_SA_ACCESSIBILITY_CROP_MARKERS
     File = "cropmarkersACC.bmp";
 };
 
+// DialControl bitmaps
+Bitmap IMG_DIACONTROL_NORMAL
+{
+    File = "rotation.png";
+};
+Bitmap IMG_DIACONTROL_H
+{
+    File = "rotation_h.png";
+};
+
 //IAccessibility2 Implementation 2009-----
 String STR_ObjNameSingulFONTWORK
 {

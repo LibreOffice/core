@@ -373,6 +373,8 @@
 #define FN_NUM_BULLET_OFF       (FN_EDIT + 37)  /* Numerierung aus */
 #define FN_NUM_BULLET_ON        (FN_EDIT + 38)  /* Numerierung mit Bullets an */
 #define FN_NUM_NUMBERING_ON     (FN_EDIT + 44)  /* Numerierung an */
+#define FN_BUL_NUM_RULE_INDEX   (FN_EDIT + 120)  /* Achieving num rule index */
+#define FN_NUM_NUM_RULE_INDEX   (FN_EDIT + 121)
 
 #define FN_INSERT               (SID_SW_START +  300)
 #define FN_DELETE_BOOKMARK      (FN_INSERT + 1)
@@ -682,6 +684,9 @@
 #define SID_TWAIN_TRANSFER                              ( SID_SVX_START + 332 )
 #define SID_CONTOUR_DLG                                 ( SID_SVX_START + 334 )
 #define SID_CONTOUR_EXEC                                ( SID_SVX_START + 335 )
+
+//#define SID_SIDEBAR                                   ( SID_SVX_START + 336 )   -> sfxsids.hrc
+
 #define SID_BORDER_OBJECT                               ( SID_SVX_START + 340 )
 #define SID_BORDER_LEFTLINE                             ( SID_SVX_START + 341 )
 #define SID_BORDER_RIGHTLINE                            ( SID_SVX_START + 342 )
@@ -747,6 +752,8 @@
 #define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
 #define SID_ATTR_3D_AMBIENTCOLOR                        ( SID_SVX_START + 411 )
 #define SID_IMPORT_GRAPH_LINK                           ( SID_SVX_START + 412 )
+
+//#define SID_ATTR_PARA_REGISTER                          ( SID_SVX_START + 413 ) -> editids.hrc
 
 //! moved to sfx2, still in use:
 //#define SID_HTML_MODE                                   ( SID_SVX_START + 414 )
@@ -1257,8 +1264,26 @@
 #define SID_TRANSLITERATE_TITLE_CASE                    (SID_SVX_START+1103)
 #define SID_TRANSLITERATE_TOGGLE_CASE                   (SID_SVX_START+1104)
 
+// new slots for panels
+#define SID_ATTR_FILL_TRANSPARENCE                      (SID_SVX_START+1105)
+#define SID_ATTR_FILL_FLOATTRANSPARENCE                 (SID_SVX_START+1106)
+#define SID_ATTR_LINE_TRANSPARENCE                      (SID_SVX_START+1107)
+#define SID_FLIP_HORIZONTAL                             (SID_SVX_START+1108)
+#define SID_FLIP_VERTICAL                               (SID_SVX_START+1109)
+#define SID_ATTR_LINE_JOINT                             (SID_SVX_START+1110)
+#define SID_ATTR_LINE_CAP                               (SID_SVX_START+1111)
+#define SID_ATTR_TRANSFORM_MATRIX                       (SID_SVX_START+1112)
+
+#define SID_CELL_FORMAT_BORDER                          (SID_SVX_START+1113)
+#define SID_CHAR_DLG_EFFECT             (SID_SVX_START+1114)
+#define SID_ATTR_PARA_LEFT              (SID_SVX_START + 1115)
+#define SID_ATTR_PARA_RIGHT             (SID_SVX_START + 1116)
+
+#define FN_SVX_SET_NUMBER               (SID_SVX_START + 1117)
+#define FN_SVX_SET_BULLET               (SID_SVX_START + 1118)
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_TRANSLITERATE_TOGGLE_CASE + 1)
+#define SID_SVX_FIRSTFREE                               (FN_SVX_SET_BULLET + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

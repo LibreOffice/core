@@ -35,6 +35,8 @@
 #include <svl/rectitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/bolnitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -42,6 +44,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/hlnkitem.hxx>
 // --> OD 2009-07-07 #i73249#
 #include <svx/svdview.hxx>
@@ -382,7 +385,38 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+
+        case SID_ATTR_TRANSFORM:
+        {
+            bool bApplyNewSize = false;
+
+            Size aNewSize = aMgr.GetSize();
+            if ( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_TRANSFORM_WIDTH, sal_False, &pItem ) )
+            {
+                aNewSize.setWidth( static_cast< const SfxUInt32Item* >(pItem)->GetValue() );
+                bApplyNewSize = true;
+            }
+
+            if ( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_TRANSFORM_HEIGHT, sal_False, &pItem ) )
+            {
+                aNewSize.setHeight( static_cast< const SfxUInt32Item* >(pItem)->GetValue() );
+                bApplyNewSize = true;
+            }
+
+            if ( bApplyNewSize )
+            {
+                aMgr.SetSize( aNewSize );
+            }
+            else
+            {
+                bUpdateMgr = sal_False;
+            }
+
+        }
+        break;
+
         case FN_FORMAT_FRAME_DLG:
+        case FN_PROPERTY_WRAP_DLG:
         {
             const int nSel = rSh.GetSelectionType();
             if (nSel & nsSelectionType::SEL_GRF)
@@ -416,10 +450,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
                 if( nSel & nsSelectionType::SEL_OLE )
                 {
-                    // --> OD 2009-07-13 #i73249#
-//                    aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
                     aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
-                    // <--
                 }
 
                 const SwRect &rPg = rSh.GetAnyCurRect(RECT_PAGE);
@@ -467,6 +498,11 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                         sal_False,
                                                         nDefPage);
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
+
+                if ( nSlot == FN_PROPERTY_WRAP_DLG )
+                {
+                    pDlg->SetCurPageId(TP_FRM_WRAP);
+                }
 
                 if ( pDlg->Execute() )
                 {
@@ -638,16 +674,17 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             ASSERT( !this, "falscher Dispatcher" );
             return;
     }
-    // Vorlagen-AutoUpdate
-    SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
     if ( bUpdateMgr )
     {
-        if(bCopyToFmt && pFmt && pFmt->IsAutoUpdateFmt())
+        SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
+        if ( bCopyToFmt && pFmt && pFmt->IsAutoUpdateFmt() )
         {
             rSh.AutoUpdateFrame(pFmt, aMgr.GetAttrSet());
         }
         else
+        {
             aMgr.UpdateFlyFrm();
+        }
     }
 
 }
@@ -862,6 +899,40 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                     if ( bParentCntProt )
                         rSet.DisableItem( nWhich );
                 break;
+
+                case SID_ATTR_TRANSFORM:
+                {
+                    rSet.DisableItem( nWhich );
+                }
+                break;
+
+                case SID_ATTR_TRANSFORM_PROTECT_SIZE:
+                {
+                    const sal_uInt8 eProtection = rSh.IsSelObjProtected( FLYPROTECT_SIZE );
+                    if ( ( eProtection & FLYPROTECT_CONTENT ) ||
+                         ( eProtection & FLYPROTECT_SIZE ) )
+                    {
+                        rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, sal_True ) );
+                    }
+                    else
+                    {
+                        rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, sal_False ) );
+                    }
+                }
+                break;
+
+                case SID_ATTR_TRANSFORM_WIDTH:
+                {
+                    rSet.Put( SfxUInt32Item( SID_ATTR_TRANSFORM_WIDTH, aMgr.GetSize().getWidth() ) );
+                }
+                break;
+
+                case SID_ATTR_TRANSFORM_HEIGHT:
+                {
+                    rSet.Put( SfxUInt32Item( SID_ATTR_TRANSFORM_HEIGHT, aMgr.GetSize().getHeight() ) );
+                }
+                break;
+
                 case FN_FORMAT_FRAME_DLG:
                 {
                     const int nSel = rSh.GetSelectionType();
@@ -869,7 +940,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( nWhich );
                 }
                 break;
-                // --> OD 2009-07-07 #i73249#
+
                 case FN_TITLE_DESCRIPTION_SHAPE:
                 {
                     SwWrtShell &rWrtSh = GetShell();
@@ -882,7 +953,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
                 }
                 break;
-                // <--
+
                 default:
                     /* do nothing */;
                     break;
@@ -906,6 +977,8 @@ SwFrameShell::SwFrameShell(SwView &_rView) :
     /* #96392# Use this to announce it is the frame shell who creates the
        selection. */
     SwTransferable::CreateSelection( _rView.GetWrtShell(), (ViewShell *) this );
+
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Frame));
 }
 
 SwFrameShell::~SwFrameShell()
@@ -1148,4 +1221,3 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     if ((nSel & nsSelectionType::SEL_GRF) || (nSel & nsSelectionType::SEL_OLE))
         rSet.DisableItem(FN_INSERT_FRAME);
 }
-

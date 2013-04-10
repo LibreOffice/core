@@ -61,7 +61,7 @@ public:
     virtual FASTBOOL        HasMetrics() const;
     virtual FASTBOOL        ScaleMetrics(long nMul, long nDiv);
 
-    const XHatch&           GetHatchValue(const XHatchTable* pTable = 0) const; // GetValue -> GetHatchValue
+    const XHatch&           GetHatchValue(const XHatchList* pTable = 0) const; // GetValue -> GetHatchValue
     void                    SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );

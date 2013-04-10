@@ -89,8 +89,8 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
-    XColorTable* pColorTable = NULL;
-    ::boost::scoped_ptr<XColorTable> pOwnColorTable; // locally instantiated in case the doc shell doesn't have one.
+    XColorList* pColorTable = NULL;
+    ::boost::scoped_ptr< XColorList > pOwnColorTable; // locally instantiated in case the doc shell doesn't have one.
 
     const Size aSize15x15 = Size( 15, 15 );
     const Size aSize10x10 = Size( 10, 10 );
@@ -103,7 +103,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
     if ( !pColorTable )
     {
-        pOwnColorTable.reset(new XColorTable(SvtPathOptions().GetPalettePath()));
+        pOwnColorTable.reset(new XColorList(SvtPathOptions().GetPalettePath()));
         pColorTable = pOwnColorTable.get();
     }
     if ( pColorTable )

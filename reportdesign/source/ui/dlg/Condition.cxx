@@ -146,7 +146,7 @@ OColorPopup::OColorPopup(Window* _pParent,Condition* _pCondition)
     m_aColorSet.SetHelpId( HID_RPT_POPUP_COLOR_CTRL );
     SetHelpId( HID_RPT_POPUP_COLOR );
     const Size aSize12( 13, 13 );
-    ::std::auto_ptr<XColorTable> pColorTable(new XColorTable( SvtPathOptions().GetPalettePath() ));
+    ::std::auto_ptr< XColorList > pColorTable(new XColorList( SvtPathOptions().GetPalettePath() ));
     short i = 0;
     long nCount = pColorTable->Count();
     XColorEntry* pEntry = NULL;

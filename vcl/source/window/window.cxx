@@ -277,7 +277,9 @@ WindowImpl::WindowImpl( WindowType nType )
     mbDisableAccessibleLabelForRelation = sal_False; // sal_True: do not set LabelFor relation on accessible objects
     mbDisableAccessibleLabeledByRelation = sal_False; // sal_True: do not set LabeledBy relation on accessible objects
     mbHelpTextDynamic = sal_False;          // sal_True: append help id in HELP_DEBUG case
-    mbFakeFocusSet = sal_False; // sal_True: pretend as if the window has focus.
+    mbFakeFocusSet = sal_False; // sal_True: pretend as if the window
+                                // has focus.
+    mbIsThemingEnabled = sal_True;
 }
 
 WindowImpl::~WindowImpl()
@@ -756,7 +758,10 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             nBorderTypeStyle |= BORDERWINDOW_STYLE_FRAME;
             nStyle |= WB_BORDER;
         }
-        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle );
+        ImplBorderWindow* pBorderWin =
+            mpWindowImpl->mbIsThemingEnabled
+            ? CreateBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle )
+            : new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle );
         ((Window*)pBorderWin)->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;

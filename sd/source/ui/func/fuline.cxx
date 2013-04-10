@@ -99,11 +99,16 @@ void FuLine::DoExecute( SfxRequest& rReq )
 
         // Attribute wurden geaendert, Listboxes in Objectbars muessen aktualisiert werden
         static sal_uInt16 SidArray[] = {
-                        SID_ATTR_LINE_STYLE,
-                        SID_ATTR_LINE_DASH,
-                        SID_ATTR_LINE_WIDTH,
-                        SID_ATTR_LINE_COLOR,
-                        0 };
+            SID_ATTR_LINE_STYLE,                // ( SID_SVX_START + 169 )
+            SID_ATTR_LINE_DASH,                 // ( SID_SVX_START + 170 )
+            SID_ATTR_LINE_WIDTH,                // ( SID_SVX_START + 171 )
+            SID_ATTR_LINE_COLOR,                // ( SID_SVX_START + 172 )
+            SID_ATTR_LINE_START,                // ( SID_SVX_START + 173 )
+            SID_ATTR_LINE_END,                  // ( SID_SVX_START + 174 )
+            SID_ATTR_LINE_TRANSPARENCE,         // (SID_SVX_START+1107)
+            SID_ATTR_LINE_JOINT,                // (SID_SVX_START+1110)
+            SID_ATTR_LINE_CAP,                  // (SID_SVX_START+1111)
+            0 };
 
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 

@@ -95,9 +95,12 @@ class GalleryPreview;
 class Menu;
 class SgaObject;
 
+namespace svx { namespace sidebar { class GalleryControl; } }
+
 class GalleryBrowser2 : public Control, public SfxListener
 {
     friend class GalleryBrowser;
+    friend class svx::sidebar::GalleryControl;
     using Control::Notify;
     using Window::KeyInput;
 
@@ -148,7 +151,7 @@ public:
 
 public:
 
-                        GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery );
+                        GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery* pGallery );
                         ~GalleryBrowser2();
 
     void                SelectTheme( const String& rThemeName );

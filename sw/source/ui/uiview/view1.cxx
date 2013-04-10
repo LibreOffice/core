@@ -28,6 +28,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/ruler.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <idxmrk.hxx>
 #ifndef _VIEW_HXX
 #include <view.hxx>

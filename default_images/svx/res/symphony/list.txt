@@ -1,0 +1,70 @@
+mv bla/"axial.png" .
+mv bla/"axial_h.png" .
+mv bla/"decrease font.png" .
+mv bla/"ellipsoid.png" .
+mv bla/"ellipsoid_h.png" .
+mv bla/"enlarge font.png" .
+mv bla/"fill_color.png" .
+mv bla/"fill_color_h.png" .
+mv bla/"Highlight.png" .
+mv bla/"icon_normal.png" .
+mv bla/"last_custom_common.png" .
+mv bla/"last_custom_common_grey.png" .
+mv bla/"line1.png" .
+mv bla/"line1_h.png" .
+mv bla/"line10.png" .
+mv bla/"line10_h.png" .
+mv bla/"line2.png" .
+mv bla/"line2_h.png" .
+mv bla/"line3.png" .
+mv bla/"line3_h.png" .
+mv bla/"line4.png" .
+mv bla/"line4_h.png" .
+mv bla/"line5.png" .
+mv bla/"line5_h.png" .
+mv bla/"line6.png" .
+mv bla/"line6_h.png" .
+mv bla/"line7.png" .
+mv bla/"line7_h.png" .
+mv bla/"line8.png" .
+mv bla/"line8_h.png" .
+mv bla/"line9.png" .
+mv bla/"line9_h.png" .
+mv bla/"linear.png" .
+mv bla/"linear_h.png" .
+mv bla/"Quadratic.png" .
+mv bla/"Quadratic_h.png" .
+mv bla/"radial.png" .
+mv bla/"radial_h.png" .
+mv bla/"rotate_left.png" .
+mv bla/"rotate_right.png" .
+mv bla/"sc_bold.png" .
+mv bla/"sc_color.png" .
+mv bla/"sc_italic.png" .
+mv bla/"sc_shadowed.png" .
+mv bla/"sc_strikeout.png" .
+mv bla/"sc_subscript.png" .
+mv bla/"sc_superscript.png" .
+mv bla/"sc_underline.png" .
+mv bla/"selected-line1.png" .
+mv bla/"selected-line10.png" .
+mv bla/"selected-line2.png" .
+mv bla/"selected-line3.png" .
+mv bla/"selected-line4.png" .
+mv bla/"selected-line5.png" .
+mv bla/"selected-line6.png" .
+mv bla/"selected-line7.png" .
+mv bla/"selected-line8.png" .
+mv bla/"selected-line9.png" .
+mv bla/"spacing_loose.png" .
+mv bla/"spacing_loose_s.png" .
+mv bla/"spacing_normal.png" .
+mv bla/"spacing_normal_s.png" .
+mv bla/"spacing_tight.png" .
+mv bla/"spacing_tight_s.png" .
+mv bla/"spacing_very loose.png" .
+mv bla/"spacing_very loose_s.png" .
+mv bla/"spacing_very tight.png" .
+mv bla/"spacing_very tight_s.png" .
+mv bla/"Square.png" .
+mv bla/"Square_h.png" .

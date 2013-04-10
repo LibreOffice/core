@@ -103,33 +103,4 @@ LeftDrawPaneShell::~LeftDrawPaneShell (void)
 }
 
 
-
-
-//===== ToolPanelPaneShell ========================================================
-
-#undef ShellClass
-#define ShellClass ToolPanelPaneShell
-
-SFX_SLOTMAP( ToolPanelPaneShell )
-{
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-};
-
-SFX_IMPL_INTERFACE( ToolPanelPaneShell, SfxShell, SdResId( STR_TOOL_PANEL_SHELL ) )
-{
-    SFX_CHILDWINDOW_REGISTRATION( ::sd::ToolPanelChildWindow::GetChildWindowId() );
-}
-
-TYPEINIT1( ToolPanelPaneShell, SfxShell );
-
-ToolPanelPaneShell::ToolPanelPaneShell()
-    :SfxShell()
-{
-    SetName( ::rtl::OUString::createFromAscii( "ToolPanel" ) );
-}
-
-ToolPanelPaneShell::~ToolPanelPaneShell(void)
-{
-}
-
 } // end of namespace ::sd

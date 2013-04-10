@@ -29,7 +29,7 @@
 
 #include <svx/xit.hxx>
 
-class XColorTable;
+class XColorList;
 
 //-----------------
 // class XColorItem
@@ -55,7 +55,7 @@ public:
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
     virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
 
-    const Color&    GetColorValue(const XColorTable* pTable = 0) const;
+    const Color&    GetColorValue(const XColorList* pTable = 0) const;
     void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }
 };
 

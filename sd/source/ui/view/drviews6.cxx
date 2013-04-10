@@ -577,7 +577,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         {
             // Make the slide transition panel visible (expand it) in the
             // tool pane.
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestSidebarPanel(
                 framework::FrameworkHelper::msCustomAnimationTaskPanelURL);
 
             Cancel();
@@ -589,7 +589,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         {
             // Make the slide transition panel visible (expand it) in the
             // tool pane.
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestSidebarPanel(
                 framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
 
             Cancel();

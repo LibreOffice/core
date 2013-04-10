@@ -78,16 +78,11 @@ class SfxStyleSheet;
 class SfxUndoAction;
 class SfxUndoManager;
 class XBitmapList;
-class XBitmapTable;
-class XColorTable;
+class XColorList;
 class XDashList;
-class XDashTable;
 class XGradientList;
-class XGradientTable;
 class XHatchList;
-class XHatchTable;
 class XLineEndList;
-class XLineEndTable;
 class SvxForbiddenCharactersTable;
 class SvNumberFormatter;
 class SotStorage;
@@ -282,7 +277,7 @@ public:
     FASTBOOL        mbInDestruction;
 
     // Zeiger auf Paletten, Listen und Tabellen
-    XColorTable*    pColorTable;
+    XColorList*    pColorTable;
     XDashList*      pDashList;
     XLineEndList*   pLineEndList;
     XHatchList*     pHatchList;
@@ -658,8 +653,8 @@ public:
     const Link& GetIOProgressHdl() const                     { return aIOProgressLink; }
 
     // Zugriffsmethoden fuer Paletten, Listen und Tabellen
-    void            SetColorTable(XColorTable* pTable)       ;
-    XColorTable*    GetColorTable() const                    { return pColorTable; }
+    void            SetColorTable(XColorList* pTable)       ;
+    XColorList*    GetColorTable() const                    { return pColorTable; }
     void            SetDashList(XDashList* pList)            ;
     XDashList*      GetDashList() const                      { return pDashList; }
     void            SetLineEndList(XLineEndList* pList)      ;

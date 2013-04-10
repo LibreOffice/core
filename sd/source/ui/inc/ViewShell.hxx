@@ -35,9 +35,7 @@
 #include "glob.hxx"
 #include "pres.hxx"
 #include "cfgids.hxx"
-#ifndef _SD_VIEW_HXX
 #include "View.hxx"
-#endif
 #include "sddllapi.h"
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>
@@ -111,7 +109,7 @@ public:
         ST_OUTLINE,
         ST_SLIDE_SORTER,
         ST_PRESENTATION,
-        ST_TASK_PANE
+        ST_SIDEBAR
     };
     static const int MAX_HSPLIT_CNT = 1;
     static const int MAX_VSPLIT_CNT = 1;
@@ -211,6 +209,8 @@ public:
 
     virtual void SetUIUnit(FieldUnit eUnit);
     virtual void SetDefTabHRuler( sal_uInt16 nDefTab );
+
+    const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId);
 
     sal_Bool HasRuler (void);
     void SetRuler(sal_Bool bRuler);

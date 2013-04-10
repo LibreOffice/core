@@ -29,7 +29,6 @@
 #include "ViewTabBarModule.hxx"
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"
-#include "ToolPanelModule.hxx"
 #include "ToolBarModule.hxx"
 #include "ShellStackGuard.hxx"
 
@@ -50,7 +49,6 @@ void ImpressModule::Initialize (Reference<frame::XController>& rxController)
     new SlideSorterModule(
         rxController,
         FrameworkHelper::msLeftImpressPaneURL);
-    ToolPanelModule::Initialize(rxController);
     new ToolBarModule(rxController);
     new ShellStackGuard(rxController);
 }

@@ -66,86 +66,6 @@ char const aChckHatch[]  = { 0x04, 0x00, 'S','O','H','L'};  // < 5.2
 char const aChckHatch0[] = { 0x04, 0x00, 'S','O','H','0'};  // = 5.2
 char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };     // = 6.0
 
-// ------------------
-// class XHatchTable
-// ------------------
-
-/*************************************************************************
-|*
-|* XHatchTable::XHatchTable()
-|*
-*************************************************************************/
-
-XHatchTable::XHatchTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
-{
-    pBmpTable = new Table( nInitSize, nReSize );
-}
-
-/************************************************************************/
-
-XHatchTable::~XHatchTable()
-{
-}
-
-/************************************************************************/
-
-XHatchEntry* XHatchTable::Replace(long nIndex, XHatchEntry* pEntry )
-{
-    return (XHatchEntry*) XPropertyTable::Replace(nIndex, pEntry);
-}
-
-/************************************************************************/
-
-XHatchEntry* XHatchTable::Remove(long nIndex)
-{
-    return (XHatchEntry*) XPropertyTable::Remove(nIndex, 0);
-}
-
-/************************************************************************/
-
-XHatchEntry* XHatchTable::GetHatch(long nIndex) const
-{
-    return (XHatchEntry*) XPropertyTable::Get(nIndex, 0);
-}
-
-/************************************************************************/
-
-sal_Bool XHatchTable::Load()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XHatchTable::Save()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XHatchTable::Create()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XHatchTable::CreateBitmapsForUI()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-Bitmap* XHatchTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return( NULL );
-}
-
 // -----------------
 // class XHatchList
 // -----------------
@@ -189,11 +109,12 @@ void XHatchList::impCreate()
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XDashList: no VirtualDevice created!" );
         pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(Size(BITMAP_WIDTH, BITMAP_HEIGHT)));
+        const Size aSize(pVirDev->PixelToLogic(Size(getUiBitmapWidth(), getUiBitmapHeight())));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
+        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
 
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XDashList: no SdrModel created!" );
@@ -229,11 +150,10 @@ void XHatchList::impDestroy()
     }
 }
 
-XHatchList::XHatchList(const String& rPath, XOutdevItemPool* pInPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
-:   XPropertyList(rPath, pInPool, nInitSize, nReSize),
+XHatchList::XHatchList(const String& rPath, XOutdevItemPool* pInPool)
+:   XPropertyList(rPath, pInPool),
     mpData(0)
 {
-    pBmpList = new List(nInitSize, nReSize);
 }
 
 XHatchList::~XHatchList()
@@ -262,19 +182,19 @@ XHatchEntry* XHatchList::GetHatch(long nIndex) const
 
 sal_Bool XHatchList::Load()
 {
-    if( bListDirty )
+    if( mbListDirty )
     {
-        bListDirty = sal_False;
+        mbListDirty = false;
 
-        INetURLObject aURL( aPath );
+        INetURLObject aURL( maPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
+            DBG_ASSERT( !maPath.Len(), "invalid URL" );
             return sal_False;
         }
 
-        aURL.Append( aName );
+        aURL.Append( maName );
 
         if( !aURL.getExtension().getLength() )
             aURL.setExtension( rtl::OUString( pszExtHatch, 3 ) );
@@ -287,15 +207,15 @@ sal_Bool XHatchList::Load()
 
 sal_Bool XHatchList::Save()
 {
-    INetURLObject aURL( aPath );
+    INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
+        DBG_ASSERT( !maPath.Len(), "invalid URL" );
         return sal_False;
     }
 
-    aURL.Append( aName );
+    aURL.Append( maName );
 
     if( !aURL.getExtension().getLength() )
         aURL.setExtension( rtl::OUString( pszExtHatch, 3 ) );
@@ -320,25 +240,7 @@ sal_Bool XHatchList::Create()
     return( sal_True );
 }
 
-sal_Bool XHatchList::CreateBitmapsForUI()
-{
-    impCreate();
-
-    for( long i = 0; i < Count(); i++)
-    {
-        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
-        DBG_ASSERT( pBmp, "XHatchList: Bitmap(UI) konnte nicht erzeugt werden!" );
-
-        if( pBmp )
-            pBmpList->Insert( pBmp, i );
-    }
-
-    impDestroy();
-
-    return( sal_True );
-}
-
-Bitmap* XHatchList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
+Bitmap XHatchList::CreateBitmapForUI( long nIndex )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();
@@ -353,17 +255,11 @@ Bitmap* XHatchList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
     sdr::contact::DisplayInfo aDisplayInfo;
 
+    pVD->Erase();
     aPainter.ProcessDisplay(aDisplayInfo);
 
     const Point aZero(0, 0);
-    Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
-
-    if(bDelete)
-    {
-        impDestroy();
-    }
-
-    return pBitmap;
+    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
 }
 
 //////////////////////////////////////////////////////////////////////////////

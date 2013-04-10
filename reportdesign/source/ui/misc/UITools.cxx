@@ -44,7 +44,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/xtable.hxx>       // XColorTable
+#include <svx/xtable.hxx>       // XColorList
 #include <editeng/brshitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/emphitem.hxx>
@@ -654,7 +654,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     };
     Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
     ::std::auto_ptr<FontList> pFontList(new FontList( pParent ));
-    ::std::auto_ptr<XColorTable> pColorTable( new XColorTable( SvtPathOptions().GetPalettePath() ));
+    ::std::auto_ptr< XColorList > pColorTable( new XColorList( SvtPathOptions().GetPalettePath() ));
     SfxPoolItem* pDefaults[] =
     {
         new SvxFontItem(ITEMID_FONT),
@@ -774,7 +774,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
             // #i74099# by default, the dialog deletes the current color table if a different one is loaded
             // (see SwDrawShell::ExecDrawDlg)
             const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pDescriptor->GetItem(SID_COLOR_TABLE) );
-            if (pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
+            if (pColorItem && pColorItem->GetColorTable() == XColorList::GetStdColorList())
                 pDialog->DontDeleteColorTable();
             bSuccess = ( RET_OK == pDialog->Execute() );
             if ( bSuccess )

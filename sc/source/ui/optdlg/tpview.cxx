@@ -351,7 +351,7 @@ void ScTpContentOptions::InitGridOpt()
         // hier koennte auch eine andere DocShell kommen!
         pDocSh = PTR_CAST(ScDocShell, pDocSh);
 
-        XColorTable* pColorTable = NULL;
+        XColorList* pColorTable = NULL;
 
         if ( pDocSh  )
         {
@@ -361,7 +361,7 @@ void ScTpContentOptions::InitGridOpt()
                 pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
         }
         else
-            pColorTable = XColorTable::GetStdColorTable();
+            pColorTable = XColorList::GetStdColorList();
 
         if ( !pColorTable )
             return;

@@ -106,7 +106,7 @@ extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                              SfxStyleSheetBase& rBase,
                              sal_uInt16             nRegion,
-                             sal_Bool               bColumn,
+                             const sal_uInt16 nSlot,
                              SwWrtShell*        pActShell,
                              sal_Bool               bNew ) :
     SfxStyleDialog( pParent,
@@ -260,15 +260,6 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
             AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
 
-            // Auskommentiert wegen Bug #45776 (per default keine Breite&Groesse in Rahmenvorlagen)
-/*          SwFmtFrmSize aSize( (const SwFmtFrmSize&)rBase.
-                                            GetItemSet().Get(RES_FRM_SIZE));
-            if( !aSize.GetWidth() )
-            {
-                aSize.SetWidth( DFLT_WIDTH );
-                aSize.SetHeight( DFLT_HEIGHT );
-                rBase.GetItemSet().Put( aSize );
-            }*/
         break;
         }
         // Seitenvorlagen
@@ -283,8 +274,14 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage(TP_FOOTER_PAGE,      String(SW_RES(STR_PAGE_FOOTER)),
                                             SvxFooterPage::Create,
                                             SvxFooterPage::GetRanges );
-            if(bColumn)
+            if ( nSlot == FN_FORMAT_PAGE_COLUMN_DLG )
+            {
                 SetCurPageId(TP_COLUMN);
+            }
+            else if ( nSlot == FN_FORMAT_PAGE_SETTING_DLG )
+            {
+                SetCurPageId(TP_PAGE_STD);
+            }
 
             DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
             DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");

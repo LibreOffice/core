@@ -39,6 +39,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjitem.hxx>
+#include <editeng/kernitem.hxx>
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
 #include <svl/whiter.hxx>
@@ -153,6 +154,27 @@ TextObjectBar::~TextObjectBar()
     SetRepeatTarget(NULL);
 }
 
+void TextObjectBar::GetCharState( SfxItemSet& rSet )
+{
+    SfxItemSet  aCharAttrSet( mpView->GetDoc()->GetPool() );
+    mpView->GetAttributes( aCharAttrSet );
+
+    SfxItemSet aNewAttr( mpViewShell->GetPool(),EE_ITEMS_START,EE_ITEMS_END);
+
+    aNewAttr.Put(aCharAttrSet, sal_False);
+    rSet.Put(aNewAttr, sal_False);
+
+    SvxKerningItem aKern = ( (const SvxKerningItem&) aCharAttrSet.Get( EE_CHAR_KERNING ) );
+    //aKern.SetWhich(SID_ATTR_CHAR_KERNING);
+    rSet.Put(aKern);
+
+    SfxItemState eState = aCharAttrSet.GetItemState( EE_CHAR_KERNING, sal_True );
+    if ( eState == SFX_ITEM_DONTCARE )
+    {
+        rSet.InvalidateItem(EE_CHAR_KERNING);
+    }
+}
+
 /*************************************************************************
 |*
 |* Status der Attribut-Items
@@ -183,6 +205,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_FONTHEIGHT:
             case SID_ATTR_CHAR_WEIGHT:
             case SID_ATTR_CHAR_POSTURE:
+        case SID_ATTR_CHAR_SHADOWED:
+            case SID_ATTR_CHAR_STRIKEOUT:
             {
                 SvxScriptSetItem aSetItem( nSlotId, GetPool() );
                 aSetItem.GetItemSet().Put( aAttrSet, sal_False );
@@ -464,6 +488,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
 
         // Absatzausrichtung
+        SvxLRSpaceItem aLR = ( (const SvxLRSpaceItem&) aAttrSet.Get( EE_PARA_LRSPACE ) );
+        rSet.Put(aLR);
         SvxAdjust eAdj = ( (const SvxAdjustItem&) aAttrSet.Get( EE_PARA_JUST ) ).GetAdjust();
         switch( eAdj )
         {
@@ -482,6 +508,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             default:
             break;
         }
+
+        Invalidate(SID_ATTR_PARA_ADJUST_LEFT);
+        Invalidate(SID_ATTR_PARA_ADJUST_CENTER);
+        Invalidate(SID_ATTR_PARA_ADJUST_RIGHT);
+        Invalidate(SID_ATTR_PARA_ADJUST_BLOCK);
+        Invalidate(SID_ATTR_PARA_LINESPACE);
+        Invalidate(SID_ATTR_PARA_ULSPACE);
 
         // paragraph text direction
         if( bDisableParagraphTextDirection )
@@ -547,6 +580,17 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             }
         }
 */
+        SvxLRSpaceItem aLRSpace = ( (const SvxLRSpaceItem&) aAttrSet.Get( EE_PARA_LRSPACE ) );
+        aLRSpace.SetWhich(SID_ATTR_PARA_LRSPACE);
+        rSet.Put(aLRSpace);
+        Invalidate(SID_ATTR_PARA_LRSPACE);
+        //Added by xuxu
+        SfxItemState eState = aAttrSet.GetItemState( EE_PARA_LRSPACE );
+        if ( eState == SFX_ITEM_DONTCARE )
+        {
+            rSet.InvalidateItem(EE_PARA_LRSPACE);
+            rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
+        }
         sal_uInt16 nLineSpace = (sal_uInt16) ( (const SvxLineSpacingItem&) aAttrSet.
                             Get( EE_PARA_SBL ) ).GetPropLineSpace();
         switch( nLineSpace )

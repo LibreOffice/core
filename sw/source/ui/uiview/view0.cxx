@@ -43,6 +43,7 @@
 #include <sfx2/templdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <uivwimp.hxx>
 #include <avmedia/mediaplayer.hxx>
 //#include <swlinguconfig.hxx>
@@ -109,6 +110,7 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
 {
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
+    SFX_CHILDWINDOW_REGISTRATION(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SwSpellDialogChildWindow::GetChildWindowId());

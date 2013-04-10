@@ -524,7 +524,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             ConvertColorValues (aAktuellColor, CM_RGB);
         pEntry = new XColorEntry( aAktuellColor, aName );
 
-        pColorTab->Insert( pColorTab->Count(), pEntry );
+        pColorTab->Insert( pEntry, pColorTab->Count() );
 
         aLbColor.Append( pEntry );
         aValSetColorTable.InsertItem( aValSetColorTable.GetItemCount() + 1,
@@ -698,7 +698,7 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
             {
                 pEntry = pColorTab->Remove( i + 1 );
                 DBG_ASSERT( pEntry, "ColorEntry nicht vorhanden (2) !" );
-                pColorTab->Insert( i, pEntry );
+                pColorTab->Insert( pEntry, i );
             }
 
             // Listbox und ValueSet aktualisieren
@@ -765,14 +765,14 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeFinalSlash();
 
             // Tabelle speichern
-            XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
+            XColorList* pColTab = new XColorList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
             pColTab->SetName( aURL.getName() ); // XXX
             if( pColTab->Load() )
             {
                 if( pColTab )
                 {
                     // Pruefen, ob Tabelle geloescht werden darf:
-                    const XColorTable *pTempTable = 0;
+                    const XColorList *pTempTable = 0;
                     SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
                     SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
                     if( pArea )

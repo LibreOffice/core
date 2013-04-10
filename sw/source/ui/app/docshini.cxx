@@ -439,9 +439,9 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     // wird nur die DocInfo fuer den Explorer gelesen, ist das Item nicht da
     if(pColItem)
     {
-        XColorTable* pTable = pColItem->GetColorTable();
+        XColorList* pTable = pColItem->GetColorTable();
         // wurde eine neue Table angelegt, muss sie auch geloescht werden.
-        if((void*)pTable  != (void*)(XColorTable::GetStdColorTable()) )
+        if((void*)pTable  != (void*)(XColorList::GetStdColorList()) )
             delete pTable;
     }
 

@@ -171,7 +171,7 @@ sal_Bool __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 {
 
-    XColorTable* pColorTbl = XColorTable::GetStdColorTable();
+    XColorList* pColorTbl = XColorList::GetStdColorList();
     aContentColorLB.InsertEntry(aAuthorStr);
     aMoveColorLB.InsertEntry(aAuthorStr);
     aInsertColorLB.InsertEntry(aAuthorStr);

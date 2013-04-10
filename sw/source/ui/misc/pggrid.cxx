@@ -143,7 +143,7 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
 
     aDisplayCB.SetClickHdl(LINK(this, SwTextGridPage, DisplayGridHdl));
 
-    XColorTable* pColorTbl = XColorTable::GetStdColorTable();
+    XColorList* pColorTbl = XColorList::GetStdColorList();
     aColorLB.InsertAutomaticEntry();
     for( sal_uInt16 i = 0; i < pColorTbl->Count(); ++i )
     {

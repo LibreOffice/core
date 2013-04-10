@@ -48,9 +48,6 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     SdrObjList*                 pSub;    // Subliste (Kinder)
-    long                        nDrehWink;
-    long                        nShearWink;
-
     Point                       aRefPoint; // Referenzpunkt innerhalb der Objektgruppe
     FASTBOOL                    bRefPoint; // Ist ein RefPoint gesetzt?
 

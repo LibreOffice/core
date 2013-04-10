@@ -28,6 +28,7 @@
 
 #include "window.h"
 #include "svdata.hxx"
+#include "brdwin.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"
 
@@ -219,3 +220,29 @@ uno::Sequence< beans::PropertyValue > Window::getProperties() const
     return aProps;
 }
 
+
+
+
+void Window::EnableThemeSupport (void)
+{
+    mpWindowImpl->mbIsThemingEnabled = sal_True;
+}
+
+
+
+
+void Window::DisableThemeSupport (void)
+{
+    mpWindowImpl->mbIsThemingEnabled = sal_False;
+}
+
+
+
+
+ImplBorderWindow* Window::CreateBorderWindow (
+    Window* pParent,
+    const WinBits nStyle,
+    const sal_uInt16 nTypeStyle)
+{
+    return new ImplBorderWindow(pParent, nStyle, nTypeStyle);
+}

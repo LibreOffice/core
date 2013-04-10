@@ -78,7 +78,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
         const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem )
         {
-            XColorTable* pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
+            XColorList* pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
             if (pColorTable)
             {
                 aLbColor.SetUpdateMode( sal_False );

@@ -29,7 +29,7 @@
 #include "dlgpage.hrc"
 
 class SfxObjectShell;
-class XColorTable;
+class XColorList;
 class XGradientList;
 class XHatchList;
 class XBitmapList;
@@ -48,7 +48,7 @@ private:
 
     const SfxObjectShell* mpDocShell;
 
-    XColorTable*        mpColorTab;
+    XColorList*     mpColorTab;
     XGradientList*      mpGradientList;
     XHatchList*         mpHatchingList;
     XBitmapList*        mpBitmapList;

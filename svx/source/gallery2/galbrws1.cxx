@@ -147,7 +147,13 @@ long GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 // -------------------
 DBG_NAME(GalleryBrowser1)
 
-GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery ) :
+GalleryBrowser1::GalleryBrowser1(
+    Window* pParent,
+    const ResId& rResId,
+    Gallery* pGallery,
+    const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
+    const ::boost::function<void(void)>& rThemeSlectionHandler)
+    :
     Control               ( pParent, rResId ),
     maNewTheme            ( this, WB_3DLOOK ),
     mpThemes              ( new GalleryThemeListBox( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
@@ -157,7 +163,9 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
     aImgNormal            ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_NORMAL ) ),
     aImgDefault           ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_DEFAULT ) ),
     aImgReadOnly          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) ),
-    aImgImported          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_IMPORTED ) )
+    aImgImported          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_IMPORTED ) ),
+    maKeyInputHandler(rKeyInputHandler),
+    maThemeSlectionHandler(rThemeSlectionHandler)
 {
     DBG_CTOR(GalleryBrowser1,NULL);
 
@@ -591,7 +599,9 @@ void GalleryBrowser1::ShowContextMenu()
 
 sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
-    sal_Bool bRet = static_cast< GalleryBrowser* >( GetParent() )->KeyInput( rKEvt, pWindow );
+    sal_Bool bRet (sal_False);
+    if (maKeyInputHandler)
+        bRet = maKeyInputHandler(rKEvt, pWindow);
 
     if( !bRet )
     {
@@ -699,7 +709,8 @@ IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
 
 IMPL_LINK( GalleryBrowser1, SelectThemeHdl, void*, EMPTYARG )
 {
-    ( (GalleryBrowser*) GetParent() )->ThemeSelectionHasChanged();
+    if (maThemeSlectionHandler)
+        maThemeSlectionHandler();
     return 0L;
 }
 

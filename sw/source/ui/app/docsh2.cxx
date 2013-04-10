@@ -1019,7 +1019,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             case SID_GET_COLORTABLE:
             {
                 SvxColorTableItem* pColItem = (SvxColorTableItem*)GetItem(SID_COLOR_TABLE);
-                XColorTable* pTable = pColItem->GetColorTable();
+                XColorList* pTable = pColItem->GetColorTable();
                 rReq.SetReturnValue(OfaPtrItem(SID_GET_COLORTABLE, pTable));
             }
             break;

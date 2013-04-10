@@ -270,6 +270,9 @@ public:
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
 
+    sal_uInt16 GetSelectionLevel() const;
+
+
     //************************************************************************
     // Object-MacroModus (z.B. Rect als Button oder sowas):
     //************************************************************************

@@ -62,7 +62,7 @@
 #include "PresentationViewShell.hxx"
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
-#include "taskpane/PanelId.hxx"
+#include "SidebarPanelId.hxx"
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
 #include "DocumentRenderer.hxx"
@@ -727,13 +727,6 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 rRequest,
                 framework::FrameworkHelper::msLeftImpressPaneURL,
                 framework::FrameworkHelper::msSlideSorterURL);
-            break;
-
-        case SID_TASKPANE:
-            mpImpl->SetPaneVisibility(
-                rRequest,
-                framework::FrameworkHelper::msRightPaneURL,
-                framework::FrameworkHelper::msTaskPaneURL);
             break;
 
         case SID_NORMAL_MULTI_PANE_GUI:
@@ -1449,11 +1442,6 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
                         break;
 
-                    case SID_TASKPANE:
-                        xResourceId = ResourceId::create(
-                            xContext, FrameworkHelper::msRightPaneURL);
-                        break;
-
                     case SID_NORMAL_MULTI_PANE_GUI:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
@@ -1553,8 +1541,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Set the visibility state of the toolpanel and one of its top
     // level panels.
     sal_Bool bShowToolPanel = sal_True;
-    toolpanel::PanelId nPanelId (
-        toolpanel::PID_UNKNOWN);
+    sidebar::PanelId nPanelId (sidebar::PID_UNKNOWN);
     bool bPanelIdGiven = false;
 
     // Extract the given arguments.
@@ -1574,9 +1561,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
                 ID_VAL_PANEL_INDEX, sal_False);
             if (pPanelId != NULL)
             {
-                nPanelId = static_cast<
-                    toolpanel::PanelId>(
-                        pPanelId->GetValue());
+                nPanelId = static_cast<sidebar::PanelId>(pPanelId->GetValue());
                 bPanelIdGiven = true;
             }
         }
@@ -1585,11 +1570,11 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Ignore the request for some combinations of panels and view
     // shell types.
     if (bPanelIdGiven
-        && ! (nPanelId==toolpanel::PID_LAYOUT
+        && ! (nPanelId==sidebar::PID_LAYOUT
             && mrBase.GetMainViewShell()!=NULL
             && mrBase.GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
     {
-        framework::FrameworkHelper::Instance(mrBase)->RequestTaskPanel(
+        framework::FrameworkHelper::Instance(mrBase)->RequestSidebarPanel(
             framework::FrameworkHelper::msLayoutTaskPanelURL);
     }
 }

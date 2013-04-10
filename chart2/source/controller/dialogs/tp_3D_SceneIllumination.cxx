@@ -284,7 +284,7 @@ namespace
 ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWindow
                 , const uno::Reference< beans::XPropertySet > & xSceneProperties
                 , const uno::Reference< frame::XModel >& xChartModel
-                , XColorTable* pColorTable )
+                , XColorList* pColorTable )
                 : TabPage           ( pWindow, SchResId( TP_3D_SCENEILLUMINATION ) )
                 , m_aFT_LightSource( this, SchResId( FT_LIGHTSOURCE ) )
                 , m_aBtn_Light1( this, SchResId( BTN_LIGHT_1 ), 1 )

@@ -39,6 +39,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/prtqry.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/dispatch.hxx>
@@ -220,6 +221,10 @@ void __EXPORT ScTabViewShell::Activate(sal_Bool bMDI)
     //  Wenn Referenzeingabe-Tip-Hilfe hier wieder angezeigt werden soll (ShowRefTip),
     //  muss sie beim Verschieben der View angepasst werden (gibt sonst Probleme unter OS/2
     //  beim Umschalten zwischen Dokumenten)
+
+    ContextChangeEventMultiplexer::NotifyContextChange(
+        GetController(),
+        ::sfx2::sidebar::EnumContext::Context_Default);
 }
 
 void __EXPORT ScTabViewShell::Deactivate(sal_Bool bMDI)

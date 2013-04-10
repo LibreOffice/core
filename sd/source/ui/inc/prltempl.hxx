@@ -34,7 +34,7 @@
 #include "prlayout.hxx" // fuer enum PresentationObjects
 
 
-class XColorTable;
+class XColorList;
 class XGradientList;
 class XHatchList;
 class XBitmapList;
@@ -54,7 +54,7 @@ class SdPresLayoutTemplateDlg : public SfxTabDialog
 private:
     const SfxObjectShell*   mpDocShell;
 
-    XColorTable*        pColorTab;
+    XColorList*     pColorTab;
     XGradientList*      pGradientList;
     XHatchList*         pHatchingList;
     XBitmapList*        pBitmapList;

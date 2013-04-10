@@ -67,86 +67,6 @@ char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'};   // < 5.2
 char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'};   // = 5.2
 char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 
-// ---------------------
-// class XGradientTable
-// ---------------------
-
-/*************************************************************************
-|*
-|* XGradientTable::XGradientTable()
-|*
-*************************************************************************/
-
-XGradientTable::XGradientTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
-{
-    pBmpTable = new Table( nInitSize, nReSize );
-}
-
-/************************************************************************/
-
-XGradientTable::~XGradientTable()
-{
-}
-
-/************************************************************************/
-
-XGradientEntry* XGradientTable::Replace(long nIndex, XGradientEntry* pEntry )
-{
-    return (XGradientEntry*) XPropertyTable::Replace(nIndex, pEntry);
-}
-
-/************************************************************************/
-
-XGradientEntry* XGradientTable::Remove(long nIndex)
-{
-    return (XGradientEntry*) XPropertyTable::Remove(nIndex, 0);
-}
-
-/************************************************************************/
-
-XGradientEntry* XGradientTable::GetGradient(long nIndex) const
-{
-    return (XGradientEntry*) XPropertyTable::Get(nIndex, 0);
-}
-
-/************************************************************************/
-
-sal_Bool XGradientTable::Load()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XGradientTable::Save()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XGradientTable::Create()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XGradientTable::CreateBitmapsForUI()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-Bitmap* XGradientTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return( NULL );
-}
-
 // --------------------
 // class XGradientList
 // --------------------
@@ -186,11 +106,12 @@ void XGradientList::impCreate()
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XGradientList: no VirtualDevice created!" );
         pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(Size(BITMAP_WIDTH, BITMAP_HEIGHT)));
+        const Size aSize(pVirDev->PixelToLogic(Size(getUiBitmapWidth(), getUiBitmapHeight())));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
+        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
 
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XGradientList: no SdrModel created!" );
@@ -204,7 +125,7 @@ void XGradientList::impCreate()
         pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
         pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
         pBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
-        pBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((BITMAP_WIDTH + BITMAP_HEIGHT) / 3)));
+        pBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((getUiBitmapWidth() + getUiBitmapHeight()) / 3)));
 
         mpData = new impXGradientList(pVirDev, pSdrModel, pBackgroundObject);
         OSL_ENSURE(0 != mpData, "XGradientList: data creation went wrong!" );
@@ -220,11 +141,10 @@ void XGradientList::impDestroy()
     }
 }
 
-XGradientList::XGradientList( const String& rPath, XOutdevItemPool* pInPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
-:   XPropertyList(rPath, pInPool, nInitSize, nReSize),
+XGradientList::XGradientList( const String& rPath, XOutdevItemPool* pInPool )
+:   XPropertyList(rPath, pInPool ),
     mpData(0)
 {
-    pBmpList = new List(nInitSize, nReSize);
 }
 
 XGradientList::~XGradientList()
@@ -253,19 +173,19 @@ XGradientEntry* XGradientList::GetGradient(long nIndex) const
 
 sal_Bool XGradientList::Load()
 {
-    if( bListDirty )
+    if( mbListDirty )
     {
-        bListDirty = sal_False;
+        mbListDirty = false;
 
-        INetURLObject aURL( aPath );
+        INetURLObject aURL( maPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
+            DBG_ASSERT( !maPath.Len(), "invalid URL" );
             return sal_False;
         }
 
-        aURL.Append( aName );
+        aURL.Append( maName );
 
         if( !aURL.getExtension().getLength() )
             aURL.setExtension( rtl::OUString( pszExtGradient, 3 ) );
@@ -279,15 +199,15 @@ sal_Bool XGradientList::Load()
 
 sal_Bool XGradientList::Save()
 {
-    INetURLObject aURL( aPath );
+    INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
+        DBG_ASSERT( !maPath.Len(), "invalid URL" );
         return sal_False;
     }
 
-    aURL.Append( aName );
+    aURL.Append( maName );
 
     if( !aURL.getExtension().getLength() )
         aURL.setExtension( rtl::OUString( pszExtGradient, 3 ) );
@@ -318,25 +238,7 @@ sal_Bool XGradientList::Create()
     return( sal_True );
 }
 
-sal_Bool XGradientList::CreateBitmapsForUI()
-{
-    impCreate();
-
-    for( long i = 0; i < Count(); i++)
-    {
-        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
-        DBG_ASSERT( pBmp, "XGradientList: Bitmap(UI) konnte nicht erzeugt werden!" );
-
-        if( pBmp )
-            pBmpList->Insert( pBmp, i );
-    }
-
-    impDestroy();
-
-    return( sal_False );
-}
-
-Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
+Bitmap XGradientList::CreateBitmapForUI( long nIndex )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();
@@ -351,17 +253,11 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
     sdr::contact::DisplayInfo aDisplayInfo;
 
+    pVD->Erase();
     aPainter.ProcessDisplay(aDisplayInfo);
 
     const Point aZero(0, 0);
-    Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
-
-    if(bDelete)
-    {
-        impDestroy();
-    }
-
-    return pBitmap;
+    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
 }
 
 //////////////////////////////////////////////////////////////////////////////

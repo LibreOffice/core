@@ -30,12 +30,12 @@
 
 /************************************************************************/
 
-class XColorTable;
-class XDashTable;
-class XLineEndTable;
-class XHatchTable;
-class XBitmapTable;
-class XGradientTable;
+class XColorList;
+class XDashList;
+class XLineEndList;
+class XHatchList;
+class XBitmapList;
+class XGradientList;
 class SfxItemPool;
 class NameOrIndex;
 class XPropertyList;

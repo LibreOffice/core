@@ -124,7 +124,6 @@ extern uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames(
 extern OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
-// --> OD 2007-05-24 #i73788#
 #include "cppuhelper/implementationentry.hxx"
 namespace comp_FinalThreadManager {
 
@@ -135,7 +134,8 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _crea
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context );
 
 }
-// <--
+
+#include "SwPanelFactory.hxx"
 
 //
 #ifdef __cplusplus
@@ -356,14 +356,19 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 SwUnoModule_createInstance,
                 SwUnoModule_getSupportedServiceNames() );
         }
-        // --> OD 2007-05-24 #i73788#
+        else if ( ::sw::sidebar::SwPanelFactory::getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                ::sw::sidebar::SwPanelFactory::getImplementationName(),
+                ::sw::sidebar::SwPanelFactory::createInstance,
+                ::sw::sidebar::SwPanelFactory::getSupportedServiceNames() );
+        }
         else if( comp_FinalThreadManager::_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )
         {
             pRet = ::cppu::component_getFactoryHelper(
                         pImplName, pServiceManager, pRegistryKey, entries);
         }
-        // <--
 
         if( xFactory.is())
         {

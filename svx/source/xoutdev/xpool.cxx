@@ -162,6 +162,13 @@ XOutdevItemPool::XOutdevItemPool(
     mpLocalItemInfos[XATTR_FORMTXTSHDWYVAL  -XATTR_START]._nSID = SID_FORMTEXT_SHDWYVAL;
     mpLocalItemInfos[XATTR_FORMTXTHIDEFORM  -XATTR_START]._nSID = SID_FORMTEXT_HIDEFORM;
 
+    // associate new slots for panels with known items
+    mpLocalItemInfos[XATTR_FILLTRANSPARENCE - XATTR_START]._nSID = SID_ATTR_FILL_TRANSPARENCE;
+    mpLocalItemInfos[XATTR_FILLFLOATTRANSPARENCE - XATTR_START]._nSID = SID_ATTR_FILL_FLOATTRANSPARENCE;
+    mpLocalItemInfos[XATTR_LINETRANSPARENCE - XATTR_START]._nSID = SID_ATTR_LINE_TRANSPARENCE;
+    mpLocalItemInfos[XATTR_LINEJOINT - XATTR_START]._nSID = SID_ATTR_LINE_JOINT;
+    mpLocalItemInfos[XATTR_LINECAP - XATTR_START]._nSID = SID_ATTR_LINE_CAP;
+
     // if it's my own creation level, set Defaults and ItemInfos
     if(XATTR_START == GetFirstWhich() && XATTR_END == GetLastWhich())
     {

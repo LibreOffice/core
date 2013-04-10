@@ -131,3 +131,13 @@ $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/userinputinterception.hxx,sf
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/viewfac.hxx,sfx2/viewfac.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/viewfrm.hxx,sfx2/viewfrm.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/viewsh.hxx,sfx2/viewsh.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/SidebarChildWindow.hxx,sfx2/sidebar/SidebarChildWindow.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/SidebarPanelBase.hxx,sfx2/sidebar/SidebarPanelBase.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/ControllerItem.hxx,sfx2/sidebar/ControllerItem.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/propertypanel.hrc,sfx2/sidebar/propertypanel.hrc))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/EnumContext.hxx,sfx2/sidebar/EnumContext.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/ControlFactory.hxx,sfx2/sidebar/ControlFactory.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/Theme.hxx,sfx2/sidebar/Theme.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/ILayoutableWindow.hxx,sfx2/sidebar/ILayoutableWindow.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/IContextChangeReceiver.hxx,sfx2/sidebar/IContextChangeReceiver.hxx))
+

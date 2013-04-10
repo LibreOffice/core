@@ -64,8 +64,9 @@ public:
     void ExecuteAttr( SfxRequest &rReq );
     void GetAttrState( SfxItemSet& rSet );
     void ExecuteToggle( SfxRequest &rReq );
+    void GetStatePropPanelAttr(SfxItemSet &);
 
-    sal_Bool ExecuteCharDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
+    sal_Bool ExecuteCharDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet , sal_uInt16 nSlot);
     sal_Bool ExecuteParaDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
 
     void ExecuteExtra( SfxRequest &rReq );

@@ -1903,7 +1903,20 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 
     if (DrawMouseButtonUp(rMEvt))       // includes format paint brush handling for drawing objects
+    {
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        SfxBindings& rBindings=pViewShell->GetViewFrame()->GetBindings();
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_WIDTH);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_HEIGHT);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_X);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_Y);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_ANGLE);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_ROT_X);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_ROT_Y);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_AUTOWIDTH);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_AUTOHEIGHT);
         return;
+    }
 
     rMark.SetMarking(sal_False);
 
@@ -3078,7 +3091,20 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             return;
 
         if (DrawKeyInput(rKEvt))
+        {
+            const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+            if (rKeyCode.GetCode() == KEY_DOWN
+                || rKeyCode.GetCode() == KEY_UP
+                || rKeyCode.GetCode() == KEY_LEFT
+                || rKeyCode.GetCode() == KEY_RIGHT)
+            {
+                ScTabViewShell* pViewShell = pViewData->GetViewShell();
+                SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+                rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_X);
+                rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_Y);
+             }
             return;
+        }
 
         if (!pViewData->GetView()->IsDrawSelMode() && !DrawHasMarkedObj())  //  keine Eingaben im Zeichenmodus
         {                                                           //! DrawShell abfragen !!!

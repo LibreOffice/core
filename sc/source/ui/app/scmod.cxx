@@ -1034,7 +1034,10 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
         SetViewOptions( rNewOpt );
         if (pBindings)
+        {
             pBindings->Invalidate(SID_HELPLINES_MOVE);
+            pBindings->Invalidate(SID_SCGRIDSHOW);
+        }
     }
 
     //============================================

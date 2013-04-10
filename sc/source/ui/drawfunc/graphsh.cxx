@@ -35,6 +35,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/grafctrl.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 
 #include "graphsh.hxx"
 #include "sc.hrc"
@@ -62,6 +63,7 @@ ScGraphicShell::ScGraphicShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_GRAPHIC);
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("GraphicObject")));
+        SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Graphic));
 }
 
 ScGraphicShell::~ScGraphicShell()
@@ -141,4 +143,3 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
 
     Invalidate();
 }
-

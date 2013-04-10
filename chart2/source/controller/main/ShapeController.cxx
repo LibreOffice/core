@@ -323,7 +323,7 @@ void ShapeController::executeDispatch_FormatArea()
                     SfxItemPool& rItemPool = pDrawViewWrapper->GetModel()->GetItemPool();
                     SfxItemSet aSet( rItemPool, rItemPool.GetFirstWhich(), rItemPool.GetLastWhich() );
                     const SvxColorTableItem* pColorItem = static_cast< const SvxColorTableItem* >( aSet.GetItem( SID_COLOR_TABLE ) );
-                    if ( pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable() )
+                    if ( pColorItem && pColorItem->GetColorTable() == XColorList::GetStdColorList() )
                     {
                         pDlg->DontDeleteColorTable();
                     }

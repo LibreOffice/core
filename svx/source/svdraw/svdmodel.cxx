@@ -762,7 +762,7 @@ bool SdrModel::IsUndoEnabled() const
 void SdrModel::ImpCreateTables()
 {
     // der Writer hat seinen eigenen ColorTable
-    if (!bExtColorTable) pColorTable=new XColorTable(aTablePath,(XOutdevItemPool*)pItemPool);
+    if (!bExtColorTable) pColorTable=new XColorList(aTablePath,(XOutdevItemPool*)pItemPool);
     pDashList    =new XDashList    (aTablePath,(XOutdevItemPool*)pItemPool);
     pLineEndList =new XLineEndList (aTablePath,(XOutdevItemPool*)pItemPool);
     pHatchList   =new XHatchList   (aTablePath,(XOutdevItemPool*)pItemPool);
@@ -2173,7 +2173,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImpleme
 //
 // i120668, move from the header files, add delete action
 //
-void            SdrModel::SetColorTable(XColorTable* pTable)       { delete pColorTable; pColorTable=pTable; }
+void            SdrModel::SetColorTable(XColorList* pTable)       { delete pColorTable; pColorTable=pTable; }
 void            SdrModel::SetDashList(XDashList* pList)            { delete pDashList; pDashList=pList; }
 void            SdrModel::SetLineEndList(XLineEndList* pList)      { delete pLineEndList; pLineEndList=pList; }
 void            SdrModel::SetHatchList(XHatchList* pList)          { delete pHatchList; pHatchList=pList; }

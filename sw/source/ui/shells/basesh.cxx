@@ -2452,8 +2452,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
     switch ( nSlot )
     {
-        case FN_FORMAT_PAGE_COLUMN_DLG:
         case FN_FORMAT_PAGE_DLG:
+        case FN_FORMAT_PAGE_COLUMN_DLG:
+        case FN_FORMAT_PAGE_SETTING_DLG:
         {
             if( !bBackground )
             {
@@ -2462,9 +2463,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 //temp. View, weil die Shell nach dem Dialog nicht mehr gueltig sein muss
                 //z.B. Kopfzeile ausschalten
                 SwView& rTempView = GetView();
-                rTempView.GetDocShell()->FormatPage(rPageDesc.GetName(),
-                                    nSlot == FN_FORMAT_PAGE_COLUMN_DLG,
-                                    &rSh );
+                rTempView.GetDocShell()->FormatPage(
+                    rPageDesc.GetName(),
+                    nSlot,
+                    rSh );
                 rTempView.InvalidateRulerPos();
             }
         }

@@ -31,6 +31,7 @@ interface WebDrawBase : BaseTextDrawBase
 shell SwWebDrawBaseShell: SwBaseShell
 {
         import WebDrawBase[Automation];
+        import Sidebar;
 
     SID_OBJECT_ALIGN
     [

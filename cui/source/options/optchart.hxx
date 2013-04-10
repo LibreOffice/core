@@ -35,7 +35,7 @@
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-// header for XColorTable
+// header for XColorList
 #include <svx/xtable.hxx>
 
 #include "cfgchart.hxx"
@@ -61,7 +61,7 @@ private:
 
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;
-    XColorTable*            pColorTab;
+    XColorList*         pColorTab;
 
     DECL_LINK( ResetToDefaults, void * );
     DECL_LINK( ListClickedHdl, ChartColorLB * );

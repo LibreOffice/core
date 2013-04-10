@@ -40,6 +40,8 @@ IDLFILES=\
     ActionTriggerSeparatorType.idl              \
     ConfigurableUIElement.idl                   \
     ConfigurationEvent.idl                      \
+    ContextChangeEventMultiplexer.idl			\
+    ContextChangeEventObject.idl				\
     ContextMenuExecuteEvent.idl                 \
     ContextMenuInterceptorAction.idl            \
     DockingArea.idl                             \
@@ -48,6 +50,7 @@ IDLFILES=\
     ItemDescriptor.idl                          \
     ItemStyle.idl                               \
     ItemType.idl                                \
+    LayoutSize.idl								\
     ModuleUICategoryDescription.idl             \
     ModuleUICommandDescription.idl              \
     ModuleUIConfigurationManager.idl            \
@@ -66,10 +69,14 @@ IDLFILES=\
     XAcceleratorConfiguration.idl               \
     XContextMenuInterception.idl                \
     XContextMenuInterceptor.idl                 \
+    XContextChangeEventListener.idl				\
+    XContextChangeEventMultiplexer.idl			\
     XDockingAreaAcceptor.idl                    \
     XImageManager.idl                           \
     XModuleUIConfigurationManager.idl           \
     XModuleUIConfigurationManagerSupplier.idl   \
+    XSidebar.idl								\
+    XSidebarPanel.idl							\
     XStatusbarItem.idl                          \
     XUIConfiguration.idl                        \
     XUIConfigurationListener.idl                \

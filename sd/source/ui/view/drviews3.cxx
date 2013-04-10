@@ -32,6 +32,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/ruler.hxx>
 #ifndef _SVX_RULERITEM_HXX
 #include <svx/rulritem.hxx>
@@ -96,7 +97,8 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-
+#include <editeng/lspcitem.hxx>
+#include <editeng/ulspitem.hxx>
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::com::sun::star::frame::XFrame;
@@ -677,7 +679,96 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             break;
         }
 
+        case SID_ATTR_PARA_LINESPACE:
+        {
+            sal_uInt16 nSlot = SID_ATTR_PARA_LINESPACE;
+            SvxLineSpacingItem aParaLineSP = (const SvxLineSpacingItem&)pArgs->Get(
+                GetPool().GetWhich(nSlot));
+
+            SfxItemSet aEditAttr( GetPool(), EE_PARA_SBL, EE_PARA_SBL );
+            aParaLineSP.SetWhich( EE_PARA_SBL );
+
+            aEditAttr.Put( aParaLineSP );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_LINESPACE);
+        }
+        break;
+        case SID_ATTR_PARA_ADJUST_LEFT:
+        {
+            SvxAdjustItem aItem( SVX_ADJUST_LEFT, EE_PARA_JUST );
+            SfxItemSet aEditAttr( GetPool(), EE_PARA_JUST, EE_PARA_JUST );
+
+            aEditAttr.Put( aItem );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_ADJUST_LEFT);
+        }
+        break;
+        case SID_ATTR_PARA_ADJUST_CENTER:
+        {
+            SvxAdjustItem aItem( SVX_ADJUST_CENTER, EE_PARA_JUST );
+            SfxItemSet aEditAttr( GetPool(), EE_PARA_JUST, EE_PARA_JUST );
+
+            aEditAttr.Put( aItem );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_ADJUST_CENTER);
+        }
+        break;
+        case SID_ATTR_PARA_ADJUST_RIGHT:
+        {
+            SvxAdjustItem aItem( SVX_ADJUST_RIGHT, EE_PARA_JUST );
+            SfxItemSet aEditAttr( GetPool(), EE_PARA_JUST, EE_PARA_JUST );
+
+            aEditAttr.Put( aItem );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_ADJUST_RIGHT);
+        }
+        break;
+        case SID_ATTR_PARA_ADJUST_BLOCK:
+        {
+            SvxAdjustItem aItem( SVX_ADJUST_BLOCK, EE_PARA_JUST );
+            SfxItemSet aEditAttr( GetPool(), EE_PARA_JUST, EE_PARA_JUST );
+
+            aEditAttr.Put( aItem );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_ADJUST_BLOCK);
+        }
+        break;
+        case SID_ATTR_PARA_ULSPACE:
+        {
+            sal_uInt16 nSlot = SID_ATTR_PARA_ULSPACE;
+            SvxULSpaceItem aULSP = (const SvxULSpaceItem&)pArgs->Get(
+                GetPool().GetWhich(nSlot));
+            SfxItemSet aEditAttr( GetPool(), EE_PARA_ULSPACE, EE_PARA_ULSPACE );
+            aULSP.SetWhich( EE_PARA_ULSPACE );
+
+            aEditAttr.Put( aULSP );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_ULSPACE);
+        }
+        break;
+
         case SID_ATTR_PARA_LRSPACE:
+        {
+            sal_uInt16 nSlot = SID_ATTR_PARA_LRSPACE;
+            SvxLRSpaceItem aLRSpace = (const SvxLRSpaceItem&)pArgs->Get(
+                GetPool().GetWhich(nSlot));
+
+            SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+            aLRSpace.SetWhich( EE_PARA_LRSPACE );
+
+            aEditAttr.Put( aLRSpace );
+            mpDrawView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_LRSPACE);
+            break;
+        }
+        case SID_ATTR_LRSPACE:
         {
             if( mpDrawView->IsTextEdit() )
             {
@@ -685,9 +776,9 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
                             pArgs->Get( nId );
 
-                SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+                        SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
-                nId = EE_PARA_LRSPACE;
+                        nId = EE_PARA_LRSPACE;
                 SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                         rItem.GetRight(), rItem.GetTxtLeft(),
                         rItem.GetTxtFirstLineOfst(), nId );

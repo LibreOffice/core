@@ -945,7 +945,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         }
     }
 
-    XColorTable aColorTable( SvtPathOptions().GetPalettePath() );
+    XColorList aColorTable( SvtPathOptions().GetPalettePath() );
     aColorBoxes[0]->InsertAutomaticEntry();
     for( sal_Int32 i = 0; i < aColorTable.Count(); i++ )
     {

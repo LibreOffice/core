@@ -65,7 +65,7 @@ public:
     virtual FASTBOOL        HasMetrics() const;
     virtual FASTBOOL        ScaleMetrics(long nMul, long nDiv);
 
-    const XDash&            GetDashValue(const XDashTable* pTable = 0) const; // GetValue -> GetDashValue
+    const XDash&            GetDashValue(const XDashList* pTable = 0) const; // GetValue -> GetDashValue
     void                    SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );

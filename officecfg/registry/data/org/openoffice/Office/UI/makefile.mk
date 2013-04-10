@@ -64,6 +64,7 @@ LOCALIZEDFILES= \
     WriterWebWindowState.xcu \
     WriterCommands.xcu\
     GenericCategories.xcu\
+    Sidebar.xcu
 
 XCUFILES= \
     $(LOCALIZEDFILES) \

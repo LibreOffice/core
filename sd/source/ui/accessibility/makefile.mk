@@ -49,12 +49,13 @@ SLOFILES =      									\
     $(SLO)$/AccessibleViewForwarder.obj				\
     $(SLO)$/AccessibleOutlineEditSource.obj			\
     $(SLO)$/AccessiblePageShape.obj					\
-    $(SLO)$/AccessibleScrollPanel.obj				\
     $(SLO)$/AccessibleSlideSorterView.obj			\
     $(SLO)$/AccessibleSlideSorterObject.obj			\
-    $(SLO)$/AccessibleTreeNode.obj					\
     $(SLO)$/SdShapeTypes.obj
 
+#SIDEBAR_TO_BE_REMOVED
+#	$(SLO)$/AccessibleScrollPanel.obj				\
+#	$(SLO)$/AccessibleTreeNode.obj					\
 
 EXCEPTIONSFILES= 
 

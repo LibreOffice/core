@@ -34,7 +34,7 @@
 class XBitmapEntry;
 class XBitmapList;
 class XColorEntry;
-class XColorTable;
+class XColorList;
 class XDash;
 class XDashEntry;
 class XDashList;
@@ -259,7 +259,7 @@ public:
          ColorLB( Window* pParent, ResId Id ) : ColorListBox( pParent, Id ) {}
          ColorLB( Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
 
-    virtual void Fill( const XColorTable* pTab );
+    virtual void Fill( const XColorList* pTab );
 
     void Append( XColorEntry* pEntry, Bitmap* pBmp = NULL );
     void Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
@@ -327,8 +327,8 @@ public:
     virtual void Fill(const XBitmapList* pList);
     virtual void UserDraw(const UserDrawEvent& rUDEvt);
 
-    void Append(XBitmapEntry* pEntry, BitmapEx* pBmpEx = 0);
-    void Modify(XBitmapEntry* pEntry, sal_uInt16 nPos, BitmapEx* pBmpEx = 0);
+    void Append(const Size& rSize, const XBitmapEntry& rEntry, BitmapEx* pBmpEx = 0);
+    void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos, BitmapEx* pBmpEx = 0);
     void SelectEntryByList(const XBitmapList* pList, const String& rStr);
 
 private:
@@ -338,7 +338,7 @@ private:
     XBitmapList*    mpList;
     bool            mbUserDraw;
 
-    SVX_DLLPRIVATE void SetVirtualDevice();
+    SVX_DLLPRIVATE void SetVirtualDevice(const Size& rSize);
 };
 
 /*************************************************************************
@@ -352,13 +352,13 @@ private:
     VirtualDevice   maVD;
     BitmapEx        maBitmapEx;
 
-    void SetVirtualDevice();
+    void SetVirtualDevice(const Size& rSize);
 
 public:
     FillAttrLB( Window* pParent, ResId Id );
     FillAttrLB( Window* pParent, WinBits aWB );
 
-    virtual void Fill( const XColorTable* pTab );
+    virtual void Fill( const XColorList* pTab );
     virtual void Fill( const XHatchList* pList );
     virtual void Fill( const XGradientList* pList );
     virtual void Fill( const XBitmapList* pList );
@@ -395,11 +395,11 @@ public:
 
     virtual void Fill( const XDashList* pList );
 
-    void Append( XDashEntry* pEntry, Bitmap* pBmp = NULL );
-    void Modify( XDashEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
+    void Append( XDashEntry* pEntry, const Bitmap* pBmp = NULL );
+    void Modify( XDashEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp = NULL );
     void SelectEntryByList( const XDashList* pList, const String& rStr,
                             const XDash& rDash, sal_uInt16 nDist = 0 );
-    void FillStyles();
+    // void FillStyles();
 };
 
 /*************************************************************************
@@ -411,14 +411,15 @@ class SVX_DLLPUBLIC LineEndLB : public ListBox
 {
 
 public:
-         LineEndLB( Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
-         LineEndLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
+                          LineEndLB( Window* pParent, ResId Id );
+                          LineEndLB( Window* pParent, WinBits aWB );
+                 virtual ~LineEndLB (void);
 
     virtual void Fill( const XLineEndList* pList, sal_Bool bStart = sal_True );
 
-    void    Append( XLineEndEntry* pEntry, Bitmap* pBmp = NULL,
+    void    Append( XLineEndEntry* pEntry, const Bitmap* pBmp = NULL,
                     sal_Bool bStart = sal_True );
-    void    Modify( XLineEndEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL,
+    void    Modify( XLineEndEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp = NULL,
                     sal_Bool bStart = sal_True );
 };
 

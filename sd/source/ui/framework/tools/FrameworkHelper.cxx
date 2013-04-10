@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #include "precompiled_sd.hxx"
 
 #include <osl/time.h>
@@ -37,6 +35,7 @@
 #include "DrawController.hxx"
 #include "app.hrc"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <com/sun/star/drawing/framework/XPane.hpp>
 #include <cppuhelper/compbase1.hxx>
 #include <svl/lstner.hxx>
 
@@ -102,8 +101,10 @@ public:
     virtual ~CallbackCaller (void);
 
     virtual void SAL_CALL disposing (void);
+    // XEventListener
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
         throw (RuntimeException);
+    // XConfigurationChangeListener
     virtual void SAL_CALL notifyConfigurationChange (const ConfigurationChangeEvent& rEvent)
         throw (RuntimeException);
 
@@ -179,8 +180,8 @@ const OUString FrameworkHelper::msLeftImpressPaneURL(
     msPaneURLPrefix + OUString::createFromAscii("LeftImpressPane"));
 const OUString FrameworkHelper::msLeftDrawPaneURL(
     msPaneURLPrefix + OUString::createFromAscii("LeftDrawPane"));
-const OUString FrameworkHelper::msRightPaneURL(
-    msPaneURLPrefix + OUString::createFromAscii("RightPane"));
+const OUString FrameworkHelper::msSidebarPaneURL(
+    msPaneURLPrefix + OUString::createFromAscii("SidebarPane"));
 
 
 // View URLs.
@@ -201,8 +202,8 @@ const OUString FrameworkHelper::msSlideSorterURL(
     msViewURLPrefix + OUString::createFromAscii("SlideSorter"));
 const OUString FrameworkHelper::msPresentationViewURL(
     msViewURLPrefix + OUString::createFromAscii("PresentationView"));
-const OUString FrameworkHelper::msTaskPaneURL(
-    msViewURLPrefix + OUString::createFromAscii("TaskPane"));
+const OUString FrameworkHelper::msSidebarViewURL(
+    msViewURLPrefix + OUString::createFromAscii("SidebarView"));
 
 
 // Tool bar URLs.
@@ -215,9 +216,13 @@ const OUString FrameworkHelper::msViewTabBarURL(
 
 // Task panel URLs.
 const ::rtl::OUString FrameworkHelper::msTaskPanelURLPrefix(
-    OUString::createFromAscii("private:resource/toolpanel/DrawingFramework/"));
-const ::rtl::OUString FrameworkHelper::msMasterPagesTaskPanelURL(
-    msTaskPanelURLPrefix + OUString::createFromAscii("MasterPages"));
+    OUString::createFromAscii("private:resource/toolpanel/"));
+const ::rtl::OUString FrameworkHelper::msAllMasterPagesTaskPanelURL(
+    msTaskPanelURLPrefix + OUString::createFromAscii("AllMasterPages"));
+const ::rtl::OUString FrameworkHelper::msRecentMasterPagesTaskPanelURL(
+    msTaskPanelURLPrefix + OUString::createFromAscii("RecentMasterPages"));
+const ::rtl::OUString FrameworkHelper::msUsedMasterPagesTaskPanelURL(
+    msTaskPanelURLPrefix + OUString::createFromAscii("UsedMasterPages"));
 const ::rtl::OUString FrameworkHelper::msLayoutTaskPanelURL(
     msTaskPanelURLPrefix + OUString::createFromAscii("Layouts"));
 const ::rtl::OUString FrameworkHelper::msTableDesignPanelURL(
@@ -237,6 +242,8 @@ const OUString FrameworkHelper::msResourceActivationEvent(
     OUString::createFromAscii("ResourceActivation"));
 const OUString FrameworkHelper::msResourceDeactivationEvent(
     OUString::createFromAscii("ResourceDeactivation"));
+const OUString FrameworkHelper::msResourceDeactivationEndEvent(
+    OUString::createFromAscii("ResourceDeactivationEnd"));
 const OUString FrameworkHelper::msConfigurationUpdateStartEvent(
     OUString::createFromAscii("ConfigurationUpdateStart"));
 const OUString FrameworkHelper::msConfigurationUpdateEndEvent(
@@ -337,6 +344,20 @@ private:
 
 
 
+//----- FrameworkHelper::Deleter ----------------------------------------------
+
+class FrameworkHelper::Deleter
+{
+public:
+    void operator()(FrameworkHelper* pObject)
+    {
+        delete pObject;
+    }
+};
+
+
+
+
 //----- FrameworkHelper -------------------------------------------------------
 
 ::boost::scoped_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new ViewURLMap());
@@ -381,7 +402,9 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
         ::osl::MutexGuard aGuard (aMutexFunctor());
         if (iHelper == maInstanceMap.end())
         {
-            pHelper = ::boost::shared_ptr<FrameworkHelper>(new FrameworkHelper(rBase));
+            pHelper = ::boost::shared_ptr<FrameworkHelper>(
+                new FrameworkHelper(rBase),
+                FrameworkHelper::Deleter());
             pHelper->Initialize();
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             maInstanceMap[&rBase] = pHelper;
@@ -524,6 +547,61 @@ Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneO
 
 
 
+Reference<awt::XWindow> FrameworkHelper::GetPaneWindow (const Reference<XResourceId>& rxPaneId)
+{
+    Reference<awt::XWindow> xWindow;
+
+    if (rxPaneId.is() && mxConfigurationController.is())
+    {
+        try
+        {
+            if (rxPaneId->getResourceURL().match(msPaneURLPrefix))
+            {
+                Reference<XPane> xPane (mxConfigurationController->getResource(rxPaneId), UNO_QUERY);
+                if (xPane.is())
+                    xWindow = xPane->getWindow();
+            }
+        }
+        catch (lang::DisposedException&)
+        {
+            Dispose();
+        }
+        catch (RuntimeException&)
+        {
+        }
+    }
+
+    return xWindow;
+}
+
+
+
+
+Reference<XResource> FrameworkHelper::GetResource (const Reference<XResourceId>& rxResourceId)
+{
+    Reference<XResource> xResource;
+
+    if (rxResourceId.is() && mxConfigurationController.is())
+    {
+        try
+        {
+            return mxConfigurationController->getResource(rxResourceId);
+        }
+        catch (lang::DisposedException&)
+        {
+            Dispose();
+        }
+        catch (RuntimeException&)
+        {
+        }
+    }
+
+    return NULL;
+}
+
+
+
+
 Reference<XResourceId> FrameworkHelper::RequestView (
     const OUString& rsResourceURL,
     const OUString& rsAnchorURL)
@@ -559,7 +637,7 @@ Reference<XResourceId> FrameworkHelper::RequestView (
 
 
 
-void FrameworkHelper::RequestTaskPanel (
+Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
     const OUString& rsTaskPanelURL,
     const bool bEnsureTaskPaneIsVisible)
 {
@@ -572,27 +650,50 @@ void FrameworkHelper::RequestTaskPanel (
             {
                 Reference<XConfiguration> xConfiguration (
                     mxConfigurationController->getCurrentConfiguration());
-            if (xConfiguration.is())
-                if ( ! xConfiguration->hasResource(
-                    CreateResourceId(msTaskPaneURL, msRightPaneURL)))
-                {
-                    // Task pane does is not active.  Do not force it.
-                    return;
-                }
+                if (xConfiguration.is())
+                    if ( ! xConfiguration->hasResource(
+                            CreateResourceId(msSidebarViewURL, msSidebarPaneURL)))
+                    {
+                        // Task pane is not active.  Do not force it.
+                        return NULL;
+                    }
             }
 
-            // Create the resource id from URLs for the pane, the task pane
-            // view, and the task panel.
+            // Create the resource id from URLs for the sidebar pane
+            // and view and the requested panel.
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(msRightPaneURL),
+                CreateResourceId(msSidebarPaneURL),
                 ResourceActivationMode_ADD);
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(msTaskPaneURL, msRightPaneURL),
+                CreateResourceId(msSidebarViewURL, msSidebarPaneURL),
                 ResourceActivationMode_REPLACE);
+            Reference<XResourceId> xPanelId (CreateResourceId(rsTaskPanelURL, msSidebarViewURL, msSidebarPaneURL));
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(rsTaskPanelURL, msTaskPaneURL, msRightPaneURL),
+                xPanelId,
                 ResourceActivationMode_REPLACE);
+
+            return xPanelId;
         }
+    }
+    catch (lang::DisposedException&)
+    {
+        Dispose();
+    }
+    catch (RuntimeException&)
+    {}
+
+    return NULL;
+}
+
+
+
+
+void FrameworkHelper::RequestResourceDeactivation (const cssu::Reference<cssdf::XResourceId>& rxResourceId)
+{
+    try
+    {
+        if (mxConfigurationController.is() && rxResourceId.is())
+            mxConfigurationController->requestResourceDeactivation(rxResourceId);
     }
     catch (lang::DisposedException&)
     {
@@ -616,7 +717,7 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const rtl::OUString& rsViewURL)
         (*mpViewURLMap)[msHandoutViewURL] = ViewShell::ST_HANDOUT;
         (*mpViewURLMap)[msSlideSorterURL] = ViewShell::ST_SLIDE_SORTER;
         (*mpViewURLMap)[msPresentationViewURL] = ViewShell::ST_PRESENTATION;
-        (*mpViewURLMap)[msTaskPaneURL] = ViewShell::ST_TASK_PANE;
+        (*mpViewURLMap)[msSidebarViewURL] = ViewShell::ST_SIDEBAR;
     }
     ViewURLMap::const_iterator iView (mpViewURLMap->find(rsViewURL));
     if (iView != mpViewURLMap->end())
@@ -639,7 +740,7 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const rtl::OUString& rsViewURL)
         case ViewShell::ST_HANDOUT : return msHandoutViewURL;
         case ViewShell::ST_SLIDE_SORTER : return msSlideSorterURL;
         case ViewShell::ST_PRESENTATION : return msPresentationViewURL;
-        case ViewShell::ST_TASK_PANE : return msTaskPaneURL;
+        case ViewShell::ST_SIDEBAR : return msSidebarViewURL;
         default:
             return OUString();
     }
@@ -780,6 +881,30 @@ void FrameworkHelper::RunOnResourceActivation(
     {
         RunOnEvent(
             msResourceActivationEvent,
+            FrameworkHelperResourceIdFilter(rxResourceId),
+            rCallback);
+    }
+}
+
+
+
+
+void FrameworkHelper::RunOnResourceDeactivation(
+    const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+    const Callback& rCallback,
+    const bool bRunOnDeactivationEnd)
+{
+    if (mxConfigurationController.is()
+        && ! mxConfigurationController->getResource(rxResourceId).is())
+    {
+        rCallback(false);
+    }
+    else
+    {
+        RunOnEvent(
+            bRunOnDeactivationEnd
+                ? msResourceDeactivationEndEvent
+                : msResourceDeactivationEvent,
             FrameworkHelperResourceIdFilter(rxResourceId),
             rCallback);
     }

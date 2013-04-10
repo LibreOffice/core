@@ -903,7 +903,7 @@ IMPL_LINK( SvxFontWorkDialog, ColorSelectHdl_Impl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-void SvxFontWorkDialog::SetColorTable(const XColorTable* pTable)
+void SvxFontWorkDialog::SetColorTable(const XColorList* pTable)
 {
     if ( pTable && pTable != pColorTable )
     {

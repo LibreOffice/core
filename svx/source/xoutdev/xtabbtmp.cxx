@@ -51,102 +51,13 @@ static char const aChckBitmap0[] = { 0x04, 0x00, 'S','O','B','0'};  // old
 static char const aChckBitmap1[] = { 0x04, 0x00, 'S','O','B','1'};  // = 5.2
 static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };        // = 6.0
 
-// -------------------
-// class XBitmapTable
-// -------------------
-
-/*************************************************************************
-|*
-|* XBitmapTable::XBitmapTable()
-|*
-*************************************************************************/
-
-XBitmapTable::XBitmapTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
-{
-    pBmpTable = new Table( nInitSize, nReSize );
-}
-
-/************************************************************************/
-
-XBitmapTable::~XBitmapTable()
-{
-}
-
-/************************************************************************/
-
-XBitmapEntry* XBitmapTable::Replace(long nIndex, XBitmapEntry* pEntry )
-{
-    return (XBitmapEntry*) XPropertyTable::Replace(nIndex, pEntry);
-}
-
-/************************************************************************/
-
-XBitmapEntry* XBitmapTable::Remove(long nIndex)
-{
-    return (XBitmapEntry*) XPropertyTable::Remove(nIndex, 0);
-}
-
-/************************************************************************/
-
-XBitmapEntry* XBitmapTable::GetBitmap(long nIndex) const
-{
-    return (XBitmapEntry*) XPropertyTable::Get(nIndex, 0);
-}
-
-/************************************************************************/
-
-sal_Bool XBitmapTable::Load()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XBitmapTable::Save()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XBitmapTable::Create()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XBitmapTable::CreateBitmapsForUI()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-Bitmap* XBitmapTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return( NULL );
-}
-
 // ------------------
 // class XBitmapList
 // ------------------
 
-/*************************************************************************
-|*
-|* XBitmapList::XBitmapList()
-|*
-*************************************************************************/
-
-XBitmapList::XBitmapList( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyList( rPath, pInPool, nInitSize, nReSize)
+XBitmapList::XBitmapList( const String& rPath, XOutdevItemPool* pInPool ) :
+                XPropertyList( rPath, pInPool )
 {
-    // pBmpList = new List( nInitSize, nReSize );
 }
 
 /************************************************************************/
@@ -180,19 +91,19 @@ XBitmapEntry* XBitmapList::GetBitmap(long nIndex) const
 
 sal_Bool XBitmapList::Load()
 {
-    if( bListDirty )
+    if( mbListDirty )
     {
-        bListDirty = sal_False;
+        mbListDirty = false;
 
-        INetURLObject aURL( aPath );
+        INetURLObject aURL( maPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
+            DBG_ASSERT( !maPath.Len(), "invalid URL" );
             return sal_False;
         }
 
-        aURL.Append( aName );
+        aURL.Append( maName );
 
         if( !aURL.getExtension().getLength() )
             aURL.setExtension( rtl::OUString( pszExtBitmap, 3 ) );
@@ -207,15 +118,15 @@ sal_Bool XBitmapList::Load()
 
 sal_Bool XBitmapList::Save()
 {
-    INetURLObject aURL( aPath );
+    INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
+        DBG_ASSERT( !maPath.Len(), "invalid URL" );
         return sal_False;
     }
 
-    aURL.Append( aName );
+    aURL.Append( maName );
 
     if( !aURL.getExtension().getLength() )
         aURL.setExtension( rtl::OUString( pszExtBitmap, 3 ) );
@@ -276,16 +187,9 @@ sal_Bool XBitmapList::Create()
 
 /************************************************************************/
 
-sal_Bool XBitmapList::CreateBitmapsForUI()
+Bitmap XBitmapList::CreateBitmapForUI( long /*nIndex*/ )
 {
-    return( sal_False );
-}
-
-/************************************************************************/
-
-Bitmap* XBitmapList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return( NULL );
+    return Bitmap();
 }
 
 // eof

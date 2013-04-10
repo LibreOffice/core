@@ -24,6 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <cmdid.h>
 #include <hintids.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdmodel.hxx>
@@ -34,6 +35,8 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <fmtfsize.hxx>
@@ -424,6 +427,18 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     {
         GetIDocumentUndoRedo().DelAllUndoObj();
     }
+
+    SfxBindings* pBindings =
+        ( GetDocShell() && GetDocShell()->GetDispatcher() ) ? GetDocShell()->GetDispatcher()->GetBindings() : 0;
+    if ( pBindings )
+    {
+        pBindings->Invalidate( SID_ATTR_PAGE_COLUMN );
+        pBindings->Invalidate( SID_ATTR_PAGE );
+        pBindings->Invalidate( SID_ATTR_PAGE_SIZE );
+        pBindings->Invalidate( SID_ATTR_PAGE_ULSPACE );
+        pBindings->Invalidate( SID_ATTR_PAGE_LRSPACE );
+    }
+
 }
 
 /*************************************************************************

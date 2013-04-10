@@ -81,6 +81,16 @@ void Pane::disposing (void)
 
 
 
+void Pane::SetWindow (::Window* pWindow)
+{
+    OSL_TRACE("setting Pane::mpWindow to %x", pWindow);
+    mpWindow = pWindow;
+    mxWindow = VCLUnoHelper::GetInterface(mpWindow);
+}
+
+
+
+
 //----- XPane -----------------------------------------------------------------
 
 Reference<awt::XWindow> SAL_CALL Pane::getWindow (void)

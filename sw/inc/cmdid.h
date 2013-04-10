@@ -64,6 +64,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_EXTRA2               (SID_SW_START + 2200)
 #define FN_PARAM2               (SID_SW_START + 2400)
 #define FN_NOTES                (SID_SW_START + 2500)
+#define FN_SIDEBAR              (SID_SW_START + 2550)
 
  /* More accurately, this range should be from FN_EXTRA2 to FN_PARAM2-1, but
  * FN_NUMBER_NEWSTART comes from FN_FORMAT2, and FN_PARAM_LINK_DISPLAY_NAME
@@ -480,7 +481,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_SET_WIDOW            (FN_FORMAT + 36) /* Widows */
 #define FN_SET_ORPHAN           (FN_FORMAT + 37) /* Orphans */
 
-
+#define FN_FORMAT_PAGE_SETTING_DLG  (FN_FORMAT + 42)  /*  */
 #define FN_REGISTER_COLLECTION  (FN_FORMAT + 43)  /* Referenzvorlage an der Seite */
 #define FN_REGISTER_MODE        (FN_FORMAT + 44)  /* Registermodus an/aus */
 #define FN_NUM_FORMAT_TABLE_DLG     (FN_FORMAT + 45)  /* Zahlenformat in Tabelle */
@@ -638,10 +639,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_FRAME_WRAP_CONTOUR       (FN_FORMAT + 184)  /* Rahmen Kunturumlauf */
 
-#define FN_TABLE_VERT_NONE          (FN_FORMAT + 185)  /* vertikale Ausrichtung in Tabellenzellen */
-#define FN_TABLE_VERT_CENTER        (FN_FORMAT + 186)  /*   -"-  */
-#define FN_TABLE_VERT_BOTTOM        (FN_FORMAT + 187)  /*  -"-  */
-#define FN_TABLE_SET_VERT_ALIGN     (FN_FORMAT + 188)  /*  -"-  */
+// +185..+187 removed in favor of corresponding globally available slot
+
+#define FN_TABLE_SET_VERT_ALIGN     (FN_FORMAT + 188)  /* vertical alignment in Writer table cells */
 #define FN_TABLE_MODE_FIX           (FN_FORMAT + 189)  /* Tabellenmodus */
 #define FN_TABLE_MODE_FIX_PROP      (FN_FORMAT + 190)  /*  -"-  */
 #define FN_TABLE_MODE_VARIABLE      (FN_FORMAT + 191)  /*  -"-  */
@@ -1258,10 +1258,13 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_IID_COLRIGHT                 (FN_FRAME + 17)
 
 #define FN_SET_FRM_ALT_NAME             (FN_FRAME + 18)
-// --> OD 2009-07-13 #i73249#
 #define FN_UNO_TITLE                    (FN_FRAME + 19)
 #define FN_UNO_DESCRIPTION              (FN_FRAME + 20)
-// <--
+
+#define FN_PROPERTY_WRAP_DLG            (FN_SIDEBAR + 0)
+#define SID_ATTR_PAGE_COLUMN            (FN_SIDEBAR + 1)
+#define SID_ATTR_PAGE_ULSPACE           (FN_SIDEBAR + 2)
+#define SID_ATTR_PAGE_LRSPACE           (FN_SIDEBAR + 3)
 
 
 //Member-Ids fuer Fill/SetVariable an Items

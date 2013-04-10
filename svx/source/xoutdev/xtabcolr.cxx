@@ -55,78 +55,63 @@ static char const aChckColor[]  = { 0x04, 0x00, 'S','O','C','L'};   // < 5.2
 static char const aChckColor0[] = { 0x04, 0x00, 'S','O','C','0'};   // = 5.2
 static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 
-// ------------------
-// class XColorTable
-// ------------------
-
-static XColorTable* pTable=0;
-
 /*************************************************************************
 |*
-|* XColorTable::XColorTable()
+|* XColorList::XColorList()
 |*
 *************************************************************************/
 
-XColorTable::XColorTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+static XColorList* pStaticGlobalColorList = 0;
+
+XColorList::XColorList( const String& rPath, XOutdevItemPool* pInPool ) :
+                XPropertyList( rPath, pInPool )
 {
-    // ColorTable braucht keine eigene BmpTable
-    // pBmpTable = new Table( nInitSize, nReSize );
 }
 
 /************************************************************************/
 
-XColorTable::~XColorTable()
+XColorList::~XColorList()
 {
-}
-
-XColorTable* XColorTable::GetStdColorTable()
-{
-    if ( !pTable )
-        pTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-    return pTable;
 }
 
 /************************************************************************/
 
-XColorEntry* XColorTable::Replace(long nIndex, XColorEntry* pEntry )
+XColorEntry* XColorList::Replace(XColorEntry* pEntry, long nIndex )
 {
-    return (XColorEntry*) XPropertyTable::Replace(nIndex, pEntry);
+    return (XColorEntry*) XPropertyList::Replace(pEntry, nIndex);
 }
 
 /************************************************************************/
 
-XColorEntry* XColorTable::Remove(long nIndex)
+XColorEntry* XColorList::Remove(long nIndex)
 {
-    return (XColorEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XColorEntry*) XPropertyList::Remove(nIndex, 0);
 }
 
 /************************************************************************/
 
-XColorEntry* XColorTable::GetColor(long nIndex) const
+XColorEntry* XColorList::GetColor(long nIndex) const
 {
-    return (XColorEntry*) XPropertyTable::Get(nIndex, 0);
+    return (XColorEntry*) XPropertyList::Get(nIndex, 0);
 }
 
 /************************************************************************/
 
-sal_Bool XColorTable::Load()
+sal_Bool XColorList::Load()
 {
-    if( bTableDirty )
+    if( mbListDirty )
     {
-        bTableDirty = sal_False;
+        mbListDirty = false;
 
-        INetURLObject aURL( aPath );
+        INetURLObject aURL( maPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
+            DBG_ASSERT( !maPath.Len(), "invalid URL" );
             return sal_False;
         }
 
-        aURL.Append( aName );
+        aURL.Append( maName );
 
         if( !aURL.getExtension().getLength() )
             aURL.setExtension( rtl::OUString( pszExtColor, 3 ) );
@@ -139,17 +124,17 @@ sal_Bool XColorTable::Load()
 
 /************************************************************************/
 
-sal_Bool XColorTable::Save()
+sal_Bool XColorList::Save()
 {
-    INetURLObject aURL( aPath );
+    INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
+        DBG_ASSERT( !maPath.Len(), "invalid URL" );
         return sal_False;
     }
 
-    aURL.Append( aName );
+    aURL.Append( maName );
 
     if( !aURL.getExtension().getLength() )
         aURL.setExtension( rtl::OUString( pszExtColor, 3 ) );
@@ -160,7 +145,7 @@ sal_Bool XColorTable::Save()
 
 /************************************************************************/
 
-sal_Bool XColorTable::Create()
+sal_Bool XColorList::Create()
 {
     XubString aStr;
     xub_StrLen nLen;
@@ -217,328 +202,249 @@ sal_Bool XColorTable::Create()
 
     for( sal_uInt16 n = 0; n < 16; ++n )
     {
-        Insert( n, new XColorEntry( Color( aColTab[n] ),
-                                    String( ResId( aResId[ n ], rRes )) ) );
+        Insert( new XColorEntry( Color( aColTab[n] ), String( ResId( aResId[ n ], rRes )) ), n );
     }
 
     aStr = SVX_RESSTR( RID_SVXSTR_GREY );
     aStr.AppendAscii(" 80%");
     nLen = aStr.Len() - 3;
-    Insert(16, new XColorEntry( Color( 51, 51, 51 ), aStr ) );
+    Insert( new XColorEntry( Color( 51, 51, 51 ), aStr ) , 16);
     aStr.SetChar(nLen, sal_Unicode('7'));
-    Insert(17, new XColorEntry( Color( 76, 76, 76 ), aStr ) );
+    Insert( new XColorEntry( Color( 76, 76, 76 ), aStr ) , 17);
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(18, new XColorEntry( Color(102,102,102 ), aStr ) );
+    Insert( new XColorEntry( Color(102,102,102 ), aStr ) , 18);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(19, new XColorEntry( Color(153,153,153 ), aStr ) );
+    Insert( new XColorEntry( Color(153,153,153 ), aStr ) , 19);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(20, new XColorEntry( Color(179,179,179 ), aStr ) );
+    Insert( new XColorEntry( Color(179,179,179 ), aStr ) , 20);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(21, new XColorEntry( Color(204,204,204 ), aStr ) );
+    Insert( new XColorEntry( Color(204,204,204 ), aStr ) , 21);
     // BM: new 15%
     aStr.SetChar(nLen, sal_Unicode('1'));
     aStr.SetChar(nLen + 1, sal_Unicode('5'));
-    Insert(22, new XColorEntry( Color(217,217,217 ), aStr ) );
+    Insert( new XColorEntry( Color(217,217,217 ), aStr ) , 22);
     aStr.SetChar(nLen + 1, sal_Unicode('0'));
-    Insert(23, new XColorEntry( Color(230,230,230 ), aStr ) );
-    Insert(24, new XColorEntry( Color(230,230,255 ), SVX_RESSTR( RID_SVXSTR_BLUEGREY ) ) );
+    Insert( new XColorEntry( Color(230,230,230 ), aStr ) , 23);
+    Insert( new XColorEntry( Color(230,230,255 ), SVX_RESSTR( RID_SVXSTR_BLUEGREY ) ) , 24);
 
     aStr = SVX_RESSTR( RID_SVXSTR_RED );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(25, new XColorEntry( Color(255, 51,102 ), aStr ) );
+    Insert( new XColorEntry( Color(255, 51,102 ), aStr ) , 25);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(26, new XColorEntry( Color(220, 35,  0 ), aStr ) );
+    Insert( new XColorEntry( Color(220, 35,  0 ), aStr ) , 26);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(27, new XColorEntry( Color(184, 71,  0 ), aStr ) );
+    Insert( new XColorEntry( Color(184, 71,  0 ), aStr ) , 27);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(28, new XColorEntry( Color(255, 51, 51 ), aStr ) );
+    Insert( new XColorEntry( Color(255, 51, 51 ), aStr ) , 28);
     aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert(29, new XColorEntry( Color(235, 97, 61 ), aStr ) );
+    Insert( new XColorEntry( Color(235, 97, 61 ), aStr ) , 29);
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(30, new XColorEntry( Color(184, 71, 71 ), aStr ) );
+    Insert( new XColorEntry( Color(184, 71, 71 ), aStr ) , 30);
     aStr.SetChar(nLen, sal_Unicode('7'));
-    Insert(31, new XColorEntry( Color(184,  0, 71 ), aStr ) );
+    Insert( new XColorEntry( Color(184,  0, 71 ), aStr ) , 31);
     aStr.SetChar(nLen, sal_Unicode('8'));
-    Insert(32, new XColorEntry( Color(153, 40, 76 ), aStr ) );
+    Insert( new XColorEntry( Color(153, 40, 76 ), aStr ) , 32);
 
     aStr = SVX_RESSTR( RID_SVXSTR_MAGENTA );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(33, new XColorEntry( Color(148,  0,107 ), aStr ) );
+    Insert( new XColorEntry( Color(148,  0,107 ), aStr ) , 33);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(34, new XColorEntry( Color(148, 71,107 ), aStr ) );
+    Insert( new XColorEntry( Color(148, 71,107 ), aStr ) , 34);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(35, new XColorEntry( Color(148, 71,148 ), aStr ) );
+    Insert( new XColorEntry( Color(148, 71,148 ), aStr ) , 35);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(36, new XColorEntry( Color(153,102,204 ), aStr ) );
+    Insert( new XColorEntry( Color(153,102,204 ), aStr ) , 36);
     aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert(37, new XColorEntry( Color(107, 71,148 ), aStr ) );
+    Insert( new XColorEntry( Color(107, 71,148 ), aStr ) , 37);
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(38, new XColorEntry( Color(107, 35,148 ), aStr ) );
+    Insert( new XColorEntry( Color(107, 35,148 ), aStr ) , 38);
     aStr.SetChar(nLen, sal_Unicode('7'));
-    Insert(39, new XColorEntry( Color(107,  0,148 ), aStr ) );
+    Insert( new XColorEntry( Color(107,  0,148 ), aStr ) , 39);
     aStr.SetChar(nLen, sal_Unicode('8'));
-    Insert(40, new XColorEntry( Color( 94, 17,166 ), aStr ) );
+    Insert( new XColorEntry( Color( 94, 17,166 ), aStr ) , 40);
 
     aStr = SVX_RESSTR( RID_SVXSTR_BLUE );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(41, new XColorEntry( Color( 40,  0,153 ), aStr ) );
+    Insert( new XColorEntry( Color( 40,  0,153 ), aStr ) , 41);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(42, new XColorEntry( Color( 71,  0,184 ), aStr ) );
+    Insert( new XColorEntry( Color( 71,  0,184 ), aStr ) , 42);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(43, new XColorEntry( Color( 35,  0,220 ), aStr ) );
+    Insert( new XColorEntry( Color( 35,  0,220 ), aStr ) , 43);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(44, new XColorEntry( Color( 35, 35,220 ), aStr ) );
+    Insert( new XColorEntry( Color( 35, 35,220 ), aStr ) , 44);
     aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert(45, new XColorEntry( Color(  0, 71,255 ), aStr ) );
+    Insert( new XColorEntry( Color(  0, 71,255 ), aStr ) , 45);
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(46, new XColorEntry( Color(  0,153,255 ), aStr ) );
+    Insert( new XColorEntry( Color(  0,153,255 ), aStr ) , 46);
     aStr.SetChar(nLen, sal_Unicode('7'));
-    Insert(47, new XColorEntry( Color(  0,184,255 ), aStr ) );
+    Insert( new XColorEntry( Color(  0,184,255 ), aStr ) , 47);
     aStr.SetChar(nLen, sal_Unicode('8'));
-    Insert(48, new XColorEntry( Color(153,204,255 ), aStr ) );
+    Insert( new XColorEntry( Color(153,204,255 ), aStr ) , 48);
     //Insert(48, new XColorEntry( Color( 46,215,255 ), aStr ) );
 
     aStr = SVX_RESSTR( RID_SVXSTR_CYAN );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(49, new XColorEntry( Color(  0,220,255 ), aStr ) );
+    Insert( new XColorEntry( Color(  0,220,255 ), aStr ) , 49);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(50, new XColorEntry( Color(  0,204,204 ), aStr ) );
+    Insert( new XColorEntry( Color(  0,204,204 ), aStr ) , 50);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(51, new XColorEntry( Color( 35,184,220 ), aStr ) );
+    Insert( new XColorEntry( Color( 35,184,220 ), aStr ) , 51);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(52, new XColorEntry( Color( 71,184,184 ), aStr ) );
+    Insert( new XColorEntry( Color( 71,184,184 ), aStr ) , 52);
     aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert(53, new XColorEntry( Color( 51,163,163 ), aStr ) );
+    Insert( new XColorEntry( Color( 51,163,163 ), aStr ) , 53);
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(54, new XColorEntry( Color( 25,138,138 ), aStr ) );
+    Insert( new XColorEntry( Color( 25,138,138 ), aStr ) , 54);
     aStr.SetChar(nLen, sal_Unicode('7'));
-    Insert(55, new XColorEntry( Color(  0,107,107 ), aStr ) );
+    Insert( new XColorEntry( Color(  0,107,107 ), aStr ) , 55);
     aStr.SetChar(nLen, sal_Unicode('8'));
-    Insert(56, new XColorEntry( Color(  0, 74, 74 ), aStr ) );
+    Insert( new XColorEntry( Color(  0, 74, 74 ), aStr ) , 56);
 
     aStr = SVX_RESSTR( RID_SVXSTR_GREEN );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(57, new XColorEntry( Color( 53, 94,  0 ), aStr ) );
+    Insert( new XColorEntry( Color( 53, 94,  0 ), aStr ) , 57);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(58, new XColorEntry( Color( 92,133, 38 ), aStr ) );
+    Insert( new XColorEntry( Color( 92,133, 38 ), aStr ) , 58);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(59, new XColorEntry( Color(125,166, 71 ), aStr ) );
+    Insert( new XColorEntry( Color(125,166, 71 ), aStr ) , 59);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(60, new XColorEntry( Color(148,189, 94 ), aStr ) );
+    Insert( new XColorEntry( Color(148,189, 94 ), aStr ) , 60);
     aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert(61, new XColorEntry( Color(  0,174,  0 ), aStr ) );
+    Insert( new XColorEntry( Color(  0,174,  0 ), aStr ) , 61);
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(62, new XColorEntry( Color( 51,204,102 ), aStr ) );
+    Insert( new XColorEntry( Color( 51,204,102 ), aStr ) , 62);
     aStr.SetChar(nLen, sal_Unicode('7'));
-    Insert(63, new XColorEntry( Color( 61,235, 61 ), aStr ) );
+    Insert( new XColorEntry( Color( 61,235, 61 ), aStr ) , 63);
     aStr.SetChar(nLen, sal_Unicode('8'));
-    Insert(64, new XColorEntry( Color( 35,255, 35 ), aStr ) );
+    Insert( new XColorEntry( Color( 35,255, 35 ), aStr ) , 64);
 
     aStr = SVX_RESSTR( RID_SVXSTR_YELLOW );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(65, new XColorEntry( Color(230,255,  0 ), aStr ) );
+    Insert( new XColorEntry( Color(230,255,  0 ), aStr ) , 65);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(66, new XColorEntry( Color(255,255,153 ), aStr ) );
+    Insert( new XColorEntry( Color(255,255,153 ), aStr ) , 66);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(67, new XColorEntry( Color(255,255,102 ), aStr ) );
+    Insert( new XColorEntry( Color(255,255,102 ), aStr ) , 67);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(68, new XColorEntry( Color(230,230, 76 ), aStr ) );
+    Insert( new XColorEntry( Color(230,230, 76 ), aStr ) , 68);
     aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert(69, new XColorEntry( Color(204,204,  0 ), aStr ) );
+    Insert( new XColorEntry( Color(204,204,  0 ), aStr ) , 69);
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(70, new XColorEntry( Color(179,179,  0 ), aStr ) );
+    Insert( new XColorEntry( Color(179,179,  0 ), aStr ) , 70);
     aStr.SetChar(nLen, sal_Unicode('7'));
-    Insert(71, new XColorEntry( Color(128,128, 25 ), aStr ) );
+    Insert( new XColorEntry( Color(128,128, 25 ), aStr ) , 71);
     aStr.SetChar(nLen, sal_Unicode('8'));
-    Insert(72, new XColorEntry( Color(102,102,  0 ), aStr ) );
+    Insert( new XColorEntry( Color(102,102,  0 ), aStr ) , 72);
 
     aStr = SVX_RESSTR( RID_SVXSTR_BROWN );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(73, new XColorEntry( Color( 76, 25,  0 ), aStr ) );
+    Insert( new XColorEntry( Color( 76, 25,  0 ), aStr ) , 73);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(74, new XColorEntry( Color(102, 51,  0 ), aStr ) );
+    Insert( new XColorEntry( Color(102, 51,  0 ), aStr ) , 74);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(75, new XColorEntry( Color(128, 76, 25 ), aStr ) );
+    Insert( new XColorEntry( Color(128, 76, 25 ), aStr ) , 75);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(76, new XColorEntry( Color(153,102, 51 ), aStr ) );
+    Insert( new XColorEntry( Color(153,102, 51 ), aStr ) , 76);
 
     aStr = SVX_RESSTR( RID_SVXSTR_ORANGE );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(77, new XColorEntry( Color(204,102, 51 ), aStr ) );
+    Insert( new XColorEntry( Color(204,102, 51 ), aStr ) , 77);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(78, new XColorEntry( Color(255,102, 51 ), aStr ) );
+    Insert( new XColorEntry( Color(255,102, 51 ), aStr ) , 78);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(79, new XColorEntry( Color(255,153,102 ), aStr ) );
+    Insert( new XColorEntry( Color(255,153,102 ), aStr ) , 79);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(80, new XColorEntry( Color(255,204,153 ), aStr ) );
+    Insert( new XColorEntry( Color(255,204,153 ), aStr ) , 80);
 
     // new chart colors
     aStr = SVX_RESSTR( RID_SVXSTR_VIOLET );
-    Insert( 81, new XColorEntry( Color( 0x99, 0x99, 0xff ), aStr ) );
+    Insert( new XColorEntry( Color( 0x99, 0x99, 0xff ), aStr ) , 81);
 
     aStr = SVX_RESSTR( RID_SVXSTR_BORDEAUX );
-    Insert( 82, new XColorEntry( Color( 0x99, 0x33, 0x66 ), aStr ) );
+    Insert( new XColorEntry( Color( 0x99, 0x33, 0x66 ), aStr ) , 82);
 
     aStr = SVX_RESSTR( RID_SVXSTR_PALE_YELLOW );
-    Insert( 83, new XColorEntry( Color( 0xff, 0xff, 0xcc ), aStr ) );
+    Insert( new XColorEntry( Color( 0xff, 0xff, 0xcc ), aStr ) , 83);
 
     aStr = SVX_RESSTR( RID_SVXSTR_PALE_GREEN );
-    Insert( 84, new XColorEntry( Color( 0xcc, 0xff, 0xff ), aStr ) );
+    Insert( new XColorEntry( Color( 0xcc, 0xff, 0xff ), aStr ) , 84);
 
     aStr = SVX_RESSTR( RID_SVXSTR_DKVIOLET );
-    Insert( 85, new XColorEntry( Color( 0x66, 0x00, 0x66 ), aStr ) );
+    Insert( new XColorEntry( Color( 0x66, 0x00, 0x66 ), aStr ) , 85);
 
     aStr = SVX_RESSTR( RID_SVXSTR_SALMON );
-    Insert( 86, new XColorEntry( Color( 0xff, 0x80, 0x80 ), aStr ) );
+    Insert( new XColorEntry( Color( 0xff, 0x80, 0x80 ), aStr ) , 86);
 
     aStr = SVX_RESSTR( RID_SVXSTR_SEABLUE );
-    Insert( 87, new XColorEntry( Color( 0x00, 0x66, 0xcc ), aStr ) );
+    Insert( new XColorEntry( Color( 0x00, 0x66, 0xcc ), aStr ) , 87);
 
     // Sun colors
     aStr = SVX_RESSTR( RID_SVXSTR_COLOR_SUN );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert( 88, new XColorEntry( Color( 0x33, 0x33, 0x66 ), aStr ) );
+    Insert( new XColorEntry( Color( 0x33, 0x33, 0x66 ), aStr ) , 88);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert( 89, new XColorEntry( Color( 0x66, 0x66, 0x99 ), aStr ) );
+    Insert( new XColorEntry( Color( 0x66, 0x66, 0x99 ), aStr ) , 89);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert( 90, new XColorEntry( Color( 0x99, 0x99, 0xcc ), aStr ) );
+    Insert( new XColorEntry( Color( 0x99, 0x99, 0xcc ), aStr ) , 90);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert( 91, new XColorEntry( Color( 0xcc, 0xcc, 0xff ), aStr ) );
+    Insert( new XColorEntry( Color( 0xcc, 0xcc, 0xff ), aStr ) , 91);
 
     // Chart default colors
     aStr = SVX_RESSTR( RID_SVXSTR_COLOR_CHART );
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert( 92, new XColorEntry( Color( 0x00, 0x45, 0x86 ), aStr ) );
+    Insert( new XColorEntry( Color( 0x00, 0x45, 0x86 ), aStr ) , 92);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert( 93, new XColorEntry( Color( 0xff, 0x42, 0x0e ), aStr ) );
+    Insert( new XColorEntry( Color( 0xff, 0x42, 0x0e ), aStr ) , 93);
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert( 94, new XColorEntry( Color( 0xff, 0xd3, 0x20 ), aStr ) );
+    Insert( new XColorEntry( Color( 0xff, 0xd3, 0x20 ), aStr ) , 94);
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert( 95, new XColorEntry( Color( 0x57, 0x9d, 0x1c ), aStr ) );
+    Insert( new XColorEntry( Color( 0x57, 0x9d, 0x1c ), aStr ) , 95);
     aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert( 96, new XColorEntry( Color( 0x7e, 0x00, 0x21 ), aStr ) );
+    Insert( new XColorEntry( Color( 0x7e, 0x00, 0x21 ), aStr ) , 96);
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert( 97, new XColorEntry( Color( 0x83, 0xca, 0xff ), aStr ) );
+    Insert( new XColorEntry( Color( 0x83, 0xca, 0xff ), aStr ) , 97);
     aStr.SetChar(nLen, sal_Unicode('7'));
-    Insert( 98, new XColorEntry( Color( 0x31, 0x40, 0x04 ), aStr ) );
+    Insert( new XColorEntry( Color( 0x31, 0x40, 0x04 ), aStr ) , 98);
     aStr.SetChar(nLen, sal_Unicode('8'));
-    Insert( 99, new XColorEntry( Color( 0xae, 0xcf, 0x00 ), aStr ) );
+    Insert( new XColorEntry( Color( 0xae, 0xcf, 0x00 ), aStr ) , 99);
     aStr.SetChar(nLen, sal_Unicode('9'));
-    Insert( 100, new XColorEntry( Color( 0x4b, 0x1f, 0x6f ), aStr ) );
+    Insert( new XColorEntry( Color( 0x4b, 0x1f, 0x6f ), aStr ) , 100);
     aStr.SetChar(nLen, sal_Unicode('1'));
     aStr.AppendAscii("0");
     nLen = aStr.Len() - 1;
-    Insert( 101, new XColorEntry( Color( 0xff, 0x95, 0x0e ), aStr ) );
+    Insert( new XColorEntry( Color( 0xff, 0x95, 0x0e ), aStr ) , 101);
     aStr.SetChar(nLen, sal_Unicode('1'));
-    Insert( 102, new XColorEntry( Color( 0xc5, 0x00, 0x0b ), aStr ) );
+    Insert( new XColorEntry( Color( 0xc5, 0x00, 0x0b ), aStr ) , 102);
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert( 103, new XColorEntry( Color( 0x00, 0x84, 0xd1 ), aStr ) );
+    Insert( new XColorEntry( Color( 0x00, 0x84, 0xd1 ), aStr ) , 103);
 
     return( Count() == 104 );
 }
 
 /************************************************************************/
 
-sal_Bool XColorTable::CreateBitmapsForUI()
+Bitmap XColorList::CreateBitmapForUI( long /*nIndex*/ )
 {
-    return( sal_False );
+    return Bitmap();
 }
 
 /************************************************************************/
 
-Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
+XColorList* XColorList::GetStdColorList()
 {
-    return( NULL );
-}
-
-// --------------------
-// class XColorList
-// --------------------
-
-/*************************************************************************
-|*
-|* XColorList::XColorList()
-|*
-*************************************************************************/
-
-XColorList::XColorList( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyList( rPath, pInPool, nInitSize, nReSize)
-{
-    // pBmpList = new List( nInitSize, nReSize );
-}
-
-/************************************************************************/
-
-XColorList::~XColorList()
-{
-}
-
-/************************************************************************/
-
-XColorEntry* XColorList::Replace(XColorEntry* pEntry, long nIndex )
-{
-    return (XColorEntry*) XPropertyList::Replace(pEntry, nIndex);
-}
-
-/************************************************************************/
-
-XColorEntry* XColorList::Remove(long nIndex)
-{
-    return (XColorEntry*) XPropertyList::Remove(nIndex, 0);
-}
-
-/************************************************************************/
-
-XColorEntry* XColorList::GetColor(long nIndex) const
-{
-    return (XColorEntry*) XPropertyList::Get(nIndex, 0);
-}
-
-/************************************************************************/
-
-sal_Bool XColorList::Load()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XColorList::Save()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XColorList::Create()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XColorList::CreateBitmapsForUI()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return( NULL );
+    if ( !pStaticGlobalColorList )
+        pStaticGlobalColorList = new XColorList( SvtPathOptions().GetPalettePath() );
+    return pStaticGlobalColorList;
 }
 
 // eof

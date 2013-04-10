@@ -29,6 +29,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objitem.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #ifndef _HELPID_H
@@ -71,6 +72,5 @@ SwOleShell::SwOleShell(SwView &_rView) :
 {
     SetName(String::CreateFromAscii("Object"));
     SetHelpId(SW_OLESHELL);
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_OLE));
 }
-
-

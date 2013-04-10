@@ -196,6 +196,7 @@ MY_FILES_main = \
     $(MY_XCS)/Office/UI/GenericCategories.xcs \
     $(MY_XCS)/Office/UI/GenericCommands.xcs \
     $(MY_XCS)/Office/UI/GlobalSettings.xcs \
+    $(MY_XCS)/Office/UI/Sidebar.xcs \
     $(MY_XCS)/Office/UI/StartModuleCommands.xcs \
     $(MY_XCS)/Office/UI/StartModuleWindowState.xcs \
     $(MY_XCS)/Office/UI/WindowContentFactories.xcs \
@@ -259,6 +260,7 @@ MY_FILES_main = \
     $(MY_XCU)/Office/UI/Factories.xcu \
     $(MY_XCU)/Office/UI/GenericCategories.xcu \
     $(MY_XCU)/Office/UI/GenericCommands.xcu \
+    $(MY_XCU)/Office/UI/Sidebar.xcu \
     $(MY_XCU)/Office/UI/StartModuleCommands.xcu \
     $(MY_XCU)/Office/UI/StartModuleWindowState.xcu \
     $(MY_XCU)/Office/UI.xcu \

@@ -605,7 +605,7 @@ sal_Bool SvxBmpMask::NeedsColorTable() const
 
 //-------------------------------------------------------------------------
 
-void SvxBmpMask::SetColorTable( const XColorTable* pTable )
+void SvxBmpMask::SetColorTable( const XColorList* pTable )
 {
     if ( pTable && ( pTable != pColTab ) )
     {

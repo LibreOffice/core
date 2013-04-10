@@ -97,4 +97,7 @@
   <implementation name="com.sun.star.util.comp.FinalThreadManager">
     <service name="com.sun.star.util.JobManager"/>
   </implementation>
+  <implementation name="org.apache.openoffice.comp.sw.sidebar.SwPanelFactory">
+    <service name="com.sun.star.ui.UIElementFactory"/>
+  </implementation>
 </component>

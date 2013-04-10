@@ -472,6 +472,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         break;
 
         case SID_HORIZONTAL:  // BASIC
+        case SID_FLIP_HORIZONTAL:
         {
             mpDrawView->MirrorAllMarkedHorizontal();
             Cancel();
@@ -480,6 +481,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         break;
 
         case SID_VERTICAL:  // BASIC
+        case SID_FLIP_VERTICAL:
         {
             mpDrawView->MirrorAllMarkedVertical();
             Cancel();

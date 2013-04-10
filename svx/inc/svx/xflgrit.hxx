@@ -59,7 +59,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    const XGradient&        GetGradientValue(const XGradientTable* pTable = 0) const; // GetValue -> GetGradientValue
+    const XGradient&        GetGradientValue(const XGradientList* pTable = 0) const; // GetValue -> GetGradientValue
     void                    SetGradientValue(const XGradient& rNew) { aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
