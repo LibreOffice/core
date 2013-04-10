@@ -449,7 +449,7 @@ sub link_ui_files()
               {
                   push( @files, $File::Find::name );
               }
-          }, $OOO_INSTALL );
+          }, "$OOO_INSTALL/" );
 
     my @modules = get_modules( $OOO_BUILD, $TARGET );
 
@@ -488,11 +488,15 @@ sub link_ui_files()
             if ( $module_dir eq "sfx" ) { $module = "sfx2"; }
             elsif ( $module_dir eq "svt" ) { $module = "svtools"; }
             elsif ( $module_dir eq "sw" ) { $module = "sw"; $nb_segments = 3; }
+            elsif ( $module_dir eq "spa" ) { $module = "padmin"; }
+	    elsif ( $module_dir eq "xmlsec" ) { $module = "xmlsecurity"; }
 
             $modulepath = "$module/uiconfig";
         }
         my $subpath = catdir( @dest_dirs[-$nb_segments..-2] );
         my $src_dir = "$OOO_BUILD/$modulepath/$subpath";
+
+#	print STDERR "$module_dir : $modulepath : '$src_dir/$name'\n";
 
         if ( -e "$src_dir/$name" )
         {
