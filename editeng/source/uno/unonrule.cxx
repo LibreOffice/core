@@ -34,6 +34,7 @@
 #include <editeng/unofdesc.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/editids.hrc>
+#include <editeng/numdef.hxx>
 
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::ucb::XAnyCompare;
@@ -490,7 +491,7 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
     }
     else
     {
-        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , sal_False);
+        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, SVX_MAX_NUM , sal_False);
         return new SvxUnoNumberingRules( aDefaultRule );
     }
 }

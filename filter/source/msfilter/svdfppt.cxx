@@ -47,6 +47,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdotable.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/numdef.hxx>
 #include <svx/svdattr.hxx>
 #include "svx/xattr.hxx"
 #include "svx/svditext.hxx"
@@ -4295,20 +4296,20 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 eNumRuleType = SVX_RULETYPE_NUMBERING;
             break;
             case TSS_TYPE_SUBTITLE :
-                nLevels = 10;
+                nLevels = SVX_MAX_NUM;
                 eNumRuleType = SVX_RULETYPE_NUMBERING;
             break;
             case TSS_TYPE_BODY :
             case TSS_TYPE_HALFBODY :
             case TSS_TYPE_QUARTERBODY :
-                nLevels = 10;
+                nLevels = SVX_MAX_NUM;
                 eNumRuleType = SVX_RULETYPE_PRESENTATION_NUMBERING;
             break;
             default :
             case TSS_TYPE_NOTES :
             case TSS_TYPE_UNUSED :
             case TSS_TYPE_TEXT_IN_SHAPE :
-                nLevels = 10;
+                nLevels = SVX_MAX_NUM;
                 eNumRuleType = SVX_RULETYPE_NUMBERING;
             break;
         }
