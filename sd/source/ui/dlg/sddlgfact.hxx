@@ -276,10 +276,9 @@ public:
     virtual SfxAbstractDialog*          CreatSdActionDialog( ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView );
     virtual AbstractSdVectorizeDlg*     CreateSdVectorizeDlg( ::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell );
     virtual AbstractSdPublishingDlg*    CreateSdPublishingDlg( ::Window* pWindow, DocumentType eDocType);
-
     virtual VclAbstractDialog* CreateSdPhotoAlbumDialog( ::Window* pWindow, SdDrawDocument* pDoc);
-
-      virtual VclAbstractDialog*          CreateMasterLayoutDialog( ::Window* pParent,
+    virtual VclAbstractDialog*          CreateSdGroupDialog( ::Window* pWindow, SdDrawDocument *pDoc, const std::vector< SdPage * > &rPagesToGroup );
+    virtual VclAbstractDialog*          CreateMasterLayoutDialog( ::Window* pParent,
                                                                   SdDrawDocument* pDoc,
                                                                   SdPage* ); // add for MasterLayoutDialog
 

@@ -105,6 +105,11 @@ private:
         This can be the current selection or the insertion indicator.
     */
     sal_Int32 GetInsertionPosition (void);
+
+    /// Handle SID_GROUP_SLIDES
+    void GroupSlides();
+    /// Handle SID_UNGROUP_SLIDES
+    void UnGroupSlides();
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

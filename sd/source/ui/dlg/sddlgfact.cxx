@@ -47,6 +47,7 @@
 #include "masterlayoutdlg.hxx"
 #include "headerfooterdlg.hxx"
 #include "PhotoAlbumDialog.hxx"
+#include "GroupSlidesDialog.hxx"
 
 IMPL_ABSTDLG_BASE(SdVclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
@@ -576,7 +577,12 @@ AbstractHeaderFooterDialog* SdAbstractDialogFactory_Impl::CreateHeaderFooterDial
 
 VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog( ::Window* pWindow, SdDrawDocument* pDoc )
 {
-     return new SdVclAbstractDialog_Impl( new ::sd::SdPhotoAlbumDialog( pWindow, pDoc ) );
+    return new SdVclAbstractDialog_Impl( new ::sd::SdPhotoAlbumDialog( pWindow, pDoc ) );
+}
+
+VclAbstractDialog* SdAbstractDialogFactory_Impl::CreateSdGroupDialog( ::Window* pWindow, SdDrawDocument *pDoc, const std::vector< SdPage * > &rPagesToGroup )
+{
+    return new SdVclAbstractDialog_Impl( new ::sd::SdGroupSlidesDialog( pWindow, pDoc, rPagesToGroup ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
