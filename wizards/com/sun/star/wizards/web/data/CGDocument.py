@@ -23,6 +23,7 @@ from ...document.OfficeDocument import OfficeDocument
 from ...common.Properties import Properties
 from ...common.PropertyNames import PropertyNames
 from ...common.FileAccess import FileAccess
+from ...common.XMLHelper import XMLHelper
 from ..TypeDetection import *
 from ...common.Desktop import Desktop
 
@@ -45,28 +46,32 @@ The same is valid for *description* and *author*.
 '''
 
 class CGDocument(ConfigGroup):
-    cp_Exporter = None
-    cp_Index = -1
+
     PAGE_TYPE_PAGE = 1
     PAGE_TYPE_SLIDE = 2
-    cp_Title = ""
-    cp_Description = ""
-    cp_URL = ""
-    cp_Author = ""
-    localFilename = ""
-    urlFilename = ""
-    title = ""
-    description = ""
-    author = ""
-    sizeBytes = -1
-    pages = -1
-    valid = False
-    appType = None
 
-    def __init__(self, url = "", xmsf = None, Task = None):
+    def __init__(self, url = "", xmsf = None, task = None):
+        self.cp_URL = ""
+        self.cp_Exporter = None
+        self.cp_Index = -1
+        self.cp_Title = ""
+        self.cp_Description = ""
+        self.cp_Author = ""
+        self.localFilename = ""
+        self.urlFilename = ""
+        self.title = ""
+        self.description = ""
+        self.author = ""
+        self.dirName = ""
+        self.createdDate = None
+        self.updatedDate = None
+        self.sizeBytes = -1
+        self.pages = -1
+        self.valid = False
+        self.appType = None
         if (xmsf is None):
             return
-        cp_URL = self.getSettings().getFileAccess(xmsf).getURL(url);
+        self.cp_URL = self.getSettings().getFileAccess(xmsf).getURL(url);
         if (task is None):
             task = Task("", "", 5)
         self.validate(xmsf, task);
@@ -127,32 +132,32 @@ class CGDocument(ConfigGroup):
         #4
         #now use the object to read some document properties.
         if xProps is not None:
-            title = xProps.Title
-            description = xProps.Description
-            author = xProps.Author
-            createDate = xProps.CreationDate
-            updateDate = xProps.ModificationDate
+            self.title = xProps.Title
+            self.description = xProps.Description
+            self.author = xProps.Author
+            self.createdDate = xProps.CreationDate
+            self.updatedDate = xProps.ModificationDate
         else:
 
             #get some information from OS.
-            title = self.localFilename
-            updateDate = \
+            self.title = self.localFilename
+            self.updatedDate = \
                 self.getSettings().getFileAccess(xmsf).getLastModified(self.cp_URL)
 
         task.advance(True)
         #5
         valid = True
         if self.cp_Title == "":
-            cp_Title = self.title
+            self.cp_Title = self.title
 
         if self.cp_Title == "":
-            cp_Title = self.localFilename
+            self.cp_Title = self.localFilename
 
         if self.cp_Description == "":
-            cp_Description = self.description
+            self.cp_Description = self.description
 
         if self.cp_Author == "":
-            cp_Author = self.author
+            self.cp_Author = self.author
 
         if self.cp_Exporter is None or self.cp_Exporter == "":
             print ("WARNING !!! settign exporter for key:", CGDocument.appType)
@@ -224,21 +229,33 @@ class CGDocument(ConfigGroup):
     def createDOM(self, parent):
         d = self.getSettings().cp_DefaultSession.cp_Design
         exp = self.getSettings().cp_Exporters.getElement(self.cp_Exporter)
-        '''return XMLHelper.addElement(parent, "document", ["title", "description", "author", "format", "filename", "create-date", "update-date", "pages", "size", "icon", "dir", "fn"], [d.cp_DisplayTitle ? self.cp_Title : "", d.cp_DisplayDescription ? self.cp_Description : "", d.cp_DisplayAuthor ? self.cp_Author : "", d.cp_DisplayFileFormat ? getTargetTypeName(exp) : "", d.cp_DisplayFilename ? self.localFilename : "", d.cp_DisplayCreateDate ? self.createDate() : "", d.cp_DisplayUpdateDate ? self.updateDate() : "", d.cp_DisplayPages and (self.pages > -1) ? "" + self.pages() : "", #TODO when do i calculate pages?
-        d.cp_DisplaySize ? sizeKB() : "", #TODO when do i calculate size?
-        d.cp_DisplayFormatIcon ? getIcon(exp) : "", self.dirName, self.urlFilename])'''
+        return XMLHelper.addElement(parent, "document",
+                                    ["title", "description", "author", "format", "filename",
+                                     "create-date", "update-date", "pages", "size", "icon",
+                                     "dir", "fn"],
+                                    [self.cp_Title if (d.cp_DisplayTitle) else "",
+                                     self.cp_Description if (d.cp_DisplayDescription) else "",
+                                     self.cp_Author if (d.cp_DisplayAuthor) else "",
+                                     self.getTargetTypeName(exp) if (d.cp_DisplayFileFormat) else "",
+                                     self.localFilename if (d.cp_DisplayFilename) else "",
+                                     self.createDate() if (d.cp_DisplayCreateDate) else "",
+                                     self.updateDate() if (d.cp_DisplayUpdateDate) else  "",
+                                     "" + self.getPages() if (d.cp_DisplayPages and (self.pages > -1)) else "", #TODO when do i calculate pages?
+                                     self.sizeKB() if (d.cp_DisplaySize) else "", #TODO when do i calculate size?
+                                     self.getIcon(exp) if (d.cp_DisplayFormatIcon) else "",
+                                     self.dirName, self.urlFilename])
 
     def updateDate(self):
-        if self.updateDate is None:
+        if self.updatedDate is None:
             return ""
 
-        return self.getSettings().formatter.formatCreated(self.updateDate)
+        return self.getSettings().formatter.formatCreated(self.updatedDate)
 
     def createDate(self):
-        if self.createDate is None:
+        if self.createdDate is None:
             return ""
 
-        return self.getSettings().formatter.formatCreated(self.createDate)
+        return self.getSettings().formatter.formatCreated(self.createdDate)
 
     def sizeKB(self):
         if self.sizeBytes == -1:
@@ -246,11 +263,11 @@ class CGDocument(ConfigGroup):
         else:
             return self.getSettings().formatter.formatFileSize(self.sizeBytes)
 
-    def pages(self):
+    def getPages(self):
         if self.pages == -1:
             return ""
         else:
-            return pagesTemplate().replace("%NUMBER", "" + self.pages)
+            return self.pagesTemplate().replace("%NUMBER", "" + self.pages)
 
     def pagesTemplate(self):
         pagesType = \
@@ -272,11 +289,11 @@ class CGDocument(ConfigGroup):
 
     def getIcon(self, exporter):
         if exporter.cp_Icon == "":
-            return getIcon(CGDocument.appType)
+            return self.getIcon1(CGDocument.appType)
         else:
             return exporter.cp_Icon
 
-    def getIcon(self, appType):
+    def getIcon1(self, appType):
         return appType + ".gif"
 
     '''

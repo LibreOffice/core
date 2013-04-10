@@ -35,6 +35,7 @@ from .CGSession import CGSession
 
 from com.sun.star.i18n.NumberFormatIndex import DATE_SYS_DMMMYYYY
 from com.sun.star.i18n.NumberFormatIndex import NUMBER_1000DEC2
+from com.sun.star.util import DateTime
 
 class CGSettings(ConfigGroup):
 
@@ -64,7 +65,7 @@ class CGSettings(ConfigGroup):
             self.soTemplateDir = FileAccess.getOfficePath2(self.xmsf, "Config", "", "");
             self.soGalleryDir = FileAccess.getOfficePath2(self.xmsf, "Gallery", "share", "");
             ConfigGroup.root = self
-            self.formatter = self.Formatter(self.xmsf, document)
+            self.formatter = self.Formatter(self.xmsf, document, resources_)
             self.resources = resources_
             self.workPath = None
             self.exportersMap = {}
@@ -146,35 +147,40 @@ class CGSettings(ConfigGroup):
             @param format a constant of the enumeration NumberFormatIndex
             @return
             '''
-            def getFormat(self, format):
-                return NumberFormatter.getNumberFormatterKey(self.formatSupplier, format)
+            def getFormat(self, f):
+                return NumberFormatter.getNumberFormatterKey(self.formatSupplier, f)
 
             '''
             @param date a VCL date in form of 20041231
             @return a document relative date
             '''
             def format(self, formatIndex, date):
-                difference =  date - self.calendar
+                dateTime = dateTimeObject(date.Year, date.Month, date.Day)
+                difference =  dateTime - self.calendar
                 return self.formatter.convertNumberToString(formatIndex,  difference.days)
 
-        def __init__(self, xmsf, document):
+            def getFormatter(self):
+                return self.formatter
+
+        def __init__(self, xmsf, document, resources):
             self.dateUtils = self.DateUtils(xmsf, document)
             self.dateFormat = self.dateUtils.getFormat(DATE_SYS_DMMMYYYY)
             self.numberFormat = self.dateUtils.getFormat(NUMBER_1000DEC2)
+            self.resources = resources
 
         def formatCreated(self, date):
-            sDate = self.dateUtils.format(dateFormat, date)
-            return resources[CGSettings.RESOURCE_CREATED_TEMPLATE].replace(
+            sDate = self.dateUtils.format(self.dateFormat, date)
+            return self.resources[CGSettings.RESOURCE_CREATED_TEMPLATE].replace(
                 "%DATE", sDate)
 
         def formatUpdated(self, date):
-            sDate = self.dateUtils.format(dateFormat, date);
-            return resources[CGSettings.RESOURCE_UPDATED_TEMPLATE].replace(
+            sDate = self.dateUtils.format(self.dateFormat, date);
+            return self.resources[CGSettings.RESOURCE_UPDATED_TEMPLATE].replace(
                 "%DATE", sDate)
 
         def formatFileSize(self, size):
             sizeInKB = size / float(1024)
             sSize = self.dateUtils.getFormatter().convertNumberToString(
-                numberFormat, sizeInKB)
-            return resources[CGSettings.RESOURCE_SIZE_TEMPLATE].replace(
+                self.numberFormat, sizeInKB)
+            return self.resources[CGSettings.RESOURCE_SIZE_TEMPLATE].replace(
                 "%NUMBER", sSize)

@@ -146,9 +146,8 @@ class WebConfigSet(ConfigGroup):
         i = 0
         while i < len(items):
             item = items[i]
-            if isinstance(item, XMLProvider):
+            if hasattr(item, "createDOM"):
                 item.createDOM(parent)
-
             i += 1
         return parent
 

@@ -25,6 +25,8 @@ from .CGDesign import CGDesign
 from .CGGeneralInfo import CGGeneralInfo
 from .CGPublish import CGPublish
 
+from com.sun.star.beans import StringPair
+
 class CGSession(ConfigGroup):
 
     cp_Index = -1
@@ -44,6 +46,20 @@ class CGSession(ConfigGroup):
         self.cp_GeneralInfo.createDOM(root)
         self.cp_Content.createDOM(root)
         return root
+
+    def serializeNode(self, node):
+        xBuffer = self.root.xmsf.createInstance("com.sun.star.io.Pipe")
+        xTextInputStream = self.root.xmsf.createInstance("com.sun.star.io.TextInputStream")
+        xSaxWriter = self.root.xmsf.createInstance( "com.sun.star.xml.sax.Writer" )
+        xSaxWriter.setOutputStream(xBuffer)
+        xTextInputStream.setInputStream(xBuffer)
+        node.serialize(xSaxWriter, tuple([StringPair()]))
+        result = ""
+        while (not xTextInputStream.isEOF()):
+            sLine = xTextInputStream.readLine()
+            if (not sLine == "") and (not sLine.startswith("<?xml")):
+                result = result + sLine + "\n"
+        print ("DEBUG !!! result: ", result)
 
     def getScreenSize(self):
         tmp_switch_var1 = self.cp_Design.cp_OptimizeDisplaySize
