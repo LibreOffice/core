@@ -28,7 +28,7 @@ $(eval $(call gb_Module_Module,registry))
 
 $(eval $(call gb_Module_add_targets,registry,\
 	Library_reg \
-	ZipPackage_registry_odk_headers \
+	Package_inc \
 	$(if $(filter-out $(OS),IOS), \
 		Executable_regmerge \
 		Executable_regview \

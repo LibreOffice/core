@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,reg))
 $(eval $(call gb_Library_set_soversion_script,reg,3,$(SRCDIR)/registry/util/reg.map))
 
 $(eval $(call gb_Library_use_packages,reg,\
-	registry_odk_headers \
+	registry_inc \
 ))
 
 $(eval $(call gb_Library_add_defs,reg,\
