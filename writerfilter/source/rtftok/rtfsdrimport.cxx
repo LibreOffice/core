@@ -136,6 +136,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     uno::Any aLineColor = uno::makeAny(COL_BLACK);
     // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
+    text::WritingMode eWritingMode = text::WritingMode_LR_TB;
 
     for (std::vector< std::pair<OUString, OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
@@ -206,10 +207,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if (i->first == "txflTextFlow" && xPropertySet.is())
         {
             if (i->second.toInt32() == 1)
-            {
-                aAny <<= text::WritingMode_TB_RL;
-                xPropertySet->setPropertyValue("TextWritingMode", aAny);
-            }
+                eWritingMode = text::WritingMode_TB_RL;
         }
         else if (i->first == "fLine" && xPropertySet.is())
             resolveFLine(xPropertySet, i->second.toInt32());
@@ -373,6 +371,11 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         xPropertySet->setPropertyValue("LineWidth", aLineWidth);
         if (rShape.oZ)
             resolveDhgt(xPropertySet, *rShape.oZ);
+        if (bTextFrame)
+            // Writer textframes implement text::WritingMode2, which is a different data type.
+            xPropertySet->setPropertyValue("WritingMode", uno::makeAny(sal_Int16(eWritingMode)));
+        else
+            xPropertySet->setPropertyValue("TextWritingMode", uno::makeAny(eWritingMode));
     }
 
     if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
