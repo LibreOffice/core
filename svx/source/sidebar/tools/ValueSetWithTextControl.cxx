@@ -274,7 +274,7 @@ void SvxNumValueSet2::SetNumberingSettings(
     InsertItem( DEFAULT_NONE, DEFAULT_NONE - 1 );
     SetItemText( DEFAULT_NONE, SVX_RESSTR( RID_SVXSTR_NUMBULLET_NONE ));
 
-        for ( sal_uInt32 i = 0; i < aNum.getLength(); i++ )
+        for ( sal_Int32 i = 0; i < aNum.getLength(); i++ )
         {
             InsertItem( i + 1);
                 if( i < 8 )
