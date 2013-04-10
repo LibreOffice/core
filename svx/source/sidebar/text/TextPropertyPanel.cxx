@@ -194,10 +194,6 @@ TextPropertyPanel::TextPropertyPanel (
         mpToolBoxHighlight(ControlFactory::CreateToolBox(
                 mpToolBoxHighlightBackground.get(),
                 SVX_RES(TB_HIGHLIGHT))),
-    maCharSpacePopup(this, ::boost::bind(&TextPropertyPanel::CreateCharacterSpacingControl, this, _1)),
-    maFontColorPopup(this, ::boost::bind(&TextPropertyPanel::CreateFontColorPopupControl, this, _1)),
-    maBrushColorPopup(this, ::boost::bind(&TextPropertyPanel::CreateBrushColorPopupControl, this, _1)),
-    maUnderlinePopup(this, ::boost::bind(&TextPropertyPanel::CreateUnderlinePopupControl, this, _1)),
         mpFontColorUpdater(),
         mpHighlightUpdater(),
 
@@ -246,6 +242,10 @@ TextPropertyPanel::TextPropertyPanel (
         mpFontList          (NULL),
         mbMustDelete        (false),
         mbFocusOnFontSizeCtrl(false),
+    maCharSpacePopup(this, ::boost::bind(&TextPropertyPanel::CreateCharacterSpacingControl, this, _1)),
+    maUnderlinePopup(this, ::boost::bind(&TextPropertyPanel::CreateUnderlinePopupControl, this, _1)),
+    maFontColorPopup(this, ::boost::bind(&TextPropertyPanel::CreateFontColorPopupControl, this, _1)),
+    maBrushColorPopup(this, ::boost::bind(&TextPropertyPanel::CreateBrushColorPopupControl, this, _1)),
         mxFrame(rxFrame),
         maContext(),
         mpBindings(pBindings),
@@ -1556,7 +1556,7 @@ Color TextPropertyPanel::GetFontColor (void) const
 }
 
 void TextPropertyPanel::SetFontColor (
-    const String& rsColorName,
+    const String& /* rsColorName */,
     const Color aColor)
 {
     SvxColorItem aColorItem(aColor, SID_ATTR_CHAR_COLOR);
@@ -1570,7 +1570,7 @@ Color TextPropertyPanel::GetBrushColor (void) const
 }
 
 void TextPropertyPanel::SetBrushColor (
-    const String& rsColorName,
+    const String& /* rsColorName */,
     const Color aColor)
 {
     SvxBrushItem aBrushItem(aColor, SID_ATTR_BRUSH_CHAR);
