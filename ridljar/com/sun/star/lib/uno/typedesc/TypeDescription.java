@@ -676,7 +676,8 @@ public final class TypeDescription implements ITypeDescription {
 
         private void cleanUp() {
             for (;;) {
-                Entry e = (Entry) queue.poll();
+                Object tmp = queue.poll();
+                Entry e = (Entry)tmp;
                 if (e == null) {
                     break;
                 }

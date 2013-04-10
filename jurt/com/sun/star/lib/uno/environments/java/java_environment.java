@@ -206,7 +206,8 @@ public final class java_environment implements IEnvironment {
         // must only be called while synchronized on this Registry:
         private void cleanUp() {
             for (;;) {
-                Level2Entry l2 = (Level2Entry) queue.poll();
+                Object tmp = queue.poll();
+                Level2Entry l2 = (Level2Entry) tmp;
                 if (l2 == null) {
                     break;
                 }
