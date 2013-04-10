@@ -75,7 +75,7 @@ void RTFSdrImport::createShape(OUString aStr, uno::Reference<drawing::XShape>& x
     xPropertySet.set(xShape, uno::UNO_QUERY);
 }
 
-std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults()
+std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults(bool bNew)
 {
     std::vector<beans::PropertyValue> aRet;
     beans::PropertyValue aPropertyValue;
@@ -86,20 +86,24 @@ std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults()
     aPropertyValue.Name = "VertOrient";
     aPropertyValue.Value <<= text::VertOrientation::NONE;
     aRet.push_back(aPropertyValue);
-    aPropertyValue.Name = "BackColorTransparency";
-    aPropertyValue.Value <<= sal_Int32(100);
-    aRet.push_back(aPropertyValue);
+    if (!bNew)
+    {
+        aPropertyValue.Name = "BackColorTransparency";
+        aPropertyValue.Value <<= sal_Int32(100);
+        aRet.push_back(aPropertyValue);
+    }
+    // See the spec, new-style frame default margins are specified in EMUs.
     aPropertyValue.Name = "LeftBorderDistance";
-    aPropertyValue.Value <<= sal_Int32(0);
+    aPropertyValue.Value <<= sal_Int32(bNew ? (91440 / 360) : 0);
     aRet.push_back(aPropertyValue);
     aPropertyValue.Name = "RightBorderDistance";
-    aPropertyValue.Value <<= sal_Int32(0);
+    aPropertyValue.Value <<= sal_Int32(bNew ? (91440 / 360) : 0);
     aRet.push_back(aPropertyValue);
     aPropertyValue.Name = "TopBorderDistance";
-    aPropertyValue.Value <<= sal_Int32(0);
+    aPropertyValue.Value <<= sal_Int32(bNew ? (45720 / 360) : 0);
     aRet.push_back(aPropertyValue);
     aPropertyValue.Name = "BottomBorderDistance";
-    aPropertyValue.Value <<= sal_Int32(0);
+    aPropertyValue.Value <<= sal_Int32(bNew ? (45720 / 360) : 0);
     aRet.push_back(aPropertyValue);
     aPropertyValue.Name = "SizeType";
     aPropertyValue.Value <<= text::SizeType::FIX;
@@ -161,7 +165,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                     {
                         createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
                         bTextFrame = true;
-                        std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults();
+                        std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
                         for (size_t j = 0; j < aDefaults.size(); ++j)
                             xPropertySet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
                     }
@@ -205,8 +209,6 @@ void RTFSdrImport::resolve(RTFShape& rShape)
 
             // fillType will decide, possible it'll be the start color of a gradient.
             aFillModel.moColor.set(OUString("#") + OStringToOUString(msfilter::util::ConvertColor(aAny.get<sal_Int32>()), RTL_TEXTENCODING_UTF8));
-
-            xPropertySet->setPropertyValue("BackColorTransparency", uno::makeAny(sal_Int32(0)));
         }
         else if ( i->first == "fillBackColor" )
             // fillType will decide, possible it'll be the end color of a gradient.

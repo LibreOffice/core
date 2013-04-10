@@ -2561,7 +2561,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                         case RTF_DPTXBX:
                             {
                                 m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
-                                std::vector<beans::PropertyValue> aDefaults = m_pSdrImport->getTextFrameDefaults();
+                                std::vector<beans::PropertyValue> aDefaults = m_pSdrImport->getTextFrameDefaults(false);
                                 for (size_t i = 0; i < aDefaults.size(); ++i)
                                     m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
                             }
