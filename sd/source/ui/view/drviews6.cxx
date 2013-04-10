@@ -101,7 +101,6 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
          mpDrawView && !mpDrawView->IsPresObjSelected() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
-        const SfxPoolItem* pItem;
 
         if ( mpDrawView->IsTextEdit() )
             mpDrawView->SdrEndTextEdit();
