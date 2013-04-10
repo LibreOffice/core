@@ -99,9 +99,6 @@ void PreviewValueSet::Resize (void)
 
 void PreviewValueSet::Rearrange (bool bForceRequestResize)
 {
-    sal_uInt16 nOldColumnCount (GetColCount());
-    sal_uInt16 nOldRowCount (GetLineCount());
-
     sal_uInt16 nNewColumnCount (CalculateColumnCount (
         GetOutputSizePixel().Width()));
     sal_uInt16 nNewRowCount (CalculateRowCount (nNewColumnCount));
