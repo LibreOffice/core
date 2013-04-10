@@ -103,6 +103,10 @@ public:
     SdrObject* getLineObject() const { return mpLineObject; }
 };
 
+// to avoid rendering trouble (e.g. vcl renderer) and to get better AAed quality,
+// use double prerender size
+static bool bUseDoubleSize = true;
+
 void XDashList::impCreate()
 {
     if(!mpData)
@@ -113,7 +117,9 @@ void XDashList::impCreate()
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XDashList: no VirtualDevice created!" );
         pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(Size(getUiBitmapWidth() * 2, getUiBitmapHeight())));
+        const Size aSize(pVirDev->PixelToLogic(Size(
+            bUseDoubleSize ? getUiBitmapWidth() * 5 : getUiBitmapWidth() * 5 / 2,
+            bUseDoubleSize ? getUiBitmapHeight() * 2 : getUiBitmapHeight())));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
@@ -132,8 +138,9 @@ void XDashList::impCreate()
         pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
         pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
 
-        const basegfx::B2DPoint aStart(0, aSize.Height() / 2);
-        const basegfx::B2DPoint aEnd(aSize.Width(), aSize.Height() / 2);
+        const sal_uInt32 nHalfHeight(aSize.Height() / 2);
+        const basegfx::B2DPoint aStart(0, nHalfHeight);
+        const basegfx::B2DPoint aEnd(aSize.Width(), nHalfHeight);
         basegfx::B2DPolygon aPolygon;
         aPolygon.append(aStart);
         aPolygon.append(aEnd);
@@ -143,7 +150,7 @@ void XDashList::impCreate()
         pLineObject->SetMergedItem(XLineStyleItem(XLINE_DASH));
         pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
         const Size aLineWidth(pVirDev->PixelToLogic(Size(getUiBitmapLineWidth(), 0)));
-        pLineObject->SetMergedItem(XLineWidthItem(aLineWidth.getWidth()));
+        pLineObject->SetMergedItem(XLineWidthItem(bUseDoubleSize ? aLineWidth.getWidth() * 2 : aLineWidth.getWidth()));
         mpData = new impXDashList(pVirDev, pSdrModel, pBackgroundObject, pLineObject);
         OSL_ENSURE(0 != mpData, "XDashList: data creation went wrong!" );
     }
@@ -273,7 +280,16 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
     aPainter.ProcessDisplay(aDisplayInfo);
 
     const Point aZero(0, 0);
-    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
+    Bitmap aResult(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
+
+    if(bUseDoubleSize)
+    {
+        const Size aCurrentSize(aResult.GetSizePixel());
+
+        aResult.Scale(Size(aCurrentSize.Width() / 2, aCurrentSize.Height() / 2), BMP_SCALE_FASTESTINTERPOLATE);
+    }
+
+    return aResult;
 }
 
 Bitmap XDashList::CreateBitmapForUI( long nIndex )

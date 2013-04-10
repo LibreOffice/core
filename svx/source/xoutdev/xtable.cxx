@@ -226,7 +226,7 @@ sal_uInt32 XPropertyList::getUiBitmapHeight() const
 
 sal_uInt32 XPropertyList::getUiBitmapLineWidth() const
 {
-    static sal_uInt32 nLineWidth = 3;
+    static sal_uInt32 nLineWidth = 1;
 
     return nLineWidth;
 }
