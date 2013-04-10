@@ -736,7 +736,7 @@ IMPL_LINK(LinePropertyPanel, ToolboxColorSelectHdl,ToolBox*, pToolBox)
 
 
 
-IMPL_LINK(LinePropertyPanel, ChangeLineStyleHdl, ToolBox*, pToolBox)
+IMPL_LINK(LinePropertyPanel, ChangeLineStyleHdl, ToolBox*, /* pToolBox */)
 {
     const sal_uInt16 nPos(mpLBStyle->GetSelectEntryPos());
 
