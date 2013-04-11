@@ -79,23 +79,25 @@
 #define HAVE_GETSOCKOPT 1
 #endif
 
+#ifdef DISABLE_OPENSSL
 /* Define if GnuTLS support is enabled */
-/* #undef HAVE_GNUTLS */
+#define HAVE_GNUTLS
 
 /* Define to 1 if you have the `gnutls_certificate_get_x509_cas' function. */
 /* #undef HAVE_GNUTLS_CERTIFICATE_GET_X509_CAS */
 
 /* Define to 1 if you have the `gnutls_certificate_verify_peers2' function. */
-/* #undef HAVE_GNUTLS_CERTIFICATE_VERIFY_PEERS2 */
+#define HAVE_GNUTLS_CERTIFICATE_VERIFY_PEERS2
 
 /* Define to 1 if you have the `gnutls_session_get_data2' function. */
-/* #undef HAVE_GNUTLS_SESSION_GET_DATA2 */
+#define HAVE_GNUTLS_SESSION_GET_DATA2
 
 /* Define to 1 if you have the `gnutls_sign_callback_set' function. */
-/* #undef HAVE_GNUTLS_SIGN_CALLBACK_SET */
+#define HAVE_GNUTLS_SIGN_CALLBACK_SET
 
 /* Define to 1 if you have the `gnutls_x509_dn_get_rdn_ava' function. */
-/* #undef HAVE_GNUTLS_X509_DN_GET_RDN_AVA */
+#define HAVE_GNUTLS_X509_DN_GET_RDN_AVA
+#endif /* DISABLE_OPENSSL */
 
 /* Define if GSSAPI support is enabled */
 /* #undef HAVE_GSSAPI */
@@ -179,6 +181,7 @@
 #define HAVE_NETINET_TCP_H 1
 #endif
 
+#ifndef DISABLE_OPENSSL
 /* Define if NTLM is supported */
 #ifndef WIN32
 #define HAVE_NTLM 1
@@ -192,6 +195,7 @@
 
 /* Define to 1 if you have the <openssl/ssl.h> header file. */
 #define HAVE_OPENSSL_SSL_H 1
+#endif /* !DISABLE_OPENSSL */
 
 /* Define if pakchois library supported */
 /* #undef HAVE_PAKCHOIS */
