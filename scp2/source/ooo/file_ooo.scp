@@ -486,7 +486,7 @@ File gid_File_Wizards_Common
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "Pyuno/wizards.filelist";
+    Name = "Pyuno/commonwizards.filelist";
 End
 
 File gid_File_Wizards_Fax
