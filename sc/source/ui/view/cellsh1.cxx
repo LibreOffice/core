@@ -267,14 +267,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScRange aRange;
                         ScDocument* pDoc = GetViewData()->GetDocument();
-                        sal_Bool bTheFlag=GetViewData()->IsMultiMarked() ||
+                        bool bTheFlag=GetViewData()->IsMultiMarked() ||
                             (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE_FILTERED) ||
                             (pDoc->GetChangeTrack() != NULL);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        AbstractScDeleteCellDlg* pDlg = pFact->CreateScDeleteCellDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DELCELL, bTheFlag );
+                        AbstractScDeleteCellDlg* pDlg = pFact->CreateScDeleteCellDlg( pTabViewShell->GetDialogParent(), bTheFlag );
                         OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if (pDlg->Execute() == RET_OK)

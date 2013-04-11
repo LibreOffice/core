@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="deletecells">
+  <object class="GtkDialog" id="DeleteCellsDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Delete Cells</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <property name="layout_style">start</property>
             <child>
-              <object class="GtkButton" id="ok1">
+              <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -32,12 +32,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel1">
+              <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -47,12 +46,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="help1">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">top</property>
               </object>
@@ -80,23 +78,25 @@
               <object class="GtkAlignment" id="alignment3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkBox" id="box1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton1">
+                      <object class="GtkRadioButton" id="up">
                         <property name="label" translatable="yes">Shift cells _up</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">left</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -105,16 +105,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton2">
+                      <object class="GtkRadioButton" id="left">
                         <property name="label" translatable="yes">Shift cells _left</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">rows</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -123,16 +122,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton3">
+                      <object class="GtkRadioButton" id="rows">
                         <property name="label" translatable="yes">Delete entire _row(s)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">cols</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -141,16 +139,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton4">
+                      <object class="GtkRadioButton" id="cols">
                         <property name="label" translatable="yes">Delete entire _column(s)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">up</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -163,11 +160,13 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="Selectio">
+              <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;Selection&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="label" translatable="yes">Selection</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -180,9 +179,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">ok1</action-widget>
-      <action-widget response="0">cancel1</action-widget>
-      <action-widget response="0">help1</action-widget>
+      <action-widget response="0">ok</action-widget>
+      <action-widget response="0">cancel</action-widget>
+      <action-widget response="0">help</action-widget>
     </action-widgets>
   </object>
 </interface>

@@ -61,6 +61,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/scalc,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/cellprotectionpage \
 	sc/uiconfig/scalc/ui/definename \
+	sc/uiconfig/scalc/ui/deletecells \
 	sc/uiconfig/scalc/ui/deletecontents \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
 	sc/uiconfig/scalc/ui/insertname \

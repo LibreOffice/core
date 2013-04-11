@@ -33,19 +33,13 @@
 class ScDeleteCellDlg : public ModalDialog
 {
 private:
-    FixedLine       aFlFrame;
-    RadioButton     aBtnCellsUp;
-    RadioButton     aBtnCellsLeft;
-    RadioButton     aBtnDelRows;
-    RadioButton     aBtnDelCols;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-
+    RadioButton* m_pBtnCellsUp;
+    RadioButton* m_pBtnCellsLeft;
+    RadioButton* m_pBtnDelRows;
+    RadioButton* m_pBtnDelCols;
 
 public:
-            ScDeleteCellDlg( Window* pParent, sal_Bool bDisallowCellMove = false );
-            ~ScDeleteCellDlg();
+    ScDeleteCellDlg(Window* pParent, bool bDisallowCellMove = false);
 
     DelCellCmd GetDelCellCmd() const;
 };

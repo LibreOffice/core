@@ -832,26 +832,12 @@ AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotSe
 // add for ScDataPilotServiceDlg end
 
 
-AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg( Window* pParent, int nId,
-                                                                             sal_Bool bDisallowCellMove )
+AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(Window* pParent,
+    bool bDisallowCellMove)
 {
-    ScDeleteCellDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_DELCELL :
-            pDlg = new ScDeleteCellDlg( pParent, bDisallowCellMove );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScDeleteCellDlg_Impl( pDlg );
-    return 0;
+    ScDeleteCellDlg * pDlg = new ScDeleteCellDlg(pParent, bDisallowCellMove);
+    return new AbstractScDeleteCellDlg_Impl( pDlg );
 }
-
-
-
 
 AbstractScDataFormDlg* ScAbstractDialogFactory_Impl::CreateScDataFormDlg( Window* pParent, int nId, ScTabViewShell* pTabViewShell )
 {

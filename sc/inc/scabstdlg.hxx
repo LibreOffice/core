@@ -358,7 +358,7 @@ public:
                                                                         const com::sun::star::uno::Sequence<OUString>& rServices,
                                                                         int nId ) = 0;
 
-    virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg( Window* pParent, int nId, sal_Bool bDisallowCellMove = false ) = 0 ; //add for ScDeleteCellDlg
+    virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(Window* pParent, bool bDisallowCellMove = false) = 0 ; //add for ScDeleteCellDlg
 
     //for dataform
     virtual AbstractScDataFormDlg * CreateScDataFormDlg( Window* pParent, int nId, ScTabViewShell*      pTabViewShell ) = 0 ; //add for ScDataFormDlg

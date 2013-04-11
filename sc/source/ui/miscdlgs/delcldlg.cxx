@@ -33,43 +33,36 @@ static sal_uInt8 nDelItemChecked=0;
 
 //==================================================================
 
-ScDeleteCellDlg::ScDeleteCellDlg( Window* pParent, sal_Bool bDisallowCellMove ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DELCELL ) ),
-    //
-    aFlFrame        ( this, ScResId( FL_FRAME ) ),
-    aBtnCellsUp     ( this, ScResId( BTN_CELLSUP ) ),
-    aBtnCellsLeft   ( this, ScResId( BTN_CELLSLEFT ) ),
-    aBtnDelRows     ( this, ScResId( BTN_DELROWS ) ),
-    aBtnDelCols     ( this, ScResId( BTN_DELCOLS ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) )
+ScDeleteCellDlg::ScDeleteCellDlg(Window* pParent, bool bDisallowCellMove)
+    : ModalDialog(pParent, "DeleteCellsDialog", "modules/scalc/ui/deletecells.ui")
 {
+    get(m_pBtnCellsUp, "up");
+    get(m_pBtnCellsLeft, "left");
+    get(m_pBtnDelRows, "rows");
+    get(m_pBtnDelCols, "cols");
 
     if (bDisallowCellMove)
     {
-        aBtnCellsUp.Disable();
-        aBtnCellsLeft.Disable();
+        m_pBtnCellsUp->Disable();
+        m_pBtnCellsLeft->Disable();
 
         switch(nDelItemChecked)
         {
-            case 2: aBtnDelRows.Check();break;
-            case 3: aBtnDelCols.Check();break;
-            default:aBtnDelRows.Check();break;
+            case 2: m_pBtnDelRows->Check();break;
+            case 3: m_pBtnDelCols->Check();break;
+            default:m_pBtnDelRows->Check();break;
         }
     }
     else
     {
         switch(nDelItemChecked)
         {
-            case 0: aBtnCellsUp.Check();break;
-            case 1: aBtnCellsLeft.Check();break;
-            case 2: aBtnDelRows.Check();break;
-            case 3: aBtnDelCols.Check();break;
+            case 0: m_pBtnCellsUp->Check();break;
+            case 1: m_pBtnCellsLeft->Check();break;
+            case 2: m_pBtnDelRows->Check();break;
+            case 3: m_pBtnDelCols->Check();break;
         }
     }
-
-    FreeResource();
 }
 
 //------------------------------------------------------------------------
@@ -78,22 +71,22 @@ DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
 {
     DelCellCmd nReturn = DEL_NONE;
 
-    if ( aBtnCellsUp.IsChecked()   )
+    if ( m_pBtnCellsUp->IsChecked()   )
     {
         nDelItemChecked=0;
         nReturn = DEL_CELLSUP;
     }
-    else if ( aBtnCellsLeft.IsChecked() )
+    else if ( m_pBtnCellsLeft->IsChecked() )
     {
         nDelItemChecked=1;
         nReturn = DEL_CELLSLEFT;
     }
-    else if ( aBtnDelRows.IsChecked()   )
+    else if ( m_pBtnDelRows->IsChecked()   )
     {
         nDelItemChecked=2;
         nReturn = DEL_DELROWS;
     }
-    else if ( aBtnDelCols.IsChecked()   )
+    else if ( m_pBtnDelCols->IsChecked()   )
     {
         nDelItemChecked=3;
         nReturn = DEL_DELCOLS;
@@ -101,11 +94,5 @@ DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
 
     return nReturn;
 }
-
-ScDeleteCellDlg::~ScDeleteCellDlg()
-{
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

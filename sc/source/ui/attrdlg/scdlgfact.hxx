@@ -424,8 +424,7 @@ public:
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( Window* pParent, //add for ScDataPilotServiceDlg
                                                                         const com::sun::star::uno::Sequence<OUString>& rServices,
                                                                         int nId );
-    virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg( Window* pParent, int nId,
-                                                            sal_Bool bDisallowCellMove = false ); //add for ScDeleteCellDlg
+    virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(Window* pParent, bool bDisallowCellMove = false );
 
     //for dataform
     virtual AbstractScDataFormDlg * CreateScDataFormDlg( Window* pParent, int nId, ScTabViewShell*      pTabViewShell); //add for ScDeleteCellDlg

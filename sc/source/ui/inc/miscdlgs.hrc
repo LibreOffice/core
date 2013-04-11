@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sc.hrc"   // -> RID_SCDLG_DELCELL
-                    // -> RID_SCDLG_INSCELL
+#include "sc.hrc"   // -> RID_SCDLG_INSCELL
                     // -> RID_SCDLG_INSCONT
                     // -> RID_SCDLG_MOVETAB
                     // -> RID_SCDLG_STRINPUT
@@ -38,13 +37,9 @@
 #define FL_FRAME        112
 #define STR_BTN_CLOSE   200
 
-// Insert/Delete Cell Dialog
-#define BTN_CELLSUP     10
+// Insert Cell Dialog
 #define BTN_CELLSDOWN   11
 #define BTN_CELLSRIGHT  12
-#define BTN_CELLSLEFT   13
-#define BTN_DELROWS     14
-#define BTN_DELCOLS     15
 #define BTN_INSROWS     16
 #define BTN_INSCOLS     17
 
