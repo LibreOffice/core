@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///Z0\u003d",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3009,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-11T04:04:23Z",
+      "side": 1,
+      "message": "This code has undefined behavior in C++ (two writes to the same variable). Why not\n\naMenuPos.X() +\u003d LayoutIsRTL ? -nSizePix : nSizePix;\n\n?\n\nNitpick: Could you use the (simplified) Hungarian notation prefixes as the rest of the surrounding code? E.g., \u0027p\u0027 for pointer, \u0027n\u0027 for number, \u0027b\u0027 for boolean etc.",
+      "revId": "5f0bc625353f7b719eff0a236990d8c70077bdf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
