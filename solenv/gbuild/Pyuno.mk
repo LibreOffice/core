@@ -25,6 +25,15 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+# class Pyuno
+#
+# Handles creation and delivery of Python UNO components.
+#
+# Provides one filelist, called Pyuno/<name>.
+
+# platform
+#  gb_Pyuno_PROGRAMDIRNAME
+
 $(dir $(call gb_Pyuno_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
@@ -42,6 +51,7 @@ $(call gb_Pyuno_get_clean_target,%) :
 
 gb_Pyuno_get_packagename = Pyuno/$(1)
 
+# gb_Pyuno_Pyuno component
 define gb_Pyuno_Pyuno
 $(call gb_Package_Package_internal,$(call gb_Pyuno_get_packagename,$(1)),$(2))
 $(call gb_Package_set_outdir,$(call gb_Pyuno_get_packagename,$(1)),$(INSTDIR))
@@ -55,11 +65,13 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Pyuno)
 
 endef
 
+# gb_Pyuno_add_file component destination source
 define gb_Pyuno_add_file
 $(call gb_Package_add_file,$(call gb_Pyuno_get_packagename,$(1)),$(gb_Pyuno_PROGRAMDIRNAME)/$(2),$(3))
 
 endef
 
+# gb_Pyuno_add_files component destdir source
 define gb_Pyuno_add_files
 $(foreach file,$(3),$(call gb_Pyuno_add_file,$(1),$(if $(strip $(2)),$(strip $(2))/)$(file),$(file)))
 
@@ -74,6 +86,7 @@ $(call gb_Pyuno_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_tar
 
 endef
 
+# Set .component file for the component.
 define gb_Pyuno_set_componentfile
 $(call gb_Pyuno_set_componentfile_full,$(1),$(2),$(gb_Pyuno__COMPONENTPREFIX),$(1))
 
