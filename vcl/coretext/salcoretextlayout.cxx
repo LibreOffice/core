@@ -223,6 +223,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     CGContextSetFontSize(gr.mrContext, CTFontGetSize(mpStyle->GetFont()));
     CGContextSetTextDrawingMode(gr.mrContext, kCGTextFill);
     CGContextSetShouldAntialias( gr.mrContext, true );
+    CGContextSetShouldSubpixelPositionFonts( gr.mrContext, false );
     if( mpStyle->GetColor() ) {
         CGContextSetFillColorWithColor(gr.mrContext, mpStyle->GetColor());
         CGContextSetStrokeColorWithColor(gr.mrContext, mpStyle->GetColor());
