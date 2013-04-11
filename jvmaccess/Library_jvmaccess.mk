@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,jvmaccess))
 
-$(eval $(call gb_Library_set_soversion_script,jvmaccess,3,$(SRCDIR)/jvmaccess/util/gcc3.map))
-
 $(eval $(call gb_Library_use_package,jvmaccess,\
     jvmaccess_inc \
 ))

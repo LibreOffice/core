@@ -26,8 +26,6 @@
 
 $(eval $(call gb_Library_Library,store))
 
-$(eval $(call gb_Library_set_soversion_script,store,3,$(SRCDIR)/store/util/store.map))
-
 $(eval $(call gb_Library_use_external,store,boost_headers))
 
 $(eval $(call gb_Library_use_packages,store,\
