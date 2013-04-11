@@ -67,54 +67,60 @@
 
 using namespace ::com::sun::star;
 
+/*--------------------------------------------------------
+ Tools->Options->Writer->View
+ Tools->Options->Writer/Web->View
+--------------------------------------------------------- */
 SwContentOptPage::SwContentOptPage( Window* pParent,
                                       const SfxItemSet& rCoreSet ) :
-    SfxTabPage( pParent, SW_RES( TP_CONTENT_OPT ), rCoreSet ),
-    aLineFL       ( this,   SW_RES( FL_LINE     ) ),
-    aCrossCB      ( this,   SW_RES( CB_CROSS     ) ),
-
-    aWindowFL     ( this,   SW_RES( FL_WINDOW   ) ),
-    aHScrollBox   ( this,   SW_RES( CB_HSCROLL   ) ),
-    aVScrollBox   ( this,   SW_RES( CB_VSCROLL   ) ),
-    aAnyRulerCB   ( this,   SW_RES( CB_ANY_RULER ) ),
-    aHRulerCBox   ( this,   SW_RES( CB_HRULER   ) ),
-    aHMetric      ( this,   SW_RES( LB_HMETRIC    ) ),
-    aVRulerCBox   ( this,   SW_RES( CB_VRULER    ) ),
-    aVRulerRightCBox( this, SW_RES( CB_VRULER_RIGHT    ) ),
-    aVMetric      ( this,   SW_RES( LB_VMETRIC    ) ),
-    aSmoothCBox   ( this,   SW_RES( CB_SMOOTH_SCROLL    ) ),
-
-    aDispFL      ( this,   SW_RES( FL_DISP     ) ),
-    aGrfCB        ( this,   SW_RES( CB_GRF          ) ),
-    aTblCB        ( this,   SW_RES( CB_TBL      ) ),
-    aDrwCB        ( this,   SW_RES( CB_DRWFAST   ) ),
-    aFldNameCB    ( this,   SW_RES( CB_FIELD    ) ),
-    aPostItCB     ( this,   SW_RES( CB_POSTIT   ) ),
-
-    aSettingsFL   ( this,   SW_RES( FL_SETTINGS   ) ),
-    aMetricFT     ( this,   SW_RES( FT_METRIC   ) ),
-    aMetricLB     ( this,   SW_RES( LB_METRIC   ) )
+    SfxTabPage(pParent, "ViewOptionsPage",
+               "modules/swriter/ui/viewoptionspage.ui", rCoreSet)
 {
-    FreeResource();
+    get (m_pCrossCB, "helplines");
+
+    get (m_pHScrollBox, "hscrollbar");
+    get (m_pVScrollBox, "vscrollbar");
+    get (m_pAnyRulerCB, "ruler");
+    get (m_pHRulerCBox, "hruler");
+    get (m_pHMetric, "hrulercombobox");
+    get (m_pVRulerCBox, "vruler");
+    get (m_pVRulerRightCBox, "vrulerright");
+    get (m_pVMetric, "vrulercombobox");
+    get (m_pSmoothCBox, "smoothscroll");
+
+    get (m_pGrfCB, "graphics");
+    get (m_pTblCB, "tables");
+    get (m_pDrwCB, "drawings");
+    get (m_pFldNameCB, "fieldcodes");
+    get (m_pPostItCB, "comments");
+
+    get (m_pSettingsFrame, "settingsframe");
+    get (m_pSettingsLabel, "settingslabel");
+    get (m_pMetricLabel, "measureunitlabel");
+    get (m_pMetricLB, "measureunit");
+
+    /* This part is visible only with Writer/Web->View dialogue. */
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, sal_False, &pItem )
-        && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
+    if (! (SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, sal_False, &pItem )
+           && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON))
     {
-        aMetricLB.Show();
-        aSettingsFL.Show();
-        aMetricFT.Show();
+        m_pSettingsFrame->Hide();
+        m_pSettingsLabel->Hide();
+        m_pMetricLabel->Hide();
+        m_pMetricLB->Hide();
     }
+
     SvtCJKOptions aCJKOptions;
     if(aCJKOptions.IsVerticalTextEnabled() )
     {
-        Point aSmoothPos(aSmoothCBox.GetPosPixel());
-        aSmoothPos.Y() += aSmoothPos.Y() - aVRulerCBox.GetPosPixel().Y();
-        aSmoothCBox.SetPosPixel(aSmoothPos);
+        Point aSmoothPos(m_pSmoothCBox->GetPosPixel());
+        aSmoothPos.Y() += aSmoothPos.Y() - m_pVRulerCBox->GetPosPixel().Y();
+        m_pSmoothCBox->SetPosPixel(aSmoothPos);
     }
     else
-        aVRulerRightCBox.Hide();
-    aVRulerCBox.SetClickHdl(LINK(this, SwContentOptPage, VertRulerHdl ));
-    aAnyRulerCB.SetClickHdl(LINK(this, SwContentOptPage, AnyRulerHdl));
+        m_pVRulerRightCBox->Hide();
+    m_pVRulerCBox->SetClickHdl(LINK(this, SwContentOptPage, VertRulerHdl ));
+    m_pAnyRulerCB->SetClickHdl(LINK(this, SwContentOptPage, AnyRulerHdl));
 
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
@@ -137,16 +143,16 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
                 // there isn't 'line' unit in HTML format
                 if ( eFUnit != FUNIT_LINE )
                 {
-                   sal_uInt16 nPos = aMetricLB.InsertEntry( sMetric );
-                   aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
-                   aHMetric.InsertEntry( sMetric );
-                   aHMetric.SetEntryData( nPos, (void*)(long)eFUnit );
+                   sal_uInt16 nPos = m_pMetricLB->InsertEntry( sMetric );
+                   m_pMetricLB->SetEntryData( nPos, (void*)(long)eFUnit );
+                   m_pHMetric->InsertEntry( sMetric );
+                   m_pHMetric->SetEntryData( nPos, (void*)(long)eFUnit );
                 }
                 // a vertical ruler has not the 'character' unit
                 if ( eFUnit != FUNIT_CHAR )
                 {
-                   sal_uInt16 nPos = aVMetric.InsertEntry( sMetric );
-                   aVMetric.SetEntryData( nPos, (void*)(long)eFUnit );
+                   sal_uInt16 nPos = m_pVMetric->InsertEntry( sMetric );
+                   m_pVMetric->SetEntryData( nPos, (void*)(long)eFUnit );
                 }
             }
             default:;//prevent warning
@@ -164,22 +170,22 @@ SfxTabPage* SwContentOptPage::Create( Window* pParent,
     return new SwContentOptPage(pParent, rAttrSet);
 }
 
-static void lcl_SelectMetricLB(ListBox& rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
+static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
     if( rSet.GetItemState( nSID, sal_False, &pItem ) >= SFX_ITEM_AVAILABLE )
     {
         FieldUnit eFieldUnit = (FieldUnit)((SfxUInt16Item*)pItem)->GetValue();
-        for ( sal_uInt16 i = 0; i < rMetric.GetEntryCount(); ++i )
+        for ( sal_uInt16 i = 0; i < rMetric->GetEntryCount(); ++i )
         {
-            if ( (int)(sal_IntPtr)rMetric.GetEntryData( i ) == (int)eFieldUnit )
+            if ( (int)(sal_IntPtr)rMetric->GetEntryData( i ) == (int)eFieldUnit )
             {
-                rMetric.SelectEntryPos( i );
+                rMetric->SelectEntryPos( i );
                 break;
             }
         }
     }
-    rMetric.SaveValue();
+    rMetric->SaveValue();
 }
 
 void SwContentOptPage::Reset(const SfxItemSet& rSet)
@@ -190,25 +196,25 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
                                     (const SfxPoolItem**)&pElemAttr );
     if(pElemAttr)
     {
-        aTblCB      .Check  (pElemAttr->bTable                );
-        aGrfCB.Check  (pElemAttr->bGraphic              );
-        aDrwCB      .Check  (pElemAttr->bDrawing              );
-        aFldNameCB  .Check  (pElemAttr->bFieldName            );
-        aPostItCB   .Check  (pElemAttr->bNotes                );
-        aCrossCB   .Check( pElemAttr->bCrosshair        );
-        aHScrollBox.Check( pElemAttr->bHorzScrollbar     );
-        aVScrollBox.Check( pElemAttr->bVertScrollbar     );
-        aAnyRulerCB.Check( pElemAttr->bAnyRuler );
-        aHRulerCBox.Check( pElemAttr->bHorzRuler         );
-        aVRulerCBox.Check( pElemAttr->bVertRuler         );
-        aVRulerRightCBox.Check(pElemAttr->bVertRulerRight);
-        aSmoothCBox.Check( pElemAttr->bSmoothScroll      );
+        m_pTblCB->Check (pElemAttr->bTable);
+        m_pGrfCB->Check (pElemAttr->bGraphic);
+        m_pDrwCB->Check (pElemAttr->bDrawing);
+        m_pFldNameCB->Check (pElemAttr->bFieldName);
+        m_pPostItCB->Check (pElemAttr->bNotes);
+        m_pCrossCB->Check (pElemAttr->bCrosshair);
+        m_pHScrollBox->Check (pElemAttr->bHorzScrollbar);
+        m_pVScrollBox->Check (pElemAttr->bVertScrollbar);
+        m_pAnyRulerCB->Check (pElemAttr->bAnyRuler);
+        m_pHRulerCBox->Check (pElemAttr->bHorzRuler);
+        m_pVRulerCBox->Check (pElemAttr->bVertRuler);
+        m_pVRulerRightCBox->Check (pElemAttr->bVertRulerRight);
+        m_pSmoothCBox->Check (pElemAttr->bSmoothScroll);
     }
-    aMetricLB.SetNoSelection();
-    lcl_SelectMetricLB(aMetricLB, SID_ATTR_METRIC, rSet);
-    lcl_SelectMetricLB(aHMetric, FN_HSCROLL_METRIC, rSet);
-    lcl_SelectMetricLB(aVMetric, FN_VSCROLL_METRIC, rSet);
-    AnyRulerHdl(&aAnyRulerCB);
+    m_pMetricLB->SetNoSelection();
+    lcl_SelectMetricLB(m_pMetricLB, SID_ATTR_METRIC, rSet);
+    lcl_SelectMetricLB(m_pHMetric, FN_HSCROLL_METRIC, rSet);
+    lcl_SelectMetricLB(m_pVMetric, FN_VSCROLL_METRIC, rSet);
+    AnyRulerHdl(m_pAnyRulerCB);
 }
 
 sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
@@ -219,47 +225,48 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     SwElemItem aElem;
     if(pOldAttr)
         aElem = *pOldAttr;
-    aElem.bTable                = aTblCB        .IsChecked();
-    aElem.bGraphic              = aGrfCB.IsChecked();
-    aElem.bDrawing              = aDrwCB        .IsChecked();
-    aElem.bFieldName            = aFldNameCB    .IsChecked();
-    aElem.bNotes                = aPostItCB     .IsChecked();
-    aElem.bCrosshair     = aCrossCB   .IsChecked();
-    aElem.bHorzScrollbar = aHScrollBox.IsChecked();
-    aElem.bVertScrollbar = aVScrollBox.IsChecked();
-    aElem.bAnyRuler = aAnyRulerCB.IsChecked();
-    aElem.bHorzRuler     = aHRulerCBox.IsChecked();
-    aElem.bVertRuler     = aVRulerCBox.IsChecked();
-    aElem.bVertRulerRight= aVRulerRightCBox.IsChecked();
-    aElem.bSmoothScroll  = aSmoothCBox.IsChecked();
+    aElem.bTable                = m_pTblCB->IsChecked();
+    aElem.bGraphic              = m_pGrfCB->IsChecked();
+    aElem.bDrawing              = m_pDrwCB->IsChecked();
+    aElem.bFieldName            = m_pFldNameCB->IsChecked();
+    aElem.bNotes                = m_pPostItCB->IsChecked();
+    aElem.bCrosshair            = m_pCrossCB->IsChecked();
+    aElem.bHorzScrollbar        = m_pHScrollBox->IsChecked();
+    aElem.bVertScrollbar        = m_pVScrollBox->IsChecked();
+    aElem.bAnyRuler             = m_pAnyRulerCB->IsChecked();
+    aElem.bHorzRuler            = m_pHRulerCBox->IsChecked();
+    aElem.bVertRuler            = m_pVRulerCBox->IsChecked();
+    aElem.bVertRulerRight       = m_pVRulerRightCBox->IsChecked();
+    aElem.bSmoothScroll         = m_pSmoothCBox->IsChecked();
 
 
     sal_Bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
         bRet = 0 != rSet.Put(aElem);
-    sal_uInt16 nMPos = aMetricLB.GetSelectEntryPos();
+
+    sal_uInt16 nMPos = m_pMetricLB->GetSelectEntryPos();
     sal_uInt16 nGlobalMetricPos = nMPos;
-    if ( nMPos != aMetricLB.GetSavedValue() )
+    if ( nMPos != m_pMetricLB->GetSavedValue() )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(long)aMetricLB.GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(long)m_pMetricLB->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
     }
 
-    nMPos = aHMetric.GetSelectEntryPos();
-    if ( nMPos != aHMetric.GetSavedValue() || nMPos != nGlobalMetricPos )
+    nMPos = m_pHMetric->GetSelectEntryPos();
+    if ( nMPos != m_pHMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(long)aHMetric.GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(long)m_pHMetric->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_HSCROLL_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
     }
-    nMPos = aVMetric.GetSelectEntryPos();
-    if ( nMPos != aVMetric.GetSavedValue() || nMPos != nGlobalMetricPos )
+    nMPos = m_pVMetric->GetSelectEntryPos();
+    if ( nMPos != m_pVMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(long)aVMetric.GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(long)m_pVMetric->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_VSCROLL_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
     }
@@ -268,18 +275,18 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
 
 IMPL_LINK(SwContentOptPage, VertRulerHdl, CheckBox*, pBox)
 {
-    aVRulerRightCBox.Enable(pBox->IsEnabled() && pBox->IsChecked());
+    m_pVRulerRightCBox->Enable(pBox->IsEnabled() && pBox->IsChecked());
     return 0;
 }
 
 IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
 {
     sal_Bool bChecked = pBox->IsChecked();
-    aHRulerCBox      .Enable(bChecked);
-    aHMetric         .Enable(bChecked);
-    aVRulerCBox      .Enable(bChecked);
-    aVMetric         .Enable(bChecked);
-    VertRulerHdl(&aVRulerCBox);
+    m_pHRulerCBox->Enable(bChecked);
+    m_pHMetric->Enable(bChecked);
+    m_pVRulerCBox->Enable(bChecked);
+    m_pVMetric->Enable(bChecked);
+    VertRulerHdl(m_pVRulerCBox);
     return 0;
 }
 /*------------------------------------------------------
