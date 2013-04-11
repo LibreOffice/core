@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -83,8 +84,14 @@ std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults(bool bNew)
     aPropertyValue.Name = "HoriOrient";
     aPropertyValue.Value <<= text::HoriOrientation::NONE;
     aRet.push_back(aPropertyValue);
+    aPropertyValue.Name = "HoriOrientRelation";
+    aPropertyValue.Value <<= text::RelOrientation::FRAME;
+    aRet.push_back(aPropertyValue);
     aPropertyValue.Name = "VertOrient";
     aPropertyValue.Value <<= text::VertOrientation::NONE;
+    aRet.push_back(aPropertyValue);
+    aPropertyValue.Name = "VertOrientRelation";
+    aPropertyValue.Value <<= text::RelOrientation::FRAME;
     aRet.push_back(aPropertyValue);
     if (!bNew)
     {
