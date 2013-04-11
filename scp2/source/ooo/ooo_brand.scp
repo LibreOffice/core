@@ -31,7 +31,7 @@
 Directory gid_Dir_Brand_Root
     ParentID = PREDEFINED_PROGDIR;
   #ifdef WNT
-    HostName = "${PRODUCTNAME} ${BRANDPACKAGEVERSION}";
+    HostName = "${WINDOWSBASISROOTNAME}";
   #else
     HostName = ".";
   #endif
