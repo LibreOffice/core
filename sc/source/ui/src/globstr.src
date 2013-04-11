@@ -443,31 +443,23 @@ Resource RID_GLOBSTR
     };
     String STR_MSSG_SOLVE_0
     {
-        Text [ en-US ] = "Goal Seek successful.\n" ;
+        Text [ en-US ] = "Goal Seek succeeded. Result: " ;
     };
     String STR_MSSG_SOLVE_1
     {
-        Text [ en-US ] = "Result (" ;
+        Text [ en-US ] = "\n\nInsert the result into the variable cell?" ;
     };
     String STR_MSSG_SOLVE_2
     {
-        Text [ en-US ] = "). Apply setting to spreadsheet?" ;
+        Text [ en-US ] = "Goal Seek failed.\n\n" ;
     };
     String STR_MSSG_SOLVE_3
     {
-        Text [ en-US ] = "Goal Seek not successful.\n" ;
+        Text [ en-US ] = "Insert the closest value (" ;
     };
     String STR_MSSG_SOLVE_4
     {
-        Text [ en-US ] = "No exact value found. \n" ;
-    };
-    String STR_MSSG_SOLVE_5
-    {
-        Text [ en-US ] = "Insert closest value (" ;
-    };
-    String STR_MSSG_SOLVE_6
-    {
-        Text [ en-US ] = ")?" ;
+        Text [ en-US ] = ") into the variable cell anyway?" ;
     };
     String STR_TABLE_GESAMTERGEBNIS
     {
