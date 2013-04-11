@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<html>
+<head>
+    <title>SDRemote Firefox OS Demo</title>
+    <!--<meta name="viewport" content="width=device-width" />-->
+
+    <script>
+        function init() {
+            console.info("Hello world");
+        }
+
+        var mCommunicator;
+    </script>
+    <script src="js/transmitter.js"></script>
+</head>
+<body onLoad="init();">
+    <button id="open_comm" onclick="mCommunicator = new Communicator('127.0.0.1');">Press to Connect (localhost)</button>
+    <button id="transition_next" onclick="if (mCommunicator) mCommunicator.sendMessage('transition_next\n\n');">transition_next</button>
+    <p>Current slide: <span id="current slide">---</span></p>
+</body>
+</html>
