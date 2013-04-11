@@ -33,10 +33,11 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="graphics">
-                        <property name="label" translatable="yes">Pictures and objects</property>
+                        <property name="label" translatable="yes">_Pictures and objects</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -49,10 +50,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="formcontrols">
-                        <property name="label" translatable="yes">Form controls</property>
+                        <property name="label" translatable="yes">Form control_s</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -65,10 +67,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="background">
-                        <property name="label" translatable="yes">Page background</property>
+                        <property name="label" translatable="yes">Page ba_ckground</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -81,10 +84,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="inblack">
-                        <property name="label" translatable="yes">Print text in black</property>
+                        <property name="label" translatable="yes">Print text in blac_k</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -97,10 +101,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="hiddentext">
-                        <property name="label" translatable="yes">Hidden text</property>
+                        <property name="label" translatable="yes">Hidden te_xt</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -113,10 +118,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="textplaceholder">
-                        <property name="label" translatable="yes">Text placeholder</property>
+                        <property name="label" translatable="yes">Text _placeholder</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -169,10 +175,11 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="leftpages">
-                        <property name="label" translatable="yes">Left pages</property>
+                        <property name="label" translatable="yes">_Left pages</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -185,10 +192,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="rightpages">
-                        <property name="label" translatable="yes">Right pages</property>
+                        <property name="label" translatable="yes">_Right pages</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -201,10 +209,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="brochure">
-                        <property name="label" translatable="yes">Brochure</property>
+                        <property name="label" translatable="yes">Broch_ure</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -221,7 +230,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">18</property>
+                        <property name="margin_left">12</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -273,10 +283,11 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="none">
-                        <property name="label" translatable="yes">None</property>
+                        <property name="label" translatable="yes">_None</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">only</property>
@@ -290,10 +301,11 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="only">
-                        <property name="label" translatable="yes">Comments only</property>
+                        <property name="label" translatable="yes">Comments _only</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">end</property>
@@ -307,10 +319,11 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="end">
-                        <property name="label" translatable="yes">End of document</property>
+                        <property name="label" translatable="yes">End of docu_ment</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">endpage</property>
@@ -324,10 +337,11 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="endpage">
-                        <property name="label" translatable="yes">End of page</property>
+                        <property name="label" translatable="yes">_End of page</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">none</property>
@@ -389,12 +403,14 @@
                   <object class="GtkGrid" id="grid7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="column_spacing">10</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Fax </property>
+                        <property name="label" translatable="yes">_Fax</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">fax</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -425,10 +441,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="blankpages">
-                    <property name="label" translatable="yes">Print automatically inserted blank pages</property>
+                    <property name="label" translatable="yes">Print _automatically inserted blank pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -441,10 +458,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="papertray">
-                    <property name="label" translatable="yes">Paper tray from printer settings</property>
+                    <property name="label" translatable="yes">_Paper tray from printer settings</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>

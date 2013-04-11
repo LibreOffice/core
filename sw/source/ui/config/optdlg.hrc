@@ -18,14 +18,8 @@
  */
 
 /* TabPage View */
-#define FL_DISP                 1
 #define FL_NOPRINT              2
-#define FL_WINDOW               3
 
-#define CB_GRF                  1
-#define CB_TBL                  2
-#define CB_DRWFAST              3
-#define CB_FIELD                4
 #define CB_PARA                 5
 #define CB_TAB                  6
 #define CB_SPACE                7
@@ -33,19 +27,6 @@
 #define CB_SHYPH                9
 #define CB_FLD_HIDDEN           10
 #define CB_BREAK                11
-#define CB_ANY_RULER            12
-#define CB_CROSS                14
-#define CB_HSCROLL              15
-#define CB_VSCROLL              16
-#define CB_HRULER               17
-#define CB_VRULER               18
-#define FL_LINE                 22
-#define CB_POSTIT               23
-#define CB_VRULER_RIGHT         24
-
-#define FL_SETTINGS             26
-#define LB_METRIC               27
-#define FT_METRIC               28
 
 //test tab page
 
@@ -81,17 +62,6 @@
 #define RB_ONLY            81
 #define RB_END             82
 #define RB_PAGEEND         83
-
-#define LB_FAX             86
-#define CB_BLACK_FONT      87
-#define LB_HMETRIC         88
-#define LB_VMETRIC         89
-#define FL_SEP_PRT_LEFT     90
-#define FL_SEP_PRT_RIGHT    91
-#define CB_PRINTEMPTYPAGES  92
-#define CB_HIDDEN_TEXT      93
-#define CB_TEXT_PLACEHOLDER  94
-
 
 // Tabpage Basic Fonts
 #define FT_STANDARD         90
