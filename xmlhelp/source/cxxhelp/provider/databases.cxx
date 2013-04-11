@@ -66,6 +66,10 @@
 #include "databases.hxx"
 #include "urlparameter.hxx"
 
+#ifdef WNT
+#include <windows.h>
+#endif
+
 using namespace chelp;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -1146,7 +1150,30 @@ void Databases::cascadingStylesheet( const OUString& Language,
                 {
                     uno::Any aHCMode = xVclWindowPeer->getProperty( OUString( "HighContrastMode" ) );
                     if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
+                    {
                         aCSS = OUString( "highcontrastblack" );
+                        #ifdef WNT
+                        HKEY hKey = NULL;
+                        LONG lResult = RegOpenKeyExA( HKEY_CURRENT_USER, "Control Panel\\Accessibility\\HighContrast", 0, KEY_QUERY_VALUE, &hKey );
+                        if ( ERROR_SUCCESS == lResult )
+                        {
+                            CHAR szBuffer[1024];
+                            DWORD nSize = sizeof( szBuffer );
+                            lResult = RegQueryValueExA( hKey, "High Contrast Scheme", NULL, NULL, (LPBYTE)szBuffer, &nSize );
+                            if ( ERROR_SUCCESS == lResult && nSize > 0 )
+                            {
+                                szBuffer[nSize] = '\0';
+                                if ( strncmp( szBuffer, "High Contrast #1", strlen("High Contrast #1") ) == 0 )
+                                    aCSS = OUString( "highcontrast1" );
+                                if ( strncmp( szBuffer, "High Contrast #2", strlen("High Contrast #2") ) == 0 )
+                                    aCSS = OUString( "highcontrast2" );
+                                if ( strncmp( szBuffer, "High Contrast White", strlen("High Contrast White") ) == 0 )
+                                    aCSS = OUString( "highcontrastwhite" );
+                            }
+                            RegCloseKey( hKey );
+                        }
+                        #endif
+                    }
                 }
             }
         }
