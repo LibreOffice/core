@@ -199,8 +199,8 @@ css::uno::Reference< css::uno::XInterface > create(
     }
 }
 
-OUString getImplementationName() {
-    return OUString("test.cpp.cppmain.Component");
+rtl::OUString getImplementationName() {
+    return rtl::OUString("test.cpp.cppmain.Component");
 }
 
 css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() {
