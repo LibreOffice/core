@@ -1131,45 +1131,49 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             break;
 
         case SID_NUMBER_TYPE_FORMAT:
+            if ( pReqArgs )
             {
-                SfxInt16Item aFormatItem((const SfxInt16Item&)rReq.GetArgs()->Get(nSlot));
-                sal_uInt16 nFormat = aFormatItem.GetValue();
-                switch(nFormat)
+                const SfxPoolItem* pItem;
+                if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
-                case 0:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER); //Modify
-                    break;
-                case 1:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER, 2 ); //Modify
-                    break;
-                case 2:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_PERCENT );
-                    break;
-                case 3:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_CURRENCY );
-                    break;
-                case 4:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_DATE );
-                    break;
-                case 5:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_TIME );
-                    break;
-                case 6:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_SCIENTIFIC );
-                    break;
-                case 7:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_FRACTION );
-                    break;
-                case 8:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_LOGICAL );
-                    break;
-                case 9:
-                    pTabViewShell->SetNumberFormat( NUMBERFORMAT_TEXT );
-                    break;
-                default:
-                    ;
+                    sal_uInt16 nFormat = ((SfxInt16Item *)pItem)->GetValue();
+                    switch(nFormat)
+                    {
+                    case 0:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER); //Modify
+                        break;
+                    case 1:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER, 2 ); //Modify
+                        break;
+                    case 2:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_PERCENT );
+                        break;
+                    case 3:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_CURRENCY );
+                        break;
+                    case 4:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_DATE );
+                        break;
+                    case 5:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_TIME );
+                        break;
+                    case 6:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_SCIENTIFIC );
+                        break;
+                    case 7:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_FRACTION );
+                        break;
+                    case 8:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_LOGICAL );
+                        break;
+                    case 9:
+                        pTabViewShell->SetNumberFormat( NUMBERFORMAT_TEXT );
+                        break;
+                    default:
+                        ;
+                    }
+                    rReq.Done();
                 }
-                rReq.Done();
             }
             break;
 
