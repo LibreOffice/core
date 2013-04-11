@@ -47,10 +47,6 @@ static const char usageText[] =
 "                name(s) and the corresponding command(s) have to be specified with the\n"
 "                '-p' option.\n"
 "\n options:\n"
-"    -env:INIFILENAME=<url> url specifies a URL to an UNO ini|rc file of an\n"
-"                           existing UNO environment (URE, office installation).\n"
-"    -env:UNO_TYPES=<url>   url specifies a binary type library file. It can be\n"
-"                           a space separated list of urls.\n"
 "    -a, --all              list all interface methods, not only the direct\n"
 "                           ones\n"
 "    --(java4|java5|cpp)    select the target language\n"
@@ -82,9 +78,7 @@ static const char usageText[] =
 "                           sub-command 'component'. If path=stdout the generated\n"
 "                           code is generated on standard out instead of a file.\n"
 "    -l <file>              specifies a binary type library (can be used more\n"
-"                           than once). The type library is integrated as an\n"
-"                           additional type provider in the bootstrapped type\n"
-"                           system.\n"
+"                           than once).\n"
 "    -n <name>              specifies an implementation name for the component\n"
 "                           (used as classname, filename and package|namespace\n"
 "                           name). In 'dump' mode it is used as classname (e.g.\n"
@@ -107,17 +101,13 @@ static const char usageText[] =
 void printUsageAndExit(const char* programname, const char* version)
 {
     std::cerr
-        << "\n using: " << programname
-        << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
+        << "\n using: " << programname << "\n"
         << "            dump [<options>] -t <type> ...\n"
-        << "        " << programname
-        << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
+        << "        " << programname << "\n"
         << "            component [<options>] -n <name> -t <type> ...\n"
-        << "        " << programname
-        << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
+        << "        " << programname << "\n"
         << "            calc-add-in [<options>] -n <name> -t <add-in_service>\n"
-        << "        " << programname
-        << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
+        << "        " << programname << "\n"
         << "            add-on [<options>] -n <name> -p <protocol_name:command,...>\n"
         << "        " << programname << " -V, --version\n"
         << "        " << programname << " -h, --help\n"
