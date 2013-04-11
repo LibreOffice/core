@@ -98,6 +98,12 @@
         Styles = (PACKED); \
         Dir    = SCP2_OOO_BIN_DIR
 
+#define LIBO_LIB_FILE(id,name) \
+    File id \
+        Name = name; \
+        PACKED_LIB_FILE_BODY; \
+    End
+
 #define STD_LIB_FILE(id,name) \
     File id \
         Name   = LIBNAME(name); \
