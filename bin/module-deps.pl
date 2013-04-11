@@ -159,11 +159,13 @@ sub prune_redundant_deps($)
 }
 
 # glob on libo directory
-# note: only works if you stay in main LO dir
 sub create_lib_module_map()
 {
     my %l2m;
+    # hardcode the libs that don't have a directory
     $l2m{'merged'} = 'merged';
+    $l2m{'urelibs'} = 'urelibs';
+
     for (glob($src_root."/*/Library_*.mk"))
     {
         /.*\/(.*)\/Library_(.*)\.mk/;
@@ -315,7 +317,9 @@ sub main()
     my $tree = clean_tree($deps);
     filter_targets($tree);
     optimize_tree($tree);
-    $tree = collapse_lib_to_module($tree) if !$preserve_libs;
+    if (!$preserve_libs && !defined($ENV{PRESERVE_LIBS})) {
+        $tree = collapse_lib_to_module($tree);
+    }
     dump_graphviz($tree);
 }
 
