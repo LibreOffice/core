@@ -114,7 +114,7 @@ class StreamListenerProcAdapter( unohelper.Base, XStreamListener ):
 
     def terminated(self):
         if callable( self. terminatedCall):
-            self.terminatedCall(self)
+            self.terminatedCall(self, self.parent)
 
     def started(self):
         if callable( self.startedCall ):
@@ -122,7 +122,7 @@ class StreamListenerProcAdapter( unohelper.Base, XStreamListener ):
 
     def closed(self):
         if callable( self.closedCall ):
-            self.closedCall(self)
+            self.closedCall(self, self.parent)
 
     def error(self, aException):
         if callable( self.errorCall ):

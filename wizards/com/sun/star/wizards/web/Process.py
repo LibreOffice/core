@@ -166,8 +166,8 @@ class Process(ProcessErrors):
         except Exception:
             traceback.print_exc()
         if self.tempDir is None:
-            print ("WARNING !!! createTempDir -- error")
-            #self.error(None, None, ProcessErrors.ERROR_MKDIR, ErrorHandler.ERROR_PROCESS_FATAL)
+            print ("DEBUG !!! createTempDir -- error")
+            self.error(None, None, ProcessErrors.ERROR_MKDIR, ErrorHandler.ERROR_PROCESS_FATAL)
             return False
         else:
             task.advance(True)
@@ -187,11 +187,11 @@ class Process(ProcessErrors):
     # delete the temporary directory
     # @return true should continue
     def cleanup(self, task):
-        print ("WARNING !!! cleanup")
+        print ("DEBUG !!! cleanup")
         task.setSubtaskName(TASK_FINISH)
         b = self.fileAccess.delete(self.tempDir)
         if not b:
-            print ("WARNING !!! cleanup -- error")
+            print ("DEBUG !!! cleanup -- error")
             self.error(None, None, ProcessErrors.ERROR_CLEANUP, ErrorHandler.ERROR_WARNING)
         task.advance(b)
         return b
@@ -204,7 +204,7 @@ class Process(ProcessErrors):
         # 1. .css
         sourceDir = FileAccess.connectURLs(settings.workPath, "styles")
         filename = settings.cp_DefaultSession.getStyle().cp_CssHref
-        print ("WARNING !!! copyMedia (css) - source, filenamem, target, targetName: ", sourceDir, filename, targetDir, "style.css")
+        print ("DEBUG !!! copyMedia (css) - source, filenamem, target, targetName: ", sourceDir, filename, targetDir, "style.css")
         copy.copy2(sourceDir, filename, targetDir, "style.css")
 
         task.advance(True)
@@ -214,7 +214,7 @@ class Process(ProcessErrors):
         if (background is not None and background is not ""):
             sourceDir = FileAccess.getParentDir(background)
             filename = background[len(sourceDir):]
-            print ("WARNING !!! copyMedia (background) - source, filenamem, target, targetName: ", sourceDir, filename, targetDir + "/images", "background.gif")
+            print ("DEBUG !!! copyMedia (background) - source, filenamem, target, targetName: ", sourceDir, filename, targetDir + "/images", "background.gif")
             copy.copy2(sourceDir, filename, targetDir + "/images", "background.gif")
 
         task.advance(True)
@@ -231,7 +231,7 @@ class Process(ProcessErrors):
     def copyStaticImages(self, copy, settings, targetDir):
         source = FileAccess.connectURLs(settings.workPath, "images")
         target = targetDir + "/images"
-        print ("WARNING !!! copyStaticImages - source, target: ", source, target)
+        print ("DEBUG !!! copyStaticImages - source, target: ", source, target)
         copy.copy(source, target)
 
     # publish the given directory.
@@ -248,7 +248,7 @@ class Process(ProcessErrors):
         except Exception as ex:
             # error in copying media
             traceback.print_exc()
-            print ("WARNING !!! publish -- error")
+            print ("DEBUG !!! publish -- error")
             self.error(ex, "", ProcessErrors.ERROR_PUBLISH_MEDIA, ErrorHandler.ERROR_PROCESS_FATAL)
             return False
         for p in configSet.childrenList:
@@ -272,14 +272,14 @@ class Process(ProcessErrors):
         try:
             task.advance(True)
             url = publish.url
-            print ("WARNING !!! publish1 - source, target: ", folder, url)
+            print ("DEBUG !!! publish1 - source, target: ", folder, url)
             copy.copy(folder, url)
             task.advance(True)
             return True
         except Exception as e:
             task.advance(False)
             traceback.print_exc()
-            print ("WARNING !!! publish1 -- error")
+            print ("DEBUG !!! publish1 -- error")
             return self.error(e, publish, ProcessErrors.ERROR_PUBLISH, ErrorHandler.ERROR_NORMAL_IGNORE)
 
     # Generates the TOC pages for the current session.
@@ -296,9 +296,8 @@ class Process(ProcessErrors):
             doc = self.settings.cp_DefaultSession.createDOM1()
             self.generate1(self.xmsf, layout, doc, self.fileAccess, targetDir, task)
         except Exception as ex:
-            print ("WARNING !!! generate (calling generate1  -- error")
+            print ("DEBUG !!! generate (calling generate1  -- error)")
             traceback.print_exc()
-            print ("WARNING !!! publish1 -- error")
             self.error(ex, "", ProcessErrors.ERROR_GENERATE_XSLT, ErrorHandler.ERROR_PROCESS_FATAL)
             return False
 
@@ -314,7 +313,7 @@ class Process(ProcessErrors):
             result = True
         except Exception as ex:
             task.advance(False)
-            print ("WARNING !!! generate (copying layouts) -- error")
+            print ("DEBUG !!! generate (copying layouts) -- error")
             traceback.print_exc()
             return self.error(ex, None, ProcessErrors.ERROR_GENERATE_COPY, ErrorHandler.ERROR_NORMAL_ABORT)
         return result
@@ -330,7 +329,7 @@ class Process(ProcessErrors):
     @classmethod
     def copyLayoutFiles(self, ucb, fileAccess, settings, layout, targetDir):
         filesPath = fileAccess.getURL(FileAccess.connectURLs(settings.workPath, "layouts/"), layout.cp_FSName)
-        print ("WARNING !!! copyLayoutFiles - source, target: ", filesPath, targetDir)
+        print ("DEBUG !!! copyLayoutFiles - source, target: ", filesPath, targetDir)
         ucb.copy1(filesPath, targetDir, ExtensionVerifier("xsl"))
 
     # generates the TOC page for the given layout.
@@ -371,17 +370,17 @@ class Process(ProcessErrors):
             arguments = list(range(1))
             arguments[0] = tuple(args)
 
-            tf = Process.createTransformer(xmsf, arguments)
+            self.tf = Process.createTransformer(xmsf, arguments)
 
             self.node.normalize()
             task.advance(True)
 
             # we want to be notfied when the processing is done...
-            tf.addListener(StreamListenerProcAdapter(self,
-                                                     self.streamTerminatedHandler,
-                                                     self.streamStartedHandler,
-                                                     self.streamClosedHandler,
-                                                     self.streamErrorHandler))
+            self.tf.addListener(StreamListenerProcAdapter(self,
+                                                          self.streamTerminatedHandler,
+                                                          self.streamStartedHandler,
+                                                          self.streamClosedHandler,
+                                                          self.streamErrorHandler))
 
             # create pipe
             pipeout = xmsf.createInstance("com.sun.star.io.Pipe")
@@ -392,13 +391,15 @@ class Process(ProcessErrors):
             self.xSaxWriter.setOutputStream(pipeout)
 
             # connect pipe to transformer
-            tf.setInputStream(pipein)
+            self.tf.setInputStream(pipein)
 
             # connect transformer to output
             xOutputStream = fileAccess.xInterface.openFileWrite(fn)
-            tf.setOutputStream(xOutputStream)
+            self.tf.setOutputStream(xOutputStream)
 
-            tf.start()
+            self.tf.start()
+            while (not self.tfCompleted):
+                pass
             task.advance(True)
 
 
@@ -417,16 +418,20 @@ class Process(ProcessErrors):
 
     def streamTerminatedHandler(self):
         print ("DEBUG !!! Stream 'terminated' event handler !!!!")
+        parent.isTerminated = True
 
     def streamStartedHandler(self, parent):
         print ("DEBUG !!! Stream 'started' event handler !!!!")
+        parent.tfCompleted = False
         parent.node.serialize(parent.xSaxWriter, tuple([StringPair()]))
 
     def streamErrorHandler(self, aException):
         print ("DEBUG !!! Stream 'error' event handler")
 
-    def streamClosedHandler(self):
+    def streamClosedHandler(self, parent):
         print ("DEBUG !!! Stream 'closed' event handler")
+        parent.tf.terminate()
+        parent.tfCompleted = True
 
     # I broke the export method to two methods
     # in a time where a tree with more than one contents was planned.
@@ -483,19 +488,19 @@ class Process(ProcessErrors):
                 except SecurityException as sx:
                     # nonfatal
                     traceback.print_exc()
-                    print ("WARNING !!! export1 (SecurityException -- error")
+                    print ("DEBUG !!! export1 (SecurityException -- error")
                     if (not self.error(sx, item, ProcessErrors.ERROR_EXPORT_SECURITY, ErrorHandler.ERROR_NORMAL_IGNORE)):
                         return False
                     self.result = False
         except IOException as iox:
             # nonfatal
             traceback.print_exc()
-            print ("WARNING !!! export1 (IOException -- error")
+            print ("DEBUG !!! export1 (IOException -- error")
             return self.error(iox, content, ProcessErrors.ERROR_EXPORT_IO, ErrorHandler.ERROR_NORMAL_IGNORE)
         except SecurityException as se:
             # nonfatal
             traceback.print_exc()
-            print ("WARNING !!! export1 (SecurityException -- error")
+            print ("DEBUG !!! export1 (SecurityException -- error")
             return self.error(se, content, ProcessErrors.ERROR_EXPORT_SECURITY, ErrorHandler.ERROR_NORMAL_IGNORE)
 
         self.failTask(task, toPerform)
@@ -510,17 +515,17 @@ class Process(ProcessErrors):
         # first I check if the document was already validated...
         if (not doc.valid):
             try:
-                print ("WARNING !!! export2 -- new validation: ")
+                print ("DEBUG !!! export2 -- new validation: ")
                 doc.validate(self.xmsf, task)
             except Exception as ex:
                 # fatal
                 traceback.print_exc()
-                print ("WARNING !!! export2 (validation) -- error")
+                print ("DEBUG !!! export2 (validation) -- error")
                 self.error(ex, doc, ProcessErrors.ERROR_DOC_VALIDATE, ErrorHandler.ERROR_PROCESS_FATAL)
                 return False
         # get the exporter specified for this document
         exp = doc.cp_Exporter
-        print ("WARNING !!! export2 -- exporter: ", exp)
+        print ("DEBUG !!! export2 -- exporter: ", exp)
         exporter = self.settings.cp_Exporters.getElement(exp)
 
         try:
@@ -528,24 +533,24 @@ class Process(ProcessErrors):
              # I take the original filename (docFilename), substract the extension, (docExt) -> (fn)
              # and find an available filename which starts with
              # this filename, but with the new extension. (destExt)
-            print ("WARNING !!! export2 - doc.cp_URL: ", doc.cp_URL)
-            print ("WARNING !!! export2 - doc.localFilename: ", doc.localFilename)
+            print ("DEBUG !!! export2 - doc.cp_URL: ", doc.cp_URL)
+            print ("DEBUG !!! export2 - doc.localFilename: ", doc.localFilename)
             docFilename = FileAccess.getFilename(doc.cp_URL)
-            print ("WARNING !!! export2 - docFilename: ", docFilename)
+            print ("DEBUG !!! export2 - docFilename: ", docFilename)
 
             docExt = FileAccess.getExtension(docFilename)
-            print ("WARNING !!! export2 - docExt: ", docExt)
+            print ("DEBUG !!! export2 - docExt: ", docExt)
             # filename without extension
             #fn = doc.localFilename.substring(0, doc.localFilename.length() - docExt.length() - 1)
             fn = doc.localFilename[:len(doc.localFilename) - len(docExt) - 1]
-            print ("WARNING !!! export2 - fn: ", fn)
+            print ("DEBUG !!! export2 - fn: ", fn)
 
             # the copyExporter does not change
             # the extension of the target...
             destExt = FileAccess.getExtension(docFilename) \
                 if (exporter.cp_Extension is "") \
                 else exporter.cp_Extension
-            print ("WARNING !!! export2 - destExt: ", destExt)
+            print ("DEBUG !!! export2 - destExt: ", destExt)
 
             # if this filter needs to export to its own directory...
             # this is the case in, for example, impress html export
@@ -559,14 +564,14 @@ class Process(ProcessErrors):
             # i get a new filename, so I do not
             # overwrite files...
             f = self.fileAccess.getNewFile(folder, fn, destExt)
-            print ("WARNING !!! export2 - f: ", f)
+            print ("DEBUG !!! export2 - f: ", f)
 
 
             # set filename with extension.
             # this will be used by the exporter,
             # and to generate the TOC.
             doc.urlFilename = FileAccess.getFilename(f)
-            print ("WARNING !!! export2 - : doc.urlFilename", doc.urlFilename)
+            print ("DEBUG !!! export2 - : doc.urlFilename", doc.urlFilename)
 
             task.advance(True)
 
@@ -580,13 +585,13 @@ class Process(ProcessErrors):
             except Exception as ex:
                 # nonfatal
                 traceback.print_exc()
-                print ("WARNING !!! export2 (getting exporters) -- error")
+                print ("DEBUG !!! export2 (getting exporters) -- error")
                 if (not self.error(ex, doc, ProcessErrors.ERROR_EXPORT, ErrorHandler.ERROR_NORMAL_IGNORE)):
                     return False
         except Exception as ex:
             # nonfatal
             traceback.print_exc()
-            print ("WARNING !!! export2 (general) -- error")
+            print ("DEBUG !!! export2 (general) -- error")
             if (not self.error(ex, doc, ProcessErrors.ERROR_EXPORT_MKDIR, ErrorHandler.ERROR_NORMAL_ABORT)):
                 return False
 
