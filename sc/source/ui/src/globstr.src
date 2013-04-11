@@ -451,7 +451,7 @@ Resource RID_GLOBSTR
     };
     String STR_MSSG_SOLVE_2
     {
-        Text [ en-US ] = "). Apply setting to spreadsheet?" ;
+        Text [ en-US ] = "). Apply to spreadsheet?" ;
     };
     String STR_MSSG_SOLVE_3
     {
