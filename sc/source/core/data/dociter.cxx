@@ -140,7 +140,7 @@ bool ScDocumentIterator::GetThisCol()
         }
         else
         {
-            nRow = Min( (SCROW)nColRow, (SCROW)(nAttrEnd+1) );
+            nRow = std::min( (SCROW)nColRow, (SCROW)(nAttrEnd+1) );
         }
     }
     while (!bFound && nRow <= MAXROW);

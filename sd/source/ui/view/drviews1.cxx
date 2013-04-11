@@ -587,7 +587,7 @@ IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab )
         - maTabControl.GetPosPixel().X() ;
 
     Size aTabSize = maTabControl.GetSizePixel();
-    aTabSize.Width() = Min(pTab->GetSplitSize(), (long)(nMax-1));
+    aTabSize.Width() = std::min(pTab->GetSplitSize(), (long)(nMax-1));
 
     maTabControl.SetSizePixel(aTabSize);
     GetLayerTabControl()->SetSizePixel(aTabSize);
@@ -635,7 +635,7 @@ void DrawViewShell::ResetActualPage()
     sal_uInt16 nCurrentPage = maTabControl.GetCurPageId() - 1;
     sal_uInt16 nPageCount   = (meEditMode == EM_PAGE)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
     if (nPageCount > 0)
-        nCurrentPage = Min((sal_uInt16)(nPageCount - 1), nCurrentPage);
+        nCurrentPage = std::min((sal_uInt16)(nPageCount - 1), nCurrentPage);
     else
         nCurrentPage = 0;
 

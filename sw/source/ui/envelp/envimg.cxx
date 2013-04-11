@@ -108,8 +108,8 @@ SwEnvItem::SwEnvItem() :
     lShiftRight     = 0;
     lShiftDown      = 0;
 
-    lAddrFromLeft   = Max(lWidth, lHeight) / 2;
-    lAddrFromTop    = Min(lWidth, lHeight) / 2;
+    lAddrFromLeft   = std::max(lWidth, lHeight) / 2;
+    lAddrFromTop    = std::min(lWidth, lHeight) / 2;
 }
 
 SwEnvItem::SwEnvItem(const SwEnvItem& rItem) :

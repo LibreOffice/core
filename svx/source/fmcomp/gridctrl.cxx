@@ -1888,7 +1888,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
     if (nDelta < nLimit && (nDelta > 0
         || (bCacheAligned && m_nTotalCount < 0)) )
         SeekCursor(nNewTopRow + nLinesOnScreen - 1, sal_False);
-    else if (nDelta < 0 && Abs(nDelta) < nLimit)
+    else if (nDelta < 0 && std::abs(nDelta) < nLimit)
         SeekCursor(nNewTopRow, sal_False);
     else if (nDelta != 0 || bUpdateCursor)
         SeekCursor(nNewTopRow, sal_True);

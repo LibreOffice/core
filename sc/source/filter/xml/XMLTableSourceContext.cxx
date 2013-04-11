@@ -76,7 +76,7 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
             {
                 double fTime;
                 if (::sax::Converter::convertDuration( fTime, sValue ))
-                    nRefresh = Max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
+                    nRefresh = std::max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
             }
         }
     }

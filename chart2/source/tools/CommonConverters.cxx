@@ -235,7 +235,7 @@ void addPolygon( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonSh
 
 void appendPoly( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonShape3D& rAdd )
 {
-    sal_Int32 nOuterCount = Max( rRet.SequenceX.getLength(), rAdd.SequenceX.getLength() );
+    sal_Int32 nOuterCount = std::max( rRet.SequenceX.getLength(), rAdd.SequenceX.getLength() );
     rRet.SequenceX.realloc(nOuterCount);
     rRet.SequenceY.realloc(nOuterCount);
     rRet.SequenceZ.realloc(nOuterCount);

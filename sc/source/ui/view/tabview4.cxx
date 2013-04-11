@@ -352,7 +352,7 @@ static long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, 
 
     ++nVis;
     ++nMax;     // for partially visible cells
-    SCCOLROW nEnd = Max(nDocEnd, (SCCOLROW)(nPos+nVis)) + nVis;
+    SCCOLROW nEnd = std::max(nDocEnd, (SCCOLROW)(nPos+nVis)) + nVis;
     if (nEnd > nMax)
         nEnd = nMax;
 

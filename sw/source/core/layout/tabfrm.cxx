@@ -563,13 +563,13 @@ static void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
 
                         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCell );
                         const SwBorderAttrs &rAttrs = *aAccess.Get();
-                        nMinHeight = Max( nMinHeight, lcl_CalcTopAndBottomMargin( *(SwLayoutFrm*)pCell, rAttrs ) );
+                        nMinHeight = std::max( nMinHeight, lcl_CalcTopAndBottomMargin( *(SwLayoutFrm*)pCell, rAttrs ) );
                         pCell = pCell->GetNext();
                     }
 
                     const SwFmtFrmSize &rSz = pTmpLastLineRow->GetFmt()->GetFrmSize();
                     if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE )
-                        nMinHeight = Max( nMinHeight, rSz.GetHeight() );
+                        nMinHeight = std::max( nMinHeight, rSz.GetHeight() );
                 }
 
                 //
@@ -2754,7 +2754,7 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                         const long nWidth = (*fnRect->fnXDiff)(
                             (aFlyRect.*fnRect->fnGetRight)(),
                             (pFly->GetAnchorFrm()->Frm().*fnRect->fnGetLeft)() );
-                        rLeftOffset = Max( rLeftOffset, nWidth );
+                        rLeftOffset = std::max( rLeftOffset, nWidth );
                         bInvalidatePrtArea = sal_True;
                     }
                     if ( (SURROUND_LEFT     == rSur.GetSurround() ||
@@ -2764,7 +2764,7 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                         const long nWidth = (*fnRect->fnXDiff)(
                             (pFly->GetAnchorFrm()->Frm().*fnRect->fnGetRight)(),
                             (aFlyRect.*fnRect->fnGetLeft)() );
-                        rRightOffset = Max( rRightOffset, nWidth );
+                        rRightOffset = std::max( rRightOffset, nWidth );
                         bInvalidatePrtArea = sal_True;
                     }
                 }
@@ -2811,7 +2811,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
          nLeftOffset  = 0;
     if( CalcFlyOffsets( nUpper, nLeftOffset, nTmpRight ) )
         mbValidPrtArea = sal_False;
-    long nRightOffset = Max( 0L, nTmpRight );
+    long nRightOffset = std::max( 0L, nTmpRight );
 
     SwTwips nLower = pAttrs->CalcBottomLine();
     // #i29550#
@@ -2866,7 +2866,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                         // surrounding fly frames on the right
                         // -> right indent is maximun of given right offset
                         //    and wished right offset.
-                        nRightSpacing = nRightLine + Max( nRightOffset, nWishRight );
+                        nRightSpacing = nRightLine + std::max( nRightOffset, nWishRight );
                     }
                     else
                     {
@@ -2878,7 +2878,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                         nRightSpacing = nRightLine +
                                         ( ( (nWishRight+nLeftOffset) < 0 ) ?
                                             (nWishRight+nLeftOffset) :
-                                            Max( 0L, nWishRight ) );
+                                            std::max( 0L, nWishRight ) );
                     }
                 }
                 break;
@@ -2897,7 +2897,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                         // surrounding fly frames on the left
                         // -> right indent is maximun of given left offset
                         //    and wished left offset.
-                        nLeftSpacing = nLeftLine + Max( nLeftOffset, nWishLeft );
+                        nLeftSpacing = nLeftLine + std::max( nLeftOffset, nWishLeft );
                     }
                     else
                     {
@@ -2909,7 +2909,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                         nLeftSpacing = nLeftLine +
                                        ( ( (nWishLeft+nRightOffset) < 0 ) ?
                                            (nWishLeft+nRightOffset) :
-                                           Max( 0L, nWishLeft ) );
+                                           std::max( 0L, nWishLeft ) );
                     }
                 }
                 break;
@@ -2920,11 +2920,11 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                     const SwTwips nCenterSpacing = ( nMax - nWishedTableWidth ) / 2;
                     nLeftSpacing = nLeftLine +
                                    ( (nLeftOffset > 0) ?
-                                     Max( nCenterSpacing, nLeftOffset ) :
+                                     std::max( nCenterSpacing, nLeftOffset ) :
                                      nCenterSpacing );
                     nRightSpacing = nRightLine +
                                     ( (nRightOffset > 0) ?
-                                      Max( nCenterSpacing, nRightOffset ) :
+                                      std::max( nCenterSpacing, nRightOffset ) :
                                       nCenterSpacing );
                 }
                 break;
@@ -2947,7 +2947,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                         // they overlap with the table.
                         // Thus, take maximun of left spacing and left offset.
                         // OD 10.03.2003 #i9040# - consider left line attribute.
-                        nLeftSpacing = Max( nLeftSpacing, ( nLeftOffset + nLeftLine ) );
+                        nLeftSpacing = std::max( nLeftSpacing, ( nLeftOffset + nLeftLine ) );
                     }
                     // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
                     nRightSpacing = pAttrs->CalcRight( this );
@@ -2957,7 +2957,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                         // they overlap with the table.
                         // Thus, take maximun of right spacing and right offset.
                         // OD 10.03.2003 #i9040# - consider right line attribute.
-                        nRightSpacing = Max( nRightSpacing, ( nRightOffset + nRightLine ) );
+                        nRightSpacing = std::max( nRightSpacing, ( nRightOffset + nRightLine ) );
                     }
                 }
                 break;
@@ -2973,14 +2973,14 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                         // they overlap with the table.
                         // Thus, take maximun of right spacing and right offset.
                         // OD 10.03.2003 #i9040# - consider left line attribute.
-                        nLeftSpacing = Max( nLeftSpacing, ( pAttrs->CalcLeftLine() + nLeftOffset ) );
+                        nLeftSpacing = std::max( nLeftSpacing, ( pAttrs->CalcLeftLine() + nLeftOffset ) );
                     }
                     // OD 10.03.2003 #i9040# - consider right and left line attribute.
                     const SwTwips nWishRight =
                             nMax - (nLeftSpacing-pAttrs->CalcLeftLine()) - nWishedTableWidth;
                     nRightSpacing = nRightLine +
                                     ( (nRightOffset > 0) ?
-                                      Max( nWishRight, nRightOffset ) :
+                                      std::max( nWishRight, nRightOffset ) :
                                       nWishRight );
                 }
                 break;
@@ -3013,7 +3013,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
             long nWidth = pSh->GetBrowseWidth();
             nWidth -= Prt().Left();
             nWidth -= pAttrs->CalcRightLine();
-            Prt().Width( Min( nWidth, Prt().Width() ) );
+            Prt().Width( std::min( nWidth, Prt().Width() ) );
         }
 
         if ( nOldHeight != (Prt().*fnRect->fnGetHeight)() )
@@ -3080,7 +3080,7 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 
             if ( IsRestrictTableGrowth() )
             {
-                nTmp = Min( nDist, nReal + nTmp );
+                nTmp = std::min( nDist, nReal + nTmp );
                 nDist = nTmp < 0 ? 0 : nTmp;
             }
         }
@@ -3428,7 +3428,7 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
             long nOldWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
             SWRECTFNX( pNewUpper );
             long nNewWidth = (pNewUpper->Prt().*fnRectX->fnGetWidth)();
-            if( Abs( nNewWidth - nOldWidth ) < 2 )
+            if( std::abs( nNewWidth - nOldWidth ) < 2 )
             {
                 if( !( bMoveAnyway = (BwdMoveNecessary( pOldPage, Frm() ) > 1) ) )
                 {
@@ -3848,7 +3848,7 @@ long CalcHeightWidthFlys( const SwFrm *pFrm )
                                     (pTmp->Frm().*fnRect->fnGetTop)(),
                                     (pFrm->Frm().*fnRect->fnGetTop)() );
 
-                            nHeight = Max( nHeight, nDistOfFlyBottomToAnchorTop + nFrmDiff -
+                            nHeight = std::max( nHeight, nDistOfFlyBottomToAnchorTop + nFrmDiff -
                                             (pFrm->Frm().*fnRect->fnGetHeight)() );
 
                             // #i56115# The first height calculation
@@ -3862,7 +3862,7 @@ long CalcHeightWidthFlys( const SwFrm *pFrm )
                                                                             (pAnchoredObj->GetObjRect().*fnRect->fnGetBottom)(),
                                                                             (pFrm->Frm().*fnRect->fnGetBottom)() );
 
-                            nHeight = Max( nHeight, nDistOfFlyBottomToAnchorTop2 );
+                            nHeight = std::max( nHeight, nDistOfFlyBottomToAnchorTop2 );
                         }
                     }
                 }
@@ -3938,8 +3938,8 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
                 // #i26945#
                 if ( _bConsiderObjs )
                 {
-                    nFlyAdd = Max( 0L, nFlyAdd - nLowHeight );
-                    nFlyAdd = Max( nFlyAdd, ::CalcHeightWidthFlys( pLow ) );
+                    nFlyAdd = std::max( 0L, nFlyAdd - nLowHeight );
+                    nFlyAdd = std::max( nFlyAdd, ::CalcHeightWidthFlys( pLow ) );
                 }
             }
 
@@ -4019,7 +4019,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
         pLow = static_cast<const SwCellFrm*>(pLow->GetNext());
     }
     if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE && !_pRow->IsRowSpanLine() )
-        nHeight = Max( nHeight, rSz.GetHeight() );
+        nHeight = std::max( nHeight, rSz.GetHeight() );
     return nHeight;
 }
 
@@ -4041,7 +4041,7 @@ static sal_uInt16 lcl_GetTopSpace( const SwRowFrm& rRow )
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpTopSpace = rBoxItem.CalcLineSpace( BOX_LINE_TOP, sal_True );
         }
-        nTopSpace  = Max( nTopSpace, nTmpTopSpace );
+        nTopSpace  = std::max( nTopSpace, nTmpTopSpace );
     }
     return nTopSpace;
 }
@@ -4062,7 +4062,7 @@ static sal_uInt16 lcl_GetTopLineDist( const SwRowFrm& rRow )
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpTopLineDist = rBoxItem.GetDistance( BOX_LINE_TOP );
         }
-        nTopLineDist = Max( nTopLineDist, nTmpTopLineDist );
+        nTopLineDist = std::max( nTopLineDist, nTmpTopLineDist );
     }
     return nTopLineDist;
 }
@@ -4087,7 +4087,7 @@ static sal_uInt16 lcl_GetBottomLineSize( const SwRowFrm& rRow )
             nTmpBottomLineSize = rBoxItem.CalcLineSpace( BOX_LINE_BOTTOM, sal_True ) -
                                  rBoxItem.GetDistance( BOX_LINE_BOTTOM );
         }
-        nBottomLineSize = Max( nBottomLineSize, nTmpBottomLineSize );
+        nBottomLineSize = std::max( nBottomLineSize, nTmpBottomLineSize );
     }
     return nBottomLineSize;
 }
@@ -4111,7 +4111,7 @@ static sal_uInt16 lcl_GetBottomLineDist( const SwRowFrm& rRow )
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpBottomLineDist = rBoxItem.GetDistance( BOX_LINE_BOTTOM );
         }
-        nBottomLineDist = Max( nBottomLineDist, nTmpBottomLineDist );
+        nBottomLineDist = std::max( nBottomLineDist, nTmpBottomLineDist );
     }
     return nBottomLineDist;
 }
@@ -4460,7 +4460,7 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
                 (Frm().*fnRect->fnBottomDist)( (GetUpper()->GetUpper()->*fnRect->fnGetPrtBottom)() );
         if ( bRestrictTableGrowth && nAdditionalSpace > 0 )
         {
-            nReal = Min( nAdditionalSpace, nDist );
+            nReal = std::min( nAdditionalSpace, nDist );
             nDist -= nReal;
             if ( !bTst )
                 (Frm().*fnRect->fnAddBottom)( nReal );
@@ -5602,7 +5602,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
                     if ( 1 == pLower2->GetTabBox()->getRowSpan() )
                     {
                         const SwTwips nCellHeight = lcl_CalcMinCellHeight( pLower2, sal_True );
-                        nMaxHeight = Max( nCellHeight, nMaxHeight );
+                        nMaxHeight = std::max( nCellHeight, nMaxHeight );
                     }
                     pLower2 = static_cast<const SwCellFrm*>(pLower2->GetNext());
                 }
@@ -5629,7 +5629,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
             const SwTwips nMinRowHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ?
                                           rSz.GetHeight() : 0;
 
-            nTmpHeight += Max( nHeightOfFirstContentLine, nMinRowHeight );
+            nTmpHeight += std::max( nHeightOfFirstContentLine, nMinRowHeight );
 
             if ( !bOldJoinLock )
                 ((SwTabFrm*)this)->UnlockJoin();

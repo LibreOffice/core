@@ -883,8 +883,8 @@ ImplVectMap* ImplVectorizer::ImplExpand( BitmapReadAccess* pRAcc, const Color& r
         const long          nNewWidth = ( nOldWidth << 2L ) + 4L;
         const long          nNewHeight = ( nOldHeight << 2L ) + 4L;
         const BitmapColor   aTest( pRAcc->GetBestMatchingColor( rColor ) );
-        long*               pMapIn = new long[ Max( nOldWidth, nOldHeight ) ];
-        long*               pMapOut = new long[ Max( nOldWidth, nOldHeight ) ];
+        long*               pMapIn = new long[ std::max( nOldWidth, nOldHeight ) ];
+        long*               pMapOut = new long[ std::max( nOldWidth, nOldHeight ) ];
         long                nX, nY, nTmpX, nTmpY;
 
         pMap = new ImplVectMap( nNewWidth, nNewHeight );

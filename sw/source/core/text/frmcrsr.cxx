@@ -209,8 +209,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     // nMaxY is an absolute value
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwTwips nMaxY = bVert ?
-                    ( bVertL2R ? Min( nFrmMaxY, nUpperMaxY ) : Max( nFrmMaxY, nUpperMaxY ) ) :
-                    Min( nFrmMaxY, nUpperMaxY );
+                    ( bVertL2R ? std::min( nFrmMaxY, nUpperMaxY ) : std::max( nFrmMaxY, nUpperMaxY ) ) :
+                    std::min( nFrmMaxY, nUpperMaxY );
 
     sal_Bool bRet = sal_False;
 
@@ -384,8 +384,8 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     // nMaxY is in absolute value
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwTwips nMaxY = bVert ?
-                    ( bVertL2R ? Min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) : Max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) ) :
-                    Min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
+                    ( bVertL2R ? std::min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) : std::max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) ) :
+                    std::min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
 
     if ( pFrm->IsEmpty() || ! (pFrm->Prt().*fnRect->fnGetHeight)() )
     {
@@ -1283,7 +1283,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                 {
                     if( nFormat <= GetOfst() )
                     {
-                        nFormat = Min( xub_StrLen( GetOfst() + MIN_OFFSET_STEP ),
+                        nFormat = std::min( xub_StrLen( GetOfst() + MIN_OFFSET_STEP ),
                                        static_cast<xub_StrLen>(nTmpLen) );
                         if( nFormat <= GetOfst() )
                             break;
@@ -1444,7 +1444,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
     if( nLineHeight )
     {
         const SvxULSpaceItem &rUL = pSet->GetULSpace();
-        SwTwips nDist = Max( rUL.GetLower(), rUL.GetUpper() );
+        SwTwips nDist = std::max( rUL.GetLower(), rUL.GetUpper() );
         if( rFill.Fill().nColumnCnt )
         {
             rFill.aFrm.Height( nLineHeight );
@@ -1455,7 +1455,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
             nFirst = nFirst - (sal_uInt16)nDist;
         else
             nFirst = 0;
-        nDist = Max( nDist, long( GetLineSpace() ) );
+        nDist = std::max( nDist, long( GetLineSpace() ) );
         nDist += nLineHeight;
         nDiff -= nFirst;
 
@@ -1681,8 +1681,8 @@ static sal_Char const sDoubleSpace[] = "  ";
                     rFill.SetSpace( nSpaceCnt );
                     if( bFill )
                     {
-                        if( Abs( rFill.X() - nCenter ) <=
-                            Abs( rFill.X() - rRect.Left() ) )
+                        if( std::abs( rFill.X() - nCenter ) <=
+                            std::abs( rFill.X() - rRect.Left() ) )
                         {
                             rFill.SetOrient( text::HoriOrientation::CENTER );
                             rFill.SetTab( 0 );

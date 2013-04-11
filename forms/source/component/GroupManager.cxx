@@ -119,7 +119,7 @@ OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPo
     {
         if (hasProperty( PROPERTY_TABINDEX, m_xComponent ) )
             // Indices kleiner 0 werden wie 0 behandelt
-            m_nTabIndex = Max(getINT16(m_xComponent->getPropertyValue( PROPERTY_TABINDEX )) , sal_Int16(0));
+            m_nTabIndex = std::max(getINT16(m_xComponent->getPropertyValue( PROPERTY_TABINDEX )) , sal_Int16(0));
     }
 }
 

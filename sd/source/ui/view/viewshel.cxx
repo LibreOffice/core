@@ -660,9 +660,9 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                         long        nNewZoom;
 
                         if( pData->GetDelta() < 0L )
-                            nNewZoom = Max( (long) pWin->GetMinZoom(), basegfx::zoomtools::zoomOut( nOldZoom ));
+                            nNewZoom = std::max( (long) pWin->GetMinZoom(), basegfx::zoomtools::zoomOut( nOldZoom ));
                         else
-                            nNewZoom = Min( (long) pWin->GetMaxZoom(), basegfx::zoomtools::zoomIn( nOldZoom ));
+                            nNewZoom = std::min( (long) pWin->GetMaxZoom(), basegfx::zoomtools::zoomIn( nOldZoom ));
 
                         SetZoom( nNewZoom );
                         Invalidate( SID_ATTR_ZOOM );

@@ -237,8 +237,8 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
     long lWVal = static_cast< long >(GetFldVal(aSizeWidthField ));
     long lHVal = static_cast< long >(GetFldVal(aSizeHeightField));
 
-    long lWidth  = Max(lWVal, lHVal);
-    long lHeight = Min(lWVal, lHVal);
+    long lWidth  = std::max(lWVal, lHVal);
+    long lHeight = std::min(lWVal, lHVal);
 
     if (pEdit == &aSizeWidthField || pEdit == &aSizeHeightField)
     {
@@ -437,8 +437,8 @@ IMPL_LINK_NOARG(SwEnvFmtPage, FormatHdl)
     if (nPaper != (sal_uInt16)PAPER_USER)
     {
         Size aSz = SvxPaperInfo::GetPaperSize((Paper)nPaper);
-        lWidth  = Max(aSz.Width(), aSz.Height());
-        lHeight = Min(aSz.Width(), aSz.Height());
+        lWidth  = std::max(aSz.Width(), aSz.Height());
+        lHeight = std::min(aSz.Width(), aSz.Height());
     }
     else
     {
@@ -471,8 +471,8 @@ void SwEnvFmtPage::SetMinMax()
     long lWVal = static_cast< long >(GetFldVal(aSizeWidthField ));
     long lHVal = static_cast< long >(GetFldVal(aSizeHeightField));
 
-    long lWidth  = Max(lWVal, lHVal),
-         lHeight = Min(lWVal, lHVal);
+    long lWidth  = std::max(lWVal, lHVal),
+         lHeight = std::min(lWVal, lHVal);
 
     // Min and Max
     aAddrLeftField.SetMin((long) 100 * (GetFldVal(aSendLeftField) + 566), FUNIT_TWIP);
@@ -534,15 +534,15 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     {
         long lWVal = static_cast< long >(GetFldVal(aSizeWidthField ));
         long lHVal = static_cast< long >(GetFldVal(aSizeHeightField));
-        rItem.lWidth  = Max(lWVal, lHVal);
-        rItem.lHeight = Min(lWVal, lHVal);
+        rItem.lWidth  = std::max(lWVal, lHVal);
+        rItem.lHeight = std::min(lWVal, lHVal);
     }
     else
     {
         long lWVal = SvxPaperInfo::GetPaperSize((Paper)nPaper).Width ();
         long lHVal = SvxPaperInfo::GetPaperSize((Paper)nPaper).Height();
-        rItem.lWidth  = Max(lWVal, lHVal);
-        rItem.lHeight = Min(lWVal, lHVal);
+        rItem.lWidth  = std::max(lWVal, lHVal);
+        rItem.lHeight = std::min(lWVal, lHVal);
     }
 }
 
@@ -558,8 +558,8 @@ void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
     const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
 
     Paper ePaper = SvxPaperInfo::GetSvxPaper(
-        Size( Min(rItem.lWidth, rItem.lHeight),
-        Max(rItem.lWidth, rItem.lHeight)), MAP_TWIP, sal_True);
+        Size( std::min(rItem.lWidth, rItem.lHeight),
+        std::max(rItem.lWidth, rItem.lHeight)), MAP_TWIP, sal_True);
     for (sal_uInt16 i = 0; i < (sal_uInt16) aIDs.size(); i++)
         if (aIDs[i] == (sal_uInt16)ePaper)
             aSizeFormatBox.SelectEntryPos(i);
@@ -569,8 +569,8 @@ void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
     SetFldVal(aAddrTopField , rItem.lAddrFromTop );
     SetFldVal(aSendLeftField, rItem.lSendFromLeft);
     SetFldVal(aSendTopField , rItem.lSendFromTop );
-    SetFldVal(aSizeWidthField  , Max(rItem.lWidth, rItem.lHeight));
-    SetFldVal(aSizeHeightField , Min(rItem.lWidth, rItem.lHeight));
+    SetFldVal(aSizeWidthField  , std::max(rItem.lWidth, rItem.lHeight));
+    SetFldVal(aSizeHeightField , std::min(rItem.lWidth, rItem.lHeight));
     SetMinMax();
 
     DELETEZ(GetParentSwEnvDlg()->pSenderSet);

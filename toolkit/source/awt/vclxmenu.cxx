@@ -419,7 +419,7 @@ void VCLXMenu::removeItem( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::
     if ( mpMenu && ( nCount > 0 ) && ( nPos >= 0 ) && ( nPos < nItemCount ) && ( nItemCount > 0 ))
     {
         sal_Int16 nP = sal::static_int_cast< sal_Int16 >(
-            Min( (int)(nPos+nCount), (int)nItemCount ));
+            std::min( (int)(nPos+nCount), (int)nItemCount ));
         while( nP-nPos > 0 )
             mpMenu->RemoveItem( --nP );
     }

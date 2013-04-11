@@ -846,7 +846,7 @@ void SfxBindings::Invalidate
     if ( pCache )
     {
         pCache->Invalidate(sal_False);
-        pImp->nMsgPos = Min(GetSlotPos(nId), pImp->nMsgPos);
+        pImp->nMsgPos = std::min(GetSlotPos(nId), pImp->nMsgPos);
         if ( !nRegLevel )
         {
             pImp->aTimer.Stop();
@@ -883,7 +883,7 @@ void SfxBindings::Invalidate
         if ( !pDispatcher || pImp->bAllDirty )
             return;
 
-        pImp->nMsgPos = Min(GetSlotPos(nId), pImp->nMsgPos);
+        pImp->nMsgPos = std::min(GetSlotPos(nId), pImp->nMsgPos);
         if ( !nRegLevel )
         {
             pImp->aTimer.Stop();
@@ -1715,7 +1715,7 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 {
     SAL_INFO(
         "sfx2.control",
-        std::setw(Min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
+        std::setw(std::min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
             << " Level = " << nRegLevel << " SfxBindings::EnterRegistrations "
             << (pFile
                 ? SAL_STREAM("File: " << pFile << " Line: " << nLine) : ""));
@@ -1815,7 +1815,7 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
 
     SAL_INFO(
         "sfx2.control",
-        std::setw(Min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
+        std::setw(std::min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
             << " Level = " << nRegLevel << " SfxBindings::LeaveRegistrations "
             << (pFile
                 ? SAL_STREAM("File: " << pFile << " Line: " << nLine) : ""));

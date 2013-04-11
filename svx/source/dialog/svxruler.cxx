@@ -1948,7 +1948,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(pRuler_Imp->lLastLMargin))
                 {
                     long l = pBorders[i].nPos;
                     pBorders[i].nPos += lDiff;
-                    pBorders[i].nPos = Min(pBorders[i].nPos, nRight - pBorders[i].nWidth);
+                    pBorders[i].nPos = std::min(pBorders[i].nPos, nRight - pBorders[i].nWidth);
                     nRight = pBorders[i].nPos - lMinFrame;
                     // RR update the column
                     if(i == GetActRightColumn())
@@ -2172,7 +2172,7 @@ void SvxRuler::ApplyMargins()
         else
             pLRSpaceItem->SetRight(
                 PixelHAdjust(
-                    Max((long)0,pPagePosItem->GetWidth() -
+                    std::max((long)0,pPagePosItem->GetWidth() -
                         pLRSpaceItem->GetLeft() -
                         (ConvertHPosLogic(GetMargin2()) -
                          lAppNullOffset)),pLRSpaceItem->GetRight()));
@@ -2192,7 +2192,7 @@ void SvxRuler::ApplyMargins()
             lAppNullOffset += lLogicNullOffset - lOldNull;
         pULSpaceItem->SetLower(
             PixelVAdjust(
-                Max((long)0, pPagePosItem->GetHeight() -
+                std::max((long)0, pPagePosItem->GetHeight() -
                     pULSpaceItem->GetUpper() -
                     (ConvertVPosLogic(GetMargin2()) -
                      lAppNullOffset)),pULSpaceItem->GetLower()));
@@ -2688,8 +2688,8 @@ void SvxRuler::Click()
         sal_Bool bContentProtected = pRuler_Imp->aProtectItem.IsCntntProtected();
         if( bContentProtected ) return;
         const long lPos = GetClickPos();
-        if((bRTL && lPos < Min(GetFirstLineIndent(), GetLeftIndent()) && lPos > GetRightIndent()) ||
-            (!bRTL && lPos > Min(GetFirstLineIndent(), GetLeftIndent()) && lPos < GetRightIndent()))
+        if((bRTL && lPos < std::min(GetFirstLineIndent(), GetLeftIndent()) && lPos > GetRightIndent()) ||
+            (!bRTL && lPos > std::min(GetFirstLineIndent(), GetLeftIndent()) && lPos < GetRightIndent()))
         {
             //convert position in left-to-right text
             long nTabPos;
@@ -2758,13 +2758,13 @@ void SvxRuler::CalcMinMax()
                 if(bRTL)
                 {
                     nMaxRight = lNullPix - GetRightIndent() +
-                        Max(GetFirstLineIndent(), GetLeftIndent()) -
+                        std::max(GetFirstLineIndent(), GetLeftIndent()) -
                         lMinFrame;
                 }
                 else
                 {
                     nMaxRight = lNullPix + GetRightIndent() -
-                        Max(GetFirstLineIndent(), GetLeftIndent()) -
+                        std::max(GetFirstLineIndent(), GetLeftIndent()) -
                         lMinFrame;
                 }
             }
@@ -2806,22 +2806,22 @@ void SvxRuler::CalcMinMax()
                     {
                         if(bRTL)
                         {
-                            nMaxRight += Min(
+                            nMaxRight += std::min(
                                 pBorders[0].nPos,
-                                Max(GetFirstLineIndent(), GetLeftIndent()) - GetRightIndent());
+                                std::max(GetFirstLineIndent(), GetLeftIndent()) - GetRightIndent());
                         }
                         else
                         {
-                            nMaxRight += Min(
+                            nMaxRight += std::min(
                                 pBorders[0].nPos, GetRightIndent() -
-                                Max(GetFirstLineIndent(), GetLeftIndent()));
+                                std::max(GetFirstLineIndent(), GetLeftIndent()));
                         }
                     }
                     else if( pColumnItem->Count() > 1 )
                         nMaxRight += pBorders[0].nPos;
                     else
                         nMaxRight +=GetRightIndent() -
-                            Max(GetFirstLineIndent(), GetLeftIndent());
+                            std::max(GetFirstLineIndent(), GetLeftIndent());
                     // Do not drag the left table edge over the edge of the page
                     if(pLRSpaceItem&&pColumnItem->IsTable())
                     {
@@ -2846,13 +2846,13 @@ void SvxRuler::CalcMinMax()
             if(bRTL)
             {
                 nMaxLeft =  GetMargin2() + GetRightIndent() -
-                    Max(GetFirstLineIndent(),GetLeftIndent())  - GetMargin1()+
+                    std::max(GetFirstLineIndent(),GetLeftIndent())  - GetMargin1()+
                         lMinFrame + lNullPix;
             }
             else
             {
                 nMaxLeft =  GetMargin2() - GetRightIndent() +
-                    Max(GetFirstLineIndent(),GetLeftIndent())  - GetMargin1()+
+                    std::max(GetFirstLineIndent(),GetLeftIndent())  - GetMargin1()+
                         lMinFrame + lNullPix;
             }
         }
@@ -2891,13 +2891,13 @@ void SvxRuler::CalcMinMax()
                 if(bRTL)
                 {
                     nMaxLeft = lMinFrame + lNullPix + GetMargin2() +
-                        GetRightIndent() - Max(GetFirstLineIndent(),
+                        GetRightIndent() - std::max(GetFirstLineIndent(),
                                                GetLeftIndent());
                 }
                 else
                 {
                     nMaxLeft = lMinFrame + lNullPix + GetMargin2() -
-                        GetRightIndent() + Max(GetFirstLineIndent(),
+                        GetRightIndent() + std::max(GetFirstLineIndent(),
                                                GetLeftIndent());
                 }
             }
@@ -2907,7 +2907,7 @@ void SvxRuler::CalcMinMax()
                     lMinFrame + lNullPix +
                     pBorders[pColumnItem->Count()-2].nPos +
                     pBorders[pColumnItem->Count()-2].nWidth;
-                nMaxLeft=Max(nMaxLeft,nNewMaxLeft);
+                nMaxLeft=std::max(nMaxLeft,nNewMaxLeft);
             }
 
         }
@@ -2933,13 +2933,13 @@ void SvxRuler::CalcMinMax()
                     if(bRTL)
                     {
                         nMaxLeft += pBorders[nIdx].nPos +
-                            GetRightIndent() - Max(GetFirstLineIndent(),
+                            GetRightIndent() - std::max(GetFirstLineIndent(),
                                                    GetLeftIndent());
                     }
                     else
                     {
                         nMaxLeft += pBorders[nIdx].nPos -
-                            GetRightIndent() + Max(GetFirstLineIndent(),
+                            GetRightIndent() + std::max(GetFirstLineIndent(),
                                                    GetLeftIndent());
                     }
                     if(0 != nIdx)
@@ -3023,7 +3023,7 @@ void SvxRuler::CalcMinMax()
                             if(bRTL)
                             {
                                 nMaxLeft += pBorders[nIdx].nPos +
-                                    GetRightIndent() - Max(GetFirstLineIndent(),
+                                    GetRightIndent() - std::max(GetFirstLineIndent(),
                                                            GetLeftIndent());
                                 if(nActLeftCol!=USHRT_MAX)
                                     nMaxLeft -= pBorders[nActLeftCol].nPos +
@@ -3032,7 +3032,7 @@ void SvxRuler::CalcMinMax()
                             else
                             {
                                 nMaxLeft += pBorders[nIdx].nPos -
-                                    GetRightIndent() + Max(GetFirstLineIndent(),
+                                    GetRightIndent() + std::max(GetFirstLineIndent(),
                                                            GetLeftIndent());
                                 if(nActLeftCol!=USHRT_MAX)
                                     nMaxLeft -= pBorders[nActLeftCol].nPos +
@@ -3065,14 +3065,14 @@ void SvxRuler::CalcMinMax()
                                     {
                                         nMaxRight -=
                                             GetMargin2() + GetRightIndent() -
-                                                Max(GetFirstLineIndent(),
+                                                std::max(GetFirstLineIndent(),
                                                     GetLeftIndent());
                                     }
                                     else
                                     {
                                         nMaxRight -=
                                             GetMargin2() - GetRightIndent() +
-                                                Max(GetFirstLineIndent(),
+                                                std::max(GetFirstLineIndent(),
                                                     GetLeftIndent());
                                     }
                                     nMaxRight += pBorders[nIdx].nPos +
@@ -3094,13 +3094,13 @@ void SvxRuler::CalcMinMax()
                                     if(bRTL)
                                     {
                                         nMaxRight -= nBorder + GetRightIndent() -
-                                            Max(GetFirstLineIndent(),
+                                            std::max(GetFirstLineIndent(),
                                                 GetLeftIndent());
                                     }
                                     else
                                     {
                                         nMaxRight -= nBorder - GetRightIndent() +
-                                            Max(GetFirstLineIndent(),
+                                            std::max(GetFirstLineIndent(),
                                                 GetLeftIndent());
                                     }
                                     nMaxRight += pBorders[nIdx].nPos +
@@ -3139,7 +3139,7 @@ void SvxRuler::CalcMinMax()
                     if(pColumnItem->IsLastAct()) {
                         nMaxRight -=
                             GetMargin2() - GetRightIndent() +
-                                Max(GetFirstLineIndent(),
+                                std::max(GetFirstLineIndent(),
                                     GetLeftIndent());
                         nMaxRight += pBorders[nIdx].nPos +
                             pBorders[nIdx].nWidth;
@@ -3149,7 +3149,7 @@ void SvxRuler::CalcMinMax()
                     nMaxRight = lNullPix + pBorders[nIdx+1].nPos;
                     if(pColumnItem->GetActColumn()-1 == nIdx) {
                         nMaxRight -= pBorders[nIdx+1].nPos  - GetRightIndent() +
-                            Max(GetFirstLineIndent(),
+                            std::max(GetFirstLineIndent(),
                                 GetLeftIndent());
                         nMaxRight += pBorders[nIdx].nPos +
                             pBorders[nIdx].nWidth;
@@ -3217,7 +3217,7 @@ void SvxRuler::CalcMinMax()
                 if(bRTL)
                 {
                     nMaxLeft = lNullPix;
-                    nMaxRight = lNullPix + Min(GetFirstLineIndent(), GetLeftIndent()) - lMinFrame;
+                    nMaxRight = lNullPix + std::min(GetFirstLineIndent(), GetLeftIndent()) - lMinFrame;
                     if(pColumnItem)
                     {
                         sal_uInt16 nRightCol=GetActRightColumn( sal_True );
@@ -3233,7 +3233,7 @@ void SvxRuler::CalcMinMax()
                 else
                 {
                     nMaxLeft = lNullPix +
-                        Max(GetFirstLineIndent(), GetLeftIndent());
+                        std::max(GetFirstLineIndent(), GetLeftIndent());
                     nMaxRight = lNullPix;
                     if(pColumnItem)
                     {
@@ -3258,7 +3258,7 @@ void SvxRuler::CalcMinMax()
            right = NOf + RAR
            */
         nMaxLeft = bRTL ? lNullPix + GetRightIndent()
-                            : lNullPix + Min(GetFirstLineIndent(), GetLeftIndent());
+                            : lNullPix + std::min(GetFirstLineIndent(), GetLeftIndent());
         pRuler_Imp->lMaxRightLogic=GetLogicRightIndent()+lLogicNullOffset;
         nMaxRight = ConvertSizePixel(pRuler_Imp->lMaxRightLogic);
         break;

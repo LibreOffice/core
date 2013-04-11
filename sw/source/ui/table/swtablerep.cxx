@@ -173,10 +173,10 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
     }
 
 // intercept rounding errors
-    if(Abs((long)nOldLeft - (long)rTabCols.GetLeft()) < 3)
+    if(std::abs((long)nOldLeft - (long)rTabCols.GetLeft()) < 3)
         rTabCols.SetLeft(nOldLeft);
 
-    if(Abs((long)nOldRight - (long)rTabCols.GetRight()) < 3)
+    if(std::abs((long)nOldRight - (long)rTabCols.GetRight()) < 3)
         rTabCols.SetRight(nOldRight);
 
     if(GetRightSpace() >= 0 &&

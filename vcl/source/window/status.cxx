@@ -372,7 +372,7 @@ void StatusBar::ImplDrawText( sal_Bool bOffScreen, long nOldTextWidth )
 
         if ( bOffScreen )
         {
-            long nMaxWidth = Max( nOldTextWidth, GetTextWidth( aStr ) );
+            long nMaxWidth = std::max( nOldTextWidth, GetTextWidth( aStr ) );
             Size aVirDevSize( nMaxWidth, aTextRect.GetHeight() );
             mpImplData->mpVirDev->SetOutputSizePixel( aVirDevSize );
             Rectangle aTempRect = aTextRect;

@@ -1575,7 +1575,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                                    &rDesc.GetMaster().GetCol();
                     const SwColumns& rCols = pCols->GetColumns();
                     sal_uInt16 nNum = rSh.GetCurOutColNum();
-                    sal_uInt16 nCount = Min(sal_uInt16(nNum + 1), sal_uInt16(rCols.size()));
+                    sal_uInt16 nCount = std::min(sal_uInt16(nNum + 1), sal_uInt16(rCols.size()));
                     const SwRect aRect( rSh.GetAnyCurRect( pFmt
                                                     ? RECT_FLY_PRT_EMBEDDED
                                                     : RECT_PAGE_PRT, pPt ));

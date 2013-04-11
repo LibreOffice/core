@@ -308,7 +308,7 @@ bool ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     if (bRet) {
         double cs=cos(nTmpAngle*nPi180);
         double nR=(double)GetLen(Point(dx,dy))/cs/2;
-        nRad=Abs(Round(nR));
+        nRad=std::abs(Round(nR));
     }
     if (dAngle<18000) {
         nCircStWink=NormAngle360(nTangAngle-9000);
@@ -335,7 +335,7 @@ bool ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
         }
     }
     nCircRadius=nRad;
-    if (nRad==0 || Abs(nCircRelWink)<5) bRet=sal_False;
+    if (nRad==0 || std::abs(nCircRelWink)<5) bRet=sal_False;
     bCircle=bRet;
     return bRet;
 }
@@ -376,8 +376,8 @@ Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, Sdr
     else {
         x1=BigMulDiv(y,nDirX,nDirY);
         y2=BigMulDiv(x,nDirY,nDirX);
-        long l1=Abs(x1)+Abs(y1);
-        long l2=Abs(x2)+Abs(y2);
+        long l1=std::abs(x1)+std::abs(y1);
+        long l2=std::abs(x2)+std::abs(y2);
         if ((l1<=l2) != (pView!=NULL && pView->IsBigOrtho())) {
             x=x1; y=y1;
         } else {
@@ -396,8 +396,8 @@ bool ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point
     Point aTmpPt(rP2-rP1);
     long nDirX=rDir.X();
     long nDirY=rDir.Y();
-    Point aP1(CalcLine(aTmpPt, nDirX, nDirY,pView)); aP1-=aTmpPt; long nQ1=Abs(aP1.X())+Abs(aP1.Y());
-    Point aP2(CalcLine(aTmpPt, nDirY,-nDirX,pView)); aP2-=aTmpPt; long nQ2=Abs(aP2.X())+Abs(aP2.Y());
+    Point aP1(CalcLine(aTmpPt, nDirX, nDirY,pView)); aP1-=aTmpPt; long nQ1=std::abs(aP1.X())+std::abs(aP1.Y());
+    Point aP2(CalcLine(aTmpPt, nDirY,-nDirX,pView)); aP2-=aTmpPt; long nQ2=std::abs(aP2.X())+std::abs(aP2.Y());
     if (pView!=NULL && pView->IsOrtho()) nQ1=0; // Ortho turns off at right angle
     bLine90=nQ1>2*nQ2;
     if (!bLine90) { // smooth transition
@@ -447,10 +447,10 @@ bool ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
     aRectP2.X()+=x;
     aRectP2.Y()+=y;
     if (pView!=NULL && pView->IsOrtho()) {
-        long dx1=aRectP2.X()-aRectP1.X(); long dx1a=Abs(dx1);
-        long dy1=aRectP2.Y()-aRectP1.Y(); long dy1a=Abs(dy1);
-        long dx2=aRectP3.X()-aRectP2.X(); long dx2a=Abs(dx2);
-        long dy2=aRectP3.Y()-aRectP2.Y(); long dy2a=Abs(dy2);
+        long dx1=aRectP2.X()-aRectP1.X(); long dx1a=std::abs(dx1);
+        long dy1=aRectP2.Y()-aRectP1.Y(); long dy1a=std::abs(dy1);
+        long dx2=aRectP3.X()-aRectP2.X(); long dx2a=std::abs(dx2);
+        long dy2=aRectP3.Y()-aRectP2.Y(); long dy2a=std::abs(dy2);
         bool b1MoreThan2=dx1a+dy1a>dx2a+dy2a;
         if (b1MoreThan2 != pView->IsBigOrtho()) {
             long xtemp=dy2a-dx1a; if (dx1<0) xtemp=-xtemp;
@@ -741,7 +741,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
             aPt-=mpSdrPathDragData->aXP[nPrevPnt];
             long nWink2=GetAngle(aPt);
             long nDiff=nWink1-nWink2;
-            nDiff=Abs(nDiff);
+            nDiff=std::abs(nDiff);
             mpSdrPathDragData->bEliminate=nDiff<=rDrag.GetView()->GetEliminatePolyPointLimitAngle();
             if (mpSdrPathDragData->bEliminate) { // adapt position, Smooth is true for the ends
                 aPt=mpSdrPathDragData->aXP[nNextPnt];
@@ -938,7 +938,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
 
         if(pU->bCircle)
         {
-            mrSdrPathObject.GetModel()->TakeWinkStr(Abs(pU->nCircRelWink), aMetr);
+            mrSdrPathObject.GetModel()->TakeWinkStr(std::abs(pU->nCircRelWink), aMetr);
             aStr.Append(aMetr);
             aStr.AppendAscii(" r=");
             mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, sal_True);

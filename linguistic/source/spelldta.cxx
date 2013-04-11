@@ -152,7 +152,7 @@ Sequence< OUString > MergeProposalSeqs(
         sal_Int32 nAltCount2 = rAlt2.getLength();
         const OUString *pAlt2 = rAlt2.getConstArray();
 
-        sal_Int32 nCountNew = Min( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
+        sal_Int32 nCountNew = std::min( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
         aMerged.realloc( nCountNew );
         OUString *pMerged = aMerged.getArray();
 

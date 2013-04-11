@@ -690,8 +690,8 @@ Fraction AnimationWindow::GetScale()
         {
             BitmapEx *const pBitmap = m_FrameList[i].first;
             Size aTempSize( pBitmap->GetBitmap().GetSizePixel() );
-            aBmpSize.Width() = Max( aBmpSize.Width(), aTempSize.Width() );
-            aBmpSize.Height() = Max( aBmpSize.Height(), aTempSize.Height() );
+            aBmpSize.Width() = std::max( aBmpSize.Width(), aTempSize.Width() );
+            aBmpSize.Height() = std::max( aBmpSize.Height(), aTempSize.Height() );
         }
 
         aBmpSize.Width() += 10;
@@ -1044,11 +1044,11 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         else
             aTmpSizeLog = pDefDev->LogicToLogic( aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), aMap100 );
 
-        aMaxSizeLog.Width() = Max( aMaxSizeLog.Width(), aTmpSizeLog.Width() );
-        aMaxSizeLog.Height() = Max( aMaxSizeLog.Height(), aTmpSizeLog.Height() );
+        aMaxSizeLog.Width() = std::max( aMaxSizeLog.Width(), aTmpSizeLog.Width() );
+        aMaxSizeLog.Height() = std::max( aMaxSizeLog.Height(), aTmpSizeLog.Height() );
 
-        aMaxSizePix.Width() = Max( aMaxSizePix.Width(), aTmpSizePix.Width() );
-        aMaxSizePix.Height() = Max( aMaxSizePix.Height(), aTmpSizePix.Height() );
+        aMaxSizePix.Width() = std::max( aMaxSizePix.Width(), aTmpSizePix.Width() );
+        aMaxSizePix.Height() = std::max( aMaxSizePix.Height(), aTmpSizePix.Height() );
     }
 
     SdrPageView* pPV = rView.GetSdrPageView();

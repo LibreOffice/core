@@ -176,7 +176,7 @@ void ViewShell::PrintProspect(
     else
     {
         nMaxColSz = aNxtPageSize.Width() + aSttPageSize.Width();
-        nMaxRowSz = Max( aNxtPageSize.Height(), aSttPageSize.Height() );
+        nMaxRowSz = std::max( aNxtPageSize.Height(), aSttPageSize.Height() );
     }
 
     // den MapMode einstellen

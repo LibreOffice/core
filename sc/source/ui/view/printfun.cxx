@@ -465,8 +465,8 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     //  if no lines, still space for the outline frame (20 Twips = 1pt)
     //  (HasLines initalizes aLines to 0,0,0,0)
-    nTwipsSizeX += aLines.Left() + Max( aLines.Right(), 20L );
-    nTwipsSizeY += aLines.Top() +  Max( aLines.Bottom(), 20L );
+    nTwipsSizeX += aLines.Left() + std::max( aLines.Right(), 20L );
+    nTwipsSizeY += aLines.Top() +  std::max( aLines.Bottom(), 20L );
 
     double nScaleX = (double) nDevSizeX / nTwipsSizeX;
     double nScaleY = (double) nDevSizeY / nTwipsSizeY;
@@ -753,15 +753,15 @@ void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
         long nMaxHeight = 0;
         if ( rParam.pLeft )
         {
-            nMaxHeight = Max( nMaxHeight, TextHeight( rParam.pLeft->GetLeftArea() ) );
-            nMaxHeight = Max( nMaxHeight, TextHeight( rParam.pLeft->GetCenterArea() ) );
-            nMaxHeight = Max( nMaxHeight, TextHeight( rParam.pLeft->GetRightArea() ) );
+            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pLeft->GetLeftArea() ) );
+            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pLeft->GetCenterArea() ) );
+            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pLeft->GetRightArea() ) );
         }
         if ( rParam.pRight )
         {
-            nMaxHeight = Max( nMaxHeight, TextHeight( rParam.pRight->GetLeftArea() ) );
-            nMaxHeight = Max( nMaxHeight, TextHeight( rParam.pRight->GetCenterArea() ) );
-            nMaxHeight = Max( nMaxHeight, TextHeight( rParam.pRight->GetRightArea() ) );
+            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetLeftArea() ) );
+            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetCenterArea() ) );
+            nMaxHeight = std::max( nMaxHeight, TextHeight( rParam.pRight->GetRightArea() ) );
         }
 
         rParam.nHeight = nMaxHeight + rParam.nDistance;
@@ -1744,9 +1744,9 @@ void ScPrintFunc::PrintHF( long nPageNo, sal_Bool bHeader, long nStartY,
         //  and probably other breaks by variable (page number etc.)
 
         long nMaxHeight = 0;
-        nMaxHeight = Max( nMaxHeight, TextHeight( pHFItem->GetLeftArea() ) );
-        nMaxHeight = Max( nMaxHeight, TextHeight( pHFItem->GetCenterArea() ) );
-        nMaxHeight = Max( nMaxHeight, TextHeight( pHFItem->GetRightArea() ) );
+        nMaxHeight = std::max( nMaxHeight, TextHeight( pHFItem->GetLeftArea() ) );
+        nMaxHeight = std::max( nMaxHeight, TextHeight( pHFItem->GetCenterArea() ) );
+        nMaxHeight = std::max( nMaxHeight, TextHeight( pHFItem->GetRightArea() ) );
         if (rParam.pBorder)
             nMaxHeight += lcl_LineTotal( rParam.pBorder->GetTop() ) +
                           lcl_LineTotal( rParam.pBorder->GetBottom() ) +

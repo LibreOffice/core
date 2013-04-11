@@ -577,7 +577,7 @@ void ParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
         {
 //          nInvalidPosEnd = pNode->Len();
             DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
-            nInvalidPosStart = Min( nInvalidPosStart, (sal_uInt16) ( nDiff < 0 ? nStart+nDiff : nDiff ) );
+            nInvalidPosStart = std::min( nInvalidPosStart, (sal_uInt16) ( nDiff < 0 ? nStart+nDiff : nDiff ) );
             nInvalidDiff = 0;
             bSimple = sal_False;
         }
@@ -596,7 +596,7 @@ void ParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /* nEnd */
     }
     else
     {
-        nInvalidPosStart = Min( nInvalidPosStart, nStart );
+        nInvalidPosStart = std::min( nInvalidPosStart, nStart );
 //      nInvalidPosEnd = pNode->Len();
     }
     nInvalidDiff = 0;
