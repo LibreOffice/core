@@ -105,8 +105,7 @@ public:
 
     /** Query byte offset to get from scanline n to scanline n+1
 
-        @return the scanline stride in bytes. In the case of
-        isTopDown()==false, this offset will be negative.
+        @return the scanline stride in bytes.
      */
     sal_Int32 getScanlineStride() const;
 
