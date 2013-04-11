@@ -2034,13 +2034,20 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
 {
     BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, bTopDown, nScanlineFormat, pMem, pPal, pSubset, rDamage ) );
 
+#ifdef SAL_LOG_INFO
+    std::ostringstream subset;
+
+    if (pSubset)
+        subset << " subset: " << pSubset->getWidth() << "x" << pSubset->getHeight() << "@(" << pSubset->getMinX() << "," << pSubset->getMinY() << ")";
+
     SAL_INFO( "basebmp.bitmapdevice",
               "createBitmapDevice: "
               << rSize.getX() << "x" << rSize.getY()
               << (bTopDown ? " top-down " : " bottom-up ")
               << Format::formatName(nScanlineFormat)
+              << subset.str()
               << " = " << result.get() );
-
+#endif
     return result;
 }
 } // namespace
@@ -2091,6 +2098,7 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
 BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr& rProto,
                                           const basegfx::B2IBox&       rSubset )
 {
+    SAL_INFO( "basebmp.bitmapdevice", "subsetBitmapDevice: proto=" << rProto.get() );
     return createBitmapDeviceImpl( rProto->getSize(),
                                    rProto->isTopDown(),
                                    rProto->getScanlineFormat(),
