@@ -139,12 +139,12 @@ out.sdk/cppserver.$(OBJ_EXT): cppserver.cc out.sdk/cpputypes.cppumaker.flag \
 
 out.sdk/cpputypes.cppumaker.flag: | out.sdk
 	$(CPPUMAKER) -O./out.sdk/include/cpputypes \
-            -BUCR "$(URE_TYPES)"
             "-Tcom.sun.star.lang.DisposedException;com.sun.star.lang.EventObject;com.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak;com.sun.star.util.theMacroExpander" \
+            "$(URE_TYPES)"
 	touch $@
 
 out.sdk/types.cppumaker.flag: out.sdk/types.rdb | out.sdk
-	$(CPPUMAKER) -O./out.sdk/include/types -BUCR $< "-X$(URE_TYPES)"
+	$(CPPUMAKER) -O./out.sdk/include/types $< "-X$(URE_TYPES)"
 	touch $@
 
 
@@ -261,7 +261,7 @@ out.sdk/types.mf: types.mf.template | out.sdk
 
 out.sdk/types.javamaker.flag: out.sdk/types.rdb | out.sdk out.sdk/class
 	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/types)
-	$(JAVAMAKER) -O./out.sdk/class/types -BUCR $< "-X$(URE_TYPES)"
+	$(JAVAMAKER) -O./out.sdk/class/types $< "-X$(URE_TYPES)"
 	touch $@
 
 
