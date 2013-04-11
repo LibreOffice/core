@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,jvmfwk))
 
-$(eval $(call gb_Library_set_soversion_script,jvmfwk,3,$(SRCDIR)/jvmfwk/source/framework.map))
-
 $(eval $(call gb_Library_use_package,jvmfwk,\
     jvmfwk_inc \
 ))
