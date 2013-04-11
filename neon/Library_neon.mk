@@ -13,10 +13,15 @@ $(eval $(call gb_Library_use_unpacked,neon,neon))
 
 $(eval $(call gb_Library_use_externals,neon,\
 	libxml2 \
-	openssl \
-	openssl_headers \
 	zlib \
 ))
+
+ifneq ($(DISABLE_OPENSSL),YES)
+$(eval $(call gb_Library_use_externals,neon,\
+	openssl \
+	openssl_headers \
+))
+endif
 
 $(eval $(call gb_Library_set_visibility_default,neon))
 
@@ -56,8 +61,28 @@ $(eval $(call gb_Library_add_generated_cobjects,neon,\
 	UnpackedTarball/neon/src/ne_utils \
 	UnpackedTarball/neon/src/ne_xml \
 	UnpackedTarball/neon/src/ne_xmlreq \
+))
+
+
+ifneq ($(DISABLE_OPENSSL),YES)
+$(eval $(call gb_Library_add_generated_cobjects,neon,\
 	UnpackedTarball/neon/src/ne_openssl \
 ))
+else
+$(eval $(call gb_Library_add_generated_cobjects,neon,\
+	UnpackedTarball/neon/src/ne_gnutls \
+))
+$(eval $(call gb_Library_add_cflags,neon,\
+	-DDISABLE_OPENSSL \
+	$(LIBGCRYPT_CFLAGS) \
+	$(GNUTLS_CFLAGS) \
+))
+$(eval $(call gb_Library_add_libs,neon,\
+	$(LIBGCRYPT_LIBS) \
+	$(GNUTLS_LIBS) \
+))
+endif
+
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,neon,\
@@ -76,9 +101,11 @@ $(eval $(call gb_Library_add_generated_cobjects,neon,\
 ))
 
 else
+ifneq ($(DISABLE_OPENSSL),YES)
 $(eval $(call gb_Library_add_generated_cobjects,neon,\
 	UnpackedTarball/neon/src/ne_ntlm \
 ))
+endif
 
 endif
 
