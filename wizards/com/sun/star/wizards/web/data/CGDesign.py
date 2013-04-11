@@ -19,21 +19,22 @@ from ...common.ConfigGroup import ConfigGroup
 
 class CGDesign(ConfigGroup):
 
-    cp_Layout = str()
-    cp_Style = str()
-    cp_BackgroundImage = str()
-    cp_IconSet = str()
-    cp_DisplayTitle = bool()
-    cp_DisplayDescription = bool()
-    cp_DisplayAuthor = bool()
-    cp_DisplayCreateDate = bool()
-    cp_DisplayUpdateDate = bool()
-    cp_DisplayFilename = bool()
-    cp_DisplayFileFormat = bool()
-    cp_DisplayFormatIcon = bool()
-    cp_DisplayPages = bool()
-    cp_DisplaySize = bool()
-    cp_OptimizeDisplaySize = int()
+    def __init__(self):
+        self.cp_Layout = str()
+        self.cp_Style = str()
+        self.cp_BackgroundImage = str()
+        self.cp_IconSet = str()
+        self.cp_DisplayTitle = bool()
+        self.cp_DisplayDescription = bool()
+        self.cp_DisplayAuthor = bool()
+        self.cp_DisplayCreateDate = bool()
+        self.cp_DisplayUpdateDate = bool()
+        self.cp_DisplayFilename = bool()
+        self.cp_DisplayFileFormat = bool()
+        self.cp_DisplayFormatIcon = bool()
+        self.cp_DisplayPages = bool()
+        self.cp_DisplaySize = bool()
+        self.cp_OptimizeDisplaySize = int()
 
     def createDOM(self, parent):
         return XMLHelper.addElement(parent, "design", (0,), (0,))

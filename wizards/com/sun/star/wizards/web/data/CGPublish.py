@@ -26,23 +26,24 @@ through such a CGPublish object.
 
 class CGPublish(ConfigGroup):
 
-    cp_Publish = bool()
-    cp_URL = str()
-    cp_Username = str()
-    password = str()
-    overwriteApproved = bool()
-    url = str()
+    def __init__(self):
+        self.cp_Publish = bool()
+        self.cp_URL = str()
+        self.cp_Username = str()
+        self.password = str()
+        self.overwriteApproved = bool()
+        self.url = str()
 
     def setURL(self, path):
         try:
-            self.cp_URL = (self.root).getFileAccess().getURL(path)
+            self.cp_URL = self.root.getFileAccess().getURL(path)
             self.overwriteApproved = False
         except Exception as ex:
             ex.printStackTrace()
 
     def getURL(self):
         try:
-            return (self.root).getFileAccess().getPath(self.cp_URL, None)
+            return self.root.getFileAccess().getPath(self.cp_URL, None)
         except Exception as e:
             e.printStackTrace()
             return ""

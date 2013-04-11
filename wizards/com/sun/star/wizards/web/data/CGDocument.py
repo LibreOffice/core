@@ -77,7 +77,7 @@ class CGDocument(ConfigGroup):
         self.validate(xmsf, task)
 
     def getSettings(self):
-        return ConfigGroup.root
+        return self.root
 
     '''
     the task will advance 5 times during validate.
@@ -88,11 +88,11 @@ class CGDocument(ConfigGroup):
 
     def validate(self, xmsf, task):
         print ("WARNING !!! VALIDATING DOCUMENT ....")
-        if not self.root.getFileAccess(xmsf).exists(self.cp_URL, False):
+        if not self.getSettings().getFileAccess(xmsf).exists(self.cp_URL, False):
             raise FileNotFoundException (
                 "The given URL does not point to a file")
 
-        if self.root.getFileAccess(xmsf).isDirectory(self.cp_URL):
+        if self.getSettings().getFileAccess(xmsf).isDirectory(self.cp_URL):
             raise IllegalArgumentException ("The given URL points to a directory") #create a TypeDetection service
 
         self.mediaDescriptor = OfficeDocument.getFileMediaDecriptor(
@@ -102,7 +102,7 @@ class CGDocument(ConfigGroup):
         self.analyzeFileType(self.mediaDescriptor)
         task.advance(True)
         #2
-        path = self.root.getFileAccess(xmsf).getPath(self.cp_URL, "")
+        path = self.getSettings().getFileAccess(xmsf).getPath(self.cp_URL, "")
         self.localFilename = FileAccess.getFilename(path, separator)
         '''
         if the type is a star office convertable document
@@ -159,11 +159,11 @@ class CGDocument(ConfigGroup):
 
         if self.cp_Exporter is None or self.cp_Exporter == "":
             print ("WARNING !!! settign exporter for key:", self.appType)
-            exp = self.root.getExporters(self.appType)
+            exp = self.getSettings().getExporters(self.appType)
             print ("WARNING !!! got N exporters:", len(exp))
             print ("WARNING !!! got exporter:", exp[0])
             self.cp_Exporter = \
-                self.root.cp_Exporters.getKey(exp[0])
+                self.getSettings().cp_Exporters.getKey(exp[0])
             print ("WARNING !!! exporter: ", self.cp_Exporter)
 
     '''

@@ -23,12 +23,13 @@ from ...ui.UIConsts import UIConsts
 
 class CGLayout(ConfigGroup):
 
-    cp_Index = -1
-    cp_Name = str()
-    cp_FSName = str()
+    def __init__(self):
+        self.cp_Index = -1
+        self.cp_Name = str()
+        self.cp_FSName = str()
 
     def getSettings(self):
-        return ConfigGroup.root
+        return self.root
 
     def createTemplates(self, xmsf):
         self.templates = {}

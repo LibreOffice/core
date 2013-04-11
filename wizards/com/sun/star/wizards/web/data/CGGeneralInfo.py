@@ -20,13 +20,14 @@ from ...common.XMLHelper import XMLHelper
 
 class CGGeneralInfo(ConfigGroup):
 
-    cp_Title = str()
-    cp_Description = str()
-    cp_Author = str()
-    cp_CreationDate = int()
-    cp_UpdateDate = int()
-    cp_Email = str()
-    cp_Copyright = str()
+    def __init__(self):
+        self.cp_Title = str()
+        self.cp_Description = str()
+        self.cp_Author = str()
+        self.cp_CreationDate = int()
+        self.cp_UpdateDate = int()
+        self.cp_Email = str()
+        self.cp_Copyright = str()
 
     def createDOM(self, parent):
         return XMLHelper.addElement(

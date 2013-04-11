@@ -151,7 +151,7 @@ class WWD_Events(WWD_Startup):
                 view = Configuration.getNode(sessionToLoad, view)
 
             session = CGSession()
-            session.root = self.settings
+            session.setRoot(self.settings)
             print ("DEBUG !!! loadSession -- reading configuration ...")
             session.readConfiguration(view, CONFIG_READ_PARAM)
             numDocs = session.cp_Content.cp_Documents.getSize()
@@ -986,7 +986,7 @@ class WWD_Events(WWD_Startup):
 
             for i in range(start, len(self.files)):
                 doc = CGDocument()
-                doc.root = self.parent.settings
+                doc.setRoot(self.parent.settings)
 
                 if start == 0:
                     doc.cp_URL = self.files[i]

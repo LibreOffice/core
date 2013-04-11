@@ -45,53 +45,50 @@ class CGSettings(ConfigGroup):
     RESOURCE_UPDATED_TEMPLATE = 3
     RESOURCE_SIZE_TEMPLATE = 4
 
-    cp_WorkDir = str()
-    cp_Exporters = WebConfigSet(CGExporter)
-    cp_Layouts = WebConfigSet(CGLayout)
-    cp_Styles = WebConfigSet(CGStyle)
-    cp_IconSets = WebConfigSet(CGIconSet)
-    cp_BackgroundImages = WebConfigSet(CGImage)
-    cp_SavedSessions = WebConfigSet(CGSessionName)
-    cp_Filters = WebConfigSet(CGFilter)
-    savedSessions = WebConfigSet(CGSessionName)
-    cp_DefaultSession = CGSession()
-    cp_LastSavedSession = str()
-    fileAccess = None
-    xmsf = None
-
     def __init__(self, xmsf_, resources_, document):
+        self.cp_WorkDir = str()
+        self.cp_Exporters = WebConfigSet(CGExporter)
+        self.cp_Layouts = WebConfigSet(CGLayout)
+        self.cp_Styles = WebConfigSet(CGStyle)
+        self.cp_IconSets = WebConfigSet(CGIconSet)
+        self.cp_BackgroundImages = WebConfigSet(CGImage)
+        self.cp_SavedSessions = WebConfigSet(CGSessionName)
+        self.cp_Filters = WebConfigSet(CGFilter)
+        self.savedSessions = WebConfigSet(CGSessionName)
+        self.cp_DefaultSession = CGSession()
+        self.cp_LastSavedSession = str()
+        self.fileAccess = None
+        self.workPath = None
         self.xmsf = xmsf_
         try:
             self.soTemplateDir = FileAccess.getOfficePath2(self.xmsf, "Config", "", "");
             self.soGalleryDir = FileAccess.getOfficePath2(self.xmsf, "Gallery", "share", "");
-            ConfigGroup.root = self
+            self.setRoot(self)
             self.formatter = self.Formatter(self.xmsf, document, resources_)
             self.resources = resources_
-            self.workPath = None
             self.exportersMap = {}
         except Exception:
             traceback.print_exc()
 
     def getExporters(self, mime):
+        print ("DEBUG !!! CGSettings.getExporters -- mime: ", mime)
         exps = self.exportersMap.get(mime)
         if exps is None:
             exps = self.createExporters(mime)
             self.exportersMap[mime] = exps
-
+        print ("DEBUG !!! CGSettings.getExporters -- exps: ", len(exps))
         return exps
 
     def createExporters(self, mime):
+        print ("DEBUG !!! CGSettings.createExporters -- mime: ", mime)
         exporters = self.cp_Exporters.childrenList
         v = []
         for i in exporters:
-            if i is not None:
-                if i.supports(mime):
-                    try:
-                        v.append(i)
-                    except Exception:
-                        traceback.print_exc()
-            else:
-                print ("DEBUG !!! Exporter is None")
+            if i.supports(mime):
+                try:
+                    v.append(i)
+                except Exception:
+                    traceback.print_exc()
         return v
 
     '''
@@ -101,37 +98,31 @@ class CGSettings(ConfigGroup):
     '''
 
     def configure(self, xmsf):
-        self.workPath = FileAccess.connectURLs(
-            self.soTemplateDir, self.cp_WorkDir)
-        #COMMENTED
+        self.workPath = FileAccess.connectURLs(self.soTemplateDir, self.cp_WorkDir)
         self.calcExportersTargetTypeNames(xmsf)
 
     def calcExportersTargetTypeNames(self, xmsf):
-        typeDetect = xmsf.createInstance(
-            "com.sun.star.document.TypeDetection")
+        typeDetect = xmsf.createInstance("com.sun.star.document.TypeDetection")
         for i in range(self.cp_Exporters.getSize()):
-            self.calcExporterTargetTypeName(
-                typeDetect, self.cp_Exporters.getElementAt(i))
+            self.calcExporterTargetTypeName(typeDetect, self.cp_Exporters.getElementAt(i))
 
     def calcExporterTargetTypeName(self, typeDetect, exporter):
         if (exporter is None):
-            print ("WARNING !!!! calcExporterTargetTypeName - received None as exporter argument.")
+            print ("DEBUG !!!! calcExporterTargetTypeName - received None as exporter argument.")
             return
-        print ("WARNING !!!! calcExporterTargetTypeName - targetType: ", exporter.cp_TargetType)
+        print ("DEBUG !!!! calcExporterTargetTypeName - targetType: ", exporter.cp_TargetType)
         if not (exporter.cp_TargetType == "" or exporter.cp_TargetType is None):
             targetTypeName = Properties.getPropertyValue(
                 typeDetect.getByName(exporter.cp_TargetType), "UIName")
-            print ("WARNING !!!! calcExporterTargetTypeName - targetTypeName: ", targetTypeName)
+            print ("DEBUG !!!! calcExporterTargetTypeName - targetTypeName: ", targetTypeName)
             exporter.cp_targetTypeName = targetTypeName
 
-    @classmethod
     def getFileAccess(self, xmsf = None):
         if xmsf is None:
             xmsf = self.xmsf
-        if CGSettings.fileAccess is None:
-            CGSettings.fileAccess = FileAccess(xmsf)
-
-        return CGSettings.fileAccess
+        if self.fileAccess is None:
+            self.fileAccess = FileAccess(xmsf)
+        return self.fileAccess
 
     class Formatter(object):
         class DateUtils(object):

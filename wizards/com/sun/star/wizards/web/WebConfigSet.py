@@ -108,7 +108,7 @@ class WebConfigSet(ConfigGroup):
                 print ("DEBUG !!! readConfiguration -- name: ", i)
                 try:
                     child = self.childClass()
-                    child.root = self.root
+                    child.setRoot(self.root)
                     child.readConfiguration(
                         configurationView.getByName(i), param)
                     self.add(i, child)
