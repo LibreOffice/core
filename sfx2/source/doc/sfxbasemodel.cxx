@@ -1843,125 +1843,125 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     // the object shell should exist always
     DBG_ASSERT( m_pData->m_pObjectShell.Is(), "Model is useless without an ObjectShell" );
 
-    if ( m_pData->m_pObjectShell.Is() )
+    if (!m_pData->m_pObjectShell.Is())
+        return;
+
+    if( m_pData->m_pObjectShell->GetMedium() )
+        // if a Medium is present, the document is already initialized
+        throw frame::DoubleInitializationException();
+
+    SfxMedium* pMedium = new SfxMedium( seqArguments );
+
+    sal_uInt32 nError = ERRCODE_NONE;
+    OUString aFilterProvider = getFilterProvider(seqArguments);
+    if (!aFilterProvider.isEmpty())
     {
-        if( m_pData->m_pObjectShell->GetMedium() )
-            // if a Medium is present, the document is already initialized
-            throw frame::DoubleInitializationException();
-
-        SfxMedium* pMedium = new SfxMedium( seqArguments );
-
-        sal_uInt32 nError = ERRCODE_NONE;
-        OUString aFilterProvider = getFilterProvider(seqArguments);
-        if (!aFilterProvider.isEmpty())
-        {
-            if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium))
-                nError = ERRCODE_IO_GENERAL;
-
-            handleLoadError(nError, pMedium);
-            pMedium->SetUpdatePickList(false);
-            return;
-        }
-
-        String aFilterName;
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-        if( pFilterNameItem )
-            aFilterName = pFilterNameItem->GetValue();
-        if( !m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) )
-        {
-            // filtername is not valid
-            delete pMedium;
-            throw frame::IllegalArgumentIOException();
-        }
-
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
-        sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
-
-        // load document
-        if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
-            nError=ERRCODE_IO_GENERAL;
-
-        // QUESTION: if the following happens outside of DoLoad, something important is missing there!
-        Reference< task::XInteractionHandler > xHandler = pMedium->GetInteractionHandler();
-        if( m_pData->m_pObjectShell->GetErrorCode() )
-        {
-            nError = m_pData->m_pObjectShell->GetErrorCode();
-            if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
-            {
-                OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
-                if ( !pRepairItem || !pRepairItem->GetValue() )
-                {
-                    RequestPackageReparation aRequest( aDocName );
-                    xHandler->handle( aRequest.GetRequest() );
-                    if( aRequest.isApproved() )
-                    {
-                        // broken package: try second loading and allow repair
-                        pMedium->GetItemSet()->Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
-                        pMedium->GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                        pMedium->GetItemSet()->Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
-
-                        // the error must be reset and the storage must be reopened in new mode
-                        pMedium->ResetError();
-                        pMedium->CloseStorage();
-                        m_pData->m_pObjectShell->PrepareSecondTryLoad_Impl();
-                        if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
-                            nError=ERRCODE_IO_GENERAL;
-                        nError = m_pData->m_pObjectShell->GetErrorCode();
-                    }
-                }
-
-                if ( nError == ERRCODE_IO_BROKENPACKAGE )
-                {
-                    // repair either not allowed or not successful
-                    NotifyBrokenPackage aRequest( aDocName );
-                    xHandler->handle( aRequest.GetRequest() );
-                }
-            }
-        }
-
-        if( m_pData->m_pObjectShell->IsAbortingImport() )
-            nError = ERRCODE_ABORT;
-
-        if( bSalvage )
-        {
-            // file recovery: restore original filter
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-            SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
-            const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
-            pMedium->SetFilter( pSetFilter );
-            m_pData->m_pObjectShell->SetModified(sal_True);
-        }
-
-        // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
-        if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        {
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-            if ( pFilterItem )
-                m_pData->m_aPreusedFilterName = pFilterItem->GetValue();
-        }
-
-        if ( !nError )
-            nError = pMedium->GetError();
-
-        m_pData->m_pObjectShell->ResetError();
+        if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium))
+            nError = ERRCODE_IO_GENERAL;
 
         handleLoadError(nError, pMedium);
+        pMedium->SetUpdatePickList(false);
+        return;
+    }
 
-        loadCmisProperties( );
+    String aFilterName;
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+    if( pFilterNameItem )
+        aFilterName = pFilterNameItem->GetValue();
+    if( !m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) )
+    {
+        // filtername is not valid
+        delete pMedium;
+        throw frame::IllegalArgumentIOException();
+    }
 
-        sal_Bool bHidden = sal_False;
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
-        if ( pHidItem )
-            bHidden = pHidItem->GetValue();
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
+    sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
+
+    // load document
+    if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
+        nError=ERRCODE_IO_GENERAL;
+
+    // QUESTION: if the following happens outside of DoLoad, something important is missing there!
+    Reference< task::XInteractionHandler > xHandler = pMedium->GetInteractionHandler();
+    if( m_pData->m_pObjectShell->GetErrorCode() )
+    {
+        nError = m_pData->m_pObjectShell->GetErrorCode();
+        if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
+        {
+            OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
+            if ( !pRepairItem || !pRepairItem->GetValue() )
+            {
+                RequestPackageReparation aRequest( aDocName );
+                xHandler->handle( aRequest.GetRequest() );
+                if( aRequest.isApproved() )
+                {
+                    // broken package: try second loading and allow repair
+                    pMedium->GetItemSet()->Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
+                    pMedium->GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+                    pMedium->GetItemSet()->Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
+
+                    // the error must be reset and the storage must be reopened in new mode
+                    pMedium->ResetError();
+                    pMedium->CloseStorage();
+                    m_pData->m_pObjectShell->PrepareSecondTryLoad_Impl();
+                    if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
+                        nError=ERRCODE_IO_GENERAL;
+                    nError = m_pData->m_pObjectShell->GetErrorCode();
+                }
+            }
+
+            if ( nError == ERRCODE_IO_BROKENPACKAGE )
+            {
+                // repair either not allowed or not successful
+                NotifyBrokenPackage aRequest( aDocName );
+                xHandler->handle( aRequest.GetRequest() );
+            }
+        }
+    }
+
+    if( m_pData->m_pObjectShell->IsAbortingImport() )
+        nError = ERRCODE_ABORT;
+
+    if( bSalvage )
+    {
+        // file recovery: restore original filter
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+        const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
+        pMedium->SetFilter( pSetFilter );
+        m_pData->m_pObjectShell->SetModified(sal_True);
+    }
+
+    // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
+    if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    {
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        if ( pFilterItem )
+            m_pData->m_aPreusedFilterName = pFilterItem->GetValue();
+    }
+
+    if ( !nError )
+        nError = pMedium->GetError();
+
+    m_pData->m_pObjectShell->ResetError();
+
+    handleLoadError(nError, pMedium);
+
+    loadCmisProperties( );
+
+    sal_Bool bHidden = sal_False;
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
+    if ( pHidItem )
+        bHidden = pHidItem->GetValue();
 
 #if OSL_DEBUG_LEVEL > 0
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
-        OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
+    OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
 #endif
-        // !TODO: will be done by Framework!
-        pMedium->SetUpdatePickList( !bHidden );
-    }
+    // !TODO: will be done by Framework!
+    pMedium->SetUpdatePickList( !bHidden );
 }
 
 //________________________________________________________________________________________________________
