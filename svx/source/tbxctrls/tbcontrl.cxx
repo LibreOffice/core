@@ -1705,14 +1705,12 @@ struct SvxStyleToolBoxControl::Impl
     String                              aClearForm;
     String                              aMore;
     ::std::vector< OUString >    aDefaultStyles;
-    sal_Bool                        bListening;
     sal_Bool                        bSpecModeWriter;
     sal_Bool                        bSpecModeCalc;
 
     inline Impl( void )
         :aClearForm         ( SVX_RESSTR( RID_SVXSTR_CLEARFORM ) )
         ,aMore              ( SVX_RESSTR( RID_SVXSTR_MORE ) )
-        ,bListening         ( sal_False )
         ,bSpecModeWriter    ( sal_False )
         ,bSpecModeCalc      ( sal_False )
     {
