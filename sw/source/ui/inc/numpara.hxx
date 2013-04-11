@@ -34,26 +34,26 @@
  ---------------------------------------------------------------------------*/
 class SwParagraphNumTabPage : public SfxTabPage
 {
-    FixedLine               aOutlineStartFL;
-    FixedText               aOutlineLvFT;
-    ListBox                 aOutlineLvLB;
+    VclHBox*                 m_pOutlineStartBX;
+    ListBox*                 m_pOutlineLvLB;
 
-    FixedLine               aNewStartFL;
-    FixedText               aNumberStyleFT;
-    ListBox                 aNumberStyleLB;
+    VclHBox*                 m_pNumberStyleBX;
+    ListBox*                 m_pNumberStyleLB;
 
-    TriStateBox             aNewStartCB;
-    TriStateBox             aNewStartNumberCB;
-    NumericField            aNewStartNF;
+    TriStateBox*             m_pNewStartCB;
+    VclHBox*                 m_pNewStartBX;
+    TriStateBox*             m_pNewStartNumberCB;
+    NumericField*            m_pNewStartNF;
 
-    FixedLine               aCountParaFL;
-    TriStateBox             aCountParaCB;
-    TriStateBox             aRestartParaCountCB;
-    FixedText               aRestartFT;
-    NumericField            aRestartNF;
+    VclFrame*                m_pCountParaFram;
+    TriStateBox*             m_pCountParaCB;
+    TriStateBox*             m_pRestartParaCountCB;
+
+    VclHBox*                 m_pRestartBX;
+    NumericField*            m_pRestartNF;
 
     // --> OD 2008-04-14 #outlinelevel#
-    const String msOutlineNumbering;
+    const OUString msOutlineNumbering;
 
     sal_Bool                    bModified : 1;
     sal_Bool                    bCurNumrule : 1;
@@ -64,6 +64,7 @@ class SwParagraphNumTabPage : public SfxTabPage
 
 protected:
         SwParagraphNumTabPage(Window* pParent, const SfxItemSet& rSet );
+    void aCountParaFL();
 
 public:
         ~SwParagraphNumTabPage();
@@ -79,7 +80,7 @@ public:
     void                DisableOutline();
     void                DisableNumbering();
 
-    ListBox&            GetStyleBox() {return aNumberStyleLB;};
+    ListBox&            GetStyleBox() {return *m_pNumberStyleLB;};
 };
 
 
