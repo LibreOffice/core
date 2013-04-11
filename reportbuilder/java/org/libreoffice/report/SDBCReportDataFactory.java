@@ -258,7 +258,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                                 prefix = (String)column.getPropertyValue("TableName");
                                 if (prefix == null)
                                     prefix = "";
-                                if (!prefix.isEmpty())
+                                if (prefix.length() != 0)
                                 {
                                     prefix = quote + prefix + quote + ".";
                                 }
