@@ -1856,8 +1856,8 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         {
             if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium))
             {
-                delete pMedium;
-                return;
+                throw task::ErrorCodeIOException(
+                    OUString(), Reference<XInterface>(), ERRCODE_IO_CANTREAD);
             }
 
             pMedium->SetUpdatePickList(false);
