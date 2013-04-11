@@ -213,9 +213,6 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     if( mnCharCount <= 0 || !gr.CheckContext() )
         return;
 
-    Point pos = GetDrawPosition(Point(0,0));
-    SAL_INFO( "vcl.coretext.layout", "  at pos (" << pos.X() << "," << pos.Y() <<") ctfont=" << mpStyle->GetFont() );
-
     CGFontRef cg_font = CTFontCopyGraphicsFont(mpStyle->GetFont(), NULL);
     if( !cg_font ) {
         SAL_INFO( "vcl.coretext.layout", "Error cg_font is NULL" );
@@ -236,6 +233,15 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     CFRelease(cg_font);
     CGContextSetTextMatrix(gr.mrContext, CGAffineTransformMakeScale(1.0, -1.0));
     CGContextSetShouldAntialias( gr.mrContext, !gr.mbNonAntialiasedText );
+
+    Point pos = GetDrawPosition(Point(0,0));
+    CGPoint posDev = CGContextConvertPointToDeviceSpace(gr.mrContext, CGPointMake(pos.X(), pos.Y()));
+    SAL_INFO( "vcl.coretext.layout",
+              " context=" << gr.mrContext <<
+              " pos=(" << pos.X() << "," << pos.Y() <<")" <<
+              " posDev=" << posDev <<
+              " font=" << mpStyle->GetFont() );
+
     CGContextTranslateCTM(gr.mrContext, pos.X(), pos.Y());
 
     CGContextShowGlyphsWithAdvances(gr.mrContext, mpGlyphs, mpGlyphAdvances, mnGlyphCount);
