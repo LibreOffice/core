@@ -45,9 +45,9 @@
        </exec>
 
        <exec dir="." executable="${ODKPATH}/windows/bin/javamaker.exe" timeout="600">
-             <arg line="-BUCR -O${OUTPUTPATH}/class/${INTERFACE_NAME} -nD ./${RDB_NAME}"/>
+             <arg line="-O${OUTPUTPATH}/class/${INTERFACE_NAME} -nD ./${RDB_NAME}"/>
 <!--
-             <arg line="-BUCR -T${PACKAGE_NAME}${INTERFACE_NAME} -O${OUTPUTPATH}/class/${INTERFACE_NAME} -nD ./${INTERFACE_NAME}.urd"/>
+             <arg line="-T${PACKAGE_NAME}${INTERFACE_NAME} -O${OUTPUTPATH}/class/${INTERFACE_NAME} -nD ./${INTERFACE_NAME}.urd"/>
  -->
        </exec>
 

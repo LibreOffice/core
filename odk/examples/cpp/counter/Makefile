@@ -92,7 +92,7 @@ $(OUT_BIN)/%.rdb : $(GENURDFILES)
 $(COMP_TYPEFLAG) : $(COMP_RDB) $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_TYPEFLAG)))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMP_RDB) -X $(URE_TYPES)
+	$(CPPUMAKER) -Gc -O$(OUT_COMP_INC) $(TYPESLIST) $(COMP_RDB) -X $(URE_TYPES)
 	echo flagged > $@
 
 $(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMP_TYPEFLAG)

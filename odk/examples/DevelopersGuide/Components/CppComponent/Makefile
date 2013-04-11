@@ -96,7 +96,7 @@ $(SAMPLE_GEN_OUT)/%.rdb : $(GENURDFILES)
 $(COMP_TYPEFLAG) : $(COMP_RDB) $(SDKTYPEFLAG)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CPPUMAKER) -Gc -BUCR -O$(SAMPLE_INC_OUT) $(TYPESLIST) $(COMP_RDB) -X$(URE_TYPES) -X$(OFFICE_TYPES)
+	$(CPPUMAKER) -Gc -O$(SAMPLE_INC_OUT) $(TYPESLIST) $(COMP_RDB) -X$(URE_TYPES) -X$(OFFICE_TYPES)
 	echo flagged > $@
 
 $(SAMPLE_SLO_OUT)/%.$(OBJ_EXT) : %.cxx $(COMP_TYPEFLAG)
