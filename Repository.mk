@@ -430,7 +430,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,URE, \
 	unsafe_uno \
 	$(if $(URELIBS),urelibs) \
 	xmlreader \
-	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(COMNAME)),msci,mscx),gcc3)_uno \
+	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(CPUNAME)),msci,mscx),gcc3)_uno \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
