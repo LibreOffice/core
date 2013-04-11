@@ -841,14 +841,11 @@ class WWD_Events(WWD_Startup):
         '''
         p = self.getPublisher(ZIP_PUBLISHER)
         print ("DEBUG !!! finishWizard2 - zip URL: ", p.cp_URL)
-        #remove the 'file://' prefix
-        url1 = p.cp_URL.replace("file://", "")
-        #replace the '%' with '%25'
-        url1 = url1.replace("%", "%25")
-        #replace all '/' with '%2F'
-        url1 = url1.replace("/", "%2F")
-
-        p.url = "vnd.sun.star.zip://" + url1 + "/"
+        factory = self.xMSF.createInstance("com.sun.star.uri.VndSunStarPkgUrlReferenceFactory")
+        uriFactory = self.xMSF.createInstance("com.sun.star.uri.UriReferenceFactory")
+        uri = uriFactory.parse(p.cp_URL)
+        pckUri = factory.createVndSunStarPkgUrlReference(uri)
+        p.url = pckUri.getUriReference()
         print ("DEBUG !!! finishWizard2 - zip url: ", p.url)
 
         '''
