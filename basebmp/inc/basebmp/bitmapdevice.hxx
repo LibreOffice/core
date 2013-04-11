@@ -79,7 +79,7 @@ class BASEBMP_DLLPUBLIC BitmapDevice : public boost::enable_shared_from_this<Bit
                                        private boost::noncopyable
 {
 public:
-    /** Query size of device in pixel
+    /** Query size of device in pixel columns (X) and rows (Y, "scanlines")
      */
     basegfx::B2IVector getSize() const;
 
@@ -92,12 +92,12 @@ public:
      */
     bool isTopDown() const;
 
-    /** Query the offset from the start of the memory buffer
+    /** Query the size of the whole frame buffer
 
-        @ return the offset, which is (0,0) unless this is a subset
-        device.
+        @ return the size of the whole frame buffer, the same as
+        getSize() unless this is a "subset" device.
     */
-    basegfx::B2IVector getOffset() const;
+    basegfx::B2IVector getBufferSize() const;
 
     /** Query type of scanline memory format
      */
@@ -552,6 +552,7 @@ public:
 
 protected:
     BASEBMP_DLLPRIVATE BitmapDevice( const basegfx::B2IBox&           rBounds,
+                                     const basegfx::B2IVector&        rBufferSize,
                                      sal_Int32                        nScanlineFormat,
                                      sal_Int32                        nScanlineStride,
                                      sal_uInt8*                       pFirstScanline,
@@ -688,10 +689,16 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
 /** Function to retrieve a subsetted BitmapDevice to the same
     memory.
 
+    Note that there is no coordinate system translation or offsetting
+    involved.
+
     This method creates a second bitmap device instance, which renders
-    to the same memory as the original, but to a limited, rectangular
-    area. Useful to implement rectangular clips (usually faster than
-    setting up a 1bpp clip mask).
+    to the same memory as the original, with the same pixel coordinate
+    pairs refering to the same pixels in the memory buffer, but with
+    rendering clipped to a rectangular area. Useful to implement
+    rectangular clips (usually faster than setting up a 1bpp clip
+    mask).
+
  */
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC subsetBitmapDevice( const BitmapDeviceSharedPtr& rProto,
                                                             const basegfx::B2IBox&       rSubset );
