@@ -495,7 +495,7 @@ void CppuType::dumpInitializer(
                 break;
             default:
                 throw CannotDumpException(
-                    "unexpected type \"" + name
+                    "unexpected entity \"" + name
                     + "\" in call to CppuType::dumpInitializer");
             }
         }
@@ -789,7 +789,7 @@ void CppuType::dumpType(
         break;
     default:
         throw CannotDumpException(
-            "unexpected type \"" + name + "\" in call to CppuType::dumpType");
+            "unexpected entity \"" + name + "\" in call to CppuType::dumpType");
     }
     for (sal_Int32 i = 0; i != k; ++i) {
         out << " >";
@@ -829,7 +829,7 @@ void CppuType::dumpCppuGetType(FileStream & out, OUString const & name) {
         break;
     default:
         throw CannotDumpException(
-            "unexpected type \"" + name
+            "unexpected entity \"" + name
             + "\" in call to CppuType::dumpCppuGetType");
     }
 }
@@ -859,7 +859,7 @@ bool CppuType::passByReference(OUString const & name) const {
         return true;
     default:
         throw CannotDumpException(
-            "unexpected type \"" + name
+            "unexpected entity \"" + name
             + "\" in call to CppuType::passByReference");
     }
 }
@@ -3829,7 +3829,7 @@ void produce(
         break;
     default:
         throw CannotDumpException(
-            "unexpected type \"" + name + "\" in call to produce");
+            "unexpected entity \"" + name + "\" in call to produce");
     }
 }
 
