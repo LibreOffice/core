@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Pyuno_Pyuno,letter,$(SRCDIR)/wizards/com/sun/star/wizards/letter))
 
-$(eval $(call gb_Pyuno_add_files,letter,\
+$(eval $(call gb_Pyuno_add_files,letter,wizards/letter,\
 	CallWizard.py \
 	CGLetter.py \
 	CGLetterWizard.py \

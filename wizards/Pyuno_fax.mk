@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Pyuno_Pyuno,fax,$(SRCDIR)/wizards/com/sun/star/wizards/fax))
 
-$(eval $(call gb_Pyuno_add_files,fax,\
+$(eval $(call gb_Pyuno_add_files,fax,wizards/fax,\
     __init__.py \
     CallWizard.py \
     CGFax.py \

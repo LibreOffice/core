@@ -30,7 +30,7 @@ $(eval $(call gb_Pyuno_Pyuno,mailmerge,$(SRCDIR)/scripting/source/pyprov))
 
 $(eval $(call gb_Pyuno_set_componentfile,mailmerge,scripting/source/pyprov/mailmerge))
 
-$(eval $(call gb_Pyuno_add_files,mailmerge,\
+$(eval $(call gb_Pyuno_add_files,mailmerge,,\
 	mailmerge.py \
 	msgbox.py \
 	officehelper.py \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Pyuno_Pyuno,passive_python,$(SRCDIR)/desktop/test/deployment/passive))
 
-$(eval $(call gb_Pyuno_add_files,passive_python, \
+$(eval $(call gb_Pyuno_add_files,passive_python,,\
     passive_python.py \
 ))
 

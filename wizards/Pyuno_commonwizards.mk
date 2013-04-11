@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Pyuno_Pyuno,wizards,$(SRCDIR)/wizards/com/sun/star/wizards))
 
-$(eval $(call gb_Pyuno_add_files,wizards,\
+$(eval $(call gb_Pyuno_add_files,wizards,wizards,\
     __init__.py \
     common/__init__.py \
     common/ConfigGroup.py \

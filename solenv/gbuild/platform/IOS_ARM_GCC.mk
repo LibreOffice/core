@@ -295,6 +295,10 @@ endef
 
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
+# Pyuno class
+
+gb_Pyuno_PROGRAMDIRNAME := program
+
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 

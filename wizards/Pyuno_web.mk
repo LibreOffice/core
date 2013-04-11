@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Pyuno_Pyuno,web,$(SRCDIR)/wizards/com/sun/star/wizards/web))
 
-$(eval $(call gb_Pyuno_add_files,web,\
+$(eval $(call gb_Pyuno_add_files,web,wizards/web,\
 	CallWizard.py \
 	BackgroundsDialog.py \
 	ErrorHandler.py \

@@ -483,33 +483,38 @@ End
 #ifndef DISABLE_PYUNO
 
 File gid_File_Wizards_Common
-    Dir = gid_Dir_Wizards;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "wizards.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "Pyuno/wizards.filelist";
 End
 
 File gid_File_Wizards_Fax
-    Dir = gid_Dir_Wizards_Fax;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "fax.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "Pyuno/fax.filelist";
 End
 
 File gid_File_Wizards_Letter
-    Dir = gid_Dir_Wizards_Letter;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "letter.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "Pyuno/letter.filelist";
 End
 
 File gid_File_Wizards_Agenda
-    Dir = gid_Dir_Wizards_Agenda;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "agenda.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "Pyuno/agenda.filelist";
 End
 
 File gid_File_Pymailmerge
-    Dir = gid_Brand_Dir_Program;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "mailmerge.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "Pyuno/mailmerge.filelist";
 End
 #endif
 #endif

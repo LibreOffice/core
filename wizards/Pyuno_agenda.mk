@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Pyuno_Pyuno,agenda,$(SRCDIR)/wizards/com/sun/star/wizards/agenda))
 
-$(eval $(call gb_Pyuno_add_files,agenda,\
+$(eval $(call gb_Pyuno_add_files,agenda,wizards/agenda,\
     AgendaDocument.py \
     AgendaWizardDialogConst.py \
     AgendaWizardDialogImpl.py \

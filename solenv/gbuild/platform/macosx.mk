@@ -377,6 +377,10 @@ endef
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 
+# Pyuno class
+
+gb_Pyuno_PROGRAMDIRNAME := MacOS
+
 include $(GBUILDDIR)/platform/com_GCC_class.mk
 
 # vim: set noet sw=4:

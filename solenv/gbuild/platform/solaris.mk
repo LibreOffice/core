@@ -421,6 +421,10 @@ endef
 
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
+# Pyuno class
+
+gb_Pyuno_PROGRAMDIRNAME := program
+
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
 
