@@ -102,7 +102,6 @@ orcus::spreadsheet::iface::import_shared_strings* ScOrcusFactory::get_shared_str
 
 orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
 {
-    // We don't support it yet.
     return &maStyles;
 }
 
