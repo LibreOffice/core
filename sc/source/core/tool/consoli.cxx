@@ -311,7 +311,7 @@ void ScConsData::AddName( const String& rName )
             SCSIZE nMax = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
                 if (ppUsed[nArrX][nArrY])
-                    nMax = Max( nMax, ppRefs[nArrX][nArrY].GetCount() );
+                    nMax = std::max( nMax, ppRefs[nArrX][nArrY].GetCount() );
 
             for (nArrX=0; nArrX<nColCount; nArrX++)
             {
@@ -642,7 +642,7 @@ SCROW ScConsData::GetInsertCount() const
             SCSIZE nNeeded = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
                 if (ppUsed[nArrX][nArrY])
-                    nNeeded = Max( nNeeded, ppRefs[nArrX][nArrY].GetCount() );
+                    nNeeded = std::max( nNeeded, ppRefs[nArrX][nArrY].GetCount() );
 
             nInsert += nNeeded;
         }
@@ -721,7 +721,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
             SCSIZE nNeeded = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
                 if (ppUsed[nArrX][nArrY])
-                    nNeeded = Max( nNeeded, ppRefs[nArrX][nArrY].GetCount() );
+                    nNeeded = std::max( nNeeded, ppRefs[nArrX][nArrY].GetCount() );
 
             if (nNeeded)
             {

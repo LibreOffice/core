@@ -19,6 +19,7 @@
 
 
 #include <sfx2/minarray.hxx>
+#include <algorithm>
 
 // -----------------------------------------------------------------------
 
@@ -111,7 +112,7 @@ void SfxPtrArr::Append( void* aElem )
 sal_uInt16 SfxPtrArr::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
 {
     // Adjust nLen, thus to avoid deleting beyond the end
-    nLen = Min( (sal_uInt16)(nUsed-nPos), nLen );
+    nLen = std::min( (sal_uInt16)(nUsed-nPos), nLen );
 
     // simple problems require simple solutions!
     if ( nLen == 0 )

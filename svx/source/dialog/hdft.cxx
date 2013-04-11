@@ -877,7 +877,7 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
     long nFHeight = m_pBspWin->GetFtHeight();
     long nFDist   = m_pBspWin->GetFtDist();
 
-    long nHeight = Max( (long)MINBODY,
+    long nHeight = std::max( (long)MINBODY,
         static_cast<long>(m_pHeightEdit->Denormalize( m_pHeightEdit->GetValue( FUNIT_TWIP ) ) ) );
     long nDist   = m_pTurnOnBox->IsChecked() ?
         static_cast<long>(m_pDistEdit->Denormalize( m_pDistEdit->GetValue( FUNIT_TWIP ) )) : 0;
@@ -910,11 +910,11 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
     {
         // Header
         nMin = ( nH - nBB - nBT ) / 5; // 20%
-        nMax = Max( nH - nMin - nHDist - nFDist - nFHeight - nBB - nBT,
+        nMax = std::max( nH - nMin - nHDist - nFDist - nFHeight - nBB - nBT,
                     nMin );
         m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FUNIT_TWIP );
         nMin = ( nH - nBB - nBT ) / 5; // 20%
-        nDist = Max( nH - nMin - nHHeight - nFDist - nFHeight - nBB - nBT,
+        nDist = std::max( nH - nMin - nHHeight - nFDist - nFHeight - nBB - nBT,
                      long(0) );
         m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FUNIT_TWIP );
     }
@@ -922,11 +922,11 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
     {
         // Footer
         nMin = ( nH - nBT - nBB ) / 5; // 20%
-        nMax = Max( nH - nMin - nFDist - nHDist - nHHeight - nBT - nBB,
+        nMax = std::max( nH - nMin - nFDist - nHDist - nHHeight - nBT - nBB,
                     nMin );
         m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FUNIT_TWIP );
         nMin = ( nH - nBT - nBB ) / 5; // 20%
-        nDist = Max( nH - nMin - nFHeight - nHDist - nHHeight - nBT - nBB,
+        nDist = std::max( nH - nMin - nFHeight - nHDist - nHHeight - nBT - nBB,
                      long(0) );
         m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FUNIT_TWIP );
     }

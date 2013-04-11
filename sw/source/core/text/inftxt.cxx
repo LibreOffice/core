@@ -197,7 +197,7 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
 inline sal_Int32 GetMinLen( const SwTxtSizeInfo &rInf )
 {
     const sal_Int32 nInfLen = rInf.GetIdx() + rInf.GetLen();
-    return Min( rInf.GetTxt().getLength(), nInfLen );
+    return std::min( rInf.GetTxt().getLength(), nInfLen );
 }
 
 
@@ -1263,7 +1263,7 @@ sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyphen )
         nHyphStart = nHyphWrdStart = STRING_LEN;
         nHyphWrdLen = 0;
 
-        const sal_Int16 nMinimalLeading  = Max(rAttr.GetMinLead(), sal_uInt8(2));
+        const sal_Int16 nMinimalLeading  = std::max(rAttr.GetMinLead(), sal_uInt8(2));
         const sal_Int16 nMinimalTrailing = rAttr.GetMinTrail();
         lcl_InitHyphValues( aHyphVals, nMinimalLeading, nMinimalTrailing);
     }

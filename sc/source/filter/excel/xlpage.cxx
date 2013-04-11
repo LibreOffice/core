@@ -242,8 +242,8 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait, bool bStric
 
     for( const XclPaperSize* pEntry = pPaperSizeTable; pEntry != STATIC_ARRAY_END( pPaperSizeTable ); ++pEntry )
     {
-        long nWDiff = Abs( pEntry->mnWidth - nWidth );
-        long nHDiff = Abs( pEntry->mnHeight - nHeight );
+        long nWDiff = std::abs( pEntry->mnWidth - nWidth );
+        long nHDiff = std::abs( pEntry->mnHeight - nHeight );
         if( ((nWDiff <= nMaxWDiff) && (nHDiff < nMaxHDiff)) ||
             ((nWDiff < nMaxWDiff) && (nHDiff <= nMaxHDiff)) )
         {

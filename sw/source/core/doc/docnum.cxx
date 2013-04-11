@@ -559,7 +559,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // If a Position inside the special nodes array sections was calculated,
     // set it to document start instead.
     // Sections or Tables at the document start will be pushed backwards.
-    nNewPos = Max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + 2 );
+    nNewPos = std::max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + 2 );
 
     long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
     SwPaM aPam( aSttRg, aEndRg, 0, -1 );

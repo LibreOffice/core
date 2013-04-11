@@ -238,8 +238,8 @@ sal_Bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
     sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-    if (Abs(aMDPos.X() - aPos.X()) < nDrgLog &&
-        Abs(aMDPos.Y() - aPos.Y()) < nDrgLog &&
+    if (std::abs(aMDPos.X() - aPos.X()) < nDrgLog &&
+        std::abs(aMDPos.Y() - aPos.Y()) < nDrgLog &&
         !rMEvt.IsShift() && !rMEvt.IsMod2())
     {
         SdrViewEvent aVEvt;

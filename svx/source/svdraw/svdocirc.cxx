@@ -64,7 +64,7 @@ Point GetWinkPnt(const Rectangle& rR, long nWink)
         if (nWdt>nHgt) {
             if (nWdt!=0) {
                 // stop possible overruns for very large objects
-                if (Abs(nHgt)>32767 || Abs(aRetval.Y())>32767) {
+                if (std::abs(nHgt)>32767 || std::abs(aRetval.Y())>32767) {
                     aRetval.Y()=BigMulDiv(aRetval.Y(),nHgt,nWdt);
                 } else {
                     aRetval.Y()=aRetval.Y()*nHgt/nWdt;
@@ -73,7 +73,7 @@ Point GetWinkPnt(const Rectangle& rR, long nWink)
         } else {
             if (nHgt!=0) {
                 // stop possible overruns for very large objects
-                if (Abs(nWdt)>32767 || Abs(aRetval.X())>32767) {
+                if (std::abs(nWdt)>32767 || std::abs(aRetval.X())>32767) {
                     aRetval.X()=BigMulDiv(aRetval.X(),nWdt,nHgt);
                 } else {
                     aRetval.X()=aRetval.X()*nWdt/nHgt;

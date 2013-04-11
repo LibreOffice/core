@@ -1630,8 +1630,8 @@ void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, bool bClear
     if ( bInsCol || bInsRow )
     {
         ScRange aGrowSource = rOld;
-        aGrowSource.aEnd.SetCol(Min( rOld.aEnd.Col(), rNew.aEnd.Col() ));
-        aGrowSource.aEnd.SetRow(Min( rOld.aEnd.Row(), rNew.aEnd.Row() ));
+        aGrowSource.aEnd.SetCol(std::min( rOld.aEnd.Col(), rNew.aEnd.Col() ));
+        aGrowSource.aEnd.SetRow(std::min( rOld.aEnd.Row(), rNew.aEnd.Row() ));
         SCCOL nGrowX = bInsCol ? ( rNew.aEnd.Col() - rOld.aEnd.Col() ) : 0;
         SCROW nGrowY = bInsRow ? ( rNew.aEnd.Row() - rOld.aEnd.Row() ) : 0;
         UpdateGrow( aGrowSource, nGrowX, nGrowY );
@@ -2522,7 +2522,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                                     nDx, nDy, &aCBFCP, nClipStartRow );
                         }
                         nC1 = nC2 + 1;
-                        nC2 = Min((SCCOL)(nC1 + nXw), nCol2);
+                        nC2 = std::min((SCCOL)(nC1 + nXw), nCol2);
                     } while (nC1 <= nCol2);
                     if (nClipStartRow > nClipEndRow)
                         nClipStartRow = aClipRange.aStart.Row();
@@ -2531,7 +2531,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     if (nC2 > nCol2)
                         nC2 = nCol2;
                     nR1 = nR2 + 1;
-                    nR2 = Min((SCROW)(nR1 + nYw), nRow2);
+                    nR2 = std::min((SCROW)(nR1 + nYw), nRow2);
                 } while (nR1 <= nRow2);
             }
 
@@ -5059,7 +5059,7 @@ bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                 if (((ScMergeFlagAttr&)pAttrArray->pData[nIndex].pPattern->
                         GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped())
                 {
-                    SCROW nLoopEndRow = Min( nEndRow, pAttrArray->pData[nIndex].nRow );
+                    SCROW nLoopEndRow = std::min( nEndRow, pAttrArray->pData[nIndex].nRow );
                     for (SCROW nAttrRow = nAttrPos; nAttrRow <= nLoopEndRow; nAttrRow++)
                     {
                         SCCOL nTempCol = nOldCol;

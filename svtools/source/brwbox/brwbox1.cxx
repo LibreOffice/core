@@ -1070,9 +1070,9 @@ long BrowseBox::ScrollRows( long nRows )
         return 0;
 
     // compute new top row
-    long nTmpMin = Min( (long)(nTopRow + nRows), (long)(nRowCount - 1) );
+    long nTmpMin = std::min( (long)(nTopRow + nRows), (long)(nRowCount - 1) );
 
-    long nNewTopRow = Max( (long)nTmpMin, (long)0 );
+    long nNewTopRow = std::max( (long)nTmpMin, (long)0 );
 
     if ( nNewTopRow == nTopRow )
         return 0;
@@ -1083,9 +1083,9 @@ long BrowseBox::ScrollRows( long nRows )
     VisibleRowsChanged(nNewTopRow, nVisibleRows);
 
     // compute new top row again (nTopRow might have changed!)
-    nTmpMin = Min( (long)(nTopRow + nRows), (long)(nRowCount - 1) );
+    nTmpMin = std::min( (long)(nTopRow + nRows), (long)(nRowCount - 1) );
 
-    nNewTopRow = Max( (long)nTmpMin, (long)0 );
+    nNewTopRow = std::max( (long)nTmpMin, (long)0 );
 
     StartScroll();
 
@@ -1100,8 +1100,8 @@ long BrowseBox::ScrollRows( long nRows )
         pVScroll->SetThumbPos( nTopRow );
 
         if( pDataWin->GetBackground().IsScrollable() &&
-            Abs( nDeltaY ) > 0 &&
-            Abs( nDeltaY ) < pDataWin->GetSizePixel().Height() )
+            std::abs( nDeltaY ) > 0 &&
+            std::abs( nDeltaY ) < pDataWin->GetSizePixel().Height() )
         {
             pDataWin->Scroll( 0, (short)-nDeltaY, SCROLL_FLAGS );
         }
@@ -1348,7 +1348,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, sal_Bool bDoPaint )
         nCurRow = BROWSER_ENDOFSELECTION;
     else if ( nRow < nCurRow )
     {
-        nCurRow -= Min( nCurRow - nRow, nNumRows );
+        nCurRow -= std::min( nCurRow - nRow, nNumRows );
         // with the above nCurRow points a) to the first row after the removed block or b) to the same line
         // as before, but moved up nNumRows
         // case a) needs an additional correction if the last n lines were deleted, as 'the first row after the
@@ -1723,7 +1723,7 @@ void BrowseBox::SelectAll()
         Rectangle aHighlightRect;
         sal_uInt16 nVisibleRows =
             (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
-        for ( long nRow = Max( nTopRow, uRow.pSel->FirstSelected() );
+        for ( long nRow = std::max( nTopRow, uRow.pSel->FirstSelected() );
               nRow != BROWSER_ENDOFSELECTION && nRow < nTopRow + nVisibleRows;
               nRow = uRow.pSel->NextSelected() )
             aHighlightRect.Union( Rectangle(

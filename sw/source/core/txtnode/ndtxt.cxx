@@ -2307,8 +2307,8 @@ void SwTxtNode::GCAttr()
             && ( bAll || pHt->Which() == RES_TXTATR_INETFMT ) )
         {
             bChanged = true;
-            nMin = Min( nMin, *pHt->GetStart() );
-            nMax = Max( nMax, *pHt->GetEnd() );
+            nMin = std::min( nMin, *pHt->GetStart() );
+            nMax = std::max( nMax, *pHt->GetEnd() );
             DestroyAttr( m_pSwpHints->Cut(i) );
             --i;
         }

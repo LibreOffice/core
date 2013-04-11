@@ -67,8 +67,8 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
     if( mbOutputClipped )
         return;
 
-    const long  nDistX = Max( rDist.Width(), 1L );
-    const long  nDistY = Max( rDist.Height(), 1L );
+    const long  nDistX = std::max( rDist.Width(), 1L );
+    const long  nDistY = std::max( rDist.Height(), 1L );
     long        nX = ( rRect.Left() >= aDstRect.Left() ) ? rRect.Left() : ( rRect.Left() + ( ( aDstRect.Left() - rRect.Left() ) / nDistX ) * nDistX );
     long        nY = ( rRect.Top() >= aDstRect.Top() ) ? rRect.Top() : ( rRect.Top() + ( ( aDstRect.Top() - rRect.Top() ) / nDistY ) * nDistY );
     const long  nRight = aDstRect.Right();
@@ -327,7 +327,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
         Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
         const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
-        const long      nBaseExtent = Max( FRound( aDPISize.Width() / 300. ), 1L );
+        const long      nBaseExtent = std::max( FRound( aDPISize.Width() / 300. ), 1L );
         long            nMove;
         const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
             ( nTransparencePercent < 38 ) ? 25 :

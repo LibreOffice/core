@@ -992,7 +992,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                 //! should be limited to whole cells in both directions
                 long nLeft = aPixRect.Left();
                 long nRight = pView->GetGridWidth(eHWhich) - aPixRect.Right();
-                nSizeXPix = aPixRect.GetWidth() + 2 * Min( nLeft, nRight );
+                nSizeXPix = aPixRect.GetWidth() + 2 * std::min( nLeft, nRight );
             }
             else if ( bGrowToLeft )
                 nSizeXPix = aPixRect.Right();   // space that's available in the window when growing to the left

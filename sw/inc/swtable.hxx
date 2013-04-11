@@ -176,7 +176,7 @@ public:
     void SetTableModel( sal_Bool bNew ){ bNewModel = bNew; }
     sal_Bool IsNewModel() const { return bNewModel; }
 
-    sal_uInt16 GetRowsToRepeat() const { return Min( (sal_uInt16)GetTabLines().size(), nRowsToRepeat ); }
+    sal_uInt16 GetRowsToRepeat() const { return std::min( (sal_uInt16)GetTabLines().size(), nRowsToRepeat ); }
     sal_uInt16 _GetRowsToRepeat() const { return nRowsToRepeat; }
     void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { nRowsToRepeat = nNumOfRows; }
 

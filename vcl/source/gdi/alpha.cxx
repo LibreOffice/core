@@ -106,8 +106,8 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
 
                     if( pWriteAcc )
                     {
-                        const long  nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                        const long  nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                        const long  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                        const long  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
                         const long  nSrcEndX = aRectSrc.Left() + nWidth;
                         const long  nSrcEndY = aRectSrc.Top() + nHeight;
                         long        nDstY = aRectDst.Top();
@@ -136,8 +136,8 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
 
                 if( pWriteAcc )
                 {
-                    const long  nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                    const long  nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                    const long  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                    const long  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
                     const long  nSrcX = aRectSrc.Left();
                     const long  nSrcY = aRectSrc.Top();
                     const long  nSrcEndX1 = nSrcX + nWidth - 1L;
@@ -197,8 +197,8 @@ sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency
     if( pMaskAcc && pAcc )
     {
         const BitmapColor   aReplace( cReplaceTransparency );
-        const long          nWidth = Min( pMaskAcc->Width(), pAcc->Width() );
-        const long          nHeight = Min( pMaskAcc->Height(), pAcc->Height() );
+        const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
+        const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
         const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
 
         for( long nY = 0L; nY < nHeight; nY++ )

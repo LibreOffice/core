@@ -577,14 +577,14 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
 
             if ( bFlyCmp )
             {
-                _orObjAscent = Max( _orObjAscent, nPortionAsc );
-                _orObjDescent = Max( _orObjDescent, nPortionDesc );
+                _orObjAscent = std::max( _orObjAscent, nPortionAsc );
+                _orObjDescent = std::max( _orObjDescent, nPortionDesc );
             }
 
             if ( !pTmpPortion->IsFlyCntPortion() && !pTmpPortion->IsGrfNumPortion() )
             {
-                _orAscent = Max( _orAscent, nPortionAsc );
-                _orDescent = Max( _orDescent, nPortionDesc );
+                _orAscent = std::max( _orAscent, nPortionAsc );
+                _orDescent = std::max( _orDescent, nPortionDesc );
             }
         }
         pTmpPortion = pTmpPortion->GetPortion();
@@ -883,7 +883,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 else
                     break;
             }
-            nChg = Min( nChg, nNextCTLScriptStart );
+            nChg = std::min( nChg, nNextCTLScriptStart );
         }
 
         // special case for dotted circle since it can be used with complex

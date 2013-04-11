@@ -1743,7 +1743,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             if ( nTxtW >= nBtnW )
             {
                 const long nMinDelta = 10;
-                long nDelta = Max( nTxtW - nBtnW, nMinDelta );
+                long nDelta = std::max( nTxtW - nBtnW, nMinDelta );
                 sal_uInt32 i = 0;
                 Window* pWins[] =
                 {
@@ -2043,12 +2043,12 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             Size aBtnSz = maOKBtn.GetSizePixel();
             Point aEditPnt = maContentML.GetPosPixel();
 
-            long nNewHeight = Max( aWinSz.Height() - aEditPnt.Y() - 3 * a3Sz.Height() - aBtnSz.Height(), mnMinHeight );
+            long nNewHeight = std::max( aWinSz.Height() - aEditPnt.Y() - 3 * a3Sz.Height() - aBtnSz.Height(), mnMinHeight );
             long nNewWidth = aWinSz.Width() - 4 * a3Sz.Width();
 
             Size aNewSize( nNewWidth, nNewHeight );
             maContentML.SetSizePixel( aNewSize );
-            Point aNewPoint( Max( aEditPnt.X() + aNewSize.Width() - aBtnSz.Width(), aEditPnt.X() ),
+            Point aNewPoint( std::max( aEditPnt.X() + aNewSize.Width() - aBtnSz.Width(), aEditPnt.X() ),
                              aEditPnt.Y() + aNewSize.Height() + a3Sz.Height() );
             maOKBtn.SetPosPixel( aNewPoint );
         }

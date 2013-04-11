@@ -147,7 +147,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     // dynamic length because of the different languages
     long nWidth1 = maIssuedToLabelFI.GetTextWidth( maIssuedToLabelFI.GetText() );
     long nWidth2 = maIssuedByLabelFI.GetTextWidth( maIssuedByLabelFI.GetText() );
-    long nNewWidth = Max( nWidth1, nWidth2 ) + 5;
+    long nNewWidth = std::max( nWidth1, nWidth2 ) + 5;
     Size aNewSize = maIssuedToLabelFI.GetSizePixel();
     aNewSize.Width() = nNewWidth;
     maIssuedToLabelFI.SetSizePixel( aNewSize );

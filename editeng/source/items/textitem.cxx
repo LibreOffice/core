@@ -2491,7 +2491,7 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_ESC:
         {
             sal_Int16 nVal = sal_Int16();
-            if( (rVal >>= nVal) && (Abs(nVal) <= 101))
+            if( (rVal >>= nVal) && (std::abs(nVal) <= 101))
                 nEsc = nVal;
             else
                 return sal_False;

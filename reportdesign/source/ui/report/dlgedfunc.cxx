@@ -758,8 +758,8 @@ sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         checkMovementAllowed(rMEvt);
 
     if ( !m_rView.AreObjectsMarked() &&
-         Abs(m_aMDPos.X() - aPos.X()) < nHitLog &&
-         Abs(m_aMDPos.Y() - aPos.Y()) < nHitLog &&
+         std::abs(m_aMDPos.X() - aPos.X()) < nHitLog &&
+         std::abs(m_aMDPos.Y() - aPos.Y()) < nHitLog &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )
     {
         SdrPageView* pPV = m_rView.GetSdrPageView();

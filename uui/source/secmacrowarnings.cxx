@@ -231,7 +231,7 @@ void MacroWarning::InitControls()
     if ( nTxtW >= nBtnW )
     {
         // broaden the button
-        long nDelta = Max( nTxtW - nBtnW, nOffset/3 );
+        long nDelta = std::max( nTxtW - nBtnW, nOffset/3 );
         Size aNewSize = maViewSignsBtn.GetSizePixel();
         aNewSize.Width() += nDelta;
         maViewSignsBtn.SetSizePixel( aNewSize );
@@ -253,7 +253,7 @@ void MacroWarning::InitControls()
     long nTxtW2 = maDisableBtn.GetTextWidth( sText2 );
     if ( sText2.Search( '~' ) == STRING_NOTFOUND )
         nTxtW2 += nOffset;
-    nTxtW = Max( nTxtW1, nTxtW2 );
+    nTxtW = std::max( nTxtW1, nTxtW2 );
     nBtnW = maEnableBtn.GetSizePixel().Width();
     if ( nTxtW > nBtnW )
     {
@@ -284,10 +284,10 @@ void MacroWarning::FitControls()
     if ( mbShowSignatures )
     {
         aMinSize = maSignsFI.CalcMinimumSize( maSignsFI.GetSizePixel().Width() );
-        nTxtH = Max( aMinSize.Height(), maViewSignsBtn.GetSizePixel().Height() );
+        nTxtH = std::max( aMinSize.Height(), maViewSignsBtn.GetSizePixel().Height() );
         nTxtH += a3Size.Height() / 2;
         nCtrlH = maSignsFI.GetSizePixel().Height();
-        nDelta = Max( nCtrlH - nTxtH, static_cast< long >( -100 ) ); // not too large
+        nDelta = std::max( nCtrlH - nTxtH, static_cast< long >( -100 ) ); // not too large
         aNewSize = maSignsFI.GetSizePixel();
         aNewSize.Height() -= nDelta;
         maSignsFI.SetSizePixel( aNewSize );

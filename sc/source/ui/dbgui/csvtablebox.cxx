@@ -333,33 +333,33 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
     switch( eType )
     {
         case CSVCMD_SETPOSCOUNT:
-            maData.mnPosCount = Max( nParam1, sal_Int32( 1 ) );
+            maData.mnPosCount = std::max( nParam1, sal_Int32( 1 ) );
             ImplSetPosOffset( GetFirstVisPos() );
         break;
         case CSVCMD_SETPOSOFFSET:
             ImplSetPosOffset( nParam1 );
         break;
         case CSVCMD_SETHDRWIDTH:
-            maData.mnHdrWidth = Max( nParam1, sal_Int32( 0 ) );
+            maData.mnHdrWidth = std::max( nParam1, sal_Int32( 0 ) );
             ImplSetPosOffset( GetFirstVisPos() );
         break;
         case CSVCMD_SETCHARWIDTH:
-            maData.mnCharWidth = Max( nParam1, sal_Int32( 1 ) );
+            maData.mnCharWidth = std::max( nParam1, sal_Int32( 1 ) );
             ImplSetPosOffset( GetFirstVisPos() );
         break;
         case CSVCMD_SETLINECOUNT:
-            maData.mnLineCount = Max( nParam1, sal_Int32( 1 ) );
+            maData.mnLineCount = std::max( nParam1, sal_Int32( 1 ) );
             ImplSetLineOffset( GetFirstVisLine() );
         break;
         case CSVCMD_SETLINEOFFSET:
             ImplSetLineOffset( nParam1 );
         break;
         case CSVCMD_SETHDRHEIGHT:
-            maData.mnHdrHeight = Max( nParam1, sal_Int32( 0 ) );
+            maData.mnHdrHeight = std::max( nParam1, sal_Int32( 0 ) );
             ImplSetLineOffset( GetFirstVisLine() );
         break;
         case CSVCMD_SETLINEHEIGHT:
-            maData.mnLineHeight = Max( nParam1, sal_Int32( 1 ) );
+            maData.mnLineHeight = std::max( nParam1, sal_Int32( 1 ) );
             ImplSetLineOffset( GetFirstVisLine() );
         break;
         case CSVCMD_MOVERULERCURSOR:

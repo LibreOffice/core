@@ -522,7 +522,7 @@ FillControl::FillControl( Window* pParent, WinBits nStyle ) :
     Point aAttrPnt = pLbFillAttr->GetPosPixel();
     SetSizePixel(
         Size( aAttrPnt.X() + aAttrSize.Width(),
-              Max( aAttrSize.Height(), aTypeSize.Height() ) ) );
+              std::max( aAttrSize.Height(), aTypeSize.Height() ) ) );
 
     pLbFillType->SetSelectHdl( LINK( this, FillControl, SelectFillTypeHdl ) );
     pLbFillAttr->SetSelectHdl( LINK( this, FillControl, SelectFillAttrHdl ) );
@@ -822,7 +822,7 @@ void FillControl::DataChanged( const DataChangedEvent& rDCEvt )
 
         SetSizePixel(
             Size( aAttrPnt.X() + aAttrSize.Width(),
-                Max( aAttrSize.Height(), aTypeSize.Height() ) ) );
+                std::max( aAttrSize.Height(), aTypeSize.Height() ) ) );
     }
     Window::DataChanged( rDCEvt );
 }

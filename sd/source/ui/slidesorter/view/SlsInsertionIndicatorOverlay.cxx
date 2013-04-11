@@ -138,7 +138,7 @@ void InsertionIndicatorOverlay::Create (
         RoundToInt(aOriginalPreviewSize.Width()*nPreviewScale),
         RoundToInt(aOriginalPreviewSize.Height()*nPreviewScale));
     const sal_Int32 nOffset (
-        RoundToInt(Min(aPreviewSize.Width(),aPreviewSize.Height()) * gnPreviewOffsetScale));
+        RoundToInt(std::min(aPreviewSize.Width(),aPreviewSize.Height()) * gnPreviewOffsetScale));
 
     // Determine size and offset depending on the number of previews.
     sal_Int32 nCount (rRepresentatives.size());

@@ -886,7 +886,7 @@ void Window::SetZoomedPointFont( const Font& rFont )
         // Use another font if the representation is to be scaled,
         // and the actual font is not scalable
         FontMetric aMetric = GetFontMetric();
-        long       nFontDiff = Abs( GetFont().GetSize().Height()-aMetric.GetSize().Height() );
+        long       nFontDiff = std::abs( GetFont().GetSize().Height()-aMetric.GetSize().Height() );
         if ( (aMetric.GetType() == TYPE_RASTER) && (nFontDiff >= 2) )
         {
             sal_uInt16 nType;

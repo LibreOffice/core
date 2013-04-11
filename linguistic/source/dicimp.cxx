@@ -698,7 +698,7 @@ sal_Bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > x
             DBG_ASSERT(!bNeedEntries, "lng : entries still not loaded");
 
             if (nCount >= aEntries.getLength())
-                aEntries.realloc( Max(2 * nCount, nCount + 32) );
+                aEntries.realloc( std::max(2 * nCount, nCount + 32) );
             uno::Reference< XDictionaryEntry > *pEntry = aEntries.getArray();
 
             // shift old entries right

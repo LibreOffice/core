@@ -158,7 +158,7 @@ void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
     Region*         pOldClip = !maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL;
 
     aVDev.SetOutputSizePixel( maSzPix, sal_False );
-    nPos = Min( nPos, (sal_uLong) mpParent->Count() - 1UL );
+    nPos = std::min( nPos, (sal_uLong) mpParent->Count() - 1UL );
 
     for( sal_uLong i = 0UL; i <= nPos; i++ )
         ImplDraw( i, &aVDev );
@@ -195,7 +195,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
         Size                    aSizePix;
         Size                    aBmpSizePix;
         const sal_uLong             nLastPos = mpParent->Count() - 1;
-        const AnimationBitmap&  rAnm = mpParent->Get( (sal_uInt16) ( mnActPos = Min( nPos, nLastPos ) ) );
+        const AnimationBitmap&  rAnm = mpParent->Get( (sal_uInt16) ( mnActPos = std::min( nPos, nLastPos ) ) );
 
         ImplGetPosSize( rAnm, aPosPix, aSizePix );
 

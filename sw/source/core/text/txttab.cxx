@@ -489,7 +489,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     const bool bTabOverMargin = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVER_MARGIN);
     // If the tab position is larger than the right margin, it gets scaled down by default.
     // However, if compat mode enabled, we allow tabs to go over the margin: the rest of the paragraph is not broken into lines.
-    const KSHORT nRight = bTabOverMargin ? GetTabPos() : Min(GetTabPos(), rInf.Width());
+    const KSHORT nRight = bTabOverMargin ? GetTabPos() : std::min(GetTabPos(), rInf.Width());
     const SwLinePortion *pPor = GetPortion();
 
     KSHORT nPorWidth = 0;

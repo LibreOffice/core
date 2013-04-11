@@ -2873,8 +2873,8 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         {
             SwRect aTmp( rOld );
             aTmp.Union( aFrm );
-            aTmp.Left(  Min(aFrm.Left(), rOld.Left()) );
-            aTmp.Right( Max(aFrm.Left(), rOld.Left()) );
+            aTmp.Left(  std::min(aFrm.Left(), rOld.Left()) );
+            aTmp.Right( std::max(aFrm.Left(), rOld.Left()) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
         SwTwips nOld = rOld.Right();
@@ -2883,16 +2883,16 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         {
             SwRect aTmp( rOld );
             aTmp.Union( aFrm );
-            aTmp.Left(  Min(nNew, nOld) );
-            aTmp.Right( Max(nNew, nOld) );
+            aTmp.Left(  std::min(nNew, nOld) );
+            aTmp.Right( std::max(nNew, nOld) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
         if ( rOld.Top() != aFrm.Top() )
         {
             SwRect aTmp( rOld );
             aTmp.Union( aFrm );
-            aTmp.Top(    Min(aFrm.Top(), rOld.Top()) );
-            aTmp.Bottom( Max(aFrm.Top(), rOld.Top()) );
+            aTmp.Top(    std::min(aFrm.Top(), rOld.Top()) );
+            aTmp.Bottom( std::max(aFrm.Top(), rOld.Top()) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
         nOld = rOld.Bottom();
@@ -2901,8 +2901,8 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         {
             SwRect aTmp( rOld );
             aTmp.Union( aFrm );
-            aTmp.Top(    Min(nNew, nOld) );
-            aTmp.Bottom( Max(nNew, nOld) );
+            aTmp.Top(    std::min(nNew, nOld) );
+            aTmp.Bottom( std::max(nNew, nOld) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
     }
@@ -3282,8 +3282,8 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
                 nLow += ((SwTxtFrm*)pLow)->GetParHeight()-pLow->Prt().Height();
             else if( pLow->IsSctFrm() && ((SwSectionFrm*)pLow)->IsUndersized() )
                 nLow += ((SwSectionFrm*)pLow)->Undersize();
-            nFlyAdd = Max( 0L, nFlyAdd - nLow );
-            nFlyAdd = Max( nFlyAdd, ::CalcHeightWidthFlys( pLow ) );
+            nFlyAdd = std::max( 0L, nFlyAdd - nLow );
+            nFlyAdd = std::max( nFlyAdd, ::CalcHeightWidthFlys( pLow ) );
             nHeight += nLow;
             pLow = pLow->GetNext();
         } while ( pLow );
@@ -3319,7 +3319,7 @@ SwTwips CalcRowRstHeight( SwLayoutFrm *pRow )
     SwLayoutFrm *pLow = (SwLayoutFrm*)pRow->Lower();
     while ( pLow )
     {
-        nRstHeight = Min( nRstHeight, ::lcl_CalcCellRstHeight( pLow ) );
+        nRstHeight = std::min( nRstHeight, ::lcl_CalcCellRstHeight( pLow ) );
         pLow = (SwLayoutFrm*)pLow->GetNext();
     }
     return nRstHeight;

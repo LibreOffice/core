@@ -228,7 +228,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     SwTwips nLeft = aLRSpace.GetLeft();
     SwTwips nRight = aLRSpace.GetRight();
     SwTwips nDiff = pRep->GetSpace() - nRight - nLeft - nWidth;
-    if(nAlign != text::HoriOrientation::FULL && Abs(nDiff) > 2)
+    if(nAlign != text::HoriOrientation::FULL && std::abs(nDiff) > 2)
     {
         SwTwips nLR = pRep->GetSpace() - nWidth;
         switch ( nAlign )
@@ -479,9 +479,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             {
                 aBox = *(SvxBoxItem*)pBoxItem;
                 if ( !rReq.IsAPI() )
-                    aBox.SetDistance( Max(rCoreBox.GetDistance(),sal_uInt16(55)) );
+                    aBox.SetDistance( std::max(rCoreBox.GetDistance(),sal_uInt16(55)) );
                 else if ( aBox.GetDistance() < MIN_BORDER_DIST )
-                    aBox.SetDistance( Max(rCoreBox.GetDistance(),(sal_uInt16)MIN_BORDER_DIST)  );
+                    aBox.SetDistance( std::max(rCoreBox.GetDistance(),(sal_uInt16)MIN_BORDER_DIST)  );
             }
             else
                 OSL_ENSURE( !this, "where is BoxItem?" );

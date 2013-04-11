@@ -568,7 +568,7 @@ void ScInputWindow::Resize()
         long nLeft  = aTextWindow.GetPosPixel().X();
         Size aSize  = aTextWindow.GetSizePixel();
 
-        aSize.Width() = Max( ((long)(nWidth - nLeft - 5)), (long)0 );
+        aSize.Width() = std::max( ((long)(nWidth - nLeft - 5)), (long)0 );
 
         aTextWindow.SetSizePixel( aSize );
         aTextWindow.Invalidate();
@@ -951,7 +951,7 @@ void ScInputBarGroup::Resize()
     long nLeft  = GetPosPixel().X();
 
     Size aSize  = GetSizePixel();
-    aSize.Width() = Max( ((long)(nWidth - nLeft - LEFT_OFFSET)), (long)0 );
+    aSize.Width() = std::max( ((long)(nWidth - nLeft - LEFT_OFFSET)), (long)0 );
 
     aScrollBar.SetPosPixel(Point( aSize.Width() - aButton.GetSizePixel().Width(), aButton.GetSizePixel().Height() ) );
 
@@ -1889,7 +1889,7 @@ void ScTextWnd::SetTextString( const String& rNewString )
                 long nSize1 = GetTextWidth(aString);
                 long nSize2 = GetTextWidth(rNewString);
                 if ( nSize1>0 && nSize2>0 )
-                    nTextSize = Max( nSize1, nSize2 );
+                    nTextSize = std::max( nSize1, nSize2 );
                 else
                     nTextSize = GetOutputSize().Width();        // Ueberlauf
 

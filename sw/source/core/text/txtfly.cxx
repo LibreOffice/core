@@ -294,7 +294,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
     // fnGetBottom is top + height
     long nTmpBottom = (rLine.*fnRect->fnGetBottom)();
 
-    Range aRange( Min( nTmpTop, nTmpBottom ), Max( nTmpTop, nTmpBottom ) );
+    Range aRange( std::min( nTmpTop, nTmpBottom ), std::max( nTmpTop, nTmpBottom ) );
 
     LongDqPtr pTmp = pTextRanger[ 0 ]->GetTextRanges( aRange );
 
@@ -972,8 +972,8 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
                                     pAnchoredObj->GetFrmFmt().GetVertOrient();
                     if( text::VertOrientation::BOTTOM != rTmpFmt.GetVertOrient() )
                         nMinBottom = ( bVert && nMinBottom ) ?
-                                     Min( nMinBottom, aBound.Left() ) :
-                                     Max( nMinBottom, (aBound.*fnRect->fnGetBottom)() );
+                                     std::min( nMinBottom, aBound.Left() ) :
+                                     std::max( nMinBottom, (aBound.*fnRect->fnGetBottom)() );
                 }
 
                 bOn = sal_True;
@@ -1020,7 +1020,7 @@ SwTwips SwTxtFly::CalcMinBottom() const
                 {
                     const SwRect aBound( pAnchoredObj->GetObjRectWithSpaces() );
                     if( aBound.Top() < nEndOfFrm )
-                        nRet = Max( nRet, aBound.Bottom() );
+                        nRet = std::max( nRet, aBound.Bottom() );
                 }
             }
         }

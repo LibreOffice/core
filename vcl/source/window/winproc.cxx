@@ -1278,7 +1278,7 @@ static long ImplHandleExtTextInput( Window* pWindow,
 
     // Test for changes
     sal_Bool        bOnlyCursor = sal_False;
-    xub_StrLen  nMinLen = Min( pWinData->mpExtOldText->getLength(), sal_Int32(rText.Len()) );
+    xub_StrLen  nMinLen = std::min( pWinData->mpExtOldText->getLength(), sal_Int32(rText.Len()) );
     xub_StrLen  nDeltaStart = 0;
     while ( nDeltaStart < nMinLen )
     {

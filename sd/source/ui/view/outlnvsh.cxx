@@ -1094,7 +1094,7 @@ long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     long          nViewWidth    = pWin->PixelToLogic(
         pWin->GetSizePixel()).Width();
     long          nTextWidth    = pOlView->GetPaperWidth();
-    nViewWidth                  = Max(nViewWidth, nTextWidth);
+    nViewWidth                  = std::max(nViewWidth, nTextWidth);
     long          nCurrentPos   = pOutlinerView->GetVisArea().Left();
     long          nTargetPos    = (long)(fX * nViewWidth);
     long          nDelta        = nTargetPos - nCurrentPos;

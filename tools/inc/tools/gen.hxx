@@ -498,8 +498,8 @@ inline Point Rectangle::TopCenter() const
     if ( IsEmpty() )
         return Point( nLeft, nTop );
     else
-        return Point( Min( nLeft, nRight ) + Abs( (nRight - nLeft)/2 ),
-                      Min( nTop,  nBottom) );
+        return Point( std::min( nLeft, nRight ) + std::abs( (nRight - nLeft)/2 ),
+                      std::min( nTop,  nBottom) );
 }
 
 inline Point Rectangle::BottomCenter() const
@@ -507,8 +507,8 @@ inline Point Rectangle::BottomCenter() const
     if ( IsEmpty() )
         return Point( nLeft, nTop );
     else
-        return Point( Min( nLeft, nRight ) + Abs( (nRight - nLeft)/2 ),
-                      Max( nTop,  nBottom) );
+        return Point( std::min( nLeft, nRight ) + std::abs( (nRight - nLeft)/2 ),
+                      std::max( nTop,  nBottom) );
 }
 
 inline Point Rectangle::LeftCenter() const
@@ -516,7 +516,7 @@ inline Point Rectangle::LeftCenter() const
     if ( IsEmpty() )
         return Point( nLeft, nTop );
     else
-        return Point( Min( nLeft, nRight ), nTop + (nBottom - nTop)/2 );
+        return Point( std::min( nLeft, nRight ), nTop + (nBottom - nTop)/2 );
 }
 
 inline Point Rectangle::RightCenter() const
@@ -524,7 +524,7 @@ inline Point Rectangle::RightCenter() const
     if ( IsEmpty() )
         return Point( nLeft, nTop );
     else
-        return Point( Max( nLeft, nRight ), nTop + (nBottom - nTop)/2 );
+        return Point( std::max( nLeft, nRight ), nTop + (nBottom - nTop)/2 );
 }
 
 inline Point Rectangle::Center() const

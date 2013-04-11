@@ -555,7 +555,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
             rData.nSwHLo = sal::static_int_cast< sal_uInt32 >(cMinHdFtHeight);
     }
     else // kein Header -> Up einfach uebernehmen
-        rData.nSwUp = Abs(nWWUp);
+        rData.nSwUp = std::abs(nWWUp);
 
     rData.bHasFooter = (rSection.maSep.grpfIhdt &
         (WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST)) != 0;
@@ -576,7 +576,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
             rData.nSwFUp = sal::static_int_cast< sal_uInt32 >(cMinHdFtHeight);
     }
     else // kein Footer -> Lo einfach uebernehmen
-        rData.nSwLo = Abs(nWWLo);
+        rData.nSwLo = std::abs(nWWLo);
 }
 
 void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
@@ -600,7 +600,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             else
             {
                 // #i48832# - set correct spacing between header and body.
-                const SwTwips nHdLowerSpace( Abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
+                const SwTwips nHdLowerSpace( std::abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
                 pHdFmt->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
                 aHdUL.SetLower( static_cast< sal_uInt16 >(nHdLowerSpace) );
                 pHdFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
@@ -627,7 +627,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             else
             {
                 // #i48832# - set correct spacing between footer and body.
-                const SwTwips nFtUpperSpace( Abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
+                const SwTwips nFtUpperSpace( std::abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
                 pFtFmt->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwFUp + nFtUpperSpace));
                 aFtUL.SetUpper( static_cast< sal_uInt16 >(nFtUpperSpace) );
                 pFtFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
