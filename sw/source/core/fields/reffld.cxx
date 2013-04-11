@@ -993,14 +993,9 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
         GetFieldIdsFromDoc( rDestDoc, aIds );
         GetFieldIdsFromDoc( rDoc, aDstIds );
 
-        // Define the mappings now
-        sal_uInt16 nMaxDstId = -1;
-        if ( !aIds.empty() )
-            nMaxDstId = *aIds.rbegin();
-
-        // Map all the src fields to their value + nMaxDstId
+        // Map all the new src fields to the next available unused id
         for ( std::set<sal_uInt16>::iterator pIt = aDstIds.begin(); pIt != aDstIds.end(); ++pIt )
-            AddId( ++nMaxDstId, *pIt );
+            AddId( GetFirstUnusedId(aIds), *pIt );
 
         // Change the Sequence number of all the SetExp fields in the destination document
         SwFieldType* pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
@@ -1023,9 +1018,9 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
     bInit = true;
 }
 
-/// Get the lowest unused ID in the passed set.
+/// Get the lowest number unused in the passed set.
 /// @param[in] rIds The set of used ID numbers.
-/// @returns The lowest unused ID.
+/// @returns The lowest number unused by the passed set
 sal_uInt16 _RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
 {
     sal_uInt16 num(0);
