@@ -72,7 +72,11 @@ string processccargs(vector<string> rawargs) {
     string args=" -nologo";
     // TODO: should these options be enabled globally?
     args.append(" -EHsc");
-    args.append(" -MD");
+    const char *const pDebugRuntime(getenv("MSVC_USE_DEBUG_RUNTIME"));
+    if (pDebugRuntime && !strcmp(pDebugRuntime, "TRUE"))
+        args.append(" -MDd");
+    else
+        args.append(" -MD");
     args.append(" -Gy");
     args.append(" -Zc:wchar_t-");
     args.append(" -Ob1 -Oxs -Oy-");

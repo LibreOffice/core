@@ -224,11 +224,10 @@ gb_GLOBALDEFS += \
 	-DLIBO_INTERNAL_ONLY \
 
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
-gb_GLOBALDEFS += -DDBG_UTIL \
+gb_GLOBALDEFS += -DDBG_UTIL
 
-ifneq ($(COM),MSC)
-gb_GLOBALDEFS += -D_DEBUG \
-
+ifneq ($(COM)-$(MSVC_USE_DEBUG_RUNTIME),MSC-)
+gb_GLOBALDEFS += -D_DEBUG
 endif
 endif
 

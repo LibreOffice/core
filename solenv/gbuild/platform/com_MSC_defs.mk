@@ -148,7 +148,7 @@ gb_CFLAGS := \
 	-GR \
 	-Gs \
 	-GS \
-	-MD \
+	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
 	-wd4127 \
@@ -181,7 +181,7 @@ gb_CXXFLAGS := \
 	-Gs \
 	-GS \
 	-Gy \
-	-MD \
+	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
 	-wd4127 \

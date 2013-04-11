@@ -59,15 +59,9 @@ $(eval $(call gb_Library_use_system_win32_libs,oleautobridge,\
 ))
 
 ifeq ($(COM),MSC)
-ifneq ($(USE_DEBUG_RUNTIME),)
 $(eval $(call gb_Library_add_libs,oleautobridge,\
-	$(ATL_LIB)/atlsd.lib \
+	$(ATL_LIB)/$(if $(MSVC_USE_DEBUG_RUNTIME),atlsd.lib,atls.lib) \
 ))
-else
-$(eval $(call gb_Library_add_libs,oleautobridge,\
-	$(ATL_LIB)/atls.lib \
-))
-endif
 endif
 
 $(eval $(call gb_Library_add_exception_objects,oleautobridge,\

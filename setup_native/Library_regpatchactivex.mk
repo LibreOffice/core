@@ -14,7 +14,7 @@ $(eval $(call gb_Library_add_defs,regpatchactivex,\
 ))
 
 $(eval $(call gb_Library_add_cxxflags,regpatchactivex,\
-	/MT \
+	$(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
 ))
 
 $(eval $(call gb_Library_add_ldflags,regpatchactivex,\

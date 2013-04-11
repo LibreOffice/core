@@ -218,8 +218,12 @@ $(call gb_Helper_abbreviate_dirs,\
 	; exit $$RC)
 endef
 
+define gb_MSVCRT_subst
+$(if $(MSVC_USE_DEBUG_RUNTIME),$(subst msvcrt,msvcrtd,$(subst msvcprt,msvcprtd,$(subst libcmt,libcmtd,$(subst libcpmt,libcpmtd,$(subst msvcmrt,msvcmrtd,$(1)))))),$(1))
+endef
+
 define gb_LinkTarget_use_system_win32_libs
-$(call gb_LinkTarget_add_libs,$(1),$(foreach lib,$(2),$(lib).lib))
+$(call gb_LinkTarget_add_libs,$(1),$(foreach lib,$(2),$(call gb_MSVCRT_subst,$(lib)).lib))
 endef
 
 # Flags common for PE executables (EXEs and DLLs) 

@@ -68,14 +68,8 @@ $(eval $(call gb_Library_use_system_win32_libs,so_activex_x64,\
 	uuid \
 ))
 
-ifneq ($(USE_DEBUG_RUNTIME),)
 $(eval $(call gb_Library_add_libs,so_activex_x64,\
-	$(ATL_LIB)/amd64/atlsd.lib \
+	$(ATL_LIB)/amd64/$(if $(MSVC_USE_DEBUG_RUNTIME),atlsd.lib,atls.lib) \
 ))
-else
-$(eval $(call gb_Library_add_libs,so_activex_x64,\
-	$(ATL_LIB)/amd64/atls.lib \
-))
-endif
 
 # vim:set noet sw=4 ts=4:

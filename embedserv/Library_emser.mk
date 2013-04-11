@@ -58,15 +58,9 @@ $(eval $(call gb_Library_use_system_win32_libs,emser,\
 	uuid \
 ))
 
-ifeq ($(USE_DEBUG_RUNTIME),)
 $(eval $(call gb_Library_add_libs,emser,\
-	$(ATL_LIB)/atls.lib \
+	$(ATL_LIB)/$(if $(MSVC_USE_DEBUG_RUNTIME),atlsd.lib,atls.lib) \
 ))
-else
-$(eval $(call gb_Library_add_libs,emser,\
-	$(ATL_LIB)/atlsd.lib \
-))
-endif
 
 $(eval $(call gb_Library_add_ldflags,emser,\
 	-LIBPATH:$(ATL_LIB) \

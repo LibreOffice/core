@@ -16,7 +16,7 @@ $(eval $(call gb_Library_add_defs,reg4allmsdoc,\
 ))
 
 $(eval $(call gb_Library_add_cxxflags,reg4allmsdoc,\
-	/MT \
+	$(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
 ))
 
 $(eval $(call gb_Library_add_ldflags,reg4allmsdoc,\

@@ -14,7 +14,7 @@ $(eval $(call gb_StaticLibrary_add_defs,quickstarter,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_cxxflags,quickstarter,\
-	/MT \
+	$(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,quickstarter,\

@@ -14,7 +14,7 @@ $(eval $(call gb_Library_add_defs,sdqsmsi,\
 ))
 
 $(eval $(call gb_Library_add_cxxflags,sdqsmsi,\
-	/MT \
+	$(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
 ))
 
 $(eval $(call gb_Library_add_ldflags,sdqsmsi,\
