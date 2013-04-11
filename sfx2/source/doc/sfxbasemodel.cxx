@@ -1851,15 +1851,14 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
 
         SfxMedium* pMedium = new SfxMedium( seqArguments );
 
+        sal_uInt32 nError = ERRCODE_NONE;
         OUString aFilterProvider = getFilterProvider(seqArguments);
         if (!aFilterProvider.isEmpty())
         {
             if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium))
-            {
-                throw task::ErrorCodeIOException(
-                    OUString(), Reference<XInterface>(), ERRCODE_IO_CANTREAD);
-            }
+                nError = ERRCODE_IO_GENERAL;
 
+            handleLoadError(nError, pMedium);
             pMedium->SetUpdatePickList(false);
             return;
         }
@@ -1879,7 +1878,6 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
 
         // load document
-        sal_uInt32 nError = ERRCODE_NONE;
         if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
             nError=ERRCODE_IO_GENERAL;
 
@@ -1948,38 +1946,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
 
         m_pData->m_pObjectShell->ResetError();
 
-        if ( nError )
-        {
-            sal_Bool bSilent = sal_False;
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
-            if( pSilentItem )
-                bSilent = pSilentItem->GetValue();
-
-              sal_Bool bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
-            if ( nError != ERRCODE_IO_BROKENPACKAGE && !bSilent )
-            {
-                // broken package was handled already
-                if ( SfxObjectShell::UseInteractionToHandleError( xHandler, nError ) && !bWarning )
-                {
-                    // abort loading (except for warnings)
-                       nError = ERRCODE_IO_ABORT;
-                }
-            }
-
-            if ( m_pData->m_pObjectShell->GetMedium() != pMedium )
-            {
-                // for whatever reason document now has another medium
-                OSL_FAIL("Document has rejected the medium?!");
-                delete pMedium;
-            }
-
-            if ( !bWarning )    // #i30711# don't abort loading if it's only a warning
-            {
-                throw task::ErrorCodeIOException( OUString(),
-                                                    Reference< XInterface >(),
-                                                    nError ? nError : ERRCODE_IO_CANTREAD );
-            }
-        }
+        handleLoadError(nError, pMedium);
 
         loadCmisProperties( );
 
@@ -2708,6 +2675,43 @@ void SfxBaseModel::loadCmisProperties( )
         catch (const ucb::CommandAbortedException &)
         {
         }
+    }
+}
+
+void SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium )
+{
+    if (!nError)
+        // No error condition.
+        return;
+
+    bool bSilent = false;
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSilentItem, SfxBoolItem, SID_SILENT, false);
+    if( pSilentItem )
+        bSilent = pSilentItem->GetValue();
+
+    bool bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+    if ( nError != ERRCODE_IO_BROKENPACKAGE && !bSilent )
+    {
+        // broken package was handled already
+        if ( SfxObjectShell::UseInteractionToHandleError(pMedium->GetInteractionHandler(), nError) && !bWarning)
+        {
+            // abort loading (except for warnings)
+            nError = ERRCODE_IO_ABORT;
+        }
+    }
+
+    if ( m_pData->m_pObjectShell->GetMedium() != pMedium )
+    {
+        // for whatever reason document now has another medium
+        OSL_FAIL("Document has rejected the medium?!");
+        delete pMedium;
+    }
+
+    if ( !bWarning )    // #i30711# don't abort loading if it's only a warning
+    {
+        throw task::ErrorCodeIOException( OUString(),
+                                            Reference< XInterface >(),
+                                            nError ? nError : ERRCODE_IO_CANTREAD );
     }
 }
 

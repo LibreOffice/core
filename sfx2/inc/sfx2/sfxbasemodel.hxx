@@ -91,6 +91,7 @@
 
 #include <svl/lstner.hxx>
 
+class SfxMedium;
 class   SfxPrinter;
 class   SfxViewShell;
 class   SfxObjectShell                      ;
@@ -1455,6 +1456,8 @@ private:
     SAL_DLLPRIVATE void NotifyModifyListeners_Impl() const;
 
     SAL_DLLPRIVATE void loadCmisProperties();
+
+    SAL_DLLPRIVATE void handleLoadError( sal_uInt32 nError, SfxMedium* pMedium );
 
 //________________________________________________________________________________________________________
 //  private variables and methods
