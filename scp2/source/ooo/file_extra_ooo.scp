@@ -42,10 +42,10 @@ File gid_File_Extra_Autotextshare_Lang
 End
 
 File gid_File_Extra_Autotextuser
-    Dir = gid_Dir_User_Autotext;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DOCLANG, DONT_OVERWRITE);
-    Name = "autotextuser.zip";
+    Styles = (FILELIST, WORKSTATION, DOCLANG, DONT_OVERWRITE);
+    Name = "extras_autotextuser.filelist";
 End
 
 #ifdef UNX

@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,autotextuser,$(SRCDIR)/extras/source/autotext))
+$(eval $(call gb_Package_Package,extras_autotextuser,$(SRCDIR)/extras/source/autotext))
 
-$(eval $(call gb_Zip_add_files,autotextuser,\
+$(eval $(call gb_Package_set_outdir,extras_autotextuser,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_autotextuser,presets/autotext,\
 	mytexts.bau \
 ))
 
