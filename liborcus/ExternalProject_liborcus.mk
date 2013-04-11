@@ -37,7 +37,6 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			--with-pic \
 			--enable-static \
 			--disable-shared \
-			--without-libzip \
 			--disable-debug \
 			--disable-spreadsheet-model \
 			--disable-werror \
