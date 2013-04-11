@@ -1404,7 +1404,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
                     {
                         aNewSz.Height() += pChgFly->Frm().Height() -
                                                pFly->Prt().Height();
-                        if( Abs( aNewSz.Height() - pChgFly->Frm().Height()) > 1 )
+                        if( std::abs( aNewSz.Height() - pChgFly->Frm().Height()) > 1 )
                             aFrmSz.SetHeight( aNewSz.Height() );
                     }
                     // via Doc for the Undo!
@@ -1861,8 +1861,8 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
             const long nWidth = rBound.Right()  - rBound.Left();
             const long nHeight= rBound.Bottom() - rBound.Top();
             aFrmSet.Put( SwFmtFrmSize( ATT_MIN_SIZE,
-                                Max( nWidth,  long(MINFLY) ),
-                                Max( nHeight, long(MINFLY) )));
+                                std::max( nWidth,  long(MINFLY) ),
+                                std::max( nHeight, long(MINFLY) )));
 
             if( SFX_ITEM_SET != aFrmSet.GetItemState( RES_HORI_ORIENT ))
                 aFrmSet.Put( SwFmtHoriOrient( aRelPos.X(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ));

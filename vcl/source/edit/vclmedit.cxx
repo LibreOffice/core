@@ -579,7 +579,7 @@ void ImpVclMEdit::SetSelection( const Selection& rSelection )
     else if ( aNewSelection.Max() > aText.Len() )
         aNewSelection.Max() = aText.Len();
 
-    long nEnd = Max( aNewSelection.Min(), aNewSelection.Max() );
+    long nEnd = std::max( aNewSelection.Min(), aNewSelection.Max() );
     TextSelection aTextSel;
     sal_uLong nPara = 0;
     sal_uInt16 nChar = 0;

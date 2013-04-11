@@ -240,7 +240,7 @@ void Outliner::SetMaxDepth( sal_Int16 nDepth, sal_Bool bCheckParagraphs )
 {
     if( nMaxDepth != nDepth )
     {
-        nMaxDepth = Min( nDepth, (sal_Int16)(SVX_MAX_NUM-1) );
+        nMaxDepth = std::min( nDepth, (sal_Int16)(SVX_MAX_NUM-1) );
 
         if( bCheckParagraphs )
         {
@@ -1580,7 +1580,7 @@ Rectangle Outliner::ImpCalcBulletArea( sal_uInt16 nPara, sal_Bool bAdjust, sal_B
         const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&) pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
         aTopLeft.X() = rLR.GetTxtLeft() + rLR.GetTxtFirstLineOfst() + nSpaceBefore;
 
-        long nBulletWidth = Max( (long) -rLR.GetTxtFirstLineOfst(), (long) ((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
+        long nBulletWidth = std::max( (long) -rLR.GetTxtFirstLineOfst(), (long) ((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
         if ( nBulletWidth < aBulletSize.Width() )   // The Bullet creates its space
             nBulletWidth = aBulletSize.Width();
 
@@ -1839,7 +1839,7 @@ IMPL_LINK( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo*, pInfos )
     DBG_CHKTHIS(Outliner,0);
 
     pParaList->MoveParagraphs( pInfos->nStartPara, pInfos->nDestPara, pInfos->nEndPara - pInfos->nStartPara + 1 );
-    sal_uInt16 nChangesStart = Min( pInfos->nStartPara, pInfos->nDestPara );
+    sal_uInt16 nChangesStart = std::min( pInfos->nStartPara, pInfos->nDestPara );
     sal_uInt16 nParas = (sal_uInt16)pParaList->GetParagraphCount();
     for ( sal_uInt16 n = nChangesStart; n < nParas; n++ )
         ImplCalcBulletText( n, sal_False, sal_False );

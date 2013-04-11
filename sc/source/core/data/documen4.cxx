@@ -242,7 +242,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
         aRef.Set( nCol1, nRow1, nTab1, false, true, true );
         aForString.append(aRef.GetRefString(this, nTab1));
         nCol1++;
-        nCol2 = Min( nCol2, (SCCOL)(rParam.aRefFormulaEnd.Col() -
+        nCol2 = std::min( nCol2, (SCCOL)(rParam.aRefFormulaEnd.Col() -
                     rParam.aRefFormulaCell.Col() + nCol1 + 1));
     }
     else if (rParam.nMode == 1)                 // nur zeilenweise
@@ -255,7 +255,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
         aRef.Set( nCol1, nRow1, nTab1, true, false, true );
         aForString.append(aRef.GetRefString(this, nTab1));
         nRow1++;
-        nRow2 = Min( nRow2, (SCROW)(rParam.aRefFormulaEnd.Row() -
+        nRow2 = std::min( nRow2, (SCROW)(rParam.aRefFormulaEnd.Row() -
                     rParam.aRefFormulaCell.Row() + nRow1 + 1));
     }
     else                    // beides
@@ -892,7 +892,7 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
         SCCOLROW nTempOther = nOtherRow;
         bool bFound = false;
         sal_uInt16 nBest = SC_DOCCOMP_MAXDIFF;
-        SCCOLROW nMax = Min( nOtherEndRow, static_cast<SCCOLROW>(( nTempOther + nMaxCont + nUnknown )) );
+        SCCOLROW nMax = std::min( nOtherEndRow, static_cast<SCCOLROW>(( nTempOther + nMaxCont + nUnknown )) );
         for (SCCOLROW i=nTempOther; i<=nMax && nBest>0; i++)    // bei 0 abbrechen
         {
             if (bColumns)
@@ -942,7 +942,7 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
                 {
                     SCROW nDiff1 = nThisOther - nFillStart;
                     SCROW nDiff2 = nThisRow   - nFillPos;
-                    SCROW nMinDiff = Min(nDiff1, nDiff2);
+                    SCROW nMinDiff = std::min(nDiff1, nDiff2);
                     for (SCROW i=0; i<nMinDiff; i++)
                         pOtherRows[nFillPos+i] = nFillStart+i;
                 }
@@ -1001,7 +1001,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 {
                     SCTAB nDiff1 = nThisOther - nFillStart;
                     SCTAB nDiff2 = nThisTab   - nFillPos;
-                    SCTAB nMinDiff = Min(nDiff1, nDiff2);
+                    SCTAB nMinDiff = std::min(nDiff1, nDiff2);
                     for (SCTAB i=0; i<nMinDiff; i++)
                         if ( !IsScenario(nFillPos+i) && !rOtherDoc.IsScenario(nFillStart+i) )
                             pOtherTabs[nFillPos+i] = nFillStart+i;
@@ -1031,8 +1031,8 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             SCROW nOtherEndRow = 0;
             GetCellArea( nThisTab, nThisEndCol, nThisEndRow );
             rOtherDoc.GetCellArea( nOtherTab, nOtherEndCol, nOtherEndRow );
-            SCCOL nEndCol = Max(nThisEndCol, nOtherEndCol);
-            SCROW nEndRow = Max(nThisEndRow, nOtherEndRow);
+            SCCOL nEndCol = std::max(nThisEndCol, nOtherEndCol);
+            SCROW nEndRow = std::max(nThisEndRow, nOtherEndRow);
             SCCOL nThisCol;
             SCROW nThisRow;
             sal_uLong n1,n2;    // fuer AppendDeleteRange

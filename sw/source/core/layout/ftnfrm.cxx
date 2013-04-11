@@ -288,7 +288,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
                 SwTwips nPrtHeight = (Prt().*fnRect->fnGetHeight)();
                 if( nPrtHeight < 0 )
                 {
-                    const SwTwips nTmpDiff = Max( (Prt().*fnRect->fnGetTop)(),
+                    const SwTwips nTmpDiff = std::max( (Prt().*fnRect->fnGetTop)(),
                                                 -nPrtHeight );
                     (Prt().*fnRect->fnSubTop)( nTmpDiff );
                 }
@@ -344,7 +344,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
     {
         if ( pBoss->GetMaxFtnHeight() != LONG_MAX )
         {
-            nDist = Min( nDist, pBoss->GetMaxFtnHeight()
+            nDist = std::min( nDist, pBoss->GetMaxFtnHeight()
                          - (Frm().*fnRect->fnGetHeight)() );
             if ( nDist <= 0 )
                 return 0L;

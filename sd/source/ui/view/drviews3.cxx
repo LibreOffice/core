@@ -507,8 +507,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             }
             else
             {
-                long nLeft = Max(0L, rLRSpace.GetLeft() - aPagePos.X());
-                long nRight = Max(0L, rLRSpace.GetRight() + aPagePos.X() +
+                long nLeft = std::max(0L, rLRSpace.GetLeft() - aPagePos.X());
+                long nRight = std::max(0L, rLRSpace.GetRight() + aPagePos.X() +
                                       aPageSize.Width() - aViewSize.Width());
 
                 sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
@@ -565,8 +565,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             }
             else
             {
-                long nUpper = Max(0L, rULSpace.GetUpper() - aPagePos.Y());
-                long nLower = Max(0L, rULSpace.GetLower() + aPagePos.Y() +
+                long nUpper = std::max(0L, rULSpace.GetUpper() - aPagePos.Y());
+                long nLower = std::max(0L, rULSpace.GetLower() + aPagePos.Y() +
                                       aPageSize.Height() - aViewSize.Height());
 
                 sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);

@@ -1099,7 +1099,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                     if (pH1!=NULL && pH2!=NULL) {
                         aDif=pH2->GetPos()-pH1->GetPos();
                         b90=(aDif.X()==0) || aDif.Y()==0;
-                        b45=b90 || (Abs(aDif.X())==Abs(aDif.Y()));
+                        b45=b90 || (std::abs(aDif.X())==std::abs(aDif.Y()));
                     }
                     bool bNo=false;
                     if (!IsMirrorAllowed(sal_True,sal_True)) bNo=true; // any mirroring is forbidden

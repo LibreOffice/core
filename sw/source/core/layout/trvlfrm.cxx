@@ -204,10 +204,10 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     // check, if we have to adjust the point
     if ( !Frm().IsInside( aPoint ) )
     {
-        aPoint.X() = Max( aPoint.X(), Frm().Left() );
-        aPoint.X() = Min( aPoint.X(), Frm().Right() );
-        aPoint.Y() = Max( aPoint.Y(), Frm().Top() );
-        aPoint.Y() = Min( aPoint.Y(), Frm().Bottom() );
+        aPoint.X() = std::max( aPoint.X(), Frm().Left() );
+        aPoint.X() = std::min( aPoint.X(), Frm().Right() );
+        aPoint.Y() = std::max( aPoint.Y(), Frm().Top() );
+        aPoint.Y() = std::min( aPoint.Y(), Frm().Bottom() );
     }
 
     sal_Bool bTextRet, bBackRet = sal_False;
@@ -1197,10 +1197,10 @@ sal_uLong CalcDiff( const Point &rPt1, const Point &rPt2 )
 {
     //Jetzt die Entfernung zwischen den beiden Punkten berechnen.
     //'Delta' X^2 + 'Delta'Y^2 = 'Entfernung'^2
-    sal_uInt32 dX = Max( rPt1.X(), rPt2.X() ) -
-               Min( rPt1.X(), rPt2.X() ),
-          dY = Max( rPt1.Y(), rPt2.Y() ) -
-               Min( rPt1.Y(), rPt2.Y() );
+    sal_uInt32 dX = std::max( rPt1.X(), rPt2.X() ) -
+               std::min( rPt1.X(), rPt2.X() ),
+          dY = std::max( rPt1.Y(), rPt2.Y() ) -
+               std::min( rPt1.Y(), rPt2.Y() );
     BigInt dX1( dX ), dY1( dY );
     dX1 *= dX1; dY1 *= dY1;
     return ::SqRt( dX1 + dY1 );

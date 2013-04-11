@@ -58,7 +58,7 @@ extern void ClearFEShellTabCols();
 // See swtable.cxx too
 #define COLFUZZY 20L
 
-inline bool IsSame( long nA, long nB ) { return  Abs(nA-nB) <= COLFUZZY; }
+inline bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
 class SwTblFmtCmp
 {
@@ -329,7 +329,7 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
             }
 
             std::vector<SwTblFmtCmp*> aFmtCmp;
-            aFmtCmp.reserve( Max( 255, (int)aRowArr.size() ) );
+            aFmtCmp.reserve( std::max( 255, (int)aRowArr.size() ) );
 
             for( sal_uInt16 i = 0; i < aRowArr.size(); ++i )
                 ::lcl_ProcessRowAttr( aFmtCmp, aRowArr[i], rNew );
@@ -381,7 +381,7 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
             }
 
             std::vector<SwTblFmtCmp*> aFmtCmp;
-            aFmtCmp.reserve( Max( 255, (int)aRowArr.size() ) );
+            aFmtCmp.reserve( std::max( 255, (int)aRowArr.size() ) );
             for ( sal_uInt16 i = 0; i < aRowArr.size(); ++i )
                 ::lcl_ProcessRowSize( aFmtCmp, aRowArr[i], rNew );
             SwTblFmtCmp::Delete( aFmtCmp );
@@ -438,7 +438,7 @@ sal_Bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly )
                     SwFrm* pFrm = aIter.First();
                     while ( pFrm )
                     {
-                        nHeight = Max( nHeight, pFrm->Frm().Height() );
+                        nHeight = std::max( nHeight, pFrm->Frm().Height() );
                         pFrm = aIter.Next();
                     }
                 }
@@ -451,7 +451,7 @@ sal_Bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly )
                 }
 
                 std::vector<SwTblFmtCmp*> aFmtCmp;
-                aFmtCmp.reserve( Max( 255, (int)aRowArr.size() ) );
+                aFmtCmp.reserve( std::max( 255, (int)aRowArr.size() ) );
                 for( i = 0; i < aRowArr.size(); ++i )
                     ::lcl_ProcessRowSize( aFmtCmp, (SwTableLine*)aRowArr[i], aNew );
                 SwTblFmtCmp::Delete( aFmtCmp );
@@ -480,7 +480,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
             }
 
             std::vector<SwTblFmtCmp*> aFmtCmp;
-            aFmtCmp.reserve( Max( 255, (int)aRowArr.size() ) );
+            aFmtCmp.reserve( std::max( 255, (int)aRowArr.size() ) );
 
             for( sal_uInt16 i = 0; i < aRowArr.size(); ++i )
                 ::lcl_ProcessRowAttr( aFmtCmp, aRowArr[i], rNew );
@@ -1286,7 +1286,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
                                           ((SwTxtFrm*)pFrm)->CalcFitToContent() :
                                           (pFrm->Prt().*fnRect->fnGetWidth)();
 
-        nRet = Max( nRet, nCalcFitToContent + nAdd );
+        nRet = std::max( nRet, nCalcFitToContent + nAdd );
         pFrm = pFrm->GetNext();
     }
     // Surrounding border as well as left and Right Border also need to be respected
@@ -1296,7 +1296,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
     nRet += COLFUZZY;
-    return (sal_uInt16)Max( long(MINLAY), nRet );
+    return (sal_uInt16)std::max( long(MINLAY), nRet );
 }
 
 /**

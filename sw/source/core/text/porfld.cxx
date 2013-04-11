@@ -242,7 +242,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
             ubidi_close( pBidi );
             const xub_StrLen nNextDirChg = (xub_StrLen)nEnd;
-            nNextScriptChg = Min( nNextScriptChg, nNextDirChg );
+            nNextScriptChg = std::min( nNextScriptChg, nNextDirChg );
 
             // #i89825# change the script type also to CTL
             // if there is no strong LTR char in the LTR run (numbers)
@@ -927,7 +927,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
             return;
     }
     Point aPos( rInf.X() + GRFNUM_SECURE, rInf.Y() - GetRelPos() + GRFNUM_SECURE );
-    long nTmpWidth = Max( (long)0, (long)(nFixWidth - 2 * GRFNUM_SECURE) );
+    long nTmpWidth = std::max( (long)0, (long)(nFixWidth - 2 * GRFNUM_SECURE) );
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
     const bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||

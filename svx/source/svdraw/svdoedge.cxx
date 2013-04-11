@@ -589,11 +589,11 @@ sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt) const
     long dyo=rPt.Y()-aR.Top();
     long dxr=aR.Right()-rPt.X();
     long dyu=aR.Bottom()-rPt.Y();
-    bool bxMitt=Abs(dxl-dxr)<2;
-    bool byMitt=Abs(dyo-dyu)<2;
-    long dx=Min(dxl,dxr);
-    long dy=Min(dyo,dyu);
-    bool bDiag=Abs(dx-dy)<2;
+    bool bxMitt=std::abs(dxl-dxr)<2;
+    bool byMitt=std::abs(dyo-dyu)<2;
+    long dx=std::min(dxl,dxr);
+    long dy=std::min(dyo,dyu);
+    bool bDiag=std::abs(dx-dy)<2;
     if (bxMitt && byMitt) return SDRESC_ALL; // in the center
     if (bDiag) {  // diagonally
         sal_uInt16 nRet=0;
@@ -844,7 +844,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         aXP[0]=rPt1;
         aXP[1]=rPt2;
         if (pnQuality!=NULL) {
-            *pnQuality=Abs(rPt1.X()-rPt2.X())+Abs(rPt1.Y()-rPt2.Y());
+            *pnQuality=std::abs(rPt1.X()-rPt2.X())+std::abs(rPt1.Y()-rPt2.Y());
         }
         return aXP;
     } else if (eKind==SDREDGE_THREELINES) {
@@ -862,9 +862,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         if (bLks2) aXP[2].X()=aBewareRect2.Left();   //-=500;
         if (bUnt2) aXP[2].Y()=aBewareRect2.Bottom(); //+=500;
         if (pnQuality!=NULL) {
-            long nQ=Abs(aXP[1].X()-aXP[0].X())+Abs(aXP[1].Y()-aXP[0].Y());
-                nQ+=Abs(aXP[2].X()-aXP[1].X())+Abs(aXP[2].Y()-aXP[1].Y());
-                nQ+=Abs(aXP[3].X()-aXP[2].X())+Abs(aXP[3].Y()-aXP[2].Y());
+            long nQ=std::abs(aXP[1].X()-aXP[0].X())+std::abs(aXP[1].Y()-aXP[0].Y());
+                nQ+=std::abs(aXP[2].X()-aXP[1].X())+std::abs(aXP[2].Y()-aXP[1].Y());
+                nQ+=std::abs(aXP[3].X()-aXP[2].X())+std::abs(aXP[3].Y()-aXP[2].Y());
             *pnQuality=nQ;
         }
         if (bInfo) {
@@ -889,8 +889,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         Point aC2(aBewareRect2.Center());
         if (aBewareRect1.Left()<=aBewareRect2.Right() && aBewareRect1.Right()>=aBewareRect2.Left()) {
             // overlapping on the x axis
-            long n1=Max(aBewareRect1.Left(),aBewareRect2.Left());
-            long n2=Min(aBewareRect1.Right(),aBewareRect2.Right());
+            long n1=std::max(aBewareRect1.Left(),aBewareRect2.Left());
+            long n2=std::min(aBewareRect1.Right(),aBewareRect2.Right());
             aMeeting.X()=(n1+n2+1)/2;
         } else {
             // otherwise the center point of the empty space
@@ -902,8 +902,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         }
         if (aBewareRect1.Top()<=aBewareRect2.Bottom() && aBewareRect1.Bottom()>=aBewareRect2.Top()) {
             // overlapping on the x axis
-            long n1=Max(aBewareRect1.Top(),aBewareRect2.Top());
-            long n2=Min(aBewareRect1.Bottom(),aBewareRect2.Bottom());
+            long n1=std::max(aBewareRect1.Top(),aBewareRect2.Top());
+            long n2=std::min(aBewareRect1.Bottom(),aBewareRect2.Bottom());
             aMeeting.Y()=(n1+n2+1)/2;
         } else {
             // otherwise the center point of the empty space
@@ -917,10 +917,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         //   1. both go into the same direction
         //   2. both go into opposite directions
         //   3. one is vertical, the other is horizontal
-        long nXMin=Min(aBewareRect1.Left(),aBewareRect2.Left());
-        long nXMax=Max(aBewareRect1.Right(),aBewareRect2.Right());
-        long nYMin=Min(aBewareRect1.Top(),aBewareRect2.Top());
-        long nYMax=Max(aBewareRect1.Bottom(),aBewareRect2.Bottom());
+        long nXMin=std::min(aBewareRect1.Left(),aBewareRect2.Left());
+        long nXMax=std::max(aBewareRect1.Right(),aBewareRect2.Right());
+        long nYMin=std::min(aBewareRect1.Top(),aBewareRect2.Top());
+        long nYMax=std::max(aBewareRect1.Bottom(),aBewareRect2.Bottom());
         bool bBewareOverlap=aBewareRect1.Right()>aBewareRect2.Left() && aBewareRect1.Left()<aBewareRect2.Right() &&
                             aBewareRect1.Bottom()>aBewareRect2.Top() && aBewareRect1.Top()<aBewareRect2.Bottom();
         unsigned nMainCase=3;
@@ -1016,7 +1016,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                             }
                         }
                         if (!bCase29Direct) {
-                            bool bObenLang=Abs(nYMin-aMeeting.Y())<=Abs(nYMax-aMeeting.Y());
+                            bool bObenLang=std::abs(nYMin-aMeeting.Y())<=std::abs(nYMax-aMeeting.Y());
                             if (bObenLang) {
                                 aMeeting.Y()=nYMin;
                             } else {
@@ -1077,7 +1077,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                             }
                         }
                         if (!bCase29Direct) {
-                            bool bLinksLang=Abs(nXMin-aMeeting.X())<=Abs(nXMax-aMeeting.X());
+                            bool bLinksLang=std::abs(nXMin-aMeeting.X())<=std::abs(nXMax-aMeeting.X());
                             if (bLinksLang) {
                                 aMeeting.X()=nXMin;
                             } else {
@@ -1299,7 +1299,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         Point aPt0(aXP1[0]);
         for (sal_uInt16 nPntNum=1; nPntNum<nPntAnz; nPntNum++) {
             Point aPt1b(aXP1[nPntNum]);
-            nQual+=Abs(aPt1b.X()-aPt0.X())+Abs(aPt1b.Y()-aPt0.Y());
+            nQual+=std::abs(aPt1b.X()-aPt0.X())+std::abs(aPt1b.Y()-aPt0.Y());
             if (nQual<nQual0) bOverflow = true;
             nQual0=nQual;
             aPt0=aPt1b;
@@ -1308,9 +1308,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         sal_uInt16 nTmp=nPntAnz;
         if (cForm=='Z') {
             nTmp=2; // Z shape with good quality (nTmp=2 instead of 4)
-            sal_uIntPtr n1=Abs(aXP1[1].X()-aXP1[0].X())+Abs(aXP1[1].Y()-aXP1[0].Y());
-            sal_uIntPtr n2=Abs(aXP1[2].X()-aXP1[1].X())+Abs(aXP1[2].Y()-aXP1[1].Y());
-            sal_uIntPtr n3=Abs(aXP1[3].X()-aXP1[2].X())+Abs(aXP1[3].Y()-aXP1[2].Y());
+            sal_uIntPtr n1=std::abs(aXP1[1].X()-aXP1[0].X())+std::abs(aXP1[1].Y()-aXP1[0].Y());
+            sal_uIntPtr n2=std::abs(aXP1[2].X()-aXP1[1].X())+std::abs(aXP1[2].Y()-aXP1[1].Y());
+            sal_uIntPtr n3=std::abs(aXP1[3].X()-aXP1[2].X())+std::abs(aXP1[3].Y()-aXP1[2].Y());
             // try to make lines lengths similar
             sal_uIntPtr nBesser=0;
             n1+=n3;
@@ -2163,7 +2163,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     if (bOk && aMouseRect.IsInside(aConPos)) {
                         if (bUser) bUserFnd = true;
                         bFnd = true;
-                        sal_uIntPtr nDist=(sal_uIntPtr)Abs(aConPos.X()-rPt.X())+(sal_uIntPtr)Abs(aConPos.Y()-rPt.Y());
+                        sal_uIntPtr nDist=(sal_uIntPtr)std::abs(aConPos.X()-rPt.X())+(sal_uIntPtr)std::abs(aConPos.Y()-rPt.Y());
                         if (nDist<nBestDist) {
                             nBestDist=nDist;
                             aTestCon.pObj=pObj;

@@ -547,8 +547,8 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
                         }
                     }
 
-                    aSize.Width() = Max( aSize.Width(), 4L );
-                    aSize.Height() = Max( aSize.Height(), 4L );
+                    aSize.Width() = std::max( aSize.Width(), 4L );
+                    aSize.Height() = std::max( aSize.Height(), 4L );
 
                     const Point aPos( ( ( aOutputRect.GetWidth() - aSize.Width() ) >> 1 ) + aOutputRect.Left(),
                                       ( ( aOutputRect.GetHeight() - aSize.Height() ) >> 1 ) + aOutputRect.Top() );

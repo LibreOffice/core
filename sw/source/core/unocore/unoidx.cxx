@@ -2114,7 +2114,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 aMark.SetAlternativeText(lcl_AnyToString(rValue));
             break;
             case WID_LEVEL:
-                aMark.SetLevel(Min( static_cast<sal_Int8>( MAXLEVEL ),
+                aMark.SetLevel(std::min( static_cast<sal_Int8>( MAXLEVEL ),
                             static_cast<sal_Int8>(lcl_AnyToInt16(rValue)+1)));
             break;
             case WID_PRIMARY_KEY  :

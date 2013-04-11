@@ -38,7 +38,7 @@ long AdjustRectToSquare( Rectangle &rRect )
 {
     const long nWidth = rRect.GetWidth();
     const long nHeight = rRect.GetHeight();
-    long nSide = Min( nWidth, nHeight );
+    long nSide = std::min( nWidth, nHeight );
 
     if ( nSide && !(nSide & 1) )
     {

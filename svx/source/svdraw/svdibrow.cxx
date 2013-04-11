@@ -248,7 +248,7 @@ void _SdrItemBrowserControl::ImpCtor()
     InsertDataColumn(
         ITEMBROWSER_STATECOL_ID,
         String("State", aTextEncoding),
-        Max(GetTextWidth(String(" State ", aTextEncoding)) + 2 ,
+        std::max(GetTextWidth(String(" State ", aTextEncoding)) + 2 ,
             GetTextWidth(String("DontCare", aTextEncoding)) + 2));
     InsertDataColumn(
         ITEMBROWSER_TYPECOL_ID ,

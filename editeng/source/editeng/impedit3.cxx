@@ -415,7 +415,7 @@ void ImpEditEngine::FormatDoc()
             if ( aInvalidRect.IsEmpty() )
             {
                 // For Paperwidth 0 (AutoPageSize) it would otherwise be Empty()...
-                long nWidth = Max( (long)1, ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() ) );
+                long nWidth = std::max( (long)1, ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() ) );
                 Range aInvRange( GetInvalidYOffsets( pParaPortion ) );
                 aInvalidRect = Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
@@ -442,7 +442,7 @@ void ImpEditEngine::FormatDoc()
             aStatus.GetStatusWord() |= !IsVertical() ? EE_STAT_TEXTHEIGHTCHANGED : EE_STAT_TEXTWIDTHCHANGED;
         if ( nNewHeight < nCurTextHeight )
         {
-            aInvalidRect.Bottom() = (long)Max( nNewHeight, nCurTextHeight );
+            aInvalidRect.Bottom() = (long)std::max( nNewHeight, nCurTextHeight );
             if ( aInvalidRect.IsEmpty() )
             {
                 aInvalidRect.Top() = 0;
@@ -632,7 +632,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
 
     const short nInvalidDiff = pParaPortion->GetInvalidDiff();
     const sal_uInt16 nInvalidStart = pParaPortion->GetInvalidPosStart();
-    const sal_uInt16 nInvalidEnd =  nInvalidStart + Abs( nInvalidDiff );
+    const sal_uInt16 nInvalidEnd =  nInvalidStart + std::abs( nInvalidDiff );
 
     sal_Bool bQuickFormat = sal_False;
     if ( !bEmptyNodeWithPolygon && !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
@@ -864,7 +864,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                 {
                     // Try further down in the polygon.
                     // Below the polygon use the Paper Width.
-                    nTextExtraYOffset += Max( (long)(nTextLineHeight / 10), (long)1 );
+                    nTextExtraYOffset += std::max( (long)(nTextLineHeight / 10), (long)1 );
                     if ( ( nTextY + nTextExtraYOffset  ) > GetTextRanger()->GetBoundRect().Bottom() )
                     {
                         nXWidth = !IsVertical() ? GetPaperSize().Width() : GetPaperSize().Height();
@@ -3956,8 +3956,8 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_uInt16 nNe
     {
         // in this case one can redraw directly without invalidating the
         // Portions
-        sal_uInt16 nFirstPortion = Min( (sal_uInt16)aOldPositions.Min(), nNewPos );
-        sal_uInt16 nLastPortion = Max( (sal_uInt16)aOldPositions.Max(), nNewPos );
+        sal_uInt16 nFirstPortion = std::min( (sal_uInt16)aOldPositions.Min(), nNewPos );
+        sal_uInt16 nLastPortion = std::max( (sal_uInt16)aOldPositions.Max(), nNewPos );
 
         ParaPortion* pUpperPortion = GetParaPortions().SafeGetObject( nFirstPortion );
         ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
@@ -3973,7 +3973,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_uInt16 nNe
     else
     {
         // redraw from the upper invalid position
-        sal_uInt16 nFirstInvPara = Min( (sal_uInt16)aOldPositions.Min(), nNewPos );
+        sal_uInt16 nFirstInvPara = std::min( (sal_uInt16)aOldPositions.Min(), nNewPos );
         InvalidateFromParagraph( nFirstInvPara );
     }
     return aSel;

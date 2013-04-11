@@ -736,7 +736,7 @@ void ScHTMLLayoutParser::SetWidths()
                             sal_uInt16 nTotal = 0;
                             bool bFound = false;
                             SCCOL nHere = 0;
-                            SCCOL nStop = Min( static_cast<SCCOL>(nCol + pE->nColOverlap), nColsPerRow );
+                            SCCOL nStop = std::min( static_cast<SCCOL>(nCol + pE->nColOverlap), nColsPerRow );
                             for ( ; nCol < nStop; nCol++ )
                             {
                                 if ( pWidths[nCol] )

@@ -326,7 +326,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
         case 1:
         {
             long a = GetEckenradius();
-            long b = Max(aRect.GetWidth(),aRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
+            long b = std::max(aRect.GetWidth(),aRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
             if (a>b) a=b;
             if (a<0) a=0;
             aPnt=aRect.TopLeft();

@@ -3676,7 +3676,7 @@ void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pE
                 break;
             const Image& rBitmap1( pBmpItem->GetBitmap1() );
             const Image& rBitmap2( pBmpItem->GetBitmap2() );
-            short nMaxWidth = short( Max( rBitmap1.GetSizePixel().Width(), rBitmap2.GetSizePixel().Width() ) );
+            short nMaxWidth = short( std::max( rBitmap1.GetSizePixel().Width(), rBitmap2.GetSizePixel().Width() ) );
             nMaxWidth = pImp->UpdateContextBmpWidthVector( pEntry, nMaxWidth );
             if( nMaxWidth > nContextBmpWidthMax )
             {

@@ -621,7 +621,7 @@ static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lo
         )
         {
             rRadioHeight = aNativeBounds.GetHeight();
-            rMaxWidth = Max (rMaxWidth, aNativeContent.GetWidth());
+            rMaxWidth = std::max (rMaxWidth, aNativeContent.GetWidth());
         }
     }
     return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;

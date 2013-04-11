@@ -551,7 +551,7 @@ void SwFntObj::GuessLeading( const ViewShell&
                 // Those who lie about their Leading, may lie about their
                 // Ascent/Descent as well, hence the Font will be lowered a
                 // litte without changing its height.
-                long nDiff = Min( rMet.GetDescent() - aWinMet.GetDescent(),
+                long nDiff = std::min( rMet.GetDescent() - aWinMet.GetDescent(),
                     aWinMet.GetAscent() - rMet.GetAscent() - nTmpLeading );
                 if( nDiff > 0 )
                 {
@@ -1539,7 +1539,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             nCnt = 0;
         else
             nCnt = nCnt - rInf.GetIdx();
-        nCnt = Min( nCnt, rInf.GetLen() );
+        nCnt = std::min( nCnt, rInf.GetLen() );
         long nKernSum = rInf.GetKern();
         sal_Unicode cChPrev = rInf.GetText()[ rInf.GetIdx() ];
 
@@ -1902,7 +1902,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                 nCnt=0;
             else
                 nCnt = nCnt - rInf.GetIdx();
-            nCnt = Min (nCnt, nLn);
+            nCnt = std::min (nCnt, nLn);
             sal_Unicode nChPrev = rInf.GetText()[ rInf.GetIdx() ];
 
             sal_Unicode nCh;

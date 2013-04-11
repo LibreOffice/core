@@ -3459,7 +3459,7 @@ RTLFUNC(Shell)
             {
                 sal_Int32 iFoundSpacePos = aCmdLine.indexOf( ' ', i );
                 sal_Int32 iFoundTabPos = aCmdLine.indexOf( '\t', i );
-                sal_Int32 iFoundPos = iFoundSpacePos >= 0 ? iFoundTabPos >= 0 ? Min( iFoundSpacePos, iFoundTabPos ) : iFoundSpacePos : -1;
+                sal_Int32 iFoundPos = iFoundSpacePos >= 0 ? iFoundTabPos >= 0 ? std::min( iFoundSpacePos, iFoundTabPos ) : iFoundSpacePos : -1;
 
                 if( iFoundPos < 0 )
                 {

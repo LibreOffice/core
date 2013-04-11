@@ -181,7 +181,7 @@ void SwInputWindow::Resize()
     long    nLeft       = aEdit.GetPosPixel().X();
     Size    aEditSize   = aEdit.GetSizePixel();
 
-    aEditSize.Width() = Max( ((long)(nWidth - nLeft - 5)), (long)0 );
+    aEditSize.Width() = std::max( ((long)(nWidth - nLeft - 5)), (long)0 );
     aEdit.SetSizePixel( aEditSize );
     aEdit.Invalidate();
 }

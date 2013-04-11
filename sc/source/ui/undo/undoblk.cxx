@@ -1236,8 +1236,8 @@ void ScUndoDragDrop::DoUndo( ScRange aRange ) const
     if ( pDoc->HasAttrib( aRange, HASATTR_MERGED ) )
         pDoc->ExtendMerge( aRange, sal_True );
 
-    aPaintRange.aEnd.SetCol( Max( aPaintRange.aEnd.Col(), aRange.aEnd.Col() ) );
-    aPaintRange.aEnd.SetRow( Max( aPaintRange.aEnd.Row(), aRange.aEnd.Row() ) );
+    aPaintRange.aEnd.SetCol( std::max( aPaintRange.aEnd.Col(), aRange.aEnd.Col() ) );
+    aPaintRange.aEnd.SetRow( std::max( aPaintRange.aEnd.Row(), aRange.aEnd.Row() ) );
 
     pDocShell->UpdatePaintExt( nExtFlags, aPaintRange );
     PaintArea( aPaintRange, nExtFlags );

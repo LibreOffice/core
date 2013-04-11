@@ -535,7 +535,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
             Move( fnMoveForward, fnGoCntnt ) &&
             (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
-            1 == Abs( (int)( GetPoint()->nNode.GetIndex() -
+            1 == std::abs( (int)( GetPoint()->nNode.GetIndex() -
                              GetMark()->nNode.GetIndex()) ) )
         {
             // if backward search, switch point and mark

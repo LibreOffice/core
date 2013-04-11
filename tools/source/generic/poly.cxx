@@ -363,8 +363,8 @@ Polygon::Polygon( const Rectangle& rRect, sal_uIntPtr nHorzRound, sal_uIntPtr nV
         Rectangle aRect( rRect );
         aRect.Justify();            // SJ: i9140
 
-        nHorzRound = Min( nHorzRound, (sal_uIntPtr) labs( aRect.GetWidth() >> 1 ) );
-        nVertRound = Min( nVertRound, (sal_uIntPtr) labs( aRect.GetHeight() >> 1 ) );
+        nHorzRound = std::min( nHorzRound, (sal_uIntPtr) labs( aRect.GetWidth() >> 1 ) );
+        nVertRound = std::min( nVertRound, (sal_uIntPtr) labs( aRect.GetHeight() >> 1 ) );
 
         if( !nHorzRound && !nVertRound )
         {
@@ -500,7 +500,7 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
             fDiff = F_2PI;
 
         // Proportionally shrink number of points( fDiff / (2PI) );
-        nPoints = Max( (sal_uInt16) ( ( fDiff * 0.1591549 ) * nPoints ), (sal_uInt16) 16 );
+        nPoints = std::max( (sal_uInt16) ( ( fDiff * 0.1591549 ) * nPoints ), (sal_uInt16) 16 );
         fStep = fDiff / ( nPoints - 1 );
 
         if( POLY_PIE == eStyle )
@@ -1200,7 +1200,7 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
         long dy = nNewY - ly;
         if ( !md )
             nNewX = lx;
-        else if ( (LONG_MAX / Abs(md)) >= Abs(dy) )
+        else if ( (LONG_MAX / std::abs(md)) >= std::abs(dy) )
             nNewX = (dy * md) / mn + lx;
         else
         {
@@ -1226,7 +1226,7 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
         long dx = nNewX - lx;
         if ( !mn )
             nNewY = ly;
-        else if ( (LONG_MAX / Abs(mn)) >= Abs(dx) )
+        else if ( (LONG_MAX / std::abs(mn)) >= std::abs(dx) )
             nNewY = (dx * mn) / md + ly;
         else
         {

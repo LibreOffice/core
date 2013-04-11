@@ -570,10 +570,10 @@ sal_uLong SwLayHelper::CalcPageCount()
                 nMaxParaPerPage = nNdCount / nPgCount;
             else
             {
-                nMaxParaPerPage = Max( sal_uLong(20),
+                nMaxParaPerPage = std::max( sal_uLong(20),
                                        sal_uLong(20 + nNdCount / 1000 * 3) );
                 const sal_uLong nMax = 53;
-                nMaxParaPerPage = Min( nMaxParaPerPage, nMax );
+                nMaxParaPerPage = std::min( nMaxParaPerPage, nMax );
                 nPgCount = nNdCount / nMaxParaPerPage;
             }
             if ( nNdCount < 1000 )
@@ -716,7 +716,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     ++nCnt;
                     pTmp = pTmp->GetNext();
                 } while( pTmp );
-                nMaxRowPerPage = Max( sal_uLong(2), nMaxParaPerPage / nCnt );
+                nMaxRowPerPage = std::max( sal_uLong(2), nMaxParaPerPage / nCnt );
             }
             bLongTab = true;
         }

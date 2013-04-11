@@ -2534,7 +2534,7 @@ bool UniscribeLayout::KashidaWordFix ( int nMinGlyphPos, int nEndGlyphPos, int* 
         {
             if( i == nKashPos )
                 continue;
-            nSteal = Min( mnMinKashidaWidth - nSpaceAdded, nSteal );
+            nSteal = std::min( mnMinKashidaWidth - nSpaceAdded, nSteal );
             if ( nSteal > 0 )
             {
                 mpJustifications [ i ] -= nSteal;

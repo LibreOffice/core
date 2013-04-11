@@ -1550,7 +1550,7 @@ void SdrDragMove::ImpCheckSnap(const Point& rPt)
     {
         if (bXSnapped)
         {
-            if (Abs(aPt.X())<Abs(nBestXSnap))
+            if (std::abs(aPt.X())<std::abs(nBestXSnap))
             {
                 nBestXSnap=aPt.X();
             }
@@ -1566,7 +1566,7 @@ void SdrDragMove::ImpCheckSnap(const Point& rPt)
     {
         if (bYSnapped)
         {
-            if (Abs(aPt.Y())<Abs(nBestYSnap))
+            if (std::abs(aPt.Y())<std::abs(nBestYSnap))
             {
                 nBestYSnap=aPt.Y();
             }
@@ -1780,8 +1780,8 @@ void SdrDragResize::TakeSdrDragComment(XubString& rStr) const
     if(!nYDiv)
         nYDiv = 1;
 
-    bool bX(aXFact != aFact1 && Abs(nXDiv) > 1);
-    bool bY(aYFact != aFact1 && Abs(nYDiv) > 1);
+    bool bX(aXFact != aFact1 && std::abs(nXDiv) > 1);
+    bool bY(aYFact != aFact1 && std::abs(nYDiv) > 1);
 
     if(bX || bY)
     {
@@ -1961,7 +1961,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
     if (!DragStat().IsHorFixed() && !DragStat().IsVerFixed())
     {
-        if (Abs(nXDiv)<=1 || Abs(nYDiv)<=1)
+        if (std::abs(nXDiv)<=1 || std::abs(nYDiv)<=1)
             bOrtho=false;
 
         if (bOrtho)
@@ -2545,7 +2545,7 @@ void SdrDragMirror::TakeSdrDragComment(XubString& rStr) const
         ImpTakeDescriptionStr(STR_DragMethMirrorHori,rStr);
     else if (aDif.Y()==0)
         ImpTakeDescriptionStr(STR_DragMethMirrorVert,rStr);
-    else if (Abs(aDif.X())==Abs(aDif.Y()))
+    else if (std::abs(aDif.X()) == std::abs(aDif.Y()))
         ImpTakeDescriptionStr(STR_DragMethMirrorDiag,rStr);
     else
         ImpTakeDescriptionStr(STR_DragMethMirrorFree,rStr);
@@ -2567,7 +2567,7 @@ bool SdrDragMirror::BeginSdrDrag()
         Ref2()=pH2->GetPos();
         aDif=pH2->GetPos()-pH1->GetPos();
         bool b90=(aDif.X()==0) || aDif.Y()==0;
-        bool b45=b90 || (Abs(aDif.X())==Abs(aDif.Y()));
+        bool b45=b90 || (std::abs(aDif.X()) == std::abs(aDif.Y()));
         nWink=NormAngle360(GetAngle(aDif));
 
         if (!getSdrDragView().IsMirrorAllowed(false,false) && !b45)
@@ -2842,7 +2842,7 @@ void SdrDragCrook::TakeSdrDragComment(XubString& rStr) const
         if(bAtCenter)
             nVal *= 2;
 
-        nVal = Abs(nVal);
+        nVal = std::abs(nVal);
         OUString aStr;
         getSdrDragView().GetModel()->TakeWinkStr(nVal, aStr);
         rStr.Append(aStr);
@@ -3185,9 +3185,9 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         if (bValid)
         {
             if (bVertical)
-                bValid=Abs(dx1)*100>Abs(dy1);
+                bValid = std::abs(dx1)*100>std::abs(dy1);
             else
-                bValid=Abs(dy1)*100>Abs(dx1);
+                bValid = std::abs(dy1)*100>std::abs(dx1);
         }
 
         long nNeuRad=0;
@@ -3235,10 +3235,10 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
                 if (nNeuRad<0) nPntWink+=18000;
                 if (bVertical) nPntWink=18000-nPntWink;
                 nPntWink=NormAngle180(nPntWink);
-                nPntWink=Abs(nPntWink);
+                nPntWink = std::abs(nPntWink);
             }
 
-            double nUmfang=2*Abs(nNeuRad)*nPi;
+            double nUmfang = 2 * std::abs(nNeuRad)*nPi;
 
             if (bResize)
             {
@@ -3311,7 +3311,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             if (bAtCenter)
             {
                 nMul*=2;
-                nMul=Abs(nMul);
+                nMul = std::abs(nMul);
             }
 
             aNeuFact=Fraction(nMul,nDiv);

@@ -132,7 +132,7 @@ void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
         else
         {
             DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
-            mnInvalidPosStart = Min( mnInvalidPosStart, (sal_uInt16) ( (nDiff < 0) ? nStart+nDiff : nDiff ) );
+            mnInvalidPosStart = std::min( mnInvalidPosStart, (sal_uInt16) ( (nDiff < 0) ? nStart+nDiff : nDiff ) );
             mnInvalidDiff = 0;
             mbSimple = sal_False;
         }
@@ -152,7 +152,7 @@ void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/
     }
     else
     {
-        mnInvalidPosStart = Min( mnInvalidPosStart, nStart );
+        mnInvalidPosStart = std::min( mnInvalidPosStart, nStart );
 //      nInvalidPosEnd = pNode->Len();
     }
 

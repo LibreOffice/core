@@ -74,8 +74,8 @@ void SwEnvPreview::Paint(const Rectangle &)
     const SwEnvItem& rItem =
         ((SwEnvDlg*) GetParentDialog())->aEnvItem;
 
-    sal_uInt16 nPageW = (sal_uInt16) Max(rItem.lWidth, rItem.lHeight),
-           nPageH = (sal_uInt16) Min(rItem.lWidth, rItem.lHeight);
+    sal_uInt16 nPageW = (sal_uInt16) std::max(rItem.lWidth, rItem.lHeight),
+           nPageH = (sal_uInt16) std::min(rItem.lWidth, rItem.lHeight);
 
     float fx = (float)GetOutputSizePixel().Width () / (float)nPageW,
           fy = (float)GetOutputSizePixel().Height() / (float)nPageH,

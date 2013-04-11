@@ -443,8 +443,8 @@ sal_uInt16 GetAngleSector(long nWink)
 
 long GetLen(const Point& rPnt)
 {
-    long x=Abs(rPnt.X());
-    long y=Abs(rPnt.Y());
+    long x=std::abs(rPnt.X());
+    long y=std::abs(rPnt.Y());
     if (x+y<0x8000) { // because 7FFF * 7FFF * 2 = 7FFE0002
         x*=x;
         y*=y;
@@ -552,8 +552,8 @@ void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho)
 {
     long dx=rPt.X()-rPt0.X();
     long dy=rPt.Y()-rPt0.Y();
-    long dxa=Abs(dx);
-    long dya=Abs(dy);
+    long dxa=std::abs(dx);
+    long dya=std::abs(dy);
     if (dx==0 || dy==0 || dxa==dya) return;
     if (dxa>=dya*2) { rPt.Y()=rPt0.Y(); return; }
     if (dya>=dxa*2) { rPt.X()=rPt0.X(); return; }
@@ -568,8 +568,8 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
 {
     long dx=rPt.X()-rPt0.X();
     long dy=rPt.Y()-rPt0.Y();
-    long dxa=Abs(dx);
-    long dya=Abs(dy);
+    long dxa=std::abs(dx);
+    long dya=std::abs(dy);
     if ((dxa<dya) != bBigOrtho) {
         rPt.Y()=rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) );
     } else {
@@ -617,7 +617,7 @@ void Kuerzen(Fraction& rF, unsigned nDigits)
     // count how many decimal places can be removed
     int nMulWeg=nMulDigits-nDigits; if (nMulWeg<0) nMulWeg=0;
     int nDivWeg=nDivDigits-nDigits; if (nDivWeg<0) nDivWeg=0;
-    int nWeg=Min(nMulWeg,nDivWeg);
+    int nWeg=std::min(nMulWeg,nDivWeg);
     nMul>>=nWeg;
     nDiv>>=nWeg;
     if (nMul==0 || nDiv==0) {

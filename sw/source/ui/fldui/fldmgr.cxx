@@ -935,8 +935,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             SwChapterFieldType* pTyp =
                 (SwChapterFieldType*)pCurShell->GetFldType(0, RES_CHAPTERFLD);
             pFld = new SwChapterField(pTyp, nFormatId);
-            nByte = Max(sal_uInt16(1), nByte);
-            nByte = Min(nByte, sal_uInt16(MAXLEVEL));
+            nByte = std::max(sal_uInt16(1), nByte);
+            nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
             ((SwChapterField*)pFld)->SetLevel((sal_uInt8)nByte);
             break;
@@ -1465,8 +1465,8 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
         case TYP_CHAPTERFLD:
         {
             sal_uInt16 nByte = (sal_uInt16)rPar2.ToInt32();
-            nByte = Max(sal_uInt16(1), nByte);
-            nByte = Min(nByte, sal_uInt16(MAXLEVEL));
+            nByte = std::max(sal_uInt16(1), nByte);
+            nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
             ((SwChapterField*)pTmpFld)->SetLevel((sal_uInt8)nByte);
             bSetPar2 = false;

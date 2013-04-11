@@ -197,7 +197,7 @@ Rectangle OConnectionLine::GetBoundingRect()
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
     //////////////////////////////////////////////////////////////////////
     // line proceeds in in z-Form
-    if( pSourceWin == pDestWin || Abs(m_aSourceConnPos.X() - m_aDestConnPos.X()) > Abs(m_aSourceDescrLinePos.X() - m_aDestDescrLinePos.X()) )
+    if( pSourceWin == pDestWin || std::abs(m_aSourceConnPos.X() - m_aDestConnPos.X()) > std::abs(m_aSourceDescrLinePos.X() - m_aDestDescrLinePos.X()) )
     {
         aTopLeft.X() -= DESCRIPT_LINE_WIDTH;
         aBottomRight.X() += DESCRIPT_LINE_WIDTH;

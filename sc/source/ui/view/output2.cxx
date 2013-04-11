@@ -1894,7 +1894,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                                     long nBot = (long)( aVars.GetMargin()->GetBottomMargin() * mnPPTY );
                                     nJustPosY += ( nOutHeight + nTop -
                                                     aVars.GetTextSize().Height() - nBot ) / 2;
-                                    nTestClipHeight += Abs( nTop - nBot );
+                                    nTestClipHeight += std::abs( nTop - nBot );
                                 }
                                 break;
                             default:
@@ -5124,7 +5124,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                                 if ( eRotMode != SVX_ROTATE_MODE_STANDARD )
                                 {
                                     nGridWidth = aCellSize.Width() +
-                                            Abs((long) ( aCellSize.Height() * nCos / nSin ));
+                                            std::abs((long) ( aCellSize.Height() * nCos / nSin ));
                                     bNegative = ( pInfo->nRotateDir == SC_ROTDIR_LEFT );
                                     if ( bLayoutRTL )
                                         bNegative = !bNegative;

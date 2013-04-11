@@ -291,7 +291,7 @@ ImplGrafControl::ImplGrafControl(
     maImage.SetPosPixel( Point( nOffset, nImgY ) );
     maField.SetPosPixel( Point( aImgSize.Width() + SYMBOL_TO_FIELD_OFFSET, nFldY ) );
     SetSizePixel( Size( aImgSize.Width() + aFldSize.Width() + SYMBOL_TO_FIELD_OFFSET + nOffset,
-                  Max( aImgSize.Height(), aFldSize.Height() ) ) );
+                  std::max( aImgSize.Height(), aFldSize.Height() ) ) );
 
     SetBackground( Wallpaper() ); // transparent background
 

@@ -299,9 +299,9 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                         aTmp1 = GetOut()->LogicToPixel( aTmp1 );
                         Rectangle aTmp2( GetOut()->PixelToLogic( aTmp1 ) );
                         if ( aTmp2.Left() > aRect.Left() )
-                            aTmp1.Left() = Max( 0L, aTmp1.Left() - 1L );
+                            aTmp1.Left() = std::max( 0L, aTmp1.Left() - 1L );
                         if ( aTmp2.Top() > aRect.Top() )
-                            aTmp1.Top() = Max( 0L, aTmp1.Top() - 1L );
+                            aTmp1.Top() = std::max( 0L, aTmp1.Top() - 1L );
                         aTmp1.Right() += 1;
                         aTmp1.Bottom() += 1;
                         aTmp1 = GetOut()->PixelToLogic( aTmp1 );
@@ -1121,7 +1121,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                             {
                                 const Rectangle &rBound = pObj->GetObjRect().SVRect();
                             // OD 03.03.2003 #107927# - use correct datatype
-                                const SwTwips nL = Max( 0L, rBound.Left() - nOfst );
+                                const SwTwips nL = std::max( 0L, rBound.Left() - nOfst );
                                 if ( nL < nMinLeft )
                                     nMinLeft = nL;
                                 if( rBound.Right() + nOfst > nMaxRight )
@@ -1215,7 +1215,7 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
     }
 
     // #i75172# isolated static conditions
-    const bool bOnlyYScroll(!lXDiff && Abs(lYDiff) != 0 && Abs(lYDiff) < lMax);
+    const bool bOnlyYScroll(!lXDiff && std::abs(lYDiff) != 0 && std::abs(lYDiff) < lMax);
     const bool bAllowedWithChildWindows(GetWin()->GetWindowClipRegionPixel(WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL).IsNull());
     const bool bSmoothScrollAllowed(bOnlyYScroll && mbEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
 
@@ -1232,9 +1232,9 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
         pVout->SetFillColor( GetWin()->GetFillColor() );
         MapMode aMapMode( GetWin()->GetMapMode() );
         pVout->SetMapMode( aMapMode );
-        Size aSize( maVisArea.Width()+2*aPixSz.Width(), Abs(lYDiff)+(2*aPixSz.Height()) );
+        Size aSize( maVisArea.Width()+2*aPixSz.Width(), std::abs(lYDiff)+(2*aPixSz.Height()) );
         if ( pRect )
-            aSize.Width() = Min(aSize.Width(), pRect->GetWidth()+2*aPixSz.Width());
+            aSize.Width() = std::min(aSize.Width(), pRect->GetWidth()+2*aPixSz.Width());
         if ( pVout->SetOutputSize( aSize ) )
         {
             mnLockPaint++;
@@ -1244,14 +1244,14 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
             aRect.Height( aSize.Height() );
             if ( pRect )
             {
-                aRect.Pos().X() = Max(aRect.Left(),pRect->Left()-aPixSz.Width());
-                aRect.Right( Min(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
+                aRect.Pos().X() = std::max(aRect.Left(),pRect->Left()-aPixSz.Width());
+                aRect.Right( std::min(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
             }
             else
                 aRect.SSize().Width() += 2*aPixSz.Width();
             aRect.Pos().Y() = lYDiff < 0 ? aOldVis.Bottom() - aPixSz.Height()
                                          : aRect.Top() - aSize.Height() + aPixSz.Height();
-            aRect.Pos().X() = Max( 0L, aRect.Left()-aPixSz.Width() );
+            aRect.Pos().X() = std::max( 0L, aRect.Left()-aPixSz.Width() );
             aRect.Pos()  = GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.Pos()));
             aRect.SSize()= GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.SSize()));
             maVisArea = aRect;
@@ -1303,7 +1303,7 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
             // as option?
             // ??????????????????????
             long lMaDelta = aPixSz.Height();
-            if ( Abs(lYDiff) > ( maVisArea.Height() / 3 ) )
+            if ( std::abs(lYDiff) > ( maVisArea.Height() / 3 ) )
                 lMaDelta *= 6;
             else
                 lMaDelta *= 2;
@@ -1317,7 +1317,7 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
             while ( lDiff )
             {
                 long lScroll;
-                if ( Imp()->bStopSmooth || Abs(lDiff) <= Abs(lMaDelta) )
+                if ( Imp()->bStopSmooth || std::abs(lDiff) <= std::abs(lMaDelta) )
                 {
                     lScroll = lDiff;
                     lDiff = 0;
@@ -2349,7 +2349,7 @@ sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwR
 
     // #i40059# Position out of bounds:
     SwRect aRect( rRect );
-    aRect.Pos().X() = Max( aRect.Left(), GetLayout()->Frm().Left() );
+    aRect.Pos().X() = std::max( aRect.Left(), GetLayout()->Frm().Left() );
 
     const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aRect.Center() );
     if ( pPage )

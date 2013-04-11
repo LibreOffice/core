@@ -922,7 +922,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
 
         if ( cChar == CH_BREAK )
         {
-            nWidth = Max( nWidth, nProWidth );
+            nWidth = std::max( nWidth, nProWidth );
             nProWidth = 0;
             nIdx++;
         }
@@ -973,7 +973,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
         } // end of while
     }
 
-    nWidth = Max( nWidth, nProWidth );
+    nWidth = std::max( nWidth, nProWidth );
 
     // search for a text frame this node belongs to
     SwIterator<SwTxtFrm,SwTxtNode> aFrmIter( *this );

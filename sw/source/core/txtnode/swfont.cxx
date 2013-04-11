@@ -189,7 +189,7 @@ sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
         const long nAscent = nOldAscent +
                              ( (long) nOrgHeight * GetEscapement() ) / 100L;
         if ( nAscent>0 )
-            return ( Max( sal_uInt16 (nAscent), nOrgAscent ));
+            return ( std::max( sal_uInt16 (nAscent), nOrgAscent ));
     }
     return nOrgAscent;
 }
@@ -672,7 +672,7 @@ sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
     {
         long nDescent = nOldHeight - nOldAscent -
                              ( (long) nOrgHeight * GetEscapement() ) / 100L;
-        const sal_uInt16 nDesc = ( nDescent>0 ) ? Max ( sal_uInt16(nDescent),
+        const sal_uInt16 nDesc = ( nDescent>0 ) ? std::max ( sal_uInt16(nDescent),
                    sal_uInt16(nOrgHeight - nOrgAscent) ) : nOrgHeight - nOrgAscent;
         return ( nDesc + CalcEscAscent( nOldAscent ) );
     }

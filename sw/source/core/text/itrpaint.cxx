@@ -179,7 +179,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     SwLinePortion *pPor = bEndPor ? pCurr->GetFirstPortion() : CalcPaintOfst( rPaint );
 
     // Optimierung!
-    const SwTwips nMaxRight = Min( rPaint.Right(), Right() );
+    const SwTwips nMaxRight = std::min( rPaint.Right(), Right() );
     const SwTwips nTmpLeft = GetInfo().X();
     if( !bEndPor && nTmpLeft >= nMaxRight )
         return;

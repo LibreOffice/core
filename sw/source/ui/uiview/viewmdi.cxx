@@ -111,7 +111,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // gespiegelte Seiten
         {
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
-            aPageSize.Width() += Abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
+            aPageSize.Width() += std::abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
         }
 
         if( SVX_ZOOM_OPTIMAL == eZoomType )
@@ -132,7 +132,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
             if ( SVX_ZOOM_WHOLEPAGE == eZoomType )
             {
                 long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
-                nFac = Min( nFac, nVisPercent );
+                nFac = std::min( nFac, nVisPercent );
             }
         }
         else
@@ -142,7 +142,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         }
     }
 
-    nFac = Max( long( MINZOOM ), nFac );
+    nFac = std::max( long( MINZOOM ), nFac );
 
     SwViewOption aOpt( *pOpt );
     if ( !GetViewFrame()->GetFrame().IsInPlace() )

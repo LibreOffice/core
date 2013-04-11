@@ -2105,7 +2105,7 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingWidth( SvxIconChoiceCtrlEntry* pEntry )
     switch( nWinBits & (VIEWMODE_MASK) )
     {
         case WB_ICON:
-            nWidth = Max( nStringWidth, aImageSize.Width() );
+            nWidth = std::max( nStringWidth, aImageSize.Width() );
             break;
 
         case WB_SMALLICON:
@@ -2133,7 +2133,7 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingHeight( SvxIconChoiceCtrlEntry* pEntry 
 
         case WB_SMALLICON:
         case WB_DETAILS:
-            nHeight = Max( aImageSize.Height(), nStringHeight );
+            nHeight = std::max( aImageSize.Height(), nStringHeight );
             break;
     }
     if( nHeight > nMaxBoundHeight )

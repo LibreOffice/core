@@ -300,7 +300,7 @@ void ScTabControl::UpdateStatus()
     SCTAB nCount = pDoc->GetTableCount();
     SCTAB i;
     OUString aString;
-    SCTAB nMaxCnt = Max( nCount, static_cast<SCTAB>(GetMaxId()) );
+    SCTAB nMaxCnt = std::max( nCount, static_cast<SCTAB>(GetMaxId()) );
     Color aTabBgColor;
 
     sal_Bool bModified = false;                                     // Tabellen-Namen

@@ -168,7 +168,7 @@ sal_uInt16 ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
         ++aSnappingPointIter )
     {
         const long nCurrent = *aSnappingPointIter;
-        if ( Abs(nCurrent - nOffset) < nSnappingEpsilon )
+        if ( std::abs(nCurrent - nOffset) < nSnappingEpsilon )
         {
             nOffset = nCurrent;
             nRet = mpImpl->maSnappingPointZooms[ nCount ];

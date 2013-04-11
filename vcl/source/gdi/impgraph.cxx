@@ -1091,7 +1091,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
                     if( pOStm )
                     {
                         sal_uLong   nFullLen = nHeaderLen + nLen;
-                        sal_uLong   nPartLen = Min( nFullLen, (sal_uLong) GRAPHIC_MAXPARTLEN );
+                        sal_uLong   nPartLen = std::min( nFullLen, (sal_uLong) GRAPHIC_MAXPARTLEN );
                         sal_uInt8*  pBuffer = (sal_uInt8*) rtl_allocateMemory( nPartLen );
 
                           pOStm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );

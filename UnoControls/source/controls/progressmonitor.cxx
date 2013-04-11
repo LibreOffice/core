@@ -754,14 +754,14 @@ void ProgressMonitor::impl_recalcLayout ()
     // But "Width" is oriented on left column below progressbar to!!! "max(...)"
     nX_Topic_Top            =   PROGRESSMONITOR_FREEBORDER                              ;
     nY_Topic_Top            =   PROGRESSMONITOR_FREEBORDER                              ;
-    nWidth_Topic_Top        =   Max ( aTopicSize_Top.Width, aTopicSize_Bottom.Width )   ;
+    nWidth_Topic_Top        =   std::max( aTopicSize_Top.Width, aTopicSize_Bottom.Width )   ;
     nHeight_Topic_Top       =   aTopicSize_Top.Height                                   ;
 
     // Right column before progressbar has relativ position to left column ...
     // ... and a size as rest of dialog size!
     nX_Text_Top             =   nX_Topic_Top+nWidth_Topic_Top+PROGRESSMONITOR_FREEBORDER;
     nY_Text_Top             =   nY_Topic_Top                                            ;
-    nWidth_Text_Top         =   Max ( aTextSize_Top.Width, aTextSize_Bottom.Width )     ;
+    nWidth_Text_Top         =   std::max ( aTextSize_Top.Width, aTextSize_Bottom.Width )     ;
     // Fix size of this column to minimum!
     sal_Int32 nSummaryWidth = nWidth_Text_Top+nWidth_Topic_Top+(3*PROGRESSMONITOR_FREEBORDER) ;
     if ( nSummaryWidth < PROGRESSMONITOR_DEFAULT_WIDTH )

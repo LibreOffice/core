@@ -922,8 +922,8 @@ sal_Bool Bitmap::CopyPixel( const Rectangle& rRectDst,
 
                     if( pWriteAcc )
                     {
-                        const long  nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                        const long  nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                        const long  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                        const long  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
                         const long  nSrcEndX = aRectSrc.Left() + nWidth;
                         const long  nSrcEndY = aRectSrc.Top() + nHeight;
                         long        nDstY = aRectDst.Top();
@@ -975,8 +975,8 @@ sal_Bool Bitmap::CopyPixel( const Rectangle& rRectDst,
 
                 if( pWriteAcc )
                 {
-                    const long  nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                    const long  nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                    const long  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                    const long  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
                     const long  nSrcX = aRectSrc.Left();
                     const long  nSrcY = aRectSrc.Top();
                     const long  nSrcEndX1 = nSrcX + nWidth - 1L;
@@ -1329,8 +1329,8 @@ sal_Bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
 
     if( pMaskAcc && pAcc )
     {
-        const long          nWidth = Min( pMaskAcc->Width(), pAcc->Width() );
-        const long          nHeight = Min( pMaskAcc->Height(), pAcc->Height() );
+        const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
+        const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
         const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
         BitmapColor         aReplace;
 
@@ -1406,8 +1406,8 @@ sal_Bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
     if( pAcc && pAlphaAcc && pNewAcc )
     {
         BitmapColor aCol;
-        const long  nWidth = Min( pAlphaAcc->Width(), pAcc->Width() );
-        const long  nHeight = Min( pAlphaAcc->Height(), pAcc->Height() );
+        const long  nWidth = std::min( pAlphaAcc->Width(), pAcc->Width() );
+        const long  nHeight = std::min( pAlphaAcc->Height(), pAcc->Height() );
 
         for( long nY = 0L; nY < nHeight; nY++ )
         {
@@ -1632,8 +1632,8 @@ sal_Bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
 
     if( pMaskAcc && pAcc )
     {
-        const long          nWidth = Min( pMaskAcc->Width(), pAcc->Width() );
-        const long          nHeight = Min( pMaskAcc->Height(), pAcc->Height() );
+        const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
+        const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
         const Color         aColBlack( COL_BLACK );
         BitmapColor         aPixel;
         BitmapColor         aMaskPixel;
@@ -1776,8 +1776,8 @@ sal_Bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
 
     if( pAlphaAcc && pAcc )
     {
-        const long          nWidth = Min( pAlphaAcc->Width(), pAcc->Width() );
-        const long          nHeight = Min( pAlphaAcc->Height(), pAcc->Height() );
+        const long          nWidth = std::min( pAlphaAcc->Width(), pAcc->Width() );
+        const long          nHeight = std::min( pAlphaAcc->Height(), pAcc->Height() );
 
         for( long nY = 0L; nY < nHeight; ++nY )
             for( long nX = 0L; nX < nWidth; ++nX )

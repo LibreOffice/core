@@ -526,8 +526,8 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
         else
             aGrfSize = LogicToLogic( maLogo.GetPrefSize(), maLogo.GetPrefMapMode(), rMap );
 
-        const Point aGrfPos( Max( aOutOrg.X() + aOutSize.Width() - aGrfSize.Width() - aOffset.Width(), aOutOrg.X() ),
-                             Max( aOutOrg.Y() + aOutSize.Height() - aGrfSize.Height() - aOffset.Height(), aOutOrg.Y() ) );
+        const Point aGrfPos( std::max( aOutOrg.X() + aOutSize.Width() - aGrfSize.Width() - aOffset.Width(), aOutOrg.X() ),
+                             std::max( aOutOrg.Y() + aOutSize.Height() - aGrfSize.Height() - aOffset.Height(), aOutOrg.Y() ) );
 
         if( maLogo.IsAnimated() )
             maLogo.StartAnimation( this, aGrfPos, aGrfSize, (long) this );

@@ -155,13 +155,13 @@ void Window::CalcMinZoom()
             // Decide whether to take the larger or the smaller factor.
             sal_uLong nFact;
             if (mbCalcMinZoomByMinSide)
-                nFact = Min(nX, nY);
+                nFact = std::min(nX, nY);
             else
-                nFact = Max(nX, nY);
+                nFact = std::max(nX, nY);
 
             // The factor is tansfomed according to the current zoom factor.
             nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
-            mnMinZoom = Max((sal_uInt16) MIN_ZOOM, (sal_uInt16) nFact);
+            mnMinZoom = std::max((sal_uInt16) MIN_ZOOM, (sal_uInt16) nFact);
         }
         // If the current zoom factor is smaller than the calculated minimal
         // zoom factor then set the new minimal factor as the current zoom
@@ -465,7 +465,7 @@ long Window::GetZoomForRect( const Rectangle& rZoomRect )
 
         // Use the smaller one of both so that the zoom rectangle will be
         // fully visible with respect to both coordinate directions.
-        sal_uLong nFact = Min(nX, nY);
+        sal_uLong nFact = std::min(nX, nY);
 
         // Transform the current zoom factor so that it leads to the desired
         // scaling.
@@ -538,7 +538,7 @@ long Window::SetZoomRect (const Rectangle& rZoomRect)
 
         // Use the smaller one of both so that the zoom rectangle will be
         // fully visible with respect to both coordinate directions.
-        sal_uLong nFact = Min(nX, nY);
+        sal_uLong nFact = std::min(nX, nY);
 
         // Transform the current zoom factor so that it leads to the desired
         // scaling.

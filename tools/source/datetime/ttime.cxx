@@ -343,7 +343,7 @@ Time Time::GetUTCOffset()
         nTempTime += aTimeZone.StandardBias;
     else if ( nTimeZoneRet == TIME_ZONE_ID_DAYLIGHT )
         nTempTime += aTimeZone.DaylightBias;
-    Time aTime( 0, (sal_uInt16)Abs( nTempTime ) );
+    Time aTime( 0, (sal_uInt16)abs( nTempTime ) );
     if ( nTempTime > 0 )
         aTime = -aTime;
     return aTime;
@@ -381,7 +381,7 @@ Time Time::GetUTCOffset()
          nCacheSecOffset = (nLocalTime-nUTC) / 60;
     }
 
-    nTempTime = (short)Abs( nCacheSecOffset );
+    nTempTime = abs( nCacheSecOffset );
     Time aTime( 0, (sal_uInt16)nTempTime );
     if ( nCacheSecOffset < 0 )
         aTime = -aTime;

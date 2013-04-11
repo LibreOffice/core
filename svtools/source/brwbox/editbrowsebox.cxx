@@ -1248,7 +1248,7 @@ namespace svt
         sal_uInt32 nCurColWidth  = GetColumnWidth(nColId);
         sal_uInt32 nMinColWidth = CalcZoom(20); // minimum
         sal_uInt32 nNewColWidth = nMinColWidth;
-        long nMaxRows      = Min(long(GetVisibleRows()), GetRowCount());
+        long nMaxRows      = std::min(long(GetVisibleRows()), GetRowCount());
         long nLastVisRow   = GetTopRow() + nMaxRows - 1;
 
         if (GetTopRow() <= nLastVisRow) // calc the column with using the cell contents

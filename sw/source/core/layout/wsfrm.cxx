@@ -1384,7 +1384,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
         if ( nDiff > 0 )
         {
             nChg = BROWSE_HEIGHT - pUp->Frm().Height();
-            nChg = Min( nDiff, nChg );
+            nChg = std::min( nDiff, nChg );
 
             if ( !IsBodyFrm() )
             {
@@ -1396,7 +1396,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                     const long nTmp = nChg - pBody->Prt().Height();
                     if ( !bTst )
                     {
-                        pBody->Frm().Height(Max( 0L, pBody->Frm().Height() - nChg ));
+                        pBody->Frm().Height(std::max( 0L, pBody->Frm().Height() - nChg ));
                         pBody->_InvalidatePrt();
                         pBody->_InvalidateSize();
                         if ( pBody->GetNext() )
@@ -3136,7 +3136,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
                     pFrm = pFrm->GetNext();
                 }
                 nRemaining += nBorder;
-                nRemaining = Max( nRemaining, nMinHeight );
+                nRemaining = std::max( nRemaining, nMinHeight );
                 const SwTwips nDiff = nRemaining-(Frm().*fnRect->fnGetHeight)();
                 const long nOldLeft = (Frm().*fnRect->fnGetLeft)();
                 const long nOldTop = (Frm().*fnRect->fnGetTop)();
@@ -3267,7 +3267,7 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
             if ( nDiff > 0 )
                 nRel -= nDiff;
         }
-        nRel = Min( nRel, pRel->Prt().Width() );
+        nRel = std::min( nRel, pRel->Prt().Width() );
         nRet = nRel * nPercent / 100;
     }
     return nRet;
@@ -3294,7 +3294,7 @@ static long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
                 if ( pCol == pLayFrm->Lower() )
                     nFirstDiff = nTmp;
                 else
-                    nDiff = nDiff ? Min( nDiff, nTmp ) : nTmp;
+                    nDiff = nDiff ? std::min( nDiff, nTmp ) : nTmp;
             }
         }
         //Skip empty columns!
@@ -3565,7 +3565,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         nDiff = nMinDiff;
                     // If we should grow more than by nMinDiff we split it over
                     // the columns
-                    if ( Abs(nDiff - nMinDiff) > nNumCols && nDiff > (long)nNumCols )
+                    if ( std::abs(nDiff - nMinDiff) > nNumCols && nDiff > (long)nNumCols )
                         nDiff /= nNumCols;
 
                     if ( bMinDiff )
@@ -3576,7 +3576,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         // nMinDiff afterwards.
                         long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
                         if ( nFrmHeight > nMinHeight || nPrtHeight >= nMinDiff )
-                            nDiff = Max( nDiff, nMinDiff );
+                            nDiff = std::max( nDiff, nMinDiff );
                         else if( nDiff < nMinDiff )
                             nDiff = nMinDiff - nPrtHeight + 1;
                     }

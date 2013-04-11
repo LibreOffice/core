@@ -1442,12 +1442,12 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     sal_Bool bResize = false;
     // sizes can differ by 1 from twips->1/100mm conversion for equal cell sizes,
     // don't resize to empty size when pasting into hidden columns or rows
-    if ( Abs(nWidthDiff) > 1 && nDestWidth > 1 && nSourceWidth > 1 )
+    if ( std::abs(nWidthDiff) > 1 && nDestWidth > 1 && nSourceWidth > 1 )
     {
         aHorFract = Fraction( nDestWidth, nSourceWidth );
         bResize = sal_True;
     }
-    if ( Abs(nHeightDiff) > 1 && nDestHeight > 1 && nSourceHeight > 1 )
+    if ( std::abs(nHeightDiff) > 1 && nDestHeight > 1 && nSourceHeight > 1 )
     {
         aVerFract = Fraction( nDestHeight, nSourceHeight );
         bResize = sal_True;
