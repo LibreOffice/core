@@ -1854,18 +1854,16 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
 
         if ( bExact )
         {
-            aMsgStr  = ScGlobal::GetRscString( STR_MSSG_SOLVE_0 );
-            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_1 );
+            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_0 );
             aMsgStr += String( aResStr );
-            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_2 );
+            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_1 );
         }
         else
         {
-            aMsgStr  = ScGlobal::GetRscString( STR_MSSG_SOLVE_3 );
-            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_4 );
-            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_5 );
+            aMsgStr  = ScGlobal::GetRscString( STR_MSSG_SOLVE_2 );
+            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_3 );
             aMsgStr += String( aResStr );
-            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_6 );
+            aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_4 );
         }
 
         MessBox aBox( GetViewData()->GetDialogParent(),
