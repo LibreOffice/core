@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <cstdlib>
+#include <cstring>
 
 #include "rtl/alloc.h"
 #include "codemaker/typemanager.hxx"
@@ -344,7 +345,7 @@ bool TypeManager::foundAtPrimaryProvider(rtl::OUString const & name) const {
 }
 
 codemaker::UnoType::Sort TypeManager::getSort(
-    rtl::OUString const & name, rtl::Reference< unoidl::Entity > * entity,
+    OUString const & name, rtl::Reference< unoidl::Entity > * entity,
     rtl::Reference< unoidl::MapCursor > * cursor) const
 {
     if (name.isEmpty()) {
@@ -441,6 +442,124 @@ codemaker::UnoType::Sort TypeManager::getSort(
         return codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON;
     default:
         for (;;) { std::abort(); } // this cannot happen
+    }
+}
+
+codemaker::UnoType::Sort TypeManager::getSortResolveOuterSequences(
+    OUString const & name, OUString * nucleus, sal_Int32 * rank) const
+{
+    assert(nucleus != 0);
+    assert(rank != 0);
+    *nucleus = name;
+    *rank = 0;
+    while (nucleus->startsWith("[]")) {
+        ++rank;
+        *nucleus = nucleus->copy(std::strlen("[]"));
+    }
+    codemaker::UnoType::Sort s = getSort(*nucleus);
+    switch (s) {
+    case codemaker::UnoType::SORT_BOOLEAN:
+    case codemaker::UnoType::SORT_BYTE:
+    case codemaker::UnoType::SORT_SHORT:
+    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
+    case codemaker::UnoType::SORT_LONG:
+    case codemaker::UnoType::SORT_UNSIGNED_LONG:
+    case codemaker::UnoType::SORT_HYPER:
+    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
+    case codemaker::UnoType::SORT_FLOAT:
+    case codemaker::UnoType::SORT_DOUBLE:
+    case codemaker::UnoType::SORT_CHAR:
+    case codemaker::UnoType::SORT_STRING:
+    case codemaker::UnoType::SORT_TYPE:
+    case codemaker::UnoType::SORT_ANY:
+    case codemaker::UnoType::SORT_ENUM_TYPE:
+    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::SORT_TYPEDEF:
+        return s;
+    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+        assert(false); // this cannot happen
+        // fall through
+    default:
+        throw CannotDumpException(
+            "unexpected \"" + *nucleus + "\" resolved from \"" + name
+            + "\"in call to TypeManager::getSortResolveOuterSequences");
+    }
+}
+
+codemaker::UnoType::Sort
+TypeManager::getSortResolveAllSequencesTemplatesTypedefs(
+    OUString const & name, OUString * nucleus, sal_Int32 * rank,
+    std::vector< OUString > * arguments,
+    rtl::Reference< unoidl::Entity > * entity) const
+{
+    assert(nucleus != 0);
+    assert(rank != 0);
+    assert(arguments != 0);
+    arguments->clear();
+    std::vector< OString > args;
+    *nucleus = b2u(codemaker::UnoType::decompose(u2b(name), rank, &args));
+    for (;;) {
+        rtl::Reference< unoidl::Entity > ent;
+        codemaker::UnoType::Sort s = getSort(*nucleus, &ent);
+        if (args.empty()
+            != (s != codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE))
+        {
+            throw CannotDumpException(
+                "syntax error, \"" + *nucleus + "\" resolved from \""
+                + name + "\"");
+        }
+        switch (s) {
+        case codemaker::UnoType::SORT_VOID:
+        case codemaker::UnoType::SORT_BOOLEAN:
+        case codemaker::UnoType::SORT_BYTE:
+        case codemaker::UnoType::SORT_SHORT:
+        case codemaker::UnoType::SORT_UNSIGNED_SHORT:
+        case codemaker::UnoType::SORT_LONG:
+        case codemaker::UnoType::SORT_UNSIGNED_LONG:
+        case codemaker::UnoType::SORT_HYPER:
+        case codemaker::UnoType::SORT_UNSIGNED_HYPER:
+        case codemaker::UnoType::SORT_FLOAT:
+        case codemaker::UnoType::SORT_DOUBLE:
+        case codemaker::UnoType::SORT_CHAR:
+        case codemaker::UnoType::SORT_STRING:
+        case codemaker::UnoType::SORT_TYPE:
+        case codemaker::UnoType::SORT_ANY:
+        case codemaker::UnoType::SORT_ENUM_TYPE:
+        case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+        case codemaker::UnoType::SORT_INTERFACE_TYPE:
+            if (entity != 0) {
+                *entity = ent;
+            }
+            return s;
+        case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+            if (entity != 0) {
+                *entity = ent;
+            }
+            for (std::vector< OString >::iterator i(args.begin());
+                 i != args.end(); ++i)
+            {
+                arguments->push_back(b2u(*i));
+            }
+            return
+                codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE;
+        case codemaker::UnoType::SORT_TYPEDEF:
+            *nucleus = dynamic_cast< unoidl::TypedefEntity * >(ent.get())->
+                getType();
+            while (nucleus->startsWith("[]")) {
+                ++*rank; //TODO: overflow
+                *nucleus = nucleus->copy(std::strlen("[]"));
+            }
+            break;
+        case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+            assert(false); // this cannot happen
+            // fall through
+        default:
+            throw CannotDumpException(
+                "unexpected \"" + *nucleus + "\" resolved from \"" + name
+                + ("\"in call to TypeManager::"
+                   "getSortResolveAllSequencesTemplatesTypedefs"));
+        }
     }
 }
 

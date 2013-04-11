@@ -25,8 +25,8 @@
 namespace codemaker { namespace java {
 
 rtl::OString translateUnoToJavaType(
-    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    rtl::OString const & nucleus, bool referenceType);
+    codemaker::UnoType::Sort sort, rtl::OString const & nucleus,
+    bool referenceType);
 
 rtl::OString translateUnoToJavaIdentifier(
     rtl::OString const & identifier, rtl::OString const & prefix);

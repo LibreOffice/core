@@ -82,7 +82,7 @@ void printType(std::ostream & o,
     }
 
     OString sType(codemaker::java::translateUnoToJavaType(
-                      sort, typeClass, name, referenceType && rank==0).replace('/', '.'));
+                      sort, name, referenceType && rank==0).replace('/', '.'));
     if ( sType.indexOf("java.lang.") == 0 )
         sType = sType.copy(10);
     o << sType.getStr();

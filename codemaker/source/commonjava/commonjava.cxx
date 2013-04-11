@@ -40,20 +40,10 @@
 namespace codemaker { namespace java {
 
 OString translateUnoToJavaType(
-    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    OString const & nucleus, bool referenceType)
+    codemaker::UnoType::Sort sort, OString const & nucleus, bool referenceType)
 {
     OStringBuffer buf;
-    if (sort == codemaker::UnoType::SORT_COMPLEX) {
-        if (typeClass == RT_TYPE_INTERFACE && nucleus == "com/sun/star/uno/XInterface")
-        {
-            buf.append("java/lang/Object");
-        } else {
-            //TODO: check that nucleus is a valid (Java-modified UTF-8)
-            // identifier
-            buf.append(nucleus);
-        }
-    } else {
+    if (sort <= codemaker::UnoType::SORT_ANY) {
         OString const javaTypes[codemaker::UnoType::SORT_ANY + 1][2] = {
             { "void", "java/lang/Void" },
             { "boolean", "java/lang/Boolean" },
@@ -71,6 +61,14 @@ OString translateUnoToJavaType(
             { "com/sun/star/uno/Type", "com/sun/star/uno/Type" },
             { "java/lang/Object", "java/lang/Object" } };
         buf.append(javaTypes[sort][referenceType]);
+    } else {
+        if (nucleus == "com/sun/star/uno/XInterface") {
+            buf.append("java/lang/Object");
+        } else {
+            //TODO: check that nucleus is a valid (Java-modified UTF-8)
+            // identifier
+            buf.append(nucleus);
+        }
     }
     return buf.makeStringAndClear();
 }

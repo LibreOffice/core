@@ -23,21 +23,16 @@
 #include "sal/config.h"
 
 #include "rtl/ref.hxx"
-#include "rtl/string.hxx"
 
 namespace codemaker { class GeneratedTypeSet; }
+namespace rtl { class OUString; }
 class JavaOptions;
 class TypeManager;
-class RegistryKey;
 
-bool produceType(
-    OString const & type, rtl::Reference< TypeManager > const & manager,
-    codemaker::GeneratedTypeSet & generated, JavaOptions * pOptions);
+void produce(
+    rtl::OUString const & name, rtl::Reference< TypeManager > const & manager,
+    codemaker::GeneratedTypeSet & generated, JavaOptions const & options);
 
-bool produceType(RegistryKey& typeName, bool bIsExtraType, rtl::Reference< TypeManager > const & typeMgr,
-                 codemaker::GeneratedTypeSet & generated,
-                 JavaOptions* pOptions);
-
-#endif // INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

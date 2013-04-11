@@ -79,14 +79,21 @@ public:
     sal_Int32 getSize() const { return m_t2TypeClass.size(); }
 
 
-    void loadProvider(rtl::OUString const & uri, bool primary);
+    void loadProvider(OUString const & uri, bool primary);
 
-    bool foundAtPrimaryProvider(rtl::OUString const & name) const;
+    bool foundAtPrimaryProvider(OUString const & name) const;
 
     codemaker::UnoType::Sort getSort(
-        rtl::OUString const & name,
-        rtl::Reference< unoidl::Entity > * entity = 0,
+        OUString const & name, rtl::Reference< unoidl::Entity > * entity = 0,
         rtl::Reference< unoidl::MapCursor > * cursor = 0) const;
+
+    codemaker::UnoType::Sort getSortResolveOuterSequences(
+        OUString const & name, OUString * nucleus, sal_Int32 * rank) const;
+
+    codemaker::UnoType::Sort getSortResolveAllSequencesTemplatesTypedefs(
+        OUString const & name, OUString * nucleus, sal_Int32 * rank,
+        std::vector< OUString > * arguments,
+        rtl::Reference< unoidl::Entity > * entity) const;
 
 private:
     virtual ~TypeManager();

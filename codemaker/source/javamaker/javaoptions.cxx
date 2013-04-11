@@ -87,30 +87,6 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     m_options["-O"] = OString(s);
                     break;
-                case 'B':
-                    if (av[i][2] == '\0')
-                    {
-                        if (i < ac - 1 && av[i+1][0] != '-')
-                        {
-                            i++;
-                            s = av[i];
-                        } else
-                        {
-                            OString tmp("'-B', please check");
-                            if (i <= ac - 1)
-                            {
-                                tmp += " your input '" + OString(av[i+1]) + "'";
-                            }
-
-                            throw IllegalArgument(tmp);
-                        }
-                    } else
-                    {
-                        s = av[i] + 2;
-                    }
-
-                    m_options["-B"] = OString(s);
-                    break;
                 case 'n':
                     if (av[i][2] != 'D' || av[i][3] != '\0')
                     {
@@ -273,8 +249,6 @@ OString JavaOptions::prepareHelp()
     help += "      [t1;...]   type and all dependent types are generated. If no '-T' option is \n";
     help += "                 specified, then output for all types is generated.\n";
     help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
-    help += "    -B<name>   = name specifies the base node. All types are searched under this\n";
-    help += "                 node. Default is the root '/' of the registry files.\n";
     help += "    -nD        = no dependent types are generated.\n";
     help += "    -G         = generate only target files which does not exists.\n";
     help += "    -Gc        = generate only target files which content will be changed.\n";

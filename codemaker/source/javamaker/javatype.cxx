@@ -17,11 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
-#include "javatype.hxx"
-
-#include "classfile.hxx"
-#include "javaoptions.hxx"
+#include <algorithm>
+#include <cassert>
+#include <list>
+#include <map>
+#include <memory>
+#include <set>
+#include <utility>
+#include <vector>
 
 #include "codemaker/exceptiontree.hxx"
 #include "codemaker/generatedtypeset.hxx"
@@ -30,86 +35,66 @@
 #include "codemaker/typemanager.hxx"
 #include "codemaker/unotype.hxx"
 #include "codemaker/commonjava.hxx"
-
-#include "osl/diagnose.h"
-#include "registry/reader.hxx"
-#include "registry/refltype.hxx"
-#include "registry/types.h"
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
-#include "rtl/string.h"
 #include "rtl/string.hxx"
-#include "rtl/textcvt.h"
-#include "rtl/textenc.h"
-#include "rtl/ustring.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "unoidl/unoidl.hxx"
 
-#include <algorithm>
-#include <list>
-#include <map>
-#include <memory>
-#include <set>
-#include <utility>
-#include <vector>
+#include "classfile.hxx"
+#include "javaoptions.hxx"
+#include "javatype.hxx"
 
 using codemaker::javamaker::ClassFile;
 
 namespace {
 
-// helper function for createUnoName
 void appendUnoName(
-    rtl::Reference< TypeManager > const & manager, rtl::OString const & nucleus, sal_Int32 rank,
-    std::vector< rtl::OString > const & arguments, rtl::OStringBuffer * buffer)
+    rtl::Reference< TypeManager > const & manager, OUString const & nucleus,
+    sal_Int32 rank, std::vector< OUString > const & arguments,
+    OUStringBuffer * buffer)
 {
-    OSL_ASSERT(rank >= 0 && buffer != 0);
-    for (sal_Int32 i = 0; i < rank; ++i) {
+    assert(manager.is());
+    assert(rank >= 0);
+    assert(buffer != 0);
+    for (sal_Int32 i = 0; i != rank; ++i) {
         buffer->append("[]");
     }
-    buffer->append(nucleus.replace('/', '.'));
+    buffer->append(nucleus);
     if (!arguments.empty()) {
         buffer->append('<');
-        for (std::vector< rtl::OString >::const_iterator i(arguments.begin());
+        for (std::vector< OUString >::const_iterator i(arguments.begin());
              i != arguments.end(); ++i)
         {
             if (i != arguments.begin()) {
                 buffer->append(',');
             }
-            RTTypeClass argTypeClass;
-            rtl::OString argNucleus;
-            sal_Int32 argRank;
-            std::vector< rtl::OString > argArgs;
-            codemaker::decomposeAndResolve(
-                manager, *i, true, false, false, &argTypeClass, &argNucleus,
-                &argRank, &argArgs);
-            appendUnoName(manager, argNucleus, argRank, argArgs, buffer);
+            OUString n;
+            sal_Int32 k;
+            std::vector< OUString > args;
+            manager->getSortResolveAllSequencesTemplatesTypedefs(
+                *i, &n, &k, &args, 0);
+            appendUnoName(manager, n, k, args, buffer);
         }
         buffer->append('>');
     }
 }
 
-// Translate the name of a UNO type registry entity (enum type, plain struct
-// type, polymorphic struct type template, or interface type, decomposed into
-// nucleus, rank, and arguments) into a core UNO type name:
-rtl::OString createUnoName(
-    rtl::Reference< TypeManager > const & manager, rtl::OString const & nucleus, sal_Int32 rank,
-    std::vector< rtl::OString > const & arguments)
+// Translate the name of a UNOIDL entity (enum type, plain struct type,
+// polymorphic struct type template, or interface type, decomposed into nucleus,
+// sequence rank, and template arguments) into a core UNO type name:
+OUString createUnoName(
+    rtl::Reference< TypeManager > const & manager, OUString const & nucleus,
+    sal_Int32 rank, std::vector< OUString > const & arguments)
 {
-    rtl::OStringBuffer buf;
+    OUStringBuffer buf;
     appendUnoName(manager, nucleus, rank, arguments, &buf);
     return buf.makeStringAndClear();
 }
 
-/**
-   Set of UTF-8--encoded names of UNO type registry entities a given UNO type
-   registry entity depends on.
-
-   UNO type registry entities are enum types, plain struct types, polymorphic
-   struct type templates, exception types, interface types, typedefs, modules,
-   constant groupds, single-interface--based services, accumulation-based
-   services, interface-based singletons, and service-based singletons.
- */
-typedef std::set< rtl::OString > Dependencies;
+typedef std::set< OUString > Dependencies;
 
 enum SpecialType {
     SPECIAL_TYPE_NONE,
@@ -122,12 +107,15 @@ bool isSpecialType(SpecialType special) {
     return special >= SPECIAL_TYPE_UNSIGNED;
 }
 
-rtl::OString translateUnoTypeToJavaFullyQualifiedName(
-    rtl::OString const & type, rtl::OString const & prefix)
+OString translateUnoidlEntityNameToJavaFullyQualifiedName(
+    OUString const & name, OString const & prefix)
 {
-    sal_Int32 i = type.lastIndexOf('/') + 1;
-    return type.copy(0, i) +
-        codemaker::java::translateUnoToJavaIdentifier(type.copy(i), prefix);
+    assert(!name.startsWith("[]"));
+    assert(name.indexOf('<') == -1);
+    sal_Int32 i = name.lastIndexOf('.') + 1;
+    return codemaker::convertString(name.copy(0, i)).replace('.', '/')
+        + codemaker::java::translateUnoToJavaIdentifier(
+            codemaker::convertString(name.copy(i)), prefix);
 }
 
 struct PolymorphicUnoType {
@@ -135,32 +123,37 @@ struct PolymorphicUnoType {
 
     enum Kind { KIND_NONE, KIND_STRUCT, KIND_SEQUENCE };
     Kind kind;
-    rtl::OString name;
+    OUString name;
 };
 
 SpecialType translateUnoTypeToDescriptor(
-    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
+    rtl::Reference< TypeManager > const & manager, OUString const & type,
     bool array, bool classType, Dependencies * dependencies,
-    rtl::OStringBuffer * descriptor, rtl::OStringBuffer * signature,
+    OStringBuffer * descriptor, OStringBuffer * signature,
     bool * needsSignature, PolymorphicUnoType * polymorphicUnoType);
 
 SpecialType translateUnoTypeToDescriptor(
     rtl::Reference< TypeManager > const & manager,
-    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    rtl::OString const & nucleus, sal_Int32 rank,
-    std::vector< rtl::OString > const & arguments, bool array, bool classType,
-    Dependencies * dependencies, rtl::OStringBuffer * descriptor,
-    rtl::OStringBuffer * signature, bool * needsSignature,
+    codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
+    std::vector< OUString > const & arguments, bool array, bool classType,
+    Dependencies * dependencies, OStringBuffer * descriptor,
+    OStringBuffer * signature, bool * needsSignature,
     PolymorphicUnoType * polymorphicUnoType)
 {
-    OSL_ASSERT(rank >= 0 && (signature == 0) == (needsSignature == 0));
+    assert(rank >= 0);
+    assert((signature == 0) == (needsSignature == 0));
+    assert(
+        arguments.empty()
+        == (sort
+            != codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE));
     if (rank > 0xFF - (array ? 1 : 0)) {
-        throw CannotDumpException("Too many array dimensions for Java class file format");
+        throw CannotDumpException(
+            "Too many array dimensions for Java class file format");
     }
     if (array) {
         ++rank;
     }
-    for (sal_Int32 i = 0; i < rank; ++i) {
+    for (sal_Int32 i = 0; i != rank; ++i) {
         if (descriptor != 0) {
             descriptor->append('[');
         }
@@ -168,60 +161,38 @@ SpecialType translateUnoTypeToDescriptor(
             signature->append('[');
         }
     }
-    if (sort == codemaker::UnoType::SORT_COMPLEX) {
-        //TODO: check that nucleus is a valid (Java-modified UTF-8) identifier
-        if (typeClass == RT_TYPE_INTERFACE && nucleus == "com/sun/star/uno/XInterface")
+    if (polymorphicUnoType != 0) {
+        if (sort
+            == codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE)
         {
-            if (descriptor != 0) {
-                descriptor->append("Ljava/lang/Object;");
-            }
-            if (signature != 0) {
-                signature->append("Ljava/lang/Object;");
-            }
-            if (polymorphicUnoType != 0) {
-                polymorphicUnoType->kind = PolymorphicUnoType::KIND_NONE;
-            }
-            return SPECIAL_TYPE_INTERFACE;
+            polymorphicUnoType->kind = rank == 0
+                ? PolymorphicUnoType::KIND_STRUCT
+                : PolymorphicUnoType::KIND_SEQUENCE;
+            polymorphicUnoType->name = createUnoName(
+                manager, nucleus, rank, arguments);
         } else {
-            if (dependencies != 0) {
-                dependencies->insert(nucleus);
-            }
-            if (descriptor != 0) {
-                descriptor->append("L" + nucleus + ";");
-            }
-            if (signature != 0) {
-                signature->append("L" + nucleus);
-                if (!arguments.empty()) {
-                    signature->append('<');
-                    for (std::vector< rtl::OString >::const_iterator i(
-                             arguments.begin());
-                         i != arguments.end(); ++i)
-                    {
-                        translateUnoTypeToDescriptor(
-                            manager, *i, false, true, dependencies, 0,
-                            signature, needsSignature, 0);
-                    }
-                    signature->append('>');
-                    *needsSignature = true;
-                }
-                signature->append(';');
-            }
-            if (polymorphicUnoType != 0) {
-                if (arguments.empty()) {
-                    polymorphicUnoType->kind = PolymorphicUnoType::KIND_NONE;
-                } else {
-                    polymorphicUnoType->kind = rank == 0
-                        ? PolymorphicUnoType::KIND_STRUCT
-                        : PolymorphicUnoType::KIND_SEQUENCE;
-                    polymorphicUnoType->name = createUnoName(
-                        manager, nucleus, rank, arguments);
-                }
-            }
-            return SPECIAL_TYPE_NONE;
+            polymorphicUnoType->kind = PolymorphicUnoType::KIND_NONE;
         }
-    } else {
-        static rtl::OString const
-            simpleTypeDescriptors[codemaker::UnoType::SORT_ANY + 1][2] = {
+    }
+    switch (sort) {
+    case codemaker::UnoType::SORT_VOID:
+    case codemaker::UnoType::SORT_BOOLEAN:
+    case codemaker::UnoType::SORT_BYTE:
+    case codemaker::UnoType::SORT_SHORT:
+    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
+    case codemaker::UnoType::SORT_LONG:
+    case codemaker::UnoType::SORT_UNSIGNED_LONG:
+    case codemaker::UnoType::SORT_HYPER:
+    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
+    case codemaker::UnoType::SORT_FLOAT:
+    case codemaker::UnoType::SORT_DOUBLE:
+    case codemaker::UnoType::SORT_CHAR:
+    case codemaker::UnoType::SORT_STRING:
+    case codemaker::UnoType::SORT_TYPE:
+    case codemaker::UnoType::SORT_ANY:
+        {
+            static char const * const
+                simpleTypeDescriptors[codemaker::UnoType::SORT_ANY + 1][2] = {
                 { "V", "Ljava/lang/Void;" },
                 { "Z", "Ljava/lang/Boolean;" },
                 { "B", "Ljava/lang/Byte;" },
@@ -237,55 +208,98 @@ SpecialType translateUnoTypeToDescriptor(
                 { "Ljava/lang/String;", "Ljava/lang/String;" },
                 { "Lcom/sun/star/uno/Type;", "Lcom/sun/star/uno/Type;" },
                 { "Ljava/lang/Object;", "Ljava/lang/Object;" } };
-        rtl::OString const & s
-            = simpleTypeDescriptors[sort][rank == 0 && classType];
-        if (descriptor != 0) {
-            descriptor->append(s);
-        }
-        if (signature != 0) {
-            signature->append(s);
-        }
-        if (polymorphicUnoType != 0) {
-            polymorphicUnoType->kind = PolymorphicUnoType::KIND_NONE;
-        }
-        static SpecialType const
-            simpleTypeSpecials[codemaker::UnoType::SORT_ANY + 1] = {
+            char const * s
+                = simpleTypeDescriptors[sort][rank == 0 && classType];
+            if (descriptor != 0) {
+                descriptor->append(s);
+            }
+            if (signature != 0) {
+                signature->append(s);
+            }
+            static SpecialType const
+                simpleTypeSpecials[codemaker::UnoType::SORT_ANY + 1] = {
                 SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE,
                 SPECIAL_TYPE_NONE, SPECIAL_TYPE_UNSIGNED, SPECIAL_TYPE_NONE,
                 SPECIAL_TYPE_UNSIGNED, SPECIAL_TYPE_NONE, SPECIAL_TYPE_UNSIGNED,
                 SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE,
                 SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE, SPECIAL_TYPE_ANY };
-        return simpleTypeSpecials[sort];
+            return simpleTypeSpecials[sort];
+        }
+    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+        if (nucleus == "com.sun.star.uno.XInterface") {
+            if (descriptor != 0) {
+                descriptor->append("Ljava/lang/Object;");
+            }
+            if (signature != 0) {
+                signature->append("Ljava/lang/Object;");
+            }
+            return SPECIAL_TYPE_INTERFACE;
+        }
+        // fall through
+    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+    case codemaker::UnoType::SORT_ENUM_TYPE:
+    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+        if (dependencies != 0) {
+            dependencies->insert(nucleus);
+        }
+        if (descriptor != 0) {
+            descriptor->append(
+                "L" + codemaker::convertString(nucleus).replace('.', '/')
+                + ";");
+        }
+        if (signature != 0) {
+            signature->append(
+                "L" + codemaker::convertString(nucleus).replace('.', '/'));
+            if (!arguments.empty()) {
+                signature->append('<');
+                for (std::vector< OUString >::const_iterator i(
+                         arguments.begin());
+                     i != arguments.end(); ++i)
+                {
+                    translateUnoTypeToDescriptor(
+                        manager, *i, false, true, dependencies, 0, signature,
+                        needsSignature, 0);
+                }
+                signature->append('>');
+                *needsSignature = true;
+            }
+            signature->append(';');
+        }
+        return SPECIAL_TYPE_NONE;
+    default:
+        throw CannotDumpException(
+            "unexpected nucleus \"" + nucleus
+            + "\" in call to translateUnoTypeToDescriptor");
     }
 }
 
 SpecialType translateUnoTypeToDescriptor(
-    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
+    rtl::Reference< TypeManager > const & manager, OUString const & type,
     bool array, bool classType, Dependencies * dependencies,
-    rtl::OStringBuffer * descriptor, rtl::OStringBuffer * signature,
+    OStringBuffer * descriptor, OStringBuffer * signature,
     bool * needsSignature, PolymorphicUnoType * polymorphicUnoType)
 {
-    RTTypeClass typeClass;
-    rtl::OString nucleus;
+    assert(manager.is());
+    OUString nucleus;
     sal_Int32 rank;
-    std::vector< rtl::OString > args;
-    codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
-        manager, type, true, true, false, &typeClass, &nucleus, &rank, &args);
-    OSL_ASSERT(rank < SAL_MAX_INT32);
+    std::vector< OUString > args;
+    codemaker::UnoType::Sort sort = manager->
+        getSortResolveAllSequencesTemplatesTypedefs(
+            type, &nucleus, &rank, &args, 0);
     return translateUnoTypeToDescriptor(
-        manager, sort, typeClass, nucleus, rank, args, array, classType,
-        dependencies, descriptor, signature, needsSignature,
-        polymorphicUnoType);
+        manager, sort, nucleus, rank, args, array, classType, dependencies,
+        descriptor, signature, needsSignature, polymorphicUnoType);
 }
 
 SpecialType getFieldDescriptor(
     rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
-    rtl::OString const & type, rtl::OString * descriptor,
-    rtl::OString * signature, PolymorphicUnoType * polymorphicUnoType)
+    OUString const & type, OString * descriptor, OString * signature,
+    PolymorphicUnoType * polymorphicUnoType)
 {
-    OSL_ASSERT(dependencies != 0 && descriptor != 0);
-    rtl::OStringBuffer desc;
-    rtl::OStringBuffer sig;
+    assert(descriptor != 0);
+    OStringBuffer desc;
+    OStringBuffer sig;
     bool needsSig = false;
     SpecialType specialType = translateUnoTypeToDescriptor(
         manager, type, false, false, dependencies, &desc, &sig, &needsSig,
@@ -295,7 +309,7 @@ SpecialType getFieldDescriptor(
         if (needsSig) {
             *signature = sig.makeStringAndClear();
         } else {
-            *signature = rtl::OString();
+            *signature = OString();
         }
     }
     return specialType;
@@ -305,42 +319,42 @@ class MethodDescriptor {
 public:
     MethodDescriptor(
         rtl::Reference< TypeManager > const & manager,
-        Dependencies * dependencies, rtl::OString const & returnType,
+        Dependencies * dependencies, OUString const & returnType,
         SpecialType * specialReturnType,
         PolymorphicUnoType * polymorphicUnoType);
 
     SpecialType addParameter(
-        rtl::OString const & type, bool array, bool dependency,
+        OUString const & type, bool array, bool dependency,
         PolymorphicUnoType * polymorphicUnoType);
 
-    void addTypeParameter(rtl::OString const & name);
+    void addTypeParameter(OUString const & name);
 
-    rtl::OString getDescriptor() const;
+    OString getDescriptor() const;
 
-    rtl::OString getSignature() const;
+    OString getSignature() const;
 
 private:
     rtl::Reference< TypeManager > m_manager;
     Dependencies * m_dependencies;
-    rtl::OStringBuffer m_descriptorStart;
-    rtl::OString m_descriptorEnd;
-    rtl::OStringBuffer m_signatureStart;
-    rtl::OString m_signatureEnd;
+    OStringBuffer m_descriptorStart;
+    OString m_descriptorEnd;
+    OStringBuffer m_signatureStart;
+    OString m_signatureEnd;
     bool m_needsSignature;
 };
 
 MethodDescriptor::MethodDescriptor(
     rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
-    rtl::OString const & returnType, SpecialType * specialReturnType,
+    OUString const & returnType, SpecialType * specialReturnType,
     PolymorphicUnoType * polymorphicUnoType):
     m_manager(manager), m_dependencies(dependencies), m_needsSignature(false)
 {
-    OSL_ASSERT(dependencies != 0);
+    assert(dependencies != 0);
     m_descriptorStart.append('(');
     m_signatureStart.append('(');
-    rtl::OStringBuffer descEnd;
+    OStringBuffer descEnd;
     descEnd.append(')');
-    rtl::OStringBuffer sigEnd;
+    OStringBuffer sigEnd;
     sigEnd.append(')');
     SpecialType special = translateUnoTypeToDescriptor(
         m_manager, returnType, false, false, m_dependencies, &descEnd, &sigEnd,
@@ -353,7 +367,7 @@ MethodDescriptor::MethodDescriptor(
 }
 
 SpecialType MethodDescriptor::addParameter(
-    rtl::OString const & type, bool array, bool dependency,
+    OUString const & type, bool array, bool dependency,
     PolymorphicUnoType * polymorphicUnoType)
 {
     return translateUnoTypeToDescriptor(
@@ -362,24 +376,20 @@ SpecialType MethodDescriptor::addParameter(
         polymorphicUnoType);
 }
 
-void MethodDescriptor::addTypeParameter(OString const & name) {
+void MethodDescriptor::addTypeParameter(OUString const & name) {
     m_descriptorStart.append("Ljava/lang/Object;");
-    m_signatureStart.append("T" + name + ";");
+    m_signatureStart.append("T" + codemaker::convertString(name) + ";");
     m_needsSignature = true;
 }
 
-rtl::OString MethodDescriptor::getDescriptor() const {
-    rtl::OStringBuffer buf(m_descriptorStart);
+OString MethodDescriptor::getDescriptor() const {
+    OStringBuffer buf(m_descriptorStart);
     buf.append(m_descriptorEnd);
     return buf.makeStringAndClear();
 }
 
-rtl::OString MethodDescriptor::getSignature() const {
-    if (m_needsSignature) {
-        return m_signatureStart + m_signatureEnd;
-    } else {
-        return rtl::OString();
-    }
+OString MethodDescriptor::getSignature() const {
+    return m_needsSignature ?  m_signatureStart + m_signatureEnd : OString();
 }
 
 class TypeInfo {
@@ -388,25 +398,24 @@ public:
 
     // Same values as in com/sun/star/lib/uno/typeinfo/TypeInfo.java:
     enum Flags {
-        FLAG_READONLY = 0x008, FLAG_BOUND = 0x100, FLAG_ONEWAY = 0x010
+        FLAG_READONLY = 0x008, FLAG_BOUND = 0x100
     };
 
     // KIND_MEMBER:
     TypeInfo(
-        rtl::OString const & name, SpecialType specialType, sal_Int32 index,
+        OString const & name, SpecialType specialType, sal_Int32 index,
         PolymorphicUnoType const & polymorphicUnoType,
         sal_Int32 typeParameterIndex);
 
     // KIND_ATTRIBUTE/METHOD:
     TypeInfo(
-        Kind kind, rtl::OString const & name, SpecialType specialType,
-        Flags flags, sal_Int32 index,
-        PolymorphicUnoType const & polymorphicUnoType);
+        Kind kind, OString const & name, SpecialType specialType, Flags flags,
+        sal_Int32 index, PolymorphicUnoType const & polymorphicUnoType);
 
     // KIND_PARAMETER:
     TypeInfo(
-        rtl::OString const & parameterName, SpecialType specialType,
-        bool inParameter, bool outParameter, rtl::OString const & methodName,
+        OString const & parameterName, SpecialType specialType,
+        bool inParameter, bool outParameter, OString const & methodName,
         sal_Int32 index, PolymorphicUnoType const & polymorphicUnoType);
 
     sal_uInt16 generateCode(ClassFile::Code & code, Dependencies * dependencies)
@@ -417,10 +426,10 @@ public:
 
 private:
     Kind m_kind;
-    rtl::OString m_name;
+    OString m_name;
     sal_Int32 m_flags;
     sal_Int32 m_index;
-    rtl::OString m_methodName;
+    OString m_methodName;
     PolymorphicUnoType m_polymorphicUnoType;
     sal_Int32 m_typeParameterIndex;
 };
@@ -441,7 +450,7 @@ sal_Int32 translateSpecialTypeFlags(
 }
 
 TypeInfo::TypeInfo(
-    rtl::OString const & name, SpecialType specialType, sal_Int32 index,
+    OString const & name, SpecialType specialType, sal_Int32 index,
     PolymorphicUnoType const & polymorphicUnoType,
     sal_Int32 typeParameterIndex):
     m_kind(KIND_MEMBER), m_name(name),
@@ -449,26 +458,25 @@ TypeInfo::TypeInfo(
     m_index(index), m_polymorphicUnoType(polymorphicUnoType),
     m_typeParameterIndex(typeParameterIndex)
 {
-    OSL_ASSERT(
+    assert(
         polymorphicUnoType.kind == PolymorphicUnoType::KIND_NONE
         ? typeParameterIndex >= -1 : typeParameterIndex == -1);
 }
 
 TypeInfo::TypeInfo(
-    Kind kind, rtl::OString const & name, SpecialType specialType,
-    Flags flags, sal_Int32 index,
-    PolymorphicUnoType const & polymorphicUnoType):
+    Kind kind, OString const & name, SpecialType specialType, Flags flags,
+    sal_Int32 index, PolymorphicUnoType const & polymorphicUnoType):
     m_kind(kind), m_name(name),
     m_flags(flags | translateSpecialTypeFlags(specialType, false, false)),
     m_index(index), m_polymorphicUnoType(polymorphicUnoType)
 {
-    OSL_ASSERT(kind == KIND_ATTRIBUTE || kind == KIND_METHOD);
+    assert(kind == KIND_ATTRIBUTE || kind == KIND_METHOD);
 }
 
 TypeInfo::TypeInfo(
-    rtl::OString const & parameterName, SpecialType specialType,
-    bool inParameter, bool outParameter, rtl::OString const & methodName,
-    sal_Int32 index, PolymorphicUnoType const & polymorphicUnoType):
+    OString const & parameterName, SpecialType specialType, bool inParameter,
+    bool outParameter, OString const & methodName, sal_Int32 index,
+    PolymorphicUnoType const & polymorphicUnoType):
     m_kind(KIND_PARAMETER), m_name(parameterName),
     m_flags(translateSpecialTypeFlags(specialType, inParameter, outParameter)),
     m_index(index), m_methodName(methodName),
@@ -478,7 +486,6 @@ TypeInfo::TypeInfo(
 sal_uInt16 TypeInfo::generateCode(
     ClassFile::Code & code, Dependencies * dependencies) const
 {
-    OSL_ASSERT(dependencies != 0);
     switch (m_kind) {
     case KIND_MEMBER:
         code.instrNew("com/sun/star/lib/uno/typeinfo/MemberTypeInfo");
@@ -489,21 +496,23 @@ sal_uInt16 TypeInfo::generateCode(
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
             code.loadIntegerConstant(m_typeParameterIndex);
-            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MemberTypeInfo"
-                                   ,"<init>", "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V");
+            code.instrInvokespecial(
+                "com/sun/star/lib/uno/typeinfo/MemberTypeInfo", "<init>",
+                "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V");
             return 8;
         } else if (m_typeParameterIndex >= 0) {
             code.instrAconstNull();
             code.loadIntegerConstant(m_typeParameterIndex);
-            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MemberTypeInfo"
-                                   ,"<init>", "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V");
+            code.instrInvokespecial(
+                "com/sun/star/lib/uno/typeinfo/MemberTypeInfo", "<init>",
+                "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V");
             return 6;
         } else {
-            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MemberTypeInfo"
-                                   ,"<init>", "(Ljava/lang/String;II)V");
+            code.instrInvokespecial(
+                "com/sun/star/lib/uno/typeinfo/MemberTypeInfo", "<init>",
+                "(Ljava/lang/String;II)V");
             return 4;
         }
-
     case KIND_ATTRIBUTE:
         code.instrNew("com/sun/star/lib/uno/typeinfo/AttributeTypeInfo");
         code.instrDup();
@@ -512,15 +521,16 @@ sal_uInt16 TypeInfo::generateCode(
         code.loadIntegerConstant(m_flags);
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
-            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/AttributeTypeInfo"
-                                   ,"<init>", "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V");
+            code.instrInvokespecial(
+                "com/sun/star/lib/uno/typeinfo/AttributeTypeInfo", "<init>",
+                "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V");
             return 8;
         } else {
-            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/AttributeTypeInfo"
-                                   ,"<init>", "(Ljava/lang/String;II)V");
+            code.instrInvokespecial(
+                "com/sun/star/lib/uno/typeinfo/AttributeTypeInfo", "<init>",
+                "(Ljava/lang/String;II)V");
             return 4;
         }
-
     case KIND_METHOD:
         code.instrNew("com/sun/star/lib/uno/typeinfo/MethodTypeInfo");
         code.instrDup();
@@ -529,15 +539,16 @@ sal_uInt16 TypeInfo::generateCode(
         code.loadIntegerConstant(m_flags);
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
-            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MethodTypeInfo"
-                                   ,"<init>", "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V");
+            code.instrInvokespecial(
+                "com/sun/star/lib/uno/typeinfo/MethodTypeInfo", "<init>",
+                "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V");
             return 8;
         } else {
-            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MethodTypeInfo"
-                                   ,"<init>", "(Ljava/lang/String;II)V");
+            code.instrInvokespecial(
+                "com/sun/star/lib/uno/typeinfo/MethodTypeInfo", "<init>",
+                "(Ljava/lang/String;II)V");
             return 4;
         }
-
     case KIND_PARAMETER:
         code.instrNew("com/sun/star/lib/uno/typeinfo/ParameterTypeInfo");
         code.instrDup();
@@ -547,18 +558,19 @@ sal_uInt16 TypeInfo::generateCode(
         code.loadIntegerConstant(m_flags);
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
-            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/ParameterTypeInfo"
-                                    ,"<init>", "(Ljava/lang/String;Ljava/lang/String;II"
-                                               "Lcom/sun/star/uno/Type;)V");
+            code.instrInvokespecial(
+                "com/sun/star/lib/uno/typeinfo/ParameterTypeInfo", "<init>",
+                ("(Ljava/lang/String;Ljava/lang/String;II"
+                 "Lcom/sun/star/uno/Type;)V"));
             return 9;
         } else {
-            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/ParameterTypeInfo"
-                                   ,"<init>", "(Ljava/lang/String;Ljava/lang/String;II)V");
+            code.instrInvokespecial(
+                "com/sun/star/lib/uno/typeinfo/ParameterTypeInfo", "<init>",
+                "(Ljava/lang/String;Ljava/lang/String;II)V");
             return 5;
         }
-
     default:
-        OSL_ASSERT(false);
+        assert(false);
         return 0;
     }
 }
@@ -566,23 +578,29 @@ sal_uInt16 TypeInfo::generateCode(
 void TypeInfo::generatePolymorphicUnoTypeCode(
     ClassFile::Code & code, Dependencies * dependencies) const
 {
-    OSL_ASSERT(
-        dependencies != 0
-        && m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE);
+    assert(dependencies != 0);
+    assert(m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE);
     code.instrNew("com/sun/star/uno/Type");
     code.instrDup();
-    code.loadStringConstant(m_polymorphicUnoType.name);
+    code.loadStringConstant(
+        codemaker::convertString(m_polymorphicUnoType.name));
     if (m_polymorphicUnoType.kind == PolymorphicUnoType::KIND_STRUCT) {
-        code.instrGetstatic("com/sun/star/uno/TypeClass", "STRUCT", "Lcom/sun/star/uno/TypeClass;");
+        code.instrGetstatic(
+            "com/sun/star/uno/TypeClass", "STRUCT",
+            "Lcom/sun/star/uno/TypeClass;");
     } else {
-        code.instrGetstatic("com/sun/star/uno/TypeClass", "SEQUENCE", "Lcom/sun/star/uno/TypeClass;");
+        code.instrGetstatic(
+            "com/sun/star/uno/TypeClass", "SEQUENCE",
+            "Lcom/sun/star/uno/TypeClass;");
     }
-    dependencies->insert("com/sun/star/uno/TypeClass");
-    code.instrInvokespecial("com/sun/star/uno/Type", "<init>", "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
+    dependencies->insert("com.sun.star.uno.TypeClass");
+    code.instrInvokespecial(
+        "com/sun/star/uno/Type", "<init>",
+        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
 }
 
 void writeClassFile(
-    JavaOptions /*TODO const*/ & options, OString const & type,
+    JavaOptions const & options, OString const & type,
     ClassFile const & classFile)
 {
     OString path;
@@ -600,9 +618,10 @@ void writeClassFile(
     FileStream tempfile;
     tempfile.createTempFile(getTempDir(filename));
     if (!tempfile.isValid()) {
-        throw CannotDumpException("Cannot create temporary file for " + b2u(filename));
+        throw CannotDumpException(
+            "Cannot create temporary file for " + b2u(filename));
     }
-    rtl::OString tempname(tempfile.getName());
+    OString tempname(tempfile.getName());
     try {
         classFile.write(tempfile);
     } catch (...) {
@@ -616,18 +635,21 @@ void writeClassFile(
     }
     tempfile.close();
     if (!makeValidTypeFile(filename, tempname, check)) {
-        throw CannotDumpException("Cannot create " + b2u(filename) + " from temporary file " + b2u(tempname));
+        throw CannotDumpException(
+            "Cannot create " + b2u(filename) + " from temporary file "
+            + b2u(tempname));
     }
 }
 
 void addTypeInfo(
-    rtl::OString const & className, std::vector< TypeInfo > const & typeInfo,
+    OString const & className, std::vector< TypeInfo > const & typeInfo,
     Dependencies * dependencies, ClassFile * classFile)
 {
-    OSL_ASSERT(dependencies != 0 && classFile != 0);
+    assert(classFile != 0);
     std::vector< TypeInfo >::size_type typeInfos = typeInfo.size();
     if (typeInfos > SAL_MAX_INT32) {
-        throw CannotDumpException("UNOTYPEINFO array too big for Java class file format");
+        throw CannotDumpException(
+            "UNOTYPEINFO array too big for Java class file format");
     }
     if (typeInfos != 0) {
         classFile->addField(
@@ -651,38 +673,28 @@ void addTypeInfo(
             stack = std::max(stack, i->generateCode(*code, dependencies));
             code->instrAastore();
         }
-        code->instrPutstatic(className, "UNOTYPEINFO", "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;");
+        code->instrPutstatic(
+            className, "UNOTYPEINFO",
+            "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;");
         code->instrReturn();
         if (stack > SAL_MAX_UINT16 - 4) {
-            throw CannotDumpException("Stack too big for Java class file format");
+            throw CannotDumpException(
+                "Stack too big for Java class file format");
         }
         code->setMaxStackAndLocals(static_cast< sal_uInt16 >(stack + 4), 0);
         classFile->addMethod(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC),
-            "<clinit>", "()V", code.get(),
-            std::vector< rtl::OString >(), "");
+            "<clinit>", "()V", code.get(), std::vector< OString >(), "");
     }
 }
 
-typedef void (* handleUnoTypeRegistryEntityFunction)(
-    rtl::Reference< TypeManager > const & manager,
-    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
-    Dependencies * dependencies);
-
 void handleEnumType(
-    SAL_UNUSED_PARAMETER rtl::Reference< TypeManager > const &,
-    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
-    SAL_UNUSED_PARAMETER Dependencies *)
+    OUString name, rtl::Reference< unoidl::EnumTypeEntity > const & entity,
+    JavaOptions const & options)
 {
-    sal_uInt16 fields = reader.getFieldCount();
-    if (fields == 0 || reader.getSuperTypeCount() != 0
-        || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
-    {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    rtl::OString className(codemaker::convertString(reader.getTypeName()));
+    assert(entity.is());
+    OString className(codemaker::convertString(name).replace('.', '/'));
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
@@ -691,28 +703,23 @@ void handleEnumType(
                 | ClassFile::ACC_SUPER),
             className, "com/sun/star/uno/Enum", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    rtl::OString classDescriptor("L" + className + ";");
-    for (sal_uInt16 i = 0; i < fields; ++i) {
-        RTConstValue fieldValue(reader.getFieldValue(i));
-        if (fieldValue.m_type != RT_TYPE_INT32
-            || reader.getFieldFlags(i) != RT_ACCESS_CONST
-            || reader.getFieldTypeName(i).getLength() != 0)
-        {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        rtl::OString fieldName(
-            codemaker::convertString(reader.getFieldName(i)));
+    OString classDescriptor("L" + className + ";");
+    for (std::vector< unoidl::EnumTypeEntity::Member >::const_iterator i(
+             entity->getMembers().begin());
+         i != entity->getMembers().end(); ++i)
+    {
+        OString fieldName(codemaker::convertString(i->name));
         cf->addField(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
                 | ClassFile::ACC_FINAL),
-            fieldName, classDescriptor, 0, rtl::OString());
+            fieldName, classDescriptor, 0, OString());
         cf->addField(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
                 | ClassFile::ACC_FINAL),
             fieldName + "_value", "I",
-            cf->addIntegerInfo(fieldValue.m_value.aLong), "");
+            cf->addIntegerInfo(i->value), "");
     }
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
@@ -729,7 +736,8 @@ void handleEnumType(
     code.reset(cf->newCode());
     code->instrGetstatic(
         className,
-        codemaker::convertString(reader.getFieldName(0)), classDescriptor);
+        codemaker::convertString(entity->getMembers()[0].name),
+        classDescriptor);
     code->instrAreturn();
     code->setMaxStackAndLocals(1, 0);
     cf->addMethod(
@@ -739,16 +747,18 @@ void handleEnumType(
         code.get(), std::vector< OString >(), "");
     code.reset(cf->newCode());
     code->loadLocalInteger(0);
-    std::map< sal_Int32, rtl::OString > map;
+    std::map< sal_Int32, OString > map;
     sal_Int32 min = SAL_MAX_INT32;
     sal_Int32 max = SAL_MIN_INT32;
-    for (sal_uInt16 i = 0; i < fields; ++i) {
-        sal_Int32 value = reader.getFieldValue(i).m_value.aLong;
-        min = std::min(min, value);
-        max = std::max(max, value);
+    for (std::vector< unoidl::EnumTypeEntity::Member >::const_iterator i(
+             entity->getMembers().begin());
+         i != entity->getMembers().end(); ++i)
+    {
+        min = std::min(min, i->value);
+        max = std::max(max, i->value);
         map.insert(
-            std::map< sal_Int32, rtl::OString >::value_type(
-                value, codemaker::convertString(reader.getFieldName(i))));
+            std::map< sal_Int32, OString >::value_type(
+                i->value, codemaker::convertString(i->name)));
     }
     sal_uInt64 size = static_cast< sal_uInt64 >(map.size());
     if ((static_cast< sal_uInt64 >(max) - static_cast< sal_uInt64 >(min)
@@ -763,7 +773,7 @@ void handleEnumType(
         std::list< ClassFile::Code * > blocks;
             //FIXME: pointers contained in blocks may leak
         sal_Int32 last = SAL_MAX_INT32;
-        for (std::map< sal_Int32, rtl::OString >::iterator i(map.begin());
+        for (std::map< sal_Int32, OString >::iterator i(map.begin());
              i != map.end(); ++i)
         {
             sal_Int32 value = i->first;
@@ -795,7 +805,7 @@ void handleEnumType(
         defCode->instrAreturn();
         std::list< std::pair< sal_Int32, ClassFile::Code * > > blocks;
             //FIXME: pointers contained in blocks may leak
-        for (std::map< sal_Int32, rtl::OString >::iterator i(map.begin());
+        for (std::map< sal_Int32, OString >::iterator i(map.begin());
              i != map.end(); ++i)
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -818,192 +828,204 @@ void handleEnumType(
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
-        "fromInt", "(I)" + classDescriptor,
-        code.get(), std::vector< rtl::OString >(), "");
+        "fromInt", "(I)" + classDescriptor, code.get(),
+        std::vector< OString >(), "");
     code.reset(cf->newCode());
-    for (sal_uInt16 i = 0; i < fields; ++i) {
+    for (std::vector< unoidl::EnumTypeEntity::Member >::const_iterator i(
+             entity->getMembers().begin());
+         i != entity->getMembers().end(); ++i)
+    {
         code->instrNew(className);
         code->instrDup();
-        code->loadIntegerConstant(reader.getFieldValue(i).m_value.aLong);
+        code->loadIntegerConstant(i->value);
         code->instrInvokespecial(className, "<init>", "(I)V");
         code->instrPutstatic(
-            className,
-            codemaker::convertString(reader.getFieldName(i)),
-            classDescriptor);
+            className, codemaker::convertString(i->name), classDescriptor);
     }
     code->instrReturn();
     code->setMaxStackAndLocals(3, 0);
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC),
-        "<clinit>", "()V", code.get(),
-        std::vector< rtl::OString >(), "");
+        "<clinit>", "()V", code.get(), std::vector< OString >(), "");
     writeClassFile(options, className, *cf.get());
 }
 
 void addField(
     rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
     ClassFile * classFile, std::vector< TypeInfo > * typeInfo,
-    sal_Int32 typeParameterIndex, rtl::OString const & type,
-    rtl::OString const & name, sal_Int32 index)
+    sal_Int32 typeParameterIndex, OUString const & type, OUString const & name,
+    sal_Int32 index)
 {
-    OSL_ASSERT(dependencies != 0 && classFile != 0 && typeInfo != 0);
-    rtl::OString descriptor;
-    rtl::OString signature;
+    assert(classFile != 0);
+    assert(typeInfo != 0);
+    OString descriptor;
+    OString signature;
     SpecialType specialType;
     PolymorphicUnoType polymorphicUnoType;
     if (typeParameterIndex >= 0) {
         descriptor = "Ljava/lang/Object;";
-        signature = "T" + type + ";";
+        signature = "T" + codemaker::convertString(type).replace('.', '/')
+            + ";";
         specialType = SPECIAL_TYPE_NONE; //TODO: SPECIAL_TYPE_TYPE_PARAMETER?
     } else {
         specialType = getFieldDescriptor(
             manager, dependencies, type, &descriptor, &signature,
             &polymorphicUnoType);
     }
-    classFile->addField(ClassFile::ACC_PUBLIC, name, descriptor, 0, signature);
+    classFile->addField(
+        ClassFile::ACC_PUBLIC, codemaker::convertString(name), descriptor, 0,
+        signature);
     typeInfo->push_back(
         TypeInfo(
-            name, specialType, index, polymorphicUnoType, typeParameterIndex));
+            codemaker::convertString(name), specialType, index,
+            polymorphicUnoType, typeParameterIndex));
 }
 
 sal_uInt16 addFieldInit(
-    rtl::Reference< TypeManager > const & manager,
-    rtl::OString const & className, rtl::OString const & fieldName,
-    bool typeParameter, rtl::OString const & fieldType,
+    rtl::Reference< TypeManager > const & manager, OString const & className,
+    OUString const & fieldName, bool typeParameter, OUString const & fieldType,
     Dependencies * dependencies, ClassFile::Code * code)
 {
-    OSL_ASSERT(dependencies != 0 && code != 0);
+    assert(manager.is());
+    assert(code != 0);
     if (typeParameter) {
         return 0;
-    } else {
-        RTTypeClass typeClass;
-        rtl::OString nucleus;
-        sal_Int32 rank;
-        std::vector< rtl::OString > args;
-        codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
-            manager, fieldType, true, false, false, &typeClass, &nucleus, &rank,
-            &args);
-        if (rank == 0) {
-            switch (sort) {
-            case codemaker::UnoType::SORT_STRING:
-                code->loadLocalReference(0);
-                code->loadStringConstant(rtl::OString());
-                code->instrPutfield(className, fieldName, "Ljava/lang/String;");
-                return 2;
-
-            case codemaker::UnoType::SORT_TYPE:
-                code->loadLocalReference(0);
-                code->instrGetstatic("com/sun/star/uno/Type", "VOID", "Lcom/sun/star/uno/Type;");
-                code->instrPutfield(className, fieldName, "Lcom/sun/star/uno/Type;");
-                return 2;
-
-            case codemaker::UnoType::SORT_ANY:
-                code->loadLocalReference(0);
-                code->instrGetstatic("com/sun/star/uno/Any", "VOID", "Lcom/sun/star/uno/Any;");
-                code->instrPutfield(className, fieldName, "Ljava/lang/Object;");
-                return 2;
-
-            case codemaker::UnoType::SORT_COMPLEX:
-                switch (typeClass) {
-                case RT_TYPE_ENUM:
-                    {
-                        code->loadLocalReference(0);
-                        typereg::Reader reader(manager->getTypeReader(nucleus));
-                        if (reader.getFieldCount() == 0) {
-                            throw CannotDumpException("Bad type information"); //TODO
-                        }
-                        rtl::OStringBuffer descBuf;
-                        translateUnoTypeToDescriptor(
-                            manager, sort, typeClass, nucleus, 0,
-                            std::vector< rtl::OString >(), false, false,
-                            dependencies, &descBuf, 0, 0, 0);
-                        rtl::OString desc(descBuf.makeStringAndClear());
-                        code->instrGetstatic(
-                            nucleus,
-                            codemaker::convertString(reader.getFieldName(0)),
-                            desc);
-                        code->instrPutfield(className, fieldName, desc);
-                        return 2;
-                    }
-
-                case RT_TYPE_STRUCT:
-                    {
-                        code->loadLocalReference(0);
-                        code->instrNew(nucleus);
-                        code->instrDup();
-                        code->instrInvokespecial(nucleus, "<init>", "()V");
-                        rtl::OStringBuffer desc;
-                        translateUnoTypeToDescriptor(
-                            manager, sort, typeClass, nucleus, 0,
-                            std::vector< rtl::OString >(), false, false,
-                            dependencies, &desc, 0, 0, 0);
-                        code->instrPutfield(
-                            className, fieldName, desc.makeStringAndClear());
-                        return 3;
-                    }
-
-                default:
-                    OSL_ASSERT(typeClass == RT_TYPE_INTERFACE);
-                    return 0;
-                }
-
-            default:
-                return 0;
-            }
-        } else {
+    }
+    OString name(codemaker::convertString(fieldName));
+    OUString nucleus;
+    sal_Int32 rank;
+    std::vector< rtl::OUString > args;
+    rtl::Reference< unoidl::Entity > ent;
+    codemaker::UnoType::Sort sort
+        = manager->getSortResolveAllSequencesTemplatesTypedefs(
+            fieldType, &nucleus, &rank, &args, &ent);
+    if (rank == 0) {
+        switch (sort) {
+        case codemaker::UnoType::SORT_BOOLEAN:
+        case codemaker::UnoType::SORT_BYTE:
+        case codemaker::UnoType::SORT_SHORT:
+        case codemaker::UnoType::SORT_UNSIGNED_SHORT:
+        case codemaker::UnoType::SORT_LONG:
+        case codemaker::UnoType::SORT_UNSIGNED_LONG:
+        case codemaker::UnoType::SORT_HYPER:
+        case codemaker::UnoType::SORT_UNSIGNED_HYPER:
+        case codemaker::UnoType::SORT_FLOAT:
+        case codemaker::UnoType::SORT_DOUBLE:
+        case codemaker::UnoType::SORT_CHAR:
+        case codemaker::UnoType::SORT_INTERFACE_TYPE:
+            return 0;
+        case codemaker::UnoType::SORT_STRING:
             code->loadLocalReference(0);
-            code->loadIntegerConstant(0);
-            if (rank == 1) {
-                if (sort >= codemaker::UnoType::SORT_BOOLEAN
-                    && sort <= codemaker::UnoType::SORT_CHAR)
-                {
-                    code->instrNewarray(sort);
-                } else {
-                    code->instrAnewarray(
-                        codemaker::java::translateUnoToJavaType(sort, typeClass,
-                                                                nucleus, 0));
-                }
-            } else {
-                rtl::OStringBuffer desc;
-                translateUnoTypeToDescriptor(
-                    manager, sort, typeClass, nucleus, rank - 1,
-                    std::vector< rtl::OString >(), false, false, dependencies,
-                    &desc, 0, 0, 0);
-                code->instrAnewarray(desc.makeStringAndClear());
-            }
-            rtl::OStringBuffer desc;
-            translateUnoTypeToDescriptor(
-                manager, sort, typeClass, nucleus, rank,
-                std::vector< rtl::OString >(), false, false, dependencies,
-                &desc, 0, 0, 0);
-            code->instrPutfield(
-                className, fieldName, desc.makeStringAndClear());
+            code->loadStringConstant(OString());
+            code->instrPutfield(className, name, "Ljava/lang/String;");
             return 2;
+        case codemaker::UnoType::SORT_TYPE:
+            code->loadLocalReference(0);
+            code->instrGetstatic(
+                "com/sun/star/uno/Type", "VOID", "Lcom/sun/star/uno/Type;");
+            code->instrPutfield(className, name, "Lcom/sun/star/uno/Type;");
+            return 2;
+        case codemaker::UnoType::SORT_ANY:
+            code->loadLocalReference(0);
+            code->instrGetstatic(
+                "com/sun/star/uno/Any", "VOID", "Lcom/sun/star/uno/Any;");
+            code->instrPutfield(className, name, "Ljava/lang/Object;");
+            return 2;
+        case codemaker::UnoType::SORT_ENUM_TYPE:
+            {
+                rtl::Reference< unoidl::EnumTypeEntity > ent2(
+                    dynamic_cast< unoidl::EnumTypeEntity * >(ent.get()));
+                assert(ent2.is());
+                code->loadLocalReference(0);
+                OStringBuffer descBuf;
+                translateUnoTypeToDescriptor(
+                    manager, sort, nucleus, 0, std::vector< OUString >(), false,
+                    false, dependencies, &descBuf, 0, 0, 0);
+                OString desc(descBuf.makeStringAndClear());
+                code->instrGetstatic(
+                    codemaker::convertString(nucleus).replace('.', '/'),
+                    codemaker::convertString(ent2->getMembers()[0].name), desc);
+                code->instrPutfield(className, name, desc);
+                return 2;
+            }
+        case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+        case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+            {
+                code->loadLocalReference(0);
+                code->instrNew(
+                    codemaker::convertString(nucleus).replace('.', '/'));
+                code->instrDup();
+                code->instrInvokespecial(
+                    codemaker::convertString(nucleus).replace('.', '/'),
+                    "<init>", "()V");
+                OStringBuffer desc;
+                translateUnoTypeToDescriptor(
+                    manager, sort, nucleus, 0, args, false, false, dependencies,
+                    &desc, 0, 0, 0);
+                code->instrPutfield(className, name, desc.makeStringAndClear());
+                return 3;
+            }
+        case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+        case codemaker::UnoType::SORT_TYPEDEF:
+            assert(false); // this cannot happen
+            // fall through
+        default:
+            throw CannotDumpException(
+                "unexpected entity \"" + fieldType
+                + "\" in call to addFieldInit");
         }
     }
+    code->loadLocalReference(0);
+    code->loadIntegerConstant(0);
+    if (rank == 1) {
+        if (sort >= codemaker::UnoType::SORT_BOOLEAN
+            && sort <= codemaker::UnoType::SORT_CHAR)
+        {
+            code->instrNewarray(sort);
+        } else {
+            code->instrAnewarray(
+                codemaker::java::translateUnoToJavaType(
+                    sort, codemaker::convertString(nucleus).replace('.', '/'),
+                    false));
+        }
+    } else {
+        OStringBuffer desc;
+        translateUnoTypeToDescriptor(
+            manager, sort, nucleus, rank - 1, std::vector< OUString >(), false,
+            false, dependencies, &desc, 0, 0, 0);
+        code->instrAnewarray(desc.makeStringAndClear());
+    }
+    OStringBuffer desc;
+    translateUnoTypeToDescriptor(
+        manager, sort, nucleus, rank, std::vector< OUString >(), false, false,
+        dependencies, &desc, 0, 0, 0);
+    code->instrPutfield(className, name, desc.makeStringAndClear());
+    return 2;
 }
 
 sal_uInt16 addLoadLocal(
     rtl::Reference< TypeManager > const & manager, ClassFile::Code * code,
-    sal_uInt16 * index, bool typeParameter, rtl::OString const & type, bool any,
+    sal_uInt16 * index, bool typeParameter, OUString const & type, bool any,
     Dependencies * dependencies)
 {
-    OSL_ASSERT(
-        code != 0 && index != 0 && !(typeParameter && any)
-        && dependencies != 0);
+    assert(manager.is());
+    assert(code != 0);
+    assert(index != 0);
+    assert(!(typeParameter && any));
+    assert(dependencies != 0);
     sal_uInt16 stack = 1;
     sal_uInt16 size = 1;
     if (typeParameter) {
         code->loadLocalReference(*index);
         stack = size = 1;
     } else {
-        RTTypeClass typeClass;
-        rtl::OString nucleus;
+        OUString nucleus;
         sal_Int32 rank;
-        std::vector< rtl::OString > args;
-        codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
-            manager, type, true, false, false, &typeClass, &nucleus, &rank, &args);
+        std::vector< OUString > args;
+        codemaker::UnoType::Sort sort = manager->
+            getSortResolveAllSequencesTemplatesTypedefs(
+                type, &nucleus, &rank, &args, 0);
         if (rank == 0) {
             switch (sort) {
             case codemaker::UnoType::SORT_BOOLEAN:
@@ -1011,7 +1033,8 @@ sal_uInt16 addLoadLocal(
                     code->instrNew("java/lang/Boolean");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial("java/lang/Boolean", "<init>", "(Z)V");
+                    code->instrInvokespecial(
+                        "java/lang/Boolean", "<init>", "(Z)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1019,13 +1042,13 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-
             case codemaker::UnoType::SORT_BYTE:
                 if (any) {
                     code->instrNew("java/lang/Byte");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial("java/lang/Byte", "<init>", "(B)V");
+                    code->instrInvokespecial(
+                        "java/lang/Byte", "<init>", "(B)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1033,13 +1056,13 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-
             case codemaker::UnoType::SORT_SHORT:
                 if (any) {
                     code->instrNew("java/lang/Short");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial("java/lang/Short", "<init>", "(S)V");
+                    code->instrInvokespecial(
+                        "java/lang/Short", "<init>", "(S)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1047,18 +1070,21 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-
             case codemaker::UnoType::SORT_UNSIGNED_SHORT:
                 if (any) {
                     code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
-                    code->instrGetstatic("com/sun/star/uno/Type", "UNSIGNED_SHORT", "Lcom/sun/star/uno/Type;");
+                    code->instrGetstatic(
+                        "com/sun/star/uno/Type", "UNSIGNED_SHORT",
+                        "Lcom/sun/star/uno/Type;");
                     code->instrNew("java/lang/Short");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial("java/lang/Short", "<init>", "(S)V");
-                    code->instrInvokespecial("com/sun/star/uno/Any", "<init>",
-                                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                    code->instrInvokespecial(
+                        "java/lang/Short", "<init>", "(S)V");
+                    code->instrInvokespecial(
+                        "com/sun/star/uno/Any", "<init>",
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                     stack = 6;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1066,13 +1092,13 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-
             case codemaker::UnoType::SORT_LONG:
                 if (any) {
                     code->instrNew("java/lang/Integer");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial("java/lang/Integer", "<init>", "(I)V");
+                    code->instrInvokespecial(
+                        "java/lang/Integer", "<init>", "(I)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1080,18 +1106,21 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-
             case codemaker::UnoType::SORT_UNSIGNED_LONG:
                 if (any) {
                     code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
-                    code->instrGetstatic("com/sun/star/uno/Type", "UNSIGNED_LONG", "Lcom/sun/star/uno/Type;");
+                    code->instrGetstatic(
+                        "com/sun/star/uno/Type", "UNSIGNED_LONG",
+                        "Lcom/sun/star/uno/Type;");
                     code->instrNew("java/lang/Integer");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial("java/lang/Integer", "<init>", "(I)V");
-                    code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
-                                            ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                    code->instrInvokespecial(
+                        "java/lang/Integer", "<init>", "(I)V");
+                    code->instrInvokespecial(
+                        "com/sun/star/uno/Any", "<init>",
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                     stack = 6;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1099,13 +1128,13 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-
             case codemaker::UnoType::SORT_HYPER:
                 if (any) {
                     code->instrNew("java/lang/Long");
                     code->instrDup();
                     code->loadLocalLong(*index);
-                    code->instrInvokespecial("java/lang/Long", "<init>", "(J)V");
+                    code->instrInvokespecial(
+                        "java/lang/Long", "<init>", "(J)V");
                     stack = 4;
                 } else {
                     code->loadLocalLong(*index);
@@ -1113,19 +1142,21 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 2;
                 break;
-
             case codemaker::UnoType::SORT_UNSIGNED_HYPER:
                 if (any) {
                     code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
-                    code->instrGetstatic("com/sun/star/uno/Type", "UNSIGNED_HYPER"
-                                        ,"Lcom/sun/star/uno/Type;");
+                    code->instrGetstatic(
+                        "com/sun/star/uno/Type", "UNSIGNED_HYPER",
+                        "Lcom/sun/star/uno/Type;");
                     code->instrNew("java/lang/Long");
                     code->instrDup();
                     code->loadLocalLong(*index);
-                    code->instrInvokespecial("java/lang/Long", "<init>", "(J)V");
-                    code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
-                                            ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                    code->instrInvokespecial(
+                        "java/lang/Long", "<init>", "(J)V");
+                    code->instrInvokespecial(
+                        "com/sun/star/uno/Any", "<init>",
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                     stack = 7;
                 } else {
                     code->loadLocalLong(*index);
@@ -1133,13 +1164,13 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 2;
                 break;
-
             case codemaker::UnoType::SORT_FLOAT:
                 if (any) {
                     code->instrNew("java/lang/Float");
                     code->instrDup();
                     code->loadLocalFloat(*index);
-                    code->instrInvokespecial("java/lang/Float", "<init>", "(F)V");
+                    code->instrInvokespecial(
+                        "java/lang/Float", "<init>", "(F)V");
                     stack = 3;
                 } else {
                     code->loadLocalFloat(*index);
@@ -1147,13 +1178,13 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-
             case codemaker::UnoType::SORT_DOUBLE:
                 if (any) {
                     code->instrNew("java/lang/Double");
                     code->instrDup();
                     code->loadLocalDouble(*index);
-                    code->instrInvokespecial("java/lang/Double", "<init>", "(D)V");
+                    code->instrInvokespecial(
+                        "java/lang/Double", "<init>", "(D)V");
                     stack = 4;
                 } else {
                     code->loadLocalDouble(*index);
@@ -1161,13 +1192,13 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 2;
                 break;
-
             case codemaker::UnoType::SORT_CHAR:
                 if (any) {
                     code->instrNew("java/lang/Character");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial("java/lang/Character", "<init>", "(C)V");
+                    code->instrInvokespecial(
+                        "java/lang/Character", "<init>", "(C)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1175,79 +1206,79 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-
             case codemaker::UnoType::SORT_STRING:
             case codemaker::UnoType::SORT_TYPE:
             case codemaker::UnoType::SORT_ANY:
                 code->loadLocalReference(*index);
                 stack = size = 1;
                 break;
-
-            case codemaker::UnoType::SORT_COMPLEX:
-                switch (typeClass) {
-                case RT_TYPE_ENUM:
-                    // Assuming that no Java types are derived from Java types
-                    // that are directly derived from com.sun.star.uno.Enum:
+            case codemaker::UnoType::SORT_ENUM_TYPE:
+                // Assuming that no Java types are derived from Java types that
+                // are directly derived from com.sun.star.uno.Enum:
+                code->loadLocalReference(*index);
+                stack = size = 1;
+                break;
+            case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+            case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+                if (any) {
+                    code->instrNew("com/sun/star/uno/Any");
+                    code->instrDup();
+                    code->instrNew("com/sun/star/uno/Type");
+                    code->instrDup();
+                    code->loadStringConstant(
+                        codemaker::convertString(
+                            createUnoName(manager, nucleus, rank, args)));
+                    code->instrGetstatic(
+                        "com/sun/star/uno/TypeClass", "STRUCT",
+                        "Lcom/sun/star/uno/TypeClass;");
+                    dependencies->insert("com.sun.star.uno.TypeClass");
+                    code->instrInvokespecial(
+                        "com/sun/star/uno/Type", "<init>",
+                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
                     code->loadLocalReference(*index);
-                    stack = size = 1;
-                    break;
-
-                case RT_TYPE_STRUCT:
-                    if (any) {
-                        code->instrNew("com/sun/star/uno/Any");
-                        code->instrDup();
-                        code->instrNew("com/sun/star/uno/Type");
-                        code->instrDup();
-                        code->loadStringConstant(
-                            createUnoName(manager, nucleus, rank, args));
-                        code->instrGetstatic("com/sun/star/uno/TypeClass", "STRUCT", "Lcom/sun/star/uno/TypeClass;");
-                        dependencies->insert("com/sun/star/uno/TypeClass");
-                        code->instrInvokespecial("com/sun/star/uno/Type", "<init>"
-                                                ,"(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
-                        code->loadLocalReference(*index);
-                        code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
-                                                ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
-                        stack = 6;
-                    } else {
-                        code->loadLocalReference(*index);
-                        stack = 1;
-                    }
-                    size = 1;
-                    break;
-
-                case RT_TYPE_INTERFACE:
-                    if (any && nucleus != "com/sun/star/uno/XInterface")
-                    {
-                        code->instrNew("com/sun/star/uno/Any");
-                        code->instrDup();
-                        code->instrNew("com/sun/star/uno/Type");
-                        code->instrDup();
-                        code->loadStringConstant(nucleus.replace('/', '.'));
-                        code->instrGetstatic("com/sun/star/uno/TypeClass", "INTERFACE"
-                                           , "Lcom/sun/star/uno/TypeClass;");
-                        dependencies->insert("com/sun/star/uno/TypeClass");
-                        code->instrInvokespecial("com/sun/star/uno/Type", "<init>"
-                                                ,"(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
-                        code->loadLocalReference(*index);
-                        code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
-                                                ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
-                        stack = 6;
-                    } else {
-                        code->loadLocalReference(*index);
-                        stack = 1;
-                    }
-                    size = 1;
-                    break;
-
-                default:
-                    OSL_ASSERT(false);
-                    break;
+                    code->instrInvokespecial(
+                        "com/sun/star/uno/Any", "<init>",
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                    stack = 6;
+                } else {
+                    code->loadLocalReference(*index);
+                    stack = 1;
                 }
+                size = 1;
                 break;
-
+            case codemaker::UnoType::SORT_INTERFACE_TYPE:
+                if (any && nucleus != "com.sun.star.uno.XInterface") {
+                    code->instrNew("com/sun/star/uno/Any");
+                    code->instrDup();
+                    code->instrNew("com/sun/star/uno/Type");
+                    code->instrDup();
+                    code->loadStringConstant(codemaker::convertString(nucleus));
+                    code->instrGetstatic(
+                        "com/sun/star/uno/TypeClass", "INTERFACE",
+                        "Lcom/sun/star/uno/TypeClass;");
+                    dependencies->insert("com.sun.star.uno.TypeClass");
+                    code->instrInvokespecial(
+                        "com/sun/star/uno/Type", "<init>",
+                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
+                    code->loadLocalReference(*index);
+                    code->instrInvokespecial(
+                        "com/sun/star/uno/Any", "<init>",
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                    stack = 6;
+                } else {
+                    code->loadLocalReference(*index);
+                    stack = 1;
+                }
+                size = 1;
+                break;
+            case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+            case codemaker::UnoType::SORT_TYPEDEF:
+                assert(false); // this cannot happen
+                // fall through
             default:
-                OSL_ASSERT(false);
-                break;
+                throw CannotDumpException(
+                    "unexpected entity \"" + type
+                    + "\" in call to addLoadLocal");
             }
         } else {
             bool wrap = false;
@@ -1265,37 +1296,29 @@ sal_uInt16 addLoadLocal(
                 case codemaker::UnoType::SORT_TYPE:
                         // assuming that no Java types are derived from
                         // com.sun.star.uno.Type
+                case codemaker::UnoType::SORT_ENUM_TYPE:
+                        // assuming that no Java types are derived from Java
+                        // types that are directly derived from
+                        // com.sun.star.uno.Enum
                     break;
-
                 case codemaker::UnoType::SORT_UNSIGNED_SHORT:
                 case codemaker::UnoType::SORT_UNSIGNED_LONG:
                 case codemaker::UnoType::SORT_UNSIGNED_HYPER:
                 case codemaker::UnoType::SORT_ANY:
+                case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+                case codemaker::UnoType::
+                    SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+                case codemaker::UnoType::SORT_INTERFACE_TYPE:
                     wrap = true;
                     break;
-
-                case codemaker::UnoType::SORT_COMPLEX:
-                    switch (typeClass) {
-                    case RT_TYPE_ENUM:
-                            // assuming that no Java types are derived from Java
-                            // types that are directly derived from
-                            // com.sun.star.uno.Enum
-                        break;
-
-                    case RT_TYPE_STRUCT:
-                    case RT_TYPE_INTERFACE:
-                        wrap = true;
-                        break;
-
-                    default:
-                        OSL_ASSERT(false);
-                        break;
-                    }
-                    break;
-
+                case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+                case codemaker::UnoType::SORT_TYPEDEF:
+                    assert(false); // this cannot happen
+                    // fall through
                 default:
-                    OSL_ASSERT(false);
-                    break;
+                    throw CannotDumpException(
+                        "unexpected entity \"" + type
+                        + "\" in call to addLoadLocal");
                 }
             }
             if (wrap) {
@@ -1304,11 +1327,14 @@ sal_uInt16 addLoadLocal(
                 code->instrNew("com/sun/star/uno/Type");
                 code->instrDup();
                 code->loadStringConstant(
-                    createUnoName(manager, nucleus, rank, args));
-                code->instrInvokespecial("com/sun/star/uno/Type", "<init>", "(Ljava/lang/String;)V");
+                    codemaker::convertString(
+                        createUnoName(manager, nucleus, rank, args)));
+                code->instrInvokespecial(
+                    "com/sun/star/uno/Type", "<init>", "(Ljava/lang/String;)V");
                 code->loadLocalReference(*index);
-                code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
-                                        ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
+                code->instrInvokespecial(
+                    "com/sun/star/uno/Any", "<init>",
+                    "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                 stack = 5;
             } else {
                 code->loadLocalReference(*index);
@@ -1318,74 +1344,22 @@ sal_uInt16 addLoadLocal(
         }
     }
     if (*index > SAL_MAX_UINT16 - size) {
-        throw CannotDumpException("Too many local variables for Java class file format");
+        throw CannotDumpException(
+            "Too many local variables for Java class file format");
     }
     *index = *index + size;
     return stack;
 }
 
-void addBaseArguments(
-    rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
-    MethodDescriptor * methodDescriptor, ClassFile::Code * code,
-    RTTypeClass typeClass, rtl::OString const & type, sal_uInt16 * index)
-{
-    OSL_ASSERT(
-        dependencies != 0 && methodDescriptor != 0 && code != 0 && index != 0);
-    typereg::Reader reader(manager->getTypeReader(type));
-    if (!reader.isValid() || reader.getTypeClass() != typeClass
-        || codemaker::convertString(reader.getTypeName()) != type
-        || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
-    {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    sal_uInt16 superTypes = reader.getSuperTypeCount();
-    sal_uInt16 fields = reader.getFieldCount();
-    sal_uInt16 firstField = 0;
-    if (type  == "com/sun/star/uno/Exception")
-    {
-        if (typeClass != RT_TYPE_EXCEPTION || superTypes != 0 || fields != 2) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        firstField = 1;
-    } else {
-        if (
-            (typeClass == RT_TYPE_STRUCT && (superTypes > 1 || fields == 0)) ||
-            (typeClass == RT_TYPE_EXCEPTION && superTypes != 1)
-           )
-        {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        if (superTypes == 1) {
-            addBaseArguments(
-                manager, dependencies, methodDescriptor, code, typeClass,
-                codemaker::convertString(reader.getSuperTypeName(0)), index);
-        }
-    }
-    for (sal_uInt16 i = firstField; i < fields; ++i) {
-        if (reader.getFieldFlags(i) != RT_ACCESS_READWRITE
-            || reader.getFieldValue(i).m_type != RT_TYPE_NONE)
-        {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        rtl::OString fieldType(
-            codemaker::convertString(reader.getFieldTypeName(i)));
-        methodDescriptor->addParameter(fieldType, false, true, 0);
-        addLoadLocal(
-            manager, code, index, false, fieldType, false, dependencies);
-    }
-}
-
 sal_uInt16 addDirectArgument(
     rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
     MethodDescriptor * methodDescriptor, ClassFile::Code * code,
-    sal_uInt16 * index, rtl::OString const & className,
-    rtl::OString const & fieldName, bool typeParameter,
-    rtl::OString const & fieldType)
+    sal_uInt16 * index, OString const & className, OString const & fieldName,
+    bool typeParameter, OUString const & fieldType)
 {
-    OSL_ASSERT(
-        dependencies != 0 && methodDescriptor != 0 && code != 0 && index != 0);
-    rtl::OString desc;
+    assert(methodDescriptor != 0);
+    assert(code != 0);
+    OString desc;
     if (typeParameter) {
         methodDescriptor->addTypeParameter(fieldType);
         desc = "Ljava/lang/Object;";
@@ -1400,130 +1374,71 @@ sal_uInt16 addDirectArgument(
     return stack + 1;
 }
 
-void handleAggregatingType(
-    rtl::Reference< TypeManager > const & manager,
-    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+void addPlainStructBaseArguments(
+    rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
+    MethodDescriptor * methodDescriptor, ClassFile::Code * code,
+    OUString const & base, sal_uInt16 * index)
+{
+    assert(manager.is());
+    assert(methodDescriptor != 0);
+    rtl::Reference< unoidl::Entity > ent;
+    if (manager->getSort(base, &ent)
+        != codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE)
+    {
+        throw CannotDumpException(
+            "unexpected entity \"" + base
+            + "\" in call to addPlainStructBaseArguments");
+    }
+    rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
+        dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
+    assert(ent2.is());
+    if (!ent2->getDirectBase().isEmpty()) {
+        addPlainStructBaseArguments(
+            manager, dependencies, methodDescriptor, code,
+            ent2->getDirectBase(), index);
+    }
+    for (std::vector< unoidl::PlainStructTypeEntity::Member >::const_iterator i(
+             ent2->getDirectMembers().begin());
+         i != ent2->getDirectMembers().end(); ++i)
+    {
+        methodDescriptor->addParameter(i->type, false, true, 0);
+        addLoadLocal(manager, code, index, false, i->type, false, dependencies);
+    }
+}
+
+void handlePlainStructType(
+    OUString name,
+    rtl::Reference< unoidl::PlainStructTypeEntity > const & entity,
+    rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
 {
-    OSL_ASSERT(dependencies != 0);
-    if (reader.getMethodCount() != 0)
-    {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    RTTypeClass typeClass = reader.getTypeClass();
-    rtl::OString className(codemaker::convertString(reader.getTypeName()));
-    sal_uInt16 superTypes = reader.getSuperTypeCount();
-    sal_uInt16 fields = reader.getFieldCount();
-    sal_uInt16 firstField = 0;
-    sal_uInt16 references = reader.getReferenceCount();
-    bool runtimeException = false;
-    rtl::OString superClass;
-    if (className == "com/sun/star/uno/Exception")
-    {
-        if (typeClass != RT_TYPE_EXCEPTION || superTypes != 0 || fields != 2
-            || references != 0)
-        {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        firstField = 1;
-        superClass = "java/lang/Exception";
-    } else if (className == "com/sun/star/uno/RuntimeException")
-    {
-        if (typeClass != RT_TYPE_EXCEPTION || superTypes != 1 || fields != 0
-            || references != 0)
-        {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        superTypes = 0;
-        superClass = "java/lang/RuntimeException";
-        runtimeException = true;
+    assert(entity.is());
+    assert(dependencies != 0);
+    OString className(codemaker::convertString(name).replace('.', '/'));
+    OString superClass;
+    if (entity->getDirectBase().isEmpty()) {
+        superClass = "java/lang/Object";
     } else {
-        if (
-             (
-              typeClass == RT_TYPE_STRUCT &&
-              (
-               fields == 0 ||
-               (references == 0 ? superTypes > 1 : superTypes != 0)
-              )
-             ) ||
-             (typeClass == RT_TYPE_EXCEPTION && superTypes != 1)
-           )
-        {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        if (superTypes == 0) {
-            superClass = "java/lang/Object";
-        } else {
-            superClass = codemaker::convertString(reader.getSuperTypeName(0));
-            dependencies->insert(superClass);
-        }
-    }
-    rtl::OString sig;
-    std::map< rtl::OString, sal_Int32 > typeParameters;
-    if (references != 0) {
-        rtl::OStringBuffer buf;
-        buf.append('<');
-        for (sal_uInt16 i = 0; i < references; ++i) {
-            if (reader.getReferenceFlags(i) != RT_ACCESS_INVALID
-                || reader.getReferenceSort(i) != RT_REF_TYPE_PARAMETER)
-            {
-                throw CannotDumpException("Bad type information");
-                    //TODO
-            }
-            rtl::OString name(
-                codemaker::convertString(reader.getReferenceTypeName(i)));
-            buf.append(name + ":Ljava/lang/Object;");
-            if (!typeParameters.insert(
-                    std::map< rtl::OString, sal_Int32 >::value_type(name, i)).
-                second)
-            {
-                throw CannotDumpException("Bad type information");
-                    //TODO
-            }
-        }
-        buf.append(">Ljava/lang/Object;");
-        sig = buf.makeStringAndClear();
+        superClass = codemaker::convertString(entity->getDirectBase()).
+            replace('.', '/');
+        dependencies->insert(entity->getDirectBase());
     }
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
-            className, superClass, sig));
+            className, superClass, ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     std::vector< TypeInfo > typeInfo;
-    for (sal_uInt16 i = firstField; i < fields; ++i) {
-        RTFieldAccess flags = reader.getFieldFlags(i);
-        if ((flags != RT_ACCESS_READWRITE
-             && flags != (RT_ACCESS_READWRITE | RT_ACCESS_PARAMETERIZED_TYPE))
-            || ((flags & RT_ACCESS_PARAMETERIZED_TYPE) != 0 && references == 0)
-            || reader.getFieldValue(i).m_type != RT_TYPE_NONE)
-        {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        rtl::OString type(
-            codemaker::convertString(reader.getFieldTypeName(i)));
-        sal_Int32 typeParameterIndex;
-        if ((flags & RT_ACCESS_PARAMETERIZED_TYPE) == 0) {
-            typeParameterIndex = -1;
-        } else {
-            std::map< rtl::OString, sal_Int32 >::iterator it(
-                typeParameters.find(type));
-            if (it == typeParameters.end()) {
-                throw CannotDumpException("Bad type information");
-                    //TODO
-            }
-            typeParameterIndex = it->second;
-        }
+    sal_Int32 index = 0;
+    for (std::vector< unoidl::PlainStructTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
         addField(
-            manager, dependencies, cf.get(), &typeInfo, typeParameterIndex,
-            type, codemaker::convertString(reader.getFieldName(i)), i - firstField);
-    }
-    if (runtimeException) {
-        addField(
-            manager, dependencies, cf.get(), &typeInfo, -1,
-                "com/sun/star/uno/XInterface", "Context", 0);
+            manager, dependencies, cf.get(), &typeInfo, -1, i->type, i->name,
+            index++);
     }
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
@@ -1531,107 +1446,350 @@ void handleAggregatingType(
     code->loadLocalReference(0);
     code->instrInvokespecial(superClass, "<init>", "()V");
     sal_uInt16 stack = 0;
-    for (sal_uInt16 i = firstField; i < fields; ++i) {
+    for (std::vector< unoidl::PlainStructTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
         stack = std::max(
             stack,
             addFieldInit(
-                manager, className,
-                codemaker::convertString(reader.getFieldName(i)),
-                (reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0,
-                codemaker::convertString(reader.getFieldTypeName(i)),
-                dependencies, code.get()));
+                manager, className, i->name, false, i->type, dependencies,
+                code.get()));
     }
-    if (runtimeException) {
-        stack = std::max(stack,
-            addFieldInit(manager, className, "Context", false, "com/sun/star/uno/XInterface",
+    code->instrReturn();
+    code->setMaxStackAndLocals(stack + 1, 1);
+    cf->addMethod(
+        ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
+        std::vector< OString >(), "");
+    MethodDescriptor desc(manager, dependencies, "void", 0, 0);
+    code.reset(cf->newCode());
+    code->loadLocalReference(0);
+    sal_uInt16 index2 = 1;
+    if (!entity->getDirectBase().isEmpty()) {
+        addPlainStructBaseArguments(
+            manager, dependencies, &desc, code.get(), entity->getDirectBase(),
+            &index2);
+    }
+    code->instrInvokespecial(superClass, "<init>", desc.getDescriptor());
+    sal_uInt16 maxSize = index2;
+    for (std::vector< unoidl::PlainStructTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
+        maxSize = std::max(
+            maxSize,
+            addDirectArgument(
+                manager, dependencies, &desc, code.get(), &index2, className,
+                codemaker::convertString(i->name), false, i->type));
+    }
+    code->instrReturn();
+    code->setMaxStackAndLocals(maxSize, index2);
+    cf->addMethod(
+        ClassFile::ACC_PUBLIC, "<init>", desc.getDescriptor(), code.get(),
+        std::vector< OString >(), desc.getSignature());
+    addTypeInfo(className, typeInfo, dependencies, cf.get());
+    writeClassFile(options, className, *cf.get());
+}
+
+void handlePolyStructType(
+    OUString name,
+    rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > const &
+        entity,
+    rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
+    Dependencies * dependencies)
+{
+    assert(entity.is());
+    OString className(codemaker::convertString(name).replace('.', '/'));
+    std::map< OUString, sal_Int32 > typeParameters;
+    OStringBuffer sig("<");
+    sal_Int32 index = 0;
+    for (std::vector< OUString >::const_iterator i(
+             entity->getTypeParameters().begin());
+         i != entity->getTypeParameters().end(); ++i)
+    {
+        sig.append(codemaker::convertString(*i) + ":Ljava/lang/Object;");
+        if (!typeParameters.insert(
+                std::map< OUString, sal_Int32 >::value_type(*i, index++)).
+            second)
+        {
+            throw CannotDumpException("Bad type information"); //TODO
+        }
+    }
+    sig.append(">Ljava/lang/Object;");
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr< ClassFile > cf(
+        new ClassFile(
+            static_cast< ClassFile::AccessFlags >(
+                ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
+            className, "java/lang/Object", sig.makeStringAndClear()));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::vector< TypeInfo > typeInfo;
+    index = 0;
+    for (std::vector< unoidl::PolymorphicStructTypeTemplateEntity::Member >::
+             const_iterator i(entity->getMembers().begin());
+         i != entity->getMembers().end(); ++i)
+    {
+        sal_Int32 typeParameterIndex;
+        if (i->parameterized) {
+            std::map< OUString, sal_Int32 >::iterator it(
+                typeParameters.find(i->type));
+            if (it == typeParameters.end()) {
+                throw CannotDumpException("Bad type information"); //TODO
+            }
+            typeParameterIndex = it->second;
+        } else {
+            typeParameterIndex = -1;
+        }
+        addField(
+            manager, dependencies, cf.get(), &typeInfo, typeParameterIndex,
+            i->type, i->name, index++);
+    }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr< ClassFile::Code > code(cf->newCode());
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+    code->loadLocalReference(0);
+    code->instrInvokespecial("java/lang/Object", "<init>", "()V");
+    sal_uInt16 stack = 0;
+    for (std::vector< unoidl::PolymorphicStructTypeTemplateEntity::Member >::
+             const_iterator i(entity->getMembers().begin());
+         i != entity->getMembers().end(); ++i)
+    {
+        stack = std::max(
+            stack,
+            addFieldInit(
+                manager, className, i->name, i->parameterized, i->type,
                 dependencies, code.get()));
     }
     code->instrReturn();
     code->setMaxStackAndLocals(stack + 1, 1);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC,
-        "<init>", "()V", code.get(),
-        std::vector< rtl::OString >(), "");
-    if (typeClass == RT_TYPE_EXCEPTION) {
-        code.reset(cf->newCode());
-        code->loadLocalReference(0);
-        code->loadLocalReference(1);
-        code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/String;)V");
-        stack = 0;
-        for (sal_uInt16 i = firstField; i < fields; ++i) {
-            stack = std::max(
-                stack,
-                addFieldInit(
-                    manager, className,
-                    codemaker::convertString(reader.getFieldName(i)),
-                    ((reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE)
-                     != 0),
-                    codemaker::convertString(reader.getFieldTypeName(i)),
-                    dependencies, code.get()));
-        }
-        if (runtimeException) {
-            stack = std::max(
-                stack,
-                addFieldInit(manager, className, "Context", false, "com/sun/star/uno/XInterface",
-                    dependencies, code.get()));
-        }
-        code->instrReturn();
-        code->setMaxStackAndLocals(stack + 2, 2);
-        cf->addMethod(ClassFile::ACC_PUBLIC, "<init>", "(Ljava/lang/String;)V",
-            code.get(), std::vector< rtl::OString >(), "");
-    }
+        ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
+        std::vector< OString >(), "");
     MethodDescriptor desc(manager, dependencies, "void", 0, 0);
     code.reset(cf->newCode());
     code->loadLocalReference(0);
-    sal_uInt16 index = 1;
-    if (typeClass == RT_TYPE_EXCEPTION) {
-        desc.addParameter("string", false, true, 0);
-        code->loadLocalReference(index++);
-    }
-    if (superTypes != 0) {
-        addBaseArguments(
-            manager, dependencies, &desc, code.get(), typeClass, superClass,
-            &index);
-    }
-    code->instrInvokespecial(superClass, "<init>", desc.getDescriptor());
-    sal_uInt16 maxSize = index;
-    for (sal_uInt16 i = firstField; i < fields; ++i) {
+    sal_uInt16 index2 = 1;
+    code->instrInvokespecial(
+        "java/lang/Object", "<init>", desc.getDescriptor());
+    sal_uInt16 maxSize = index2;
+    for (std::vector< unoidl::PolymorphicStructTypeTemplateEntity::Member >::
+             const_iterator i(entity->getMembers().begin());
+         i != entity->getMembers().end(); ++i)
+    {
         maxSize = std::max(
             maxSize,
             addDirectArgument(
-                manager, dependencies, &desc, code.get(), &index, className,
-                codemaker::convertString(reader.getFieldName(i)),
-                (reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0,
-                codemaker::convertString(reader.getFieldTypeName(i))));
-    }
-    if (runtimeException) {
-        maxSize = std::max(
-            maxSize,
-            addDirectArgument( manager, dependencies, &desc, code.get(), &index, className,
-                "Context", false, "com/sun/star/uno/XInterface"));
+                manager, dependencies, &desc, code.get(), &index2, className,
+                codemaker::convertString(i->name), i->parameterized, i->type));
     }
     code->instrReturn();
-    code->setMaxStackAndLocals(maxSize, index);
-    cf->addMethod(ClassFile::ACC_PUBLIC, "<init>",
-        desc.getDescriptor(), code.get(), std::vector< rtl::OString >(),
-        desc.getSignature());
+    code->setMaxStackAndLocals(maxSize, index2);
+    cf->addMethod(
+        ClassFile::ACC_PUBLIC, "<init>", desc.getDescriptor(), code.get(),
+        std::vector< OString >(), desc.getSignature());
+    addTypeInfo(className, typeInfo, dependencies, cf.get());
+    writeClassFile(options, className, *cf.get());
+}
+
+void addExceptionBaseArguments(
+    rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
+    MethodDescriptor * methodDescriptor, ClassFile::Code * code,
+    OUString const & base, sal_uInt16 * index)
+{
+    assert(manager.is());
+    assert(methodDescriptor != 0);
+    rtl::Reference< unoidl::Entity > ent;
+    if (manager->getSort(base, &ent) != codemaker::UnoType::SORT_EXCEPTION_TYPE)
+    {
+        throw CannotDumpException(
+            "unexpected entity \"" + base
+            + "\" in call to addExceptionBaseArguments");
+    }
+    rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
+        dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
+    assert(ent2.is());
+    bool baseException = base == "com.sun.star.uno.Exception";
+    if (!baseException) {
+        addExceptionBaseArguments(
+            manager, dependencies, methodDescriptor, code,
+            ent2->getDirectBase(), index);
+    }
+    for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
+             ent2->getDirectMembers().begin());
+         i != ent2->getDirectMembers().end(); ++i)
+    {
+        if (!baseException || i != ent2->getDirectMembers().begin()) {
+            methodDescriptor->addParameter(i->type, false, true, 0);
+            addLoadLocal(
+                manager, code, index, false, i->type, false, dependencies);
+        }
+    }
+}
+
+void handleExceptionType(
+    OUString name, rtl::Reference< unoidl::ExceptionTypeEntity > const & entity,
+    rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
+    Dependencies * dependencies)
+{
+    assert(entity.is());
+    assert(dependencies != 0);
+    OString className(codemaker::convertString(name).replace('.', '/'));
+    bool baseException = false;
+    bool baseRuntimeException = false;
+    OString superClass;
+    if (className == "com/sun/star/uno/Exception") {
+        baseException = true;
+        superClass = "java/lang/Exception";
+    } else if (className == "com/sun/star/uno/RuntimeException") {
+        baseRuntimeException = true;
+        superClass = "java/lang/RuntimeException";
+    } else {
+        if (entity->getDirectBase().isEmpty()) {
+            throw CannotDumpException(
+                "Exception type \"" + name + "\" lacks base");
+        }
+        superClass = codemaker::convertString(entity->getDirectBase()).
+            replace('.', '/');
+        dependencies->insert(entity->getDirectBase());
+    }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr< ClassFile > cf(
+        new ClassFile(
+            static_cast< ClassFile::AccessFlags >(
+                ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
+            className, superClass, ""));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::vector< TypeInfo > typeInfo;
+    sal_Int32 index = 0;
+    if (baseRuntimeException) {
+        addField(
+            manager, dependencies, cf.get(), &typeInfo, -1,
+            "com.sun.star.uno.XInterface", "Context", index++);
+    }
+    for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
+        if (!baseException || i != entity->getDirectMembers().begin()) {
+            addField(
+                manager, dependencies, cf.get(), &typeInfo, -1, i->type,
+                i->name, index++);
+        }
+    }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr< ClassFile::Code > code(cf->newCode());
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+    code->loadLocalReference(0);
+    code->instrInvokespecial(superClass, "<init>", "()V");
+    sal_uInt16 stack = 0;
+    if (baseRuntimeException) {
+        stack = std::max(
+            stack,
+            addFieldInit(
+                manager, className, "Context", false,
+                "com.sun.star.uno.XInterface", dependencies, code.get()));
+    }
+    for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
+        if (!baseException || i != entity->getDirectMembers().begin()) {
+            stack = std::max(
+                stack,
+                addFieldInit(
+                    manager, className, i->name, false, i->type, dependencies,
+                    code.get()));
+        }
+    }
+    code->instrReturn();
+    code->setMaxStackAndLocals(stack + 1, 1);
+    cf->addMethod(
+        ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
+        std::vector< OString >(), "");
+    code.reset(cf->newCode());
+    code->loadLocalReference(0);
+    code->loadLocalReference(1);
+    code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/String;)V");
+    stack = 0;
+    if (baseRuntimeException) {
+        stack = std::max(
+            stack,
+            addFieldInit(
+                manager, className, "Context", false,
+                "com.sun.star.uno.XInterface", dependencies, code.get()));
+    }
+    for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
+        if (!baseException || i != entity->getDirectMembers().begin()) {
+            stack = std::max(
+                stack,
+                addFieldInit(
+                    manager, className, i->name, false, i->type, dependencies,
+                    code.get()));
+        }
+    }
+    code->instrReturn();
+    code->setMaxStackAndLocals(stack + 2, 2);
+    cf->addMethod(
+        ClassFile::ACC_PUBLIC, "<init>", "(Ljava/lang/String;)V", code.get(),
+        std::vector< OString >(), "");
+    MethodDescriptor desc(manager, dependencies, "void", 0, 0);
+    code.reset(cf->newCode());
+    code->loadLocalReference(0);
+    sal_uInt16 index2 = 1;
+    desc.addParameter("string", false, true, 0);
+    code->loadLocalReference(index2++);
+    if (!(baseException || baseRuntimeException)) {
+        addExceptionBaseArguments(
+            manager, dependencies, &desc, code.get(), entity->getDirectBase(),
+            &index2);
+    }
+    code->instrInvokespecial(superClass, "<init>", desc.getDescriptor());
+    sal_uInt16 maxSize = index2;
+    if (baseRuntimeException) {
+        maxSize = std::max(
+            maxSize,
+            addDirectArgument(
+                manager, dependencies, &desc, code.get(), &index2, className,
+                "Context", false, "com.sun.star.uno.XInterface"));
+    }
+    for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
+             entity->getDirectMembers().begin());
+         i != entity->getDirectMembers().end(); ++i)
+    {
+        if (!baseException || i != entity->getDirectMembers().begin()) {
+            maxSize = std::max(
+                maxSize,
+                addDirectArgument(
+                    manager, dependencies, &desc, code.get(), &index2,
+                    className, codemaker::convertString(i->name), false,
+                    i->type));
+        }
+    }
+    code->instrReturn();
+    code->setMaxStackAndLocals(maxSize, index2);
+    cf->addMethod(
+        ClassFile::ACC_PUBLIC, "<init>", desc.getDescriptor(), code.get(),
+        std::vector< OString >(), desc.getSignature());
     addTypeInfo(className, typeInfo, dependencies, cf.get());
     writeClassFile(options, className, *cf.get());
 }
 
 void createExceptionsAttribute(
     rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, sal_uInt16 methodIndex,
-    Dependencies * dependencies, std::vector< rtl::OString > * exceptions,
+    std::vector< OUString > const & exceptionTypes,
+    Dependencies * dependencies, std::vector< OString > * exceptions,
     codemaker::ExceptionTree * tree)
 {
-    OSL_ASSERT(dependencies != 0 && exceptions != 0);
-    sal_uInt16 n = reader.getMethodExceptionCount(methodIndex);
-    for (sal_uInt16 i = 0; i < n; ++i) {
-        rtl::OString type(
-            codemaker::convertString(
-                reader.getMethodExceptionTypeName(methodIndex, i)));
-        dependencies->insert(type);
+    assert(dependencies != 0);
+    assert(exceptions != 0);
+    for (std::vector< OUString >::const_iterator i(exceptionTypes.begin());
+         i != exceptionTypes.end(); ++i)
+    {
+        dependencies->insert(*i);
+        OString type(codemaker::convertString(*i).replace('.', '/'));
         exceptions->push_back(type);
         if (tree != 0) {
             tree->add(type.replace('/', '.'), manager);
@@ -1640,26 +1798,13 @@ void createExceptionsAttribute(
 }
 
 void handleInterfaceType(
-    rtl::Reference< TypeManager > const & manager,
-    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    OUString name, rtl::Reference< unoidl::InterfaceTypeEntity > const & entity,
+    rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
 {
-    OSL_ASSERT(dependencies != 0);
-
-    rtl::OString className(codemaker::convertString(reader.getTypeName()));
-    sal_uInt16 superTypes = reader.getSuperTypeCount();
-    sal_uInt16 fields = reader.getFieldCount();
-    sal_uInt16 methods = reader.getMethodCount();
-    if (className == "com/sun/star/uno/XInterface")
-    {
-        if (superTypes != 0 || fields != 0 || methods != 3) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        methods = 0;
-    } else if (superTypes == 0) {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
+    assert(entity.is());
+    assert(dependencies != 0);
+    OString className(codemaker::convertString(name).replace('.', '/'));
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
@@ -1668,193 +1813,107 @@ void handleInterfaceType(
                 | ClassFile::ACC_ABSTRACT),
             className, "java/lang/Object", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    for (sal_uInt16 i = 0; i < superTypes; ++i) {
-        rtl::OString t(codemaker::convertString(reader.getSuperTypeName(i)));
-        dependencies->insert(t);
-        cf->addInterface(t);
+    for (std::vector< OUString >::const_iterator i(
+             entity->getDirectMandatoryBases().begin());
+         i != entity->getDirectMandatoryBases().end(); ++i)
+    {
+        dependencies->insert(*i);
+        cf->addInterface(codemaker::convertString(*i).replace('.', '/'));
     }
     // As a special case, let com.sun.star.lang.XEventListener extend
     // java.util.EventListener ("A tagging interface that all event listener
     // interfaces must extend"):
-    if (className == "com/sun/star/lang/XEventListener")
-    {
+    if (className == "com/sun/star/lang/XEventListener") {
         cf->addInterface("java/util/EventListener");
     }
     std::vector< TypeInfo > typeInfo;
-    sal_Int32 index = 0;
-    for (sal_uInt16 i = 0; i < fields; ++i) {
-        RTFieldAccess flags = reader.getFieldFlags(i);
-        //TODO: ok if both READONLY and BOUND?
-        if (((((flags & RT_ACCESS_READWRITE) != 0)
-              ^ ((flags & RT_ACCESS_READONLY) != 0))
-             == 0)
-            || ((flags
-                 & ~(RT_ACCESS_READWRITE | RT_ACCESS_READONLY
-                     | RT_ACCESS_BOUND))
-                != 0)
-            || reader.getFieldValue(i).m_type != RT_TYPE_NONE)
+    if (className != "com/sun/star/uno/XInterface") {
+        sal_Int32 index = 0;
+        for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::
+                 const_iterator i(entity->getDirectAttributes().begin());
+             i != entity->getDirectAttributes().end(); ++i)
         {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        //TODO: exploit the fact that attribute getter/setter methods preceed
-        // real methods
-        rtl::OUString attrNameUtf16(reader.getFieldName(i));
-        sal_uInt16 getter = SAL_MAX_UINT16;
-        sal_uInt16 setter = SAL_MAX_UINT16;
-        for (sal_uInt16 j = 0; j < methods; ++j) {
-            RTMethodMode mflags = reader.getMethodFlags(j);
-            if ((mflags == RT_MODE_ATTRIBUTE_GET
-                 || mflags == RT_MODE_ATTRIBUTE_SET)
-                && reader.getMethodName(j) == attrNameUtf16)
-            {
-                if (reader.getMethodReturnTypeName(j) != "void"
-                    || reader.getMethodParameterCount(j) != 0
-                    || (mflags == RT_MODE_ATTRIBUTE_GET
-                        ? getter != SAL_MAX_UINT16
-                        : (setter != SAL_MAX_UINT16
-                           || (flags & RT_ACCESS_READONLY) != 0)))
-                {
-                    throw CannotDumpException("Bad type information"); //TODO
-                }
-                OSL_ASSERT(j != SAL_MAX_UINT16);
-                (mflags == RT_MODE_ATTRIBUTE_GET ? getter : setter) = j;
-            }
-        }
-        rtl::OString fieldType(
-            codemaker::convertString(reader.getFieldTypeName(i)));
-        SpecialType specialType;
-        PolymorphicUnoType polymorphicUnoType;
-        MethodDescriptor gdesc(
-            manager, dependencies, fieldType, &specialType,
-            &polymorphicUnoType);
-        std::vector< rtl::OString > exc;
-        if (getter != SAL_MAX_UINT16) {
+            SpecialType specialType;
+            PolymorphicUnoType polymorphicUnoType;
+            MethodDescriptor gdesc(
+                manager, dependencies, i->type, &specialType,
+                &polymorphicUnoType);
+            std::vector< OString > exc;
             createExceptionsAttribute(
-                manager, reader, getter, dependencies, &exc, 0);
-        }
-        rtl::OString attrName(codemaker::convertString(attrNameUtf16));
-        cf->addMethod(
-            static_cast< ClassFile::AccessFlags >(
-                ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
-            "get" + attrName, gdesc.getDescriptor(), 0, exc, gdesc.getSignature());
-        if ((flags & RT_ACCESS_READONLY) == 0) {
-            MethodDescriptor sdesc(
-                manager, dependencies, "void", 0, 0);
-            sdesc.addParameter(fieldType, false, true, 0);
-            std::vector< rtl::OString > exc2;
-            if (setter != SAL_MAX_UINT16) {
-                createExceptionsAttribute(
-                    manager, reader, setter, dependencies, &exc2, 0);
-            }
+                manager, i->getExceptions, dependencies, &exc, 0);
+            OString attrName(codemaker::convertString(i->name));
             cf->addMethod(
                 static_cast< ClassFile::AccessFlags >(
                     ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
-                "set" + attrName, sdesc.getDescriptor(), 0, exc2, sdesc.getSignature());
-        }
-        typeInfo.push_back(
-            TypeInfo(
-                TypeInfo::KIND_ATTRIBUTE, attrName, specialType,
-                static_cast< TypeInfo::Flags >(
-                    ((flags & RT_ACCESS_READONLY) == 0
-                     ? 0 : TypeInfo::FLAG_READONLY)
-                    | ((flags & RT_ACCESS_BOUND) == 0
-                       ? 0 : TypeInfo::FLAG_BOUND)),
-                index, polymorphicUnoType));
-        index += ((flags & RT_ACCESS_READONLY) == 0 ? 2 : 1);
-    }
-    for (sal_uInt16 i = 0; i < methods; ++i) {
-        RTMethodMode flags = reader.getMethodFlags(i);
-        switch (flags) {
-        case RT_MODE_ONEWAY:
-        case RT_MODE_TWOWAY:
-            {
-                rtl::OString methodName(
-                    codemaker::convertString(reader.getMethodName(i)));
-                SpecialType specialReturnType;
-                PolymorphicUnoType polymorphicUnoReturnType;
-                MethodDescriptor desc(
-                    manager, dependencies,
-                    codemaker::convertString(
-                        reader.getMethodReturnTypeName(i)),
-                    &specialReturnType, &polymorphicUnoReturnType);
-                typeInfo.push_back(
-                    TypeInfo(
-                        TypeInfo::KIND_METHOD, methodName, specialReturnType,
-                        static_cast< TypeInfo::Flags >(
-                            flags == RT_MODE_ONEWAY
-                            ? TypeInfo::FLAG_ONEWAY : 0),
-                        index++, polymorphicUnoReturnType));
-                for (sal_uInt16 j = 0; j < reader.getMethodParameterCount(i);
-                     ++j)
-                {
-                    bool in;
-                    bool out;
-                    switch (reader.getMethodParameterFlags(i, j)) {
-                    case RT_PARAM_IN:
-                        in = true;
-                        out = false;
-                        break;
-
-                    case RT_PARAM_OUT:
-                        in = false;
-                        out = true;
-                        break;
-
-                    case RT_PARAM_INOUT:
-                        in = true;
-                        out = true;
-                        break;
-
-                    default:
-                        throw CannotDumpException("Bad type information"); //TODO
-                    }
-                    PolymorphicUnoType polymorphicUnoType;
-                    SpecialType specialType = desc.addParameter(
-                        codemaker::convertString(
-                            reader.getMethodParameterTypeName(i, j)),
-                        out, true, &polymorphicUnoType);
-                    if (out || isSpecialType(specialType)
-                        || (polymorphicUnoType.kind
-                            != PolymorphicUnoType::KIND_NONE))
-                    {
-                        typeInfo.push_back(
-                            TypeInfo(
-                                codemaker::convertString(
-                                    reader.getMethodParameterName(i, j)),
-                                specialType, in, out, methodName, j,
-                                polymorphicUnoType));
-                    }
-                }
-                std::vector< rtl::OString > exc2;
+                "get" + attrName, gdesc.getDescriptor(), 0, exc,
+                gdesc.getSignature());
+            if (!i->readOnly) {
+                MethodDescriptor sdesc(manager, dependencies, "void", 0, 0);
+                sdesc.addParameter(i->type, false, true, 0);
+                std::vector< OString > exc2;
                 createExceptionsAttribute(
-                    manager, reader, i, dependencies, &exc2, 0);
+                    manager, i->setExceptions, dependencies, &exc2, 0);
                 cf->addMethod(
                     static_cast< ClassFile::AccessFlags >(
                         ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
-                    methodName, desc.getDescriptor(), 0, exc2,
-                    desc.getSignature());
-                break;
+                    "set" + attrName, sdesc.getDescriptor(), 0, exc2,
+                    sdesc.getSignature());
             }
-
-        case RT_MODE_ATTRIBUTE_GET:
-        case RT_MODE_ATTRIBUTE_SET:
+            typeInfo.push_back(
+                TypeInfo(
+                    TypeInfo::KIND_ATTRIBUTE, attrName, specialType,
+                    static_cast< TypeInfo::Flags >(
+                        (i->readOnly ? TypeInfo::FLAG_READONLY : 0)
+                        | (i->bound ? TypeInfo::FLAG_BOUND : 0)),
+                    index, polymorphicUnoType));
+            index += (i->readOnly ? 1 : 2);
+        }
+        for (std::vector< unoidl::InterfaceTypeEntity::Method >::const_iterator
+                 i(entity->getDirectMethods().begin());
+             i != entity->getDirectMethods().end(); ++i)
+        {
+            OString methodName(codemaker::convertString(i->name));
+            SpecialType specialReturnType;
+            PolymorphicUnoType polymorphicUnoReturnType;
+            MethodDescriptor desc(
+                manager, dependencies, i->returnType, &specialReturnType,
+                &polymorphicUnoReturnType);
+            typeInfo.push_back(
+                TypeInfo(
+                    TypeInfo::KIND_METHOD, methodName, specialReturnType,
+                    static_cast< TypeInfo::Flags >(0), index++,
+                    polymorphicUnoReturnType));
+            sal_Int32 paramIndex = 0;
+            for (std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
+                     const_iterator j(i->parameters.begin());
+                 j != i->parameters.end(); ++j)
             {
-                //TODO: exploit the fact that attribute getter/setter methods
-                // are ordered the same way as the attribute fields themselves
-                rtl::OUString methodNameUtf16(reader.getMethodName(i));
-                bool found = false;
-                for (sal_uInt16 j = 0; j < fields; ++j) {
-                    if (reader.getFieldName(j) == methodNameUtf16) {
-                        found = true;
-                        break;
-                    }
+                bool in = j->direction
+                    != (unoidl::InterfaceTypeEntity::Method::Parameter::
+                        DIRECTION_OUT);
+                bool out = j->direction
+                    != (unoidl::InterfaceTypeEntity::Method::Parameter::
+                        DIRECTION_IN);
+                PolymorphicUnoType polymorphicUnoType;
+                SpecialType specialType = desc.addParameter(
+                    j->type, out, true, &polymorphicUnoType);
+                if (out || isSpecialType(specialType)
+                    || polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE)
+                {
+                    typeInfo.push_back(
+                        TypeInfo(
+                            codemaker::convertString(j->name), specialType, in,
+                            out, methodName, paramIndex, polymorphicUnoType));
                 }
-                if (found) {
-                    break;
-                }
+                ++paramIndex;
             }
-        default:
-            throw CannotDumpException("Bad type information"); //TODO
+            std::vector< OString > exc2;
+            createExceptionsAttribute(
+                manager, i->exceptions, dependencies, &exc2, 0);
+            cf->addMethod(
+                static_cast< ClassFile::AccessFlags >(
+                    ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
+                methodName, desc.getDescriptor(), 0, exc2, desc.getSignature());
         }
     }
     addTypeInfo(className, typeInfo, dependencies, cf.get());
@@ -1862,173 +1921,50 @@ void handleInterfaceType(
 }
 
 void handleTypedef(
-    rtl::Reference< TypeManager > const & manager,
-    SAL_UNUSED_PARAMETER JavaOptions /*TODO const*/ &,
-    typereg::Reader const & reader, Dependencies * dependencies)
+    rtl::Reference< unoidl::TypedefEntity > const & entity,
+    rtl::Reference< TypeManager > const & manager, Dependencies * dependencies)
 {
-    OSL_ASSERT(dependencies != 0);
-    if (reader.getSuperTypeCount() != 1 || reader.getFieldCount() != 0
-        || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
-    {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    RTTypeClass typeClass;
-    rtl::OString nucleus;
+    assert(entity.is());
+    assert(manager.is());
+    assert(dependencies != 0);
+    OUString nucleus;
     sal_Int32 rank;
-    std::vector< rtl::OString > args;
-    if (codemaker::decomposeAndResolve(
-            manager, codemaker::convertString(reader.getSuperTypeName(0)),
-            false, false, false, &typeClass, &nucleus, &rank, &args)
-        == codemaker::UnoType::SORT_COMPLEX)
-    {
-        switch (typeClass) {
-        case RT_TYPE_STRUCT:
-            if (!args.empty()) {
-                throw CannotDumpException("Bad type information");
-                    //TODO
-            }
-        case RT_TYPE_ENUM:
-        case RT_TYPE_INTERFACE:
-        case RT_TYPE_TYPEDEF:
-            dependencies->insert(nucleus);
-            break;
-
-        default:
-            OSL_ASSERT(false);
-            break;
-        }
-    }
-}
-
-void addConstant(
-    rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, bool publishable, sal_uInt16 index,
-    Dependencies * dependencies, ClassFile * classFile)
-{
-    OSL_ASSERT(dependencies != 0 && classFile != 0);
-    RTFieldAccess flags = reader.getFieldFlags(index);
-    if (flags != RT_ACCESS_CONST
-        && (!publishable || flags != (RT_ACCESS_CONST | RT_ACCESS_PUBLISHED)))
-    {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    RTConstValue fieldValue(reader.getFieldValue(index));
-    sal_uInt16 valueIndex;
-    RTTypeClass typeClass;
-    rtl::OString nucleus;
-    sal_Int32 rank;
-    std::vector< rtl::OString > args;
-    switch (codemaker::decomposeAndResolve(
-                manager,
-                codemaker::convertString(reader.getFieldTypeName(index)),
-                true, false, false, &typeClass, &nucleus, &rank, &args))
+    switch (manager->getSortResolveOuterSequences(
+                entity->getType(), &nucleus, &rank))
     {
     case codemaker::UnoType::SORT_BOOLEAN:
-        if (fieldValue.m_type != RT_TYPE_BOOL) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aBool);
-        break;
-
     case codemaker::UnoType::SORT_BYTE:
-        if (fieldValue.m_type != RT_TYPE_BYTE) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aByte);
-        break;
-
     case codemaker::UnoType::SORT_SHORT:
-        if (fieldValue.m_type != RT_TYPE_INT16) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aShort);
-        break;
-
     case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-    case codemaker::UnoType::SORT_CHAR:
-        if (fieldValue.m_type != RT_TYPE_UINT16) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aUShort);
-        break;
-
     case codemaker::UnoType::SORT_LONG:
-        if (fieldValue.m_type != RT_TYPE_INT32) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aLong);
-        break;
-
     case codemaker::UnoType::SORT_UNSIGNED_LONG:
-        if (fieldValue.m_type != RT_TYPE_UINT32) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addIntegerInfo(
-            static_cast< sal_Int32 >(fieldValue.m_value.aULong));
-        break;
-
     case codemaker::UnoType::SORT_HYPER:
-        if (fieldValue.m_type != RT_TYPE_INT64) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addLongInfo(fieldValue.m_value.aHyper);
-        break;
-
     case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-        if (fieldValue.m_type != RT_TYPE_UINT64) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addLongInfo(
-            static_cast< sal_Int64 >(fieldValue.m_value.aUHyper));
-        break;
-
     case codemaker::UnoType::SORT_FLOAT:
-        if (fieldValue.m_type != RT_TYPE_FLOAT) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addFloatInfo(fieldValue.m_value.aFloat);
-        break;
-
     case codemaker::UnoType::SORT_DOUBLE:
-        if (fieldValue.m_type != RT_TYPE_DOUBLE) {
-            throw CannotDumpException("Bad type information"); //TODO
-        }
-        valueIndex = classFile->addDoubleInfo(fieldValue.m_value.aDouble);
+    case codemaker::UnoType::SORT_CHAR:
+    case codemaker::UnoType::SORT_STRING:
+    case codemaker::UnoType::SORT_TYPE:
+    case codemaker::UnoType::SORT_ANY:
         break;
-
+    case codemaker::UnoType::SORT_ENUM_TYPE:
+    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::SORT_TYPEDEF:
+        dependencies->insert(nucleus);
+        break;
     default:
-        throw CannotDumpException("Bad type information");
-            //TODO
+        assert(false); // this cannot happen
     }
-    rtl::OString desc;
-    rtl::OString sig;
-    getFieldDescriptor(
-        manager, dependencies,
-        codemaker::convertString(reader.getFieldTypeName(index)),
-        &desc, &sig, 0);
-    classFile->addField(
-        static_cast< ClassFile::AccessFlags >(
-            ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
-            | ClassFile::ACC_FINAL),
-        codemaker::convertString(reader.getFieldName(index)),
-        desc, valueIndex, sig);
 }
 
 void handleConstantGroup(
-    rtl::Reference< TypeManager > const & manager,
-    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    OUString name, rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
+    rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
 {
-    OSL_ASSERT(dependencies != 0);
-    if (reader.getSuperTypeCount() != 0 || reader.getMethodCount() != 0
-        || reader.getReferenceCount() != 0)
-    {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    rtl::OString className(codemaker::convertString(reader.getTypeName()));
+    assert(entity.is());
+    OString className(codemaker::convertString(name).replace('.', '/'));
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
@@ -2037,41 +1973,66 @@ void handleConstantGroup(
                 | ClassFile::ACC_ABSTRACT),
             className, "java/lang/Object", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    sal_uInt16 fields = reader.getFieldCount();
-    for (sal_uInt16 i = 0; i < fields; ++i) {
-        addConstant(manager, reader, false, i, dependencies, cf.get());
+    for (std::vector< unoidl::ConstantGroupEntity::Member >::const_iterator i(
+             entity->getMembers().begin());
+         i != entity->getMembers().end(); ++i)
+    {
+        OUString type;
+        sal_uInt16 valueIndex = sal_uInt16(); // avoid false warnings
+        switch (i->value.type) {
+        case unoidl::ConstantValue::TYPE_BOOLEAN:
+            type = "boolean";
+            valueIndex = cf->addIntegerInfo(i->value.booleanValue);
+            break;
+        case unoidl::ConstantValue::TYPE_BYTE:
+            type = "byte";
+            valueIndex = cf->addIntegerInfo(i->value.byteValue);
+            break;
+        case unoidl::ConstantValue::TYPE_SHORT:
+            type = "short";
+            valueIndex = cf->addIntegerInfo(i->value.shortValue);
+            break;
+        case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
+            type = "unsigned short";
+            valueIndex = cf->addIntegerInfo(i->value.unsignedShortValue);
+            break;
+        case unoidl::ConstantValue::TYPE_LONG:
+            type = "long";
+            valueIndex = cf->addIntegerInfo(i->value.longValue);
+            break;
+        case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
+            type = "unsigned long";
+            valueIndex = cf->addIntegerInfo(
+                static_cast< sal_Int32 >(i->value.unsignedLongValue));
+            break;
+        case unoidl::ConstantValue::TYPE_HYPER:
+            type = "hyper";
+            valueIndex = cf->addLongInfo(i->value.hyperValue);
+            break;
+        case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
+            type = "unsigned hyper";
+            valueIndex = cf->addLongInfo(
+                static_cast< sal_Int64 >(i->value.unsignedHyperValue));
+            break;
+        case unoidl::ConstantValue::TYPE_FLOAT:
+            type = "float";
+            valueIndex = cf->addFloatInfo(i->value.floatValue);
+            break;
+        case unoidl::ConstantValue::TYPE_DOUBLE:
+            type = "double";
+            valueIndex = cf->addDoubleInfo(i->value.doubleValue);
+            break;
+        }
+        OString desc;
+        OString sig;
+        getFieldDescriptor(manager, dependencies, type, &desc, &sig, 0);
+        cf->addField(
+            static_cast< ClassFile::AccessFlags >(
+                ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
+                | ClassFile::ACC_FINAL),
+            codemaker::convertString(i->name), desc, valueIndex, sig);
     }
     writeClassFile(options, className, *cf.get());
-}
-
-void handleModule(
-    rtl::Reference< TypeManager > const & manager,
-    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
-    Dependencies * dependencies)
-{
-    OSL_ASSERT(dependencies != 0);
-    if (reader.getSuperTypeCount() != 0 || reader.getMethodCount() != 0
-        || reader.getReferenceCount() != 0)
-    {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    rtl::OString prefix(codemaker::convertString(reader.getTypeName()) + "/");
-    sal_uInt16 fields = reader.getFieldCount();
-    for (sal_uInt16 i = 0; i < fields; ++i) {
-        rtl::OString className(
-            prefix + codemaker::convertString(reader.getFieldName(i)));
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< ClassFile > cf(
-            new ClassFile(
-                static_cast< ClassFile::AccessFlags >(
-                    ClassFile::ACC_PUBLIC | ClassFile::ACC_INTERFACE
-                    | ClassFile::ACC_ABSTRACT),
-                className, "java/lang/Object", ""));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        addConstant(manager, reader, true, i, dependencies, cf.get());
-        writeClassFile(options, className, *cf.get());
-    }
 }
 
 void addExceptionHandlers(
@@ -2079,7 +2040,8 @@ void addExceptionHandlers(
     ClassFile::Code::Position start, ClassFile::Code::Position end,
     ClassFile::Code::Position handler, ClassFile::Code * code)
 {
-    OSL_ASSERT(node != 0 && code != 0);
+    assert(node != 0);
+    assert(code != 0);
     if (node->present) {
         code->addException(start, end, handler, node->name.replace('.', '/'));
     } else {
@@ -2094,49 +2056,51 @@ void addExceptionHandlers(
 
 void addConstructor(
     rtl::Reference< TypeManager > const & manager,
-    rtl::OString const & realJavaBaseName, rtl::OString const & unoName,
-    rtl::OString const & className, typereg::Reader const & reader,
-    sal_uInt16 methodIndex, rtl::OString const & methodName,
-    rtl::OString const & returnType, bool defaultConstructor,
-    Dependencies * dependencies, ClassFile * classFile)
+    OString const & realJavaBaseName, OString const & unoName,
+    OString const & className,
+    unoidl::SingleInterfaceBasedServiceEntity::Constructor const & constructor,
+    OUString const & returnType, Dependencies * dependencies,
+    ClassFile * classFile)
 {
-    OSL_ASSERT(dependencies != 0 && classFile != 0);
+    assert(dependencies != 0);
+    assert(classFile != 0);
     MethodDescriptor desc(manager, dependencies, returnType, 0, 0);
-    desc.addParameter("com/sun/star/uno/XComponentContext", false, false, 0);
+    desc.addParameter("com.sun.star.uno.XComponentContext", false, false, 0);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(classFile->newCode());
     SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
     // stack: context
-    code->instrInvokeinterface("com/sun/star/uno/XComponentContext", "getServiceManager"
-                              ,"()Lcom/sun/star/lang/XMultiComponentFactory;", 1);
+    code->instrInvokeinterface(
+        "com/sun/star/uno/XComponentContext", "getServiceManager",
+        "()Lcom/sun/star/lang/XMultiComponentFactory;", 1);
     // stack: factory
     code->loadStringConstant(unoName);
     // stack: factory serviceName
     codemaker::ExceptionTree tree;
     ClassFile::Code::Position tryStart;
     ClassFile::Code::Position tryEnd;
-    std::vector< rtl::OString > exc;
+    std::vector< OString > exc;
     sal_uInt16 stack;
     sal_uInt16 localIndex = 1;
     ClassFile::AccessFlags access = static_cast< ClassFile::AccessFlags >(
         ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC);
-    if (defaultConstructor) {
+    if (constructor.defaultConstructor) {
         code->loadLocalReference(0);
         // stack: factory serviceName context
         tryStart = code->getPosition();
-        code->instrInvokeinterface("com/sun/star/lang/XMultiComponentFactory", "createInstanceWithContext"
-                                  ,"(Ljava/lang/String;Lcom/sun/star/uno/XComponentContext;)"
-                                  "Ljava/lang/Object;", 3);
+        code->instrInvokeinterface(
+            "com/sun/star/lang/XMultiComponentFactory",
+            "createInstanceWithContext",
+            ("(Ljava/lang/String;Lcom/sun/star/uno/XComponentContext;)"
+             "Ljava/lang/Object;"),
+            3);
         tryEnd = code->getPosition();
         // stack: instance
         stack = 3;
     } else {
-        sal_uInt16 parameters = reader.getMethodParameterCount(methodIndex);
-        if (parameters == 1
-            && (reader.getMethodParameterFlags(methodIndex, 0)
-                == (RT_PARAM_IN | RT_PARAM_REST))
-            && (reader.getMethodParameterTypeName(methodIndex, 0) == "any"))
+        if (constructor.parameters.size() == 1
+            && constructor.parameters[0].rest)
         {
             desc.addParameter("any", true, true, 0);
             code->loadLocalReference(localIndex++);
@@ -2145,35 +2109,28 @@ void addConstructor(
             access = static_cast< ClassFile::AccessFlags >(
                 access | ClassFile::ACC_VARARGS);
         } else {
-            code->loadIntegerConstant(parameters);
+            code->loadIntegerConstant(constructor.parameters.size());
             // stack: factory serviceName N
             code->instrAnewarray("java/lang/Object");
             // stack: factory serviceName args
             stack = 0;
-            for (sal_uInt16 i = 0; i < parameters; ++i) {
-                RTParamMode flags = reader.getMethodParameterFlags(
-                    methodIndex, i);
-                rtl::OString paramType(
-                    codemaker::convertString(
-                        reader.getMethodParameterTypeName(methodIndex, i)));
-                if ((flags != RT_PARAM_IN
-                     && flags != (RT_PARAM_IN | RT_PARAM_REST))
-                    || ((flags & RT_PARAM_REST) != 0
-                        && (parameters != 1
-                            || (paramType != "any"))))
-                {
-                    throw CannotDumpException("Bad type information"); //TODO
-                }
-                desc.addParameter(paramType, false, true, 0);
+            sal_Int32 n = 0;
+            for (std::vector<
+                     unoidl::SingleInterfaceBasedServiceEntity::Constructor::
+                     Parameter >::const_iterator i(
+                         constructor.parameters.begin());
+                 i != constructor.parameters.end(); ++i)
+            {
+                desc.addParameter(i->type, false, true, 0);
                 code->instrDup();
                 // stack: factory serviceName args args
-                code->loadIntegerConstant(i);
+                code->loadIntegerConstant(n++);
                 // stack: factory serviceName args args i
                 stack = std::max(
                     stack,
                     addLoadLocal(
-                        manager, code.get(), &localIndex, false, paramType,
-                        true, dependencies));
+                        manager, code.get(), &localIndex, false, i->type, true,
+                        dependencies));
                 // stack: factory serviceName args args i any
                 code->instrAastore();
                 // stack: factory serviceName args
@@ -2183,28 +2140,33 @@ void addConstructor(
         code->loadLocalReference(0);
         // stack: factory serviceName args context
         tryStart = code->getPosition();
-        code->instrInvokeinterface("com/sun/star/lang/XMultiComponentFactory"
-                                  ,"createInstanceWithArgumentsAndContext"
-                                  ,"(Ljava/lang/String;[Ljava/lang/Object;"
-                                  "Lcom/sun/star/uno/XComponentContext;)Ljava/lang/Object;", 4);
+        code->instrInvokeinterface(
+            "com/sun/star/lang/XMultiComponentFactory",
+            "createInstanceWithArgumentsAndContext",
+            ("(Ljava/lang/String;[Ljava/lang/Object;"
+             "Lcom/sun/star/uno/XComponentContext;)Ljava/lang/Object;"),
+            4);
         tryEnd = code->getPosition();
         // stack: instance
         createExceptionsAttribute(
-            manager, reader, methodIndex, dependencies, &exc, &tree);
+            manager, constructor.exceptions, dependencies, &exc, &tree);
     }
     code->loadLocalReference(0);
     // stack: instance context
-    code->instrInvokestatic(className, "$castInstance"
-                           ,"(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
-                            "Ljava/lang/Object;");
+    code->instrInvokestatic(
+        className, "$castInstance",
+        ("(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
+         "Ljava/lang/Object;"));
     // stack: instance
-    code->instrCheckcast(returnType);
+    code->instrCheckcast(
+        codemaker::convertString(returnType).replace('.', '/'));
     // stack: instance
     code->instrAreturn();
     if (!tree.getRoot()->present) {
         ClassFile::Code::Position pos1 = code->getPosition();
         // stack: e
-        code->instrInvokevirtual("java/lang/Throwable", "toString", "()Ljava/lang/String;");
+        code->instrInvokevirtual(
+            "java/lang/Throwable", "toString", "()Ljava/lang/String;");
         // stack: str
         localIndex = std::max< sal_uInt16 >(localIndex, 2);
         code->storeLocalReference(1);
@@ -2213,55 +2175,52 @@ void addConstructor(
         // stack: ex
         code->instrDup();
         // stack: ex ex
-        code->loadStringConstant("component context fails to supply service " + unoName +
-                                 " of type " + realJavaBaseName + ": ");
+        code->loadStringConstant(
+            "component context fails to supply service " + unoName + " of type "
+            + realJavaBaseName + ": ");
         // stack: ex ex "..."
         code->loadLocalReference(1);
         // stack: ex ex "..." str
-        code->instrInvokevirtual("java/lang/String", "concat", "(Ljava/lang/String;)Ljava/lang/String;");
+        code->instrInvokevirtual(
+            "java/lang/String", "concat",
+            "(Ljava/lang/String;)Ljava/lang/String;");
         // stack: ex ex "..."
         code->loadLocalReference(0);
         // stack: ex ex "..." context
-        code->instrInvokespecial("com/sun/star/uno/DeploymentException", "<init>"
-                                ,"(Ljava/lang/String;Ljava/lang/Object;)V");
+        code->instrInvokespecial(
+            "com/sun/star/uno/DeploymentException", "<init>",
+            "(Ljava/lang/String;Ljava/lang/Object;)V");
         // stack: ex
         ClassFile::Code::Position pos2 = code->getPosition();
         code->instrAthrow();
         addExceptionHandlers(
             tree.getRoot(), tryStart, tryEnd, pos2, code.get());
-        code->addException(tryStart, tryEnd, pos1, "com/sun/star/uno/Exception");
-        dependencies->insert("com/sun/star/uno/Exception");
+        code->addException(
+            tryStart, tryEnd, pos1, "com/sun/star/uno/Exception");
+        dependencies->insert("com.sun.star.uno.Exception");
         stack = std::max< sal_uInt16 >(stack, 4);
     }
     code->setMaxStackAndLocals(stack, localIndex);
     classFile->addMethod(
-        access, methodName, desc.getDescriptor(), code.get(), exc,
-        desc.getSignature());
+        access,
+        codemaker::java::translateUnoToJavaIdentifier(
+            (constructor.defaultConstructor
+             ? OString("create") : codemaker::convertString(constructor.name)),
+            "method"),
+        desc.getDescriptor(), code.get(), exc, desc.getSignature());
 }
 
 void handleService(
-    rtl::Reference< TypeManager > const & manager,
-    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    OUString name,
+    rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > const & entity,
+    rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
 {
-    OSL_ASSERT(dependencies != 0);
-    sal_uInt16 superTypes = reader.getSuperTypeCount();
-    sal_uInt16 methods = reader.getMethodCount();
-    if (superTypes == 0
-        ? methods != 0
-        : (superTypes != 1 || reader.getFieldCount() != 0
-           || reader.getReferenceCount() != 0))
-    {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    if (superTypes == 0) {
-        return;
-    }
-    rtl::OString unoName(codemaker::convertString(reader.getTypeName()));
-    rtl::OString className(
-        translateUnoTypeToJavaFullyQualifiedName(unoName, "service"));
-    unoName = unoName.replace('/', '.');
+    assert(entity.is());
+    assert(dependencies != 0);
+    OString unoName(codemaker::convertString(name));
+    OString className(
+        translateUnoidlEntityNameToJavaFullyQualifiedName(name, "service"));
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
@@ -2270,36 +2229,22 @@ void handleService(
                 | ClassFile::ACC_SUPER),
             className, "java/lang/Object", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    if (methods > 0) {
-        rtl::OString base(codemaker::convertString(
-                              reader.getSuperTypeName(0)));
-        rtl::OString realJavaBaseName(base.replace('/', '.'));
-        dependencies->insert(base);
-        dependencies->insert("com/sun/star/lang/XMultiComponentFactory");
-        dependencies->insert("com/sun/star/uno/DeploymentException");
-        dependencies->insert("com/sun/star/uno/TypeClass");
-        dependencies->insert("com/sun/star/uno/XComponentContext");
-        for (sal_uInt16 i = 0; i < methods; ++i) {
-            rtl::OString name(codemaker::convertString(
-                                  reader.getMethodName(i)));
-            bool defaultCtor = name.isEmpty();
-            if (reader.getMethodFlags(i) != RT_MODE_TWOWAY
-                || (reader.getMethodReturnTypeName(i) != "void")
-                || (defaultCtor
-                    && (methods != 1 || reader.getMethodParameterCount(i) != 0
-                        || reader.getMethodExceptionCount(i) != 0)))
-            {
-                throw CannotDumpException("Bad type information");
-                    //TODO
-            }
-            if (defaultCtor) {
-                name = "create";
-            } else {
-                name = codemaker::java::translateUnoToJavaIdentifier(name, "method");
-            }
+    if (!entity->getConstructors().empty()) {
+        OString realJavaBaseName(
+            codemaker::convertString(entity->getBase()));
+        dependencies->insert(entity->getBase());
+        dependencies->insert("com.sun.star.lang.XMultiComponentFactory");
+        dependencies->insert("com.sun.star.uno.DeploymentException");
+        dependencies->insert("com.sun.star.uno.TypeClass");
+        dependencies->insert("com.sun.star.uno.XComponentContext");
+        for (std::vector<
+                 unoidl::SingleInterfaceBasedServiceEntity::Constructor >::
+                 const_iterator i(entity->getConstructors().begin());
+             i != entity->getConstructors().end(); ++i)
+        {
             addConstructor(
-                manager, realJavaBaseName, unoName, className, reader, i, name,
-                base, defaultCtor, dependencies, cf.get());
+                manager, realJavaBaseName, unoName, className, *i,
+                entity->getBase(), dependencies, cf.get());
         }
         // Synthetic castInstance method:
         {
@@ -2312,16 +2257,20 @@ void handleService(
             // stack: type type
             code->loadStringConstant(realJavaBaseName);
             // stack: type type "..."
-            code->instrGetstatic("com/sun/star/uno/TypeClass", "INTERFACE", "Lcom/sun/star/uno/TypeClass;");
+            code->instrGetstatic(
+                "com/sun/star/uno/TypeClass", "INTERFACE",
+                "Lcom/sun/star/uno/TypeClass;");
             // stack: type type "..." INTERFACE
-            code->instrInvokespecial("com/sun/star/uno/Type", "<init>"
-                                    ,"(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
+            code->instrInvokespecial(
+                "com/sun/star/uno/Type", "<init>",
+                "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
             // stack: type
             code->loadLocalReference(0);
             // stack: type instance
-            code->instrInvokestatic("com/sun/star/uno/UnoRuntime", "queryInterface"
-                                   ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                                    "Ljava/lang/Object;");
+            code->instrInvokestatic(
+                "com/sun/star/uno/UnoRuntime", "queryInterface",
+                ("(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
+                 "Ljava/lang/Object;"));
             // stack: instance
             code->instrDup();
             // stack: instance instance
@@ -2335,13 +2284,15 @@ void handleService(
             // stack: ex
             code->instrDup();
             // stack: ex ex
-            code->loadStringConstant("component context fails to supply service " + unoName +
-                                     " of type " + realJavaBaseName);
+            code->loadStringConstant(
+                "component context fails to supply service " + unoName
+                + " of type " + realJavaBaseName);
             // stack: ex ex "..."
             code->loadLocalReference(1);
             // stack: ex ex "..." context
-            code->instrInvokespecial("com/sun/star/uno/DeploymentException", "<init>"
-                                    ,"(Ljava/lang/String;Ljava/lang/Object;)V");
+            code->instrInvokespecial(
+                "com/sun/star/uno/DeploymentException", "<init>",
+                "(Ljava/lang/String;Ljava/lang/Object;)V");
             // stack: ex
             code->instrAthrow();
             code->setMaxStackAndLocals(4, 2);
@@ -2349,46 +2300,32 @@ void handleService(
                 static_cast< ClassFile::AccessFlags >(
                     ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC
                     | ClassFile::ACC_SYNTHETIC),
-                "$castInstance", "(Ljava/lang/Object;Lcom/sun/star/uno/"
-                                 "XComponentContext;)Ljava/lang/Object;",
-                code.get(), std::vector< rtl::OString >(), "");
+                "$castInstance",
+                ("(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
+                 "Ljava/lang/Object;"),
+                code.get(), std::vector< OString >(), "");
         }
     }
     writeClassFile(options, className, *cf.get());
 }
 
 void handleSingleton(
-    rtl::Reference< TypeManager > const & manager,
-    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    OUString name,
+    rtl::Reference< unoidl::InterfaceBasedSingletonEntity > const & entity,
+    rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
 {
-    OSL_ASSERT(dependencies != 0);
-    if (reader.getSuperTypeCount() != 1 || reader.getFieldCount() != 0
-        || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
-    {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    rtl::OString base(codemaker::convertString(reader.getSuperTypeName(0)));
-    rtl::OString realJavaBaseName(base.replace('/', '.'));
-    switch (manager->getTypeReader(base).getTypeClass()) {
-    case RT_TYPE_INTERFACE:
-        break;
-
-    case RT_TYPE_SERVICE:
-        return;
-
-    default:
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-    dependencies->insert(base);
-    OString unoName(codemaker::convertString(reader.getTypeName()));
-    OString className(translateUnoTypeToJavaFullyQualifiedName(unoName, "singleton"));
-    unoName = unoName.replace('/', '.');
-    dependencies->insert("com/sun/star/uno/DeploymentException");
-    dependencies->insert("com/sun/star/uno/TypeClass");
-    dependencies->insert("com/sun/star/uno/XComponentContext");
+    assert(entity.is());
+    assert(dependencies != 0);
+    OString realJavaBaseName(codemaker::convertString(entity->getBase()));
+    OString base(realJavaBaseName.replace('.', '/'));
+    dependencies->insert(entity->getBase());
+    OString unoName(codemaker::convertString(name));
+    OString className(
+        translateUnoidlEntityNameToJavaFullyQualifiedName(name, "singleton"));
+    dependencies->insert("com.sun.star.uno.DeploymentException");
+    dependencies->insert("com.sun.star.uno.TypeClass");
+    dependencies->insert("com.sun.star.uno.XComponentContext");
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
@@ -2397,8 +2334,8 @@ void handleSingleton(
                 | ClassFile::ACC_SUPER),
             className, "java/lang/Object", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    MethodDescriptor desc(manager, dependencies, base, 0, 0);
-    desc.addParameter("com/sun/star/uno/XComponentContext", false, false, 0);
+    MethodDescriptor desc(manager, dependencies, entity->getBase(), 0, 0);
+    desc.addParameter("com.sun.star.uno.XComponentContext", false, false, 0);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -2406,8 +2343,9 @@ void handleSingleton(
     // stack: context
     code->loadStringConstant("/singletons/" + unoName);
     // stack: context "..."
-    code->instrInvokeinterface("com/sun/star/uno/XComponentContext", "getValueByName"
-                              ,"(Ljava/lang/String;)Ljava/lang/Object;", 2);
+    code->instrInvokeinterface(
+        "com/sun/star/uno/XComponentContext", "getValueByName",
+        "(Ljava/lang/String;)Ljava/lang/Object;", 2);
     // stack: value
     code->instrDup();
     // stack: value value
@@ -2419,15 +2357,21 @@ void handleSingleton(
     // stack: value
     code->instrDup();
     // stack: value value
-    code->instrInvokevirtual("com/sun/star/uno/Any", "getType", "()Lcom/sun/star/uno/Type;");
+    code->instrInvokevirtual(
+        "com/sun/star/uno/Any", "getType", "()Lcom/sun/star/uno/Type;");
     // stack: value type
-    code->instrInvokevirtual("com/sun/star/uno/Type", "getTypeClass", "()Lcom/sun/star/uno/TypeClass;");
+    code->instrInvokevirtual(
+        "com/sun/star/uno/Type", "getTypeClass",
+        "()Lcom/sun/star/uno/TypeClass;");
     // stack: value typeClass
-    code->instrGetstatic("com/sun/star/uno/TypeClass", "INTERFACE", "Lcom/sun/star/uno/TypeClass;");
+    code->instrGetstatic(
+        "com/sun/star/uno/TypeClass", "INTERFACE",
+        "Lcom/sun/star/uno/TypeClass;");
     // stack: value typeClass INTERFACE
     ClassFile::Code::Branch branch2 = code->instrIfAcmpne();
     // stack: value
-    code->instrInvokevirtual("com/sun/star/uno/Any", "getObject", "()Ljava/lang/Object;");
+    code->instrInvokevirtual(
+        "com/sun/star/uno/Any", "getObject", "()Ljava/lang/Object;");
     // stack: value
     code->branchHere(branch1);
     code->instrNew("com/sun/star/uno/Type");
@@ -2436,15 +2380,19 @@ void handleSingleton(
     // stack: value type type
     code->loadStringConstant(realJavaBaseName);
     // stack: value type type "..."
-    code->instrGetstatic("com/sun/star/uno/TypeClass", "INTERFACE", "Lcom/sun/star/uno/TypeClass;");
+    code->instrGetstatic(
+        "com/sun/star/uno/TypeClass", "INTERFACE",
+        "Lcom/sun/star/uno/TypeClass;");
     // stack: value type type "..." INTERFACE
-    code->instrInvokespecial("com/sun/star/uno/Type", "<init>", "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
+    code->instrInvokespecial(
+        "com/sun/star/uno/Type", "<init>",
+        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
     // stack: value type
     code->instrSwap();
     // stack: type value
-    code->instrInvokestatic("com/sun/star/uno/UnoRuntime", "queryInterface"
-                           ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                            "Ljava/lang/Object;");
+    code->instrInvokestatic(
+        "com/sun/star/uno/UnoRuntime", "queryInterface",
+        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)Ljava/lang/Object;");
     // stack: instance
     code->instrDup();
     // stack: instance instance
@@ -2461,166 +2409,118 @@ void handleSingleton(
     // stack: ex
     code->instrDup();
     // stack: ex ex
-    code->loadStringConstant("component context fails to supply singleton " + unoName +
-                             " of type " + realJavaBaseName);
+    code->loadStringConstant(
+        "component context fails to supply singleton " + unoName + " of type "
+        + realJavaBaseName);
     // stack: ex ex "..."
     code->loadLocalReference(0);
     // stack: ex ex "..." context
-    code->instrInvokespecial("com/sun/star/uno/DeploymentException", "<init>"
-                            ,"(Ljava/lang/String;Ljava/lang/Object;)V");
+    code->instrInvokespecial(
+        "com/sun/star/uno/DeploymentException", "<init>",
+        "(Ljava/lang/String;Ljava/lang/Object;)V");
     // stack: ex
     code->instrAthrow();
     code->setMaxStackAndLocals(5, 1);
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
-        "get", desc.getDescriptor(),
-        code.get(), std::vector< rtl::OString >(), desc.getSignature());
+        "get", desc.getDescriptor(), code.get(), std::vector< OString >(),
+        desc.getSignature());
     writeClassFile(options, className, *cf.get());
 }
 
 }
 
-bool produceType(
-    rtl::OString const & type, rtl::Reference< TypeManager > const & manager,
-    codemaker::GeneratedTypeSet & generated, JavaOptions * options)
+void produce(
+    OUString const & name, rtl::Reference< TypeManager > const & manager,
+    codemaker::GeneratedTypeSet & generated, JavaOptions const & options)
 {
-    OSL_ASSERT(options != 0);
-    if (type == "/" || type == manager->getBase() || generated.contains(type))
-    {
-        return true;
+    if (generated.contains(u2b(name))) {
+        return;
     }
-    sal_Bool extra = sal_False;
-    typereg::Reader reader(manager->getTypeReader(type, &extra));
-    if (extra) {
-        generated.add(type);
-        return true;
-    }
-    if (!reader.isValid()) {
-        return false;
-    }
-
-    handleUnoTypeRegistryEntityFunction handler;
-    switch (reader.getTypeClass()) {
-    case RT_TYPE_ENUM:
-        handler = handleEnumType;
-        break;
-
-    case RT_TYPE_STRUCT:
-    case RT_TYPE_EXCEPTION:
-        handler = handleAggregatingType;
-        break;
-
-    case RT_TYPE_INTERFACE:
-        handler = handleInterfaceType;
-        break;
-
-    case RT_TYPE_TYPEDEF:
-        handler = handleTypedef;
-        break;
-
-    case RT_TYPE_CONSTANTS:
-        handler = handleConstantGroup;
-        break;
-
-    case RT_TYPE_MODULE:
-        handler = handleModule;
-        break;
-
-    case RT_TYPE_SERVICE:
-        handler = handleService;
-        break;
-
-    case RT_TYPE_SINGLETON:
-        handler = handleSingleton;
-        break;
-
-    default:
-        return false;
+    generated.add(u2b(name));
+    if (!manager->foundAtPrimaryProvider(name)) {
+        return;
     }
     Dependencies deps;
-    handler(manager, *options, reader, &deps);
-    generated.add(type);
-    if (!options->isValid("-nD")) {
-        for (Dependencies::iterator i(deps.begin()); i != deps.end(); ++i) {
-            if (!produceType(*i, manager, generated, options)) {
-                return false;
+    rtl::Reference< unoidl::Entity > ent;
+    rtl::Reference< unoidl::MapCursor > cur;
+    switch (manager->getSort(name, &ent, &cur)) {
+    case codemaker::UnoType::SORT_MODULE:
+        {
+            OUString prefix;
+            if (!name.isEmpty()) {
+                prefix = name + ".";
             }
+            for (;;) {
+                OUString mem;
+                if (!cur->getNext(&mem).is()) {
+                    break;
+                }
+                produce(prefix + mem, manager, generated, options);
+            }
+            return;
         }
-    }
-    return true;
-}
-
-bool produceType(
-    RegistryKey & rTypeKey, bool bIsExtraType,
-    rtl::Reference< TypeManager > const & manager,
-    codemaker::GeneratedTypeSet & generated, JavaOptions * options)
-{
-    ::rtl::OString typeName = manager->getTypeName(rTypeKey);
-
-    OSL_ASSERT(options != 0);
-    if (typeName == "/" || typeName == manager->getBase()
-        || generated.contains(typeName))
-    {
-        return true;
-    }
-    typereg::Reader reader(manager->getTypeReader(rTypeKey));
-    if (bIsExtraType) {
-        generated.add(typeName);
-        return true;
-    }
-    if (!reader.isValid()) {
-        return false;
-    }
-    handleUnoTypeRegistryEntityFunction handler;
-    switch (reader.getTypeClass()) {
-    case RT_TYPE_ENUM:
-        handler = handleEnumType;
+    case codemaker::UnoType::SORT_ENUM_TYPE:
+        handleEnumType(
+            name, dynamic_cast< unoidl::EnumTypeEntity * >(ent.get()), options);
         break;
-
-    case RT_TYPE_STRUCT:
-    case RT_TYPE_EXCEPTION:
-        handler = handleAggregatingType;
+    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+        handlePlainStructType(
+            name, dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()),
+            manager, options, &deps);
         break;
-
-    case RT_TYPE_INTERFACE:
-        handler = handleInterfaceType;
+    case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+        handlePolyStructType(
+            name,
+            dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
+                ent.get()),
+            manager, options, &deps);
         break;
-
-    case RT_TYPE_TYPEDEF:
-        handler = handleTypedef;
+    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+        handleExceptionType(
+            name, dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()),
+            manager, options, &deps);
         break;
-
-    case RT_TYPE_CONSTANTS:
-        handler = handleConstantGroup;
+    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+        handleInterfaceType(
+            name, dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()),
+            manager, options, &deps);
         break;
-
-    case RT_TYPE_MODULE:
-        handler = handleModule;
+    case codemaker::UnoType::SORT_TYPEDEF:
+        handleTypedef(
+            dynamic_cast< unoidl::TypedefEntity * >(ent.get()), manager, &deps);
         break;
-
-    case RT_TYPE_SERVICE:
-        handler = handleService;
+    case codemaker::UnoType::SORT_CONSTANT_GROUP:
+        handleConstantGroup(
+            name, dynamic_cast< unoidl::ConstantGroupEntity * >(ent.get()),
+            manager, options, &deps);
         break;
-
-    case RT_TYPE_SINGLETON:
-        handler = handleSingleton;
+    case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+        handleService(
+            name,
+            dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
+                ent.get()),
+            manager, options, &deps);
         break;
-
+    case codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON:
+        handleSingleton(
+            name,
+            dynamic_cast< unoidl::InterfaceBasedSingletonEntity * >(ent.get()),
+            manager, options, &deps);
+        break;
+    case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+    case codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON:
+        break;
     default:
-        return false;
+        throw CannotDumpException(
+            "unexpected entity \"" + name + "\" in call to produce");
     }
-    Dependencies deps;
-    handler(manager, *options, reader, &deps);
-    generated.add(typeName);
-    if (!options->isValid("-nD")) {
+    if (!options.isValid("-nD")) {
         for (Dependencies::iterator i(deps.begin()); i != deps.end(); ++i) {
-            if (!produceType(*i, manager, generated, options)) {
-                return false;
-            }
+            produce(*i, manager, generated, options);
         }
     }
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

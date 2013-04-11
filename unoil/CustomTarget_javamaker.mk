@@ -37,7 +37,7 @@ $(unoil_JAVADIR)/done : $(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	rm -r $(unoil_JAVADIR) && \
-	$(call gb_Helper_execute,javamaker -BUCR -O$(unoil_JAVADIR) $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
+	$(call gb_Helper_execute,javamaker -O$(unoil_JAVADIR) $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
 	touch $@)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

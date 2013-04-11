@@ -37,6 +37,6 @@ $(ridljar_DIR)/done : $(OUTDIR)/bin/udkapi.rdb \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	rm -r $(ridljar_DIR) && \
-	$(call gb_Helper_execute,javamaker -BUCR -O$(ridljar_DIR) $<) && touch $@)
+	$(call gb_Helper_execute,javamaker -O$(ridljar_DIR) $<) && touch $@)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
