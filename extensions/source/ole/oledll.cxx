@@ -25,9 +25,6 @@
 #pragma warning (push,1)
 #pragma warning (disable:4548)
 
-#if defined(_MSC_VER) && !defined(_DEBUG_RUNTIME)
-#undef _DEBUG
-#endif
 #ifdef __MINGW32__
 #define _INIT_ATL_COMMON_VARS
 #endif

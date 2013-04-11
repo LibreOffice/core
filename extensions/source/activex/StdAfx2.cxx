@@ -30,8 +30,4 @@
 #include <statreg.h>
 #endif
 
-#ifdef _MSC_VER
-#undef _DEBUG
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,9 +34,6 @@
 #include <ExDisp.h>
 #include <shlguid.h>
 
-#ifdef _MSC_VER
-#undef _DEBUG
-#endif
 #include <atlctl.h>
 
 #include "so_activex.h"
