@@ -586,10 +586,10 @@ void ScOutputData::SetPagebreakMode( ScPageBreakData* pPageData )
     {
         ScRange aRange = pPageData->GetData( nPos ).GetPrintRange();
 
-        SCCOL nStartX = Max( aRange.aStart.Col(), nX1 );
-        SCCOL nEndX   = Min( aRange.aEnd.Col(),   nX2 );
-        SCROW nStartY = Max( aRange.aStart.Row(), nY1 );
-        SCROW nEndY   = Min( aRange.aEnd.Row(),   nY2 );
+        SCCOL nStartX = std::max( aRange.aStart.Col(), nX1 );
+        SCCOL nEndX   = std::min( aRange.aEnd.Col(),   nX2 );
+        SCROW nStartY = std::max( aRange.aStart.Row(), nY1 );
+        SCROW nEndY   = std::min( aRange.aEnd.Row(),   nY2 );
 
         for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
         {
@@ -1395,7 +1395,7 @@ void ScOutputData::DrawFrame()
         size_t nCol = lclGetArrayColFromCellInfoX( nInfoIdx, nX1, nX2, bLayoutRTL );
         long nNewPosX = nOldPosX + pRowInfo[ 0 ].pCellInfo[ nInfoIdx ].nWidth * nLayoutSign;
         long nNewSnapX = lclGetSnappedX( *mpDev, nNewPosX, bSnapPixel );
-        rArray.SetColWidth( nCol, Abs( nNewSnapX - nOldSnapX ) );
+        rArray.SetColWidth( nCol, std::abs( nNewSnapX - nOldSnapX ) );
         nOldPosX = nNewPosX;
         nOldSnapX = nNewSnapX;
     }

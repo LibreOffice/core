@@ -986,7 +986,7 @@ again:
         }
         else if (m_pFileSet.is())
         {
-            sal_uInt32 nBookmarkValue = Abs((sal_Int32)(m_aEvaluateRow->get())[0]->getValue());
+            sal_uInt32 nBookmarkValue = std::abs((sal_Int32)(m_aEvaluateRow->get())[0]->getValue());
             m_pFileSet->get().push_back(nBookmarkValue);
         }
     }

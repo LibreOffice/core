@@ -1067,7 +1067,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             const text::TextColumn* pArray = aSetColumns.getConstArray();
             aColumns.clear();
             //max count is 64k here - this is something the array can't do
-            sal_uInt16 nCount = Min( (sal_uInt16)aSetColumns.getLength(),
+            sal_uInt16 nCount = std::min( (sal_uInt16)aSetColumns.getLength(),
                                      (sal_uInt16) 0x3fff );
             sal_uInt16 nWidthSum = 0;
             // #101224# one column is no column

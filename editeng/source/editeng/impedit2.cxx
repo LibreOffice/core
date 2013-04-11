@@ -3709,7 +3709,7 @@ sal_uInt16 ImpEditEngine::GetChar(
                             pParaPortion->GetNode()->GetString(), nRight, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
                         if ( ( nLeft != nChar ) && ( nRight != nChar ) )
                         {
-                            nChar = ( Abs( nRight - nChar ) < Abs( nLeft - nChar ) ) ? nRight : nLeft;
+                            nChar = ( std::abs( nRight - nChar ) < std::abs( nLeft - nChar ) ) ? nRight : nLeft;
                         }
                     }
                 }
@@ -4145,7 +4145,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_uInt16 nIndex
     if ( nFlags & GETCRSR_TXTONLY )
         aEditCursor.Top() = aEditCursor.Bottom() - pLine->GetTxtHeight() + 1;
     else
-        aEditCursor.Top() = aEditCursor.Bottom() - Min( pLine->GetTxtHeight(), pLine->GetHeight() ) + 1;
+        aEditCursor.Top() = aEditCursor.Bottom() - std::min( pLine->GetTxtHeight(), pLine->GetHeight() ) + 1;
 
     return aEditCursor;
 }

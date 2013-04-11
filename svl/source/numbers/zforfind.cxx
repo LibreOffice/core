@@ -1587,7 +1587,7 @@ input for the following reasons:
         case 0:                 // none
             if (nMonthPos)          // only month (Jan)
             {
-                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
             }
             else
             {
@@ -1625,7 +1625,7 @@ input for the following reasons:
                 break;
             }
             case 1:             // month at the beginning (Jan 01)
-                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                 switch (DateFmt)
                 {
                 case MDY:
@@ -1652,7 +1652,7 @@ input for the following reasons:
                 }
                 break;
             case 3:             // month at the end (10 Jan)
-                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                 switch (DateFmt)
                 {
                 case DMY:
@@ -1787,7 +1787,7 @@ input for the following reasons:
                 // The input is valid as MDY in almost any
                 // constellation, there is no date order (M)YD except if
                 // set in a format applied.
-                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                 sal_uInt32 nExactDateOrder = (bFormatTurn ? pFormat->GetExactDateOrder() : 0);
                 if ((((nExactDateOrder >> 8) & 0xff) == 'Y') && ((nExactDateOrder & 0xff) == 'D'))
                 {
@@ -1803,7 +1803,7 @@ input for the following reasons:
             }
             case 2:             // month in the middle (10 Jan 94)
             {
-                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                 DateFormat eDF = (MayBeMonthDate() ? (nMayBeMonthDate == 2 ? DMY : YMD) : DateFmt);
                 switch (eDF)
                 {
@@ -1878,7 +1878,7 @@ input for the following reasons:
                 {
                 case MDY:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                    pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                    pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                     break;
                 default:
@@ -1888,7 +1888,7 @@ input for the following reasons:
                 break;
             case 2:             // month in the middle (10 Jan 94 8:23)
                 nCounter = 2;
-                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                 switch (DateFmt)
                 {
                 case DMY:

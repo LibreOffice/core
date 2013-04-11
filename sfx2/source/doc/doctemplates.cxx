@@ -531,7 +531,7 @@ void SfxDocTplService_Impl::readFolderList()
 
     NamePair_Impl*  pPair;
 
-    sal_uInt16 nCount = (sal_uInt16)( Min( aShortNames.Count(), aLongNames.Count() ) );
+    sal_uInt16 nCount = (sal_uInt16)( std::min( aShortNames.Count(), aLongNames.Count() ) );
 
     for ( sal_uInt16 i=0; i<nCount; i++ )
     {

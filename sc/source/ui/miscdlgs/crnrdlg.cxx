@@ -1083,7 +1083,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
             aEdAssign.SetText( aStr );
         }
         ScRange aRange( theCurData );
-        aRange.aStart.SetRow( Min( (long)(theCurArea.aEnd.Row() + 1), (long)MAXROW ) );
+        aRange.aStart.SetRow( std::min( (long)(theCurArea.aEnd.Row() + 1), (long)MAXROW ) );
         aRange.aEnd.SetRow( MAXROW );
         AdjustColRowData( aRange );
     }
@@ -1121,7 +1121,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
             aEdAssign.SetText( aStr );
         }
         ScRange aRange( theCurData );
-        aRange.aStart.SetCol( static_cast<SCCOL>(Min( (long)(theCurArea.aEnd.Col() + 1), (long)MAXCOL )) );
+        aRange.aStart.SetCol( static_cast<SCCOL>(std::min( (long)(theCurArea.aEnd.Col() + 1), (long)MAXCOL )) );
         aRange.aEnd.SetCol( MAXCOL );
         AdjustColRowData( aRange );
     }

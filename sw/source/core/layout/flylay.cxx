@@ -317,7 +317,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             if ( !pHeader || !pHeader->IsHeaderFrm() )
             {
                 const long nOld = Frm().Top();
-                Frm().Pos().Y() = Max( aClip.Top(), nClipBot - Frm().Height() );
+                Frm().Pos().Y() = std::max( aClip.Top(), nClipBot - Frm().Height() );
                 if ( Frm().Top() != nOld )
                     bAgain = true;
                 bHeightClipped = sal_True;
@@ -326,7 +326,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
         if ( bRig )
         {
             const long nOld = Frm().Left();
-            Frm().Pos().X() = Max( aClip.Left(), nClipRig - Frm().Width() );
+            Frm().Pos().X() = std::max( aClip.Left(), nClipRig - Frm().Width() );
             if ( Frm().Left() != nOld )
             {
                 const SwFmtHoriOrient &rH = GetFmt()->GetHoriOrient();
@@ -441,7 +441,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             const long nPrtWidthDiff  = Frm().Width()  - Prt().Width();
             maUnclippedFrm = SwRect( Frm() );
             Frm().Height( aFrmRect.Height() );
-            Frm().Width ( Max( long(MINLAY), aFrmRect.Width() ) );
+            Frm().Width ( std::max( long(MINLAY), aFrmRect.Width() ) );
             if ( Lower() && Lower()->IsColumnFrm() )
             {
                 ColLock();  //lock grow/shrink

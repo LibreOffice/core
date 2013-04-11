@@ -477,8 +477,8 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bReco
     for (nPos=0; nPos<rParam.nDataAreaCount; nPos++)
     {
         ScArea* pArea = rParam.ppDataAreas[nPos];
-        nColSize = Max( nColSize, SCCOL( pArea->nColEnd - pArea->nColStart + 1 ) );
-        nRowSize = Max( nRowSize, SCROW( pArea->nRowEnd - pArea->nRowStart + 1 ) );
+        nColSize = std::max( nColSize, SCCOL( pArea->nColEnd - pArea->nColStart + 1 ) );
+        nRowSize = std::max( nRowSize, SCROW( pArea->nRowEnd - pArea->nRowStart + 1 ) );
 
                                         // Test, ob Quelldaten verschoben wuerden
         if (rParam.bReferenceData)

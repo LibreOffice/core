@@ -308,18 +308,18 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             switch (rHL.GetKind()) {
                 case SDRHELPLINE_VERTICAL: {
                     long a=x-rPos.X();
-                    if (Abs(a)<=mx) { dx1=-a; if (Abs(dx1)<Abs(dx)) dx=dx1; }
+                    if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; }
                 } break;
                 case SDRHELPLINE_HORIZONTAL: {
                     long b=y-rPos.Y();
-                    if (Abs(b)<=my) { dy1=-b; if (Abs(dy1)<Abs(dy)) dy=dy1; }
+                    if (std::abs(b)<=my) { dy1=-b; if (std::abs(dy1)<std::abs(dy)) dy=dy1; }
                 } break;
                 case SDRHELPLINE_POINT: {
                     long a=x-rPos.X();
                     long b=y-rPos.Y();
-                    if (Abs(a)<=mx && Abs(b)<=my) {
+                    if (std::abs(a)<=mx && std::abs(b)<=my) {
                         dx1=-a; dy1=-b;
-                        if (Abs(dx1)<Abs(dx) && Abs(dy1)<Abs(dy)) { dx=dx1; dy=dy1; }
+                        if (std::abs(dx1)<std::abs(dx) && std::abs(dy1)<std::abs(dy)) { dx=dx1; dy=dy1; }
                     }
                 } break;
             } // switch
@@ -334,14 +334,14 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         long upp=pPage->GetUppBorder();
         long lwr=pPage->GetLwrBorder();
         long a;
-        a=x- lft    ; if (Abs(a)<=mx) { dx1=-a; if (Abs(dx1)<Abs(dx)) dx=dx1; } // left margin
-        a=x-(xs-rgt); if (Abs(a)<=mx) { dx1=-a; if (Abs(dx1)<Abs(dx)) dx=dx1; } // right margin
-        a=x         ; if (Abs(a)<=mx) { dx1=-a; if (Abs(dx1)<Abs(dx)) dx=dx1; } // left edge of paper
-        a=x- xs     ; if (Abs(a)<=mx) { dx1=-a; if (Abs(dx1)<Abs(dx)) dx=dx1; } // right edge of paper
-        a=y- upp    ; if (Abs(a)<=my) { dy1=-a; if (Abs(dy1)<Abs(dy)) dy=dy1; } // left margin
-        a=y-(ys-lwr); if (Abs(a)<=my) { dy1=-a; if (Abs(dy1)<Abs(dy)) dy=dy1; } // right margin
-        a=y         ; if (Abs(a)<=my) { dy1=-a; if (Abs(dy1)<Abs(dy)) dy=dy1; } // left edge of paper
-        a=y- ys     ; if (Abs(a)<=my) { dy1=-a; if (Abs(dy1)<Abs(dy)) dy=dy1; } // right edge of paper
+        a=x- lft    ; if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // left margin
+        a=x-(xs-rgt); if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // right margin
+        a=x         ; if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // left edge of paper
+        a=x- xs     ; if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // right edge of paper
+        a=y- upp    ; if (std::abs(a)<=my) { dy1=-a; if (std::abs(dy1)<std::abs(dy)) dy=dy1; } // left margin
+        a=y-(ys-lwr); if (std::abs(a)<=my) { dy1=-a; if (std::abs(dy1)<std::abs(dy)) dy=dy1; } // right margin
+        a=y         ; if (std::abs(a)<=my) { dy1=-a; if (std::abs(dy1)<std::abs(dy)) dy=dy1; } // left edge of paper
+        a=y- ys     ; if (std::abs(a)<=my) { dy1=-a; if (std::abs(dy1)<std::abs(dy)) dy=dy1; } // right edge of paper
     }
     if (bOFrmSnap || bOPntSnap) {
         sal_uIntPtr nMaxPointSnapCount=200;
@@ -366,7 +366,7 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
                         Point aP(pO->GetSnapPoint(i));
                         dx1=x-aP.X();
                         dy1=y-aP.Y();
-                        if (Abs(dx1)<=mx && Abs(dy1)<=my && Abs(dx1)<Abs(dx) && Abs(dy1)<Abs(dy)) {
+                        if (std::abs(dx1)<=mx && std::abs(dy1)<=my && std::abs(dx1)<std::abs(dx) && std::abs(dy1)<std::abs(dy)) {
                             dx=-dx1;
                             dy=-dy1;
                         }
@@ -381,10 +381,10 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
                     aR1.Top   ()-=my;
                     aR1.Bottom()+=my;
                     if (aR1.IsInside(rPnt)) {
-                        if (Abs(x-aLog.Left  ())<=mx) { dx1=-(x-aLog.Left  ()); if (Abs(dx1)<Abs(dx)) dx=dx1; }
-                        if (Abs(x-aLog.Right ())<=mx) { dx1=-(x-aLog.Right ()); if (Abs(dx1)<Abs(dx)) dx=dx1; }
-                        if (Abs(y-aLog.Top   ())<=my) { dy1=-(y-aLog.Top   ()); if (Abs(dy1)<Abs(dy)) dy=dy1; }
-                        if (Abs(y-aLog.Bottom())<=my) { dy1=-(y-aLog.Bottom()); if (Abs(dy1)<Abs(dy)) dy=dy1; }
+                        if (std::abs(x-aLog.Left  ())<=mx) { dx1=-(x-aLog.Left  ()); if (std::abs(dx1)<std::abs(dx)) dx=dx1; }
+                        if (std::abs(x-aLog.Right ())<=mx) { dx1=-(x-aLog.Right ()); if (std::abs(dx1)<std::abs(dx)) dx=dx1; }
+                        if (std::abs(y-aLog.Top   ())<=my) { dy1=-(y-aLog.Top   ()); if (std::abs(dy1)<std::abs(dy)) dy=dy1; }
+                        if (std::abs(y-aLog.Bottom())<=my) { dy1=-(y-aLog.Bottom()); if (std::abs(dy1)<std::abs(dy)) dy=dy1; }
                     }
                     nMaxFrameSnapCount--;
                 }
@@ -439,7 +439,7 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
     aPt-=rPt;
     if ((nRet & SDRSNAP_XSNAPPED) !=0) {
         if (bXSnapped) {
-            if (Abs(aPt.X())<Abs(nBestXSnap)) {
+            if (std::abs(aPt.X())<std::abs(nBestXSnap)) {
                 nBestXSnap=aPt.X();
             }
         } else {
@@ -449,7 +449,7 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
     }
     if ((nRet & SDRSNAP_YSNAPPED) !=0) {
         if (bYSnapped) {
-            if (Abs(aPt.Y())<Abs(nBestYSnap)) {
+            if (std::abs(aPt.Y())<std::abs(nBestYSnap)) {
                 nBestYSnap=aPt.Y();
             }
         } else {

@@ -551,8 +551,8 @@ bool SwLineRect::MakeUnion( const SwRect &rRect )
             if ( Bottom() + nAdd >= rRect.Top() &&
                  Top()    - nAdd <= rRect.Bottom()  )
             {
-                Bottom( Max( Bottom(), rRect.Bottom() ) );
-                Top   ( Min( Top(),    rRect.Top()    ) );
+                Bottom( std::max( Bottom(), rRect.Bottom() ) );
+                Top   ( std::min( Top(),    rRect.Top()    ) );
                 return true;
             }
         }
@@ -566,8 +566,8 @@ bool SwLineRect::MakeUnion( const SwRect &rRect )
             if ( Right() + nAdd >= rRect.Left() &&
                  Left()  - nAdd <= rRect.Right() )
             {
-                Right( Max( Right(), rRect.Right() ) );
-                Left ( Min( Left(),  rRect.Left()  ) );
+                Right( std::max( Right(), rRect.Right() ) );
+                Left ( std::min( Left(),  rRect.Left()  ) );
                 return true;
             }
         }
@@ -951,7 +951,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
 
             if ( rLRect.IsLocked() )
             {
-                nMinCount = Min( nMinCount, i );
+                nMinCount = std::min( nMinCount, i );
                 continue;
             }
 
@@ -1015,7 +1015,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
 
                 if ( rLRect.IsLocked() )
                 {
-                    nMinCount = Min( nMinCount, i );
+                    nMinCount = std::min( nMinCount, i );
                     continue;
                 }
 
@@ -1312,7 +1312,7 @@ static long lcl_AlignWidth( const long nWidth )
         const long nW = nWidth % nPixelSzW;
 
         if ( !nW || nW > nHalfPixelSzW )
-            return Max(1L, nWidth - nHalfPixelSzW);
+            return std::max(1L, nWidth - nHalfPixelSzW);
     }
     return nWidth;
 }
@@ -1324,7 +1324,7 @@ static long lcl_AlignHeight( const long nHeight )
         const long nH = nHeight % nPixelSzH;
 
         if ( !nH || nH > nHalfPixelSzH )
-            return Max(1L, nHeight - nHalfPixelSzH);
+            return std::max(1L, nHeight - nHalfPixelSzH);
     }
     return nHeight;
 }
@@ -1333,7 +1333,7 @@ static long lcl_MinHeightDist( const long nDist )
 {
     if ( aScaleX < aMinDistScale || aScaleY < aMinDistScale )
         return nDist;
-    return ::lcl_AlignHeight( Max( nDist, nMinDistPixelH ));
+    return ::lcl_AlignHeight( std::max( nDist, nMinDistPixelH ));
 }
 
 //Calculate PrtArea plus surrounding plus shadow.
@@ -2374,8 +2374,8 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
 
     // The following stuff if necessary to have the new table borders fit
     // into a ::SwAlignRect adjusted world.
-    const SwTwips nTwipXCorr =  bVert ? 0 : Max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
-    const SwTwips nTwipYCorr = !bVert ? 0 : Max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
+    const SwTwips nTwipXCorr =  bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
+    const SwTwips nTwipYCorr = !bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
     const SwFrm* pUpper = mrTabFrm.GetUpper();
     SwRect aUpper( pUpper->Prt() );
     aUpper.Pos() += pUpper->Frm().Pos();
@@ -2457,11 +2457,11 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
                     sal_uInt16 nSecn = aStyles[ i ].Secn();
 
                     if ( nPrim > 0 )
-                        nPrim = (sal_uInt16)( Max( 1L, nPixelSzH * ( nPrim / nPixelSzH ) ) );
+                        nPrim = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nPrim / nPixelSzH ) ) );
                     if ( nDist > 0 )
-                        nDist = (sal_uInt16)( Max( 1L, nPixelSzH * ( nDist / nPixelSzH ) ) );
+                        nDist = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nDist / nPixelSzH ) ) );
                     if ( nSecn > 0 )
-                        nSecn = (sal_uInt16)( Max( 1L, nPixelSzH * ( nSecn / nPixelSzH ) ) );
+                        nSecn = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nSecn / nPixelSzH ) ) );
 
                     aStyles[ i ].Set( nPrim, nDist, nSecn );
                 }
@@ -5289,8 +5289,8 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                         if( bGrid )
                         {
                             nY -= nGrid;
-                            SwTwips nPosY = Max( aInter.Left(), nY );
-                            SwTwips nHeight = Min(nRight, aTmp.Pos().X())-nPosY;
+                            SwTwips nPosY = std::max( aInter.Left(), nY );
+                            SwTwips nHeight = std::min(nRight, aTmp.Pos().X())-nPosY;
                             if( nHeight > 0 )
                             {
                                 if( bCell )
@@ -5322,8 +5322,8 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                             nY -= nRuby;
                             if( bBorder )
                             {
-                                SwTwips nPos = Max( aInter.Left(), nY );
-                                SwTwips nW = Min(nRight, aTmp.Pos().X()) - nPos;
+                                SwTwips nPos = std::max( aInter.Left(), nY );
+                                SwTwips nW = std::min(nRight, aTmp.Pos().X()) - nPos;
                                 SwRect aVert( Point( nPos, aGrid.Top() ),
                                               Size( nW, 1 ) );
                                 if( nW > 0 )
@@ -5348,7 +5348,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                         {
                             nY -= nGrid;
                             SwTwips nHeight = aTmp.Pos().X()
-                                              - Max(aInter.Left(), nY );
+                                              - std::max(aInter.Left(), nY );
                             if( nHeight > 0 )
                             {
                                 if( bCell )
@@ -5380,8 +5380,8 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                             nY -= nRuby;
                             if( bBorder )
                             {
-                                SwTwips nPos = Max( aInter.Left(), nY );
-                                SwTwips nW = Min(nRight, aTmp.Pos().X()) - nPos;
+                                SwTwips nPos = std::max( aInter.Left(), nY );
+                                SwTwips nW = std::min(nRight, aTmp.Pos().X()) - nPos;
                                 SwRect aVert( Point( nPos, aGrid.Top() ),
                                               Size( nW, 1 ) );
                                 if( nW > 0 )
@@ -5420,8 +5420,8 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                         if( bGrid )
                         {
                             nY += nGrid;
-                            SwTwips nPosY = Max( aInter.Top(), aTmp.Pos().Y() );
-                            SwTwips nHeight = Min(nBottom, nY ) - nPosY;
+                            SwTwips nPosY = std::max( aInter.Top(), aTmp.Pos().Y() );
+                            SwTwips nHeight = std::min(nBottom, nY ) - nPosY;
                             if( nHeight )
                             {
                                 if( bCell )
@@ -5453,8 +5453,8 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                             nY += nRuby;
                             if( bBorder )
                             {
-                                SwTwips nPos = Max(aInter.Top(),aTmp.Pos().Y());
-                                SwTwips nH = Min( nBottom, nY ) - nPos;
+                                SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().Y());
+                                SwTwips nH = std::min( nBottom, nY ) - nPos;
                                 SwRect aVert( Point( aGrid.Left(), nPos ),
                                             Size( 1, nH ) );
                                 if( nH > 0 )
@@ -5478,7 +5478,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                         if( bGrid )
                         {
                             nY += nGrid;
-                            SwTwips nHeight = Min(nBottom, nY) - aTmp.Pos().Y();
+                            SwTwips nHeight = std::min(nBottom, nY) - aTmp.Pos().Y();
                             if( nHeight )
                             {
                                 if( bCell )
@@ -5510,8 +5510,8 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                             nY += nRuby;
                             if( bBorder )
                             {
-                                SwTwips nPos = Max(aInter.Top(),aTmp.Pos().Y());
-                                SwTwips nH = Min( nBottom, nY ) - nPos;
+                                SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().Y());
+                                SwTwips nH = std::min( nBottom, nY ) - nPos;
                                 SwRect aVert( Point( aGrid.Left(), nPos ),
                                             Size( 1, nH ) );
                                 if( nH > 0 )

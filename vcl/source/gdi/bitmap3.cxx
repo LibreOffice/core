@@ -224,7 +224,7 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
        for ( j = 0; j < 4; j++ )
            for ( k = 0; k < 4; k++ )
                 for ( l = 0; l < 4; l++ )
-                    nMax = Max ( pMtx[ (k<<2) + i][(l<<2 ) + j] =
+                    nMax = std::max ( pMtx[ (k<<2) + i][(l<<2 ) + j] =
                     (sal_uInt16) ( 0.5 + pMagic[i][j]*fVal + pMagic[k][l]*fVal16 ), nMax );
 
     // Scale to interval [0;254]
@@ -700,7 +700,7 @@ sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
 
             pWriteAcc->SetPalette( aPal );
 
-            for( nY = 0L; nY < Min( nHeight, 2L ); nY++, nYTmp++ )
+            for( nY = 0L; nY < std::min( nHeight, 2L ); nY++, nYTmp++ )
             {
                 for( nX = 0L, pQLine2 = !nY ? pErrQuad1 : pErrQuad2; nX < nWidth; nX++ )
                 {
@@ -1463,7 +1463,7 @@ sal_Bool Bitmap::ImplDitherFloyd16()
         long            nYTmp = 0L;
         sal_Bool            bQ1 = sal_True;
 
-        for( nY = 0L; nY < Min( nHeight, 2L ); nY++, nYTmp++ )
+        for( nY = 0L; nY < std::min( nHeight, 2L ); nY++, nYTmp++ )
             for( nX = 0L, pQLine2 = !nY ? pErrQuad1 : pErrQuad2; nX < nWidth; nX++ )
                 pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
 
@@ -1554,7 +1554,7 @@ sal_Bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
 {
     Bitmap              aNewBmp;
     BitmapReadAccess*   pRAcc = AcquireReadAccess();
-    const sal_uInt16        nColCount = Min( nColorCount, (sal_uInt16) 256 );
+    const sal_uInt16        nColCount = std::min( nColorCount, (sal_uInt16) 256 );
     sal_uInt16              nBitCount;
     sal_Bool                bRet = sal_False;
 

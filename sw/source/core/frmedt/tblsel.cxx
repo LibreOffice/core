@@ -1815,7 +1815,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
 
     const long nStSz = pStart->GetFmt()->GetFrmSize().GetWidth();
     const long nEdSz = pEnd->GetFmt()->GetFrmSize().GetWidth();
-    const long nWish = Max( 1L, pTable->GetFmt()->GetFrmSize().GetWidth() );
+    const long nWish = std::max( 1L, pTable->GetFmt()->GetFrmSize().GetWidth() );
     while ( pTable )
     {
         SWRECTFN( pTable )

@@ -936,8 +936,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     Size aMaxSize( mrDoc.GetMaxObjSize() );
 
-                    maDropPos.X() -= Min( aSize.Width(), aMaxSize.Width() ) >> 1;
-                    maDropPos.Y() -= Min( aSize.Height(), aMaxSize.Height() ) >> 1;
+                    maDropPos.X() -= std::min( aSize.Width(), aMaxSize.Width() ) >> 1;
+                    maDropPos.Y() -= std::min( aSize.Height(), aMaxSize.Height() ) >> 1;
 
                     Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
@@ -1102,8 +1102,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     Size aMaxSize( mrDoc.GetMaxObjSize() );
 
-                    maDropPos.X() -= Min( aSize.Width(), aMaxSize.Width() ) >> 1;
-                    maDropPos.Y() -= Min( aSize.Height(), aMaxSize.Height() ) >> 1;
+                    maDropPos.X() -= std::min( aSize.Width(), aMaxSize.Width() ) >> 1;
+                    maDropPos.Y() -= std::min( aSize.Height(), aMaxSize.Height() ) >> 1;
 
                     Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );

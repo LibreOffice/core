@@ -3124,7 +3124,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     long nCtrlW = aTopLevelLabel.GetSizePixel().Width();
     if ( nTxtW >= nCtrlW )
     {
-        long nDelta = Max( (long)10, nTxtW - nCtrlW );
+        long nDelta = std::max( (long)10, nTxtW - nCtrlW );
         Size aNewSz = aTopLevelLabel.GetSizePixel();
         aNewSz.Width() += nDelta;
         aTopLevelLabel.SetSizePixel( aNewSz );

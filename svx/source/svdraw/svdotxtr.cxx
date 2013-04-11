@@ -249,7 +249,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     bool bRota90Merk = false;
     if (bNoShearMerk &&
         (rRef1.X()==rRef2.X() || rRef1.Y()==rRef2.Y() ||
-         Abs(rRef1.X()-rRef2.X())==Abs(rRef1.Y()-rRef2.Y()))) {
+         std::abs(rRef1.X()-rRef2.X())==std::abs(rRef1.Y()-rRef2.Y()))) {
         bRota90Merk=aGeo.nDrehWink % 9000 ==0;
     }
     Polygon aPol(Rect2Poly(aRect,aGeo));

@@ -1073,7 +1073,7 @@ void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK )
     sal_uInt16 const nColor2 = 255 - rColor.GetGreen();
     sal_uInt16 const nColor3 = 255 - rColor.GetBlue();
 
-    rK = Min( Min( nColor1, nColor2 ), nColor3 );
+    rK = std::min( std::min( nColor1, nColor2 ), nColor3 );
 
     rColor.SetRed( sal::static_int_cast< sal_uInt8 >( nColor1 - rK ) );
     rColor.SetGreen( sal::static_int_cast< sal_uInt8 >( nColor2 - rK ) );

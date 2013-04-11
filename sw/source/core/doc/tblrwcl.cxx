@@ -873,8 +873,8 @@ lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
                 pFndBox = rLowLns.back()->GetTabBoxes().front();
         }
 
-        if( Abs( nFndWidth ) > COLFUZZY ||
-            Abs( nBoxWidth - nFndBoxWidth ) > COLFUZZY )
+        if( std::abs( nFndWidth ) > COLFUZZY ||
+            std::abs( nBoxWidth - nFndBoxWidth ) > COLFUZZY )
             pFndBox = 0;
         else if( pAllDelBoxes )
         {
@@ -2456,7 +2456,7 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
             // Collect all "ContentBoxes"
             if( ( 0 != ( bGreaterBox = TBLFIX_CHGABS != rParam.nMode && ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide)) ||
-                ( !rParam.bBigger && ( Abs( nDist + (( rParam.nMode && rParam.bLeft ) ? 0 : nWidth ) - rParam.nSide ) < COLFUZZY ) ) )
+                ( !rParam.bBigger && ( std::abs( nDist + (( rParam.nMode && rParam.bLeft ) ? 0 : nWidth ) - rParam.nSide ) < COLFUZZY ) ) )
             {
                 rParam.bAnyBoxFnd = true;
                 SwTwips nLowerDiff;
@@ -2492,7 +2492,7 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             if( nLowerDiff ||
                  ( 0 != ( bGreaterBox = !nOldLower && TBLFIX_CHGABS != rParam.nMode &&
                     ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide)) ||
-                ( Abs( nDist + ( (rParam.nMode && rParam.bLeft) ? 0 : nWidth )
+                ( std::abs( nDist + ( (rParam.nMode && rParam.bLeft) ? 0 : nWidth )
                             - rParam.nSide ) < COLFUZZY ))
             {
                 // This column contains the Cursor - so decrease/increase
@@ -2555,7 +2555,7 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     return false;
 
             if( rParam.bBigger && ( TBLFIX_CHGABS == rParam.nMode
-                    ? Abs( nDist - rParam.nSide ) < COLFUZZY
+                    ? std::abs( nDist - rParam.nSide ) < COLFUZZY
                     : ( rParam.bLeft ? nDist < rParam.nSide - COLFUZZY
                                      : nDist >= rParam.nSide - COLFUZZY )) )
             {
@@ -2591,7 +2591,7 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
             if( nLowerDiff ||
                 ( TBLFIX_CHGABS == rParam.nMode
-                        ? Abs( nDist - rParam.nSide ) < COLFUZZY
+                        ? std::abs( nDist - rParam.nSide ) < COLFUZZY
                         : ( rParam.bLeft ? nDist < rParam.nSide - COLFUZZY
                                          : nDist >= rParam.nSide - COLFUZZY)
                  ) )
@@ -2650,7 +2650,7 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     return false;
 
             // Collect all "ContentBoxes"
-            if( Abs( nDist + ( rParam.bLeft ? 0 : nWidth )
+            if( std::abs( nDist + ( rParam.bLeft ? 0 : nWidth )
                     - rParam.nSide ) < COLFUZZY )
                 nCmp = 1;
             else if( nDist + ( rParam.bLeft ? 0 : nWidth/2 ) > rParam.nSide )
@@ -2692,7 +2692,7 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
             if( nLowerDiff )
                 nCmp = 1;
-            else if( Abs( nDist + ( rParam.bLeft ? 0 : nWidth )
+            else if( std::abs( nDist + ( rParam.bLeft ? 0 : nWidth )
                                 - rParam.nSide ) < COLFUZZY )
                 nCmp = 2;
             else if( nDist + nWidth / 2 > rParam.nSide )
@@ -2943,8 +2943,8 @@ SwComparePosition _CheckBoxInRange( sal_uInt16 nStt, sal_uInt16 nEnd,
     {
         if( nEnd + COLFUZZY >= nBoxEnd )
         {
-            if( COLFUZZY > Abs( long(nEnd) - long(nBoxEnd) ) &&
-                COLFUZZY > Abs( long(nStt) - long(nBoxStt) ) )
+            if( COLFUZZY > std::abs( long(nEnd) - long(nBoxEnd) ) &&
+                COLFUZZY > std::abs( long(nStt) - long(nBoxStt) ) )
                 nRet = POS_EQUAL;
             else
                 nRet = POS_INSIDE;
@@ -2969,7 +2969,7 @@ static void lcl_DelSelBox_CorrLowers( SwTableLine& rLine, CR_SetBoxWidth& rParam
     for( n = rBoxes.size(); n; )
         nBoxWidth += rBoxes[ --n ]->GetFrmFmt()->GetFrmSize().GetWidth();
 
-    if( COLFUZZY < Abs( nWidth - nBoxWidth ))
+    if( COLFUZZY < std::abs( nWidth - nBoxWidth ))
     {
         // Thus, they need to be adjusted
         for( n = rBoxes.size(); n; )
@@ -3027,7 +3027,7 @@ static void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
         break;
 
     case TBLVAR_CHGABS:     // Variable table, change all neighbors
-        if( COLFUZZY < Abs( rParam.nBoxWidth -
+        if( COLFUZZY < std::abs( rParam.nBoxWidth -
                             ( rDelWidth + rParam.nLowerDiff )))
         {
             nDiff = rDelWidth + rParam.nLowerDiff - rParam.nBoxWidth;
@@ -3207,7 +3207,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                 // if it's as large as the change in the Table.
                 if( (( TBLVAR_CHGABS != rParam.nMode ||
                         nDelWidth != rParam.nBoxWidth ) &&
-                     COLFUZZY > Abs( rParam.bLeft
+                     COLFUZZY > std::abs( rParam.bLeft
                                     ? nWidth - nDist
                                     : (nDist + nWidth - rParam.nTblWidth )))
                     || !::lcl_DeleteBox_Rekursiv( rParam, *pBox, bCheck ) )
@@ -3247,7 +3247,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                     pLine == pBox->GetTabLines()[ i ] )
                 {
                     if( !bFirst && !bCorrLowers &&
-                        COLFUZZY < Abs( nLowerDiff - rParam.nLowerDiff ) )
+                        COLFUZZY < std::abs( nLowerDiff - rParam.nLowerDiff ) )
                         bCorrLowers = true;
 
                     // The largest deletion width counts, but only if we don't
@@ -3400,7 +3400,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
             _CheckBoxWidth( *pBox->GetTabLines()[ j ], nBoxW );
     }
 
-    if (sal::static_int_cast< unsigned long >(Abs(nAktSize - nSize)) >
+    if (sal::static_int_cast< unsigned long >(std::abs(nAktSize - nSize)) >
         (COLFUZZY * rBoxes.size()))
     {
         OSL_FAIL( "Line's Boxes are too small or too large" );
@@ -3680,7 +3680,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             }
         }
         else if( bInsDel ||
-                ( bLeft ? nDist : Abs( rSz.GetWidth() - nDist ) > COLFUZZY ) )
+                ( bLeft ? nDist : std::abs( rSz.GetWidth() - nDist ) > COLFUZZY ) )
         {
             bRet = true;
             if( bLeft && TBLFIX_CHGABS == eTblChgMode && !bInsDel )

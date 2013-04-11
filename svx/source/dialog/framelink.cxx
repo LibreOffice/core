@@ -1264,7 +1264,7 @@ bool operator<( const Style& rL, const Style& rR )
 
 double GetHorDiagAngle( long nWidth, long nHeight )
 {
-    return atan2( static_cast< double >( Abs( nHeight ) ), static_cast< double >( Abs( nWidth ) ) );
+    return atan2( static_cast< double >( std::abs( nHeight ) ), static_cast< double >( std::abs( nWidth ) ) );
 }
 
 // ============================================================================

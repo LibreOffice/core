@@ -210,8 +210,8 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double fScaleX, double fScaleY )
 {
     Graphic         aRet;
-    const Size      aSize( Max( FRound( GetTileWidth() * fScaleX ), 1L ),
-                           Max( FRound( GetTileHeight() * fScaleY ), 1L ) );
+    const Size      aSize( std::max( FRound( GetTileWidth() * fScaleX ), 1L ),
+                           std::max( FRound( GetTileHeight() * fScaleY ), 1L ) );
     BmpFilterParam  aParam( aSize );
 
     if( rGraphic.IsAnimated() )

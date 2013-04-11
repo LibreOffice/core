@@ -185,7 +185,7 @@ void SvImpLBox::UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEnt
     SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
     short nExpWidth = (short)pBmpItem->GetBitmap1().GetSizePixel().Width();
     short nColWidth = (short)pBmpItem->GetBitmap2().GetSizePixel().Width();
-    short nMax = Max(nExpWidth, nColWidth);
+    short nMax = std::max(nExpWidth, nColWidth);
     UpdateContextBmpWidthVector( pEntry, nMax );
 
     if( pEntry->HasChildren() ) // recursive call, whether expanded or not

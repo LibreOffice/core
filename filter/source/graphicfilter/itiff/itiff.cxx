@@ -854,11 +854,11 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                         }
                     }
                     nBlack = nSamp[ 3 ];
-                    nRed = (sal_uInt8) Max( 0L, 255L - ( ( (long) nSamp[ 0 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
+                    nRed = (sal_uInt8) std::max( 0L, 255L - ( ( (long) nSamp[ 0 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
                                 255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
-                    nGreen = (sal_uInt8) Max( 0L, 255L - ( ( (long) nSamp[ 1 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
+                    nGreen = (sal_uInt8) std::max( 0L, 255L - ( ( (long) nSamp[ 1 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
                                 255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
-                    nBlue = (sal_uInt8) Max( 0L, 255L - ( ( (long) nSamp[ 2 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
+                    nBlue = (sal_uInt8) std::max( 0L, 255L - ( ( (long) nSamp[ 2 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
                                 255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
                     pAcc->SetPixel( nY, nx, Color ( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
                 }
@@ -1156,7 +1156,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 pTIFF->ResetError();
                 break;
             };
-            nMaxPos = Max( pTIFF->Tell(), nMaxPos );
+            nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
 
             *pTIFF >> nNumTags;
 
@@ -1166,15 +1166,15 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 *pTIFF >> nTagType >> nDataType >> nDataLen >> nOffset;
 
                 if( DataTypeSize() * nDataLen > 4 )
-                    nMaxPos = Max( nOrigPos + nOffset + DataTypeSize() * nDataLen, nMaxPos );
+                    nMaxPos = std::max( nOrigPos + nOffset + DataTypeSize() * nDataLen, nMaxPos );
             }
             *pTIFF >> nOffset;
             if ( pTIFF->IsEof() )
                 nOffset = 0;
 
-            nMaxPos = Max( pTIFF->Tell(), nMaxPos );
+            nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
             if ( !nOffset )
-                nMaxPos = Max( pTIFF->Tell(), nMaxPos );
+                nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
         }
         while( nOffset );
 
@@ -1301,9 +1301,9 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
                     if ( bStatus && ReadMap( 10, 60 ) )
                     {
-                        nMaxPos = Max( pTIFF->Tell(), nMaxPos );
+                        nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
                         MakePalCol();
-                        nMaxPos = Max( pTIFF->Tell(), nMaxPos );
+                        nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
                     }
                     else
                         bStatus = sal_False;

@@ -185,8 +185,8 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else if (rMEvt.IsLeft() && !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
                  !bSelectionChanged                   &&
-                 Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
-                 Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+                 std::abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
+                 std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             // toggle between selection and rotation
             SdrObject* pSingleObj = NULL;

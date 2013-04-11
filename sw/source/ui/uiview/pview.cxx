@@ -646,7 +646,7 @@ void SwPagePreView::_ExecPgUpAndPgDown( const bool  _bPgUp,
                         nNewSelectedPageNum = 1;
                 }
                 else
-                    nScrollAmount = - Min( aViewWin.GetOutputSize().Height(),
+                    nScrollAmount = - std::min( aViewWin.GetOutputSize().Height(),
                                            aViewWin.GetPaintedPreviewDocRect().Top() );
             }
             else
@@ -660,7 +660,7 @@ void SwPagePreView::_ExecPgUpAndPgDown( const bool  _bPgUp,
                         nNewSelectedPageNum = mnPageCount;
                 }
                 else
-                    nScrollAmount = Min( aViewWin.GetOutputSize().Height(),
+                    nScrollAmount = std::min( aViewWin.GetOutputSize().Height(),
                                          ( pPagePrevwLay->GetPrevwDocSize().Height() -
                                            aViewWin.GetPaintedPreviewDocRect().Bottom() ) );
             }
@@ -1396,13 +1396,13 @@ void SwPagePreView::SetVisArea( const Rectangle &rRect, sal_Bool bUpdateScrollba
 
     if(aLR.Top() < 0)
     {
-        aLR.Bottom() += Abs(aLR.Top());
+        aLR.Bottom() += std::abs(aLR.Top());
         aLR.Top() = 0;
     }
 
     if(aLR.Left() < 0)
     {
-        aLR.Right() += Abs(aLR.Left());
+        aLR.Right() += std::abs(aLR.Left());
         aLR.Left() = 0;
     }
     if(aLR.Right() < 0) aLR.Right() = 0;

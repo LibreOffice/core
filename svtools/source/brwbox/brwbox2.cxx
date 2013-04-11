@@ -1240,7 +1240,7 @@ void BrowseBox::UpdateScrollbars()
         ? (short)( pCols->size() - nFirstCol )
         : (short)( nLastCol - nFirstCol );
 
-    short nRange = Max( nScrollCols, (short)0 );
+    short nRange = std::max( nScrollCols, (short)0 );
     aHScroll.SetVisibleSize( nVisibleHSize );
     aHScroll.SetRange( Range( 0, nRange ));
     if ( bNeedsHScroll && !aHScroll.IsVisible() )
@@ -1257,7 +1257,7 @@ void BrowseBox::UpdateScrollbars()
 
     if ( pVScroll->GetThumbPos() != nTopRow )
         pVScroll->SetThumbPos( nTopRow );
-    long nVisibleSize = Min( Min( nRowCount, nMaxRows ), long(nRowCount-nTopRow) );
+    long nVisibleSize = std::min( std::min( nRowCount, nMaxRows ), long(nRowCount-nTopRow) );
     pVScroll->SetVisibleSize( nVisibleSize ? nVisibleSize : 1 );
     pVScroll->SetRange( Range( 0, nRowCount ) );
     pVScroll->SetPosSizePixel(
@@ -1473,7 +1473,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
             long nR = nX + pCol->Width() - 1;
 
             // at the end of a column (and not handle column)?
-            if ( pCol->GetId() && Abs( nR - rEvtPos.X() ) < 2 )
+            if ( pCol->GetId() && std::abs( nR - rEvtPos.X() ) < 2 )
             {
                 // start resizing the column
                 bResizing = sal_True;
@@ -1527,7 +1527,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
 
             // show resize-pointer?
             if ( bResizing || ( pCol->GetId() &&
-                 Abs( ((long) nR ) - rEvt.GetPosPixel().X() ) < MIN_COLUMNWIDTH ) )
+                 std::abs( ((long) nR ) - rEvt.GetPosPixel().X() ) < MIN_COLUMNWIDTH ) )
             {
                 aNewPointer = Pointer( POINTER_HSPLIT );
                 if ( bResizing )
@@ -1536,7 +1536,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
                     pDataWin->HideTracking() ;
 
                     // check allowed width and new delta
-                    nDragX = Max( rEvt.GetPosPixel().X(), nMinResizeX );
+                    nDragX = std::max( rEvt.GetPosPixel().X(), nMinResizeX );
                     long nDeltaX = nDragX - nResizeX;
                     sal_uInt16 nId = GetColumnId(nResizeCol);
                     sal_uLong nOldWidth = GetColumnWidth(nId);
@@ -1570,12 +1570,12 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
         pDataWin->HideTracking();
 
         // width changed?
-        nDragX = Max( rEvt.GetPosPixel().X(), nMinResizeX );
+        nDragX = std::max( rEvt.GetPosPixel().X(), nMinResizeX );
         if ( (nDragX - nResizeX) != (long)(*pCols)[ nResizeCol ]->Width() )
         {
             // resize column
             long nMaxX = pDataWin->GetSizePixel().Width();
-            nDragX = Min( nDragX, nMaxX );
+            nDragX = std::min( nDragX, nMaxX );
             long nDeltaX = nDragX - nResizeX;
             sal_uInt16 nId = GetColumnId(nResizeCol);
             SetColumnWidth( GetColumnId(nResizeCol), GetColumnWidth(nId) + nDeltaX );

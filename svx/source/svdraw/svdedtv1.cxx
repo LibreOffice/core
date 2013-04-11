@@ -316,7 +316,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
         Point aDif(rRef2-rRef1);
         if (aDif.X()==0) ImpTakeDescriptionStr(STR_EditMirrorHori,aStr);
         else if (aDif.Y()==0) ImpTakeDescriptionStr(STR_EditMirrorVert,aStr);
-        else if (Abs(aDif.X())==Abs(aDif.Y())) ImpTakeDescriptionStr(STR_EditMirrorDiag,aStr);
+        else if (std::abs(aDif.X()) == std::abs(aDif.Y())) ImpTakeDescriptionStr(STR_EditMirrorDiag,aStr);
         else ImpTakeDescriptionStr(STR_EditMirrorFree,aStr);
         if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
         BegUndo(aStr);

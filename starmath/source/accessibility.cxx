@@ -679,8 +679,8 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
-    sal_Int32 nStart = Min(nStartIndex, nEndIndex);
-    sal_Int32 nEnd   = Max(nStartIndex, nEndIndex);
+    sal_Int32 nStart = std::min(nStartIndex, nEndIndex);
+    sal_Int32 nEnd   = std::max(nStartIndex, nEndIndex);
     if (!(nStart <= aTxt.getLength()) ||
         !(nEnd   <= aTxt.getLength()))
         throw IndexOutOfBoundsException();

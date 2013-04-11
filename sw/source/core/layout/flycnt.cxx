@@ -917,10 +917,10 @@ static sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
         {
             //Calculate the distance between those two points.
             //'delta' X^2 + 'delta' Y^2 = 'distance'^2
-            sal_uInt32 dX = Max( pCnt->Frm().Left(), rPt.X() ) -
-                       Min( pCnt->Frm().Left(), rPt.X() ),
-                  dY = Max( pCnt->Frm().Top(), rPt.Y() ) -
-                       Min( pCnt->Frm().Top(), rPt.Y() );
+            sal_uInt32 dX = std::max( pCnt->Frm().Left(), rPt.X() ) -
+                       std::min( pCnt->Frm().Left(), rPt.X() ),
+                  dY = std::max( pCnt->Frm().Top(), rPt.Y() ) -
+                       std::min( pCnt->Frm().Top(), rPt.Y() );
             BigInt dX1( dX ), dY1( dY );
             dX1 *= dX1; dY1 *= dY1;
             const sal_uLong nDiff = ::SqRt( dX1 + dY1 );

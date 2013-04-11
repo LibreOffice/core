@@ -268,9 +268,9 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
     }
 
     if ( bVert )
-        nRet = Min( nRet, nFlyLower );
+        nRet = std::min( nRet, nFlyLower );
     else
-        nRet = Max( nRet, nFlyLower );
+        nRet = std::max( nRet, nFlyLower );
 
     return nRet;
 }

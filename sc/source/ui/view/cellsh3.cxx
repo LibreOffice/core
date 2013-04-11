@@ -805,8 +805,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,
                                               nEndCol,nEndRow,nEndTab );
 
-                if (   ( Abs((SCsCOL)nEndCol-(SCsCOL)nStartCol) > 1 )
-                    && ( Abs((SCsROW)nEndRow-(SCsROW)nStartRow) > 1 ) )
+                if (   ( std::abs((SCsCOL)nEndCol-(SCsCOL)nStartCol) > 1 )
+                    && ( std::abs((SCsROW)nEndRow-(SCsROW)nStartRow) > 1 ) )
                 {
                     if ( pReqArgs )
                     {

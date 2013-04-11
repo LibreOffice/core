@@ -132,7 +132,7 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm, const String& rBaseURL  ) co
 void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 {
     OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("poly "));
-    const sal_uInt16 nCount = Min( aPoly.GetSize(), (sal_uInt16) 100 );
+    const sal_uInt16 nCount = std::min( aPoly.GetSize(), (sal_uInt16) 100 );
 
     AppendNCSAURL(aStrBuf, rBaseURL);
 

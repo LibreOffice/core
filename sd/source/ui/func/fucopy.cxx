@@ -193,13 +193,13 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         if( lWidth < 0L )
         {
             long nTmp = ( aRect.Right() - aRect.Left() ) / -lWidth;
-            nNumber = (sal_uInt16) Min( nTmp, (long)nNumber );
+            nNumber = (sal_uInt16) std::min( nTmp, (long)nNumber );
         }
 
         if( lHeight < 0L )
         {
             long nTmp = ( aRect.Bottom() - aRect.Top() ) / -lHeight;
-            nNumber = (sal_uInt16) Min( nTmp, (long)nNumber );
+            nNumber = (sal_uInt16) std::min( nTmp, (long)nNumber );
         }
 
         for( sal_uInt16 i = 1; i <= nNumber; i++ )

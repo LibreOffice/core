@@ -1730,8 +1730,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
         aShadow.SetColor( Color( aShdColor ) );
 
-        aShadow.SetWidth(writer_cast<sal_uInt16>((Abs( nShdDistX) +
-            Abs( nShdDistY )) / 2 ));
+        aShadow.SetWidth(writer_cast<sal_uInt16>((std::abs( nShdDistX) +
+            std::abs( nShdDistY )) / 2 ));
 
         SvxShadowLocation eShdPosi;
         if( 0 <= nShdDistX )

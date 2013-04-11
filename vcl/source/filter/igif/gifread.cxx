@@ -437,8 +437,8 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
                 // falls Interlaced, werden die Zeilen kopiert
                 if( nLastInterCount )
                 {
-                    long nMinY = Min( (long) nLastImageY + 1, (long) nImageHeight - 1 );
-                    long nMaxY = Min( (long) nLastImageY + nLastInterCount, (long) nImageHeight - 1 );
+                    long nMinY = std::min( (long) nLastImageY + 1, (long) nImageHeight - 1 );
+                    long nMaxY = std::min( (long) nLastImageY + nLastInterCount, (long) nImageHeight - 1 );
 
                     // letzte gelesene Zeile kopieren, wenn Zeilen
                     // nicht zusanmmenfallen ( kommt vorm wenn wir am Ende des Bildes sind )

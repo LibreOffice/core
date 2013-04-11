@@ -356,7 +356,7 @@ IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
             pWindow->Command( aCEvt );
             if( aDel.IsDead() )
                 return 0;
-            mnRepaintTime = Max( Time::GetSystemTicks() - nTime, (sal_uLong)1 );
+            mnRepaintTime = std::max( Time::GetSystemTicks() - nTime, (sal_uLong)1 );
             ImplRecalcScrollValues();
         }
     }

@@ -408,7 +408,7 @@ void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
 
 sal_Size ExcBundlesheet::GetLen() const
 {
-    return 7 + Min( aName.getLength(), (sal_Int32) 255 );
+    return 7 + std::min( aName.getLength(), (sal_Int32) 255 );
 }
 
 

@@ -475,7 +475,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
                     pTblData->GetWidth()), FUNIT_TWIP);
             m_aWidthMF.SaveValue();
             nSaveWidth = pTblData->GetWidth();
-            nMinTableWidth = Min( nSaveWidth, nMinTableWidth );
+            nMinTableWidth = std::min( nSaveWidth, nMinTableWidth );
         }
 
         m_aWidthMF.SetRefValue(pTblData->GetSpace());
@@ -658,11 +658,11 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             }
             if(nColSum != pTblData->GetWidth())
             {
-                SwTwips nMinWidth = Min( (long)MINLAY,
+                SwTwips nMinWidth = std::min( (long)MINLAY,
                                     (long) (pTblData->GetWidth() /
                                             pTblData->GetColCount() - 1));
                 SwTwips nDiff = nColSum - pTblData->GetWidth();
-                while ( Abs(nDiff) > pTblData->GetColCount() + 1 )
+                while ( std::abs(nDiff) > pTblData->GetColCount() + 1 )
                 {
                     SwTwips nSub = nDiff / pTblData->GetColCount();
                     for( i = 0; i < pTblData->GetColCount(); i++)

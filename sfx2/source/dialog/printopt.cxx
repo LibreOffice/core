@@ -231,7 +231,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     pCurrentOptions->SetReduceBitmaps( m_pReduceBitmapsCB->IsChecked() );
     pCurrentOptions->SetReducedBitmapMode( m_pReduceBitmapsOptimalRB->IsChecked() ? PRINTER_BITMAP_OPTIMAL :
                                            ( m_pReduceBitmapsNormalRB->IsChecked() ? PRINTER_BITMAP_NORMAL : PRINTER_BITMAP_RESOLUTION ) );
-    pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ Min( (sal_uInt16) m_pReduceBitmapsResolutionLB->GetSelectEntryPos(),
+    pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ std::min( (sal_uInt16) m_pReduceBitmapsResolutionLB->GetSelectEntryPos(),
                                                             (sal_uInt16)( (sizeof (aDPIArray) / sizeof (aDPIArray[0])) - 1 ) ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( m_pReduceBitmapsTransparencyCB->IsChecked() );
     pCurrentOptions->SetConvertToGreyscales( m_pConvertToGreyscalesCB->IsChecked() );

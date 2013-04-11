@@ -528,8 +528,8 @@ void sw_NormalizeRange(
     sw_GetCellPosition( rCell2, nCol2, nRow2 );
     if (nCol2 < nCol1 || nRow2 < nRow1)
     {
-        rCell1  = sw_GetCellName( Min(nCol1, nCol2), Min(nRow1, nRow2) );
-        rCell2  = sw_GetCellName( Max(nCol1, nCol2), Max(nRow1, nRow2) );
+        rCell1  = sw_GetCellName( std::min(nCol1, nCol2), std::min(nRow1, nRow2) );
+        rCell2  = sw_GetCellName( std::max(nCol1, nCol2), std::max(nRow1, nRow2) );
     }
 
 }

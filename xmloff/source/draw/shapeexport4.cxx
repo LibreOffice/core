@@ -343,7 +343,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                 break;
                 case 1 :
                 {
-                    aSegment.Count = (sal_Int16)Min( nCoords - 1, (sal_Int32)32767 );
+                    aSegment.Count = (sal_Int16)std::min( nCoords - 1, (sal_Int32)32767 );
                     aSegment.Command = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
                 }
                 break;

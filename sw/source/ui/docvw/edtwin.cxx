@@ -289,8 +289,8 @@ struct QuickHelpData
 
 inline bool IsMinMove(const Point &rStartPos, const Point &rLPt)
 {
-    return Abs(rStartPos.X() - rLPt.X()) > MIN_MOVE ||
-           Abs(rStartPos.Y() - rLPt.Y()) > MIN_MOVE;
+    return std::abs(rStartPos.X() - rLPt.X()) > MIN_MOVE ||
+           std::abs(rStartPos.Y() - rLPt.Y()) > MIN_MOVE;
 }
 
 /**
@@ -634,10 +634,10 @@ void SwEditWin::JustifyAreaTimer()
     const long coMinLen = 50;
 #endif
     long nTimeout = 800,
-         nDiff = Max(
-         Max( m_aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - m_aMovePos.Y() ),
-         Max( m_aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - m_aMovePos.X()));
-    m_aTimer.SetTimeout( Max( coMinLen, nTimeout - nDiff*2L) );
+         nDiff = std::max(
+         std::max( m_aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - m_aMovePos.Y() ),
+         std::max( m_aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - m_aMovePos.X()));
+    m_aTimer.SetTimeout( std::max( coMinLen, nTimeout - nDiff*2L) );
 }
 
 void SwEditWin::LeaveArea(const Point &rPos)
@@ -1011,10 +1011,10 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
             aSnap = rSh.GetViewOptions()->GetSnapSize();
             short nDiv = rSh.GetViewOptions()->GetDivisionX();
             if ( nDiv > 0 )
-                aSnap.Width() = Max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
+                aSnap.Width() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
             nDiv = rSh.GetViewOptions()->GetDivisionY();
             if ( nDiv > 0 )
-                aSnap.Height() = Max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
+                aSnap.Height() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
         }
 
         SwRect aBoundRect;
@@ -1031,10 +1031,10 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
                                pToCharCntntPos, bFollowTextFlow,
                                false, &aRefPoint );
         }
-        long nLeft = Min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
-        long nRight = Min( aBoundRect.Right() - aTmp.Right(), aSnap.Width() );
-        long nUp = Min( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
-        long nDown = Min( aBoundRect.Bottom() - aTmp.Bottom(), aSnap.Height() );
+        long nLeft = std::min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
+        long nRight = std::min( aBoundRect.Right() - aTmp.Right(), aSnap.Width() );
+        long nUp = std::min( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
+        long nDown = std::min( aBoundRect.Bottom() - aTmp.Bottom(), aSnap.Height() );
 
         switch ( nDir )
         {
@@ -1190,10 +1190,10 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
         Size aSnap( rSh.GetViewOptions()->GetSnapSize() );
         short nDiv = rSh.GetViewOptions()->GetDivisionX();
         if ( nDiv > 0 )
-            aSnap.Width() = Max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
+            aSnap.Width() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
         nDiv = rSh.GetViewOptions()->GetDivisionY();
         if ( nDiv > 0 )
-            aSnap.Height() = Max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
+            aSnap.Height() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
 
         if(bOnePixel)
             aSnap = PixelToLogic(Size(1,1));

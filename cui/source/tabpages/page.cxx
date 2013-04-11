@@ -130,8 +130,8 @@ sal_Bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
     if ( pSize )
     {
         Size aSize = pSize->GetSize();
-        long nDiffW = Abs( rSize.Width () - aSize.Width () );
-        long nDiffH = Abs( rSize.Height() - aSize.Height() );
+        long nDiffW = std::abs( rSize.Width () - aSize.Width () );
+        long nDiffH = std::abs( rSize.Height() - aSize.Height() );
         return ( nDiffW < 10 && nDiffH < 10 );
     }
     else
@@ -1446,8 +1446,8 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
     long nFHeight = m_pBspWin->GetFtHeight();
     long nFDist = m_pBspWin->GetFtDist();
 
-    long nHFLeft = Max( m_pBspWin->GetHdLeft(), m_pBspWin->GetFtLeft() );
-    long nHFRight = Max( m_pBspWin->GetHdRight(), m_pBspWin->GetFtRight() );
+    long nHFLeft = std::max( m_pBspWin->GetHdLeft(), m_pBspWin->GetFtLeft() );
+    long nHFRight = std::max( m_pBspWin->GetHdRight(), m_pBspWin->GetFtRight() );
 
     // current values for page margins
     long nBT = static_cast<long>(m_pTopMarginEdit->Denormalize(m_pTopMarginEdit->GetValue(FUNIT_TWIP)));

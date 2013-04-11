@@ -1022,12 +1022,12 @@ void lclIntersectRanges( ListOfScRange& rList, const uno::Any& rArg )
                 if( aOuterIt->Intersects( *aInnerIt ) )
                 {
                     ScRange aIsectRange(
-                        Max( aOuterIt->aStart.Col(), aInnerIt->aStart.Col() ),
-                        Max( aOuterIt->aStart.Row(), aInnerIt->aStart.Row() ),
-                        Max( aOuterIt->aStart.Tab(), aInnerIt->aStart.Tab() ),
-                        Min( aOuterIt->aEnd.Col(),   aInnerIt->aEnd.Col() ),
-                        Min( aOuterIt->aEnd.Row(),   aInnerIt->aEnd.Row() ),
-                        Min( aOuterIt->aEnd.Tab(),   aInnerIt->aEnd.Tab() ) );
+                        std::max( aOuterIt->aStart.Col(), aInnerIt->aStart.Col() ),
+                        std::max( aOuterIt->aStart.Row(), aInnerIt->aStart.Row() ),
+                        std::max( aOuterIt->aStart.Tab(), aInnerIt->aStart.Tab() ),
+                        std::min( aOuterIt->aEnd.Col(),   aInnerIt->aEnd.Col() ),
+                        std::min( aOuterIt->aEnd.Row(),   aInnerIt->aEnd.Row() ),
+                        std::min( aOuterIt->aEnd.Tab(),   aInnerIt->aEnd.Tab() ) );
                     rList.push_back( aIsectRange );
                 }
             }

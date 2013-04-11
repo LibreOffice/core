@@ -303,7 +303,7 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
     }
     else
         // TODO: use fastbmp infrastructure
-        for( long nX = 0L, nWidth = Min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
+        for( long nX = 0L, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
             SetPixel( nY, nX, rReadAcc.GetPixel( nY, nX ) );
 }
 
@@ -318,7 +318,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                 ( !HasPalette() && nFormat > BMP_FORMAT_8BIT_PAL ),
                 "No copying possible between palette and non palette scanlines!" );
 
-    const sal_uLong nCount = Min( GetScanlineSize(), nSrcScanlineSize );
+    const sal_uLong nCount = std::min( GetScanlineSize(), nSrcScanlineSize );
 
     if( nCount )
     {
@@ -376,13 +376,13 @@ void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
     if( ( GetScanlineFormat() == rReadAcc.GetScanlineFormat() ) &&
         ( GetScanlineSize() == rReadAcc.GetScanlineSize() ) )
     {
-        const long  nHeight = Min( mpBuffer->mnHeight, rReadAcc.Height() );
+        const long  nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() );
         const sal_uLong nCount = nHeight * mpBuffer->mnScanlineSize;
 
         memcpy( mpBuffer->mpBits, rReadAcc.GetBuffer(), nCount );
     }
     else
-        for( long nY = 0L, nHeight = Min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
+        for( long nY = 0L, nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
             CopyScanline( nY, rReadAcc );
 }
 

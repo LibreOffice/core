@@ -1732,7 +1732,7 @@ void SwCursor::DoSetBidiLevelUpDown()
                 if ( nCurrLevel % 2 != nPrevLevel % 2 )
                 {
                     // set cursor level to the lower of the two levels
-                    SetCrsrBidiLevel( Min( nCurrLevel, nPrevLevel ) );
+                    SetCrsrBidiLevel( std::min( nCurrLevel, nPrevLevel ) );
                 }
                 else
                     SetCrsrBidiLevel( nCurrLevel );

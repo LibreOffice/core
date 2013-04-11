@@ -439,7 +439,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             {
                 const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( (sal_uInt16)nPara );
                 const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) rItems.Get( EE_PARA_ULSPACE );
-                nUpper = Max( nUpper, (long)rItem.GetUpper() );
+                nUpper = std::max( nUpper, (long)rItem.GetUpper() );
             }
             if( nUpper == 0L )
                 rSet.DisableItem( SID_PARASPACE_DECREASE );

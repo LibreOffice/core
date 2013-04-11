@@ -598,7 +598,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pFld )
         if(nActLevel & nMask)
         {
             SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.SetIncludeUpperLevels( Min( (sal_uInt8)pFld->GetValue(),
+            aNumFmt.SetIncludeUpperLevels( std::min( (sal_uInt8)pFld->GetValue(),
                                                 (sal_uInt8)(i + 1)) );
             pNumRule->Set(i, aNumFmt);
         }
@@ -971,7 +971,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 nStart--;
 
             SwNumberTree::tNumberVector aNumVector;
-            sal_uInt8 nEnd = Min( (sal_uInt8)(nStart + 3), MAXLEVEL );
+            sal_uInt8 nEnd = std::min( (sal_uInt8)(nStart + 3), MAXLEVEL );
             for( sal_uInt8 nLevel = nStart; nLevel < nEnd; ++nLevel )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);

@@ -127,8 +127,8 @@ void SwLabPreview::Paint(const Rectangle &)
         lDispH += ROUND(aItem.lVDist / 10);
 
     // Scale factor
-    float fx = (float) lOutWPix23 / Max(1L, lDispW),
-          fy = (float) lOutHPix23 / Max(1L, lDispH),
+    float fx = (float) lOutWPix23 / std::max(1L, lDispW),
+          fy = (float) lOutHPix23 / std::max(1L, lDispH),
           f  = fx < fy ? fx : fy;
 
     // zero point
@@ -159,8 +159,8 @@ void SwLabPreview::Paint(const Rectangle &)
     // Labels
     SetClipRegion(Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
     SetFillColor( COL_LIGHTGRAYBLUE );
-    for (sal_uInt16 nRow = 0; nRow < Min((sal_uInt16) 2, (sal_uInt16) aItem.nRows); nRow++)
-        for (sal_uInt16 nCol = 0; nCol < Min((sal_uInt16) 2, (sal_uInt16) aItem.nCols); nCol++)
+    for (sal_uInt16 nRow = 0; nRow < std::min((sal_uInt16) 2, (sal_uInt16) aItem.nRows); nRow++)
+        for (sal_uInt16 nCol = 0; nCol < std::min((sal_uInt16) 2, (sal_uInt16) aItem.nCols); nCol++)
             DrawRect(Rectangle(
               Point(ROUND(lX0 + f * (aItem.lLeft  + nCol * aItem.lHDist)),
                     ROUND(lY0 + f * (aItem.lUpper + nRow * aItem.lVDist))),
@@ -417,8 +417,8 @@ void SwLabFmtPage::ChangeMinMax()
     aHDistField .SetMin(nMinSize, FUNIT_CM);
     aVDistField .SetMin(nMinSize, FUNIT_CM);
 
-    aHDistField .SetMax((long) 100 * ((lMax - lLeft ) / Max(1L, (long) nCols)), FUNIT_TWIP);
-    aVDistField .SetMax((long) 100 * ((lMax - lUpper) / Max(1L, (long) nRows)), FUNIT_TWIP);
+    aHDistField .SetMax((long) 100 * ((lMax - lLeft ) / std::max(1L, (long) nCols)), FUNIT_TWIP);
+    aVDistField .SetMax((long) 100 * ((lMax - lUpper) / std::max(1L, (long) nRows)), FUNIT_TWIP);
 
     aWidthField .SetMin(nMinSize, FUNIT_CM);
     aHeightField.SetMin(nMinSize, FUNIT_CM);
@@ -432,8 +432,8 @@ void SwLabFmtPage::ChangeMinMax()
     aColsField  .SetMin( 1 );
     aRowsField  .SetMin( 1 );
 
-    aColsField  .SetMax((lMax - lLeft ) / Max(1L, lHDist));
-    aRowsField  .SetMax((lMax - lUpper) / Max(1L, lVDist));
+    aColsField  .SetMax((lMax - lLeft ) / std::max(1L, lHDist));
+    aRowsField  .SetMax((lMax - lUpper) / std::max(1L, lVDist));
     aPWidthField .SetMin( (long) 100 * lMinPWidth,  FUNIT_TWIP );
     aPHeightField.SetMin( (long) 100 * lMinPHeight, FUNIT_TWIP );
 

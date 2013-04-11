@@ -2245,8 +2245,8 @@ namespace svxform
         Window::Resize();
 
         Size aOutSz = GetOutputSizePixel();
-        long nWidth = Max( aOutSz.Width(), m_nMinWidth );
-        long nHeight = Max( aOutSz.Height(), m_nMinHeight );
+        long nWidth = std::max( aOutSz.Width(), m_nMinWidth );
+        long nHeight = std::max( aOutSz.Height(), m_nMinHeight );
 
         Size aSz = m_aModelsBox.GetSizePixel();
         aSz.Width() = nWidth - 3*m_a3Size.Width() - m_aModelBtn.GetSizePixel().Width();

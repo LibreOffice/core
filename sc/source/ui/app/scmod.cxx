@@ -765,7 +765,7 @@ void ScModule::InsertEntryToLRUList(sal_uInt16 nFIndex)
     if(nFIndex != 0)
     {
         const ScAppOptions& rAppOpt = GetAppOptions();
-        sal_uInt16 nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
+        sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
         sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
 
         sal_uInt16  aIdxList[LRU_MAX];

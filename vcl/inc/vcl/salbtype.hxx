@@ -641,7 +641,7 @@ inline void BitmapPalette::SetEntryCount( sal_uInt16 nCount )
     else if( nCount != mnCount )
     {
         const sal_uLong nNewSize = nCount * sizeof( BitmapColor );
-        const sal_uLong nMinSize = Min( mnCount, nCount ) * sizeof( BitmapColor );
+        const sal_uLong nMinSize = std::min( mnCount, nCount ) * sizeof( BitmapColor );
         sal_uInt8*      pNewColor = new sal_uInt8[ nNewSize ];
 
         if ( nMinSize && mpBitmapColor )

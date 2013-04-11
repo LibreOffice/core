@@ -342,8 +342,8 @@ sal_Bool FuSelection::MouseMove(const MouseEvent& rMEvt)
     {
         Point aOldPixel = pWindow->LogicToPixel( aMDPos );
         Point aNewPixel = rMEvt.GetPosPixel();
-        if ( Abs( aOldPixel.X() - aNewPixel.X() ) > SC_MAXDRAGMOVE ||
-             Abs( aOldPixel.Y() - aNewPixel.Y() ) > SC_MAXDRAGMOVE )
+        if ( std::abs( aOldPixel.X() - aNewPixel.X() ) > SC_MAXDRAGMOVE ||
+             std::abs( aOldPixel.Y() - aNewPixel.Y() ) > SC_MAXDRAGMOVE )
             aDragTimer.Stop();
     }
 
@@ -432,8 +432,8 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
 
             if (!rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
-                Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
-                Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+                std::abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
+                std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
             {
                 /*************************************************************
                 * If a user wants to click on an object in front of a marked

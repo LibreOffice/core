@@ -653,8 +653,8 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
             if (!rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
                 !bSelectionChanged                   &&
-                Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
-                Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+                std::abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
+                std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
             {
                 /*************************************************************
                 * If a user wants to click on an object in front of a marked
@@ -735,8 +735,8 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else if (rMEvt.IsMod1()
             && !rMEvt.IsMod2()
-            && Abs(aPnt.X() - aMDPos.X()) < nDrgLog
-            && Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+            && std::abs(aPnt.X() - aMDPos.X()) < nDrgLog
+            && std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             // Enter group
             mpView->MarkObj(aPnt, nHitLog, rMEvt.IsShift(), rMEvt.IsMod1());
@@ -858,8 +858,8 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 sal_uInt16 nDrgLog2 = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
                 Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-                if (Abs(aMDPos.X() - aPos.X()) < nDrgLog2 &&
-                    Abs(aMDPos.Y() - aPos.Y()) < nDrgLog2 &&
+                if (std::abs(aMDPos.X() - aPos.X()) < nDrgLog2 &&
+                    std::abs(aMDPos.Y() - aPos.Y()) < nDrgLog2 &&
                     !rMEvt.IsShift() && !rMEvt.IsMod2())
                 {
                     SdrViewEvent aVEvt;
@@ -874,8 +874,8 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
         }
         else if (!rMEvt.IsShift() && rMEvt.IsMod1() && !rMEvt.IsMod2() &&
-                 Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
-                 Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+                 std::abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
+                 std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             // Enter group
             mpView->MarkObj(aPnt, nHitLog, sal_False, rMEvt.IsMod1());

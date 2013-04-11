@@ -125,7 +125,7 @@ IMPL_LINK(GraphicViewShell, TabBarSplitHandler, TabBar*, pTabBar)
         - pTabBar->GetPosPixel().X();
 
     Size aTabSize = pTabBar->GetSizePixel();
-    aTabSize.Width() = Min(pTabBar->GetSplitSize(), (long)(nMax-1));
+    aTabSize.Width() = std::min(pTabBar->GetSplitSize(), (long)(nMax-1));
 
     pTabBar->SetSizePixel (aTabSize);
 

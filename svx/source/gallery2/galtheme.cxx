@@ -1388,7 +1388,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     delete pCompat;
 
     // Rest des Puffers auffuellen
-    const long  nRest = Max( 512L - ( (long) rOStm.Tell() - nReservePos ), 0L );
+    const long  nRest = std::max( 512L - ( (long) rOStm.Tell() - nReservePos ), 0L );
 
     if( nRest )
     {

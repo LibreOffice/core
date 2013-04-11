@@ -357,7 +357,7 @@ void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
     FmFormModel::MovePage(nPgNum, nNewPos);
 
-    sal_uInt16 nMin = Min(nPgNum, nNewPos);
+    sal_uInt16 nMin = std::min(nPgNum, nNewPos);
 
     UpdatePageObjectsInNotes(nMin);
 }
@@ -541,8 +541,8 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
 
                     sal_uLong nTop    = aPageOffset.Y();
                     sal_uLong nLeft   = aPageOffset.X();
-                    sal_uLong nBottom = Max((long)(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), 0L);
-                    sal_uLong nRight  = Max((long)(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), 0L);
+                    sal_uLong nBottom = std::max((long)(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), 0L);
+                    sal_uLong nRight  = std::max((long)(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), 0L);
 
                     pPage->SetBorder(nLeft, nTop, nRight, nBottom);
                 }

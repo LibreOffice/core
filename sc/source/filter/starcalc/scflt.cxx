@@ -743,7 +743,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
                                     SC10TOSTRING( pHeadFootLine->LogFont.lfFaceName ), EMPTY_STRING,
                                     PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ),
                                 EE_CHAR_FONTINFO );
-            aEditAttribs.Put(   SvxFontHeightItem( Abs( pHeadFootLine->LogFont.lfHeight ), 100, EE_CHAR_FONTHEIGHT ),
+            aEditAttribs.Put(   SvxFontHeightItem( std::abs( pHeadFootLine->LogFont.lfHeight ), 100, EE_CHAR_FONTHEIGHT ),
                                 EE_CHAR_FONTHEIGHT);
 
             Sc10Color nColor = pHeadFootLine->TextColor;
@@ -1184,7 +1184,7 @@ void Sc10Import::LoadPatternCollection()
                 }
                 rItemSet.Put( SvxFontItem( eFam, SC10TOSTRING( pPattern->LogFont.lfFaceName ), EMPTY_STRING,
                         PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
-                rItemSet.Put( SvxFontHeightItem( Abs( pPattern->LogFont.lfHeight ), 100, ATTR_FONT_HEIGHT ) );
+                rItemSet.Put( SvxFontHeightItem( std::abs( pPattern->LogFont.lfHeight ), 100, ATTR_FONT_HEIGHT ) );
                 Color TextColor( COL_BLACK );
                 lcl_ChangeColor( ( pPattern->nColor & 0x000F ), TextColor );
                 rItemSet.Put( SvxColorItem( TextColor, ATTR_FONT_COLOR ) );
@@ -1239,7 +1239,7 @@ void Sc10Import::LoadPatternCollection()
                 else if( ( OJustify & ojTopBottom ) == ojTopBottom )
                     rItemSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
 
-                sal_Int16 Margin = Max( ( sal_uInt16 ) 20, ( sal_uInt16 ) ( EJustify * 20 ) );
+                sal_Int16 Margin = std::max( ( sal_uInt16 ) 20, ( sal_uInt16 ) ( EJustify * 20 ) );
                 if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
                     rItemSet.Put( SvxMarginItem( 20, Margin, 20, Margin, ATTR_MARGIN ) );
                 else
@@ -1760,7 +1760,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
                     ScPatternAttr aScPattern(pDoc->GetPool());
                     aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_STRING,
                         PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
-                    aScPattern.GetItemSet().Put(SvxFontHeightItem(Abs(pFont->Height), 100, ATTR_FONT_HEIGHT ));
+                    aScPattern.GetItemSet().Put(SvxFontHeightItem(std::abs(pFont->Height), 100, ATTR_FONT_HEIGHT ));
                     pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
                 }
             }
@@ -1861,7 +1861,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             else if (OJustify & ojTopBottom)
                 aScPattern.GetItemSet().Put(SfxInt32Item(ATTR_ROTATE_VALUE,27000));
 
-            sal_Int16 Margin = Max((sal_uInt16)20, (sal_uInt16)(EJustify * 20));
+            sal_Int16 Margin = std::max((sal_uInt16)20, (sal_uInt16)(EJustify * 20));
             if (OJustify & ojBottomTop)
                 aScPattern.GetItemSet().Put(SvxMarginItem(20, Margin, 20, Margin, ATTR_MARGIN));
             else

@@ -594,7 +594,7 @@ void SwFlyFrmAttrMgr::SetHeightSizeType( SwFrmSize eType )
 void SwFlyFrmAttrMgr::SetSize( const Size& rSize )
 {
     SwFmtFrmSize aSize( GetFrmSize() );
-    aSize.SetSize(Size(Max(rSize.Width(), long(MINFLY)), Max(rSize.Height(), long(MINFLY))));
+    aSize.SetSize(Size(std::max(rSize.Width(), long(MINFLY)), std::max(rSize.Height(), long(MINFLY))));
     aSet.Put( aSize );
 }
 

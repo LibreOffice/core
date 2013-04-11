@@ -2300,16 +2300,16 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
         long        nVal;
 
         nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = (sal_uLong) Max( nVal - nTol, 0L );
-        aColParam.pMaxR[ i ] = (sal_uLong) Min( nVal + nTol, 255L );
+        aColParam.pMinR[ i ] = (sal_uLong) std::max( nVal - nTol, 0L );
+        aColParam.pMaxR[ i ] = (sal_uLong) std::min( nVal + nTol, 255L );
 
         nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = (sal_uLong) Max( nVal - nTol, 0L );
-        aColParam.pMaxG[ i ] = (sal_uLong) Min( nVal + nTol, 255L );
+        aColParam.pMinG[ i ] = (sal_uLong) std::max( nVal - nTol, 0L );
+        aColParam.pMaxG[ i ] = (sal_uLong) std::min( nVal + nTol, 255L );
 
         nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = (sal_uLong) Max( nVal - nTol, 0L );
-        aColParam.pMaxB[ i ] = (sal_uLong) Min( nVal + nTol, 255L );
+        aColParam.pMinB[ i ] = (sal_uLong) std::max( nVal - nTol, 0L );
+        aColParam.pMaxB[ i ] = (sal_uLong) std::min( nVal + nTol, 255L );
     }
 
     aColParam.pDstCols = pReplaceColors;

@@ -1072,12 +1072,12 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 
         if (aRelWidthCB.IsChecked())
         {
-            aSz.SetWidthPercent((sal_uInt8)Min( static_cast< sal_Int64 >(MAX_PERCENT_WIDTH), aWidthED.Convert(aWidthED.NormalizePercent(nNewWidth), FUNIT_TWIP, FUNIT_CUSTOM)));
+            aSz.SetWidthPercent((sal_uInt8)std::min( static_cast< sal_Int64 >(MAX_PERCENT_WIDTH), aWidthED.Convert(aWidthED.NormalizePercent(nNewWidth), FUNIT_TWIP, FUNIT_CUSTOM)));
         }
         else
             aSz.SetWidthPercent(0);
         if (aRelHeightCB.IsChecked())
-            aSz.SetHeightPercent((sal_uInt8)Min(static_cast< sal_Int64 >(MAX_PERCENT_HEIGHT), aHeightED.Convert(aHeightED.NormalizePercent(nNewHeight), FUNIT_TWIP, FUNIT_CUSTOM)));
+            aSz.SetHeightPercent((sal_uInt8)std::min(static_cast< sal_Int64 >(MAX_PERCENT_HEIGHT), aHeightED.Convert(aHeightED.NormalizePercent(nNewHeight), FUNIT_TWIP, FUNIT_CUSTOM)));
         else
             aSz.SetHeightPercent(0);
 
@@ -1756,10 +1756,10 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
 
     if (aVal.bAutoHeight && (nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE))
     {
-        SwTwips nTmp = Min(nWidth * nMaxHeight / Max(nHeight, 1L), nMaxHeight);
+        SwTwips nTmp = std::min(nWidth * nMaxHeight / std::max(nHeight, 1L), nMaxHeight);
         aWidthED.SetMax(aWidthED.NormalizePercent(nTmp), FUNIT_TWIP);
 
-        nTmp = Min(nHeight * nMaxWidth / Max(nWidth, 1L), nMaxWidth);
+        nTmp = std::min(nHeight * nMaxWidth / std::max(nWidth, 1L), nMaxWidth);
         aHeightED.SetMax(aWidthED.NormalizePercent(nTmp), FUNIT_TWIP);
     }
     else

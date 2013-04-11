@@ -184,7 +184,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                 if ( aPrevLayer == aName )
                 {
-                    nPrevLayer = Max(nLayer, (sal_uInt16) 4);
+                    nPrevLayer = std::max(nLayer, (sal_uInt16) 4);
                 }
             }
 

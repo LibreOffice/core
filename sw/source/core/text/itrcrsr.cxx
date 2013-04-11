@@ -219,7 +219,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         else
         {
             nLeft = pFrm->Frm().Left() +
-                    Max( long( rSpace.GetTxtLeft() + nLMWithNum ),
+                    std::max( long( rSpace.GetTxtLeft() + nLMWithNum ),
                          pFrm->Prt().Left() );
         }
     }
@@ -308,7 +308,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         else
         {
               nFirst = pFrm->Frm().Left() +
-                     Max( rSpace.GetTxtLeft() + nLMWithNum+ nFirstLineOfs,
+                     std::max( rSpace.GetTxtLeft() + nLMWithNum+ nFirstLineOfs,
                           pFrm->Prt().Left() );
         }
 

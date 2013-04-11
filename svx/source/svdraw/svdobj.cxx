@@ -1288,10 +1288,10 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
         long nYDiv=nHgt0;
         bool bXNeg=(nXMul<0)!=(nXDiv<0);
         bool bYNeg=(nYMul<0)!=(nYDiv<0);
-        nXMul=Abs(nXMul);
-        nYMul=Abs(nYMul);
-        nXDiv=Abs(nXDiv);
-        nYDiv=Abs(nYDiv);
+        nXMul=std::abs(nXMul);
+        nYMul=std::abs(nYMul);
+        nXDiv=std::abs(nXDiv);
+        nYDiv=std::abs(nYDiv);
         Fraction aXFact(nXMul,nXDiv); // fractions for canceling
         Fraction aYFact(nYMul,nYDiv); // and for comparing
         nXMul=aXFact.GetNumerator();

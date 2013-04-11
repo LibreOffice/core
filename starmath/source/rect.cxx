@@ -448,8 +448,8 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
 {
     // get some values used for (italic) spaces adaption
     // ! (need to be done before changing current SmRect) !
-    long  nL = Min(GetItalicLeft(),  rRect.GetItalicLeft()),
-          nR = Max(GetItalicRight(), rRect.GetItalicRight());
+    long  nL = std::min(GetItalicLeft(),  rRect.GetItalicLeft()),
+          nR = std::max(GetItalicRight(), rRect.GetItalicRight());
 
     Union(rRect);
 
@@ -458,10 +458,10 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
     if (!HasAlignInfo())
         CopyAlignInfo(rRect);
     else if (rRect.HasAlignInfo())
-    {   nAlignT = Min(GetAlignT(), rRect.GetAlignT());
-        nAlignB = Max(GetAlignB(), rRect.GetAlignB());
-        nHiAttrFence = Min(GetHiAttrFence(), rRect.GetHiAttrFence());
-        nLoAttrFence = Max(GetLoAttrFence(), rRect.GetLoAttrFence());
+    {   nAlignT = std::min(GetAlignT(), rRect.GetAlignT());
+        nAlignB = std::max(GetAlignB(), rRect.GetAlignB());
+        nHiAttrFence = std::min(GetHiAttrFence(), rRect.GetHiAttrFence());
+        nLoAttrFence = std::max(GetLoAttrFence(), rRect.GetLoAttrFence());
         OSL_ENSURE(HasAlignInfo(), "Sm: ooops...");
 
         switch (eCopyMode)
@@ -571,7 +571,7 @@ long SmRect::OrientedDist(const Point &rPoint) const
     long nAbsX = labs(aDist.X()),
          nAbsY = labs(aDist.Y());
 
-    return bIsInside ? - Min(nAbsX, nAbsY) : Max (nAbsX, nAbsY);
+    return bIsInside ? - std::min(nAbsX, nAbsY) : std::max (nAbsX, nAbsY);
 }
 
 

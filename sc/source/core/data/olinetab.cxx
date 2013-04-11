@@ -216,7 +216,7 @@ bool ScOutlineArray::Insert(
     sal_uInt16 nFindMax;
     FindEntry( nStartCol, nStartLevel, nStartIndex );       // nLevel = neuer Level (alter+1) !!!
     FindEntry( nEndCol, nEndLevel, nEndIndex );
-    nFindMax = Max(nStartLevel,nEndLevel);
+    nFindMax = std::max(nStartLevel,nEndLevel);
     do
     {
         bCont = false;

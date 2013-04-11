@@ -1774,8 +1774,8 @@ sal_Bool SwFEShell::ImpEndCreate()
         // For OBJ_NONE a fly is inserted.
         const long nWidth = rBound.Right()  - rBound.Left();
         const long nHeight= rBound.Bottom() - rBound.Top();
-        aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, Max( nWidth,  long(MINFLY) ),
-                                              Max( nHeight, long(MINFLY) )));
+        aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, std::max( nWidth,  long(MINFLY) ),
+                                              std::max( nHeight, long(MINFLY) )));
 
         SwFmtHoriOrient aHori( nXOffset, text::HoriOrientation::NONE, text::RelOrientation::FRAME );
         SwFmtVertOrient aVert( nYOffset, text::VertOrientation::NONE, text::RelOrientation::FRAME );

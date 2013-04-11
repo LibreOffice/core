@@ -93,10 +93,10 @@ void Client::RequestNewObjectArea( Rectangle& aObjRect )
         Point aWorkAreaTL = aWorkArea.TopLeft();
         Point aWorkAreaBR = aWorkArea.BottomRight();
 
-        aPos.X() = Max(aPos.X(), aWorkAreaTL.X());
-        aPos.X() = Min(aPos.X(), aWorkAreaBR.X()-aSize.Width());
-        aPos.Y() = Max(aPos.Y(), aWorkAreaTL.Y());
-        aPos.Y() = Min(aPos.Y(), aWorkAreaBR.Y()-aSize.Height());
+        aPos.X() = std::max(aPos.X(), aWorkAreaTL.X());
+        aPos.X() = std::min(aPos.X(), aWorkAreaBR.X()-aSize.Width());
+        aPos.Y() = std::max(aPos.Y(), aWorkAreaTL.Y());
+        aPos.Y() = std::min(aPos.Y(), aWorkAreaBR.Y()-aSize.Height());
 
         aObjRect.SetPos(aPos);
     }

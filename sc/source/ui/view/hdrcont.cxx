@@ -149,11 +149,11 @@ void ScHeaderControl::SetMark( sal_Bool bNewSet, SCCOLROW nNewStart, SCCOLROW nN
             if ( nNewStart == nOldStart )
             {
                 if ( nNewEnd != nOldEnd )
-                    DoPaint( Min( nNewEnd, nOldEnd ) + 1, Max( nNewEnd, nOldEnd ) );
+                    DoPaint( std::min( nNewEnd, nOldEnd ) + 1, std::max( nNewEnd, nOldEnd ) );
                 // sonst nix
             }
             else if ( nNewEnd == nOldEnd )
-                DoPaint( Min( nNewStart, nOldStart ), Max( nNewStart, nOldStart ) - 1 );
+                DoPaint( std::min( nNewStart, nOldStart ), std::max( nNewStart, nOldStart ) - 1 );
             else if ( nNewStart > nOldEnd || nNewEnd < nOldStart )
             {
                 //  zwei Bereiche...
@@ -161,7 +161,7 @@ void ScHeaderControl::SetMark( sal_Bool bNewSet, SCCOLROW nNewStart, SCCOLROW nN
                 DoPaint( nNewStart, nNewEnd );
             }
             else                //  irgendwie ueberlappend... (kommt eh nicht oft vor)
-                DoPaint( Min( nNewStart, nOldStart ), Max( nNewEnd, nOldEnd ) );
+                DoPaint( std::min( nNewStart, nOldStart ), std::max( nNewEnd, nOldEnd ) );
         }
         else
             DoPaint( nNewStart, nNewEnd );      //  komplett neu

@@ -1150,7 +1150,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 
     const sal_uInt16 nTrans = rSet.GetTransparencyGrf().GetValue();
     rGA.SetTransparency( (sal_uInt8) FRound(
-                                Min( nTrans, (sal_uInt16) 100 )  * 2.55 ) );
+                                std::min( nTrans, (sal_uInt16) 100 )  * 2.55 ) );
 
     return rGA;
 }

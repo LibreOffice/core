@@ -220,7 +220,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     {
         Add( new XclExpBoolRecord( EXC_ID_DSF, false ) );
         Add( new XclExpEmptyRecord( EXC_ID_XL9FILE ) );
-        rR.pTabId = new XclExpChTrTabId( Max( nExcTabCount, nCodenames ) );
+        rR.pTabId = new XclExpChTrTabId( std::max( nExcTabCount, nCodenames ) );
         Add( rR.pTabId );
         if( HasVbaStorage() )
         {

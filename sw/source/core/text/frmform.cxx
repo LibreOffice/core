@@ -483,7 +483,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                     ( IsInSct() && !FindSctFrm()->MoveAllowed(this) ) )
                 {
                     SetUndersized( sal_True );
-                    Shrink( Min( ( nFrmHeight - nRstHeight), nPrtHeight ) );
+                    Shrink( std::min( ( nFrmHeight - nRstHeight), nPrtHeight ) );
                 }
                 else
                     SetUndersized( sal_False );
@@ -1182,14 +1182,14 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
                 rLine.SetUnclipped( sal_False );
             }
         }
-        SwTwips nRght = Max( nOldWidth, pNew->Width() +
+        SwTwips nRght = std::max( nOldWidth, pNew->Width() +
                              pNew->GetHangingMargin() );
         ViewShell *pSh = getRootFrm()->GetCurrShell();
         const SwViewOption *pOpt = pSh ? pSh->GetViewOptions() : 0;
         if( pOpt && (pOpt->IsParagraph() || pOpt->IsLineBreak()) )
-            nRght += ( Max( nOldAscent, pNew->GetAscent() ) );
+            nRght += ( std::max( nOldAscent, pNew->GetAscent() ) );
         else
-            nRght += ( Max( nOldAscent, pNew->GetAscent() ) / 4);
+            nRght += ( std::max( nOldAscent, pNew->GetAscent() ) / 4);
         nRght += rLine.GetLeftMargin();
         if( rRepaint.GetOfst() || rRepaint.GetRightOfst() < nRght )
             rRepaint.SetRightOfst( nRght );

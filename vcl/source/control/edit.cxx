@@ -1348,10 +1348,10 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
     if( nIndex == STRING_LEN )
     {
         nIndex = 0;
-        long nDiff = Abs( pDX[0]-nX );
+        long nDiff = std::abs( pDX[0]-nX );
         for( int i = 1; i < aText.getLength(); i++ )
         {
-            long nNewDiff = Abs( pDX[2*i]-nX );
+            long nNewDiff = std::abs( pDX[2*i]-nX );
 
             if( nNewDiff < nDiff )
             {
@@ -1359,7 +1359,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
                 nDiff = nNewDiff;
             }
         }
-        if( nIndex == aText.getLength()-1 && Abs( pDX[2*nIndex+1] - nX ) < nDiff )
+        if( nIndex == aText.getLength()-1 && std::abs( pDX[2*nIndex+1] - nX ) < nDiff )
             nIndex = STRING_LEN;
     }
 

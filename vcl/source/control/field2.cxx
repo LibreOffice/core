@@ -408,7 +408,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
     {
         // adjust selection such that it remains at the end if it was there before
         Selection aSel = pEdit->GetSelection();
-        sal_Int64 nMaxSel = Max( aSel.Min(), aSel.Max() );
+        sal_Int64 nMaxSel = std::max( aSel.Min(), aSel.Max() );
         if ( nMaxSel >= aText.getLength() )
         {
             sal_Int32 nMaxPos = aNewText.getLength();

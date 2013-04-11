@@ -622,7 +622,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     // set the cursor after the last entry because otherwise performance problem in TLB.
     // TLB would otherwise reset the cursor at every Remove (expensive)
-    sal_uInt16 nPos = Min((sal_uInt16)nCount, (sal_uInt16)aRedlineParents.size());
+    sal_uInt16 nPos = std::min((sal_uInt16)nCount, (sal_uInt16)aRedlineParents.size());
     SvTreeListEntry *pCurEntry = NULL;
     while( ( pCurEntry == NULL ) && ( nPos > 0 ) )
     {
@@ -689,7 +689,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     String sParent;
     sal_uInt16 nCount = pSh->GetRedlineCount();
-    nEnd = Min((sal_uInt16)nEnd, (sal_uInt16)(nCount - 1)); // also treats nEnd=USHRT_MAX (until the end)
+    nEnd = std::min((sal_uInt16)nEnd, (sal_uInt16)(nCount - 1)); // also treats nEnd=USHRT_MAX (until the end)
 
     if (nEnd == USHRT_MAX)
         return;     // no redlines in the document

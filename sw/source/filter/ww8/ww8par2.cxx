@@ -634,7 +634,7 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
     rNum.SetNumAdjust( eAdjA[SVBT8ToByte( rAV.aBits1 ) & 0x3] );
 
     rNum.SetCharTextDistance( SVBT16ToShort( rAV.dxaSpace ) );
-    sal_Int16 nIndent = Abs((sal_Int16)SVBT16ToShort( rAV.dxaIndent ));
+    sal_Int16 nIndent = std::abs((sal_Int16)SVBT16ToShort( rAV.dxaIndent ));
     if( SVBT8ToByte( rAV.aBits1 ) & 0x08 )      //fHang
     {
         rNum.SetFirstLineOffset( -nIndent );

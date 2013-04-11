@@ -182,7 +182,7 @@ sal_Int32 ScCsvControl::GetVisPosCount() const
 
 sal_Int32 ScCsvControl::GetMaxPosOffset() const
 {
-    return Max( GetPosCount() - GetVisPosCount() + 2L, 0L );
+    return std::max( GetPosCount() - GetVisPosCount() + 2L, 0L );
 }
 
 bool ScCsvControl::IsValidSplitPos( sal_Int32 nPos ) const
@@ -227,12 +227,12 @@ sal_Int32 ScCsvControl::GetVisLineCount() const
 
 sal_Int32 ScCsvControl::GetLastVisLine() const
 {
-    return Min( GetFirstVisLine() + GetVisLineCount(), GetLineCount() ) - 1;
+    return std::min( GetFirstVisLine() + GetVisLineCount(), GetLineCount() ) - 1;
 }
 
 sal_Int32 ScCsvControl::GetMaxLineOffset() const
 {
-    return Max( GetLineCount() - GetVisLineCount() + 1L, 0L );
+    return std::max( GetLineCount() - GetVisLineCount() + 1L, 0L );
 }
 
 bool ScCsvControl::IsValidLine( sal_Int32 nLine ) const

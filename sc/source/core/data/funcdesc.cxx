@@ -792,7 +792,7 @@ const formula::IFunctionDescription* ScFunctionMgr::getFunctionByName(const OUSt
 void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-    sal_uInt16 nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
+    sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
     sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
 
     if ( pLRUListIds )

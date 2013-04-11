@@ -749,8 +749,8 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* p
     {
         SCROW nLastRow = 0;
         for (SCCOL nCol = aSortParam.nCol1; nCol <= aSortParam.nCol2; nCol++)
-            nLastRow = Max(nLastRow, aCol[nCol].GetLastDataPos());
-        nLastRow = Min(nLastRow, aSortParam.nRow2);
+            nLastRow = std::max(nLastRow, aCol[nCol].GetLastDataPos());
+        nLastRow = std::min(nLastRow, aSortParam.nRow2);
         SCROW nRow1 = (rSortParam.bHasHeader ?
             aSortParam.nRow1 + 1 : aSortParam.nRow1);
         if (!IsSorted(nRow1, nLastRow))

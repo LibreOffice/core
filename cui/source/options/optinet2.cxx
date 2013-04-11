@@ -1268,7 +1268,7 @@ SvxEMailTabPage::SvxEMailTabPage(Window* pParent, const SfxItemSet& rSet) :
     long nCtrlW = aMailerURLFT.GetSizePixel().Width();
     if ( nTxtW >= nCtrlW )
     {
-        long nDelta = Max( (long)10, nTxtW - nCtrlW );
+        long nDelta = std::max( (long)10, nTxtW - nCtrlW );
         // so FixedText wider
         Size aNewSz = aMailerURLFT.GetSizePixel();
         aNewSz.Width() += nDelta;

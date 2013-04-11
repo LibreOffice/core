@@ -640,8 +640,8 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         }
         if ((rMEvt.GetClicks() != 2) &&
             !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsRight() &&
-            Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
-            Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+            std::abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
+            std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             /*************************************************************
             * From text mode, you don't want to rotate immediately.
@@ -729,8 +729,8 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     sal_uInt16 nDrgLog1 = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
     if ( mpView && !mpView->AreObjectsMarked() &&
-         Abs(aMDPos.X() - aPnt.X()) < nDrgLog1 &&
-         Abs(aMDPos.Y() - aPnt.Y()) < nDrgLog1 &&
+         std::abs(aMDPos.X() - aPnt.X()) < nDrgLog1 &&
+         std::abs(aMDPos.Y() - aPnt.Y()) < nDrgLog1 &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )
     {
         SdrPageView* pPV2 = mpView->GetSdrPageView();

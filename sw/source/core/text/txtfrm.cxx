@@ -649,7 +649,7 @@ xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
 {
     // #i104291# - applying patch to avoid overflow.
     unsigned long nFound = nStart;
-    const xub_StrLen nEndLine = Min( nEnd, rTxt.Len() );
+    const xub_StrLen nEndLine = std::min( nEnd, rTxt.Len() );
 
     // Wir ueberlesen erst alle Blanks am Anfang der Zeile (vgl. Bug 2235).
     while( nFound <= nEndLine &&
@@ -1883,7 +1883,7 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
         (pFrm->Prt().*fnRect->fnSetPosY)( nUpper );
     }
     (pFrm->Prt().*fnRect->fnSetHeight)(
-        Max( 0L , (pFrm->Frm().*fnRect->fnGetHeight)() -
+        std::max( 0L , (pFrm->Frm().*fnRect->fnGetHeight)() -
                   (pFrm->Prt().*fnRect->fnGetTop)() - nLower ) );
     (pFrm->Prt().*fnRect->fnSetWidth)(
         (pFrm->Frm().*fnRect->fnGetWidth)() -
@@ -2154,7 +2154,7 @@ SwTwips SwTxtFrm::CalcFitToContent()
     SwHookOut aHook( aInf );
 
     // #i54031# - assure mininum of MINLAY twips.
-    const SwTwips nMax = Max( (SwTwips)MINLAY,
+    const SwTwips nMax = std::max( (SwTwips)MINLAY,
                               aLine._CalcFitToContent() + 1 );
 
     Frm().Width( nOldFrmWidth );
@@ -2518,7 +2518,7 @@ void SwTxtFrm::ChgThisLines()
             if ( HasPara() )
             {
                 SwRepaint *pRepaint = GetPara()->GetRepaint();
-                pRepaint->Bottom( Max( pRepaint->Bottom(),
+                pRepaint->Bottom( std::max( pRepaint->Bottom(),
                                        Frm().Top()+Prt().Bottom()));
             }
         }

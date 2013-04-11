@@ -945,10 +945,10 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                     const ScMergeAttr& rOldMerge = (const ScMergeAttr&)rSet.Get(ATTR_MERGE);
                     if (rOldMerge.IsMerged())
-                        rNewSet.Put( ScMergeAttr( Min(
+                        rNewSet.Put( ScMergeAttr( std::min(
                                         static_cast<SCsCOL>(rOldMerge.GetRowMerge()),
                                         static_cast<SCsCOL>(MAXCOL+1 - (nAttrRow2-nRow1))),
-                                    Min(
+                                    std::min(
                                         static_cast<SCsROW>(rOldMerge.GetColMerge()),
                                         static_cast<SCsROW>(MAXROW+1 - (nCol-nCol1)))));
                     const ScMergeFlagAttr& rOldFlag = (const ScMergeFlagAttr&)rSet.Get(ATTR_MERGE_FLAG);

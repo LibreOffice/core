@@ -2537,7 +2537,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilt
         if ( INET_PROT_NOT_VALID != eProt && INET_PROT_FILE != eProt )
             nQuestionMarkPos = STRING_NOTFOUND;
     }
-    sal_uInt16 nWildCardPos = Min( rPath.Search( FILEDIALOG_DEF_WILDCARD ), nQuestionMarkPos );
+    sal_uInt16 nWildCardPos = std::min( rPath.Search( FILEDIALOG_DEF_WILDCARD ), nQuestionMarkPos );
     rFilter = aEmpty;
 
     if ( nWildCardPos != STRING_NOTFOUND )

@@ -602,7 +602,7 @@ IMPL_LINK_INLINE_END( SmGraphicWindow, MenuSelectHdl, Menu *, pMenu )
 
 void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 {
-    nZoom = Min(Max((sal_uInt16) Factor, (sal_uInt16) MINZOOM), (sal_uInt16) MAXZOOM);
+    nZoom = std::min(std::max((sal_uInt16) Factor, (sal_uInt16) MINZOOM), (sal_uInt16) MAXZOOM);
     Fraction   aFraction (nZoom, 100);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction) );
     SetTotalSize();
@@ -625,7 +625,7 @@ void SmGraphicWindow::ZoomToFitInWindow()
 
     if (aSize.Width() > 0  &&  aSize.Height() > 0)
     {
-        long nVal = Min ((85 * aWindowSize.Width())  / aSize.Width(),
+        long nVal = std::min ((85 * aWindowSize.Width())  / aSize.Width(),
                       (85 * aWindowSize.Height()) / aSize.Height());
         SetZoom ( sal::static_int_cast< sal_uInt16 >(nVal) );
     }
@@ -1065,7 +1065,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
                 aLine = aLine.replaceAt(0, m, "");
                 aSize = GetTextLineSize(rDevice, aText);
                 TextSize.Height() += aSize.Height();
-                TextSize.Width() = Max(TextSize.Width(), Min(aSize.Width(), MaxWidth));
+                TextSize.Width() = std::max(TextSize.Width(), std::min(aSize.Width(), MaxWidth));
 
                 aLine = comphelper::string::stripStart(aLine, ' ');
                 aLine = comphelper::string::stripStart(aLine, '\t');
@@ -1076,7 +1076,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
         else
         {
             TextSize.Height() += aSize.Height();
-            TextSize.Width() = Max(TextSize.Width(), aSize.Width());
+            TextSize.Width() = std::max(TextSize.Width(), aSize.Width());
         }
     }
 
@@ -1288,9 +1288,9 @@ void SmViewShell::Impl_Print(
                 Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
                                                             aOutRect.GetHeight()), MapMode(MAP_100TH_MM)));
                 Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MAP_100TH_MM)));
-                sal_uInt16   nZ = (sal_uInt16) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
+                sal_uInt16   nZ = (sal_uInt16) std::min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
                                               (long)Fraction(OutputSize.Height() * 100L, GraphicSize.Height()));
-                Fraction aFraction ((sal_uInt16) Max ((sal_uInt16) MINZOOM, Min((sal_uInt16) MAXZOOM, (sal_uInt16) (nZ - 10))), (sal_uInt16) 100);
+                Fraction aFraction ((sal_uInt16) std::max ((sal_uInt16) MINZOOM, std::min((sal_uInt16) MAXZOOM, (sal_uInt16) (nZ - 10))), (sal_uInt16) 100);
 
                 OutputMapMode = MapMode(MAP_100TH_MM, aZeroPoint, aFraction, aFraction);
             }
@@ -1816,7 +1816,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                                               OutputRect.GetHeight()), aMap));
                             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-                            sal_uInt16     nZ = (sal_uInt16) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
+                            sal_uInt16     nZ = (sal_uInt16) std::min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
                                                          (long)Fraction(OutputSize.Height() * 100L, GraphicSize.Height()));
                             aGraphic.SetZoom (nZ);
                             break;

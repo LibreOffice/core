@@ -209,7 +209,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
     const xub_StrLen nLen = STRING_LEN == nPartLen ? rDo.GetLen() : nPartLen;
 
     const XubString aTxt( CalcCaseMap( rTxt ) );
-    const sal_uInt16 nTxtLen = Min( rTxt.Len(), nLen );
+    const sal_uInt16 nTxtLen = std::min( rTxt.Len(), nLen );
     sal_uInt16 nPos = 0;
     sal_uInt16 nOldPos = nPos;
 

@@ -2308,7 +2308,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                                 ? (sal_uInt32)SVX_NUM_ARABIC
                                 : pPgFrm->GetPageDesc()->GetNumType().GetNumberingType() )
                         : pGetFld->GetFormat();
-                short nPageNum = static_cast<short>(Max(0, pSetFld->GetOffset() + (short)nDiff));
+                short nPageNum = static_cast<short>(std::max(0, pSetFld->GetOffset() + (short)nDiff));
                 pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
             }
         }
@@ -2395,7 +2395,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
                             ? pPgFrm->GetPageDesc()->GetNumType().GetNumberingType()
                             : pGetFld->GetFormat();
-        short nPageNum = static_cast<short>(Max(0, pSetFld->GetOffset() + (short)nDiff ));
+        short nPageNum = static_cast<short>(std::max(0, pSetFld->GetOffset() + (short)nDiff ));
         pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
     }
 }

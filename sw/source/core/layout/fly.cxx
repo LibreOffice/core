@@ -909,10 +909,10 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 SwRect aNew( GetObjRectWithSpaces() );
                 SwRect aOld( maFrm );
                 const SvxULSpaceItem &rUL = ((SwFmtChg*)pOld)->pChangedFmt->GetULSpace();
-                aOld.Top( Max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
+                aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
                 aOld.SSize().Height()+= rUL.GetLower();
                 const SvxLRSpaceItem &rLR = ((SwFmtChg*)pOld)->pChangedFmt->GetLRSpace();
-                aOld.Left  ( Max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
+                aOld.Left  ( std::max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
                 aOld.SSize().Width() += rLR.GetRight();
                 aNew.Union( aOld );
                 NotifyBackground( FindPageFrm(), aNew, PREP_CLEAR );
@@ -1001,13 +1001,13 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if ( RES_UL_SPACE == nWhich )
             {
                 const SvxULSpaceItem &rUL = *(SvxULSpaceItem*)pNew;
-                aOld.Top( Max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
+                aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
                 aOld.SSize().Height()+= rUL.GetLower();
             }
             else
             {
                 const SvxLRSpaceItem &rLR = *(SvxLRSpaceItem*)pNew;
-                aOld.Left  ( Max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
+                aOld.Left  ( std::max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
                 aOld.SSize().Width() += rLR.GetRight();
             }
             aNew.Union( aOld );
@@ -1459,7 +1459,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                 if ( nAutoWidth )
                 {
                     if( ATT_MIN_SIZE == rFrmSz.GetWidthSizeType() )
-                        nNewSize = Max( nNewSize - nLR, nAutoWidth );
+                        nNewSize = std::max( nNewSize - nLR, nAutoWidth );
                     else
                         nNewSize = nAutoWidth;
                 }
@@ -1949,7 +1949,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
             const SwFmtFrmSize& rFmtSize = GetFmt()->GetFrmSize();
             SwTwips nFmtHeight = bVert ? rFmtSize.GetWidth() : rFmtSize.GetHeight();
 
-            nVal = Min( nDist, nHeight - nFmtHeight );
+            nVal = std::min( nDist, nHeight - nFmtHeight );
         }
 
         if ( nVal <= 0L )
@@ -2501,15 +2501,15 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
             if ( nDiff > 0 )
                 nRelHeight -= nDiff;
         }
-        nRelWidth  = Min( nRelWidth,  pRel->Prt().Width() );
-        nRelHeight = Min( nRelHeight, pRel->Prt().Height() );
+        nRelWidth  = std::min( nRelWidth,  pRel->Prt().Width() );
+        nRelHeight = std::min( nRelHeight, pRel->Prt().Height() );
         if( !pRel->IsPageFrm() )
         {
             const SwPageFrm* pPage = FindPageFrm();
             if( pPage )
             {
-                nRelWidth  = Min( nRelWidth,  pPage->Prt().Width() );
-                nRelHeight = Min( nRelHeight, pPage->Prt().Height() );
+                nRelWidth  = std::min( nRelWidth,  pPage->Prt().Width() );
+                nRelHeight = std::min( nRelHeight, pPage->Prt().Height() );
             }
         }
 

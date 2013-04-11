@@ -395,9 +395,9 @@ void SvxFontSubstCheckListBox::setColSizes()
         return;
     long nW1 = rBar.GetTextWidth(rBar.GetItemText(3));
     long nW2 = rBar.GetTextWidth(rBar.GetItemText(4));
-    long nMax = Max( nW1, nW2 ) + 6; // width of the longest header + a little offset
+    long nMax = std::max( nW1, nW2 ) + 6; // width of the longest header + a little offset
     long nMin = rBar.LogicToPixel(Size(10, 0), MAP_APPFONT).Width();
-    nMax = Max( nMax, nMin );
+    nMax = std::max( nMax, nMin );
     const long nDoubleMax = 2*nMax;
     const long nRest = GetSizePixel().Width() - nDoubleMax;
     long aStaticTabs[] = { 4, 0, 0, 0, 0 };

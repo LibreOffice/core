@@ -556,9 +556,9 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
     Size aInfoSize = pParent->GetOutputSizePixel();     // von aussen vorgegebene Groesse
     Size aNavSize = pNavigator->GetOutputSizePixel();   // Default-Groesse
 
-    aNavSize.Width()  = Max( aInfoSize.Width(),  aNavSize.Width() );
-    aNavSize.Height() = Max( aInfoSize.Height(), aNavSize.Height() );
-    pNavigator->nListModeHeight = Max( aNavSize.Height(), pNavigator->nListModeHeight );
+    aNavSize.Width()  = std::max( aInfoSize.Width(),  aNavSize.Width() );
+    aNavSize.Height() = std::max( aInfoSize.Height(), aNavSize.Height() );
+    pNavigator->nListModeHeight = std::max( aNavSize.Height(), pNavigator->nListModeHeight );
 
     //  Die Groesse kann in einem anderen Modul geaendert worden sein,
     //  deshalb muessen in Abhaengigkeit von der momentanen Groesse die
@@ -661,7 +661,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     aTitleBase = GetText();
 
     long nListboxYPos =
-        Max( aTbxCmd.GetPosPixel().Y() + aTbxCmd.GetSizePixel().Height(),
+        std::max( aTbxCmd.GetPosPixel().Y() + aTbxCmd.GetSizePixel().Height(),
              aEdRow.GetPosPixel().Y() + aEdRow.GetSizePixel().Height() ) + 4;
     aLbEntries.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y);
 

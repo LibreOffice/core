@@ -225,7 +225,7 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
     if ( nPos < pArray->nCount && nRow <= nEndRow )
     {
         rTop = nRow;
-        rBottom = Min( pArray->pData[nPos].nRow, nEndRow );
+        rBottom = std::min( pArray->pData[nPos].nRow, nEndRow );
         pRet = pArray->pData[nPos].pPattern;
         nRow = rBottom + 1;
         ++nPos;

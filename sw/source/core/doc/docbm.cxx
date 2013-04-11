@@ -1647,7 +1647,7 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                 MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getMarksBegin()[aSave.GetCount()].get());
                 SwPosition aNewPos(pMark->GetMarkPos());
                 aNewPos.nNode = rNd;
-                aNewPos.nContent.Assign(pCNd, Min(aSave.GetContent(), nLen));
+                aNewPos.nContent.Assign(pCNd, std::min(aSave.GetContent(), nLen));
                 pMark->SetMarkPos(aNewPos);
             }
             break;
@@ -1656,7 +1656,7 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                 MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getMarksBegin()[aSave.GetCount()].get());
                 SwPosition aNewPos(pMark->GetOtherMarkPos());
                 aNewPos.nNode = rNd;
-                aNewPos.nContent.Assign(pCNd, Min(aSave.GetContent(), nLen));
+                aNewPos.nContent.Assign(pCNd, std::min(aSave.GetContent(), nLen));
                 pMark->SetOtherMarkPos(aNewPos);
             }
             break;
@@ -1678,7 +1678,7 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                         aNewPos.nNode = rNd;
                         if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
                         {
-                            aNewPos.nContent.Assign( pCNd, Min(
+                            aNewPos.nContent.Assign( pCNd, std::min(
                                                      aSave.GetContent(), nLen ) );
                         }
                         else
@@ -1776,7 +1776,7 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
             if( pPos )
             {
                 pPos->nNode = rNd;
-                pPos->nContent.Assign( pCNd, Min( aSave.GetContent(), nLen ) );
+                pPos->nContent.Assign( pCNd, std::min( aSave.GetContent(), nLen ) );
             }
             n -= 2;
             rSaveArr.erase( rSaveArr.begin() + n, rSaveArr.begin() + n + 2);

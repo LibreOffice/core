@@ -358,7 +358,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     }
     else
     {
-        nLeftCrop = Max( aOrigSz.Width() -
+        nLeftCrop = std::max( aOrigSz.Width() -
                             (rCrop.GetRight() + rCrop.GetLeft()), long(1) );
         const double nScale = double(Prt().Width())  / double(nLeftCrop);
         nLeftCrop  = long(nScale * -rCrop.GetLeft() );
@@ -381,7 +381,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     }
     else
     {
-        nTopCrop = Max( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), long(1) );
+        nTopCrop = std::max( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), long(1) );
         const double nScale = double(Prt().Height()) / double(nTopCrop);
         nTopCrop   = long(nScale * -rCrop.GetTop() );
         nBottomCrop= long(nScale * -rCrop.GetBottom() );
@@ -480,7 +480,7 @@ void SwNoTxtFrm::Format( const SwBorderAttrs * )
     if( nChgHght > 0)
         Grow( nChgHght );
     else if( nChgHght < 0)
-        Shrink( Min(Prt().Height(), -nChgHght) );
+        Shrink( std::min(Prt().Height(), -nChgHght) );
 }
 
 sal_Bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,

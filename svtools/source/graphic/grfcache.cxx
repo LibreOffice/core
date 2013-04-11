@@ -1035,7 +1035,7 @@ void GraphicCache::SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize, sal_Bool
 {
     const sal_Bool bDestroy = ( bDestroyGreaterCached && ( nNewMaxObjSize < mnMaxObjDisplaySize ) );
 
-    mnMaxObjDisplaySize = Min( nNewMaxObjSize, mnMaxDisplaySize );
+    mnMaxObjDisplaySize = std::min( nNewMaxObjSize, mnMaxDisplaySize );
 
     if( bDestroy )
     {

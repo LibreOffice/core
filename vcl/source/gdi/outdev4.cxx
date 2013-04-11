@@ -173,7 +173,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     }
 
     // Top darf nicht groesser als Bottom sein
-    aRect.Top() = Min( aRect.Top(), (long)(aRect.Bottom() - 1) );
+    aRect.Top() = std::min( aRect.Top(), (long)(aRect.Bottom() - 1) );
 
     long nMinRect = aRect.GetHeight();
 
@@ -228,12 +228,12 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         nStepCount = nMinRect / nInc;
     }
     // minimal drei Schritte und maximal die Anzahl der Farbunterschiede
-    long nSteps = Max( nStepCount, 2L );
-    long nCalcSteps  = Abs( nRedSteps );
-    long nTempSteps = Abs( nGreenSteps );
+    long nSteps = std::max( nStepCount, 2L );
+    long nCalcSteps  = std::abs( nRedSteps );
+    long nTempSteps = std::abs( nGreenSteps );
     if ( nTempSteps > nCalcSteps )
         nCalcSteps = nTempSteps;
-    nTempSteps = Abs( nBlueSteps );
+    nTempSteps = std::abs( nBlueSteps );
     if ( nTempSteps > nCalcSteps )
         nCalcSteps = nTempSteps;
     if ( nCalcSteps < nSteps )
@@ -415,7 +415,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     else
         pPolyPoly = NULL;
 
-    long nMinRect = Min( aRect.GetWidth(), aRect.GetHeight() );
+    long nMinRect = std::min( aRect.GetWidth(), aRect.GetHeight() );
 
     // Anzahl der Schritte berechnen, falls nichts uebergeben wurde
     if( !nStepCount )
@@ -436,12 +436,12 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     }
 
     // minimal drei Schritte und maximal die Anzahl der Farbunterschiede
-    long nSteps = Max( nStepCount, 2L );
-    long nCalcSteps  = Abs( nRedSteps );
-    long nTempSteps = Abs( nGreenSteps );
+    long nSteps = std::max( nStepCount, 2L );
+    long nCalcSteps  = std::abs( nRedSteps );
+    long nTempSteps = std::abs( nGreenSteps );
     if ( nTempSteps > nCalcSteps )
         nCalcSteps = nTempSteps;
-    nTempSteps = Abs( nBlueSteps );
+    nTempSteps = std::abs( nBlueSteps );
     if ( nTempSteps > nCalcSteps )
         nCalcSteps = nTempSteps;
     if ( nCalcSteps < nSteps )
@@ -1079,7 +1079,7 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
 {
     Rectangle   aRect( rPolyPoly.GetBoundRect() );
     const long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
-    const long  nWidth = ImplDevicePixelToLogicWidth( Max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
+    const long  nWidth = ImplDevicePixelToLogicWidth( std::max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
     Point*      pPtBuffer = new Point[ HATCH_MAXPOINTS ];
     Point       aPt1, aPt2, aEndPt1;
     Size        aInc;

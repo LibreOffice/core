@@ -111,7 +111,7 @@ void SearchDialog::SaveConfig()
     SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
     aViewOpt.SetWindowState(OStringToOUString(m_sWinState, RTL_TEXTENCODING_ASCII_US));
     String sUserData;
-    sal_uInt16 i = 0, nCount = Min( m_aSearchEdit.GetEntryCount(), MAX_SAVE_COUNT );
+    sal_uInt16 i = 0, nCount = std::min( m_aSearchEdit.GetEntryCount(), MAX_SAVE_COUNT );
     for ( ; i < nCount; ++i )
     {
         sUserData += m_aSearchEdit.GetEntry(i);

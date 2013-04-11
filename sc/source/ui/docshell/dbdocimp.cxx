@@ -463,7 +463,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             //  keep formatting of title and first data row from the document
             //  CopyToDocument also copies styles, Apply... needs separate calls
 
-            SCCOL nMinEndCol = Min( rParam.nCol2, nEndCol );    // not too much
+            SCCOL nMinEndCol = std::min( rParam.nCol2, nEndCol );    // not too much
             nMinEndCol = sal::static_int_cast<SCCOL>( nMinEndCol + nFormulaCols );  // only if column count unchanged
             pImportDoc->DeleteAreaTab( 0,0, MAXCOL,MAXROW, nTab, IDF_ATTRIB );
             pDoc->CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,
@@ -496,8 +496,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         //  copy old data for undo
         //
 
-        SCCOL nUndoEndCol = Max( nEndCol, rParam.nCol2 );       // rParam = old end
-        SCROW nUndoEndRow = Max( nEndRow, rParam.nRow2 );
+        SCCOL nUndoEndCol = std::max( nEndCol, rParam.nCol2 );       // rParam = old end
+        SCROW nUndoEndRow = std::max( nEndRow, rParam.nRow2 );
 
         ScDocument* pUndoDoc = NULL;
         ScDBData* pUndoDBData = NULL;

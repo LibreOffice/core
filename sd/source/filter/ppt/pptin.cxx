@@ -2440,9 +2440,9 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                         }
                                         else if ( pSlideLayout->eLayout == PPT_LAYOUT_2COLUMNSANDTITLE )
                                         {   // position in outline area left
-                                            if (Abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
-                                                Abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
-                                                Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
+                                            if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
                                                     aLogicSize.Width()  / aOutlineSize.Width()   < 0.48          ||
                                                     aLogicSize.Width()  / aOutlineSize.Width()   > 0.5)
                                             {
@@ -2451,15 +2451,15 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                         }
                                         else if ( pSlideLayout->eLayout == PPT_LAYOUT_2ROWSANDTITLE )
                                         {   // position in outline area top
-                                            if (Abs(aLogicRect.Left()  - aOutlineRect.Left())  > MAX_USER_MOVE ||
-                                                Abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE ||
-                                                Abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE)
+                                            if (std::abs(aLogicRect.Left()  - aOutlineRect.Left())  > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE)
                                             {
                                                 pPresObj->SetUserCall( NULL );
                                             }
                                         }
-                                        else if (Abs(aLogicRect.Left() - aOutlineRect.Left()) > MAX_USER_MOVE ||
-                                                 Abs(aLogicRect.Top()  - aOutlineRect.Top())  > MAX_USER_MOVE)
+                                        else if (std::abs(aLogicRect.Left() - aOutlineRect.Left()) > MAX_USER_MOVE ||
+                                                 std::abs(aLogicRect.Top()  - aOutlineRect.Top())  > MAX_USER_MOVE)
                                         {   // position in outline area top left
                                             pPresObj->SetUserCall( NULL );
                                         }
@@ -2470,9 +2470,9 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                     {
                                         if ( pSlideLayout->eLayout == PPT_LAYOUT_2COLUMNSANDTITLE )
                                         {   // position in outline area right
-                                            if (Abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE ||
-                                                Abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
-                                                Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
+                                            if (std::abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
                                                     aLogicSize.Width()  / aOutlineSize.Width()   < 0.48          ||
                                                     aLogicSize.Width()  / aOutlineSize.Width()   > 0.5)
                                             {
@@ -2481,15 +2481,15 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                         }
                                         else if ( pSlideLayout->eLayout == PPT_LAYOUT_2ROWSANDTITLE )
                                         {   // position in outline area bottom
-                                            if (Abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
-                                                Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
-                                                Abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE)
+                                            if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE)
                                             {
                                                 pPresObj->SetUserCall( NULL );
                                             }
                                         }
-                                        else if (Abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE ||
-                                                 Abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE)
+                                        else if (std::abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE ||
+                                                 std::abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE)
                                         {   // position in outline area top right
                                             pPresObj->SetUserCall(NULL);
                                         }
@@ -2498,8 +2498,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                                     case 3:
                                     {   // position in outline area bottom left
-                                        if (Abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
-                                            Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
+                                        if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
                                         {
                                             pPresObj->SetUserCall( NULL );
                                         }
@@ -2508,8 +2508,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                                     case 4:
                                     {   // position in outline area bottom right
-                                        if (Abs(aLogicRect.Right() - aOutlineRect.Right())   > MAX_USER_MOVE ||
-                                            Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
+                                        if (std::abs(aLogicRect.Right() - aOutlineRect.Right())   > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
                                         {
                                             pObj->SetUserCall( NULL );
                                         }

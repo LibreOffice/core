@@ -1805,8 +1805,8 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     // Seiten-Dialog war und ihn mit OK verlassen hat, bekommt man eine
     // neue Seitengroesse, die dann hier exportiert wuerde. Um das
     // vermeiden erlauben wir hier kleine Abweichungen.
-    if( Abs( rSz.Width() - aRefSz.Width() ) <= 2 &&
-        Abs( rSz.Height() - aRefSz.Height() ) <= 2 )
+    if( std::abs( rSz.Width() - aRefSz.Width() ) <= 2 &&
+        std::abs( rSz.Height() - aRefSz.Height() ) <= 2 )
     {
         if( bRefLandscape != rPageDesc.GetLandscape() )
         {

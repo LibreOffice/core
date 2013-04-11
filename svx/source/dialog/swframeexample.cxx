@@ -202,15 +202,15 @@ void SvxSwFrameExample::InitAllRects_Impl()
                 aFrmSize = Size(nLBorder - 3, (aTextLine.GetHeight() + 2) * 3);
                 break;
         }
-        aFrmSize.Width() = Max(5L, aFrmSize.Width());
-        aFrmSize.Height() = Max(5L, aFrmSize.Height());
+        aFrmSize.Width() = std::max(5L, aFrmSize.Width());
+        aFrmSize.Height() = std::max(5L, aFrmSize.Height());
     }
     else
     {
         sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(OUString(DEMOTEXT));
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
-        aDrawObj.SetSize(Size(Max(5L, (long)nFreeWidth / 3L), Max(5L, aFrmSize.Height() * 3L)));
+        aDrawObj.SetSize(Size(std::max(5L, (long)nFreeWidth / 3L), std::max(5L, aFrmSize.Height() * 3L)));
         aDrawObj.SetPos(Point(aParaPrtArea.Right() + 1, aParaPrtArea.Bottom() / 2));
         aParaPrtArea.Right() = aDrawObj.Right();
     }

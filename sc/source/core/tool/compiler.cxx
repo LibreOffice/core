@@ -3110,7 +3110,7 @@ bool ScCompiler::IsColRowName( const String& rName )
                             {   // right or below
                                 bTwo = true;
                                 aTwo.Set( nCol, nRow, aAddress.Tab() );
-                                nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
+                                nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
                                 nDistance = nD;
                             }
                             else if ( !(nRow < aOne.Row() && nMyRow >= (long)aOne.Row()) )
@@ -3120,7 +3120,7 @@ bool ScCompiler::IsColRowName( const String& rName )
                                 // runs column-wise)
                                 bTwo = false;
                                 aOne.Set( nCol, nRow, aAddress.Tab() );
-                                nMax = Max( nMyCol + nC, nMyRow + nR );
+                                nMax = std::max( nMyCol + nC, nMyRow + nR );
                                 nDistance = nD;
                             }
                         }
@@ -3129,7 +3129,8 @@ bool ScCompiler::IsColRowName( const String& rName )
                     {
                         aOne.Set( nCol, nRow, aAddress.Tab() );
                         nDistance = nC * nC + nR * nR;
-                        nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
+                        nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
+
                     }
                     bFound = true;
                 }
@@ -3173,7 +3174,7 @@ bool ScCompiler::IsColRowName( const String& rName )
                                 {   // right or below
                                     bTwo = true;
                                     aTwo.Set( nCol, nRow, aIter.GetPos().Tab() );
-                                    nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
+                                    nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
                                     nDistance = nD;
                                 }
                                 else if ( !(nRow < aOne.Row() && nMyRow >= (long)aOne.Row()) )
@@ -3183,7 +3184,7 @@ bool ScCompiler::IsColRowName( const String& rName )
                                     // runs column-wise)
                                     bTwo = false;
                                     aOne.Set( nCol, nRow, aIter.GetPos().Tab() );
-                                    nMax = Max( nMyCol + nC, nMyRow + nR );
+                                    nMax = std::max( nMyCol + nC, nMyRow + nR );
                                     nDistance = nD;
                                 }
                             }
@@ -3192,7 +3193,7 @@ bool ScCompiler::IsColRowName( const String& rName )
                         {
                             aOne.Set( nCol, nRow, aIter.GetPos().Tab() );
                             nDistance = nC * nC + nR * nR;
-                            nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
+                            nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
                         }
                         bFound = true;
                     }

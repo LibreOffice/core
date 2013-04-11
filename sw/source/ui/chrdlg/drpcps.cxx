@@ -740,7 +740,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
     else if (pEdit == &aTextEdit)   // set quantity if applicable
     {
         sal_Int32 nTmp = aTextEdit.GetText().getLength();
-        aDropCapsField.SetValue(Max((sal_uInt16)1, (sal_uInt16)nTmp));
+        aDropCapsField.SetValue(std::max((sal_uInt16)1, (sal_uInt16)nTmp));
 
         sPreview = aTextEdit.GetText().copy(0, nTmp);
     }

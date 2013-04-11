@@ -114,7 +114,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
                                      const ImplMapRes& rMapRes,
                                      ImplThresholdRes& rThresRes )
 {
-    if ( nDPIX && (LONG_MAX / nDPIX < Abs( rMapRes.mnMapScNumX ) ) ) // #111139# avoid div by zero
+    if ( nDPIX && (LONG_MAX / nDPIX < std::abs( rMapRes.mnMapScNumX ) ) ) // #111139# avoid div by zero
     {
         rThresRes.mnThresLogToPixX = 0;
         rThresRes.mnThresPixToLogX = 0;
@@ -129,7 +129,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nProductX )
             rThresRes.mnThresLogToPixX = LONG_MAX;
         else
-            rThresRes.mnThresLogToPixX = Abs( (LONG_MAX - nDenomHalfX) / nProductX );
+            rThresRes.mnThresLogToPixX = std::abs( (LONG_MAX - nDenomHalfX) / nProductX );
 
         if ( !nDenomX )
             rThresRes.mnThresPixToLogX = LONG_MAX;
@@ -139,7 +139,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
             rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductX/2)) / nDenomX);
     }
 
-    if ( nDPIY && (LONG_MAX / nDPIY < Abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
+    if ( nDPIY && (LONG_MAX / nDPIY < std::abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
     {
         rThresRes.mnThresLogToPixY = 0;
         rThresRes.mnThresPixToLogY = 0;
@@ -154,7 +154,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nProductY )
             rThresRes.mnThresLogToPixY = LONG_MAX;
         else
-            rThresRes.mnThresLogToPixY = Abs( (LONG_MAX - nDenomHalfY) / nProductY );
+            rThresRes.mnThresLogToPixY = std::abs( (LONG_MAX - nDenomHalfY) / nProductY );
 
         if ( !nDenomY )
             rThresRes.mnThresPixToLogY = LONG_MAX;
@@ -628,12 +628,12 @@ LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
     if( aInfo.GetStyle() == LINE_DASH )
     {
         if( aInfo.GetDotCount() && aInfo.GetDotLen() )
-            aInfo.SetDotLen( Max( ImplLogicWidthToDevicePixel( aInfo.GetDotLen() ), 1L ) );
+            aInfo.SetDotLen( std::max( ImplLogicWidthToDevicePixel( aInfo.GetDotLen() ), 1L ) );
         else
             aInfo.SetDotCount( 0 );
 
         if( aInfo.GetDashCount() && aInfo.GetDashLen() )
-            aInfo.SetDashLen( Max( ImplLogicWidthToDevicePixel( aInfo.GetDashLen() ), 1L ) );
+            aInfo.SetDashLen( std::max( ImplLogicWidthToDevicePixel( aInfo.GetDashLen() ), 1L ) );
         else
             aInfo.SetDashCount( 0 );
 
@@ -1701,14 +1701,14 @@ static long fn5( const long n1,
 {
     if ( n1 == 0 || n2 == 0 || n3 == 0 || n4 == 0 || n5 == 0 )
         return 0;
-    if ( LONG_MAX / Abs(n2) < Abs(n3) )
+    if ( LONG_MAX / std::abs(n2) < std::abs(n3) )
     {
         // a6 wird "ubersprungen
         BigInt a7 = n2;
         a7 *= n3;
         a7 *= n1;
 
-        if ( LONG_MAX / Abs(n4) < Abs(n5) )
+        if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
         {
             BigInt a8 = n4;
             a8 *= n5;
@@ -1739,12 +1739,12 @@ static long fn5( const long n1,
     {
         long n6 = n2 * n3;
 
-        if ( LONG_MAX / Abs(n1) < Abs(n6) )
+        if ( LONG_MAX / std::abs(n1) < std::abs(n6) )
         {
             BigInt a7 = n1;
             a7 *= n6;
 
-            if ( LONG_MAX / Abs(n4) < Abs(n5) )
+            if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
             {
                 BigInt a8 = n4;
                 a8 *= n5;
@@ -1775,7 +1775,7 @@ static long fn5( const long n1,
         {
             long n7 = n1 * n6;
 
-            if ( LONG_MAX / Abs(n4) < Abs(n5) )
+            if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
             {
                 BigInt a7 = n7;
                 BigInt a8 = n4;
@@ -1817,7 +1817,7 @@ static long fn3( const long n1, const long n2, const long n3 )
 {
     if ( n1 == 0 || n2 == 0 || n3 == 0 )
         return 0;
-    if ( LONG_MAX / Abs(n1) < Abs(n2) )
+    if ( LONG_MAX / std::abs(n1) < std::abs(n2) )
     {
         BigInt a4 = n1;
         a4 *= n2;

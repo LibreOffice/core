@@ -613,7 +613,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
 
         // find next attribute change / script change
         const xub_StrLen nTmpIdx = nNextChg;
-        sal_Int32 nNextAttr = Min( static_cast<sal_Int32>(GetNextAttr()), rInf.GetTxt().getLength() );
+        sal_Int32 nNextAttr = std::min( static_cast<sal_Int32>(GetNextAttr()), rInf.GetTxt().getLength() );
         nNextChg = pScriptInfo->NextScriptChg( nTmpIdx );
         if( nNextChg > nNextAttr )
             nNextChg = nNextAttr;

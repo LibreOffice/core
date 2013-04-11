@@ -332,7 +332,7 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
     if( nCount )
     {
-        AnimationBitmap* pObj = maList[ Min( mnPos, nCount - 1 ) ];
+        AnimationBitmap* pObj = maList[ std::min( mnPos, nCount - 1 ) ];
 
         if(  pOut->GetConnectMetaFile()
           || ( pOut->GetOutDevType() == OUTDEV_PRINTER )
@@ -352,7 +352,7 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
 void Animation::ImplRestartTimer( sal_uLong nTimeout )
 {
-    maTimer.SetTimeout( Max( nTimeout, (sal_uLong)(MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT) ) * 10L );
+    maTimer.SetTimeout( std::max( nTimeout, (sal_uLong)(MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT) ) * 10L );
     maTimer.Start();
 }
 

@@ -2295,7 +2295,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
             }
         }
     }
-    return Size(Max(nCheckWidth, nRadioWidth), Max(rCheckHeight, rRadioHeight));
+    return Size(std::max(nCheckWidth, nRadioWidth), std::max(rCheckHeight, rRadioHeight));
 }
 
 sal_Bool Menu::ImplGetNativeSubmenuArrowSize( Window* pWin, Size& rArrowSize, long& rArrowSpacing ) const
@@ -2464,7 +2464,7 @@ Size Menu::ImplCalcSize( Window* pWin )
                     aSz.Width() += pData->aSz.Width();
                 }
                 else
-                    pData->aSz.Height() = Max( Max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+                    pData->aSz.Height() = std::max( std::max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
 
                 nWidth += nTextWidth;
             }
@@ -2484,7 +2484,7 @@ Size Menu::ImplCalcSize( Window* pWin )
                     if ( nFontHeight > nWidth )
                         nWidth += nFontHeight;
 
-                pData->aSz.Height() = Max( Max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+                pData->aSz.Height() = std::max( std::max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
             }
 
             pData->aSz.Height() += EXTRAITEMHEIGHT; // little bit more distance
@@ -2510,14 +2510,14 @@ Size Menu::ImplCalcSize( Window* pWin )
         if( nMaxWidth > nScreenWidth/2 )
             nMaxWidth = nScreenWidth/2;
 
-        sal_uInt16 gfxExtra = (sal_uInt16) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
+        sal_uInt16 gfxExtra = (sal_uInt16) std::max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nImgOrChkPos = (sal_uInt16)nExtra;
         long nImgOrChkWidth = 0;
         if( aMaxSize.Height() > 0 ) // NWF case
             nImgOrChkWidth = aMaxSize.Height() + nExtra;
         else // non NWF case
             nImgOrChkWidth = nFontHeight/2 + gfxExtra;
-        nImgOrChkWidth = Max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
+        nImgOrChkWidth = std::max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
         nTextPos = (sal_uInt16)(nImgOrChkPos + nImgOrChkWidth);
         nTextPos = nTextPos + gfxExtra;
 

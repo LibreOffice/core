@@ -132,7 +132,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const short nPrtGlue )
 {
-    short nPrt = Min( nPrtGlue, GetPrtGlue() );
+    short nPrt = std::min( nPrtGlue, GetPrtGlue() );
     if( 0 < nPrt )
     {
         pTarget->AddPrtWidth( nPrt );

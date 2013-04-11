@@ -582,8 +582,8 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
     delete pColMgr;
     pColMgr = new SwColMgr(rSet);
     nCols   = pColMgr->GetCount() ;
-    m_pCLNrEdt->SetMax(Max((sal_uInt16)m_pCLNrEdt->GetMax(), (sal_uInt16)nCols));
-    m_pCLNrEdt->SetLast(Max(nCols,(sal_uInt16)m_pCLNrEdt->GetMax()));
+    m_pCLNrEdt->SetMax(std::max((sal_uInt16)m_pCLNrEdt->GetMax(), (sal_uInt16)nCols));
+    m_pCLNrEdt->SetLast(std::max(nCols,(sal_uInt16)m_pCLNrEdt->GetMax()));
 
     if(bFrm)
     {
@@ -672,7 +672,7 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         sal_uInt16 i;
 
         for( i = 1; i < nCols; ++i)
-            nMin = Min(nMin, nColWidth[i]);
+            nMin = std::min(nMin, nColWidth[i]);
 
         sal_Bool bAutoWidth = m_pAutoWidthBox->IsChecked();
         if(!bAutoWidth)
@@ -738,8 +738,8 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
     }
 
     //set maximum values
-    m_pCLNrEdt->SetMax(Max(1L,
-        Min(long(nMaxCols), long( pColMgr->GetActualSize() / (nGutterWidth + MINLAY)) )));
+    m_pCLNrEdt->SetMax(std::max(1L,
+        std::min(long(nMaxCols), long( pColMgr->GetActualSize() / (nGutterWidth + MINLAY)) )));
     m_pCLNrEdt->SetLast(m_pCLNrEdt->GetMax());
     m_pCLNrEdt->Reformat();
 
@@ -820,8 +820,8 @@ void SwColumnPage::Init()
 
         // set maximum number of columns
         // values below 1 are not allowed
-    m_pCLNrEdt->SetMax(Max(1L,
-        Min(long(nMaxCols), long( pColMgr->GetActualSize() / nMinWidth) )));
+    m_pCLNrEdt->SetMax(std::max(1L,
+        std::min(long(nMaxCols), long( pColMgr->GetActualSize() / nMinWidth) )));
 }
 
 /*------------------------------------------------------------------------
@@ -1332,7 +1332,7 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetFillColor(rStyleSettings.GetFieldColor());
     pDev->SetLineColor(SwViewOption::GetFontColor());
 
-    long nStep = Abs(Abs(nRectHeight * 95 /100) / 11);
+    long nStep = std::abs(std::abs(nRectHeight * 95 /100) / 11);
     long nTop = (nRectHeight - 11 * nStep ) / 2;
     sal_uInt16 nCols = 0;
     long nStarts[3];

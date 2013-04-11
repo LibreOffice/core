@@ -103,7 +103,7 @@ void PercentField::ShowPercent(sal_Bool bPercent)
         // round to 0.5 percent
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
 
-        MetricField::SetMin(Max(static_cast< sal_Int64 >(1), nPercent));
+        MetricField::SetMin(std::max(static_cast< sal_Int64 >(1), nPercent));
         MetricField::SetMax(100);
         SetSpinSize(5);
         MetricField::SetBaseValue(0);
@@ -169,7 +169,7 @@ void PercentFieldWrap::ShowPercent(bool bPercent)
         // round to 0.5 percent
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
 
-        m_pField->SetMin(Max(static_cast< sal_Int64 >(1), nPercent));
+        m_pField->SetMin(std::max(static_cast< sal_Int64 >(1), nPercent));
         m_pField->SetMax(100);
         m_pField->SetSpinSize(5);
         m_pField->SetBaseValue(0);
@@ -311,7 +311,7 @@ void PercentField::SetMin(sal_Int64 nNewMin, FieldUnit eInUnit)
         nOldMin = Convert(nNewMin, eInUnit, eOldUnit);
 
         sal_Int64 nPercent = Convert(nNewMin, eInUnit, FUNIT_CUSTOM);
-        MetricField::SetMin(Max( static_cast< sal_Int64 >(1), nPercent));
+        MetricField::SetMin(std::max( static_cast< sal_Int64 >(1), nPercent));
     }
 }
 
@@ -326,7 +326,7 @@ void PercentFieldWrap::SetMin(sal_Int64 nNewMin, FieldUnit eInUnit)
         nOldMin = Convert(nNewMin, eInUnit, eOldUnit);
 
         sal_Int64 nPercent = Convert(nNewMin, eInUnit, FUNIT_CUSTOM);
-        m_pField->SetMin(Max( static_cast< sal_Int64 >(1), nPercent));
+        m_pField->SetMin(std::max( static_cast< sal_Int64 >(1), nPercent));
     }
 }
 

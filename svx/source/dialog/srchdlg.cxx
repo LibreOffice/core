@@ -676,7 +676,7 @@ void SvxSearchDialog::InitControls_Impl()
         LINK( this, SvxSearchDialog, AttributeHdl_Impl ) );
 
     // check if buttontext is to wide
-    long nTxtW = Max( pMoreBtn->GetCtrlTextWidth( pMoreBtn->GetMoreText() ),
+    long nTxtW = std::max( pMoreBtn->GetCtrlTextWidth( pMoreBtn->GetMoreText() ),
                       pMoreBtn->GetCtrlTextWidth( pMoreBtn->GetLessText() ) );
     nTxtW += ( pMoreBtn->GetTextHeight() * 2 ); // add image size + offset
     long nBtnW = pMoreBtn->GetSizePixel().Width();
@@ -684,7 +684,7 @@ void SvxSearchDialog::InitControls_Impl()
     {
         // broaden the button
         const long nMinDelta = 10;
-        long nDelta = Max( nTxtW - nBtnW, nMinDelta );
+        long nDelta = std::max( nTxtW - nBtnW, nMinDelta );
         Size aNewSize = pMoreBtn->GetSizePixel();
         aNewSize.Width() += nDelta;
         pMoreBtn->SetSizePixel( aNewSize );

@@ -132,7 +132,7 @@ static OUString lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
         return OUString::number( nValue );           // simple case...
     else
     {
-        OUString aStr = OUString::number( Abs( nValue ) );
+        OUString aStr = OUString::number( std::abs( nValue ) );
         if ( aStr.getLength() < nMinDigits )
         {
             OUStringBuffer aZero;
@@ -604,8 +604,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if (pNewPattern || pSrcPattern != pDocument->GetDefPattern())
                     {
                         //  Default is already present (DeleteArea)
-                        SCROW nY1 = static_cast<SCROW>(Min( nIStart, nIEnd ));
-                        SCROW nY2 = static_cast<SCROW>(Max( nIStart, nIEnd ));
+                        SCROW nY1 = static_cast<SCROW>(std::min( nIStart, nIEnd ));
+                        SCROW nY2 = static_cast<SCROW>(std::max( nIStart, nIEnd ));
                         if ( pStyleSheet )
                             aCol[nCol].ApplyStyleArea( nY1, nY2, *pStyleSheet );
                         if ( pNewPattern )
@@ -1253,7 +1253,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
                     aDate.SetMonth((sal_uInt16) nMonth);
                     aDate.SetYear((sal_uInt16) nYear);
                     if ( nDayOfMonth > 28 )
-                        aDate.SetDay( Min( aDate.GetDaysInMonth(), nDayOfMonth ) );
+                        aDate.SetDay( std::min( aDate.GetDaysInMonth(), nDayOfMonth ) );
                 }
             }
             break;

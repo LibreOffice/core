@@ -254,7 +254,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
     // calculate Symbol size
     long nTempSize1 = aUpRect.GetWidth();
     long nTempSize2 = aLowRect.GetWidth();
-    if ( Abs( nTempSize1-nTempSize2 ) == 1 )
+    if ( std::abs( nTempSize1-nTempSize2 ) == 1 )
     {
         if ( nTempSize1 > nTempSize2 )
             aUpRect.Left()++;
@@ -263,7 +263,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
     }
     nTempSize1 = aUpRect.GetHeight();
     nTempSize2 = aLowRect.GetHeight();
-    if ( Abs( nTempSize1-nTempSize2 ) == 1 )
+    if ( std::abs( nTempSize1-nTempSize2 ) == 1 )
     {
         if ( nTempSize1 > nTempSize2 )
             aUpRect.Top()++;

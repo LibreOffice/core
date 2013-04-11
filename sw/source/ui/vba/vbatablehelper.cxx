@@ -263,7 +263,7 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
             aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol-1)) ] -= nDiff;
     }
     else
-        aCols.SetRight( Min( (long)nNewWidth, aCols.GetRightMax()) );
+        aCols.SetRight( std::min( (long)nNewWidth, aCols.GetRightMax()) );
 
     pTable->SetTabCols(aCols, aOldCols, pStart, bCurRowOnly );
 }

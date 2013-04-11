@@ -3827,12 +3827,12 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryIntersec
     {
         ScRange aTemp( *aRanges[ i ] );
         if ( aTemp.Intersects( aMask ) )
-            aNew.Join( ScRange( Max( aTemp.aStart.Col(), aMask.aStart.Col() ),
-                                Max( aTemp.aStart.Row(), aMask.aStart.Row() ),
-                                Max( aTemp.aStart.Tab(), aMask.aStart.Tab() ),
-                                Min( aTemp.aEnd.Col(), aMask.aEnd.Col() ),
-                                Min( aTemp.aEnd.Row(), aMask.aEnd.Row() ),
-                                Min( aTemp.aEnd.Tab(), aMask.aEnd.Tab() ) ) );
+            aNew.Join( ScRange( std::max( aTemp.aStart.Col(), aMask.aStart.Col() ),
+                                std::max( aTemp.aStart.Row(), aMask.aStart.Row() ),
+                                std::max( aTemp.aStart.Tab(), aMask.aStart.Tab() ),
+                                std::min( aTemp.aEnd.Col(), aMask.aEnd.Col() ),
+                                std::min( aTemp.aEnd.Row(), aMask.aEnd.Row() ),
+                                std::min( aTemp.aEnd.Tab(), aMask.aEnd.Tab() ) ) );
     }
 
     return new ScCellRangesObj( pDocShell, aNew );  // kann leer sein

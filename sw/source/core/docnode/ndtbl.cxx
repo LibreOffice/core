@@ -2639,7 +2639,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
             else
             {
                 nLowerBorder = (*aIter).first;
-                long nNewLowerBorderUpperBoundary = Max( (*aIter).second.first, nUpperBorder );
+                long nNewLowerBorderUpperBoundary = std::max( (*aIter).second.first, nUpperBorder );
                 aPair.first = nNewLowerBorderUpperBoundary; aPair.second = LONG_MAX;
             }
             aBoundaries[ nLowerBorder ] = aPair;

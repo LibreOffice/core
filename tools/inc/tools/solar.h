@@ -107,21 +107,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[7
 #endif
 #endif
 
-#ifndef __cplusplus
-#ifndef min
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
-#endif
-#ifndef max
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
-#endif
-#endif
-
-#ifdef __cplusplus
-template<typename T> inline T Min(T a, T b) { return (a<b?a:b); }
-template<typename T> inline T Max(T a, T b) { return (a>b?a:b); }
-template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
-#endif
-
 #ifdef __cplusplus
 #define EXTERN_C    extern "C"
 #else
