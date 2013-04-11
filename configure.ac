@@ -8552,7 +8552,7 @@ AC_SUBST(REDLAND_MAJOR)
 dnl ===================================================================
 dnl Check for system orcus
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.4 >= 0.3.0])
+libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.6 >= 0.5.0])
 if test "$with_system_orcus" != "yes"; then
     if test "$SYSTEM_BOOST" = "YES"; then
         # ===========================================================
