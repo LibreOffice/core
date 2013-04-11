@@ -760,7 +760,11 @@ IMPL_LINK(LinePropertyPanel, ChangeLineStyleHdl, ToolBox*, /* pToolBox */)
         {
             // XLINE_DASH
             const XLineStyleItem aItemA(XLINE_DASH);
-            const XLineDashItem aItemB(mpLBStyle->GetSelectEntry(), mpLineStyleList->GetDash(nPos - 2)->GetDash());
+            const XDashEntry* pDashEntry = mpLineStyleList->GetDash(nPos - 2);
+            OSL_ENSURE(pDashEntry, "OOps, got empty XDash from XDashList (!)");
+            const XLineDashItem aItemB(
+                pDashEntry ? pDashEntry->GetName() : String(),
+                pDashEntry ? pDashEntry->GetDash() : XDash());
 
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aItemA, 0L);
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_DASH, SFX_CALLMODE_RECORD, &aItemB, 0L);
