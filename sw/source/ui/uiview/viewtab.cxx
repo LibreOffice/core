@@ -276,6 +276,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     const sal_Bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
 
     const sal_uInt16 nSlot      = rReq.GetSlot();
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
     const sal_uInt16 nDescId    = rSh.GetCurPageDesc();
     const SwPageDesc& rDesc = rSh.GetPageDesc( nDescId );
 
@@ -299,8 +300,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     switch( nSlot )
     {
     case SID_ATTR_LONG_LRSPACE:
+        if ( pReqArgs )
         {
-            SvxLongLRSpaceItem aLongLR( (const SvxLongLRSpaceItem&)rReq.GetArgs()->
+            SvxLongLRSpaceItem aLongLR( (const SvxLongLRSpaceItem&)pReqArgs->
                 Get( SID_ATTR_LONG_LRSPACE ) );
             SvxLRSpaceItem aLR(RES_LR_SPACE);
             if ( !bSect && (bFrmSelection || nFrmType & FRMTYPE_FLY_ANY) )
@@ -440,8 +442,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
         // apply new left and right margins to current page style
     case SID_ATTR_PAGE_LRSPACE:
+        if ( pReqArgs )
         {
-            const SvxLongLRSpaceItem aLongLR( static_cast<const SvxLongLRSpaceItem&>(rReq.GetArgs()->Get( SID_ATTR_PAGE_LRSPACE )) );
+            const SvxLongLRSpaceItem aLongLR( static_cast<const SvxLongLRSpaceItem&>(pReqArgs->Get( SID_ATTR_PAGE_LRSPACE )) );
 
             SwPageDesc aDesc( rDesc );
             {
@@ -456,8 +459,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         break;
 
     case SID_ATTR_LONG_ULSPACE:
+        if ( pReqArgs )
         {
-            SvxLongULSpaceItem aLongULSpace( (const SvxLongULSpaceItem&)rReq.GetArgs()->
+            SvxLongULSpaceItem aLongULSpace( (const SvxLongULSpaceItem&)pReqArgs->
                 Get( SID_ATTR_LONG_ULSPACE ));
 
             if( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
@@ -579,9 +583,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
         // apply new top and bottom margins to current page style
     case SID_ATTR_PAGE_ULSPACE:
+        if ( pReqArgs )
         {
             SvxLongULSpaceItem aLongULSpace(
-                static_cast<const SvxLongULSpaceItem&>(rReq.GetArgs()->Get( SID_ATTR_PAGE_ULSPACE ) ) );
+                static_cast<const SvxLongULSpaceItem&>(pReqArgs->Get( SID_ATTR_PAGE_ULSPACE ) ) );
 
             SwPageDesc aDesc( rDesc );
             {
@@ -595,8 +600,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         break;
 
     case SID_ATTR_PAGE_COLUMN:
+        if ( pReqArgs )
         {
-            const SfxInt16Item aColumnItem( (const SfxInt16Item&)rReq.GetArgs()->Get(nSlot) );
+            const SfxInt16Item aColumnItem( (const SfxInt16Item&)pReqArgs->Get(nSlot) );
             const sal_uInt16 nPageColumnType = aColumnItem.GetValue();
 
             // nPageColumnType =
@@ -654,9 +660,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     case SID_ATTR_TABSTOP_VERTICAL:
     case SID_ATTR_TABSTOP:
+        if ( pReqArgs )
         {
             sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
-            SvxTabStopItem aTabStops( (const SvxTabStopItem&)rReq.GetArgs()->
+            SvxTabStopItem aTabStops( (const SvxTabStopItem&)pReqArgs->
                 Get( nWhich ));
             aTabStops.SetWhich(RES_PARATR_TABSTOP);
             const SvxTabStopItem& rDefTabs =
@@ -691,9 +698,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     case SID_ATTR_PARA_LRSPACE_VERTICAL:
     case SID_ATTR_PARA_LRSPACE:
+        if ( pReqArgs )
         {
-            SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)rReq.
-                GetArgs()->Get(nSlot));
+            SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)pReqArgs->Get(nSlot));
             if(nFrmType & FRMTYPE_FLY_ANY)
             {
                 sal_Bool bFirstColumn = sal_True;
@@ -789,9 +796,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         break;
 
     case SID_ATTR_PARA_ULSPACE:
+        if ( pReqArgs )
     {
-        SvxULSpaceItem aParaMargin((const SvxULSpaceItem&)rReq.
-            GetArgs()->Get(nSlot));
+        SvxULSpaceItem aParaMargin((const SvxULSpaceItem&)pReqArgs->Get(nSlot));
 
         long nUDist = 0;
         long nLDist = 0;
@@ -813,9 +820,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     case SID_RULER_BORDERS_VERTICAL:
     case SID_RULER_BORDERS:
+        if ( pReqArgs )
         {
-            SvxColumnItem aColItem((const SvxColumnItem&)rReq.
-                GetArgs()->Get(nSlot));
+            SvxColumnItem aColItem((const SvxColumnItem&)pReqArgs->Get(nSlot));
 
             if( bSetTabColFromDoc || (!bSect && rSh.GetTableFmt()) )
             {
@@ -945,9 +952,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     case SID_RULER_ROWS :
     case SID_RULER_ROWS_VERTICAL:
+        if ( pReqArgs )
         {
-            SvxColumnItem aColItem((const SvxColumnItem&)rReq.
-                GetArgs()->Get(nSlot));
+            SvxColumnItem aColItem((const SvxColumnItem&)pReqArgs->Get(nSlot));
 
             if( bSetTabColFromDoc || (!bSect && rSh.GetTableFmt()) )
             {
@@ -991,7 +998,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 }
                 sal_Bool bSingleLine = sal_False;
                 const SfxPoolItem* pSingleLine;
-                if( SFX_ITEM_SET == rReq.GetArgs()->GetItemState(SID_RULER_ACT_LINE_ONLY, sal_False, &pSingleLine))
+                if( SFX_ITEM_SET == pReqArgs->GetItemState(SID_RULER_ACT_LINE_ONLY, sal_False, &pSingleLine))
                     bSingleLine = ((const SfxBoolItem*)pSingleLine)->GetValue();
                 if ( bSetTabRowFromDoc )
                 {
