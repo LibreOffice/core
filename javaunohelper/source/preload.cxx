@@ -38,14 +38,11 @@ typedef jboolean (JNICALL * fptr_writeInfo)(
     JNIEnv *, jclass, jstring, jobject, jobject, jobject );
 typedef jobject (JNICALL * fptr_getFactory)(
     JNIEnv *, jclass, jstring, jstring, jobject, jobject, jobject );
-typedef jobject (JNICALL * fptr_createRegistryServiceFactory)(
-    JNIEnv *, jclass, jstring, jstring, jboolean, jobject );
 typedef jobject (JNICALL * fptr_bootstrap)(
     JNIEnv *_env, jclass, jstring, jobjectArray, jobject );
 
 static fptr_writeInfo s_writeInfo;
 static fptr_getFactory s_getFactory;
-static fptr_createRegistryServiceFactory s_createRegistryServiceFactory;
 static fptr_bootstrap s_bootstrap;
 static bool s_inited = false;
 
@@ -77,18 +74,12 @@ static bool inited_juhx( JNIEnv * jni_env )
         s_getFactory = (fptr_getFactory)osl_getFunctionSymbol(
             hModule, symbol.pData );
         symbol =
-            "Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory";
-        s_createRegistryServiceFactory =
-            (fptr_createRegistryServiceFactory)osl_getFunctionSymbol(
-                hModule, symbol.pData );
-        symbol =
             "Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap";
         s_bootstrap =
             (fptr_bootstrap)osl_getFunctionSymbol( hModule, symbol.pData );
 
         if (0 == s_writeInfo ||
             0 == s_getFactory ||
-            0 == s_createRegistryServiceFactory ||
             0 == s_bootstrap)
         {
             jclass c = jni_env->FindClass( "java/lang/RuntimeException" );
@@ -121,19 +112,6 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     if (inited_juhx( pJEnv ))
         return (*s_getFactory)(
             pJEnv, jClass, jLibName, jImplName, jSMgr, jRegKey, loader );
-    return 0;
-}
-//==================================================================================================
-SAL_DLLPUBLIC_EXPORT jobject JNICALL
-Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory(
-    JNIEnv * pJEnv, jclass jClass, jstring jWriteRegFile,
-    jstring jReadRegFile, jboolean jbReadOnly, jobject loader )
-{
-    if (inited_juhx( pJEnv ))
-    {
-        return (*s_createRegistryServiceFactory)(
-            pJEnv, jClass, jWriteRegFile, jReadRegFile, jbReadOnly, loader );
-    }
     return 0;
 }
 //==================================================================================================
