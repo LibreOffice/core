@@ -41,6 +41,8 @@
 #include "splitwin.hxx"
 #include <svl/smplhint.hxx>
 #include <tools/link.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+
 #include <comphelper/componentfactory.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -53,6 +55,7 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
@@ -498,6 +501,7 @@ bool SidebarController::ArePanelSetsEqual (
     const SharedPanelContainer& rCurrentPanels,
     const ResourceManager::PanelContextDescriptorContainer& rRequestedPanels)
 {
+#ifdef DEBUG
     OSL_TRACE("current panel list:");
     for (SharedPanelContainer::const_iterator
              iPanel(rCurrentPanels.begin()),
@@ -517,6 +521,7 @@ bool SidebarController::ArePanelSetsEqual (
     {
         OSL_TRACE("    panel %s", S2A(iId->msId));
     }
+#endif
 
     if (rCurrentPanels.size() != rRequestedPanels.size())
         return false;
@@ -560,7 +565,8 @@ SharedPanel SidebarController::CreatePanel (
     // Create the XUIElement.
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
             pPanel->GetComponentInterface(),
-            pPanelDescriptor->msImplementationURL));
+            pPanelDescriptor->msImplementationURL,
+            pPanelDescriptor->mbWantsCanvas));
     if (xUIElement.is())
     {
         // Initialize the panel and add it to the active deck.
@@ -579,7 +585,8 @@ SharedPanel SidebarController::CreatePanel (
 
 Reference<ui::XUIElement> SidebarController::CreateUIElement (
     const Reference<awt::XWindowPeer>& rxWindow,
-    const ::rtl::OUString& rsImplementationURL)
+    const ::rtl::OUString& rsImplementationURL,
+    const bool bWantsCanvas)
 {
     try
     {
@@ -597,6 +604,11 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
             aCreationArguments.put("SfxBindings", makeAny(sal_uInt64(&pSfxDockingWindow->GetBindings())));
         aCreationArguments.put("Theme", Theme::GetPropertySet());
         aCreationArguments.put("Sidebar", makeAny(Reference<ui::XSidebar>(static_cast<ui::XSidebar*>(this))));
+        if (bWantsCanvas)
+        {
+            Reference<rendering::XSpriteCanvas> xCanvas (VCLUnoHelper::GetWindow(rxWindow)->GetSpriteCanvas());
+            aCreationArguments.put("Canvas", makeAny(xCanvas));
+        }
 
         Reference<ui::XUIElement> xUIElement(
             xUIElementFactory->createUIElement(
