@@ -124,7 +124,8 @@ private:
         const ResourceManager::PanelContextDescriptorContainer& rRequestedPanels);
     cssu::Reference<css::ui::XUIElement> CreateUIElement (
         const cssu::Reference<css::awt::XWindowPeer>& rxWindow,
-        const ::rtl::OUString& rsImplementationURL);
+        const ::rtl::OUString& rsImplementationURL,
+        const bool bWantsCanvas);
     SharedPanel CreatePanel (
         const ::rtl::OUString& rsPanelId,
         ::Window* pParentWindow,
