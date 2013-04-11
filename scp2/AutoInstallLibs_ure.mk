@@ -7,6 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AutoInstallLibs_AutoInstallLibs,ure,URE,URE_PRIVATE_LIB(auto_Ure_Private_Lib_$$(1),$$(call gb_Library_get_runtime_filename,$$(1)))))
+$(eval $(call gb_AutoInstallLibs_AutoInstallLibs,ure,URE,URE_PRIVATE_LIB,auto_Ure_Private_Lib))
 
 # vim: set noet sw=4 ts=4:
