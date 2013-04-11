@@ -506,6 +506,20 @@ sub link_ui_files()
     print "\n";
 }
 
+sub link_rdb_files()
+{
+    print "linking rdb:";
+    my $src_prefix  = "$SOLARVER/$TARGET/";
+    my $dest_prefix = "$OOO_INSTALL/";
+
+    do_link ($src_prefix . "xml" , $dest_prefix . $brand_program_dir . "/services", "services.rdb", "services.rdb");
+    do_link ($src_prefix . "xml/ure" , $dest_prefix . "ure/share/misc", "services.rdb", "services.rdb");
+
+    do_link ($src_prefix . "bin/ure" , $dest_prefix . "ure/share/misc", "types.rdb", "types.rdb");
+
+    print "\n";
+}
+
 evilness ('undo');
 
 my $installed_files = build_installed_list ($OOO_INSTALL);
@@ -514,6 +528,7 @@ scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
 link_gdb_py();
 link_pagein_files();
 link_ui_files();
+link_rdb_files();
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
     my $ooenv;
