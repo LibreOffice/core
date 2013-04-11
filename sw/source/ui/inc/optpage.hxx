@@ -37,35 +37,34 @@ class SwStdFontConfig;
 class SwWrtShell;
 class FontList;
 
+/*--------------------------------------------------------
+ Tools->Options->Writer->View
+ Tools->Options->Writer/Web->View
+--------------------------------------------------------- */
 class SwContentOptPage : public SfxTabPage
 {
-    //visual aids
-    FixedLine   aLineFL;
-    CheckBox    aCrossCB;
+    CheckBox*   m_pCrossCB;
 
-    //view
-    FixedLine   aWindowFL;
-    CheckBox    aHScrollBox;
-    CheckBox    aVScrollBox;
-    CheckBox    aAnyRulerCB;
-    CheckBox    aHRulerCBox;
-    ListBox     aHMetric;
-    CheckBox    aVRulerCBox;
-    CheckBox    aVRulerRightCBox;
-    ListBox     aVMetric;
-    CheckBox    aSmoothCBox;
+    CheckBox*   m_pHScrollBox;
+    CheckBox*   m_pVScrollBox;
+    CheckBox*   m_pAnyRulerCB;
+    CheckBox*   m_pHRulerCBox;
+    ListBox*    m_pHMetric;
+    CheckBox*   m_pVRulerCBox;
+    CheckBox*   m_pVRulerRightCBox;
+    ListBox*    m_pVMetric;
+    CheckBox*   m_pSmoothCBox;
 
-    //display
-    FixedLine   aDispFL;
-    CheckBox    aGrfCB;
-    CheckBox    aTblCB;
-    CheckBox    aDrwCB;
-    CheckBox    aFldNameCB;
-    CheckBox    aPostItCB;
+    CheckBox*   m_pGrfCB;
+    CheckBox*   m_pTblCB;
+    CheckBox*   m_pDrwCB;
+    CheckBox*   m_pFldNameCB;
+    CheckBox*   m_pPostItCB;
 
-    FixedLine   aSettingsFL;
-    FixedText   aMetricFT;
-    ListBox     aMetricLB;
+    VclFrame*   m_pSettingsFrame;
+    FixedText*  m_pSettingsLabel;
+    FixedText*  m_pMetricLabel;
+    ListBox*    m_pMetricLB;
 
     DECL_LINK(VertRulerHdl, CheckBox*);
     DECL_LINK(AnyRulerHdl, CheckBox*);
