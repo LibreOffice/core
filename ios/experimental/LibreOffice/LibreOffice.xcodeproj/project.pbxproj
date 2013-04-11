@@ -119,10 +119,11 @@
 		BE2F0A0D17077A950060FE0D /* vcl */ = {
 			isa = PBXGroup;
 			children = (
-				BE4EEE9A16FF80B100D475B2 /* virdev.cxx */,
-				BEBF3E3D17002D6900C454AC /* window.cxx */,
+				BE954A2E1704F9500040D517 /* iosinst.cxx */,
 				BEBF3E3A17002D0200C454AC /* svapp.cxx */,
 				BEBF3E3B17002D0200C454AC /* svmain.cxx */,
+				BE4EEE9A16FF80B100D475B2 /* virdev.cxx */,
+				BEBF3E3D17002D6900C454AC /* window.cxx */,
 				BEA86899170B3FCB0043E44B /* coretext */,
 				BE2F0A0C17077A2F0060FE0D /* headless */,
 			);
@@ -199,7 +200,6 @@
 				BE2F0A1017077B560060FE0D /* basebmp */,
 				BE2F0A0B17077A0F0060FE0D /* cppuhelper */,
 				BE2F0A0E17077AC40060FE0D /* framework */,
-				BE954A2E1704F9500040D517 /* iosinst.cxx */,
 				BE56CD651704A08E00CA5B15 /* lo.h */,
 				BE56CD661704A08E00CA5B15 /* lo.mm */,
 				BE2F0A0F17077B060060FE0D /* sfx2 */,
