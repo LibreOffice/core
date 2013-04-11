@@ -15,6 +15,7 @@
 #include "tokenarray.hxx"
 #include "stringutil.hxx"
 #include "globalnames.hxx"
+#include "docoptio.hxx"
 
 #include "formula/token.hxx"
 #include "tools/datetime.hxx"
@@ -23,10 +24,22 @@ using orcus::spreadsheet::row_t;
 using orcus::spreadsheet::col_t;
 using orcus::spreadsheet::formula_grammar_t;
 
+ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocument& rDoc) : mrDoc(rDoc) {}
+
+void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
+{
+    ScDocOptions aOpt = mrDoc.GetDocOptions();
+    aOpt.SetDate(year, month, day);
+    mrDoc.SetDocOptions(aOpt);
+}
+
 ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t nIndex) :
     maPos(rPos), mnIndex(nIndex) {}
 
-ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) : mrDoc(rDoc), maSharedStrings(*this) {}
+ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) :
+    mrDoc(rDoc),
+    maGlobalSettings(mrDoc),
+    maSharedStrings(*this) {}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char* sheet_name, size_t sheet_name_length)
 {
@@ -69,6 +82,11 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
     // Create a new orcus sheet instance for this.
     maSheets.push_back(new ScOrcusSheet(mrDoc, nTab, *this));
     return &maSheets.back();
+}
+
+orcus::spreadsheet::iface::import_global_settings* ScOrcusFactory::get_global_settings()
+{
+    return &maGlobalSettings;
 }
 
 orcus::spreadsheet::iface::import_shared_strings* ScOrcusFactory::get_shared_strings()

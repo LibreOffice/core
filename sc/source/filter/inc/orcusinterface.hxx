@@ -26,6 +26,16 @@ class ScOrcusSheet;
 class ScOrcusFactory;
 class ScRangeData;
 
+class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_settings
+{
+    ScDocument& mrDoc;
+
+public:
+    ScOrcusGlobalSettings(ScDocument& rDoc);
+
+    virtual void set_origin_date(int year, int month, int day);
+};
+
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
 {
     ScOrcusFactory& mrFactory;
@@ -175,6 +185,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
     StringHashType maStringHash;
 
     StringCellCaches maStringCells;
+    ScOrcusGlobalSettings maGlobalSettings;
     ScOrcusSharedStrings maSharedStrings;
     boost::ptr_vector<ScOrcusSheet> maSheets;
     ScOrcusStyles maStyles;
@@ -184,6 +195,7 @@ public:
 
     virtual orcus::spreadsheet::iface::import_sheet* append_sheet(const char *sheet_name, size_t sheet_name_length);
     virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length);
+    virtual orcus::spreadsheet::iface::import_global_settings* get_global_settings();
     virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings();
     virtual orcus::spreadsheet::iface::import_styles* get_styles();
     virtual void finalize();
