@@ -352,13 +352,13 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
-                            XGradient &rGradient = pEntry->GetGradient ();
+                            XGradient aGradient(pEntry->GetGradient());
 
-                            if (rReq.GetSlot () == SID_SETGRADSTARTCOLOR) rGradient.SetStartColor (aColor);
-                            else rGradient.SetEndColor (aColor);
+                            if (rReq.GetSlot () == SID_SETGRADSTARTCOLOR) aGradient.SetStartColor (aColor);
+                            else aGradient.SetEndColor (aColor);
 
                             pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
-                            pAttr->Put (XFillGradientItem (pName->GetValue (), rGradient), XATTR_FILLGRADIENT);
+                            pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
                             break;
                         }
                     }
@@ -413,12 +413,12 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
-                            XHatch &rHatch = pEntry->GetHatch ();
+                            XHatch aHatch(pEntry->GetHatch());
 
-                            rHatch.SetColor (aColor);
+                            aHatch.SetColor (aColor);
 
                             pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
-                            pAttr->Put (XFillHatchItem (pName->GetValue (), rHatch), XATTR_FILLHATCH);
+                            pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
                             break;
                         }
                     }
@@ -527,18 +527,18 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
-                                XGradient &rGradient = pEntry->GetGradient ();
+                                XGradient aGradient(pEntry->GetGradient());
 
-                                rGradient.SetGradientStyle ((XGradientStyle) pStyle->GetValue ());
-                                rGradient.SetAngle (pAngle->GetValue () * 10);
-                                rGradient.SetBorder ((short) pBorder->GetValue ());
-                                rGradient.SetXOffset ((short) pCenterX->GetValue ());
-                                rGradient.SetYOffset ((short) pCenterY->GetValue ());
-                                rGradient.SetStartIntens ((short) pStart->GetValue ());
-                                rGradient.SetEndIntens ((short) pEnd->GetValue ());
+                                aGradient.SetGradientStyle ((XGradientStyle) pStyle->GetValue ());
+                                aGradient.SetAngle (pAngle->GetValue () * 10);
+                                aGradient.SetBorder ((short) pBorder->GetValue ());
+                                aGradient.SetXOffset ((short) pCenterX->GetValue ());
+                                aGradient.SetYOffset ((short) pCenterY->GetValue ());
+                                aGradient.SetStartIntens ((short) pStart->GetValue ());
+                                aGradient.SetEndIntens ((short) pEnd->GetValue ());
 
                                 pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
-                                pAttr->Put (XFillGradientItem (pName->GetValue (), rGradient), XATTR_FILLGRADIENT);
+                                pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
                                 break;
                             }
                         }
@@ -595,14 +595,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
-                                XHatch &rHatch = pEntry->GetHatch ();
+                                XHatch aHatch(pEntry->GetHatch());
 
-                                rHatch.SetHatchStyle ((XHatchStyle) pStyle->GetValue ());
-                                rHatch.SetDistance (pDistance->GetValue ());
-                                rHatch.SetAngle (pAngle->GetValue () * 10);
+                                aHatch.SetHatchStyle ((XHatchStyle) pStyle->GetValue ());
+                                aHatch.SetDistance (pDistance->GetValue ());
+                                aHatch.SetAngle (pAngle->GetValue () * 10);
 
                                 pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
-                                pAttr->Put (XFillHatchItem (pName->GetValue (), rHatch), XATTR_FILLHATCH);
+                                pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
                                 break;
                             }
                         }
