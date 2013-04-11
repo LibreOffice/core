@@ -111,13 +111,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     }
 
     SvtCJKOptions aCJKOptions;
-    if(aCJKOptions.IsVerticalTextEnabled() )
-    {
-        Point aSmoothPos(m_pSmoothCBox->GetPosPixel());
-        aSmoothPos.Y() += aSmoothPos.Y() - m_pVRulerCBox->GetPosPixel().Y();
-        m_pSmoothCBox->SetPosPixel(aSmoothPos);
-    }
-    else
+    if(!aCJKOptions.IsVerticalTextEnabled() )
         m_pVRulerRightCBox->Hide();
     m_pVRulerCBox->SetClickHdl(LINK(this, SwContentOptPage, VertRulerHdl ));
     m_pAnyRulerCB->SetClickHdl(LINK(this, SwContentOptPage, AnyRulerHdl));
@@ -351,10 +345,6 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
         m_pRightPageCB->Hide();
         m_pPrintHiddenTextCB->Hide();
         m_pPrintTextPlaceholderCB->Hide();
-        m_pProspectCB->SetPosPixel(m_pLeftPageCB->GetPosPixel());
-        Point aPt( m_pRightPageCB->GetPosPixel() );
-        aPt.setX(aPt.getX() + 15); // indent
-        m_pProspectCB_RTL->SetPosPixel(aPt);
 
         // hide m_pPrintEmptyPagesCB
         m_pPrintEmptyPagesCB->Hide();
