@@ -415,22 +415,27 @@ sub create_package
             if (($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev') &&
                 defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
             {
-                # Just sign the .app as a whole, which means signing
-                # the CFBundleExecutable from Info.plist,
-                # i.e. soffice, plus the contents of the Resources
-                # treee (which is not much, far from all of our
-                # non-code "resources").
+                # Sign the .app as a whole, which means (re-)signing
+                # the CFBundleExecutable from Info.plist, i.e.
+                # soffice, plus the contents of the Resources tree
+                # (which at the moment is not much, far from all of
+                # our non-code "resources").
 
-                # Don't bother here in the 4.0 branch to sign each
-                # individual .dylib, or each additional binary. See
-                # master for more work plus possibly eventually
-                # re-organising the app bundle structure to be more
-                # Mac-like (the "program" symlink, eek!) and actually
-                # putting all non-code resources (including extension
-                # scripts!)  into Resources so that they participate
-                # in the signing and their validity can be guaranteed.
+                # Don't bother yet to sign each individual .dylib. (We
+                # do that for "make dev-install", but not here.)
 
-                $systemcall = "codesign --sign $ENV{'MACOSX_CODESIGNING_IDENTITY'} -v -v -v $tempdir/$packagename/$volume_name_classic_app.app";
+                # The executables have already been signed by
+                # gb_LinkTarget__command_dynamiclink in
+                # solenv/gbuild/platform/macosx.mk.
+
+                # Eventually it would be a good idea to re-organise
+                # the app bundle structure to be more Mac-like and
+                # actually put all non-code resources (including
+                # extension scripts!) into Resources so that they
+                # participate in the signing and their validity can be
+                # guaranteed.
+
+                $systemcall = "codesign --sign $ENV{'MACOSX_CODESIGNING_IDENTITY'} --force -v -v -v $localtempdir/$folder/$volume_name_classic_app.app";
                 print "... $systemcall ...\n";
                 my $returnvalue = system($systemcall);
                 $infoline = "Systemcall: $systemcall\n";
