@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///Xg\u003d",
+        "filename": "neon/Library_neon.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-11T13:05:42Z",
+      "side": 1,
+      "message": "This should be in RepositoryExternal.mk, so we do not have to replicate it in half a dozen places. Just wrap the existing defs in ifneq ($(DISABLE_OPENSSL),YES) and define empty gb_LinkTarget__use_openssl, gb_LinkTarget__use_openssl_headers and gb_ExternalProject_use_openssl in else branch.",
+      "revId": "c49d9acb50038b260259a94f709f456b8ee1155d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
