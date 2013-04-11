@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,neon,0))
 $(eval $(call gb_UnpackedTarball_add_patches,neon,\
 	neon/neon.patch \
 	neon/neon_ne_set_request_flag.patch \
+	neon/neon_with_gnutls.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

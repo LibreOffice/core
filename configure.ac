@@ -8580,6 +8580,21 @@ fi
 AC_SUBST([DISABLE_OPENSSL])
 
 dnl ===================================================================
+dnl Check for building gnutls
+dnl ===================================================================
+AC_MSG_CHECKING([whether to use gnutls])
+if test "$enable_neon" != "no" && test "$enable_openssl" = "no"; then
+    AC_MSG_RESULT([yes])
+    AM_PATH_LIBGCRYPT()
+    PKG_CHECK_MODULES(GNUTLS, [gnutls],,
+        AC_MSG_ERROR([Disabling OpenSSL was requested, but GNUTLS is not
+                      available in the system to use as replacement.]))
+fi
+
+AC_SUBST([LIBGCRYPT_CFLAGS])
+AC_SUBST([LIBGCRYPT_LIBS])
+
+dnl ===================================================================
 dnl Check for system redland
 dnl ===================================================================
 dnl versions before 1.0.8 write RDF/XML that is useless for ODF (@xml:base)
