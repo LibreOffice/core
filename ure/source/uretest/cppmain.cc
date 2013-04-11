@@ -30,6 +30,7 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "com/sun/star/util/theMacroExpander.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implementationentry.hxx"
@@ -39,7 +40,6 @@
 #include "osl/thread.h"
 #include "rtl/malformeduriexception.hxx"
 #include "rtl/string.h"
-#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -146,17 +146,7 @@ private:
                 static_cast< ::cppu::OWeakObject * >(this));
         }
     }
-    static char const * const singletons[] = {
-        "com.sun.star.util.theMacroExpander" };
-    for (::std::size_t i = 0; i < SAL_N_ELEMENTS(singletons); ++i)
-    {
-        ::rtl::OUStringBuffer b;
-        b.append("/singletons/");
-        b.append(singletons[i]);
-        css::uno::Reference< css::uno::XInterface > instance(
-            context_->getValueByName(b.makeStringAndClear()),
-            css::uno::UNO_QUERY_THROW);
-    }
+    css::util::theMacroExpander::get(context_);
     test(
         ::test::types::CppTest::create(context_),
         ::rtl::OUString("test.types.CppTest"));
