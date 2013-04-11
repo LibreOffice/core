@@ -664,7 +664,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 {
     XFillStyle eXFS = (XFillStyle)pLbFillType->GetSelectEntryPos();
     XFillStyleItem aXFillStyleItem( eXFS );
-    sal_Bool bAction = pBox && !pLbFillAttr->IsTravelSelect();
+    bool bAction = pBox && !pLbFillAttr->IsTravelSelect();
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     if ( bAction )

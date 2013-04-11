@@ -60,7 +60,7 @@ class SvxPopupWindowListBox : public SfxPopupWindow
 
     ListBox *       pListBox;
     ToolBox &       rToolBox;
-    sal_Bool            bUserSel;
+    bool            bUserSel;
     sal_uInt16          nTbxId;
     OUString   maCommandURL;
     // disallow copy-constructor and assignment-operator
@@ -82,8 +82,8 @@ public:
 
     inline ListBox &            GetListBox()    { return *pListBox; }
 
-    sal_Bool                        IsUserSelected() const          { return bUserSel; }
-    void                        SetUserSelected( sal_Bool bVal )    { bUserSel = bVal; }
+    bool                        IsUserSelected() const          { return bUserSel; }
+    void                        SetUserSelected( bool bVal )    { bUserSel = bVal; }
     /*virtual*/Window*                     GetPreferredKeyInputWindow();
 };
 
@@ -92,7 +92,7 @@ public:
 SvxPopupWindowListBox::SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
     rToolBox    ( rTbx ),
-    bUserSel    ( sal_False ),
+    bUserSel    ( false ),
     nTbxId      ( nId ),
     maCommandURL( rCommandURL )
 {
@@ -225,14 +225,14 @@ IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl)
 {
     if (pPopupWin)
     {
-        //pPopupWin->SetUserSelected( sal_False );
+        //pPopupWin->SetUserSelected( false );
 
         ListBox &rListBox = pPopupWin->GetListBox();
         if (rListBox.IsTravelSelect())
             Impl_SetInfo( rListBox.GetSelectEntryCount() );
         else
         {
-            pPopupWin->SetUserSelected( sal_True );
+            pPopupWin->SetUserSelected( true );
             pPopupWin->EndPopupMode( 0 );
         }
     }

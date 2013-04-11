@@ -61,7 +61,7 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
     const SfxPoolItem* pState )
 {
     SvtLanguageOptions aLangOptions;
-    sal_Bool bCalc = sal_False;
+    bool bCalc = false;
     sal_Bool bEnabled = sal_False;
     if ( nSID == SID_VERTICALTEXT_STATE )
         bEnabled = aLangOptions.IsVerticalTextEnabled();
@@ -78,7 +78,7 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
         // always hide if either IsVerticalTextEnabled or IsCTLFontEnabled
         // is false
         GetToolBox().HideItem( GetId() );
-        bCalc = sal_True;
+        bCalc = true;
     }
     if(bCalc)
     {

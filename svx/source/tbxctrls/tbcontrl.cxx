@@ -128,11 +128,11 @@ class SvxStyleBox_Impl : public ComboBox
     using Window::IsVisible;
 public:
     SvxStyleBox_Impl( Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
-                        const Reference< XFrame >& _xFrame,const String& rClearFormatKey, const String& rMoreKey, sal_Bool bInSpecialMode );
+                        const Reference< XFrame >& _xFrame,const String& rClearFormatKey, const String& rMoreKey, bool bInSpecialMode );
     ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
-    inline sal_Bool IsVisible() { return bVisible; }
+    inline bool IsVisible() { return bVisible; }
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -153,17 +153,17 @@ protected:
 private:
     SfxStyleFamily                  eStyleFamily;
     sal_uInt16                      nCurSel;
-    sal_Bool                        bRelease;
+    bool                            bRelease;
     Size                            aLogicalSize;
     Link                            aVisibilityListener;
-    sal_Bool                        bVisible;
+    bool                            bVisible;
     Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;
     OUString                        m_aCommand;
     String                          aClearFormatKey;
     String                          aMoreKey;
     String                          sDefaultStyle;
-    sal_Bool                        bInSpecialMode;
+    bool                            bInSpecialMode;
 
     void            ReleaseFocus();
 };
@@ -184,7 +184,7 @@ private:
     Size                           aLogicalSize;
     String                         aCurText;
     sal_uInt16                     nFtCount;
-    sal_Bool                       bRelease;
+    bool                           bRelease;
     Reference< XDispatchProvider > m_xDispatchProvider;
     Reference< XFrame >            m_xFrame;
 
@@ -325,13 +325,13 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
     const Reference< XFrame >&              _xFrame,
     const String&                           rClearFormatKey,
     const String&                           rMoreKey,
-    sal_Bool                                    bInSpec) :
+    bool                                    bInSpec) :
 
     ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
 
     eStyleFamily( eFamily ),
-    bRelease    ( sal_True ),
-    bVisible(sal_False),
+    bRelease    ( true ),
+    bVisible(false),
     m_xDispatchProvider( rDispatchProvider ),
     m_xFrame(_xFrame),
     m_aCommand  ( rCommand ),
@@ -355,7 +355,7 @@ void SvxStyleBox_Impl::ReleaseFocus()
 {
     if ( !bRelease )
     {
-        bRelease = sal_True;
+        bRelease = true;
         return;
     }
     if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
@@ -492,7 +492,7 @@ long SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_TAB:
             {
                 if ( KEY_TAB == nCode )
-                    bRelease = sal_False;
+                    bRelease = false;
                 else
                     nHandled = 1;
                 Select();
@@ -534,7 +534,7 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
     }
     else if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        bVisible = sal_True;
+        bVisible = true;
         if ( aVisibilityListener.IsSet() )
             aVisibilityListener.Call( this );
     }
@@ -701,9 +701,9 @@ IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
 
 // -----------------------------------------------------------------------
 
-sal_Bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
+bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
 {
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
     const SfxObjectShell* pDocSh = SfxObjectShell::Current();
     SvxFontListItem* pFontListItem = NULL;
 
@@ -717,7 +717,7 @@ sal_Bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* 
         SAL_WNODEPRECATED_DECLARATIONS_POP
         *ppFontList = aFontList.get();
         pBox->SetOwnFontList(aFontList);
-        bChanged = sal_True;
+        bChanged = true;
     }
 
     if ( pFontListItem )
@@ -730,7 +730,7 @@ sal_Bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* 
         {
             // => take over
             *ppFontList = pNewFontList;
-            bChanged = sal_True;
+            bChanged = true;
         }
         else
         {
@@ -783,7 +783,7 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDis
     pFontList          ( NULL ),
     aLogicalSize       ( 60,160 ),
     nFtCount           ( 0 ),
-    bRelease           ( sal_True ),
+    bRelease           ( true ),
     m_xDispatchProvider( rDispatchProvider ),
     m_xFrame (_xFrame)
 {
@@ -885,7 +885,7 @@ long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_TAB:
             {
                 if ( KEY_TAB == nCode )
-                    bRelease = sal_False;
+                    bRelease = false;
                 else
                     nHandled = 1;
                 Select();
@@ -928,7 +928,7 @@ void SvxFontNameBox_Impl::ReleaseFocus_Impl()
 {
     if ( !bRelease )
     {
-        bRelease = sal_True;
+        bRelease = true;
         return;
     }
     if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
@@ -1465,20 +1465,20 @@ void SvxFrameWindow_Impl::StateChanged(
             //initial calls mustn't insert or remove elements
             if(aFrameSet.GetItemCount())
             {
-                sal_Bool bTableMode = ( aFrameSet.GetItemCount() == 12 );
-                sal_Bool bResize    = sal_False;
+                bool bTableMode = ( aFrameSet.GetItemCount() == 12 );
+                bool bResize    = false;
 
                 if ( bTableMode && bParagraphMode )
                 {
                     for ( sal_uInt16 i = 9; i < 13; i++ )
                         aFrameSet.RemoveItem(i);
-                    bResize = sal_True;
+                    bResize = true;
                 }
                 else if ( !bTableMode && !bParagraphMode )
                 {
                     for ( sal_uInt16 i = 9; i < 13; i++ )
                         aFrameSet.InsertItem( i, aImgList.GetImage(i) );
-                    bResize = sal_True;
+                    bResize = true;
                 }
 
                 if ( bResize )
@@ -1931,7 +1931,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
         const SfxStyleFamily    eFamily     = GetActFamily();
         sal_uInt16                  nCount      = pStyleSheetPool->Count();
         SfxStyleSheetBase*      pStyle      = NULL;
-        sal_Bool                    bDoFill     = sal_False;
+        bool                    bDoFill     = false;
 
         pStyleSheetPool->SetSearchMask( eFamily, SFXSTYLEBIT_USED );
 
@@ -1941,7 +1941,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
         //!!! so the list doesn't show the count
         if ( nCount != pBox->GetEntryCount() )
         {
-            bDoFill = sal_True;
+            bDoFill = true;
         }
         else
         {
@@ -2576,12 +2576,12 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
 {
     OUString aCommand;
     OUString aParamName;
-    sal_Bool bNoArgs = sal_False;
+    bool bNoArgs = false;
 
     switch( GetSlotId() )
     {
         case SID_ATTR_CHAR_COLOR2 :
-            bNoArgs     = sal_True;
+            bNoArgs     = true;
             aCommand    = OUString( ".uno:CharColorExt" );
             aParamName  = OUString( "CharColorExt" );
             break;
@@ -2597,7 +2597,7 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND :
-            bNoArgs     = sal_True;
+            bNoArgs     = true;
             aCommand    = OUString( ".uno:CharBackgroundExt" );
             aParamName  = OUString( "CharBackgroundExt" );
             break;

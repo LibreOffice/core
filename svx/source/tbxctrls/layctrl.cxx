@@ -65,8 +65,8 @@ private:
     ::Color             aBackgroundColor;
     long                nCol;
     long                nLine;
-    sal_Bool                bInitialKeyInput;
-    sal_Bool                m_bMod1;
+    bool                bInitialKeyInput;
+    bool                m_bMod1;
     ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
     OUString       maCommand;
@@ -221,7 +221,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
             //make sure that a table can initially be created
             if(bInitialKeyInput)
             {
-                bInitialKeyInput = sal_False;
+                bInitialKeyInput = false;
                 if(!nNewLine)
                     nNewLine = 1;
                 if(!nNewCol)
@@ -232,7 +232,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
     {
-        m_bMod1 = sal_True;
+        m_bMod1 = true;
         EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
     }
 
@@ -401,8 +401,8 @@ private:
     long                nWidth;
     long                nMX;
     long                nTextHeight;
-    sal_Bool                bInitialKeyInput;
-    sal_Bool                m_bMod1;
+    bool                bInitialKeyInput;
+    bool                m_bMod1;
     ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
     OUString            maCommand;
@@ -426,8 +426,8 @@ public:
 
 ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nId, rFrame, WB_STDPOPUP ),
-    bInitialKeyInput(sal_True),
-    m_bMod1(sal_False),
+    bInitialKeyInput(true),
+    m_bMod1(false),
     rTbx(rParentTbx),
     mxFrame(rFrame),
     maCommand( rCmd )
@@ -556,7 +556,7 @@ void ColumnsWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     sal_uInt16 nModifier = rKEvt.GetKeyCode().GetModifier();
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
     if(!nModifier)
@@ -565,7 +565,7 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
             KEY_RETURN == nKey ||KEY_ESCAPE == nKey ||
             KEY_UP == nKey)
         {
-            bHandled = sal_True;
+            bHandled = true;
             long nNewCol = nCol;
             switch(nKey)
             {
@@ -589,7 +589,7 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
             //make sure that a table can initially be created
             if(bInitialKeyInput)
             {
-                bInitialKeyInput = sal_False;
+                bInitialKeyInput = false;
                 if(!nNewCol)
                     nNewCol = 1;
             }
@@ -598,7 +598,7 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
     {
-        m_bMod1 = sal_True;
+        m_bMod1 = true;
         if(IsMouseCaptured())
             ReleaseMouse();
         EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL );

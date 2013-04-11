@@ -459,7 +459,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
             }
             else
             {
-                sal_Bool bDone = sal_False;
+                bool bDone = false;
 
                 // Wenn wir eine DrawView haben und uns im TextEdit-Modus befinden,
                 // wird nicht die Flaechen-, sondern die Textfarbe zugewiesen
@@ -472,7 +472,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
                         SvxColorItem aTextColorItem( aColor, SID_ATTR_CHAR_COLOR );
                         pDispatcher->Execute(
                             SID_ATTR_CHAR_COLOR, SFX_CALLMODE_RECORD, &aTextColorItem, 0L );
-                        bDone = sal_True;
+                        bDone = true;
                     }
                 }
                 if ( !bDone )

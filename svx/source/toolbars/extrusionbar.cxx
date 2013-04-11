@@ -170,7 +170,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     case SID_EXTRUSION_TILT_LEFT:
     case SID_EXTRUSION_TILT_RIGHT:
     {
-        sal_Bool bHorizontal = ( nSID == SID_EXTRUSION_TILT_DOWN ) || ( nSID == SID_EXTRUSION_TILT_UP );
+        bool bHorizontal = ( nSID == SID_EXTRUSION_TILT_DOWN ) || ( nSID == SID_EXTRUSION_TILT_UP );
         sal_Int32 nDiff = ( nSID == SID_EXTRUSION_TILT_LEFT ) || ( nSID == SID_EXTRUSION_TILT_UP ) ? 5 : -5;
         EnhancedCustomShapeParameterPair aRotateAnglePropPair;
         double fX = 0.0;
@@ -671,7 +671,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
                     continue;
             }
 
-            sal_Bool    bParallel = sal_True;
+            bool        bParallel = true;
             Position3D  aViewPoint( 3472, -3472, 25000 );
             double      fSkewAngle = -135;
 
