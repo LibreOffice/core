@@ -170,7 +170,7 @@
 #define HID_FLD_FUNC                                            "SW_HID_FLD_FUNC"
 #define HID_FLD_REF                                             "SW_HID_FLD_REF"
 #define HID_OPTSHDWCRSR                                         "SW_HID_OPTSHDWCRSR"
-#define HID_NUMPARA                                             "SW_HID_NUMPARA"
+
 #define HID_REDLINE_OPT                                         "SW_HID_REDLINE_OPT"
 #define HID_EDIT_FLD_DB                                         "SW_HID_EDIT_FLD_DB"
 #define HID_EDIT_FLD_DOKINF                                     "SW_HID_EDIT_FLD_DOKINF"
