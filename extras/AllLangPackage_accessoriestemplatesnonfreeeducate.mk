@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplatesnonfreeeducate,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates-nonfree/educate/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesnonfreeeducate,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates-nonfree/educate/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplatesnonfreeeducate,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesnonfreeeducate,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplatesnonfreeeducate,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreeeducate,share/template,educate,\
 	cs/dummy_templates-nonfree.txt \
 	de/dummy_templates-nonfree.txt \
 	en-US/attendance_sheet.ott \

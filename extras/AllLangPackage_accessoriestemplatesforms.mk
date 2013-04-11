@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplatesforms,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/forms/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesforms,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/forms/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplatesforms,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesforms,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplatesforms,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesforms,share/template,forms,\
 	cs/seznam_pohledavek.ots \
 	de/Ausbildungsnachweis2.ott \
 	de/Ausbildungsnachweis.ott \

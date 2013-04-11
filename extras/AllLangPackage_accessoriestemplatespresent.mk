@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplatespresent,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/presnt/lang,$(true)))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatespresent,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/presnt/lang,$(true)))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplatespresent,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatespresent,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplatespresent,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatespresent,share/template,presnt,\
 	cs/dummy_templates.txt \
 	de/compladients.otp \
 	de/praktikumsbericht.otp \

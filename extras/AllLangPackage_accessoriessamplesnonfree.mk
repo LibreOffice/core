@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriessamplesnonfree,$(call gb_UnpackedTarball_get_dir,samples-pack)/samples-nonfree/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriessamplesnonfree,$(call gb_UnpackedTarball_get_dir,samples-pack)/samples-nonfree/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriessamplesnonfree,\
-	$(call gb_UnpackedTarball_get_target,samples-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriessamplesnonfree,samples-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriessamplesnonfree,\
+$(eval $(call gb_AllLangPackage_add_files,accessoriessamplesnonfree,share/samples,\
 	cs/dummy_samples-nonfree.txt \
 	de/dummy_samples-nonfree.txt \
 	en-US/dummy_samples-nonfree.txt \

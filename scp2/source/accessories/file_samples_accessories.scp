@@ -35,47 +35,47 @@
 #ifdef WITH_EXTRA_SAMPLE
 
 File gid_File_Extra_Samples_Accessories
-    Dir = gid_Dir_Samples_Language;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriessamples,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriessamples,filelist);
 End
 
 File gid_File_Extra_Samples_Documentations_Accessories
-    Dir = gid_Dir_Samples_Documentations;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriessamplesdocumentation,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriessamplesdocumentation,filelist);
 End
 
 File gid_File_Extra_Samples_Advertisement_Accessories
-    Dir = gid_Dir_Samples_Advertisement;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriessamplesadvertisement,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriessamplesadvertisement,filelist);
 End
 
 /* ** Samples - NON FREE** */
 
 File gid_File_Extra_Samples_NONFREE_Accessories
-    Dir = gid_Dir_Samples_Language;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriessamplesnonfree,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriessamplesnonfree,filelist);
 End
 
 File gid_File_Extra_Samples_NONFREE_Documentations_Accessories
-    Dir = gid_Dir_Samples_Documentations;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriessamplesnonfreedocumentation,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriessamplesnonfreedocumentation,filelist);
 End
 
 File gid_File_Extra_Samples_NONFREE_Advertisement_Accessories
-    Dir = gid_Dir_Samples_Advertisement;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriessamplesnonfreeadvertisement,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriessamplesnonfreeadvertisement,filelist);
 End
 
 #endif

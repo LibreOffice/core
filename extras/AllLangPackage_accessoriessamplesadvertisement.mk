@@ -7,21 +7,24 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriessamplesdocumentation,$(call gb_UnpackedTarball_get_dir,samples-pack)/samples/documentation/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriessamplesadvertisement,$(call gb_UnpackedTarball_get_dir,samples-pack)/samples/advertisement/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriessamplesdocumentation,\
-	$(call gb_UnpackedTarball_get_target,samples-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriessamplesadvertisement,samples-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriessamplesdocumentation,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriessamplesadvertisement,share/samples,Advertisement,\
 	cs/dummy_samples.txt \
 	de/dummy_samples.txt \
-	en-US/Connect_to_Postgres.odt \
-	en-US/ooo2.odt \
+	en-US/ooo2prodflyera3en.odt \
+	en-US/ooo2prodflyera4en.odt \
+	en-US/ooo2prodintroen.odp \
+	en-US/ooo2prodspeca4en.odt \
 	es/dummy_samples.txt \
 	fi/dummy_samples.txt \
 	fr/dummy_samples.txt \
-	hu/ooo2.odt \
+	hu/ooo2prodflyera3hu.odt \
+	hu/ooo2prodspeca4hu.odt \
+	hu/OOo_Ossszehasonlitas.odt \
+	hu/OOo_Reklam4.odt \
 	it/dummy_samples.txt \
 	ja/dummy_samples.txt \
 	ka/dummy_samples.txt \

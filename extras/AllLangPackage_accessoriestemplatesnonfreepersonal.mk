@@ -7,28 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplatesnonfreefinance,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates-nonfree/finance/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesnonfreepersonal,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates-nonfree/personal/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplatesnonfreefinance,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesnonfreepersonal,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplatesnonfreefinance,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreepersonal,share/template,personal,\
 	cs/dummy_templates-nonfree.txt \
 	de/dummy_templates-nonfree.txt \
-	en-US/24_Month_Sales_Forecast.ots \
-	en-US/Balance_Sheet.ots \
-	en-US/Break-Even_Analysis.ots \
-	en-US/business_plan_calc.ots \
-	en-US/Capital_Budget_Analysis.ots \
-	en-US/Corporate_Earnings_Analysis.ots \
-	en-US/Five_Year_Projections.ots \
-	en-US/Income_Statement.ots \
-	en-US/job_bid_calc.ots \
-	en-US/marketing_plan_calc.ots \
-	en-US/Pro-Forma_Balance_Sheet.ots \
-	en-US/Pro-Forma_Income_Statement.ots \
-	en-US/Quarterly_Marketing_Budget.ots \
+	en-US/resume_1.ott \
+	en-US/resume_2.ott \
+	en-US/resume_3.ott \
 	es/dummy_templates-nonfree.txt \
 	fi/dummy_templates-nonfree.txt \
 	fr/dummy_templates-nonfree.txt \

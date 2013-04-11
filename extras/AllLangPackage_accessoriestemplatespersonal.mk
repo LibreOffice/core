@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplatespersonal,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/personal/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatespersonal,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/personal/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplatespersonal,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatespersonal,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplatespersonal,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatespersonal,share/template,personal,\
 	cs/dummy_templates.txt \
 	de/faltkarte.otg \
 	de/formalletteraquarius.ott \

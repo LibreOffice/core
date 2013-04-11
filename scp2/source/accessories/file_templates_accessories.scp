@@ -35,80 +35,80 @@
 #ifdef WITH_EXTRA_TEMPLATE
 
 File gid_File_Extra_Templates_Accessories
-    Dir = gid_Dir_Template_Language;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplates,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplates,filelist);
 End
 
 File gid_File_Extra_Templates_Layout_Accessories
-    Dir = gid_Dir_Template_Layout;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplateslayout,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplateslayout,filelist);
 End
 
 File gid_File_Extra_Templates_Present_Accessories
-    Dir = gid_Dir_Template_Presnt;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatespresent,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatespresent,filelist);
 End
 
 File gid_File_Extra_Templates_Educate_Accessories
-    Dir = gid_Dir_Template_Educate;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplateseducate,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplateseducate,filelist);
 End
 
 File gid_File_Extra_Templates_Finance_Accessories
-    Dir = gid_Dir_Template_Finance;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesfinance,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesfinance,filelist);
 End
 
 File gid_File_Extra_Templates_Forms_Accessories
-    Dir = gid_Dir_Template_Forms;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesforms,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesforms,filelist);
 End
 
 File gid_File_Extra_Templates_Labels_Accessories
-    Dir = gid_Dir_Template_Labels;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplateslabels,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplateslabels,filelist);
 End
 
 File gid_File_Extra_Templates_Misc_Accessories
-    Dir = gid_Dir_Template_Misc;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesmisc,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesmisc,filelist);
 End
 
 File gid_File_Extra_Templates_Officorr_Accessories
-    Dir = gid_Dir_Template_Officorr;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesofficorr,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesofficorr,filelist);
 End
 
 File gid_File_Extra_Templates_Offimisc_Accessories
-    Dir = gid_Dir_Template_Offimisc;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesoffimisc,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesoffimisc,filelist);
 End
 
 File gid_File_Extra_Templates_Personal_Accessories
-    Dir = gid_Dir_Template_Personal;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatespersonal,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatespersonal,filelist);
 End
 
 /* ** Templates - Common ** */
@@ -193,80 +193,80 @@ End
 /* ** Templates - NON FREE ** */
 
 File gid_File_Extra_Templates_NONFREE_Accessories
-    Dir = gid_Dir_Template_Language;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfree,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfree,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Layout_Accessories
-    Dir = gid_Dir_Template_Layout;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreelayout,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreelayout,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Present_Accessories
-    Dir = gid_Dir_Template_Presnt;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreepresent,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreepresent,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Educate_Accessories
-    Dir = gid_Dir_Template_Educate;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreeeducate,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreeeducate,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Finance_Accessories
-    Dir = gid_Dir_Template_Finance;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreefinance,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreefinance,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Forms_Accessories
-    Dir = gid_Dir_Template_Forms;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreeforms,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreeforms,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Labels_Accessories
-    Dir = gid_Dir_Template_Labels;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreelabels,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreelabels,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Misc_Accessories
-    Dir = gid_Dir_Template_Misc;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreemisc,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreemisc,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Officorr_Accessories
-    Dir = gid_Dir_Template_Officorr;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreeofficorr,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreeofficorr,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Offimisc_Accessories
-    Dir = gid_Dir_Template_Offimisc;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreeoffimisc,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreeoffimisc,filelist);
 End
 
 File gid_File_Extra_Templates_NONFREE_Personal_Accessories
-    Dir = gid_Dir_Template_Personal;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(accessoriestemplatesnonfreepersonal,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreepersonal,filelist);
 End
 
 #endif

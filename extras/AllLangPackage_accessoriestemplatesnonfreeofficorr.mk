@@ -7,16 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplatesnonfreeoffimisc,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates-nonfree/offimisc/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesnonfreeofficorr,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates-nonfree/officorr/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplatesnonfreeoffimisc,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesnonfreeofficorr,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplatesnonfreeoffimisc,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreeofficorr,share/template,officorr,\
 	cs/dummy_templates-nonfree.txt \
 	de/dummy_templates-nonfree.txt \
-	en-US/report_1.ott \
+	en-US/dummy_templates-nonfree.txt \
+	en-US/id_2_statement.ott \
 	es/dummy_templates-nonfree.txt \
 	fi/dummy_templates-nonfree.txt \
 	fr/dummy_templates-nonfree.txt \

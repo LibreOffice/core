@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriessamples,$(call gb_UnpackedTarball_get_dir,samples-pack)/samples/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriessamples,$(call gb_UnpackedTarball_get_dir,samples-pack)/samples/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriessamples,\
-	$(call gb_UnpackedTarball_get_target,samples-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriessamples,samples-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriessamples,\
+$(eval $(call gb_AllLangPackage_add_files,accessoriessamples,share/samples,\
 	cs/.nametranslation.table \
 	de/.nametranslation.table \
 	en-US/JacketPotato.odb \

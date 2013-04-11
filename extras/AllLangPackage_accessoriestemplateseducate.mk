@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplateseducate,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/educate/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplateseducate,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/educate/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplateseducate,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplateseducate,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplateseducate,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplateseducate,share/template,educate,\
 	cs/dummy_templates.txt \
 	de/Jahres_Schulnoten.ots \
 	de/Klassen-Schulnoten-Verwaltung_Noten_1-6.ots \

@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplatesofficorr,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/officorr/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesofficorr,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/officorr/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplatesofficorr,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesofficorr,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplatesofficorr,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesofficorr,share/template,officorr,\
 	cs/dummy_templates.txt \
 	de/01_business_fax.ott \
 	de/01_business_letter.ott \

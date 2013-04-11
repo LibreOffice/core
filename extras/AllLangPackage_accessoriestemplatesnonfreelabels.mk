@@ -7,18 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplatesnonfreepersonal,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates-nonfree/personal/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesnonfreelabels,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates-nonfree/labels/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplatesnonfreepersonal,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesnonfreelabels,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplatesnonfreepersonal,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreelabels,share/template,labels,\
 	cs/dummy_templates-nonfree.txt \
 	de/dummy_templates-nonfree.txt \
-	en-US/resume_1.ott \
-	en-US/resume_2.ott \
-	en-US/resume_3.ott \
+	en-US/dummy_templates-nonfree.txt \
 	es/dummy_templates-nonfree.txt \
 	fi/dummy_templates-nonfree.txt \
 	fr/dummy_templates-nonfree.txt \

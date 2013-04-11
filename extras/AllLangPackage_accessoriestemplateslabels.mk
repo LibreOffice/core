@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplateslabels,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/labels/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplateslabels,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/labels/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplateslabels,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplateslabels,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplateslabels,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplateslabels,share/template,labels,\
 	cs/dummy_templates.txt \
 	de/dummy_templates.txt \
 	en-US/address12-WL-OL875.ott \

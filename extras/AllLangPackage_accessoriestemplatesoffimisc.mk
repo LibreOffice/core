@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplatesoffimisc,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/offimisc/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesoffimisc,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/offimisc/lang))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplatesoffimisc,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesoffimisc,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplatesoffimisc,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesoffimisc,share/template,offimisc,\
 	cs/dummy_templates.txt \
 	de/01_graph_paper.ott \
 	de/01_invoice.ott \

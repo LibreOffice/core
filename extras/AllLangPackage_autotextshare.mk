@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,autotextshare,$(SRCDIR)/extras/source/autotext/lang))
+$(eval $(call gb_AllLangPackage_AllLangPackage,autotextshare,$(SRCDIR)/extras/source/autotext/lang))
 
-$(eval $(call gb_AllLangZip_add_files,autotextshare,\
+$(eval $(call gb_AllLangPackage_add_files,autotextshare,share/autotext,\
 	bg/crdbus50.bau \
 	bg/standard.bau \
 	bg/template.bau \

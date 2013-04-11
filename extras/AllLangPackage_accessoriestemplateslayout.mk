@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_AllLangZip_AllLangZip,accessoriestemplateslayout,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/layout/lang,$(true)))
+$(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplateslayout,$(call gb_UnpackedTarball_get_dir,templates-pack)/templates/layout/lang,$(true)))
 
-$(eval $(call gb_AllLangZip_add_dependencies,accessoriestemplateslayout,\
-	$(call gb_UnpackedTarball_get_target,templates-pack) \
-))
+$(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplateslayout,templates-pack))
 
-$(eval $(call gb_AllLangZip_add_files,accessoriestemplateslayout,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplateslayout,share/template,layout,\
 	cs/dummy_templates.txt \
 	de/A4-kariert.otp \
 	de/BlueBoxes.otp \

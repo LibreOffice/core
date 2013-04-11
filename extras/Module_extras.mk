@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,extras))
 
 $(eval $(call gb_Module_add_targets,extras,\
-	AllLangZip_autotextshare \
+	AllLangPackage_autotextshare \
 	CustomTarget_autocorr \
 	CustomTarget_glade \
 	Package_autocorr \
@@ -82,40 +82,40 @@ endif
 
 ifeq ($(WITH_EXTRA_SAMPLE),YES)
 $(eval $(call gb_Module_add_targets,extras,\
-	AllLangZip_accessoriessamples \
-	AllLangZip_accessoriessamplesadvertisement \
-	AllLangZip_accessoriessamplesdocumentation \
-	AllLangZip_accessoriessamplesnonfree \
-	AllLangZip_accessoriessamplesnonfreeadvertisement \
-	AllLangZip_accessoriessamplesnonfreedocumentation \
+	AllLangPackage_accessoriessamples \
+	AllLangPackage_accessoriessamplesadvertisement \
+	AllLangPackage_accessoriessamplesdocumentation \
+	AllLangPackage_accessoriessamplesnonfree \
+	AllLangPackage_accessoriessamplesnonfreeadvertisement \
+	AllLangPackage_accessoriessamplesnonfreedocumentation \
 	UnpackedTarball_samples_pack \
 ))
 endif
 
 ifeq ($(WITH_EXTRA_TEMPLATE),YES)
 $(eval $(call gb_Module_add_targets,extras,\
-	AllLangZip_accessoriestemplates \
-	AllLangZip_accessoriestemplateseducate \
-	AllLangZip_accessoriestemplatesfinance \
-	AllLangZip_accessoriestemplatesforms \
-	AllLangZip_accessoriestemplateslabels \
-	AllLangZip_accessoriestemplateslayout \
-	AllLangZip_accessoriestemplatesmisc \
-	AllLangZip_accessoriestemplatesnonfree \
-	AllLangZip_accessoriestemplatesnonfreeeducate \
-	AllLangZip_accessoriestemplatesnonfreefinance \
-	AllLangZip_accessoriestemplatesnonfreeforms \
-	AllLangZip_accessoriestemplatesnonfreelabels \
-	AllLangZip_accessoriestemplatesnonfreelayout \
-	AllLangZip_accessoriestemplatesnonfreemisc \
-	AllLangZip_accessoriestemplatesnonfreeofficorr \
-	AllLangZip_accessoriestemplatesnonfreeoffimisc \
-	AllLangZip_accessoriestemplatesnonfreepersonal \
-	AllLangZip_accessoriestemplatesnonfreepresent \
-	AllLangZip_accessoriestemplatesofficorr \
-	AllLangZip_accessoriestemplatesoffimisc \
-	AllLangZip_accessoriestemplatespersonal \
-	AllLangZip_accessoriestemplatespresent \
+	AllLangPackage_accessoriestemplates \
+	AllLangPackage_accessoriestemplateseducate \
+	AllLangPackage_accessoriestemplatesfinance \
+	AllLangPackage_accessoriestemplatesforms \
+	AllLangPackage_accessoriestemplateslabels \
+	AllLangPackage_accessoriestemplateslayout \
+	AllLangPackage_accessoriestemplatesmisc \
+	AllLangPackage_accessoriestemplatesnonfree \
+	AllLangPackage_accessoriestemplatesnonfreeeducate \
+	AllLangPackage_accessoriestemplatesnonfreefinance \
+	AllLangPackage_accessoriestemplatesnonfreeforms \
+	AllLangPackage_accessoriestemplatesnonfreelabels \
+	AllLangPackage_accessoriestemplatesnonfreelayout \
+	AllLangPackage_accessoriestemplatesnonfreemisc \
+	AllLangPackage_accessoriestemplatesnonfreeofficorr \
+	AllLangPackage_accessoriestemplatesnonfreeoffimisc \
+	AllLangPackage_accessoriestemplatesnonfreepersonal \
+	AllLangPackage_accessoriestemplatesnonfreepresent \
+	AllLangPackage_accessoriestemplatesofficorr \
+	AllLangPackage_accessoriestemplatesoffimisc \
+	AllLangPackage_accessoriestemplatespersonal \
+	AllLangPackage_accessoriestemplatespresent \
 	UnpackedTarball_templates_pack \
 	Zip_accessoriestemplatescommon \
 	Zip_accessoriestemplatescommoneducate \

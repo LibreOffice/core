@@ -35,10 +35,10 @@ File gid_File_Extra_Autocorr
 End
 
 File gid_File_Extra_Autotextshare_Lang
-    Dir = gid_Dir_Autotext_Language;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(autotextshare,zip);
+    Styles = (FILELIST, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(autotextshare,filelist);
 End
 
 File gid_File_Extra_Autotextuser
