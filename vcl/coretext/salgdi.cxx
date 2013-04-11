@@ -283,23 +283,30 @@ void QuartzSalGraphics::SetTextColor( SalColor nSalColor )
 
 bool SvpSalGraphics::CheckContext()
 {
-    basegfx::B2IVector size = m_aDevice->getSize();
+    const basegfx::B2IVector size = m_aDevice->getSize();
+    const basegfx::B2IVector bufferSize = m_aDevice->getBufferSize();
+    const sal_Int32 scanlineStride = m_aDevice->getScanlineStride();
     basebmp::RawMemorySharedArray pixelBuffer = m_aDevice->getBuffer();
 
-    SAL_INFO( "vcl.ios", "CheckContext: device=" << m_aDevice.get() << " size=" << size.getX() << "x" << size.getY() << (m_aDevice->isTopDown() ? " top-down" : " bottom-up") << " stride=" << m_aDevice->getScanlineStride() );
+    SAL_INFO( "vcl.ios",
+              "CheckContext: device=" << m_aDevice.get() <<
+              " size=" << size.getX() << "x" << size.getY() <<
+              (m_aDevice->isTopDown() ? " top-down" : " bottom-up") <<
+              " stride=" << scanlineStride <<
+              " bufferSize=(" << bufferSize.getX() << "," << bufferSize.getY() << ")" );
 
     switch( m_aDevice->getScanlineFormat() ) {
     case basebmp::Format::EIGHT_BIT_PAL:
         mrContext = CGBitmapContextCreate(pixelBuffer.get(),
-                                          size.getX(), size.getY(),
-                                          8, m_aDevice->getScanlineStride(),
+                                          bufferSize.getX(), bufferSize.getY(),
+                                          8, scanlineStride,
                                           CGColorSpaceCreateDeviceGray(),
                                           kCGImageAlphaNone);
         break;
     case basebmp::Format::THIRTYTWO_BIT_TC_MASK_RGBA:
         mrContext = CGBitmapContextCreate(pixelBuffer.get(),
-                                          size.getX(), size.getY(),
-                                          8, m_aDevice->getScanlineStride(),
+                                          bufferSize.getX(), bufferSize.getY(),
+                                          8, scanlineStride,
                                           CGColorSpaceCreateDeviceRGB(),
                                           kCGImageAlphaNoneSkipLast);
         break;
@@ -309,11 +316,16 @@ bool SvpSalGraphics::CheckContext()
 
     SAL_WARN_IF( mrContext == NULL, "vcl.ios", "CheckContext() failed" );
 
+    // Should we also clip the context? (Then we need to add a
+    // getBounds() function to BitmapDevice.)
+
     if( mrContext != NULL && m_aDevice->isTopDown() )
     {
-        CGContextTranslateCTM( mrContext, 0, size.getY() );
+        CGContextTranslateCTM( mrContext, 0, bufferSize.getY() );
         CGContextScaleCTM( mrContext, 1, -1 );
     }
+
+    SAL_INFO( "vcl.ios", "CheckContext: context=" << mrContext );
 
     return ( mrContext != NULL );
 }
