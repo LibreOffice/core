@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///X4\u003d",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-11T12:33:04Z",
+      "side": 1,
+      "message": "Where does the second argument number of levels hard coded value 10 originate? I think it would be better to have a named symbolic constant for this, like NUM_RULE_DEFAULT_LEVELS or some such, especially if it\u0027s used in more than just this place. Btw, other places in editeng/ and sd/ use\n\n SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , sal_False);\n\nso maybe this one should also have these or\u0027ed values?",
+      "revId": "7f4c69f32bf4584dae69078671e93e77e4e693dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
