@@ -379,7 +379,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     OSL_ENSURE(io_rLevel >= 0, "invalid Level");
     NumParaList_t & rNPList( mNPLists[i_ListId] );
     const OUString none; // default
-    if ( rNPList.empty() && (0 != io_rLevel)) {
+    if ( rNPList.empty() ) {
         // create default list style for top level
         sal_Int16 lev(0);
         rNPList.push_back(::std::make_pair(none,
