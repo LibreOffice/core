@@ -373,7 +373,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(gb_CPUDEFS) \
 	$(gb_OSDEFS) \
 	-DCOMID=gcc3 \
-	-DCOMNAME=gcc3 \
 	-DSHORTSTDC3=$(gb_SHORTSTDC3) \
 	-DSHORTSTDCPP3=$(gb_SHORTSTDCPP3) \
 	-D_gcc3 \

@@ -455,5 +455,13 @@ End
         EXTRA_ALL_LANG_BUT_EN_US(file, ext); \
     End
 
+#define URE_PRIVATE_LIB(id,name) \
+    File id \
+        LIB_FILE_BODY; \
+        Dir = SCP2_URE_DL_DIR; \
+        Name = name; \
+        Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID); \
+    End
+
 #endif // MACROS_INC
 

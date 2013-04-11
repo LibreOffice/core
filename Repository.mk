@@ -414,35 +414,32 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 
 endif
 
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,URE, \
+	affine_uno \
+	$(if $(SOLAR_JAVA),java_uno) \
+	$(if $(SOLAR_JAVA),juh) \
+	$(if $(SOLAR_JAVA),juhx) \
+	$(if $(SOLAR_JAVA),jvmaccess) \
+	$(if $(SOLAR_JAVA),jvmfwk) \
+	log_uno \
+	reg \
+	sal_textenc \
+	store \
+	$(if $(SOLAR_JAVA),sunjavaplugin) \
+	unoidl \
+	unsafe_uno \
+	$(if $(URELIBS),urelibs) \
+	xmlreader \
+	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(COMNAME)),msci,mscx),gcc3)_uno \
+))
+
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-    affine_uno \
-	cli_cppuhelper \
-	cli_uno \
-	gcc3_uno \
+	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
+	$(if $(filter MSC,$(COM)),cli_uno) \
 	getuid \
-	java_uno \
-    jpipe \
-    juh \
-    juhx \
-    log_uno \
-    sal_textenc \
-    sunjavaplugin \
-	sunpro5_uno \
-    unoidl \
-    unsafe_uno \
-	urelibs \
-    xmlreader \
+	jpipe \
+	$(if $(filter WNT,$(OS)),jpipx) \
 ))
-
-ifeq ($(OS),WNT)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-    jpipx \
-	msci_uno \
-	mscx_uno \
-))
-
-endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     avmediagst \
@@ -552,7 +549,6 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
-    jvmaccess \
     purpenvhelper \
     salhelper \
 ))
@@ -651,10 +647,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
-    jvmfwk \
-    reg \
     sal \
-    store \
 ))
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \

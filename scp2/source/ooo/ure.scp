@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstallLibs/ure"
+
 Directory gid_Dir_Ure_Bin
 #if defined MACOSX
     ParentID = gid_Dir_UreLink;
@@ -213,13 +215,6 @@ Unixlink gid_Unixlink_File_Dl_Sal
 End
 #endif
 
-File gid_File_Dl_Sal_TextEnc
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("sal_textenc");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-End
-
 File gid_File_Dl_Salhelper
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -248,14 +243,6 @@ File gid_File_Dl_Profile_Uno
     // CompID = "4681F5C1-8F64-486F-B804-03B4D8CEB41F";
 End
 
-File gid_File_Dl_Reg
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_VER("reg", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "D5313B1F-D09F-401F-B180-891F70D489ED";
-End
-
 #ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Reg
     BIN_FILE_BODY;
@@ -264,43 +251,7 @@ Unixlink gid_Unixlink_File_Dl_Reg
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     Target = SCP2_URE_DL_VER("reg", "3");
 End
-#endif
 
-
-
-File gid_File_Dl_Store
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_VER("store", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "A5477BD7-89A3-44AF-8B42-9E28D55C8066";
-End
-
-
-File gid_File_Dl_Unoidl
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("unoidl");
-    Styles = (PACKED);
-End
-
-File gid_File_Dl_Xmlreader
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("xmlreader");
-    Styles = (PACKED);
-End
-
-#ifdef URELIBS
-File gid_File_Dl_Urelibs
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("urelibs");
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Store
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -308,19 +259,9 @@ Unixlink gid_Unixlink_File_Dl_Store
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     Target = SCP2_URE_DL_VER("store", "3");
 End
-#endif
 
 #if defined SOLAR_JAVA
 
-File gid_File_Dl_Jvmaccess
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_COMID_VER("jvmaccess", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "F3D6F794-DA6F-4522-B3A7-C15593C1A577";
-End
-
-#ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Jvmaccess
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -328,17 +269,7 @@ Unixlink gid_Unixlink_File_Dl_Jvmaccess
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     Target = SCP2_URE_DL_COMID_VER("jvmaccess", "3");
 End
-#endif
 
-File gid_File_Dl_Jvmfwk
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_VER("jvmfwk", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "4E128F82-FA30-4077-88DC-F745C3330093";
-End
-
-#ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Jvmfwk
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -346,25 +277,11 @@ Unixlink gid_Unixlink_File_Dl_Jvmfwk
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     Target = SCP2_URE_DL_VER("jvmfwk", "3");
 End
-#endif
 
-File gid_File_Dl_Sunjavaplugin
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("sunjavaplugin");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "0AC6C688-876C-40C5-B24E-9257003FDC3E";
-End
+#endif # JAVA
 
-File gid_File_Dl_JrepropertiesClass
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = "JREProperties.class";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "0C4B8DCF-18D1-47D9-8BB7-A5C1D9268016";
-End
+#endif # AIX
 
-#endif
 
 File gid_File_Dl_Profile_Jvmfwk3rc
     TXT_FILE_BODY;
@@ -374,21 +291,14 @@ File gid_File_Dl_Profile_Jvmfwk3rc
     // CompID = "1124A984-F905-47DC-ACEF-EDEC037F9B38";
 End
 
-File gid_File_Dl_ComnameUno
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL(STRING(COMNAME) "_uno");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "3FAFBDCB-96FE-4D9E-B655-CA86FE674711";
-End
 
 #if defined SOLAR_JAVA
-File gid_File_Dl_JavaUno
-    LIB_FILE_BODY;
+File gid_File_Dl_JrepropertiesClass
+    TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("java_uno");
+    Name = "JREProperties.class";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "5425A018-DAFD-4BC6-A550-377C899DC98A";
+    // CompID = "0C4B8DCF-18D1-47D9-8BB7-A5C1D9268016";
 End
 #endif
 
@@ -401,28 +311,6 @@ Shortcut gid_Shortcut_Dl_JavaUno
 End
 #endif
 
-File gid_File_Dl_UnsafeUnoUno
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("unsafe_uno_uno");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "74C2909A-FDCF-430A-B0F4-CA6D15690D76";
-End
-
-File gid_File_Dl_AffineUnoUno
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("affine_uno_uno");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "CF542EC3-7A51-4EAA-8480-65D5E8906D05";
-End
-
-File gid_File_Dl_LogUnoUno
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("log_uno_uno");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-End
 
 #if defined _MSC_VER
 File gid_File_Dl_Cli_Uno
@@ -432,9 +320,6 @@ File gid_File_Dl_Cli_Uno
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 
 End
-#endif
-
-#if defined _MSC_VER
 
 File gid_File_Dl_Cli_Ure_Assembly
     TXT_FILE_BODY;
@@ -449,10 +334,6 @@ File gid_File_Dl_Cli_Ure_Assembly
     ProcessorArchitecture = "MSIL";
 End
 
-#endif
-
-#if defined _MSC_VER
-
 File gid_File_Dl_Policy_Cli_Ure_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
@@ -466,10 +347,6 @@ File gid_File_Dl_Policy_Cli_Ure_Assembly
     ProcessorArchitecture = "MSIL";
 End
 
-#endif
-
-#if defined _MSC_VER 
-
 File gid_File_Dl_Policy_Cli_Ure_Config
     TXT_FILE_BODY;
     Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
@@ -477,10 +354,6 @@ File gid_File_Dl_Policy_Cli_Ure_Config
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Dl_Policy_Cli_Ure_Assembly;
 End
-
-#endif
-
-#if defined _MSC_VER
 
 File gid_File_Dl_Cli_Basetypes_Assembly
     TXT_FILE_BODY;
@@ -495,10 +368,6 @@ File gid_File_Dl_Cli_Basetypes_Assembly
     ProcessorArchitecture = "MSIL";
 End
 
-#endif
-
-#if defined _MSC_VER
-
 File gid_File_Dl_Policy_Cli_Basetypes_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
@@ -512,9 +381,6 @@ File gid_File_Dl_Policy_Cli_Basetypes_Assembly
     ProcessorArchitecture = "MSIL";
 End
 
-#endif
-#if defined _MSC_VER
-
 File gid_File_Dl_Policy_Cli_Basetypes_Config
     TXT_FILE_BODY;
     Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
@@ -522,11 +388,6 @@ File gid_File_Dl_Policy_Cli_Basetypes_Config
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Dl_Policy_Cli_Basetypes_Assembly;
 End
-
-#endif
-
-
-#if defined _MSC_VER
 
 File gid_File_Dl_Cli_Uretypes_Assembly
     TXT_FILE_BODY;
@@ -541,10 +402,6 @@ File gid_File_Dl_Cli_Uretypes_Assembly
     ProcessorArchitecture = "MSIL";
 End
 
-#endif
-
-#if defined _MSC_VER
-
 File gid_File_Dl_Policy_Cli_Uretypes_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
@@ -558,10 +415,6 @@ File gid_File_Dl_Policy_Cli_Uretypes_Assembly
     ProcessorArchitecture = "MSIL";
 End
 
-#endif
-
-#if defined _MSC_VER 
-
 File gid_File_Dl_Policy_Cli_Uretypes_Config
     TXT_FILE_BODY;
     Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
@@ -569,10 +422,6 @@ File gid_File_Dl_Policy_Cli_Uretypes_Config
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Dl_Policy_Cli_Uretypes_Assembly;
 End
-
-#endif
-
-#if defined _MSC_VER
 
 File gid_File_Lib_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
@@ -587,10 +436,6 @@ File gid_File_Lib_Cli_Cppuhelper_Assembly
     ProcessorArchitecture = "x86";
 End
 
-#endif
-
-#if defined _MSC_VER
-
 File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
@@ -603,10 +448,6 @@ File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     Attributes = "0";
     ProcessorArchitecture = "x86";
 End
-
-#endif
-
-#if defined _MSC_VER
 
 File gid_File_Lib_Policy_Cli_Cppuhelper_Config
     TXT_FILE_BODY;
@@ -634,26 +475,6 @@ File gid_File_Dl_Jpipx
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("jpipx");
     Styles = (PACKED);
-End
-#endif
-
-#if defined SOLAR_JAVA
-File gid_File_Dl_Juh
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("juh");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "1A001FB0-C469-4517-A3D1-3FA56AD607AF";
-End
-#endif
-
-#if defined SOLAR_JAVA
-File gid_File_Dl_Juhx
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("juhx");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "B152234F-A46A-40BE-B632-48F35A33A29A";
 End
 #endif
 
@@ -1003,36 +824,36 @@ Module gid_Module_Root_Ure_Hidden
             gid_Unixlink_File_Dl_PurpEnvHelper,
             gid_File_Dl_Sal,
             gid_Unixlink_File_Dl_Sal,
-            gid_File_Dl_Sal_TextEnc,
             gid_File_Dl_Salhelper,
             gid_Unixlink_File_Dl_Salhelper,
             gid_File_Dl_Profile_Uno,
-            gid_File_Dl_Reg,
             gid_Unixlink_File_Dl_Reg,
             gid_Unixlink_File_Dl_Rmcxt,
-            gid_File_Dl_Store,
             gid_Unixlink_File_Dl_Store,
-            gid_File_Dl_Unoidl,
-            gid_File_Dl_Xmlreader,
-#ifdef URELIBS
-            gid_File_Dl_Urelibs,
-#endif
-            gid_File_Dl_Jvmaccess,
             gid_Unixlink_File_Dl_Jvmaccess,
-            gid_File_Dl_Jvmfwk,
             gid_Unixlink_File_Dl_Jvmfwk,
-            gid_File_Dl_Sunjavaplugin,
+            auto_Ure_Private_Lib_affine_uno,
+            auto_Ure_Private_Lib_gcc3_uno,
+            auto_Ure_Private_Lib_java_uno,
+            auto_Ure_Private_Lib_juh,
+            auto_Ure_Private_Lib_juhx,
+            auto_Ure_Private_Lib_jvmaccess,
+            auto_Ure_Private_Lib_jvmfwk,
+            auto_Ure_Private_Lib_log_uno,
+            auto_Ure_Private_Lib_msci_uno,
+            auto_Ure_Private_Lib_mscx_uno,
+            auto_Ure_Private_Lib_reg,
+            auto_Ure_Private_Lib_sal_textenc,
+            auto_Ure_Private_Lib_store,
+            auto_Ure_Private_Lib_sunjavaplugin,
+            auto_Ure_Private_Lib_unoidl,
+            auto_Ure_Private_Lib_unsafe_uno,
+            auto_Ure_Private_Lib_urelibs,
+            auto_Ure_Private_Lib_xmlreader,
             gid_File_Dl_JrepropertiesClass,
             gid_File_Dl_Profile_Jvmfwk3rc,
-            gid_File_Dl_ComnameUno,
-            gid_File_Dl_JavaUno,
-            gid_File_Dl_UnsafeUnoUno,
-            gid_File_Dl_AffineUnoUno,
-            gid_File_Dl_LogUnoUno,
             gid_File_Dl_Jpipe,
             gid_File_Dl_Jpipx,
-            gid_File_Dl_Juh,
-            gid_File_Dl_Juhx,
             gid_File_Dl_Acceptor,
             gid_File_Dl_Binaryurp,
             gid_File_Dl_Bootstrap,
