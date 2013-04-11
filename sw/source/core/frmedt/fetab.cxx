@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 // also see swtable.cxx
 #define COLFUZZY 20L
 
-inline bool IsSame( long nA, long nB ) { return  Abs(nA-nB) <= COLFUZZY; }
+inline bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
 // table column cache
 SwTabCols *pLastCols   = 0;
@@ -1147,7 +1147,7 @@ sal_uInt16 SwFEShell::GetRowSelectionFromTop() const
         if ( ( nPtLine == 0 && nMkLine != USHRT_MAX ) ||
              ( nMkLine == 0 && nPtLine != USHRT_MAX ) )
         {
-            nRet = Max( nPtLine, nMkLine ) + 1;
+            nRet = std::max( nPtLine, nMkLine ) + 1;
         }
     }
 
@@ -1727,7 +1727,7 @@ static double lcl_DistancePoint2Segment( const Point& rA, const Point& rB, const
         }
     }
 
-    return Abs(nRet);
+    return std::abs(nRet);
 }
 
 /* Helper function*/

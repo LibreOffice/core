@@ -225,7 +225,7 @@ void ImplInitSalGDI()
                 pSalData->mpDitherLow[ n ] = (BYTE) ( n & 248 );
 
             for( n = 0; n < 256L; n++ )
-                pSalData->mpDitherHigh[ n ] = (BYTE) Min( pSalData->mpDitherLow[ n ] + 8L, 255L );
+                pSalData->mpDitherHigh[ n ] = (BYTE) std::min( pSalData->mpDitherLow[ n ] + 8L, 255L );
         }
     }
     else if ( (nRasterCaps & RC_PALETTE) && (nBitCount == 8) )
@@ -303,7 +303,7 @@ void ImplInitSalGDI()
                 pSalData->mpDitherLow[ n ] = (BYTE) ( n / 51L );
 
             for( n = 0; n < 256L; n++ )
-                pSalData->mpDitherHigh[ n ] = (BYTE)Min( pSalData->mpDitherLow[ n ] + 1, 5 );
+                pSalData->mpDitherHigh[ n ] = (BYTE)std::min( pSalData->mpDitherLow[ n ] + 1, 5 );
         }
 
         // get system color entries

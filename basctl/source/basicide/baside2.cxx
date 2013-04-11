@@ -787,7 +787,7 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
                     long nMaxY = pView->GetTextEngine()->GetTextHeight() - nVisHeight;
                     long nOldStartY = pView->GetStartDocPos().Y();
                     long nNewStartY = nStart * pView->GetTextEngine()->GetCharHeight();
-                    nNewStartY = Min( nNewStartY, nMaxY );
+                    nNewStartY = std::min( nNewStartY, nMaxY );
                     pView->Scroll( 0, -(nNewStartY-nOldStartY) );
                     pView->ShowCursor( false, true );
                     GetEditVScrollBar().SetThumbPos( pView->GetStartDocPos().Y() );

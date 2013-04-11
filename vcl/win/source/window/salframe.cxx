@@ -4650,7 +4650,7 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         Size checkSize( GetSystemMetrics( SM_CXMENUCHECK ), GetSystemMetrics( SM_CYMENUCHECK ) );
 
         pMI->itemWidth = checkSize.Width() + 3 + bmpSize.Width() + 3 + strSize.cx;
-        pMI->itemHeight = Max( Max( checkSize.Height(), bmpSize.Height() ), strSize.cy );
+        pMI->itemHeight = std::max( std::max( checkSize.Height(), bmpSize.Height() ), strSize.cy );
         pMI->itemHeight += 4;
 
         DeleteObject( SelectObject(hdc, hfntOld) );

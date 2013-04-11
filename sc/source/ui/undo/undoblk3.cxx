@@ -1653,9 +1653,9 @@ void ScUndoUpdateAreaLink::DoChange( const sal_Bool bUndo ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    SCCOL nEndX = Max( aOldRange.aEnd.Col(), aNewRange.aEnd.Col() );
-    SCROW nEndY = Max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
-    SCTAB nEndZ = Max( aOldRange.aEnd.Tab(), aNewRange.aEnd.Tab() );    //?
+    SCCOL nEndX = std::max( aOldRange.aEnd.Col(), aNewRange.aEnd.Col() );
+    SCROW nEndY = std::max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
+    SCTAB nEndZ = std::max( aOldRange.aEnd.Tab(), aNewRange.aEnd.Tab() );    //?
 
     if ( bUndo )
     {

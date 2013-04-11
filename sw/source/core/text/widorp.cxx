@@ -519,7 +519,7 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
     MSHORT nLineCnt = rLine.GetLineNr();
 
     // First satisfy the Orphans-rule and the wish for initials ...
-    const MSHORT nMinLines = Max( GetOrphansLines(), rLine.GetDropLines() );
+    const MSHORT nMinLines = std::max( GetOrphansLines(), rLine.GetDropLines() );
     if ( nLineCnt < nMinLines )
         return sal_False;
 

@@ -559,7 +559,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     Size aPartSize;
     long nKana = 0;
     const XubString aTxt( CalcCaseMap( rDo.GetInf().GetText() ) );
-    xub_StrLen nMaxPos = Min( sal_uInt16(rDo.GetInf().GetText().getLength() - rDo.GetInf().GetIdx()),
+    xub_StrLen nMaxPos = std::min( sal_uInt16(rDo.GetInf().GetText().getLength() - rDo.GetInf().GetIdx()),
                              rDo.GetInf().GetLen() );
     rDo.GetInf().SetLen( nMaxPos );
 

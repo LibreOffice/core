@@ -113,7 +113,7 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
         }
         SWRECTFN( this )
         SWRECTFNX( pNewUpper )
-        if( Abs( (pNewUpper->Prt().*fnRectX->fnGetWidth)() -
+        if( std::abs( (pNewUpper->Prt().*fnRectX->fnGetWidth)() -
                  (GetUpper()->Prt().*fnRect->fnGetWidth)() ) > 1 ) {
             // In this case, only a _WouldFit with test move is possible
             nMoveAnyway = 2;
@@ -671,10 +671,10 @@ static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot
         }
         else
             nTmp = pObj->GetObjRect().Bottom();
-        nMax = Max( nTmp, nMax );
+        nMax = std::max( nTmp, nMax );
     }
     ++nMax; // Lower edge vs. height!
-    rBot = Max( rBot, nMax );
+    rBot = std::max( rBot, nMax );
 }
 
 void SwPageFrm::MakeAll()
@@ -722,7 +722,7 @@ void SwPageFrm::MakeAll()
                         nWidth = pSh->GetBrowseWidth();
                     nWidth += + 2 * aBorder.Width();
 
-                    nWidth = Max( nWidth, 2L * aBorder.Width() + 4L*MM50 );
+                    nWidth = std::max( nWidth, 2L * aBorder.Width() + 4L*MM50 );
                     Frm().Width( nWidth );
 
                     SwLayoutFrm *pBody = FindBodyCont();
@@ -760,7 +760,7 @@ void SwPageFrm::MakeAll()
                                  ( pFrm->Frm().Height() < pFrm->Prt().Height() )
                                )
                             {
-                                nTmp = Min( nTmp, pFrm->Frm().Height() );
+                                nTmp = std::min( nTmp, pFrm->Frm().Height() );
                             }
                             else
                             {
@@ -770,7 +770,7 @@ void SwPageFrm::MakeAll()
                                 nTmp += pFrm->Frm().Height() - pFrm->Prt().Height();
                             }
                             if ( !pFrm->IsBodyFrm() )
-                                nTmp = Min( nTmp, pFrm->Frm().Height() );
+                                nTmp = std::min( nTmp, pFrm->Frm().Height() );
                             nBot += nTmp;
                             // Here we check whether paragraph anchored objects
                             // protrude outside the Body/FtnCont.
@@ -789,11 +789,11 @@ void SwPageFrm::MakeAll()
                         // visible area.
                         if ( !GetPrev() && !GetNext() )
                         {
-                            nBot = Max( nBot, pSh->VisArea().Height() );
+                            nBot = std::max( nBot, pSh->VisArea().Height() );
                         }
                         // #i35143# - Assure, that the page
                         // doesn't exceed the defined browse height.
-                        Frm().Height( Min( nBot, BROWSE_HEIGHT ) );
+                        Frm().Height( std::min( nBot, BROWSE_HEIGHT ) );
                     }
                     Prt().Left ( pAttrs->CalcLeftLine() + aBorder.Width() );
                     Prt().Top  ( nTop );
@@ -1007,7 +1007,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
                     if ( FLY_AS_CHAR == rFmt.GetAnchor().GetAnchorId() )
                     {
-                        nMinWidth = Max( nMinWidth,
+                        nMinWidth = std::max( nMinWidth,
                                          bFly ? rFmt.GetFrmSize().GetWidth()
                                               : pObj->GetObjRect().Width() );
                     }
@@ -1017,8 +1017,8 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 long nWidth = nWidthArea - 2 * ( IsVertical() ? aBorder.Height() : aBorder.Width() );
                 nWidth -= (Prt().*fnRect->fnGetLeft)();
                 nWidth -= rAttrs.CalcRightLine();
-                nWidth = Max( nMinWidth, nWidth );
-                (Prt().*fnRect->fnSetWidth)( Min( nWidth,
+                nWidth = std::max( nMinWidth, nWidth );
+                (Prt().*fnRect->fnSetWidth)( std::min( nWidth,
                                             (Prt().*fnRect->fnGetWidth)() ) );
             }
 
@@ -1026,7 +1026,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             {
                 // The PrtArea should already be at least MINLAY wide, matching the
                 // minimal values of the UI
-                (Prt().*fnRect->fnSetWidth)( Min( long(MINLAY),
+                (Prt().*fnRect->fnSetWidth)( std::min( long(MINLAY),
                                              (Frm().*fnRect->fnGetWidth)() ) );
                 SwTwips nTmp = (Frm().*fnRect->fnGetWidth)() -
                                (Prt().*fnRect->fnGetWidth)();

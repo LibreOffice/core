@@ -501,8 +501,8 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
             nRow = nRow2;
         else
         {
-            SCROW nNewRow1 = Max( nRow1, nRow );
-            SCROW nNewRow2 = Min( nRow2, nEndRow );
+            SCROW nNewRow1 = std::max( nRow1, nRow );
+            SCROW nNewRow2 = std::min( nRow2, nEndRow );
             pAttrArray->ApplyCacheArea( nNewRow1, nNewRow2, &aCache );
             nRow = nNewRow2;
         }
@@ -731,7 +731,7 @@ bool ScColumn::Search( SCROW nRow, SCSIZE& nIndex ) const
 
     long nOldLo, nOldHi;
     long    nLo     = nOldLo = 0;
-    long    nHi     = nOldHi = Min(static_cast<long>(maItems.size())-1, static_cast<long>(nRow) );
+    long    nHi     = nOldHi = std::min(static_cast<long>(maItems.size())-1, static_cast<long>(nRow) );
     long    i       = 0;
     bool    bFound  = false;
     // quite continuous distribution? => interpolating search
@@ -1450,7 +1450,7 @@ void ScColumn::CopyToColumn(
             while ( aIter.Next( nStart, nEnd ) && nStart <= nRow2 )
             {
                 if ( nEnd >= nRow1 )
-                    CopyToColumn( Max(nRow1,nStart), Min(nRow2,nEnd),
+                    CopyToColumn( std::max(nRow1,nStart), std::min(nRow2,nEnd),
                                     nFlags, false, rColumn, pMarkData, bAsLink );
             }
         }

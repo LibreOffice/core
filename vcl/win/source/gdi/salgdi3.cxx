@@ -2037,7 +2037,7 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
     char aResourceName[512];
     int nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
     int nLen = ::GetTempPathA( nMaxLen, aResourceName );
-    ::strncpy( aResourceName + nLen, aFileName, Max( 0, nMaxLen - nLen ));
+    ::strncpy( aResourceName + nLen, aFileName, std::max( 0, nMaxLen - nLen ));
     ::DeleteFileA( aResourceName );
 
     // Create font resource file (typically with a .fot file name extension).

@@ -70,10 +70,10 @@ Rectangle& Rectangle::Union( const Rectangle& rRect )
         *this = rRect;
     else
     {
-        nLeft  =  Min( Min( nLeft, rRect.nLeft ), Min( nRight, rRect.nRight )   );
-        nRight  = Max( Max( nLeft, rRect.nLeft ), Max( nRight, rRect.nRight )   );
-        nTop    = Min( Min( nTop, rRect.nTop ),   Min( nBottom, rRect.nBottom ) );
-        nBottom = Max( Max( nTop, rRect.nTop ),   Max( nBottom, rRect.nBottom ) );
+        nLeft  =  std::min( std::min( nLeft, rRect.nLeft ), std::min( nRight, rRect.nRight )   );
+        nRight  = std::max( std::max( nLeft, rRect.nLeft ), std::max( nRight, rRect.nRight )   );
+        nTop    = std::min( std::min( nTop, rRect.nTop ),   std::min( nBottom, rRect.nBottom ) );
+        nBottom = std::max( std::max( nTop, rRect.nTop ),   std::max( nBottom, rRect.nBottom ) );
     }
 
     return *this;
@@ -95,10 +95,10 @@ Rectangle& Rectangle::Intersection( const Rectangle& rRect )
     aTmpRect.Justify();
 
     // Perform intersection
-    nLeft  = Max( nLeft, aTmpRect.nLeft );
-    nRight = Min( nRight, aTmpRect.nRight );
-    nTop   = Max( nTop, aTmpRect.nTop );
-    nBottom= Min( nBottom, aTmpRect.nBottom );
+    nLeft  = std::max( nLeft, aTmpRect.nLeft );
+    nRight = std::min( nRight, aTmpRect.nRight );
+    nTop   = std::max( nTop, aTmpRect.nTop );
+    nBottom= std::min( nBottom, aTmpRect.nBottom );
 
     // Determine if intersection is empty
     if ( nRight < nLeft || nBottom < nTop )

@@ -23,6 +23,7 @@
 
 #include <string.h>     // memset(), memcpy()
 #include <limits.h>     // USHRT_MAX
+#include <algorithm>
 
 //====================================================================
 // add nOffset to each bit-value in the set
@@ -189,7 +190,7 @@ BitSet& BitSet::operator-=(sal_uInt16 nBit)
 
 BitSet& BitSet::operator|=( const BitSet& rSet )
 {
-    sal_uInt16 nMax = Min(nBlocks, rSet.nBlocks);
+    sal_uInt16 nMax = std::min(nBlocks, rSet.nBlocks);
 
     // expand the bitmap
     if ( nBlocks < rSet.nBlocks )

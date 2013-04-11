@@ -993,7 +993,7 @@ SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
     {
         nCount = static_cast<SCSIZE>(nEndRow - nStartRow);
         for (nCol = nStartCol; nCol <= nEndCol; nCol++)
-            nCount = Min(nCount, aCol[nCol].GetEmptyLinesInBlock(nStartRow, nEndRow, eDir));
+            nCount = std::min(nCount, aCol[nCol].GetEmptyLinesInBlock(nStartRow, nEndRow, eDir));
     }
     else if (eDir == DIR_RIGHT)
     {

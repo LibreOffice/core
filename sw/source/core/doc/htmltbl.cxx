@@ -1556,7 +1556,7 @@ static void lcl_ResizeLine( const SwTableLine* pLine, sal_uInt16 *pWidth )
     BOOST_FOREACH( const SwTableBox* pBox, pLine->GetTabBoxes() )
         lcl_ResizeBox(pBox, pWidth );
 
-    SAL_WARN_IF( nOldWidth && Abs(*pWidth-nOldWidth) >= COLFUZZY, "sw.core",
+    SAL_WARN_IF( nOldWidth && std::abs(*pWidth-nOldWidth) >= COLFUZZY, "sw.core",
                  "A box's rows have all a different length" );
 }
 
@@ -1626,7 +1626,7 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
         sal_uInt16 nCalcTabWidth = 0;
         BOOST_FOREACH( const SwTableLine *pLine, pSwTable->GetTabLines() )
             lcl_ResizeLine( pLine, &nCalcTabWidth );
-        SAL_WARN_IF( Abs( nRelTabWidth-nCalcTabWidth ) >= COLFUZZY, "sw.core",
+        SAL_WARN_IF( std::abs( nRelTabWidth-nCalcTabWidth ) >= COLFUZZY, "sw.core",
                      "Table width is not equal to the row width" );
 
         // Lock the table format when altering it, or else the box formats

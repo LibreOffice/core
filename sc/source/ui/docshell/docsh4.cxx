@@ -1458,7 +1458,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         if ( nBlkTwipsY == 0 )
             nBlkTwipsY = 1;
 
-        long nNeeded = Min( aPhysPage.Width()  * 100 / nBlkTwipsX,
+        long nNeeded = std::min( aPhysPage.Width()  * 100 / nBlkTwipsX,
                             aPhysPage.Height() * 100 / nBlkTwipsY );
         if ( nNeeded < ZOOM_MIN )
             nNeeded = ZOOM_MIN;         // Begrenzung

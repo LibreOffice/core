@@ -331,7 +331,7 @@ void FrameSelectorImpl::InitGlobalGeometry()
     /*  nMinSize is the lower of width and height (control will always be squarish).
         FRAMESEL_GEOM_OUTER is the minimal distance between inner control border
         and any element. */
-    long nMinSize = Min( aCtrlSize.Width(), aCtrlSize.Height() ) - 2 * FRAMESEL_GEOM_OUTER;
+    long nMinSize = std::min( aCtrlSize.Width(), aCtrlSize.Height() ) - 2 * FRAMESEL_GEOM_OUTER;
     /*  nFixedSize is the size all existing elements need in one direction:
         the diag. arrow, space betw. arrow and frame border, outer frame border,
         inner frame border, other outer frame border, space betw. frame border

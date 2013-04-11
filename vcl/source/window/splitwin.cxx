@@ -555,7 +555,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                 }
             }
             // Rundungsfehler werden hier nicht ausgelichen
-            if ( (nAbsItems < (sal_uInt16)(Abs( nSizeDelta ))) && nSizeWinSize )
+            if ( (nAbsItems < (sal_uInt16)(std::abs( nSizeDelta ))) && nSizeWinSize )
             {
                 for ( i = 0; i < nItems; i++ )
                 {

@@ -952,7 +952,7 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
 
     while ( nNextThis <= nRow2 || nNextSrc <= nRow2 )
     {
-        SCROW nRow = Min( nNextThis, nNextSrc );
+        SCROW nRow = std::min( nNextThis, nNextSrc );
 
         ScBaseCell* pSrc = NULL;
         ScBaseCell* pDest = NULL;

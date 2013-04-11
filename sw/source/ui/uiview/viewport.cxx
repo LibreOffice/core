@@ -138,14 +138,14 @@ long SwView::SetHScrollMax( long lMax )
 
     // bei negativen Werten ist das Dokument vollstaendig sichtbar;
     // in diesem Fall kein Scrollen
-    return Max( Min( lMax, lSize ), 0L );
+    return std::max( std::min( lMax, lSize ), 0L );
 }
 
 long SwView::SetVScrollMax( long lMax )
 {
     const long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     long lSize = GetDocSz().Height() + lBorder - m_aVisArea.GetHeight();
-    return Max( Min( lMax, lSize), 0L );        // siehe horz.
+    return std::max( std::min( lMax, lSize), 0L );        // siehe horz.
 }
 
 Point SwView::AlignToPixel(const Point &rPt) const
@@ -259,8 +259,8 @@ void SwView::SetVisArea( const Rectangle &rRect, sal_Bool bUpdateScrollbar )
     {
         m_pWrtShell->VisPortChgd( m_aVisArea );
         if ( aOldSz != m_pWrtShell->VisArea().SSize() &&
-             ( Abs(aOldSz.Width() - m_pWrtShell->VisArea().Width()) > 2 ||
-                Abs(aOldSz.Height() - m_pWrtShell->VisArea().Height()) > 2 ) )
+             ( std::abs(aOldSz.Width() - m_pWrtShell->VisArea().Width()) > 2 ||
+                std::abs(aOldSz.Height() - m_pWrtShell->VisArea().Height()) > 2 ) )
             m_pWrtShell->CheckBrowseView( sal_False );
     }
 
@@ -359,16 +359,16 @@ void SwView::CalcPt( Point *pPt, const Rectangle &rRect,
     long nYScroll = GetYScroll();
     long nDesHeight = rRect.GetHeight();
     long nCurHeight = m_aVisArea.GetHeight();
-    nYScroll = Min(nYScroll, nCurHeight - nDesHeight); // wird es knapp, dann nicht zuviel scrollen
+    nYScroll = std::min(nYScroll, nCurHeight - nDesHeight); // wird es knapp, dann nicht zuviel scrollen
     if(nDesHeight > nCurHeight) // die Hoehe reicht nicht aus, dann interessiert nYScroll nicht mehr
     {
         pPt->Y() = rRect.Top();
-        pPt->Y() = Max( lMin, pPt->Y() );
+        pPt->Y() = std::max( lMin, pPt->Y() );
     }
     else if ( rRect.Top() < m_aVisArea.Top() )                //Verschiebung nach oben
     {
         pPt->Y() = rRect.Top() - (nRangeY != USHRT_MAX ? nRangeY : nYScroll);
-        pPt->Y() = Max( lMin, pPt->Y() );
+        pPt->Y() = std::max( lMin, pPt->Y() );
     }
     else if( rRect.Bottom() > m_aVisArea.Bottom() )   //Verschiebung nach unten
     {
@@ -388,9 +388,9 @@ void SwView::CalcPt( Point *pPt, const Rectangle &rRect,
     else if ( rRect.Left() < m_aVisArea.Left() )      //Verschiebung nach links
     {
         pPt->X() = rRect.Left() - (nRangeX != USHRT_MAX ? nRangeX : nXScroll);
-        pPt->X() = Max( ::GetLeftMargin( *this ) + nLeftOfst, pPt->X() );
-        pPt->X() = Min( rRect.Left() - nScrollX, pPt->X() );
-        pPt->X() = Max( 0L, pPt->X() );
+        pPt->X() = std::max( ::GetLeftMargin( *this ) + nLeftOfst, pPt->X() );
+        pPt->X() = std::min( rRect.Left() - nScrollX, pPt->X() );
+        pPt->X() = std::max( 0L, pPt->X() );
     }
 }
 
@@ -462,8 +462,8 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
         aSize.Height()+ GetYScroll() > aVisSize.Height() ))
     {
         Point aPt( m_aVisArea.TopLeft() );
-        aSize.Width() = Min( aSize.Width(), aVisSize.Width() );
-        aSize.Height()= Min( aSize.Height(),aVisSize.Height());
+        aSize.Width() = std::min( aSize.Width(), aVisSize.Width() );
+        aSize.Height()= std::min( aSize.Height(),aVisSize.Height());
 
         CalcPt( &aPt, Rectangle( rRect.TopLeft(), aSize ),
                 static_cast< sal_uInt16 >((aVisSize.Width() - aSize.Width()) / 2),
@@ -472,7 +472,7 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
         if( m_bTopCrsr )
         {
             const long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
-            aPt.Y() = Min( Max( nBorder, rRect.Top() ),
+            aPt.Y() = std::min( std::max( nBorder, rRect.Top() ),
                                 m_aDocSz.Height() + nBorder -
                                     m_aVisArea.GetHeight() );
         }
@@ -489,7 +489,7 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
         if( m_bTopCrsr )
         {
             const long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
-            aPt.Y() = Min( Max( nBorder, rRect.Top() ),
+            aPt.Y() = std::min( std::max( nBorder, rRect.Top() ),
                                 m_aDocSz.Height() + nBorder -
                                     m_aVisArea.GetHeight() );
         }
@@ -513,7 +513,7 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
                   - m_aVisArea.Left() - m_aVisArea.Right() ) / 2;
         aPnt.X() = SetHScrollMax( aPnt.X() );
         const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : 0;
-        aPnt.X() = Max( (GetLeftMargin( *this ) - lMin) + nLeftOfst, aPnt.X() );
+        aPnt.X() = std::max( (GetLeftMargin( *this ) - lMin) + nLeftOfst, aPnt.X() );
     }
     m_aVisArea = aOldVisArea;
     if( pCareWn )
@@ -566,7 +566,7 @@ long SwView::PageUp()
 
     Point aPos(m_aVisArea.TopLeft());
     aPos.Y() -= m_aVisArea.GetHeight() - (GetYScroll() / 2);
-    aPos.Y() = Max(0L, aPos.Y());
+    aPos.Y() = std::max(0L, aPos.Y());
     SetVisArea( aPos );
     return 1;
 }
@@ -1259,9 +1259,9 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     {
         long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
-            nFact = Max( (long) 20, basegfx::zoomtools::zoomOut( nFact ));
+            nFact = std::max( (long) 20, basegfx::zoomtools::zoomOut( nFact ));
         else
-            nFact = Min( (long) 600, basegfx::zoomtools::zoomIn( nFact ));
+            nFact = std::min( (long) 600, basegfx::zoomtools::zoomIn( nFact ));
 
         SetZoom( SVX_ZOOM_PERCENT, nFact );
         bOk = sal_True;
@@ -1269,7 +1269,7 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     else if( pWData && COMMAND_WHEEL_ZOOM_SCALE == pWData->GetMode() )
     {
         int newZoom = 100 * (m_pWrtShell->GetViewOptions()->GetZoom() / 100.0) * (pWData->GetDelta() / 100.0);
-        SetZoom( SVX_ZOOM_PERCENT, Max( 20, Min( 600, newZoom ) ) );
+        SetZoom( SVX_ZOOM_PERCENT, std::max( 20, std::min( 600, newZoom ) ) );
         bOk = sal_True;
     }
     else

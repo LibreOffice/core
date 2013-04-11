@@ -1004,7 +1004,7 @@ void Ruler::ImplCalc()
             mnWinWidth = mnWidth - mnVirOff;
         if ( mpData->bAutoPageWidth )
             mpData->nPageWidth = mnWinWidth;
-        mpData->nRulWidth = Min( mnWinWidth, mpData->nPageWidth-nNotVisPageWidth );
+        mpData->nRulWidth = std::min( mnWinWidth, mpData->nPageWidth-nNotVisPageWidth );
         if ( nRulWinOff+mpData->nRulWidth > mnWidth )
             mpData->nRulWidth = mnWidth-nRulWinOff;
     }
@@ -1014,7 +1014,7 @@ void Ruler::ImplCalc()
             mnWinWidth = mnHeight - mnVirOff;
         if ( mpData->bAutoPageWidth )
             mpData->nPageWidth = mnWinWidth;
-        mpData->nRulWidth = Min( mnWinWidth, mpData->nPageWidth-nNotVisPageWidth );
+        mpData->nRulWidth = std::min( mnWinWidth, mpData->nPageWidth-nNotVisPageWidth );
         if ( nRulWinOff+mpData->nRulWidth > mnHeight )
             mpData->nRulWidth = mnHeight-nRulWinOff;
     }

@@ -658,8 +658,8 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                         ((SwFmtChg*)pNew)->pChangedFmt->GetFrmSize() :
                         (const SwFmtFrmSize&)*pNew;
 
-                Frm().Height( Max( rSz.GetHeight(), long(MINLAY) ) );
-                Frm().Width ( Max( rSz.GetWidth(),  long(MINLAY) ) );
+                Frm().Height( std::max( rSz.GetHeight(), long(MINLAY) ) );
+                Frm().Width ( std::max( rSz.GetWidth(),  long(MINLAY) ) );
 
                 if ( GetUpper() )
                     static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
@@ -1769,7 +1769,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                     ((const SwTabFrm *)pFrm)->GetTable()
                                             ->GetHTMLTableLayout();
                 if ( pLayoutInfo )
-                    nWidth = Min( nWidth, pLayoutInfo->GetBrowseWidthMin() );
+                    nWidth = std::min( nWidth, pLayoutInfo->GetBrowseWidthMin() );
 
                 switch ( rHori.GetHoriOrient() )
                 {
@@ -1784,7 +1784,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                         break;
 
                 }
-                nBrowseWidth = Max( nBrowseWidth, nWidth );
+                nBrowseWidth = std::max( nBrowseWidth, nWidth );
             }
         }
         else if ( pFrm->GetDrawObjs() )
@@ -1843,7 +1843,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                         break;
                     default:    /* do nothing */;
                 }
-                nBrowseWidth = Max( nBrowseWidth, nWidth );
+                nBrowseWidth = std::max( nBrowseWidth, nWidth );
             }
         }
         pFrm = pFrm->FindNextCnt();
@@ -2193,7 +2193,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
             nWidthRemain = nWidthRemain - nPageWidth;
 
             nCurrentRowWidth = nCurrentRowWidth + nPageWidth;
-            nCurrentRowHeight = Max( nCurrentRowHeight, nPageHeight );
+            nCurrentRowHeight = std::max( nCurrentRowHeight, nPageHeight );
 
             pPageFrm = static_cast<SwPageFrm*>(pPageFrm->GetNext());
 
@@ -2307,8 +2307,8 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
                 const bool bLastColumn = pPageToAdjust->GetNext() == pEndOfRow;
                 const bool bLastRow = !pEndOfRow;
 
-                nMinPageLeft  = Min( nMinPageLeft, aNewPagePos.X() );
-                nMaxPageRight = Max( nMaxPageRight, aNewPagePos.X() + nCurrentPageWidth);
+                nMinPageLeft  = std::min( nMinPageLeft, aNewPagePos.X() );
+                nMaxPageRight = std::max( nMaxPageRight, aNewPagePos.X() + nCurrentPageWidth);
 
                 // border of nGapBetweenPages around the current page:
                 SwRect aPageRectWithBorders( aNewPagePos.X() - nGapBetweenPages,

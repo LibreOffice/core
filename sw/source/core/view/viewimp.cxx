@@ -68,8 +68,8 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
     const Size &rSz = pNewOpt->GetSnapSize();
     pDrawView->SetGridCoarse( rSz );
     const Size aFSize
-            ( rSz.Width() ? rSz.Width() /Max(short(1),pNewOpt->GetDivisionX()):0,
-              rSz.Height()? rSz.Height()/Max(short(1),pNewOpt->GetDivisionY()):0);
+            ( rSz.Width() ? rSz.Width() /std::max(short(1),pNewOpt->GetDivisionX()):0,
+              rSz.Height()? rSz.Height()/std::max(short(1),pNewOpt->GetDivisionY()):0);
      pDrawView->SetGridFine( aFSize );
     Fraction aSnGrWdtX(rSz.Width(), pNewOpt->GetDivisionX() + 1);
     Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);

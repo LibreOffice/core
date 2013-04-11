@@ -543,8 +543,8 @@ void VCLXAccessibleList::UpdateEntryRange_Impl()
     if ( nTop != m_nLastTopEntry )
     {
         UpdateVisibleLineCount();
-        sal_Int32 nBegin = Min( m_nLastTopEntry, nTop );
-        sal_Int32 nEnd = Max( m_nLastTopEntry + m_nVisibleLineCount, nTop + m_nVisibleLineCount );
+        sal_Int32 nBegin = std::min( m_nLastTopEntry, nTop );
+        sal_Int32 nEnd = std::max( m_nLastTopEntry + m_nVisibleLineCount, nTop + m_nVisibleLineCount );
         for (sal_uInt16 i = static_cast<sal_uInt16>(nBegin); (i <= static_cast<sal_uInt16>(nEnd)); ++i)
         {
             sal_Bool bVisible = ( i >= nTop && i < ( nTop + m_nVisibleLineCount ) );

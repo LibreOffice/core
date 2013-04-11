@@ -980,9 +980,9 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             } else
             {
                 if ( pData->GetDelta() < 0 )
-                    nNew = Max( (long) MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
+                    nNew = std::max( (long) MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
                 else
-                    nNew = Min( (long) MAXZOOM, basegfx::zoomtools::zoomIn( nOld ));
+                    nNew = std::min( (long) MAXZOOM, basegfx::zoomtools::zoomIn( nOld ));
             }
             if ( nNew != nOld )
             {

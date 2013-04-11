@@ -1467,7 +1467,7 @@ bool XclExpDefcolwidth::IsDefWidth( sal_uInt16 nXclColWidth ) const
 {
     double fNewColWidth = lclGetCorrectedColWidth( GetRoot(), nXclColWidth );
     // exactly matched, if difference is less than 1/16 of a character to the left or to the right
-    return Abs( static_cast< long >( GetValue() * 256.0 - fNewColWidth + 0.5 ) ) < 16;
+    return std::abs( static_cast< long >( GetValue() * 256.0 - fNewColWidth + 0.5 ) ) < 16;
 }
 
 void XclExpDefcolwidth::SetDefWidth( sal_uInt16 nXclColWidth )

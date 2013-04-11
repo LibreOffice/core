@@ -1155,8 +1155,8 @@ ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
             SCSIZE nR0, nR1;
             pMat[0]->GetDimensions( nC0, nR0 );
             pMat[1]->GetDimensions( nC1, nR1 );
-            SCSIZE nC = Max( nC0, nC1 );
-            SCSIZE nR = Max( nR0, nR1 );
+            SCSIZE nC = std::max( nC0, nC1 );
+            SCSIZE nR = std::max( nR0, nR1 );
             pResMat = GetNewMat( nC, nR);
             if ( !pResMat )
                 return NULL;

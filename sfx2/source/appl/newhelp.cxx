@@ -1008,7 +1008,7 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
     nChecked = aScopeCB.IsChecked() ? 1 : 0;
     aUserData += OUString::number( nChecked );
     aUserData += ';';
-    sal_uInt16 nCount = Min( aSearchED.GetEntryCount(), (sal_uInt16)10 );  // save only 10 entries
+    sal_uInt16 nCount = std::min( aSearchED.GetEntryCount(), (sal_uInt16)10 );  // save only 10 entries
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
@@ -2246,7 +2246,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
 
 void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
 {
-    long nX = Max( GetOutputSizePixel().Width() - aOnStartupCB.GetSizePixel().Width(), nMinPos );
+    long nX = std::max( GetOutputSizePixel().Width() - aOnStartupCB.GetSizePixel().Width(), nMinPos );
     Point aPos = aOnStartupCB.GetPosPixel();
     aPos.X() = nX;
     aOnStartupCB.SetPosPixel( aPos );

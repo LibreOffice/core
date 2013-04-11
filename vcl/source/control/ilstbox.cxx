@@ -723,16 +723,16 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
         if( aMetrics.nImgHeight > mnMaxImgHeight )
             mnMaxImgHeight = aMetrics.nImgHeight;
 
-        mnMaxImgTxtWidth = Max( mnMaxImgTxtWidth, aMetrics.nTextWidth );
-        aMetrics.nEntryHeight = Max( aMetrics.nImgHeight, aMetrics.nEntryHeight );
+        mnMaxImgTxtWidth = std::max( mnMaxImgTxtWidth, aMetrics.nTextWidth );
+        aMetrics.nEntryHeight = std::max( aMetrics.nImgHeight, aMetrics.nEntryHeight );
 
     }
     if ( IsUserDrawEnabled() || aMetrics.bImage )
     {
-        aMetrics.nEntryWidth = Max( aMetrics.nImgWidth, maUserItemSize.Width() );
+        aMetrics.nEntryWidth = std::max( aMetrics.nImgWidth, maUserItemSize.Width() );
         if ( aMetrics.bText )
             aMetrics.nEntryWidth += aMetrics.nTextWidth + IMG_TXT_DISTANCE;
-        aMetrics.nEntryHeight = Max( Max( mnMaxImgHeight, maUserItemSize.Height() ) + 2,
+        aMetrics.nEntryHeight = std::max( std::max( mnMaxImgHeight, maUserItemSize.Height() ) + 2,
                                      aMetrics.nEntryHeight );
     }
 
@@ -983,8 +983,8 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 sal_uInt16 nSelect = GetEntryPosForPoint( rMEvt.GetPosPixel() );
                 if( nSelect == LISTBOX_ENTRY_NOTFOUND )
                     nSelect = mpEntryList->GetEntryCount() - 1;
-                nSelect = Min( nSelect, GetLastVisibleEntry() );
-                nSelect = Min( nSelect, (sal_uInt16) ( mpEntryList->GetEntryCount() - 1 ) );
+                nSelect = std::min( nSelect, GetLastVisibleEntry() );
+                nSelect = std::min( nSelect, (sal_uInt16) ( mpEntryList->GetEntryCount() - 1 ) );
                 // Select only visible Entries with MouseMove, otherwise Tracking...
                 if ( IsVisible( nSelect ) &&
                     mpEntryList->IsEntrySelectable( nSelect ) &&
@@ -1167,8 +1167,8 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
                 if( nAnchor != LISTBOX_ENTRY_NOTFOUND )
                 {
                     // All entries from achor to nSelect have to be selected
-                    sal_uInt16 nStart = Min( nSelect, nAnchor );
-                    sal_uInt16 nEnd = Max( nSelect, nAnchor );
+                    sal_uInt16 nStart = std::min( nSelect, nAnchor );
+                    sal_uInt16 nEnd = std::max( nSelect, nAnchor );
                     for ( sal_uInt16 n = nStart; n <= nEnd; n++ )
                     {
                         if ( !mpEntryList->IsEntryPosSelected( n ) )
@@ -1314,7 +1314,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
             {
                 if ( mnCurrentPos != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    nSelect = Min(  (sal_uInt16)(mnCurrentPos+1), (sal_uInt16)(mpEntryList->GetEntryCount()-1) );
+                    nSelect = std::min(  (sal_uInt16)(mnCurrentPos+1), (sal_uInt16)(mpEntryList->GetEntryCount()-1) );
                     if( nSelect >= GetLastVisibleEntry() )
                         SetTopEntry( mnTop+1 );
                 }
@@ -1322,8 +1322,8 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
             else
             {
                 nSelect = (sal_uInt16) ( ( aPt.Y() + mnBorder ) / mnMaxHeight ) + (sal_uInt16) mnTop;
-                nSelect = Min( nSelect, GetLastVisibleEntry() );
-                nSelect = Min( nSelect, (sal_uInt16) ( mpEntryList->GetEntryCount() - 1 ) );
+                nSelect = std::min( nSelect, GetLastVisibleEntry() );
+                nSelect = std::min( nSelect, (sal_uInt16) ( mpEntryList->GetEntryCount() - 1 ) );
             }
 
             if ( bInside )
@@ -1534,12 +1534,12 @@ sal_Bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 {
                     sal_uInt16 nCount = mpEntryList->GetEntryCount();
                     sal_uInt16 nCurVis = GetLastVisibleEntry() - mnTop;
-                    sal_uInt16 nTmp = Min( nCurVis, nCount );
+                    sal_uInt16 nTmp = std::min( nCurVis, nCount );
                     nTmp += mnTop - 1;
                     if( mnCurrentPos == nTmp && mnCurrentPos != nCount - 1 )
                     {
-                        long nTmp2 = Min( (long)(nCount-nCurVis), (long)((long)mnTop+(long)nCurVis-1) );
-                        nTmp2 = Max( (long)0 , nTmp2 );
+                        long nTmp2 = std::min( (long)(nCount-nCurVis), (long)((long)mnTop+(long)nCurVis-1) );
+                        nTmp2 = std::max( (long)0 , nTmp2 );
                         nTmp = (sal_uInt16)(nTmp2+(nCurVis-1) );
                         SetTopEntry( (sal_uInt16)nTmp2 );
                     }
@@ -1875,7 +1875,7 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, sal_Bool bDrawImage, sal_Boo
         XubString aStr( mpEntryList->GetEntryText( nPos ) );
         if ( aStr.Len() )
         {
-            long nMaxWidth = Max( static_cast< long >( mnMaxWidth ),
+            long nMaxWidth = std::max( static_cast< long >( mnMaxWidth ),
                                   GetOutputSizePixel().Width() - 2*mnBorder );
             // a multiline entry should only be as wide a the window
             if( (pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE) )
@@ -1886,7 +1886,7 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, sal_Bool bDrawImage, sal_Boo
 
             if( !bDrawTextAtImagePos && ( mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled() ) )
             {
-                long nImageWidth = Max( mnMaxImgWidth, maUserItemSize.Width() );
+                long nImageWidth = std::max( mnMaxImgWidth, maUserItemSize.Width() );
                 aTextRect.Left() += nImageWidth + IMG_TXT_DISTANCE;
             }
 
@@ -2942,7 +2942,7 @@ void ImplWin::DrawEntry( sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDraw
 
         if ( !bDrawTextAtImagePos && ( bImage || IsUserDrawEnabled() ) )
         {
-            long nMaxWidth = Max( maImage.GetSizePixel().Width(), maUserItemSize.Width() );
+            long nMaxWidth = std::max( maImage.GetSizePixel().Width(), maUserItemSize.Width() );
             aTextRect.Left() += nMaxWidth + IMG_TXT_DISTANCE;
         }
 

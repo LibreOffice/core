@@ -1738,7 +1738,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     // get the drawing pages
     if (bInsPages) {
         sal_uInt16 nSourcePos=nFirstPageNum;
-        sal_uInt16 nMergeCount=sal_uInt16(Abs((long)((long)nFirstPageNum-nLastPageNum))+1);
+        sal_uInt16 nMergeCount=sal_uInt16(std::abs((long)((long)nFirstPageNum-nLastPageNum))+1);
         if (nDestPos>GetPageCount()) nDestPos=GetPageCount();
         while (nMergeCount>0) {
             SdrPage* pPg=NULL;

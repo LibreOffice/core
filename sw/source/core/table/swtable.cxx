@@ -433,7 +433,7 @@ static void lcl_RefreshHidden( SwTabCols &rToFill, sal_uInt16 nPos )
 {
     for ( sal_uInt16 i = 0; i < rToFill.Count(); ++i )
     {
-        if ( Abs((long)(nPos - rToFill[i])) <= COLFUZZY )
+        if ( std::abs((long)(nPos - rToFill[i])) <= COLFUZZY )
         {
             rToFill.SetHidden( i, sal_False );
             break;

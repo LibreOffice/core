@@ -1525,7 +1525,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         else
         {
             bChgBullet = true;
-            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_BUL_LEVEL1 + ( Min( nLvl, cnNumBullColls ) * 4 )) );
+            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_BUL_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 )) );
         }
     }
     else
@@ -1545,7 +1545,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             // Ebene 0 und Einrueckung dann wird die Ebene durch den linken
             // Einzug und der default NumEinrueckung bestimmt.
             if( !nDigitLevel && nLeftTxtPos )
-                nLvl = Min( sal_uInt16( nLeftTxtPos / lNumIndent ),
+                nLvl = std::min( sal_uInt16( nLeftTxtPos / lNumIndent ),
                             sal_uInt16( MAXLEVEL - 1 ) );
             else
                 nLvl = nDigitLevel;
@@ -1622,7 +1622,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             }
         }
         else if( !aFlags.bAFmtByInput )
-            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_NUM_LEVEL1 + ( Min( nLvl, cnNumBullColls ) * 4 ) ));
+            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_NUM_LEVEL1 + ( std::min( nLvl, cnNumBullColls ) * 4 ) ));
         else
             bChgEnum = false;
     }
@@ -1791,7 +1791,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
         SwTxtFrmInfo aFInfo( pAktTxtFrm );
         const SwTxtNode* pNxtNd = GetNextNode();
         while(  CanJoin( pNxtNd ) &&
-                20 < Abs( (long)(nSpaces - aFInfo.SetFrm(
+                20 < std::abs( (long)(nSpaces - aFInfo.SetFrm(
                                 GetFrm( *pNxtNd ) ).GetLineStart() ))
             )
         {

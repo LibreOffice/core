@@ -1142,10 +1142,10 @@ void Region::ImplCreateRectRegion( const Rectangle& rRect )
     else
     {
         // get justified rectangle
-        long nTop       = Min( rRect.Top(), rRect.Bottom() );
-        long nBottom    = Max( rRect.Top(), rRect.Bottom() );
-        long nLeft      = Min( rRect.Left(), rRect.Right() );
-        long nRight     = Max( rRect.Left(), rRect.Right() );
+        long nTop       = std::min( rRect.Top(), rRect.Bottom() );
+        long nBottom    = std::max( rRect.Top(), rRect.Bottom() );
+        long nLeft      = std::min( rRect.Left(), rRect.Right() );
+        long nRight     = std::max( rRect.Left(), rRect.Right() );
 
         // create instance of implementation class
         mpImplRegion = new ImplRegion();
@@ -1378,10 +1378,10 @@ void Region::Union( const Rectangle& rRect )
         ImplCopyData();
 
     // get justified rectangle
-    long nLeft      = Min( rRect.Left(), rRect.Right() );
-    long nTop       = Min( rRect.Top(), rRect.Bottom() );
-    long nRight     = Max( rRect.Left(), rRect.Right() );
-    long nBottom    = Max( rRect.Top(), rRect.Bottom() );
+    long nLeft      = std::min( rRect.Left(), rRect.Right() );
+    long nTop       = std::min( rRect.Top(), rRect.Bottom() );
+    long nRight     = std::max( rRect.Left(), rRect.Right() );
+    long nBottom    = std::max( rRect.Top(), rRect.Bottom() );
 
     // insert bands if the boundaries are not already in the list
     mpImplRegion->InsertBands( nTop, nBottom );
@@ -1480,10 +1480,10 @@ void Region::Intersect( const Rectangle& rRect )
         return;
 
     // get justified rectangle
-    long nLeft      = Min( rRect.Left(), rRect.Right() );
-    long nTop       = Min( rRect.Top(), rRect.Bottom() );
-    long nRight     = Max( rRect.Left(), rRect.Right() );
-    long nBottom    = Max( rRect.Top(), rRect.Bottom() );
+    long nLeft      = std::min( rRect.Left(), rRect.Right() );
+    long nTop       = std::min( rRect.Top(), rRect.Bottom() );
+    long nRight     = std::max( rRect.Left(), rRect.Right() );
+    long nBottom    = std::max( rRect.Top(), rRect.Bottom() );
 
     // is own region NULL-region? -> copy data!
     if ( mpImplRegion == &aImplNullRegion )
@@ -1583,10 +1583,10 @@ void Region::Exclude( const Rectangle& rRect )
         ImplCopyData();
 
     // get justified rectangle
-    long nLeft      = Min( rRect.Left(), rRect.Right() );
-    long nTop       = Min( rRect.Top(), rRect.Bottom() );
-    long nRight     = Max( rRect.Left(), rRect.Right() );
-    long nBottom    = Max( rRect.Top(), rRect.Bottom() );
+    long nLeft      = std::min( rRect.Left(), rRect.Right() );
+    long nTop       = std::min( rRect.Top(), rRect.Bottom() );
+    long nRight     = std::max( rRect.Left(), rRect.Right() );
+    long nBottom    = std::max( rRect.Top(), rRect.Bottom() );
 
     // insert bands if the boundaries are not already in the list
     mpImplRegion->InsertBands( nTop, nBottom );
@@ -1645,10 +1645,10 @@ void Region::XOr( const Rectangle& rRect )
         ImplCopyData();
 
     // get justified rectangle
-    long nLeft      = Min( rRect.Left(), rRect.Right() );
-    long nTop       = Min( rRect.Top(), rRect.Bottom() );
-    long nRight     = Max( rRect.Left(), rRect.Right() );
-    long nBottom    = Max( rRect.Top(), rRect.Bottom() );
+    long nLeft      = std::min( rRect.Left(), rRect.Right() );
+    long nTop       = std::min( rRect.Top(), rRect.Bottom() );
+    long nRight     = std::max( rRect.Left(), rRect.Right() );
+    long nBottom    = std::max( rRect.Top(), rRect.Bottom() );
 
     // insert bands if the boundaries are not already in the list
     mpImplRegion->InsertBands( nTop, nBottom );
@@ -2091,8 +2091,8 @@ Rectangle Region::GetBoundRect() const
     while ( pBand )
     {
         nYBottom    = pBand->mnYBottom;
-        nXLeft      = Min( nXLeft, pBand->GetXLeftBoundary() );
-        nXRight     = Max( nXRight, pBand->GetXRightBoundary() );
+        nXLeft      = std::min( nXLeft, pBand->GetXLeftBoundary() );
+        nXRight     = std::max( nXRight, pBand->GetXRightBoundary() );
 
         pBand = pBand->mpNextBand;
     }

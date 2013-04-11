@@ -288,7 +288,7 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         if( FindExtRange( aTokenRange, pSrcDoc, aToken ) )
         {
             // columns: find maximum
-            nWidth = Max( nWidth, (SCCOL)(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
+            nWidth = std::max( nWidth, (SCCOL)(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
             // rows: add row range + 1 empty row
             nHeight += aTokenRange.aEnd.Row() - aTokenRange.aStart.Row() + 2;
         }
@@ -321,7 +321,7 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         SCCOL nNewEndX = aNewRange.aEnd.Col();
         SCROW nNewEndY = aNewRange.aEnd.Row();
         ScRange aMaxRange( aDestPos,
-                    ScAddress(Max(nOldEndX,nNewEndX), Max(nOldEndY,nNewEndY), nDestTab) );
+                    ScAddress(std::max(nOldEndX,nNewEndX), std::max(nOldEndY,nNewEndY), nDestTab) );
 
         //  Undo initialisieren
 
@@ -438,8 +438,8 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         if ( nNewRefresh != GetRefreshDelay() )
             SetRefreshDelay( nNewRefresh );
 
-        SCCOL nPaintEndX = Max( aOldRange.aEnd.Col(), aNewRange.aEnd.Col() );
-        SCROW nPaintEndY = Max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
+        SCCOL nPaintEndX = std::max( aOldRange.aEnd.Col(), aNewRange.aEnd.Col() );
+        SCROW nPaintEndY = std::max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
 
         if ( aOldRange.aEnd.Col() != aNewRange.aEnd.Col() )
             nPaintEndX = MAXCOL;

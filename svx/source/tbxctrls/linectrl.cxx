@@ -533,7 +533,7 @@ void SvxLineEndWindow::FillValueSet()
             aLineEndSet.InsertItem( (sal_uInt16)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
             aLineEndSet.InsertItem( (sal_uInt16)((i+2L)*2L),    aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
         }
-        nLines = Min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
+        nLines = std::min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
         aLineEndSet.SetLineCount( nLines );
 
         SetSize();
@@ -582,14 +582,14 @@ void SvxLineEndWindow::Resizing( Size& rNewSize )
     // Spalten ermitteln
     long nItemW = aItemSize.Width();
     long nW = rNewSize.Width();
-    nCols = (sal_uInt16) Max( ( (sal_uIntPtr)(( nW + nItemW ) / ( nItemW * 2 ) )),
+    nCols = (sal_uInt16) std::max( ( (sal_uIntPtr)(( nW + nItemW ) / ( nItemW * 2 ) )),
                                             (sal_uIntPtr) 1L );
     nCols *= 2;
 
     // Reihen ermitteln
     long nItemH = aItemSize.Height();
     long nH = rNewSize.Height();
-    nLines = (sal_uInt16) Max( ( ( nH + nItemH / 2 ) / nItemH ), 1L );
+    nLines = (sal_uInt16) std::max( ( ( nH + nItemH / 2 ) / nItemH ), 1L );
 
     sal_uInt16 nMaxCols  = nItemCount / nLines;
     if( nItemCount % nLines )
@@ -601,7 +601,7 @@ void SvxLineEndWindow::Resizing( Size& rNewSize )
     // Keine ungerade Anzahl von Spalten
     if( nCols % 2 )
         nCols--;
-    nCols = Max( nCols, (sal_uInt16) 2 );
+    nCols = std::max( nCols, (sal_uInt16) 2 );
 
     sal_uInt16 nMaxLines  = nItemCount / nCols;
     if( nItemCount % nCols )

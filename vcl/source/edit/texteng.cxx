@@ -228,7 +228,7 @@ void TextEngine::SetMaxTextWidth( sal_uLong nMaxWidth )
 {
     if ( nMaxWidth != mnMaxTextWidth )
     {
-        mnMaxTextWidth = Min( nMaxWidth, (sal_uLong)0x7FFFFFFF );
+        mnMaxTextWidth = std::min( nMaxWidth, (sal_uLong)0x7FFFFFFF );
         FormatFullDoc();
         UpdateViews();
     }
@@ -1620,7 +1620,7 @@ void TextEngine::FormatDoc()
         long nDiff = nNewHeight - mnCurTextHeight;
         if ( nNewHeight < mnCurTextHeight )
         {
-            maInvalidRect.Bottom() = (long)Max( nNewHeight, mnCurTextHeight );
+            maInvalidRect.Bottom() = (long)std::max( nNewHeight, mnCurTextHeight );
             if ( maInvalidRect.IsEmpty() )
             {
                 maInvalidRect.Top() = 0;
@@ -2188,7 +2188,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
 
     const short nInvalidDiff = pTEParaPortion->GetInvalidDiff();
     const sal_uInt16 nInvalidStart = pTEParaPortion->GetInvalidPosStart();
-    const sal_uInt16 nInvalidEnd =  nInvalidStart + Abs( nInvalidDiff );
+    const sal_uInt16 nInvalidEnd =  nInvalidStart + std::abs( nInvalidDiff );
     sal_Bool bQuickFormat = sal_False;
 
     if ( pTEParaPortion->GetWritingDirectionInfos().empty() )
@@ -2602,7 +2602,7 @@ sal_Bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, sal_Bo
 
                     if ( pAttr )
                     {
-                        nTmpEnd = Min( pAttr->GetEnd(), nEndPos );
+                        nTmpEnd = std::min( pAttr->GetEnd(), nEndPos );
 
                         // e.g. <A HREF="http://www.mopo.de/">Morgenpost</A>
                         aText.AppendAscii( "<A HREF=\"" );

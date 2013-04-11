@@ -257,8 +257,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
                     long nX1 = pEditEngine->GetXPos(pTmpPortion, pLine, nTmpStartIndex, true);
                     long nX2 = pEditEngine->GetXPos(pTmpPortion, pLine, nTmpEndIndex);
 
-                    Point aPt1( Min( nX1, nX2 ), aTopLeft.Y() );
-                    Point aPt2( Max( nX1, nX2 ), aBottomRight.Y() );
+                    Point aPt1( std::min( nX1, nX2 ), aTopLeft.Y() );
+                    Point aPt2( std::max( nX1, nX2 ), aBottomRight.Y() );
 
                     ImplDrawHighlightRect( pTarget, aPt1, aPt2, pPolyPoly );
 
@@ -765,10 +765,10 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
             long nDiffY = !IsVertical() ? nDocDiffY : nDocDiffX;
 
             // Negative: Back to the top or left edge
-            if ( ( Abs( nDiffY ) > pEditEngine->GetOnePixelInRef() ) && DoBigScroll() )
+            if ( ( std::abs( nDiffY ) > pEditEngine->GetOnePixelInRef() ) && DoBigScroll() )
             {
                 long nH = aOutArea.GetHeight() / 4;
-                if ( ( nH > aEditCursor.GetHeight() ) && ( Abs( nDiffY ) < nH ) )
+                if ( ( nH > aEditCursor.GetHeight() ) && ( std::abs( nDiffY ) < nH ) )
                 {
                     if ( nDiffY < 0 )
                         nDiffY -= nH;
@@ -777,10 +777,10 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
                 }
             }
 
-            if ( ( Abs( nDiffX ) > pEditEngine->GetOnePixelInRef() ) && DoBigScroll() )
+            if ( ( std::abs( nDiffX ) > pEditEngine->GetOnePixelInRef() ) && DoBigScroll() )
             {
                 long nW = aOutArea.GetWidth() / 4;
-                if ( Abs( nDiffX ) < nW )
+                if ( std::abs( nDiffX ) < nW )
                 {
                     if ( nDiffY < 0 )
                         nDiffY -= nW;

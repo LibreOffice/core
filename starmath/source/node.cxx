@@ -1174,7 +1174,7 @@ void SmBinVerNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     long  nFontHeight = GetFont().GetSize().Height(),
           nExtLen     = nFontHeight * rFormat.GetDistance(DIS_FRACTION) / 100L,
           nThick      = nFontHeight * rFormat.GetDistance(DIS_STROKEWIDTH) / 100L,
-          nWidth      = Max(pNum->GetItalicWidth(), pDenom->GetItalicWidth()),
+          nWidth      = std::max(pNum->GetItalicWidth(), pDenom->GetItalicWidth()),
           nNumDist    = bIsTextmode ? 0 :
                             nFontHeight * rFormat.GetDistance(DIS_NUMERATOR)   / 100L,
           nDenomDist  = bIsTextmode ? 0 :
@@ -1735,7 +1735,7 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         Size  aTmpSize (pLeft->GetFont().GetSize());
         OSL_ENSURE(pRight->GetFont().GetSize() == aTmpSize,
                     "Sm : different font sizes");
-        aTmpSize.Width() = Min((long) nBraceHeight * 60L / 100L,
+        aTmpSize.Width() = std::min((long) nBraceHeight * 60L / 100L,
                             rFormat.GetBaseSize().Height() * 3L / 2L);
         // correction factor since change from StarMath to OpenSymbol font
         // because of the different font width in the FontMetric
@@ -2543,7 +2543,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         {
             pNode->Arrange(rDev, rFormat);
             int  nCol = nIdx % nNumCols;
-            pColWidth[nCol] = Max(pColWidth[nCol], pNode->GetItalicWidth());
+            pColWidth[nCol] = std::max(pColWidth[nCol], pNode->GetItalicWidth());
         }
     }
 

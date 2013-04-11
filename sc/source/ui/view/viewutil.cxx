@@ -424,35 +424,35 @@ sal_Bool ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
         return false;
     }
 
-    rX1 = Min(nNewStartX,nOldStartX);
-    rY1 = Min(nNewStartY,nOldStartY);
-    rX2 = Max(nNewEndX,nOldEndX);
-    rY2 = Max(nNewEndY,nOldEndY);
+    rX1 = std::min(nNewStartX,nOldStartX);
+    rY1 = std::min(nNewStartY,nOldStartY);
+    rX2 = std::max(nNewEndX,nOldEndX);
+    rY2 = std::max(nNewEndY,nOldEndY);
 
     if ( nNewStartX == nOldStartX && nNewEndX == nOldEndX )
     {
         if ( nNewStartY == nOldStartY )
         {
-            rY1 = Min( nNewEndY, nOldEndY );
-            rY2 = Max( nNewEndY, nOldEndY );
+            rY1 = std::min( nNewEndY, nOldEndY );
+            rY2 = std::max( nNewEndY, nOldEndY );
         }
         else if ( nNewEndY == nOldEndY )
         {
-            rY1 = Min( nNewStartY, nOldStartY );
-            rY2 = Max( nNewStartY, nOldStartY );
+            rY1 = std::min( nNewStartY, nOldStartY );
+            rY2 = std::max( nNewStartY, nOldStartY );
         }
     }
     else if ( nNewStartY == nOldStartY && nNewEndY == nOldEndY )
     {
         if ( nNewStartX == nOldStartX )
         {
-            rX1 = Min( nNewEndX, nOldEndX );
-            rX2 = Max( nNewEndX, nOldEndX );
+            rX1 = std::min( nNewEndX, nOldEndX );
+            rX2 = std::max( nNewEndX, nOldEndX );
         }
         else if ( nNewEndX == nOldEndX )
         {
-            rX1 = Min( nNewStartX, nOldStartX );
-            rX2 = Max( nNewStartX, nOldStartX );
+            rX1 = std::min( nNewStartX, nOldStartX );
+            rX2 = std::max( nNewStartX, nOldStartX );
         }
     }
 

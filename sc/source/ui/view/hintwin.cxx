@@ -61,7 +61,7 @@ ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& r
     aTextStart = Point( HINT_MARGIN + HINT_INDENT,
                         aHeadSize.Height() + HINT_MARGIN + HINT_LINESPACE );
 
-    Size aWinSize( Max( aHeadSize.Width(), aTextSize.Width() ) + 2 * HINT_MARGIN + 1,
+    Size aWinSize( std::max( aHeadSize.Width(), aTextSize.Width() ) + 2 * HINT_MARGIN + 1,
                     aHeadSize.Height() + aTextSize.Height() + HINT_LINESPACE + 2 * HINT_MARGIN + 1 );
     SetOutputSizePixel( aWinSize );
 }

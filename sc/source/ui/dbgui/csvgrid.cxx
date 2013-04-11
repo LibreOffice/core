@@ -122,7 +122,7 @@ void ScCsvGrid::UpdateOffsetX()
     sal_Int32 nLastLine = GetLastVisLine() + 1;
     sal_Int32 nDigits = 2;
     while( nLastLine /= 10 ) ++nDigits;
-    nDigits = Max( nDigits, sal_Int32( 3 ) );
+    nDigits = std::max( nDigits, sal_Int32( 3 ) );
     Execute( CSVCMD_SETHDRWIDTH, GetTextWidth( OUString( '0' ) ) * nDigits );
 }
 
@@ -398,7 +398,7 @@ sal_uInt32 ScCsvGrid::GetFirstVisColumn() const
 
 sal_uInt32 ScCsvGrid::GetLastVisColumn() const
 {
-    return GetColumnFromPos( Min( GetLastVisPos(), GetPosCount() ) - 1 );
+    return GetColumnFromPos( std::min( GetLastVisPos(), GetPosCount() ) - 1 );
 }
 
 bool ScCsvGrid::IsValidColumn( sal_uInt32 nColIndex ) const
@@ -533,7 +533,7 @@ void ScCsvGrid::FillColumnDataSep( ScAsciiOptions& rOptions ) const
 
 void ScCsvGrid::FillColumnDataFix( ScAsciiOptions& rOptions ) const
 {
-    sal_uInt32 nCount = Min( GetColumnCount(), static_cast<sal_uInt32>(MAXCOLCOUNT) );
+    sal_uInt32 nCount = std::min( GetColumnCount(), static_cast<sal_uInt32>(MAXCOLCOUNT) );
     ScCsvExpDataVec aDataVec( nCount + 1 );
 
     for( sal_uInt32 nColIx = 0; nColIx < nCount; ++nColIx )
@@ -653,8 +653,8 @@ void ScCsvGrid::MoveCursor( sal_uInt32 nColIndex )
     {
         sal_Int32 nPosBeg = GetColumnPos( nColIndex );
         sal_Int32 nPosEnd = GetColumnPos( nColIndex + 1 );
-        sal_Int32 nMinPos = Max( nPosBeg - CSV_SCROLL_DIST, sal_Int32( 0 ) );
-        sal_Int32 nMaxPos = Min( nPosEnd - GetVisPosCount() + CSV_SCROLL_DIST + sal_Int32( 1 ), nMinPos );
+        sal_Int32 nMinPos = std::max( nPosBeg - CSV_SCROLL_DIST, sal_Int32( 0 ) );
+        sal_Int32 nMaxPos = std::min( nPosEnd - GetVisPosCount() + CSV_SCROLL_DIST + sal_Int32( 1 ), nMinPos );
         if( nPosBeg - CSV_SCROLL_DIST + 1 <= GetFirstVisPos() )
             Execute( CSVCMD_SETPOSOFFSET, nMinPos );
         else if( nPosEnd + CSV_SCROLL_DIST >= GetLastVisPos() )
@@ -744,7 +744,7 @@ void ScCsvGrid::ImplSetTextLineSep(
         /* TODO: signal overflow somewhere in UI */
 
         // update column width
-        sal_Int32 nWidth = Max( CSV_MINCOLWIDTH, aCellText.Len() + sal_Int32( 1 ) );
+        sal_Int32 nWidth = std::max( CSV_MINCOLWIDTH, aCellText.Len() + sal_Int32( 1 ) );
         if( IsValidColumn( nColIx ) )
         {
             // expand existing column
@@ -876,7 +876,7 @@ void ScCsvGrid::Tracking( const TrackingEvent& rTEvt )
 
         sal_Int32 nPos = (rMEvt.GetPosPixel().X() - GetFirstX()) / GetCharWidth() + GetFirstVisPos();
         // on mouse tracking: keep position valid
-        nPos = Max( Min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 0 ) );
+        nPos = std::max( std::min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 0 ) );
         Execute( CSVCMD_MAKEPOSVISIBLE, nPos );
 
         sal_uInt32 nColIx = GetColumnFromPos( nPos );
@@ -965,8 +965,8 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
                 sal_uInt32 nColIx = GetFocusColumn();
                 if( !IsSelected( nColIx ) )
                     Select( nColIx );
-                sal_Int32 nX1 = Max( GetColumnX( nColIx ), GetFirstX() );
-                sal_Int32 nX2 = Min( GetColumnX( nColIx + 1 ), GetWidth() );
+                sal_Int32 nX1 = std::max( GetColumnX( nColIx ), GetFirstX() );
+                sal_Int32 nX2 = std::min( GetColumnX( nColIx + 1 ), GetWidth() );
                 ExecutePopup( Point( (nX1 + nX2) / 2, GetHeight() / 2 ) );
             }
         }
@@ -1037,8 +1037,8 @@ EditEngine* ScCsvGrid::GetEditEngine()
 void ScCsvGrid::ImplSetColumnClipRegion( OutputDevice& rOutDev, sal_uInt32 nColIndex )
 {
     rOutDev.SetClipRegion( Region( Rectangle(
-        Max( GetColumnX( nColIndex ), GetFirstX() ) + 1, 0,
-        Min( GetColumnX( nColIndex + 1 ), GetLastX() ), GetHeight() - 1 ) ) );
+        std::max( GetColumnX( nColIndex ), GetFirstX() ) + 1, 0,
+        std::min( GetColumnX( nColIndex + 1 ), GetLastX() ), GetHeight() - 1 ) ) );
 }
 
 void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColIndex, Color aFillColor )
@@ -1119,7 +1119,7 @@ void ScCsvGrid::ImplDrawFirstLineSep( bool bSet )
     if( IsVisibleLine( mnFirstImpLine ) && (mnFirstImpLine != GetFirstVisLine() ) )
     {
         sal_Int32 nY = GetY( mnFirstImpLine );
-        sal_Int32 nX = Min( GetColumnX( GetLastVisColumn() + 1 ), GetLastX() );
+        sal_Int32 nX = std::min( GetColumnX( GetLastVisColumn() + 1 ), GetLastX() );
         maBackgrDev.SetLineColor( bSet ? maGridPBColor : maGridColor );
         maBackgrDev.DrawLine( Point( GetFirstX() + 1, nY ), Point( nX, nY ) );
     }
@@ -1278,7 +1278,7 @@ void ScCsvGrid::ImplDrawHorzScrolled( sal_Int32 nOldPos )
     sal_Int32 nPos = GetFirstVisPos();
     if( !IsValidGfx() || (nPos == nOldPos) )
         return;
-    if( Abs( nPos - nOldPos ) > GetVisPosCount() / 2 )
+    if( std::abs( nPos - nOldPos ) > GetVisPosCount() / 2 )
     {
         ImplDrawBackgrDev();
         ImplDrawGridDev();
@@ -1298,8 +1298,8 @@ void ScCsvGrid::ImplDrawHorzScrolled( sal_Int32 nOldPos )
     {
         aSrc = Point( GetFirstX() + GetCharWidth() * (nPos - nOldPos) + 1, 0 );
         aDest = Point( GetFirstX() + 1, 0 );
-        nFirstColIx = GetColumnFromPos( Min( nOldPos + GetVisPosCount(), GetPosCount() ) - 1 );
-        nLastColIx = GetColumnFromPos( Min( nPos + GetVisPosCount(), GetPosCount() ) - 1 );
+        nFirstColIx = GetColumnFromPos( std::min( nOldPos + GetVisPosCount(), GetPosCount() ) - 1 );
+        nLastColIx = GetColumnFromPos( std::min( nPos + GetVisPosCount(), GetPosCount() ) - 1 );
     }
 
     ImplInvertCursor( GetRulerCursorPos() + (nPos - nOldPos) );
@@ -1346,9 +1346,9 @@ void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
 {
     if( HasFocus() && IsVisibleColumn( nColIndex ) )
     {
-        sal_Int32 nX1 = Max( GetColumnX( nColIndex ), GetFirstX() ) + 1;
-        sal_Int32 nX2 = Min( GetColumnX( nColIndex + 1 ) - sal_Int32( 1 ), GetLastX() );
-        sal_Int32 nY2 = Min( GetY( GetLastVisLine() + 1 ), GetHeight() ) - 1;
+        sal_Int32 nX1 = std::max( GetColumnX( nColIndex ), GetFirstX() ) + 1;
+        sal_Int32 nX2 = std::min( GetColumnX( nColIndex + 1 ) - sal_Int32( 1 ), GetLastX() );
+        sal_Int32 nY2 = std::min( GetY( GetLastVisLine() + 1 ), GetHeight() ) - 1;
         InvertTracking( Rectangle( nX1, 0, nX2, nY2 ), SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
     }
 }

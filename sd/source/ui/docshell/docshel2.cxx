@@ -199,7 +199,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
     aVDev.SetMapMode( aMapMode );
 
     const Size  aPixSize( aVDev.LogicToPixel( aSize ) );
-    const sal_uLong nMaxEdgePix = Max( aPixSize.Width(), aPixSize.Height() );
+    const sal_uLong nMaxEdgePix = std::max( aPixSize.Width(), aPixSize.Height() );
     Fraction    aFrac( nMaxEdgePixel, nMaxEdgePix );
 
     aMapMode.SetScaleX( aFrac );

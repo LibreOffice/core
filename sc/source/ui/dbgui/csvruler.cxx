@@ -161,7 +161,7 @@ void ScCsvRuler::InitSizeData()
 
     mnSplitSize = (GetCharWidth() * 3 / 5) | 1; // make an odd number
 
-    sal_Int32 nActiveWidth = Min( GetWidth() - GetHdrWidth(), GetPosCount() * GetCharWidth() );
+    sal_Int32 nActiveWidth = std::min( GetWidth() - GetHdrWidth(), GetPosCount() * GetCharWidth() );
     sal_Int32 nActiveHeight = GetTextHeight();
 
     maActiveRect.SetPos( Point( GetFirstX(), (GetHeight() - nActiveHeight - 1) / 2 ) );
@@ -261,12 +261,12 @@ sal_Int32 ScCsvRuler::GetNoScrollPos( sal_Int32 nPos ) const
         if( nNewPos < GetFirstVisPos() + CSV_SCROLL_DIST )
         {
             sal_Int32 nScroll = (GetFirstVisPos() > 0) ? CSV_SCROLL_DIST : 0;
-            nNewPos = Max( nPos, GetFirstVisPos() + nScroll );
+            nNewPos = std::max( nPos, GetFirstVisPos() + nScroll );
         }
         else if( nNewPos > GetLastVisPos() - CSV_SCROLL_DIST - 1L )
         {
             sal_Int32 nScroll = (GetFirstVisPos() < GetMaxPosOffset()) ? CSV_SCROLL_DIST : 0;
-            nNewPos = Min( nNewPos, GetLastVisPos() - nScroll - sal_Int32( 1 ) );
+            nNewPos = std::min( nNewPos, GetLastVisPos() - nScroll - sal_Int32( 1 ) );
         }
     }
     return nNewPos;
@@ -316,10 +316,10 @@ sal_Int32 ScCsvRuler::FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const
         switch( eDir )
         {
             case MOVE_FIRST:
-                nNewPos = Min( nPos, FindEmptyPos( 0, MOVE_NEXT ) );
+                nNewPos = std::min( nPos, FindEmptyPos( 0, MOVE_NEXT ) );
             break;
             case MOVE_LAST:
-                nNewPos = Max( nPos, FindEmptyPos( GetPosCount(), MOVE_PREV ) );
+                nNewPos = std::max( nPos, FindEmptyPos( GetPosCount(), MOVE_PREV ) );
             break;
             case MOVE_PREV:
                 while( HasSplit( --nNewPos ) ) ;
@@ -413,7 +413,7 @@ void ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
         if( IsTracking() )
         {
             // on mouse tracking: keep position valid
-            nPos = Max( Min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 1 ) );
+            nPos = std::max( std::min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 1 ) );
             MoveMouseTracking( nPos );
         }
         else
@@ -551,8 +551,8 @@ void ScCsvRuler::ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth )
     maBackgrDev.DrawRect( aRect );
 
     aRect = maActiveRect;
-    aRect.Left() = Max( GetFirstX(), nPosX );
-    aRect.Right() = Min( Min( GetX( GetPosCount() ), GetLastX() ), nPosX + nWidth - sal_Int32( 1 ) );
+    aRect.Left() = std::max( GetFirstX(), nPosX );
+    aRect.Right() = std::min( std::min( GetX( GetPosCount() ), GetLastX() ), nPosX + nWidth - sal_Int32( 1 ) );
     if( aRect.Left() <= aRect.Right() )
     {
         maBackgrDev.SetFillColor( maActiveColor );
@@ -573,7 +573,7 @@ void ScCsvRuler::ImplDrawBackgrDev()
     maBackgrDev.SetFillColor();
     sal_Int32 nPos;
 
-    sal_Int32 nFirstPos = Max( GetPosFromX( 0 ) - (sal_Int32)(1L), (sal_Int32)(0L) );
+    sal_Int32 nFirstPos = std::max( GetPosFromX( 0 ) - (sal_Int32)(1L), (sal_Int32)(0L) );
     sal_Int32 nLastPos = GetPosFromX( GetWidth() );
     sal_Int32 nY = (maActiveRect.Top() + maActiveRect.Bottom()) / 2;
     for( nPos = nFirstPos; nPos <= nLastPos; ++nPos )

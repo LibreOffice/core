@@ -613,7 +613,7 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
         {
             sal_Int64 nOpposite = pOpposite->GetValue();
 
-            if (nValue + nOpposite > Max(pEdit->GetMax(), pOpposite->GetMax()))
+            if (nValue + nOpposite > std::max(pEdit->GetMax(), pOpposite->GetMax()))
                 pOpposite->SetValue(pOpposite->GetMax() - nValue);
         }
 

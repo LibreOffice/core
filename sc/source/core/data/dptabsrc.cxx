@@ -1241,7 +1241,7 @@ void ScDPDimensions::CountChanged()
     if ( ppDims )
     {
         long i;
-        long nCopy = Min( nNewCount, nDimCount );
+        long nCopy = std::min( nNewCount, nDimCount );
         ScDPDimension** ppNew = new ScDPDimension*[nNewCount];
 
         for (i=0; i<nCopy; i++)             // copy existing dims

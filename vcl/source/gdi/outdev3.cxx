@@ -6317,7 +6317,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                         nMnemonicWidth = rTargetDevice.ImplLogicWidthToDevicePixel( ::abs((int)(lc_x1 - lc_x2)) );
 
                         Point       aTempPos = rTargetDevice.LogicToPixel( aPos );
-                        nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( Min( lc_x1, lc_x2 ) );
+                        nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
                         nMnemonicY = rTargetDevice.GetOutOffYPixel() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
                         rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
                     }
@@ -6386,7 +6386,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             nMnemonicWidth = rTargetDevice.ImplLogicWidthToDevicePixel( ::abs((int)(lc_x1 - lc_x2)) );
 
             Point aTempPos = rTargetDevice.LogicToPixel( aPos );
-            nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( Min(lc_x1, lc_x2) );
+            nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
             nMnemonicY = rTargetDevice.GetOutOffYPixel() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
         }
 
@@ -6843,9 +6843,9 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
             long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
             nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
 
-            Point aTempPos( Min(lc_x1,lc_x2), GetFontMetric().GetAscent() );
+            Point aTempPos( std::min(lc_x1,lc_x2), GetFontMetric().GetAscent() );
             if( bInvalidPos )  // #106952#, place behind the (last) character
-                aTempPos = Point( Max(lc_x1,lc_x2), GetFontMetric().GetAscent() );
+                aTempPos = Point( std::max(lc_x1,lc_x2), GetFontMetric().GetAscent() );
 
             aTempPos += rPos;
             aTempPos = LogicToPixel( aTempPos );
@@ -7296,8 +7296,8 @@ sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     long nXOffset = 0;
     if( nBase != nIndex )
     {
-        xub_StrLen nStart = Min( nBase, nIndex );
-        xub_StrLen nOfsLen = Max( nBase, nIndex ) - nStart;
+        xub_StrLen nStart = std::min( nBase, nIndex );
+        xub_StrLen nOfsLen = std::max( nBase, nIndex ) - nStart;
         pSalLayout = ImplLayout( rStr, nStart, nOfsLen, aPoint, nLayoutWidth, pDXAry );
         if( pSalLayout )
         {
@@ -7489,8 +7489,8 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     long nXOffset = 0;
     if( nBase != nIndex )
     {
-        xub_StrLen nStart = Min( nBase, nIndex );
-        xub_StrLen nOfsLen = Max( nBase, nIndex ) - nStart;
+        xub_StrLen nStart = std::min( nBase, nIndex );
+        xub_StrLen nOfsLen = std::max( nBase, nIndex ) - nStart;
         pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point(0,0), nTWidth, pDXArray );
         if( pSalLayout )
         {

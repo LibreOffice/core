@@ -2382,7 +2382,7 @@ void ScInterpreter::ScBase()
         {
             const xub_StrLen nConstBuf = 128;
             sal_Unicode aBuf[nConstBuf];
-            xub_StrLen nBuf = Max( (xub_StrLen) fChars, (xub_StrLen) (nMinLen+1) );
+            xub_StrLen nBuf = std::max( (xub_StrLen) fChars, (xub_StrLen) (nMinLen+1) );
             sal_Unicode* pBuf = (nBuf <= nConstBuf ? aBuf : new sal_Unicode[nBuf]);
             for ( xub_StrLen j = 0; j < nBuf; ++j )
             {

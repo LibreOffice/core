@@ -799,7 +799,7 @@ sal_Bool SwScanner::NextWord()
     // #i89042, as discussed with HDU: don't evaluate script changes for word count. Use whole word.
     if ( nWordType == i18n::WordType::WORD_COUNT )
     {
-        nBegin = Max(aBound.startPos, nBegin);
+        nBegin = std::max(aBound.startPos, nBegin);
         nLen   = 0;
         if (aBound.endPos > nBegin)
             nLen = aBound.endPos - nBegin;
@@ -816,7 +816,7 @@ sal_Bool SwScanner::NextWord()
             OUString aTmpWord = aText.copy( nBegin, aBound.endPos - nBegin );
             const sal_Int32 nScriptEnd = nBegin +
                 g_pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
-            const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
+            const sal_Int32 nEnd = std::min( aBound.endPos, nScriptEnd );
 
             // restrict word start to last script change position
             sal_Int32 nScriptBegin = 0;
@@ -830,7 +830,7 @@ sal_Bool SwScanner::NextWord()
                                                     nCurrScript );
             }
 
-            nBegin = Max( aBound.startPos, nScriptBegin );
+            nBegin = std::max( aBound.startPos, nScriptBegin );
             nLen = nEnd - nBegin;
         }
         else
@@ -840,7 +840,7 @@ sal_Bool SwScanner::NextWord()
                                              aBound.endPos - aBound.startPos );
             const sal_Int32 nScriptEnd = aBound.startPos +
                 g_pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
-            const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
+            const sal_Int32 nEnd = std::min( aBound.endPos, nScriptEnd );
             nBegin = aBound.startPos;
             nLen = nEnd - nBegin;
         }
@@ -849,8 +849,8 @@ sal_Bool SwScanner::NextWord()
     // optionally clip the result of getWordBoundaries:
     if ( bClip )
     {
-        aBound.startPos = Max( aBound.startPos, nStartPos );
-        aBound.endPos = Min( aBound.endPos, nEndPos );
+        aBound.startPos = std::max( aBound.startPos, nStartPos );
+        aBound.endPos = std::min( aBound.endPos, nEndPos );
         nBegin = aBound.startPos;
         nLen = aBound.endPos - nBegin;
     }
@@ -1388,14 +1388,14 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
         if ( pSmartTagList->GetBeginInv() != STRING_LEN )
         {
             nBegin = pSmartTagList->GetBeginInv();
-            nEnd = Min( pSmartTagList->GetEndInv(), (xub_StrLen)rText.getLength() );
+            nEnd = std::min( pSmartTagList->GetEndInv(), (xub_StrLen)rText.getLength() );
 
             if ( nBegin < nEnd )
             {
                 const LanguageType aCurrLang = pNode->GetLang( nBegin );
                 const com::sun::star::lang::Locale aCurrLocale = g_pBreakIt->GetLocale( aCurrLang );
                 nBegin = static_cast< xub_StrLen >(g_pBreakIt->GetBreakIter()->beginOfSentence( rText, nBegin, aCurrLocale ));
-                nEnd = static_cast< xub_StrLen >(Min( rText.getLength(), g_pBreakIt->GetBreakIter()->endOfSentence( rText, nEnd, aCurrLocale ) ));
+                nEnd = static_cast< xub_StrLen >(std::min( rText.getLength(), g_pBreakIt->GetBreakIter()->endOfSentence( rText, nEnd, aCurrLocale ) ));
             }
         }
     }
@@ -1436,7 +1436,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
         {
             const LanguageType nLang = aIter.GetLanguage();
             const com::sun::star::lang::Locale aLocale = g_pBreakIt->GetLocale( nLang );
-            nLangEnd = Min( nEnd, aIter.GetChgPos() );
+            nLangEnd = std::min( nEnd, aIter.GetChgPos() );
 
             const sal_uInt32 nExpandBegin = aConversionMap.ConvertToViewPosition( nLangBegin );
             const sal_uInt32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nLangEnd );

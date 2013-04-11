@@ -961,7 +961,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         {
             NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
 
-            nDestPos = Min(nDestPos, (SCTAB)(GetTableCount() - 1));
+            nDestPos = std::min(nDestPos, (SCTAB)(GetTableCount() - 1));
             {   // scope for bulk broadcast
                 ScBulkBroadcast aBulkBroadcast( pBASM);
                 pSrcDoc->maTabs[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,

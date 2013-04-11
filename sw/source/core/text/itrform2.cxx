@@ -674,7 +674,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                                  ( nSumWidth - 1 ) / nGridWidth + 1 :
                                  0;
                 const SwTwips nTmpWidth = i * nGridWidth;
-                const SwTwips nKernWidth = Min( (SwTwips)(nTmpWidth - nSumWidth),
+                const SwTwips nKernWidth = std::min( (SwTwips)(nTmpWidth - nSumWidth),
                                                 nRestWidth );
                 const sal_uInt16 nKernWidth_1 = (sal_uInt16)(nKernWidth / 2);
 
@@ -916,15 +916,15 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
 
     // until next attribute change:
     const sal_Int32 nNextAttr = GetNextAttr();
-    sal_Int32 nNextChg = Min( nNextAttr, rInf.GetTxt().getLength() );
+    sal_Int32 nNextChg = std::min( nNextAttr, rInf.GetTxt().getLength() );
 
     // end of script type:
     const sal_Int32 nNextScript = pScriptInfo->NextScriptChg( rInf.GetIdx() );
-    nNextChg = Min( nNextChg, nNextScript );
+    nNextChg = std::min( nNextChg, nNextScript );
 
     // end of direction:
     const sal_Int32 nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
-    nNextChg = Min( nNextChg, nNextDir );
+    nNextChg = std::min( nNextChg, nNextDir );
 
     // Turbo boost:
     // We assume that a font's characters are not larger than twice
@@ -943,13 +943,13 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     CalcAscent( rInf, pPor );
 
     const SwFont* pTmpFnt = rInf.GetFont();
-    sal_Int32 nExpect = Min( sal_Int32( ((Font *)pTmpFnt)->GetSize().Height() ),
+    sal_Int32 nExpect = std::min( sal_Int32( ((Font *)pTmpFnt)->GetSize().Height() ),
                              sal_Int32( pPor->GetAscent() ) ) / 8;
     if ( !nExpect )
         nExpect = 1;
     nExpect = rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect);
     if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
-        nNextChg = Min( nExpect, rInf.GetTxt().getLength() );
+        nNextChg = std::min( nExpect, rInf.GetTxt().getLength() );
 
     // we keep an invariant during method calls:
     // there are no portion ending characters like hard spaces
@@ -2524,7 +2524,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
                                       pFly->GetRefPoint().Y() );
 
     if ( bUseFlyAscent )
-         nAscent = static_cast<sal_uInt16>( Abs( int( bTxtFrmVertical ?
+         nAscent = static_cast<sal_uInt16>( std::abs( int( bTxtFrmVertical ?
                                                   pFly->GetRelPos().X() :
                                                   pFly->GetRelPos().Y() ) ) );
 
@@ -2601,7 +2601,7 @@ namespace {
         // something of our text has moved to the next line
             return 0;
 
-        xub_StrLen nReformat = Min( txtFmtInfo.GetReformatStart(), nOldLineEnd );
+        xub_StrLen nReformat = std::min( txtFmtInfo.GetReformatStart(), nOldLineEnd );
 
         // in case we do not have any fly in our line, our repaint position
         // is the changed position - 1
@@ -2662,7 +2662,7 @@ namespace {
             rThis.GetCharRect( &aRect, nReformat );
             txtFmtInfo.SetMulti( bOldMulti );
 
-            return nFormatRepaint ? Min( aRect.Left(), nFormatRepaint ) :
+            return nFormatRepaint ? std::min( aRect.Left(), nFormatRepaint ) :
                                     aRect.Left();
         }
         else

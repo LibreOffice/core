@@ -1446,7 +1446,7 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
             rSRD.nRelRow = static_cast<SCsROW>(static_cast<sal_Int16>(nRow));
         else
             //                                                          abs Row
-            rSRD.nRow = Min( static_cast<SCROW>(nRow), MAXROW);
+            rSRD.nRow = std::min( static_cast<SCROW>(nRow), MAXROW);
 
         // T A B
         // abs needed if rel in shared formula for ScCompiler UpdateNameReference

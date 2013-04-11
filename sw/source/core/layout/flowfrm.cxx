@@ -1511,7 +1511,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     // former consideration
                     if ( pOwn->IsTxtFrm() )
                     {
-                        nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace() );
+                        nAdd = std::max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace() );
                     }
                     nUpper += nAdd;
                 }
@@ -1537,7 +1537,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         }
                         else
                         {
-                            nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
+                            nAdd = std::max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
                         }
                     }
                     nUpper += nAdd;
@@ -1545,7 +1545,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             }
             else
             {
-                nUpper = Max( static_cast<long>(nPrevLowerSpace),
+                nUpper = std::max( static_cast<long>(nPrevLowerSpace),
                               static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
                 // OD 07.01.2004 #i11859# - consideration of the line spacing
                 //      for the upper spacing of a text frame
@@ -1553,10 +1553,10 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                 {
                     // former consideration
                     if ( pOwn->IsTxtFrm() )
-                        nUpper = Max( nUpper, ((SwTxtFrm*)pOwn)->GetLineSpace() );
+                        nUpper = std::max( nUpper, ((SwTxtFrm*)pOwn)->GetLineSpace() );
                     if ( nPrevLineSpacing != 0 )
                     {
-                        nUpper = Max( nUpper, nPrevLineSpacing );
+                        nUpper = std::max( nUpper, nPrevLineSpacing );
                     }
                 }
                 else
@@ -1583,7 +1583,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         }
                         else
                         {
-                            nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
+                            nAdd = std::max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
                         }
                     }
                     nUpper += nAdd;
@@ -1709,7 +1709,7 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
             }
             else
             {
-                nUpperSpaceAmountOfPrevFrm = Max( nPrevLowerSpace, nPrevLineSpacing );
+                nUpperSpaceAmountOfPrevFrm = std::max( nPrevLowerSpace, nPrevLineSpacing );
             }
         }
     }

@@ -274,7 +274,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
             bAdjustAttributes = sal_True;
         else
         {
-            sal_uInt16 nCount = Min( rNew.GetColumns().size(), rOld.GetColumns().size() );
+            sal_uInt16 nCount = std::min( rNew.GetColumns().size(), rOld.GetColumns().size() );
             for ( sal_uInt16 i = 0; i < nCount; ++i )
                 if ( !(rOld.GetColumns()[i] == rNew.GetColumns()[i]) )
                 {
@@ -393,16 +393,16 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
             {
                 if ( i == 0 )
                 {
-                    aLR.SetRight( Max( nRight, nMin ) );
+                    aLR.SetRight( std::max( nRight, nMin ) );
                 }
                 else if ( i == pAttr->GetNumCols() - 1 )
                 {
-                    aLR.SetLeft ( Max( nLeft, nMin ) );
+                    aLR.SetLeft ( std::max( nLeft, nMin ) );
                 }
                 else
                 {
-                    aLR.SetLeft ( Max( nLeft,  nMin ) );
-                    aLR.SetRight( Max( nRight, nMin ) );
+                    aLR.SetLeft ( std::max( nLeft,  nMin ) );
+                    aLR.SetRight( std::max( nRight, nMin ) );
                 }
             }
 

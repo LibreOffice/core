@@ -753,7 +753,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 {
                     const SfxInt32Item* pTypedItem = PTR_CAST( SfxInt32Item, pItem );
                     if ( pTypedItem )
-                        nRecord = Max( pTypedItem->GetValue(), sal_Int32(0) );
+                        nRecord = std::max( pTypedItem->GetValue(), sal_Int32(0) );
                 }
             }
             else

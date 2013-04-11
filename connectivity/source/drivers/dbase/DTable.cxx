@@ -1314,7 +1314,7 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
                     {
                         throwInvalidColumnType(STR_INVALID_COLUMN_PRECISION, aName);
                     }
-                    (*m_pFileStream) << (sal_uInt8) Min((unsigned)nPrecision, 255U);      // field length
+                    (*m_pFileStream) << (sal_uInt8) std::min((unsigned)nPrecision, 255U);      // field length
                     nRecLength = nRecLength + (sal_uInt16)::std::min((sal_uInt16)nPrecision, (sal_uInt16)255UL);
                     (*m_pFileStream) << (sal_uInt8)0;                                                                // decimals
                     break;

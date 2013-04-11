@@ -988,7 +988,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
                 rOutput << "{\\*\\updnprop" << OString::valueOf(
                     static_cast<sal_Int32>(nProp100)).getStr() << '}';
             }
-            long nUpDown = nFontHeight * Abs( nEsc ) / 100;
+            long nUpDown = nFontHeight * std::abs( nEsc ) / 100;
             OString aUpDown = OString::valueOf(
                 static_cast<sal_Int32>(nUpDown));
             if ( nEsc < 0 )

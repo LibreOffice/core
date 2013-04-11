@@ -35,8 +35,8 @@
 */
 static long GetGGT( long nVal1, long nVal2 )
 {
-    nVal1 = Abs( nVal1 );
-    nVal2 = Abs( nVal2 );
+    nVal1 = std::abs( nVal1 );
+    nVal2 = std::abs( nVal2 );
 
     if ( nVal1 <= 1 || nVal2 <= 1 )
         return 1;
@@ -132,7 +132,7 @@ Fraction::Fraction( double dVal )
         return;
     }
 
-    while ( Abs( (long)dVal ) < nMAX && nDen < nMAX )
+    while ( abs( (long)dVal ) < nMAX && nDen < nMAX )
     {
         dVal *= 10;
         nDen *= 10;
@@ -411,10 +411,10 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     DBG_ASSERT(nSignificantBits<65, "More than 64 bit of significance is overkill!");
 
     // How much bits can we lose?
-    const int nMulBitsToLose = Max( ( impl_NumberOfBits( nMul ) - int( nSignificantBits ) ), 0 );
-    const int nDivBitsToLose = Max( ( impl_NumberOfBits( nDiv ) - int( nSignificantBits ) ), 0 );
+    const int nMulBitsToLose = std::max( ( impl_NumberOfBits( nMul ) - int( nSignificantBits ) ), 0 );
+    const int nDivBitsToLose = std::max( ( impl_NumberOfBits( nDiv ) - int( nSignificantBits ) ), 0 );
 
-    const int nToLose = Min( nMulBitsToLose, nDivBitsToLose );
+    const int nToLose = std::min( nMulBitsToLose, nDivBitsToLose );
 
     // Remove the bits
     nMul >>= nToLose;

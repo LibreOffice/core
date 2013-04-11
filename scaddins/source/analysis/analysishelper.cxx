@@ -2755,7 +2755,7 @@ void ScaDate::setDay()
     if( b30Days )
     {
         // 30-days-mode: set nDay to 30 if original was last day in month
-        nDay = Min( nOrigDay, static_cast< sal_uInt16 >( 30 ) );
+        nDay = std::min( nOrigDay, static_cast< sal_uInt16 >( 30 ) );
         if( bLastDay || (nDay >= ::DaysInMonth( nMonth, nYear )) )
             nDay = 30;
     }
@@ -2763,7 +2763,7 @@ void ScaDate::setDay()
     {
         // set nDay to last day in this month if original was last day
         sal_uInt16 nLastDay = ::DaysInMonth( nMonth, nYear );
-        nDay = bLastDay ? nLastDay : Min( nOrigDay, nLastDay );
+        nDay = bLastDay ? nLastDay : std::min( nOrigDay, nLastDay );
     }
 }
 
@@ -2821,7 +2821,7 @@ void ScaDate::addMonths( sal_Int32 nMonthCount ) throw( lang::IllegalArgumentExc
 sal_Int32 ScaDate::getDate( sal_Int32 nNullDate ) const
 {
     sal_uInt16 nLastDay = ::DaysInMonth( nMonth, nYear );
-    sal_uInt16 nRealDay = (bLastDayMode && bLastDay) ? nLastDay : Min( nLastDay, nOrigDay );
+    sal_uInt16 nRealDay = (bLastDayMode && bLastDay) ? nLastDay : std::min( nLastDay, nOrigDay );
     return ::DateToDays( nRealDay, nMonth, nYear ) - nNullDate;
 }
 

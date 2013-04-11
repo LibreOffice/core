@@ -98,8 +98,8 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
             else
             {
                 const float fFactor  = (float) aBmpSize.Width() / aBmpSize.Height();
-                const Size  aNewSize( Max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
-                                      Max( (long) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
+                const Size  aNewSize( std::max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
+                                      std::max( (long) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
 
                 if( aThumbBmp.Scale( (double) aNewSize.Width() / aBmpSize.Width(),
                                      (double) aNewSize.Height() / aBmpSize.Height(), BMP_SCALE_BEST ) )
