@@ -1,9 +1,11 @@
 Library that provides API used by LO-based apps on touch devices
 
-This is all very much a work in progress and the design can change radically
-at any moment. The name "touch" for this module and the library name
-"libotouch" are not fixed and might change if somebody comes up with niftier
-names.
+This is all very much a work in progress and the design can change
+radically at any moment. And actually at the moment it is unclear
+whether this will be used or not.
+
+The name "touch" for this module and the library name "libotouch" are
+not fixed and might change if somebody comes up with niftier names.
 
 This module will contain an UNO API to be called either from Java (for
 Android), or directly (iOS). (Or, on iOS, possibly through some thin
