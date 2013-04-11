@@ -1814,18 +1814,13 @@ void SAL_CALL SfxBaseModel::initNew()
 
 namespace {
 
-OUString getFilterProvider(const Sequence<beans::PropertyValue>& rArgs)
+OUString getFilterProvider( SfxMedium& rMedium )
 {
-    OUString aStr;
-    for (sal_Int32 i = 0, n = rArgs.getLength(); i < n; ++i)
-    {
-        if (rArgs[i].Name == "FilterProvider")
-        {
-            rArgs[i].Value >>= aStr;
-            return aStr;
-        }
-    }
-    return aStr;
+    const SfxFilter* pFilter = rMedium.GetFilter();
+    if (!pFilter)
+        return OUString();
+
+    return pFilter->GetProviderName();
 }
 
 }
@@ -1853,7 +1848,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     SfxMedium* pMedium = new SfxMedium( seqArguments );
 
     sal_uInt32 nError = ERRCODE_NONE;
-    OUString aFilterProvider = getFilterProvider(seqArguments);
+    OUString aFilterProvider = getFilterProvider(*pMedium);
     if (!aFilterProvider.isEmpty())
     {
         if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium))
