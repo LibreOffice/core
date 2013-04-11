@@ -29,7 +29,7 @@ ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocument& rDoc) : mrDoc(rDoc) {}
 void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
 {
     ScDocOptions aOpt = mrDoc.GetDocOptions();
-    aOpt.SetDate(year, month, day);
+    aOpt.SetDate(day, month, year);
     mrDoc.SetDocOptions(aOpt);
 }
 
