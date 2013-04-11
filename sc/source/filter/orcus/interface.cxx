@@ -109,6 +109,7 @@ void ScOrcusFactory::finalize()
 {
     ScSetStringParam aParam;
     aParam.setTextInput();
+    int nCellCount = 0;
     StringCellCaches::const_iterator it = maStringCells.begin(), itEnd = maStringCells.end();
     for (; it != itEnd; ++it)
     {
@@ -117,6 +118,12 @@ void ScOrcusFactory::finalize()
             continue;
 
         mrDoc.SetString(it->maPos, maStrings[it->mnIndex], &aParam);
+        ++nCellCount;
+        if (nCellCount == 100000)
+        {
+            incrementProgress();
+            nCellCount = 0;
+        }
     }
 
     if (mxStatusIndicator.is())
