@@ -17,13 +17,30 @@
             console.info("Hello world");
         }
 
-        var mCommunicator;
+        var mClient;
+        var mTransmitter;
     </script>
+    <script src="js/client.js"></script>
     <script src="js/transmitter.js"></script>
 </head>
 <body onLoad="init();">
-    <button id="open_comm" onclick="mCommunicator = new Communicator('127.0.0.1');">Press to Connect (localhost)</button>
-    <button id="transition_next" onclick="if (mCommunicator) mCommunicator.sendMessage('transition_next\n\n');">transition_next</button>
+    <button id="open_comm" onclick="mClient = new Client('127.0.0.1'); mTransmitter = new Transmitter( mClient );">Press to Connect (localhost)</button>
+
+    <br/><br/>
+
+    <button id="startPres" onclick="mTransmitter.startPresentation()">Start Presentation</button>
+    <button id="stopPres" onclick="mTransmitter.stopPresentation()">Stop Presentation</button>
+
+    <br/><br/>
+
+    <button id="next" onclick="mTransmitter.nextTransition()">Next</button>
+    <button id="previous" onclick="mTransmitter.previousTransition()">Previous</button>
+    <br/>
+    <button id="blank" onclick="mTransmitter.blankScreen()">Blank Screen</button>
+    <button id="resume" onclick="mTransmitter.resume()">Resume</button>
+    <br/>
+
+
     <p>Current slide: <span id="current slide">---</span></p>
 </body>
 </html>

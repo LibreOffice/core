@@ -6,52 +6,40 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-function Communicator( aServerAddress ) {
+function Transmitter( aClient ) {
 
-    var mReceiveBuffer = "";
-    var mCurrentMessage = [];
-    var mSocket;
+    var mClient = aClient;
 
-    // PUBLIC
-    this.sendMessage = function( aMessage ) {
-        mSocket.send( aMessage );
+    this.nextTransition = function() {
+        mClient.sendMessage( "transition_next\n\n" );
     }
 
-    // PRIVATE
-    function processMessage( aMessage ) {
-        console.log( "Received message " + aMessage );
+    this.previousTransition = function() {
+        mClient.sendMessage( "transition_previous\n\n" );
     }
 
-    function dataReceived( aEvent ) {
-        mReceiveBuffer += aEvent.data;
-        var i;
-        while ( ( i = mReceiveBuffer.indexOf( '\n' ) ) != -1 ) {
-            var aLine = mReceiveBuffer.substring( 0, i );
-            mReceiveBuffer = mReceiveBuffer.substring( i+1 );
-            if ( aLine.length > 0 ) {
-                mCurrentMessage.push( aLine );
-            } else {
-                processMessage( mCurrentMessage );
-                mCurrentMessage = [];
-            }
-            aLine = "";
-        }
+    this.gotoSlide = function( aSlide ) {
+        mClient.sendMessage( "goto_slide\n" + aSlide + "\n\n" );
     }
 
-    // CONSTRUCTOR
-    if(  navigator.mozTCPSocket ) {
-        mSocket = navigator.mozTCPSocket.open( "localhost", 1599 );
-        mSocket.onopen = function( aEvent ) {
-            console.log( "Received onopen" );
-            mSocket.send( "LO_SERVER_CLIENT_PAIR\nFirefox OS\n1234\n\n" );
-        }
-        mSocket.onerror = function( aEvent ) {
-            console.log( "Received error: " + aEvent.data );
-        }
-        mSocket.ondata = dataReceived;
-    } else {
-        console.log( "Can't access socket." );
+    this.blankScreen = function() {
+        mClient.sendMessage( "presentation_blank_screen\n\n" );
     }
 
+    this.blankScreen = function( aColor ) {
+        mClient.sendMessage( "presentation_blank_screen\n" + aColor + "\n\n" );
+    }
+
+    this.resume = function() {
+        mClient.sendMessage( "presentation_resume\n\n" );
+    }
+
+    this.startPresentation = function() {
+        mClient.sendMessage( "presentation_start\n\n" );
+    }
+
+    this.stopPresentation = function() {
+        mClient.sendMessage( "presentation_stop\n\n" );
+    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
