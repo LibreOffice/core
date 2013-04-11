@@ -64,32 +64,6 @@
 #define VS_STYLE                1
 #define PB_OPTIONS              2
 
-#define IMG_LINE1           5
-#define IMG_LINE2               7
-#define IMG_LINE3           9
-#define IMG_LINE4           11
-#define IMG_LINE5               13
-#define IMG_LINE6           15
-#define IMG_LINE7           17
-#define IMG_LINE8               19
-#define IMG_LINE9           21
-#define IMG_LINE10              23
-#define IMG_LINE11          25
-
-// #define STR_STYLE_NONE_TIP       30
-#define STR_STYLE_NONE          31
-#define STR_STYLE_LINE1         32
-#define STR_STYLE_LINE2         33
-#define STR_STYLE_LINE3         34
-#define STR_STYLE_LINE4         35
-#define STR_STYLE_LINE5         36
-#define STR_STYLE_LINE6         37
-#define STR_STYLE_LINE7         38
-#define STR_STYLE_LINE8         39
-#define STR_STYLE_LINE9         40
-#define STR_STYLE_LINE10        41
-#define STR_STYLE_LINE11        42
-
 //width popup page
 #define VS_WIDTH        1
 #define MF_WIDTH        2

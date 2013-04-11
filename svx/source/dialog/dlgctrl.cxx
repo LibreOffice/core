@@ -1019,7 +1019,7 @@ void HatchingLB::UserDraw( const UserDrawEvent& rUDEvt )
             sal_uIntPtr nOldDrawMode = pDevice->GetDrawMode();
             pDevice->SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
-            XHatch& rXHatch = mpList->GetHatch( rUDEvt.GetItemId() )->GetHatch();
+            const XHatch& rXHatch = mpList->GetHatch( rUDEvt.GetItemId() )->GetHatch();
             MapMode aMode( MAP_100TH_MM );
             Hatch aHatch( (HatchStyle) rXHatch.GetHatchStyle(),
                           rXHatch.GetColor(),
@@ -1157,7 +1157,7 @@ void GradientLB::UserDraw( const UserDrawEvent& rUDEvt )
         {
             OutputDevice* pDevice = rUDEvt.GetDevice();
 
-            XGradient& rXGrad = mpList->GetGradient( rUDEvt.GetItemId() )->GetGradient();
+            const XGradient& rXGrad = mpList->GetGradient( rUDEvt.GetItemId() )->GetGradient();
             Gradient aGradient( (GradientStyle) rXGrad.GetGradientStyle(), rXGrad.GetStartColor(), rXGrad.GetEndColor() );
             aGradient.SetAngle( (sal_uInt16)rXGrad.GetAngle() );
             aGradient.SetBorder( rXGrad.GetBorder() );

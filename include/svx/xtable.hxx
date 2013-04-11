@@ -66,8 +66,8 @@ public:
                 , aColor(rColor)
                 {}
 
-    void    SetColor(const Color& rColor)   { aColor = rColor; }
-    Color&  GetColor()                      { return aColor; }
+    void SetColor(const Color& rColor) { aColor = rColor; }
+    const Color& GetColor() const { return aColor; }
 };
 
 // --------------------
@@ -89,7 +89,7 @@ public:
         aB2DPolyPolygon = rB2DPolyPolygon;
     }
 
-    basegfx::B2DPolyPolygon& GetLineEnd()
+    const basegfx::B2DPolyPolygon& GetLineEnd() const
     {
         return aB2DPolyPolygon;
     }
@@ -107,8 +107,8 @@ public:
             XDashEntry(const XDash& rDash, const String& rName) :
                 XPropertyEntry(rName), aDash(rDash) {}
 
-    void    SetDash(const XDash& rDash)    { aDash = rDash; }
-    XDash&  GetDash()                      { return aDash; }
+    void SetDash(const XDash& rDash) { aDash = rDash; }
+    const XDash& GetDash() const { return aDash; }
 };
 
 // ------------------
@@ -123,8 +123,8 @@ public:
             XHatchEntry(const XHatch& rHatch, const String& rName) :
                 XPropertyEntry(rName), aHatch(rHatch) {}
 
-    void    SetHatch(const XHatch& rHatch)  { aHatch = rHatch; }
-    XHatch& GetHatch()                      { return aHatch; }
+    void SetHatch(const XHatch& rHatch) { aHatch = rHatch; }
+    const XHatch& GetHatch() const { return aHatch; }
 };
 
 // ---------------------
@@ -139,8 +139,8 @@ public:
                 XGradientEntry(const XGradient& rGradient, const String& rName):
                     XPropertyEntry(rName), aGradient(rGradient) {}
 
-    void        SetGradient(const XGradient& rGrad) { aGradient = rGrad; }
-    XGradient&  GetGradient()                       { return aGradient; }
+    void SetGradient(const XGradient& rGrad) { aGradient = rGrad; }
+    const XGradient& GetGradient() const { return aGradient; }
 };
 
 // ---------------------
