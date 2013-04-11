@@ -338,7 +338,6 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
     if( !pImpl )
         return sal_True;
     const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();
-    sal_Bool bRet = sal_True;
     if( pRootFrm )
     {
         sal_uInt16 nIndex = 0;
@@ -350,11 +349,8 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
         while( pPage )
         {
             if( nIndex >= pImpl->size() )
-            {
-                if( bRet )
-                    bRet = sal_False;
-                break;
-            }
+                return sal_False;
+
             SwLayoutFrm* pLay = pPage->FindBodyCont();
             SwFrm* pTmp = pLay ? pLay->ContainsAny() : NULL;
             if( pTmp && pTmp->IsSctFrm() )
@@ -374,8 +370,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                             ( bFollow ? ((SwTxtFrm*)pTmp)->GetOfst()
                               : STRING_LEN ) != pImpl->GetBreakOfst( nIndex ) )
                         {
-                            if( bRet )
-                                bRet = sal_False;
+                            return sal_False;
                         }
                         ++nIndex;
                     }
@@ -412,8 +407,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                                 pImpl->GetBreakType( nIndex ) ||
                                nOfst != pImpl->GetBreakOfst( nIndex ) )
                             {
-                                if( bRet )
-                                    bRet = sal_False;
+                                return sal_False;
                             }
                             ++nIndex;
                         }
@@ -446,7 +440,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
             pPage = (SwPageFrm*)pPage->GetNext();
         }
     }
-    return bRet;
+    return sal_True;
 }
 #endif
 
