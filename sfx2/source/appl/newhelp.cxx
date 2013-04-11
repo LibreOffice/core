@@ -2006,8 +2006,6 @@ long TextWin_Impl::Notify( NotifyEvent& rNEvt )
 // remove docking area acceptor from layoutmanager, so it will not layout anything further .-)
 static void lcl_disableLayoutOfFrame(const Reference< XFrame2 >& xFrame)
 {
-    static const OUString PROP_LAYOUT_MANAGER("LayoutManager");
-
     xFrame->setLayoutManager( Reference< XLayoutManager >() );
 }
 
