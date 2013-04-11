@@ -153,8 +153,10 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
     text::WritingMode eWritingMode = text::WritingMode_LR_TB;
-    // Used for gradients, let the VML import do the hard work.
-    oox::vml::FillModel aFillModel;
+
+    // Importing these are not trivial, let the VML import do the hard work.
+    oox::vml::FillModel aFillModel; // Gradient.
+    oox::vml::ShadowModel aShadowModel; // Shadow.
 
     for (std::vector< std::pair<OUString, OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
@@ -399,6 +401,16 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         }
         else if (i->first == "fillFocus")
             aFillModel.moFocus.set(i->second.toDouble() / 100); // percent
+        else if (i->first == "fShadow" && xPropertySet.is())
+        {
+            if (i->second.toInt32() == 1)
+                aShadowModel.mbHasShadow = true;
+        }
+        else if (i->first == "shadowColor")
+            aShadowModel.moColor.set(OUString("#") + OStringToOUString(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32())), RTL_TEXTENCODING_UTF8));
+        else if (i->first == "shadowOffsetX")
+            // EMUs to points
+            aShadowModel.moOffset.set(OUString::number(i->second.toDouble() / 12700) + "pt");
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
@@ -493,12 +505,20 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             xPropertySet->setPropertyValue("VertOrientRelation", uno::makeAny(rShape.nVertOrientRelation));
         if (rShape.nWrap != -1)
             xPropertySet->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode(rShape.nWrap)));
+        oox::ModelObjectHelper aModelObjectHelper(m_rImport.getModelFactory());
         if (aFillModel.moType.has())
         {
-            oox::ModelObjectHelper aModelObjectHelper(m_rImport.getModelFactory());
             oox::drawingml::ShapePropertyMap aPropMap(aModelObjectHelper);
             aFillModel.pushToPropMap(aPropMap, m_rImport.getGraphicHelper());
             // Sets the FillStyle and FillGradient UNO properties.
+            oox::PropertySet(xShape).setProperties(aPropMap);
+        }
+
+        if (aShadowModel.mbHasShadow)
+        {
+            oox::drawingml::ShapePropertyMap aPropMap(aModelObjectHelper);
+            aShadowModel.pushToPropMap(aPropMap, m_rImport.getGraphicHelper());
+            // Sets the ShadowFormat UNO property.
             oox::PropertySet(xShape).setProperties(aPropMap);
         }
     }

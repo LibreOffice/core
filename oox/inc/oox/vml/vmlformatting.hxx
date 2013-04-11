@@ -226,7 +226,7 @@ struct OOX_DLLPUBLIC FillModel
 // ============================================================================
 
 /** The shadow model structure contains all shape shadow properties. */
-struct ShadowModel
+struct OOX_DLLPUBLIC ShadowModel
 {
     bool               mbHasShadow;               ///< Is a v:shadow element seen?
     OptValue<bool>     moShadowOn;                ///< Is the element turned on?
