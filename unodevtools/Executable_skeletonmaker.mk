@@ -28,10 +28,6 @@ $(eval $(call gb_Executable_Executable,uno-skeletonmaker))
 
 $(eval $(call gb_Executable_use_external,uno-skeletonmaker,boost_headers))
 
-$(eval $(call gb_Executable_use_api,uno-skeletonmaker,\
-    udkapi \
-))
-
 $(eval $(call gb_Executable_set_include,uno-skeletonmaker,\
     -I$(SRCDIR)/unodevtools/inc \
     $$(INCLUDE) \
@@ -41,8 +37,6 @@ $(eval $(call gb_Executable_use_libraries,uno-skeletonmaker,\
     reg \
     sal \
     salhelper \
-    cppu \
-    cppuhelper \
     unoidl \
 ))
 

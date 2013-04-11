@@ -21,17 +21,13 @@
 #include "codemaker/typemanager.hxx"
 #include "sal/main.h"
 #include "rtl/process.h"
-#include "rtl/ustrbuf.hxx"
 #include "unodevtools/options.hxx"
 #include "skeletonjava.hxx"
 #include "skeletoncpp.hxx"
 
-#include "com/sun/star/uno/Reference.hxx"
-
 using namespace ::rtl;
 using namespace ::skeletonmaker;
 using namespace ::unodevtools;
-using namespace ::com::sun::star::uno;
 
 namespace {
 
@@ -269,12 +265,7 @@ SAL_IMPLEMENT_MAIN()
 
 
         // else illegal argument
-        OUStringBuffer buf( 64 );
-        buf.append("unexpected parameter \"");
-        buf.append(arg);
-        buf.append("\"!");
-        throw RuntimeException(buf.makeStringAndClear(),
-                               css::uno::Reference< XInterface >());
+        throw CannotDumpException("unexpected parameter \"" + arg + "\"!");
     }
 
     if ( types.empty() && options.componenttype != 3) {
@@ -331,12 +322,6 @@ SAL_IMPLEMENT_MAIN()
     } catch (const CannotDumpException & e) {
         std::cout.flush();
         std::cerr << "\nError: " << e.getMessage() << std::endl;
-    } catch(const Exception& e) {
-        std::cout.flush();
-        std::cerr
-            << "\nError: "
-            << OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr()
-            << std::endl;
     }
 
     return 0;

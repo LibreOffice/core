@@ -19,14 +19,11 @@
 
 #include <stdio.h>
 
+#include "codemaker/global.hxx"
 #include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
 #include "rtl/process.h"
 
-#include "com/sun/star/uno/RuntimeException.hpp"
-
 using namespace ::rtl;
-using namespace ::com::sun::star::uno;
 
 namespace unodevtools {
 
@@ -41,7 +38,6 @@ static void out( const sal_Char * pText )
 //-------------------------------------------------------------------------------
 sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
-    throw (RuntimeException)
 {
     const OUString dash = OUString("-");
     if(aArg.indexOf(dash) != 0)
@@ -60,11 +56,8 @@ sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
         if (*pnIndex >= rtl_getAppCommandArgCount() ||
             pValue->copy(1).equals(dash))
         {
-            OUStringBuffer buf( 32 );
-            buf.append( "incomplete option \"-" );
-            buf.appendAscii( pOpt );
-            buf.append( "\" given!" );
-            throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
+            throw CannotDumpException(
+                "incomplete option \"-" + aOpt + "\" given!");
         } else {
 #if OSL_DEBUG_LEVEL > 1
             out( "\n> identified option -" );

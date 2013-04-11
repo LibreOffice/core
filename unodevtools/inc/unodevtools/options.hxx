@@ -22,15 +22,14 @@
 
 #include "sal/config.h"
 
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ustrbuf.hxx>
 
 namespace unodevtools {
 
 //-------------------------------------------------------------------------------
 sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
-                     sal_uInt32 * pnIndex, const OUString & aArg)
-    throw (com::sun::star::uno::RuntimeException);
+                     sal_uInt32 * pnIndex, const OUString & aArg);
+    // throws CannotDumpException
 
 //-------------------------------------------------------------------------------
 sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
