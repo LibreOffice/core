@@ -16,10 +16,11 @@ $(eval $(call gb_ExternalProject_register_targets,epm,\
 ))
 
 $(call gb_ExternalProject_get_state_target,epm,build) :
-	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --disable-fltk \
-		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________NONE) \
-	&& $(MAKE) \
-	&& touch $@
+	$(call gb_ExternalProject_run,build,\
+		./configure --disable-fltk \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________NONE) \
+		&& $(MAKE) \
+		&& touch $@ \
+	)
 
 # vim: set noet sw=4 ts=4:
