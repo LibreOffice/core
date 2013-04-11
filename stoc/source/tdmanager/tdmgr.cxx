@@ -1085,16 +1085,10 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
             for ( ProviderVector::const_iterator iPos( _aProviders.begin() );
                   iPos != _aProviders.end(); ++iPos )
             {
-                try
+                if ( (*iPos)->hasByHierarchicalName( rName ) )
                 {
-                    if ((aRet = (*iPos)->getByHierarchicalName(
-                             rName )).hasValue())
-                    {
-                        break;
-                    }
-                }
-                catch (const NoSuchElementException &)
-                {
+                    aRet = (*iPos)->getByHierarchicalName( rName );
+                    break;
                 }
             }
         }
