@@ -72,6 +72,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace com::sun::star;
@@ -917,10 +918,43 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                             aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
                             aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
                         const bool bCropped(aGrfAttr.IsCropped());
+                        drawinglayer::primitive2d::Primitive2DSequence aContent;
+                        GraphicAttr aSuppressGraphicAttr(aGrfAttr);
+
+                        aSuppressGraphicAttr.SetCrop(0, 0, 0, 0);
+                        aSuppressGraphicAttr.SetRotation(0);
+                        aSuppressGraphicAttr.SetMirrorFlags(0);
+
+                        const bool bNeedTransformedGraphic(
+                            aSuppressGraphicAttr.IsSpecialDrawMode() ||
+                            aSuppressGraphicAttr.IsAdjusted() ||
+                            aSuppressGraphicAttr.IsMirrored() ||
+                            aSuppressGraphicAttr.IsRotated() ||
+                            aSuppressGraphicAttr.IsTransparent());
+
+                        if(bNeedTransformedGraphic)
+                        {
+                            // #i122039# need to apply graphic transformation if GraphicAttr are used qwhich need this
+                            const Graphic aTransformedGraphic(rGrfObj.GetTransformedGraphic(&aSuppressGraphicAttr));
+                            const basegfx::B2DRange aRange(rSvgDataPtr->getRange());
+                            const basegfx::B2DHomMatrix aTransform(
+                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    aRange.getRange(),
+                                    aRange.getMinimum()));
+
+                            aContent.realloc(1);
+                            aContent[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
+                                aTransformedGraphic.GetBitmapEx(),
+                                aTransform);
+                        }
+                        else
+                        {
+                            aContent = rSvgDataPtr->getPrimitive2DSequence();
+                        }
 
                         bDone = paintUsingPrimitivesHelper(
                             *pOut,
-                            rSvgDataPtr->getPrimitive2DSequence(),
+                            aContent,
                             rSvgDataPtr->getRange(),
                             aTargetRange,
                             bCropped ? aGrfAttr.GetLeftCrop() : 0,
