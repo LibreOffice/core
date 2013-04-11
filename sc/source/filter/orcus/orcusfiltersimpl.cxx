@@ -13,6 +13,10 @@
 #include "document.hxx"
 
 #include "tools/urlobj.hxx"
+#include "sfx2/docfile.hxx"
+#include "sfx2/frame.hxx"
+#include "sfx2/sfxsids.hrc"
+#include "svl/itemset.hxx"
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>
@@ -21,11 +25,32 @@
 #include <orcus/orcus_ods.hpp>
 #include <orcus/global.hpp>
 
+#include <com/sun/star/task/XStatusIndicator.hpp>
+
 #ifdef WNT
 #define SYSTEM_PATH INetURLObject::FSYS_DOS
 #else
 #define SYSTEM_PATH INetURLObject::FSYS_UNX
 #endif
+
+using namespace com::sun::star;
+
+namespace {
+
+uno::Reference<task::XStatusIndicator> getStatusIndicator(SfxMedium& rMedium)
+{
+    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+    SfxItemSet* pSet = rMedium.GetItemSet();
+    if (pSet)
+    {
+        const SfxUnoAnyItem* pItem = static_cast<const SfxUsrAnyItem*>(pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+        if (pItem)
+            xStatusIndicator.set(pItem->GetValue(), uno::UNO_QUERY);
+    }
+    return xStatusIndicator;
+}
+
+}
 
 OString ScOrcusFiltersImpl::toSystemPath(const OUString& rPath)
 {
@@ -33,10 +58,11 @@ OString ScOrcusFiltersImpl::toSystemPath(const OUString& rPath)
     return OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
 }
 
-bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) const
+bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, SfxMedium& rMedium) const
 {
     ScOrcusFactory aFactory(rDoc);
-    OString aSysPath = toSystemPath(rPath);
+    aFactory.setStatusIndicator(getStatusIndicator(rMedium));
+    OString aSysPath = toSystemPath(rMedium.GetName());
     const char* path = aSysPath.getStr();
 
     try
@@ -53,10 +79,11 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
     return true;
 }
 
-bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, const OUString& rPath) const
+bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const
 {
     ScOrcusFactory aFactory(rDoc);
-    OString aSysPath = toSystemPath(rPath);
+    aFactory.setStatusIndicator(getStatusIndicator(rMedium));
+    OString aSysPath = toSystemPath(rMedium.GetName());
     const char* path = aSysPath.getStr();
 
     try
@@ -73,10 +100,11 @@ bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, const OUString& rPath)
     return true;
 }
 
-bool ScOrcusFiltersImpl::importXLSX(ScDocument& rDoc, const OUString& rPath) const
+bool ScOrcusFiltersImpl::importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const
 {
     ScOrcusFactory aFactory(rDoc);
-    OString aSysPath = toSystemPath(rPath);
+    aFactory.setStatusIndicator(getStatusIndicator(rMedium));
+    OString aSysPath = toSystemPath(rMedium.GetName());
     const char* path = aSysPath.getStr();
 
     try
@@ -93,10 +121,11 @@ bool ScOrcusFiltersImpl::importXLSX(ScDocument& rDoc, const OUString& rPath) con
     return true;
 }
 
-bool ScOrcusFiltersImpl::importODS(ScDocument& rDoc, const OUString& rPath) const
+bool ScOrcusFiltersImpl::importODS(ScDocument& rDoc, SfxMedium& rMedium) const
 {
     ScOrcusFactory aFactory(rDoc);
-    OString aSysPath = toSystemPath(rPath);
+    aFactory.setStatusIndicator(getStatusIndicator(rMedium));
+    OString aSysPath = toSystemPath(rMedium.GetName());
     const char* path = aSysPath.getStr();
 
     try

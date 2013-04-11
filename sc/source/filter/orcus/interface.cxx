@@ -16,9 +16,14 @@
 #include "stringutil.hxx"
 #include "globalnames.hxx"
 #include "docoptio.hxx"
+#include "globstr.hrc"
 
 #include "formula/token.hxx"
 #include "tools/datetime.hxx"
+
+#include <com/sun/star/task/XStatusIndicator.hpp>
+
+using namespace com::sun::star;
 
 using orcus::spreadsheet::row_t;
 using orcus::spreadsheet::col_t;
@@ -39,7 +44,8 @@ ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t n
 ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) :
     mrDoc(rDoc),
     maGlobalSettings(mrDoc),
-    maSharedStrings(*this) {}
+    maSharedStrings(*this),
+    mnProgress(0) {}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char* sheet_name, size_t sheet_name_length)
 {
@@ -113,6 +119,9 @@ void ScOrcusFactory::finalize()
 
         mrDoc.SetString(it->maPos, maStrings[it->mnIndex], &aParam);
     }
+
+    if (mxStatusIndicator.is())
+        mxStatusIndicator->end();
 }
 
 size_t ScOrcusFactory::appendString(const OUString& rStr)
@@ -139,13 +148,48 @@ void ScOrcusFactory::pushStringCell(const ScAddress& rPos, size_t nStrIndex)
     maStringCells.push_back(StringCellCache(rPos, nStrIndex));
 }
 
+void ScOrcusFactory::incrementProgress()
+{
+    if (!mxStatusIndicator.is())
+        // Status indicator object not set.
+        return;
+
+    // For now, we'll hard-code the progress range to be 100, and stops at 99
+    // in all cases.
+
+    if (!mnProgress)
+        mxStatusIndicator->start(ScGlobal::GetRscString(STR_LOAD_DOC), 100);
+
+    if (mnProgress == 99)
+        return;
+
+    ++mnProgress;
+    mxStatusIndicator->setValue(mnProgress);
+}
+
+void ScOrcusFactory::setStatusIndicator(const uno::Reference<task::XStatusIndicator>& rIndicator)
+{
+    mxStatusIndicator = rIndicator;
+}
+
 ScOrcusSheet::ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusFactory& rFactory) :
-    mrDoc(rDoc), mnTab(nTab), mrFactory(rFactory) {}
+    mrDoc(rDoc), mnTab(nTab), mrFactory(rFactory), mnCellCount(0) {}
+
+void ScOrcusSheet::cellInserted()
+{
+    ++mnCellCount;
+    if (mnCellCount == 100000)
+    {
+        mrFactory.incrementProgress();
+        mnCellCount = 0;
+    }
+}
 
 void ScOrcusSheet::set_auto(row_t row, col_t col, const char* p, size_t n)
 {
     OUString aVal(p, n, RTL_TEXTENCODING_UTF8);
     mrDoc.SetString(col, row, mnTab, aVal);
+    cellInserted();
 }
 
 void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
@@ -156,16 +200,19 @@ void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
     // implement true shared strings in Calc core.
 
     mrFactory.pushStringCell(ScAddress(col, row, mnTab), sindex);
+    cellInserted();
 }
 
 void ScOrcusSheet::set_value(row_t row, col_t col, double value)
 {
     mrDoc.SetValue( col, row, mnTab, value );
+    cellInserted();
 }
 
 void ScOrcusSheet::set_bool(row_t row, col_t col, bool value)
 {
     mrDoc.SetValue(col, row, mnTab, value ? 1.0 : 0.0);
+    cellInserted();
 }
 
 void ScOrcusSheet::set_date_time(
@@ -189,6 +236,7 @@ void ScOrcusSheet::set_date_time(
     fTime /= DATE_TIME_FACTOR;
 
     mrDoc.SetValue(col, row, mnTab, nDateDiff + fTime);
+    cellInserted();
 }
 
 void ScOrcusSheet::set_format(row_t /*row*/, col_t /*col*/, size_t /*xf_index*/)
@@ -225,6 +273,7 @@ void ScOrcusSheet::set_formula(
     OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
     formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
     mrDoc.SetFormula(ScAddress(col,row,mnTab), aFormula, eGrammar);
+    cellInserted();
 }
 
 void ScOrcusSheet::set_formula_result(row_t row, col_t col, const char* p, size_t n)
@@ -257,6 +306,7 @@ void ScOrcusSheet::set_shared_formula(
         ScTokenArray aArr;
         aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
         mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
+        cellInserted();
     }
 }
 
@@ -277,6 +327,7 @@ void ScOrcusSheet::set_shared_formula(
         ScTokenArray aArr;
         aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
         mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
+        cellInserted();
     }
 }
 
@@ -289,6 +340,7 @@ void ScOrcusSheet::set_shared_formula(row_t row, col_t col, size_t sindex)
     ScTokenArray aArr;
     aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
     mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
+    cellInserted();
 }
 
 void ScOrcusSheet::set_array_formula(

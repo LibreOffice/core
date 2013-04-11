@@ -20,10 +20,10 @@ class ScOrcusFiltersImpl : public ScOrcusFilters
 public:
     static OString toSystemPath(const OUString& rPath);
 
-    virtual bool importCSV(ScDocument& rDoc, const OUString& rPath) const;
-    virtual bool importGnumeric(ScDocument& rDoc, const OUString& rPath) const;
-    virtual bool importXLSX(ScDocument& rDoc, const OUString& rPath) const;
-    virtual bool importODS(ScDocument& rDoc, const OUString& rPath) const;
+    virtual bool importCSV(ScDocument& rDoc, SfxMedium& rMedium) const;
+    virtual bool importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const;
+    virtual bool importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const;
+    virtual bool importODS(ScDocument& rDoc, SfxMedium& rMedium) const;
 
     virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const OUString& rPath) const;
 };

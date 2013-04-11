@@ -1508,22 +1508,22 @@ bool ScDocShell::LoadExternal( SfxMedium& rMed )
         const OUString& rFilterName = pFilter->GetName();
         if (rFilterName == "gnumeric")
         {
-            if (!pOrcus->importGnumeric(aDocument, rMed.GetName()))
+            if (!pOrcus->importGnumeric(aDocument, rMed))
                 return false;
         }
         else if (rFilterName == "csv")
         {
-            if (!pOrcus->importCSV(aDocument, rMed.GetName()))
+            if (!pOrcus->importCSV(aDocument, rMed))
                 return false;
         }
         else if (rFilterName == "xlsx")
         {
-            if (!pOrcus->importXLSX(aDocument, rMed.GetName()))
+            if (!pOrcus->importXLSX(aDocument, rMed))
                 return false;
         }
         else if (rFilterName == "ods")
         {
-            if (!pOrcus->importODS(aDocument, rMed.GetName()))
+            if (!pOrcus->importODS(aDocument, rMed))
                 return false;
         }
 

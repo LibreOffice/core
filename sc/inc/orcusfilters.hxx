@@ -17,6 +17,7 @@ class SvTreeListBox;
 struct ScOrcusXMLTreeParam;
 struct ScOrcusImportXMLParam;
 class ScOrcusXMLContext;
+class SfxMedium;
 
 /**
  * Collection of orcus filter wrappers.
@@ -26,13 +27,13 @@ class ScOrcusFilters
 public:
     virtual ~ScOrcusFilters() {}
 
-    virtual bool importCSV(ScDocument& rDoc, const OUString& rPath) const = 0;
+    virtual bool importCSV(ScDocument& rDoc, SfxMedium& rMedium) const = 0;
 
-    virtual bool importGnumeric(ScDocument& rDoc, const OUString& rPath) const = 0;
+    virtual bool importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) const = 0;
 
-    virtual bool importXLSX(ScDocument& rDoc, const OUString& rPath) const = 0;
+    virtual bool importXLSX(ScDocument& rDoc, SfxMedium& rMedium) const = 0;
 
-    virtual bool importODS(ScDocument& rDoc, const OUString& rPath) const = 0;
+    virtual bool importODS(ScDocument& rDoc, SfxMedium& rMedium) const = 0;
 
     /**
      * Create a context for XML file.  The context object stores session

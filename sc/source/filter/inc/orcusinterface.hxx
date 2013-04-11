@@ -26,6 +26,12 @@ class ScOrcusSheet;
 class ScOrcusFactory;
 class ScRangeData;
 
+namespace com { namespace sun { namespace star { namespace task {
+
+class XStatusIndicator;
+
+}}}}
+
 class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_settings
 {
     ScDocument& mrDoc;
@@ -64,6 +70,11 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 
     typedef std::map<size_t, ScRangeData*> SharedFormulaContainer;
     SharedFormulaContainer maSharedFormulas;
+
+    int mnCellCount;
+
+    void cellInserted();
+
 public:
     ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
 
@@ -190,6 +201,10 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
     boost::ptr_vector<ScOrcusSheet> maSheets;
     ScOrcusStyles maStyles;
 
+    int mnProgress;
+
+    com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> mxStatusIndicator;
+
 public:
     ScOrcusFactory(ScDocument& rDoc);
 
@@ -204,6 +219,10 @@ public:
     size_t addString(const OUString& rStr);
 
     void pushStringCell(const ScAddress& rPos, size_t nStrIndex);
+
+    void incrementProgress();
+
+    void setStatusIndicator(const com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator>& rIndicator);
 };
 
 #endif
