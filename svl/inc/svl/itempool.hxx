@@ -215,6 +215,7 @@ public:
     sal_uInt16                      GetVersion() const;
     void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
     bool                            IsCurrentVersionLoading() const;
+    void                            SetIsCurrentVersionLoading( );
 
     static int                      IsWhich(sal_uInt16 nId) {
                                         return nId && nId <= SFX_WHICH_MAX; }

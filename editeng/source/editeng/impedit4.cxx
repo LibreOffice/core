@@ -197,8 +197,8 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const String& rBaseURL, EditS
 
 EditPaM ImpEditEngine::ReadBin( SvStream& rInput, EditSelection aSel )
 {
-    // Simply abuse a temporary text object ...
-    EditTextObject* pObj = EditTextObject::Create( rInput, NULL );
+    // fdo#60551 pass global text object pool to load attributes
+    EditTextObject* pObj = EditTextObject::Create( rInput, GetEditTextObjectPool( ) );
 
     EditPaM aLastPaM = aSel.Max();
     if ( pObj )
@@ -301,7 +301,8 @@ static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16
 
 sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, bool bStoreUnicodeStrings )
 {
-    boost::scoped_ptr<EditTextObject> pObj(CreateTextObject(aSel, NULL));
+    // fdo#60551 use global pool instead of creating a new pool
+    boost::scoped_ptr<EditTextObject> pObj(CreateTextObject( aSel ));
     pObj->mpImpl->StoreUnicodeStrings(bStoreUnicodeStrings);
     pObj->Store(rOutput);
     return 0;

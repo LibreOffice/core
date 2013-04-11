@@ -1629,5 +1629,16 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
     return pItem;
 }
 
+//-------------------------------------------------------------------------
+/*
+    In case ::LoadItem() is called without preceeded by ::Load(),
+    This function is used to avoid using of ::GetNewWhich() which lead to
+    out of range error.
+ */
+
+void SfxItemPool::SetIsCurrentVersionLoading( )
+{
+    pImp->nLoadingVersion = pImp->nVersion;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

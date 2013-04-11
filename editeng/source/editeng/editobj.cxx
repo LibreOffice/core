@@ -1041,6 +1041,13 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
     if ( bOwnerOfPool )
         GetPool()->Load( rIStream );
+    else
+    {
+        // Don't load, a global Pool is passed.
+        // Inform this is the current loading version to avoid GetNewWhich in
+        // SfxPoolItem::LoadItem
+        GetPool()->SetIsCurrentVersionLoading( );
+    }
 
     // CharSet, in which it was saved:
     sal_uInt16 nCharSet;
@@ -1085,7 +1092,10 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
             const SfxPoolItem* pItem;
 
             rIStream >> _nWhich;
-            _nWhich = pPool->GetNewWhich( _nWhich );
+
+            // Only map new which if we don't use a global pool
+            if ( bOwnerOfPool)
+                _nWhich = pPool->GetNewWhich( _nWhich );
             pItem = pPool->LoadSurrogate( rIStream, _nWhich, 0 );
             rIStream >> nStart;
             rIStream >> nEnd;
