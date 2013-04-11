@@ -33,6 +33,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
@@ -405,8 +406,23 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     if (xPropertySet.is())
     {
         if (!bTextFrame)
+        {
             xPropertySet->setPropertyValue("LineColor", aLineColor);
-        xPropertySet->setPropertyValue("LineWidth", aLineWidth);
+            xPropertySet->setPropertyValue("LineWidth", aLineWidth);
+        }
+        else
+        {
+            static OUString aBorders[] = {
+                OUString("TopBorder"), OUString("LeftBorder"), OUString("BottomBorder"), OUString("RightBorder")
+            };
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
+            {
+                table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(aBorders[i]).get<table::BorderLine2>();
+                aBorderLine.Color = aLineColor.get<sal_Int32>();
+                aBorderLine.LineWidth = aLineWidth.get<sal_Int32>();
+                xPropertySet->setPropertyValue(aBorders[i], uno::makeAny(aBorderLine));
+            }
+        }
         if (rShape.oZ)
             resolveDhgt(xPropertySet, *rShape.oZ);
         if (bTextFrame)
