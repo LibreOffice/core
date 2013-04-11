@@ -1170,6 +1170,13 @@ AC_ARG_ENABLE(bogus-pkg-config,
         [MACOSX only: on MacOSX pkg-config can cause trouble. by default if one is found in the PATH, an error is issued. This flag turn that error into a warning.]),
 )
 
+AC_ARG_ENABLE(openssl,
+    AS_HELP_STRING([--disable-openssl],
+        [Disable using libssl/libcrypto from OpenSSL. If disabled,
+         components will either use GNUTLS or NSS. Work in progress,
+         use only if you are hacking on it.]),
+,enable_openssl=yes)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -8110,6 +8117,10 @@ if test -n "$with_tls"; then
         AC_DEFINE(USE_TLS_OPENSSL)
         TLS=OPENSSL
 
+        if test "$enable_openssl" != "yes"; then
+            AC_MSG_ERROR(["Disabling OpenSSL was requested, but the requested TLS to use is actually OpenSSL."])
+        fi
+
         # warn that OpenSSL has been selected but not all TLS code has this option
         AC_MSG_WARN([TLS/SSL implementation to use is OpenSSL but some code may still be depending on NSS or GNUTLS])
         add_warning "TLS/SSL implementation to use is OpenSSL but some code may still be depending on NSS or GNUTLS"
@@ -8126,8 +8137,13 @@ nss - Mozilla's Network Security Services (NSS)
         ;;
     esac
 else
-    AC_DEFINE(USE_TLS_OPENSSL)
-    TLS=OPENSSL
+    if test "$enable_openssl" = "yes"; then
+        AC_DEFINE(USE_TLS_OPENSSL)
+        TLS=OPENSSL
+    else
+        AC_DEFINE(USE_TLS_NSS)
+        TLS=NSS
+    fi
 fi
 AC_MSG_RESULT([$TLS])
 AC_SUBST(TLS)
@@ -8526,21 +8542,35 @@ fi
 dnl ===================================================================
 dnl Check for system openssl
 dnl ===================================================================
-if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
-        "$_os" = "DragonFly" && test "$with_system_openssl" != "no"; then
-    # Mac OS builds should get out without extra stuff is the Mac porters'
-    # wish. And pkg-config is although Xcode ships a .pc for openssl
-    with_system_openssl=yes
-    SYSTEM_OPENSSL=YES
-    OPENSSL_CFLAGS=
-    OPENSSL_LIBS="-lssl -lcrypto"
+DISABLE_OPENSSL="NO"
+AC_MSG_CHECKING([whether to disable OpenSSL usage])
+if test "$enable_openssl" = "yes"; then
+    AC_MSG_RESULT([no])
+    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
+            "$_os" = "DragonFly" && test "$with_system_openssl" != "no"; then
+        # Mac OS builds should get out without extra stuff is the Mac porters'
+        # wish. And pkg-config is although Xcode ships a .pc for openssl
+        with_system_openssl=yes
+        SYSTEM_OPENSSL=YES
+        OPENSSL_CFLAGS=
+        OPENSSL_LIBS="-lssl -lcrypto"
+    else
+        libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
+    fi
+    if test "$with_system_openssl" = "yes"; then
+        libo_MINGW_CHECK_DLL([SSL], [libssl])
+        libo_MINGW_CHECK_DLL([CRYPTO], [libcrypto])
+    fi
 else
-    libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
+    AC_MSG_RESULT([yes])
+    DISABLE_OPENSSL=YES
+
+    # warn that although OpenSSL is disabled, system libraries may be depending on it
+    AC_MSG_WARN([OpenSSL has been disabled. No code compiled by LibO will make use of it but system librares may create indirect dependencies])
+    add_warning "OpenSSL has been disabled. No code compiled by LibO will make use of it but system librares may create indirect dependencies"
 fi
-if test "$with_system_openssl" = "yes"; then
-    libo_MINGW_CHECK_DLL([libssl])
-    libo_MINGW_CHECK_DLL([libcrypto])
-fi
+
+AC_SUBST([DISABLE_OPENSSL])
 
 dnl ===================================================================
 dnl Check for system redland
