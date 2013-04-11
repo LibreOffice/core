@@ -124,7 +124,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
         if ( sOpt == "Fit to slide")
         {
             OUString sUrl;
-            OUString* pData;
+            OUString* pData = NULL;
             for( sal_Int16 i = 0; i < pImagesLst->GetEntryCount(); ++i )
             {
                 pData = (OUString*) pImagesLst->GetEntryData(i);
@@ -179,12 +179,13 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
                 }
             }
-            delete pData;
+            if (pData)
+                delete pData;
         }
         else if( sOpt == "1 image with title" )
         {
             OUString sUrl;
-            OUString* pData;
+            OUString* pData = NULL;
             for( sal_Int16 i = 0; i < pImagesLst->GetEntryCount(); ++i )
             {
                 pData = (OUString*) pImagesLst->GetEntryData(i);
@@ -221,13 +222,14 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
                 }
             }
-            delete pData;
+            if (pData)
+                delete pData;
         }
         else if( sOpt == "2 images" )
         {
             OUString sUrl1("");
             OUString sUrl2("");
-            OUString* pData;
+            OUString* pData = NULL;
 
             for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=2 )
             {
@@ -333,7 +335,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 }
 
             }
-            delete pData;
+            if (pData)
+                delete pData;
         }
         else if( sOpt == "4 images" )
         {
@@ -341,7 +344,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
             OUString sUrl2("");
             OUString sUrl3("");
             OUString sUrl4("");
-            OUString* pData;
+            OUString* pData = NULL;
 
             for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=4 )
             {
@@ -539,7 +542,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xSlide->add(xShape);
                 }
             }
-            delete pData;
+            if (pData)
+                delete pData;
         }
         else
         {
