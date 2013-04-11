@@ -51,6 +51,7 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/tabletextflowpage \
 	sw/uiconfig/swriter/ui/textgridpage \
 	sw/uiconfig/swriter/ui/titlepage \
+	sw/uiconfig/swriter/ui/viewoptionspage \
 	sw/uiconfig/swriter/ui/wordcount \
 ))
 
