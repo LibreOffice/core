@@ -39,13 +39,18 @@ class GenPspGraphics;
 class GtkYieldMutex : public SalYieldMutex
 {
 public:
-                                                GtkYieldMutex();
-    virtual void                                acquire();
-    virtual void                                release();
-    virtual sal_Bool                            tryToAcquire();
+                        GtkYieldMutex();
+    virtual void        acquire();
+    virtual void        release();
+    virtual sal_Bool    tryToAcquire()  { return SalYieldMutex::tryToAcquire(); }
 
-    virtual int Grab();
-    virtual void Ungrab( int );
+    virtual int         Grab()          { return 0; };
+    virtual void        Ungrab(int )    {};
+
+    std::list<sal_uLong> aYieldStack;
+
+    void ThreadsEnter();
+    void ThreadsLeave();
 
     class GtkYieldGuard
     {
@@ -63,21 +68,6 @@ public:
         }
     };
 };
-
-class GtkHookedYieldMutex : public GtkYieldMutex
-{
-    virtual int      Grab()             { return 0; };
-    virtual void     Ungrab(int )       {};
-    std::list<sal_uLong> aYieldStack;
-public:
-    GtkHookedYieldMutex();
-    virtual void      acquire();
-    virtual void      release();
-    virtual sal_Bool  tryToAcquire() { return SalYieldMutex::tryToAcquire(); }
-    void ThreadsEnter();
-    void ThreadsLeave();
-};
-
 
 #define GTK_YIELD_GRAB() GtkYieldMutex::GtkYieldGuard aLocalGtkYieldGuard( static_cast<GtkYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex()) )
 

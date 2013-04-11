@@ -48,78 +48,29 @@
 
 #include "gtkprintwrapper.hxx"
 
-GtkHookedYieldMutex::GtkHookedYieldMutex()
-{
-}
-
-/*
- * These methods always occur in pairs
- * A ThreadsEnter is followed by a ThreadsLeave
- * We need to queue up the recursive lock count
- * for each pair, so we can accurately restore
- * it later.
- */
-void GtkHookedYieldMutex::ThreadsEnter()
-{
-    acquire();
-    if( !aYieldStack.empty() )
-    { /* Previously called ThreadsLeave() */
-        sal_uLong nCount = aYieldStack.front();
-        aYieldStack.pop_front();
-        while( nCount-- > 1 )
-            acquire();
-    }
-}
-
-void GtkHookedYieldMutex::ThreadsLeave()
-{
-    aYieldStack.push_front( mnCount );
-
-#if OSL_DEBUG_LEVEL > 1
-    if( mnThreadId &&
-        mnThreadId != osl::Thread::getCurrentIdentifier())
-        fprintf( stderr, "\n\n--- A different thread owns the mutex ...---\n\n\n");
-#endif
-
-    while( mnCount > 1 )
-        release();
-    release();
-}
-
-void GtkHookedYieldMutex::acquire()
-{
-    SalYieldMutex::acquire();
-}
-
-void GtkHookedYieldMutex::release()
-{
-    SalYieldMutex::release();
-}
-
 extern "C"
 {
-    #define GET_YIELD_MUTEX() static_cast<GtkHookedYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())
+    #define GET_YIELD_MUTEX() static_cast<GtkYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())
     static void GdkThreadsEnter( void )
     {
-        GtkHookedYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
+        GtkYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
         pYieldMutex->ThreadsEnter();
     }
     static void GdkThreadsLeave( void )
     {
-        GtkHookedYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
+        GtkYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
         pYieldMutex->ThreadsLeave();
     }
-    static bool hookLocks( oslModule pModule )
+    static bool hookLocks( void )
     {
 #if !GTK_CHECK_VERSION(2,4,0)
-        g_error("no lock hooking!");
+#error No lock hooking!
 #endif
         gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
 
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "Hooked gdk threads locks\n" );
 #endif
-        (void)pModule;
         return true;
     }
 
@@ -130,6 +81,9 @@ extern "C"
                  (int) gtk_major_version, (int) gtk_minor_version,
                  (int) gtk_micro_version );
 #endif
+        if( (int) gtk_major_version < 2 || ((int) gtk_major_version == 2 && (int) gtk_minor_version < 4))
+            g_warning("require a newer gtk than %d.%d for gdk_threads_set_lock_functions", (int) gtk_major_version, gtk_minor_version);
+                return NULL;
         /* #i92121# workaround deadlocks in the X11 implementation
         */
         static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
@@ -159,8 +113,8 @@ extern "C"
         if ( !g_thread_supported() )
             g_thread_init( NULL );
 
-        if ( hookLocks( pModule ) )
-            pYieldMutex = new GtkHookedYieldMutex();
+        if ( hookLocks() )
+            pYieldMutex = new GtkYieldMutex();
 
         gdk_threads_init();
 
@@ -341,30 +295,46 @@ GtkYieldMutex::GtkYieldMutex()
 
 void GtkYieldMutex::acquire()
 {
-    g_error ("never called");
+    SalYieldMutex::acquire();
 }
 
 void GtkYieldMutex::release()
 {
-    g_error ("never called");
+    SalYieldMutex::release();
 }
 
-sal_Bool GtkYieldMutex::tryToAcquire()
+/*
+ * These methods always occur in pairs
+ * A ThreadsEnter is followed by a ThreadsLeave
+ * We need to queue up the recursive lock count
+ * for each pair, so we can accurately restore
+ * it later.
+ */
+void GtkYieldMutex::ThreadsEnter()
 {
-    g_error ("never called");
-    return sal_True;
+    acquire();
+    if( !aYieldStack.empty() )
+    { /* Previously called ThreadsLeave() */
+        sal_uLong nCount = aYieldStack.front();
+        aYieldStack.pop_front();
+        while( nCount-- > 1 )
+            acquire();
+    }
 }
 
-int GtkYieldMutex::Grab()
+void GtkYieldMutex::ThreadsLeave()
 {
-    g_error ("never called");
-    return sal_True;
-}
+    aYieldStack.push_front( mnCount );
 
-void GtkYieldMutex::Ungrab( int nGrabs )
-{
-    (void)nGrabs;
-    g_error ("never called");
+#if OSL_DEBUG_LEVEL > 1
+    if( mnThreadId &&
+        mnThreadId != osl::Thread::getCurrentIdentifier())
+        fprintf( stderr, "\n\n--- A different thread owns the mutex ...---\n\n\n");
+#endif
+
+    while( mnCount > 1 )
+        release();
+    release();
 }
 
 SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
