@@ -43,7 +43,18 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
     if (!xPropSet.is())
         return NULL;
 
-    uno::Any aAny = xPropSet->getPropertyValue(UNO_TC_PROP_TEXTFIELD_TYPE);
+    // we do not support these fields from Writer, so make sure we do not throw
+    // here - see fdo#63436 how to possibly extend Writer to make use of this
+    uno::Any aAny;
+    try {
+        aAny = xPropSet->getPropertyValue(UNO_TC_PROP_TEXTFIELD_TYPE);
+        if ( !aAny.has<sal_Int32>() )
+            return NULL;
+    } catch ( const beans::UnknownPropertyException& e )
+    {
+        return NULL;
+    }
+
     sal_Int32 nFieldType = aAny.get<sal_Int32>();
 
     switch (nFieldType)
