@@ -701,7 +701,7 @@ IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
 
 // -----------------------------------------------------------------------
 
-bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
+static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
 {
     bool bChanged = false;
     const SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -804,7 +804,7 @@ void SvxFontNameBox_Impl::FillList()
     // Save old Selection, set back in the end
     Selection aOldSel = GetSelection();
     // Did Doc-Fontlist change?
-    GetDocFontList_Impl( &pFontList, this );
+    lcl_GetDocFontList( &pFontList, this );
     aCurText = GetText();
     SetSelection( aOldSel );
 }
@@ -814,7 +814,7 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent*, event 
     if( event->GetId() != VCLEVENT_EDIT_MODIFY )
         return 0;
     OUString fontname = GetSubEdit()->GetText();
-    GetDocFontList_Impl( &pFontList, this );
+    lcl_GetDocFontList( &pFontList, this );
     // If the font is unknown, show it in italic.
     Font font = GetControlFont();
     if( pFontList != NULL && pFontList->IsAvailable( fontname ))
