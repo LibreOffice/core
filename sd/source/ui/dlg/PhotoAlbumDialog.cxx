@@ -179,8 +179,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
                 }
             }
-            if (pData)
-                delete pData;
+            delete pData;
         }
         else if( sOpt == "1 image with title" )
         {
@@ -222,8 +221,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
                 }
             }
-            if (pData)
-                delete pData;
+            delete pData;
         }
         else if( sOpt == "2 images" )
         {
@@ -335,8 +333,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 }
 
             }
-            if (pData)
-                delete pData;
+            delete pData;
         }
         else if( sOpt == "4 images" )
         {
@@ -542,8 +539,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xSlide->add(xShape);
                 }
             }
-            if (pData)
-                delete pData;
+            delete pData;
         }
         else
         {
