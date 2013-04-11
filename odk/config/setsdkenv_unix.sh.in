@@ -213,7 +213,7 @@ case ${sdk_platform} in
 esac
 
 # Add directory of the SDK tools to the path.
-PATH=${OO_SDK_HOME}/bin:${OO_SDK_OUT}/${exampleout}/bin:${OO_SDK_URE_BIN_DIR}:${OFFICE_PROGRAM_PATH}:.:${PATH}
+PATH=${OO_SDK_HOME}/bin:${OO_SDK_OUT}/${exampleout}/bin:${OO_SDK_URE_BIN_DIR}:${OFFICE_PROGRAM_PATH}:${PATH}
 
 # Set the classpath
 CLASSPATH=${OO_SDK_URE_JAVA_DIR}/juh.jar:${OO_SDK_URE_JAVA_DIR}/jurt.jar:${OO_SDK_URE_JAVA_DIR}/ridl.jar:${OO_SDK_URE_JAVA_DIR}/unoloader.jar:${OFFICE_PROGRAM_PATH}/classes/unoil.jar:${CLASSPATH}
