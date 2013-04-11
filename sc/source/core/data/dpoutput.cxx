@@ -1812,6 +1812,8 @@ void lcl_StripSubTotals( std::vector<bool>& rResult, const std::vector<sal_Int32
             // if a subtotal is included, clear the result flag for the columns/rows that the subtotal includes
             sal_Int32 nStart = nPos - rSubtotal[nPos];
             OSL_ENSURE( nStart >= 0, "invalid subtotal count" );
+            if (nStart < 0)
+                nStart = 0;
 
             for (sal_Int32 nPrev = nStart; nPrev < nPos; nPrev++)
                 rResult[nPrev] = false;
