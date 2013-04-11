@@ -1667,11 +1667,19 @@ void lcl_FilterInclude( std::vector<bool>& rResult, std::vector< sal_Int32 >& rS
                 {
                     // grand total is always automatic
                     sal_Int32 nDataPos = j - ( nSize - nGrandTotals );
-                    OSL_ENSURE( nDataPos < (sal_Int32)rDataNames.size(), "wrong data count" );
-                    rtl::OUString aSourceName( rDataNames[nDataPos] );     // vector contains source names
-                    rtl::OUString aGivenName( rGivenNames[nDataPos] );
+                    if (nDataPos >= 0 && nDataPos < (sal_Int32)rDataNames.size() &&
+                            nDataPos < (sal_Int32)rGivenNames.size())
+                    {
+                        rtl::OUString aSourceName( rDataNames[nDataPos] );     // vector contains source names
+                        rtl::OUString aGivenName( rGivenNames[nDataPos] );
 
-                    rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
+                        rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
+                    }
+                    else
+                    {
+                        OSL_FAIL( "wrong data count for grand total" );
+                        rResult[j] = false;
+                    }
                 }
             }
 
@@ -1707,27 +1715,49 @@ void lcl_FilterInclude( std::vector<bool>& rResult, std::vector< sal_Int32 >& rS
                         rtl::OUString aSourceName( rDataNames[nDataPos] );             // vector contains source names
                         rtl::OUString aGivenName( rGivenNames[nDataPos] );
 
-                        OSL_ENSURE( nFuncPos < aSubTotals.getLength(), "wrong subtotal count" );
-                        rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName ) &&
+                        if (nFuncPos < aSubTotals.getLength())
+                        {
+                            rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName ) &&
                                      aSubTotals[nFuncPos] == aFilter.meFunction;
+                        }
+                        else
+                        {
+                            OSL_FAIL( "wrong subtotal count for manual subtotals and several data fields" );
+                            rResult[j] = false;
+                        }
                     }
                     else
                     {
                         // manual subtotals for a single data field
 
-                        OSL_ENSURE( nSubTotalCount < aSubTotals.getLength(), "wrong subtotal count" );
-                        rResult[j] = ( aSubTotals[nSubTotalCount] == aFilter.meFunction );
+                        if (nSubTotalCount < aSubTotals.getLength())
+                        {
+                            rResult[j] = ( aSubTotals[nSubTotalCount] == aFilter.meFunction );
+                        }
+                        else
+                        {
+                            OSL_FAIL( "wrong subtotal count for manual subtotals for a single data field" );
+                            rResult[j] = false;
+                        }
                     }
                 }
                 else    // automatic subtotals
                 {
                     if ( rBeforeDataLayout )
                     {
-                        OSL_ENSURE( nSubTotalCount < (sal_Int32)rDataNames.size(), "wrong data count" );
-                        rtl::OUString aSourceName( rDataNames[nSubTotalCount] );       // vector contains source names
-                        rtl::OUString aGivenName( rGivenNames[nSubTotalCount] );
+                        if (nSubTotalCount < (sal_Int32)rDataNames.size() &&
+                                nSubTotalCount < (sal_Int32)rGivenNames.size())
+                        {
+                            rtl::OUString aSourceName( rDataNames[nSubTotalCount] );       // vector contains source names
+                            rtl::OUString aGivenName( rGivenNames[nSubTotalCount] );
 
-                        rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
+                            rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
+                        }
+                        else
+                        {
+                            OSL_FAIL( "wrong data count for automatic subtotals" );
+                            rResult[j] = false;
+                        }
                     }
 
                     // if a function was specified, automatic subtotals never match
