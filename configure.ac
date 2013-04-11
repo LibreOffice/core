@@ -11633,8 +11633,15 @@ fi
 # ===================================================================
 AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
+
+if test $_os = iOS -o $_os = Android; then
+    # Never any point in mergelibs for these as we build just static
+    # libraries anyway...
+    enable_mergelibs=no
+fi
+
 if test "$enable_mergelibs" != "no"; then
-    if test $_os != Linux -a $_os != Android -a $_os != WINNT; then
+    if test $_os != Linux -a $_os != WINNT; then
         add_warning "--enable-mergelibs is not tested for this platform"
     fi
     if test "$enable_mergelibs" = "all"; then
