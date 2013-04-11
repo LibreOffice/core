@@ -68,13 +68,13 @@ class CGDocument(ConfigGroup):
         self.sizeBytes = -1
         self.pages = -1
         self.valid = False
-        self.appType = None
+        self.appType = ""
         if (xmsf is None):
             return
-        self.cp_URL = self.getSettings().getFileAccess(xmsf).getURL(url);
+        self.cp_URL = self.getSettings().getFileAccess(xmsf).getURL(url)
         if (task is None):
             task = Task("", "", 5)
-        self.validate(xmsf, task);
+        self.validate(xmsf, task)
 
     def getSettings(self):
         return ConfigGroup.root
@@ -90,12 +90,10 @@ class CGDocument(ConfigGroup):
         print ("WARNING !!! VALIDATING DOCUMENT ....")
         if not self.root.getFileAccess(xmsf).exists(self.cp_URL, False):
             raise FileNotFoundException (
-                "The given URL does not point to a file");
+                "The given URL does not point to a file")
 
         if self.root.getFileAccess(xmsf).isDirectory(self.cp_URL):
-            raise IllegalArgumentException (
-                "The given URL points to a directory");
-            #create a TypeDetection service
+            raise IllegalArgumentException ("The given URL points to a directory") #create a TypeDetection service
 
         self.mediaDescriptor = OfficeDocument.getFileMediaDecriptor(
             xmsf, self.cp_URL)
@@ -160,8 +158,8 @@ class CGDocument(ConfigGroup):
             self.cp_Author = self.author
 
         if self.cp_Exporter is None or self.cp_Exporter == "":
-            print ("WARNING !!! settign exporter for key:", CGDocument.appType)
-            exp = self.root.getExporters(CGDocument.appType)
+            print ("WARNING !!! settign exporter for key:", self.appType)
+            exp = self.root.getExporters(self.appType)
             print ("WARNING !!! got N exporters:", len(exp))
             print ("WARNING !!! got exporter:", exp[0])
             self.cp_Exporter = \
@@ -180,9 +178,9 @@ class CGDocument(ConfigGroup):
         else:
             media = Properties.getPropertyValue(
                 self.mediaDescriptor, PropertyNames.PROPERTY_NAME)
-        CGDocument.appType = self.getDocType(media)
-        print ("DEBUG !!! analyzeFileType --  appType: ", CGDocument.appType)
-        self.isSOOpenable = (CGDocument.appType == WRITER_DOC or CGDocument.appType == CALC_DOC or CGDocument.appType == IMPRESS_DOC or CGDocument.appType == DRAW_DOC) or CGDocument.appType == HTML_DOC
+        self.appType = self.getDocType(media)
+        print ("DEBUG !!! analyzeFileType --  appType: ", self.appType)
+        self.isSOOpenable = (self.appType == WRITER_DOC or self.appType == CALC_DOC or self.appType == IMPRESS_DOC or self.appType == DRAW_DOC) or self.appType == HTML_DOC
         if (self.isSOOpenable):
             print ("DEBUG !!! analyzeFileType -- isSOOpenable .")
         else:
@@ -289,7 +287,7 @@ class CGDocument(ConfigGroup):
 
     def getIcon(self, exporter):
         if exporter.cp_Icon == "":
-            return self.getIcon1(CGDocument.appType)
+            return self.getIcon1(self.appType)
         else:
             return exporter.cp_Icon
 
@@ -312,7 +310,7 @@ class CGDocument(ConfigGroup):
     '''
 
     def setExporter(self, exporter_):
-        exp = self.getSettings().getExporters(CGDocument.appType)[exporter_[0]]
+        exp = self.getSettings().getExporters(self.appType)[exporter_[0]]
         self.cp_Exporter = self.getSettings().cp_Exporters.getKey(exp)
 
     '''
@@ -325,7 +323,7 @@ class CGDocument(ConfigGroup):
             return 0
 
         exporter = self.getSettings().cp_Exporters.getElement(self.cp_Exporter)
-        exporters = self.getSettings().getExporters(CGDocument.appType)
+        exporters = self.getSettings().getExporters(self.appType)
         i = 0
         while i < len(exporters):
             if exporters[i] == exporter:
