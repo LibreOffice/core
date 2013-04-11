@@ -71,6 +71,9 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 public:
 
                         SfxMedium();
+                        /**
+                         * @param pSet Takes ownership
+                         */
                         SfxMedium( const String &rName,
                                    StreamMode nOpenMode,
                                    const SfxFilter *pFilter = 0,
