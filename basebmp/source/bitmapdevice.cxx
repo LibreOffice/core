@@ -1105,6 +1105,11 @@ bool BitmapDevice::isTopDown() const
     return mpImpl->mnScanlineStride >= 0;
 }
 
+basegfx::B2IVector BitmapDevice::getOffset() const
+{
+    return basegfx::B2IVector(mpImpl->maBounds.getMinX(), mpImpl->maBounds.getMinY());
+}
+
 sal_Int32 BitmapDevice::getScanlineFormat() const
 {
     return mpImpl->mnScanlineFormat;

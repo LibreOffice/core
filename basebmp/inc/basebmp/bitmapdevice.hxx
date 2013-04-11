@@ -92,6 +92,13 @@ public:
      */
     bool isTopDown() const;
 
+    /** Query the offset from the start of the memory buffer
+
+        @ return the offset, which is (0,0) unless this is a subset
+        device.
+    */
+    basegfx::B2IVector getOffset() const;
+
     /** Query type of scanline memory format
      */
     sal_Int32 getScanlineFormat() const;
