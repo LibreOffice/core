@@ -249,12 +249,14 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
 {
     SolarMutexGuard aGuard;
 
+    SAL_INFO("vcl.unity", "ImplUpdate pre PrepUpdate");
     if( !PrepUpdate() )
         return;
 
     Menu* pVCLMenu = mpVCLMenu;
     GLOMenu* pLOMenu = G_LO_MENU( mpMenuModel );
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
+    SAL_INFO("vcl.unity", "Syncing vcl menu " << pVCLMenu << " to menu model " << pLOMenu << " and action group " << pActionGroup);
     GList *pOldCommandList = NULL;
     GList *pNewCommandList = NULL;
 
@@ -348,6 +350,7 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
 
             if ( bRecurse )
             {
+                SAL_INFO("vcl.unity", "preparing submenu  " << pSubMenuModel << " to menu model " << G_MENU_MODEL(pSubMenuModel) << " and action group " << G_ACTION_GROUP(pActionGroup));
                 pSubmenu->SetMenuModel( G_MENU_MODEL( pSubMenuModel ) );
                 pSubmenu->SetActionGroup( G_ACTION_GROUP( pActionGroup ) );
 
@@ -475,6 +478,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
     GLOMenu* pMenuModel = G_LO_MENU( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
+    SAL_INFO("vcl.unity", "Found menu model: " << pMenuModel << " and action group: " << pActionGroup);
 
     if ( pMenuModel )
     {

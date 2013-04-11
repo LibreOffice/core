@@ -569,6 +569,7 @@ gboolean ensure_dbus_setup( gpointer data )
         // Publish the menu model and the action group.
         SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
         pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
+        SAL_INFO("vcl.unity", "exporting action group at " << pActionGroup << " for window " << windowId);
         pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
         pSalFrame->m_nHudAwarenessId = hud_awareness_register( pSessionBus, aDBusMenubarPath, hud_activated, pSalFrame, NULL, NULL );
 

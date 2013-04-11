@@ -135,6 +135,7 @@ g_lo_action_group_query_action (GActionGroup        *group,
                                 GVariant           **state_hint,
                                 GVariant           **state)
 {
+    //SAL_INFO("vcl.unity", "g_lo_action_group_query_action on " << group);
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
     GLOAction* action;
 
@@ -166,6 +167,8 @@ g_lo_action_group_perform_submenu_action (GLOActionGroup *group,
                                           const gchar    *action_name,
                                           GVariant       *state)
 {
+    SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group);
+
     GtkSalFrame* pFrame = group->priv->frame;
 
     if (pFrame == NULL)
@@ -188,6 +191,7 @@ g_lo_action_group_change_state (GActionGroup *group,
                                 const gchar  *action_name,
                                 GVariant     *value)
 {
+    SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group);
     g_return_if_fail (value != NULL);
 
     g_variant_ref_sink (value);
@@ -239,6 +243,7 @@ g_lo_action_group_activate (GActionGroup *group,
 {
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
     GtkSalFrame *pFrame = lo_group->priv->frame;
+    SAL_INFO("vcl.unity", "g_lo_action_group_activate on group " << group << " for frame " << pFrame << " with parameter " << parameter);
 
     if ( parameter != NULL )
         g_action_group_change_action_state( group, action_name, parameter );
@@ -246,10 +251,12 @@ g_lo_action_group_activate (GActionGroup *group,
     if ( pFrame != NULL )
     {
         GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pFrame->GetMenu() );
+        SAL_INFO("vcl.unity", "g_lo_action_group_activate for menu " << pSalMenu);
 
         if ( pSalMenu != NULL )
         {
             GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
+            SAL_INFO("vcl.unity", "g_lo_action_group_activate dispatching action " << action << " named " << action_name << " on menu " << pSalMenu);
             pSalMenu->DispatchCommand( action->item_id, action_name );
         }
     }
@@ -320,6 +327,7 @@ g_lo_action_group_finalize (GObject *object)
 static void
 g_lo_action_group_init (GLOActionGroup *group)
 {
+    SAL_INFO("vcl.unity", "g_lo_action_group_init on " << group);
     group->priv = G_TYPE_INSTANCE_GET_PRIVATE (group,
                                                  G_TYPE_LO_ACTION_GROUP,
                                                  GLOActionGroupPrivate);
@@ -361,6 +369,7 @@ g_lo_action_group_set_action_enabled (GLOActionGroup *group,
                                       const gchar    *action_name,
                                       gboolean        enabled)
 {
+    SAL_INFO("vcl.unity", "g_lo_action_group_set_action_enabled on " << group);
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
     g_return_if_fail (action_name != NULL);
 
@@ -378,6 +387,7 @@ void
 g_lo_action_group_remove (GLOActionGroup *group,
                           const gchar    *action_name)
 {
+    SAL_INFO("vcl.unity", "g_lo_action_group_remove on " << group);
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
     if (action_name != NULL)
@@ -390,6 +400,7 @@ g_lo_action_group_remove (GLOActionGroup *group,
 void
 g_lo_action_group_clear (GLOActionGroup  *group)
 {
+    SAL_INFO("vcl.unity", "g_lo_action_group_clear on " << group);
     g_return_if_fail (G_IS_LO_ACTION_GROUP (group));
 
     GList* keys = g_hash_table_get_keys (group->priv->table);
