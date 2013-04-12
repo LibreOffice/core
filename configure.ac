@@ -11640,7 +11640,7 @@ if test $_os = iOS -o $_os = Android; then
     enable_mergelibs=no
 fi
 
-if test "$enable_mergelibs" != "no"; then
+if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
     if test $_os != Linux -a $_os != WINNT; then
         add_warning "--enable-mergelibs is not tested for this platform"
     fi
