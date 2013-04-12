@@ -211,11 +211,6 @@ String RID_SVXITEMS_BRUSHSTYLE_BITMAP
 {
     Text [ en-US ] = "Image" ;
 };
-// enum ColorName -----------------------------------------------------------
-String RID_SVXITEMS_COLOR_WHITE
-{
-    Text [ en-US ] = "White" ;
-};
 // end enum ColorName -----------------------------------------------------------
 String RID_SVXITEMS_HORJUST_STANDARD
 {

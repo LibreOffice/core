@@ -70,9 +70,6 @@
 #define RID_SVXITEMS_BRUSHSTYLE_75          (RID_SVXITEMS_START + 55)
 #define RID_SVXITEMS_BRUSHSTYLE_BITMAP      (RID_SVXITEMS_START + 56)
 
-// enum ColorName -----------------------------------------------------------
-#define RID_SVXITEMS_COLOR_WHITE            (RID_SVXITEMS_START + 76)
-
 // enum FontFamily -------------------------------------------------------
 #define RID_SVXITEMS_FONTFAMILY_BEGIN       (RID_SVXITEMS_START + 100)
 #define RID_SVXITEMS_FONTFAMILY_DONTKNOW    (RID_SVXITEMS_START + 100)
