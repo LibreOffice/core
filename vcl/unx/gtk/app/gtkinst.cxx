@@ -61,18 +61,6 @@ extern "C"
         GtkYieldMutex *pYieldMutex = GET_YIELD_MUTEX();
         pYieldMutex->ThreadsLeave();
     }
-    static bool hookLocks( void )
-    {
-#if !GTK_CHECK_VERSION(2,4,0)
-#error No lock hooking!
-#endif
-        gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
-
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Hooked gdk threads locks\n" );
-#endif
-        return true;
-    }
 
     VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule )
     {
@@ -113,8 +101,16 @@ extern "C"
         if ( !g_thread_supported() )
             g_thread_init( NULL );
 
-        if ( hookLocks() )
-            pYieldMutex = new GtkYieldMutex();
+#if !GTK_CHECK_VERSION(2,4,0)
+#error "Requires gtk 2.4.0+ for lock hooking"
+#endif
+        gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
+
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "Hooked gdk threads locks\n" );
+#endif
+
+        pYieldMutex = new GtkYieldMutex();
 
         gdk_threads_init();
 
