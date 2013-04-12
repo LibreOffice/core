@@ -423,9 +423,7 @@ void SlideSorterView::Layout ()
             mpLayouter->GetPageObjectLayouter());
         if (pPageObjectLayouter)
         {
-            const Size aNewPreviewSize (mpLayouter->GetPageObjectLayouter()->GetSize(
-                PageObjectLayouter::Preview,
-                PageObjectLayouter::WindowCoordinateSystem));
+            const Size aNewPreviewSize (mpLayouter->GetPageObjectLayouter()->GetPreviewSize(PageObjectLayouter::WindowCoordinateSystem));
             if (maPreviewSize != aNewPreviewSize && GetPreviewCache())
             {
                 mpPreviewCache->ChangeSize(aNewPreviewSize, false);
