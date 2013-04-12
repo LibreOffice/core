@@ -51,6 +51,7 @@
 #include <editeng/splwrap.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/editview.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <linguistic/lngprops.hxx>
@@ -96,90 +97,6 @@
 using namespace ::com::sun::star;
 
 extern void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
-
-
-
-
-// tries to determine the language of 'rText'
-//
-static LanguageType lcl_CheckLanguage(
-    const OUString &rText,
-    uno::Reference< linguistic2::XSpellChecker1 > xSpell,
-    uno::Reference< linguistic2::XLanguageGuessing > xLangGuess,
-    bool bIsParaText )
-{
-    LanguageType  nLang = LANGUAGE_NONE;
-    if (bIsParaText)    // check longer texts with language-guessing...
-    {
-        if (!xLangGuess.is())
-            return nLang;
-
-        lang::Locale aLocale( xLangGuess->guessPrimaryLanguage( rText, 0, rText.getLength()) );
-
-        // get language as from "Tools/Options - Language Settings - Languages: Locale setting"
-        LanguageType nTmpLang = Application::GetSettings().GetLanguageTag().getLanguageType();
-
-        // if the result from language guessing does not provide a 'Country' part
-        // try to get it by looking up the locale setting of the office.
-        /* FIXME-BCP47: handle language tags */
-        if (aLocale.Country.isEmpty())
-        {
-            lang::Locale aTmpLocale = LanguageTag( nTmpLang ).getLocale();
-            if (aTmpLocale.Language == aLocale.Language)
-                nLang = nTmpLang;
-        }
-        if (nLang == LANGUAGE_NONE) // language not found by looking up the system language...
-            nLang = LanguageTag( aLocale ).makeFallback().getLanguageType();
-        if (nLang == LANGUAGE_SYSTEM)
-            nLang = nTmpLang;
-        if (nLang == LANGUAGE_DONTKNOW)
-            nLang = LANGUAGE_NONE;
-    }
-    else    // check single word
-    {
-            if (!xSpell.is())
-            return nLang;
-
-        //
-        // build list of languages to check
-        //
-        LanguageType aLangList[4];
-        const AllSettings& rSettings  = Application::GetSettings();
-        SvtLinguOptions aLinguOpt;
-        SvtLinguConfig().GetOptions( aLinguOpt );
-        // The default document language from "Tools/Options - Language Settings - Languages: Western"
-        aLangList[0] = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
-        // The one from "Tools/Options - Language Settings - Languages: User interface"
-        aLangList[1] = rSettings.GetUILanguageTag().getLanguageType();
-        // The one from "Tools/Options - Language Settings - Languages: Locale setting"
-        aLangList[2] = rSettings.GetLanguageTag().getLanguageType();
-        // en-US
-        aLangList[3] = LANGUAGE_ENGLISH_US;
-#if OSL_DEBUG_LEVEL > 1
-        lang::Locale a0( LanguageTag( aLangList[0] ).getLocale() );
-        lang::Locale a1( LanguageTag( aLangList[1] ).getLocale() );
-        lang::Locale a2( LanguageTag( aLangList[2] ).getLocale() );
-        lang::Locale a3( LanguageTag( aLangList[3] ).getLocale() );
-#endif
-
-        sal_Int32 nCount = SAL_N_ELEMENTS(aLangList);
-        for (sal_Int32 i = 0; i < nCount;  i++)
-        {
-            sal_Int16 nTmpLang = aLangList[i];
-            if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
-            {
-                if (xSpell->hasLanguage( nTmpLang ) &&
-                    xSpell->isValid( rText, nTmpLang, uno::Sequence< beans::PropertyValue >() ))
-                {
-                    nLang = nTmpLang;
-                    break;
-                }
-            }
-        }
-    }
-
-    return nLang;
-}
 
 
 /// @returns : the language for the selected text that is set for the
@@ -443,8 +360,8 @@ SwSpellPopup::SwSpellPopup(
     nGuessLangPara = LANGUAGE_NONE;
     if (xSpellAlt.is() && xLG.is())
     {
-        nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), ::GetSpellChecker(), xLG, false );
-        nGuessLangPara = lcl_CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
+        nGuessLangWord = EditView::CheckLanguage( xSpellAlt->getWord(), ::GetSpellChecker(), xLG, false );
+        nGuessLangPara = EditView::CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
     }
     if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
     {
@@ -652,7 +569,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     nGuessLangPara = LANGUAGE_NONE;
     if (xLG.is())
     {
-        nGuessLangPara = lcl_CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
+        nGuessLangPara = EditView::CheckLanguage( rParaText, ::GetSpellChecker(), xLG, true );
     }
     if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
     {
