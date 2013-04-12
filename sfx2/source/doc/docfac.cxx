@@ -57,7 +57,7 @@ using namespace ::com::sun::star;
 
 //========================================================================
 
-DECL_PTRARRAY( SfxViewFactoryArr_Impl, SfxViewFactory*, 2, 2 )
+typedef std::vector<SfxViewFactory*> SfxViewFactoryArr_Impl;
 
 //========================================================================
 
@@ -147,9 +147,9 @@ void SfxObjectFactory::RegisterViewFactory
 #if OSL_DEBUG_LEVEL > 0
     {
         const String sViewName( rFactory.GetAPIViewName() );
-        for ( sal_uInt16 i = 0; i < pImpl->aViewFactoryArr.Count(); ++i )
+        for ( SfxViewFactoryArr_Impl::const_iterator it = pImpl->aViewFactoryArr.begin(); it != pImpl->aViewFactoryArr.end(); ++it )
         {
-            if ( !pImpl->aViewFactoryArr[i]->GetAPIViewName().Equals( sViewName ) )
+            if ( !(*it)->GetAPIViewName().Equals( sViewName ) )
                 continue;
             OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                 "SfxObjectFactory::RegisterViewFactory: duplicate view name '"));
@@ -160,20 +160,19 @@ void SfxObjectFactory::RegisterViewFactory
         }
     }
 #endif
-    sal_uInt16 nPos;
-    for ( nPos = 0;
-          nPos < pImpl->aViewFactoryArr.Count() &&
-          pImpl->aViewFactoryArr[nPos]->GetOrdinal() <= rFactory.GetOrdinal();
-          ++nPos )
+    SfxViewFactoryArr_Impl::iterator it = pImpl->aViewFactoryArr.begin();
+    for ( ; it != pImpl->aViewFactoryArr.end() &&
+          (*it)->GetOrdinal() <= rFactory.GetOrdinal();
+          ++it )
     /* empty loop */;
-    pImpl->aViewFactoryArr.Insert(nPos, &rFactory);
+    pImpl->aViewFactoryArr.insert(it, &rFactory);
 }
 
 //--------------------------------------------------------------------
 
 sal_uInt16 SfxObjectFactory::GetViewFactoryCount() const
 {
-    return pImpl->aViewFactoryArr.Count();
+    return pImpl->aViewFactoryArr.size();
 }
 
 //--------------------------------------------------------------------
