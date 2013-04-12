@@ -4986,6 +4986,13 @@ if test "$_os" = "Linux"; then
         MONO_GAC_ROOT=$with_mono_gac_root
     fi
 fi
+
+if test "$ENABLE_MONO" = "YES" -o "$COM" = "MSC" ; then
+    BUILD_CLI=YES
+else
+    BUILD_CLI=NO
+fi
+AC_SUBST(BUILD_CLI)
 AC_SUBST(CSC_PATH)
 AC_SUBST(CSC)
 AC_SUBST(AL)

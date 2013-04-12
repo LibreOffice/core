@@ -413,8 +413,10 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     affine_uno \
+	climaker \
 	cli_cppuhelper \
 	cli_uno \
+	cli_uno_glue \
 	gcc3_uno \
 	java_uno \
     jpipe \
@@ -615,6 +617,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     invocation \
     javaloader \
     javavm \
+    mono_loader \
     namingservice \
     proxyfac \
     reflection \
