@@ -2800,6 +2800,7 @@ void RtfAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert 
             break;
             default:
                 m_aFlyProperties.push_back(std::make_pair<OString, OString>("posrelv", OString::number(2)));
+                m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPBYPARA << OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE;
             break;
         }
 
@@ -2850,6 +2851,7 @@ void RtfAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
             break;
             default:
                 m_aFlyProperties.push_back(std::make_pair<OString, OString>("posrelh", OString::number(2)));
+                m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPBXCOLUMN << OOO_STRING_SVTOOLS_RTF_SHPBXIGNORE;
             break;
         }
 
