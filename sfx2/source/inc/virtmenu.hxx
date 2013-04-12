@@ -22,7 +22,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <sfx2/mnuitem.hxx>
-#include "mnucfga.hxx"
 
 class SfxBindings;
 class Timer;
