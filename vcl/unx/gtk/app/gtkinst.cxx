@@ -69,9 +69,13 @@ extern "C"
                  (int) gtk_major_version, (int) gtk_minor_version,
                  (int) gtk_micro_version );
 #endif
-        if( (int) gtk_major_version < 2 || ((int) gtk_major_version == 2 && (int) gtk_minor_version < 4))
+        if( gtk_major_version < 2 || // very unlikely sanity check
+            ( gtk_major_version == 2 && gtk_minor_version < 4 ) )
+        {
             g_warning("require a newer gtk than %d.%d for gdk_threads_set_lock_functions", (int) gtk_major_version, gtk_minor_version);
-                return NULL;
+            return NULL;
+        }
+
         /* #i92121# workaround deadlocks in the X11 implementation
         */
         static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
