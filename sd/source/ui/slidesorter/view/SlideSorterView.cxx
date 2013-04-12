@@ -438,8 +438,6 @@ void SlideSorterView::Layout ()
             model::SharedPageDescriptor pDescriptor (aPageEnumeration.GetNextElement());
             pDescriptor->SetBoundingBox(mpLayouter->GetPageObjectBox(pDescriptor->GetPageIndex()));
         }
-
-        GetPageObjectPainter()->NotifyResize();
     }
 
     InvalidatePageObjectVisibilities ();
