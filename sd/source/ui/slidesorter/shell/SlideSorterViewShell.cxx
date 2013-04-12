@@ -701,7 +701,7 @@ SlideJockeyViewShell::~SlideJockeyViewShell()
 {
     // FIXME: need to delete this early - it holds references on random widgets.
     mpSlideSorter.reset();
-    fprintf(stderr, "Delete slide jockey %p\n", this);
+    SAL_DEBUG("Delete slide jockey " << this);
 }
 
 ::boost::shared_ptr<SlideJockeyViewShell> SlideJockeyViewShell::Create (
@@ -744,9 +744,9 @@ public:
     }
     virtual void setAllocation(const Size& rAllocation)
     {
-        fprintf(stderr, "setAllocation %d,%d %dx%d\n",
-                (int)GetPosPixel().X(), (int)GetPosPixel().Y(),
-                (int)rAllocation.Width(), (int)rAllocation.Height());
+        SAL_DEBUG("setAllocation " << (int)GetPosPixel().X() << "," <<
+                  (int)GetPosPixel().Y() << " " << (int)rAllocation.Width()
+                  << "x" << (int)rAllocation.Height());
 
         mpSlideSorter->ArrangeGUIElements(GetPosPixel(), rAllocation);
 
@@ -764,7 +764,7 @@ public:
     virtual void Paint( const Rectangle& rRect )
     { // for reasons unknown the background is not painted at all here [!]
       // who should do that ?
-        fprintf(stderr,"SlideSortercontainer::Paint ...\n");
+        SAL_DEBUG("SlideSortercontainer::Paint ...");
         Erase();
         VclBin::Paint( rRect );
     }
@@ -776,7 +776,7 @@ public:
 
 void SlideJockeyViewShell::Initialize (void)
 {
-    fprintf( stderr, "Create custom slide jockey layout\n" );
+    SAL_DEBUG("Create custom slide jockey layout");
 
 // FIXME: I need to write a layout enabled GtkPaned replacement
 //        using a splitter manually is just -too- bad ...
@@ -829,8 +829,8 @@ void SlideJockeyViewShell::ArrangeGUIElements (void)
 {
     if (IsActive())
     {
-        fprintf(stderr, "Arrange elements size %d %d\n",
-                (int) maViewSize.Width(), (int)maViewSize.Height() );
+        SAL_DEBUG("Arrange elements size " << (int) maViewSize.Width()
+                  << " " << (int)maViewSize.Height());
 
         OSL_ASSERT(mpSlideSorter.get()!=NULL);
 

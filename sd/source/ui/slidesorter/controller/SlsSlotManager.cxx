@@ -84,6 +84,7 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <boost/bind.hpp>
 
@@ -657,7 +658,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     if (rSet.GetItemState(SID_GROUP_SLIDES) == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_UNGROUP_SLIDES)  == SFX_ITEM_AVAILABLE)
     {
-        fprintf(stderr, "Determine if we can show group vs. un-group\n");
+        SAL_DEBUG("Determine if we can show group vs. un-group");
     }
 
     PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
@@ -1272,10 +1273,7 @@ SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
 
 void SlotManager::GroupSlides()
 {
-    PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
-    View* pDrView = &mrSlideSorter.GetView();
-
-    fprintf (stderr, "Execute -group\n");
+    SAL_DEBUG("Execute -group");
 
     model::PageEnumeration aSelectedPages (
         model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
@@ -1303,7 +1301,7 @@ void SlotManager::GroupSlides()
 
 void SlotManager::UnGroupSlides()
 {
-    fprintf (stderr, "Execute un-group\n");
+    SAL_DEBUG("Execute un-group");
 }
 
 } } } // end of namespace ::sd::slidesorter::controller

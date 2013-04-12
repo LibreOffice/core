@@ -523,9 +523,9 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
         mbPageObjectVisibilitiesValid = true;
 
         Rectangle aViewArea (pWindow->PixelToLogic(Rectangle(Point(0,0),pWindow->GetSizePixel())));
-        fprintf(stderr ,"SlideSorterView::DeterminePageObjectvisi %ld,%ld %ldx%ld\n",
-                aViewArea.getX(), aViewArea.getY(),
-                aViewArea.getWidth(), aViewArea.getHeight());
+        SAL_DEBUG("SlideSorterView::DeterminePageObjectvisi " <<
+                  aViewArea.getX() << "," << aViewArea.getY() << " " <<
+                  aViewArea.getWidth() << "," << aViewArea.getHeight());
         const Range aRange (mpLayouter->GetRangeOfVisiblePageObjects(aViewArea));
         const Range aUnion(
             ::std::min(maVisiblePageRange.Min(), aRange.Min()),
@@ -760,14 +760,14 @@ void SlideSorterView::Paint (
     OutputDevice& rDevice,
     const Rectangle& rRepaintArea)
 {
-    fprintf(stderr ,"SlideSorterView::Paint %ld,%ld %ldx%ld\n",
-            rRepaintArea.getX(), rRepaintArea.getY(),
-            rRepaintArea.getWidth(), rRepaintArea.getHeight());
+    SAL_DEBUG("SlideSorterView::Paint " <<
+              rRepaintArea.getX() << "," << rRepaintArea.getY() << " "
+              << rRepaintArea.getWidth() << "," << rRepaintArea.getHeight());
 
     if ( ! mpPageObjectPainter)
         if ( ! GetPageObjectPainter())
         {
-            fprintf(stderr, "bail early !\n");
+            SAL_DEBUG("bail early !");
             return;
         }
 
@@ -784,7 +784,7 @@ void SlideSorterView::Paint (
     // Paint all page objects that are fully or partially inside the
     // repaint region.
     const Range aRange (mpLayouter->GetRangeOfVisiblePageObjects(rRepaintArea));
-    fprintf(stderr, "Visible slides are: %d -> %d\n", (int) aRange.Min(), (int)aRange.Max());
+    SAL_DEBUG("Visible slides are: " << (int) aRange.Min() << " -> " << (int)aRange.Max());
     for (sal_Int32 nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
     {
         model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
