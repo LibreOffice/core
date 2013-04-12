@@ -87,24 +87,22 @@ static LanguageType lcl_CheckLanguage(
         if (!xLangGuess.is())
             return nLang;
 
-        lang::Locale aLocale( xLangGuess->guessPrimaryLanguage( rText, 0, rText.getLength()) );
+        LanguageTag aGuessTag( xLangGuess->guessPrimaryLanguage( rText, 0, rText.getLength()) );
 
-        // get language as from "Tools/Options - Language Settings - Languages: Locale setting"
-        LanguageType nTmpLang = Application::GetSettings().GetLanguageTag().getLanguageType();
-
-        // if the result from language guessing does not provide a 'Country' part
-        // try to get it by looking up the locale setting of the office.
-        /* FIXME-BCP47: handle language tags */
-        if ( aLocale.Country.isEmpty( ) )
+        // If the result from language guessing does not provide a 'Country'
+        // part, try to get it by looking up the locale setting of the office,
+        // "Tools/Options - Language Settings - Languages: Locale setting", if
+        // the language matches.
+        if ( aGuessTag.getCountry().isEmpty() )
         {
-            lang::Locale aTmpLocale = LanguageTag( nTmpLang ).getLocale();
-            if (aTmpLocale.Language == aLocale.Language)
-                nLang = nTmpLang;
+            const LanguageTag& rAppLocaleTag = Application::GetSettings().GetLanguageTag();
+            if (rAppLocaleTag.getLanguage() == aGuessTag.getLanguage())
+                nLang = rAppLocaleTag.getLanguageType();
         }
         if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
-            nLang = LanguageTag( aLocale ).makeFallback().getLanguageType();
+            nLang = aGuessTag.makeFallback().getLanguageType();     // best known locale match
         if (nLang == LANGUAGE_SYSTEM)
-            nLang = nTmpLang;
+            nLang = Application::GetSettings().GetLanguageTag().getLanguageType();
         if (nLang == LANGUAGE_DONTKNOW)
             nLang = LANGUAGE_NONE;
     }
