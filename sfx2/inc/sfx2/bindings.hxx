@@ -121,6 +121,7 @@ private:
                             const SfxFoundCache_Impl* pFound,
                             const SfxPoolItem *pItem,
                             SfxItemState eItemState );
+    SAL_DLLPRIVATE SfxStateCache* GetStateCache( sal_uInt16 nId, sal_uInt16 *pPos);
     DECL_DLLPRIVATE_LINK( NextJob_Impl, Timer * );
 
 public:
@@ -149,7 +150,7 @@ public:
     sal_Bool         IsBound( sal_uInt16 nMsgId, sal_uInt16 nStartSearchAt = 0 );
 
     const SfxSlot*   GetSlot( sal_uInt16 nMsgId );
-    SfxStateCache*   GetStateCache( sal_uInt16 nId, sal_uInt16 *pPos = 0 );
+    SfxStateCache*   GetStateCache( sal_uInt16 nId);
     SAL_DLLPRIVATE SfxStateCache* GetAnyStateCache_Impl( sal_uInt16 nId );
     /**
      * @param rpState the caller has to delete the pointer
