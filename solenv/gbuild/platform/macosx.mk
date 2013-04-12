@@ -90,7 +90,6 @@ gb_CXXFLAGS := \
 	-Wendif-labels \
 	-Wextra \
 	-Wno-ctor-dtor-privacy \
-	-Wno-long-double \
 	-Wno-non-virtual-dtor \
 	-fPIC \
 	-fmessage-length=0 \
