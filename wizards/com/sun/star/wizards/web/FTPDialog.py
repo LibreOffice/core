@@ -364,7 +364,7 @@ class FTPDialog(UnoDialog2, UIConsts):
         self.ucb.executeCommand(content, "open", aArg)
 
         # get the title property of the content.
-        #obj = self.ucb.getContentProperty(content, "Title", str)
+        obj = self.ucb.getContentProperty(content, "Title", str)
 
     # changes the ftp subdirectory, in both
     # the UI and the data.

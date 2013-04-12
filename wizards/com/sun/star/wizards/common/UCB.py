@@ -163,7 +163,8 @@ class UCB(object):
         pv[0].Name = propName
         pv[0].Handle = -1
 
-        row = self.executeCommand(content, "getPropertyValues", tuple(pv))
+        row = self.executeCommand(content, "getPropertyValues",
+                                  uno.Any("[]com.sun.star.beans.Property", tuple(pv)))
         if (isinstance(classType, str)):
            return row.getString(1)
         elif (isinstance(classType, bool)):
