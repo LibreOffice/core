@@ -45,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 	boost_headers \
 	mdds_headers \
 	orcus \
+	orcus-parser \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \

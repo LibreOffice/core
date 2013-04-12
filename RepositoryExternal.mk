@@ -2295,6 +2295,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 	orcus \
 ))
 
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	orcus-parser \
+))
+
 define gb_LinkTarget__use_orcus
 $(call gb_LinkTarget_use_unpacked,$(1),orcus)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2306,6 +2310,13 @@ $(call gb_LinkTarget_use_static_libraries,$(1),orcus)
 $(if $(filter YES,$(SYSTEM_BOOST)), \
     $(call gb_LinkTarget_add_ldflags,$(1),$(BOOST_LDFLAGS)) \
     $(call gb_LinkTarget_add_libs,$(1),$(BOOST_SYSTEM_LIB)) \
+)
+
+endef
+
+define gb_LinkTarget__use_orcus-parser
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	orcus-parser \
 )
 
 endef

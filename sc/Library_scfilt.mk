@@ -70,6 +70,7 @@ $(eval $(call gb_Library_use_libraries,scfilt,\
 
 $(eval $(call gb_Library_use_externals,scfilt,\
 	orcus \
+	orcus-parser \
 	zlib \
 ))
 
