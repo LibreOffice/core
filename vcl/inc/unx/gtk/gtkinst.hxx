@@ -38,6 +38,7 @@ class GtkPrintWrapper;
 class GenPspGraphics;
 class GtkYieldMutex : public SalYieldMutex
 {
+    std::list<sal_uLong> aYieldStack;
 public:
                         GtkYieldMutex();
     virtual void        acquire();
@@ -46,8 +47,6 @@ public:
 
     virtual int         Grab()          { return 0; };
     virtual void        Ungrab(int )    {};
-
-    std::list<sal_uLong> aYieldStack;
 
     void ThreadsEnter();
     void ThreadsLeave();
