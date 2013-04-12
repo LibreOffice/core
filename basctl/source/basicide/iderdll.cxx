@@ -50,7 +50,7 @@ namespace basctl
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-Module* Module::mpModule;
+Module* Module::mpModule = 0;
 
 namespace
 {
