@@ -41,10 +41,10 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static \
 	&& $(COMPATH)/../Common7/Tools/vcupgrade.exe liborcus-static.vcproj \
-	&& MSBuild.exe liborcus-static.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
+	&& MSBuild.exe liborcus-static.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=liborcus-static /p:WholeProgramOptimization=no \
 	&& cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-parser-static \
 	&& $(COMPATH)/../Common7/Tools/vcupgrade.exe liborcus-parser-static.vcproj \
-	&& MSBuild.exe liborcus-parser-static.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
+	&& MSBuild.exe liborcus-parser-static.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=liborcus-parser-static /p:WholeProgramOptimization=no \
 	&& touch $@
 endif
 
