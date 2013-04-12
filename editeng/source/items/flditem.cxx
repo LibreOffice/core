@@ -50,7 +50,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
         aAny = xPropSet->getPropertyValue(UNO_TC_PROP_TEXTFIELD_TYPE);
         if ( !aAny.has<sal_Int32>() )
             return NULL;
-    } catch ( const beans::UnknownPropertyException& e )
+    } catch ( const beans::UnknownPropertyException& )
     {
         return NULL;
     }
