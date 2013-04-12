@@ -55,7 +55,7 @@ endef
 
 # cygwin seems to eat one backslash when executing command, thus replace with '\\'
 define gb_Helper_windows_path
-$(subst /,\\,$(1))
+$(if $(filter $(COM),MSC),$(subst /,\\,$(1)),$(1))
 endef
 
 define gb_Helper_make_clean_target
