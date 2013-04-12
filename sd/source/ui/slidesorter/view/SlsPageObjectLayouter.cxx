@@ -152,21 +152,18 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
         nTop + nPreviewHeight);
 }
 
-
-
-
 Rectangle PageObjectLayouter::GetBoundingBox (
     const model::SharedPageDescriptor& rpPageDescriptor,
     const Part ePart,
-    const CoordinateSystem eCoordinateSystem)
+    const CoordinateSystem eCoordinateSystem,
+    bool bIgnoreLocation)
 {
     OSL_ASSERT(rpPageDescriptor);
-    Point aLocation (rpPageDescriptor ? rpPageDescriptor->GetLocation() : Point(0,0));
+    Point aLocation(0,0);
+    if (rpPageDescriptor)
+        aLocation = rpPageDescriptor->GetLocation( bIgnoreLocation );
     return GetBoundingBox(aLocation, ePart, eCoordinateSystem);
 }
-
-
-
 
 Rectangle PageObjectLayouter::GetBoundingBox (
     const Point& rPageObjectLocation,
@@ -212,18 +209,18 @@ Rectangle PageObjectLayouter::GetBoundingBox (
         aBoundingBox.BottomRight() + aLocation);
 }
 
-
-
-
-Size PageObjectLayouter::GetSize (
-    const Part ePart,
+Size PageObjectLayouter::GetPreviewSize (
     const CoordinateSystem eCoordinateSystem)
 {
-    return GetBoundingBox(Point(0,0), ePart, eCoordinateSystem).GetSize();
+    return GetBoundingBox(Point(0,0), PageObjectLayouter::Preview,
+                          eCoordinateSystem).GetSize();
 }
 
-
-
+Size PageObjectLayouter::GetGridMaxSize(const CoordinateSystem eCoordinateSystem)
+{
+    return GetBoundingBox(Point(0,0), PageObjectLayouter::FocusIndicator,
+                          eCoordinateSystem).GetSize();
+}
 
 Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
 {

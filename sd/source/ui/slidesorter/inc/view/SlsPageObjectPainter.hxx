@@ -104,8 +104,12 @@ private:
         OutputDevice& rDevice,
         const Theme::GradientColorType eColorType,
         const Rectangle& rBox) const;
+    void PaintBackgroundDetail(
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor);
+
+#if 0
     Bitmap& GetBackgroundForState (
-        const model::SharedPageDescriptor& rpDescriptor,
         const OutputDevice& rTemplateDevice);
     Bitmap& GetBackground(
         Bitmap& rBackground,
@@ -116,6 +120,7 @@ private:
         const OutputDevice& rReferenceDevice,
         const Theme::GradientColorType eType,
         const bool bHasFocusBorder) const;
+#endif
     Bitmap CreateMarkedPreview(
         const Size& rSize,
         const Bitmap& rPreview,

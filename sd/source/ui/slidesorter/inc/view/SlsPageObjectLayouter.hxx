@@ -95,22 +95,30 @@ public:
         @param eCoodinateSystem
             The bounding box can be returned in model and in pixel
             (window) coordinates.
+        @param bIgnoreLocation
+            Return a position ignoring the slides' location, ie. as if
+            we were the first slide.
     */
     Rectangle GetBoundingBox (
         const model::SharedPageDescriptor& rpPageDescriptor,
         const Part ePart,
-        const CoordinateSystem eCoordinateSystem);
-    Rectangle GetBoundingBox (
-        const Point& rPageObjectLocation,
-        const Part ePart,
-        const CoordinateSystem eCoordinateSystem);
-    Size GetSize (
-        const Part ePart,
-        const CoordinateSystem eCoordinateSystem);
+        const CoordinateSystem eCoordinateSystem,
+        bool bIgnoreLocation = false);
+
+    /// the size of the embedded preview: position independent
+    Size GetPreviewSize(const CoordinateSystem eCoordinateSystem);
+
+    /// the maximum size of each tile, also position independent
+    Size GetGridMaxSize(const CoordinateSystem eCoordinateSystem);
 
     Image GetTransitionEffectIcon (void) const;
 
 private:
+    Rectangle GetBoundingBox (
+        const Point& rPageObjectLocation,
+        const Part ePart,
+        const CoordinateSystem eCoordinateSystem);
+
     SharedSdWindow mpWindow;
     Size maPageObjectSize;
     Rectangle maFocusIndicatorBoundingBox;

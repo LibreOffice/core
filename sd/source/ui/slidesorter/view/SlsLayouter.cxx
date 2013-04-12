@@ -552,7 +552,7 @@ Layouter::Implementation::~Implementation (void)
 
 
 
-bool Layouter::Implementation::Rearrange  (
+bool Layouter::Implementation::Rearrange (
     const Size& rWindowSize,
     const Size& rPreviewModelSize,
     const sal_uInt32 nPageCount)
@@ -595,8 +595,8 @@ bool Layouter::Implementation::Rearrange  (
             rPreviewModelSize,
             mpWindow,
             mnPageCount));
-    maPageObjectSize = mpPageObjectLayouter->GetSize(
-        PageObjectLayouter::FocusIndicator,
+
+    maPageObjectSize = mpPageObjectLayouter->GetGridMaxSize(
         PageObjectLayouter::WindowCoordinateSystem);
 
     CalculateMaxRowAndColumnCount(rWindowSize);
@@ -874,17 +874,14 @@ Rectangle Layouter::Implementation::GetInnerBoundingBox (
     if ( ! pDescriptor)
         return Rectangle();
 
-    const Point aLocation (pDescriptor->GetLocation(true));
+    PageObjectLayouter::Part ePart = PageObjectLayouter::Preview;
+
     if (pDescriptor->HasState(model::PageDescriptor::ST_Selected))
-        return mpPageObjectLayouter->GetBoundingBox(
-            aLocation,
-            PageObjectLayouter::PageObject,
-            PageObjectLayouter::ModelCoordinateSystem);
-    else
-        return mpPageObjectLayouter->GetBoundingBox(
-            aLocation,
-            PageObjectLayouter::Preview,
-            PageObjectLayouter::ModelCoordinateSystem);
+        ePart = PageObjectLayouter::PageObject;
+
+    return mpPageObjectLayouter->GetBoundingBox(
+            pDescriptor, ePart,
+            PageObjectLayouter::ModelCoordinateSystem, true);
 }
 
 

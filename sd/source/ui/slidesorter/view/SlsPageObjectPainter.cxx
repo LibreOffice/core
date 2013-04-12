@@ -105,10 +105,9 @@ void PageObjectPainter::NotifyResize (const bool bForce)
         InvalidateBitmaps();
     else
     {
-        const Size aSize (mpPageObjectLayouter->GetSize(
-                PageObjectLayouter::FocusIndicator,
+        const Size aSize (mpPageObjectLayouter->GetGridMaxSize(
                 PageObjectLayouter::WindowCoordinateSystem));
-        if ( maSize!=aSize)
+        if (maSize != aSize)
         {
             maSize = aSize;
             InvalidateBitmaps();
@@ -127,29 +126,17 @@ void PageObjectPainter::InvalidateBitmaps (void)
     maMouseOverSelectedAndFocusedBackground.SetEmpty();
 }
 
-
-
-
 void PageObjectPainter::SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme)
 {
     mpTheme = rpTheme;
     NotifyResize(true);
 }
 
-
-
-
 void PageObjectPainter::PaintBackground (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor)
 {
-    const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
-        rpDescriptor,
-        PageObjectLayouter::FocusIndicator,
-        PageObjectLayouter::ModelCoordinateSystem));
-
-    const Bitmap& rBackground (GetBackgroundForState(rpDescriptor, rDevice));
-    rDevice.DrawBitmap(aBox.TopLeft(), rBackground);
+    PaintBackgroundDetail(rDevice, rpDescriptor);
 
     // Fill the interior of the preview area with the default background
     // color of the page.
@@ -319,12 +306,9 @@ void PageObjectPainter::PaintTransitionEffect (
     }
 }
 
-
-
-
-Bitmap& PageObjectPainter::GetBackgroundForState (
-    const model::SharedPageDescriptor& rpDescriptor,
-    const OutputDevice& rReferenceDevice)
+void PageObjectPainter::PaintBackgroundDetail(
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor)
 {
     enum State { None = 0x00, Selected = 0x01, MouseOver = 0x02, Focused = 0x04 };
     const int eState =
@@ -332,98 +316,64 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
         | (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver) ? MouseOver : None)
         | (rpDescriptor->HasState(model::PageDescriptor::ST_Focused) ? Focused : None);
 
+    bool bHasFocusBorder;
+    Theme::GradientColorType eColorType;
+
     switch (eState)
     {
         case MouseOver | Selected | Focused:
-            return GetBackground(
-                maMouseOverSelectedAndFocusedBackground,
-                Theme::Gradient_MouseOverSelectedAndFocusedPage,
-                rReferenceDevice,
-                true);
+            eColorType = Theme::Gradient_MouseOverSelectedAndFocusedPage;
+            bHasFocusBorder = true;
+            break;
 
         case MouseOver | Selected:
         case MouseOver:
-            return GetBackground(
-                maMouseOverBackground,
-                Theme::Gradient_MouseOverPage,
-                rReferenceDevice,
-                false);
+            eColorType = Theme::Gradient_MouseOverPage;
+            bHasFocusBorder = false;
+            break;
 
         case MouseOver | Focused:
-            return GetBackground(
-                maMouseOverFocusedBackground,
-                Theme::Gradient_MouseOverPage,
-                rReferenceDevice,
-                true);
+            eColorType = Theme::Gradient_MouseOverPage;
+            bHasFocusBorder = true;
+            break;
 
         case Selected | Focused:
-            return GetBackground(
-                maFocusedSelectionBackground,
-                Theme::Gradient_SelectedAndFocusedPage,
-                rReferenceDevice,
-                true);
+            eColorType = Theme::Gradient_SelectedAndFocusedPage;
+            bHasFocusBorder = true;
+            break;
 
         case Selected:
-            return GetBackground(
-                maSelectionBackground,
-                Theme::Gradient_SelectedPage,
-                rReferenceDevice,
-                false);
+            eColorType = Theme::Gradient_SelectedPage;
+            bHasFocusBorder = false;
+            break;
 
         case Focused:
-            return GetBackground(
-                maFocusedBackground,
-                Theme::Gradient_FocusedPage,
-                rReferenceDevice,
-                true);
+            eColorType = Theme::Gradient_FocusedPage;
+            bHasFocusBorder = true;
+            break;
 
         case None:
         default:
-            return GetBackground(
-                maNormalBackground,
-                Theme::Gradient_NormalPage,
-                rReferenceDevice,
-                false);
+            eColorType = Theme::Gradient_NormalPage;
+            bHasFocusBorder = false;
+            break;
     }
-}
 
+    const Rectangle aFocusSize (mpPageObjectLayouter->GetBoundingBox(
+                                        rpDescriptor,
+                                        PageObjectLayouter::FocusIndicator,
+                                        PageObjectLayouter::ModelCoordinateSystem));
 
-
-
-Bitmap& PageObjectPainter::GetBackground(
-    Bitmap& rBackground,
-    Theme::GradientColorType eType,
-    const OutputDevice& rReferenceDevice,
-    const bool bHasFocusBorder)
-{
-    if (rBackground.IsEmpty())
-        rBackground = CreateBackgroundBitmap(rReferenceDevice, eType, bHasFocusBorder);
-    return rBackground;
-}
-
-
-
-
-Bitmap PageObjectPainter::CreateBackgroundBitmap(
-    const OutputDevice& rReferenceDevice,
-    const Theme::GradientColorType eColorType,
-    const bool bHasFocusBorder) const
-{
-    const Size aSize (mpPageObjectLayouter->GetSize(
-        PageObjectLayouter::FocusIndicator,
-        PageObjectLayouter::WindowCoordinateSystem));
     const Rectangle aPageObjectBox (mpPageObjectLayouter->GetBoundingBox(
-        Point(0,0),
-        PageObjectLayouter::PageObject,
-        PageObjectLayouter::ModelCoordinateSystem));
-    VirtualDevice aBitmapDevice (rReferenceDevice);
-    aBitmapDevice.SetOutputSizePixel(aSize);
+                                        rpDescriptor,
+                                        PageObjectLayouter::PageObject,
+                                        PageObjectLayouter::ModelCoordinateSystem));
 
     // Fill the background with the background color of the slide sorter.
     const Color aBackgroundColor (mpTheme->GetColor(Theme::Color_Background));
-    aBitmapDevice.SetFillColor(aBackgroundColor);
-    aBitmapDevice.SetLineColor(aBackgroundColor);
-    aBitmapDevice.DrawRect(Rectangle(Point(0,0), aSize));
+    rDevice.SetFillColor(aBackgroundColor);
+    rDevice.SetLineColor(aBackgroundColor);
+    rDevice.DrawRect(aFocusSize);
 
     // Paint the slide area with a linear gradient that starts some pixels
     // below the top and ends some pixels above the bottom.
@@ -445,46 +395,41 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
         for (sal_Int32 nY=0; nY<nHeight; ++nY)
         {
             if (nY<=nY1)
-                aBitmapDevice.SetLineColor(aTopColor);
+                rDevice.SetLineColor(aTopColor);
             else if (nY>=nY2)
-                aBitmapDevice.SetLineColor(aBottomColor);
+                rDevice.SetLineColor(aBottomColor);
             else
             {
                 Color aColor (aTopColor);
                 aColor.Merge(aBottomColor, 255 * (nY2-nY) / (nY2-nY1));
-                aBitmapDevice.SetLineColor(aColor);
+                rDevice.SetLineColor(aColor);
             }
-            aBitmapDevice.DrawLine(
+            rDevice.DrawLine(
                 Point(aPageObjectBox.Left(), nY+nTop),
                 Point(aPageObjectBox.Right(), nY+nTop));
         }
     }
     else
     {
-        aBitmapDevice.SetFillColor(aTopColor);
-        aBitmapDevice.DrawRect(aPageObjectBox);
+        rDevice.SetFillColor(aTopColor);
+        rDevice.DrawRect(aPageObjectBox);
     }
 
     // Paint the simple border and, for some backgrounds, the focus border.
     if (bHasFocusBorder)
-        mpFocusBorderPainter->PaintFrame(aBitmapDevice, aPageObjectBox);
+        mpFocusBorderPainter->PaintFrame(rDevice, aPageObjectBox);
     else
-        PaintBorder(aBitmapDevice, eColorType, aPageObjectBox);
+        PaintBorder(rDevice, eColorType, aPageObjectBox);
 
     // Get bounding box of the preview around which a shadow is painted.
     // Compensate for the border around the preview.
     const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
-        Point(0,0),
-        PageObjectLayouter::Preview,
-        PageObjectLayouter::ModelCoordinateSystem));
+                                rpDescriptor,
+                                PageObjectLayouter::Preview,
+                                PageObjectLayouter::ModelCoordinateSystem));
     Rectangle aFrameBox (aBox.Left()-1,aBox.Top()-1,aBox.Right()+1,aBox.Bottom()+1);
-    mpShadowPainter->PaintFrame(aBitmapDevice, aFrameBox);
-
-    return aBitmapDevice.GetBitmap (Point(0,0),aSize);
+    mpShadowPainter->PaintFrame(rDevice, aFrameBox);
 }
-
-
-
 
 void PageObjectPainter::PaintBorder (
     OutputDevice& rDevice,
