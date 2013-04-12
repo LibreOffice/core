@@ -118,7 +118,8 @@ LanguageType EditView::CheckLanguage(
         SvtLinguOptions aLinguOpt;
         SvtLinguConfig().GetOptions( aLinguOpt );
         // The default document language from "Tools/Options - Language Settings - Languages: Western"
-        aLangList[0] = aLinguOpt.nDefaultLanguage;
+        aLangList[0] = MsLangId::resolveSystemLanguageByScriptType( aLinguOpt.nDefaultLanguage,
+                ::com::sun::star::i18n::ScriptType::LATIN);
         // The one from "Tools/Options - Language Settings - Languages: User interface"
         aLangList[1] = rSettings.GetUILanguageTag().getLanguageType();
         // The one from "Tools/Options - Language Settings - Languages: Locale setting"
