@@ -22,6 +22,34 @@ $(eval $(call gb_ExternalProject_register_targets,liborcus,\
 	build \
 ))
 
+ifeq ($(OS)$(COM),WNTMSC)
+
+ifeq ($(VCVER),90)
+$(call gb_ExternalProject_get_state_target,liborcus,build) :
+	export BOOST_INCLUDE_DIR=$(WORKDIR)/UnpackedTarball/boost \
+	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
+	&& cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static \
+	&& $(COMPATH)/vcpackages/vcbuild.exe liborcus-static.vcproj "Release|Win32" \
+	&& cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-parser-static \
+	&& $(COMPATH)/vcpackages/vcbuild.exe liborcus-parser-static.vcproj "Release|Win32" \
+	&& touch $@
+else
+$(call gb_ExternalProject_get_state_target,liborcus,build) :
+	export BOOST_INCLUDE_DIR=$(WORKDIR)/UnpackedTarball/boost \
+	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
+	&& cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static \
+	&& $(COMPATH)/../Common7/Tools/vcupgrade.exe liborcus-static.vcproj \
+	&& MSBuild.exe liborcus-static.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
+	&& cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-parser-static \
+	&& $(COMPATH)/../Common7/Tools/vcupgrade.exe liborcus-parser-static.vcproj \
+	&& MSBuild.exe liborcus-parser-static.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
+	&& touch $@
+endif
+
+else
+
 # Must be built with debug GNU C++ library if --enable-dbgutil has
 # caused the LO code to be built thusly.
 
@@ -50,5 +78,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
+
+endif
 
 # vim: set noet sw=4 ts=4:
