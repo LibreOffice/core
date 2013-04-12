@@ -74,7 +74,7 @@ extern "C"
         return true;
     }
 
-    VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule pModule )
+    VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule )
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "create vcl plugin instance with gtk version %d %d %d\n",
@@ -254,15 +254,6 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
         X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType);
 #endif
 }
-
-/*
- * Obsolete, non-working, and crufty code from the
- * beginning of time. When we update our base platform
- * we should kill this with extreme prejudice.
- */
-#if !GTK_CHECK_VERSION(3,0,0)
-#  define HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
-#endif
 
 SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
     ImplJobSetup* pSetupData )
