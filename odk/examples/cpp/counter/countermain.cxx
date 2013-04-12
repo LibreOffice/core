@@ -41,6 +41,9 @@
  *************************************************************************
  *************************************************************************/
 
+#include "sal/config.h"
+
+#include <cstdlib>
 #include <stdio.h>
 
 #include <sal/main.h>
@@ -94,11 +97,12 @@ SAL_IMPLEMENT_MAIN()
         }
 
         Reference< XComponent >::query( xContext )->dispose();
+        return EXIT_SUCCESS;
 
     } catch( Exception& e) {
         printf("Error: caught exception:\n       %s\n",
                OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
-        exit(1);
+        return EXIT_FAILURE;
     }
 }
 
