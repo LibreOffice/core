@@ -102,28 +102,34 @@ public class CommunicationService extends Service implements Runnable {
                             case NETWORK:
                                 mClient = new NetworkClient(mServerDesired,
                                                 this, mReceiver);
+                                mClient.validating();
                                 break;
                             case BLUETOOTH:
                                 mClient = new BluetoothClient(mServerDesired,
                                                 this, mReceiver,
                                                 mBluetoothPreviouslyEnabled);
+                                mClient.validating();
                                 break;
                             }
                             mTransmitter = new Transmitter(mClient);
                             mState = State.CONNECTED;
                         } catch (IOException e) {
                             Log.i(Globals.TAG, "CommunicationService.run: " + e);
-                            mClient = null;
-                            mState = State.DISCONNECTED;
-                            Intent aIntent = new Intent(
-                                            CommunicationService.STATUS_CONNECTION_FAILED);
-                            LocalBroadcastManager.getInstance(this)
-                                            .sendBroadcast(aIntent);
+                            connextionFailed();
                         }
                     }
                 }
+                Log.i(Globals.TAG, "CommunicationService.finished work");
             }
         }
+    }
+
+    private void connextionFailed() {
+        mClient = null;
+        mState = State.DISCONNECTED;
+        Intent aIntent = new Intent(
+                CommunicationService.STATUS_CONNECTION_FAILED);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
     private boolean mBluetoothPreviouslyEnabled;
@@ -174,6 +180,7 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public void disconnect() {
+        Log.d(Globals.TAG, "Service Disconnected");
         synchronized (mConnectionVariableMutex) {
             mStateDesired = State.DISCONNECTED;
             synchronized (this) {
@@ -326,6 +333,10 @@ public class CommunicationService extends Service implements Runnable {
         aEditor.remove(aServer.getAddress());
         aEditor.apply();
 
+    }
+
+    public Client getClient() {
+        return mClient;
     }
 
 }

@@ -58,6 +58,27 @@ public class BluetoothClient extends Client {
 
         mSocket.connect();
         Log.i(Globals.TAG, "BluetoothClient: connected");
+    }
+
+    @Override
+    public void closeConnection() {
+        try {
+            if (mSocket != null)
+                mSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void onDisconnect() {
+        if (!mBluetoothWasEnabled) {
+            mAdapter.disable();
+        }
+    }
+
+    @Override
+    public void validating() throws IOException {
+        // TODO Auto-generated method stub
 
         mInputStream = mSocket.getInputStream();
         mReader = new BufferedReader(new InputStreamReader(mInputStream,
@@ -78,22 +99,6 @@ public class BluetoothClient extends Client {
                         aIntent);
         startListening();
 
-    }
-
-    @Override
-    public void closeConnection() {
-        try {
-            if (mSocket != null)
-                mSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected void onDisconnect() {
-        if (!mBluetoothWasEnabled) {
-            mAdapter.disable();
-        }
     }
 
 }
