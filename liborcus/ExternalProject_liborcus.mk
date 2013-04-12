@@ -30,10 +30,16 @@ $(eval $(call gb_ExternalProject_register_targets,liborcus,\
 # that executable on Android, but we don't want to bother with
 # patching out building it for Android.
 
+#$(if $(filter MSC,$(COM)),CPPFLAGS+="-DBOOST_ALL_NO_LIB") CXXFLAGS+="$(BOOST_CXXFLAGS))
+
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter ANDROID,$(OS)),LIBS='-lgnustl_shared -lm') \
 		$(if $(filter YES,$(SYSTEM_ZLIB)),LIBS+=-lz) \
+		$(if $(filter NO,$(SYSTEM_ZLIB)),CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib) \
+		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS+=-I$(WORKDIR)/UnpackedTarball/boost) \
+		$(if $(filter YES,$(SYSTEM_BOOST)),LDFLAGS=$(BOOST_LDFLAGS)) \
+		$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)),$(if $(gb_ENABLE_DBGUTIL),CPPFLAGS+=-D_GLIBCXX_DEBUG)) \
 		./configure \
 			--with-pic \
 			--enable-static \
@@ -41,11 +47,6 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			--disable-debug \
 			--disable-spreadsheet-model \
 			--disable-werror \
-			$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)),$(if $(gb_ENABLE_DBGUTIL),CPPFLAGS=-D_GLIBCXX_DEBUG)) \
-			$(if $(filter MSC,$(COM)),CPPFLAGS="-DBOOST_ALL_NO_LIB") \
-			CXXFLAGS="$(BOOST_CXXFLAGS) $(if $(filter NO,$(SYSTEM_BOOST)),\
-			-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS))" \
-			$(if $(filter YES,$(SYSTEM_BOOST)),LDFLAGS=$(BOOST_LDFLAGS)) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
