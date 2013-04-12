@@ -4808,12 +4808,15 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                         {
                             SwFrmFmt *pFrmFmt = pHt->GetFlyCnt().GetFrmFmt();
                             const SwNodeIndex *pNdIdx = pFrmFmt->GetCntnt().GetCntntIdx();
-                            const SwNodes &nos = pNdIdx->GetNodes();
-                            const SwGrfNode *pGrf = dynamic_cast<const SwGrfNode*>(nos[pNdIdx->GetIndex() + 1]);
-                            if (pGrf)
+                            if (pNdIdx)
                             {
-                                vecBulletGrf.push_back(pGrf);
-                                vecFrmFmt.push_back(pFrmFmt);
+                                const SwNodes &nos = pNdIdx->GetNodes();
+                                const SwGrfNode *pGrf = dynamic_cast<const SwGrfNode*>(nos[pNdIdx->GetIndex() + 1]);
+                                if (pGrf)
+                                {
+                                    vecBulletGrf.push_back(pGrf);
+                                    vecFrmFmt.push_back(pFrmFmt);
+                                }
                             }
                         }
                     }
