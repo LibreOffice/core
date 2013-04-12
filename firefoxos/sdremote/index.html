@@ -20,7 +20,12 @@
         var mClient;
         var mTransmitter;
     </script>
+
+    <script src="js/ui.js"></script>
+
     <script src="js/client.js"></script>
+    <script src="js/receiver.js"></script>
+    <script src="js/slideshow.js"></script>
     <script src="js/transmitter.js"></script>
 </head>
 <body onLoad="init();">
@@ -39,8 +44,8 @@
     <button id="blank" onclick="mTransmitter.blankScreen()">Blank Screen</button>
     <button id="resume" onclick="mTransmitter.resume()">Resume</button>
     <br/>
+    <img id="preview"></img>
 
-
-    <p>Current slide: <span id="current slide">---</span></p>
+    <p>Current slide: <span id="current_slide">---</span></p>
 </body>
 </html>

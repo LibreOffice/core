@@ -11,6 +11,7 @@ function Client( aServerAddress ) {
     var mReceiveBuffer = "";
     var mCurrentMessage = [];
     var mSocket;
+    var mReceiver = new Receiver();
 
     // PUBLIC
     this.sendMessage = function( aMessage ) {
@@ -18,10 +19,6 @@ function Client( aServerAddress ) {
     }
 
     // PRIVATE
-    function processMessage( aMessage ) {
-        console.log( "Received message " + aMessage );
-    }
-
     function dataReceived( aEvent ) {
         mReceiveBuffer += aEvent.data;
         var i;
@@ -31,7 +28,7 @@ function Client( aServerAddress ) {
             if ( aLine.length > 0 ) {
                 mCurrentMessage.push( aLine );
             } else {
-                processMessage( mCurrentMessage );
+                mReceiver.parseMessage( mCurrentMessage );
                 mCurrentMessage = [];
             }
             aLine = "";
