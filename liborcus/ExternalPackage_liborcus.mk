@@ -15,6 +15,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_ExternalPackage_add_file,liborcus,lib/orcus.lib,src/liborcus/.libs/liborcus-0.6.lib))
 else
 $(eval $(call gb_ExternalPackage_add_file,liborcus,lib/liborcus.a,src/liborcus/.libs/liborcus-0.6.a))
+$(eval $(call gb_ExternalPackage_add_file,liborcus,lib/liborcus-parser.a,src/parser/.libs/liborcus-parser-0.6.a))
 endif
 
 # vim: set noet sw=4 ts=4:
