@@ -25,6 +25,8 @@
 #include "PropertyHelper.hxx"
 #include "CloneHelper.hxx"
 
+#include <svl/itemprop.hxx>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
@@ -38,133 +40,31 @@ using ::osl::MutexGuard;
 
 namespace
 {
+
 static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.ErrorBar" );
-
-enum
-{
-    PROP_ERROR_BAR_STYLE,
-    PROP_ERROR_BAR_POS_ERROR,
-    PROP_ERROR_BAR_NEG_ERROR,
-    PROP_ERROR_BAR_WEIGHT,
-    PROP_ERROR_BAR_SHOW_POS_ERROR,
-    PROP_ERROR_BAR_SHOW_NEG_ERROR
-};
-
-void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
-{
-    rOutProperties.push_back(
-        Property( "ErrorBarStyle",
-                  PROP_ERROR_BAR_STYLE,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    rOutProperties.push_back(
-        Property( "PositiveError",
-                  PROP_ERROR_BAR_POS_ERROR,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "NegativeError",
-                  PROP_ERROR_BAR_NEG_ERROR,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    rOutProperties.push_back(
-        Property( "Weight",
-                  PROP_ERROR_BAR_WEIGHT,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    rOutProperties.push_back(
-        Property( "ShowPositiveError",
-                  PROP_ERROR_BAR_SHOW_POS_ERROR,
-                  ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "ShowNegativeError",
-                  PROP_ERROR_BAR_SHOW_NEG_ERROR,
-                  ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-}
-
-struct StaticErrorBarDefaults_Initializer
-{
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
-
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_STYLE, ::com::sun::star::chart::ErrorBarStyle::NONE );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_POS_ERROR, 0.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_NEG_ERROR, 0.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_WEIGHT, 1.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_SHOW_POS_ERROR, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_SHOW_NEG_ERROR, true );
-    }
-};
-
-struct StaticErrorBarDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticErrorBarDefaults_Initializer >
-{
-};
-
-struct StaticErrorBarInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
-
-        ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
-    }
-
-};
-
-struct StaticErrorBarInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticErrorBarInfoHelper_Initializer >
-{
-};
-
-struct StaticErrorBarInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticErrorBarInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticErrorBarInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticErrorBarInfo_Initializer >
-{
-};
 
 bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq )
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( xLSeq, uno::UNO_QUERY );
     return ( xServiceInfo.is() && xServiceInfo->getImplementationName() == "com.sun.star.comp.chart2.LabeledDataSequence" );
+}
+
+const SfxItemPropertySet* GetErrorBarPropertySet()
+{
+    static SfxItemPropertyMapEntry aErrorBarPropertyMap_Impl[] =
+    {
+        {MAP_CHAR_LEN("ShowPositiveError"),0,&getBooleanCppuType(), 0, 0},
+        {MAP_CHAR_LEN("ShowNegativeError"),1,&getBooleanCppuType(), 0, 0},
+        {MAP_CHAR_LEN("PositiveError"),2,&getCppuType((const double*)0),0,0},
+        {MAP_CHAR_LEN("NegativeError"),3,&getCppuType((const double*)0), 0, 0},
+        {MAP_CHAR_LEN("ErrorBarStyle"),4,&getCppuType((sal_Int32*)0),0,0},
+        {MAP_CHAR_LEN("Weight"),5,&getCppuType((const double*)0),0,0},
+        {MAP_CHAR_LEN(""),6,&getBooleanCppuType(), 0, 0},
+        {MAP_CHAR_LEN(""),7,&getCppuType((OUString*)0),0,0},
+        {0,0,0,0,0,0}
+    };
+    static SfxItemPropertySet aPropSet( aErrorBarPropertyMap_Impl );
+    return &aPropSet;
 }
 
 } // anonymous namespace
@@ -179,15 +79,23 @@ uno::Reference< beans::XPropertySet > createErrorBar( const uno::Reference< uno:
 
 ErrorBar::ErrorBar(
     uno::Reference< uno::XComponentContext > const & xContext ) :
-        ::property::OPropertySet( m_aMutex ),
+    mbShowPositiveError(true),
+    mbShowNegativeError(true),
+    mfPositiveError(0),
+    mfNegativeError(0),
+    mfWeight(1),
     m_xContext( xContext ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 ErrorBar::ErrorBar( const ErrorBar & rOther ) :
-        MutexContainer(),
-        impl::ErrorBar_Base(),
-        ::property::OPropertySet( rOther, m_aMutex ),
+    MutexContainer(),
+    impl::ErrorBar_Base(),
+    mbShowPositiveError(rOther.mbShowPositiveError),
+    mbShowNegativeError(rOther.mbShowNegativeError),
+    mfPositiveError(rOther.mfPositiveError),
+    mfNegativeError(rOther.mfNegativeError),
+    mfWeight(rOther.mfWeight),
     m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
@@ -211,29 +119,70 @@ uno::Reference< util::XCloneable > SAL_CALL ErrorBar::createClone()
     return uno::Reference< util::XCloneable >( new ErrorBar( *this ));
 }
 
-// ================================================================================
-
-// ____ OPropertySet ____
-uno::Any ErrorBar::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
-{
-    const tPropertyValueMap& rStaticDefaults = *StaticErrorBarDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
-        return uno::Any();
-    return (*aFound).second;
-}
-
-::cppu::IPropertyArrayHelper & SAL_CALL ErrorBar::getInfoHelper()
-{
-    return *StaticErrorBarInfoHelper::get();
-}
-
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticErrorBarInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > aRef (
+            new SfxItemPropertySetInfo( GetErrorBarPropertySet()->getPropertyMap() ) );
+    return aRef;
+}
+
+void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny )
+    throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if(rPropName == "ErrorBarStyle")
+        rAny >>= meStyle;
+    else if(rPropName == "PositiveError")
+        rAny >>= mfPositiveError;
+    else if(rPropName == "NegativeError")
+        rAny >>= mfNegativeError;
+    else if(rPropName == "ShowPositiveError")
+        rAny >>= mbShowPositiveError;
+    else if(rPropName == "ShowNegativeError")
+        rAny >>= mbShowNegativeError;
+    else
+        SAL_WARN("chart2", "asked for property value: " << rPropName);
+}
+
+uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    uno::Any aRet;
+    if(rPropName == "ErrorBarStyle")
+        aRet <<= meStyle;
+    else if(rPropName == "PositiveError")
+        aRet <<= mfPositiveError;
+    else if(rPropName == "NegativeError")
+        aRet <<= mfNegativeError;
+    else if(rPropName == "ShowPositiveError")
+        aRet <<= mbShowPositiveError;
+    else if(rPropName == "ShowNegativeError")
+        aRet <<= mbShowNegativeError;
+    else
+        SAL_WARN("chart2", "asked for property value: " << rPropName);
+    return aRet;
+}
+
+void ErrorBar::addPropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
+    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+}
+
+void ErrorBar::removePropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
+    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+}
+
+void ErrorBar::addVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
+    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+}
+
+void ErrorBar::removeVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
+    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
 }
 
 // ____ XModifyBroadcaster ____
@@ -312,17 +261,6 @@ void SAL_CALL ErrorBar::setParent(
     m_xParent.set( Parent );
 }
 
-// ____ OPropertySet ____
-void ErrorBar::firePropertyChangeEvent()
-{
-    fireModifyEvent();
-}
-
-void ErrorBar::fireModifyEvent()
-{
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
-}
-
 // ================================================================================
 
 uno::Sequence< OUString > ErrorBar::getSupportedServiceNames_Static()
@@ -338,9 +276,6 @@ APPHELPER_XSERVICEINFO_IMPL( ErrorBar, lcl_aServiceName );
 
 // needed by MSC compiler
 using impl::ErrorBar_Base;
-
-IMPLEMENT_FORWARD_XINTERFACE2( ErrorBar, ErrorBar_Base, OPropertySet )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( ErrorBar, ErrorBar_Base, OPropertySet )
 
 } //  namespace chart
 
