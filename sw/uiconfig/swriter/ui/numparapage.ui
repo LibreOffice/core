@@ -41,7 +41,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Outline level:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">comboLB_OUTLINE_LEVEL</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -50,10 +53,24 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="comboLB_OUTLINE_LEVEL">
+                  <object class="GtkComboBoxText" id="comboLB_OUTLINE_LEVEL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="model">liststoreOUTLINE_LEVEL</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <items>
+                      <item translatable="yes">Body text</item>
+                      <item translatable="yes">Level 1</item>
+                      <item translatable="yes">Level 2</item>
+                      <item translatable="yes">Level 3</item>
+                      <item translatable="yes">Level 4</item>
+                      <item translatable="yes">Level 5</item>
+                      <item translatable="yes">Level 6</item>
+                      <item translatable="yes">Level 7</item>
+                      <item translatable="yes">Level 8</item>
+                      <item translatable="yes">Level 9</item>
+                      <item translatable="yes">Level 10</item>
+                    </items>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -104,12 +121,13 @@
                   <object class="GtkBox" id="boxNUMBER_STYLE">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="labelFT_NUMBER_STYLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Numbering style:</property>
                         <property name="use_underline">True</property>
                       </object>
@@ -120,10 +138,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="comboLB_NUMBER_STYLE">
+                      <object class="GtkComboBoxText" id="comboLB_NUMBER_STYLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">liststoreNUMBERING</property>
+                        <property name="entry_text_column">0</property>
+                        <property name="id_column">1</property>
+                        <items>
+                          <item translatable="yes">None</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -143,6 +165,7 @@
                     <property name="label" translatable="yes">R_estart at this paragraph</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="no_show_all">True</property>
                     <property name="relief">none</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
@@ -157,18 +180,35 @@
                 </child>
                 <child>
                   <object class="GtkBox" id="boxNEW_START">
+                    <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="spacing">12</property>
                     <child>
-                      <object class="GtkCheckButton" id="checkCB_NUMBER_NEW_START">
-                        <property name="label" translatable="yes">S_tart with:</property>
+                      <object class="GtkBox" id="box4">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="inconsistent">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkCheckButton" id="checkCB_NUMBER_NEW_START">
+                            <property name="label" translatable="yes">S_tart with:</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="margin_left">12</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="inconsistent">True</property>
+                            <property name="draw_indicator">True</property>
+                            <accessibility>
+                              <relation type="label-for" target="spinNF_NEW_START"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -273,17 +313,31 @@
                 <child>
                   <object class="GtkBox" id="boxRESTART_NO">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="labelFT_RESTART_NO">
+                      <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="margin_left">12</property>
-                        <property name="label" translatable="yes">_Start with:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinNF_RESTART_PARA</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="labelFT_RESTART_NO">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="margin_left">12</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">_Start with:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinNF_RESTART_PARA</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -334,80 +388,20 @@
       </packing>
     </child>
   </object>
-  <object class="GtkListStore" id="liststoreNUMBERING">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">None</col>
-        <col id="1">1</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststoreOUTLINE_LEVEL">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Body text</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 1</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 2</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 3</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 4</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 5</col>
-        <col id="1">5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 6</col>
-        <col id="1">6</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 7</col>
-        <col id="1">7</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 8</col>
-        <col id="1">8</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 9</col>
-        <col id="1">9</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Level 10</col>
-        <col id="1">10</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
       <widget name="comboLB_OUTLINE_LEVEL"/>
       <widget name="comboLB_NUMBER_STYLE"/>
       <widget name="spinNF_NEW_START"/>
       <widget name="spinNF_RESTART_PARA"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="labelFT_OUTLINE_LEVEL"/>
+      <widget name="labelFT_NUMBER_STYLE"/>
+      <widget name="box4"/>
+      <widget name="box3"/>
     </widgets>
   </object>
 </interface>

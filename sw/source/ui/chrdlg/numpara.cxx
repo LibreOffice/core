@@ -42,7 +42,7 @@ static sal_uInt16 aPageRg[] = {
 };
 
 SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent, const SfxItemSet& rAttr ) :
-    SfxTabPage(pParent, "NumParaPage", "/modules/swriter/ui/numparapage.ui", rAttr),
+    SfxTabPage(pParent, "NumParaPage", "modules/swriter/ui/numparapage.ui", rAttr),
 
     msOutlineNumbering( SW_RES( STR_OUTLINE_NUMBERING ) ),
     bModified(sal_False),
@@ -56,12 +56,16 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent, const SfxItemSet& 
 
     get(m_pNewStartBX,             "boxNEW_START");
     get(m_pNewStartCB,             "checkCB_NEW_START");
+    m_pNewStartCB->SetState(STATE_NOCHECK);
     get(m_pNewStartNumberCB,       "checkCB_NUMBER_NEW_START");
+    m_pNewStartNumberCB->SetState(STATE_NOCHECK);
     get(m_pNewStartNF,             "spinNF_NEW_START");
 
     get(m_pCountParaFram,          "frameFL_COUNT_PARA");
     get(m_pCountParaCB,            "checkCB_COUNT_PARA");
+    m_pCountParaCB->SetState(STATE_NOCHECK);
     get(m_pRestartParaCountCB,     "checkCB_RESTART_PARACOUNT");
+    m_pRestartParaCountCB->SetState(STATE_NOCHECK);
 
     get(m_pRestartBX,              "boxRESTART_NO");
     get(m_pRestartNF,              "spinNF_RESTART_PARA");
@@ -74,8 +78,8 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent, const SfxItemSet& 
     {
         sal_uInt16 nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
 
-        if(HTMLMODE_ON & nHtmlMode)
-                    m_pCountParaFram->Hide();
+        if (HTMLMODE_ON & nHtmlMode)
+            m_pCountParaFram->Hide();
     }
 
     m_pNewStartCB->SetClickHdl(LINK(this, SwParagraphNumTabPage, NewStartHdl_Impl));
