@@ -45,7 +45,7 @@
 //17 (SHL_SFX) removed
 //18 (SHL_SO2) removed
 #define SHL_IDL         19
-#define SHL_IDE         20
+//20 (SHL_IDE) removed
 //21 (SHL_EDIT) removed
 //22 (SHL_VCED) removed
 #define SHL_BASIC       23

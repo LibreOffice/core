@@ -22,19 +22,19 @@
 #define BASCTL_BASICMOD_HXX
 
 #include <sfx2/module.hxx>
-#include <tools/shl.hxx>
 
 namespace basctl
 {
 
 class Module : public SfxModule
 {
+    static Module* mpModule;
 public:
     Module ( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
         SfxModule( pMgr, false, pObjFact, NULL )
     { }
 public:
-    static Module*& Get () { return *reinterpret_cast<Module**>(GetAppData(SHL_IDE)); }
+    static Module*& Get () { return mpModule; }
 };
 
 } // namespace basctl
