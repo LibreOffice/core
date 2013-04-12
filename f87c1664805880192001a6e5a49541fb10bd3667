@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///UA\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 8570,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-12T15:44:53Z",
+      "side": 1,
+      "message": "You have to copy /usr/share/aclocal/libgcrypt.m4 to m4, because it must be available on every platform for aclocal, even if it would never be used.",
+      "revId": "f87c1664805880192001a6e5a49541fb10bd3667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
