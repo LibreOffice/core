@@ -79,7 +79,7 @@ SdGroupSlidesDialog::~SdGroupSlidesDialog()
 
 IMPL_LINK_NOARG(SdGroupSlidesDialog, AddHdl)
 {
-    fprintf(stderr, "Add to group\n");
+    SAL_DEBUG("Add to group");
     EndDialog(0);
     return 0;
 }
@@ -89,14 +89,14 @@ int SdGroupSlidesDialog::endDialog( bool bSuccessSoSave )
     if ( bSuccessSoSave )
     {
         sal_uInt16 nSelected = mpGroupCombo->GetSelectEntryPos();
-        fprintf( stderr, "complete: %d\n", (int) nSelected );
+        SAL_DEBUG("complete: " << (int) nSelected );
         if ( nSelected < maGroups.size() )
         {
-            fprintf( stderr, "one selected\n" );
+            SAL_DEBUG("one selected");
         }
         else
         {
-            fprintf( stderr, "new group\n" );
+            SAL_DEBUG("new group");
         }
     }
 
@@ -120,7 +120,7 @@ IMPL_LINK_NOARG( SdGroupSlidesDialog, GroupSelectHdl )
 {
     sal_uInt16 nSelected = mpGroupCombo->GetSelectEntryPos();
     OSL_ASSERT( nSelected < maGroups.size() );
-    fprintf( stderr, "select hdl %d\n", (int) nSelected );
+    SAL_DEBUG("select hdl " << (int) nSelected );
     populateEdits( maGroups[ nSelected ] );
     return 0;
 }
