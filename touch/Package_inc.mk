@@ -8,6 +8,7 @@
 
 $(eval $(call gb_Package_Package,touch_inc,$(SRCDIR)/touch/inc))
 
+$(eval $(call gb_Package_add_file,touch_inc,inc/touch/touch.h,touch/touch.h))
 $(eval $(call gb_Package_add_file,touch_inc,inc/touch/libotouch.hxx,touch/libotouch.hxx))
 
 # vim: set noet sw=4 ts=4:
