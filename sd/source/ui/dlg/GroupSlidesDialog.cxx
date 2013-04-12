@@ -29,9 +29,11 @@ namespace {
     }
 }
 
-void SdGroupSlidesDialog::addGroupsToCombo( ComboBox *pBox, SdDrawDocument *pDoc )
+void SdGroupSlidesDialog::addGroupsToCombo( ComboBox /* *pBox, */ SdDrawDocument *pDoc )
 {
+#if 0
     mpGroupCombo->Clear();
+#endif
 
     sal_uInt32 nPages = pDoc->GetSdPageCount( PK_STANDARD );
     StorePtr pStore = SlideHack::Store::getStore();
@@ -48,7 +50,11 @@ void SdGroupSlidesDialog::addGroupsToCombo( ComboBox *pBox, SdDrawDocument *pDoc
         if ( std::find( maGroups.begin(), maGroups.end(), pGroup ) != maGroups.end() )
             continue;
         maGroups.push_back( pGroup );
+#if 0
+        // FIXME: we want a widget that does something like this -
+        // an Autocomplete hdl on an Edit ? or ...
         mpGroupCombo->InsertEntry( pGroup->getMetaData()->getName() );
+#endif
     }
 }
 
@@ -60,17 +66,18 @@ SdGroupSlidesDialog::SdGroupSlidesDialog(Window* pWindow, SdDrawDocument* pActDo
 {
     get( mpAddBtn, "add_btn" );
     get( mpCancelBtn, "cancel_btn" );
-    get( mpGroupCombo, "cb_group" );
+//    get( mpGroupCombo, "cb_group" );
+    get( mpGroupEdit, "ed_group" );
     get( mpTitle, "ed_title" );
     get( mpKeywords, "ed_keywords" );
 
     mpAddBtn->SetClickHdl( LINK( this, SdGroupSlidesDialog, AddHdl ) );
     mpCancelBtn->SetClickHdl( LINK( this, SdGroupSlidesDialog, CancelHdl ) );
 
-    addGroupsToCombo( mpGroupCombo, mpDoc );
-    mpGroupCombo->SetSelectHdl( LINK( this, SdGroupSlidesDialog, GroupSelectHdl ) );
-    mpGroupCombo->SetDoubleClickHdl( LINK( this, SdGroupSlidesDialog, GroupDoubleClickHdl ) );
-    mpGroupCombo->EnableAutocomplete( true );
+//    addGroupsToCombo( mpGroupCombo, mpDoc );
+//    mpGroupCombo->SetSelectHdl( LINK( this, SdGroupSlidesDialog, GroupSelectHdl ) );
+//    mpGroupCombo->SetDoubleClickHdl( LINK( this, SdGroupSlidesDialog, GroupDoubleClickHdl ) );
+//    mpGroupCombo->EnableAutocomplete( true );
 }
 
 SdGroupSlidesDialog::~SdGroupSlidesDialog()
@@ -88,6 +95,12 @@ int SdGroupSlidesDialog::endDialog( bool bSuccessSoSave )
 {
     if ( bSuccessSoSave )
     {
+        // FIXME: input validation
+        SlideHack::Store::getStore()->createGroup( mpGroupEdit->GetText(),
+                                                   mpTitle->GetText(),
+                                                   mpKeywords->GetText(),
+                                                   maPages );
+#if 0
         sal_uInt16 nSelected = mpGroupCombo->GetSelectEntryPos();
         SAL_DEBUG("complete: " << (int) nSelected );
         if ( nSelected < maGroups.size() )
@@ -98,6 +111,7 @@ int SdGroupSlidesDialog::endDialog( bool bSuccessSoSave )
         {
             SAL_DEBUG("new group");
         }
+#endif
     }
 
     EndDialog(0);
@@ -116,6 +130,7 @@ IMPL_LINK_NOARG( SdGroupSlidesDialog, CancelHdl )
     return endDialog( false ) ;
 }
 
+#if 0
 IMPL_LINK_NOARG( SdGroupSlidesDialog, GroupSelectHdl )
 {
     sal_uInt16 nSelected = mpGroupCombo->GetSelectEntryPos();
@@ -130,6 +145,7 @@ IMPL_LINK_NOARG( SdGroupSlidesDialog, GroupDoubleClickHdl )
     GroupSelectHdl( 0 );
     return endDialog( true ) ;
 }
+#endif
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

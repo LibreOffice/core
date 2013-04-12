@@ -154,6 +154,7 @@ public:
     /// check for updated versions etc.
     virtual GroupPtr lookupGroup( OriginPtr pOrigin ) = 0;
     virtual GroupPtr createGroup( const OUString &rName,
+                                  const OUString &rTitle,
                                   const OUString &rKeywords,
                                   const std::vector< SdPage * > &rPages ) = 0;
 
