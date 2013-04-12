@@ -60,6 +60,12 @@ struct SbCompare_UString_PropertyValue_Impl
    {
       return lhs.Name.compareTo(rhs) < 0;
    }
+#ifdef DBG_UTIL
+   bool operator() (PropertyValue const & lhs, const PropertyValue& rhs)
+   {
+       return lhs.Name.compareTo(rhs.Name) < 0;
+   }
+#endif
 };
 
 int CDECL SbCompare_Properties_Impl( const void *arg1, const void *arg2 )
