@@ -69,7 +69,7 @@ public class ServerFinder {
             for (int j = i + 1; j < aBuffer.length; j++) {
                 if (aPacket.getData()[j] == '\n') {
                     aName = new String(aPacket.getData(), i + 1, j - (i + 1),
-                                    CHARSET);
+                            CHARSET);
                     break;
                 }
             }
@@ -77,10 +77,11 @@ public class ServerFinder {
                 return;
             }
             Server aServer = new Server(Server.Protocol.NETWORK, aPacket
-                            .getAddress().getHostAddress(), aName,
-                            System.currentTimeMillis());
+                    .getAddress().getHostAddress(), aName,
+                    System.currentTimeMillis());
             mServerList.put(aServer.getAddress(), aServer);
-            Log.i(Globals.TAG, "ServerFinder.listenForServer: contains " + aName);
+            Log.i(Globals.TAG, "ServerFinder.listenForServer: contains "
+                    + aName);
 
             notifyActivity();
         } catch (java.net.SocketTimeoutException e) {
@@ -110,18 +111,20 @@ public class ServerFinder {
                             if (System.currentTimeMillis() - aTime > SEARCH_INTERVAL) {
                                 String aString = "LOREMOTE_SEARCH\n";
                                 DatagramPacket aPacket = new DatagramPacket(
-                                                aString.getBytes(CHARSET),
-                                                aString.length(),
-                                                InetAddress.getByName(GROUPADDRESS),
-                                                PORT);
+                                        aString.getBytes(CHARSET),
+                                        aString.length(),
+                                        InetAddress.getByName(GROUPADDRESS),
+                                        PORT);
                                 mSocket.send(aPacket);
                                 aTime = System.currentTimeMillis();
                                 // Remove stale servers
                                 for (Server aServer : mServerList.values()) {
                                     if (!aServer.mNoTimeout
-                                                    && System.currentTimeMillis()
-                                                                    - aServer.getTimeDiscovered() > 60 * 1000) {
-                                        mServerList.remove(aServer.getAddress());
+                                            && System.currentTimeMillis()
+                                                    - aServer
+                                                            .getTimeDiscovered() > 60 * 1000) {
+                                        mServerList
+                                                .remove(aServer.getAddress());
                                         notifyActivity();
 
                                     }
@@ -157,15 +160,16 @@ public class ServerFinder {
 
     /**
      * Check whether we are on an emulator and add it's host to the list of
-     * servers if so (although we do not know whether libo is running on
-     * the host).
+     * servers if so (although we do not know whether libo is running on the
+     * host).
      */
     private void checkAndAddEmulator() {
         try {
             if (InetAddress.getByName("10.0.2.2").isReachable(100)) {
-                Log.i(Globals.TAG, "ServerFinder.checkAndAddEmulator: NulledNot, whatever that is supposed to mean");
+                Log.i(Globals.TAG,
+                        "ServerFinder.checkAndAddEmulator: NulledNot, whatever that is supposed to mean");
                 Server aServer = new Server(Protocol.NETWORK, "10.0.2.2",
-                                "Android Emulator Host", 0);
+                        "Android Emulator Host", 0);
                 aServer.mNoTimeout = true;
                 mServerList.put(aServer.getAddress(), aServer);
                 notifyActivity();

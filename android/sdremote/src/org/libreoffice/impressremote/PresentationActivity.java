@@ -59,21 +59,23 @@ public class PresentationActivity extends SherlockFragmentActivity {
         super.onCreate(savedInstanceState);
 
         // bind preference defaults
-        PreferenceManager.setDefaultValues(this, R.xml.preferences,
-                                           false /* retain user settings */);
+        /*
+         * retain user settings
+         */
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
 
         bindService(new Intent(this, CommunicationService.class), mConnection,
-                        Context.BIND_IMPORTANT);
+                Context.BIND_IMPORTANT);
 
         IntentFilter aFilter = new IntentFilter();
         mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
         mBroadcastProcessor.addToFilter(aFilter);
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
-                        aFilter);
+                aFilter);
 
-        //((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
+        // ((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
         setContentView(R.layout.activity_presentation);
 
         mPresentationFragment = new PresentationFragment();
@@ -81,9 +83,9 @@ public class PresentationActivity extends SherlockFragmentActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction fragmentTransaction = fragmentManager
-            .beginTransaction();
+                .beginTransaction();
         fragmentTransaction.replace(R.id.presentation_interceptor,
-                                    mPresentationFragment, "fragment_presentation");
+                mPresentationFragment, "fragment_presentation");
         fragmentTransaction.commit();
         mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
     }
@@ -97,7 +99,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
         Intent aIntent = new Intent(this, SelectorActivity.class);
         aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(aIntent);
-        if ( mCommunicationService != null )
+        if (mCommunicationService != null)
             mCommunicationService.disconnect();
     }
 
@@ -111,13 +113,13 @@ public class PresentationActivity extends SherlockFragmentActivity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         SharedPreferences aPref = PreferenceManager
-                        .getDefaultSharedPreferences(this);
+                .getDefaultSharedPreferences(this);
         boolean aVolumeSwitching = aPref.getBoolean("option_volumeswitching",
-                        false);
+                false);
         boolean aRelevantFragmentVisible = ((mPresentationFragment != null) && mPresentationFragment
-                        .isVisible())
-                        || ((mThumbnailFragment != null) && mThumbnailFragment
-                                        .isVisible());
+                .isVisible())
+                || ((mThumbnailFragment != null) && mThumbnailFragment
+                        .isVisible());
         if (aVolumeSwitching && aRelevantFragmentVisible) {
 
             int action = event.getAction();
@@ -141,13 +143,13 @@ public class PresentationActivity extends SherlockFragmentActivity {
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName aClassName,
-                        IBinder aService) {
+                IBinder aService) {
             mCommunicationService = ((CommunicationService.CBinder) aService)
-                            .getService();
+                    .getService();
 
             if (mThumbnailFragment != null)
                 mThumbnailFragment
-                                .setCommunicationService(mCommunicationService);
+                        .setCommunicationService(mCommunicationService);
 
         }
 
@@ -168,7 +170,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(
-                    com.actionbarsherlock.view.MenuItem item) {
+            com.actionbarsherlock.view.MenuItem item) {
         Intent aIntent;
         switch (item.getItemId()) {
         case R.id.actionbar_presentation_submenu_options:
@@ -178,16 +180,16 @@ public class PresentationActivity extends SherlockFragmentActivity {
             return true;
         case R.id.actionbar_presentation_submenu_blank:
             boolean aRelevantFragmentVisible = (mPresentationFragment != null && mPresentationFragment
-                            .isVisible())
-                            || (mThumbnailFragment != null && mThumbnailFragment
-                                            .isVisible());
+                    .isVisible())
+                    || (mThumbnailFragment != null && mThumbnailFragment
+                            .isVisible());
             if (aRelevantFragmentVisible) {
 
                 BlankScreenFragment aFragment = new BlankScreenFragment(
-                                mCommunicationService);
+                        mCommunicationService);
 
                 FragmentTransaction ft = getSupportFragmentManager()
-                                .beginTransaction();
+                        .beginTransaction();
                 ft.replace(R.id.presentation_interceptor, aFragment);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 ft.addToBackStack(null);
@@ -199,14 +201,15 @@ public class PresentationActivity extends SherlockFragmentActivity {
             AlertDialog aDialog = aBuilder.create();
             aDialog.show();
             return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }
     }
 
     private class ActionBarManager implements OnClickListener,
-                    FragmentManager.OnBackStackChangedListener,
-                    TextView.OnEditorActionListener {
+            FragmentManager.OnBackStackChangedListener,
+            TextView.OnEditorActionListener {
 
         private Handler timerHandler = new Handler();
 
@@ -230,9 +233,9 @@ public class PresentationActivity extends SherlockFragmentActivity {
         private Button mCountdownButton;
 
         private String aTimeFormat = getResources().getString(
-                        R.string.actionbar_timeformat);
+                R.string.actionbar_timeformat);
         private String aTimerFormat = getResources().getString(
-                        R.string.actionbar_timerformat);
+                R.string.actionbar_timerformat);
         /*
          * True if the timer is being used as a timer, false if we are showing a
          * clock.
@@ -250,11 +253,11 @@ public class PresentationActivity extends SherlockFragmentActivity {
             aBar.setCustomView(R.layout.presentation_actionbar);
 
             mThumbnailButton = (ToggleButton) aBar.getCustomView()
-                            .findViewById(R.id.actionbar_thumbnailtoggle);
+                    .findViewById(R.id.actionbar_thumbnailtoggle);
             mThumbnailButton.setOnClickListener(this);
 
             mTimeLabel = (ToggleButton) aBar.getCustomView().findViewById(
-                            R.id.actionbar_time);
+                    R.id.actionbar_time);
             mTimeLabel.setOnClickListener(this);
 
             setupClockBar();
@@ -282,34 +285,34 @@ public class PresentationActivity extends SherlockFragmentActivity {
             mClockBar = mOuterLayout.findViewById(R.id.clockbar);
 
             mClockBar_clockButton = (ToggleButton) mClockBar
-                            .findViewById(R.id.clockbar_toggle_clockmode);
+                    .findViewById(R.id.clockbar_toggle_clockmode);
             mClockBar_stopwatchButton = (ToggleButton) mClockBar
-                            .findViewById(R.id.clockbar_toggle_stopwatchmode);
+                    .findViewById(R.id.clockbar_toggle_stopwatchmode);
             mClockBar_countdownButton = (ToggleButton) mClockBar
-                            .findViewById(R.id.clockbar_toggle_countdownmode);
+                    .findViewById(R.id.clockbar_toggle_countdownmode);
             mClockBar_clockButton.setOnClickListener(this);
             mClockBar_stopwatchButton.setOnClickListener(this);
             mClockBar_countdownButton.setOnClickListener(this);
 
             // Stopwatch bar
             mStopwatchBar = mOuterLayout
-                            .findViewById(R.id.clockbar_stopwatchbar);
+                    .findViewById(R.id.clockbar_stopwatchbar);
 
             mStopwatchButtonRun = (Button) mStopwatchBar
-                            .findViewById(R.id.clockbar_stopwatch_run);
+                    .findViewById(R.id.clockbar_stopwatch_run);
             mStopwatchButtonReset = (Button) mStopwatchBar
-                            .findViewById(R.id.clockbar_stopwatch_reset);
+                    .findViewById(R.id.clockbar_stopwatch_reset);
             mStopwatchButtonRun.setOnClickListener(this);
             mStopwatchButtonReset.setOnClickListener(this);
 
             // Countdown bar
             mCountdownBar = mOuterLayout
-                            .findViewById(R.id.clockbar_countdownbar);
+                    .findViewById(R.id.clockbar_countdownbar);
 
             mCountdownEntry = (EditText) mCountdownBar
-                            .findViewById(R.id.clockbar_countdown_time);
+                    .findViewById(R.id.clockbar_countdown_time);
             mCountdownButton = (Button) mCountdownBar
-                            .findViewById(R.id.clockbar_countdown_button);
+                    .findViewById(R.id.clockbar_countdown_button);
             mCountdownButton.setOnClickListener(this);
             mCountdownEntry.setOnEditorActionListener(this);
 
@@ -324,30 +327,30 @@ public class PresentationActivity extends SherlockFragmentActivity {
             }
             mClockBar_clockButton.setChecked(!mTimerOn);
 
-            //            FrameLayout.LayoutParams aParams = (LayoutParams) mCountdownBar
-            //                            .getLayoutParams();
-            //            aParams.topMargin = mClockBar.getBottom();
-            //            //            aParams.height = mClockBar.getHeight();
-            //            //            aParams.bottomMargin = aParams.topMargin + aParams.height;
-            //            //            aParams.leftMargin = 100;
-            //            mCountdownBar.setLayoutParams(aParams);
-            //            mCountdownBar.setPadding(0, mClockBar.getBottom(), 0, 0);
-            //            mStopwatchBar.setPadding(0, mClockBar.getBottom(), 0, 0);
-            //            //            mCountdownBar.requestLayout();
-            //            //            mOuterLayout.requestLayout();
-            //            //            mOuterLayout.invalidate();
-            //            //            aParams = (LayoutParams) mStopwatchBar.getLayoutParams();
-            //            //            aParams.topMargin = mClockBar.getHeight();
-            //            //            mOuterLayout.invalidate();
-            //            //            mStopwatchBar.setY(mClockBar.getHeight());
+            // FrameLayout.LayoutParams aParams = (LayoutParams) mCountdownBar
+            // .getLayoutParams();
+            // aParams.topMargin = mClockBar.getBottom();
+            // // aParams.height = mClockBar.getHeight();
+            // // aParams.bottomMargin = aParams.topMargin + aParams.height;
+            // // aParams.leftMargin = 100;
+            // mCountdownBar.setLayoutParams(aParams);
+            // mCountdownBar.setPadding(0, mClockBar.getBottom(), 0, 0);
+            // mStopwatchBar.setPadding(0, mClockBar.getBottom(), 0, 0);
+            // // mCountdownBar.requestLayout();
+            // // mOuterLayout.requestLayout();
+            // // mOuterLayout.invalidate();
+            // // aParams = (LayoutParams) mStopwatchBar.getLayoutParams();
+            // // aParams.topMargin = mClockBar.getHeight();
+            // // mOuterLayout.invalidate();
+            // // mStopwatchBar.setY(mClockBar.getHeight());
 
             boolean aIsCountdown = mCommunicationService.getSlideShow()
-                            .getTimer().isCountdown();
+                    .getTimer().isCountdown();
             // Stopwatch
             boolean aStopwatchMode = mTimerOn && !aIsCountdown;
             mClockBar_stopwatchButton.setChecked(aStopwatchMode);
             mStopwatchBar.setVisibility(aStopwatchMode ? View.VISIBLE
-                            : View.GONE);
+                    : View.GONE);
             mStopwatchBar.bringToFront();
             if (aStopwatchMode) {
                 Timer aTimer = mCommunicationService.getSlideShow().getTimer();
@@ -364,7 +367,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
             boolean aCountdownMode = mTimerOn && aIsCountdown;
             mClockBar_countdownButton.setChecked(mTimerOn && aIsCountdown);
             mCountdownBar.setVisibility(mTimerOn && aIsCountdown ? View.VISIBLE
-                            : View.GONE);
+                    : View.GONE);
             mCountdownBar.bringToFront();
             if (aCountdownMode) {
                 Timer aTimer = mCommunicationService.getSlideShow().getTimer();
@@ -385,7 +388,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
                 long aTime = System.currentTimeMillis();
                 if (mTimerOn && mCommunicationService != null) {
                     aTime = mCommunicationService.getSlideShow().getTimer()
-                                    .getTimeMillis();
+                            .getTimeMillis();
                     aTimeString = DateFormat.format(aTimerFormat, aTime);
                 } else {
                     aTimeString = DateFormat.format(aTimeFormat, aTime);
@@ -403,18 +406,18 @@ public class PresentationActivity extends SherlockFragmentActivity {
             if (aSource == mThumbnailButton) {
                 if (mThumbnailFragment == null) {
                     mThumbnailFragment = (ThumbnailFragment) getSupportFragmentManager()
-                                    .findFragmentByTag("ThumbnailFragment");
+                            .findFragmentByTag("ThumbnailFragment");
                     if (mThumbnailFragment == null) {
                         mThumbnailFragment = new ThumbnailFragment();
                         mThumbnailFragment
-                                        .setCommunicationService(mCommunicationService);
+                                .setCommunicationService(mCommunicationService);
                     }
                 }
                 if (!mThumbnailFragment.isVisible()) {
                     FragmentTransaction ft = getSupportFragmentManager()
-                                    .beginTransaction();
+                            .beginTransaction();
                     ft.replace(R.id.presentation_interceptor,
-                                    mThumbnailFragment, "ThumbnailFragment");
+                            mThumbnailFragment, "ThumbnailFragment");
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.addToBackStack(null);
                     ft.commit();
@@ -492,7 +495,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
                     SimpleDateFormat aFormat = new SimpleDateFormat("HH:mm:ss");
                     aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                     aTime = aFormat.parse(mCountdownEntry.getText().toString())
-                                    .getTime();
+                            .getTime();
                 } catch (ParseException e) {
                 }
                 if (aTime == 0) {
@@ -500,13 +503,12 @@ public class PresentationActivity extends SherlockFragmentActivity {
                         SimpleDateFormat aFormat = new SimpleDateFormat("mm:ss");
                         aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                         aTime = aFormat.parse(
-                                        mCountdownEntry.getText().toString())
-                                        .getTime();
+                                mCountdownEntry.getText().toString()).getTime();
                     } catch (ParseException e) {
                     }
                 }
                 mCommunicationService.getSlideShow().getTimer()
-                                .setCountdownTime(aTime);
+                        .setCountdownTime(aTime);
                 return true;
             }
             return false;
@@ -514,8 +516,33 @@ public class PresentationActivity extends SherlockFragmentActivity {
     }
 
     /**
-     * Intermediate layout that catches all touches, used in order to hide
-     * the clock menu as appropriate.
+     * Intermediate layout that catches all touches, used in order to hide the
+     * clock menu as appropriate.
+     */
+    public static class InterceptorLayout extends FrameLayout {
+
+        public InterceptorLayout(Context context, AttributeSet aAttrs) {
+            super(context, aAttrs);
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(MotionEvent aEvent) {
+            mActionBarManager.hidePopups();
+            return super.onInterceptTouchEvent(aEvent);
+        }
+    }
+
+    private BroadcastReceiver mListener = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context aContext, Intent aIntent) {
+            mBroadcastProcessor.onReceive(aContext, aIntent);
+        }
+    };
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+    * the clock menu as appropriate.
      *
      */
     public static class InterceptorLayout extends FrameLayout {

@@ -10,6 +10,7 @@ package org.libreoffice.impressremote;
 
 import org.libreoffice.impressremote.communication.CommunicationService;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
+@SuppressLint("ValidFragment")
 public class BlankScreenFragment extends SherlockFragment {
 
     CommunicationService mCommunicationService;
@@ -34,13 +36,13 @@ public class BlankScreenFragment extends SherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                    Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_blankscreen, container,
-                        false);
+                false);
 
         Bitmap aBitmap = mCommunicationService.getSlideShow().getImage(
-                        mCommunicationService.getSlideShow().getCurrentSlide());
+                mCommunicationService.getSlideShow().getCurrentSlide());
 
         // Process the image
         final int borderWidth = 8;
@@ -49,17 +51,16 @@ public class BlankScreenFragment extends SherlockFragment {
         p.setShadowLayer(borderWidth, 0, 0, Color.BLACK);
 
         RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
-                        + aBitmap.getWidth(), borderWidth + aBitmap.getHeight());
+                + aBitmap.getWidth(), borderWidth + aBitmap.getHeight());
         Bitmap aOut = Bitmap.createBitmap(aBitmap.getWidth() + 2 * borderWidth,
-                        aBitmap.getHeight() + 2 * borderWidth,
-                        aBitmap.getConfig());
+                aBitmap.getHeight() + 2 * borderWidth, aBitmap.getConfig());
         Canvas canvas = new Canvas(aOut);
         canvas.drawColor(Color.TRANSPARENT);
         canvas.drawRect(aRect, p);
         canvas.drawBitmap(aBitmap, null, aRect, null);
 
         ImageView aImage = (ImageView) v
-                        .findViewById(R.id.blankscreen_slidepreview);
+                .findViewById(R.id.blankscreen_slidepreview);
         aImage.setImageBitmap(aOut);
 
         OnClickListener aListener = new OnClickListener() {
@@ -72,7 +73,7 @@ public class BlankScreenFragment extends SherlockFragment {
         };
 
         v.findViewById(R.id.blankscreen_slidepreview).setOnClickListener(
-                        aListener);
+                aListener);
         v.findViewById(R.id.blankscreen_return).setOnClickListener(aListener);
         mCommunicationService.getTransmitter().blankScreen();
         return v;
@@ -86,3 +87,4 @@ public class BlankScreenFragment extends SherlockFragment {
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+dtab: */

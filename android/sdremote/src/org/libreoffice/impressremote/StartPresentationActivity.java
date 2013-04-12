@@ -10,6 +10,7 @@ package org.libreoffice.impressremote;
 
 import org.libreoffice.impressremote.communication.CommunicationService;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,19 +37,21 @@ public class StartPresentationActivity extends SherlockActivity {
 
         setContentView(R.layout.activity_startpresentation);
         bindService(new Intent(this, CommunicationService.class), mConnection,
-                        Context.BIND_IMPORTANT);
+                Context.BIND_IMPORTANT);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         IntentFilter aFilter = new IntentFilter(
-                        CommunicationService.MSG_SLIDESHOW_STARTED);
+                CommunicationService.MSG_SLIDESHOW_STARTED);
 
         mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
         mBroadcastProcessor.addToFilter(aFilter);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
-                        aFilter);
+                aFilter);
 
         findViewById(R.id.startpresentation_button).setOnClickListener(
-                        mClickListener);
+                mClickListener);
     }
 
     @Override
@@ -68,9 +72,9 @@ public class StartPresentationActivity extends SherlockActivity {
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName aClassName,
-                        IBinder aService) {
+                IBinder aService) {
             mCommunicationService = ((CommunicationService.CBinder) aService)
-                            .getService();
+                    .getService();
 
         }
 
@@ -97,6 +101,18 @@ public class StartPresentationActivity extends SherlockActivity {
             mBroadcastProcessor.onReceive(aContext, aIntent);
         }
     };
+
+    @Override
+    public boolean onOptionsItemSelected(
+            com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            onBackPressed();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

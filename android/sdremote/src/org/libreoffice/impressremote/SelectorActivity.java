@@ -63,15 +63,18 @@ public class SelectorActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selector);
 
+        if (mCommunicationService != null)
+            mCommunicationService.disconnect();
+
         IntentFilter aFilter = new IntentFilter(
-                        CommunicationService.MSG_SERVERLIST_CHANGED);
+                CommunicationService.MSG_SERVERLIST_CHANGED);
         aFilter.addAction(CommunicationService.STATUS_CONNECTION_FAILED);
 
         mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
         mBroadcastProcessor.addToFilter(aFilter);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
-                        aFilter);
+                aFilter);
 
         mBluetoothContainer = findViewById(R.id.selector_container_bluetooth);
         mBluetoothList = (LinearLayout) findViewById(R.id.selector_list_bluetooth);
@@ -106,32 +109,27 @@ public class SelectorActivity extends SherlockActivity {
 
             LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             final View layout = inflater.inflate(R.layout.dialog_addserver,
-                            null);
+                    null);
 
             builder = new AlertDialog.Builder(this);
             builder.setView(layout);
             builder.setTitle(R.string.addserver);
             builder.setPositiveButton(R.string.addserver_add,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                int which) {
-                                    EditText aAddressEntry = (EditText) layout
-                                                    .findViewById(R.id.addserver_addressentry);
-                                    EditText aNameEntry = (EditText) layout
-                                                    .findViewById(R.id.addserver_nameentry);
-                                    CheckBox aRememberServer = (CheckBox) layout
-                                                    .findViewById(R.id.addserver_remember);
-                                    mCommunicationService
-                                                    .addServer(aAddressEntry
-                                                                    .getText()
-                                                                    .toString(),
-                                                                    aNameEntry.getText()
-                                                                                    .toString(),
-                                                                    aRememberServer.isChecked());
-                                    refreshLists();
-                                }
-                            });
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            EditText aAddressEntry = (EditText) layout
+                                    .findViewById(R.id.addserver_addressentry);
+                            EditText aNameEntry = (EditText) layout
+                                    .findViewById(R.id.addserver_nameentry);
+                            CheckBox aRememberServer = (CheckBox) layout
+                                    .findViewById(R.id.addserver_remember);
+                            mCommunicationService.addServer(aAddressEntry
+                                    .getText().toString(), aNameEntry.getText()
+                                    .toString(), aRememberServer.isChecked());
+                            refreshLists();
+                        }
+                    });
             builder.setNegativeButton(R.string.addserver_cancel, null);
             alertDialog = builder.create();
             alertDialog.show();
@@ -197,9 +195,9 @@ public class SelectorActivity extends SherlockActivity {
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName aClassName,
-                        IBinder aService) {
+                IBinder aService) {
             mCommunicationService = ((CommunicationService.CBinder) aService)
-                            .getService();
+                    .getService();
             mCommunicationService.startSearching();
             refreshLists();
         }
@@ -215,34 +213,58 @@ public class SelectorActivity extends SherlockActivity {
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
             if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SERVERLIST_CHANGED)) {
+                    CommunicationService.MSG_SERVERLIST_CHANGED)) {
                 refreshLists();
                 return;
             } else if (aIntent.getAction().equals(
-                            CommunicationService.STATUS_CONNECTION_FAILED)) {
+                    CommunicationService.STATUS_CONNECTION_FAILED)) {
                 if (mProgressDialog != null) {
                     mProgressDialog.dismiss();
 
-                    String aFormat = getResources().getString(
-                                    R.string.selector_dialog_connectionfailed);
-                    String aDialogText = MessageFormat.format(aFormat,
-                                    mCommunicationService
-                                                    .getPairingDeviceName());
+                    if (mCommunicationService != null) {
+                        String aFormat = getResources().getString(
+                                R.string.selector_dialog_connectionfailed);
+                        String aDialogText = MessageFormat.format(aFormat,
+                                mCommunicationService.getPairingDeviceName());
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(
-                                    SelectorActivity.this);
-                    builder.setMessage(aDialogText)
-                                    .setCancelable(false)
-                                    .setPositiveButton(
-                                                    R.string.selector_dialog_connectionfailed_ok,
-                                                    new DialogInterface.OnClickListener() {
-                                                        public void onClick(
-                                                                        DialogInterface dialog,
-                                                                        int id) {
-                                                            dialog.dismiss();
-                                                        }
-                                                    });
-                    builder.show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(
+                                SelectorActivity.this);
+                        builder.setMessage(aDialogText)
+                                .setCancelable(false)
+                                .setNeutralButton(R.string.help,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int id) {
+                                                dialog.dismiss();
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(
+                                                        SelectorActivity.this);
+                                                builder.setMessage(
+                                                        R.string.ConnectionFailedHelp)
+                                                        .setCancelable(false)
+                                                        .setPositiveButton(
+                                                                R.string.selector_dialog_connectionfailed_ok,
+                                                                new DialogInterface.OnClickListener() {
+                                                                    public void onClick(
+                                                                            DialogInterface dialog,
+                                                                            int id) {
+                                                                        dialog.dismiss();
+                                                                    }
+                                                                });
+                                                builder.show();
+                                            }
+                                        })
+                                .setPositiveButton(
+                                        R.string.selector_dialog_connectionfailed_ok,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int id) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                        builder.show();
+                    }
                 }
             }
             mBroadcastProcessor.onReceive(aContext, aIntent);
@@ -257,10 +279,9 @@ public class SelectorActivity extends SherlockActivity {
         Log.i(Globals.TAG, "SelectorActivity.deleteServer(" + aView + ")");
         for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
             if (aEntry.getValue() == aView
-                            .findViewById(R.id.selector_sub_label)
-                            || aEntry.getValue().findViewById(
-                                            R.id.selector_sub_label) == aView
-                                            .findViewById(R.id.selector_sub_label))
+                    .findViewById(R.id.selector_sub_label)
+                    || aEntry.getValue().findViewById(R.id.selector_sub_label) == aView
+                            .findViewById(R.id.selector_sub_label))
                 mCommunicationService.removeServer(aEntry.getKey());
         }
     }
@@ -270,7 +291,9 @@ public class SelectorActivity extends SherlockActivity {
 
             List<Server> aServers = mCommunicationService.getServers();
 
-            Log.i(Globals.TAG, "SelectorActivity.refreshLists: got " + aServers.size() + " servers");
+            Log.i(Globals.TAG,
+                    "SelectorActivity.refreshLists: got " + aServers.size()
+                            + " servers");
 
             // Simply replace the lists... first clear the old lists,
             // Then add those currently found.
@@ -283,35 +306,35 @@ public class SelectorActivity extends SherlockActivity {
             for (Server aServer : aServers) {
                 boolean aIsBluetooth = (aServer.getProtocol() == Protocol.BLUETOOTH);
                 HashMap<Server, View> aMap = aIsBluetooth ? mBluetoothServers
-                                : mNetworkServers;
+                        : mNetworkServers;
                 LinearLayout aLayout = aIsBluetooth ? mBluetoothList
-                                : mNetworkList;
+                        : mNetworkList;
 
-                View aView = getLayoutInflater()
-                                .inflate(R.layout.activity_selector_sublayout_server,
-                                                null);
+                View aView = getLayoutInflater().inflate(
+                        R.layout.activity_selector_sublayout_server, null);
 
                 TextView aText = (TextView) aView
-                                .findViewById(R.id.selector_sub_label);
+                        .findViewById(R.id.selector_sub_label);
                 aText.setOnClickListener(mClickListener);
                 aText.setText(aServer.getName());
                 aLayout.addView(aView);
                 aMap.put(aServer, aText);
 
-                //                    registerForContextMenu(aView);
+                // registerForContextMenu(aView);
                 registerForContextMenu(aText);
             }
         }
 
         // Hide as necessary
         mBluetoothContainer
-                        .setVisibility((mBluetoothServers.size() != 0) ? View.VISIBLE
-                                        : View.GONE);
+                .setVisibility((mBluetoothServers.size() != 0) ? View.VISIBLE
+                        : View.GONE);
         mNetworkContainer
-                        .setVisibility((mNetworkServers.size() != 0) ? View.VISIBLE
-                                        : View.GONE);
+                .setVisibility((mNetworkServers.size() != 0) ? View.VISIBLE
+                        : View.GONE);
 
-        mNoServerLabel.setVisibility(((mBluetoothServers.size() == 0) && (mNetworkServers
+        mNoServerLabel
+                .setVisibility(((mBluetoothServers.size() == 0) && (mNetworkServers
                         .size() == 0)) ? View.VISIBLE : View.GONE);
     }
 
@@ -340,12 +363,12 @@ public class SelectorActivity extends SherlockActivity {
                 mCommunicationService.connectTo(aDesiredServer);
                 // Connect Service and wait for broadcast
                 String aFormat = getResources().getString(
-                                R.string.selector_dialog_connecting);
+                        R.string.selector_dialog_connecting);
                 String aDialogText = MessageFormat.format(aFormat,
-                                aDesiredServer.getName());
+                        aDesiredServer.getName());
 
                 mProgressDialog = ProgressDialog.show(SelectorActivity.this,
-                                "", aDialogText, true);
+                        "", aDialogText, true);
                 mProgressDialog.setCancelable(true);
                 mProgressDialog.setOnCancelListener(new OnCancelListener() {
 
@@ -362,7 +385,7 @@ public class SelectorActivity extends SherlockActivity {
     View aLastSelected = null;
 
     public void onCreateContextMenu(android.view.ContextMenu menu, View v,
-                    android.view.ContextMenu.ContextMenuInfo menuInfo) {
+            android.view.ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         aLastSelected = v;
         android.view.MenuInflater inflater = getMenuInflater();

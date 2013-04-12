@@ -27,31 +27,38 @@ public class AboutDialogBuilder extends AlertDialog.Builder {
         super(aContext);
 
         LayoutInflater aInflater = (LayoutInflater) aContext
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View aLayout = aInflater.inflate(R.layout.dialog_about, null);
 
         setView(aLayout);
 
-        //        setTitle(R.string.about);
+        // setTitle(R.string.about);
         setPositiveButton(
-                        aContext.getResources().getString(R.string.about_close),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
+                aContext.getResources().getString(R.string.about_close),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
 
         mVersionLabel = (TextView) aLayout.findViewById(R.id.about_version);
 
         try {
             PackageInfo aInfo = aContext.getPackageManager().getPackageInfo(
-                            aContext.getPackageName(), 0);
-            String aVersionString = MessageFormat.format(
-                            aContext.getResources().getString(
-                                            R.string.about_versionstring),
-                            aInfo.versionName, aInfo.versionCode);
+                    aContext.getPackageName(), 0);
+            String aVersionString = MessageFormat.format(aContext
+                    .getResources().getString(R.string.about_versionstring),
+                    aInfo.versionName, aInfo.versionCode);
             mVersionLabel.setText(aVersionString);
         } catch (NameNotFoundException e) {
+            // Cannot logically happen
+        }
+
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+tFoundException e) {
             // Cannot logically happen
         }
 

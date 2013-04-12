@@ -58,20 +58,20 @@ public class PresentationFragment extends SherlockFragment {
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName aClassName,
-                        IBinder aService) {
+                IBinder aService) {
             mCommunicationService = ((CommunicationService.CBinder) aService)
-                            .getService();
+                    .getService();
 
             if (mTopView != null) {
                 mTopView.setAdapter(new ThumbnailAdapter(mContext,
-                                mCommunicationService.getSlideShow()));
+                        mCommunicationService.getSlideShow()));
                 mTopView.setSelection(mCommunicationService.getSlideShow()
-                                .getCurrentSlide(), true);
+                        .getCurrentSlide(), true);
                 mTopView.setOnItemSelectedListener(new ClickListener());
             }
 
             updateSlideNumberDisplay(mCommunicationService.getSlideShow()
-                            .getCurrentSlide());
+                    .getCurrentSlide());
 
         }
 
@@ -82,16 +82,16 @@ public class PresentationFragment extends SherlockFragment {
     };
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                    Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         setRetainInstance(true);
         getActivity().bindService(
-                        new Intent(getActivity().getApplicationContext(),
-                                        CommunicationService.class),
-                        mConnection, Context.BIND_IMPORTANT);
+                new Intent(getActivity().getApplicationContext(),
+                        CommunicationService.class), mConnection,
+                Context.BIND_IMPORTANT);
         mContext = getActivity().getApplicationContext();
-        //        container.removeAllViews();
+        // container.removeAllViews();
         View v = inflater.inflate(R.layout.fragment_presentation, container,
-                        false);
+                false);
 
         mNotes = (WebView) v.findViewById(R.id.presentation_notes);
 
@@ -114,8 +114,8 @@ public class PresentationFragment extends SherlockFragment {
 
         if (mNewCoverflowHeight != 0) {
             ThumbnailAdapter aAdapter = (ThumbnailAdapter) mTopView
-                            .getAdapter();
-            if ( aAdapter != null ) {
+                    .getAdapter();
+            if (aAdapter != null) {
                 aAdapter.setHeight(mNewCoverflowHeight);
                 mTopView.setImageHeight(mNewCoverflowHeight);
                 aAdapter.setWidth(mNewCoverflowWidth);
@@ -127,12 +127,12 @@ public class PresentationFragment extends SherlockFragment {
         }
 
         IntentFilter aFilter = new IntentFilter(
-                        CommunicationService.MSG_SLIDE_CHANGED);
+                CommunicationService.MSG_SLIDE_CHANGED);
         aFilter.addAction(CommunicationService.MSG_SLIDE_NOTES);
         aFilter.addAction(CommunicationService.MSG_SLIDE_PREVIEW);
         LocalBroadcastManager
-                        .getInstance(getActivity().getApplicationContext())
-                        .registerReceiver(mListener, aFilter);
+                .getInstance(getActivity().getApplicationContext())
+                .registerReceiver(mListener, aFilter);
 
         return v;
     }
@@ -142,18 +142,18 @@ public class PresentationFragment extends SherlockFragment {
         getActivity().unbindService(mConnection);
         super.onDestroyView();
         LocalBroadcastManager
-                        .getInstance(getActivity().getApplicationContext())
-                        .unregisterReceiver(mListener);
+                .getInstance(getActivity().getApplicationContext())
+                .unregisterReceiver(mListener);
         mTopView = null;
         mContext = null;
     }
 
     private void updateSlideNumberDisplay(int aPosition) {
-        //        int aSlide = mCommunicationService.getSlideShow().getCurrentSlide();
+        // int aSlide = mCommunicationService.getSlideShow().getCurrentSlide();
         mNumberText.setText((aPosition + 1) + "/"
-                        + mCommunicationService.getSlideShow().getSize());
+                + mCommunicationService.getSlideShow().getSize());
         mNotes.loadDataWithBaseURL(null, mCommunicationService.getSlideShow()
-                        .getNotes(aPosition), "text/html", "UTF-8", null);
+                .getNotes(aPosition), "text/html", "UTF-8", null);
     }
 
     // -------------------------------------------------- RESIZING LISTENER ----
@@ -176,9 +176,9 @@ public class PresentationFragment extends SherlockFragment {
                 boolean aPortrait = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
 
                 int aFlowSize = aPortrait ? mTopView.getHeight() : mTopView
-                                .getWidth();
+                        .getWidth();
                 int aViewSize = aPortrait ? mLayout.getHeight() : mLayout
-                                .getWidth();
+                        .getWidth();
 
                 // Calculate height change, taking limits into account
                 int aDiff = (int) (aPortrait ? aEvent.getY() : aEvent.getX());
@@ -190,16 +190,16 @@ public class PresentationFragment extends SherlockFragment {
 
                 // Now deal with the internal height
                 AbstractCoverFlowImageAdapter aAdapter = (AbstractCoverFlowImageAdapter) mTopView
-                                .getAdapter();
+                        .getAdapter();
 
                 double aRatio = mOriginalCoverflowWidth
-                                / mOriginalCoverflowHeight;
+                        / mOriginalCoverflowHeight;
                 float aHeightNew;
                 float aWidthNew;
                 if (aPortrait) {
                     aHeightNew = mTopView.getImageHeight() + aDiff;
                     aWidthNew = (float) (aRatio * aHeightNew);
-                    //               Too wide -- so scale down
+                    // Too wide -- so scale down
                     if (aWidthNew > mLayout.getWidth() - 50) {
                         aWidthNew = mLayout.getWidth() - 50;
                         aHeightNew = (float) (aWidthNew / aRatio);
@@ -208,7 +208,7 @@ public class PresentationFragment extends SherlockFragment {
                 } else {
                     aWidthNew = mTopView.getImageWidth() + aDiff;
                     aHeightNew = (float) (aWidthNew / aRatio);
-                    //              Too High -- so scale down
+                    // Too High -- so scale down
                     if (aHeightNew > mLayout.getHeight() - 50) {
                         aHeightNew = mLayout.getHeight() - 50;
                         aWidthNew = (float) (aHeightNew * aRatio);
@@ -239,7 +239,7 @@ public class PresentationFragment extends SherlockFragment {
 
         @Override
         public void onItemSelected(AdapterView<?> arg0, View arg1,
-                        int aPosition, long arg3) {
+                int aPosition, long arg3) {
             if (mCommunicationService != null)
                 mCommunicationService.getTransmitter().gotoSlide(aPosition);
             lastUpdateTime = System.currentTimeMillis();
@@ -260,7 +260,7 @@ public class PresentationFragment extends SherlockFragment {
             if (mTopView == null || mTopView.getAdapter() == null)
                 return;
             if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_CHANGED)) {
+                    CommunicationService.MSG_SLIDE_CHANGED)) {
                 int aSlide = aIntent.getExtras().getInt("slide_number");
 
                 if (aSlide == mTopView.getSelectedItemPosition())
@@ -270,15 +270,17 @@ public class PresentationFragment extends SherlockFragment {
                 }
                 mTopView.setSelection(aSlide, true);
             } else if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_PREVIEW)) {
-                ThumbnailAdapter aThumbAdaptor = (ThumbnailAdapter) mTopView.getAdapter();
+                    CommunicationService.MSG_SLIDE_PREVIEW)) {
+                ThumbnailAdapter aThumbAdaptor = (ThumbnailAdapter) mTopView
+                        .getAdapter();
                 aThumbAdaptor.notifyDataSetChanged();
             } else if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_NOTES)) {
+                    CommunicationService.MSG_SLIDE_NOTES)) {
                 int aPosition = aIntent.getExtras().getInt("slide_number");
-                if ( aPosition == mTopView.getSelectedItemPosition() ) {
-                    mNotes.loadDataWithBaseURL(null, mCommunicationService.getSlideShow()
-                                    .getNotes(aPosition), "text/html", "UTF-8", null);
+                if (aPosition == mTopView.getSelectedItemPosition()) {
+                    mNotes.loadDataWithBaseURL(null, mCommunicationService
+                            .getSlideShow().getNotes(aPosition), "text/html",
+                            "UTF-8", null);
                 }
             }
 
@@ -298,6 +300,17 @@ public class PresentationFragment extends SherlockFragment {
         @Override
         public int getCount() {
             return mSlideShow.getSize();
+        }
+
+        @Override
+        protected Bitmap createBitmap(int position) {
+            return mSlideShow.getImage(position);
+        }
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+.getSize();
         }
 
         @Override

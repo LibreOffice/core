@@ -44,12 +44,12 @@ public class ThumbnailFragment extends SherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                    Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //        container.removeAllViews();
+        // container.removeAllViews();
         setRetainInstance(true);
         View v = inflater
-                        .inflate(R.layout.fragment_thumbnail, container, false);
+                .inflate(R.layout.fragment_thumbnail, container, false);
 
         mGrid = (GridView) v.findViewById(R.id.thumbnail_grid);
 
@@ -61,11 +61,11 @@ public class ThumbnailFragment extends SherlockFragment {
         }
 
         IntentFilter aFilter = new IntentFilter(
-                        CommunicationService.MSG_SLIDE_CHANGED);
+                CommunicationService.MSG_SLIDE_CHANGED);
         aFilter.addAction(CommunicationService.MSG_SLIDE_PREVIEW);
         LocalBroadcastManager
-                        .getInstance(getActivity().getApplicationContext())
-                        .registerReceiver(mListener, aFilter);
+                .getInstance(getActivity().getApplicationContext())
+                .registerReceiver(mListener, aFilter);
 
         return v;
     }
@@ -74,8 +74,8 @@ public class ThumbnailFragment extends SherlockFragment {
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager
-                        .getInstance(getActivity().getApplicationContext())
-                        .unregisterReceiver(mListener);
+                .getInstance(getActivity().getApplicationContext())
+                .unregisterReceiver(mListener);
         mGrid = null;
         mContext = null;
         mCurrentImage = null;
@@ -101,29 +101,29 @@ public class ThumbnailFragment extends SherlockFragment {
     private void formatUnselected(ImageView aImage, TextView aText) {
         if (aImage != null) {
             aImage.setBackgroundColor(getResources().getColor(
-                            R.color.thumbnail_border));
+                    R.color.thumbnail_border));
         }
         if (aText != null) {
             aText.setTypeface(Typeface.create(aText.getTypeface(),
-                            Typeface.NORMAL));
+                    Typeface.NORMAL));
         }
     }
 
     private void formatSelected(ImageView aImage, TextView aText) {
         if (aImage != null) {
             aImage.setBackgroundColor(getResources().getColor(
-                            R.color.thumbnail_border_selected));
+                    R.color.thumbnail_border_selected));
         }
         if (aText != null) {
             aText.setTypeface(Typeface.create(aText.getTypeface(),
-                            Typeface.BOLD));
+                    Typeface.BOLD));
         }
     }
 
     // ----------------------------------------------------- CLICK LISTENER ----
     protected class ClickListener implements AdapterView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View v, int position,
-                        long id) {
+                long id) {
             if (mCommunicationService != null)
                 mCommunicationService.getTransmitter().gotoSlide(position);
         }
@@ -132,7 +132,7 @@ public class ThumbnailFragment extends SherlockFragment {
     // ---------------------------------------------------- MESSAGE HANDLER ----
 
     public void setCommunicationService(
-                    CommunicationService aCommunicationService) {
+            CommunicationService aCommunicationService) {
         mCommunicationService = aCommunicationService;
         mSlideShow = mCommunicationService.getSlideShow();
         if (mGrid != null) {
@@ -147,11 +147,11 @@ public class ThumbnailFragment extends SherlockFragment {
             if (mGrid == null)
                 return;
             if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_CHANGED)) {
+                    CommunicationService.MSG_SLIDE_CHANGED)) {
                 int aSlide = aIntent.getExtras().getInt("slide_number");
                 setSelected(aSlide);
             } else if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDE_PREVIEW)) {
+                    CommunicationService.MSG_SLIDE_PREVIEW)) {
                 mGrid.invalidateViews();
             }
 
@@ -188,7 +188,7 @@ public class ThumbnailFragment extends SherlockFragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater aInflater = (LayoutInflater) mContext
-                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View v = aInflater.inflate(R.layout.slide_thumbnail, null);
 
             ImageView aImage = (ImageView) v.findViewById(R.id.sub_thumbnail);
@@ -196,12 +196,12 @@ public class ThumbnailFragment extends SherlockFragment {
 
             // Do the image & number styling
             int aBorderWidth = getResources().getInteger(
-                            R.integer.thumbnail_border_width);
+                    R.integer.thumbnail_border_width);
             aImage.setPadding(aBorderWidth, aBorderWidth, aBorderWidth,
-                            aBorderWidth);
+                    aBorderWidth);
 
             if ((mSlideShow != null)
-                            && (position == mSlideShow.getCurrentSlide())) {
+                    && (position == mSlideShow.getCurrentSlide())) {
                 formatSelected(aImage, aText);
                 mCurrentImage = aImage;
                 mCurrentText = aText;
@@ -218,6 +218,16 @@ public class ThumbnailFragment extends SherlockFragment {
             if (aBitmap != null) {
                 aImage.setImageBitmap(aBitmap);
             }
+
+            aText.setText(String.valueOf(position + 1));
+
+            return v;
+        }
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+     }
 
             aText.setText(String.valueOf(position + 1));
 

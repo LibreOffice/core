@@ -15,7 +15,11 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import org.libreoffice.impressremote.Globals;
+import org.libreoffice.impressremote.communication.CommunicationService.State;
+
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * Generic Client for the remote control. To implement a Client for a specific
@@ -37,6 +41,8 @@ public abstract class Client {
 
     public abstract void closeConnection();
 
+    public abstract void validating() throws IOException;
+
     private Receiver mReceiver;
 
     protected Server mServer;
@@ -44,8 +50,7 @@ public abstract class Client {
     protected CommunicationService mCommunicationService;
 
     protected Client(Server aServer,
-                    CommunicationService aCommunicationService,
-                    Receiver aReceiver) {
+            CommunicationService aCommunicationService, Receiver aReceiver) {
         mServer = aServer;
         mName = aServer.getName();
         mCommunicationService = aCommunicationService;
@@ -71,18 +76,17 @@ public abstract class Client {
                 String aTemp;
                 // read until empty line
                 while ((aTemp = mReader.readLine()) != null
-                                && aTemp.length() != 0) {
+                        && aTemp.length() != 0) {
                     aList.add(aTemp);
                 }
                 if (aTemp == null) {
-                    mCommunicationService.connectTo(mServer);
                     Intent aIntent = new Intent(
-                                    mCommunicationService
-                                                    .getApplicationContext(),
-                                    ReconnectionActivity.class);
+                            mCommunicationService.getApplicationContext(),
+                            ReconnectionActivity.class);
+                    aIntent.putExtra("server", mServer);
                     aIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mCommunicationService.getApplicationContext()
-                                    .startActivity(aIntent);
+                            .startActivity(aIntent);
                     return;
                 }
                 mReceiver.parseCommand(aList);
@@ -122,7 +126,7 @@ public abstract class Client {
             mOutputStream.write(command.getBytes(CHARSET));
         } catch (UnsupportedEncodingException e) {
             throw new Error("Specified network encoding [" + CHARSET
-                            + " not available.");
+                    + " not available.");
         } catch (IOException e) {
             // I.e. connection closed. This will be dealt with by the listening
             // loop.

@@ -32,9 +32,8 @@ public class BluetoothClient extends Client {
     private BluetoothSocket mSocket;
 
     public BluetoothClient(Server aServer,
-                    CommunicationService aCommunicationService,
-                    Receiver aReceiver, boolean aBluetoothWasEnabled)
-                    throws IOException {
+            CommunicationService aCommunicationService, Receiver aReceiver,
+            boolean aBluetoothWasEnabled) throws IOException {
         super(aServer, aCommunicationService, aReceiver);
 
         Log.i(Globals.TAG, "BluetoothClient(" + aServer + ")");
@@ -46,7 +45,7 @@ public class BluetoothClient extends Client {
         }
 
         BluetoothDevice aDevice = mAdapter
-                        .getRemoteDevice(aServer.getAddress());
+                .getRemoteDevice(aServer.getAddress());
         mAdapter.cancelDiscovery();
 
         // This is the "standard UUID for the Serial Port Profile".
@@ -54,30 +53,10 @@ public class BluetoothClient extends Client {
         // Bluetooth BASE_UUID. See
         // https://www.bluetooth.org/Technical/AssignedNumbers/service_discovery.htm
         mSocket = aDevice.createRfcommSocketToServiceRecord(UUID
-                        .fromString("00001101-0000-1000-8000-00805F9B34FB"));
+                .fromString("00001101-0000-1000-8000-00805F9B34FB"));
 
         mSocket.connect();
         Log.i(Globals.TAG, "BluetoothClient: connected");
-
-        mInputStream = mSocket.getInputStream();
-        mReader = new BufferedReader(new InputStreamReader(mInputStream,
-                        CHARSET));
-
-        mOutputStream = mSocket.getOutputStream();
-
-        String aTemp = mReader.readLine();
-        Log.i(Globals.TAG, "BluetoothClient: got line " + aTemp);
-        if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
-            return;
-        }
-        while (mReader.readLine().length() != 0) {
-            // Get rid of extra lines
-        }
-        Intent aIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
-        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
-                        aIntent);
-        startListening();
-
     }
 
     @Override
@@ -94,6 +73,29 @@ public class BluetoothClient extends Client {
         if (!mBluetoothWasEnabled) {
             mAdapter.disable();
         }
+    }
+
+    @Override
+    public void validating() throws IOException {
+        // TODO Auto-generated method stub
+        mInputStream = mSocket.getInputStream();
+        mReader = new BufferedReader(new InputStreamReader(mInputStream,
+                CHARSET));
+
+        mOutputStream = mSocket.getOutputStream();
+
+        String aTemp = mReader.readLine();
+        Log.i(Globals.TAG, "BluetoothClient: got line " + aTemp);
+        if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
+            return;
+        }
+        while (mReader.readLine().length() != 0) {
+            // Get rid of extra lines
+        }
+        Intent aIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
+        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
+                aIntent);
+        startListening();
     }
 
 }

@@ -25,7 +25,7 @@ public class SettingsActivity extends SherlockPreferenceActivity {
 
     @Override
     public boolean onOptionsItemSelected(
-                    com.actionbarsherlock.view.MenuItem item) {
+            com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
             finish();
@@ -37,3 +37,4 @@ public class SettingsActivity extends SherlockPreferenceActivity {
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+tab: */

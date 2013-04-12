@@ -8,7 +8,10 @@
  */
 package org.libreoffice.impressremote.communication;
 
-public class Server {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Server implements Parcelable {
 
     public enum Protocol {
         NETWORK, BLUETOOTH
@@ -25,7 +28,7 @@ public class Server {
     protected boolean mNoTimeout = false;
 
     protected Server(Protocol aProtocol, String aAddress, String aName,
-                    long aTimeDiscovered) {
+            long aTimeDiscovered) {
         mProtocol = aProtocol;
         mAddress = aAddress;
         mName = aName;
@@ -42,7 +45,6 @@ public class Server {
 
     /**
      * Get a human friendly name for the server.
-     *
      * @return The name.
      */
     public String getName() {
@@ -54,7 +56,38 @@ public class Server {
     }
 
     public String toString() {
-        return getClass().getName() + '@' + Integer.toHexString(hashCode()) + ":{" + mAddress + "," + mName + "}";
+        return getClass().getName() + '@' + Integer.toHexString(hashCode())
+                + ":{" + mAddress + "," + mName + "}";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(mAddress);
+        out.writeString(mName);
+        out.writeString(mProtocol.name());
+        out.writeLong(mTimeDiscovered);
+    }
+
+    public static final Parcelable.Creator<Server> CREATOR = new Parcelable.Creator<Server>() {
+        public Server createFromParcel(Parcel in) {
+            return new Server(in);
+        }
+
+        public Server[] newArray(int size) {
+            return new Server[size];
+        }
+    };
+
+    private Server(Parcel in) {
+        mAddress = in.readString();
+        mName = in.readString();
+        mProtocol = Protocol.valueOf(in.readString());
+        mTimeDiscovered = in.readLong();
     }
 }
 

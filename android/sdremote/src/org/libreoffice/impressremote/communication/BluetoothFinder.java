@@ -37,7 +37,8 @@ public class BluetoothFinder {
     }
 
     public void startFinding() {
-        Log.i(Globals.TAG, "BluetoothFinder.startFinding(): mAdapter=" + mAdapter);
+        Log.i(Globals.TAG, "BluetoothFinder.startFinding(): mAdapter="
+                + mAdapter);
         if (mAdapter == null) {
             return; // No bluetooth adapter found (emulator, special devices)
         }
@@ -49,7 +50,8 @@ public class BluetoothFinder {
     }
 
     public void stopFinding() {
-        Log.i(Globals.TAG, "BluetoothFinder.stopFinding(): mAdapter=" + mAdapter);
+        Log.i(Globals.TAG, "BluetoothFinder.stopFinding(): mAdapter="
+                + mAdapter);
         if (mAdapter == null) {
             return; // No bluetooth adapter found (emulator, special devices)
         }
@@ -72,25 +74,28 @@ public class BluetoothFinder {
 
         @Override
         public void onReceive(Context context, Intent aIntent) {
-            Log.i(Globals.TAG, "BluetoothFinder: BroadcastReceiver.onReceive: aIntent=" + aIntent);
+            Log.i(Globals.TAG,
+                    "BluetoothFinder: BroadcastReceiver.onReceive: aIntent="
+                            + aIntent);
             if (aIntent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice aDevice = (BluetoothDevice) aIntent.getExtras()
-                                .get(BluetoothDevice.EXTRA_DEVICE);
-                Log.i(Globals.TAG, "BluetoothFinder.onReceive: found " + aDevice.getName() + " at " + aDevice.getAddress());
+                        .get(BluetoothDevice.EXTRA_DEVICE);
+                Log.i(Globals.TAG, "BluetoothFinder.onReceive: found "
+                        + aDevice.getName() + " at " + aDevice.getAddress());
                 if (aDevice.getName() == null)
                     return;
                 Server aServer = new Server(Protocol.BLUETOOTH,
-                                aDevice.getAddress(), aDevice.getName(),
-                                System.currentTimeMillis());
+                        aDevice.getAddress(), aDevice.getName(),
+                        System.currentTimeMillis());
                 mServerList.put(aServer.getAddress(), aServer);
                 Intent aNIntent = new Intent(
-                                CommunicationService.MSG_SERVERLIST_CHANGED);
+                        CommunicationService.MSG_SERVERLIST_CHANGED);
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-                                aNIntent);
+                        aNIntent);
             } else if (aIntent.getAction().equals(
-                            BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-                            || aIntent.getAction()
-                                            .equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                    BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+                    || aIntent.getAction().equals(
+                            BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 // Start discovery again after a small delay.
                 // but check whether device is on incase the user manually
                 // disabled bluetooth

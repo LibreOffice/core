@@ -38,7 +38,6 @@ public class CommunicationService extends Service implements Runnable {
     /**
      * Get the publicly visible device name -- generally the bluetooth name,
      * however for bluetoothless devices the device model name is used.
-     *
      * @return The device name.
      */
     public static String getDeviceName() {
@@ -77,6 +76,7 @@ public class CommunicationService extends Service implements Runnable {
     @Override
     public void run() {
         Log.i(Globals.TAG, "CommunicationService.run()");
+
         synchronized (this) {
             while (true) {
                 // Condition
@@ -90,8 +90,8 @@ public class CommunicationService extends Service implements Runnable {
                 Log.i(Globals.TAG, "CommunicationService.run: at \"Work\"");
                 synchronized (mConnectionVariableMutex) {
                     if ((mStateDesired == State.CONNECTED && mState == State.CONNECTED)
-                                    || (mStateDesired == State.DISCONNECTED && mState == State.CONNECTED)) {
-                        mClient.closeConnection();
+                            || (mStateDesired == State.DISCONNECTED && mState == State.CONNECTED)) {
+                        getClient().closeConnection();
                         mClient = null;
                         mState = State.DISCONNECTED;
                     }
@@ -101,36 +101,43 @@ public class CommunicationService extends Service implements Runnable {
                             switch (mServerDesired.getProtocol()) {
                             case NETWORK:
                                 mClient = new NetworkClient(mServerDesired,
-                                                this, mReceiver);
+                                        this, mReceiver);
+                                mClient.validating();
                                 break;
                             case BLUETOOTH:
                                 mClient = new BluetoothClient(mServerDesired,
-                                                this, mReceiver,
-                                                mBluetoothPreviouslyEnabled);
+                                        this, mReceiver,
+                                        mBluetoothPreviouslyEnabled);
+                                mClient.validating();
                                 break;
                             }
-                            mTransmitter = new Transmitter(mClient);
+                            mTransmitter = new Transmitter(getClient());
                             mState = State.CONNECTED;
                         } catch (IOException e) {
                             Log.i(Globals.TAG, "CommunicationService.run: " + e);
-                            mClient = null;
-                            mState = State.DISCONNECTED;
-                            Intent aIntent = new Intent(
-                                            CommunicationService.STATUS_CONNECTION_FAILED);
-                            LocalBroadcastManager.getInstance(this)
-                                            .sendBroadcast(aIntent);
+                            connextionFailed();
                         }
                     }
                 }
+                Log.i(Globals.TAG, "CommunicationService.finished work");
             }
         }
+    }
+
+    private void connextionFailed() {
+        mClient = null;
+        mState = State.DISCONNECTED;
+        Intent aIntent = new Intent(
+                CommunicationService.STATUS_CONNECTION_FAILED);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
     private boolean mBluetoothPreviouslyEnabled;
 
     public void startSearching() {
         Log.i(Globals.TAG, "CommunicationService.startSearching()");
-        SharedPreferences aPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences aPref = PreferenceManager
+                .getDefaultSharedPreferences(this);
         boolean bEnableWifi = aPref.getBoolean("option_enablewifi", false);
         if (bEnableWifi)
             mNetworkFinder.startFinding();
@@ -174,6 +181,7 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public void disconnect() {
+        Log.d(Globals.TAG, "Service Disconnected");
         synchronized (mConnectionVariableMutex) {
             mStateDesired = State.DISCONNECTED;
             synchronized (this) {
@@ -204,14 +212,12 @@ public class CommunicationService extends Service implements Runnable {
 
     /**
      * Notify the UI that the service has connected to a server AND a slideshow
-     * is running.
-     * In this case the PresentationActivity should be started.
+     * is running. In this case the PresentationActivity should be started.
      */
     public static final String STATUS_CONNECTED_SLIDESHOW_RUNNING = "STATUS_CONNECTED_SLIDESHOW_RUNNING";
     /**
      * Notify the UI that the service has connected to a server AND no slideshow
-     * is running.
-     * In this case the StartPresentationActivity should be started.
+     * is running. In this case the StartPresentationActivity should be started.
      */
     public static final String STATUS_CONNECTED_NOSLIDESHOW = "STATUS_CONNECTED_NOSLIDESHOW";
 
@@ -283,14 +289,14 @@ public class CommunicationService extends Service implements Runnable {
 
     void loadServersFromPreferences() {
         SharedPreferences aPref = getSharedPreferences(SERVERSTORAGE_KEY,
-                        MODE_PRIVATE);
+                MODE_PRIVATE);
 
         @SuppressWarnings("unchecked")
-		Map<String, String> aStoredMap = (Map<String, String>) aPref.getAll();
+        Map<String, String> aStoredMap = (Map<String, String>) aPref.getAll();
 
         for (Entry<String, String> aServerEntry : aStoredMap.entrySet()) {
-            mManualServers.put(aServerEntry.getKey(), new Server(
-                            Protocol.NETWORK, aServerEntry.getKey(),
+            mManualServers.put(aServerEntry.getKey(),
+                    new Server(Protocol.NETWORK, aServerEntry.getKey(),
                             aServerEntry.getValue(), 0));
         }
     }
@@ -306,10 +312,10 @@ public class CommunicationService extends Service implements Runnable {
                 return;
         }
         mManualServers.put(aAddress, new Server(Protocol.NETWORK, aAddress,
-                        aName, 0));
+                aName, 0));
         if (aRemember) {
             SharedPreferences aPref = getSharedPreferences(SERVERSTORAGE_KEY,
-                            MODE_PRIVATE);
+                    MODE_PRIVATE);
             Editor aEditor = aPref.edit();
             aEditor.putString(aAddress, aName);
             aEditor.apply();
@@ -321,11 +327,15 @@ public class CommunicationService extends Service implements Runnable {
         mManualServers.remove(aServer.getAddress());
 
         SharedPreferences aPref = getSharedPreferences(SERVERSTORAGE_KEY,
-                        MODE_PRIVATE);
+                MODE_PRIVATE);
         Editor aEditor = aPref.edit();
         aEditor.remove(aServer.getAddress());
         aEditor.apply();
 
+    }
+
+    public Client getClient() {
+        return mClient;
     }
 
 }

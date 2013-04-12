@@ -57,6 +57,11 @@
             android:icon="@drawable/icon_options"
             android:label="@string/options" >
         </activity>
+        <activity
+            android:name=".communication.ReconnectionActivity"
+            android:logo="@drawable/actionbar_icon_computer"
+            android:label="@string/reconnect" >
+        </activity>
     </application>
 
 </manifest>

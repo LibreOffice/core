@@ -19,7 +19,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.SparseArray;
 
-
 public class SlideShow {
 
     private SparseArray<Bitmap> mPreviews = new SparseArray<Bitmap>();
@@ -50,18 +49,17 @@ public class SlideShow {
     }
 
     protected void putImage(int aSlide, byte[] aImage) {
-        Bitmap aBitmap = BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
+        Bitmap aBitmap = BitmapFactory
+                .decodeByteArray(aImage, 0, aImage.length);
         final int borderWidth = 8;
 
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setShadowLayer(borderWidth, 0, 0, Color.BLACK);
 
         RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
-                        + aBitmap.getWidth(), borderWidth
-                        + aBitmap.getHeight());
-        Bitmap aOut = Bitmap.createBitmap(aBitmap.getWidth() + 2
-                        * borderWidth, aBitmap.getHeight() + 2
-                        * borderWidth, aBitmap.getConfig());
+                + aBitmap.getWidth(), borderWidth + aBitmap.getHeight());
+        Bitmap aOut = Bitmap.createBitmap(aBitmap.getWidth() + 2 * borderWidth,
+                aBitmap.getHeight() + 2 * borderWidth, aBitmap.getConfig());
         Canvas canvas = new Canvas(aOut);
         canvas.drawColor(mContext.getResources().getColor(R.color.light_grey));
         canvas.drawRect(aRect, p);
@@ -97,7 +95,6 @@ public class SlideShow {
     public class Timer {
         /**
          * This stores the starting time of the timer if running.
-         *
          * If paused this stores how long the timer was previously running.
          */
         private long aTime = 0;
@@ -111,7 +108,7 @@ public class SlideShow {
         /**
          * Set whether this timer should be a normal or a countdown timer.
          * @param aIsCountdown
-         *     Whether this should be a countdown timer.
+         *            Whether this should be a countdown timer.
          */
         public void setCountdown(boolean aIsCountdown) {
             mIsCountdown = aIsCountdown;
@@ -122,10 +119,10 @@ public class SlideShow {
         }
 
         /**
-         * Set the countdown time. Can be set, and isn't lost, whatever mode
-         * the timer is running in.
+         * Set the countdown time. Can be set, and isn't lost, whatever mode the
+         * timer is running in.
          * @param aCountdownTime
-         *      The countdown time.
+         *            The countdown time.
          */
         public void setCountdownTime(long aCountdownTime) {
             mCountdownTime = aCountdownTime;
