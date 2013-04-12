@@ -28,6 +28,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <editeng/numdef.hxx>
+#include <editeng/eeitem.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -177,6 +178,53 @@ SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :
     *this = rFormat;
 }
 
+SvxNumberFormat::SvxNumberFormat( SvStream &rStream, sal_uInt16 _nWhich )
+{
+    sal_uInt16 nTmp16;
+    sal_Int32  nTmp32;
+    rStream >> nTmp16; // Version number
+
+    rStream >> nTmp16; SetNumberingType( nTmp16 );
+    rStream >> nTmp16; eNumAdjust = ( SvxAdjust )nTmp16;
+    rStream >> nTmp16; nInclUpperLevels = nTmp16;
+    rStream >> nStart;
+    rStream >> nTmp16; cBullet = (sal_Unicode)nTmp16;
+
+    rStream >> nFirstLineOffset;
+    rStream >> nAbsLSpace;
+    rStream >> nLSpace;
+
+    rStream >> nCharTextDistance;
+
+    sPrefix = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
+    sSuffix = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
+    sCharStyleName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
+
+    sal_uInt16 hasGraphicBrush = 0;
+    rStream >> hasGraphicBrush;
+    pGraphicBrush = new SvxBrushItem( _nWhich );
+    if ( hasGraphicBrush )
+        pGraphicBrush->Create( rStream, BRUSH_GRAPHIC_VERSION );
+    rStream >> nTmp16; eVertOrient = nTmp16;
+
+    sal_uInt16 hasBulletFont = 0;
+    pBulletFont = new Font( );
+    rStream >> hasBulletFont;
+    if ( hasBulletFont )
+        rStream >> *pBulletFont;
+    rStream >> aGraphicSize;
+
+    rStream >> nBulletColor;
+    rStream >> nBulletRelSize;
+    rStream >> nTmp16; SetShowSymbol( nTmp16 );
+
+    rStream >> nTmp16; mePositionAndSpaceMode = ( SvxNumPositionAndSpaceMode )nTmp16;
+    rStream >> nTmp16; meLabelFollowedBy = ( LabelFollowedBy )nTmp16;
+    rStream >> nTmp32; mnListtabPos = nTmp32;
+    rStream >> nTmp32; mnFirstLineIndent = nTmp32;
+    rStream >> nTmp32; mnIndentAt = nTmp32;
+
+}
 SvxNumberFormat::~SvxNumberFormat()
 {
     delete pGraphicBrush;
@@ -251,6 +299,11 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     rStream << ( sal_Int32 ) mnIndentAt;
 
     return rStream;
+}
+
+SvxNumberFormat* SvxNumberFormat::Create( SvStream &rStream, sal_uInt16 _nWhich )
+{
+    return new SvxNumberFormat( rStream, _nWhich );
 }
 
 SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
@@ -621,7 +674,41 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
     }
 }
 
-SvStream&   SvxNumRule::Store(SvStream &rStream)
+SvxNumRule::SvxNumRule( SvStream &rStream, sal_uInt16 _nWhich )
+{
+    sal_uInt16 nTmp16;
+    rStream >> nTmp16; // NUM_ITEM_VERSION
+    rStream >> nLevelCount;
+
+    // first nFeatureFlags of old Versions
+    rStream >> nTmp16; nFeatureFlags = nTmp16;
+    rStream >> nTmp16; bContinuousNumbering = nTmp16;
+    rStream >> nTmp16; eNumberingType = ( SvxNumRuleType )nTmp16;
+
+    for (sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
+    {
+        rStream >> nTmp16;
+        sal_Bool hasNumberingFormat = nTmp16;
+        if ( hasNumberingFormat ){
+            aFmts[i] = new SvxNumberFormat( rStream, _nWhich );
+            aFmtsSet[i] = sal_True;
+        }
+        else
+        {
+            aFmts[i] = 0;
+            aFmtsSet[i] = sal_False;
+        }
+    }
+    //second nFeatureFlags for new versions
+    rStream >> nTmp16; nFeatureFlags = nTmp16;
+}
+
+SvxNumRule* SvxNumRule::Create( SvStream & rStream, sal_uInt16 _nWhich )
+{
+    return new SvxNumRule( rStream, _nWhich );
+}
+
+SvStream& SvxNumRule::Store( SvStream &rStream )
 {
     rStream<<(sal_uInt16)NUMITEM_VERSION_03;
     rStream<<nLevelCount;
@@ -656,7 +743,6 @@ SvStream&   SvxNumRule::Store(SvStream &rStream)
 
     return rStream;
 }
-
 SvxNumRule::~SvxNumRule()
 {
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
@@ -843,9 +929,10 @@ SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule, sal_uInt16 _nWhich ) :
 {
 }
 
-SfxPoolItem* SvxNumBulletItem::Create(SvStream &s, sal_uInt16 n) const
+SfxPoolItem* SvxNumBulletItem::Create(SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
 {
-    return SfxPoolItem::Create(s, n );
+    SvxNumRule aNumRule( rStream, EE_PARA_NUMBULLET );
+    return new SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET );
 }
 
 SvxNumBulletItem::SvxNumBulletItem(const SvxNumBulletItem& rCopy) :
