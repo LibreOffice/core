@@ -99,11 +99,6 @@ $(eval $(call gb_Library_use_externals,tl,\
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Library_set_include,tl,\
-    -I$(SRCDIR)/tools/win/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_system_win32_libs,tl,\
 	mpr \
 	ole32 \

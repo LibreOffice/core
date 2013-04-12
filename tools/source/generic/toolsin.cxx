@@ -21,10 +21,6 @@
 #include <string.h>
 #include <tools/debug.hxx>
 
-#if defined WNT
-#include <dll.hxx>
-#endif
-
 void InitTools()
 {
     DBG_DEBUGSTART();
@@ -38,10 +34,6 @@ void DeInitTools()
 void GlobalDeInitTools()
 {
     DBG_GLOBALDEBUGEND();
-
-#if defined WNT
-    ImpDeInitWinTools();
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
