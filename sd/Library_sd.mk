@@ -147,6 +147,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/core/sdpage2 \
     sd/source/core/sdpage_animations \
     sd/source/core/shapelist \
+    sd/source/core/slidehack \
     sd/source/core/stlfamily \
     sd/source/core/stlpool \
     sd/source/core/stlsheet \

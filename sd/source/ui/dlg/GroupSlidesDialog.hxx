@@ -51,7 +51,8 @@ private:
     CancelButton  *mpCancelBtn;
     PushButton    *mpAddBtn;
 
-    ComboBox*      mpGroupCombo;
+//    ComboBox*      mpGroupCombo;
+    Edit          *mpGroupEdit;
     std::vector< SlideHack::GroupPtr > maGroups;
     void addGroupsToCombo( ComboBox *pBox, SdDrawDocument *pDoc );
 
@@ -60,8 +61,10 @@ private:
 
     DECL_LINK( AddHdl, void* );
     DECL_LINK( CancelHdl, void* );
+#if 0
     DECL_LINK( GroupSelectHdl, void* );
     DECL_LINK( GroupDoubleClickHdl, void* );
+#endif
 
     int  endDialog( bool bSuccessSoSave );
     void populateEdits( SlideHack::GroupPtr pGroup );
