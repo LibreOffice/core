@@ -1497,18 +1497,35 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
     switch ( rFrame.GetWriterType() )
     {
         case sw::Frame::eTxtBox:
+            {
             OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");
             m_rExport.mpParentFrame = &rFrame;
+
+            m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_SHP;
+            m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST;
+
+            // Shape properties.
+            m_aFlyProperties.push_back(std::make_pair<OString, OString>("shapeType", OString::number(ESCHER_ShpInst_TextBox)));
+
             m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
             m_rExport.OutputFormat( rFrame.GetFrmFmt(), false, false, true );
             m_rExport.Strm() << m_aRunText.makeStringAndClear().getStr();
             m_rExport.Strm() << m_aStyles.makeStringAndClear().getStr();
             m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
-            m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_IGNORE;
-            m_rExport.OutputFormat( rFrame.GetFrmFmt(), false, false, true );
-            m_rExport.Strm() << m_aRunText.makeStringAndClear().getStr();
-            m_rExport.Strm() << m_aStyles.makeStringAndClear().getStr();
-            m_rExport.Strm() << '}';
+            m_pFmtFrmSize = 0;
+
+            for (size_t i = 0; i < m_aFlyProperties.size(); ++i)
+            {
+                m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_SP "{";
+                m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SN " ";
+                m_rExport.Strm() << m_aFlyProperties[i].first.getStr();
+                m_rExport.Strm() << "}{" OOO_STRING_SVTOOLS_RTF_SV " ";
+                m_rExport.Strm() << m_aFlyProperties[i].second.getStr();
+                m_rExport.Strm() << "}}";
+            }
+            m_aFlyProperties.clear();
+
+            m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_SHPTXT;
 
             {
                 /*
@@ -1542,7 +1559,13 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             }
 
             m_rExport.mpParentFrame = NULL;
+
+            m_rExport.Strm() << '}'; // shptxt
+            m_rExport.Strm() << '}'; // shpinst
+            m_rExport.Strm() << '}'; // shp
+
             m_rExport.Strm() << RtfExport::sNewLine;
+            }
             break;
         case sw::Frame::eGraphic:
             if (!rFrame.IsInline())
@@ -2629,20 +2652,7 @@ void RtfAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 
     if ( m_rExport.bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax )
     {
-        if( rSize.GetWidth() )
-        {
-            m_aRunText->append(OOO_STRING_SVTOOLS_RTF_ABSW);
-            m_aRunText->append((sal_Int32)rSize.GetWidth());
-        }
-
-        if( rSize.GetHeight() )
-        {
-            long nH = rSize.GetHeight();
-            if( ATT_FIX_SIZE == rSize.GetHeightSizeType() )
-                nH = -nH;
-            m_aRunText->append(OOO_STRING_SVTOOLS_RTF_ABSH);
-            m_aRunText->append((sal_Int32)nH);
-        }
+        m_pFmtFrmSize = &rSize;
     }
     else if (m_rExport.bOutPageDescs)
     {
@@ -2696,10 +2706,11 @@ void RtfAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
             m_aStyles.append( (sal_Int32) rLRSpace.GetTxtFirstLineOfst() );
         }
     }
-    else if (rLRSpace.GetLeft() == rLRSpace.GetRight() && m_rExport.bRTFFlySyntax)
+    else if (m_rExport.bRTFFlySyntax)
     {
-        m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_DFRMTXTX;
-        m_rExport.OutLong( rLRSpace.GetLeft() );
+        // Wrap: top and bottom spacing, convert from twips to EMUs.
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxWrapDistLeft", OString::number(rLRSpace.GetLeft() * 635)));
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxWrapDistRight", OString::number(rLRSpace.GetRight() * 635)));
     }
 }
 
@@ -2752,10 +2763,11 @@ void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
                 m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CONTEXTUALSPACE);
         }
     }
-    else if (rULSpace.GetUpper() == rULSpace.GetLower() && m_rExport.bRTFFlySyntax)
+    else if (m_rExport.bRTFFlySyntax)
     {
-        m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_DFRMTXTY;
-        m_rExport.OutLong( rULSpace.GetLower() );
+        // Wrap: top and bottom spacing, convert from twips to EMUs.
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyWrapDistTop", OString::number(rULSpace.GetUpper() * 635)));
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyWrapDistBottom", OString::number(rULSpace.GetLower() * 635)));
     }
 }
 
@@ -2784,33 +2796,37 @@ void RtfAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert 
         switch (rFlyVert.GetRelationOrient())
         {
             case text::RelOrientation::PAGE_FRAME:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PVPG);
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posrelv", OString::number(1)));
             break;
             default:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PVPARA);
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posrelv", OString::number(2)));
             break;
         }
 
-        switch (rFlyVert.GetVertOrient())
+        switch(rFlyVert.GetVertOrient())
         {
             case text::VertOrientation::TOP:
             case text::VertOrientation::LINE_TOP:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_POSYT);
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posv", OString::number(1)));
                 break;
             case text::VertOrientation::BOTTOM:
             case text::VertOrientation::LINE_BOTTOM:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_POSYB);
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posv", OString::number(3)));
                 break;
             case text::VertOrientation::CENTER:
             case text::VertOrientation::LINE_CENTER:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_POSYC);
-                break;
-            case text::VertOrientation::NONE:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_POSY);
-                m_aRunText->append((sal_Int32)rFlyVert.GetPos());
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posv", OString::number(2)));
                 break;
             default:
                 break;
+        }
+
+        m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPTOP;
+        m_rExport.OutLong(rFlyVert.GetPos());
+        if (m_pFmtFrmSize)
+        {
+            m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPBOTTOM;
+            m_rExport.OutLong(rFlyVert.GetPos() + m_pFmtFrmSize->GetHeight());
         }
     }
     else if ( !m_rExport.bRTFFlySyntax )
@@ -2830,35 +2846,37 @@ void RtfAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
         switch (rFlyHori.GetRelationOrient())
         {
             case text::RelOrientation::PAGE_FRAME:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PHPG);
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posrelh", OString::number(1)));
             break;
             default:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PHCOL);
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posrelh", OString::number(2)));
             break;
         }
 
-        const char* pS = 0;
         switch(rFlyHori.GetHoriOrient())
         {
-            case text::HoriOrientation::RIGHT:
-                pS = rFlyHori.IsPosToggle() ? OOO_STRING_SVTOOLS_RTF_POSXO : OOO_STRING_SVTOOLS_RTF_POSXR;
-                break;
             case text::HoriOrientation::LEFT:
-                pS = rFlyHori.IsPosToggle() ? OOO_STRING_SVTOOLS_RTF_POSXI : OOO_STRING_SVTOOLS_RTF_POSXL;
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posh", OString::number(1)));
                 break;
             case text::HoriOrientation::CENTER:
-                pS = OOO_STRING_SVTOOLS_RTF_POSXC;
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posh", OString::number(2)));
                 break;
-            case text::HoriOrientation::NONE:
-                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_POSX);
-                m_aRunText->append((sal_Int32)rFlyHori.GetPos());
+            case text::HoriOrientation::RIGHT:
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("posh", OString::number(3)));
                 break;
             default:
                 break;
         }
-        if (pS)
-            m_aRunText->append(pS);
-    } else if ( !m_rExport.bRTFFlySyntax )
+
+        m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPLEFT;
+        m_rExport.OutLong(rFlyHori.GetPos());
+        if (m_pFmtFrmSize)
+        {
+            m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPRIGHT;
+            m_rExport.OutLong(rFlyHori.GetPos() + m_pFmtFrmSize->GetWidth());
+        }
+    }
+    else if ( !m_rExport.bRTFFlySyntax )
     {
         RTFHoriOrient aHO( static_cast< sal_uInt16 >(rFlyHori.GetHoriOrient()),
                 static_cast< sal_uInt16 >(rFlyHori.GetRelationOrient()) );
@@ -2921,7 +2939,14 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
     sal_uInt16 nDist = rBox.GetDistance();
 
     if ( m_rExport.bRTFFlySyntax )
+    {
+        // Borders: spacing to contents, convert from twips to EMUs.
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxTextLeft", OString::number(rBox.GetDistance(BOX_LINE_LEFT) * 635)));
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyTextTop", OString::number(rBox.GetDistance(BOX_LINE_TOP) * 635)));
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxTextRight", OString::number(rBox.GetDistance(BOX_LINE_RIGHT) * 635)));
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyTextBottom", OString::number(rBox.GetDistance(BOX_LINE_BOTTOM) * 635)));
         return;
+    }
 
     if( rBox.GetTop() && rBox.GetBottom() &&
             rBox.GetLeft() && rBox.GetRight() &&
@@ -3111,6 +3136,7 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_bSingleEmptyRun(false),
     m_bInRun(false),
     m_nPostitFieldsMaxId(0),
+    m_pFmtFrmSize(0),
     m_pPrevPageDesc(0)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
