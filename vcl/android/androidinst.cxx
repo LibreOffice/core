@@ -26,16 +26,20 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#include <android/androidinst.hxx>
-#include <headless/svpdummies.hxx>
-#include <generic/gendata.hxx>
+
 #include <jni.h>
+
 #include <android/log.h>
 #include <android/looper.h>
 #include <android/bitmap.h>
+
+#include <android/androidinst.hxx>
+#include <headless/svpdummies.hxx>
+#include <generic/gendata.hxx>
 #include <osl/detail/android-bootstrap.h>
 #include <rtl/strbuf.hxx>
 #include <basebmp/scanlineformats.hxx>
+#include <touch/touch.h>
 
 #define LOGTAG "LibreOffice/androidinst"
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
@@ -552,6 +556,16 @@ Java_org_libreoffice_experimental_desktop_Desktop_scroll(JNIEnv * /* env */,
     }
     else
         LOGW("No focused frame to emit event on");
+}
+
+extern "C" void
+lo_show_keyboard()
+{
+}
+
+extern "C" void
+lo_hide_keyboard()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

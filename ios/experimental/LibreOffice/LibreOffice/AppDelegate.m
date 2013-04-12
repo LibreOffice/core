@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #include <osl/detail/ios-bootstrap.h>
+#include <touch/touch.h>
 
 #import "AppDelegate.h"
 #import "ViewController.h"
@@ -98,6 +99,20 @@ void lo_damaged(CGRect rect)
             [theView setNeedsDisplayInRect:rect];
         });
     // NSLog(@"lo_damaged: %dx%d@(%d,%d)", (int)rect.size.width, (int)rect.size.height, (int)rect.origin.x, (int)rect.origin.y);
+}
+
+void lo_show_keyboard()
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+            [theView becomeFirstResponder];
+        });
+}
+
+void lo_hide_keyboard()
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+            [theView resignFirstResponder];
+        });
 }
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

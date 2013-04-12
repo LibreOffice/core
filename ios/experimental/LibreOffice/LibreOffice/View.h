@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface View : UIView
+@interface View : UIView <UIKeyInput>
 
 - (void)drawRect:(CGRect)rect;
 - (void)tapGesture:(UIGestureRecognizer *)gestureRecognizer;

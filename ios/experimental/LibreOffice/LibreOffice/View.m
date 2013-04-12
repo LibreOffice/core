@@ -38,6 +38,29 @@
         NSLog(@"tapGesture: %@", gestureRecognizer);
 }
 
+- (void)insertText:(NSString *)text
+{
+    (void) text;
+    // Do something with the typed character
+}
+
+- (void)deleteBackward
+{
+    // Handle the delete key
+}
+
+- (BOOL)hasText
+{
+    // Return whether there's any text present
+    return YES;
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+
 @end
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:
