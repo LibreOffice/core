@@ -6,7 +6,9 @@ Communication is over a UTF-8 encoded character stream.
 TCP
 ---
 
-TODO
+More TCP-specific details on setup and initial handshake to be
+written, but the actual message protocol is the same as for Bluetooth.
+
 
 Bluetooth
 ---------
