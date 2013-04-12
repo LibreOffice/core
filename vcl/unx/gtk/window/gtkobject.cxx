@@ -178,7 +178,6 @@ gboolean GtkSalObject::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointe
 
     if( pEvent->type == GDK_BUTTON_PRESS )
     {
-        GTK_YIELD_GRAB();
         pThis->CallCallback( SALOBJ_EVENT_TOTOP, NULL );
     }
 
@@ -188,8 +187,6 @@ gboolean GtkSalObject::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointe
 gboolean GtkSalObject::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer object )
 {
     GtkSalObject* pThis = (GtkSalObject*)object;
-
-    GTK_YIELD_GRAB();
 
     pThis->CallCallback( pEvent->in ? SALOBJ_EVENT_GETFOCUS : SALOBJ_EVENT_LOSEFOCUS, NULL );
 

@@ -168,8 +168,6 @@ g_lo_action_group_perform_submenu_action (GLOActionGroup *group,
                                           const gchar    *action_name,
                                           GVariant       *state)
 {
-    GTK_YIELD_GRAB();
-
     GtkSalFrame* pFrame = group->priv->frame;
 
     if (pFrame == NULL)
@@ -241,8 +239,6 @@ g_lo_action_group_activate (GActionGroup *group,
                             const gchar  *action_name,
                             GVariant     *parameter)
 {
-    GTK_YIELD_GRAB();
-
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
     GtkSalFrame *pFrame = lo_group->priv->frame;
 

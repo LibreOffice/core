@@ -38,38 +38,20 @@ class GtkPrintWrapper;
 class GenPspGraphics;
 class GtkYieldMutex : public SalYieldMutex
 {
+    std::list<sal_uLong> aYieldStack;
+
 public:
                         GtkYieldMutex();
     virtual void        acquire();
     virtual void        release();
     virtual sal_Bool    tryToAcquire()  { return SalYieldMutex::tryToAcquire(); }
 
-    virtual int         Grab()          { return 0; };
-    virtual void        Ungrab(int )    {};
-
-    std::list<sal_uLong> aYieldStack;
 
     void ThreadsEnter();
     void ThreadsLeave();
-
-    class GtkYieldGuard
-    {
-        GtkYieldMutex*  m_pMutex;
-        int             m_nGrab;
-    public:
-        GtkYieldGuard( GtkYieldMutex* pMutex )
-                : m_pMutex( pMutex )
-        {
-            m_nGrab = m_pMutex->Grab();
-        }
-        ~GtkYieldGuard()
-        {
-            m_pMutex->Ungrab( m_nGrab );
-        }
-    };
 };
 
-#define GTK_YIELD_GRAB() GtkYieldMutex::GtkYieldGuard aLocalGtkYieldGuard( static_cast<GtkYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex()) )
+
 
 class GtkSalTimer;
 #if GTK_CHECK_VERSION(3,0,0)
