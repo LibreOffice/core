@@ -3400,7 +3400,7 @@ AC_SUBST(PRODUCTVERSION)
 # determine CPU, CPUNAME, GUI, GUIBASE, ...
 #
 LIB64="lib"
-SOLARINC=
+SOLARINC="-I${SRC_ROOT}/include"
 SDKDIR="sdk"
 
 case "$host_os" in
