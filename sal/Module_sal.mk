@@ -41,8 +41,8 @@ $(eval $(call gb_Module_add_targets,sal,\
 		Library_uwinapi) \
 	Package_inc \
 	StaticLibrary_salcpprt \
-	ZipPackage_sal_generated \
-	ZipPackage_sal_odk_headers \
+	Package_sal_generated \
+	Package_sal_odk_headers \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

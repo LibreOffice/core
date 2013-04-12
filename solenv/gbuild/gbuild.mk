@@ -331,7 +331,6 @@ include $(foreach class, \
 	CliNativeLibrary \
 	CliUnoApi \
 	Zip \
-	ZipPackage \
 	AllLangPackage \
 	Configuration \
 	HelpTarget \

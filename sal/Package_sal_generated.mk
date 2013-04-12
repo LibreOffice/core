@@ -25,8 +25,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_ZipPackage_ZipPackage,sal_generated,$(BUILDDIR)/config_$(gb_Side)))
+$(eval $(call gb_Package_Package,sal_generated,$(BUILDDIR)/config_$(gb_Side)))
 
-$(eval $(call gb_ZipPackage_add_file,sal_generated,inc/sal/typesizes.h,include/sal/typesizes.h,config_typesizes.h))
+$(eval $(call gb_Package_set_outdir,sal_generated,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,sal_generated,$(gb_Package_SDKDIRNAME)/include/sal/typesizes.h,config_typesizes.h))
 
 # vim: set noet sw=4 ts=4:

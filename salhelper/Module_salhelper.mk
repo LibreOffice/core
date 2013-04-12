@@ -30,7 +30,7 @@ $(eval $(call gb_Module_Module,salhelper))
 $(eval $(call gb_Module_add_targets,salhelper,\
 	CustomTarget_salhelper_allheaders \
 	Library_salhelper \
-	ZipPackage_salhelper_odk_headers \
+	Package_salhelper_odk_headers \
 ))
 
 $(eval $(call gb_Module_add_check_targets,salhelper,\

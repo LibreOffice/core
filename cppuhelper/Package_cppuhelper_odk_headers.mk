@@ -25,9 +25,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_ZipPackage_ZipPackage,cppuhelper_odk_headers,$(SRCDIR)/cppuhelper/inc))
+$(eval $(call gb_Package_Package,cppuhelper_odk_headers,$(SRCDIR)/cppuhelper/inc))
 
-$(eval $(call gb_ZipPackage_add_files,cppuhelper_odk_headers,inc/cppuhelper,include/cppuhelper,\
+$(eval $(call gb_Package_set_outdir,cppuhelper_odk_headers,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,cppuhelper_odk_headers,$(gb_Package_SDKDIRNAME)/include/cppuhelper,\
 	cppuhelper/cppuhelperdllapi.h \
 	cppuhelper/access_control.hxx \
 	cppuhelper/basemutex.hxx \

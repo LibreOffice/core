@@ -235,7 +235,6 @@ gb_XcuMergeTarget_get_target = $(WORKDIR)/XcuMergeTarget/$(1)
 gb_XcuResTarget_get_target = $(WORKDIR)/XcuResTarget/$(1)
 gb_Zip_get_target = $(WORKDIR)/Zip/$(1).zip
 gb_Zip_get_final_target = $(WORKDIR)/Zip/$(1).done
-gb_ZipPackage_get_target = $(WORKDIR)/ZipPackage/$(1)
 
 gb_Library__get_final_target = $(WORKDIR)/Dummy/$(1)
 

@@ -147,37 +147,37 @@ End
 
 File gid_File_Zip_Odkheaders_sal_generated
     TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "sal_generated.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+    Dir = FILELIST_SDK_DIR;
+    Name = "sal_generated.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
 File gid_File_Zip_Odkheaders_sal
     TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "sal_odk_headers.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+    Dir = FILELIST_SDK_DIR;
+    Name = "sal_odk_headers.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
 File gid_File_Zip_Odkheaders_salhelper
     TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "salhelper_odk_headers.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+    Dir = FILELIST_SDK_DIR;
+    Name = "salhelper_odk_headers.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
 File gid_File_Zip_Odkheaders_cppu
     TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "cppu_odk_headers.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+    Dir = FILELIST_SDK_DIR;
+    Name = "cppu_odk_headers.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
 File gid_File_Zip_Odkheaders_cppuhelper
     TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "cppuhelper_odk_headers.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+    Dir = FILELIST_SDK_DIR;
+    Name = "cppuhelper_odk_headers.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
 #if (!defined(WNT) && !defined( MACOSX) )

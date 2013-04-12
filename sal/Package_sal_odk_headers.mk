@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ZipPackage_ZipPackage,sal_odk_headers,$(SRCDIR)/sal/inc))
+$(eval $(call gb_Package_Package,sal_odk_headers,$(SRCDIR)/sal/inc))
 
-$(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/sal,include/sal,\
+$(eval $(call gb_Package_set_outdir,sal_odk_headers,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,sal_odk_headers,$(gb_Package_SDKDIRNAME)/include/sal,\
 	sal/alloca.h \
 	sal/ByteBufferWrapper.hxx \
 	sal/config.h \
@@ -21,11 +23,11 @@ $(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/sal,include/sal,\
 	sal/types.h \
 ))
 
-$(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/sal/detail,include/sal/detail,\
+$(eval $(call gb_Package_add_files,sal_odk_headers,$(gb_Package_SDKDIRNAME)/include/sal/detail,\
 	sal/detail/log.h \
 ))
 
-$(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/rtl,include/rtl,\
+$(eval $(call gb_Package_add_files,sal_odk_headers,$(gb_Package_SDKDIRNAME)/include/rtl,\
 	rtl/allocator.hxx \
 	rtl/alloc.h \
 	rtl/bootstrap.h \
@@ -65,7 +67,7 @@ $(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/rtl,include/rtl,\
 	rtl/uuid.h \
 ))
 
-$(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/osl,include/osl,\
+$(eval $(call gb_Package_add_files,sal_odk_headers,$(gb_Package_SDKDIRNAME)/include/osl,\
 	osl/conditn.h \
 	osl/conditn.hxx \
 	osl/diagnose.h \
@@ -100,7 +102,7 @@ $(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/osl,include/osl,\
 	osl/util.h \
 ))
 
-$(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/systools/win32,include/systools/win32,\
+$(eval $(call gb_Package_add_files,sal_odk_headers,$(gb_Package_SDKDIRNAME)/include/systools/win32,\
 	systools/win32/snprintf.h \
 ))
 

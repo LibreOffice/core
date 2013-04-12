@@ -36,7 +36,7 @@ $(call gb_CustomTarget_get_target,cppuhelper/allheaders) : \
 # updated whenever a new public header is added
 $(cppuhelper_allheaders_DIR)/cppuhelper_allheaders.hxx : \
             $(SRCDIR)/cppuhelper/CustomTarget_cppuhelper_allheaders.mk \
-			$(SRCDIR)/cppuhelper/ZipPackage_cppuhelper_odk_headers.mk \
+			$(SRCDIR)/cppuhelper/Package_cppuhelper_odk_headers.mk \
             | $(cppuhelper_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	printf '// Generated list of all cppuhelper/ includes\n' >  $@

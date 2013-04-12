@@ -25,9 +25,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_ZipPackage_ZipPackage,salhelper_odk_headers,$(SRCDIR)/salhelper/inc/salhelper))
+$(eval $(call gb_Package_Package,salhelper_odk_headers,$(SRCDIR)/salhelper/inc/salhelper))
 
-$(eval $(call gb_ZipPackage_add_files,salhelper_odk_headers,inc/salhelper,include/salhelper,\
+$(eval $(call gb_Package_set_outdir,salhelper_odk_headers,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,salhelper_odk_headers,$(gb_Package_SDKDIRNAME)/include/salhelper,\
 	salhelperdllapi.h \
 	condition.hxx \
 	dynload.hxx \

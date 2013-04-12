@@ -25,9 +25,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_ZipPackage_ZipPackage,cppu_odk_headers,$(SRCDIR)/cppu/inc))
+$(eval $(call gb_Package_Package,cppu_odk_headers,$(SRCDIR)/cppu/inc))
 
-$(eval $(call gb_ZipPackage_add_files,cppu_odk_headers,inc/com/sun/star/uno,include/com/sun/star/uno,\
+$(eval $(call gb_Package_set_outdir,cppu_odk_headers,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,cppu_odk_headers,$(gb_Package_SDKDIRNAME)/include/com/sun/star/uno,\
 	com/sun/star/uno/Any.h \
 	com/sun/star/uno/Any.hxx \
 	com/sun/star/uno/genfunc.h \
@@ -40,7 +42,7 @@ $(eval $(call gb_ZipPackage_add_files,cppu_odk_headers,inc/com/sun/star/uno,incl
 	com/sun/star/uno/Type.hxx \
 ))
 
-$(eval $(call gb_ZipPackage_add_files,cppu_odk_headers,inc/cppu,include/cppu,\
+$(eval $(call gb_Package_add_files,cppu_odk_headers,$(gb_Package_SDKDIRNAME)/include/cppu,\
 	cppu/cppudllapi.h \
 	cppu/EnvDcp.hxx \
 	cppu/Enterable.hxx \
@@ -50,19 +52,19 @@ $(eval $(call gb_ZipPackage_add_files,cppu_odk_headers,inc/cppu,include/cppu,\
 	cppu/unotype.hxx \
 ))
 
-$(eval $(call gb_ZipPackage_add_files,cppu_odk_headers,inc/cppu/helper/purpenv/,include/cppu/helper/purpenv/,\
+$(eval $(call gb_Package_add_files,cppu_odk_headers,$(gb_Package_SDKDIRNAME)/include/cppu/helper/purpenv/,\
 	cppu/helper/purpenv/Environment.hxx \
 	cppu/helper/purpenv/Mapping.hxx \
 ))
 
-$(eval $(call gb_ZipPackage_add_files,cppu_odk_headers,inc/typelib,include/typelib,\
+$(eval $(call gb_Package_add_files,cppu_odk_headers,$(gb_Package_SDKDIRNAME)/include/typelib,\
 	typelib/typeclass.h \
 	typelib/typedescription.h \
 	typelib/typedescription.hxx \
 	typelib/uik.h \
 ))
 
-$(eval $(call gb_ZipPackage_add_files,cppu_odk_headers,inc/uno,include/uno,\
+$(eval $(call gb_Package_add_files,cppu_odk_headers,$(gb_Package_SDKDIRNAME)/include/uno,\
 	uno/any2.h \
 	uno/current_context.h \
 	uno/current_context.hxx \
