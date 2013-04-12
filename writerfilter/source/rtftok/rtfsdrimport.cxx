@@ -411,6 +411,28 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if (i->first == "shadowOffsetX")
             // EMUs to points
             aShadowModel.moOffset.set(OUString::number(i->second.toDouble() / 12700) + "pt");
+        else if (i->first == "posrelh")
+        {
+            switch (i->second.toInt32())
+            {
+                case 1:
+                    rShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (i->first == "posrelv")
+        {
+            switch (i->second.toInt32())
+            {
+                case 1:
+                    rShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
+                    break;
+                default:
+                    break;
+            }
+        }
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
