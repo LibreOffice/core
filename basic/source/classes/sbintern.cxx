@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/shl.hxx>
-
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"
 #include "token.hxx"
@@ -27,13 +25,13 @@
 #include "codegen.hxx"
 #include <basic/basmgr.hxx>
 
+SbiGlobals* SbiGlobals::pGlobals = 0;
+
 SbiGlobals* GetSbData()
 {
-    SbiGlobals** pp = (SbiGlobals**) ::GetAppData( SHL_SBC );
-    SbiGlobals* p = *pp;
-    if( !p )
-        p = *pp = new SbiGlobals;
-    return p;
+    if( !SbiGlobals::pGlobals )
+        SbiGlobals::pGlobals = new SbiGlobals;
+    return SbiGlobals::pGlobals;
 }
 
 SbiGlobals::SbiGlobals()

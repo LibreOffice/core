@@ -53,7 +53,7 @@
 //25 (SHL_LNKCCH) removed
 //26 (SHL_CHANNEL) removed
 //27 (SHL_SBX) removed
-#define SHL_SBC         28
+//28 (SHL_SBC) removed
 //29 (SHL_SDB) removed
 //30 (SHL_SBA) removed
 //31 (SHL_SBA2) removed

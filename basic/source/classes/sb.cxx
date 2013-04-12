@@ -25,7 +25,6 @@
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
 #include <basic/sbx.hxx>
-#include <tools/shl.hxx>
 #include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
@@ -964,12 +963,10 @@ StarBASIC::~StarBASIC()
         RemoveFactory( GetSbData()->pFormFac );
         delete GetSbData()->pFormFac; GetSbData()->pFormFac = NULL;
 
-        SbiGlobals** pp = (SbiGlobals**) ::GetAppData( SHL_SBC );
-        SbiGlobals* p = *pp;
-        if( p )
+        if( SbiGlobals::pGlobals )
         {
-            delete p;
-            *pp = 0;
+            delete SbiGlobals::pGlobals;
+            SbiGlobals::pGlobals = 0;
         }
     }
     else if( bDocBasic )

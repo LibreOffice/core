@@ -80,6 +80,7 @@ public:
 
 struct SbiGlobals
 {
+    static SbiGlobals* pGlobals;
     SbiInstance*    pInst;          // all active runtime instances
     SbiFactory*     pSbFac;         // StarBASIC-Factory
     SbUnoFactory*   pUnoFac;        // Factory for Uno-Structs at DIM AS NEW
