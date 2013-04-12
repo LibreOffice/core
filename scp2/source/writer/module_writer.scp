@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstallLibs/writer"
+
 Module gid_Module_Prg_Wrt
     MOD_NAME_DESC(MODULE_PRG_WRT);
     ParentID = gid_Module_Prg;
@@ -44,15 +46,8 @@ Module gid_Module_Prg_Wrt_Bin
     Styles = (HIDDEN_ROOT);
     Files = (gid_File_Bin_Cde_Sagenda,gid_File_Bin_Cde_Sfax,gid_File_Bin_Cde_Slabel,
     gid_File_Bin_Cde_Sletter,gid_File_Bin_Cde_Smemo,gid_File_Bin_Cde_Svcard,
-    gid_File_Lib_Hwpreader,
-    gid_File_Lib_Swd,
-    gid_File_Lib_Swui,
-    gid_File_Lib_Msword,
-    auto_File_Lib_wpftwriter,
-    auto_File_Lib_t602filter,
+    auto_Writer_Lib_ALL,
     gid_File_Lib_Vbaswobj,
-    auto_File_Lib_writerfilter,
-    auto_File_Lib_lwpft,
     gid_File_Jar_Email, 
     gid_File_Jar_Mail, 
     gid_File_Jar_Activation,

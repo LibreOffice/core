@@ -1114,9 +1114,6 @@ STD_LIB_FILE( gid_File_Lib_Editeng, editeng)
 STD_LIB_FILE( gid_File_Lib_Msfilter, msfilter)
 
 STD_LIB_FILE( gid_File_Lib_Sw , sw)
-STD_LIB_FILE( gid_File_Lib_Swui, swui)
-
-STD_LIB_FILE( gid_File_Lib_Msword, msword )
 
 #if ! defined UNX
 File gid_File_Lib_Sysdtrans

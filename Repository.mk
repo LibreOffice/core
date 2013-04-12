@@ -243,16 +243,23 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     fwl \
 	fwm \
     lng \
-    lwpft \
     $(if $(MERGELIBS),merged) \
     sdbt \
     odbcbase \
-    t602filter \
 	$(if $(ENABLE_TELEPATHY),tubes) \
     unordf \
     unoxml \
-    wpftwriter \
-    writerfilter \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,WRITER, \
+	hwp \
+	lwpft \
+	msword \
+	swd \
+	swui \
+	t602filter \
+	wpftwriter \
+	writerfilter \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
@@ -302,7 +309,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     graphicfilter \
     guesslang \
     helplinker \
-    hwp \
     hyphen \
 	icd \
 	icg \
@@ -326,7 +332,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     mozab2 \
     mozabdrv \
     msfilter \
-    msword \
 	mysql \
     odfflatxml \
     offacc \
@@ -368,8 +373,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     svx \
     svxcore \
     sw \
-    swd \
-    swui \
 	tdeab1 \
 	tdeabdrv1 \
     textconversiondlgs \

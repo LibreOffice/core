@@ -27,10 +27,6 @@
 
 #include "macros.inc"
 
-STD_LIB_FILE(gid_File_Lib_Swd, swd)
-
-STD_LIB_FILE(gid_File_Lib_Hwpreader, hwp)
-
 File gid_File_Exe_Swriter
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
