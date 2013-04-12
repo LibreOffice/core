@@ -32,14 +32,11 @@
 struct SfxFormalArgument;
 struct SfxInterface_Impl;
 class  SfxConfigItem;
-class  SfxIFConfig_Impl;
-class  SfxObjectUIArr_Impl ;
 class  SfxModule;
 class  SvStream;
 
 class SFX2_DLLPUBLIC SfxInterface
 {
-friend class SfxIFConfig_Impl;
 friend class SfxSlotPool;
 
     const char*             pName;          // Sfx-internal name of interface
@@ -122,20 +119,6 @@ inline SfxSlot* SfxInterface::operator[]( sal_uInt16 nPos ) const
 {
     return nPos < nCount? pSlots+nPos: 0;
 }
-
-class SfxIFConfig_Impl
-{
-friend class SfxInterface;
-    sal_uInt16                  nCount;
-    SfxObjectUIArr_Impl*    pObjectBars;
-
-public:
-                    SfxIFConfig_Impl();
-                    ~SfxIFConfig_Impl();
-    sal_Bool            Store(SvStream&);
-    void            RegisterObjectBar( sal_uInt16, const ResId&, sal_uInt32 nFeature, const String* pST=0 );
-    sal_uInt16          GetType();
-};
 
 #endif
 

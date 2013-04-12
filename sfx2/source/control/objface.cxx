@@ -77,16 +77,16 @@ struct SfxObjectUI_Impl
     }
 };
 
-DECL_PTRARRAY(SfxObjectUIArr_Impl, SfxObjectUI_Impl*, 2, 2)
+typedef std::vector<SfxObjectUI_Impl*> SfxObjectUIArr_Impl;
 
 struct SfxInterface_Impl
 {
-    SfxObjectUIArr_Impl*    pObjectBars;    // registered ObjectBars
-    SfxObjectUIArr_Impl*    pChildWindows;  // registered ChildWindows
+    SfxObjectUIArr_Impl     aObjectBars;    // registered ObjectBars
+    SfxObjectUIArr_Impl     aChildWindows;  // registered ChildWindows
     ResId                   aPopupRes;      // registered PopupMenu
     ResId                   aStatBarRes;    // registered StatusBar
     SfxModule*              pModule;
-    sal_Bool                    bRegistered;
+    sal_Bool                bRegistered;
 
     SfxInterface_Impl() :
         aPopupRes(0,*SfxApplication::GetOrCreate()->GetSfxResManager()),
@@ -94,20 +94,15 @@ struct SfxInterface_Impl
     , pModule(NULL)
     , bRegistered(sal_False)
     {
-        pObjectBars   = new SfxObjectUIArr_Impl;
-        pChildWindows = new SfxObjectUIArr_Impl;
     }
 
     ~SfxInterface_Impl()
     {
-        sal_uInt16 n;
-        for (n=0; n<pObjectBars->Count(); n++)
-            delete (*pObjectBars)[n];
-        delete pObjectBars;
+        for (SfxObjectUIArr_Impl::const_iterator it = aObjectBars.begin(); it != aObjectBars.end(); ++it)
+            delete *it;
 
-        for (n=0; n<pChildWindows->Count(); n++)
-            delete (*pChildWindows)[n];
-        delete pChildWindows;
+        for (SfxObjectUIArr_Impl::const_iterator it = aChildWindows.begin(); it != aChildWindows.end(); ++it)
+            delete *it;
     }
 };
 
@@ -404,7 +399,7 @@ void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId, sal_
 {
     SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr );
     if ( pUI )
-        pImpData->pObjectBars->Append(pUI);
+        pImpData->aObjectBars.push_back(pUI);
 }
 
 SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const String *pStr )
@@ -447,10 +442,10 @@ const ResId& SfxInterface::GetObjectBarResId( sal_uInt16 nNo ) const
     }
 
 #ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->pObjectBars->Count();
+    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
-    return (*pImpData->pObjectBars)[nNo]->aResId;
+    return pImpData->aObjectBars[nNo]->aResId;
 }
 
 //--------------------------------------------------------------------
@@ -471,10 +466,10 @@ sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
     }
 
 #ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->pObjectBars->Count();
+    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
-    return (*pImpData->pObjectBars)[nNo]->nPos;
+    return pImpData->aObjectBars[nNo]->nPos;
 }
 
 //--------------------------------------------------------------------
@@ -483,9 +478,9 @@ sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
 sal_uInt16 SfxInterface::GetObjectBarCount() const
 {
     if (pGenoType && ! pGenoType->HasName())
-        return pImpData->pObjectBars->Count() + pGenoType->GetObjectBarCount();
+        return pImpData->aObjectBars.size() + pGenoType->GetObjectBarCount();
     else
-        return pImpData->pObjectBars->Count();
+        return pImpData->aObjectBars.size();
 }
 
 //--------------------------------------------------------------------
@@ -498,7 +493,7 @@ void SfxInterface::RegisterChildWindow(sal_uInt16 nId, sal_Bool bContext, sal_uI
 {
     SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, ResId(nId, *SfxApplication::GetOrCreate()->GetOffResManager_Impl()), sal_True, nFeature);
     pUI->bContext = bContext;
-    pImpData->pChildWindows->Append(pUI);
+    pImpData->aChildWindows.push_back(pUI);
 }
 
 void SfxInterface::RegisterStatusBar(const ResId& rResId)
@@ -521,11 +516,11 @@ sal_uInt32 SfxInterface::GetChildWindowId (sal_uInt16 nNo) const
     }
 
 #ifdef DBG_UTIL
-    sal_uInt16 nCWCount = pImpData->pChildWindows->Count();
+    sal_uInt16 nCWCount = pImpData->aChildWindows.size();
     DBG_ASSERT( nNo<nCWCount,"ChildWindow is unknown!" );
 #endif
-    sal_uInt32 nRet = (*pImpData->pChildWindows)[nNo]->aResId.GetId();
-    if ( (*pImpData->pChildWindows)[nNo]->bContext )
+    sal_uInt32 nRet = pImpData->aChildWindows[nNo]->aResId.GetId();
+    if ( pImpData->aChildWindows[nNo]->bContext )
         nRet += sal_uInt32( nClassId ) << 16;
     return nRet;
 }
@@ -544,10 +539,10 @@ sal_uInt32 SfxInterface::GetChildWindowFeature (sal_uInt16 nNo) const
     }
 
 #ifdef DBG_UTIL
-    sal_uInt16 nCWCount = pImpData->pChildWindows->Count();
+    sal_uInt16 nCWCount = pImpData->aChildWindows.size();
     DBG_ASSERT( nNo<nCWCount,"ChildWindow is unknown!" );
 #endif
-    return (*pImpData->pChildWindows)[nNo]->nFeature;
+    return pImpData->aChildWindows[nNo]->nFeature;
 }
 
 //--------------------------------------------------------------------
@@ -556,9 +551,9 @@ sal_uInt32 SfxInterface::GetChildWindowFeature (sal_uInt16 nNo) const
 sal_uInt16 SfxInterface::GetChildWindowCount() const
 {
     if (pGenoType)
-        return pImpData->pChildWindows->Count() + pGenoType->GetChildWindowCount();
+        return pImpData->aChildWindows.size() + pGenoType->GetChildWindowCount();
     else
-        return pImpData->pChildWindows->Count();
+        return pImpData->aChildWindows.size();
 }
 
 
@@ -593,10 +588,10 @@ const String* SfxInterface::GetObjectBarName ( sal_uInt16 nNo ) const
     }
 
 #ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->pObjectBars->Count();
+    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
-    return (*pImpData->pObjectBars)[nNo]->pName;
+    return pImpData->aObjectBars[nNo]->pName;
 }
 
 sal_uInt32 SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
@@ -614,10 +609,10 @@ sal_uInt32 SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
     }
 
 #ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->pObjectBars->Count();
+    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
-    return (*pImpData->pObjectBars)[nNo]->nFeature;
+    return pImpData->aObjectBars[nNo]->nFeature;
 }
 
 sal_Bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
@@ -635,10 +630,10 @@ sal_Bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
     }
 
 #ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->pObjectBars->Count();
+    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
     DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
-    return (*pImpData->pObjectBars)[nNo]->bVisible;
+    return pImpData->aObjectBars[nNo]->bVisible;
 }
 
 const SfxInterface* SfxInterface::GetRealInterfaceForSlot( const SfxSlot *pRealSlot ) const
