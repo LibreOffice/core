@@ -63,6 +63,8 @@ public class SelectorActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selector);
 
+        if (mCommunicationService != null)
+            mCommunicationService.disconnect();
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_SERVERLIST_CHANGED);
         aFilter.addAction(CommunicationService.STATUS_CONNECTION_FAILED);
@@ -223,26 +225,50 @@ public class SelectorActivity extends SherlockActivity {
                 if (mProgressDialog != null) {
                     mProgressDialog.dismiss();
 
-                    String aFormat = getResources().getString(
-                                    R.string.selector_dialog_connectionfailed);
-                    String aDialogText = MessageFormat.format(aFormat,
-                                    mCommunicationService
-                                                    .getPairingDeviceName());
+                    if (mCommunicationService != null) {
+                        String aFormat = getResources().getString(
+                                R.string.selector_dialog_connectionfailed);
+                        String aDialogText = MessageFormat.format(aFormat,
+                                mCommunicationService.getPairingDeviceName());
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(
-                                    SelectorActivity.this);
-                    builder.setMessage(aDialogText)
-                                    .setCancelable(false)
-                                    .setPositiveButton(
-                                                    R.string.selector_dialog_connectionfailed_ok,
-                                                    new DialogInterface.OnClickListener() {
-                                                        public void onClick(
-                                                                        DialogInterface dialog,
-                                                                        int id) {
-                                                            dialog.dismiss();
-                                                        }
-                                                    });
-                    builder.show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(
+                                SelectorActivity.this);
+                        builder.setMessage(aDialogText)
+                                .setCancelable(false)
+                                .setNeutralButton(R.string.help,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int id) {
+                                                dialog.dismiss();
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(
+                                                        SelectorActivity.this);
+                                                builder.setMessage(
+                                                        R.string.ConnectionFailedHelp)
+                                                        .setCancelable(false)
+                                                        .setPositiveButton(
+                                                                R.string.selector_dialog_connectionfailed_ok,
+                                                                new DialogInterface.OnClickListener() {
+                                                                    public void onClick(
+                                                                            DialogInterface dialog,
+                                                                            int id) {
+                                                                        dialog.dismiss();
+                                                                    }
+                                                                });
+                                                builder.show();
+                                            }
+                                        })
+                                .setPositiveButton(
+                                        R.string.selector_dialog_connectionfailed_ok,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int id) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                        builder.show();
+                    }
                 }
             }
             mBroadcastProcessor.onReceive(aContext, aIntent);

@@ -15,7 +15,11 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import org.libreoffice.impressremote.Globals;
+import org.libreoffice.impressremote.communication.CommunicationService.State;
+
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * Generic Client for the remote control. To implement a Client for a specific
@@ -37,6 +41,7 @@ public abstract class Client {
 
     public abstract void closeConnection();
 
+    public abstract void validating() throws IOException;
     private Receiver mReceiver;
 
     protected Server mServer;
@@ -75,11 +80,11 @@ public abstract class Client {
                     aList.add(aTemp);
                 }
                 if (aTemp == null) {
-                    mCommunicationService.connectTo(mServer);
                     Intent aIntent = new Intent(
                                     mCommunicationService
                                                     .getApplicationContext(),
                                     ReconnectionActivity.class);
+                    aIntent.putExtra("server", mServer);
                     aIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mCommunicationService.getApplicationContext()
                                     .startActivity(aIntent);

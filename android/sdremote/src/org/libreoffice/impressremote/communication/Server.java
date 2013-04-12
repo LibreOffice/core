@@ -8,7 +8,10 @@
  */
 package org.libreoffice.impressremote.communication;
 
-public class Server {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Server implements Parcelable {
 
     public enum Protocol {
         NETWORK, BLUETOOTH
@@ -55,6 +58,36 @@ public class Server {
 
     public String toString() {
         return getClass().getName() + '@' + Integer.toHexString(hashCode()) + ":{" + mAddress + "," + mName + "}";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(mAddress);
+        out.writeString(mName);
+        out.writeString(mProtocol.name());
+        out.writeLong(mTimeDiscovered);
+    }
+
+    public static final Parcelable.Creator<Server> CREATOR = new Parcelable.Creator<Server>() {
+        public Server createFromParcel(Parcel in) {
+            return new Server(in);
+        }
+
+        public Server[] newArray(int size) {
+            return new Server[size];
+        }
+    };
+
+    private Server(Parcel in) {
+        mAddress = in.readString();
+        mName = in.readString();
+        mProtocol = Protocol.valueOf(in.readString());
+        mTimeDiscovered = in.readLong();
     }
 }
 

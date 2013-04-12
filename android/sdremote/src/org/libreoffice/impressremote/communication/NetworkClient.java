@@ -31,73 +31,38 @@ public class NetworkClient extends Client {
     private static final int PORT = 1599;
 
     private Socket mSocket;
+    private Intent mIntent;
+    private String mPin;
+    private Server mServer;
 
     public NetworkClient(Server aServer,
-                    CommunicationService aCommunicationService,
-                    Receiver aReceiver) throws UnknownHostException,
-                    IOException {
+            CommunicationService aCommunicationService, Receiver aReceiver)
+            throws UnknownHostException, IOException {
         super(aServer, aCommunicationService, aReceiver);
-        mSocket = new Socket(aServer.getAddress(), PORT);
+        mServer = aServer;
+        mSocket = new Socket(mServer.getAddress(), PORT);
         mInputStream = mSocket.getInputStream();
         mReader = new BufferedReader(new InputStreamReader(mInputStream,
-                        CHARSET));
+                CHARSET));
         mOutputStream = mSocket.getOutputStream();
+
         // Pairing.
-        String aPin = setupPin(aServer);
-        Intent aIntent = new Intent(CommunicationService.MSG_PAIRING_STARTED);
-        aIntent.putExtra("PIN", aPin);
-        mPin = aPin;
+        mPin = setupPin(mServer);
+        mIntent = new Intent(CommunicationService.MSG_PAIRING_STARTED);
+        mIntent.putExtra("PIN", mPin);
         LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
-                        aIntent);
+                mIntent);
         // Send out
-        String aName = CommunicationService.getDeviceName(); // TODO: get the proper name
-        sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin + "\n\n");
-
-        // Wait until we get the appropriate string back...
-        String aTemp = mReader.readLine();
-
-        if (aTemp == null) {
-            throw new IOException(
-                            "End of stream reached before any data received.");
-        }
-
-        while (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
-            if (aTemp.equals("LO_SERVER_VALIDATING_PIN")) {
-                // Broadcast that we need a pin screen.
-                aIntent = new Intent(
-                                CommunicationService.STATUS_PAIRING_PINVALIDATION);
-                aIntent.putExtra("PIN", aPin);
-                aIntent.putExtra("SERVERNAME", aServer.getName());
-                mPin = aPin;
-                LocalBroadcastManager.getInstance(mCommunicationService)
-                                .sendBroadcast(aIntent);
-                while (mReader.readLine().length() != 0) {
-                    // Read off empty lines
-                }
-                aTemp = mReader.readLine();
-            } else {
-                return;
-            }
-        }
-
-        aIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
-        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
-                        aIntent);
-
-        while (mReader.readLine().length() != 0) {
-            // Get rid of extra lines
-            Log.i(Globals.TAG, "NetworkClient: extra line");
-        }
-        Log.i(Globals.TAG, "NetworkClient: calling startListening");
-        startListening();
-
+        String aName = CommunicationService.getDeviceName(); // TODO: get the
+                                                             // proper name
+        sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + mPin + "\n\n");
     }
 
     private String setupPin(Server aServer) {
         // Get settings
         SharedPreferences aPreferences = mCommunicationService
-                        .getSharedPreferences("sdremote_authorisedremotes",
-                                        android.content.Context.MODE_PRIVATE);
+                .getSharedPreferences("sdremote_authorisedremotes",
+                        android.content.Context.MODE_PRIVATE);
         if (aPreferences.contains(aServer.getName())) {
             return aPreferences.getString(aServer.getName(), "");
         } else {
@@ -132,6 +97,46 @@ public class NetworkClient extends Client {
         }
     }
 
+    @Override
+    public void validating() throws IOException {
+
+        // Wait until we get the appropriate string back...
+        String aTemp = mReader.readLine();
+
+        if (aTemp == null) {
+            throw new IOException(
+                    "End of stream reached before any data received.");
+        }
+
+        while (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
+            if (aTemp.equals("LO_SERVER_VALIDATING_PIN")) {
+                // Broadcast that we need a pin screen.
+                mIntent = new Intent(
+                        CommunicationService.STATUS_PAIRING_PINVALIDATION);
+                mIntent.putExtra("PIN", mPin);
+                mIntent.putExtra("SERVERNAME", mServer.getName());
+                LocalBroadcastManager.getInstance(mCommunicationService)
+                        .sendBroadcast(mIntent);
+                while (mReader.readLine().length() != 0) {
+                    // Read off empty lines
+                }
+                aTemp = mReader.readLine();
+            } else {
+                return;
+            }
+        }
+
+        mIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
+        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
+                mIntent);
+
+        while (mReader.readLine().length() != 0) {
+            // Get rid of extra lines
+            Log.i(Globals.TAG, "NetworkClient: extra line");
+        }
+        Log.i(Globals.TAG, "NetworkClient: calling startListening");
+        startListening();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

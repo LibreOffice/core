@@ -10,18 +10,25 @@ package org.libreoffice.impressremote;
 
 import java.text.MessageFormat;
 
+import org.libreoffice.impressremote.communication.CommunicationService;
+import org.libreoffice.impressremote.communication.CommunicationService.State;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 public class PairingActivity extends SherlockActivity {
     private ActivityChangeBroadcastProcessor mBroadcastProcessor;
+    private CommunicationService mCommunicationService;
 
     /** Called when the activity is first created. */
     @Override
@@ -29,8 +36,8 @@ public class PairingActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_pairing);
-
-        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+        bindService(new Intent(this, CommunicationService.class), mConnection,
+                Context.BIND_IMPORTANT);
 
         IntentFilter aFilter = new IntentFilter();
 
@@ -55,6 +62,22 @@ public class PairingActivity extends SherlockActivity {
         getSupportActionBar().setTitle(aServerName);
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        unbindService(mConnection);
+    }
+
+    @Override
+    public void onBackPressed() {
+        mCommunicationService.getClient().closeConnection();
+
+        Intent aIntent = new Intent(this, SelectorActivity.class);
+        aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(aIntent);
+    }
+
+
     private BroadcastReceiver mListener = new BroadcastReceiver() {
 
         @Override
@@ -63,6 +86,32 @@ public class PairingActivity extends SherlockActivity {
         }
     };
 
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName aClassName,
+                IBinder aService) {
+            mCommunicationService = ((CommunicationService.CBinder) aService)
+                    .getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName aClassName) {
+            mCommunicationService = null;
+        }
+    };
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
