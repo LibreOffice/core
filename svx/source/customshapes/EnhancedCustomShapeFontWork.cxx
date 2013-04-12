@@ -579,8 +579,9 @@ void InsertMissingOutlinePoints( const Polygon& /*rOutlinePoly*/, const std::vec
             else if ( fDistance < fLastDistance )
             {
                 std::vector< double >::const_iterator aIter = std::lower_bound( rDistances.begin(), rDistances.end(), fLastDistance );
-                if  ( aIter-- != rDistances.begin() )
+                if  ( aIter != rDistances.begin() )
                 {
+                    --aIter;
                     if ( ( *aIter > fDistance ) && ( *aIter < fLastDistance ) )
                     {
                         Point& rPt0 = rPoly[ i - 1 ];
