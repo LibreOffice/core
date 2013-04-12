@@ -126,9 +126,10 @@ public class FormatValueUtility
         }
         else if (value instanceof java.sql.Date)
         {
-            if ("float".equals(valueType))//@see http://qa.openoffice.org/issues/show_bug.cgi?id=108954
+            if ("float".equals(valueType) || valueType == null)
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, HSSFDateUtil.getExcelDate((Date) value, false, 2).toString());
+                // This is to work around fdo#63478
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, HSSFDateUtil.getExcelDate((Date) value, false, 0).toString());
             }
             else
             {
@@ -137,8 +138,12 @@ public class FormatValueUtility
         }
         else if (value instanceof Date)
         {
+            // This is what we *should* do, but see fdo#63478
+            // variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "date");
+            // variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
+            // so we do that instead to work around:
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, HSSFDateUtil.getExcelDate((Date) value, false, 2).toString());
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, HSSFDateUtil.getExcelDate((Date) value, false, 0).toString());
         }
         else if (value instanceof BigDecimal)
         {
