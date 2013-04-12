@@ -64,6 +64,7 @@ static void * load(void * address, char const * symbol) {
     h = dlopen(libname, RTLD_NOW | RTLD_GLOBAL);
     free(libname);
     if (h == NULL) {
+        fprintf(stderr, "failed to load pyuno: '%s'\n", dlerror());
         abort();
     }
     func = dlsym(h, symbol);
