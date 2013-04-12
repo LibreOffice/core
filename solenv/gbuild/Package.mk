@@ -87,6 +87,7 @@ gb_Package_OUTDIR_$(1) := $(OUTDIR)
 $(call gb_Package_get_target,$(1)) : FILES :=
 $(call gb_Package_get_clean_target,$(1)) : FILES := $(call gb_Package_get_target,$(1)) $(call gb_Package_get_preparation_target,$(1))
 $(call gb_Package_get_target,$(1)) : $(call gb_Package_get_preparation_target,$(1))
+$(call gb_Package_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 $(call gb_Package_get_target,$(1)) :| $(dir $(call gb_Package_get_target,$(1))).dir
 
 endef
