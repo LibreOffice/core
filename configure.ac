@@ -2929,7 +2929,7 @@ dnl  Test the gcc version
 dnl ===================================================================
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([the GCC version])
-    _gcc_version=`$CC -dumpversion`
+    _gcc_version=`$CC --version|head -n1|sed 's/^.* //g'`
     _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
     GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
