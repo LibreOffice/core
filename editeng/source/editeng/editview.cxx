@@ -68,18 +68,17 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::linguistic2;
 
 
 DBG_NAME( EditView )
 
 
-// From SW => Create common method
-static LanguageType lcl_CheckLanguage(
-    const OUString &rText,
-    Reference< XSpellChecker1 > xSpell,
-    Reference< linguistic2::XLanguageGuessing > xLangGuess,
-    sal_Bool bIsParaText )
+// static
+LanguageType EditView::CheckLanguage(
+        const OUString &rText,
+        Reference< linguistic2::XSpellChecker1 > xSpell,
+        Reference< linguistic2::XLanguageGuessing > xLangGuess,
+        bool bIsParaText )
 {
     LanguageType nLang = LANGUAGE_NONE;
     if (bIsParaText)    // check longer texts with language-guessing...
@@ -889,7 +888,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
     aPos = pImpEditView->GetDocPos( aPos );
     EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
-    Reference< XSpellChecker1 >  xSpeller( PIMPEE->GetSpeller() );
+    Reference< linguistic2::XSpellChecker1 >  xSpeller( PIMPEE->GetSpeller() );
     ESelection aOldSel = GetSelection();
     if ( xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, sal_True ) )
     {
@@ -920,10 +919,10 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         rVal.Value <<= (sal_Int16) 7;
         //
         // Are there any replace suggestions?
-        Reference< XSpellAlternatives >  xSpellAlt =
+        Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
                 xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), aPropVals );
 
-        Reference< XLanguageGuessing >  xLangGuesser( EE_DLL().GetGlobalData()->GetLanguageGuesser() );
+        Reference< linguistic2::XLanguageGuessing >  xLangGuesser( EE_DLL().GetGlobalData()->GetLanguageGuesser() );
 
         // check if text might belong to a different language...
         LanguageType nGuessLangWord = LANGUAGE_NONE;
@@ -941,8 +940,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 OSL_FAIL( "content node is NULL" );
             }
 
-            nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), xSpeller, xLangGuesser, sal_False );
-            nGuessLangPara = lcl_CheckLanguage( aParaText, xSpeller, xLangGuesser, sal_True );
+            nGuessLangWord = CheckLanguage( xSpellAlt->getWord(), xSpeller, xLangGuesser, false );
+            nGuessLangPara = CheckLanguage( aParaText, xSpeller, xLangGuesser, true );
         }
         if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
         {
@@ -993,11 +992,11 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
         SvtLinguConfig aCfg;
 
-        Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
-        Sequence< Reference< XDictionary >  > aDics;
+        Reference< linguistic2::XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+        Sequence< Reference< linguistic2::XDictionary >  > aDics;
         if (xDicList.is())
         {
-            const Reference< XDictionary >  *pDic = NULL;
+            const Reference< linguistic2::XDictionary >  *pDic = NULL;
             // add the default positive dictionary to dic-list (if not already done).
             // This is to ensure that there is at least one dictionary to which
             // words could be added.

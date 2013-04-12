@@ -60,7 +60,12 @@ namespace sun {
 namespace star {
 namespace datatransfer {
     class XTransferable;
-}}}}
+}
+namespace linguistic2 {
+    class XSpellChecker1;
+    class XLanguageGuessing;
+}
+}}}
 
 class EDITENG_DLLPUBLIC EditView
 {
@@ -215,6 +220,26 @@ public:
 
     String          GetSurroundingText() const;
     Selection       GetSurroundingTextSelection() const;
+
+    /** Tries to determine the language of 'rText', returning a matching known
+        locale if possible, or a fallback, or LANGUAGE_NONE if nothing found or
+        matched.
+
+        @param bIsParaText
+                If TRUE, rText is a paragraph and the language is obtained by
+                passing the text to xLangGuess.
+                IF FALSE, a language match is tried for, in order,
+                    1. the default document language (non-CTL, non-CJK, aka LATIN)
+                    2. the UI language (Tools->Options->LanguageSettings->Languages User Interface)
+                    3. the locale (Tools->Options->LanguageSettings->Languages Locale)
+                    4. en-US
+                    If nothing matched, LANGUAGE_NONE is returned.
+    */
+    static LanguageType CheckLanguage(
+                            const OUString &rText,
+                            com::sun::star::uno::Reference< com::sun::star::linguistic2::XSpellChecker1 > xSpell,
+                            com::sun::star::uno::Reference< com::sun::star::linguistic2::XLanguageGuessing > xLangGuess,
+                            bool bIsParaText );
 };
 
 #endif // _MyEDITVIEW_HXX
