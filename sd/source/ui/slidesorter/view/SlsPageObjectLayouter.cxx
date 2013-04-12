@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "view/SlsPageObjectLayouter.hxx"
 
 #include "model/SlsPageDescriptor.hxx"
@@ -92,15 +91,9 @@ PageObjectLayouter::PageObjectLayouter (
         aIconSize);
 }
 
-
-
-
 PageObjectLayouter::~PageObjectLayouter(void)
 {
 }
-
-
-
 
 Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     Size& rPageObjectSize,
@@ -273,11 +266,10 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
     return aSize;
 }
 
-
-
-
-
-
+Image PageObjectLayouter::GetTransitionEffectIcon (void) const
+{
+    return maTransitionEffectIcon;
+}
 
 } } } // end of namespace ::sd::slidesorter::view
 

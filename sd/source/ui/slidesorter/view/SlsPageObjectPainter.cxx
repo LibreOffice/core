@@ -64,14 +64,9 @@ PageObjectPainter::PageObjectPainter (
     mpFocusBorderPainter->AdaptColor(aColor, true);
 }
 
-
-
 PageObjectPainter::~PageObjectPainter (void)
 {
 }
-
-
-
 
 void PageObjectPainter::PaintPageObject (
     OutputDevice& rDevice,
@@ -111,9 +106,6 @@ bool PageObjectPainter::UpdatePageObjectLayouter (void)
         return true;
 }
 
-
-
-
 void PageObjectPainter::NotifyResize (const bool bForce)
 {
     mpPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
@@ -131,9 +123,6 @@ void PageObjectPainter::NotifyResize (const bool bForce)
         }
     }
 }
-
-
-
 
 void PageObjectPainter::InvalidateBitmaps (void)
 {
@@ -186,9 +175,6 @@ void PageObjectPainter::PaintBackground (
     }
 }
 
-
-
-
 void PageObjectPainter::PaintPreview (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
@@ -213,9 +199,6 @@ void PageObjectPainter::PaintPreview (
         }
     }
 }
-
-
-
 
 Bitmap PageObjectPainter::CreateMarkedPreview (
     const Size& rSize,
@@ -243,9 +226,6 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
     }
     return pDevice->GetBitmap(Point(0,0), rSize);
 }
-
-
-
 
 Bitmap PageObjectPainter::GetPreviewBitmap (
     const model::SharedPageDescriptor& rpDescriptor,
@@ -277,9 +257,6 @@ Bitmap PageObjectPainter::GetPreviewBitmap (
         return mpCache->GetPreviewBitmap(pPage,false);
     }
 }
-
-
-
 
 void PageObjectPainter::PaintPageNumber (
     OutputDevice& rDevice,
@@ -332,9 +309,6 @@ void PageObjectPainter::PaintPageNumber (
     rDevice.SetTextColor(aPageNumberColor);
     rDevice.DrawText(aBox, sPageNumber, TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
 }
-
-
-
 
 void PageObjectPainter::PaintTransitionEffect (
     OutputDevice& rDevice,
@@ -571,8 +545,6 @@ void PageObjectPainter::PaintBorder (
             Point(rBox.Right()+nDelta, rBox.Top()-nDelta));
     }
 }
-
-
 
 } } } // end of namespace sd::slidesorter::view
 
