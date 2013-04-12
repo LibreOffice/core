@@ -25,9 +25,11 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/metric.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
