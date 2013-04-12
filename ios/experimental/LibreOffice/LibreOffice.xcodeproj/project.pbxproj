@@ -76,6 +76,7 @@
 		BEBF3E3C17002D4C00C454AC /* frame.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = frame.cxx; path = ../../../../framework/source/services/frame.cxx; sourceTree = "<group>"; };
 		BEBF3E3D17002D6900C454AC /* window.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cxx; path = ../../../../vcl/source/window/window.cxx; sourceTree = "<group>"; };
 		BEBF3E3E17005E6B00C454AC /* frmload.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = frmload.cxx; path = ../../../../sfx2/source/view/frmload.cxx; sourceTree = "<group>"; };
+		BECB749617181C92001BEB85 /* crsrsh.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crsrsh.cxx; path = ../../../../sw/source/core/crsr/crsrsh.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,8 +195,7 @@
 		BE5A225F1664F87600CF01C9 /* LibreOffice */ = {
 			isa = PBXGroup;
 			children = (
-				BE5A22681664F87600CF01C9 /* AppDelegate.h */,
-				BE5A22691664F87600CF01C9 /* AppDelegate.m */,
+				BECB749817182B8B001BEB85 /* LibreOffice */,
 				BE5C525A170EB9D000F33F89 /* bridges */,
 				BE2F0A1017077B560060FE0D /* basebmp */,
 				BE2F0A0B17077A0F0060FE0D /* cppuhelper */,
@@ -203,12 +203,9 @@
 				BE56CD651704A08E00CA5B15 /* lo.h */,
 				BE56CD661704A08E00CA5B15 /* lo.mm */,
 				BE2F0A0F17077B060060FE0D /* sfx2 */,
+				BECB749717182B5F001BEB85 /* sw */,
 				BE2F0A11170780620060FE0D /* unoidl */,
 				BE2F0A0D17077A950060FE0D /* vcl */,
-				BE08805B16FDB784000CED5C /* View.h */,
-				BE08805C16FDB784000CED5C /* View.m */,
-				BE7B7AFF170438D0002341F4 /* ViewController.h */,
-				BE7B7B00170438D0002341F4 /* ViewController.m */,
 				BE69AD3716958CA0001BE1CD /* Resources */,
 				BE5A22601664F87600CF01C9 /* Supporting Files */,
 			);
@@ -263,6 +260,27 @@
 				BEA86898170B3FC20043E44B /* salgdi.cxx */,
 			);
 			name = coretext;
+			sourceTree = "<group>";
+		};
+		BECB749717182B5F001BEB85 /* sw */ = {
+			isa = PBXGroup;
+			children = (
+				BECB749617181C92001BEB85 /* crsrsh.cxx */,
+			);
+			name = sw;
+			sourceTree = "<group>";
+		};
+		BECB749817182B8B001BEB85 /* LibreOffice */ = {
+			isa = PBXGroup;
+			children = (
+				BE5A22681664F87600CF01C9 /* AppDelegate.h */,
+				BE5A22691664F87600CF01C9 /* AppDelegate.m */,
+				BE08805B16FDB784000CED5C /* View.h */,
+				BE08805C16FDB784000CED5C /* View.m */,
+				BE7B7AFF170438D0002341F4 /* ViewController.h */,
+				BE7B7B00170438D0002341F4 /* ViewController.m */,
+			);
+			name = LibreOffice;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
