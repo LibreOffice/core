@@ -49,6 +49,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/xmlgrhlp.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -182,6 +183,13 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
 
             return uno::Reference< uno::XInterface >( (drawing::XShape*) SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI ) );
         }
+    }
+    else if ( rServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
+    {
+        SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
+        uno::Reference< uno::XInterface> xRet( static_cast< ::cppu::OWeakObject* >( pGraphicHelper ) );
+        pGraphicHelper->release();
+        return xRet;
     }
 
     uno::Reference< uno::XInterface > xRet( createTextField( rServiceSpecifier ) );
