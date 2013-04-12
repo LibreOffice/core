@@ -29,7 +29,8 @@ namespace {
     }
 }
 
-void SdGroupSlidesDialog::addGroupsToCombo( ComboBox /* *pBox, */ SdDrawDocument *pDoc )
+#if 0
+void SdGroupSlidesDialog::addGroupsToCombo( ComboBox /* *pBox */, SdDrawDocument *pDoc )
 {
 #if 0
     mpGroupCombo->Clear();
@@ -57,6 +58,7 @@ void SdGroupSlidesDialog::addGroupsToCombo( ComboBox /* *pBox, */ SdDrawDocument
 #endif
     }
 }
+#endif
 
 SdGroupSlidesDialog::SdGroupSlidesDialog(Window* pWindow, SdDrawDocument* pActDoc,
                                          const std::vector< SdPage * > &rPages )
@@ -99,6 +101,7 @@ int SdGroupSlidesDialog::endDialog( bool bSuccessSoSave )
         SlideHack::Store::getStore()->createGroup( mpGroupEdit->GetText(),
                                                    mpTitle->GetText(),
                                                    mpKeywords->GetText(),
+                                                   SlideHack::OriginDetails::ORIGIN_UPDATE_MANUAL,
                                                    maPages );
 #if 0
         sal_uInt16 nSelected = mpGroupCombo->GetSelectEntryPos();

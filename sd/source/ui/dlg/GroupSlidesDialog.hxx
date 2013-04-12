@@ -54,7 +54,7 @@ private:
 //    ComboBox*      mpGroupCombo;
     Edit          *mpGroupEdit;
     std::vector< SlideHack::GroupPtr > maGroups;
-    void addGroupsToCombo( ComboBox *pBox, SdDrawDocument *pDoc );
+//    void addGroupsToCombo( ComboBox *pBox, SdDrawDocument *pDoc );
 
     Edit          *mpTitle;
     Edit          *mpKeywords;

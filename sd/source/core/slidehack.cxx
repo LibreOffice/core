@@ -12,9 +12,36 @@
 namespace SlideHack {
 namespace {
 
-class ImplStore : public Store {
+class GroupImpl : public Group {
 public:
-    ImplStore();
+    GroupImpl()
+    {
+    }
+    virtual ~GroupImpl()
+    {
+    }
+
+    virtual GroupMetaPtr getMetaData()
+    {
+        // what is this doing here ?
+    }
+
+    virtual void fetchData( bool bThumbnail, bool bODPStream )
+    {
+        // queue maDataComplete signal at idle
+    }
+
+    virtual void getVersions()
+    {
+        // queue maVersions signal at idle
+    }
+};
+
+class StoreImpl : public Store {
+public:
+    StoreImpl()
+    {
+    }
 
     virtual sal_uInt32 search( OUString aSearchEntry )
     {
@@ -32,9 +59,13 @@ public:
     virtual GroupPtr createGroup( const OUString &rName,
                                   const OUString &rTitle,
                                   const OUString &rKeywords,
+                                  SlideHack::OriginDetails::UpdateType eType,
                                   const std::vector< SdPage * > &rPages )
     {
-        return GroupPtr();
+        GroupPtr pGroup( new GroupImpl() );
+        // FIXME: really need something stored on SdPages for
+        // the rendering ...
+        return pGroup;
     }
 };
 
@@ -42,7 +73,7 @@ public:
 
 StorePtr Store::getStore()
 {
-    return StorePtr( new ImplStore() );
+    return StorePtr( new StoreImpl() );
 }
 
 } // end SlideHack namespace
