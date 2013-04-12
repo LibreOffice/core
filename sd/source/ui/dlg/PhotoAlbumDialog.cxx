@@ -92,8 +92,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 {
     if (pImagesLst->GetEntryCount() == 0)
     {
-        InfoBox aInfo(this, OUString("Please add images to the album."));
-        aInfo.Execute();
+        WarningBox aWarning(this, WB_OK, SD_RESSTR(STR_PHOTO_ALBUM_EMPTY_WARNING));
+        aWarning.Execute();
     }
     else
     {

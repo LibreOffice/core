@@ -1278,4 +1278,9 @@ String STR_PHOTO_ALBUM_AUTHOR
      Text [ en-US ] = "Author:" ;
 };
 
+String STR_PHOTO_ALBUM_EMPTY_WARNING
+{
+     Text [ en-US ] = "Please add images to the album." ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -417,6 +417,7 @@
 
 #define STR_PHOTO_ALBUM_TITLE                           (RID_APP_START+729)
 #define STR_PHOTO_ALBUM_AUTHOR                          (RID_APP_START+730)
+#define STR_PHOTO_ALBUM_EMPTY_WARNING                   (RID_APP_START+731)
 
 /******************************************************************************
 * The ids in glob.hrc start at RID_APP_START+750!
