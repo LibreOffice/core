@@ -74,8 +74,7 @@ void appendUnoName(
             OUString n;
             sal_Int32 k;
             std::vector< OUString > args;
-            manager->getSortResolveAllSequencesTemplatesTypedefs(
-                *i, &n, &k, &args, 0);
+            manager->decompose(*i, false, &n, &k, &args, 0);
             appendUnoName(manager, n, k, args, buffer);
         }
         buffer->append('>');
@@ -284,9 +283,8 @@ SpecialType translateUnoTypeToDescriptor(
     OUString nucleus;
     sal_Int32 rank;
     std::vector< OUString > args;
-    codemaker::UnoType::Sort sort = manager->
-        getSortResolveAllSequencesTemplatesTypedefs(
-            type, &nucleus, &rank, &args, 0);
+    codemaker::UnoType::Sort sort = manager->decompose(
+        type, true, &nucleus, &rank, &args, 0);
     return translateUnoTypeToDescriptor(
         manager, sort, nucleus, rank, args, array, classType, dependencies,
         descriptor, signature, needsSignature, polymorphicUnoType);
@@ -897,9 +895,8 @@ sal_uInt16 addFieldInit(
     sal_Int32 rank;
     std::vector< rtl::OUString > args;
     rtl::Reference< unoidl::Entity > ent;
-    codemaker::UnoType::Sort sort
-        = manager->getSortResolveAllSequencesTemplatesTypedefs(
-            fieldType, &nucleus, &rank, &args, &ent);
+    codemaker::UnoType::Sort sort = manager->decompose(
+        fieldType, true, &nucleus, &rank, &args, &ent);
     if (rank == 0) {
         switch (sort) {
         case codemaker::UnoType::SORT_BOOLEAN:
@@ -1023,9 +1020,8 @@ sal_uInt16 addLoadLocal(
         OUString nucleus;
         sal_Int32 rank;
         std::vector< OUString > args;
-        codemaker::UnoType::Sort sort = manager->
-            getSortResolveAllSequencesTemplatesTypedefs(
-                type, &nucleus, &rank, &args, 0);
+        codemaker::UnoType::Sort sort = manager->decompose(
+            type, true, &nucleus, &rank, &args, 0);
         if (rank == 0) {
             switch (sort) {
             case codemaker::UnoType::SORT_BOOLEAN:
@@ -1928,9 +1924,7 @@ void handleTypedef(
     assert(manager.is());
     assert(dependencies != 0);
     OUString nucleus;
-    sal_Int32 rank;
-    switch (manager->getSortResolveOuterSequences(
-                entity->getType(), &nucleus, &rank))
+    switch (manager->decompose(entity->getType(), false, &nucleus, 0, 0, 0))
     {
     case codemaker::UnoType::SORT_BOOLEAN:
     case codemaker::UnoType::SORT_BYTE:

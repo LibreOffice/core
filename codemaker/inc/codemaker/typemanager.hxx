@@ -87,12 +87,9 @@ public:
         OUString const & name, rtl::Reference< unoidl::Entity > * entity = 0,
         rtl::Reference< unoidl::MapCursor > * cursor = 0) const;
 
-    codemaker::UnoType::Sort getSortResolveOuterSequences(
-        OUString const & name, OUString * nucleus, sal_Int32 * rank) const;
-
-    codemaker::UnoType::Sort getSortResolveAllSequencesTemplatesTypedefs(
-        OUString const & name, OUString * nucleus, sal_Int32 * rank,
-        std::vector< OUString > * arguments,
+    codemaker::UnoType::Sort decompose(
+        OUString const & name, bool resolveTypedefs, OUString * nucleus,
+        sal_Int32 * rank, std::vector< OUString > * arguments,
         rtl::Reference< unoidl::Entity > * entity) const;
 
 private:

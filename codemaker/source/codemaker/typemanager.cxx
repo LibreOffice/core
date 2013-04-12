@@ -445,71 +445,36 @@ codemaker::UnoType::Sort TypeManager::getSort(
     }
 }
 
-codemaker::UnoType::Sort TypeManager::getSortResolveOuterSequences(
-    OUString const & name, OUString * nucleus, sal_Int32 * rank) const
-{
-    assert(nucleus != 0);
-    assert(rank != 0);
-    *nucleus = name;
-    *rank = 0;
-    while (nucleus->startsWith("[]")) {
-        ++rank;
-        *nucleus = nucleus->copy(std::strlen("[]"));
-    }
-    codemaker::UnoType::Sort s = getSort(*nucleus);
-    switch (s) {
-    case codemaker::UnoType::SORT_BOOLEAN:
-    case codemaker::UnoType::SORT_BYTE:
-    case codemaker::UnoType::SORT_SHORT:
-    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-    case codemaker::UnoType::SORT_LONG:
-    case codemaker::UnoType::SORT_UNSIGNED_LONG:
-    case codemaker::UnoType::SORT_HYPER:
-    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-    case codemaker::UnoType::SORT_FLOAT:
-    case codemaker::UnoType::SORT_DOUBLE:
-    case codemaker::UnoType::SORT_CHAR:
-    case codemaker::UnoType::SORT_STRING:
-    case codemaker::UnoType::SORT_TYPE:
-    case codemaker::UnoType::SORT_ANY:
-    case codemaker::UnoType::SORT_ENUM_TYPE:
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
-    case codemaker::UnoType::SORT_TYPEDEF:
-        return s;
-    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
-        assert(false); // this cannot happen
-        // fall through
-    default:
-        throw CannotDumpException(
-            "unexpected \"" + *nucleus + "\" resolved from \"" + name
-            + "\"in call to TypeManager::getSortResolveOuterSequences");
-    }
-}
-
-codemaker::UnoType::Sort
-TypeManager::getSortResolveAllSequencesTemplatesTypedefs(
-    OUString const & name, OUString * nucleus, sal_Int32 * rank,
-    std::vector< OUString > * arguments,
+codemaker::UnoType::Sort TypeManager::decompose(
+    OUString const & name, bool resolveTypedefs, OUString * nucleus,
+    sal_Int32 * rank, std::vector< OUString > * arguments,
     rtl::Reference< unoidl::Entity > * entity) const
 {
-    assert(nucleus != 0);
-    assert(rank != 0);
-    assert(arguments != 0);
-    arguments->clear();
+    sal_Int32 k;
     std::vector< OString > args;
-    *nucleus = b2u(codemaker::UnoType::decompose(u2b(name), rank, &args));
+    OUString n = b2u(codemaker::UnoType::decompose(u2b(name), &k, &args));
     for (;;) {
         rtl::Reference< unoidl::Entity > ent;
-        codemaker::UnoType::Sort s = getSort(*nucleus, &ent);
+        codemaker::UnoType::Sort s = getSort(n, &ent);
         if (args.empty()
             != (s != codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE))
         {
             throw CannotDumpException(
-                "syntax error, \"" + *nucleus + "\" resolved from \""
-                + name + "\"");
+                "template arguments mismatch for \"" + n
+                + "\" resolved from \"" + name + "\"");
         }
         switch (s) {
+        case codemaker::UnoType::SORT_TYPEDEF:
+            if (resolveTypedefs) {
+                n = dynamic_cast< unoidl::TypedefEntity * >(ent.get())->
+                    getType();
+                while (n.startsWith("[]")) {
+                    ++k; //TODO: overflow
+                    n = n.copy(std::strlen("[]"));
+                }
+                break;
+            }
+            // fall through
         case codemaker::UnoType::SORT_VOID:
         case codemaker::UnoType::SORT_BOOLEAN:
         case codemaker::UnoType::SORT_BYTE:
@@ -528,37 +493,55 @@ TypeManager::getSortResolveAllSequencesTemplatesTypedefs(
         case codemaker::UnoType::SORT_ENUM_TYPE:
         case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
         case codemaker::UnoType::SORT_INTERFACE_TYPE:
+            if (nucleus != 0) {
+                *nucleus = n;
+            }
+            if (rank != 0) {
+                *rank = k;
+            }
+            if (arguments != 0) {
+                arguments->clear();
+            }
             if (entity != 0) {
                 *entity = ent;
             }
             return s;
         case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+            if (args.size()
+                != (dynamic_cast<
+                    unoidl::PolymorphicStructTypeTemplateEntity * >(ent.get())->
+                    getTypeParameters().size()))
+            {
+                throw CannotDumpException(
+                    "bad number of template arguments for \"" + n
+                    + "\" resolved from \"" + name + "\"");
+            }
+            if (nucleus != 0) {
+                *nucleus = n;
+            }
+            if (rank != 0) {
+                *rank = k;
+            }
+            if (arguments != 0) {
+                arguments->clear();
+                for (std::vector< OString >::iterator i(args.begin());
+                     i != args.end(); ++i)
+                {
+                    arguments->push_back(b2u(*i));
+                }
+            }
             if (entity != 0) {
                 *entity = ent;
             }
-            for (std::vector< OString >::iterator i(args.begin());
-                 i != args.end(); ++i)
-            {
-                arguments->push_back(b2u(*i));
-            }
             return
                 codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE;
-        case codemaker::UnoType::SORT_TYPEDEF:
-            *nucleus = dynamic_cast< unoidl::TypedefEntity * >(ent.get())->
-                getType();
-            while (nucleus->startsWith("[]")) {
-                ++*rank; //TODO: overflow
-                *nucleus = nucleus->copy(std::strlen("[]"));
-            }
-            break;
         case codemaker::UnoType::SORT_SEQUENCE_TYPE:
             assert(false); // this cannot happen
             // fall through
         default:
             throw CannotDumpException(
-                "unexpected \"" + *nucleus + "\" resolved from \"" + name
-                + ("\"in call to TypeManager::"
-                   "getSortResolveAllSequencesTemplatesTypedefs"));
+                "unexpected \"" + n + "\" resolved from \"" + name
+                + ("\"in call to TypeManager::decompose"));
         }
     }
 }
