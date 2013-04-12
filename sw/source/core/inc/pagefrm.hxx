@@ -72,10 +72,6 @@ class SwPageFrm: public SwFtnBossFrm
     sal_Bool bInvalidWordCount  :1;
     sal_Bool bHasGrid           :1; // Grid for Asian layout
 
-    // #i28701# - boolean, indicating that layout of page frame
-    // is in progress.
-    bool mbLayoutInProgress;
-
     static const sal_Int8 mnShadowPxWidth;
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
@@ -334,16 +330,6 @@ public:
     }
 
     const SwRect PrtWithoutHeaderAndFooter() const;
-
-    // #i28701#
-    inline bool IsLayoutInProgress() const
-    {
-        return mbLayoutInProgress;
-    }
-    inline void SetLayoutInProgress( const bool _bLayoutInProgress )
-    {
-        mbLayoutInProgress = _bLayoutInProgress;
-    }
 
     // in case this is am empty page, this function returns the 'reference' page
     const SwPageFrm& GetFormatPage() const;

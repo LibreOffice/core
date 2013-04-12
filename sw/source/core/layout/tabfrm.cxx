@@ -1612,15 +1612,6 @@ static sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
 
 static void lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
 {
-    // #i26945# - For correct appliance of the 'straightforward
-    // object positioning process, it's needed to notify that the page frame,
-    // on which the given layout frame is in, is in its layout process.
-    SwPageFrm* pPageFrm = rRow.FindPageFrm();
-    if ( pPageFrm && !pPageFrm->IsLayoutInProgress() )
-        pPageFrm->SetLayoutInProgress( true );
-    else
-        pPageFrm = 0L;
-
     // FME 2007-08-30 #i81146# new loop control
     sal_uInt16 nLoopControlRuns_1 = 0;
     sal_uInt16 nLoopControlStage_1 = 0;
@@ -1701,10 +1692,6 @@ static void lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
         }
         break;
     } while( true );
-
-    // #i26945#
-    if ( pPageFrm )
-        pPageFrm->SetLayoutInProgress( false );
 }
 
 static void lcl_RecalcTable( SwTabFrm& rTab,

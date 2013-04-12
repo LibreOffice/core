@@ -107,7 +107,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         // detected in method <SwFlyAtCntFrm::MakeAll()> or method
         // <SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()>.
         // The boolean is reset to <false>, when the layout process for a
-        // page frame starts - see class <NotifyLayoutOfPageInProgress>.
+        // page frame starts.
         bool mbTmpConsiderWrapInfluence;
 
         mutable SwRect maObjRectWithSpaces;

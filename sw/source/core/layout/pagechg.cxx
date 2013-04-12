@@ -201,9 +201,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
     SwFtnBossFrm( pFmt, pSib ),
     pSortedObjs( 0 ),
     pDesc( pPgDsc ),
-    nPhyPageNum( 0 ),
-    // OD 2004-05-17 #i28701#
-    mbLayoutInProgress( false )
+    nPhyPageNum( 0 )
 {
     SetDerivedVert( sal_False );
     SetDerivedR2L( sal_False );

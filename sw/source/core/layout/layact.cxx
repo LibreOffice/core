@@ -498,41 +498,6 @@ SwPageFrm* SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
     return pPage;
 }
 
-// OD 2004-05-12 #i28701#
-// #i114798# - unlock position on start and end of page
-// layout process.
-class NotifyLayoutOfPageInProgress
-{
-    private:
-        SwPageFrm& mrPageFrm;
-
-        void _UnlockPositionOfObjs()
-        {
-            SwSortedObjs* pObjs = mrPageFrm.GetSortedObjs();
-            if ( pObjs )
-            {
-                sal_uInt32 i = 0;
-                for ( ; i < pObjs->Count(); ++i )
-                {
-                    SwAnchoredObject* pObj = (*pObjs)[i];
-                    pObj->UnlockPosition();
-                }
-            }
-        }
-    public:
-        NotifyLayoutOfPageInProgress( SwPageFrm& _rPageFrm )
-            : mrPageFrm( _rPageFrm )
-        {
-            _UnlockPositionOfObjs();
-            _rPageFrm.SetLayoutInProgress( true );
-        }
-        ~NotifyLayoutOfPageInProgress()
-        {
-            mrPageFrm.SetLayoutInProgress( false );
-            _UnlockPositionOfObjs();
-        }
-};
-
 void SwLayAction::InternalAction()
 {
     OSL_ENSURE( pRoot->Lower()->IsPageFrm(), ":-( No page below the root.");
@@ -629,74 +594,68 @@ void SwLayAction::InternalAction()
             pRoot->DeleteEmptySct();
             XCHECKPAGE;
 
-            // #i28701# - scope for instance of class <NotifyLayoutOfPageInProgress>
+            while ( !IsInterrupt() && !IsNextCycle() &&
+                    ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
             {
-                NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPage );
-
-                while ( !IsInterrupt() && !IsNextCycle() &&
-                        ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
+                // #i28701#
+                SwObjectFormatter::FormatObjsAtFrm( *pPage, *pPage, this );
+                if ( !IS_FLYS )
                 {
-                    // #i28701#
-                    SwObjectFormatter::FormatObjsAtFrm( *pPage, *pPage, this );
-                    if ( !IS_FLYS )
+                    // If there are no (more) Flys, the flags are superfluous.
+                    pPage->ValidateFlyLayout();
+                    pPage->ValidateFlyCntnt();
+                }
+                // #i28701# - change condition
+                while ( !IsInterrupt() && !IsNextCycle() &&
+                        ( pPage->IsInvalid() ||
+                          (IS_FLYS && IS_INVAFLY) ) )
+                {
+                    PROTOCOL( pPage, PROT_FILE_INIT, 0, 0)
+                    XCHECKPAGE;
+
+                    // #i81146# new loop control
+                    sal_uInt16 nLoopControlRuns_1 = 0;
+                    const sal_uInt16 nLoopControlMax = 20;
+
+                    while ( !IsNextCycle() && pPage->IsInvalidLayout() )
                     {
-                        // If there are no (more) Flys, the flags are superfluous.
-                        pPage->ValidateFlyLayout();
-                        pPage->ValidateFlyCntnt();
+                        pPage->ValidateLayout();
+
+                        if ( ++nLoopControlRuns_1 > nLoopControlMax )
+                        {
+                            OSL_FAIL( "LoopControl_1 in SwLayAction::InternalAction" );
+                            break;
+                        }
+
+                        FormatLayout( pPage );
+                        XCHECKPAGE;
                     }
                     // #i28701# - change condition
-                    while ( !IsInterrupt() && !IsNextCycle() &&
-                            ( pPage->IsInvalid() ||
-                              (IS_FLYS && IS_INVAFLY) ) )
+                    if ( !IsNextCycle() &&
+                         ( pPage->IsInvalidCntnt() ||
+                           (IS_FLYS && IS_INVAFLY) ) )
                     {
-                        PROTOCOL( pPage, PROT_FILE_INIT, 0, 0)
-                        XCHECKPAGE;
-
-                        // #i81146# new loop control
-                        sal_uInt16 nLoopControlRuns_1 = 0;
-                        const sal_uInt16 nLoopControlMax = 20;
-
-                        while ( !IsNextCycle() && pPage->IsInvalidLayout() )
+                        pPage->ValidateFlyInCnt();
+                        pPage->ValidateCntnt();
+                        // #i28701#
+                        pPage->ValidateFlyLayout();
+                        pPage->ValidateFlyCntnt();
+                        if ( !FormatCntnt( pPage ) )
                         {
-                            pPage->ValidateLayout();
-
-                            if ( ++nLoopControlRuns_1 > nLoopControlMax )
-                            {
-                                OSL_FAIL( "LoopControl_1 in SwLayAction::InternalAction" );
-                                break;
-                            }
-
-                            FormatLayout( pPage );
                             XCHECKPAGE;
-                        }
-                        // #i28701# - change condition
-                        if ( !IsNextCycle() &&
-                             ( pPage->IsInvalidCntnt() ||
-                               (IS_FLYS && IS_INVAFLY) ) )
-                        {
-                            pPage->ValidateFlyInCnt();
-                            pPage->ValidateCntnt();
+                            pPage->InvalidateCntnt();
+                            pPage->InvalidateFlyInCnt();
                             // #i28701#
-                            pPage->ValidateFlyLayout();
-                            pPage->ValidateFlyCntnt();
-                            if ( !FormatCntnt( pPage ) )
-                            {
-                                XCHECKPAGE;
-                                pPage->InvalidateCntnt();
-                                pPage->InvalidateFlyInCnt();
-                                // #i28701#
-                                pPage->InvalidateFlyLayout();
-                                pPage->InvalidateFlyCntnt();
-                                if ( IsBrowseActionStop() )
-                                    bInput = sal_True;
-                            }
+                            pPage->InvalidateFlyLayout();
+                            pPage->InvalidateFlyCntnt();
+                            if ( IsBrowseActionStop() )
+                                bInput = sal_True;
                         }
-                        if( bNoLoop )
-                            pLayoutAccess->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
                     }
+                    if( bNoLoop )
+                        pLayoutAccess->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
                 }
-            } // end of scope for instance of class <NotifyLayoutOfPageInProgress>
-
+            }
 
             // A previous page may be invalid again.
             XCHECKPAGE;
@@ -810,9 +769,6 @@ void SwLayAction::InternalAction()
         while ( pPg && ( pPg->Frm().Top() < nBottom ||
                          ( IsIdle() && pPg == pPage ) ) )
         {
-            // #i26945# - follow-up of #i28701#
-            NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPg );
-
             XCHECKPAGE;
 
             // #i81146# new loop control
