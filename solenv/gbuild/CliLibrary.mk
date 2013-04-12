@@ -36,7 +36,7 @@ gb_CliLibraryTarget__get_generated_source = $(WORKDIR)/$(1).cs
 define gb_CliLibraryTarget__command
 $(call gb_Output_announce,$(2),$(true),CSC,3)
 $(call gb_Helper_abbreviate_dirs,\
-	csc $(call gb_Helper_windows_path, \
+	$(CSC) $(call gb_Helper_windows_path, \
 		$(call gb_CliLibraryTarget__get_csflags) \
 		$(CLI_CSCFLAGS) \
 		-target:library \
