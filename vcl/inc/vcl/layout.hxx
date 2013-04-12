@@ -21,15 +21,6 @@ class VCL_DLLPUBLIC VclContainer : public Window
 {
 public:
     VclContainer(Window *pParent, WinBits nStyle = WB_HIDE);
-    virtual Size GetOptimalSize() const;
-    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
-    virtual void SetPosPixel(const Point& rAllocPos);
-    virtual void SetSizePixel(const Size& rAllocation);
-
-    void markLayoutDirty()
-    {
-        m_bLayoutDirty = true;
-    }
 
     //These take into account the external margins of the rWindow widget
     //while GetOptimalSize/get_preferred_size and SetPosSizePixel are
@@ -41,10 +32,24 @@ public:
     //the rWindows alignment desires within that allocation
     static void setLayoutAllocation(Window &rWindow, const Point &rPos, const Size &rSize);
 
+    void markLayoutDirty()
+    {
+        m_bLayoutDirty = true;
+    }
 protected:
+    //these are the two that need to be implemented by
+    //containers, figure out how much space you want...
     virtual Size calculateRequisition() const = 0;
+    //..and decide what to do when set to this size
     virtual void setAllocation(const Size &rAllocation) = 0;
+
     virtual sal_uInt16 getDefaultAccessibleRole() const;
+public:
+    //you don't want to override these
+    virtual Size GetOptimalSize() const;
+    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
+    virtual void SetPosPixel(const Point& rAllocPos);
+    virtual void SetSizePixel(const Size& rAllocation);
 private:
     bool m_bLayoutDirty;
 };
