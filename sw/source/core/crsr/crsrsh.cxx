@@ -64,7 +64,9 @@
 
 #include <comcore.hrc>
 
+#if !HAVE_FEATURE_DESKTOP
 #include <touch/touch.h>
+#endif
 
 using namespace com::sun::star;
 using namespace util;
