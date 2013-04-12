@@ -403,7 +403,6 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
 GtkSalMenu::~GtkSalMenu()
 {
     SolarMutexGuard aGuard;
-    //GTK_YIELD_GRAB();
 
     if ( mbMenuBar == sal_True )
     {
@@ -457,7 +456,6 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
     SolarMutexGuard aGuard;
-    GTK_YIELD_GRAB();
 
     assert(mbMenuBar);
     SAL_INFO("vcl.unity", "GtkSalMenu set to frame");

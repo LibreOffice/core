@@ -136,8 +136,6 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
         CallEventCallback( pEvent, sizeof( XEvent ) ) )
         aFilterReturn = GDK_FILTER_REMOVE;
 
-    GTK_YIELD_GRAB();
-
     if (GetDisplay() == pEvent->xany.display )
     {
         // #i53471# gtk has no callback mechanism that lets us be notified

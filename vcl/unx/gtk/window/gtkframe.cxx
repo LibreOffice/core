@@ -2957,8 +2957,6 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
             gdk_display_pointer_ungrab( pThis->getGdkDisplay(), GDK_CURRENT_TIME );
     }
 
-    GTK_YIELD_GRAB();
-
     if( pThis->m_bWindowIsGtkPlug &&
         pEvent->type == GDK_BUTTON_PRESS &&
         pEvent->button == 1 )
@@ -3028,8 +3026,6 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
     aEvent.mnCode           = GetMouseModCode( pSEvent->state );
     aEvent.mbHorz           = (pSEvent->direction == GDK_SCROLL_LEFT || pSEvent->direction == GDK_SCROLL_RIGHT);
 
-    GTK_YIELD_GRAB();
-
     // --- RTL --- (mirror mouse pos)
     if( Application::GetSettings().GetLayoutRTL() )
         aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
@@ -3049,9 +3045,6 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
-
-
-    GTK_YIELD_GRAB();
 
     // --- RTL --- (mirror mouse pos)
     if( Application::GetSettings().GetLayoutRTL() )
@@ -3094,7 +3087,6 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
-    GTK_YIELD_GRAB();
     pThis->CallCallback( (pEvent->type == GDK_ENTER_NOTIFY) ? SALEVENT_MOUSEMOVE : SALEVENT_MOUSELEAVE, &aEvent );
 
     return sal_True;
@@ -3245,8 +3237,6 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
     double x1 = 0.0, y1 = 0.0, x2 = 0.0, y2 = 0.0;
     cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
 
-    GTK_YIELD_GRAB();
-
     if (debugQueuePureRedraw > 0)
     {
         debugQueuePureRedraw--;
@@ -3289,7 +3279,6 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
 
     struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height );
 
-    GTK_YIELD_GRAB();
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
 
     return sal_False;
@@ -3298,8 +3287,6 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
 gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
-
-    GTK_YIELD_GRAB();
 
     X11SalInstance *pSalInstance =
         static_cast< X11SalInstance* >(GetSalData()->m_pInstance);
@@ -3336,8 +3323,6 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
-    GTK_YIELD_GRAB();
-
     bool bSetFocus = pThis->m_bSetFocusOnMap;
     pThis->m_bSetFocusOnMap = false;
 
@@ -3365,7 +3350,6 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
-    GTK_YIELD_GRAB();
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
     return sal_False;
@@ -3445,7 +3429,6 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
     if( bSized )
         pThis->AllocateFrame();
 
-    GTK_YIELD_GRAB();
     if( bMoved && bSized )
         pThis->CallCallback( SALEVENT_MOVERESIZE, NULL );
     else if( bMoved )
@@ -3467,7 +3450,6 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
         if( pThis->m_pIMHandler->handleKeyEvent( pEvent ) )
             return sal_True;
     }
-    GTK_YIELD_GRAB();
 
     // handle modifiers
     if( pEvent->keyval == GDK_Shift_L || pEvent->keyval == GDK_Shift_R ||
@@ -3577,7 +3559,6 @@ gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
-    GTK_YIELD_GRAB();
     pThis->CallCallback( SALEVENT_CLOSE, NULL );
 
     return sal_True;
@@ -3948,10 +3929,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
 
     SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
-    // open a block that will end the GTK_YIELD_GRAB before calling preedit changed again
     {
-        GTK_YIELD_GRAB();
-
         const bool bWasPreedit =
             (pThis->m_aInputEvent.mpTextAttr != 0) ||
             pThis->m_bPreeditJustChanged;
@@ -4115,8 +4093,6 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     g_free( pText );
     pango_attr_list_unref( pAttrs );
 
-    GTK_YIELD_GRAB();
-
     SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
 
@@ -4134,7 +4110,6 @@ void GtkSalFrame::IMHandler::signalIMPreeditStart( GtkIMContext*, gpointer /*im_
 void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_handler )
 {
     GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
-    GTK_YIELD_GRAB();
 
     pThis->m_bPreeditJustChanged = true;
 
