@@ -74,6 +74,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/misc/extendapplicationenvironment \
     tools/source/misc/getprocessworkingdir \
     tools/source/misc/solarmutex \
+    tools/source/misc/toolsdll \
     tools/source/rc/rc \
     tools/source/rc/resary \
     tools/source/rc/resmgr \
@@ -91,12 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/zcodec/zcodec \
 ))
 
-ifneq ($(OS),WNT)
-$(eval $(call gb_Library_add_exception_objects,tl,\
-    tools/unx/source/dll/toolsdll \
-))
-endif
-
 $(eval $(call gb_Library_use_externals,tl,\
 	boost_headers \
 	zlib \
@@ -107,10 +102,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_set_include,tl,\
     -I$(SRCDIR)/tools/win/inc \
     $$(INCLUDE) \
-))
-
-$(eval $(call gb_Library_add_exception_objects,tl,\
-    tools/win/source/dll/toolsdll \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,tl,\
