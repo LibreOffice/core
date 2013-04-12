@@ -45,6 +45,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			CXXFLAGS="$(BOOST_CXXFLAGS) $(if $(filter NO,$(SYSTEM_BOOST)),\
 			-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS))" \
 			$(if $(filter YES,$(SYSTEM_BOOST)),LDFLAGS=$(BOOST_LDFLAGS)) \
+			$(if $(filter YES,$(SYSTEM_ZLIB)),LIBS=-lz) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
