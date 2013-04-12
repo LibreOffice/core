@@ -41,6 +41,8 @@
 #include <tools/datetime.hxx>
 #include <vcl/bitmapex.hxx>
 
+#include "sddllapi.h"
+
 class SdPage;
 
 namespace SlideHack {
@@ -53,8 +55,8 @@ typedef boost::shared_ptr< class VersionData > VersionDataPtr;
 typedef boost::shared_ptr< class OriginDetails > OriginDetailsPtr;
 
 /// version history
-class VersionData : public boost::enable_shared_from_this< VersionData >,
-                    private boost::noncopyable
+class SD_DLLPUBLIC VersionData : public boost::enable_shared_from_this< VersionData >,
+                                 private boost::noncopyable
 {
 public:
     virtual ~VersionData() {}
@@ -64,7 +66,8 @@ public:
 };
 
 /// Tracking where a single slide came from
-class Origin
+class SD_DLLPUBLIC Origin : public boost::enable_shared_from_this< Origin >,
+                            private boost::noncopyable
 {
     friend class Store;
 private:
@@ -76,7 +79,7 @@ public:
 };
 
 /// Tracking where a single slide came from and some policy around that
-class OriginDetails : public Origin
+class SD_DLLPUBLIC OriginDetails : public Origin
 {
 public:
     /// how should we set about updating data from this origin ?
@@ -97,8 +100,8 @@ private:
 };
 
 /// Defines information about a group of slides
-class GroupMeta : public boost::enable_shared_from_this< GroupMeta >,
-                  private boost::noncopyable
+class SD_DLLPUBLIC GroupMeta : public boost::enable_shared_from_this< GroupMeta >,
+                               private boost::noncopyable
 {
 public:
     virtual ~GroupMeta() {}
@@ -115,8 +118,8 @@ public:
 };
 
 /// Defines a group of slides on a related topic
-class Group : public boost::enable_shared_from_this< Group >,
-              private boost::noncopyable
+class SD_DLLPUBLIC Group : public boost::enable_shared_from_this< Group >,
+                           private boost::noncopyable
 {
 public:
     virtual ~Group() {}
@@ -137,8 +140,8 @@ public:
 };
 
 /// Overall factory and store for these guys
-class Store : public boost::enable_shared_from_this< Store >,
-              private boost::noncopyable
+class SD_DLLPUBLIC Store : public boost::enable_shared_from_this< Store >,
+                           private boost::noncopyable
 {
 public:
     virtual ~Store() {}
@@ -156,6 +159,7 @@ public:
     virtual GroupPtr createGroup( const OUString &rName,
                                   const OUString &rTitle,
                                   const OUString &rKeywords,
+                                  SlideHack::OriginDetails::UpdateType eType,
                                   const std::vector< SdPage * > &rPages ) = 0;
 
     /// factory function: to get the root
