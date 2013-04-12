@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "view/SlsPageObjectPainter.hxx"
 
 #include "model/SlsPageDescriptor.hxx"
@@ -47,7 +46,6 @@ namespace sd { namespace slidesorter { namespace view {
 PageObjectPainter::PageObjectPainter (
     const SlideSorter& rSlideSorter)
     : mrLayouter(rSlideSorter.GetView().GetLayouter()),
-      mpPageObjectLayouter(),
       mpCache(rSlideSorter.GetView().GetPreviewCache()),
       mpProperties(rSlideSorter.GetProperties()),
       mpTheme(rSlideSorter.GetTheme()),
@@ -101,14 +99,26 @@ bool PageObjectPainter::UpdatePageObjectLayouter (void)
 {
     // The page object layouter is quite volatile. It may have been replaced
     // since the last call.  Update it now.
-    mpPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
-    if ( ! mpPageObjectLayouter)
+    PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
+    if ( ! pPageObjectLayouter)
     {
-        OSL_ASSERT(mpPageObjectLayouter);
+        OSL_FAIL("no page object layouter");
         return false;
     }
-    else
-        return true;
+
+    // Turn off antialiasing to avoid the bitmaps from being shifted by
+    // fractions of a pixel and thus show blurry edges.
+    const sal_uInt16 nSavedAntialiasingMode (rDevice.GetAntialiasing());
+    rDevice.SetAntialiasing(nSavedAntialiasingMode & ~ANTIALIASING_ENABLE_B2DDRAW);
+
+    PaintBackground(pPageObjectLayouter, rDevice, rpDescriptor);
+    PaintPreview(pPageObjectLayouter, rDevice, rpDescriptor);
+    PaintPageNumber(pPageObjectLayouter, rDevice, rpDescriptor);
+    PaintTransitionEffect(pPageObjectLayouter, rDevice, rpDescriptor);
+
+    rDevice.SetAntialiasing(nSavedAntialiasingMode);
+
+    return true;
 }
 
 
@@ -146,17 +156,18 @@ void PageObjectPainter::InvalidateBitmaps (void)
     maMouseOverSelectedAndFocusedBackground.SetEmpty();
 }
 
+>>>>>>> slidesorter - cleanup redundant caches and notifications.
 void PageObjectPainter::SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme)
 {
     mpTheme = rpTheme;
-    NotifyResize(true);
 }
 
 void PageObjectPainter::PaintBackground (
+    PageObjectLayouter *pPageObjectLayouter,
     OutputDevice& rDevice,
-    const model::SharedPageDescriptor& rpDescriptor)
+    const model::SharedPageDescriptor& rpDescriptor) const
 {
-    PaintBackgroundDetail(rDevice, rpDescriptor);
+    PaintBackgroundDetail(pPageObjectLayouter, rDevice, rpDescriptor);
 
     // Fill the interior of the preview area with the default background
     // color of the page.
@@ -165,7 +176,7 @@ void PageObjectPainter::PaintBackground (
     {
         rDevice.SetFillColor(pPage->GetPageBackgroundColor(NULL));
         rDevice.SetLineColor(pPage->GetPageBackgroundColor(NULL));
-        const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
+        const Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::Preview,
             PageObjectLayouter::ModelCoordinateSystem));
@@ -177,10 +188,11 @@ void PageObjectPainter::PaintBackground (
 
 
 void PageObjectPainter::PaintPreview (
+    PageObjectLayouter *pPageObjectLayouter,
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
-    const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+    const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::Preview,
         PageObjectLayouter::ModelCoordinateSystem));
@@ -243,8 +255,10 @@ Bitmap PageObjectPainter::GetPreviewBitmap (
 
     if (bIsExcluded)
     {
+        PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
+
         Bitmap aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage,false));
-        const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
+        const Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::Preview,
             PageObjectLayouter::ModelCoordinateSystem));
@@ -269,10 +283,11 @@ Bitmap PageObjectPainter::GetPreviewBitmap (
 
 
 void PageObjectPainter::PaintPageNumber (
+    PageObjectLayouter *pPageObjectLayouter,
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
-    const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+    const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::PageNumber,
         PageObjectLayouter::ModelCoordinateSystem));
@@ -324,13 +339,14 @@ void PageObjectPainter::PaintPageNumber (
 
 
 void PageObjectPainter::PaintTransitionEffect (
+    PageObjectLayouter *pPageObjectLayouter,
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
     const SdPage* pPage = rpDescriptor->GetPage();
     if (pPage!=NULL && pPage->getTransitionType() > 0)
     {
-        const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+        const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::TransitionEffectIndicator,
             PageObjectLayouter::ModelCoordinateSystem));
@@ -420,12 +436,12 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
             break;
     }
 
-    const Rectangle aFocusSize (mpPageObjectLayouter->GetBoundingBox(
+    const Rectangle aFocusSize (pPageObjectLayouter->GetBoundingBox(
                                         rpDescriptor,
                                         PageObjectLayouter::FocusIndicator,
                                         PageObjectLayouter::ModelCoordinateSystem));
 
-    const Rectangle aPageObjectBox (mpPageObjectLayouter->GetBoundingBox(
+    const Rectangle aPageObjectBox (pPageObjectLayouter->GetBoundingBox(
                                         rpDescriptor,
                                         PageObjectLayouter::PageObject,
                                         PageObjectLayouter::ModelCoordinateSystem));
@@ -484,7 +500,7 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
 
     // Get bounding box of the preview around which a shadow is painted.
     // Compensate for the border around the preview.
-    const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+    const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
                                 rpDescriptor,
                                 PageObjectLayouter::Preview,
                                 PageObjectLayouter::ModelCoordinateSystem));

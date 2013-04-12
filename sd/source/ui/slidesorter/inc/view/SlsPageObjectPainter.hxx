@@ -46,8 +46,6 @@ public:
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor);
 
-    void NotifyResize (const bool bForce = false);
-
     /** Called when the theme changes, either because it is replaced with
         another or because the system colors have changed.  So, even when
         the given theme is the same object as the one already in use by this
@@ -72,7 +70,6 @@ public:
 
 private:
     const Layouter& mrLayouter;
-    ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
     ::boost::shared_ptr<cache::PageCache> mpCache;
     ::boost::shared_ptr<controller::Properties> mpProperties;
     ::boost::shared_ptr<view::Theme> mpTheme;
@@ -90,15 +87,19 @@ private:
     Size maSize;
 
     void PaintBackground (
+        PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor);
+        const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintPreview (
+        PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintPageNumber (
+        PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintTransitionEffect (
+        PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintCustomAnimationEffect (
@@ -109,22 +110,10 @@ private:
         const Theme::GradientColorType eColorType,
         const Rectangle& rBox) const;
     void PaintBackgroundDetail(
+        PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,
-        const model::SharedPageDescriptor& rpDescriptor);
+        const model::SharedPageDescriptor& rpDescriptor) const;
 
-#if 0
-    Bitmap& GetBackgroundForState (
-        const OutputDevice& rTemplateDevice);
-    Bitmap& GetBackground(
-        Bitmap& rBackground,
-        Theme::GradientColorType eType,
-        const OutputDevice& rTemplateDevice,
-        const bool bHasFocusBorder);
-    Bitmap CreateBackgroundBitmap(
-        const OutputDevice& rReferenceDevice,
-        const Theme::GradientColorType eType,
-        const bool bHasFocusBorder) const;
-#endif
     Bitmap CreateMarkedPreview(
         const Size& rSize,
         const Bitmap& rPreview,
