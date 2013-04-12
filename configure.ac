@@ -3426,7 +3426,7 @@ AC_SUBST(x_LDFLAGS)
 # determine CPU, CPUNAME, GUI, GUIBASE, ...
 #
 LIB64="lib"
-SOLARINC=
+SOLARINC="-I${SRC_ROOT}/include"
 
 case "$host_os" in
 
