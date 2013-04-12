@@ -148,7 +148,7 @@ enum SfxDockingConfig
     SFX_MOVEDOCKINGWINDOW
 };
 
-DECL_PTRARRAY( SfxChildList_Impl, SfxChild_Impl*, 2, 2 )
+typedef std::vector<SfxChild_Impl*> SfxChildList_Impl;
 DECL_PTRARRAY( SfxChildWindows_Impl, SfxChildWin_Impl*, 2, 2 )
 
 
@@ -226,7 +226,7 @@ protected:
     Rectangle               aUpperClientArea;
     SfxWorkWindow*          pParent;
     SfxSplitWindow*         pSplit[SFX_SPLITWINDOWS_MAX];
-    SfxChildList_Impl*      pChildren;
+    SfxChildList_Impl       aChildren;
     SfxChildWindows_Impl*   pChildWins;
     SfxBindings*            pBindings;
     Window*                 pWorkWin;
