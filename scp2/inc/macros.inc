@@ -30,9 +30,6 @@
 #define REG_VALUE_LNG(id) \
         ALL_LANG(Value,STR_REG_VAL_##id);
 
-#define ALL_LANG_STR_VALUE_LNG(ident) \
-        ALL_LANG(Value,STR_VALUE_##ident)
-
 #ifdef UNX
     #ifdef MACOSX
         #define UNXSUFFIX .dylib
@@ -374,15 +371,6 @@ End
 #define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #define SCP2_URE_SHARE_DIR gid_Dir_Common_Ure
-#if defined _MSC_VER
-#if defined _DEBUG_RUNTIME
-#define SCP2_STDLP_DEBUG "d"
-#else
-#define SCP2_STDLP_DEBUG ""
-#endif
-#else // GCC
-#define SCP2_STDLP_DEBUG ""
-#endif
 #else
 #define SCP2_URE_DL_DIR gid_Dir_Ure_Lib
 #define SCP2_URE_DL_NORMAL(n) "lib" n STRING(UNXSUFFIX)
