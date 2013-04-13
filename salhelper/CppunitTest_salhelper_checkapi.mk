@@ -27,17 +27,15 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,salhelper_checkapi))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,salhelper_checkapi,\
+	salhelper/allheaders \
+))
+
 $(eval $(call gb_CppunitTest_use_external,salhelper_checkapi,boost_headers))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,salhelper_checkapi,\
     salhelper/qa/checkapi/strings \
 ))
-
-# strings.cxx includes generated strings.hxx
-$(call gb_CxxObject_get_target,salhelper/qa/checkapi/strings) : \
-	INCLUDE += -I$(call gb_CustomTarget_get_workdir,salhelper/allheaders)
-$(call gb_CxxObject_get_target,salhelper/qa/checkapi/strings) :| \
-	$(call gb_CustomTarget_get_workdir,salhelper/allheaders)/salhelper_allheaders.hxx
 
 $(eval $(call gb_CppunitTest_use_libraries,salhelper_checkapi,\
     salhelper \

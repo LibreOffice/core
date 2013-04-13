@@ -27,6 +27,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,cppu_checkapi))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,cppu_checkapi,\
+	cppu/allheaders \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,cppu_checkapi,\
     cppu/qa/checkapi/strings \
 ))
@@ -35,12 +39,6 @@ $(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppu_checkapi, \
 	cppu \
 	udkapi \
 ))
-
-# strings.cxx includes generated strings.hxx
-$(call gb_CxxObject_get_target,cppu/qa/checkapi/strings) : \
-	INCLUDE += -I$(call gb_CustomTarget_get_workdir,cppu/allheaders)
-$(call gb_CxxObject_get_target,cppu/qa/checkapi/strings) :| \
-	$(call gb_CustomTarget_get_workdir,cppu/allheaders)/cppu_allheaders.hxx
 
 $(eval $(call gb_CppunitTest_use_libraries,cppu_checkapi,\
     cppu \
