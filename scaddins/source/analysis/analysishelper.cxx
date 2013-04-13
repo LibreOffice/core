@@ -366,21 +366,15 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
                                         nDay2, nMonth2, nYear2, nMode == 0 ) - nYears * nDaysInYear;
             break;
         case 1:         // 1=exact/exact
-            nYears = nYear2 - nYear1;
+            //fdo40100 because of possible leap years calculate number
+            //of days separately for year1 and year2 and let nYears
+            //contain only number of full calendar years
+            nYears = nYear2 - nYear1 - 1;
 
             nDaysInYear = IsLeapYear( nYear1 )? 366 : 365;
 
-            if( nYears && ( nMonth1 > nMonth2 || ( nMonth1 == nMonth2 && nDay1 > nDay2 ) ) )
-                nYears--;
-
-            if( nYears )
-                nDayDiff = nDate2 - DateToDays( nDay1, nMonth1, nYear2 );
-            else
-                nDayDiff = nDate2 - nDate1;
-
-            if( nDayDiff < 0 )
-                nDayDiff += nDaysInYear;
-
+            nDayDiff = ( nDate2 - DateToDays( 1, 1, nYear2 ) ) +
+                ( DateToDays( 31, 12, nYear1 ) - nDate1 ) + 1; //plus 1 for Dec 31 to Jan 1
             break;
         case 2:         // 2=exact/360
             nDaysInYear = 360;
@@ -508,6 +502,18 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
 }
 
 
+//TODO: In the case of nMode == 1 (exact), there still remains a small error
+//      in the result because of leap years. nDaysInYear is an integer and
+//      returns the days in the year of nStartDate. If nEndDate is not a
+//      leap year, the year fraction of the days in the year of nEndDate is
+//      a little bit too small. If nStardate is not in a leap year, but
+//      nEndDate is, then year fraction of the days in the year of nEndDate
+//      is a little bit too large.
+//      This could be corrected when nDaysInYear is a float and the value
+//      reflects the number of days in the leap year and the non-leap year.
+//      Example: If there are 80 days in the leap year and 80 days in the
+//      non-leap year, then nDaysInYear would be 365.5, resulting in a more
+//      or less exact year fraction.
 double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nStartDate == nEndDate )
@@ -517,7 +523,6 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
     sal_Int32   nDayDiff, nDaysInYear;
 
     GetDiffParam( nNullDate, nStartDate, nEndDate, nMode, nYears, nDayDiff, nDaysInYear );
-
     return double( nYears ) + double( nDayDiff ) / double( nDaysInYear );
 }
 
