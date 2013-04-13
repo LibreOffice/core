@@ -16,7 +16,7 @@
 
 #import "lo.h"
 
-static UIView *theView;
+static View *theView;
 
 @implementation AppDelegate
 
@@ -40,6 +40,12 @@ static UIView *theView;
     self.view = [[View alloc] initWithFrame: r];
     vc.view = self.view;
     theView = self.view;
+
+    self.view->textView = [[UITextView alloc] initWithFrame: r];
+    self.view->textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.view->textView.alpha = 0;
+    [self.view addSubview: self.view->textView];
+    self.view->textView.delegate = self;
 
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(tapGesture:)];
 
@@ -66,6 +72,17 @@ static UIView *theView;
         lo_initialize();
         lo_runMain();
     }
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    NSLog(@"textView: %@ shouldChangeTextInRange:[%u,%u] replacementText:%@", textView, range.location, range.length, text);
+    assert(textView == theView->textView);
+
+    for (NSUInteger i = 0; i < [text length]; i++)
+        lo_keyboard_input([text characterAtIndex: i]);
+
+    return NO;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -101,16 +118,17 @@ static UIView *theView;
 
     [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&frameBegin];
     [[info objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&frameEnd];
+
+    NSLog(@"keyboardWillShow: frame:%dx%d@(%d,%d)",
+          (int) frameEnd.size.width, (int) frameEnd.size.height,
+          (int) frameEnd.origin.x, (int) frameEnd.origin.y);
 }
 
 - (void)keyboardDidHide:(NSNotification *)note
 {
-    NSDictionary *info = [note userInfo];
-    CGRect frameBegin;
-    CGRect frameEnd;
+    (void) note;
 
-    [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&frameBegin];
-    [[info objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&frameEnd];
+    NSLog(@"keyboardDidHide");
 
     lo_keyboard_did_hide();
 }
@@ -129,14 +147,14 @@ void lo_damaged(CGRect rect)
 void lo_show_keyboard()
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-            [theView becomeFirstResponder];
+            [theView->textView becomeFirstResponder];
         });
 }
 
 void lo_hide_keyboard()
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-            [theView resignFirstResponder];
+            [theView->textView resignFirstResponder];
         });
 }
 

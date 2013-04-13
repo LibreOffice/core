@@ -9,8 +9,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface View : UIView <UIKeyInput>
-
+@interface View : UIView
+{
+@public
+    UITextView* textView;
+}
 - (void)drawRect:(CGRect)rect;
 - (void)tapGesture:(UIGestureRecognizer *)gestureRecognizer;
 

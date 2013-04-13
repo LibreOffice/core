@@ -34,32 +34,10 @@
         CGPoint location = [gestureRecognizer locationInView: self];
         NSLog(@"tapGesture: at: (%d,%d)", (int)location.x, (int)location.y);
         lo_tap(location.x, location.y);
+        [self->textView becomeFirstResponder];
     } else
         NSLog(@"tapGesture: %@", gestureRecognizer);
 }
-
-- (void)insertText:(NSString *)text
-{
-    (void) text;
-    // Do something with the typed character
-}
-
-- (void)deleteBackward
-{
-    // Handle the delete key
-}
-
-- (BOOL)hasText
-{
-    // Return whether there's any text present
-    return YES;
-}
-
-- (BOOL)canBecomeFirstResponder
-{
-    return YES;
-}
-
 
 @end
 
