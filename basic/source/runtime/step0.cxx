@@ -17,28 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/string.hxx>
-#include <vcl/msgbox.hxx>
-
-#include "errobject.hxx"
-#include "runtime.hxx"
-#include "sbintern.hxx"
-#include "iosys.hxx"
-#include <sb.hrc>
-#include <basrid.hxx>
-#include "sbunoobj.hxx"
-#include "image.hxx"
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/util/SearchOptions.hpp>
-#include <rtl/instance.hxx>
-#include <vcl/svapp.hxx>
-#include <unotools/textsearch.hxx>
-
 Reference< XInterface > createComListener( const Any& aControlAny, const OUString& aVBAType,
                                            const OUString& aPrefix, SbxObjectRef xScopeObj );
-
-#include <algorithm>
-#include <boost/unordered_map.hpp>
 
 // for a patch forward declaring these methods below makes sense
 // but, #FIXME lets really just move the methods to the top

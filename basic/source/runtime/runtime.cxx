@@ -17,25 +17,61 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
+#include <stdlib.h>
+
+#include <algorithm>
+
+#include <boost/unordered_map.hpp>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/script/XDefaultMethod.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/util/SearchOptions.hpp>
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
+
+#include <sal/log.hxx>
+
 #include <tools/wldcrd.hxx>
+
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+
+#include <rtl/instance.hxx>
+#include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
+
 #include <svl/zforlist.hxx>
+
 #include <unotools/syslocale.hxx>
-#include "runtime.hxx"
-#include "sbintern.hxx"
-#include "opcodes.hxx"
+#include <unotools/textsearch.hxx>
+
+#include <basic/sbuno.hxx>
+
+#include "basrid.hxx"
 #include "codegen.hxx"
-#include "iosys.hxx"
-#include "image.hxx"
+#include "comenumwrapper.hxx"
 #include "ddectrl.hxx"
 #include "dllmgr.hxx"
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include "sbunoobj.hxx"
 #include "errobject.hxx"
-#include "sal/log.hxx"
+#include "image.hxx"
+#include "iosys.hxx"
+#include "opcodes.hxx"
+#include "runtime.hxx"
+#include "sb.hrc"
+#include "sbintern.hxx"
+#include "sbunoobj.hxx"
 
-#include "comenumwrapper.hxx"
+using com::sun::star::uno::Reference;
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::container;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::script;
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
@@ -1287,5 +1323,9 @@ sal_uInt16 SbiRuntime::GetBase()
 {
     return pImg->GetBase();
 }
+
+#include "step0.cxx"
+#include "step1.cxx"
+#include "step2.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

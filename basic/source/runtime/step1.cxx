@@ -17,19 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <stdlib.h>
-#include <comphelper/string.hxx>
-#include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <basic/sbuno.hxx>
-#include "runtime.hxx"
-#include "sbintern.hxx"
-#include "iosys.hxx"
-#include "image.hxx"
-#include "sbunoobj.hxx"
-#include "errobject.hxx"
-
 bool checkUnoObjectType( SbUnoObject* refVal, const OUString& aClass );
 
 // loading a numeric constant (+ID)
@@ -574,9 +561,5 @@ void SbiRuntime::StepBASED( sal_uInt32 nOp1 )
     PushVar( x2 );  // first the Expr
     PushVar( p1 );  // then the Base
 }
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,30 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "runtime.hxx"
-#include "iosys.hxx"
-#include "image.hxx"
-#include "sbintern.hxx"
-#include "sbunoobj.hxx"
-#include "opcodes.hxx"
-
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/script/XDefaultMethod.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/Any.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
-#include <rtl/ustrbuf.hxx>
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::script;
-
-using com::sun::star::uno::Reference;
-
 SbxVariable* getVBAConstant( const OUString& rName );
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
