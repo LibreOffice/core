@@ -89,7 +89,7 @@ SdGroupSlidesDialog::~SdGroupSlidesDialog()
 IMPL_LINK_NOARG(SdGroupSlidesDialog, AddHdl)
 {
     SAL_DEBUG("Add to group");
-    EndDialog(0);
+    endDialog(true);
     return 0;
 }
 

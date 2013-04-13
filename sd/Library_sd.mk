@@ -112,6 +112,7 @@ $(eval $(call gb_Library_use_externals,sd,\
 	boost_headers \
 	libxml2 \
 	dbus \
+	curl \
 ))
 
 ifeq ($(OS),WNT)
