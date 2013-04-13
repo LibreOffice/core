@@ -167,7 +167,7 @@ void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrimitive2DSequenceInCurrentState(SdrDragMethod&)
 {
     const SdrObject* pSource = &maOriginal;
 
