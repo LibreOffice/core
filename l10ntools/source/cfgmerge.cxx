@@ -475,8 +475,6 @@ void CfgMerge::WorkOnText(OString &rText, const OString& rLangIndex)
                 sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
-            OString sPlatform;
-
             pResData = new ResData( sGroupId, sFilename );
             pResData->sId = sLocalId;
             pResData->sResTyp = pStackData->sResTyp;
