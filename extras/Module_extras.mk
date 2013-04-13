@@ -14,18 +14,18 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_autocorr \
 	CustomTarget_glade \
 	Package_autocorr \
+	Package_autotextuser \
+	Package_cfgsrvbitmapunx \
+	Package_cfgsrvnolang \
+	Package_cfgusr \
+	Package_database \
+	Package_databasebiblio \
 	Package_fonts \
 	Package_glade \
 	Package_labels \
 	Package_newfiles \
 	Package_palettes \
 	Package_wordbook \
-	Package_database \
-	Package_databasebiblio \
-	Package_autotextuser \
-	Zip_cfgsrvbitmapunx \
-	Zip_cfgsrvnolang \
-	Zip_cfgusr \
 	Zip_gallbullets \
 	Zip_gallhtmlexpo \
 	Zip_gallroot \

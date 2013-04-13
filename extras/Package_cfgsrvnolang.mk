@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,cfgsrvnolang,$(SRCDIR)/extras/source/misc_config))
+$(eval $(call gb_Package_Package,extras_cfgsrvnolang,$(SRCDIR)/extras/source/misc_config))
 
-$(eval $(call gb_Zip_add_files,cfgsrvnolang,\
+$(eval $(call gb_Package_set_outdir,extras_cfgsrvnolang,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files_with_dir,extras_cfgsrvnolang,share/config,\
 	wizard/form/styles/beige.css \
 	wizard/form/styles/bgr.css \
 	wizard/form/styles/dark.css \
