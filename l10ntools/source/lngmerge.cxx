@@ -247,6 +247,8 @@ sal_Bool LngParser::Merge(
                         {
                             OString sNewText;
                             pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
+                            if( sLang == "qtz" )
+                                sNewText = sNewText.copy(sNewText.indexOf("|") + 2);
 
                             if ( !sNewText.isEmpty()) {
                                 OString *pLine = (*pLines)[ nPos ];
@@ -283,6 +285,8 @@ sal_Bool LngParser::Merge(
 
                     OString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );
+                    if( sCur == "qtz" )
+                        sNewText = sNewText.copy(sNewText.indexOf("|") + 2);
                     if ( !sNewText.isEmpty() && sCur != "x-comment")
                     {
                         OString sLine;
