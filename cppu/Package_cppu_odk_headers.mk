@@ -52,7 +52,7 @@ $(eval $(call gb_Package_add_files,cppu_odk_headers,$(gb_Package_SDKDIRNAME)/inc
 	cppu/unotype.hxx \
 ))
 
-$(eval $(call gb_Package_add_files,cppu_odk_headers,$(gb_Package_SDKDIRNAME)/include/cppu/helper/purpenv/,\
+$(eval $(call gb_Package_add_files,cppu_odk_headers,$(gb_Package_SDKDIRNAME)/include/cppu/helper/purpenv,\
 	cppu/helper/purpenv/Environment.hxx \
 	cppu/helper/purpenv/Mapping.hxx \
 ))
