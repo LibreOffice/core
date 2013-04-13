@@ -178,7 +178,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 
        XMLHashMap*   aXMLStrHM     = file->GetStrings();
     LangHashMap*  aLangHM;
-    static  ResData pResData( "","","");
+    static  ResData pResData("","");
     pResData.sResTyp   = "help";
 
     for(XMLHashMap::iterator pos=aXMLStrHM->begin();pos!=aXMLStrHM->end();++pos)    // Merge every l10n related string
@@ -205,7 +205,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){
 
     XMLElement*   pXMLElement = NULL;
-    PFormEntrys   *pEntrys    = NULL;
+    MergeEntrys   *pEntrys    = NULL;
 
     OString sLId;
 
@@ -222,7 +222,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             sLId    = pXMLElement->GetOldref();
             pResData->sId     =  sLId;
 
-            pEntrys = aMergeDataFile.GetPFormEntrys( pResData );
+            pEntrys = aMergeDataFile.GetMergeEntrys( pResData );
             if( pEntrys != NULL)
             {
                 OString sNewText;

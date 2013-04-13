@@ -63,7 +63,7 @@ namespace
 //  class ResData
 //
 
-ResData::ResData(const OString &rPF, const OString &rGId)
+ResData::ResData( const OString &rGId )
     :
     nWidth( 0 ),
     nChildIndex( 0 ),
@@ -86,14 +86,12 @@ ResData::ResData(const OString &rPF, const OString &rGId)
     pUIEntries( NULL ),
     pItemList( NULL ),
     pFilterList( NULL ),
-    pPairedList( NULL ),
-    sPForm( rPF )
+    pPairedList( NULL )
 {
     sGId = sGId.replaceAll("\r", OString());
-    sPForm = sPForm.replaceAll("\r", OString());
 }
 
-ResData::ResData(const OString &rPF, const OString &rGId , const OString &rFilename)
+ResData::ResData( const OString &rGId, const OString &rFilename)
     :
     nWidth( 0 ),
     nChildIndex( 0 ),
@@ -117,11 +115,9 @@ ResData::ResData(const OString &rPF, const OString &rGId , const OString &rFilen
     pUIEntries( NULL ),
     pItemList( NULL ),
     pFilterList( NULL ),
-    pPairedList( NULL ),
-    sPForm( rPF )
+    pPairedList( NULL )
 {
     sGId = sGId.replaceAll("\r", OString());
-    sPForm = sPForm.replaceAll("\r", OString());
 }
 
 
@@ -162,10 +158,10 @@ ResData::~ResData()
 }
 
 //
-// class PFormEntrys
+// class MergeEntrys
 //
 
-sal_Bool PFormEntrys::GetText( OString &rReturn,
+sal_Bool MergeEntrys::GetText( OString &rReturn,
     sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel )
 {
 
@@ -177,9 +173,6 @@ sal_Bool PFormEntrys::GetText( OString &rReturn,
                 sText[ nLangIndex ] = "";
             bReturn = bTextFirst[ nLangIndex ];
             bTextFirst[ nLangIndex ] = sal_False;
-            break;
-        case STRING_TYP_HELPTEXT :
-            rReturn = sHelpText;
             break;
         case STRING_TYP_QUICKHELPTEXT :
             rReturn = sQuickHelpText[ nLangIndex ];
@@ -204,27 +197,25 @@ sal_Bool PFormEntrys::GetText( OString &rReturn,
 // class MergeData
 //
 
+MergeData::MergeData(
+    const OString &rTyp, const OString &rGID,
+    const OString &rLID , const OString &rFilename )
+    : sTyp( rTyp ),
+    sGID( rGID ),
+    sLID( rLID ) ,
+    sFilename( rFilename ),
+    pMergeEntrys( new MergeEntrys() )
+{
+}
+
 MergeData::~MergeData()
 {
+    delete pMergeEntrys;
 }
 
-PFormEntrys* MergeData::GetPFormEntries()
+MergeEntrys* MergeData::GetMergeEntries()
 {
-    if( aMap.find( OString(RTL_CONSTASCII_STRINGPARAM("HACK")) ) != aMap.end() )
-        return aMap[OString(RTL_CONSTASCII_STRINGPARAM("HACK"))];
-    return NULL;
-}
-
-void MergeData::Insert(PFormEntrys* pfEntrys )
-{
-    aMap.insert( PFormEntrysHashMap::value_type( OString(RTL_CONSTASCII_STRINGPARAM("HACK")) , pfEntrys ) );
-}
-
-PFormEntrys* MergeData::GetPFObject( const OString& rPFO )
-{
-    if( aMap.find( OString(RTL_CONSTASCII_STRINGPARAM("HACK")) ) != aMap.end() )
-        return aMap[ rPFO ];
-    return NULL;
+    return pMergeEntrys;
 }
 
 sal_Bool MergeData::operator==( ResData *pData )
@@ -252,7 +243,6 @@ MergeDataFile::MergeDataFile(
     bool bFirstLang = true;
     while( !aInputStream.eof() )
     {
-        const OString sHack("HACK");
         const OString sFileName( lcl_NormalizeFilename(rFile) );
         const bool bReadAll = sFileName.isEmpty();
         const OString sPoFileName(sPoFile.data(), sPoFile.length());
@@ -331,7 +321,7 @@ MergeDataFile::MergeDataFile(
 
             InsertEntry(
                 aActPo.getResourceType(), aActPo.getGroupId(),
-                aActPo.getLocalId(), sHack, sLang, sText,
+                aActPo.getLocalId(), sLang, sText,
                 sQHText, sTitle, aActPo.getSourceFile(), bCaseSensitive );
 
             if( bFirstLang && bWithQtz &&
@@ -340,7 +330,7 @@ MergeDataFile::MergeDataFile(
                 aLanguageSet.insert("qtz");
                 InsertEntry(
                     aActPo.getResourceType(), aActPo.getGroupId(),
-                    aActPo.getLocalId(), sHack, "qtz",
+                    aActPo.getLocalId(), "qtz",
                     sQTZText + "||" + sExText, sQTZQHText + "||" + sExQHText,
                     sQTZTitle + "||" + sExTitle, aActPo.getSourceFile(),
                     bCaseSensitive );
@@ -391,31 +381,30 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
 }
 
 
-PFormEntrys *MergeDataFile::GetPFormEntrys( ResData *pResData )
+MergeEntrys *MergeDataFile::GetMergeEntrys( ResData *pResData )
 {
-    // search for requested PFormEntrys
+    // search for requested MergeEntrys
     MergeData *pData = GetMergeData( pResData );
     if ( pData )
-        return pData->GetPFormEntries();
+        return pData->GetMergeEntries();
     return NULL;
 }
 
-PFormEntrys *MergeDataFile::GetPFormEntrysCaseSensitive( ResData *pResData )
+MergeEntrys *MergeDataFile::GetMergeEntrysCaseSensitive( ResData *pResData )
 {
-    // search for requested PFormEntrys
+    // search for requested MergeEntrys
     MergeData *pData = GetMergeData( pResData , true );
     if ( pData )
-        return pData->GetPFormEntries();
+        return pData->GetMergeEntries();
     return NULL;
 }
 
 void MergeDataFile::InsertEntry(
     const OString &rTYP, const OString &rGID,
-    const OString &rLID, const OString &rPFO,
-    const OString &nLANG, const OString &rTEXT,
-    const OString &rQHTEXT, const OString &rTITLE ,
-    const OString &rInFilename , bool bCaseSensitive
-    )
+    const OString &rLID, const OString &nLANG,
+    const OString &rTEXT, const OString &rQHTEXT,
+    const OString &rTITLE, const OString &rInFilename,
+    bool bCaseSensitive )
 {
     MergeData *pData;
 
@@ -433,19 +422,9 @@ void MergeDataFile::InsertEntry(
         aMap.insert( MergeDataHashMap::value_type( sKey, pData ) );
     }
 
-    PFormEntrys *pFEntrys = 0;
-
-    // search for PFormEntrys
-    pFEntrys = pData->GetPFObject( rPFO );
-    if( !pFEntrys )
-    {
-        // create new PFormEntrys, cause no one exists with current properties
-        pFEntrys = new PFormEntrys( rPFO );
-        pData->Insert( pFEntrys );
-    }
-
-    // finaly insert the cur string
-    pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
+    // insert the cur string
+    MergeEntrys *pMergeEntrys = pData->GetMergeEntries();
+    pMergeEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
 }
 
 OString MergeDataFile::CreateKey(const OString& rTYP, const OString& rGID,

@@ -122,12 +122,12 @@ void StringParser::Merge(
         {
             xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("name"));
             ResData  aResData(
-                "", helper::xmlStrToOString( pID ),
+                helper::xmlStrToOString( pID ),
                 static_cast<OString>(m_pSource->name) );
             xmlFree( pID );
             aResData.sResTyp = "string";
-            PFormEntrys* pEntrys =
-                (&aMergeDataFile)->GetPFormEntrys( &aResData );
+            MergeEntrys* pEntrys =
+                (&aMergeDataFile)->GetMergeEntrys( &aResData );
             if( pEntrys )
             {
                 OString sNewText;

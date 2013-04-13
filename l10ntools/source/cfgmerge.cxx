@@ -487,7 +487,7 @@ void CfgMerge::WorkOnText(OString &rText, const OString& rLangIndex)
 
             OString sPlatform;
 
-            pResData = new ResData( sPlatform, sGroupId , sFilename );
+            pResData = new ResData( sGroupId, sFilename );
             pResData->sId = sLocalId;
             pResData->sResTyp = pStackData->sResTyp;
         }
@@ -495,7 +495,7 @@ void CfgMerge::WorkOnText(OString &rText, const OString& rLangIndex)
         if (rLangIndex.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
             bEnglish = sal_True;
 
-        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
+        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
             OString sContent;
             pEntrys->GetText( sContent, STRING_TYP_TEXT, rLangIndex );
@@ -520,7 +520,7 @@ void CfgMerge::WorkOnResourceEnd()
 {
 
     if ( pMergeDataFile && pResData && bLocalize && bEnglish ) {
-        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
+        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
             OString sCur;
 

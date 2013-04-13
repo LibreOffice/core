@@ -106,9 +106,9 @@ namespace
             if (aI->second->sGID.isEmpty())
                 continue;
 
-            PFormEntrys* pFoo = aI->second->GetPFormEntries();
+            MergeEntrys* pEntrys = aI->second->GetMergeEntries();
             OString sOut;
-            pFoo->GetText( sOut, STRING_TYP_TEXT, rLanguage );
+            pEntrys->GetText( sOut, STRING_TYP_TEXT, rLanguage );
 
             if (sOut.isEmpty())
                 continue;

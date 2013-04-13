@@ -157,12 +157,12 @@ namespace
                 {
                     xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("id"));
                     ResData  aResData(
-                        "", helper::xmlStrToOString( pID ),
+                        helper::xmlStrToOString( pID ),
                         static_cast<OString>(io_pSource->name) );
                     xmlFree( pID );
                     aResData.sResTyp = helper::xmlStrToOString( pNodeName );
-                    PFormEntrys* pEntrys =
-                        pMergeDataFile->GetPFormEntrys( &aResData );
+                    MergeEntrys* pEntrys =
+                        pMergeDataFile->GetMergeEntrys( &aResData );
                     if( pEntrys )
                     {
                         OString sNewText;

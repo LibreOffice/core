@@ -43,7 +43,7 @@
 
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
-class PFormEntrys;
+class MergeEntrys;
 class MergeData;
 
 typedef boost::unordered_map<OString, OString, OStringHash>
@@ -51,9 +51,6 @@ typedef boost::unordered_map<OString, OString, OStringHash>
 
 typedef boost::unordered_map<OString, bool, OStringHash>
     OStringBoolHashMap;
-
-typedef boost::unordered_map<OString, PFormEntrys*, OStringHash>
-    PFormEntrysHashMap;
 
 typedef boost::unordered_map<OString, MergeData*, OStringHash>
     MergeDataHashMap;
@@ -109,8 +106,8 @@ public:
 class ResData
 {
 public:
-    ResData(const OString &rPF, const OString &rGId);
-    ResData(const OString &rPF, const OString &rGId , const OString &rFilename);
+    ResData( const OString &rGId );
+    ResData( const OString &rGId , const OString &rFilename );
     ~ResData();
     sal_Bool SetId(const OString &rId, sal_uInt16 nLevel);
 
@@ -153,8 +150,6 @@ public:
     ExportList  *pItemList;
     ExportList  *pFilterList;
     ExportList  *pPairedList;
-
-    OString sPForm;
 };
 
 
@@ -196,8 +191,6 @@ private:
 
     ResStack aResStack;                 // stack for parsing recursive
 
-    OString sActPForm;               // hold cur. system
-
     sal_Bool bDefine;                       // cur. res. in a define?
     sal_Bool bNextMustBeDefineEOL;          // define but no \ at lineend
     std::size_t nLevel; // res. recursiv? how deep?
@@ -237,7 +230,7 @@ private:
 
     sal_Bool PrepareTextToMerge(OString &rText, sal_uInt16 nTyp,
         OString &rLangIndex, ResData *pResData);
-    void ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const OString& rTextType );
+    void ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType );
     void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( OString &rText );
     void ConvertExportContent( OString &rText );
@@ -263,19 +256,17 @@ public:
 
 
 //
-// class PFormEntrys
+// class MergeEntrys
 //
 
-/******************************************************************************
-* Purpose: holds information of data to merge (one pform)
-******************************************************************************/
+/**
+ * Purpose: holds information of data to merge
+ */
 
-class PFormEntrys
+class MergeEntrys
 {
 friend class MergeDataFile;
 private:
-    OString data_; //TODO
-    OString sHelpText; // empty string
     OStringHashMap sText;
     OStringBoolHashMap bTextFirst;
     OStringHashMap sQuickHelpText;
@@ -284,7 +275,7 @@ private:
     OStringBoolHashMap bTitleFirst;
 
 public:
-    PFormEntrys( const OString &rPForm ) : data_( rPForm ) {};
+    MergeEntrys(){};
     void InsertEntry(const OString &rId, const OString &rText,
         const OString &rQuickHelpText, const OString &rTitle)
     {
@@ -317,15 +308,11 @@ public:
     OString sGID;
     OString sLID;
     OString sFilename;
-    PFormEntrysHashMap aMap;
+    MergeEntrys* pMergeEntrys;
 public:
-    MergeData( const OString &rTyp, const OString &rGID, const OString &rLID , const OString &rFilename )
-            : sTyp( rTyp ), sGID( rGID ), sLID( rLID ) , sFilename( rFilename ) {};
+    MergeData( const OString &rTyp, const OString &rGID, const OString &rLID , const OString &rFilename );
     ~MergeData();
-    PFormEntrys* GetPFormEntries();
-
-    void Insert( PFormEntrys* pfEntrys );
-    PFormEntrys* GetPFObject( const OString &rPFO );
+    MergeEntrys* GetMergeEntries();
 
     sal_Bool operator==( ResData *pData );
 };
@@ -347,10 +334,10 @@ class MergeDataFile
 
         MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
         void InsertEntry(const OString &rTYP, const OString &rGID,
-            const OString &rLID, const OString &rPFO,
-            const OString &nLang, const OString &rTEXT,
-            const OString &rQHTEXT, const OString &rTITLE,
-            const OString &sFilename, bool bCaseSensitive);
+            const OString &rLID, const OString &nLang,
+            const OString &rTEXT, const OString &rQHTEXT,
+            const OString &rTITLE, const OString &sFilename,
+            bool bCaseSensitive);
     public:
         explicit MergeDataFile(
             const OString &rFileName, const OString& rFile,
@@ -361,8 +348,8 @@ class MergeDataFile
         std::vector<OString> GetLanguages() const;
         const MergeDataHashMap& getMap() const { return aMap; }
 
-        PFormEntrys *GetPFormEntrys( ResData *pResData );
-        PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
+        MergeEntrys *GetMergeEntrys( ResData *pResData );
+        MergeEntrys *GetMergeEntrysCaseSensitive( ResData *pResData );
 
         static OString CreateKey(const OString& rTYP, const OString& rGID,
             const OString& rLID, const OString& rFilename , bool bCaseSensitive = false);

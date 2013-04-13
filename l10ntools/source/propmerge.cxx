@@ -189,9 +189,9 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
             nEqualSign != -1 )
         {
             const OString sID( sLine.copy( 0, sLine.indexOf("=") ).trim() );
-            ResData  aResData( "", sID , m_sSource );
+            ResData  aResData( sID, m_sSource );
             aResData.sResTyp = "property";
-            PFormEntrys* pEntrys = aMergeDataFile.GetPFormEntrys( &aResData );
+            MergeEntrys* pEntrys = aMergeDataFile.GetMergeEntrys( &aResData );
             if( pEntrys )
             {
                 OString sNewText;

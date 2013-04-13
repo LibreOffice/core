@@ -381,7 +381,7 @@ void XRMResExport::WorkOnText(
 
     if ( !pResData )
     {
-        pResData = new ResData( OString(), GetGID() );
+        pResData = new ResData( GetGID() );
     }
     pResData->sText[sLang] = rText;
 }
@@ -462,7 +462,7 @@ void XRMResMerge::WorkOnDesc(
 {
     WorkOnText( rOpenTag, rText);
     if ( pMergeDataFile && pResData ) {
-        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
         if ( pEntrys ) {
             OString sCur;
             OString sDescFilename = GetAttribute ( rOpenTag, "xlink:href" );
@@ -538,12 +538,11 @@ void XRMResMerge::WorkOnText(
 
     if ( pMergeDataFile ) {
         if ( !pResData ) {
-            OString sPlatform( "" );
-            pResData = new ResData( sPlatform, GetGID() , sFilename );
+            pResData = new ResData( GetGID(), sFilename );
             pResData->sResTyp = sResourceType;
         }
 
-        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
             if ( pEntrys ) {
                 OString sContent;
                 if ( !sLang.equalsIgnoreAsciiCase("en-US") &&
@@ -576,7 +575,7 @@ void XRMResMerge::EndOfText(
 
     Output( rCloseTag );
     if ( pMergeDataFile && pResData ) {
-        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
         if ( pEntrys ) {
             OString sCur;
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){

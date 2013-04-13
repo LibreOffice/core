@@ -239,7 +239,6 @@ void Export::Init()
 /*****************************************************************************/
 {
     // resets the internal status, used before parseing another file
-    sActPForm = "";
     bDefine = sal_False;
     bNextMustBeDefineEOL = sal_False;
     nLevel = 0;
@@ -416,7 +415,7 @@ int Export::Execute( int nToken, const char * pToken )
 
             // create new instance for this res. and fill mandatory fields
 
-            pResData = new ResData( sActPForm, FullId() , sFilename );
+            pResData = new ResData( FullId() , sFilename );
             aResStack.push_back( pResData );
             sToken = sToken.replaceAll("\n", OString()).
                 replaceAll("\r", OString()).
@@ -455,7 +454,7 @@ int Export::Execute( int nToken, const char * pToken )
 
             // create new instance for this res. and fill mandatory fields
 
-            pResData = new ResData( sActPForm, FullId() , sFilename );
+            pResData = new ResData( FullId() , sFilename );
             aResStack.push_back( pResData );
             sToken = sToken.replaceAll("\n", OString()).
                 replaceAll("\r", OString()).
@@ -482,7 +481,7 @@ int Export::Execute( int nToken, const char * pToken )
                 aResStack[ nLevel - 2 ]->bChild = sal_True;
             }
 
-            ResData *pNewData = new ResData( sActPForm, FullId() , sFilename );
+            ResData *pNewData = new ResData( FullId() , sFilename );
             pNewData->sResTyp = sLowerTyp;
             aResStack.push_back( pNewData );
         }
@@ -817,40 +816,8 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case CONDITION: {
             bDontWriteOutput = sal_False;
-            sToken = sToken.replace('\r', ' ').replace('\t', ' ');
-            for (;;) {
-                sal_Int32 n = 0;
-                sToken = sToken.replaceFirst("  ", " ", &n);
-                if (n == -1) {
-                    break;
-                }
-            }
-            sal_Int32 n = 0;
-            OString sCondition(sToken.getToken(0, ' ', n));
-            if ( sCondition == "#ifndef" ) {
-                sActPForm = "!defined ";
-                sActPForm += sToken.getToken(0, ' ', n);
-            }
-            else if ( sCondition == "#ifdef" ) {
-                sActPForm = "defined ";
-                sActPForm += sToken.getToken(0, ' ', n);
-            }
-            else if ( sCondition == "#if" ) {
-                sActPForm = sToken.copy( 4 ).replaceAll("||", "\\or");
-            }
-            else if ( sCondition == "#elif" ) {
-                sActPForm = sToken.copy( 6 ).replaceAll("||", "\\or");
-            }
-            else if ( sCondition == "#else" ) {
-                sActPForm = sCondition;
-            }
-            else if ( sCondition == "#endif" ) {
-                sActPForm = "";
-            }
-            else break;
             if ( nLevel ) {
                 WriteData( pResData, sal_True );
-                pResData->sPForm = sActPForm;
             }
         }
         break;
@@ -1495,7 +1462,7 @@ sal_Bool Export::PrepareTextToMerge(OString &rText, sal_uInt16 nTyp,
 
     }
 
-    PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+    MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
     pResData->sId = sOldId;
     pResData->sGId = sOldGId;
     pResData->sResTyp = sOldTyp;
@@ -1530,7 +1497,7 @@ sal_Bool Export::PrepareTextToMerge(OString &rText, sal_uInt16 nTyp,
     return sal_True;
 }
 
-void Export::ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const OString& rTextType )
+void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType )
 {
     sal_Bool bAddSemicolon = sal_False;
     sal_Bool bFirst = sal_True;
@@ -1600,7 +1567,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
     }
     switch ( nMode ) {
         case MERGE_MODE_NORMAL : {
-            PFormEntrys *pEntry = pMergeDataFile->GetPFormEntrys( pResData );
+            MergeEntrys *pEntry = pMergeDataFile->GetMergeEntrys( pResData );
 
             if ( pEntry ) {
                 if ( pResData->bText )
@@ -1649,7 +1616,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                         else
                             pResData->sId = "1";
 
-                        PFormEntrys *pEntrys;
+                        MergeEntrys *pEntrys;
                         std::size_t nLIndex = 0;
                         std::size_t nMaxIndex = 0;
                         if ( pList )
@@ -1664,17 +1631,17 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                         sal_Bool bTranslateList = true;
                         if( !bPairedList ){
                             pResData->sId = OString::number(nMaxIndex);
-                            pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+                            pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
                             if ( !pEntrys )
                                 bTranslateList = false;
                             pResData->sId = OString::valueOf(static_cast<sal_Int32>(nMaxIndex+1));
-                            pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+                            pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
                             if ( pEntrys )
                                 bTranslateList = false;
                             pResData->sId = "1";
                         }
 
-                        pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+                        pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
                         while(( nLIndex < nMaxIndex )) {
                             if ( nIdx == 1 )
                             {
@@ -1787,8 +1754,8 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 }
                                 else
                                     pResData->sId = OString::number(nIdx);
-                                PFormEntrys *oldEntry = pEntrys;
-                                pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+                                MergeEntrys *oldEntry = pEntrys;
+                                pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
                                 if( !pEntrys )
                                     pEntrys = oldEntry;
                             }

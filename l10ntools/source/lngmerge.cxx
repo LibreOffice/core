@@ -209,9 +209,9 @@ sal_Bool LngParser::Merge(
         OString sID( sGroup );
         std::size_t nLastLangPos = 0;
 
-        ResData  *pResData = new ResData( "", sID , sSource );
+        ResData  *pResData = new ResData( sID, sSource );
         pResData->sResTyp = "LngText";
-        PFormEntrys *pEntrys = aMergeDataFile.GetPFormEntrys( pResData );
+        MergeEntrys *pEntrys = aMergeDataFile.GetMergeEntrys( pResData );
         // read languages
         bGroup = sal_False;
 
