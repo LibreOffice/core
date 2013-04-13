@@ -33,11 +33,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,salhelper_checkapi,\
     salhelper/qa/checkapi/strings \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,salhelper_checkapi,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/salhelper/inc \
-))
-
 # strings.cxx includes generated strings.hxx
 $(call gb_CxxObject_get_target,salhelper/qa/checkapi/strings) : \
 	INCLUDE += -I$(call gb_CustomTarget_get_workdir,salhelper/allheaders)

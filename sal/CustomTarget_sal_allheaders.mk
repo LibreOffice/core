@@ -32,23 +32,18 @@ sal_allheaders_DIR := $(call gb_CustomTarget_get_workdir,sal/allheaders)
 $(call gb_CustomTarget_get_target,sal/allheaders) : \
 	$(sal_allheaders_DIR)/sal_allheaders.hxx
 
-# dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
-$(sal_allheaders_DIR)/sal_allheaders.hxx : $(SRCDIR)/sal/CustomTarget_sal_allheaders.mk \
-			  $(SRCDIR)/sal/Package_sal_odk_headers.mk \
-              $(SRCDIR)/sal/Package_inc.mk \
+$(sal_allheaders_DIR)/sal_allheaders.hxx : \
+			  $(call gb_Package_get_target,sal_odk_headers) \
             | $(sal_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	printf '// Generated list of all sal/ includes\n' >  $@
-	printf '#ifdef WNT\n' >>  $@
-	printf '#include <windows.h>\n' >>  $@
-	printf '#endif\n' >>  $@
-	$(foreach file, $(wildcard $(SRCDIR)/sal/inc/*.h) $(wildcard $(SRCDIR)/sal/inc/*.hxx) \
-	                $(wildcard $(SRCDIR)/sal/inc/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*.hxx) \
-	                $(wildcard $(SRCDIR)/sal/inc/*/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*/*.hxx) \
-	                $(wildcard $(SRCDIR)/sal/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*/*/*.hxx), \
-	    $(if $(findstring /win32/, $(file)), printf '#ifdef WNT\n' >> $@ &&) \
-	    printf '#include <%s>\n' $(subst $(SRCDIR)/sal/inc/,,$(file)) >> $@ && \
-	    $(if $(findstring /win32/, $(file)), printf '#endif // WNT\n' >> $@ &&) \
-	    ) :
+	printf '// Generated list of sal includes\n' > $@ && \
+	printf '#ifdef WNT\n' >> $@ && \
+	printf '#include <windows.h>\n' >> $@ && \
+	printf '#endif\n' >> $@ \
+	$(foreach file,$(shell cat $^),\
+		$(if $(findstring /win32/,$(file)),&& printf '#ifdef WNT\n' >> $@) \
+	    && printf '#include <%s>\n' $(subst $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,,$(file)) >> $@ \
+		$(if $(findstring /win32/,$(file)),&& printf '#endif // WNT\n' >> $@) \
+	)
 
 # vim: set noet sw=4 ts=4:

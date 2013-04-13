@@ -31,11 +31,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppu_checkapi,\
     cppu/qa/checkapi/strings \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,cppu_checkapi,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/cppu/inc \
-))
-
 $(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppu_checkapi, \
 	cppu \
 	udkapi \

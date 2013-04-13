@@ -31,11 +31,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_checkapi,\
     sal/qa/checkapi/strings \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sal_checkapi,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/sal/inc \
-))
-
 $(eval $(call gb_CppunitTest_use_external,sal_checkapi,boost_headers))
 
 # strings.cxx includes generated strings.hxx

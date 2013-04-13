@@ -32,21 +32,13 @@ salhelper_allheaders_DIR := $(call gb_CustomTarget_get_workdir,salhelper/allhead
 $(call gb_CustomTarget_get_target,salhelper/allheaders) : \
 	$(salhelper_allheaders_DIR)/salhelper_allheaders.hxx
 
-# dependency on Package_salhelper_odk_headers.mk should ensure this is
-# updated whenever a new public header is added
 $(salhelper_allheaders_DIR)/salhelper_allheaders.hxx : \
-            $(SRCDIR)/salhelper/CustomTarget_salhelper_allheaders.mk \
-		    $(SRCDIR)/salhelper/Package_salhelper_odk_headers.mk \
+            $(call gb_Package_get_target,salhelper_odk_headers) \
             | $(salhelper_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	printf '// Generated list of all salhelper/ includes\n' >  $@
-	$(foreach file, $(wildcard $(SRCDIR)/salhelper/inc/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*.hxx) \
-	                $(wildcard $(SRCDIR)/salhelper/inc/*/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*/*.hxx) \
-	                $(wildcard $(SRCDIR)/salhelper/inc/*/*/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*/*/*.hxx) \
-	                $(wildcard $(SRCDIR)/salhelper/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*/*/*/*.hxx), \
-	    $(if $(findstring /win32/, $(file)), printf '#ifdef _WIN32\n' >> $@ &&) \
-	    printf '#include <%s>\n' $(subst $(SRCDIR)/salhelper/inc/,,$(file)) >> $@ && \
-	    $(if $(findstring /win32/, $(file)), printf '#endif // _WIN32\n' >> $@ &&) \
-	    ) :
+	printf '// Generated list of salhelper includes\n' > $@ \
+	$(foreach file,$(shell cat $<),\
+	    && printf '#include <%s>\n' $(subst $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,,$(file)) >> $@ \
+	)
 
 # vim: set noet sw=4 ts=4:

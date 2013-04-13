@@ -32,21 +32,13 @@ cppu_allheaders_DIR := $(call gb_CustomTarget_get_workdir,cppu/allheaders)
 $(call gb_CustomTarget_get_target,cppu/allheaders) : \
 	$(cppu_allheaders_DIR)/cppu_allheaders.hxx
 
-# dependency on Package_cppu_odk_headers.mk should ensure this is
-# updated whenever a new public header is added
 $(cppu_allheaders_DIR)/cppu_allheaders.hxx : \
-			$(SRCDIR)/cppu/CustomTarget_cppu_allheaders.mk \
-			$(SRCDIR)/cppu/Package_cppu_odk_headers.mk \
+			$(call gb_Package_get_target,cppu_odk_headers) \
             | $(cppu_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	printf '// Generated list of all cppu/ includes\n' >  $@
-	$(foreach file, $(wildcard $(SRCDIR)/cppu/inc/*.h) $(wildcard $(SRCDIR)/cppu/inc/*.hxx) \
-	                $(wildcard $(SRCDIR)/cppu/inc/*/*.h) $(wildcard $(SRCDIR)/cppu/inc/*/*.hxx) \
-	                $(wildcard $(SRCDIR)/cppu/inc/*/*/*.h) $(wildcard $(SRCDIR)/cppu/inc/*/*/*.hxx) \
-	                $(wildcard $(SRCDIR)/cppu/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/cppu/inc/*/*/*/*.hxx), \
-	    $(if $(findstring /win32/, $(file)), printf '#ifdef WNT\n' >> $@ &&) \
-	    printf '#include <%s>\n' $(subst $(SRCDIR)/cppu/inc/,,$(file)) >> $@ && \
-	    $(if $(findstring /win32/, $(file)), printf '#endif // WNT\n' >> $@ &&) \
-	    ) :
+	printf '// Generated list of cppu includes\n' > $@ \
+	$(foreach file,$(shell cat $<),\
+	    && printf '#include <%s>\n' $(subst $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,,$(file)) >> $@ \
+	)
 
 # vim: set noet sw=4 ts=4:
