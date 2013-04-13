@@ -3460,6 +3460,7 @@ darwin*)
         PLATFORMID=macosx_arm_eabi
         OUTPATH=unxiosr
         OS=IOS
+        SDKDIR=sdk
         ;;
     i*86)
         if test "$BITNESS_OVERRIDE" = 64; then
