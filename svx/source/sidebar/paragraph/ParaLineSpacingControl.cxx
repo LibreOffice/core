@@ -728,8 +728,6 @@ IMPL_LINK(ParaLineSpacingControl, VSSelHdl, void *, pControl)
     if(pControl == &maLineSpacing)
     {
         sal_uInt16 iPos = maLineSpacing.GetSelectItemId();
-        short nKern = 0;
-        long nVal = 0;
         switch ( iPos )
         {
             case 1:
