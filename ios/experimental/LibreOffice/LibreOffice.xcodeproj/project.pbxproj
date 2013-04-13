@@ -77,6 +77,10 @@
 		BEBF3E3D17002D6900C454AC /* window.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cxx; path = ../../../../vcl/source/window/window.cxx; sourceTree = "<group>"; };
 		BEBF3E3E17005E6B00C454AC /* frmload.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = frmload.cxx; path = ../../../../sfx2/source/view/frmload.cxx; sourceTree = "<group>"; };
 		BECB749617181C92001BEB85 /* crsrsh.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crsrsh.cxx; path = ../../../../sw/source/core/crsr/crsrsh.cxx; sourceTree = "<group>"; };
+		BECB749917185F48001BEB85 /* view.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = view.cxx; path = ../../../../sw/source/ui/uiview/view.cxx; sourceTree = "<group>"; };
+		BECB749A17185F48001BEB85 /* view0.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = view0.cxx; path = ../../../../sw/source/ui/uiview/view0.cxx; sourceTree = "<group>"; };
+		BECB749B17185F48001BEB85 /* view1.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = view1.cxx; path = ../../../../sw/source/ui/uiview/view1.cxx; sourceTree = "<group>"; };
+		BECB749C17185F48001BEB85 /* view2.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = view2.cxx; path = ../../../../sw/source/ui/uiview/view2.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,6 +270,10 @@
 			isa = PBXGroup;
 			children = (
 				BECB749617181C92001BEB85 /* crsrsh.cxx */,
+				BECB749917185F48001BEB85 /* view.cxx */,
+				BECB749A17185F48001BEB85 /* view0.cxx */,
+				BECB749B17185F48001BEB85 /* view1.cxx */,
+				BECB749C17185F48001BEB85 /* view2.cxx */,
 			);
 			name = sw;
 			sourceTree = "<group>";
