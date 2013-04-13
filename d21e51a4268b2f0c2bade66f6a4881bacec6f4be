@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///S0\u003d",
+        "filename": "extras/Module_extras.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-13T07:25:26Z",
+      "side": 1,
+      "message": "I would prefer to keep this list alphabetically sorted. But I will not block a review on that, as it can easily be done after the conversion has been finished.",
+      "revId": "d21e51a4268b2f0c2bade66f6a4881bacec6f4be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///Sw\u003d",
+        "filename": "extras/Package_cfgsrvnolang.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-13T07:25:26Z",
+      "side": 1,
+      "message": "This does not work as expected. There are two possible ways to fix it:\n\n1. use share/config/wizard/form/styles as destination dir\n\n2. use gb_Package_add_files_with_dir, which does not strip dirs from the source files when constructing destination paths. See the documentation in solenv/gbuild/Package.mk (our gbuild classes--at least the commonly used ones--are quite nicely documented, which is one of the differences between gbuild and the old build system).",
+      "revId": "d21e51a4268b2f0c2bade66f6a4881bacec6f4be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
