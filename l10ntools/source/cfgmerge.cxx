@@ -500,8 +500,7 @@ void CfgMerge::WorkOnText(OString &rText, const OString& rLangIndex)
             OString sContent;
             pEntrys->GetText( sContent, STRING_TYP_TEXT, rLangIndex );
 
-            if ( !rLangIndex.equalsIgnoreAsciiCase("en-US") &&
-                ( sContent != "-" ) && !sContent.isEmpty())
+            if ( !rLangIndex.equalsIgnoreAsciiCase("en-US") && !sContent.isEmpty())
             {
                 rText = helper::QuotHTML( rText );
             }
@@ -530,9 +529,7 @@ void CfgMerge::WorkOnResourceEnd()
                 OString sContent;
                 pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , sal_True );
                 if (
-                    ( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) ) &&
-
-                    ( sContent != "-" ) && !sContent.isEmpty())
+                    ( !sCur.equalsIgnoreAsciiCase("en-US") ) && !sContent.isEmpty())
                 {
 
                     OString sText = helper::QuotHTML( sContent);

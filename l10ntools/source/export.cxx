@@ -919,26 +919,28 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         sXQHText = pResData->sQuickHelpText[ SOURCE_LANGUAGE ];
         sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
 
-        if (sXText.isEmpty())
-            sXText = "-";
-
-        ConvertExportContent(sXText);
-        ConvertExportContent(sXHText);
-        ConvertExportContent(sXQHText);
-        ConvertExportContent(sXTitle);
-
-        common::writePoEntry(
-            "Transex3", *aOutput.mPo, global::inputPathname,
-            pResData->sResTyp, sGID, sLID, sXHText, sXText);
+        if( !sXText.isEmpty() )
+        {
+            ConvertExportContent(sXText);
+            ConvertExportContent(sXHText);
+            common::writePoEntry(
+                "Transex3", *aOutput.mPo, global::inputPathname,
+                pResData->sResTyp, sGID, sLID, sXHText, sXText);
+        }
         if( !sXQHText.isEmpty() )
+        {
+            ConvertExportContent(sXQHText);
             common::writePoEntry(
                 "Transex3", *aOutput.mPo, global::inputPathname, pResData->sResTyp,
                 sGID, sLID, OString(), sXQHText, PoEntry::TQUICKHELPTEXT );
-
+        }
         if( !sXTitle.isEmpty() )
+        {
+            ConvertExportContent(sXTitle);
             common::writePoEntry(
                 "Transex3", *aOutput.mPo, global::inputPathname, pResData->sResTyp,
                 sGID, sLID, OString(), sXTitle, PoEntry::TTITLE );
+        }
 
         if ( bCreateNew ) {
             pResData->sText[ SOURCE_LANGUAGE ]         = "";
@@ -1508,7 +1510,7 @@ void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OStrin
 
         OString sText;
         sal_Bool bText = pEntry->GetText( sText, nType, sCur , sal_True );
-        if ( bText && !sText.isEmpty() && sText != "-" ) {
+        if ( bText && !sText.isEmpty() ) {
             OString sOutput;
             if ( bNextMustBeDefineEOL)  {
                 if ( bFirst )

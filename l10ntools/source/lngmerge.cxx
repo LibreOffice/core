@@ -297,8 +297,7 @@ sal_Bool LngParser::Merge(
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );
                     if( sCur == "qtz" )
                         sNewText = sNewText.copy(sNewText.indexOf("|") + 2);
-                    if (( !sNewText.isEmpty()) &&
-                        !(( sCur.equalsL(RTL_CONSTASCII_STRINGPARAM("x-comment"))) && ( sNewText == "-" )))
+                    if ( !sNewText.isEmpty() && sCur != "x-comment")
                     {
                         OString sLine;
                         sLine += sCur;
