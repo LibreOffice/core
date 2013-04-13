@@ -260,15 +260,30 @@ $(if $(strip $(1)),\
 $(call repositorymodule_serialize,$(wordlist 2,$(words $(1)),$(1))))
 endef
 
+# this list consists of libraries above the arbitrary cut-off of 30M
+# on a --enable-debug linux build
 ifeq (all,$(filter all,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
+	chartcore \
+	chartcontroller \
+	cui \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
+	fwk \
+	$(if $(MERGELIBS),merged) \
+	msword \
+	oox \
+	sc \
 	scfilt \
-	$(if $(filter SCRIPTING,$(BUILD_TYPE)),vbaobj) \
-	sc msword swui sw sd \
-	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \
-	writerfilter cui chartcontroller oox \
-	$(if $(MERGELIBS),merged,svxcore) \
-	xo vcl \
+	sd \
+	sfx \
+	svt \
+	svx \
+	svxcore \
+	sw \
+	swui \
+	vcl \
+	writerfilter \
+	xo \
 ))
 endif
 
