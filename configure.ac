@@ -3457,7 +3457,7 @@ darwin*)
         CPU=R
         CPUNAME=ARM
         RTL_ARCH=ARM_EABI
-        PLATFORMID=macosx_arm_eabi
+        PLATFORMID=ios_arm
         OUTPATH=unxiosr
         OS=IOS
         SDKDIR=sdk
