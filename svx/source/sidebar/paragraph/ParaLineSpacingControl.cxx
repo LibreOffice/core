@@ -621,7 +621,7 @@ IMPL_LINK( ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox*, pBox )
     return 0;
 }
 
-IMPL_LINK( ParaLineSpacingControl, LineSPDistAtHdl_Impl, MetricField*, pBox )
+IMPL_LINK( ParaLineSpacingControl, LineSPDistAtHdl_Impl, MetricField*, /* pBox */ )
 {
     ExecuteLineSpace();
     return (0L);
