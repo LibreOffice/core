@@ -369,4 +369,19 @@ void lo_tap(int x, int y)
     }
 }
 
+extern "C"
+void lo_keyboard_did_hide()
+{
+    // Tell LO it has lost "focus", which will cause it to stop
+    // displaying any text insertion cursor etc
+
+    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
+    if (pFocus) {
+        MouseEvent aEvent;
+
+        aEvent = MouseEvent(Point(0, 0), 0, MOUSE_LEAVEWINDOW, MOUSE_LEFT);
+        Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEMOVE, pFocus->GetWindow(), &aEvent);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
