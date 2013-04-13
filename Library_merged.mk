@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,merged,\
 $(eval $(call gb_Library_use_externals,merged,\
 	boostdatetime \
 	$(call gb_Helper_optional,DESKTOP,clucene) \
+	cppunit \
 	cups \
 	curl \
 	expat \
@@ -62,6 +63,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	$(if $(filter-out IOS,$(OS)),lpsolve) \
 	mythes \
 	nss3 \
+	$(call gb_Helper_optional,PYUNO,python) \
 	zlib \
 ))
 

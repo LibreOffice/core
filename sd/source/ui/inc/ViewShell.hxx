@@ -44,14 +44,14 @@ class ScrollBarBox;
 class SdDrawDocument;
 class ScrollBar;
 
-extern const String aEmptyStr;
-
 namespace com { namespace sun { namespace star {
 namespace embed {
     class XEmbeddedObject;
 }}}}
 
 namespace sd {
+
+extern const String aEmptyStr;
 
 class DrawDocShell;
 class FrameView;

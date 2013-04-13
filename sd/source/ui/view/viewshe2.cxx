@@ -72,11 +72,9 @@
 
 using namespace com::sun::star;
 
-#if !defined(DISABLE_DYNLOADING) // otherwise use the one in sw...
-const String aEmptyStr;
-#endif
-
 namespace sd {
+
+const String aEmptyStr;
 
 /**
  * adjust Thumbpos and VisibleSize
