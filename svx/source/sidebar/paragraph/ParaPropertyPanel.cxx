@@ -750,7 +750,7 @@ void ParaPropertyPanel::ShowMenu (void)
     }
 }
 
-void ParaPropertyPanel::ParaBKGStateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
+void ParaPropertyPanel::ParaBKGStateChanged(sal_uInt16 /* nSID */, SfxItemState eState, const SfxPoolItem* pState)
 {
     if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxColorItem))
     {
@@ -773,7 +773,7 @@ Color ParaPropertyPanel::GetBGColor (void) const
 }
 
 void ParaPropertyPanel::SetBGColor (
-    const String& rsColorName,
+    const String& /* rsColorName */,
     const Color aColor)
 {
     SvxColorItem aColorItem(aColor, SID_BACKGROUND_COLOR);
@@ -831,7 +831,7 @@ IMPL_LINK( ParaPropertyPanel, AlignStyleModifyHdl_Impl, ToolBox*, pBox )
     return 0;
 }
 //==================================for Paragraph Indent=====================
-IMPL_LINK( ParaPropertyPanel, ModifyIndentHdl_Impl, SvxRelativeField*, pBox )
+IMPL_LINK( ParaPropertyPanel, ModifyIndentHdl_Impl, SvxRelativeField*, /* pBox */ )
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
     aMargin.SetTxtLeft( (const long)GetCoreValue( *maLeftIndent.get(), m_eLRSpaceUnit ) );
@@ -998,7 +998,7 @@ IMPL_LINK( ParaPropertyPanel, ClickLineSPDropDownHdl_Impl, ToolBox*, pBox )
 }
 
 //==================================for Paragraph Spacing=====================
-IMPL_LINK( ParaPropertyPanel, ULSpaceHdl_Impl, SvxRelativeField*, pBox )
+IMPL_LINK( ParaPropertyPanel, ULSpaceHdl_Impl, SvxRelativeField*, /* pBox */)
 {
     SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
     aMargin.SetUpper( (sal_uInt16)GetCoreValue( *maTopDist.get(), m_eULSpaceUnit ) );
@@ -1199,7 +1199,7 @@ void ParaPropertyPanel::StateChangedAlignmentImpl( sal_uInt16 nSID, SfxItemState
     }
 }
 
-void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /* nSID */, SfxItemState eState, const SfxPoolItem* pState )
 {
     switch (maContext.GetCombinedContext())
     {
@@ -1357,7 +1357,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eS
     }
 }
 
-void ParaPropertyPanel::StateChangedLnSPImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ParaPropertyPanel::StateChangedLnSPImpl( sal_uInt16 /* nSID */, SfxItemState eState, const SfxPoolItem* pState )
 {
     meLnSpState = eState;
 
@@ -1369,7 +1369,7 @@ void ParaPropertyPanel::StateChangedLnSPImpl( sal_uInt16 nSID, SfxItemState eSta
     }
 }
 
-void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /* nSID */, SfxItemState eState, const SfxPoolItem* pState )
 {
     maTopDist->SetMax( maTopDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
     maBottomDist->SetMax( maBottomDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
@@ -1500,7 +1500,7 @@ void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState 
 }
 //Modified for Numbering&Bullets Dialog UX Enh(Story 992) by chengjh,2011.7.5
 //Handing the transferred the num rule index data of the current selection
-void ParaPropertyPanel::StateChangeBulletNumRuleImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ParaPropertyPanel::StateChangeBulletNumRuleImpl( sal_uInt16 nSID, SfxItemState /* eState */, const SfxPoolItem* pState )
 {
 
     const SfxUInt16Item* pIt = (const SfxUInt16Item*)pState;
@@ -1579,7 +1579,7 @@ PopupControl* ParaPropertyPanel::CreateBGColorPopupControl (PopupContainer* pPar
 
 
 ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const cssu::Reference<css::frame::XFrame>& /* rxFrame */,
     SfxBindings* pBindings,
     const cssu::Reference<css::ui::XSidebar>& rxSidebar)
     : Control(pParent, SVX_RES(RID_SIDEBAR_PARA_PANEL)),
