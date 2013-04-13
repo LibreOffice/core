@@ -23,9 +23,9 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_database \
 	Package_databasebiblio \
 	Package_autotextuser \
-	Zip_cfgsrvbitmapunx \
-	Zip_cfgsrvnolang \
-	Zip_cfgusr \
+	Package_cfgsrvbitmapunx \
+	Package_cfgsrvnolang \
+	Package_cfgusr \
 	Zip_gallbullets \
 	Zip_gallhtmlexpo \
 	Zip_gallroot \
