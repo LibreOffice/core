@@ -1356,7 +1356,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 }
             }
 
-            // No table cursor in repeaded headlines:
+            // No table cursor in repeated headlines:
             if ( bInRepeatedHeadline )
             {
                 pTblFrm = 0;
