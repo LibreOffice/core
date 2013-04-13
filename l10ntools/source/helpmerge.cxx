@@ -76,7 +76,7 @@ HelpParser::HelpParser( const OString &rHelpFile )
 /*****************************************************************************/
 bool HelpParser::CreatePO(
 /*****************************************************************************/
-    const OString &rPOFile_in, const OString &sHelpFile, const OString &rLanguage,
+    const OString &rPOFile_in, const OString &sHelpFile,
     XMLFile *pXmlFile, const OString &rGsi1){
     SimpleXMLParser aParser;
     OUString sXmlFile(
@@ -111,9 +111,6 @@ bool HelpParser::CreatePO(
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
 
-    std::vector<OString> aLanguages;
-    aLanguages.push_back( rLanguage );
-
     std::vector<OString> order = file->getOrder();
     std::vector<OString>::iterator pos;
     XMLHashMap::iterator posm;
@@ -124,28 +121,24 @@ bool HelpParser::CreatePO(
         pElem = posm->second;
         OString sCur;
 
-        for( unsigned int n = 0; n < aLanguages.size(); n++ )
+        pXMLElement = (*pElem)[ "en-US" ];
+
+        if( pXMLElement != NULL )
         {
-            sCur = aLanguages[ n ];
-            pXMLElement = (*pElem)[ sCur ];
+            OString data(
+                OUStringToOString( pXMLElement->ToOUString(), RTL_TEXTENCODING_UTF8 ).
+                    replaceAll("\n",OString()).
+                    replaceAll("\t",OString()).trim());
 
-            if( pXMLElement != NULL )
-            {
-                OString data(
-                    OUStringToOString( pXMLElement->ToOUString(), RTL_TEXTENCODING_UTF8 ).
-                        replaceAll("\n",OString()).
-                        replaceAll("\t",OString()).trim());
+            common::writePoEntry(
+                "Helpex", aPoOutput, sHelpFile, rGsi1,
+                posm->first, pXMLElement->GetOldref(), OString(), data);
 
-                common::writePoEntry(
-                    "Helpex", aPoOutput, sHelpFile, rGsi1,
-                    posm->first, pXMLElement->GetOldref(), OString(), data);
-
-                pXMLElement=NULL;
-            }
-            else
-            {
-                fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreatePO, Language %s, File %s\n", sCur.getStr(), sHelpFile.getStr());
-            }
+            pXMLElement=NULL;
+        }
+        else
+        {
+            fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreatePO, Language %s, File %s\n", sCur.getStr(), sHelpFile.getStr());
         }
     }
     aPoOutput.close();

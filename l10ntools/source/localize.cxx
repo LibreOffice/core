@@ -139,7 +139,6 @@ void handleCommand(
     buf.append(rInPath);
     buf.append(" -o ");
     buf.append(rOutPath);
-    buf.append(" -l en-US");
 
     const OString cmd = buf.makeStringAndClear();
     if (system(cmd.getStr()) != 0)

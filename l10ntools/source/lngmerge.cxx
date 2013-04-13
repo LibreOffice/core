@@ -89,11 +89,8 @@ LngParser::~LngParser()
     delete pLines;
 }
 
-sal_Bool LngParser::CreatePO(
-    const OString &rPOFile,
-    const OString &rLanguage )
+sal_Bool LngParser::CreatePO( const OString &rPOFile )
 {
-    aLanguages.push_back(rLanguage);
     PoOfstream aPOStream( rPOFile, PoOfstream::APP );
     if (!aPOStream.isOpen()) {
         std::cerr << "Ulfex error: Can't open po file:" << rPOFile.getStr() << "\n";
@@ -130,18 +127,11 @@ void LngParser::WritePO(PoOfstream &aPOStream,
 {
 
    sal_Bool bExport = true;
-   if ( bExport ) {
-       OString sCur;
-       for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-           sCur = aLanguages[ n ];
-           OString sAct = rText_inout[ sCur ];
-           if ( sAct.isEmpty() && !sCur.isEmpty() )
-               sAct = rText_inout[ OString("en-US") ];
-
-           common::writePoEntry(
-                "Ulfex", aPOStream, rActFileName, "LngText",
-                rID, OString(), OString(), sAct);
-       }
+   if ( bExport )
+    {
+        common::writePoEntry(
+            "Ulfex", aPOStream, rActFileName, "LngText",
+            rID, OString(), OString(), rText_inout["en-US"]);
    }
 }
 

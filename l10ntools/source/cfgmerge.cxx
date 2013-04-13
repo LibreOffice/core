@@ -72,7 +72,7 @@ FILE * init(int argc, char ** argv) {
     } else {
         global::parser.reset(
             new CfgExport(
-                aArgs.m_sOutputFile, global::inputPathname, aArgs.m_sLanguage ));
+                aArgs.m_sOutputFile, global::inputPathname ));
     }
 
     return pFile;
@@ -359,8 +359,7 @@ void CfgParser::Error(const OString& rError)
 /*****************************************************************************/
 CfgExport::CfgExport(
         const OString &rOutputFile,
-        const OString &rFilePath,
-        const OString &rLanguage
+        const OString &rFilePath
 )
 /*****************************************************************************/
                 : sPath( rFilePath )
@@ -371,7 +370,6 @@ CfgExport::CfgExport(
         std::cerr << "ERROR: Unable to open output file: " << rOutputFile << "\n";
         std::exit(EXIT_FAILURE);
     }
-    aLanguages.push_back( rLanguage );
 }
 
 /*****************************************************************************/
@@ -388,7 +386,6 @@ void CfgExport::WorkOnResourceEnd()
     if ( bLocalize ) {
     if ( pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )
         {
-            OString sFallback = pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("en-US"))];
             OString sXComment = pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("x-comment"))];
             OString sLocalId = pStackData->sIdentifier;
             OString sGroupId;
@@ -400,20 +397,13 @@ void CfgExport::WorkOnResourceEnd()
                 sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
-            for (size_t n = 0; n < aLanguages.size(); n++)
-            {
-                OString sCur = aLanguages[ n ];
 
-                OString sText = pStackData->sText[ sCur ];
-                if ( sText.isEmpty())
-                    sText = sFallback;
+            OString sText = pStackData->sText[ "en-US" ];
+            sText = helper::UnQuotHTML( sText );
 
-                sText = helper::UnQuotHTML( sText );
-
-                common::writePoEntry(
-                    "Cfgex", pOutputStream, sPath, pStackData->sResTyp,
-                    sGroupId, sLocalId, sXComment, sText);
-            }
+            common::writePoEntry(
+                "Cfgex", pOutputStream, sPath, pStackData->sResTyp,
+                sGroupId, sLocalId, sXComment, sText);
         }
     }
 }

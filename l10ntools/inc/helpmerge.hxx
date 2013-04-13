@@ -43,7 +43,7 @@ public:
 
 /// Method append a PO file with the content of a parsed XML file
 /// @PRECOND rHelpFile is valid
-    static bool CreatePO( const OString &rPOFile_in, const OString &sHelpFile, const OString &rLanguage,
+    static bool CreatePO( const OString &rPOFile_in, const OString &sHelpFile,
                           XMLFile *pXmlFile, const OString &rGsi1 );
 
 /// Method merges the String from the POfile into XMLfile. Both Strings must

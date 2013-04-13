@@ -243,7 +243,7 @@ private:
     void CutComment( OString &rText );
 
 public:
-    Export(const OString &rOutput, const OString &rLanguage);
+    Export( const OString &rOutput );
     Export(const OString &rMergeSource, const OString &rOutput, const OString &rLanguage);
     ~Export();
 

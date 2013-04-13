@@ -72,7 +72,7 @@ FILE * init(int argc, char ** argv) {
         global::exporter.reset(
             new Export(aArgs.m_sMergeSrc, aArgs.m_sOutputFile, aArgs.m_sLanguage));
     } else {
-        global::exporter.reset(new Export(aArgs.m_sOutputFile, aArgs.m_sLanguage));
+        global::exporter.reset(new Export(aArgs.m_sOutputFile));
     }
 
     global::exporter->Init();
@@ -176,7 +176,7 @@ static sal_Int32 lcl_countOccurrences(const OString& text, char c)
 
 }
 
-Export::Export(const OString &rOutput, const OString &rLanguage)
+Export::Export(const OString &rOutput)
                 :
                 bDefine( sal_False ),
                 bNextMustBeDefineEOL( sal_False ),
@@ -191,12 +191,9 @@ Export::Export(const OString &rOutput, const OString &rLanguage)
                 bDontWriteOutput( sal_False ),
                 isInitialized( false ),
                 sFilename( global::inputPathname ),
-                sLanguages( rLanguage ),
+                sLanguages( OString() ),
                 pParseQueue( new ParserQueue( *this ) )
 {
-    InitLanguages();
-    // used when export is enabled
-
     // open output stream
     aOutput.mPo = new PoOfstream( rOutput, PoOfstream::APP );
     if (!aOutput.mPo->isOpen()) {
@@ -1018,39 +1015,31 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
         }
     }
 
-    OString sCur;
     for ( size_t i = 0; pExportList != NULL && i < pExportList->size(); i++ )
     {
         ExportListEntry *pEntry = (*pExportList)[  i ];
 
-        OString sLID(OString::valueOf(static_cast<sal_Int64>(i + 1)));
-        for (unsigned int n = 0; n < aLanguages.size(); ++n)
-        {
-            sCur = aLanguages[ n ];
-            if (!(*pEntry)[ SOURCE_LANGUAGE ].isEmpty())
-            {
-                OString sText((*pEntry)[ SOURCE_LANGUAGE ] );
+        OString sLID;
+        OString sText((*pEntry)[ SOURCE_LANGUAGE ] );
 
-                // Strip PairList Line String
-                if (rTyp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pairedlist")))
-                {
-                    sLID = GetPairedListID( sText );
-                    if (!(*pEntry)[ sCur ].isEmpty())
-                        sText = (*pEntry)[ sCur ];
-                    sText = GetPairedListString( sText );
-                }
-                else
-                {
-                    sText = StripList( (*pEntry)[ sCur ] );
-                    if( sText == "\\\"" )
-                        sText = "\"";
-                }
-                ConvertExportContent(sText);
-                common::writePoEntry(
-                    "Transex3", *aOutput.mPo, global::inputPathname,
-                    rTyp, sGID, sLID, OString(), sText);
-            }
+        // Strip PairList Line String
+        if (rTyp.equalsIgnoreAsciiCase("pairedlist"))
+        {
+            sLID = GetPairedListID( sText );
+            sText = GetPairedListString( sText );
         }
+        else
+        {
+            sLID = OString::valueOf(static_cast<sal_Int64>(i + 1));
+            sText = StripList( sText );
+            if( sText == "\\\"" )
+                sText = "\"";
+        }
+        ConvertExportContent(sText);
+        common::writePoEntry(
+            "Transex3", *aOutput.mPo, global::inputPathname,
+            rTyp, sGID, sLID, OString(), sText);
+
         if ( bCreateNew )
             delete [] pEntry;
     }

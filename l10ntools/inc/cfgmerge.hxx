@@ -160,8 +160,7 @@ protected:
 public:
     CfgExport(
         const OString &rOutputFile,
-        const OString &rFilePath,
-        const OString &rLanguage
+        const OString &rFilePath
     );
     ~CfgExport();
 };

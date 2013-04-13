@@ -39,7 +39,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         aParser.Merge(
             aArgs.m_sMergeSrc, aArgs.m_sOutputFile, aArgs.m_sLanguage );
     else
-        aParser.CreatePO( aArgs.m_sOutputFile, aArgs.m_sLanguage );
+        aParser.CreatePO( aArgs.m_sOutputFile );
 
     return 0;
 }

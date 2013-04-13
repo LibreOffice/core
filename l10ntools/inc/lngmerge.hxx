@@ -53,7 +53,7 @@ public:
         sal_Bool bULFFormat);
     ~LngParser();
 
-    sal_Bool CreatePO( const OString &rPOFile, const OString &rLanguage );
+    sal_Bool CreatePO( const OString &rPOFile );
     sal_Bool Merge(const OString &rPOFile, const OString &rDestinationFile,
          const OString &rLanguage );
 };

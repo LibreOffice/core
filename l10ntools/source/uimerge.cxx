@@ -196,13 +196,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (!aArgs.m_bMergeMode)
     {
-        if (aArgs.m_sLanguage != "en-US")
-        {
-            fprintf(stderr, "only en-US can exist in source .ui files\n");
-            nRetValue = 1;
-        }
-        else
-            nRetValue = extractTranslations();
+        nRetValue = extractTranslations();
     }
     else
     {

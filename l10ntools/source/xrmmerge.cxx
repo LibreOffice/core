@@ -325,7 +325,6 @@ XRMResExport::XRMResExport(
                 pResData( NULL ),
                 sPath( rFilePath )
 {
-    aLanguages.push_back( sLanguage );
     pOutputStream.open( rOutputFile, PoOfstream::APP );
     if (!pOutputStream.isOpen())
     {
@@ -395,18 +394,12 @@ void XRMResExport::EndOfText(
 {
     if ( pResData )
     {
-        OString sCur;
-        for( unsigned int n = 0; n < aLanguages.size(); n++ )
-        {
-            sCur = aLanguages[ n ];
+        OString sAct = pResData->sText["en-US"];
 
-            OString sAct = pResData->sText[sCur];
-
-            if( !sAct.isEmpty() )
-                common::writePoEntry(
-                    "Xrmex", pOutputStream, sPath, sResourceType,
-                    pResData->sGId, OString(), OString(), sAct );
-        }
+        if( !sAct.isEmpty() )
+            common::writePoEntry(
+                "Xrmex", pOutputStream, sPath, sResourceType,
+                pResData->sGId, OString(), OString(), sAct );
     }
     delete pResData;
     pResData = NULL;
