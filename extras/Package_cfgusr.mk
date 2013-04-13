@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,cfgusr,$(SRCDIR)/extras/source/misc_config))
+$(eval $(call gb_Package_Package,extras_cfgusr,$(SRCDIR)/extras/source/misc_config))
 
-$(eval $(call gb_Zip_add_files,cfgusr,\
+$(eval $(call gb_Package_set_outdir,extras_cfgusr,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_cfgusr,presets/config,\
     autotbl.fmt \
 ))
 
