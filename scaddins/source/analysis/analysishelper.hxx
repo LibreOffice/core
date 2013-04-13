@@ -79,11 +79,6 @@ sal_Int32           GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_I
 
 sal_Int32           GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 );
 inline sal_Int16    GetDayOfWeek( sal_Int32 nDate );
-void                GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
-                        sal_uInt16& rYears, sal_Int32& rDayDiffPart, sal_Int32& rDaysInYear ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-                        // rYears = full num of years
-                        // rDayDiffPart = num of days for last year
-                        // rDaysInYear = num of days in first year
 sal_Int32           GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
                                 sal_Int32* pOptDaysIn1stYear = NULL ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
