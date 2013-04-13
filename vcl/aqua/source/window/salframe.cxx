@@ -931,6 +931,7 @@ NSCursor* AquaSalFrame::getCurrentCursor() const
     case POINTER_WINDOW_WSIZE:
                             pCursor = [NSCursor resizeLeftRightCursor]; break;
     case POINTER_REFHAND:   pCursor = [NSCursor pointingHandCursor];    break;
+    case POINTER_NULL:      [NSCursor hide];                            break;
 
     default:
         pCursor = GetSalData()->getCursor( mePointerStyle );
