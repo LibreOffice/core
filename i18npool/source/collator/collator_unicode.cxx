@@ -136,7 +136,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                         func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, OUString(func_base + rAlgorithm).pData);
                 } else {
                     if ( rLocale.Language == "ja" ) {
-                        // replace algrithm name to implementation name.
+                        // replace algorithm name to implementation name.
                         if (rAlgorithm.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("phonetic (alphanumeric first)")) )
                             aBuf.appendAscii("phonetic_alphanumeric_first");
                         else if (rAlgorithm.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("phonetic (alphanumeric last)")))

@@ -284,7 +284,7 @@ public:
                                 int nLcsLen, int nPieceLen );
 };
 
-/// Use Hirschberg's algrithm to find LCS in linear space
+/// Use Hirschberg's algorithm to find LCS in linear space
 class LgstCommonSubseq: public CommonSubseq
 {
 private:
