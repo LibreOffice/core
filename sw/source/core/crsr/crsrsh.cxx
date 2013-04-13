@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <hintids.hxx>
@@ -63,10 +61,6 @@
 #include <globals.hrc>
 
 #include <comcore.hrc>
-
-#if !HAVE_FEATURE_DESKTOP
-#include <touch/touch.h>
-#endif
 
 using namespace com::sun::star;
 using namespace util;
@@ -2006,9 +2000,6 @@ void SwCrsrShell::ShowCrsr()
     {
         m_bSVCrsrVis = sal_True;
         UpdateCrsr();
-#if !HAVE_FEATURE_DESKTOP
-        lo_show_keyboard();
-#endif
     }
 }
 
@@ -2021,9 +2012,6 @@ void SwCrsrShell::HideCrsr()
         // possibly reverse selected areas!!
         SET_CURR_SHELL( this );
         m_pVisCrsr->Hide();
-#if !HAVE_FEATURE_DESKTOP
-        lo_hide_keyboard();
-#endif
     }
 }
 
