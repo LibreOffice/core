@@ -80,10 +80,10 @@ class  SVX_DLLPUBLIC NumSettings_Impl
 
     public:
         NumSettings_Impl() :
-            nNumberType(0),
-                pBrushItem(0),
-                aSize(0,0),
-            nParentNumbering(0)
+          nNumberType(0),
+          nParentNumbering(0),
+          pBrushItem(0),
+          aSize(0,0)
             {}
         ~NumSettings_Impl(){}
 };
@@ -134,8 +134,8 @@ class  SVX_DLLPUBLIC GrfBulDataRelation: public BulletsSettings
         BulletsSettings(eTy),
         nTabIndex((sal_uInt16)0xFFFF),
         nGallaryIndex((sal_uInt16)0xFFFF),
-        aSize(0,0),
-        pGrfObj(0)
+        pGrfObj(0),
+        aSize(0,0)
     {}
     virtual ~GrfBulDataRelation(){}
 };
