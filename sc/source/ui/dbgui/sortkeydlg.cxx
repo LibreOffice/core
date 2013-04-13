@@ -156,11 +156,12 @@ IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
 
 // -----------------------------------------------------------------------
 
-void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItem )
+void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItemIndex )
 {
-    m_rVertScroll.SetRangeMax( nItem );
-    m_rVertScroll.DoScroll( nItem );
-    m_aSortWin.AddSortKey( nItem );
+    ++nItemIndex;
+    m_rVertScroll.SetRangeMax( nItemIndex );
+    m_rVertScroll.DoScroll( nItemIndex );
+    m_aSortWin.AddSortKey( nItemIndex );
     checkAutoVScroll();
 }
 
