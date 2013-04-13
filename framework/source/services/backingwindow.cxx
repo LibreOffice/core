@@ -160,16 +160,16 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
         Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
         Sequence<Any> args(1);
         PropertyValue val(
-            OUString( "nodepath" ),
+            "nodepath",
             0,
-            Any(OUString( "/org.openoffice.Office.Common/Help/StartCenter")),
+            Any(OUString("/org.openoffice.Office.Common/Help/StartCenter")),
             PropertyState_DIRECT_VALUE);
         args.getArray()[0] <<= val;
         Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
         if( xNameAccess.is() )
         {
             //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-            Any value( xNameAccess->getByName(OUString("StartCenterHideExternalLinks")) );
+            Any value( xNameAccess->getByName("StartCenterHideExternalLinks") );
             mnHideExternalLinks = value.get<sal_Int32>();
         }
     }
@@ -177,9 +177,9 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     {
     }
 
-    String aExtHelpText( FwkResId( STR_BACKING_EXTHELP ) );
-    String aInfoHelpText( FwkResId( STR_BACKING_INFOHELP ) );
-    String aTplRepHelpText( FwkResId( STR_BACKING_TPLREP ) );
+    OUString aExtHelpText( FwkResId( STR_BACKING_EXTHELP ) );
+    OUString aInfoHelpText( FwkResId( STR_BACKING_INFOHELP ) );
+    OUString aTplRepHelpText( FwkResId( STR_BACKING_TPLREP ) );
 
     // clean up resource stack
     FreeResource();
@@ -328,24 +328,24 @@ void BackingWindow::prepareRecentFileMenu()
             rArgsList.realloc( nArgs );
 
             nArgs--;
-            rArgsList[nArgs].Name = OUString( "FilterName" );
+            rArgsList[nArgs].Name = "FilterName";
             rArgsList[nArgs].Value = makeAny( aFilter );
 
             if( !aFilterOpt.isEmpty() )
             {
                 nArgs--;
-                rArgsList[nArgs].Name = OUString( "FilterOptions" );
+                rArgsList[nArgs].Name = "FilterOptions";
                 rArgsList[nArgs].Value = makeAny( aFilterOpt );
             }
 
             // documents in the picklist will never be opened as templates
             nArgs--;
-            rArgsList[nArgs].Name = OUString( "AsTemplate" );
+            rArgsList[nArgs].Name = "AsTemplate";
             rArgsList[nArgs].Value = makeAny( (sal_Bool) sal_False );
 
             nArgs--;
-            rArgsList[nArgs].Name = OUString( "Referer" );
-            rArgsList[nArgs].Value = makeAny( OUString( "private:user"  ) );
+            rArgsList[nArgs].Name = "Referer";
+            rArgsList[nArgs].Value = makeAny( OUString("private:user") );
 
             // and finally create an entry in the popupmenu
             OUString   aMenuTitle;
@@ -389,7 +389,7 @@ void BackingWindow::prepareRecentFileMenu()
     }
     else
     {
-        String aNoDoc( FwkResId( STR_NODOCUMENT ) );
+        OUString aNoDoc( FwkResId( STR_NODOCUMENT ) );
         mpRecentMenu->InsertItem( 0xffff, aNoDoc );
     }
     maOpenButton.SetPopupMenu( mpRecentMenu );
@@ -885,7 +885,7 @@ IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
             Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
             Sequence<Any> args(1);
             PropertyValue val(
-                OUString( "nodepath" ),
+                "nodepath",
                 0,
                 Any(OUString::createFromAscii(pNodePath)),
                 PropertyState_DIRECT_VALUE);
@@ -917,27 +917,27 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 {
     // dispatch the appropriate URL and end the dialog
     if( pButton == &maWriterButton )
-        dispatchURL( OUString( WRITER_URL ) );
+        dispatchURL( WRITER_URL );
     else if( pButton == &maCalcButton )
-        dispatchURL( OUString( CALC_URL ) );
+        dispatchURL( CALC_URL );
     else if( pButton == &maImpressButton )
-        dispatchURL( OUString( IMPRESS_WIZARD_URL ) );
+        dispatchURL( IMPRESS_WIZARD_URL );
     else if( pButton == &maDrawButton )
-        dispatchURL( OUString( DRAW_URL ) );
+        dispatchURL( DRAW_URL );
     else if( pButton == &maDBButton )
-        dispatchURL( OUString( BASE_URL ) );
+        dispatchURL( BASE_URL );
     else if( pButton == &maMathButton )
-        dispatchURL( OUString( MATH_URL ) );
+        dispatchURL( MATH_URL );
     else if( pButton == &maOpenButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = OUString("Referer");
+        pArg[0].Name = "Referer";
         pArg[0].Value <<= OUString("private:user");
 
-        dispatchURL( OUString( OPEN_URL ), OUString(), xFrame, aArgs );
+        dispatchURL( OPEN_URL, OUString(), xFrame, aArgs );
     }
     else if( pButton == &maTemplateButton )
     {
@@ -948,7 +948,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         pArg[0].Name = OUString("Referer");
         pArg[0].Value <<= OUString("private:user");
 
-        dispatchURL( OUString( TEMPLATE_URL ), OUString(), xFrame, aArgs );
+        dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );
     }
     return 0;
 }
