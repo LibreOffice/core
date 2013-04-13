@@ -276,7 +276,7 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
         if( !BasicActionPend() )
         {
             // Within a Basic action, one needs to update the cursor,
-            // to e.g. create the table cursos. This is being done in
+            // to e.g. create the table cursor. This is being done in
             // UpdateCrsr.
             UpdateCrsr( SwCrsrShell::CHKRANGE, bIdleEnd );
 
