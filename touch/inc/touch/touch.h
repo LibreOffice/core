@@ -14,10 +14,12 @@
 
 #if !HAVE_FEATURE_DESKTOP
 
-// Functions to be implemented by the upper/medium layers on
-// non-desktop touch-based platforms, with the same API on each such
-// platform. Note that these are just declared here in this header in
-// the "touch" module, the per-platform implementations are elsewhere.
+// Functions to be implemented by the app-specifc upper or less
+// app-specific but platform-specific medium layer on touch-based
+// platforms. The same API is used on each such platform. There are
+// called from low level LibreOffice code. Note that these are just
+// declared here in this header in the "touch" module, the
+// per-platform implementations are elsewhere.
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,6 +27,11 @@ extern "C" {
 
 void lo_show_keyboard();
 void lo_hide_keyboard();
+
+// Functions to be implemented in the medium platform-specific layer
+// to be called from the app-specific UI layer.
+
+void lo_keyboard_did_hide();
 
 #ifdef __cplusplus
 }
