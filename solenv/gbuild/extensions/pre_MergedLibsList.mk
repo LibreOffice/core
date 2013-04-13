@@ -153,6 +153,7 @@ gb_URELIBS := \
 	cppuhelper \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmaccess) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmfwk) \
+	purpenvhelper \
 	reg \
 	sal \
 	salhelper \
