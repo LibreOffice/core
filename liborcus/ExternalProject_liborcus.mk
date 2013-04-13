@@ -64,6 +64,9 @@ liborcus_LIBS=
 ifeq ($(SYSTEM_ZLIB),YES)
 liborcus_LIBS+=-lz
 endif
+ifeq ($(SYSTEM_BOOST),YES)
+liborcus_LIBS+=$(BOOST_SYSTEM_LIB)
+endif
 ifeq ($(OS),ANDROID)
 liborcus_LIBS+=-lgnustl_shared -lm
 endif
