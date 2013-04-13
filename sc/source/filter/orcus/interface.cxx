@@ -13,7 +13,6 @@
 #include "formulacell.hxx"
 #include "rangenam.hxx"
 #include "tokenarray.hxx"
-#include "stringutil.hxx"
 #include "globalnames.hxx"
 #include "docoptio.hxx"
 #include "globstr.hrc"
@@ -29,32 +28,30 @@ using orcus::spreadsheet::row_t;
 using orcus::spreadsheet::col_t;
 using orcus::spreadsheet::formula_grammar_t;
 
-ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocument& rDoc) : mrDoc(rDoc) {}
+ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocumentImport& rDoc) : mrDoc(rDoc) {}
 
 void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
 {
-    ScDocOptions aOpt = mrDoc.GetDocOptions();
-    aOpt.SetDate(day, month, year);
-    mrDoc.SetDocOptions(aOpt);
+    mrDoc.setOriginDate(year, month, day);
 }
 
 ScOrcusFactory::StringCellCache::StringCellCache(const ScAddress& rPos, size_t nIndex) :
     maPos(rPos), mnIndex(nIndex) {}
 
 ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) :
-    mrDoc(rDoc),
-    maGlobalSettings(mrDoc),
+    maDoc(rDoc),
+    maGlobalSettings(maDoc),
     maSharedStrings(*this),
     mnProgress(0) {}
 
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char* sheet_name, size_t sheet_name_length)
 {
     OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
-    if (!mrDoc.InsertTab(SC_TAB_APPEND, aTabName))
+    if (!maDoc.appendSheet(aTabName))
         return NULL;
 
-    SCTAB nTab = mrDoc.GetTableCount() - 1;
-    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab, *this));
+    SCTAB nTab = maDoc.getSheetCount() - 1;
+    maSheets.push_back(new ScOrcusSheet(maDoc, nTab, *this));
     return &maSheets.back();
 }
 
@@ -72,8 +69,8 @@ public:
 orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* sheet_name, size_t sheet_name_length)
 {
     OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
-    SCTAB nTab = -1;
-    if (!mrDoc.GetTable(aTabName, nTab))
+    SCTAB nTab = maDoc.getSheetIndex(aTabName);
+    if (nTab < 0)
         // Sheet by that name not found.
         return NULL;
 
@@ -86,7 +83,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
         return &(*it);
 
     // Create a new orcus sheet instance for this.
-    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab, *this));
+    maSheets.push_back(new ScOrcusSheet(maDoc, nTab, *this));
     return &maSheets.back();
 }
 
@@ -107,8 +104,6 @@ orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
 
 void ScOrcusFactory::finalize()
 {
-    ScSetStringParam aParam;
-    aParam.setTextInput();
     int nCellCount = 0;
     StringCellCaches::const_iterator it = maStringCells.begin(), itEnd = maStringCells.end();
     for (; it != itEnd; ++it)
@@ -117,7 +112,7 @@ void ScOrcusFactory::finalize()
             // String index out-of-bound!  Something is up.
             continue;
 
-        mrDoc.SetString(it->maPos, maStrings[it->mnIndex], &aParam);
+        maDoc.setStringCell(it->maPos, maStrings[it->mnIndex]);
         ++nCellCount;
         if (nCellCount == 100000)
         {
@@ -178,7 +173,7 @@ void ScOrcusFactory::setStatusIndicator(const uno::Reference<task::XStatusIndica
     mxStatusIndicator = rIndicator;
 }
 
-ScOrcusSheet::ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusFactory& rFactory) :
+ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory) :
     mrDoc(rDoc), mnTab(nTab), mrFactory(rFactory), mnCellCount(0) {}
 
 void ScOrcusSheet::cellInserted()
@@ -194,7 +189,7 @@ void ScOrcusSheet::cellInserted()
 void ScOrcusSheet::set_auto(row_t row, col_t col, const char* p, size_t n)
 {
     OUString aVal(p, n, RTL_TEXTENCODING_UTF8);
-    mrDoc.SetString(col, row, mnTab, aVal);
+    mrDoc.setAutoInput(ScAddress(col, row, mnTab), aVal);
     cellInserted();
 }
 
@@ -211,20 +206,20 @@ void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
 
 void ScOrcusSheet::set_value(row_t row, col_t col, double value)
 {
-    mrDoc.SetValue( col, row, mnTab, value );
+    mrDoc.setNumericCell(ScAddress(col, row, mnTab), value);
     cellInserted();
 }
 
 void ScOrcusSheet::set_bool(row_t row, col_t col, bool value)
 {
-    mrDoc.SetValue(col, row, mnTab, value ? 1.0 : 0.0);
+    mrDoc.setNumericCell(ScAddress(col, row, mnTab), value ? 1.0 : 0.0);
     cellInserted();
 }
 
 void ScOrcusSheet::set_date_time(
     row_t row, col_t col, int year, int month, int day, int hour, int minute, double second)
 {
-    SvNumberFormatter* pFormatter = mrDoc.GetFormatTable();
+    SvNumberFormatter* pFormatter = mrDoc.getDoc().GetFormatTable();
 
     Date aDate(day, month, year);
     sal_uIntPtr nSec = floor(second);
@@ -241,7 +236,7 @@ void ScOrcusSheet::set_date_time(
 
     fTime /= DATE_TIME_FACTOR;
 
-    mrDoc.SetValue(col, row, mnTab, nDateDiff + fTime);
+    mrDoc.setNumericCell(ScAddress(col, row, mnTab), nDateDiff + fTime);
     cellInserted();
 }
 
@@ -278,13 +273,13 @@ void ScOrcusSheet::set_formula(
 {
     OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
     formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
-    mrDoc.SetFormula(ScAddress(col,row,mnTab), aFormula, eGrammar);
+    mrDoc.setFormulaCell(ScAddress(col,row,mnTab), aFormula, eGrammar);
     cellInserted();
 }
 
 void ScOrcusSheet::set_formula_result(row_t row, col_t col, const char* p, size_t n)
 {
-    ScFormulaCell* pCell = mrDoc.GetFormulaCell(ScAddress(col, row, mnTab));
+    ScFormulaCell* pCell = mrDoc.getDoc().GetFormulaCell(ScAddress(col, row, mnTab));
     if (!pCell)
     {
         SAL_WARN("sc", "trying to set formula result for non formula \
@@ -301,17 +296,17 @@ void ScOrcusSheet::set_shared_formula(
 {
     OUString aFormula( p_formula, n_formula, RTL_TEXTENCODING_UTF8 );
     formula::FormulaGrammar::Grammar eGrammar =  getCalcGrammarFromOrcus( grammar );
-    ScRangeName* pRangeName = mrDoc.GetRangeName();
+    ScRangeName* pRangeName = mrDoc.getDoc().GetRangeName();
 
     OUString aName("shared_");
     aName += OUString::valueOf(sal_Int32(pRangeName->size()));
-    ScRangeData* pSharedFormula = new ScRangeData( &mrDoc, aName, aFormula, ScAddress(col, row, mnTab), RT_SHARED, eGrammar);
+    ScRangeData* pSharedFormula = new ScRangeData(&mrDoc.getDoc(), aName, aFormula, ScAddress(col, row, mnTab), RT_SHARED, eGrammar);
     if(pRangeName->insert(pSharedFormula))
     {
         maSharedFormulas.insert( std::pair<size_t, ScRangeData*>(sindex, pSharedFormula) );
         ScTokenArray aArr;
         aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
-        mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
+        mrDoc.setFormulaCell(ScAddress(col,row,mnTab), aArr);
         cellInserted();
     }
 }
@@ -322,17 +317,17 @@ void ScOrcusSheet::set_shared_formula(
 {
     OUString aFormula( p_formula, n_formula, RTL_TEXTENCODING_UTF8 );
     formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
-    ScRangeName* pRangeName = mrDoc.GetRangeName();
+    ScRangeName* pRangeName = mrDoc.getDoc().GetRangeName();
 
     OUString aName("shared_");
     aName += OUString::valueOf(sal_Int32(pRangeName->size()));
-    ScRangeData* pSharedFormula = new ScRangeData( &mrDoc, aName, aFormula, ScAddress(col, row, mnTab), RT_SHARED, eGrammar);
+    ScRangeData* pSharedFormula = new ScRangeData(&mrDoc.getDoc(), aName, aFormula, ScAddress(col, row, mnTab), RT_SHARED, eGrammar);
     if(pRangeName->insert(pSharedFormula))
     {
         maSharedFormulas.insert( std::pair<size_t, ScRangeData*>(sindex, pSharedFormula) );
         ScTokenArray aArr;
         aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
-        mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
+        mrDoc.setFormulaCell(ScAddress(col,row,mnTab), aArr);
         cellInserted();
     }
 }
@@ -345,7 +340,7 @@ void ScOrcusSheet::set_shared_formula(row_t row, col_t col, size_t sindex)
     ScRangeData* pSharedFormula = maSharedFormulas.find(sindex)->second;
     ScTokenArray aArr;
     aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
-    mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
+    mrDoc.setFormulaCell(ScAddress(col,row,mnTab), aArr);
     cellInserted();
 }
 

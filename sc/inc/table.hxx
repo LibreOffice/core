@@ -80,6 +80,7 @@ struct ScColWidthParam;
 struct ScColWidthParam;
 class ScRangeName;
 class ScDBData;
+class ScDocumentImport;
 
 class ScTable : boost::noncopyable
 {
@@ -189,6 +190,7 @@ friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
 friend class ScAttrRectIterator;
 friend class ScColumnTextWidthIterator;
+friend class ScDocumentImport;
 
 public:
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,

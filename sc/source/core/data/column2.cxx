@@ -56,6 +56,7 @@
 #include "docparam.hxx"
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
+#include "globalnames.hxx"
 
 #include <math.h>
 
@@ -1499,6 +1500,51 @@ void ScColumn::CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDe
         }
 
         rDestCol.maScriptTypes.set(nBlockStart + nOffsetInBlock, itData, itDataEnd);
+    }
+}
+
+void ScColumn::SetCell(SCROW nRow, ScBaseCell* pNewCell)
+{
+    bool bIsAppended = false;
+    if ( !maItems.empty() )
+    {
+        if (maItems.back().nRow < nRow)
+        {
+            Append(nRow, pNewCell);
+            bIsAppended = true;
+        }
+    }
+    if (!bIsAppended)
+    {
+        SCSIZE nIndex;
+        if (Search(nRow, nIndex))
+        {
+            ScBaseCell* pOldCell = maItems[nIndex].pCell;
+
+            // move broadcaster and note to new cell, if not existing in new cell
+            if (pOldCell->HasBroadcaster() && !pNewCell->HasBroadcaster())
+                pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
+
+            if ( pOldCell->GetCellType() == CELLTYPE_FORMULA && !pDocument->IsClipOrUndo() )
+            {
+                static_cast<ScFormulaCell*>(pOldCell)->EndListeningTo( pDocument );
+                // If in EndListening NoteCell is destroyed in same Col
+                if ( nIndex >= maItems.size() || maItems[nIndex].nRow != nRow )
+                    Search(nRow, nIndex);
+            }
+            pOldCell->Delete();
+            maItems[nIndex].pCell = pNewCell;
+        }
+        else
+        {
+            maItems.insert(maItems.begin() + nIndex, ColEntry());
+            maItems[nIndex].pCell = pNewCell;
+            maItems[nIndex].nRow  = nRow;
+        }
+
+        maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
+        maScriptTypes.set<unsigned short>(nRow, SC_SCRIPTTYPE_UNKNOWN);
+        CellStorageModified();
     }
 }
 

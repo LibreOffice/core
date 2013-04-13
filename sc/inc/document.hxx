@@ -145,6 +145,7 @@ class ScNotes;
 class ScEditDataArray;
 class EditTextObject;
 struct ScRefCellValue;
+class ScDocumentImport;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -219,6 +220,7 @@ friend class ScColumnTextWidthIterator;
 friend class ScFormulaCell;
 friend class ScTable;
 friend struct ScRefCellValue;
+friend class ScDocumentImport;
 
     typedef ::std::vector<ScTable*> TableContainer;
 private:

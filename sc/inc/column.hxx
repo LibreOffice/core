@@ -74,6 +74,7 @@ struct ScColWidthParam;
 class ScColumnTextWidthIterator;
 struct ScFormulaCellGroup;
 struct ScRefCellValue;
+class ScDocumentImport;
 
 typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
 
@@ -140,6 +141,7 @@ friend class ScCellIterator;
 friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 friend class ScColumnTextWidthIterator;
+friend class ScDocumentImport;
 
     ScColumn(const ScColumn&); // disabled
     ScColumn& operator= (const ScColumn&); // disabled
@@ -463,6 +465,8 @@ private:
     void CellStorageModified();
 
     void CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
+
+    void SetCell(SCROW nRow, ScBaseCell* pNewCell);
 };
 
 

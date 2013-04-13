@@ -124,6 +124,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/documen8 \
 	sc/source/core/data/documen9 \
 	sc/source/core/data/document \
+	sc/source/core/data/documentimport \
 	sc/source/core/data/dpdimsave \
 	sc/source/core/data/dpfilteredcache \
 	sc/source/core/data/dpglobal \

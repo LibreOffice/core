@@ -11,6 +11,7 @@
 #define __SC_ORCUSINTERFACE_HXX__
 
 #include "address.hxx"
+#include "documentimport.hxx"
 #include "rtl/strbuf.hxx"
 
 #define __ORCUS_STATIC_LIB
@@ -21,7 +22,7 @@
 
 #include <map>
 
-class ScDocument;
+class ScDocumentImport;
 class ScOrcusSheet;
 class ScOrcusFactory;
 class ScRangeData;
@@ -34,10 +35,10 @@ class XStatusIndicator;
 
 class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_settings
 {
-    ScDocument& mrDoc;
+    ScDocumentImport& mrDoc;
 
 public:
-    ScOrcusGlobalSettings(ScDocument& rDoc);
+    ScOrcusGlobalSettings(ScDocumentImport& rDoc);
 
     virtual void set_origin_date(int year, int month, int day);
 };
@@ -64,7 +65,7 @@ public:
 
 class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 {
-    ScDocument& mrDoc;
+    ScDocumentImport& mrDoc;
     SCTAB mnTab;
     ScOrcusFactory& mrFactory;
 
@@ -76,7 +77,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     void cellInserted();
 
 public:
-    ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
+    ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
 
     // Orcus import interface
     virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n);
@@ -190,7 +191,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
     typedef boost::unordered_map<OUString, size_t, OUStringHash> StringHashType;
     typedef std::vector<StringCellCache> StringCellCaches;
 
-    ScDocument& mrDoc;
+    ScDocumentImport maDoc;
 
     std::vector<OUString> maStrings;
     StringHashType maStringHash;
