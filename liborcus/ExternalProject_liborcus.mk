@@ -64,6 +64,8 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter ANDROID,$(OS)),LIBS='-lgnustl_shared -lm') \
 		$(if $(filter YES,$(SYSTEM_ZLIB)),LIBS+=-lz) \
+		$(if $(filter MSC,$(COM)),CPPFLAGS+="-DBOOST_ALL_NO_LIB") \
+		$(if $(filter MSC,$(COM)),CXXFLAGS+=$(BOOST_CXXFLAGS)) \
 		$(if $(filter NO,$(SYSTEM_ZLIB)),CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib) \
 		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS+=-I$(WORKDIR)/UnpackedTarball/boost) \
 		$(if $(filter YES,$(SYSTEM_BOOST)),LDFLAGS=$(BOOST_LDFLAGS)) \

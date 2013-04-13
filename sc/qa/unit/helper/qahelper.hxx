@@ -30,6 +30,7 @@
 #define SC_QA_HELPER_HXX
 
 #include <test/bootstrapfixture.hxx>
+#define __ORCUS_STATIC_LIB
 #include "helper/csv_handler.hxx"
 #include "helper/debughelper.hxx"
 #include "orcus/csv_parser.hpp"
