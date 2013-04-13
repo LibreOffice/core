@@ -1823,6 +1823,16 @@ OUString getFilterProvider( SfxMedium& rMedium )
     return pFilter->GetProviderName();
 }
 
+void setUpdatePickList( SfxMedium* pMedium )
+{
+    bool bHidden = false;
+    SFX_ITEMSET_ARG(pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, false);
+    if (pHidItem)
+        bHidden = pHidItem->GetValue();
+
+    pMedium->SetUpdatePickList(!bHidden);
+}
+
 }
 
 void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqArguments )
@@ -1855,7 +1865,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
             nError = ERRCODE_IO_GENERAL;
 
         handleLoadError(nError, pMedium);
-        pMedium->SetUpdatePickList(false);
+        setUpdatePickList(pMedium);
         return;
     }
 
@@ -1943,20 +1953,13 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     m_pData->m_pObjectShell->ResetError();
 
     handleLoadError(nError, pMedium);
-
-    loadCmisProperties( );
-
-    sal_Bool bHidden = sal_False;
-    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
-    if ( pHidItem )
-        bHidden = pHidItem->GetValue();
+    loadCmisProperties();
+    setUpdatePickList(pMedium);
 
 #if OSL_DEBUG_LEVEL > 0
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
     OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
 #endif
-    // !TODO: will be done by Framework!
-    pMedium->SetUpdatePickList( !bHidden );
 }
 
 //________________________________________________________________________________________________________
