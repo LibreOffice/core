@@ -2256,7 +2256,7 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
 }
 
 // #i54102# added rotation support
-void SdrEdgeObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrEdgeObj::NbcRotate(const Point& rRef, long /*nWink*/, double sn, double cs)
 {
     // handle start and end point if not connected
     bool bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
@@ -2298,7 +2298,7 @@ void SdrEdgeObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 // #i54102# added shear support
-void SdrEdgeObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrEdgeObj::NbcShear(const Point& rRef, long /*nWink*/, double tn, bool bVShear)
 {
     // handle start and end point if not connected
     bool bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
