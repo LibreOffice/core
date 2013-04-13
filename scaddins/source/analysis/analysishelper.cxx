@@ -332,78 +332,6 @@ sal_Int32 GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 )
 }
 
 
-void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
-    sal_uInt16& rYears, sal_Int32& rDayDiffPart, sal_Int32& rDaysInYear ) throw( uno::RuntimeException, lang::IllegalArgumentException )
-{
-    if( nStartDate > nEndDate )
-    {
-        sal_Int32   n = nEndDate;
-        nEndDate = nStartDate;
-        nStartDate = n;
-    }
-
-    sal_Int32   nDate1 = nStartDate + nNullDate;
-    sal_Int32   nDate2 = nEndDate + nNullDate;
-
-    sal_uInt16  nDay1, nDay2;
-    sal_uInt16  nMonth1, nMonth2;
-    sal_uInt16  nYear1, nYear2;
-
-    DaysToDate( nDate1, nDay1, nMonth1, nYear1 );
-    DaysToDate( nDate2, nDay2, nMonth2, nYear2 );
-
-    sal_uInt16  nYears;
-
-    sal_Int32   nDayDiff, nDaysInYear;
-
-    switch( nMode )
-    {
-        case 0:         // 0=USA (NASD) 30/360
-        case 4:         // 4=Europe 30/360
-            nDaysInYear = 360;
-            nYears = nYear2 - nYear1;
-            nDayDiff = GetDiffDate360( nDay1, nMonth1, nYear1, IsLeapYear( nYear1 ),
-                                        nDay2, nMonth2, nYear2, nMode == 0 ) - nYears * nDaysInYear;
-            break;
-        case 1:         // 1=exact/exact
-            nYears = nYear2 - nYear1;
-
-            nDaysInYear = IsLeapYear( nYear1 )? 366 : 365;
-
-            if( nYears && ( nMonth1 > nMonth2 || ( nMonth1 == nMonth2 && nDay1 > nDay2 ) ) )
-                nYears--;
-
-            if( nYears )
-                nDayDiff = nDate2 - DateToDays( nDay1, nMonth1, nYear2 );
-            else
-                nDayDiff = nDate2 - nDate1;
-
-            if( nDayDiff < 0 )
-                nDayDiff += nDaysInYear;
-
-            break;
-        case 2:         // 2=exact/360
-            nDaysInYear = 360;
-            nYears = sal_uInt16( ( nDate2 - nDate1 ) / nDaysInYear );
-            nDayDiff = nDate2 - nDate1;
-            nDayDiff %= nDaysInYear;
-            break;
-        case 3:         //3=exact/365
-            nDaysInYear = 365;
-            nYears = sal_uInt16( ( nDate2 - nDate1 ) / nDaysInYear );
-            nDayDiff = nDate2 - nDate1;
-            nDayDiff %= nDaysInYear;
-            break;
-        default:
-            throw lang::IllegalArgumentException();
-    }
-
-    rYears = nYears;
-    rDayDiffPart = nDayDiff;
-    rDaysInYear = nDaysInYear;
-}
-
-
 sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
     sal_Int32* pOptDaysIn1stYear ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -508,17 +436,143 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
 }
 
 
+//fdo40100 toDo: make function fully compliant with ODFF1.2
+/**
+ * Function GetYearFrac implements YEARFRAC as defined in:
+ *   Open Document Format for Office Applications version 1.2 Part 2, par. 6.10.24
+ *   The calculations are defined in:
+ *   Open Document Format for Office Applications version 1.2 Part 2, par. 4.11.7
+ */
 double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nStartDate == nEndDate )
         return 0.0;     // nothing to do...
 
-    sal_uInt16  nYears;
-    sal_Int32   nDayDiff, nDaysInYear;
+    if( nStartDate > nEndDate )
+    {
+        sal_Int32   n = nEndDate;
+        nEndDate = nStartDate;
+        nStartDate = n;
+    }
 
-    GetDiffParam( nNullDate, nStartDate, nEndDate, nMode, nYears, nDayDiff, nDaysInYear );
+    sal_Int32 nDate1 = nStartDate + nNullDate;
+    sal_Int32 nDate2 = nEndDate + nNullDate;
 
-    return double( nYears ) + double( nDayDiff ) / double( nDaysInYear );
+    sal_uInt16  nDay1, nDay2;
+    sal_uInt16  nMonth1, nMonth2;
+    sal_uInt16  nYear1, nYear2;
+
+    DaysToDate( nDate1, nDay1, nMonth1, nYear1 );
+    DaysToDate( nDate2, nDay2, nMonth2, nYear2 );
+
+    // calculate days between nDate1 and nDate2
+    sal_Int32 nDayDiff;
+    switch( nMode )
+    {
+        case 0:         // 0=USA (NASD) 30/360
+            if ( nDay1 == 31 )
+            {
+                nDay1--;
+            }
+            if ( nDay1 == 30 && nDay2 == 31 )
+            {
+                nDay2--;
+            }
+            else
+            {
+                if ( nMonth1 == 2 && nDay1 == ( IsLeapYear( nYear1 ) ? 29 : 28 ) )
+                {
+                    nDay1 = 30;
+                    if ( nMonth2 == 2 && nDay2 == ( IsLeapYear( nYear2 ) ? 29 : 28 ) )
+                    {
+                        nDay2 = 30;
+                    }
+                }
+            }
+            nDayDiff = ( nYear2 - nYear1 ) * 360 + ( nMonth2 - nMonth1 ) * 30 + ( nDay2 - nDay1 );
+            break;
+        case 1:         // 1=exact/exact
+        case 2:         // 2=exact/360
+        case 3:         // 3=exact/365
+            nDayDiff = nDate2 - nDate1;
+            break;
+        case 4:         // 4=Europe 30/360
+            if ( nDay1 == 31 )
+            {
+                nDay1--;
+            }
+            if ( nDay2 == 31 )
+            {
+                nDay2--;
+            }
+            nDayDiff = ( nYear2 - nYear1 ) * 360 + ( nMonth2 - nMonth1 ) * 30 + ( nDay2 - nDay1 );
+            break;
+        default:
+            throw lang::IllegalArgumentException();
+    }
+
+    //calculate days in year
+    double nDaysInYear;
+    switch( nMode )
+    {
+        case 0:         // 0=USA (NASD) 30/360
+        case 2:         // 2=exact/360
+        case 4:         // 4=Europe 30/360
+            nDaysInYear = 360;
+            break;
+        case 1:         // 1=exact/exact
+            {
+                bool isYearDifferent = ( nYear1 != nYear2 );
+                if ( isYearDifferent &&
+                     ( ( nYear2 != nYear1 + 1 ) ||
+                       ( nMonth1 < nMonth2 ) ||
+                       ( nMonth1 == nMonth2 && nDay1 < nDay2 ) ) )
+                {
+                    // return average of days in year between nDate1 and nDate2, inclusive
+                    sal_Int32 nDayCount = 0;
+                    for ( sal_Int16 i = nYear1; i <= nYear2; i++ )
+                        nDayCount += ( IsLeapYear( i ) ? 366 : 365 );
+
+                    nDaysInYear = ( double ) nDayCount / ( double ) ( nYear2 - nYear1 + 1 );
+                }
+                else
+                {
+                    if ( isYearDifferent && IsLeapYear( nYear1 ) )
+                    {
+                        nDaysInYear = 366;
+                    }
+                    else
+                    {
+                        //if Feb 29 is between nDate1 and ndate2, inclusive
+                        if ( ( IsLeapYear( nYear1 ) && nMonth1 <= 2 && nDay1 <= 29 ) ||
+                             ( IsLeapYear( nYear2 ) && ( nMonth2 > 3 || ( nMonth2 == 2 && nDay1 == 29 ) ) ) )
+                        {
+                            nDaysInYear = 366;
+                        }
+                        else
+                        {
+                            nDaysInYear = 365;
+                            for ( sal_Int16 i = nYear1; i <= nYear2; i++ )
+                            {
+                                if ( IsLeapYear( i ) )
+                                {
+                                    nDaysInYear = 366;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+        case 3:         // 3=exact/365
+            nDaysInYear = 365;
+            break;
+        default:
+            throw lang::IllegalArgumentException();
+    }
+
+    return double( nDayDiff ) / nDaysInYear;
 }
 
 double BinomialCoefficient( double n, double k )
