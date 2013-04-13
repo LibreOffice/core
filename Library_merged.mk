@@ -29,7 +29,6 @@ $(eval $(call gb_Library_use_library_objects,merged,\
 ))
 
 $(eval $(call gb_Library_use_libraries,merged,\
-	basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -39,7 +38,6 @@ $(eval $(call gb_Library_use_libraries,merged,\
 		jvmfwk) \
 	sal \
 	salhelper \
-	tl \
 	ucbhelper \
 	xmlreader \
 	$(gb_UWINAPI) \

@@ -837,7 +837,7 @@ $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
 endef
 
 define gb_Linktarget__is_build_tool
-$(if $(filter $(1),$(addprefix Executable/,cppumaker idlc regcompare regmerge)),$(true),$(false))
+$(if $(filter $(1),$(addprefix Executable/,cppumaker idlc regcompare regmerge rsc svidl)),$(true),$(false))
 endef
 
 define gb_LinkTarget_use_libraries

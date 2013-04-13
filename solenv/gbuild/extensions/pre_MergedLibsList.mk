@@ -102,6 +102,7 @@ gb_EXTRAMERGEDLIBS := \
 # we link all object files from these libraries into one, merged library
 gb_MERGEDLIBS := \
 	avmedia \
+	basegfx \
 	canvastools \
 	configmgr \
 	cppcanvas \
@@ -134,6 +135,7 @@ gb_MERGEDLIBS := \
 	svx \
 	svxcore \
 	tk \
+	tl \
 	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
 	ucb1 \
 	ucpfile1 \
