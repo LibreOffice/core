@@ -47,6 +47,9 @@ static UIView *theView;
 
     lo_set_view_size(bounds.size.width, bounds.size.height);
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+
     NSThread* thread = [[NSThread alloc] initWithTarget:self
                                                selector:@selector(threadMainMethod:)
                                                  object:nil];
@@ -88,6 +91,28 @@ static UIView *theView;
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     (void) application;
+}
+
+- (void)keyboardWillShow:(NSNotification *)note
+{
+    NSDictionary *info = [note userInfo];
+    CGRect frameBegin;
+    CGRect frameEnd;
+
+    [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&frameBegin];
+    [[info objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&frameEnd];
+}
+
+- (void)keyboardDidHide:(NSNotification *)note
+{
+    NSDictionary *info = [note userInfo];
+    CGRect frameBegin;
+    CGRect frameEnd;
+
+    [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&frameBegin];
+    [[info objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&frameEnd];
+
+    lo_keyboard_did_hide();
 }
 
 @end
