@@ -60,16 +60,41 @@ else
 
 #$(if $(filter MSC,$(COM)),CPPFLAGS+="-DBOOST_ALL_NO_LIB") CXXFLAGS+="$(BOOST_CXXFLAGS))
 
+liborcus_LIBS=
+ifeq ($(SYSTEM_ZLIB),YES)
+liborcus_LIBS+=-lz
+endif
+ifeq ($(OS),ANDROID)
+liborcus_LIBS+=-lgnustl_shared -lm
+endif
+
+liborcus_CPPCLAGS=$(CPPFLAGS)
+ifeq ($(COM),MSC)
+liborcus_CPPFLAGS+=-DBOOST_ALL_NO_LIB
+endif
+ifeq ($(SYSTEM_ZLIB),NO)
+liborcus_CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib
+endif
+ifneq (,$(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)))
+ifneq (,$(gb_ENABLE_DBGUTIL))
+liborcus_CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib
+endif
+endif
+
+liborcus_CXXFLAGS=$(CXXFLAGS)
+ifeq ($(COM),MSC)
+liborcus_CXXFLAGS+=$(BOOST_CXXFLAGS)
+endif
+ifeq ($(SYSTEM_BOOST),NO)
+liborcus_CXXFLAGS+=-I$(WORKDIR)/UnpackedTarball/boost
+endif
+
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter ANDROID,$(OS)),LIBS='-lgnustl_shared -lm') \
-		$(if $(filter YES,$(SYSTEM_ZLIB)),LIBS+=-lz) \
-		$(if $(filter MSC,$(COM)),CPPFLAGS+="-DBOOST_ALL_NO_LIB") \
-		$(if $(filter MSC,$(COM)),CXXFLAGS+=$(BOOST_CXXFLAGS)) \
-		$(if $(filter NO,$(SYSTEM_ZLIB)),CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib) \
-		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS+=-I$(WORKDIR)/UnpackedTarball/boost) \
-		$(if $(filter YES,$(SYSTEM_BOOST)),LDFLAGS=$(BOOST_LDFLAGS)) \
-		$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)),$(if $(gb_ENABLE_DBGUTIL),CPPFLAGS+=-D_GLIBCXX_DEBUG)) \
+		$(if $(liborcus_LIBS),LIBS='$(liborcus_LIBS)') \
+		$(if $(liborcus_CXXFLAGS),CXXFLAGS='$(liborcus_CXXFLAGS)') \
+		$(if $(liborcus_CPPFLAGS),CPPFLAGS='$(liborcus_CPPFLAGS)') \
+		$(if $(filter YES,$(SYSTEM_BOOST)),LDFLAGS='$(BOOST_LDFLAGS)') \
 		./configure \
 			--with-pic \
 			--enable-static \
