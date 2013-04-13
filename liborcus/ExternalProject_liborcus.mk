@@ -77,7 +77,7 @@ liborcus_CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib
 endif
 ifneq (,$(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
-liborcus_CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib
+liborcus_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
 endif
 
