@@ -2328,9 +2328,12 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
     $(ORCUS_CFLAGS) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(ORCUS_LIBS))
+endef
+
+define gb_LinkTarget__use_orcus-parser
 
 endef
+$(call gb_LinkTarget_add_libs,$(1),$(ORCUS_LIBS))
 
 else # !SYSTEM_LIBORCUS
 
