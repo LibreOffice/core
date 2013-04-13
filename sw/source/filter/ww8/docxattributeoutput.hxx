@@ -567,6 +567,8 @@ private:
     ::sax_fastparser::FastAttributeList *m_pFlyFillAttrList;
     /// Attributes of the next v:textbox element.
     ::sax_fastparser::FastAttributeList *m_pTextboxAttrList;
+    /// When exporting fly frames, this holds the real size of the frame.
+    const Size* m_pFlyFrameSize;
 
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;

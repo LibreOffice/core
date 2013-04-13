@@ -552,8 +552,8 @@ private:
 
     unsigned int m_nPostitFieldsMaxId;
 
-    /// Set by FormatFrameSize(), read by Format*Orientation().
-    const SwFmtFrmSize* m_pFmtFrmSize;
+    /// When exporting fly frames, this holds the real size of the frame.
+    const Size* m_pFlyFrameSize;
 
     std::vector< std::pair<OString, OString> > m_aFlyProperties;
 

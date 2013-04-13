@@ -1507,12 +1507,17 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             // Shape properties.
             m_aFlyProperties.push_back(std::make_pair<OString, OString>("shapeType", OString::number(ESCHER_ShpInst_TextBox)));
 
+            // When a frame has some low height, but automatically expanded due
+            // to lots of contents, this size contains the real size.
+            const Size aSize = rFrame.GetSize();
+            m_pFlyFrameSize = &aSize;
+
             m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
             m_rExport.OutputFormat( rFrame.GetFrmFmt(), false, false, true );
             m_rExport.Strm() << m_aRunText.makeStringAndClear().getStr();
             m_rExport.Strm() << m_aStyles.makeStringAndClear().getStr();
             m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
-            m_pFmtFrmSize = 0;
+            m_pFlyFrameSize = 0;
 
             for (size_t i = 0; i < m_aFlyProperties.size(); ++i)
             {
@@ -2650,11 +2655,7 @@ void RtfAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    if ( m_rExport.bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax )
-    {
-        m_pFmtFrmSize = &rSize;
-    }
-    else if (m_rExport.bOutPageDescs)
+    if (m_rExport.bOutPageDescs)
     {
         m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGWSXN);
         m_aSectionBreaks.append((sal_Int32)rSize.GetWidth());
@@ -2824,10 +2825,10 @@ void RtfAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert 
 
         m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPTOP;
         m_rExport.OutLong(rFlyVert.GetPos());
-        if (m_pFmtFrmSize)
+        if (m_pFlyFrameSize)
         {
             m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPBOTTOM;
-            m_rExport.OutLong(rFlyVert.GetPos() + m_pFmtFrmSize->GetHeight());
+            m_rExport.OutLong(rFlyVert.GetPos() + m_pFlyFrameSize->Height());
         }
     }
     else if ( !m_rExport.bRTFFlySyntax )
@@ -2872,10 +2873,10 @@ void RtfAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
 
         m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPLEFT;
         m_rExport.OutLong(rFlyHori.GetPos());
-        if (m_pFmtFrmSize)
+        if (m_pFlyFrameSize)
         {
             m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPRIGHT;
-            m_rExport.OutLong(rFlyHori.GetPos() + m_pFmtFrmSize->GetWidth());
+            m_rExport.OutLong(rFlyHori.GetPos() + m_pFlyFrameSize->Width());
         }
     }
     else if ( !m_rExport.bRTFFlySyntax )
@@ -3138,7 +3139,7 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_bSingleEmptyRun(false),
     m_bInRun(false),
     m_nPostitFieldsMaxId(0),
-    m_pFmtFrmSize(0),
+    m_pFlyFrameSize(0),
     m_pPrevPageDesc(0)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);

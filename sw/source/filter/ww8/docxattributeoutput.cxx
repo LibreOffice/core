@@ -304,6 +304,11 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
         m_rExport.mpParentFrame = pParentFrame;
 
+        // When a frame has some low height, but automatically expanded due
+        // to lots of contents, this size contains the real size.
+        const Size aSize = pParentFrame->GetSize();
+        m_pFlyFrameSize = &aSize;
+
         m_bTextFrameSyntax = true;
         m_pFlyAttrList = m_pSerializer->createAttrList( );
         m_pTextboxAttrList = m_pSerializer->createAttrList();
@@ -315,6 +320,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         XFastAttributeListRef xTextboxAttrList(m_pTextboxAttrList);
         m_pTextboxAttrList = NULL;
         m_bTextFrameSyntax = false;
+        m_pFlyFrameSize = 0;
 
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
         m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
@@ -4282,10 +4288,10 @@ void DocxAttributeOutput::ParaSnapToGrid( const SvxParaGridItem& rGrid )
 
 void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 {
-    if (m_bTextFrameSyntax)
+    if (m_bTextFrameSyntax && m_pFlyFrameSize)
     {
-        m_aTextFrameStyle.append(";width:").append(double(rSize.GetWidth()) / 20);
-        m_aTextFrameStyle.append("pt;height:").append(double(rSize.GetHeight()) / 20).append("pt");
+        m_aTextFrameStyle.append(";width:").append(double(m_pFlyFrameSize->Width()) / 20);
+        m_aTextFrameStyle.append("pt;height:").append(double(m_pFlyFrameSize->Height()) / 20).append("pt");
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
@@ -4845,6 +4851,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pFlyAttrList( NULL ),
       m_pFlyFillAttrList( NULL ),
       m_pTextboxAttrList( NULL ),
+      m_pFlyFrameSize(0),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),
