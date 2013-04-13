@@ -28,11 +28,16 @@
 $(eval $(call gb_Package_Package,solenv_gdb,$(call gb_CustomTarget_get_workdir,solenv/gdb)))
 
 $(eval $(call gb_Package_add_files,solenv_gdb,lib,\
-	$(call gb_Library_get_runtime_filename,cppu).3-gdb.py \
-	$(call gb_Library_get_runtime_filename,sal).3-gdb.py \
+	$(if $(MERGELIBS), \
+	$(if $(filter ALL,$(MERGELIBS)), \
+		$(call gb_Library_get_runtime_filename,urelibs)-gdb.py, \
+		$(call gb_Library_get_runtime_filename,cppu).3-gdb.py \
+		$(call gb_Library_get_runtime_filename,sal).3-gdb.py \
+		$(call gb_Library_get_runtime_filename,sw)-gdb.py \
+	) \
+	$(call gb_Library_get_runtime_filename,merged)-gdb.py, \
 	$(call gb_Library_get_runtime_filename,svl)-gdb.py \
-	$(call gb_Library_get_runtime_filename,sw)-gdb.py \
-	$(call gb_Library_get_runtime_filename,tl)-gdb.py \
+	$(call gb_Library_get_runtime_filename,tl)-gdb.py) \
 ))
 
 $(eval $(call gb_Package_use_custom_target,solenv_gdb,solenv/gdb))

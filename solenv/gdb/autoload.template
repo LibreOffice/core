@@ -27,6 +27,7 @@
 
 import os.path
 import sys
+import importlib
 
 import gdb
 
@@ -36,8 +37,9 @@ if gdb.current_objfile():
     if pythondir not in sys.path:
         sys.path.insert(0, pythondir)
 
-from %MODULE% import register_pretty_printers
-register_pretty_printers(gdb.current_objfile())
+for mod in str.split("%MODULES%"):
+    module=importlib.import_module("libreoffice."+mod)
+    module.register_pretty_printers(gdb.current_objfile())
 
 try:
     import boost
