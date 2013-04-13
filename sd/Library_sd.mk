@@ -107,6 +107,7 @@ $(eval $(call gb_Library_use_externals,sd,\
 		avahi \
 	) \
 	icu_headers \
+	curl \
 ))
 
 ifeq ($(OS),WNT)
