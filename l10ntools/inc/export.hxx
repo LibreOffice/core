@@ -240,6 +240,7 @@ private:
     void ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const OString& rTextType );
     void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( OString &rText );
+    void ConvertExportContent( OString &rText );
 
     void WriteToMerged(const OString &rText , bool bSDFContent);
     void SetChildWithText();
@@ -296,7 +297,6 @@ public:
         bTitleFirst[ rId ] = true;
     }
     sal_Bool GetText( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel = sal_False );
-    sal_Bool GetTransex3Text( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel = sal_False );
 
 };
 

@@ -165,20 +165,6 @@ ResData::~ResData()
 // class PFormEntrys
 //
 
-sal_Bool PFormEntrys::GetTransex3Text( OString &rReturn,
-    sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel )
-{
-    sal_Bool rc = GetText( rReturn , nTyp , nLangIndex , bDel );
-    for( sal_Int32 idx = 0; idx < rReturn.getLength(); idx++ )
-    {
-        if( rReturn[idx] == '\"' && ( idx >= 1 )  &&  rReturn[idx-1] == '\\' )
-        {
-            rReturn = rReturn.replaceAt( idx-1, 1, OString() );
-        }
-    }
-    return rc;
-}
-/*****************************************************************************/
 sal_Bool PFormEntrys::GetText( OString &rReturn,
     sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel )
 {

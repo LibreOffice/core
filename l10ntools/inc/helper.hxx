@@ -25,6 +25,11 @@
 
 namespace helper {
 
+OString escapeAll(
+    const OString& rText, const OString& rUnEscaped, const OString& rEscaped );
+OString unEscapeAll(
+    const OString& rText, const OString& rEscaped, const OString& rUnEscaped  );
+
 OString QuotHTML( const OString &rString );
 OString UnQuotHTML( const OString& rString );
 

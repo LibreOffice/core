@@ -70,11 +70,12 @@ void StringParser::Extract( const OString& rPOFile )
         {
             xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("name"));
             xmlChar* pText = xmlNodeGetContent(pCurrent);
-
+            const OString sTemp =
+                helper::unEscapeAll(helper::xmlStrToOString( pText ),"\\n""\\t","\n""\t");
             common::writePoEntry(
                 "Stringex", aPOStream, m_pSource->name, "string",
                 helper::xmlStrToOString( pID ), OString(), OString(),
-                helper::xmlStrToOString( pText ));
+                sTemp);
 
             xmlFree( pID );
             xmlFree( pText );
@@ -131,7 +132,7 @@ void StringParser::Merge(
             {
                 OString sNewText;
                 pEntrys->GetText( sNewText, STRING_TYP_TEXT, m_sLang );
-                sNewText = sNewText.replaceAll("\'","\\\'").replaceAll("\"","\\\"");
+                sNewText = helper::escapeAll(sNewText, "\n""\t""\'""\"","\\n""\\t""\\\'""\\\"");
                 xmlNodeSetContent(
                     pCurrent,
                     xmlEncodeSpecialChars( NULL,

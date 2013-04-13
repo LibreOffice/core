@@ -2,9 +2,6 @@ Application::PostZoomEvent(unsigned long, Window*, ZoomEvent*)
 EditTextObjectImpl::SetParaAttribs(unsigned long, SfxItemSet const&)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
 LanguageTag::reset(_rtl_Locale const&)
-PoEntry::setFuzzy(bool)
-PoEntry::setMsgStr(rtl::OString const&)
-PoHeader::PoHeader(std::basic_ifstream<char, std::char_traits<char> >&)
 ScConditionalFormat::dumpInfo(rtl::OUStringBuffer&) const
 ScDocument::GetEditText(ScAddress const&) const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()

@@ -19,9 +19,7 @@
 #include <boost/crc.hpp>
 
 #include "po.hxx"
-
-#define POESCAPED OString("\\n\\t\\r\\\\\\\"")
-#define POUNESCAPED OString("\n\t\r\\\"")
+#include "helper.hxx"
 
 /** Container of po entry
 
@@ -85,49 +83,16 @@ public:
 
 namespace
 {
-    //Escape text
-    static OString lcl_EscapeText(const OString& rText,
-                           const OString& rUnEscaped= POUNESCAPED,
-                           const OString& rEscaped = POESCAPED)
-    {
-        assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
-        OString sResult = rText;
-        int nCount = 0;
-        for(sal_Int32 nIndex=0; nIndex<rText.getLength(); ++nIndex)
-        {
-            sal_Int32 nActChar = rUnEscaped.indexOf(rText[nIndex]);
-            if(nActChar!=-1)
-                sResult = sResult.replaceAt((nIndex)+(nCount++),1,
-                                            rEscaped.copy(2*nActChar,2));
-        }
-        return sResult;
-    }
-
-    //Unescape text
-    static OString lcl_UnEscapeText(const OString& rText,
-                             const OString& rEscaped = POESCAPED,
-                             const OString& rUnEscaped = POUNESCAPED)
-    {
-        assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
-        OString sResult = rText;
-        int nCount = 0;
-        for(sal_Int32 nIndex=0; nIndex<rText.getLength()-1; ++nIndex)
-        {
-            sal_Int32 nActChar = rEscaped.indexOf(rText.copy(nIndex,2));
-            if(nActChar % 2 == 0)
-                sResult = sResult.replaceAt((nIndex++)-(nCount++),2,
-                                            rUnEscaped.copy(nActChar/2,1));
-        }
-        return sResult;
-    }
-
     //Convert a normal string to msg/po output string
     static OString lcl_GenMsgString(const OString& rString)
     {
         if ( rString.isEmpty() )
             return "\"\"";
 
-        OString sResult = "\"" + lcl_EscapeText(rString) + "\"";
+        OString sResult =
+            "\"" +
+            helper::escapeAll(rString,"\n""\t""\r""\\""\"","\\n""\\t""\\r""\\\\""\\\"") +
+            "\"";
         sal_Int32 nIndex = 0;
         while((nIndex=sResult.indexOf("\\n",nIndex))!=-1)
         {
@@ -148,7 +113,11 @@ namespace
     //Convert msg string to normal form
     static OString lcl_GenNormString(const OString& rString)
     {
-        return lcl_UnEscapeText(rString.copy(1,rString.getLength()-2));
+        return
+            helper::unEscapeAll(
+                rString.copy(1,rString.getLength()-2),
+                "\\n""\\t""\\r""\\\\""\\\"",
+                "\n""\t""\r""\\""\"");
     }
 }
 
@@ -273,26 +242,6 @@ namespace
         sKeyId[5] = '\0';
         return OString(sKeyId);
     }
-
-    //Unescape merge string
-    static OString lcl_UnEscapeMergeText(
-        const OString& rText,const bool bHelpText = false )
-    {
-        if ( bHelpText )
-            return rText;
-        else
-            return lcl_UnEscapeText(rText,"\\n\\t\\r","\n\t\r");
-    }
-
-    //Escape to get merge string
-    static OString lcl_EscapeMergeText(
-        const OString& rText,const bool bHelpText = false )
-    {
-        if ( bHelpText )
-            return rText;
-        else
-            return lcl_EscapeText(rText,"\n\t\r","\\n\\t\\r");
-    }
 }
 
 //Default constructor
@@ -338,15 +287,12 @@ PoEntry::PoEntry(
       only three element*/
     }
     m_pGenPo->setMsgCtxt(sMsgCtxt);
-    m_pGenPo->setMsgId(
-        lcl_UnEscapeMergeText(
-            rText,rSourceFile.endsWith(".xhp")));
+    m_pGenPo->setMsgId(rText);
     m_pGenPo->setExtractCom(
         ( !rHelpText.isEmpty() ?  rHelpText + "\n" : OString( "" )) +
         lcl_GenKeyId(
             m_pGenPo->getReference() + sMsgCtxt + m_pGenPo->getMsgId() ) );
     m_bIsInitialized = true;
-
 }
 
 //Destructor
@@ -468,35 +414,15 @@ OString PoEntry::getKeyId() const
 OString PoEntry::getMsgId() const
 {
     assert( m_bIsInitialized );
-    return
-        lcl_EscapeMergeText(
-            m_pGenPo->getMsgId(), getSourceFile().endsWith(".xhp") );
+    return m_pGenPo->getMsgId();
 }
 
 //Get translated string in merge format
 OString PoEntry::getMsgStr() const
 {
     assert( m_bIsInitialized );
-    return
-        lcl_EscapeMergeText(
-            m_pGenPo->getMsgStr(), getSourceFile().endsWith(".xhp") );
+    return m_pGenPo->getMsgStr();
 
-}
-
-//Set translated string when input is in merge format
-void PoEntry::setMsgStr(const OString& rMsgStr)
-{
-    assert( m_bIsInitialized );
-    m_pGenPo->setMsgStr(
-                lcl_UnEscapeMergeText(
-                    rMsgStr,getSourceFile().endsWith(".xhp")));
-}
-
-//Set fuzzy flag
-void PoEntry::setFuzzy(const bool bFuzzy)
-{
-    assert( m_bIsInitialized );
-    m_pGenPo->setFuzzy(bFuzzy);
 }
 
 //Check whether po-s belong to the same localization component

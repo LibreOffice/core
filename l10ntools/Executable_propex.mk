@@ -30,6 +30,7 @@ $(eval $(call gb_Executable_add_exception_objects,propex,\
 
 $(eval $(call gb_Executable_use_externals,propex,\
     boost_headers \
+    libxml2 \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -61,9 +61,6 @@ public:
     OString         getMsgStr() const;
     bool            isFuzzy() const;
     OString         getKeyId() const;
-    void            setMsgId(const OString& rMsgId);
-    void            setMsgStr(const OString& rMsgStr);
-    void            setFuzzy(const bool bFuzzy);
 
     static bool     IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2);
 

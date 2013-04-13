@@ -313,20 +313,6 @@ void XRMResParser::Error( const OString &rError )
     yyerror(( char * ) rError.getStr());
 }
 
-/*****************************************************************************/
-void XRMResParser::ConvertStringToDBFormat( OString &rString )
-/*****************************************************************************/
-{
-    rString = rString.trim().replaceAll("\t", "\\t");
-}
-
-/*****************************************************************************/
-void XRMResParser::ConvertStringToXMLFormat( OString &rString )
-/*****************************************************************************/
-{
-    rString = rString.replaceAll("\\t", "\t");
-}
-
 //
 // class XMLResExport
 //
@@ -377,7 +363,7 @@ void XRMResExport::WorkOnDesc(
         file.read (memblock, size);
         file.close();
         memblock[size] = '\0';
-        rText = OString(memblock).replaceAll("\n", "\\n");
+        rText = OString(memblock);
         delete[] memblock;
      }
     WorkOnText( rOpenTag, rText );
@@ -395,13 +381,9 @@ void XRMResExport::WorkOnText(
 
     if ( !pResData )
     {
-        OString sPlatform( "" );
-        pResData = new ResData( sPlatform, GetGID() );
+        pResData = new ResData( OString(), GetGID() );
     }
-
-    OString sText(rText);
-    ConvertStringToDBFormat(sText);
-    pResData->sText[sLang] = sText;
+    pResData->sText[sLang] = rText;
 }
 
 /*****************************************************************************/
@@ -418,8 +400,7 @@ void XRMResExport::EndOfText(
         {
             sCur = aLanguages[ n ];
 
-            OString sAct(
-                pResData->sText[sCur].replaceAll("\x0A", OString()));
+            OString sAct = pResData->sText[sCur];
 
             if( !sAct.isEmpty() )
                 common::writePoEntry(
@@ -528,7 +509,6 @@ void XRMResMerge::WorkOnDesc(
                     }
                     OString sOutputDescFile(
                         sOutputFile.copy(0, i + 1) + sLocDescFilename);
-                    sText = sText.replaceAll("\\n", "\n");
                     ofstream file(sOutputDescFile.getStr());
                     if (file.is_open()) {
                         file << sText.getStr();
@@ -573,7 +553,6 @@ void XRMResMerge::WorkOnText(
                     helper::isWellFormedXML( sContent ))
                 {
                     rText = sContent;
-                    ConvertStringToXMLFormat( rText );
                 }
             }
     }

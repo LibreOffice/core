@@ -11,6 +11,49 @@
 
 namespace helper {
 
+OString escapeAll(
+    const OString& rText, const OString& rUnEscaped, const OString& rEscaped )
+{
+    assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
+    OStringBuffer sReturn;
+    for ( sal_Int32 nIndex = 0; nIndex < rText.getLength(); ++nIndex )
+    {
+        sal_Int32 nUnEscapedOne = rUnEscaped.indexOf(rText[nIndex]);
+        if( nUnEscapedOne != -1 )
+        {
+            sReturn.append(rEscaped.copy(nUnEscapedOne*2,2));
+        }
+        else
+            sReturn.append(rText[nIndex]);
+    }
+    return sReturn.makeStringAndClear();
+}
+
+
+OString unEscapeAll(
+    const OString& rText, const OString& rEscaped, const OString& rUnEscaped)
+{
+    assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
+    OStringBuffer sReturn;
+    const sal_Int32 nLength = rText.getLength();
+    for ( sal_Int32 nIndex = 0; nIndex < nLength; ++nIndex )
+    {
+        if( rText[nIndex] == '\\' && nIndex+1 < nLength )
+        {
+            sal_Int32 nEscapedOne = rEscaped.indexOf(rText.copy(nIndex,2));
+            if( nEscapedOne != -1 )
+            {
+                sReturn.append(rUnEscaped[nEscapedOne/2]);
+                ++nIndex;
+            }
+        }
+        else
+            sReturn.append(rText[nIndex]);
+    }
+    return sReturn.makeStringAndClear();
+}
+
+
 OString QuotHTML(const OString &rString)
 {
     OStringBuffer sReturn;

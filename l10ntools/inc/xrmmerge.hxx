@@ -59,9 +59,6 @@ protected:
     OString GetGID() { return sGID; }
     OString GetLID() { return sLID; }
 
-    void ConvertStringToDBFormat( OString &rString );
-    void ConvertStringToXMLFormat( OString &rString );
-
 public:
     XRMResParser();
     virtual ~XRMResParser();

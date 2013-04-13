@@ -22,6 +22,7 @@
 #include <cstddef>
 #include <cstring>
 
+#include "helper.hxx"
 #include "boost/scoped_ptr.hpp"
 #include <stdio.h>
 #include <stdlib.h>
@@ -954,6 +955,11 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         if (sXText.isEmpty())
             sXText = "-";
 
+        ConvertExportContent(sXText);
+        ConvertExportContent(sXHText);
+        ConvertExportContent(sXQHText);
+        ConvertExportContent(sXTitle);
+
         common::writePoEntry(
             "Transex3", *aOutput.mPo, global::inputPathname,
             pResData->sResTyp, sGID, sLID, sXHText, sXText);
@@ -1070,6 +1076,7 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
                     if( sText == "\\\"" )
                         sText = "\"";
                 }
+                ConvertExportContent(sText);
                 common::writePoEntry(
                     "Transex3", *aOutput.mPo, global::inputPathname,
                     rTyp, sGID, sLID, OString(), sText);
@@ -1316,66 +1323,26 @@ void Export::ConvertMergeContent( OString &rText )
 /*****************************************************************************/
 {
     sal_Bool bNoOpen = ( rText.indexOf( "\\\"" ) != 0 );
-    sal_Bool bNoClose = !rText.endsWithL(RTL_CONSTASCII_STRINGPARAM("\\\""));
-    OStringBuffer sNew;
-    for ( sal_Int32 i = 0; i < rText.getLength(); i++ )
-    {
-        OString sChar( rText[i]);
-        if (sChar.equalsL(RTL_CONSTASCII_STRINGPARAM("\\")))
-        {
-            if (( i + 1 ) < rText.getLength())
-            {
-                sal_Char cNext = rText[i + 1];
-                if ( cNext == '\"' )
-                {
-                    sChar = OString('\"');
-                    i++;
-                }
-                else if ( cNext == 'n' )
-                {
-                    sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\n"));
-                    i++;
-                }
-                else if ( cNext == 't' )
-                {
-                    sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\t"));
-                    i++;
-                }
-                else if ( cNext == '\'' )
-                {
-                    sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\\'"));
-                    i++;
-                }
-                else
-                {
-                    sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\\\"));
-                }
-            }
-            else
-            {
-                sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\\\"));
-            }
-        }
-        else if (sChar.equalsL(RTL_CONSTASCII_STRINGPARAM("\"")))
-        {
-            sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\\""));
-        }
-        else if (sChar.equalsL(RTL_CONSTASCII_STRINGPARAM("")))
-        {
-            sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\0x7F"));
-        }
-        sNew.append(sChar);
-    }
+    sal_Bool bNoClose = !rText.endsWith("\\\"");
 
-    rText = sNew.makeStringAndClear();
 
-    if ( bNoOpen ) {
-        OString sTmp( rText );
-        rText = "\"";
-        rText += sTmp;
-    }
+    rText = rText.replaceAll("\\\"'","\'"); /// Temporary: until PO files contain escaped single quotes
+                                            /// (Maybe next PO update solve this)
+    rText =
+        helper::escapeAll(
+            rText.replaceAll("","\\0x7F"),
+            "\n""\t""\\""\"","\\n""\\t""\\\\""\\\"");
+
+    if ( bNoOpen )
+        rText = "\"" + rText;
+
     if ( bNoClose )
         rText += "\"";
+}
+
+void Export::ConvertExportContent( OString& rText )
+{
+    rText = helper::unEscapeAll(rText,"\\n""\\t""\\\\""\\\"","\n""\t""\\""\"");
 }
 
 sal_Bool Export::PrepareTextToMerge(OString &rText, sal_uInt16 nTyp,
@@ -1539,7 +1506,7 @@ sal_Bool Export::PrepareTextToMerge(OString &rText, sal_uInt16 nTyp,
     }
 
     OString sContent;
-    pEntrys->GetTransex3Text(sContent, nTyp, rLangIndex);
+    pEntrys->GetText(sContent, nTyp, rLangIndex);
     if (sContent.isEmpty() && !rLangIndex.equalsIgnoreAsciiCase("en-US"))
     {
         rText = sOrigText;
@@ -1573,7 +1540,7 @@ void Export::ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const OStrin
         sCur = aLanguages[ n ];
 
         OString sText;
-        sal_Bool bText = pEntry->GetTransex3Text( sText, nType, sCur , sal_True );
+        sal_Bool bText = pEntry->GetText( sText, nType, sCur , sal_True );
         if ( bText && !sText.isEmpty() && sText != "-" ) {
             OString sOutput;
             if ( bNextMustBeDefineEOL)  {
@@ -1772,7 +1739,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 OString sText;
                                 sal_Bool bText = false;
                                 if ( pEntrys )
-                                    bText = pEntrys->GetTransex3Text( sText, STRING_TYP_TEXT, sCur, sal_True );
+                                    bText = pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, sal_True );
                                 if ( bText && !sText.isEmpty() )
                                 {
                                     sal_Int32 nStart, nEnd;
