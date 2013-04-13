@@ -49,6 +49,7 @@ void lo_runMain();
 void lo_set_view_size(int width, int height);
 void lo_render_windows(CGContextRef context, CGRect rect);
 void lo_tap(int x, int y);
+void lo_keyboard_input(int c);
 
 #ifdef __cplusplus
 }

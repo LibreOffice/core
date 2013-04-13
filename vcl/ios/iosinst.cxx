@@ -370,6 +370,17 @@ void lo_tap(int x, int y)
 }
 
 extern "C"
+void lo_keyboard_input(int c)
+{
+    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
+    if (pFocus) {
+        KeyEvent aEvent(c, c, 0);
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pFocus->GetWindow(), &aEvent);
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pFocus->GetWindow(), &aEvent);
+    }
+}
+
+extern "C"
 void lo_keyboard_did_hide()
 {
     // Tell LO it has lost "focus", which will cause it to stop
