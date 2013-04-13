@@ -284,19 +284,6 @@ void handleFilesOfDir(
             }
         }
     }
-    //Remove empty pot directories
-    OUString sPoPath =
-        OStringToOUString(
-            rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
-    OUString sPoUrl;
-    if (osl::FileBase::getFileURLFromSystemPath(sPoPath, sPoUrl)
-        != osl::FileBase::E_None)
-    {
-        cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
-             << OUStringToOString(sPoPath, RTL_TEXTENCODING_UTF8).getStr() << "\n";
-        throw false; //TODO
-    }
-    osl::Directory::remove(sPoUrl);
 }
 
 bool includeProject(const OString& rProject) {
@@ -444,6 +431,20 @@ void handleDirectory(
         cerr << "Error: Cannot close directory\n";
         throw false; //TODO
     }
+
+    //Remove empty pot directory
+    OUString sPoPath =
+        OStringToOUString(
+            rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+    OUString sPoUrl;
+    if (osl::FileBase::getFileURLFromSystemPath(sPoPath, sPoUrl)
+        != osl::FileBase::E_None)
+    {
+        cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
+             << OUStringToOString(sPoPath, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+        throw false; //TODO
+    }
+    osl::Directory::remove(sPoUrl);
 }
 
 void handleProjects(char * sSourceRoot, char const * sDestRoot)
