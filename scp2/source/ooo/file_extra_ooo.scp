@@ -51,25 +51,26 @@ End
 #ifdef UNX
 
 File gid_File_Extra_Cfgsrv_Bitmap_Unx
-    Dir = gid_Brand_Dir_Share_Config;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "cfgsrvbitmapunx.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_cfgsrvbitmapunx.filelist";
 End
 
 #endif
 
 File gid_File_Extra_Cfgusr
-    Dir = gid_Dir_User_Config;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    Name = "cfgusr.zip";
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Name = "extras_cfgusr.filelist";
 End
 
 File gid_File_Extra_Cfgsrv
-    Dir = gid_Brand_Dir_Share_Config;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    Name = "cfgsrvnolang.zip";
+    Styles = (FILELIST);
+    Name = "extras_cfgsrvnolang.filelist";
     Patchfiles = ();
 End
 

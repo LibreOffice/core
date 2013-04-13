@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,cfgsrvbitmapunx,$(SRCDIR)/extras/unx/source/bitmaps))
+$(eval $(call gb_Package_Package,extras_cfgsrvbitmapunx,$(SRCDIR)/extras/unx/source/bitmaps))
 
-$(eval $(call gb_Zip_add_files,cfgsrvbitmapunx,\
+$(eval $(call gb_Package_set_outdir,extras_cfgsrvbitmapunx,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_cfgsrvbitmapunx,share/config,\
 	psetupl.xpm \
 	psetup.xpm \
 ))
