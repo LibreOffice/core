@@ -359,13 +359,13 @@ SvStream& AffineMatrixItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/
     return rStream;
 }
 
-sal_Bool AffineMatrixItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+sal_Bool AffineMatrixItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
     rVal <<= maMatrix;
     return sal_True;
 }
 
-sal_Bool AffineMatrixItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+sal_Bool AffineMatrixItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /* nMemberId */ )
 {
     if (rVal >>= maMatrix)
     {
