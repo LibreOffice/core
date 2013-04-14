@@ -29,42 +29,42 @@ $(eval $(call gb_Pyuno_Pyuno,commonwizards,$(SRCDIR)/wizards/com/sun/star/wizard
 
 $(eval $(call gb_Pyuno_add_files,commonwizards,wizards,\
     __init__.py \
-    common/__init__.py \
     common/ConfigGroup.py \
-    common/Configuration.py \
-    common/FileAccess.py \
-    common/Properties.py \
-    common/Resource.py \
-    common/NoValidPathException.py \
-    common/PropertyNames.py \
-    common/SystemDialog.py \
     common/ConfigSet.py \
+    common/Configuration.py \
     common/Desktop.py \
+    common/FileAccess.py \
     common/HelpIds.py \
+    common/NoValidPathException.py \
     common/NumberFormatter.py \
-    text/TextElement.py \
-    document/__init__.py \
+    common/Properties.py \
+    common/PropertyNames.py \
+    common/Resource.py \
+    common/SystemDialog.py \
+    common/__init__.py \
     document/OfficeDocument.py \
-    text/__init__.py \
+    document/__init__.py \
     text/TextDocument.py \
+    text/TextElement.py \
     text/TextFieldHandler.py \
     text/TextSectionHandler.py \
-    ui/__init__.py \
+    text/__init__.py \
     ui/ControlScroller.py \
+    ui/DocumentPreview.py \
     ui/ImageList.py \
     ui/PathSelection.py \
-    ui/UnoDialog.py \
-    ui/DocumentPreview.py \
     ui/PeerConfig.py \
     ui/UIConsts.py \
+    ui/UnoDialog.py \
     ui/UnoDialog2.py \
     ui/WizardDialog.py \
-    ui/event/__init__.py \
+    ui/__init__.py \
     ui/event/CommonListener.py \
     ui/event/DataAware.py \
     ui/event/ListModelBinder.py \
     ui/event/RadioDataAware.py \
     ui/event/UnoDataAware.py \
+    ui/event/__init__.py \
 ))
 
 # vim:set noet sw=4 ts=4:
