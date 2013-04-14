@@ -12,29 +12,8 @@
 #import <UIKit/UIKit.h>
 #include <postmac.h>
 
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <osl/detail/ios-bootstrap.h>
 #include <osl/process.h>
-
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XToolkitExperimental.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/view/XRenderable.hpp>
-
-#include <vcl/svapp.hxx>
-
-using namespace com::sun::star;
-
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 extern "C" {
     extern void * analysis_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
