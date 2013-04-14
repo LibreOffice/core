@@ -12,9 +12,9 @@ $(eval $(call gb_ExternalPackage_use_external_project,cppunit,cppunit))
 
 ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_file,cppunit,bin/cppunit_dll.dll,src/cppunit/ReleaseDll/cppunit_dll.dll))
-$(eval $(call gb_ExternalPackage_add_file,cppunit,lib/icppunit_dll.lib,src/cppunit/ReleaseDll/cppunit_dll.lib))
-$(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester_dll.exe,src/DllPlugInTester/ReleaseDll/DllPlugInTester_dll.exe))
+$(eval $(call gb_ExternalPackage_add_file,cppunit,bin/$(if $(MSVC_USE_DEBUG_RUNTIME),cppunitd_dll.dll,cppunit_dll.dll),src/cppunit/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll/cppunitd_dll.dll,ReleaseDll/cppunit_dll.dll)))
+$(eval $(call gb_ExternalPackage_add_file,cppunit,lib/icppunit_dll.lib,src/cppunit/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll/cppunitd_dll.lib,ReleaseDll/cppunit_dll.lib)))
+$(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester_dll.exe,src/DllPlugInTester/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll/DllPlugInTesterd_dll.exe,ReleaseDll/DllPlugInTester_dll.exe)))
 else
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/libcppunit-1-13-0.dll,src/cppunit/.libs/libcppunit-1-13-0.dll))
 $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/libcppunit.dll.a,src/cppunit/.libs/libcppunit.dll.a))

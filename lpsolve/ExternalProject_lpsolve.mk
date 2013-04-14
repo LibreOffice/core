@@ -27,7 +27,8 @@ $(call gb_ExternalProject_get_state_target,lpsolve,build):
 else # $(COM)!=GCC
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	$(call gb_ExternalProject_run,build,\
-		LIB="$(ILIB)" cmd /c cvc6.bat \
+		LIB="$(ILIB)" RUNTIME_FLAG="$(if $(MSVC_USE_DEBUG_RUNTIME),/MDd,/MD)" \
+		cmd /c cvc6.bat \
 	,lpsolve55)
 endif # $(COM)
 else # $(OS)!=WNT

@@ -40,7 +40,7 @@ ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
-		$(if $(debug),,BUILD_OPT=1) \
+		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
 		MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
 		$(if $(filter X,$(CPU)),USE_64=1) \
 		LIB="$(ILIB)" \

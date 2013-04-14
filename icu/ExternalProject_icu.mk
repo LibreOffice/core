@@ -19,11 +19,15 @@ icu_CPPFLAGS:="-DHAVE_GCC_ATOMICS=$(if $(filter TRUE,$(GCC_HAVE_BUILTIN_ATOMIC))
 
 ifeq ($(OS),WNT)
 
+# Note: runConfigureICU ignores everything following the platform name!
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_ExternalProject_run,build,\
 		export LIB="$(ILIB)" \
-		&& CFLAGS="$(SOLARINC)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="$(SOLARINC)" ./runConfigureICU Cygwin/MSVC \
+		&& CFLAGS="$(SOLARINC)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="$(SOLARINC)" \
+			./runConfigureICU \
+			$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
+			Cygwin/MSVC \
 		&& $(MAKE) \
 	,source)
 else

@@ -20,8 +20,10 @@ ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.dll.a,src/.libs/liblcms2.dll.a))
 $(eval $(call gb_ExternalPackage_add_file,lcms2,bin/liblcms2-2.dll,src/.libs/liblcms2-2.dll))
 else ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_file,lcms2,lib/lcms2.lib,bin/lcms2.lib))
-$(eval $(call gb_ExternalPackage_add_file,lcms2,bin/lcms2.dll,bin/lcms2.dll))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,lib/lcms2$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib,bin/lcms2$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib))
+# note: the lcms2d.lib references LCMS2.DLL (without D!) but the dll is
+# actually called LCMS2D.DLL then
+$(eval $(call gb_ExternalPackage_add_file,lcms2,bin/lcms2.dll,bin/lcms2$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll))
 endif
 else
 $(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.so,src/.libs/liblcms2.so))

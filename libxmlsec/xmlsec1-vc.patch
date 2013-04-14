@@ -15,11 +15,14 @@
  SOLIBS 			= $(LIBS) libxml2.lib 
 --- build/xmlsec/win32/Makefile.msvc.old	2012-11-30 11:09:23.130479800 -0500
 +++ build/xmlsec/win32/Makefile.msvc	2012-11-30 11:11:06.037550700 -0500
-@@ -301,6 +301,7 @@
+@@ -301,6 +301,10 @@
  CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_STRING_H" /D "HAVE_CTYPE_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_MALLOC_H" /D "HAVE_MEMORY_H"
 +CFLAGS 			= $(CFLAGS) $(SOLARINC) -I$(WORKDIR)\UnpackedTarball\xml2\include
++!if "$(MSVC_USE_DEBUG_RUNTIME)" != ""
++CFLAGS 			= $(CFLAGS) /MDd
++!endif
  
  # Optimisation and debug symbols.
  !if "$(DEBUG)" == "1"

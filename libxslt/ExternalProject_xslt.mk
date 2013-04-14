@@ -33,6 +33,7 @@ else # COM=MSC
 $(call gb_ExternalProject_get_state_target,xslt,build):
 	$(call gb_ExternalProject_run,build,\
 		cscript configure.js \
+			$(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
 		&& unset MAKEFLAGS \
 		&& LIB="$(ILIB)" nmake \
 	,win32)

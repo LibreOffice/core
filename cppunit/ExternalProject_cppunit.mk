@@ -20,17 +20,17 @@ ifeq ($(OS)$(COM),WNTMSC)
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_ExternalProject_run,build,\
-		$(COMPATH)/vcpackages/vcbuild.exe cppunit_dll.vcproj "Release|Win32" \
+		$(COMPATH)/vcpackages/vcbuild.exe cppunit_dll.vcproj "$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)|Win32" \
 		&& cd ../DllPlugInTester \
-		&& $(COMPATH)/vcpackages/vcbuild.exe DllPlugInTester.vcproj "Release|Win32" \
+		&& $(COMPATH)/vcpackages/vcbuild.exe DllPlugInTester.vcproj "$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)|Win32" \
 	,src/cppunit)
 else
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_ExternalProject_run,build,\
-		msbuild.exe cppunit_dll.vcxproj /p:Configuration=Release \
+		msbuild.exe cppunit_dll.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
 		&& cd ../DllPlugInTester \
-		&& msbuild.exe DllPlugInTester.vcxproj /p:Configuration=Release \
+		&& msbuild.exe DllPlugInTester.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
 	,src/cppunit)
 endif

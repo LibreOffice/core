@@ -33,18 +33,18 @@ $(eval $(call gb_ExternalPackage_add_files,icu,bin,\
 
 else
 $(eval $(call gb_ExternalPackage_add_files,icu,lib,\
-	source/lib/icudt.lib \
-	source/lib/icuuc.lib \
-	source/lib/icuin.lib \
-	source/lib/icule.lib \
-	source/lib/icutu.lib\
+	source/lib/icudt$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
+	source/lib/icuuc$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
+	source/lib/icuin$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
+	source/lib/icule$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
+	source/lib/icutu$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib\
 ))
 $(eval $(call gb_ExternalPackage_add_files,icu,bin,\
-	source/lib/icudt$(ICU_MAJOR).dll \
-	source/lib/icuuc$(ICU_MAJOR).dll \
-	source/lib/icuin$(ICU_MAJOR).dll \
-	source/lib/icule$(ICU_MAJOR).dll \
-	source/lib/icutu$(ICU_MAJOR).dll \
+	source/lib/icudt$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
+	source/lib/icuuc$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
+	source/lib/icuin$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
+	source/lib/icule$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
+	source/lib/icutu$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/bin/genccode.exe \
 	source/bin/genbrk.exe \
 	source/bin/gencmn.exe \

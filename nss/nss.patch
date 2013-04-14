@@ -120,7 +120,7 @@
  	ifndef BUILD_OPT
 --- misc/nss-3.13.5/mozilla/security/coreconf/arch.mk	2009-06-05 04:14:49.000000000 +0200
 +++ misc/build/nss-3.13.5/mozilla/security/coreconf/arch.mk	2010-06-11 16:35:54.990913282 +0200
-@@ -324,7 +324,12 @@
+@@ -324,10 +324,15 @@
  # IMPL_STRATEGY may be defined too.
  #
  
@@ -133,7 +133,11 @@
 +OBJDIR_NAME = out
  
  ifeq (,$(filter-out WIN%,$(OS_TARGET)))
- ifndef BUILD_OPT
+-ifndef BUILD_OPT
++ifdef THIS_HAS_BEEN_DISABLED_TO_GET_out
+ #
+ # Define USE_DEBUG_RTL if you want to use the debug runtime library
+ # (RTL) in the debug build
 --- misc/nss-3.13.5/mozilla/security/nss/cmd/platlibs.mk	2010-02-04 19:59:10.000000000 +0100
 +++ misc/build/nss-3.13.5/mozilla/security/nss/cmd/platlibs.mk	2010-06-11 16:35:55.004869805 +0200
 @@ -41,27 +41,32 @@

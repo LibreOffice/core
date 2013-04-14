@@ -29,19 +29,26 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(call gb_ExternalProject_get_state_target,python3,build) :
 ifeq ($(VCVER),110)
 	$(call gb_ExternalProject_run,build,\
-	MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 \
+	MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
+		/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+		/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
+		/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 \
 	&& cd $(EXTERNAL_WORKDIR) \
 	&& ln -s PCbuild LO_lib \
 	,PCBuild)
 else ifeq ($(VCVER),100)
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /ToolsVersion:4.0 \
+		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
+			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
+			/ToolsVersion:4.0 \
 		&& cd $(EXTERNAL_WORKDIR) \
 		&& ln -s PCbuild LO_lib \
 	,PCBuild)
 else ifeq ($(VCVER),90)
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= $(COMPATH)/vcpackages/vcbuild.exe pcbuild.sln "Release|$(if $(filter INTEL,$(CPUNAME)),Win32,x64)" \
+		MAKEFLAGS= $(COMPATH)/vcpackages/vcbuild.exe pcbuild.sln \
+			"$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)|$(if $(filter INTEL,$(CPUNAME)),Win32,x64)" \
 		&& cd $(EXTERNAL_WORKDIR) \
 		&& ln -s PC/VS9.0 LO_lib \
 	,PC/VS9.0)

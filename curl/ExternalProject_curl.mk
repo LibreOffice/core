@@ -49,7 +49,8 @@ else ifeq ($(COM),MSC)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= LIB="$(ILIB)" nmake -f Makefile.vc9 cfg=release-dll \
+		MAKEFLAGS= LIB="$(ILIB)" nmake -f Makefile.vc9 \
+			cfg=$(if $(MSVC_USE_DEBUG_RUNTIME),debug-dll,release-dll) \
 			EXCFLAGS="/EHa /Zc:wchar_t- /D_CRT_SECURE_NO_DEPRECATE /DUSE_WINDOWS_SSPI $(SOLARINC)" $(if $(filter X86_64,$(CPUNAME)),MACHINE=X64) \
 	,lib)
 

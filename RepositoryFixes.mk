@@ -107,11 +107,13 @@ gb_Library_FILENAMES := $(patsubst xmlsec1-nss:ixmlsec1-nss%,xmlsec1-nss:libxmls
 gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 
 
+gb_Library_NOILIBFILENAMES_D := \
+    icudt icuin icule icuuc \
+    lcms2 \
+
 # change the names of all import libraries that don't have an "i" prefix as in our standard naming schema
 gb_Library_NOILIBFILENAMES := \
-    icudt icuin icule icuuc \
     langtag \
-    lcms2 \
     lpsolve55 \
     xpcom \
     xpcom_core \
@@ -129,10 +131,12 @@ gb_Library_LIBLIBFILENAMES := \
 
 gb_Library_FILENAMES := \
 	$(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%) \
+				 $(foreach lib,$(gb_Library_NOILIBFILENAMES_D),$(lib):%) \
 				 $(foreach lib,$(gb_Library_LIBLIBFILENAMES),$(lib):%) \
 		,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += \
 	$(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_NOILIBFILENAMES_D),$(lib):$(lib)d$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_LIBLIBFILENAMES),$(lib):lib$(lib)$(gb_Library_PLAINEXT))
 
 endif # ifeq ($(COM),GCC)

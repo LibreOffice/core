@@ -103,6 +103,7 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	$(if $(filter YES,$(SYSTEM_HSQLDB)),\
 		-DHSQLDB_JAR=\""$(call gb_Helper_make_path,$(HSQLDB_JAR))"\" \
 	) \
+	$(if $(filter MSC,$(COM)),$(if $(MSVC_USE_DEBUG_RUNTIME),-DMSVC_PKG_DEBUG_RUNTIME)) \
 ))
 
 ifeq ($(GUIBASE),unx)

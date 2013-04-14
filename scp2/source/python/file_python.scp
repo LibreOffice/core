@@ -167,6 +167,7 @@ File gid_File_Lib_Python_So
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
 End
+#ifndef MSVC_PKG_DEBUG_RUNTIME
 File gid_File_Lib_Python3_So
     LIB_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -177,6 +178,7 @@ File gid_File_Lib_Python3_So
 #endif //UNX
     Styles = (PACKED);
 End
+#endif
 #else //MACOSX
 //directory entries solely to be able to create the symlinks
 Directory gid_Dir_PythonFramework

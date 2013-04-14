@@ -127,7 +127,7 @@
 -    $lib_cflag='/Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
 -    $opt_cflags=$f.' /Ox /O2 /Ob2';
 -    $dbg_cflags=$f.'d /Od -DDEBUG -D_DEBUG';
-+    my $f = $shlib || $fips ?' -MD':' -MT';
++    my $f = $shlib || $fips ? (($ENV{MSVC_USE_DEBUG_RUNTIME} eq "TRUE") ? ' -MDd' : ' -MD' ):' -MT';
 +    $lib_cflag='-Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
 +    $opt_cflags=$f.' -Ox -O2 -Ob2';
 +    $dbg_cflags=$f.'d -Od -DDEBUG -D_DEBUG';

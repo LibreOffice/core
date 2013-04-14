@@ -2299,7 +2299,7 @@ $(call gb_LinkTarget__use_python_headers,$(1))
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
-	python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).lib \
+	python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).lib \
 )
 else ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\

@@ -43,7 +43,14 @@
  
  CFGSET     = FALSE
  
-@@ -620,5 +620,5 @@
+@@ -620,11 +620,11 @@
+ debug-dll-ssl-dll\libcurl.res \
+ debug-dll-zlib-dll\libcurl.res \
+ debug-dll-ssl-dll-zlib-dll\libcurl.res: libcurl.rc
+-	rc /dDEBUGBUILD=1 /Fo $@ libcurl.rc
++	rc $(SOLARINC) /dDEBUGBUILD=1 /Fo $@ libcurl.rc
+
+ release-dll\libcurl.res \
  release-dll-ssl-dll\libcurl.res \
  release-dll-zlib-dll\libcurl.res \
  release-dll-ssl-dll-zlib-dll\libcurl.res: libcurl.rc

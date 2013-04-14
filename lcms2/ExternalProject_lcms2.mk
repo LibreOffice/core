@@ -20,13 +20,16 @@ ifeq ($(COM),MSC)
 ifeq ($(filter-out 14 13,$(COMEX)),)
 $(call gb_ExternalProject_get_state_target,lcms2,build):
 	$(call gb_ExternalProject_run,build,\
-		MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32 /p:TargetName=lcms2 \
+		MSBuild.exe lcms2_DLL.vcxproj \
+			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+			/p:Platform=Win32 /p:TargetName=lcms2 \
 			$(if $(filter 14,$(COMEX)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
 	,Projects/VC2010/lcms2_DLL)
 else
 $(call gb_ExternalProject_get_state_target,lcms2,build):
 	$(call gb_ExternalProject_run,build,\
-		$(COMPATH)/vcpackages/vcbuild.exe lcms2_DLL.vcproj "Release|Win32" \
+		$(COMPATH)/vcpackages/vcbuild.exe lcms2_DLL.vcproj \
+			"$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)|Win32" \
 	,Projects/VC2008/lcms2_DLL)
 endif
 else
