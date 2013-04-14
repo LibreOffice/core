@@ -128,7 +128,7 @@ endef
 # $(eval $(call gb_Package_add_files,foo_inc,inc/foo,foo/bar/foo.hxx))
 # # -> inc/foo/foo.hxx
 define gb_Package_add_files
-$(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_files requires 3 arguments))
+$(if $(strip $(3)),,$(if $(filter 1,$(words $(2))),,$(call gb_Output_error,gb_Package_add_files: it looks like either pkg name or dest. dir is missing)))
 $(foreach file,$(3),$(call gb_Package_add_file,$(1),$(2)/$(notdir $(file)),$(file)))
 
 endef
@@ -142,7 +142,7 @@ endef
 # $(eval $(call gb_Package_add_files,foo_inc,inc,foo/bar/foo.hxx))
 # # -> inc/foo/bar/foo.hxx
 define gb_Package_add_files_with_dir
-$(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_files_with_dir requires 3 arguments))
+$(if $(strip $(3)),,$(if $(filter 1,$(words $(2))),,$(call gb_Output_error,gb_Package_add_files: it looks like either pkg name or dest. dir is missing)))
 $(foreach file,$(3),$(call gb_Package_add_file,$(1),$(2)/$(file),$(file)))
 
 endef
