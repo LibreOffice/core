@@ -144,16 +144,6 @@
     End
 #endif
 
-#ifdef UNX
-#define STD_FONT_FILE_DUO(id,name,unxfontname,winfontname) \
-    File id \
-        TXT_FILE_BODY; \
-        Dir       = gid_Dir_Fonts_Truetype; \
-        Styles    = (PACKED, FONT_WARN_IF_EXISTS); \
-        Name      = STRING(name) ; \
-    End
-#endif
-
 #ifdef WNT
 #define STD_FONT_FILE(id,name,fontname) \
     File id \
@@ -162,18 +152,6 @@
         Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
         Name     = STRING(name) ; \
         FontName = STRING(fontname) ; \
-        NetDir   = gid_Dir_Winfonts; \
-    End
-#endif
-
-#ifdef WNT
-#define STD_FONT_FILE_DUO(id,name,unxfontname,winfontname) \
-    File id \
-        TXT_FILE_BODY; \
-        Dir      = PREDEFINED_OSSYSTEMFONTDIR; \
-        Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
-        Name     = STRING(name) ; \
-        FontName = STRING(winfontname) ; \
         NetDir   = gid_Dir_Winfonts; \
     End
 #endif
