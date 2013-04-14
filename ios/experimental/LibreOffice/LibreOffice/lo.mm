@@ -37,9 +37,11 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
 extern "C" {
+    extern void * analysis_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * animcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dba_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * date_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dbaxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * evtatt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fileacc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -54,6 +56,7 @@ extern "C" {
     extern void * lnth_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * lotuswordpro_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * oox_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * pricing_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * scd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * scfilt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -84,9 +87,11 @@ const lib_to_component_mapping *
 lo_get_libmap(void)
 {
     static lib_to_component_mapping map[] = {
+        { "libanalysislo.a", analysis_component_getFactory },
         { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libdbalo.a", dba_component_getFactory },
+        { "libdatelo.a", date_component_getFactory },
         { "libdbaxmllo.a", dbaxml_component_getFactory },
         { "libevtattlo.a", evtatt_component_getFactory },
         { "libfileacc.a", fileacc_component_getFactory },
@@ -101,6 +106,7 @@ lo_get_libmap(void)
         { "liblnthlo.a", lnth_component_getFactory },
         { "liblwpftlo.a", lotuswordpro_component_getFactory },
         { "libooxlo.a", oox_component_getFactory },
+        { "libpricinglo.a", pricing_component_getFactory },
         { "libscdlo.a", scd_component_getFactory },
         { "libscfiltlo.a", scfilt_component_getFactory },
         { "libsclo.a", sc_component_getFactory },
