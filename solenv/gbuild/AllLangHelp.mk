@@ -51,7 +51,6 @@ $(call gb_AllLangHelp_get_clean_target,%) :
 # gb_AllLangHelp_AllLangHelp__one_lang module lang helpname zipname
 define gb_AllLangHelp_AllLangHelp__one_lang
 $(call gb_HelpTarget_HelpTarget,$(3),$(1),$(2))
-$(call gb_HelpTarget_set_configdir,$(3),$(gb_AllLangHelp_AUXDIR))
 $(call gb_HelpTarget_set_helpdir,$(3),$(gb_AllLangHelp_HELPDIR))
 
 $(call gb_HelpTarget_get_outdir_target,$(4)) : $(call gb_HelpTarget_get_target,$(3))
@@ -156,6 +155,7 @@ endef
 define gb_AllLangHelp__use_linked_module
 $(call gb_HelpTarget_use_linked_module,$(call gb_AllLangHelp__get_helpname,$(1),$(3)),$(call gb_AllLangHelp__get_helpname,$(2),$(3)))
 $(call gb_HelpTarget_set_indexed,$(call gb_AllLangHelp__get_helpname,$(1),$(3)))
+$(call gb_HelpTarget_set_configfile,$(call gb_AllLangHelp__get_helpname,$(1),$(3)),$(gb_AllLangHelp_AUXDIR)/$(3)/$(1))
 
 endef
 
