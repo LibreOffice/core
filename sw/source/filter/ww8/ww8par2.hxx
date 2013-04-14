@@ -75,6 +75,7 @@ struct WW8SwFlyPara
 
     // add parameter <nWWPgTop> - WW8's page top margin
     WW8SwFlyPara( SwPaM& rPaM,
+                  SwWW8ImplReader& rIo,
                   WW8FlyPara& rWW,
                   const sal_uInt32 nWWPgTop,
                   const sal_uInt32 nPgLeft,

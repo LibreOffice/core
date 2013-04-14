@@ -3425,7 +3425,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             {
                 // <WW8SwFlyPara> constructor has changed - new 4th parameter
                 // containing WW8 page top margin.
-                pTableSFlyPara = new WW8SwFlyPara(*pPaM, *pTableWFlyPara,
+                pTableSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pTableWFlyPara,
                     maSectionManager.GetWWPageTopMargin(),
                     maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
                     nIniFlyDx, nIniFlyDy);

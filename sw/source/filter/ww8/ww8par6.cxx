@@ -1726,6 +1726,7 @@ bool WW8FlyPara::IsEmpty() const
 
 // #i18732# - changes made on behalf of CMC
 WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
+                            SwWW8ImplReader& rIo,
                             WW8FlyPara& rWW,
                             const sal_uInt32 nWWPgTop,
                             const sal_uInt32 nPgLeft,
@@ -2285,7 +2286,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
 
     // <WW8SwFlyPara> constructor has changed - new 4th parameter
     // containing WW8 page top margin.
-    pSFlyPara = new WW8SwFlyPara( *pPaM, *pWFlyPara,
+    pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara,
                                   maSectionManager.GetWWPageTopMargin(),
                                   maSectionManager.GetPageLeft(),
                                   maSectionManager.GetTextAreaWidth(),
