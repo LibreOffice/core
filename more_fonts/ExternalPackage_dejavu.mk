@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,font_dejavu_inc,font_dejavu))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_dejavu,font_dejavu))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,font_dejavu_inc,pck,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_dejavu,pck,\
 	ttf/DejaVuSans-Bold.ttf \
 	ttf/DejaVuSans-BoldOblique.ttf \
 	ttf/DejaVuSans-ExtraLight.ttf \

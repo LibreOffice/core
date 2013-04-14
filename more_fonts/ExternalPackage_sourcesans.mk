@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,font_sourcesans_inc,font_sourcesans))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_sourcesans,font_sourcesans))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,font_sourcesans_inc,pck,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcesans,pck,\
 	SourceSansPro-BoldItalic.ttf \
 	SourceSansPro-Bold.ttf \
 	SourceSansPro-Italic.ttf \
 	SourceSansPro-Regular.ttf \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_file,font_sourcesans_inc,pck/License_sourcesans.txt,OFL.txt))
+$(eval $(call gb_ExternalPackage_add_unpacked_file,fonts_sourcesans,pck/License_sourcesans.txt,OFL.txt))
 
 # vim: set noet sw=4 ts=4:

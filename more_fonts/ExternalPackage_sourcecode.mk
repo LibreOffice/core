@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,font_sourcecode_inc,font_sourcecode))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_sourcecode,font_sourcecode))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,font_sourcecode_inc,pck,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcecode,pck,\
 	SourceCodePro-Bold.ttf \
 	SourceCodePro-Regular.ttf \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_file,font_sourcecode_inc,pck/License_sourcecode.txt,OFL.txt))
+$(eval $(call gb_ExternalPackage_add_unpacked_file,fonts_sourcecode,pck/License_sourcecode.txt,OFL.txt))
 
 # vim: set noet sw=4 ts=4:

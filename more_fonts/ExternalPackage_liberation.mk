@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,font_liberation_inc,font_liberation))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_liberation,font_liberation))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,font_liberation_inc,pck,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_liberation,pck,\
 	LiberationMono-Bold.ttf \
 	LiberationMono-BoldItalic.ttf \
 	LiberationMono-Italic.ttf \
@@ -24,6 +24,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,font_liberation_inc,pck,\
 	LiberationSerif-Regular.ttf \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_file,font_liberation_inc,pck/License_liberation.txt,LICENSE))
+$(eval $(call gb_ExternalPackage_add_unpacked_file,fonts_liberation,pck/License_liberation.txt,LICENSE))
 
 # vim: set noet sw=4 ts=4:

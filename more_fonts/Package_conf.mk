@@ -7,8 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,more_fonts_inc,$(SRCDIR)/more_fonts/fonts))
+$(eval $(call gb_Package_Package,more_fonts_conf,$(SRCDIR)/more_fonts/fonts))
 
-$(eval $(call gb_Package_add_file,more_fonts_inc,pck/fc_local.conf,fc_local.conf))
+$(eval $(call gb_Package_add_file,more_fonts_conf,pck/fc_local.conf,fc_local.conf))
 
 # vim: set noet sw=4 ts=4:
