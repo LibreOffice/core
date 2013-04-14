@@ -46,6 +46,7 @@ class SfxStyleSheetBase;
 class ScDPObject;
 struct ScPivotFuncData;
 struct ScDPNumGroupInfo;
+class ScSortWarningDlg;
 class ScTabViewShell;
 class ScConditionalFormat;
 class ScConditionalFormatList;
@@ -293,6 +294,10 @@ public:
     virtual sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const = 0;
 };
 
+class AbstractScSortWarningDlg : public VclAbstractDialog  //add for ScSortWarningDlg
+{
+};
+
 class AbstractScStringInputDlg :  public VclAbstractDialog  //add for ScStringInputDlg
 {
 public:
@@ -345,7 +350,8 @@ public:
                                                     const String&   rStrLabel,
                                                     int nId,
                                                     sal_Bool                bColDefault = sal_True ) = 0;
-    virtual VclAbstractDialog * CreateScSortWarningDlg ( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId ) = 0;  //add for ScSortWarningDlg
+
+    virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(Window* pParent, const String& rExtendText, const String& rCurrentText ) = 0; //add for ScSortWarningDlg
 
     virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
                                                                 const ScAddress& rPos, int nId ) = 0;

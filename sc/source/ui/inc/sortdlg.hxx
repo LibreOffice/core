@@ -56,11 +56,9 @@ public:
             ~ScSortWarningDlg();
     DECL_LINK( BtnHdl, PushButton* );
 private:
-    FixedText       aFtText;
-    FixedText       aFtTip;
-    PushButton      aBtnExtSort;
-    PushButton      aBtnCurSort;
-    CancelButton    aBtnCancel;
+    FixedText*       aFtText;
+    PushButton*      aBtnExtSort;
+    PushButton*      aBtnCurSort;
 };
 
 #endif // SC_SORTDLG_HXX

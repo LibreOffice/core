@@ -47,6 +47,7 @@ class ScDPSubtotalDlg;
 class ScDPNumGroupDlg;
 class ScDPDateGroupDlg;
 class ScDPShowDetailDlg;
+class ScSortWarningDlg;
 class ScNewScenarioDlg;
 class ScShowTabDlg;
 class ScStringInputDlg;
@@ -343,6 +344,12 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg  //add for ScShowT
     virtual sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const;
 };
 
+class AbstractScSortWarningDlg_Impl : public AbstractScSortWarningDlg
+{
+    DECL_ABSTDLG_BASE( AbstractScSortWarningDlg_Impl, ScSortWarningDlg )
+};
+
+
 class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg  //add for ScStringInputDlg
 {
     DECL_ABSTDLG_BASE( AbstractScStringInputDlg_Impl, ScStringInputDlg )
@@ -412,7 +419,7 @@ public:
                                                     int nId,
                                                     sal_Bool                bColDefault = sal_True );
 
-    virtual VclAbstractDialog * CreateScSortWarningDlg( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId );
+    virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(Window* pParent, const String& rExtendText, const String& rCurrentText );
 
     virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
                                                                 const ScAddress& rPos, int nId );

@@ -109,6 +109,7 @@ IMPL_ABSTDLG_BASE(AbstractScDPDateGroupDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPShowDetailDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractScSortWarningDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
@@ -729,23 +730,10 @@ VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*  
     return 0;
 }
 
-
-
-VclAbstractDialog * ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window* pParent, const String& rExtendText,
-                                                                          const String& rCurrentText, int nId )
+AbstractScSortWarningDlg* ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window* pParent, const String& rExtendText, const String& rCurrentText )
 {
-    Dialog * pDlg=NULL;
-    switch ( nId )
-    {
-    case RID_SCDLG_SORT_WARNING:
-        pDlg = new ScSortWarningDlg( pParent, rExtendText, rCurrentText );
-        break;
-    default:
-        break;
-    }
-    if( pDlg )
-        return new ScVclAbstractDialog_Impl( pDlg );
-    return 0;
+    ScSortWarningDlg* pDlg = new ScSortWarningDlg(pParent, rExtendText, rCurrentText );
+    return new AbstractScSortWarningDlg_Impl( pDlg );
 }
 
 

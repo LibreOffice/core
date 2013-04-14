@@ -20,7 +20,6 @@
 
 #include "sc.hrc"   // -> RID_SCDLG_SORT
                     // -> RID_SCPAGE_SORT_FIELDS
-                    // -> RID_SCDLG_SORT_WARNING
                     // -> SCSTR_NONAME
                     // -> SCSTR_UNDEFINED
                     // -> SCSTR_FIELD
@@ -32,11 +31,5 @@
 #define CTRL_MANAGESORTKEY  1
 #define WIN_MANAGESORTKEY   2
 #define SB_SORT             3
-
-#define FT_TEXT             1
-#define FT_TIP              2
-#define BTN_EXTSORT         3
-#define BTN_CURSORT         4
-#define BTN_CANCEL          5
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
