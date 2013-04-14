@@ -242,53 +242,60 @@ End
 #endif
 
 File gid_File_Extra_Gallbullets
-    Dir = gid_Dir_Gallery_Bullets;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "gallbullets.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST)
+    Name = "extras_gallbullets.filelist";
 End
 
 File gid_File_Extra_Gallhtmlexpo
-    Dir = gid_Dir_Gallery_Htmlexpo;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "gallhtmlexpo.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST)
+    Name = "extras_gallhtmlexpo.filelist";
 End
 
 File gid_File_Extra_Gallroot
-    Dir = gid_Dir_Gallery;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "gallroot.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST)
+    Name = "extras_gallroot.filelist";
 End
 
 File gid_File_Extra_Gallsound
-    Dir = gid_Dir_User_Gallery;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    Name = "gallsound.zip";
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Name = "extras_gallsound.filelist";
 End
 
 File gid_File_Extra_Gallsounds
-    Dir = gid_Dir_Gallery_Sounds;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "gallsounds.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST)
+    Name = "extras_gallsounds.filelist";
 End
 
 File gid_File_Extra_Gallsystem
-    Dir = gid_Dir_Gallery;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "gallsystem.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST)
+    Name = "extras_gallsystem.filelist";
     Patchfiles = ();
 End
 
 File gid_File_Extra_Gallwwwback
-    Dir = gid_Dir_Gallery_Wwwback;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "gallwwwback.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST)
+    Name = "extras_gallwwwback.filelist";
 End
 
 File gid_File_Extra_Gallwwwgraf
-    Dir = gid_Dir_Gallery_Wwwgraf;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "gallwwwgraf.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST)
+    Name = "extras_gallwwwgraf.filelist";
 End
 
 File gid_File_Extra_Index_Pl

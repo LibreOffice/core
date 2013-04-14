@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,gallsounds,$(SRCDIR)/extras/source/gallery/sounds))
+$(eval $(call gb_Package_Package,extras_gallsounds,$(SRCDIR)/extras/source/gallery/sounds))
 
-$(eval $(call gb_Zip_add_files,gallsounds,\
+$(eval $(call gb_Package_set_outdir,extras_gallsounds,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_gallsounds,share/gallery/sounds,\
 	apert2.wav \
 	apert.wav \
 	applause.wav \

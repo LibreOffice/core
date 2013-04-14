@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,gallwwwgraf,$(SRCDIR)/extras/source/gallery/www-graf))
+$(eval $(call gb_Package_Package,extras_gallwwwgraf,$(SRCDIR)/extras/source/gallery/www-graf))
 
-$(eval $(call gb_Zip_add_files,gallwwwgraf,\
+$(eval $(call gb_Package_set_outdir,extras_gallwwwgraf,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_gallwwwgraf,share/gallery/www-graf,\
 	bluat.gif \
 	bluback.gif \
 	bludisk.gif \
