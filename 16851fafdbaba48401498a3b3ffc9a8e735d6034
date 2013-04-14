@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///O0\u003d",
+        "filename": "extras/Package_gallsounds.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-14T14:18:49Z",
+      "side": 1,
+      "message": "There is a comma missing after share/gallery/sounds .",
+      "revId": "16851fafdbaba48401498a3b3ffc9a8e735d6034",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
