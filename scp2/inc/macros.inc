@@ -130,7 +130,6 @@
         Dir      = gid_Dir_Fonts_Truetype; \
         Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
         Name     = STRING(name) ; \
-        FontName = STRING(fontname) ; \
         NetDir   = gid_Dir_Winfonts; \
     End
 
@@ -151,7 +150,6 @@
         Dir      = gid_Dir_Fonts_Truetype; \
         Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
         Name     = STRING(name) ; \
-        FontName = STRING(fontname) ; \
         NetDir   = gid_Dir_Winfonts; \
     End
 #endif
