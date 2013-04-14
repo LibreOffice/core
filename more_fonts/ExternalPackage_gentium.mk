@@ -20,6 +20,4 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_gentium,pck,\
 	GenBkBasR.ttf \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_file,fonts_gentium,pck/License_gentium.txt,OFL.txt))
-
 # vim: set noet sw=4 ts=4:

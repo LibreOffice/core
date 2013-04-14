@@ -14,6 +14,4 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcecode,pck,\
 	SourceCodePro-Regular.ttf \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_file,fonts_sourcecode,pck/License_sourcecode.txt,OFL.txt))
-
 # vim: set noet sw=4 ts=4:

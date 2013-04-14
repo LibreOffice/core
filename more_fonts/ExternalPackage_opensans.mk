@@ -16,6 +16,4 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_opensans,pck,\
 	OpenSans-Regular.ttf \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_file,fonts_opensans,pck/License_opensans.txt,LICENSE.txt))
-
 # vim: set noet sw=4 ts=4:

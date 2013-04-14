@@ -33,6 +33,4 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_dejavu,pck,\
 	ttf/DejaVuSerifCondensed.ttf \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_file,font_dejavu_lic,pck/License_dejavu.txt,LICENSE))
-
 # vim: set noet sw=4 ts=4:

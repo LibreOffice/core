@@ -22,6 +22,4 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_libertineg,pck,\
 	LinLibertine_R_G.ttf \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_file,fonts_libertineg,pck/License_libertineg.txt,OFL.txt))
-
 # vim: set noet sw=4 ts=4:

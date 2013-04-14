@@ -24,6 +24,4 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_liberation,pck,\
 	LiberationSerif-Regular.ttf \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_file,fonts_liberation,pck/License_liberation.txt,LICENSE))
-
 # vim: set noet sw=4 ts=4:
