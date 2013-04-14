@@ -102,7 +102,7 @@ copy-stuff:
 # vcl/generic/fontmanager/helper.cxx: psp::getFontPath(). UserInstallation is
 # set to the app's data dir above.
 	mkdir -p assets/gz.unpack/user/fonts
-	for F in $(OUTDIR)/pck/Liberation*.ttf $(OUTDIR)/pck/Gen*.ttf $(OUTDIR)/pck/opens___.ttf; do \
+	for F in $(INSTDIR)/share/fonts/truetype/Liberation*.ttf $(INSTDIR)/share/fonts/truetype/Gen*.ttf $(INSTDIR)/share/fonts/truetype/opens___.ttf; do \
 		gzip -9 <$$F >assets/gz.unpack/user/fonts/`basename $$F`; \
 	done
 #
