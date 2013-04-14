@@ -41,9 +41,7 @@ gb_EXTRAMERGEDLIBS := \
 	oox \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
-	sc \
 	sd \
-	sw \
 	swd \
 	test \
 	unotest \
@@ -52,52 +50,9 @@ gb_EXTRAMERGEDLIBS := \
 
 # FIXME: just retaining these for now - they currently crash & need thought.
 #gb_EXTRAMERGEDLIBS := \
-	analysis \
-	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
-	ctl \
-	cui \
-	date \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbase) \
-	embobj \
-	evtatt \
-	fastsax \
-	$(call gb_Helper_optional,DBCONNECTIVITY,flat) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
-	fwm \
-	hwp \
-	hyphen \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),javaloader) \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),javavm) \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),java_uno) \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),juh) \
-	$(if $(filter-out IOS,$(OS)),jvmaccess) \
-	jvmfwk \
-	lnth \
-	localedata_en \
-	localedata_es \
-	localedata_euro \
-	localedata_others \
-	$(if $(filter-out ANDROID IOS,$(OS)),odbc) \
-	pricing \
-	$(call gb_Helper_optional,PYUNO,pythonloader) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,rptui) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,rptxml) \
-	$(if $(DISABLE_SCRIPTING),,scriptframe) \
-	scui \
-	scfilt \
-	sdui \
-	$(if $(filter-out IOS,$(OS)),solver) \
-	spell \
-	$(if $(DISABLE_SCRIPTING),,stringresource) \
-	subsequenttest \
-	swui \
-	textfd \
-	ucpcmis1 \
-	$(if $(filter-out IOS,$(OS)),wpftdraw) \
-	$(if $(filter-out IOS,$(OS)),wpftwriter) \
-	writerfilter \
-	xmlfa \
-	xmlfd \
+	sc \
+	sw \
+
 
 # we link all object files from these libraries into one, merged library
 gb_MERGEDLIBS := \
@@ -159,7 +114,7 @@ gb_URELIBS := \
 	salhelper \
 	store \
 	unoidl \
-	xmlreader \
+	xmlreader
 
 endif
 
