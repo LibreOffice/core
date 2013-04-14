@@ -1366,7 +1366,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
 //================== GraphicImport - the exported function ================
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicImport itiGraphicImport
 #endif
 

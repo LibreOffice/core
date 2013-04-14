@@ -2552,7 +2552,7 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
 
 //================== GraphicExport - the exported Function ================
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicExport emeGraphicExport
 #endif
 

@@ -399,7 +399,7 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
 
 //================== GraphicImport - the exported function ================
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicImport ipxGraphicImport
 #endif
 

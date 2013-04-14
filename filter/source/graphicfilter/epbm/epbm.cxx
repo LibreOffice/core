@@ -189,7 +189,7 @@ void PBMWriter::ImplWriteNumber(sal_Int32 nNumber)
 // - exported function -
 // ---------------------
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicExport epbGraphicExport
 #endif
 

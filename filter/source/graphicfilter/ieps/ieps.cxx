@@ -475,7 +475,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
 //================== GraphicImport - the exported function ================
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicImport ipsGraphicImport
 #endif
 

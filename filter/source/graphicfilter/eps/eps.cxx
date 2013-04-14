@@ -2752,7 +2752,7 @@ sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uL
 
 //================== GraphicExport - die exportierte Funktion ================
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicExport epsGraphicExport
 #endif
 

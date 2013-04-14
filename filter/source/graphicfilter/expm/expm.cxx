@@ -251,7 +251,7 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
 // - exported function -
 // ---------------------
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicExport expGraphicExport
 #endif
 

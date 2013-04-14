@@ -25,11 +25,11 @@
 
 struct ZipEntry;
 
-class ZipFile
+class PlacewareZipFile
 {
 public:
-    ZipFile( osl::File& rFile );
-    ~ZipFile();
+    PlacewareZipFile( osl::File& rFile );
+    ~PlacewareZipFile();
 
     bool addFile( osl::File& rFile, const OString& rName );
     bool close();

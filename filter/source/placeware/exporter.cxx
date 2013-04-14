@@ -181,7 +181,7 @@ static OString convertString( OUString aInput )
     return aRet;
 }
 
-static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, const OUString& rURL, vector< PageEntry* >& rPageEntries  ) throw( ::com::sun::star::uno::Exception )
+static void createSlideFile( Reference< XComponent > xDoc, PlacewareZipFile& rZipFile, const OUString& rURL, vector< PageEntry* >& rPageEntries  ) throw( ::com::sun::star::uno::Exception )
 {
     OString aInfo;
 
@@ -326,7 +326,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     // Create new package...
     try
     {
-        ZipFile aZipFile(aTempFile);
+        PlacewareZipFile aZipFile(aTempFile);
 
         // export slides as gifs and collect information for slides
 

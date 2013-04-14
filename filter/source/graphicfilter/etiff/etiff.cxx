@@ -596,7 +596,7 @@ void TIFFWriter::EndCompression()
 // - exported function -
 // ---------------------
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicExport etiGraphicExport
 #endif
 

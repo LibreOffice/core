@@ -33,23 +33,57 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
+	$(call gb_Helper_optional,EXPORT,egi) \
+	$(call gb_Helper_optional,EXPORT,eme) \
+	$(call gb_Helper_optional,EXPORT,epb) \
+	$(call gb_Helper_optional,EXPORT,epg) \
+	$(call gb_Helper_optional,EXPORT,epp) \
+	$(call gb_Helper_optional,EXPORT,eps) \
+	$(call gb_Helper_optional,EXPORT,ept) \
+	$(call gb_Helper_optional,EXPORT,era) \
+	$(call gb_Helper_optional,EXPORT,eti) \
+	$(call gb_Helper_optional,EXPORT,exp) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,file) \
+	flash \
 	for \
 	forui \
 	fwl \
+	graphicfilter \
+	icd \
+	icg \
+	idx \
+	ime \
+	ipb \
+	ipd \
+	ips \
+	ipt \
+	ipx \
+	ira \
+	itg \
+	iti \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
+	odfflatxml \
 	oox \
+	pdffilter \
+	placeware \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	sd \
+	svgfilter \
 	swd \
+	t602filter \
 	test \
+	textfd \
 	unotest \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
-	xmlsecurity
+	xmlfa \
+	xmlfd \
+	xmlsecurity \
+	xsltfilter
 
 # FIXME: just retaining these for now - they currently crash & need thought.
 #gb_EXTRAMERGEDLIBS := \
+	comphelper \
 	sc \
 	sw \
 

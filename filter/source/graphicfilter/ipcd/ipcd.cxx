@@ -367,7 +367,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
 //================== GraphicImport - the exported Function ================
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicImport icdGraphicImport
 #endif
 

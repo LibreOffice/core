@@ -44,8 +44,8 @@ static osl::File::RC putC( unsigned char c, osl::File& rFile )
     return nRC;
 }
 
-/** write a short to the ZipFile */
-void ZipFile::writeShort( sal_Int16 s)
+/** write a short to the PlacewareZipFile */
+void PlacewareZipFile::writeShort( sal_Int16 s)
 {
     if( !isError() )
     {
@@ -55,9 +55,9 @@ void ZipFile::writeShort( sal_Int16 s)
     }
 }
 
-/** write a long to the ZipFile */
+/** write a long to the PlacewareZipFile */
 
-void ZipFile::writeLong( sal_Int32 l )
+void PlacewareZipFile::writeLong( sal_Int32 l )
 {
     if( !isError() )
     {
@@ -78,7 +78,7 @@ void ZipFile::writeLong( sal_Int32 l )
 }
 
 /** copy the zipentries file to the zipfile and updates the crc of that zipentry */
-void ZipFile::copyAndCRC(ZipEntry *e, osl::File& rFile)
+void PlacewareZipFile::copyAndCRC(ZipEntry *e, osl::File& rFile)
 {
     char buf[2048];
     sal_uInt64 n, nWritten;
@@ -112,7 +112,7 @@ void ZipFile::copyAndCRC(ZipEntry *e, osl::File& rFile)
 }
 
 /** write a yet empty local header for a zipentry to the zipfile */
-void ZipFile::writeDummyLocalHeader(ZipEntry *e)
+void PlacewareZipFile::writeDummyLocalHeader(ZipEntry *e)
 {
     sal_Int32 len = zf_lfhSIZE + e->name.getLength();
     sal_Int32 i;
@@ -129,7 +129,7 @@ void ZipFile::writeDummyLocalHeader(ZipEntry *e)
 }
 
 /** write the local header for a zipentry to the zipfile */
-void ZipFile::writeLocalHeader(ZipEntry *e)
+void PlacewareZipFile::writeLocalHeader(ZipEntry *e)
 {
     TimeValue aTime;
     osl_getSystemTime( &aTime );
@@ -171,7 +171,7 @@ void ZipFile::writeLocalHeader(ZipEntry *e)
 }
 
 /* write a zipentry in the central dir to the zipfile */
-void ZipFile::writeCentralDir(ZipEntry *e)
+void PlacewareZipFile::writeCentralDir(ZipEntry *e)
 {
     writeLong(zf_CDHSIGValue);              // magic number
     writeShort(zf_Vers(1, 0));              // version made by
@@ -198,7 +198,7 @@ void ZipFile::writeCentralDir(ZipEntry *e)
 }
 
 /* write the end of the central dir to the zipfile */
-void ZipFile::writeEndCentralDir(sal_Int32 nCdOffset, sal_Int32 nCdSize)
+void PlacewareZipFile::writeEndCentralDir(sal_Int32 nCdOffset, sal_Int32 nCdSize)
 {
     writeLong(zf_ECDSIGValue);      // magic number
     writeShort(0);                  // disk num
@@ -218,12 +218,12 @@ void ZipFile::writeEndCentralDir(sal_Int32 nCdOffset, sal_Int32 nCdSize)
 /* Create a zip file for writing, return a handle for it.
  * RETURNS: A new zip-file output object, or NULL if it failed, in
  *   which case *errMsgBuffer will contain an error message string. */
-ZipFile::ZipFile(osl::File& rFile )
+PlacewareZipFile::PlacewareZipFile(osl::File& rFile )
 : mrFile( rFile ), mbOpen( true ), mnRC( osl::File::E_None )
 {
 }
 
-ZipFile::~ZipFile()
+PlacewareZipFile::~PlacewareZipFile()
 {
     if( mbOpen )
         close();
@@ -233,7 +233,7 @@ ZipFile::~ZipFile()
  * RETURNS: true if successful, else false. If false, the caller should
  *   call zip_Close() and delete the bum zip file.
 */
-bool ZipFile::addFile( osl::File& rFile, const OString& rName )
+bool PlacewareZipFile::addFile( osl::File& rFile, const OString& rName )
 {
     OSL_ASSERT( mbOpen );
 
@@ -272,7 +272,7 @@ bool ZipFile::addFile( osl::File& rFile, const OString& rName )
 /* Finish up the zip file, close it, and deallocate the zip file object.
  * RETURNS: true if successful, else false.
 */
-bool ZipFile::close()
+bool PlacewareZipFile::close()
 {
     OSL_ASSERT( mbOpen );
 

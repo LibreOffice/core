@@ -720,7 +720,7 @@ sal_Bool PSDReader::ImplReadBody()
 
 //================== GraphicImport - the exported function ================
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicImport ipdGraphicImport
 #endif
 

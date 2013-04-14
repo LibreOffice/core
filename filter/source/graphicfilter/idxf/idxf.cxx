@@ -29,7 +29,7 @@ class FilterConfigItem;
 
 //================== GraphicImport - die exportierte Funktion ================
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicImport idxGraphicImport
 #endif
 

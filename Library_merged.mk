@@ -57,7 +57,8 @@ $(eval $(call gb_Library_use_externals,merged,\
 	jpeg \
 	lcms2 \
 	libxml2 \
-	$(call gb_Helper_optional,DESKTOP,libxslt) \
+	libxslt \
+	libexslt \
 	$(if $(filter-out IOS,$(OS)),lpsolve) \
 	mythes \
 	nss3 \

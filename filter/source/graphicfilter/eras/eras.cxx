@@ -269,7 +269,7 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
 // - exported function -
 // ---------------------
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
 #define GraphicExport eraGraphicExport
 #endif
 
