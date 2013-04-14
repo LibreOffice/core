@@ -3394,7 +3394,7 @@ void DbGridControl::KeyInput( const KeyEvent& rEvt )
         {
             size_t Location = GetModelColumnPos( nColId );
             DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : NULL;
-            OStringTransfer::CopyString( GetCurrentRowCellText( pColumn,m_xPaintRow ), this );
+            OStringTransfer::CopyString( GetCurrentRowCellText( pColumn, m_xCurrentRow ), this );
             return;
         }
     }
