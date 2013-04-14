@@ -49,10 +49,9 @@ End
 
 #if defined WITH_HELP
 File gid_File_Help_Swriter_Zip
-    Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_HELPPACK;
+    Dir = FILELIST_DIR;
+    FILELIST_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(swriter);
-    Patchfiles = ();
 End
 #endif
 

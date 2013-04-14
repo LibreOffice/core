@@ -396,22 +396,20 @@ End
 
 #if defined WITH_HELP
 File gid_File_Help_Common_Zip
-    Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_HELPPACK;
+    Dir = FILELIST_DIR;
+    FILELIST_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(shared);
-    Patchfiles = ();
 End
 
 File gid_File_Help_Sbasic_Zip
-    Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_HELPPACK;
+    Dir = FILELIST_DIR;
+    FILELIST_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sbasic);
-    Patchfiles = ();
 End
 
 File gid_File_Help_Schart_Zip
-    Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_HELPPACK;
+    Dir = FILELIST_DIR;
+    FILELIST_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
 #endif

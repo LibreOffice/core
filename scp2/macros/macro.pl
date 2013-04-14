@@ -169,7 +169,7 @@ sub write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG
         next if ( $poorhelplocalizations{$lang} );
         print OUTFILE ";" unless $first;
         $first = 0;
-        print OUTFILE "\\\n\tName ($lang) = EXTRAFILENAME(name,_$lang)";
+        print OUTFILE "\\\n\tName ($lang) = EXTRAFILELISTNAME(HelpTarget/,name,/$lang)";
     }
     print OUTFILE "\n\n";
 }

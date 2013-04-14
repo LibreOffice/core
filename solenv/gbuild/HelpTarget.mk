@@ -477,10 +477,12 @@ endef
 # class HelpTarget
 
 # Creates one language version of a help module.
+#
+# Provides a filelist called HelpTarget/<name>, that is not built by
+# default (i.e., the user of HelpTarget has to explicitly depend on the
+# Package).
 
 gb_HelpTarget_DEFAULT_LANG := en-US
-
-gb_HelpTarget_COMMAND := zip
 
 gb_HelpTarget__get_module = $(patsubst %/$(call gb_HelpTarget__get_lang,$(1)),%,$(1))
 gb_HelpTarget__get_lang = $(lastword $(subst /, ,$(1)))
@@ -508,11 +510,9 @@ $(if $(call gb_HelpTarget__is_default_lang,$(1)) \
 )
 endef
 
-define gb_HelpTarget__get_command
+define gb_HelpTarget__command
 $(call gb_Output_announce,$(2),$(true),HLP,4)
-cd $(call gb_HelpTarget_get_workdir,$(2)) && \
-$(gb_HelpJarTarget_COMMAND) -q -0 -rX --filesync --must-match $(1) \
-	$(HELP_PACK_FILES)
+touch $@
 endef
 
 $(dir $(call gb_HelpTarget_get_target,%)).dir :
@@ -532,7 +532,7 @@ $(call gb_HelpTarget_get_linked_target,%) :
 	touch $@
 
 $(call gb_HelpTarget_get_target,%) :
-	$(call gb_HelpTarget__get_command,$@,$*)
+	$(call gb_HelpTarget__command,$@,$*)
 
 .PHONY : $(call gb_HelpTarget_get_clean_target,%)
 $(call gb_HelpTarget_get_clean_target,%) :
@@ -545,6 +545,8 @@ $(call gb_HelpTarget_get_clean_target,%) :
 			$(call gb_HelpTarget_get_workdir,$*) \
 	)
 
+gb_HelpTarget_get_packagename = HelpTarget/$(1)
+
 # Create a help target.
 #
 # depend on makefile to re-build filelist when files are removed
@@ -552,28 +554,29 @@ $(call gb_HelpTarget_get_clean_target,%) :
 # gb_HelpTarget_HelpTarget target module lang
 define gb_HelpTarget_HelpTarget
 $(call gb_HelpTarget_get_target,$(1)) : HELP_MODULE := $(2)
-$(call gb_HelpTarget_get_target,$(1)) : HELP_INDEXED :=
 $(call gb_HelpTarget_get_target,$(1)) : HELP_LANG := $(3)
-$(call gb_HelpTarget_get_target,$(1)) : HELP_PACK_FILES :=
 
 $(call gb_HelpTarget_get_translation_target,$(1)) : HELP_FILES :=
 $(call gb_HelpTarget_get_translation_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 
-$(call gb_HelpTarget__HelpTarget_impl,$(1),$(2),$(3),$(call gb_HelpTarget_get_workdir,$(1)))
+$(call gb_HelpTarget__HelpTarget_impl,$(1),$(2),$(3),$(call gb_HelpTarget_get_workdir,$(1)),$(call gb_HelpTarget_get_packagename,$(1)))
 
 endef
 
-# gb_HelpTarget__HelpTarget_impl target module lang workdir
+# gb_HelpTarget__HelpTarget_impl target module lang workdir package
 define gb_HelpTarget__HelpTarget_impl
 $(if $(call gb_HelpTarget__test_default_lang,$(3)),,$(call gb_HelpTarget__HelpTarget_impl_lang,$(1),$(2),$(3),$(4)))
 $(call gb_HelpLinkTarget_HelpLinkTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpIndexTarget_HelpIndexTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpJarTarget_HelpJarTarget,$(1),$(2),$(4))
+$(call gb_Package_Package_internal,$(5),$(4))
+$(call gb_Package_set_outdir,$(5),$(INSTDIR))
 
 $(call gb_HelpTarget_get_linked_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(call gb_HelpTarget_get_linked_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) :| $(call gb_HelpTarget_get_workdir,$(1))/.dir
 $(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
+$(call gb_Package_get_preparation_target,$(5)) : $(call gb_HelpTarget_get_target,$(1))
 
 $(call gb_HelpTarget_get_linked_target,$(1)) :| $(dir $(call gb_HelpTarget_get_linked_target,$(1))).dir
 $(call gb_HelpTarget_get_target,$(1)) :| $(dir $(call gb_HelpTarget_get_target,$(1))).dir
@@ -596,16 +599,16 @@ $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpTreeTarget_get_clean
 
 endef
 
-# Add index files into the zip.
+# Get list of the various index files.
 #
 # gb_HelpTarget__add_index_files target module
 define gb_HelpTarget__get_index_files
-$(foreach suffix,.db .ht .idxl .key,$(addsuffix $(suffix),$(call gb_HelpTarget__get_module,$(1))))
+$(foreach suffix,.db .ht .idxl/_0.cfs .idxl/segments_3 .idxl/segments.gen .key,$(addsuffix $(suffix),$(call gb_HelpTarget__get_module,$(1))))
 endef
 
 # gb_HelpTarget__add_file target file
 define gb_HelpTarget__add_file
-$(call gb_HelpTarget_get_target,$(1)) : HELP_PACK_FILES += $(2)
+$(call gb_Package_add_file,$(call gb_HelpTarget_get_packagename,$(1)),help/$(call gb_HelpTarget__get_lang,$(1))/$(2),$(2))
 
 endef
 
@@ -643,8 +646,6 @@ endef
 define gb_HelpTarget_set_indexed
 $(call gb_HelpLinkTarget_set_indexed,$(1),$(call gb_HelpTarget__get_index_files,$(1)))
 $(foreach file,$(call gb_HelpTarget__get_index_files,$(1)),$(call gb_HelpTarget__add_file,$(1),$(file)))
-
-$(call gb_HelpTarget_get_target,$(1)) : HELP_INDEXED := $(true)
 
 $(call gb_HelpIndexTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 $(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpIndexTarget_get_target,$(1))

@@ -30,7 +30,6 @@ $(or \
 endef
 
 gb_AllLangHelp__get_helpname = $(1)/$(2)
-gb_AllLangHelp__get_zipname = $(1)_$(2)
 
 $(dir $(call gb_AllLangHelp_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
@@ -45,22 +44,18 @@ $(call gb_AllLangHelp_get_target,%) :
 $(call gb_AllLangHelp_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),ALH,5)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_AllLangHelp_get_target,$*) $(HELP_DELIVERABLES) \
+		rm -f $(call gb_AllLangHelp_get_target,$*) \
 	)
 
-# gb_AllLangHelp_AllLangHelp__one_lang module lang helpname zipname
+# gb_AllLangHelp_AllLangHelp__one_lang module lang helpname
 define gb_AllLangHelp_AllLangHelp__one_lang
 $(call gb_HelpTarget_HelpTarget,$(3),$(1),$(2))
 $(call gb_HelpTarget_set_helpdir,$(3),$(gb_AllLangHelp_HELPDIR))
 
-$(call gb_HelpTarget_get_outdir_target,$(4)) : $(call gb_HelpTarget_get_target,$(3))
-$(call gb_HelpTarget_get_outdir_target,$(4)) :| $(dir $(call gb_HelpTarget_get_outdir_target,$(4))).dir
-$(call gb_AllLangHelp_get_target,$(1)) : $(call gb_HelpTarget_get_outdir_target,$(4))
 $(call gb_AllLangHelp_get_target,$(1)) : $(call gb_HelpTarget_get_target,$(3))
+$(call gb_AllLangHelp_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_HelpTarget_get_packagename,$(3)))
 $(call gb_AllLangHelp_get_clean_target,$(1)) : $(call gb_HelpTarget_get_clean_target,$(3))
-$(call gb_AllLangHelp_get_clean_target,$(1)) : HELP_DELIVERABLES += $(call gb_HelpTarget_get_outdir_target,$(4))
-
-$(call gb_Deliver_add_deliverable,$(call gb_HelpTarget_get_outdir_target,$(4)),$(call gb_HelpTarget_get_target,$(3)),$(1))
+$(call gb_AllLangHelp_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_HelpTarget_get_packagename,$(3)))
 
 endef
 
@@ -68,11 +63,9 @@ endef
 #
 # gb_AllLangHelp_AllLangHelp module
 define gb_AllLangHelp_AllLangHelp
-$(call gb_AllLangHelp_get_clean_target,$(1)) : HELP_DELIVERABLES :=
-
 $(foreach lang,$(gb_AllLangHelp_LANGS),\
 	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_AllLangHelp_AllLangHelp__one_lang,$(1),$(lang),$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(call gb_AllLangHelp__get_zipname,$(1),$(lang)))))
+		$(call gb_AllLangHelp_AllLangHelp__one_lang,$(1),$(lang),$(call gb_AllLangHelp__get_helpname,$(1),$(lang)))))
 
 $(call gb_AllLangHelp_get_target,$(1)) :| $(dir $(call gb_AllLangHelp_get_target,$(1))).dir
 
