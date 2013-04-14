@@ -111,6 +111,7 @@ gb_Package_OUTDIR_$(1) := $(2)
 endef
 
 define gb_Package_add_file
+$(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_file requires 3 arguments))
 $(call gb_Package_get_target,$(1)) : $$(gb_Package_OUTDIR_$(1))/$(2)
 $(call gb_Package_get_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
 $(call gb_Package_get_clean_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
@@ -127,6 +128,7 @@ endef
 # $(eval $(call gb_Package_add_files,foo_inc,inc/foo,foo/bar/foo.hxx))
 # # -> inc/foo/foo.hxx
 define gb_Package_add_files
+$(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_files requires 3 arguments))
 $(foreach file,$(3),$(call gb_Package_add_file,$(1),$(2)/$(notdir $(file)),$(file)))
 
 endef
@@ -140,6 +142,7 @@ endef
 # $(eval $(call gb_Package_add_files,foo_inc,inc,foo/bar/foo.hxx))
 # # -> inc/foo/bar/foo.hxx
 define gb_Package_add_files_with_dir
+$(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_files_with_dir requires 3 arguments))
 $(foreach file,$(3),$(call gb_Package_add_file,$(1),$(2)/$(file),$(file)))
 
 endef
