@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,gallwwwback,$(SRCDIR)/extras/source/gallery/www-back))
+$(eval $(call gb_Package_Package,extras_gallwwwback,$(SRCDIR)/extras/source/gallery/www-back))
 
-$(eval $(call gb_Zip_add_files,gallwwwback,\
+$(eval $(call gb_Package_set_outdir,extras_gallwwwback,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_gallwwwback,share/gallery/www-back,\
 	aqua.jpg \
 	bathroom.jpg \
 	blocks.jpg \

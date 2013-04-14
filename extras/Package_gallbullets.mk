@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,gallbullets,$(SRCDIR)/extras/source/gallery/bullets))
+$(eval $(call gb_Package_Package,extras_gallbullets,$(SRCDIR)/extras/source/gallery/bullets))
 
-$(eval $(call gb_Zip_add_files,gallbullets,\
+$(eval $(call gb_Package_set_outdir,extras_gallbullets,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_gallbullets,share/gallery/bullets,\
 	blkpearl.gif \
 	bluarrow.gif \
 	bluball.gif \

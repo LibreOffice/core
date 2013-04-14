@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,gallsystem,$(SRCDIR)/extras/source/gallery/gallery_system))
+$(eval $(call gb_Package_Package,extras_gallsystem,$(SRCDIR)/extras/source/gallery/gallery_system))
 
-$(eval $(call gb_Zip_add_files,gallsystem,\
+$(eval $(call gb_Package_set_outdir,extras_gallsystem,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_gallsystem,share/gallery,\
 	sg1.sdg \
 	sg1.sdv \
 	sg1.thm \

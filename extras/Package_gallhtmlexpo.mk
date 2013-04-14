@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,gallhtmlexpo,$(SRCDIR)/extras/source/gallery/htmlexpo))
+$(eval $(call gb_Package_Package,extras_gallhtmlexpo,$(SRCDIR)/extras/source/gallery/htmlexpo))
 
-$(eval $(call gb_Zip_add_files,gallhtmlexpo,\
+$(eval $(call gb_Package_set_outdir,extras_gallhtmlexpo,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_gallhtmlexpo,share/gallery/htmlexpo,\
 	bludown.gif \
 	blufirs_.gif \
 	blufirs.gif \
