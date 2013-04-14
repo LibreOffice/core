@@ -68,6 +68,16 @@ gb_ExternalPackage_UNPACKED_$(1) := $(2)
 
 endef
 
+# Set output dir for the package's files.
+#
+# Default is $(OUTDIR).
+#
+# gb_ExternalPackage_set_outdir package outdir
+define gb_ExternalPackage_set_outdir
+$(call gb_Package_set_outdir,$(1),$(2))
+
+endef
+
 # Mark a source file to be used outside of this module
 #
 # This results in the timestamp of the file being updated, so a possible
