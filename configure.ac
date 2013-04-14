@@ -3217,6 +3217,9 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to build with additional debug utilities])
 if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     ENABLE_DBGUTIL="TRUE"
+    # this is an extra var so it can have different default on different MSVC
+    # versions (in case there are version specific problems with it)
+    MSVC_USE_DEBUG_RUNTIME=""
     PROEXT=""
     PRODUCT=""
 
@@ -3249,12 +3252,14 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     fi
 else
     ENABLE_DBGUTIL=""
+    MSVC_USE_DEBUG_RUNTIME=""
     # PRODUCT is old concept, still used by build.pl .
     PRODUCT="full"
     PROEXT=".pro"
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DBGUTIL)
+AC_SUBST(MSVC_USE_DEBUG_RUNTIME)
 AC_SUBST(PRODUCT)
 AC_SUBST(PROEXT)
 
@@ -4848,9 +4853,12 @@ find_msvc_dlls()
     fi
 
     msvcdllpath="$VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT"
+    MSVC_DEBUG_DLL_PATH="$VC_PRODUCT_DIR/redist/Debug_NonRedist/$vsarch/Microsoft.VC${VCVER}.DebugCRT"
     msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
+    MSVC_DEBUG_DLLS="msvcp${VCVER}d.dll msvcr${VCVER}d.dll"
     if test "$VCVER" = "90"; then
         msvcdlls="$msvcdlls msvcm90.dll Microsoft.VC90.CRT.manifest"
+        MSVC_DEBUG_DLLS="$MSVC_DEBUG_DLLS msvcm90d.dll Microsoft.VC90.DebugCRT.manifest"
     fi
 
     for dll in $msvcdlls; do
@@ -4858,6 +4866,14 @@ find_msvc_dlls()
             AC_MSG_ERROR([can not find $dll in $msvcdllpath])
         fi
     done
+    if test -n "$MSVC_USE_DEBUG_RUNTIME"; then
+        for dll in $MSVC_DEBUG_DLLS; do
+            if ! test -f "$MSVC_DEBUG_DLL_PATH/$dll"; then
+                AC_MSG_ERROR([can not find $dll in $MSVC_DEBUG_DLL_PATH])
+            fi
+        done
+    fi
+
 }
 
 if test "$build_os" = "cygwin"; then
@@ -6031,6 +6047,8 @@ if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
 fi
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
+AC_SUBST(MSVC_DEBUG_DLL_PATH)
+AC_SUBST(MSVC_DEBUG_DLLS)
 AC_SUBST(MSM_PATH)
 AC_SUBST(MERGE_MODULES)
 

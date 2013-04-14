@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_targets,external,\
 	Package_dbghelp \
 	Package_msms \
 	Package_msvc_dlls \
+	$(if $(MSVC_USE_DEBUG_RUNTIME),Package_msvc_dlls_debug) \
 	Package_msvc80_dlls \
 ))
 endif
