@@ -78,9 +78,9 @@ End
 
 File gid_File_Oxt_CT2N
 	TXT_FILE_BODY;
-	Styles = (PACKED, ARCHIVE);
-	Dir = gid_Brand_Dir_Share_Extensions_CT2N;
-	Name = "ConvertTextToNumber.oxt";
+	Styles = (PACKED, FILELIST);
+	Dir = FILELIST_DIR;
+	Name = "ct2n.filelist";
 End
 
 #endif
