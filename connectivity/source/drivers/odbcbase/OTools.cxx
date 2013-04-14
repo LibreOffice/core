@@ -424,11 +424,15 @@ OUString OTools::getStringValue(OConnection* _pConnection,
         // we assume everyone (LibO & ODBC) uses UTF-16; see OPreparedStatement::setParameter
         BOOST_STATIC_ASSERT(sizeof(sal_Unicode) == 2);
         BOOST_STATIC_ASSERT(sizeof(SQLWCHAR)    == 2);
-        // read the unicode data
-        const SQLLEN nMaxLen = sizeof(waCharArray) / sizeof(sal_Unicode);
-        SQLLEN pcbValue = SQL_NO_TOTAL;
+        BOOST_STATIC_ASSERT(sizeof(waCharArray) % 2 == 0);
+        // Size == number of bytes, Len == number of UTF-16 code units
+        const SQLLEN nMaxSize = sizeof(waCharArray);
+        const SQLLEN nMaxLen  = sizeof(waCharArray) / sizeof(sal_Unicode);
+        BOOST_STATIC_ASSERT(nMaxLen * sizeof(sal_Unicode) == nMaxSize);
 
-        while ((pcbValue == SQL_NO_TOTAL ) || (pcbValue >= nMaxLen) )
+        // read the unicode data
+        SQLLEN pcbValue = SQL_NO_TOTAL;
+        while ((pcbValue == SQL_NO_TOTAL ) || (pcbValue >= nMaxSize) )
         {
             OTools::ThrowException(_pConnection,
                                    (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(
@@ -446,7 +450,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
             SQLLEN nReadChars;
             OSL_ENSURE( (pcbValue < 0) || (pcbValue % 2 == 0),
                         "ODBC: SQLGetData of SQL_C_WCHAR returned odd number of bytes");
-            if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxLen) )
+            if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxSize) )
             {
                 // we filled the buffer; remove the terminating null character
                 nReadChars = nMaxLen-1;
