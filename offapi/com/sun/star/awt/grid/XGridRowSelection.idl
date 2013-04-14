@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 /** This interfaces provides access to the selection of row for <type>UnoControlGrid</type>.
 
-    @since OpenOffice.org 3.4
+    @since LibreOffice 3.4
  */
 published interface XGridRowSelection
 {

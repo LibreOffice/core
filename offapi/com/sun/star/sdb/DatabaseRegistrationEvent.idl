@@ -31,7 +31,7 @@ module com { module sun { module star { module sdb {
     @see XDatabaseRegistrations
     @see XDatabaseRegistrationsListener
 
-    @since  OpenOffice.org 3.3
+    @since  LibreOffice 3.3
  */
 published struct DatabaseRegistrationEvent : ::com::sun::star::lang::EventObject
 {
