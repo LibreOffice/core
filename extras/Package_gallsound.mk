@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,gallsound,$(SRCDIR)/extras/source/gallery/gallery_sound))
+$(eval $(call gb_Package_Package,extras_gallsound,$(SRCDIR)/extras/source/gallery/gallery_sound))
 
-$(eval $(call gb_Zip_add_files,gallsound,\
+$(eval $(call gb_Package_set_outdir,extras_gallsound,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_gallsound,presets/gallery,\
 	sg100.sdv \
 	sg100.thm \
 	sg30.sdv \
