@@ -127,7 +127,7 @@ gbuild_TARGETS := AllLangHelp \
 	UnpackedTarball \
 	WinResTarget \
 	Zip \
-	ZipPackage
+
 # build a generic gbuild target
 $(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)):
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
