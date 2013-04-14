@@ -364,7 +364,7 @@ sub create_defaultdir_directorynames
         my $fontdefaultdir = "";
         if ( $onedir->{'defaultdir'} ) { $fontdefaultdir = $onedir->{'defaultdir'}; }
 
-        if (( $fontdir eq "PREDEFINED_OSSYSTEMFONTDIR" ) && ( $fontdefaultdir eq $installer::globals::fontsdirhostname ))
+        if (( $fontdir eq $installer::globals::fontsdirhostname ) && ( $fontdefaultdir eq $installer::globals::fontsdirhostname ))
         {
             $installer::globals::fontsdirname = $onedir->{'defaultdir'};
             $installer::globals::fontsdirparent = $onedir->{'uniqueparentname'};

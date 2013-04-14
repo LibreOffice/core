@@ -127,7 +127,7 @@
 #define STD_FONTWIN_FILE(id,name,fontname) \
     File id \
         TXT_FILE_BODY; \
-        Dir      = PREDEFINED_OSSYSTEMFONTDIR; \
+        Dir      = gid_Dir_Fonts_Truetype; \
         Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
         Name     = STRING(name) ; \
         FontName = STRING(fontname) ; \
@@ -148,7 +148,7 @@
 #define STD_FONT_FILE(id,name,fontname) \
     File id \
         TXT_FILE_BODY; \
-        Dir      = PREDEFINED_OSSYSTEMFONTDIR; \
+        Dir      = gid_Dir_Fonts_Truetype; \
         Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
         Name     = STRING(name) ; \
         FontName = STRING(fontname) ; \
