@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,redland,$(REDLAND_TARBALL)))
 $(eval $(call gb_UnpackedTarball_add_file,redland,src/librdf.h,redland/redland/librdf.h))
 
 $(eval $(call gb_UnpackedTarball_add_patches,redland,\
+	redland/redland/redland-query-rasqal-avoid-assert.patch.1 \
 	redland/redland/redland-pkgconfig.patch.1 \
 	redland/redland/redland-freebsd.patch.1 \
 	redland/redland/redland-msvc.patch.1 \

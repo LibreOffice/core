@@ -1,0 +1,17 @@
+avoid an assert inside rasqal_query_results_next_triple
+
+Happens on the "CONSTRUCT" query in the unordf test.
+
+--- redland/src/rdf_query_rasqal.c	2013-04-14 17:32:08.442000000 +0200
++++ redland/src/rdf_query_rasqal.c	2013-04-14 17:31:57.834000000 +0200
+@@ -1096,7 +1096,9 @@
+     scontext->statement=NULL;
+   }
+ 
+-  scontext->finished=rasqal_query_results_next_triple(scontext->qcontext->results);
++  scontext->finished = !scontext->qcontext->results;
++  if(!scontext->finished)
++    scontext->finished=rasqal_query_results_next_triple(scontext->qcontext->results);
+   if(!scontext->finished)
+     librdf_query_rasqal_query_results_update_statement(scontext);
+   
