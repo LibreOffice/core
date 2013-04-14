@@ -29,8 +29,10 @@ ifneq ($(MERGELIBS),)
 # set of libraries to link even more stuff into one merged library
 gb_EXTRAMERGEDLIBS := \
 	$(if $(filter unx,$(GUIBASE)),basebmp) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
 	chartcore \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbase) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	$(call gb_Helper_optional,EXPORT,egi) \
@@ -44,11 +46,13 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,EXPORT,eti) \
 	$(call gb_Helper_optional,EXPORT,exp) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,file) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,flat) \
 	flash \
 	for \
 	forui \
 	fwl \
 	graphicfilter \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),hsqldb) \
 	icd \
 	icg \
 	idx \
@@ -61,6 +65,10 @@ gb_EXTRAMERGEDLIBS := \
 	ira \
 	itg \
 	iti \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),jdbc) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,mork) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,mysql) \
+	$(if $(filter-out ANDROID IOS,$(OS)),odbc) \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
 	odfflatxml \
 	oox \
@@ -69,6 +77,7 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	sd \
+	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
 	svgfilter \
 	swd \
 	t602filter \
