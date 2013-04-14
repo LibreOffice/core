@@ -3219,7 +3219,7 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     ENABLE_DBGUTIL="TRUE"
     # this is an extra var so it can have different default on different MSVC
     # versions (in case there are version specific problems with it)
-    MSVC_USE_DEBUG_RUNTIME=""
+    MSVC_USE_DEBUG_RUNTIME="TRUE"
     PROEXT=""
     PRODUCT=""
 
