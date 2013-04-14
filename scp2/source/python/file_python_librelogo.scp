@@ -12,9 +12,16 @@
 #ifndef DISABLE_PYUNO
 File gid_File_LibreLogo
     TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    Dir = gid_Dir_Share_Scripts;
-    Name = "LibreLogo.zip";
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "librelogo.filelist";
+End
+
+File gid_File_LibreLogoProperties
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "librelogo_properties.filelist";
 End
 
 File gid_File_Share_Registry_LibreLogo_Xcd

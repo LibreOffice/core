@@ -16,6 +16,7 @@ Module gid_Module_Optional_Pyuno_LibreLogo
     ParentID = gid_Module_Optional;
     Sortkey = "810";
     Files = (gid_File_LibreLogo,
+             gid_File_LibreLogoProperties,
              gid_File_Share_Registry_LibreLogo_Xcd);
     Minimal = NO;
     Default = YES;

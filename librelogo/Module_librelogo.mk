@@ -14,7 +14,8 @@ ifneq ($(DISABLE_PYTHON),TRUE)
 
 $(eval $(call gb_Module_add_targets,librelogo,\
     CustomTarget_librelogo \
-    Zip_librelogo \
+    Package_librelogo \
+    Package_librelogo_properties \
 ))
 
 endif
