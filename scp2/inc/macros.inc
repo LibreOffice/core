@@ -56,6 +56,7 @@
 #define READMETXTFILENAME(name,lang,ext)      STRING(CONCAT4(name,lang,.,ext))
 #define READMEFILENAME(name,lang)             STRING(CONCAT2(name,lang))
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
+#define EXTRAFILELISTNAME(prefix,name,lang)   STRING(CONCAT4(prefix,name,lang,.filelist))
 #define CONFIGLANGFILENAME(name,lang,ext)     STRING(CONCAT4(name,lang,.,ext))
 
 #define SCP2_OOO_BIN_DIR gid_Brand_Dir_Program
@@ -81,13 +82,13 @@
         Styles = (ARCHIVE)
 
 #ifdef WITH_HELPPACK_INTEGRATION
-#define ARCHIVE_TXT_FILE_BODY_HELPPACK \
+#define FILELIST_TXT_FILE_BODY_HELPPACK \
         TXT_FILE_BODY; \
-        Styles = (ARCHIVE,FORCEHELPPACK,LANGUAGEMODULE)
+        Styles = (FILELIST,FORCEHELPPACK,LANGUAGEMODULE)
 #else
-#define ARCHIVE_TXT_FILE_BODY_HELPPACK \
+#define FILELIST_TXT_FILE_BODY_HELPPACK \
         TXT_FILE_BODY; \
-        Styles = (ARCHIVE,HELPPACK,LANGUAGEMODULE)
+        Styles = (FILELIST,HELPPACK,LANGUAGEMODULE)
 #endif
 
 #define PACKED_LIB_FILE_BODY \
