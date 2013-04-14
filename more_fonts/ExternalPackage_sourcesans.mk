@@ -9,7 +9,9 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_sourcesans,font_sourcesans))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcesans,pck,\
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_sourcesans,$(INSTDIR)))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcesans,share/fonts/truetype,\
 	SourceSansPro-BoldItalic.ttf \
 	SourceSansPro-Bold.ttf \
 	SourceSansPro-Italic.ttf \

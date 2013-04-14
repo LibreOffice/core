@@ -9,7 +9,9 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_opensans,font_opensans))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_opensans,pck,\
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_opensans,$(INSTDIR)))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_opensans,share/fonts/truetype,\
 	OpenSans-BoldItalic.ttf \
 	OpenSans-Bold.ttf \
 	OpenSans-Italic.ttf \

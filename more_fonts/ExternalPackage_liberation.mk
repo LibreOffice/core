@@ -9,7 +9,9 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_liberation,font_liberation))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_liberation,pck,\
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_liberation,$(INSTDIR)))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_liberation,share/fonts/truetype,\
 	LiberationMono-Bold.ttf \
 	LiberationMono-BoldItalic.ttf \
 	LiberationMono-Italic.ttf \

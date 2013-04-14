@@ -9,7 +9,9 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_liberation_narrow,font_liberation_narrow))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_liberation_narrow,pck,\
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_liberation_narrow,$(INSTDIR)))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_liberation_narrow,share/fonts/truetype,\
 	LiberationSansNarrow-Bold.ttf \
 	LiberationSansNarrow-BoldItalic.ttf \
 	LiberationSansNarrow-Italic.ttf \

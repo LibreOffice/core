@@ -9,7 +9,9 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_sourcecode,font_sourcecode))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcecode,pck,\
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_sourcecode,$(INSTDIR)))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcecode,share/fonts/truetype,\
 	SourceCodePro-Bold.ttf \
 	SourceCodePro-Regular.ttf \
 ))

@@ -29,154 +29,35 @@
 
 // OpenSymbol
 
-STD_FONT_FILE( gid_File_Fnt_Opensymb, opens___.ttf, OpenSymbol)
+STD_FONT_FILELIST( gid_File_Fnt_Opensymb, "extras_fonts.filelist" )
+
+#ifndef WITHOUT_FONTS 
 
 // DejaVu fonts
-
-// DejaVuSans Proportional
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSans, DejaVuSans.ttf, DejaVu Sans) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSans_Bold, DejaVuSans-Bold.ttf, DejaVu Sans Bold) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSans_Oblique, DejaVuSans-Oblique.ttf, DejaVu Sans Oblique) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSans_BoldOblique, DejaVuSans-BoldOblique.ttf, DejaVu Sans Bold Oblique) 
-#endif 
-
-// DejaVuSans ExtraLight
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSansExtraLight, DejaVuSans-ExtraLight.ttf, DejaVu Sans ExtraLight) 
-#endif
-
-// DejaVuSans Condensed
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed, DejaVuSansCondensed.ttf, DejaVu Sans Condensed) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed_Bold, DejaVuSansCondensed-Bold.ttf, DejaVu Sans Condensed Bold) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed_Oblique, DejaVuSansCondensed-Oblique.ttf, DejaVu Sans Condensed Oblique) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed_BoldOblique, DejaVuSansCondensed-BoldOblique.ttf, DejaVu Sans Condensed Bold Oblique) 
-#endif 
-
-// DejaVuSans Mono
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono, DejaVuSansMono.ttf, DejaVu Sans Mono) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono_Bold, DejaVuSansMono-Bold.ttf, DejaVu Sans Mono Bold) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono_Oblique, DejaVuSansMono-Oblique.ttf, DejaVu Sans Mono Oblique) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono_BoldOblique, DejaVuSansMono-BoldOblique.ttf, DejaVu Sans Mono Bold Oblique) 
-#endif
-
-// DejaVuSerif Proportional
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSerif, DejaVuSerif.ttf, DejaVu Serif) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSerif_Bold, DejaVuSerif-Bold.ttf, DejaVu Serif Bold) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSerif_Italic, DejaVuSerif-Italic.ttf, DejaVu Serif Italic) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSerif_BoldItalic, DejaVuSerif-BoldItalic.ttf, DejaVu Serif Bold Italic) 
-#endif 
-
-// DejaVuSerif Condensed
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed, DejaVuSerifCondensed.ttf, DejaVu Serif Condensed) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Bold, DejaVuSerifCondensed-Bold.ttf, DejaVu Serif Condensed Bold) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Italic, DejaVuSerifCondensed-Italic.ttf, DejaVu Serif Condensed Italic) 
-STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondensed-BoldItalic.ttf, DejaVu Serif Condensed Bold Italic) 
-#endif 
-
+STD_FONT_FILELIST(gid_File_Fnt_DejaVu, "fonts_dejavu.filelist")
 
 // Liberation fonts
-
-// Liberation Sans Narrow
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Regular, LiberationSansNarrow-Regular.ttf, Liberation Sans Narrow Regular) 
-STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Bold, LiberationSansNarrow-Bold.ttf, Liberation Sans Narrow Bold) 
-STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_Italic, LiberationSansNarrow-Italic.ttf, Liberation Sans Narrow Italic) 
-STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_BoldItalic, LiberationSansNarrow-BoldItalic.ttf, Liberation Sans Narrow Bold Italic) 
-#endif
-
-// Liberation Mono
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_LiberationMono_Regular, LiberationMono-Regular.ttf, Liberation Mono Regular) 
-STD_FONT_FILE( gid_File_Fnt_LiberationMono_Bold, LiberationMono-Bold.ttf, Liberation Mono Bold) 
-STD_FONT_FILE( gid_File_Fnt_LiberationMono_Italic, LiberationMono-Italic.ttf, Liberation Mono Italic) 
-STD_FONT_FILE( gid_File_Fnt_LiberationMono_BoldItalic, LiberationMono-BoldItalic.ttf, Liberation Mono Bold Italic) 
-#endif
-
-// Liberation Sans
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_LiberationSans_Regular, LiberationSans-Regular.ttf, Liberation Sans Regular) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSans_Italic, LiberationSans-Italic.ttf, Liberation Sans Italic) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSans_Bold, LiberationSans-Bold.ttf, Liberation Sans Bold) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSans_BoldItalic, LiberationSans-BoldItalic.ttf, Liberation Sans Bold Italic) 
-#endif
-
-// Liberation Serif
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Regular, LiberationSerif-Regular.ttf, Liberation Serif Regular) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Bold, LiberationSerif-Bold.ttf, Liberation Serif Bold) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Italic, LiberationSerif-Italic.ttf, Liberation Serif Italic) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSerif_BoldItalic, LiberationSerif-BoldItalic.ttf, Liberation Serif Bold Italic) 
-#endif
+STD_FONT_FILELIST(gid_File_Fnt_LibSansNarrow, "fonts_liberation_narrow.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_Liberation, "fonts_liberation.filelist")
 
 // Gentium fonts
-
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_GentiumBasicRegular, GenBasR.ttf, Gentium Basic)
-STD_FONT_FILE( gid_File_Fnt_GentiumBasicBold, GenBasB.ttf, Gentium Basic Bold)
-STD_FONT_FILE( gid_File_Fnt_GentiumBasicItalic, GenBasI.ttf, Gentium Basic Bold)
-STD_FONT_FILE( gid_File_Fnt_GentiumBasicBoldItalic, GenBasBI.ttf, Gentium Basic Bold Italic)
-#endif 
-
-#ifndef WITHOUT_FONTS 
-STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicRegular, GenBkBasR.ttf, Gentium Book Basic)
-STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBold, GenBkBasB.ttf, Gentium Book Basic Bold)
-STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicItalic, GenBkBasI.ttf, Gentium Book Basic Bold)
-STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium Book Basic Bold Italic)
-#endif 
+STD_FONT_FILELIST(gid_File_Fnt_Gentium, "fonts_gentium.filelist")
 
 // Linux Libertine G and Linux Biolinum G fonts
-
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Regular, LinLibertine_R_G.ttf, Linux Libertine G Regular)
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Semibold, LinLibertine_RZ_G.ttf, Linux Libertine G Semibold)
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Bold, LinLibertine_RB_G.ttf, Linux Libertine G Bold)
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Italic, LinLibertine_RI_G.ttf, Linux Libertine G Italic)
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_SemiboldItalic, LinLibertine_RZI_G.ttf, Linux Libertine G Semibold Italic)
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_BoldItalic, LinLibertine_RBI_G.ttf, Linux Libertine G Bold Italic)
-STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Regular, LinBiolinum_R_G.ttf, Linux Biolinum G Regular)
-STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Bold, LinBiolinum_RB_G.ttf, Linux Biolinum G Bold)
-STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Italic, LinBiolinum_RI_G.ttf, Linux Biolinum G Italic)
-#endif
+STD_FONT_FILELIST(gid_File_Fnt_LinuxLibertineG, "fonts_libertineg.filelist")
 
 // PT Serif fonts
-
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_PtSerif_Regular, PT_Serif-Web-Regular.ttf, PT Serif Regular)
-STD_FONT_FILE( gid_File_Fnt_PtSerif_Bold, PT_Serif-Web-Bold.ttf, PT Serif Bold)
-STD_FONT_FILE( gid_File_Fnt_PtSerif_Italic, PT_Serif-Web-Italic.ttf, PT Serif Italic)
-STD_FONT_FILE( gid_File_Fnt_PtSerif_BoldItalic, PT_Serif-Web-BoldItalic.ttf, PT Serif Bold Italic)
-#endif
+STD_FONT_FILELIST(gid_File_Fnt_PtSerif, "fonts_ptserif.filelist")
 
 // Open Sans fonts
-
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_OpenSans_Regular, OpenSans-Regular.ttf, Open Sans Regular)
-STD_FONT_FILE( gid_File_Fnt_OpenSans_Bold, OpenSans-Bold.ttf, Open Sans Bold)
-STD_FONT_FILE( gid_File_Fnt_OpenSans_Italic, OpenSans-Italic.ttf, Open Sans Italic)
-STD_FONT_FILE( gid_File_Fnt_OpenSans_BoldItalic, OpenSans-BoldItalic.ttf, Open Sans Bold Italic)
-#endif
-
+STD_FONT_FILELIST(gid_File_Fnt_OpenSans, "fonts_opensans.filelist")
 
 // Source Sans Pro fonts
-
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_SourceSans_Regular, SourceSansPro-Regular.ttf, Source Sans Pro Regular)
-STD_FONT_FILE( gid_File_Fnt_SourceSans_Bold, SourceSansPro-Bold.ttf, Source Sans Pro Bold)
-STD_FONT_FILE( gid_File_Fnt_SourceSans_Italic, SourceSansPro-Italic.ttf, Source Sans Pro Italic)
-STD_FONT_FILE( gid_File_Fnt_SourceSans_BoldItalic, SourceSansPro-BoldItalic.ttf, Source Sans Pro Bold Italic)
-#endif
-
+STD_FONT_FILELIST(gid_File_Fnt_SourceSans, "fonts_sourcesans.filelist")
 
 // Source Code Pro fonts
+STD_FONT_FILELIST(gid_File_Fnt_SourceCode, "fonts_sourcecode.filelist")
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_SourceCode_Regular, SourceCodePro-Regular.ttf, Source Code Pro Regular)
-STD_FONT_FILE( gid_File_Fnt_SourceCode_Bold, SourceCodePro-Bold.ttf, Source Code Pro Bold)
 #endif
 
 // fontconfig updates to allow proper use of local fonts
@@ -184,10 +65,10 @@ STD_FONT_FILE( gid_File_Fnt_SourceCode_Bold, SourceCodePro-Bold.ttf, Source Code
 #ifdef UNX
 #ifndef WITHOUT_FONTS 
 File gid_File_FcLocal_Conf
-    Dir = gid_Dir_Fonts_Truetype;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-//  Styles = ();
-    Name = "fc_local.conf";
+    Styles = (FILELIST);
+    Name = "more_fonts_conf.filelist";
 End
 #endif
 #endif

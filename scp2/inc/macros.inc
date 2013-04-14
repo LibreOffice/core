@@ -141,6 +141,14 @@
         Styles    = (PACKED, FONT_WARN_IF_EXISTS); \
         Name      = STRING(name) ; \
     End
+
+#define STD_FONT_FILELIST(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        Dir       = FILELIST_DIR; \
+        Styles    = (FILELIST, PACKED, FONT_WARN_IF_EXISTS); \
+        Name      = name; \
+    End
 #endif
 
 #ifdef WNT
@@ -151,6 +159,14 @@
         Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
         Name     = STRING(name) ; \
         NetDir   = gid_Dir_Winfonts; \
+    End
+
+#define STD_FONT_FILELIST(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        Dir       = FILELIST_DIR; \
+        Styles   = (FILELIST,PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
+        Name      = name; \
     End
 #endif
 
