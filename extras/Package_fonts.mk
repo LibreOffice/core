@@ -10,6 +10,5 @@
 $(eval $(call gb_Package_Package,extras_fonts,$(SRCDIR)/extras))
 
 $(eval $(call gb_Package_add_file,extras_fonts,pck/opens___.ttf,source/truetype/symbol/opens___.ttf))
-$(eval $(call gb_Package_add_file,extras_fonts,pck/openoffice/fonts.dir,unx/source/fonts/fonts.dir))
 
 # vim: set noet sw=4 ts=4:
