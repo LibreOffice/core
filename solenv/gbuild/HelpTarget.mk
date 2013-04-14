@@ -273,11 +273,11 @@ RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 	-o $(WORKDIR)/dummy.zip \
 	-src $(HELP_SRCDIR) \
 	-zipdir $(HELP_WORKDIR) \
-	-compact $(gb_HelpLinkTarget_COMPACTTARGET)
+	-compact $(gb_HelpLinkTarget_COMPACTTARGET) \
 	-idxcaption $(gb_HelpLinkTarget_IDXCAPTIONTARGET) \
 	-idxcontent $(gb_HelpLinkTarget_IDXCONTENTTARGET) \
 	-sty $(gb_HelpLinkTarget_EMBEDTARGET) \
-	$(if $(and $(HELP_CONFIGDIR),$(HELP_INDEXED)),-add $(HELP_MODULE).cfg $(HELP_CONFIGDIR)/$(HELP_LANG)/$(HELP_MODULE).cfg) \
+	$(if $(HELP_CONFIGFILE),-add $(HELP_MODULE).cfg $(HELP_CONFIGFILE)) \
 	$(if $(HELP_TREE),-add $(HELP_MODULE).tree $(HELP_TREE)) \
 	$(foreach file,$(HELP_ADD_FILES),-add $(notdir $(file)) $(file)) \
 	$(foreach extra,$(HELP_EXTRA_ADD_FILES),-add $(subst $(COMMA), ,$(extra))) \
@@ -313,7 +313,7 @@ $(call gb_HelpLinkTarget_get_clean_target,%) :
 # gb_HelpLinkTarget_HelpLinkTarget name module lang workdir
 define gb_HelpLinkTarget_HelpLinkTarget
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_ADD_FILES :=
-$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_CONFIGDIR :=
+$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_CONFIGFILE :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_EXTRA_ADD_FILES :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_FILES :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_INDEXED :=
@@ -329,9 +329,10 @@ $(call gb_HelpLinkTarget_get_target,$(1)) :| $(dir $(call gb_HelpLinkTarget_get_
 
 endef
 
-# gb_HelpLinkTarget_set_configdir target configdir
-define gb_HelpLinkTarget_set_configdir
-$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_CONFIGDIR := $(2)
+# gb_HelpLinkTarget_set_configfile target configfile
+define gb_HelpLinkTarget_set_configfile
+$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_CONFIGFILE := $(2)
+$(call gb_HelpLinkTarget_get_target,$(1)) : $(2)
 
 endef
 
@@ -511,8 +512,7 @@ define gb_HelpTarget__get_command
 $(call gb_Output_announce,$(2),$(true),HLP,4)
 cd $(call gb_HelpTarget_get_workdir,$(2)) && \
 $(gb_HelpJarTarget_COMMAND) -q -0 -rX --filesync --must-match $(1) \
-	$(HELP_PACK_FILES) \
-	$(if $(and $(HELP_CONFIGDIR),$(HELP_INDEXED)),$(HELP_MODULE).cfg)
+	$(HELP_PACK_FILES)
 endef
 
 $(dir $(call gb_HelpTarget_get_target,%)).dir :
@@ -551,7 +551,6 @@ $(call gb_HelpTarget_get_clean_target,%) :
 #
 # gb_HelpTarget_HelpTarget target module lang
 define gb_HelpTarget_HelpTarget
-$(call gb_HelpTarget_get_target,$(1)) : HELP_CONFIGDIR :=
 $(call gb_HelpTarget_get_target,$(1)) : HELP_MODULE := $(2)
 $(call gb_HelpTarget_get_target,$(1)) : HELP_INDEXED :=
 $(call gb_HelpTarget_get_target,$(1)) : HELP_LANG := $(3)
@@ -610,11 +609,14 @@ $(call gb_HelpTarget_get_target,$(1)) : HELP_PACK_FILES += $(2)
 
 endef
 
-# gb_HelpTarget_set_configdir target configdir
-define gb_HelpTarget_set_configdir
-$(call gb_HelpLinkTarget_set_configdir,$(1),$(SRCDIR)/$(2))
-
-$(call gb_HelpTarget_get_target,$(1)) : HELP_CONFIGDIR := $(SRCDIR)/$(2)
+# Set config. file used for the help module.
+#
+# The configfile is relative to $(SRCDIR) and without extension.
+#
+# gb_HelpTarget_set_configfile target configfile
+define gb_HelpTarget_set_configfile
+$(call gb_HelpLinkTarget_set_configfile,$(1),$(SRCDIR)/$(2).cfg)
+$(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).cfg)
 
 endef
 
