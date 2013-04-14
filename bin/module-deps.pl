@@ -33,7 +33,7 @@ sub read_deps()
     if (defined $from_file) {
         open ($p, $from_file) || die "can't read deps from cache file: $!";
     } else {
-        open ($p, "ENABLE_PRINT_DEPS=1 $gnumake -q -f $makefile_build all|") || die "can't launch make: $!";
+        open ($p, "ENABLE_PRINT_DEPS=1 $gnumake -qrf $makefile_build|") || die "can't launch make: $!";
     }
     $|=1;
     print STDERR "reading deps ";
