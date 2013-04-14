@@ -2006,7 +2006,7 @@ namespace svgio
             return SvgNumber(1.0);
         }
 
-        const FillRule SvgStyleAttributes::getFillRule() const
+        FillRule SvgStyleAttributes::getFillRule() const
         {
             if(FillRule_notset != maFillRule)
             {

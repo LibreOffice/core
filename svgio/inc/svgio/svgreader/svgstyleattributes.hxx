@@ -315,7 +315,7 @@ namespace svgio
             void setFillOpacity(const SvgNumber& rFillOpacity = SvgNumber()) { maFillOpacity = rFillOpacity; }
 
             /// fill rule content
-            const FillRule getFillRule() const;
+            FillRule getFillRule() const;
             void setFillRule(const FillRule aFillRule = FillRule_notset) { maFillRule = aFillRule; }
 
             /// fill StrokeDasharray content
