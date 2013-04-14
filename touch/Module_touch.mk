@@ -11,12 +11,13 @@ $(eval $(call gb_Module_Module,touch))
 ifneq (,$(filter IOS ANDROID,$(OS)))
 
 $(eval $(call gb_Module_add_targets,touch,\
-	CustomTarget_touch_javamaker \
-	InternalUnoApi_touch \
 	Library_libotouch \
-	Package_inc \
 ))
 
 endif
+
+$(eval $(call gb_Module_add_targets,touch,\
+	Package_inc \
+))
 
 # vim: set noet sw=4 ts=4:

@@ -14,16 +14,7 @@ $(eval $(call gb_Library_set_include,libotouch,\
 ))
 
 $(eval $(call gb_Library_use_sdk_api,libotouch))
-
-$(eval $(call gb_Library_use_internal_comprehensive_api,libotouch,\
-	touch \
-))
-
-$(eval $(call gb_Library_use_libraries,libotouch,\
-))
-
 $(eval $(call gb_Library_add_exception_objects,libotouch,\
-	touch/source/uno/Document \
 	touch/source/generic/libotouch \
 ))
 
