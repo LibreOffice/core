@@ -28,7 +28,7 @@
 $(eval $(call gb_Module_Module,sdext))
 
 $(eval $(call gb_Module_add_targets,sdext,\
-    Library_presenter \
+    Library_PresenterScreen \
 ))
 
 ifeq ($(ENABLE_MINIMIZER),YES)
