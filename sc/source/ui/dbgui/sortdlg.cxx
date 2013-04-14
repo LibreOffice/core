@@ -48,22 +48,19 @@ ScSortDlg::~ScSortDlg()
 ScSortWarningDlg::ScSortWarningDlg( Window* pParent,
                                    const String& rExtendText,
                                    const String& rCurrentText ):
-        ModalDialog     ( pParent, ScResId( RID_SCDLG_SORT_WARNING ) ),
-        aFtText         ( this, ScResId( FT_TEXT ) ),
-        aFtTip          ( this, ScResId( FT_TIP ) ),
-        aBtnExtSort     ( this, ScResId( BTN_EXTSORT ) ),
-        aBtnCurSort     ( this, ScResId( BTN_CURSORT ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) )
+    ModalDialog     ( pParent, "SortWarning", "modules/scalc/ui/sortwarning.ui" )
 {
-    String sTextName = aFtText.GetText();
+    get(aFtText, "sorttext" );
+    get( aBtnExtSort, "extend" );
+    get( aBtnCurSort, "current" );
+
+    String sTextName = aFtText->GetText();
     sTextName.SearchAndReplaceAscii("%1", rExtendText);
     sTextName.SearchAndReplaceAscii("%2", rCurrentText);
-    aFtText.SetText( sTextName );
+    aFtText->SetText( sTextName );
 
-    aBtnExtSort .SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );
-    aBtnCurSort .SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );
-
-    FreeResource();
+    aBtnExtSort->SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );
+    aBtnCurSort->SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );
 }
 
 ScSortWarningDlg::~ScSortWarningDlg()
@@ -72,11 +69,11 @@ ScSortWarningDlg::~ScSortWarningDlg()
 
 IMPL_LINK( ScSortWarningDlg, BtnHdl, PushButton*, pBtn )
 {
-    if ( pBtn == &aBtnExtSort )
+    if ( pBtn == aBtnExtSort )
     {
         EndDialog( BTN_EXTEND_RANGE );
     }
-    else if( pBtn == &aBtnCurSort )
+    else if( pBtn == aBtnCurSort )
     {
         EndDialog( BTN_CURRENT_SELECTION );
     }
