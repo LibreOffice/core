@@ -134,14 +134,6 @@
     End
 
 #ifdef UNX
-#define STD_FONT_FILE(id,name,fontname) \
-    File id \
-        TXT_FILE_BODY; \
-        Dir       = gid_Dir_Fonts_Truetype; \
-        Styles    = (PACKED, FONT_WARN_IF_EXISTS); \
-        Name      = STRING(name) ; \
-    End
-
 #define STD_FONT_FILELIST(id,name) \
     File id \
         TXT_FILE_BODY; \
@@ -152,15 +144,6 @@
 #endif
 
 #ifdef WNT
-#define STD_FONT_FILE(id,name,fontname) \
-    File id \
-        TXT_FILE_BODY; \
-        Dir      = gid_Dir_Fonts_Truetype; \
-        Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
-        Name     = STRING(name) ; \
-        NetDir   = gid_Dir_Winfonts; \
-    End
-
 #define STD_FONT_FILELIST(id,name) \
     File id \
         TXT_FILE_BODY; \
