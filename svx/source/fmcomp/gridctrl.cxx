@@ -2703,7 +2703,7 @@ XubString DbGridControl::GetCurrentRowCellText(DbGridColumn* pColumn,const DbGri
 {
     // Ausgabe des Textes fuer eine Zelle
     XubString aText;
-    if ( pColumn && IsValid(m_xPaintRow) )
+    if ( pColumn && IsValid(_rRow) )
         aText = pColumn->GetCellText(_rRow, m_xFormatter);
     return aText;
 }
