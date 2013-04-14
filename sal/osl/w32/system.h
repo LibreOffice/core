@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if OSL_DEBUG_LEVEL == 0
+#if OSL_DEBUG_LEVEL <= 3
 #    define NO_DEBUG_CRT
 #endif
 
