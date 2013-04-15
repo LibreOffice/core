@@ -28,6 +28,7 @@
 #include <map>
 #include <list>
 #include <set>
+#include <vector>
 
 #include "vcl/dllapi.h"
 #include "vcl/helper.hxx"
