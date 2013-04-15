@@ -540,7 +540,7 @@ void UIConfigurationManager::impl_Initialize()
     // Initialize the top-level structures with the storage data
     if ( m_xDocConfigStorage.is() )
     {
-        long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
+        long nModes = ElementModes::READ;
 
         // Try to access our module sub folder
         for ( sal_Int16 i = 1; i < ::com::sun::star::ui::UIElementType::COUNT;
