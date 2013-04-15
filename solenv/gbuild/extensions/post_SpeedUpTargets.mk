@@ -27,6 +27,7 @@
 
 ifeq ($(CROSS_COMPILING),YES)
 gb_Module_add_targets_for_build :=
+gb_Module_SKIPTARGETS := check slowcheck subsequentcheck
 endif
 
 ifeq ($(gb_Side),build)
