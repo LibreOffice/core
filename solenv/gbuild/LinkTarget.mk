@@ -452,7 +452,9 @@ $(call gb_LinkTarget_get_target,Library/%.exports) : $(gb_Library_OUTDIRLOCATION
 	$(if $(wildcard $@),true,touch $@)
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
-	$(call gb_LinkTarget__command,$@,$*)
+	$(if $(filter $*,$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))),\
+	$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$*)),\
+	$(call gb_LinkTarget__command,$@,$*),mkdir -p $(dir $@) && echo invalid > $@),$(call gb_LinkTarget__command,$@,$*))
 	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -848,8 +850,26 @@ $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
 
 endef
 
-define gb_Linktarget__is_build_tool
-$(if $(filter $(1),$(addprefix Executable/,cppumaker idlc regcompare regmerge rsc svidl)),$(true),$(false))
+gb_BUILD_HELPER_LIBS := basegfx \
+	reg \
+	sal \
+	salhelper \
+	store \
+	tl \
+	unoidl
+
+gb_BUILD_HELPER_TOOLS := cppumaker \
+	idlc \
+	regmerge \
+	rsc \
+	svidl
+
+define gb_LinkTarget__is_build_lib
+$(if $(filter $(1),$(foreach lib,$(gb_BUILD_HELPER_LIBS),$(call gb_Library_get_linktargetname,$(lib)))),$(true),$(false))
+endef
+
+define gb_LinkTarget__is_build_tool
+$(if $(filter $(1),$(addprefix Executable/,$(gb_BUILD_HELPER_TOOLS))),$(true),$(false))
 endef
 
 define gb_LinkTarget_use_libraries
@@ -858,7 +878,7 @@ $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
 
-ifeq ($(call gb_Linktarget__is_build_tool,$(1)),$(true))
+ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(2),$(4))
 
 else
