@@ -2084,6 +2084,29 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
             SvxFrameDirection eDirection = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ) ?
                                                 FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP;
             pTabViewShell->ApplyAttr( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ) );
+
+            const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
+            const SfxPoolItem* pItem = NULL;
+            const SvxHorJustifyItem* pHorJustify = NULL;
+            SvxCellHorJustify eHorJustify = SVX_HOR_JUSTIFY_STANDARD;
+
+            if( rAttrSet.GetItemState(ATTR_HOR_JUSTIFY, sal_True, &pItem) == SFX_ITEM_SET )
+            {
+                pHorJustify = (const SvxHorJustifyItem*)pItem;
+                eHorJustify = SvxCellHorJustify( pHorJustify->GetValue() );
+            }
+
+            if( eHorJustify != SVX_HOR_JUSTIFY_CENTER && eHorJustify != SVX_HOR_JUSTIFY_BLOCK )
+            {
+                if( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT )
+                     rReq.AppendItem( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, SID_H_ALIGNCELL ) );
+                else
+                     rReq.AppendItem( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, SID_H_ALIGNCELL ) );
+
+                rReq.SetSlot( SID_H_ALIGNCELL );
+                ExecuteSlot( rReq, GetInterface() );
+            }
+
         }
         break;
     }
