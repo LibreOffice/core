@@ -36,7 +36,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_deploymentmisc \
     Library_offacc \
     Library_sofficeapp \
-    Library_spl \
+    $(if $(ENABLE_HEADLESS),,Library_spl) \
     Package_intro \
     UIConfig_deployment \
     Zip_brand \

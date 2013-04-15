@@ -127,7 +127,7 @@ gb_MERGEDLIBS := \
 	sfx \
 	sofficeapp \
 	sot \
-	spl \
+	$(if $(ENABLE_HEADLESS),,spl) \
 	svl \
 	svt \
 	svx \

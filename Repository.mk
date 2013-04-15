@@ -232,23 +232,46 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dbmm \
     dbtools \
     dbaxml \
+	deploymentmisc \
+	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
     drawinglayer \
+    editeng \
     $(if $(filter WNT,$(OS)),$(if $(DISABLE_ATL),,emser)) \
 	file \
+	filterconfig \
     for \
     forui \
     frm \
     fwe \
 	fwi \
+    fwk \
     fwl \
 	fwm \
+    $(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
     lng \
     $(if $(MERGELIBS),merged) \
-    sdbt \
+    msfilter \
     odbcbase \
+    sax \
+    sb \
+    sdbt \
+    sfx \
+    sot \
+    $(if $(ENABLE_HEADLESS),,spl) \
+    svl \
+    svt \
+    svx \
+    svxcore \
+    tk \
+    tl \
 	$(if $(ENABLE_TELEPATHY),tubes) \
     unordf \
     unoxml \
+    utl \
+    uui \
+    vcl \
+    xmlscript \
+    xo \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,WRITER, \
@@ -287,9 +310,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     calc \
     dbp \
     dbu \
-    deploymentmisc \
-    desktop_detector \
-    editeng \
     egi \
     eme \
     epb \
@@ -301,14 +321,11 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     eti \
     evoab \
     exp \
-	filterconfig \
 	filtertracer \
 	flash \
 	flat \
-    fwk \
     graphicfilter \
     guesslang \
-    helplinker \
     hyphen \
 	icd \
 	icg \
@@ -331,7 +348,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     mork \
     mozab2 \
     mozabdrv \
-    msfilter \
 	mysql \
     odfflatxml \
     offacc \
@@ -345,8 +361,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     rpt \
     rptui \
     rptxml \
-    sax \
-    sb \
     sc \
     scd \
     scfilt \
@@ -356,34 +370,22 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sdd \
     sdfilt \
     sdui \
-    sfx \
     simplecm \
     sm \
     smd \
     solver \
-    sot \
     spa \
     spell \
-    spl \
     sts \
     svgfilter \
 	svgio \
-    svl \
-    svt \
-    svx \
-    svxcore \
     sw \
 	tdeab1 \
 	tdeabdrv1 \
     textconversiondlgs \
     textfd \
-    tk \
-    tl \
     updatecheckui \
-    utl \
-    uui \
     vbahelper \
-    vcl \
     vclplug_gen \
     vclplug_gtk \
     vclplug_gtk3 \
@@ -392,10 +394,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vclplug_kde4 \
     vclplug_svp \
     wpftdraw \
-    xmlscript \
     xmlfa \
     xmlfd \
-    xo \
     xof \
     xsltdlg \
     xsltfilter \

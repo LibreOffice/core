@@ -430,8 +430,6 @@ STD_LIB_FILE( gid_File_Lib_Evoab , evoab)
 
 STD_LIB_FILE(gid_File_Lib_Evtatt, evtatt)
 
-STD_LIB_FILE(gid_File_Lib_Filterconfig1, filterconfig)
-
 STD_LIB_FILE( gid_File_Lib_Flat, flat)
 
 #ifdef WNT
@@ -568,16 +566,7 @@ End
 
 #endif
 
-File gid_File_Lib_Fwk
-    Name = LIBNAME(fwk);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
-
-STD_LIB_FILE( gid_File_Lib_Helplinker, helplinker)
 
 File gid_File_Lib_I18nsearch
     LIB_FILE_BODY;
@@ -806,19 +795,11 @@ SPECIAL_LIB_FILE(gid_File_Lib_Deployment,deployment)
 
 SPECIAL_LIB_FILE(gid_File_Lib_DeploymentGui,deploymentgui)
 
-STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
-
 #if defined ENABLE_NPAPI_FROM_BROWSER
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 
 #if defined(UNX) && ! defined(MACOSX) && ! defined(LIBO_HEADLESS)
-File gid_File_Lib_Desktop_Detector
-    Name = LIBNAME(desktop_detector);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
 File gid_File_Lib_Vclplug_Gen
     Name = LIBNAME(vclplug_gen);
     LIB_FILE_BODY;
@@ -967,11 +948,7 @@ File gid_File_Lib_Fastsax_Uno
   #endif
 End
 
-STD_LIB_FILE( gid_File_Lib_Sax , sax)
-
 STD_LIB_FILE( gid_File_Lib_Oox , oox)
-
-STD_LIB_FILE( gid_File_Lib_Sb , sb)
 
 STD_LIB_FILE( gid_File_Lib_Scn, scn)
 
@@ -1002,13 +979,6 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Sdd , sdd)
 
-File gid_File_Lib_Sfx
-    Name = LIBNAME(sfx);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Instooofiltmsi
@@ -1031,8 +1001,6 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Sot, sot )
-
 #if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
 
 File gid_File_Lib_Spa
@@ -1051,25 +1019,13 @@ File gid_File_Lib_Spell
     Dir = SCP2_OOO_BIN_DIR;
 End
 
-#if !defined LIBO_HEADLESS
-STD_LIB_FILE( gid_File_Lib_Spl, spl)
-#endif
-
 #if defined UNX && !defined MACOSX && !defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
 #endif
 
 SPECIAL_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 
-STD_LIB_FILE( gid_File_Lib_Svl, svl )
-STD_LIB_FILE( gid_File_Lib_Svtools, svt )
-
-STD_LIB_FILE( gid_File_Lib_Svx_Core, svxcore)
-STD_LIB_FILE( gid_File_Lib_Svx, svx)
 STD_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
-STD_LIB_FILE( gid_File_Lib_Editeng, editeng)
-
-STD_LIB_FILE( gid_File_Lib_Msfilter, msfilter)
 
 STD_LIB_FILE( gid_File_Lib_Sw , sw)
 
@@ -1092,10 +1048,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1.uno )
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Macbe, macbe1.uno )
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Tk, tk )
 STD_LIB_FILE( gid_File_Lib_Acc, acc )
-
-STD_LIB_FILE( gid_File_Lib_Tools, tl )
 
 File gid_File_Lib_Tvhlp1
     LIB_FILE_BODY;
@@ -1197,29 +1150,8 @@ File gid_File_Lib_Hyph
     Dir = SCP2_OOO_BIN_DIR;
 End
 
-STD_LIB_FILE( gid_File_Lib_Utl , utl)
-
-STD_LIB_FILE( gid_File_Lib_Uui, uui )
-
 STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
-
-File gid_File_Lib_Vcl
-    Name = LIBNAME(vcl);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-
-STD_LIB_FILE( gid_File_Lib_Xcr, xmlscript)
 STD_LIB_FILE( gid_File_Lib_Xof, xof)
-
-File gid_File_Lib_Xo
-    Name = LIBNAME(xo);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-
 STD_LIB_FILE( gid_File_Lib_Xsltdlg, xsltdlg )
 STD_LIB_FILE( gid_File_Lib_Xsltfilter, xsltfilter )
 STD_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
