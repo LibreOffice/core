@@ -34,6 +34,24 @@
       "revId": "4b941584f34858cdda1eda1f9cf65d26930acc9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///Ik\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6941,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-04-15T14:31:37Z",
+      "side": 1,
+      "message": "The problem is, if somebody passes 10 for nLen, \"n \u003c STRING_LEN\" is true, but \"nLen \u003c -1\" is not, so this changes what the code does.",
+      "parentUuid": "AAAAXH///1s\u003d",
+      "revId": "4b941584f34858cdda1eda1f9cf65d26930acc9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
