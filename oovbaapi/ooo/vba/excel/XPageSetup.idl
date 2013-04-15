@@ -50,6 +50,9 @@ interface XPageSetup : com::sun::star::uno::XInterface
     [attribute] boolean CenterVertically;
     [attribute] boolean CenterHorizontally;
     [attribute] boolean PrintHeadings;
+    [attribute] boolean PrintGridlines;
+    [attribute] string PrintTitleRows;
+    [attribute] string PrintTitleColumns;
 
 };
 
