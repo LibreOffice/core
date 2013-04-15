@@ -401,7 +401,7 @@ File gid_File_Extra_Tplwizstyles
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extra_tplwizstyles.filelist";
+    Name = "extras_tplwizstyles.filelist";
 End
 
 File gid_File_Extra_Webcast_Asp
