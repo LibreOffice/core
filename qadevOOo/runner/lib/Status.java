@@ -67,7 +67,7 @@ public class Status extends SimpleStatus {
 
     /**
      * This is a factory method for creating a Status representing an exception
-     * activity termination. The Status alway has FAILED state.
+     * activity termination. The Status always has FAILED state.
      *
      * @param t the exception with that the activity completed.
      */

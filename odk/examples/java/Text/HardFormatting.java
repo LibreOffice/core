@@ -181,7 +181,7 @@ public class HardFormatting {
             case com.sun.star.beans.PropertyState.DIRECT_VALUE_value:  {
                 System.out.println( "-> The selection '"
                                     + xWordCursor.getString()
-                                    + "' completly hard formated" );
+                                    + "' completely hard formated" );
                 break;
             }
 
@@ -195,7 +195,7 @@ public class HardFormatting {
             case com.sun.star.beans.PropertyState.AMBIGUOUS_VALUE_value: {
                 System.out.println( "-> The selection '"
                                     + xWordCursor.getString()
-                                    + "' isn't completly hard formated" );
+                                    + "' isn't completely hard formated" );
                 break;
             }
 

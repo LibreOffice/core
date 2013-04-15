@@ -117,7 +117,7 @@ public:
 
        @return
        true - the object could completely initialize.
-       false - the object could not completly initialize. In this case
+       false - the object could not completely initialize. In this case
        it will be discarded by the caller.
     */
     virtual bool initialize(

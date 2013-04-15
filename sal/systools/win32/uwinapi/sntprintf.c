@@ -62,7 +62,7 @@ static int __cdecl _vsctprintf( const _TXCHAR *format, va_list ap )
 
 /*  This function retrieves the pointer to the last character of a buffer.
     That is the pointer to the last character of the buffer that fits
-    completly into that buffer or the position of the terminating zero.
+    completely into that buffer or the position of the terminating zero.
 
     buffer  Pointer to a _TXCHAR buffer to be examined
     count   size of the buffer to be examined

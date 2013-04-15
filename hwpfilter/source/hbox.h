@@ -992,7 +992,7 @@ class Outline: public HBox
  */
         hchar     user_shape[MAX_OUTLINE_LEVEL];
 /**
- * decoration charactor for the level type
+ * decoration character for the level type
  */
         hchar     deco[MAX_OUTLINE_LEVEL][2];     /* 사용자 정의시 앞뒤 문자 */
         hchar     dummy;

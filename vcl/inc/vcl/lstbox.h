@@ -33,7 +33,7 @@
 // !! to change the internal behaviour of the ListBox implementation !!
 // !! for specific entries.                                          !!
 
-/** this flag disables a selection of an entry completly. It is not
+/** this flag disables a selection of an entry completely. It is not
     possible to select such entries either from the user interface
     nor from the ListBox methods. Cursor traveling is handled correctly.
     This flag can be used to add titles to a ListBox.

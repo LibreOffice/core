@@ -249,7 +249,7 @@ static rtl_Locale * _parse_locale( const char * locale )
  * _nl_language_list[] is an array list of supported encodings. Because
  * we are using a binary search, the list has to be in ascending order.
  * We are comparing the encodings case insensitiv, so the list has
- * to be completly upper- , or lowercase.
+ * to be completely upper- , or lowercase.
  */
 
 #if defined(SOLARIS)

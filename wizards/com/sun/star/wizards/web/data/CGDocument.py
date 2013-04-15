@@ -102,7 +102,7 @@ class CGDocument(ConfigGroup):
         path = self.root.getFileAccess(xmsf).getPath(self.cp_URL, "")
         self.localFilename = FileAccess.getFilename(path, separator)
         '''
-        if the type is a star office convertable document
+        if the type is a star office convertible document
         We try to open the document to get some properties
         '''
         xProps = None

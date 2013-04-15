@@ -112,7 +112,7 @@ public class _XContentProvider extends MultiMethodTest {
         int compare = oObj.compareContentIds(CI,CI2);
         boolean res = (compare != 0);
         if (!res) {
-            log.println("Didn't work with differnt IDs");
+            log.println("Didn't work with different IDs");
             log.println(compare+" was returned");
         }
         compare = oObj.compareContentIds(CI,CI);

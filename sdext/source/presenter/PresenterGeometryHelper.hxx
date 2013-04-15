@@ -76,7 +76,7 @@ public:
         const css::geometry::RealRectangle2D& rBox,
         const css::geometry::RealPoint2D& rPoint);
 
-    /** Return whether rBox1 is completly inside rBox2.
+    /** Return whether rBox1 is completely inside rBox2.
     */
     static bool IsInside (
         const css::awt::Rectangle& rBox1,

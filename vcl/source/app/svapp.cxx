@@ -1632,7 +1632,7 @@ UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
 void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    DBG_ASSERT( !pSVData->mpUnoWrapper, "SetUnoWrapper: Wrapper allready exists" );
+    DBG_ASSERT( !pSVData->mpUnoWrapper, "SetUnoWrapper: Wrapper already exists" );
     pSVData->mpUnoWrapper = pWrapper;
 }
 

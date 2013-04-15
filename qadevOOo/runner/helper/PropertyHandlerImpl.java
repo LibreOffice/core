@@ -42,7 +42,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
      * @param FirstTimeInit If true , the method is called for the first-time update of the respective property, that is, when the property browser is just initializing with the properties of the introspected object.
      * If false , there was a real ::com::sun::star::beans::XPropertyChangeListener::propertyChange event which triggered the call.
      *
-     * In some cases it may be necessary to differentiate between both situations. For instance, if you want to set the value of another property when an actuating property's value changed, you should definately not do this when FirstTimeInit is true .
+     * In some cases it may be necessary to differentiate between both situations. For instance, if you want to set the value of another property when an actuating property's value changed, you should definitely not do this when FirstTimeInit is true .
      * @throws com.sun.star.lang.NullPointerException ::com::sun::star::lang::NullPointerException if InspectorUI is NULL
      */
     public void actuatingPropertyChanged(

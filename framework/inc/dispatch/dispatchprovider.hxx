@@ -44,7 +44,7 @@
 namespace framework{
 
 /**
-    @descr          We know some special dispatch objects with diffrent functionality.
+    @descr          We know some special dispatch objects with different functionality.
                     The can be created internaly by the following DispatchProvider.
                     Here we define some identifier to force creation of the right one.
 */

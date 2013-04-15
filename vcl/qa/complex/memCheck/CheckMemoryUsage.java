@@ -119,7 +119,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
 //        return new String[] {"loadAndSaveDocuments"};
 //    }
     /**
-     * Collect all documnets to load and all filters used for export.
+     * Collect all documents to load and all filters used for export.
      */
     @Before
     public void before()

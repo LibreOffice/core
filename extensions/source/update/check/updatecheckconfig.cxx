@@ -483,7 +483,7 @@ UpdateCheckConfig::clearUpdateFound()
 
     /* As we have removed UpdateVersionFound from the shared configuration
      * existing entries in the user layer do not have a oor operation and
-     * thus are completly ignored (which also means they can not be removed).
+     * thus are completely ignored (which also means they can not be removed).
      */
 
     commitChanges();

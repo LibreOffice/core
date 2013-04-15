@@ -762,7 +762,7 @@ oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr pAddr, sal_Seque
 
 /** try to figure out a full-qualified hostname, by adding the current domain
     as given by the domainname program to the given hostname.
-    This function MUST NOT call gethostbyname since pHostName allready points
+    This function MUST NOT call gethostbyname since pHostName already points
     to data returned by gethostname and would be garbled: use gethostname_r
     instead!
  */

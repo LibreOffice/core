@@ -249,7 +249,7 @@ public:
 
 /** merges the settings for shared, user and installation during construction.
     The class uses a simple merge mechanism for the javasettings.xml files in share and
-    user. The following elements completly overwrite the corresponding elements
+    user. The following elements completely overwrite the corresponding elements
     from share:
     /java/enabled
     /java/userClassPath

@@ -31,7 +31,7 @@ from com.sun.star.awt.KeyModifier import SHIFT, MOD1
 @author rpiterman
 This class implements the UI functionality of the topics scroller control.
 <br/>
-During developement, there has been a few changes which were not *fully* done
+During development, there has been a few changes which were not *fully* done
 mainly in converting the topics and time boxes
 from combobox and time box to normal textboxes,
 so in the code they might be referenced as combobox or timebox. This should be

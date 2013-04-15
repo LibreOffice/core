@@ -440,7 +440,7 @@ void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
     @descr      These method writes the changed values into the sub tree
                 and should always called in our destructor to guarantee consistency of config data.
 
-    @attention  We clear complete set in configuration first and write it completly new! So we don't must
+    @attention  We clear complete set in configuration first and write it completely new! So we don't must
                 distinguish between existing, added or removed elements. Our internal cached values
                 are the only and right ones.
 

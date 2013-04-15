@@ -48,7 +48,7 @@ const VAL *         find_in_map(            /// Usable for all kinds of values
 
 
 /** @return the value in the map, if it is in there, else 0.
-    @precond VAL has to be convertable to "0".
+    @precond VAL has to be convertible to "0".
 */
 template <class KEY, class VAL>
 VAL                 value_from_map(

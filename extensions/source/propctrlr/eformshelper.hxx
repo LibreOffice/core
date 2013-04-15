@@ -107,7 +107,7 @@ namespace pcr
         */
         bool    canBindToDataType( sal_Int32 _nDataType = -1 ) const SAL_THROW(());
 
-        /** checks whether the control model cna be bound to any XSD data type
+        /** checks whether the control model can be bound to any XSD data type
         */
         bool    canBindToAnyDataType() const SAL_THROW(()) { return canBindToDataType( -1 ); }
 

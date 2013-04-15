@@ -101,7 +101,7 @@
 
 2012-05-08 László Németh:
     * picture [] handles left hanging shapes better
-    * function random works on lists or list-convertable objects (string, tuple, dict, set), too
+    * function random works on lists or list-convertible objects (string, tuple, dict, set), too
     * faster "label" (remove unnecessary shape search)
     * document-level turtle states
     * clean name spaces

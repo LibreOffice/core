@@ -3147,7 +3147,7 @@ void WW8TabDesc::AdjustNewBand()
 
     if( bClaimLineFmt )
     {
-        pTabLine->ClaimFrmFmt();            // necessary becaus of cell height
+        pTabLine->ClaimFrmFmt();            // necessary because of cell height
         SwFmtFrmSize aF( ATT_MIN_SIZE, 0, 0 );  // default
 
         if (pActBand->nLineHeight == 0)    // 0 = Auto

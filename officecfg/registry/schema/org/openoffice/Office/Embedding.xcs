@@ -89,7 +89,7 @@
 		</group>
 		<group oor:name="ObjectName">
 			<info>
-				<desc>Provides object name that appeares in UI.</desc>
+				<desc>Provides object name that appears in UI.</desc>
 			</info>
 			<prop oor:name="ObjectUIName" oor:localized="true" oor:type="xs:string">
 				<!-- UIHints: setup -->

@@ -150,7 +150,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
         String path = getSettings().getFileAccess(xmsf).getPath(cp_URL, PropertyNames.EMPTY_STRING);
         localFilename = FileAccess.getFilename(path, File.separator);
 
-        /* if the type is a star office convertable document
+        /* if the type is a star office convertible document
          * We try to open the document to get some properties
          */
 

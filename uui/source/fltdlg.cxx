@@ -98,7 +98,7 @@ void FilterDialog::SetURL( const String& sURL )
     @param      "pFilterNames", pointer to list of filter names, which should be used for later operations.
     @return     -
 
-    @onerror    We clear list box and forget our currently set filter information completly!
+    @onerror    We clear list box and forget our currently set filter information completely!
     @threadsafe no
 *//*-*************************************************************************************************************/
 void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )

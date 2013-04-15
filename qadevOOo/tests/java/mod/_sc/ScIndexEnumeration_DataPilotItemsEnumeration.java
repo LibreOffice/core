@@ -200,7 +200,7 @@ public class ScIndexEnumeration_DataPilotItemsEnumeration
             new Integer(27);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace();
-            throw new StatusException("Couldn't get cells for changeing.", e);
+            throw new StatusException("Couldn't get cells for changing.", e);
         }
 
 

@@ -1006,7 +1006,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     pPop->InsertItem(3, aContextStrings[ST_DISPLAY - ST_CONTEXT_FIRST]);
     // Now edit
     SvTreeListEntry* pEntry = 0;
-    // Edit only if the shown content is comming from the current view.
+    // Edit only if the shown content is coming from the current view.
     if((bIsActive || pActiveShell == pActiveView->GetWrtShellPtr())
             && 0 != (pEntry = FirstSelected()) && lcl_IsContent(pEntry))
     {

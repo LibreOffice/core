@@ -336,7 +336,7 @@ namespace xmloff
                         converting it into a string</li>
                     <li><b>string</b>: <arg>_rValue</arg> did not need any conversion as it already was a string</li>
                 </ul>
-                If the type is not convertable, float is returned
+                If the type is not convertible, float is returned
         */
         ::xmloff::token::XMLTokenEnum implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType);
 

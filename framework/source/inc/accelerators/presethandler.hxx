@@ -333,7 +333,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     specified target.
 
             @descr  Means: copy share/.../<preset>.xml user/.../<target>.xml
-                    Note: The target will be overwritten completly or
+                    Note: The target will be overwritten completely or
                     created as new by this operation!
 
             @param  sPreset

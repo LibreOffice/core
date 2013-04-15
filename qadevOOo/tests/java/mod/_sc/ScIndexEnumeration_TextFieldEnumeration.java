@@ -42,7 +42,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 /**
- * Test for object that represents enumeration of a colection
+ * Test for object that represents enumeration of a collection
  * of text fields in a cell of a spreadsheet. <p>
  *
  * Object implements the following interfaces :

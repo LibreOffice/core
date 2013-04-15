@@ -203,7 +203,7 @@ void do_cleanup( void )
             ntdll is on the stack. No chance to find the reason for the
             corrupted heap if so.
 
-            So annoying the user with a crash report is completly useless.
+            So annoying the user with a crash report is completely useless.
 
             */
 

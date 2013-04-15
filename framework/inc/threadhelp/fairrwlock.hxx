@@ -59,7 +59,7 @@ class FairRWLock : public  IRWLock
             @short      standard ctor
             @descr      Initialize instance with right start values for correct working.
                         no reader could exist               =>  m_nReadCount   = 0
-                        don't block first comming writer    =>  m_aWriteCondition.set()
+                        don't block first coming writer    =>  m_aWriteCondition.set()
 
             @seealso    -
 

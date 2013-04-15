@@ -41,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 /**
- * Test for object that represents a colection of text fields
+ * Test for object that represents a collection of text fields
  * in a cell of a spreadsheet. <p>
  *
  * Object implements the following interfaces :

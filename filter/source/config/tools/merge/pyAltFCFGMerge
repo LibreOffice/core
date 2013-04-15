@@ -539,7 +539,7 @@ class Merger:
         # Attention!
         # If the package seem to be empty, it make no sense to generate a
         # corresponding xml file. We should suppress writing of this file on 
-        # disk completly ...
+        # disk completely ...
         if nItemCount < 1:
             printOut("Package is empty and will not result into a xml file on "\
                 "disk!? Please check configuration file.")

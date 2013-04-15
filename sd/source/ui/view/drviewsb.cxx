@@ -834,7 +834,7 @@ void DrawViewShell::ModifyLayer (
 
         if (!bIsVisible)
         {
-            // invisible layers are presented differnt
+            // invisible layers are presented different
             nBits = TPB_SPECIAL;
         }
 

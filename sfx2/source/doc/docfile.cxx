@@ -755,7 +755,7 @@ sal_Bool SfxMedium::IsStorage()
         OUString aURL;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aURL ) )
         {
-            OSL_FAIL("Physical name not convertable!");
+            OSL_FAIL("Physical name not convertible!");
         }
         pImp->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
         if ( !pImp->bIsStorage )
@@ -1801,7 +1801,7 @@ void SfxMedium::Transfer_Impl()
     {
         // makes sence only in case logic name is set
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aNameURL ) )
-            OSL_FAIL( "The medium name is not convertable!\n" );
+            OSL_FAIL( "The medium name is not convertible!\n" );
     }
 
     if ( !aNameURL.isEmpty() && ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) ) )
@@ -2318,7 +2318,7 @@ void SfxMedium::GetMedium_Impl()
             {
                 if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aFileName ) )
                 {
-                    OSL_FAIL("Physical name not convertable!");
+                    OSL_FAIL("Physical name not convertible!");
                 }
             }
             else
@@ -2983,7 +2983,7 @@ SfxMedium::~SfxMedium()
         OUString aTemp;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aTemp ))
         {
-            OSL_FAIL("Physical name not convertable!");
+            OSL_FAIL("Physical name not convertible!");
         }
 
         if ( !::utl::UCBContentHelper::Kill( aTemp ) )

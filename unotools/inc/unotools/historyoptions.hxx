@@ -130,7 +130,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
 
         /*-****************************************************************************************************//**
             @short      return complete sepcified list
-            @descr      If you will show the whole list call this method to get it completly.
+            @descr      If you will show the whole list call this method to get it completely.
 
             @seealso    -
 

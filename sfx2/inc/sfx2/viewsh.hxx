@@ -237,7 +237,7 @@ public:
     */
     void                        SetCurrentDocument() const;
 
-    /** get an XRenderable instance that can render this docuement
+    /** get an XRenderable instance that can render this document
     */
     virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
 

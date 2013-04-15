@@ -615,7 +615,7 @@ class FilterCache : public BaseLock
 
             @param      aURL
                         URL of the content, which type should be detected.
-                        Its already parsed and splitted into its differnt parts,
+                        Its already parsed and splitted into its different parts,
                         like e.g.: main, jump marks etcpp.
 
             @param      rFlatTypes

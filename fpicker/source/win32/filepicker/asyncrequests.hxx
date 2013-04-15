@@ -128,7 +128,7 @@ class RequestHandler
 typedef ::boost::shared_ptr< RequestHandler > RequestHandlerRef;
 
 //-----------------------------------------------------------------------------
-/** @todo docuemnt me
+/** @todo document me
  */
 class AsyncRequests : private ::cppu::BaseMutex
                     , public  ::osl::Thread

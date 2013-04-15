@@ -38,7 +38,7 @@ published interface XExtendedDocumentHandler: com::sun::star::xml::sax::XDocumen
     /** receives notification about the start of a CDATA section in the
         XML-source.
 
-        <p>Any string comming in via character handler may include chars,
+        <p>Any string coming in via character handler may include chars,
         that would otherwise be interpreted as markup. </p>
      */
     void startCDATA()

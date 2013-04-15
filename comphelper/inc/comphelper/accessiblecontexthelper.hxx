@@ -113,7 +113,7 @@ namespace comphelper
             the context does. A good approach to implement the lock may be to derive you own context
             not only from OAccessibleContextHelper, but also from IMutex.</p>
 
-            <p>One more note. This lock is definately not used once the dtor is reached. Means whatever
+            <p>One more note. This lock is definitely not used once the dtor is reached. Means whatever
             the dtor implementation does, it does <em>not</em> guard the external lock. See this as a contract.
             <br/>You should ensure the same thing for own derivees which do not supply the lock themself,
             but get them from yet another derivee.</p>

@@ -84,7 +84,7 @@ void VCLXGraphics::SetOutputDevice( OutputDevice* pOutDev )
 
 void VCLXGraphics::Init( OutputDevice* pOutDev )
 {
-    DBG_ASSERT( !mpOutputDevice, "VCLXGraphics::Init allready has pOutDev !" );
+    DBG_ASSERT( !mpOutputDevice, "VCLXGraphics::Init already has pOutDev !" );
     mpOutputDevice  = pOutDev;
 
     maFont          = mpOutputDevice->GetFont();

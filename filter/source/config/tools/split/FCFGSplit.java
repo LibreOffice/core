@@ -89,7 +89,7 @@ public class FCFGSplit
      *  values if a configuration key does not exist.
      *  It must be a string value, because the class java.util.Properties
      *  accept it as the only type. But of course the value must be
-     *  convertable to the right target type.
+     *  convertible to the right target type.
      *
      *  @seealso    readCfg()
      */

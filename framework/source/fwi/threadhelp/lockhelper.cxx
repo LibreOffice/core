@@ -355,7 +355,7 @@ void LockHelper::releaseWriteAccess()
                 New readers can work too - new writer are blocked!
                 We use m_eLockType to differ between all possible "lock-member"!!!
 
-    @attention  Ignore shareable mutex(!) - because this call never should release a lock completly!
+    @attention  Ignore shareable mutex(!) - because this call never should release a lock completely!
                 We change a write access to a read access only.
 
     @attention  a) Don't call this method if you are not a writer!

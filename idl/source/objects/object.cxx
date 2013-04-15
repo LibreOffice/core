@@ -174,7 +174,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                         if( xAutomationInterface.Is() )
                         {
                             // set error
-                            rBase.SetError( "Automation allready set",
+                            rBase.SetError( "Automation already set",
                                             rInStm.GetToken() );
                             rBase.WriteError( rInStm );
                         }
