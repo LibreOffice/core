@@ -64,6 +64,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
@@ -1487,6 +1488,38 @@ void RtfAttributeOutput::WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHea
     m_aRun = aRun;
 }
 
+void lcl_TextFrameShadow(std::vector< std::pair<OString, OString> >& rFlyProperties, const SwFrmFmt& rFrmFmt)
+{
+    SvxShadowItem aShadowItem = rFrmFmt.GetShadow();
+    if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
+        return;
+
+    rFlyProperties.push_back(std::make_pair<OString, OString>("fShadow", OString::number(1)));
+
+    const Color& rColor = aShadowItem.GetColor();
+    // We in fact need RGB to BGR, but the transformation is symmetric.
+    rFlyProperties.push_back(std::make_pair<OString, OString>("shadowColor", OString::number(msfilter::util::BGRToRGB(rColor.GetColor()))));
+
+    // Twips -> points -> EMUs -- hacky, the intermediate step hides rounding errors on roundtrip.
+    OString aShadowWidth = OString::number(sal_Int32(aShadowItem.GetWidth() / 20) * 12700);
+    OString aOffsetX;
+    OString aOffsetY;
+    switch (aShadowItem.GetLocation())
+    {
+        case SVX_SHADOW_TOPLEFT: aOffsetX = "-" + aShadowWidth; aOffsetY = "-" + aShadowWidth; break;
+        case SVX_SHADOW_TOPRIGHT: aOffsetX = aShadowWidth; aOffsetY = "-" + aShadowWidth; break;
+        case SVX_SHADOW_BOTTOMLEFT: aOffsetX = "-" + aShadowWidth; aOffsetY = aShadowWidth; break;
+        case SVX_SHADOW_BOTTOMRIGHT: aOffsetX = aShadowWidth; aOffsetY = aShadowWidth; break;
+        case SVX_SHADOW_NONE:
+        case SVX_SHADOW_END:
+            break;
+    }
+    if (!aOffsetX.isEmpty())
+        rFlyProperties.push_back(std::make_pair<OString, OString>("shadowOffsetX", OString(aOffsetX)));
+    if (!aOffsetY.isEmpty())
+        rFlyProperties.push_back(std::make_pair<OString, OString>("shadowOffsetY", OString(aOffsetY)));
+}
+
 void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Point& /*rNdTopLeft*/ )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
@@ -1519,6 +1552,9 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
             m_pFlyFrameSize = 0;
 
+            const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt();
+            lcl_TextFrameShadow(m_aFlyProperties, rFrmFmt);
+
             for (size_t i = 0; i < m_aFlyProperties.size(); ++i)
             {
                 m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_SP "{";
@@ -1546,7 +1582,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                 m_bSingleEmptyRun = false;
                 m_rExport.bRTFFlySyntax = true;
 
-                const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt( );
                 const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
                 sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
                 sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
