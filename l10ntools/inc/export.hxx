@@ -206,7 +206,6 @@ private:
     sal_Bool bReadOver;
     sal_Bool bDontWriteOutput;
     OString sLastTextTyp;
-    bool isInitialized;
     OString sFilename;
     OString sLanguages;
 
@@ -237,8 +236,6 @@ private:
 
     void WriteToMerged(const OString &rText , bool bSDFContent);
     void SetChildWithText();
-
-    void InitLanguages( bool bMergeMode = false );
 
     void CutComment( OString &rText );
 

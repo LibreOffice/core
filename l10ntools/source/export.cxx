@@ -189,12 +189,10 @@ Export::Export(const OString &rOutput)
                 bError( sal_False ),
                 bReadOver( sal_False ),
                 bDontWriteOutput( sal_False ),
-                isInitialized( false ),
                 sFilename( global::inputPathname ),
                 sLanguages( OString() ),
                 pParseQueue( new ParserQueue( *this ) )
 {
-    // open output stream
     aOutput.mPo = new PoOfstream( rOutput, PoOfstream::APP );
     if (!aOutput.mPo->isOpen()) {
         fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
@@ -218,15 +216,10 @@ Export::Export(
                 bError( sal_False ),
                 bReadOver( sal_False ),
                 bDontWriteOutput( sal_False ),
-                isInitialized( false ),
                 sFilename( global::inputPathname ),
                 sLanguages( rLanguage ),
                 pParseQueue( new ParserQueue( *this ) )
 {
-    InitLanguages( bMergeMode );
-    // used when merge is enabled
-
-    // open output stream
     aOutput.mSimple = new std::ofstream();
     aOutput.mSimple->open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
 }
@@ -1442,15 +1435,7 @@ sal_Bool Export::PrepareTextToMerge(OString &rText, sal_uInt16 nTyp,
     // search for merge data
     if ( !pMergeDataFile ){
         pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, false );
-
-        // Init Languages
-        if( Export::sLanguages.equalsIgnoreAsciiCase("ALL") )
-        {
-            aLanguages = pMergeDataFile->GetLanguages();
-            isInitialized = true;
-        }
-        else if( !isInitialized )InitLanguages();
-
+        aLanguages = pMergeDataFile->GetLanguages();
     }
 
     MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
@@ -1546,14 +1531,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 {
     if ( !pMergeDataFile ){
         pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, false );
-
-        // Init Languages
-        if (Export::sLanguages.equalsIgnoreAsciiCase("ALL"))
-        {
-            aLanguages = pMergeDataFile->GetLanguages();
-            isInitialized = true;
-        }
-        else if( !isInitialized )InitLanguages();
+        aLanguages = pMergeDataFile->GetLanguages();
 
     }
     switch ( nMode ) {
@@ -1845,29 +1823,6 @@ void Export::SetChildWithText()
         for ( size_t i = 0; i < aResStack.size() - 1; i++ ) {
             aResStack[ i ]->bChildWithText = sal_True;
         }
-    }
-}
-
-void Export::InitLanguages( bool bMerge ){
-
-    if( !isInitialized )
-    {
-        OString sTmp;
-        OStringBoolHashMap aEnvLangs;
-
-        sal_Int32 nIndex = 0;
-        do
-        {
-            OString aToken = sLanguages.getToken(0, ',', nIndex);
-            sTmp = aToken.getToken(0, '=').trim();
-            if( bMerge && sTmp.equalsIgnoreAsciiCase("en-US") ){}
-            else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) ){
-                aLanguages.push_back( sTmp );
-            }
-        }
-        while ( nIndex >= 0 );
-
-        isInitialized = true;
     }
 }
 
