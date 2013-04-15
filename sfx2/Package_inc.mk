@@ -72,7 +72,6 @@ $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/lnkbase.hxx,sfx2/lnkbase.hxx
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/mailmodelapi.hxx,sfx2/mailmodelapi.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/mgetempl.hxx,sfx2/mgetempl.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/mieclip.hxx,sfx2/mieclip.hxx))
-$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/minarray.hxx,sfx2/minarray.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/minfitem.hxx,sfx2/minfitem.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/mnuitem.hxx,sfx2/mnuitem.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/mnumgr.hxx,sfx2/mnumgr.hxx))

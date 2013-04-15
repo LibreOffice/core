@@ -27,7 +27,6 @@
 
 #include "appdata.hxx"
 #include "sfxtypes.hxx"
-#include <sfx2/minarray.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>

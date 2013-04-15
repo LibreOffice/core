@@ -40,7 +40,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
-#include <sfx2/minarray.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vector>
 #include <vcl/msgbox.hxx>

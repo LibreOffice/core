@@ -23,7 +23,6 @@
 // due to pSlotPool
 #include "appdata.hxx"
 #include <sfx2/msgpool.hxx>
-#include <sfx2/minarray.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
