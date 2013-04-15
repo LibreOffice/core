@@ -65,7 +65,6 @@ class SfxNewFileDialog;
 class SfxObjectShell;
 class SfxObjectShellArr_Impl;
 class SfxProgress;
-class SfxResourceManager;
 class SfxSlotPool;
 class SfxStbCtrlFactArr_Impl;
 class SfxTbxCtrlFactArr_Impl;
