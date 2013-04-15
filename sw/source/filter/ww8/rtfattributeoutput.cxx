@@ -2950,7 +2950,13 @@ void RtfAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    if( !rBrush.GetColor().GetTransparency() )
+    if (m_rExport.bRTFFlySyntax)
+    {
+        const Color& rColor = rBrush.GetColor();
+        // We in fact need RGB to BGR, but the transformation is symmetric.
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("fillColor", OString::number(msfilter::util::BGRToRGB(rColor.GetColor()))));
+    }
+    else if( !rBrush.GetColor().GetTransparency() )
     {
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CBPAT);
         m_aStyles.append((sal_Int32)m_rExport.GetColor(rBrush.GetColor()));
