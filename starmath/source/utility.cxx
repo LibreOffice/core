@@ -50,122 +50,58 @@ SmViewShell * SmGetActiveView()
 
 /**************************************************************************/
 
-SmPickList::SmPickList(sal_uInt16 nInitSize, sal_uInt16 nMaxSize) :
-    SfxPtrArr((sal_uInt8) nInitSize, 1)
+void SmFontPickList::Clear()
 {
-    nSize = nMaxSize;
+    aFontVec.clear();
 }
 
-
-SmPickList::~SmPickList()
+SmFontPickList& SmFontPickList::operator = (const SmFontPickList& rList)
 {
     Clear();
-}
-
-
-SmPickList& SmPickList::operator=(const SmPickList& rList)
-{
-    sal_uInt16  nPos;
-
-    Clear();
-    nSize = rList.nSize;
-    for (nPos = 0; nPos < rList.Count(); nPos++)
-        InsertPtr(nPos, CreateItem(rList.Get(nPos)));
+    nMaxItems = rList.nMaxItems;
+    for (sal_uInt16 nPos = 0; nPos < rList.aFontVec.size(); nPos++)
+        aFontVec.push_back( rList.aFontVec[nPos] );
 
     return *this;
 }
 
-
-void SmPickList::Insert(const void *pItem)
+Font SmFontPickList::operator [] (sal_uInt16 nPos) const
 {
-    Remove(pItem);
-    InsertPtr(0, CreateItem(pItem));
+    return aFontVec[nPos];
+}
 
-    if (Count() > nSize)
-    {
-        DestroyItem(GetPtr(nSize));
-        RemovePtr(nSize, 1);
-    }
+Font SmFontPickList::Get(sal_uInt16 nPos) const
+{
+    return nPos < aFontVec.size() ? aFontVec[nPos] : Font();
+}
+
+bool SmFontPickList::Contains(const Font &rFont) const
+{
+    return std::find( aFontVec.begin(), aFontVec.end(), rFont ) != aFontVec.end();
 }
 
 
-void SmPickList::Update(const void *pItem, const void *pNewItem)
-{
-    sal_uInt16  nPos;
 
-    for (nPos = 0; nPos < Count(); nPos++)
-        if (CompareItem(GetPtr(nPos), pItem))
-        {
-            DestroyItem(GetPtr(nPos));
-            GetPtr(nPos) = CreateItem(pNewItem);
-            break;
-        }
+
+bool SmFontPickList::CompareItem(const Font & rFirstFont, const Font & rSecondFont) const
+{
+  return rFirstFont.GetName() == rSecondFont.GetName() &&
+        rFirstFont.GetFamily()  == rSecondFont.GetFamily()  &&
+        rFirstFont.GetCharSet() == rSecondFont.GetCharSet() &&
+        rFirstFont.GetWeight()  == rSecondFont.GetWeight()  &&
+        rFirstFont.GetItalic()  == rSecondFont.GetItalic();
 }
 
-void SmPickList::Remove(const void *pItem)
+OUString SmFontPickList::GetStringItem(const Font &rFont)
 {
-    sal_uInt16  nPos;
+    OUStringBuffer aString(rFont.GetName());
 
-    for (nPos = 0; nPos < Count(); nPos++)
-        if (CompareItem(GetPtr(nPos), pItem))
-        {
-            DestroyItem(GetPtr(nPos));
-            RemovePtr(nPos, 1);
-            break;
-        }
-}
-
-void SmPickList::Clear()
-{
-    sal_uInt16  nPos;
-
-    for (nPos = 0; nPos < Count(); nPos++)
-        DestroyItem(GetPtr(nPos));
-
-    RemovePtr(0, Count());
-}
-
-
-/**************************************************************************/
-
-void * SmFontPickList::CreateItem(const void *pItem)
-{
-    return new Font(*((Font *) pItem));
-}
-
-void SmFontPickList::DestroyItem(void *pItem)
-{
-    delete (Font *)pItem;
-}
-
-bool SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem) const
-{
-    Font    *pFirstFont, *pSecondFont;
-
-    pFirstFont  = (Font *)pFirstItem;
-    pSecondFont = (Font *)pSecondItem;
-
-    if (pFirstFont->GetName() == pSecondFont->GetName())
-        if ((pFirstFont->GetFamily()  == pSecondFont->GetFamily())  &&
-            (pFirstFont->GetCharSet() == pSecondFont->GetCharSet()) &&
-            (pFirstFont->GetWeight()  == pSecondFont->GetWeight())  &&
-            (pFirstFont->GetItalic()  == pSecondFont->GetItalic()))
-            return (true);
-
-    return false;
-}
-
-OUString SmFontPickList::GetStringItem(void *pItem)
-{
-    Font *pFont = (Font *)pItem;
-    OUStringBuffer aString(pFont->GetName());
-
-    if (IsItalic( *pFont ))
+    if (IsItalic( rFont ))
     {
         aString.append(", ");
         aString.append(SM_RESSTR(RID_FONTITALIC));
     }
-    if (IsBold( *pFont ))
+    if (IsBold( rFont ))
     {
         aString.append(", ");
         aString.append(SM_RESSTR(RID_FONTBOLD));
@@ -176,17 +112,33 @@ OUString SmFontPickList::GetStringItem(void *pItem)
 
 void SmFontPickList::Insert(const Font &rFont)
 {
-    SmPickList::Insert((void *)&rFont);
+    Remove(rFont);
+    aFontVec.push_front( rFont );
+
+    if (aFontVec.size() > nMaxItems)
+    {
+        aFontVec.pop_back();
+    }
 }
 
 void SmFontPickList::Update(const Font &rFont, const Font &rNewFont)
 {
-    SmPickList::Update((void *)&rFont, (void *)&rNewFont);
+    for (sal_uInt16 nPos = 0; nPos < aFontVec.size(); nPos++)
+        if (CompareItem( aFontVec[nPos], rFont ))
+        {
+            aFontVec[nPos] = rNewFont;
+            break;
+        }
 }
 
 void SmFontPickList::Remove(const Font &rFont)
 {
-    SmPickList::Remove((void *)&rFont);
+    for (sal_uInt16 nPos = 0; nPos < aFontVec.size(); nPos++)
+        if (CompareItem( aFontVec[nPos], rFont))
+        {
+            aFontVec.erase( aFontVec.begin() + nPos );
+            break;
+        }
 }
 
 
@@ -225,8 +177,8 @@ IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 }
 
 
-SmFontPickListBox::SmFontPickListBox(Window* pParent, const ResId& rResId, sal_uInt16 nMax) :
-    SmFontPickList(nMax, nMax),
+SmFontPickListBox::SmFontPickListBox(Window* pParent, const ResId& rResId) :
+    SmFontPickList(4),
     ListBox(pParent, rResId)
 {
     SetSelectHdl(LINK(this, SmFontPickListBox, SelectHdl));
@@ -239,11 +191,11 @@ SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
 
     *(SmFontPickList *)this = rList;
 
-    for (nPos = 0; nPos < Count(); nPos++)
-        InsertEntry(GetStringItem(GetPtr(nPos)), nPos);
+    for (nPos = 0; nPos < aFontVec.size(); nPos++)
+        InsertEntry(GetStringItem(aFontVec[nPos]), nPos);
 
-    if (Count() > 0)
-        SelectEntry(GetStringItem(GetPtr(0)));
+    if (aFontVec.size() > 0)
+        SelectEntry(GetStringItem(aFontVec.front()));
 
     return *this;
 }
@@ -252,11 +204,11 @@ void SmFontPickListBox::Insert(const Font &rFont)
 {
     SmFontPickList::Insert(rFont);
 
-    RemoveEntry(GetStringItem(GetPtr(0)));
-    InsertEntry(GetStringItem(GetPtr(0)), 0);
-    SelectEntry(GetStringItem(GetPtr(0)));
+    RemoveEntry(GetStringItem(aFontVec.front()));
+    InsertEntry(GetStringItem(aFontVec.front()), 0);
+    SelectEntry(GetStringItem(aFontVec.front()));
 
-    while (GetEntryCount() > nSize)
+    while (GetEntryCount() > nMaxItems)
         RemoveEntry(GetEntryCount() - 1);
 
     return;
