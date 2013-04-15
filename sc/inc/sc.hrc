@@ -1002,7 +1002,7 @@
 #define RID_SCPAGE_PRINT                (SC_DIALOGS_START + 70)
 #define RID_SCDLG_COLORROW              (SC_DIALOGS_START + 71)
 
-#define RID_SCDLG_NAMES_CREATE          (SC_DIALOGS_START + 73)
+
 
 #define RID_SCDLG_CHAR                  (SC_DIALOGS_START + 76)
 #define RID_SCDLG_PARAGRAPH             (SC_DIALOGS_START + 77)

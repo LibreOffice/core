@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="createnames">
+  <object class="GtkDialog" id="CreateNamesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Create Names</property>
@@ -9,17 +9,19 @@
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
             <property name="layout_style">start</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="xalign">0.50999999046325684</property>
@@ -86,7 +88,7 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton1">
+                      <object class="GtkCheckButton" id="top">
                         <property name="label" translatable="yes">_Top row</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -102,7 +104,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton2">
+                      <object class="GtkCheckButton" id="left">
                         <property name="label" translatable="yes">_Left column</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -118,7 +120,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton3">
+                      <object class="GtkCheckButton" id="bottom">
                         <property name="label" translatable="yes">_Bottom row</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -136,7 +138,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton4">
+                      <object class="GtkCheckButton" id="right">
                         <property name="label" translatable="yes">_Right column</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -160,7 +162,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0.49000000953674316</property>
-                <property name="label" translatable="yes">Create names form</property>
+                <property name="label" translatable="yes">Create names from</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>

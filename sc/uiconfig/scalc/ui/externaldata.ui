@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">99999</property>
@@ -111,6 +112,12 @@
                                 <property name="tooltip_text" translatable="yes">Enter the URL of the source document in the local file system or Internet here.</property>
                                 <property name="hexpand">True</property>
                                 <property name="has_entry">True</property>
+                                <property name="max_width_chars">48</property>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry" id="URLBox-entry2">
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -189,6 +196,8 @@
                           <object class="GtkScrolledWindow" id="scrolledwindow1">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <property name="shadow_type">in</property>
                             <child>
                               <object class="GtkTreeView" id="ranges">
@@ -196,6 +205,9 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                                </child>
                               </object>
                             </child>
                           </object>

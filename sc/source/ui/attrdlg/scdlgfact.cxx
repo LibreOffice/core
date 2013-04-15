@@ -1041,28 +1041,11 @@ AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Wi
     return 0;
 }
 
-
-
-
-AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( Window * pParent, sal_uInt16 nFlags, int nId )
+AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg(Window * pParent, sal_uInt16 nFlags)
 {
-    ScNameCreateDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_NAMES_CREATE :
-            pDlg = new ScNameCreateDlg( pParent, nFlags );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScNameCreateDlg_Impl( pDlg );
-    return 0;
+    ScNameCreateDlg * pDlg = new ScNameCreateDlg( pParent, nFlags );
+    return new AbstractScNameCreateDlg_Impl( pDlg );
 }
-
-
-
 
 AbstractScNamePasteDlg * ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( Window * pParent, ScDocShell* pShell, bool bInsList )
 {

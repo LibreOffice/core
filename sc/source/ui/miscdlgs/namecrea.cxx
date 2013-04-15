@@ -20,51 +20,32 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
-//------------------------------------------------------------------
-
 #include "namecrea.hxx"
 #include "scresid.hxx"
-#include "miscdlgs.hrc"
-
-
-//==================================================================
 
 ScNameCreateDlg::ScNameCreateDlg( Window * pParent, sal_uInt16 nFlags )
-    : ModalDialog( pParent, ScResId(RID_SCDLG_NAMES_CREATE) ),
-    aFixedLine      ( this, ScResId( FL_FRAME ) ),
-    aTopBox         ( this, ScResId( BTN_TOP ) ),
-    aLeftBox        ( this, ScResId( BTN_LEFT ) ),
-    aBottomBox      ( this, ScResId( BTN_BOTTOM ) ),
-    aRightBox       ( this, ScResId( BTN_RIGHT ) ),
-    aOKButton       ( this, ScResId( BTN_OK ) ),
-    aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
-    aHelpButton     ( this, ScResId( BTN_HELP ) )
+    : ModalDialog(pParent, "CreateNamesDialog", "modules/scalc/ui/createnamesdialog.ui")
 {
-    aTopBox.Check   ( (nFlags & NAME_TOP)   ? sal_True : false );
-    aLeftBox.Check  ( (nFlags & NAME_LEFT)  ? sal_True : false );
-    aBottomBox.Check( (nFlags & NAME_BOTTOM)? sal_True : false );
-    aRightBox.Check ( (nFlags & NAME_RIGHT) ? sal_True : false );
-
-    FreeResource();
+    get(m_pTopBox, "top");
+    get(m_pLeftBox, "left");
+    get(m_pBottomBox, "bottom");
+    get(m_pRightBox, "right");
+    m_pTopBox->Check   ( (nFlags & NAME_TOP)   ? sal_True : false );
+    m_pLeftBox->Check  ( (nFlags & NAME_LEFT)  ? sal_True : false );
+    m_pBottomBox->Check( (nFlags & NAME_BOTTOM)? sal_True : false );
+    m_pRightBox->Check ( (nFlags & NAME_RIGHT) ? sal_True : false );
 }
-
-//------------------------------------------------------------------
 
 sal_uInt16 ScNameCreateDlg::GetFlags() const
 {
     sal_uInt16  nResult = 0;
 
-    nResult |= aTopBox.IsChecked()      ? NAME_TOP:     0 ;
-    nResult |= aLeftBox.IsChecked()     ? NAME_LEFT:    0 ;
-    nResult |= aBottomBox.IsChecked()   ? NAME_BOTTOM:  0 ;
-    nResult |= aRightBox.IsChecked()    ? NAME_RIGHT:   0 ;
+    nResult |= m_pTopBox->IsChecked()      ? NAME_TOP:     0 ;
+    nResult |= m_pLeftBox->IsChecked()     ? NAME_LEFT:    0 ;
+    nResult |= m_pBottomBox->IsChecked()   ? NAME_BOTTOM:  0 ;
+    nResult |= m_pRightBox->IsChecked()    ? NAME_RIGHT:   0 ;
 
     return nResult;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

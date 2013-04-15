@@ -414,7 +414,8 @@ public:
                                                             const String& rDefault,
                                                             int nId ) = 0;
 
-    virtual AbstractScNameCreateDlg * CreateScNameCreateDlg ( Window * pParent, sal_uInt16 nFlags, int nId ) = 0; //add for ScNameCreateDlg
+    virtual AbstractScNameCreateDlg * CreateScNameCreateDlg(Window * pParent,
+        sal_uInt16 nFlags) = 0;
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, ScDocShell* pShell, bool bInsList=true ) = 0; // add for ScNamePasteDlg
 

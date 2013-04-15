@@ -28,14 +28,10 @@
 class ScNameCreateDlg : public ModalDialog
 {
 protected:
-    FixedLine       aFixedLine;
-    CheckBox        aTopBox;
-    CheckBox        aLeftBox;
-    CheckBox        aBottomBox;
-    CheckBox        aRightBox;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    HelpButton      aHelpButton;
+    CheckBox* m_pTopBox;
+    CheckBox* m_pLeftBox;
+    CheckBox* m_pBottomBox;
+    CheckBox* m_pRightBox;
 public:
     ScNameCreateDlg( Window * pParent, sal_uInt16 nFlags );
 
