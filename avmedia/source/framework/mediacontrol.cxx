@@ -24,6 +24,7 @@
 #include <avmedia/mediaplayer.hxx>
 #include "helpids.hrc"
 #include <tools/time.hxx>
+#include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lstbox.hxx>
 #include <unotools/syslocale.hxx>
@@ -63,7 +64,7 @@ namespace avmedia
 
 MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     Control( pParent ),
-    maImageList( AVMEDIA_RESID( AVMEDIA_IMGLST ) ),
+    maImageList( SvtMiscOptions().AreCurrentSymbolsLarge() ? AVMEDIA_RESID( AVMEDIA_IMGLST_L ) : AVMEDIA_RESID( AVMEDIA_IMGLST ) ),
     maItem( 0, AVMEDIA_SETMASK_ALL ),
     maPlayToolBox( this, WB_3DLOOK ),
     maTimeSlider( this, WB_HORZ | WB_DRAG | WB_3DLOOK | WB_SLIDERSET ),
