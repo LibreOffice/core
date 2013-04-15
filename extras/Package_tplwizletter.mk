@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,tplwizletter,$(SRCDIR)/extras/source/templates/wizard/letter))
+$(eval $(call gb_Package_Package,extras_tplwizletter,$(SRCDIR)/extras/source/templates/wizard/letter))
 
-$(eval $(call gb_Zip_add_files,tplwizletter,\
+$(eval $(call gb_Package_set_outdir,extras_tplwizletter,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_tplwizletter,share/template/common/wizard/letter,\
     bus-elegant_l.ott \
     bus-modern_l.ott \
     bus-office_l.ott \

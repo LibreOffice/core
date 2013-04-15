@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,tplwizagenda,$(SRCDIR)/extras/source/templates/wizard/agenda))
+$(eval $(call gb_Package_Package,extras_tplwizagenda,$(SRCDIR)/extras/source/templates/wizard/agenda))
 
-$(eval $(call gb_Zip_add_files,tplwizagenda,\
+$(eval $(call gb_Package_set_outdir,extras_tplwizagenda,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_tplwizagenda,share/template/common/wizard/agenda,\
     10grey.ott \
     1simple.ott \
     2elegant.ott \

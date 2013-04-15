@@ -349,52 +349,59 @@ File gid_File_Extra_Show_Pl
 End
 
 File gid_File_Extra_Tpllayoutimpr
-    Dir = gid_Dir_Template_Common_Layout;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "tpllayoutimpr.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tpllayoutimpr.filelist";
 End
 
 File gid_File_Extra_Tplwizbitmap
-    Dir = gid_Dir_Share_Template_Wizard_Bitmap;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "tplwizbitmap.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tplwizbitmap.filelist";
 End
 
 File gid_File_Extra_Tplwizdesktop
-    Dir = gid_Dir_Template_Common_Internal;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "tplwizdesktop.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_tplwizdesktop.filelist";
 End
 
 File gid_File_Extra_Tplwizletter
-    Dir = gid_Dir_Share_Template_Common_Wizard_Letter;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "tplwizletter.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tplwizletter.filelist";
 End
 
 File gid_File_Extra_Tplwizfax
-    Dir = gid_Dir_Share_Template_Common_Wizard_Fax;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "tplwizfax.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tplwizfax.filelist";
 End
 
 File gid_File_Extra_Tplwizagenda
-    Dir = gid_Dir_Share_Template_Common_Wizard_Agenda;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "tplwizagenda.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tplwizagenda.filelist";
 End
 
 File gid_File_Extra_Tplwizreport
-    Dir = gid_Dir_Share_Template_Common_Wizard_Report;
-    ARCHIVE_TXT_FILE_BODY;
-    Name ="tplwizreport.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name ="extras_tplwizreport.filelist";
 End
 
 File gid_File_Extra_Tplwizstyles
-    Dir = gid_Dir_Share_Template_Common_Wizard_Styles;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = tplwizstyles.zip;
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extra_tplwizstyles.filelist";
 End
 
 File gid_File_Extra_Webcast_Asp

@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,tplwizbitmap,$(SRCDIR)/extras/source/templates/wizard/bitmap))
+$(eval $(call gb_Package_Package,extras_tplwizbitmap,$(SRCDIR)/extras/source/templates/wizard/bitmap))
 
-$(eval $(call gb_Zip_add_files,tplwizbitmap,\
+$(eval $(call gb_Package_set_outdir,extras_tplwizbitmap,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_tplwizbitmap,share/template/wizard/bitmap,\
 	cancel_down.bmp \
 	cancel_up.bmp \
 	down.bmp \
