@@ -385,7 +385,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     textconversiondlgs \
     textfd \
     updatecheckui \
-    vbahelper \
+    $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
+        vbahelper) \
     vclplug_gen \
     vclplug_gtk \
     vclplug_gtk3 \
