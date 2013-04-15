@@ -64,6 +64,7 @@ private:
     PushButton      aBtnClose;
     ScrollBar       aSlider;
     FixedText       aFixedText;
+    OUString        sNewRecord;
 
     ScTabViewShell* pTabViewShell;
     ScDocument*     pDoc;

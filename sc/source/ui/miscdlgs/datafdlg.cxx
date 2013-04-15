@@ -54,7 +54,8 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
     aBtnNext          ( this, ScResId( BTN_DATAFORM_NEXT ) ),
     aBtnClose          ( this, ScResId( BTN_DATAFORM_CLOSE ) ),
     aSlider         ( this, ScResId( WND_DATAFORM_SCROLLBAR ) ),
-    aFixedText          ( this, ScResId( LAB_DATAFORM_RECORDNO ) )
+    aFixedText          ( this, ScResId( LAB_DATAFORM_RECORDNO ) ),
+    sNewRecord(SC_RESSTR(STR_NEW_RECORD))
 {
     pTabViewShell = pTabViewShellOri;
     FreeResource();
@@ -265,7 +266,7 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
         aFixedText.SetText(aBuf.makeStringAndClear());
     }
     else
-        aFixedText.SetText(String(ScResId(STR_NEW_RECORD)));
+        aFixedText.SetText(sNewRecord);
 
     aSlider.SetThumbPos(nCurrentRow-nStartRow-1);
 }
