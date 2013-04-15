@@ -18,6 +18,9 @@ orcus_patches :=
 # make config.sub recognize arm-linux-androideabi
 orcus_patches += liborcus_0.1.0-configure.patch
 
+# don't use dllimport
+orcus_patches += liborcus_0.1.0-dllimport.patch
+
 # <https://gitorious.org/orcus/orcus/merge_requests/2#
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8-
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8@2>:

@@ -1,0 +1,18 @@
+--- include/orcus/env.hpp
++++ include/orcus/env.hpp
+@@ -35,15 +35,9 @@
+     #else
+       #define ORCUS_DLLPUBLIC __declspec(dllexport)
+     #endif
+-  #elif defined __ORCUS_STATIC_LIB
++  #else
+       #define ORCUS_DLLPUBLIC
+-  #else
+-    #ifdef __GNUC__
+-      #define ORCUS_DLLPUBLIC __attribute__ ((dllimport))
+-    #else
+-      #define ORCUS_DLLPUBLIC __declspec(dllimport)
+-    #endif
+   #endif
+   #define ORCUS_DLLLOCAL
+ #else

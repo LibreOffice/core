@@ -12,8 +12,8 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,liborcus,orcus))
 $(eval $(call gb_ExternalPackage_use_external_project,liborcus,liborcus))
 
 ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_ExternalPackage_add_file,liborcus,lib/orcus.lib,vsprojects/liborcus-static/Release/liborcus-static.lib))
-$(eval $(call gb_ExternalPackage_add_file,liborcus,lib/orcus-parser.lib,vsprojects/liborcus-parser-static/Release/liborcus-parser-static.lib))
+$(eval $(call gb_ExternalPackage_add_file,liborcus,lib/orcus.lib,src/liborcus/.libs/liborcus-0.6.lib))
+$(eval $(call gb_ExternalPackage_add_file,liborcus,lib/orcus-parser.lib,src/parser/.libs/liborcus-parser-0.6.lib))
 else
 $(eval $(call gb_ExternalPackage_add_file,liborcus,lib/liborcus.a,src/liborcus/.libs/liborcus-0.6.a))
 $(eval $(call gb_ExternalPackage_add_file,liborcus,lib/liborcus-parser.a,src/parser/.libs/liborcus-parser-0.6.a))
