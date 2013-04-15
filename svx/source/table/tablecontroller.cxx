@@ -756,7 +756,6 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
 
             SetAttrToSelectedCells(aNewSet, sal_False);
         }
-        UpdateTableShape();
     }
 }
 
