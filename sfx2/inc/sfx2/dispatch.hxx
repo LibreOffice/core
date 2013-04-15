@@ -28,11 +28,11 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <map>
+#include <vector>
 
 class SfxSlotServer;
 class SfxShell;
 class SfxRequest;
-class SfxShellStack_Impl;
 class SfxHintPoster;
 class SfxViewFrame;
 class SfxBindings;
@@ -40,6 +40,8 @@ class SfxItemSet;
 class SfxPopupMenuManager;
 class SfxModule;
 struct SfxDispatcher_Impl;
+
+typedef std::vector<SfxShell*> SfxShellStack_Impl;
 
 namespace com
 {
