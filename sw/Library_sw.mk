@@ -66,7 +66,8 @@ $(eval $(call gb_Library_use_libraries,sw,\
     tl \
     ucbhelper \
     utl \
-    vbahelper \
+    $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
+        vbahelper) \
     vcl \
     xmlreader \
     xo \

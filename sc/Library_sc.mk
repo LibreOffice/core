@@ -88,7 +88,8 @@ $(eval $(call gb_Library_use_libraries,sc,\
 	tl \
 	ucbhelper \
 	utl \
-	vbahelper \
+	$(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
+		vbahelper) \
 	vcl \
 	xo \
 	$(gb_UWINAPI) \
