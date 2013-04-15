@@ -30,7 +30,7 @@ import com.sun.star.beans.PropertyValue;
 
 /**
 * Testing <code>com.sun.star.text.NumberingLevel</code><p>
-* This service is currently konwn as property value of
+* This service is currently known as property value of
 * com.sun.star.text.ParagraphProperties.NumberingRules
 * This test checks only for completnes of implemented properties.
 * service properties :

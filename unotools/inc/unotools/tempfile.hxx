@@ -39,7 +39,7 @@ struct TempFile_Impl;
     the UCB helper classes for streams. For convenience use UcbStreamHelper.
     A Tempfile always has a "physical" file name ( a file name in the local computers host notation ) but it has a
     "UCB compatible" URL only if a UCP for the local file system exists. This URL may have its own URL scheme
-    ( not neccessarily "file://" ! ). The TempFile class methods take this into account, but other simple conversions like
+    ( not necessarily "file://" ! ). The TempFile class methods take this into account, but other simple conversions like
     the osl functions do not.
     So it is a potential error to convert between the filename and the URL of a TempFile object using functions or methods
     outside this class.

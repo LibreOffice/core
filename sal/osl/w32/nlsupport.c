@@ -85,7 +85,7 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
     /*
         get the ISO language code for this locale
 
-        remeber: we call the GetLocaleInfoW function
+        remember: we call the GetLocaleInfoW function
         because the ansi version of this function returns
         an error under WinNT/2000 when called with an
         unicode only lcid

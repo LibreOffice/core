@@ -1148,7 +1148,7 @@ enum cmapType {
 #define MISSING_GLYPH_INDEX 0
 
 /*
- * getGlyph[0246]() functions and freinds are implemented by:
+ * getGlyph[0246]() functions and friends are implemented by:
  * @author Manpreet Singh
  * getGlyph12() function and friends by:
  * @author HDU

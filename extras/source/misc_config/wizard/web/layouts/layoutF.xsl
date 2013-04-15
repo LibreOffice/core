@@ -74,7 +74,7 @@ places...
 		
 		<noframes/>
 		
-		<!-- the body tag has no influance here,
+		<!-- the body tag has no influence here,
 			we add it for good style.
 			-->
 			

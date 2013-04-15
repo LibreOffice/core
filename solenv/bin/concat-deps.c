@@ -407,7 +407,7 @@ static unsigned int hash_compute( struct hash* hash, const char* key, int length
     /*----------------------------- handle the last (probably partial) block */
     /* Note: we possibly over-read, which would trigger complaint from VALGRIND
      * but we mask the undefined stuff if any, so we are still good, thanks
-     * to alignment of memory allocation and tail-memory managment overhead
+     * to alignment of memory allocation and tail-memory management overhead
      * we always can read 3 bytes past the official end without triggering
      * a segfault -- if you find a platform/compiler couple for which that postulat
      * is false, then you just need to over-allocate by 2 more bytes in file_load()

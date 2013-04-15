@@ -203,9 +203,9 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobD
 
             If a job is already running, (it can only occure for asynchronous jobs)
             don't start the same job a second time. Queue in the given dispatch parameter
-            and return immediatly. If the current running job call us back, we will start this
+            and return immediately. If the current running job call us back, we will start this
             new dispatch request.
-            If no job is running - queue the parameter too! But then start the new job immediatly.
+            If no job is running - queue the parameter too! But then start the new job immediately.
             We have to queue it every time - because it hold us alive by ref count!
 
     @param  aURL

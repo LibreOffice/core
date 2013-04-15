@@ -1058,9 +1058,9 @@ protected:
                            Reference<beans::XPropertySet>& rPropSet);
 
     /**
-     * All marks can be created immediatly. Since we don't care about
+     * All marks can be created immediately. Since we don't care about
      * the element content, ProcessAttribute should set the properties
-     * immediatly.
+     * immediately.
      *
      * This method tolerates an empty PropertySet; subclasses however
      * are not expected to.

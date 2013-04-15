@@ -1950,7 +1950,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
 
              So given that the size of the values remains pretty much the
              same despite the size of the graphic, we can tell that the
-             polygon is measured in units that are independant of the
+             polygon is measured in units that are independent of the
              graphic. But why does the left corner move a different value
              to the left each time, and why does the bottom move upwards
              each time, when the right and top remain at the same value ?

@@ -184,7 +184,7 @@ public abstract class WWD_Startup extends WWD_General
     boolean __ftp;
     /**
      * When the wizard starts, a new document opens.
-     * The backgroundDoc memeber contains the TextDocument
+     * The backgroundDoc member contains the TextDocument
      * instance used for that purpose.
      */
     protected XFrame myFrame;

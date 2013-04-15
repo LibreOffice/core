@@ -103,7 +103,7 @@ struct DispatchParams
 
             @descr  If our dispatch() method was forced to start the
                     internal operation asynchronous ... we send an event
-                    to start and return immediatly. But we must be shure that
+                    to start and return immediately. But we must be shure that
                     our instance live if the event callback reach us.
                     So we hold an uno reference to ourself.
          */

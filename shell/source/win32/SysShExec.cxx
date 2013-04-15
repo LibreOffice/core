@@ -292,7 +292,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     /*  #i4789#; jump mark detection on system paths
         if the given command is a system path (not http or
         other uri schemes) and seems to have a jump mark
-        and names no existing file (remeber the jump mark
+        and names no existing file (remember the jump mark
         sign '#' is a valid file name character we remove
         the jump mark, else ShellExecuteEx fails */
     OUString preprocessed_command(aCommand);

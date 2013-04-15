@@ -68,7 +68,7 @@ class ActionLockGuard : private ThreadHelpBase
         }
 
         //---------------------------------------
-        /** @short  initialize new guard instance and lock the given resource immediatly.
+        /** @short  initialize new guard instance and lock the given resource immediately.
 
             @param  xLock
                     points to the outside resource, which should be locked.

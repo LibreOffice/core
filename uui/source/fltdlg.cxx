@@ -121,7 +121,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
     @descr      We show the dialog and if user finish it with "OK" - we try to find selected item in internal saved
                 name list (which you must set in "ChangeFilters()"!). If we return sal_True as result, you can use out
                 parameter "pSelectedItem" as pointer into your FilterNameList to get selected item realy ...
-                but if we return sal_False ... user hsa cancel the dialog ... you shouldnt do that. pSelectedItem isnt
+                but if we return sal_False ... user has cancel the dialog ... you shouldnt do that. pSelectedItem isnt
                 set to any valid value then. We don't change them ...
 
     @seealso    method ChangeFilters()

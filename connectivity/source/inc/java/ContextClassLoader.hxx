@@ -41,7 +41,7 @@ namespace connectivity { namespace jdbc
     {
     public:
         /** creates the instance. If isActive returns <FALSE/> afterwards, then an exception
-            happend in the JVM, which should be raised as UNO exception by the caller
+            happened in the JVM, which should be raised as UNO exception by the caller
 
             @param  environment
                 the current JNI environment

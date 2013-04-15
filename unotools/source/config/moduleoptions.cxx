@@ -493,7 +493,7 @@ void SvtModuleOptions_Impl::Commit()
     @descr      These methods implement easy access to our internal values.
                 You give us right enum value to specify which module interest you ... we return right information.
 
-    @attention  Some poeple use any value as enum ... but we support in header specified values only!
+    @attention  Some people use any value as enum ... but we support in header specified values only!
                 We use it directly as index in our internal list. If enum value isn't right - we crash with an
                 "index out of range"!!! Please use me right - otherwise there is no guarantee.
 

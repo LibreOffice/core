@@ -155,7 +155,7 @@ public class _XFrameLoader extends MultiMethodTest {
     }
 
     /**
-    * Starts to load a component and then immediatly tries to
+    * Starts to load a component and then immediately tries to
     * cancel the process. <p>
     * Has <b>OK</b> status if the process was cancelled or
     * finished (appropriate listener methods were called).

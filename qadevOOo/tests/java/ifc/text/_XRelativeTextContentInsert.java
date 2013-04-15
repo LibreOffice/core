@@ -41,7 +41,7 @@ import com.sun.star.uno.XInterface;
  *   the creator which can create instances of
  *   <code>com.sun.star.text.Paragraph</code> service. </li>
  *  <li> <code>'XTEXTINFO'</code> (of type <code>XInstCreator</code>):
- *   the creator which can create instances of soem text content
+ *   the creator which can create instances of some text content
  *   service (objects which implement <code>XTextContent</code>).
  *  </li>
  * <ul> <p>

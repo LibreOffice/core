@@ -298,7 +298,7 @@ JVMFWK_DLLPUBLIC sal_Bool SAL_CALL jfw_areEqualJavaInfo(
 
     <p>As long as the office and the JREs only support one
     Virtual Machine per process the Java settings, particulary the
-    selected Java, are not effective immediatly after changing when
+    selected Java, are not effective immediately after changing when
     a VM has already been running. That is, if a JRE A was used to start
     a VM and then a JRE B is selected, then JRE B will only be used
     after a restart of the office.</p>

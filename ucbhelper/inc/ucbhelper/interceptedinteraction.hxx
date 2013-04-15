@@ -249,7 +249,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     So the method impl_interceptRequest() uses the right continuation automaticly.
 
                     If this method was overwritten and something different "NO_INTERCEPTED"
-                    is returned, the method impl_interceptRequest() will return immediatly with
+                    is returned, the method impl_interceptRequest() will return immediately with
                     the result, which is returned by this intercepted() method.
                     Then the continuations must be selected inside the intercepted() call!
 

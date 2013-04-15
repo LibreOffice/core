@@ -41,7 +41,7 @@ class PreviewRenderer
     : public SfxListener
 {
 public:
-    /** Create a new preview renderer that takes some of its inital values
+    /** Create a new preview renderer that takes some of its initial values
         from the given output device.
         @param pTemplate
             May be NULL.

@@ -77,7 +77,7 @@ FltError ImportExcel::Read( void )
     sal_uInt16      nOpcode;
     sal_uInt16      nBofLevel = 0;
 
-    OSL_ENSURE( &aIn != NULL, "-ImportExcel::Read(): No Stream - what happend?!" );
+    OSL_ENSURE( &aIn != NULL, "-ImportExcel::Read(): No Stream - what happened?!" );
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(

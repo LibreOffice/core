@@ -47,7 +47,7 @@ public class _XViewFreezable extends MultiMethodTest {
     /**
     * Test calls the method, checks returned value, unfreezes panes, calls the
     * method and checks returned value again. <p>
-    * Has <b> OK </b> status if returned value is true after firts call and
+    * Has <b> OK </b> status if returned value is true after first call and
     * returned value is false after second. <p>
     * The following method tests are to be completed successfully before :
     * <ul>

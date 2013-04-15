@@ -249,10 +249,10 @@ public:
         (or more) aspect of the view forwarder.
         @param aChangeType
             A change type of <const>VISIBLE_AREA</const> leads to a call to
-            the <member>Update</memeber> which creates accessible objects of
+            the <member>Update</member> which creates accessible objects of
             new shapes immediately.  Other change types are passed to the
             visible accessible children without calling
-            <member>Update</memeber>.
+            <member>Update</member>.
         @param pViewForwarder
             The modified view forwarder.  Use this one from now on.
     */

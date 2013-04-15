@@ -375,7 +375,7 @@ namespace osl
 
             <li><code>osl_Socket_OptionTcpNoDelay</code><br>
               Disables the Nagle algorithm for send coalescing. (Do not
-              collect data until a packet is full, instead send immediatly.
+              collect data until a packet is full, instead send immediately.
               This increases network traffic but might improve latency-times.)
               1 = disables the algorithm, 0 = keeps it enabled.
             </ul>

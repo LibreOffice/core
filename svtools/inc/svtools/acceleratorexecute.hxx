@@ -134,7 +134,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                       => All currently queued events will be finished. The
                          helper kills itself afterwards. A shutdown of the
                          environment will be recognized ... The helper stop its
-                         work immediatly then!
+                         work immediately then!
          */
         static AcceleratorExecute* createAcceleratorHelper();
 

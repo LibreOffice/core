@@ -193,7 +193,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
             @short      add a new interaction to the list of interactions, which
                         must be handled by this helper.
 
-            @descr      This method must be called immediatly after a new instance of this helper was
+            @descr      This method must be called immediately after a new instance of this helper was
                         created. Without such list of InteractionRules, this instances does nothing!
                         On the other side there is no possibility to remove rules.
                         So the same instance cant be used within different transactions.

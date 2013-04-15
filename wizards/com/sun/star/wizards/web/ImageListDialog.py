@@ -45,7 +45,7 @@ to enable choosing images that are not in the list and
 so dialogs which do not need those, should set the corresponding
 members showDeselectButton and/or showOtherButton to false.
 <br/>
-the consturctor should recieve, among others, an Array of String resources
+the consturctor should receive, among others, an Array of String resources
 see constructor documentation for details.
 
 @author rpiterman

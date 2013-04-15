@@ -133,7 +133,7 @@ protected:
         control at the lower left of the document window positive values
         move to the right and negative values move to the left.
 
-        <p>Switching the layer is independant of the view's layer mode.  The
+        <p>Switching the layer is independent of the view's layer mode.  The
         layers are switched even when the layer mode is turned off and the
         layer control is not visible.</p>
         @param nOffset

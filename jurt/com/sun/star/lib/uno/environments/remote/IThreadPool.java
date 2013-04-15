@@ -109,7 +109,7 @@ public interface IThreadPool {
 
     /**
      * Destroys the thread pool and tries
-     * to join all created threads immediatly.
+     * to join all created threads immediately.
      */
     public void destroy();
 }

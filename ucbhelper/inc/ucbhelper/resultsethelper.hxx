@@ -177,7 +177,7 @@ public:
 
     /**
       * The implemetation of this method always returns 0. Override this
-      * method, if necassary.
+      * method, if necessary.
       */
     virtual sal_Int16 SAL_CALL
     getCapabilities()

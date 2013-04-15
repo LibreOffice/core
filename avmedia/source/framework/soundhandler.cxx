@@ -272,7 +272,7 @@ SoundHandler::~SoundHandler()
                 Playing of sound is asynchron everytime.
 
     @attention  We must hold us alive by ourself ... because we use async. vcl sound player ... but playing is started
-                in async interface call "dispatch()" too. And caller forget us imediatly. But then our uno ref count
+                in async interface call "dispatch()" too. And caller forget us immediately. But then our uno ref count
                 will decreased to 0 and will die. The only solution is to use own reference to our implementation.
                 But we do it for realy started jobs only and release it during call back of vcl.
 

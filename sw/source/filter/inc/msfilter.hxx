@@ -452,7 +452,7 @@ namespace sw
 
             Word generally requires characters which share the same direction,
             the same script, and occasionally (depending on the format) the
-            same charset to be exported in independant chunks.
+            same charset to be exported in independent chunks.
 
             So this function finds these ranges and returns a STL container
             of CharRuns

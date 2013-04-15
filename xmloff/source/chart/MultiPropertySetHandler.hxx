@@ -128,7 +128,7 @@ public:
     /** @descr  Create a handler of the property set of the given
             object.
         @param  xObject A reference to any of the object's interfaces.
-            not neccessarily XPropertySet or XMultiPropertySet.  It
+            not necessarily XPropertySet or XMultiPropertySet.  It
             is casted later to one of the two of them.
     */
     MultiPropertySetHandler (::com::sun::star::uno::Reference<

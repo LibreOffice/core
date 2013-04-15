@@ -106,7 +106,7 @@ namespace svt
         */
         void    addDependentWindow( Window& _rWindow );
 
-        /** resets the controller so that no actions happend anymore.
+        /** resets the controller so that no actions happened anymore.
 
             The instances is disfunctional after this method has been called.
         */

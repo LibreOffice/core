@@ -3075,7 +3075,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         /*
         If its a 0x0c without a paragraph end before it, act like a
         paragraph end, but nevertheless, numbering (and perhaps other
-        similiar constructs) do not exist on the para.
+        similar constructs) do not exist on the para.
         */
         //xushanchuan add for issue106569
         if (!bWasParaEnd && IsTemp)

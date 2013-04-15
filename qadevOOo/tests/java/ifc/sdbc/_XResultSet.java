@@ -106,7 +106,7 @@ public class _XResultSet extends MultiMethodTest {
     }
 
     /**
-    * The method is called immediatly after <code>beforeFirst</code>
+    * The method is called immediately after <code>beforeFirst</code>
     * method test. <p>
     * Has <b>OK</b> status if method returns <code>true</code>. <p>
     * The following method tests are to be completed successfully before :
@@ -147,7 +147,7 @@ public class _XResultSet extends MultiMethodTest {
     }
 
     /**
-    * The method is called immediatly after <code>afterLast</code>
+    * The method is called immediately after <code>afterLast</code>
     * method test. <p>
     * Has <b>OK</b> status if method returns <code>true</code> <p>
     * The following method tests are to be completed successfully before :
@@ -188,7 +188,7 @@ public class _XResultSet extends MultiMethodTest {
     }
 
     /**
-    * The method is called immediatly after <code>first</code>
+    * The method is called immediately after <code>first</code>
     * method test. <p>
     * Has <b>OK</b> status if method returns <code>true</code>. <p>
     * The following method tests are to be completed successfully before :
@@ -229,7 +229,7 @@ public class _XResultSet extends MultiMethodTest {
     }
 
     /**
-    * The method is called immediatly after <code>last</code>
+    * The method is called immediately after <code>last</code>
     * method test. <p>
     * Has <b>OK</b> status if method returns <code>true</code>. <p>
     * The following method tests are to be completed successfully before :
@@ -270,7 +270,7 @@ public class _XResultSet extends MultiMethodTest {
     }
 
     /**
-    * The method is called immediatly after <code>absolute</code>
+    * The method is called immediately after <code>absolute</code>
     * method test. <p>
     * Has <b>OK</b> status if method returns 1. <p>
     * The following method tests are to be completed successfully before :

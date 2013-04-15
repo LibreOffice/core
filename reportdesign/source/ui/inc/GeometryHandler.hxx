@@ -206,7 +206,7 @@ namespace rptui
                                             ,OUString& _rDataField
                                             ,OUString& _rsDefaultFunctionName) const;
 
-        /** fills the memeber m_aDefaultFunctions
+        /** fills the member m_aDefaultFunctions
         *
         */
         void loadDefaultFunctions();

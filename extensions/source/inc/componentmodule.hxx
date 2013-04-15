@@ -20,7 +20,7 @@
 #ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
 #define _EXTENSIONS_COMPONENT_MODULE_HXX_
 
-/** you may find this file helpfull if you implement a component (in it's own library) which can't use
+/** you may find this file helpful if you implement a component (in it's own library) which can't use
     the usual infrastructure.<br/>
     More precise, you find helper classes to ease the use of resources and the registration of services.
     <p>

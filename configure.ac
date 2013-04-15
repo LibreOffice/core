@@ -1161,7 +1161,7 @@ AC_ARG_ENABLE(winegcc,
 
 AC_ARG_ENABLE(liblangtag,
     AS_HELP_STRING([--disable-liblangtag],
-        [Disable use of liblangtag, and insted use an own simple
+        [Disable use of liblangtag, and instead use an own simple
          implementation.]),
 )
 

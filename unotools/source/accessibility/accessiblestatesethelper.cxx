@@ -177,7 +177,7 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
             the constants of <type>AccessibleStateType</type>.
 
         @return
-            Returns <TRUE/> if the given state is a memeber of this object's
+            Returns <TRUE/> if the given state is a member of this object's
             state set and <FALSE/> otherwise.
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)

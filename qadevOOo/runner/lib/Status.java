@@ -22,7 +22,7 @@ package lib;
  * Status represents a result of a testing activity performed. The result is
  * described in two ways: state and runtime state. The state describes if the
  * activity was successful (OK state) or not (FAILED state). The runtime state
- * describes what happend during the activity: the test can be:
+ * describes what happened during the activity: the test can be:
  *   - PASSED - the activity completed normally (although it can complete with
  *     FAILED state)
  *   - SKIPPED - the activity was not performed because of a reason (it also can

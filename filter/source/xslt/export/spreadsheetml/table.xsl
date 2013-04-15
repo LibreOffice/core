@@ -514,7 +514,7 @@
 						</xsl:choose>
 					</xsl:when>
 					<!-- Fastest cell repetition by creating cell once and copying, works not for
-							a) cells with formula (need of actual cell postition)
+							a) cells with formula (need of actual cell position)
 							b) cells, which start with ss:Index (as ss:Index is not allowed to be repeated) -->
 					<xsl:when test="not(@table:formula) and not($setIndex)">
 						<!-- In case a non-empty cell is being repeated, the cell will be created

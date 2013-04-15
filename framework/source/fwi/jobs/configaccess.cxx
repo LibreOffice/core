@@ -186,7 +186,7 @@ void ConfigAccess::close()
     @descr  It's not allowed to safe this c++ (!) reference outside. You have
             to use it directly. Further you must use our public lock member m_aLock
             to synchronize your code with our internal structures and our interface
-            methods. Acquire it before you call cfg() and release it afterwards immediatly.
+            methods. Acquire it before you call cfg() and release it afterwards immediately.
 
             E.g.:   ConfigAccess aAccess(...);
                     ReadGuard aReadLock(aAccess.m_aLock);

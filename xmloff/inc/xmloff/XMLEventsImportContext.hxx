@@ -47,7 +47,7 @@ typedef ::std::vector< EventNameValuesPair > EventsVector;
 /**
  * Import <script:events> element.
  *
- * The import context usually sets the events immediatly at the event
+ * The import context usually sets the events immediately at the event
  * XNameReplace. If none was given on construction, it operates in
  * delayed mode: All events are collected and may then be set
  * with the setEvents() method.

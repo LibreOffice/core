@@ -41,7 +41,7 @@ public class java_complex implements TestBase
      * This function executes the complex tests given as parameter "-o" or "TestJob". It querys for the correspond class
      * and crates the JobDescription.
      * @param param
-     * @return true of all tests run successfuly, esle false
+     * @return true of all tests run successfuly, else false
      */
     public boolean executeTest(TestParameters param)
     {
@@ -68,7 +68,7 @@ public class java_complex implements TestBase
      * This function run the given DescEntry[] as ComplexTest
      * @param param
      * @param entries
-     * @return true of all tests run successfuly, esle false
+     * @return true of all tests run successfuly, else false
      */
     public boolean executeTest(TestParameters param, DescEntry[] entries)
     {

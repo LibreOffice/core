@@ -262,8 +262,8 @@ class PropHelper
      *
      *  @param  aCurrentValue   contains the current value for this property
      *  @param  aNewValue       contains the new value for this property
-     *  @param  aOldValue       returns the current value, in case somthing will be changed
-     *  @param  aChangedValue   returns the new value, in case somthing will be changed
+     *  @param  aOldValue       returns the current value, in case something will be changed
+     *  @param  aChangedValue   returns the new value, in case something will be changed
      *
      *  @return <True/> if value of this property will be changed; <False/> otherwise.
      */

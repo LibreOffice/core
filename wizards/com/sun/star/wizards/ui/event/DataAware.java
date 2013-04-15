@@ -212,12 +212,12 @@ public abstract class DataAware {
     /**
      * Value objects read and write a value from and
      * to an object. Typically using reflection and JavaBeans properties
-     * or directly using memeber reflection API.
+     * or directly using member reflection API.
      * DataAware delegates the handling of the DataObject
      * to a Value object.
      * 2 implementations currently exist: PropertyValue,
      * using JavaBeans properties reflection, and DataAwareFields classes
-     * which implement different memeber types.
+     * which implement different member types.
      */
     public interface Value {
         /**

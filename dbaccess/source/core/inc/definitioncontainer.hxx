@@ -213,7 +213,7 @@ protected:
 
     /** create a object from it's persistent data within the configuration. To be overwritten by derived classes.
         @param      _rName          the name the object has within the container
-        @return                     the newly created object or an empty reference if somthing went wrong
+        @return                     the newly created object or an empty reference if something went wrong
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(
         const OUString& _rName) = 0;

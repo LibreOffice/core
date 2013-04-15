@@ -51,7 +51,7 @@ import com.sun.star.wizards.ui.ImageList.Counter;
  * so dialogs which do not need those, should set the corresponding
  * members showDeselectButton and/or showOtherButton to false.
  * <br/>
- * the consturctor should recieve, among others, an Array of String resources - see
+ * the consturctor should receive, among others, an Array of String resources - see
  * constructor documentation for details.
  */
 public abstract class ImageListDialog extends UnoDialog2 implements UIConsts

@@ -1050,9 +1050,9 @@ class ActivityChooserModel extends DataSetObservable {
                     });
                 }
             } catch (XmlPullParserException xppe) {
-                Log.e(LOG_TAG, "Error reading historical recrod file: " + mHistoryFileName, xppe);
+                Log.e(LOG_TAG, "Error reading historical record file: " + mHistoryFileName, xppe);
             } catch (IOException ioe) {
-                Log.e(LOG_TAG, "Error reading historical recrod file: " + mHistoryFileName, ioe);
+                Log.e(LOG_TAG, "Error reading historical record file: " + mHistoryFileName, ioe);
             } finally {
                 if (fis != null) {
                     try {
@@ -1081,7 +1081,7 @@ class ActivityChooserModel extends DataSetObservable {
             try {
                 fos = mContext.openFileOutput(mHistoryFileName, Context.MODE_PRIVATE);
             } catch (FileNotFoundException fnfe) {
-                Log.e(LOG_TAG, "Error writing historical recrod file: " + mHistoryFileName, fnfe);
+                Log.e(LOG_TAG, "Error writing historical record file: " + mHistoryFileName, fnfe);
                 return;
             }
 
@@ -1112,11 +1112,11 @@ class ActivityChooserModel extends DataSetObservable {
                     Log.i(LOG_TAG, "Wrote " + recordCount + " historical records.");
                 }
             } catch (IllegalArgumentException iae) {
-                Log.e(LOG_TAG, "Error writing historical recrod file: " + mHistoryFileName, iae);
+                Log.e(LOG_TAG, "Error writing historical record file: " + mHistoryFileName, iae);
             } catch (IllegalStateException ise) {
-                Log.e(LOG_TAG, "Error writing historical recrod file: " + mHistoryFileName, ise);
+                Log.e(LOG_TAG, "Error writing historical record file: " + mHistoryFileName, ise);
             } catch (IOException ioe) {
-                Log.e(LOG_TAG, "Error writing historical recrod file: " + mHistoryFileName, ioe);
+                Log.e(LOG_TAG, "Error writing historical record file: " + mHistoryFileName, ioe);
             } finally {
                 if (fos != null) {
                     try {

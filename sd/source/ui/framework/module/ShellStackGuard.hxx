@@ -94,7 +94,7 @@ private:
     DECL_LINK(TimeoutHandler, Timer*);
 
     /** Return <TRUE/> when the printer is printing.  Return <FALSE/> when
-        the printer is not printing, or there is no printer, or someting
+        the printer is not printing, or there is no printer, or something
         else went wrong.
     */
     bool IsPrinting (void) const;

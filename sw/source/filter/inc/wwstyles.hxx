@@ -136,7 +136,7 @@ namespace ww
     /** Find the WinWord sti index of an old <= Word2 stc (style code)
 
         When importing a Word 2 document we would like to treat styles as
-        similiar to how word 8 does as possible, to this end word will treat
+        similar to how word 8 does as possible, to this end word will treat
         some styles with special codes as inbuilt styles, and some as user
         defined styles.
 

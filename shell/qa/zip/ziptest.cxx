@@ -68,7 +68,7 @@ void Test::test_getContent()
 {
 		TestZipImpl testImpl(documentName.c_str());
 		bool isPassed = testImpl.test_getContent();
-		CPPUNIT_ASSERT_MESSAGE("Couldn't recieve content buffer form zipfile.", isPassed);
+                CPPUNIT_ASSERT_MESSAGE("Couldn't receive content buffer form zipfile.", isPassed);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

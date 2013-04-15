@@ -112,11 +112,11 @@ public class _XSheetFilterable extends MultiMethodTest {
             log.println("couldn't fill cells " + e.getLocalizedMessage());
             res = false;
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("problems geting Property 'isVisible' " +
+            log.println("problems getting Property 'isVisible' " +
                         e.getLocalizedMessage());
             res = false;
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("problems geting Property 'isVisible' " +
+            log.println("problems getting Property 'isVisible' " +
                         e.getLocalizedMessage());
             res = false;
         }

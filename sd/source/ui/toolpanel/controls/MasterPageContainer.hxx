@@ -52,7 +52,7 @@ class MasterPageDescriptor;
     name, and, if available, the page object.
 
     Entries are accessed via a Token, which is mostly a numerical index but
-    whose values do not neccessarily have to be consecutive.
+    whose values do not necessarily have to be consecutive.
 */
 class MasterPageContainer
 {

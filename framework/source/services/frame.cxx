@@ -2912,7 +2912,7 @@ void Frame::implts_setIconOnWindow()
 
 /*-************************************************************************************************************//**
     @short      helper to start/stop listeneing for window events on container window
-    @descr      If we get a new container window, we must set it on internal memeber ...
+    @descr      If we get a new container window, we must set it on internal member ...
                 and stop listening at old one ... and start listening on new one!
                 But sometimes (in dispose() call!) it's neccessary to stop listeneing without starting
                 on new connections. So we split this functionality to make it easier at use.

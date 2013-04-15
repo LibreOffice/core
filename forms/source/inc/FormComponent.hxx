@@ -188,7 +188,7 @@ public:
             the aggregate. In this case, you <em>have</em> to call doSetDelegator within your
             own constructor.
 
-            This is helpfull, if your derived class wants to cache an interface of the aggregate.
+            This is helpful, if your derived class wants to cache an interface of the aggregate.
             In this case, the aggregate needs to be queried for this interface <b>before</b> the
             <member scope="com::sun::star::uno">XAggregation::setDelegator</member> call.
 
