@@ -28,6 +28,8 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -77,6 +79,7 @@ public:
     void testI120928();
     void testBookmark();
     void testHyperlink();
+    void testTextFrameBorders();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -128,6 +131,7 @@ void Test::run()
         {"i120928.rtf", &Test::testI120928},
         {"bookmark.rtf", &Test::testBookmark},
         {"hyperlink.rtf", &Test::testHyperlink},
+        {"textframe-borders.rtf", &Test::testTextFrameBorders},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -555,6 +559,23 @@ void Test::testHyperlink()
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 1, "Hello"), "HyperLinkURL"));
     CPPUNIT_ASSERT_EQUAL(OUString("http://en.wikipedia.org/wiki/World"), getProperty<OUString>(getRun(getParagraph(1), 2, "world"), "HyperLinkURL"));
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 3, "!"), "HyperLinkURL"));
+}
+
+void Test::testTextFrameBorders()
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), getProperty<sal_Int32>(xFrame, "BackColor"));
+
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xFrame, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), aBorder.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), aBorder.LineWidth);
+
+    table::ShadowFormat aShadowFormat = getProperty<table::ShadowFormat>(xFrame, "ShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadowFormat.Location);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(48), aShadowFormat.ShadowWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
