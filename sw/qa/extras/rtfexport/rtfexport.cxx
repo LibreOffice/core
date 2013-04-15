@@ -25,8 +25,10 @@
  * instead of those above.
  */
 
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -80,6 +82,7 @@ public:
     void testBookmark();
     void testHyperlink();
     void testTextFrameBorders();
+    void testTextframeGradient();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -132,6 +135,7 @@ void Test::run()
         {"bookmark.rtf", &Test::testBookmark},
         {"hyperlink.rtf", &Test::testHyperlink},
         {"textframe-borders.rtf", &Test::testTextFrameBorders},
+        {"textframe-gradient.rtf", &Test::testTextframeGradient},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -576,6 +580,27 @@ void Test::testTextFrameBorders()
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadowFormat.Location);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(48), aShadowFormat.ShadowWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
+}
+
+void Test::testTextframeGradient()
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+    awt::Gradient aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+
+    xFrame.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+    aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
