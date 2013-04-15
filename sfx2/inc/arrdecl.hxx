@@ -19,7 +19,6 @@
 #ifndef _SFX_ARRDECL_HXX
 #define _SFX_ARRDECL_HXX
 
-#include <sfx2/minarray.hxx>
 #include <vector>
 
 class SfxObjectShell;

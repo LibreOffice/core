@@ -122,7 +122,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/bastyp/frmhtmlw \
     sfx2/source/bastyp/helper \
     sfx2/source/bastyp/mieclip \
-    sfx2/source/bastyp/minarray \
     sfx2/source/bastyp/progress \
     sfx2/source/bastyp/sfxhtml \
     sfx2/source/bastyp/sfxresid \

@@ -35,7 +35,6 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/childwin.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/minarray.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/viewfrm.hxx>
 

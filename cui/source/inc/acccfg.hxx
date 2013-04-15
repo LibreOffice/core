@@ -43,7 +43,6 @@
 #include <svtools/treelistbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/minarray.hxx>
 #include "cfgutil.hxx"
 
 class SfxMacroInfoItem;

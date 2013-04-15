@@ -30,7 +30,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
-#include <sfx2/minarray.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #define SVX_CFGGROUP_FUNCTION 1
