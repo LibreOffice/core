@@ -219,7 +219,7 @@ static sal_Int32 lcl_BacktraceWhiteSpaces( const OUString &rText, sal_Int32 nSta
 }
 
 
-extern "C" void workerfunc (void * gci)
+extern "C" void lcl_workerfunc (void * gci)
 {
     ((GrammarCheckingIterator*)gci)->DequeueAndCheck();
 }
@@ -243,7 +243,7 @@ GrammarCheckingIterator::GrammarCheckingIterator( const uno::Reference< lang::XM
     m_aEventListeners( MyMutex::get() ),
     m_aNotifyListeners( MyMutex::get() )
 {
-    m_thread = osl_createThread( workerfunc, this );
+    m_thread = osl_createThread( lcl_workerfunc, this );
 }
 
 

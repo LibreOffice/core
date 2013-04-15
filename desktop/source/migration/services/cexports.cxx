@@ -26,7 +26,7 @@
 extern "C"
 {
 
-::cppu::ImplementationEntry entries [] =
+::cppu::ImplementationEntry oo2_entries [] =
 {
     {
         migration::BasicMigration_create, migration::BasicMigration_getImplementationName,
@@ -54,7 +54,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL migrationoo2_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, entries );
+        pImplName, pServiceManager, pRegistryKey, oo2_entries );
 }
 
 }

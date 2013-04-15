@@ -28,7 +28,7 @@
 namespace desktop
 {
 
-extern "C" void workerfunc (void * acc)
+extern "C" void offacc_workerfunc (void * acc)
 {
     ((Acceptor*)acc)->run();
 }
@@ -157,7 +157,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
         m_aProtocol = m_aAcceptString.copy( nIndex1, nIndex2 - nIndex1 );
 
         // start accepting in new thread...
-        m_thread = osl_createThread(workerfunc, this);
+        m_thread = osl_createThread(offacc_workerfunc, this);
         m_bInit = sal_True;
         bOk = sal_True;
     }

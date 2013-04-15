@@ -35,6 +35,7 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbase) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
+	deploymentgui \
 	$(call gb_Helper_optional,EXPORT,egi) \
 	$(call gb_Helper_optional,EXPORT,eme) \
 	$(call gb_Helper_optional,EXPORT,epb) \
@@ -66,11 +67,14 @@ gb_EXTRAMERGEDLIBS := \
 	itg \
 	iti \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jdbc) \
+	$(call gb_Helper_optional,DESKTOP,migrationoo2) \
+	$(call gb_Helper_optional,DESKTOP,migrationoo3) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mork) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql) \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbc) \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
 	odfflatxml \
+	offacc \
 	oox \
 	pdffilter \
 	placeware \
@@ -78,11 +82,13 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	sd \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
+	$(if $(filter-out WNT MACOSX ANDROID IOS,$(OS)),spl_unx) \
 	svgfilter \
 	swd \
 	t602filter \
 	test \
 	textfd \
+	$(call gb_Helper_optional,DESKTOP,unopkgapp) \
 	unotest \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	xmlfa \
