@@ -540,8 +540,6 @@ void UIConfigurationManager::impl_Initialize()
     // Initialize the top-level structures with the storage data
     if ( m_xDocConfigStorage.is() )
     {
-        long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
-
         // Try to access our module sub folder
         for ( sal_Int16 i = 1; i < ::com::sun::star::ui::UIElementType::COUNT;
               i++ )
@@ -549,7 +547,7 @@ void UIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), nModes );
+                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READ );
             }
             catch ( const com::sun::star::container::NoSuchElementException& )
             {
