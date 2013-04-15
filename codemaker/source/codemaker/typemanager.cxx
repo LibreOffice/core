@@ -492,6 +492,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
         case codemaker::UnoType::SORT_ANY:
         case codemaker::UnoType::SORT_ENUM_TYPE:
         case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+        case codemaker::UnoType::SORT_EXCEPTION_TYPE:
         case codemaker::UnoType::SORT_INTERFACE_TYPE:
             if (nucleus != 0) {
                 *nucleus = n;

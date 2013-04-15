@@ -162,7 +162,8 @@ public:
 
     OUString getTypeClass(OUString const & name, bool cStyle = false);
 
-    void dumpCppuGetType(FileStream & out, OUString const & name);
+    void dumpCppuGetType(
+        FileStream & out, OUString const & name, OUString const * ownName = 0);
 
     sal_uInt32 getInheritedMemberCount();
 
@@ -799,8 +800,15 @@ void CppuType::dumpType(
     }
 }
 
-void CppuType::dumpCppuGetType(FileStream & out, OUString const & name) {
-    switch (m_typeMgr->getSort(resolveOuterTypedefs(name))) {
+void CppuType::dumpCppuGetType(
+    FileStream & out, OUString const & name, OUString const * ownName)
+{
+    //TODO: What are these calls good for?
+    OUString nucleus;
+    sal_Int32 rank;
+    codemaker::UnoType::Sort sort = m_typeMgr->decompose(
+        name, true, &nucleus, &rank, 0, 0);
+    switch (rank == 0 ? sort : codemaker::UnoType::SORT_SEQUENCE_TYPE) {
     case codemaker::UnoType::SORT_VOID:
     case codemaker::UnoType::SORT_BOOLEAN:
     case codemaker::UnoType::SORT_BYTE:
@@ -823,10 +831,16 @@ void CppuType::dumpCppuGetType(FileStream & out, OUString const & name) {
     case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
     case codemaker::UnoType::SORT_EXCEPTION_TYPE:
     case codemaker::UnoType::SORT_INTERFACE_TYPE:
-        out << indent() << "::cppu::UnoType< ";
-        dumpType(out, name, false, false, false, true);
-        out << " >::get();\n";
+        // Take care of recursion like struct S { sequence<S> x; }:
+        if (ownName == 0 || nucleus != *ownName) {
+            out << indent() << "::cppu::UnoType< ";
+            dumpType(out, name, false, false, false, true);
+            out << " >::get();\n";
+        }
         break;
+    case codemaker::UnoType::SORT_TYPEDEF:
+        assert(false); // this cannot happen
+        // fall through
     default:
         throw CannotDumpException(
             "unexpected entity \"" + name
@@ -1984,15 +1998,7 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out) {
                     i->type, static_cast< sal_uInt32 >(types.size()))).
             second)
         {
-            if ((codemaker::UnoType::getSort(u2b(i->type))
-                 == codemaker::UnoType::SORT_COMPLEX)
-                && b2u(codemaker::UnoType::decompose(u2b(i->type))) != name_)
-                    // take care of recursion like struct S { sequence<S> x; };
-            {
-                out << indent() << "::cppu::UnoType< ";
-                dumpType(out, i->type, false, false, false, true);
-                out << " >::get();\n";
-            }
+            dumpCppuGetType(out, i->type, &name_);
             // For typedefs, use the resolved type name, as there will be no
             // information available about the typedef itself at runtime (the
             // above getCppuType call will make available information about the
@@ -2488,15 +2494,7 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out) {
                            i->type, static_cast< sal_uInt32 >(types.size()))).
                    second)
         {
-            if ((codemaker::UnoType::getSort(u2b(i->type))
-                 == codemaker::UnoType::SORT_COMPLEX)
-                && b2u(codemaker::UnoType::decompose(u2b(i->type))) != name_)
-                    // take care of recursion like struct S { sequence<S> x; };
-            {
-                out << indent() << "::cppu::UnoType< ";
-                dumpType(out, i->type, false, false, false, true);
-                out << " >::get();\n";
-            }
+            dumpCppuGetType(out, i->type, &name_);
             // For typedefs, use the resolved type name, as there will be no
             // information available about the typedef itself at runtime (the
             // above getCppuType call will make available information about the
