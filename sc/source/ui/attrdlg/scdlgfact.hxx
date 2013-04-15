@@ -463,8 +463,7 @@ public:
     virtual AbstractScSelEntryDlg * CreateScSelEntryDlg ( Window* pParent, // add for ScSelEntryDlg
                                                           const std::vector<String> &rEntryList );
 
-    virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg (  Window* pParent, //add for ScLinkedAreaDlg
-                                                                int nId);
+    virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg(Window* pParent); //add for ScLinkedAreaDlg
 
     virtual AbstractScMetricInputDlg * CreateScMetricInputDlg (  Window*        pParent, //add for ScMetricInputDlg
                                                                 sal_uInt16      nResId,     // Ableitung fuer jeden Dialog!

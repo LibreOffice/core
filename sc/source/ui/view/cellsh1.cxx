@@ -2346,8 +2346,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     delete pImpl->m_pLinkedDlg;
                     pImpl->m_pLinkedDlg =
-                        pFact->CreateScLinkedAreaDlg( pTabViewShell->GetDialogParent(),
-                                                      RID_SCDLG_LINKAREA);
+                        pFact->CreateScLinkedAreaDlg(pTabViewShell->GetDialogParent());
                     OSL_ENSURE(pImpl->m_pLinkedDlg, "Dialog create fail!");
                     delete pImpl->m_pRequest;
                     pImpl->m_pRequest = new SfxRequest( rReq );

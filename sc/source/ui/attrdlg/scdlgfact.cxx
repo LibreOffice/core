@@ -982,26 +982,11 @@ AbstractScSelEntryDlg * ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( Wind
 }
 // add for ScSelEntryDlg end
 
-
-AbstractScLinkedAreaDlg * ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg (  Window* pParent,
-                                                                int nId)
+AbstractScLinkedAreaDlg * ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg(Window* pParent)
 {
-    ScLinkedAreaDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_LINKAREA :
-            pDlg = new ScLinkedAreaDlg( pParent );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScLinkedAreaDlg_Impl( pDlg );
-    return 0;
+    ScLinkedAreaDlg* pDlg = new ScLinkedAreaDlg( pParent );
+    return new AbstractScLinkedAreaDlg_Impl( pDlg );
 }
-
-
 
 AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg (  Window*      pParent,
                                                                 sal_uInt16      nResId,     // Ableitung fuer jeden Dialog!

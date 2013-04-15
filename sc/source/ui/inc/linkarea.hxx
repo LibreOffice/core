@@ -40,18 +40,13 @@ class ScDocShell;
 class ScLinkedAreaDlg : public ModalDialog
 {
 private:
-    FixedLine           aFlLocation;
-    SvtURLBox           aCbUrl;
-    PushButton          aBtnBrowse;
-    FixedInfo           aTxtHint;
-    FixedText           aFtRanges;
-    MultiListBox        aLbRanges;
-    CheckBox            aBtnReload;
-    NumericField        aNfDelay;
-    FixedText           aFtSeconds;
-    OKButton            aBtnOk;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
+    SvtURLBox*    m_pCbUrl;
+    PushButton*   m_pBtnBrowse;
+    ListBox*      m_pLbRanges;
+    CheckBox*     m_pBtnReload;
+    NumericField* m_pNfDelay;
+    FixedText*    m_pFtSeconds;
+    OKButton*     m_pBtnOk;
 
     ScDocShell*             pSourceShell;
     sfx2::DocumentInserter* pDocInserter;

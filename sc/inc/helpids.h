@@ -196,8 +196,6 @@
 #define HID_DATAPILOT_SERVICE                                   "SC_HID_DATAPILOT_SERVICE"
 
 // Other help IDs (max.70) ---------------------------------------------------
-#define HID_SCDLG_LINKAREAURL                                   "SC_HID_SCDLG_LINKAREAURL"
-
 #define HID_SELECTTABLES                                        "SC_HID_SELECTTABLES"
 #define HID_SC_REPLCELLSWARN                                    "SC_HID_SC_REPLCELLSWARN"
 

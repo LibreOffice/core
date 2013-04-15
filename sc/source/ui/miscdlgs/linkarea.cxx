@@ -34,7 +34,6 @@
 #include <vcl/waitobj.hxx>
 
 #include "linkarea.hxx"
-#include "linkarea.hrc"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "rangeutl.hxx"
@@ -43,37 +42,27 @@
 
 //==================================================================
 
-ScLinkedAreaDlg::ScLinkedAreaDlg( Window* pParent ) :
-    ModalDialog ( pParent, ScResId( RID_SCDLG_LINKAREA ) ),
-    //
-    aFlLocation ( this, ScResId( FL_LOCATION ) ),
-    aCbUrl      ( this, ScResId( CB_URL ) ),
-    aBtnBrowse  ( this, ScResId( BTN_BROWSE ) ),
-    aTxtHint    ( this, ScResId( FT_HINT ) ),
-    aFtRanges   ( this, ScResId( FT_RANGES ) ),
-    aLbRanges   ( this, ScResId( LB_RANGES ) ),
-    aBtnReload  ( this, ScResId( BTN_RELOAD ) ),
-    aNfDelay    ( this, ScResId( NF_DELAY ) ),
-    aFtSeconds  ( this, ScResId( FT_SECONDS ) ),
-    aBtnOk      ( this, ScResId( BTN_OK ) ),
-    aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp    ( this, ScResId( BTN_HELP ) ),
-    //
-    pSourceShell( NULL ),
-    pDocInserter( NULL )
+ScLinkedAreaDlg::ScLinkedAreaDlg(Window* pParent)
+    : ModalDialog(pParent, "ExternalDataDialog", "modules/scalc/ui/externaldata.ui")
+    , pSourceShell(NULL)
+    , pDocInserter(NULL)
 
 {
-    FreeResource();
+    get(m_pCbUrl, "url");
+    get(m_pLbRanges, "ranges");
+    m_pLbRanges->EnableMultiSelection(true);
+    m_pLbRanges->SetDropDownLineCount(8);
+    get(m_pBtnBrowse, "browse");
+    get(m_pBtnReload, "reload");
+    get(m_pNfDelay, "delay");
+    get(m_pFtSeconds, "secondsft");
+    get(m_pBtnOk, "ok");
 
-    aCbUrl.SetHelpId( HID_SCDLG_LINKAREAURL );  // SvtURLBox ctor always sets SID_OPENURL
-    aCbUrl.SetSelectHdl( LINK( this, ScLinkedAreaDlg, FileHdl ) );
-    aBtnBrowse.SetClickHdl( LINK( this, ScLinkedAreaDlg, BrowseHdl ) );
-    aLbRanges.SetSelectHdl( LINK( this, ScLinkedAreaDlg, RangeHdl ) );
-    aBtnReload.SetClickHdl( LINK( this, ScLinkedAreaDlg, ReloadHdl ) );
+    m_pCbUrl->SetSelectHdl( LINK( this, ScLinkedAreaDlg, FileHdl ) );
+    m_pBtnBrowse->SetClickHdl( LINK( this, ScLinkedAreaDlg, BrowseHdl ) );
+    m_pLbRanges->SetSelectHdl( LINK( this, ScLinkedAreaDlg, RangeHdl ) );
+    m_pBtnReload->SetClickHdl( LINK( this, ScLinkedAreaDlg, ReloadHdl ) );
     UpdateEnable();
-
-    aNfDelay.SetAccessibleName(aBtnReload.GetText());
-    aNfDelay.SetAccessibleRelationLabeledBy(&aBtnReload);
 }
 
 ScLinkedAreaDlg::~ScLinkedAreaDlg()
@@ -109,7 +98,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, BrowseHdl)
 
 IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl)
 {
-    OUString aEntered = aCbUrl.GetURL();
+    OUString aEntered = m_pCbUrl->GetURL();
     if (pSourceShell)
     {
         SfxMedium* pMed = pSourceShell->GetMedium();
@@ -179,10 +168,10 @@ void ScLinkedAreaDlg::InitFromOldLink( const String& rFile, const String& rFilte
     if (pSourceShell)
     {
         SfxMedium* pMed = pSourceShell->GetMedium();
-        aCbUrl.SetText( pMed->GetName() );
+        m_pCbUrl->SetText( pMed->GetName() );
     }
     else
-        aCbUrl.SetText( EMPTY_STRING );
+        m_pCbUrl->SetText( EMPTY_STRING );
 
     UpdateSourceRanges();
 
@@ -190,13 +179,13 @@ void ScLinkedAreaDlg::InitFromOldLink( const String& rFile, const String& rFilte
     for ( xub_StrLen i=0; i<nRangeCount; i++ )
     {
         String aRange = rSource.GetToken(i);
-        aLbRanges.SelectEntry( aRange );
+        m_pLbRanges->SelectEntry( aRange );
     }
 
     bool bDoRefresh = (nRefresh != 0);
-    aBtnReload.Check( bDoRefresh );
+    m_pBtnReload->Check( bDoRefresh );
     if (bDoRefresh)
-        aNfDelay.SetValue( nRefresh );
+        m_pNfDelay->SetValue( nRefresh );
 
     UpdateEnable();
 }
@@ -254,7 +243,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
 
         if ( !pSourceShell->GetError() )                    // only errors
         {
-            aCbUrl.SetText( pMed->GetName() );
+            m_pCbUrl->SetText( pMed->GetName() );
         }
         else
         {
@@ -262,7 +251,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
             pSourceShell = NULL;
             aSourceRef.Clear();
 
-            aCbUrl.SetText( EMPTY_STRING );
+            m_pCbUrl->SetText( EMPTY_STRING );
         }
     }
 
@@ -276,32 +265,32 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
 
 void ScLinkedAreaDlg::UpdateSourceRanges()
 {
-    aLbRanges.SetUpdateMode(false);
+    m_pLbRanges->SetUpdateMode(false);
 
-    aLbRanges.Clear();
+    m_pLbRanges->Clear();
     if ( pSourceShell )
     {
         ScAreaNameIterator aIter( pSourceShell->GetDocument() );
         ScRange aDummy;
         OUString aName;
         while ( aIter.Next( aName, aDummy ) )
-            aLbRanges.InsertEntry( aName );
+            m_pLbRanges->InsertEntry( aName );
     }
 
-    aLbRanges.SetUpdateMode(true);
+    m_pLbRanges->SetUpdateMode(true);
 
-    if ( aLbRanges.GetEntryCount() == 1 )
-        aLbRanges.SelectEntryPos(0);
+    if ( m_pLbRanges->GetEntryCount() == 1 )
+        m_pLbRanges->SelectEntryPos(0);
 }
 
 void ScLinkedAreaDlg::UpdateEnable()
 {
-    bool bEnable = ( pSourceShell && aLbRanges.GetSelectEntryCount() );
-    aBtnOk.Enable( bEnable );
+    bool bEnable = ( pSourceShell && m_pLbRanges->GetSelectEntryCount() );
+    m_pBtnOk->Enable( bEnable );
 
-    bool bReload = aBtnReload.IsChecked();
-    aNfDelay.Enable( bReload );
-    aFtSeconds.Enable( bReload );
+    bool bReload = m_pBtnReload->IsChecked();
+    m_pNfDelay->Enable( bReload );
+    m_pFtSeconds->Enable( bReload );
 }
 
 OUString ScLinkedAreaDlg::GetURL()
@@ -337,20 +326,20 @@ OUString ScLinkedAreaDlg::GetOptions()
 OUString ScLinkedAreaDlg::GetSource()
 {
     OUStringBuffer aBuf;
-    sal_uInt16 nCount = aLbRanges.GetSelectEntryCount();
+    sal_uInt16 nCount = m_pLbRanges->GetSelectEntryCount();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         if (i > 0)
             aBuf.append(sal_Unicode(';'));
-        aBuf.append(aLbRanges.GetSelectEntry(i));
+        aBuf.append(m_pLbRanges->GetSelectEntry(i));
     }
     return aBuf.makeStringAndClear();
 }
 
 sal_uLong ScLinkedAreaDlg::GetRefresh()
 {
-    if ( aBtnReload.IsChecked() )
-        return sal::static_int_cast<sal_uLong>( aNfDelay.GetValue() );
+    if ( m_pBtnReload->IsChecked() )
+        return sal::static_int_cast<sal_uLong>( m_pNfDelay->GetValue() );
     else
         return 0;   // disabled
 }
