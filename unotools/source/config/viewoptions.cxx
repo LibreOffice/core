@@ -241,13 +241,13 @@ typedef ::boost::unordered_map< OUString                    ,
 
 /*-************************************************************************************************************//**
     @descr          Implement base data container for view options elements.
-                    Every item support ALL possible configuration informations.
+                    Every item support ALL possible configuration information.
                     But not every superclass should use them! Because some view types don't
                     have it realy.
 
     @attention      We implement a write-througt-cache! We use it for reading - but write all changes directly to
                     configuration. (changes are made on internal cache too!). So it's easier to distinguish
-                    between added/changed/removed elements without any complex mask or bool flag informations.
+                    between added/changed/removed elements without any complex mask or bool flag information.
                     Caches from configuration and our own one are synchronized every time - if we do so.
 *//*-*************************************************************************************************************/
 class SvtViewOptionsBase_Impl

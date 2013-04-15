@@ -306,7 +306,7 @@ private:
 
 private:
     // for the ViewContactOfTableObj to build the primitive representation, it is necessary to access the
-    // TableLayouter for position and attribute informations
+    // TableLayouter for position and attribute information
     friend class sdr::contact::ViewContactOfTableObj;
     const TableLayouter& getTableLayouter() const;
 

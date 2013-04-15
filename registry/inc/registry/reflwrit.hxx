@@ -70,7 +70,7 @@ REG_DLLPUBLIC RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Ap
 
 /** RegistryTypeWriter writes/creates a binary type blob.
 
-    This class provides the necessary functions to write type informations
+    This class provides the necessary functions to write type information
     for all kinds of types into a blob.
     The class is inline and use a C-Api.
 

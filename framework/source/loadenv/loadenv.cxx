@@ -829,7 +829,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     aWriteLock.unlock();
     // <- SAFE
 
-    // But the type isnt enough. For loading sometimes we need more informations.
+    // But the type isnt enough. For loading sometimes we need more information.
     // E.g. for our "_default" feature, where we recylce any frame which contains
     // and "Untitled" document, we must know if the new document is based on a template!
     // But this information is available as a filter property only.

@@ -34,7 +34,7 @@ namespace framework{
                     We must check for 3 different states of an iterator - normal position, exact end, after end.
                     It's neccessary to detect if we have not found a entry and must return our default or
                     default already returned and we must break loop!
-                    see using in class FilterCache too for further informations!
+                    see using in class FilterCache too for further information!
 
     @Attention      If your wish to debug this inline code ...
                     under windows and msdev you can use "set ENVCFLAGS=/Ob0" to do that!

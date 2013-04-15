@@ -356,7 +356,7 @@ public class FunctionHelper
 
             // create an office window then
             // Depending from the given parameter aParentView it will be a child or a top level
-            // system window. (see impl method for further informations)
+            // system window. (see impl method for further information)
             // But before we call this helper - prepare the possible parent window: show it.
             // JNI calls to get system window handle of java window can't work without that!
             if (aParentView!=null)

@@ -56,7 +56,7 @@ DEFINE_INIT_SERVICE(
         /*Attention
             I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
             to create a new instance of this class by our own supported service factory.
-            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
         */
     }
 )
@@ -148,7 +148,7 @@ css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSu
                 check if recording is enabled or not.
 
     @param      aURL            the command URL
-    @param      lArguments      optional arguments (see com.sun.star.document.MediaDescriptor for further informations)
+    @param      lArguments      optional arguments (see com.sun.star.document.MediaDescriptor for further information)
     @param      xDispatcher     the original dispatch object which should be recorded
 
     @change     09.04.2002 by Andreas Schluens

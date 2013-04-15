@@ -694,7 +694,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, sal_False ) );
 
             // This helper wraps an existing (or may new created InteractionHandler)
-            // intercept all incoming interactions and provide useful informations
+            // intercept all incoming interactions and provide useful information
             // later if the following transaction was finished.
 
             ::framework::PreventDuplicateInteraction*                 pHandler       = new ::framework::PreventDuplicateInteraction(::comphelper::getProcessComponentContext());

@@ -78,7 +78,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      *          <ul>
      *              <li>generic job configuration data</li>
      *              <li>job specific configuration data</li>
-     *              <li>some environment informations</li>
+     *              <li>some environment information</li>
      *              <li>may optional arguments of a corresponding dispatch request</li>
      *          </ul>
      *
@@ -330,7 +330,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      *          contains all job sepcific configuration items
      *
      *  @param  lEnvironment
-     *          contains some environment informations
+     *          contains some environment information
      *
      *  @param  lDynamicData
      *          contains optional data of a might corresponding dispatch() request

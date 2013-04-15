@@ -75,7 +75,7 @@ DEFINE_INIT_SERVICE( JobExecutor,
                          /*Attention
                              I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
                              to create a new instance of this class by our own supported service factory.
-                             see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+                             see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
                          */
                         // read the list of all currently registered events inside configuration.
                         // e.g. "/org.openoffice.Office.Jobs/Events/<event name>"
@@ -120,7 +120,7 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::lang::XMultiSer
     , m_aConfig           (comphelper::getComponentContext(xSMGR), OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
 {
     // Don't do any reference related code here! Do it inside special
-    // impl_ method() ... see DEFINE_INIT_SERVICE() macro for further informations.
+    // impl_ method() ... see DEFINE_INIT_SERVICE() macro for further information.
 }
 
 JobExecutor::~JobExecutor()

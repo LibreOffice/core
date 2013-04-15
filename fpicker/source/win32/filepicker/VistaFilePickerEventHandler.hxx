@@ -132,7 +132,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
          *
          *  The broadcaster will be cached internaly so deregistration will be easy.
          *  Further all needed information are capsulated within this class (e.g. the listener handler).
-         *  Nobody outside must know such informations.
+         *  Nobody outside must know such information.
          *
          *  Nothing will happen if an inconsistent state will be detected
          *  (means: double registration will be ignored).

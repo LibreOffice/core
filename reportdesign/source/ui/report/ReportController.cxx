@@ -1669,7 +1669,7 @@ void OReportController::impl_initialize( )
     {
         if ( m_xReportDefinition.is() )
         {
-            getView()->initialize();    // show the windows and fill with our informations
+            getView()->initialize();    // show the windows and fill with our information
 
             m_aReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
             if ( !m_aReportModel )

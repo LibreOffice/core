@@ -351,7 +351,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // Init member then...
 {
     // Get names and values of all accessible menu entries and fill internal structures.
-    // See impl_GetPropertyNames() for further informations.
+    // See impl_GetPropertyNames() for further information.
     sal_uInt32              nNewCount           = 0;
     sal_uInt32              nWizardCount        = 0;
     sal_uInt32              nHelpBookmarksCount = 0;
@@ -692,7 +692,7 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtDynamicMenuOptions_Impl*     SvtDynamicMenuOptions::m_pDataContainer = NULL  ;
 sal_Int32                       SvtDynamicMenuOptions::m_nRefCount      = 0     ;

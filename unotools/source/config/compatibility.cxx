@@ -366,7 +366,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
     // Init member then...
 {
     // Get names and values of all accessible menu entries and fill internal structures.
-    // See impl_GetPropertyNames() for further informations.
+    // See impl_GetPropertyNames() for further information.
     Sequence< OUString > lNodes;
     Sequence< OUString > lNames = impl_GetPropertyNames( lNodes );
     sal_uInt32 nCount = lNodes.getLength();
@@ -640,7 +640,7 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtCompatibilityOptions_Impl*   SvtCompatibilityOptions::m_pDataContainer = NULL;
 sal_Int32                       SvtCompatibilityOptions::m_nRefCount = 0;

@@ -112,7 +112,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
         m_pFrameContainer->remove( xFrame );
         // Don't reset owner-property of removed frame!
         // This must do the caller of this method himself.
-        // See documentation of interface XFrames for further informations.
+        // See documentation of interface XFrames for further information.
     }
     // Else; Do nothing! Ouer owner is dead.
     LOG_ASSERT( !(xOwner.is()==sal_False), "OFrames::remove()\nOuer owner is dead - you can't remove any frames ...!\n" )
@@ -197,13 +197,13 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                     // ... ask him for right frames.
                     impl_appendSequence( seqFrames, xParent->getFrames()->queryFrames( nSearchFlags ) );
                 }
-                // We have all searched informations.
+                // We have all searched information.
                 // Reset protection-mode.
                 m_bRecursiveSearchProtection = sal_False;
             }
 
             //_____________________________________________________________________________________________________________
-            // If searched for children, step over all elements in container and collect the informations.
+            // If searched for children, step over all elements in container and collect the information.
             if ( nSearchFlags & FrameSearchFlag::CHILDREN )
             {
                 // Don't search for parents, siblings and self at children!

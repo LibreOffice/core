@@ -274,7 +274,7 @@ Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtLocalisationOptions_Impl*    SvtLocalisationOptions::m_pDataContainer    = NULL  ;
 sal_Int32                       SvtLocalisationOptions::m_nRefCount         = 0     ;

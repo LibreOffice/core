@@ -209,7 +209,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     // Init member then...
 {
     // Get names and values of all accessible menu entries and fill internal structures.
-    // See impl_GetPropertyNames() for further informations.
+    // See impl_GetPropertyNames() for further information.
     Sequence< OUString >    lNames              = impl_GetPropertyNames ();
     Sequence< Any >         lValues             = GetProperties         ( lNames         );
 
@@ -375,7 +375,7 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtCommandOptions_Impl*     SvtCommandOptions::m_pDataContainer = NULL  ;
 sal_Int32                   SvtCommandOptions::m_nRefCount      = 0     ;

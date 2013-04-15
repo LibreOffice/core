@@ -2573,7 +2573,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             {
                                 // read data from stream
                                 Ppt97AnimationPtr pAnimation( new Ppt97Animation( rSt ) );
-                                // store animation informations
+                                // store animation information
                                 if( pAnimation->HasEffect() )
                                 {
                                     // translate color to RGB

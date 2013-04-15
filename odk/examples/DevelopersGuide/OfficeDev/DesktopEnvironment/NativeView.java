@@ -71,7 +71,7 @@ public class NativeView extends java.awt.Canvas
 
     /**
      * Overload this method to make neccessary initializations here.
-     * (e.g. get the window handle and neccessary system informations)
+     * (e.g. get the window handle and neccessary system information)
      *
      * Why here?
      * Because the handle seams to be available for already visible windows

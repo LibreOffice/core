@@ -141,7 +141,7 @@ published service FilterFactory
                 <td><em>Type</em></td>
                 <td>[string]</td>
                 <td>Every filter is registered for a type. This value contains the internal name of it.
-                    (see service <type>TypeDetection</type> for further informations)</td>
+                    (see service <type>TypeDetection</type> for further information)</td>
             </tr>
             <tr>
                 <td><em>DocumentService</em></td>

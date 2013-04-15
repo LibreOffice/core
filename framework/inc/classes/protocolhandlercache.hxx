@@ -85,7 +85,7 @@ typedef BaseHash< ProtocolHandler > HandlerHash;
 
 /**
     @short          this hash makes it easy to find a protocol handler by using his uno implementation name.
-    @descr          It holds two lists of informations:
+    @descr          It holds two lists of information:
                         - first holds all handler by her uno implementation names and
                           can be used to get her other properties
                         - another one maps her registered pattern to her uno names to

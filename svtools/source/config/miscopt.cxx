@@ -709,7 +709,7 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtMiscOptions_Impl*    SvtMiscOptions::m_pDataContainer    = NULL  ;
 sal_Int32               SvtMiscOptions::m_nRefCount = 0     ;

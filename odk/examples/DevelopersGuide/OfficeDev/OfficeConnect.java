@@ -82,7 +82,7 @@ public class OfficeConnect
      * ctor
      * We try to open the connection in our ctor ... transparently for the user.
      * We made it private to support singleton pattern of these implementation.
-     * see getConnection() for further informations
+     * see getConnection() for further information
      */
     private OfficeConnect() throws java.lang.Exception
     {

@@ -93,7 +93,7 @@ void OCurrencyModel::implConstruct()
     {
         try
         {
-            // get the system international informations
+            // get the system international information
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& aLocaleInfo = aSysLocale.GetLocaleData();
 

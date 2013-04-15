@@ -172,7 +172,7 @@ int SvRTFParser::_GetNextToken()
                         case RTF_UPR:
                             if (!_inSkipGroup) {
                             // UPR - overread the group with the ansi
-                            //       informations
+                            //       information
                             while( '{' != _GetNextToken() )
                                 ;
                             SkipGroup();

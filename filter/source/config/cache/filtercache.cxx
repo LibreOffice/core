@@ -2249,7 +2249,7 @@ void FilterCache::impl_readOldFormat()
     }
     /* corrupt filter addon ? because it's external (optional) code .. we can ignore it. Addon wont work then ...
        but that seams to be acceptable.
-       see #139088# for further informations
+       see #139088# for further information
     */
     catch(const css::uno::Exception&)
         { return; }

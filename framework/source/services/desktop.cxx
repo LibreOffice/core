@@ -129,7 +129,7 @@ DEFINE_INIT_SERVICE                     (   Desktop,
                                                 /*Attention
                                                     I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
                                                     to create a new instance of this class by our own supported service factory.
-                                                    see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+                                                    see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
                                                 */
 
                                                 //-------------------------------------------------------------------------------------------------------------
@@ -208,7 +208,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   ::cppu::OWeakObject     (                                               )
         // Init member
         #ifdef ENABLE_ASSERTIONS
-        ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further informations!
+        ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!
         #endif
         ,   m_xFactory              ( xFactory                                      )
         ,   m_aChildTaskContainer   (                                               )
@@ -358,7 +358,7 @@ sal_Bool SAL_CALL Desktop::terminate()
     {
         #ifdef ENABLE_ASSERTIONS
             // "Protect" us against dispose before terminate calls!
-            // see dispose() for further informations.
+            // see dispose() for further information.
             /* SAFE AREA --------------------------------------------------------------------------------------- */
             WriteGuard aWriteLock( m_aLock );
             m_bIsTerminated = sal_True;
@@ -1234,7 +1234,7 @@ void SAL_CALL Desktop::dispose()
 /*-************************************************************************************************************//**
     @interface  XComponent
     @short      add/remove listener for dispose events
-    @descr      Add an event listener to this object, if you whish to get informations
+    @descr      Add an event listener to this object, if you whish to get information
                 about our dieing!
                 You must releas ethis listener reference during your own disposing() method.
 
@@ -1283,7 +1283,7 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
 
     @seealso    method loadComponentFromURL()
 
-    @param      "aEvent", state event which (hopefully) valid informations
+    @param      "aEvent", state event which (hopefully) valid information
     @return     -
 
     @onerror    -
@@ -1618,7 +1618,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     @seealso    class OPropertySetHelper
 
     @param      -
-    @return     structure with property-informations
+    @return     structure with property-information
 
     @onerror    -
     @threadsafe yes

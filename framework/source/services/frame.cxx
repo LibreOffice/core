@@ -157,7 +157,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             /*Attention
                                                 I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
                                                 to create a new instance of this class by our own supported service factory.
-                                                see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+                                                see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
                                             */
                                             css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
 
@@ -1084,7 +1084,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
 
             // Attention: Deactivation of an active path, deactivate the whole path ... from bottom to top!
             // But we wish to deactivate founded sibling-tree only.
-            // [ see deactivate() / step 4) for further informations! ]
+            // [ see deactivate() / step 4) for further information! ]
 
             xParent->setActiveFrame( xThis );
 
@@ -2003,7 +2003,7 @@ void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::
 
 /*-****************************************************************************************************//**
     @short      create new status indicator
-    @descr      Use returned status indicator to show progresses and some text informations.
+    @descr      Use returned status indicator to show progresses and some text information.
                 All created objects share the same dialog! Only the last one can show his information.
 
     @seealso    class StatusIndicatorFactory
@@ -2112,7 +2112,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fram
 /*-****************************************************************************************************//**
     @short      register/unregister interceptor for dispatch calls
     @descr      If you whish to handle some dispatches by himself ... you should be
-                an interceptor for it. Please see class OInterceptionHelper for further informations.
+                an interceptor for it. Please see class OInterceptionHelper for further information.
 
     @seealso    class OInterceptionHelper
 
@@ -2544,7 +2544,7 @@ sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException )
     // Attention:
     // external lock count is 0 here every time ... but if
     // member m_bSelfClose is set to true too .... we call our own close()/dispose().
-    // See close() for further informations
+    // See close() for further information
     implts_checkSuicide();
 
     return nCurrentLocks;
@@ -2599,7 +2599,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
 {
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)
-       see ctor of PropertySetHelper for further informations.
+       see ctor of PropertySetHelper for further information.
     */
 
     /* Attention: You can use nHandle only, if you are sure that all supported
@@ -2659,7 +2659,7 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
 {
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)
-       see ctor of PropertySetHelper for further informations.
+       see ctor of PropertySetHelper for further information.
     */
 
     /* Attention: You can use nHandle only, if you are sure that all supported

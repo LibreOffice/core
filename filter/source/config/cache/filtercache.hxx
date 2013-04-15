@@ -92,7 +92,7 @@ class FilterCache : public BaseLock
                         That should be enough to work with this cache e.g. for loading
                         the first document. After this first document was loaded successfully,
                         a special "load-on-demand-thread" will be started to fill this cache
-                        with ALL other informations, which was not readed before.
+                        with ALL other information, which was not readed before.
                         Thats the second step. All operations on top of this cache will be
                         blocked then.
          */
@@ -737,7 +737,7 @@ class FilterCache : public BaseLock
             @descr      Which items should be readed can be regulate by the
                         parameter eRequiredState. That provides the possibility
                         to load standard values on startup only and update this
-                        cache later on demand with all available informations.
+                        cache later on demand with all available information.
 
             @param      eRequiredState
                         indicates, which fill state this cache should have afterwards.
@@ -854,7 +854,7 @@ class FilterCache : public BaseLock
 
             @param  eOption
                     regulate, which properties of the requested item should be read.
-                    See defintion of EReadOption for further informations.
+                    See defintion of EReadOption for further information.
 
             @throw  [css::uno::Exception]
                     if an unrecoverable error occurs inside this operation.

@@ -476,7 +476,7 @@ IMPL_LINK( ORelationController, OnThreadFinished, void*, /*NOTINTERESTEDIN*/ )
     ::osl::MutexGuard aGuard( getMutex() );
     try
     {
-        getView()->initialize();    // show the windows and fill with our informations
+        getView()->initialize();    // show the windows and fill with our information
         getView()->Invalidate(INVALIDATE_NOERASE);
         ClearUndoManager();
         setModified(sal_False);     // and we are not modified yet

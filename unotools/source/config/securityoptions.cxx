@@ -1032,7 +1032,7 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtSecurityOptions_Impl*    SvtSecurityOptions::m_pDataContainer    = NULL  ;
 sal_Int32                   SvtSecurityOptions::m_nRefCount         = 0     ;

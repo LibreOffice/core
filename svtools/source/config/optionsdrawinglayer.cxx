@@ -951,7 +951,7 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtOptionsDrawinglayer_Impl* SvtOptionsDrawinglayer::m_pDataContainer = NULL;
 sal_Int32 SvtOptionsDrawinglayer::m_nRefCount = 0;

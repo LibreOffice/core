@@ -74,7 +74,7 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::
                     corresponding framework-cache.
                     We use given "sFactory" value to decide which query must be used to fill "pContainer" with new values.
                     Given "pContainer" hold us alive as uno reference and we use it to syschronize it with framework caches.
-                    We will die, if he die! see dtor for further informations.
+                    We will die, if he die! see dtor for further information.
 
     @seealso        dtor
     @seealso        class framework::FilterCache

@@ -37,7 +37,7 @@ class SvtSecurityOptions_Impl;
 
 /*-************************************************************************************************************//**
     @descr          These values present modes to handle StarOffice basic scripts.
-                    see GetBasicMode/SetBasicMode() for further informations
+                    see GetBasicMode/SetBasicMode() for further information
 *//*-*************************************************************************************************************/
 
 enum EBasicSecurityMode

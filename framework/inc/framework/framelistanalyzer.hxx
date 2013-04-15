@@ -42,7 +42,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
 
         /** These enums can be combined as flags to enable/disable
             special search algorithm during analyze phase.
-            see impl_analyze() for further informations.
+            see impl_analyze() for further information.
             But note: To be useable as flags, these enums
             must be values of range [2^n]! */
         enum EDetect
@@ -67,7 +67,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& m_xReferenceFrame;
 
         /** enable/disable some special analyzing steps.
-            see impl_analyze() for further informations. */
+            see impl_analyze() for further information. */
         sal_uInt32 m_eDetectMode;
 
         /** contains all frames, which uses the same model like the reference frame.
@@ -157,7 +157,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
 
     public:
 
-        /** starts analyze phase and fille all members with valid informations.
+        /** starts analyze phase and fille all members with valid information.
 
             @param xSupplier
                     Must be a valid reference to a frames supplier, which provies

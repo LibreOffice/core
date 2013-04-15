@@ -244,7 +244,7 @@ Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtPrintWarningOptions_Impl*    SvtPrintWarningOptions::m_pDataContainer = NULL;
 sal_Int32                       SvtPrintWarningOptions::m_nRefCount = 0;

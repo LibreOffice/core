@@ -37,7 +37,7 @@
     #endif
     // Enable assertion handling himself AND additional warnings.
     // The default logtype is MESSAGEBOX.
-    // see "assertion.hxx" for further informations
+    // see "assertion.hxx" for further information
     #ifndef ENABLE_ASSERTIONS
         #define ENABLE_ASSERTIONS
     #endif
@@ -56,7 +56,7 @@
     #endif
     // Enable assertion handling himself.
     // The default logtype is MESSAGEBOX.
-    // see "assertion.hxx" for further informations
+    // see "assertion.hxx" for further information
     #ifndef ENABLE_ASSERTIONS
         #define ENABLE_ASSERTIONS
     #endif

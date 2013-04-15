@@ -91,7 +91,7 @@ REG_DLLPUBLIC RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Ap
 
 /** RegistryTypeReades reads a binary type blob.
 
-    This class provides the necessary functions to read type informations
+    This class provides the necessary functions to read type information
     for all kinds of types of a type blob.
     The class is inline and use a C-Api.
 

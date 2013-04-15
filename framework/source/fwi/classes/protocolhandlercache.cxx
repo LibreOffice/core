@@ -67,7 +67,7 @@ PatternHash::iterator PatternHash::findPatternKey( const OUString& sURL )
 /**
     @short      initialize static member of class HandlerCache
     @descr      We use a singleton pattern to implement this handler cache.
-                That means it use two static member list to hold all neccessary informations
+                That means it use two static member list to hold all neccessary information
                 and a ref count mechanism to create/destroy it on demand.
  */
 HandlerHash* HandlerCache::m_pHandler  = NULL;

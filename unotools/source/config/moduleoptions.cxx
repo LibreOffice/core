@@ -88,7 +88,7 @@
 /*-************************************************************************************************************//**
     @descr  This struct hold information about one factory. We declare a complete array which can hold infos
             for all well known factories. Values of enum "EFactory" (see header!) are directly used as index!
-            So we can support a fast access on these informations.
+            So we can support a fast access on these information.
 *//*-*************************************************************************************************************/
 struct FactoryInfo
 {
@@ -466,7 +466,7 @@ void SvtModuleOptions_Impl::Commit()
         pInfo = &(m_lFactories[nFactory]);
 
         // These path is used to build full qualified property names ....
-        // See pInfo->getChangedProperties() for further informations
+        // See pInfo->getChangedProperties() for further information
         sBasePath  = PATHSEPERATOR + pInfo->getFactory() + PATHSEPERATOR;
 
         const css::uno::Sequence< css::beans::PropertyValue > lChangedProperties = pInfo->getChangedProperties ( sBasePath );
@@ -979,7 +979,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = NULL  ;
 sal_Int32               SvtModuleOptions::m_nRefCount       = 0     ;
@@ -1025,7 +1025,7 @@ SvtModuleOptions::~SvtModuleOptions()
 /*-************************************************************************************************************//**
     @short      access to configuration data
     @descr      This methods allow read/write access to configuration values.
-                They are threadsafe. All calls are forwarded to impl-data-container. See there for further informations!
+                They are threadsafe. All calls are forwarded to impl-data-container. See there for further information!
 
     @seealso    method impl_GetOwnStaticMutex()
 

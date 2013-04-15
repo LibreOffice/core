@@ -49,7 +49,7 @@ class SvtModuleOptions_Impl;
 /*-************************************************************************************************************//**
     @short          collect information about installation state of modules
     @descr          Use these class to get installation state of different office modules like writer, calc etc
-                    Further you can ask for additional informations; e.g. name of standard template file, which
+                    Further you can ask for additional information; e.g. name of standard template file, which
                     should be used by corresponding module; or short/long name of these module factory.
 
     @implements     -
@@ -79,7 +79,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
 
         /*ATTENTION:
             If you change these enum ... don't forget to change reading/writing and order of configuration values too!
-            See "SvtModuleOptions_Impl::impl_GetSetNames()" and his ctor for further informations.
+            See "SvtModuleOptions_Impl::impl_GetSetNames()" and his ctor for further information.
          */
         enum EFactory
         {
@@ -148,7 +148,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
                     the complete URL!
 
             @param  lMediaDescriptor
-                    additional informations
+                    additional information
 
             @return A suitable enum value. See EFactory above.
          */

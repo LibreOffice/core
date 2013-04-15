@@ -70,7 +70,7 @@ public :
      PlaceEditDialog(Window* pParent, const boost::shared_ptr<Place> &pPlace );
      ~PlaceEditDialog();
 
-     // Returns a place instance with given informations
+     // Returns a place instance with given information
      boost::shared_ptr<Place> GetPlace();
 
     OUString GetServerName() { return m_pEDServerName->GetText(); }

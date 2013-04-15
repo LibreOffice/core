@@ -314,7 +314,7 @@ Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtFontOptions_Impl*    SvtFontOptions::m_pDataContainer    = NULL  ;
 sal_Int32               SvtFontOptions::m_nRefCount         = 0     ;

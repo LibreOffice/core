@@ -79,7 +79,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                         /*  Attention
                             I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
                             to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
                         */
                         // create some needed uno services and cache it
                         m_xModuleManager = css::frame::ModuleManager::create( m_xContext );

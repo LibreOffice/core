@@ -57,7 +57,7 @@ module com { module sun { module star { module document {
         You can also implement and register detectors for groups of types.
         </li>
     </ul>
-    See service <type>TypeDetection</type> and his configuration for further informations.
+    See service <type>TypeDetection</type> and his configuration for further information.
     </p>
 
     @see TypeDetection

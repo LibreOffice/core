@@ -408,7 +408,7 @@ class Desktop   :   // interfaces
         static sal_Bool implcp_removeEventListener      ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
 
         sal_Bool m_bIsTerminated ;  /// check flag to protect us against dispose before terminate!
-                                    /// see dispose() for further informations!
+                                    /// see dispose() for further information!
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 

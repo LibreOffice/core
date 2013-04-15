@@ -179,7 +179,7 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
             @param      "xNode"        , root of subtree and start point of search
             @param      "seqComponents", result list of search. We cant use a return value, we search recursive
-                                         and must collect all informations.
+                                         and must collect all information.
             @return     -
 
             @onerror    -

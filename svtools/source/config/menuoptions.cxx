@@ -424,7 +424,7 @@ void SvtMenuOptions_Impl::RemoveListenerLink( const Link& rLink )
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 SvtMenuOptions_Impl*    SvtMenuOptions::m_pDataContainer    = NULL  ;
 sal_Int32               SvtMenuOptions::m_nRefCount         = 0     ;

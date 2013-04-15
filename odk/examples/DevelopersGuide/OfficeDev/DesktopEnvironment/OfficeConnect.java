@@ -89,7 +89,7 @@ public class OfficeConnect
      * m_xRemoteContext wich means remote component context of the connected office.
      * The context can be used to get the remote service manager from the office.
      * We made it private to support singleton pattern of these implementation.
-     * see getConnection() for further informations
+     * see getConnection() for further information
      */
     private OfficeConnect()
     {

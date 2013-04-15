@@ -351,7 +351,7 @@ void Job::die()
 //________________________________
 /**
     @short  generates list of arguments for job execute
-    @descr  There exist a set of informations, which can be needed by a job.
+    @descr  There exist a set of information, which can be needed by a job.
                 a) it's static configuration data   (Equals for all jobs.    )
                 b) it's specific configuration data (Different for every job.)
                 c) some environment values          (e.g. the frame, for which this job was started)

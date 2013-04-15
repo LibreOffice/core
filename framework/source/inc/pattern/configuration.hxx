@@ -86,7 +86,7 @@ class ConfigurationHelper
 
             @param  nOpenFlags
                     force opening of the configuration access in special mode.
-                    see enum EOpenMode for further informations.
+                    see enum EOpenMode for further information.
          */
         static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
                                                                       const OUString&                                        sPackage  ,

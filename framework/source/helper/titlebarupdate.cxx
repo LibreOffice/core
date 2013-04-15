@@ -314,7 +314,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     }
 
     // c) if b) failed ... identify the used module and retrieve set icon from module config.
-    //    Tirck :-) Module was already specified outside and aInfo contains all needed informations.
+    //    Tirck :-) Module was already specified outside and aInfo contains all needed information.
     if ( nIcon == INVALID_ICON_ID )
     {
         TModuleInfo aInfo;

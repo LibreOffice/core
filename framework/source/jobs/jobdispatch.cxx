@@ -66,7 +66,7 @@ DEFINE_INIT_SERVICE( JobDispatch,
                          /*Attention
                              I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
                              to create a new instance of this class by our own supported service factory.
-                             see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+                             see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
                          */
                      }
                    )
@@ -101,7 +101,7 @@ JobDispatch::~JobDispatch()
 //________________________________
 /**
     @short  implementation of XInitalization
-    @descr  A protocol handler can provide this functionality, if it wish to get additional informations
+    @descr  A protocol handler can provide this functionality, if it wish to get additional information
             about the context it runs. In this case the frame reference would be given by the outside code.
 
     @param  lArguments

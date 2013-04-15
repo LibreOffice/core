@@ -55,7 +55,7 @@ SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Adds stylefamily-informations to sorted list
+// Adds stylefamily-information to sorted list
 //
 
 void SvXMLAutoStylePoolP_Impl::AddFamily(

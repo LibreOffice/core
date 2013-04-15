@@ -52,7 +52,7 @@ published interface XFrameLoader: com::sun::star::uno::XInterface
 
         @param Arguments
             optional arguments for loading
-            (see <type scope="com::sun::star::document">MediaDescriptor</type> for further informations)
+            (see <type scope="com::sun::star::document">MediaDescriptor</type> for further information)
 
         @param Listener
             this listener will be informed about success

@@ -199,7 +199,7 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
     if (eFactory == SvtModuleOptions::E_UNKNOWN_FACTORY)
         return NULL;
 
-    // For the following code we need some additional informations.
+    // For the following code we need some additional information.
     String sServiceName   = aOpt.GetFactoryName(eFactory);
     String sDefaultFilter = aOpt.GetFactoryDefaultFilter(eFactory);
 

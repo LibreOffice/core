@@ -553,7 +553,7 @@ class LoginDialog   :   public css::lang::XTypeProvider     ,
             @seealso    OPropertySetHelper
 
             @param      -
-            @return     structure with property-informations
+            @return     structure with property-information
 
             @onerror    -
         *//*-*****************************************************************************************************/

@@ -1560,7 +1560,7 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString&
 //*****************************************************************************************************************
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//  see definition for further information
 //*****************************************************************************************************************
 AddonsOptions_Impl*     AddonsOptions::m_pDataContainer = NULL  ;
 sal_Int32               AddonsOptions::m_nRefCount      = 0     ;

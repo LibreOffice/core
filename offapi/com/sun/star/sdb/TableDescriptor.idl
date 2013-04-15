@@ -28,7 +28,7 @@
 
 /** extends the service
     <type scope="com::sun::star::sdbcx">TableDescriptor</type>
-    with additional display informations, sorting, and filtering criteria.
+    with additional display information, sorting, and filtering criteria.
  */
 published service TableDescriptor
 {

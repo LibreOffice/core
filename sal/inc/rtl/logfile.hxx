@@ -60,7 +60,7 @@ namespace rtl
         RTL_LOGFILE_CONTEXT_TRACE( instance, mesage );
         RTL_LOGFILE_CONTEXT_TRACEn( instance, frmt, arg1, .., arg3 );
         These macros can be used to log information in a "instance" context. The "instance" object
-        is used to log message informations. All macros with "frmt" uses printf notation to log timing infos.
+        is used to log message information. All macros with "frmt" uses printf notation to log timing infos.
 
         Example: RTL_LOGFILE_CONTEXT_TRACE( aLog, "Now we call an expensive function" );
                  RTL_LOGFIlE_CONTEXT_TRACE1( aLog, "Config entries read: %u", (unsigned short)i );

@@ -306,7 +306,7 @@ css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const OUString& /
 {
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)
-       see ctor of PropertySetHelper for further informations.
+       see ctor of PropertySetHelper for further information.
     */
     css::uno::Any aValue;
 

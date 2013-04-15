@@ -127,7 +127,7 @@ public class CustomizeView extends    JPanel
      *
      * @param xFrame
      *          the reference to the frame, which provides the
-     *          possibility to get the required status informations
+     *          possibility to get the required status information
      *
      *          Attention: We don't accept new frames here.
      *          We get one after startup and work with him.

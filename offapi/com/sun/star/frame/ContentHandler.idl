@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module frame {
     This handler doesn't need any frame as target for loading components.
     Content handler are registered for content types.
     (See type/filter configuration of <type scope="com::sun::star::document">TypeDetection</type>
-    for further informations) If generic load mechanism found such documents which
+    for further information) If generic load mechanism found such documents which
     can be handled by a ContentHandler it will create and use it.
     </p>
 

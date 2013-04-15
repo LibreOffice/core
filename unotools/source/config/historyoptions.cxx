@@ -573,7 +573,7 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
 //*****************************************************************************************************************
 // initialize static member
 // DON'T DO IT IN YOUR HEADER!
-// see definition for further informations
+// see definition for further information
 //*****************************************************************************************************************
 SvtHistoryOptions_Impl*  SvtHistoryOptions::m_pDataContainer = NULL ;
 sal_Int32     SvtHistoryOptions::m_nRefCount  = 0  ;

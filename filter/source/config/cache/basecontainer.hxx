@@ -45,7 +45,7 @@ namespace filter{
 
     @descr      This class can be used as base for own service implementations,
                 which must provide read/write access to the filter configuration.
-                Parameters regulate read/write access, which sub set of informations
+                Parameters regulate read/write access, which sub set of information
                 should be available etc.
 
     @attention  The base class BaseLock must be the first of declared ones.

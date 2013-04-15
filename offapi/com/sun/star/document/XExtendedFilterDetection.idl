@@ -51,7 +51,7 @@ published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
         </p>
 
         @param Descriptor
-            represent a <type>MediaDescriptor</type> which can be used to get/set informations
+            represent a <type>MediaDescriptor</type> which can be used to get/set information
             about the detected document
 
         @returns

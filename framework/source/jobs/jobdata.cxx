@@ -139,7 +139,7 @@ JobData::~JobData()
 /**
     @short      initalize this instance as a job with configuration
     @descr      They given alias can be used to address some configuraton data.
-                We read it and fill our internal structures. Of course old informations
+                We read it and fill our internal structures. Of course old information
                 will be lost doing so.
 
     @param      sAlias
@@ -149,10 +149,10 @@ void JobData::setAlias( const OUString& sAlias )
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
-    // delete all old informations! Otherwhise we mix it with the new one ...
+    // delete all old information! Otherwhise we mix it with the new one ...
     impl_reset();
 
-    // take over the new informations
+    // take over the new information
     m_sAlias   = sAlias;
     m_eMode    = E_ALIAS;
 
@@ -209,7 +209,7 @@ void JobData::setAlias( const OUString& sAlias )
 //________________________________
 /**
     @short      initalize this instance as a job without configuration
-    @descr      This job has no configuration data. We have to forget all old informations
+    @descr      This job has no configuration data. We have to forget all old information
                 and set only some of them new, so this instance can work.
 
     @param      sService
@@ -220,9 +220,9 @@ void JobData::setService( const OUString& sService )
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // delete all old informations! Otherwhise we mix it with the new one ...
+    // delete all old information! Otherwhise we mix it with the new one ...
     impl_reset();
-    // take over the new informations
+    // take over the new information
     m_sService = sService;
     m_eMode    = E_SERVICE;
 
@@ -698,7 +698,7 @@ css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::
     @short      reset all internal structures
     @descr      If somehwere recycle this instance, he can switch from one
                 using mode to another one. But then we have to reset all currently
-                used informations. Otherwhise we mix it and they can make trouble.
+                used information. Otherwhise we mix it and they can make trouble.
 
                 But note: that does not set defaults for internal used members, which
                 does not relate to any job property! e.g. the reference to the global

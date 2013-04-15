@@ -47,7 +47,7 @@ import java.awt.event.WindowEvent;
 
 /**
  * This implement a java frame wich contains
- * an office document, shows some status informations
+ * an office document, shows some status information
  * about that, provides simple functionality on it
  * (e.g. toggle menubar, save document) and
  * react for different situations independent

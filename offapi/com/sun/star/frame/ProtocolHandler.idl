@@ -52,7 +52,7 @@ published service ProtocolHandler
         */
         interface XDispatchProvider;
 
-        /** initialize the new handler instance with some context informations
+        /** initialize the new handler instance with some context information
 
         <p>
         Sometimes it can be useful for a handler object, to know something about the

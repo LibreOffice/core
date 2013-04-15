@@ -137,7 +137,7 @@ class Wildcard
             @return     -
 
             @onerror    Error-conditions are written to file or show in a messagebox.
-                        Thhat depends from current setting of ASSERT_OUTPUTTYPE. (see debug.hxx for further informations.)
+                        Thhat depends from current setting of ASSERT_OUTPUTTYPE. (see debug.hxx for further information.)
         *//*-*****************************************************************************************************/
 
         #ifdef ENABLE_CLASSDEBUG

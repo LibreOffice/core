@@ -274,7 +274,7 @@ private:
                     specified MediaDescriptor.
 
         @descr      This method works together with impl_validateAndSetTypeOnDescriptor()/
-                    impl_validateAndSetFilterOnDescriptor(). All informations, which can be
+                    impl_validateAndSetFilterOnDescriptor(). All information, which can be
                     set by these two operations must be "removable" by this method.
 
         @param      rDescriptor

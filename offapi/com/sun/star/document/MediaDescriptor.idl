@@ -417,7 +417,7 @@ service MediaDescriptor
      */
     [optional,property] boolean RepairPackage;
 
-    /** can be used for status informations
+    /** can be used for status information
 
         <p>
         Object implementing the <type scope="com::sun::star::task">XStatusIndicator</type>

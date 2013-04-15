@@ -34,7 +34,7 @@ bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
     pos = sal::static_int_cast<unsigned short>(hwpf.Read2b());
     space_width = (short) hwpf.Read2b();
     height = (short) hwpf.Read2b();
-// internal informations
+// internal information
     pgy = (short) hwpf.Read2b();
     sx = (short) hwpf.Read2b();
     psx = (short) hwpf.Read2b();

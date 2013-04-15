@@ -106,7 +106,7 @@ private:
 };
 
 //---------------------------------------------------------------------------------------------------------
-// initialize instance with all necessary informations
+// initialize instance with all necessary information
 // We use it without any further checks on our member then ...!
 //---------------------------------------------------------------------------------------------------------
 RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
@@ -146,7 +146,7 @@ OUString RequestFilterSelect_Impl::getFilter() const
 
 //---------------------------------------------------------------------------------------------------------
 // handler call it to get type of request
-// Is hard coded to "please select filter" here. see ctor for further informations.
+// Is hard coded to "please select filter" here. see ctor for further information.
 //---------------------------------------------------------------------------------------------------------
 css::uno::Any SAL_CALL RequestFilterSelect_Impl::getRequest() throw( css::uno::RuntimeException )
 {

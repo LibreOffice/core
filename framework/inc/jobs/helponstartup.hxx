@@ -129,7 +129,7 @@ class HelpOnStartup : private ThreadHelpBase
                     and try to classify this model.
 
             @descr  As a result of this operation a module identifier will be returned.
-                    It can be used against the module configuration then to retrieve further informations.
+                    It can be used against the module configuration then to retrieve further information.
 
             @param  lArguments
                     the list of job arguments which is given on our interface method execute().

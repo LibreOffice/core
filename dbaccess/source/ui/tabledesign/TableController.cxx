@@ -1546,7 +1546,7 @@ OUString OTableController::getPrivateTitle() const
 void OTableController::reload()
 {
     loadData();                 // fill the column information form the table
-    static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our informations
+    static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our information
     ClearUndoManager();
     setModified(sal_False);     // and we are not modified yet
     static_cast<OTableDesignView*>(getView())->Invalidate();

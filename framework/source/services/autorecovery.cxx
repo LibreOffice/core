@@ -428,7 +428,7 @@ DEFINE_INIT_SERVICE(
                         /*Attention
                             I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
                             to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
                         */
 
                         // read configuration to know if autosave/recovery is on/off etcpp...
@@ -2320,7 +2320,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
                                      const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress)
 {
     // no document? => can occure if we loaded our configuration with files,
-    // which couldnt be recovered successfully. In such case we have all needed informations
+    // which couldnt be recovered successfully. In such case we have all needed information
     // excepting the real document instance!
 
     // TODO: search right place, where such "dead files" can be removed from the configuration!
