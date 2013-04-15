@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///IU\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1947,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-15T16:12:24Z",
+      "side": 1,
+      "message": "Just a remark:\nScMarkData::GetArray() returns a valid array only if there are multi-marks, before constructing ScMarkArrayIter that needs to be checked, here with rMark.IsMultiMarked(). If false, then nothing is to be counted in this case.\n\nYes, ScTable::UpdateSelectionFunction() already checked that first before calling this method, so it does not need to be repeated here. A comment here saying so would be nice.",
+      "revId": "c599ef5a95a9f68b30502d5b0da9d4e444c1cac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///H0\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1948,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-15T16:12:24Z",
+      "side": 1,
+      "message": "Using the ScFlatBoolRowSegments::RangeIterator and its Next() method here unnecessarily loops over all segments starting from the top (sorry, I mislead you in a previous comment by mentioning the iterator), which can be unnecessarily slow if there are many alternating hidden / non-hidden rows before the start of the selection. Instead, using ScFlatBoolRowSegments::getRangeData( SCROW, ScFlatBoolRowSegments::RangeData\u0026) would search for the data matching the row, so the count would be quite similar to the implementation in ScTable::CountVisibleRows(SCROW,SCROW)",
+      "revId": "c599ef5a95a9f68b30502d5b0da9d4e444c1cac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///IA\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1958,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-15T16:12:24Z",
+      "side": 1,
+      "message": "This needs some enhancement to allow parts of the selection to be hidden. For example some rows near the end of the selection are hidden such that the hidden range ends below the selection. In this case aData.mnRow2 \u003e nBottom. Same for a hidden range overlapping the start of the selection where aData.mnRow1 \u003c nTop.",
+      "revId": "c599ef5a95a9f68b30502d5b0da9d4e444c1cac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///Hs\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-15T16:12:24Z",
+      "side": 1,
+      "message": "Comment above about the iterator applies also here.",
+      "revId": "c599ef5a95a9f68b30502d5b0da9d4e444c1cac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///H4\u003d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1994,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-15T16:12:24Z",
+      "side": 1,
+      "message": "Comment above about partial overlap applies also here.",
+      "revId": "c599ef5a95a9f68b30502d5b0da9d4e444c1cac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
