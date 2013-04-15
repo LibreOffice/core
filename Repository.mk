@@ -230,7 +230,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dba \
     dbase \
     dbmm \
-    dbtools \
+    $(if $(DISABLE_DBCONNECTIVITY),,dbtools) \
     dbaxml \
 	deploymentmisc \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
@@ -385,8 +385,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     textconversiondlgs \
     textfd \
     updatecheckui \
-    $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
-        vbahelper) \
+    $(if $(DISABLE_SCRIPTING),,vbahelper) \
     vclplug_gen \
     vclplug_gtk \
     vclplug_gtk3 \
