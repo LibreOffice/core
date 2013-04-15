@@ -23,7 +23,7 @@ const sdecl::ServiceDecl SyncDbusSessionHelperServiceDecl(
 COMPHELPER_SERVICEDECL_EXPORTS1(losessioninstall, SyncDbusSessionHelperServiceDecl);
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( sal_Char const* pImplName, ::com::sun::star::lang::XMultiServiceFactory* pServiceManager, ::com::sun::star::registry::XRegistryKey* pRegistryKey )
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL sessioninstall_component_getFactory( sal_Char const* pImplName, ::com::sun::star::lang::XMultiServiceFactory* pServiceManager, ::com::sun::star::registry::XRegistryKey* pRegistryKey )
         { return losessioninstall_component_getFactory(pImplName, pServiceManager, pRegistryKey); }
 }
 

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="sessioninstall"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.libreoffice.comp.shell.sessioninstall.SyncDbusSessionHelper">
     <service name="org.freedesktop.PackageKit.SyncDbusSessionHelper"/>
