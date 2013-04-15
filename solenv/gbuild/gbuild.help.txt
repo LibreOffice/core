@@ -94,10 +94,10 @@ INTERACTIVE VARIABLES:
                        (Note that levels higher than 2 are used only by obsolete debugging
                        features. Use SAL_INFO/SAL_WARN with a specific area for extra debug
                        output in new code.)
-                       2 = degugging information + no optimizations + extra
+                       2 = debugging information + no optimizations + extra
                            debug output. OSL_TRACE starts being active on this
                            level.
-                       3... = degugging information + no optimizations + extra
+                       3... = debugging information + no optimizations + extra
                               debug output (usually extremely verbose). Levels
                               > 2 are not used very much.
        TIMELOG / timelog
