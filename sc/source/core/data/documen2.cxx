@@ -154,6 +154,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pRecursionHelper( NULL ),
         pAutoNameCache( NULL ),
         pLookupCacheMapImpl( NULL ),
+        pPreviewFont( NULL ),
+        pPreviewSelection( NULL ),
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MAXCOL,0,0),
@@ -1190,6 +1192,40 @@ void ScDocument::ClearLookupCaches()
 {
     if( pLookupCacheMapImpl )
         pLookupCacheMapImpl->clear();
+}
+
+void ScDocument::SetPreviewFont( SfxItemSet* pFont )
+{
+    delete pPreviewFont;
+    pPreviewFont = pFont;
+}
+
+const ScMarkData& ScDocument::GetPreviewSelection()
+{
+    if ( !pPreviewSelection )
+        pPreviewSelection = new ScMarkData();
+
+    return *pPreviewSelection;
+}
+
+void  ScDocument::SetPreviewSelection( ScMarkData& rSel )
+{
+    // yeuch, why do I have a pointer here ???? ( other problems
+    // to fix right now though )
+    if ( !pPreviewSelection )
+        pPreviewSelection = new ScMarkData();
+    *pPreviewSelection = rSel;
+}
+
+SfxItemSet* ScDocument::GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab )
+{
+    SfxItemSet* pRet = NULL;
+    if ( pPreviewFont )
+    {
+        if ( GetPreviewSelection().IsCellMarked( nCol, nRow ) && GetPreviewSelection().GetFirstSelected() == nTab )
+            pRet = pPreviewFont;
+    }
+    return pRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

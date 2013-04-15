@@ -76,6 +76,7 @@
 #include "cellsuno.hxx"
 #include "tokenarray.hxx"
 
+
 //==================================================================
 
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
@@ -2896,6 +2897,44 @@ void ScViewFunc::InsertNameList()
         pDocSh->UpdateOle(GetViewData());
 }
 
+void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr  )
+{
+    ScDocShell* pDocShell = GetViewData()->GetDocShell();
+    ScRange aMarkRange;
+    if (rSel.IsMultiMarked() )
+        rSel.GetMultiMarkArea( aMarkRange );
+    else
+        rSel.GetMarkArea( aMarkRange );
+
+    sal_Bool bSetLines = false;
+    sal_Bool bSetAlign = false;
+    if ( pAttr )
+    {
+        const SfxItemSet& rNewSet = pAttr->GetItemSet();
+        bSetLines = rNewSet.GetItemState( ATTR_BORDER, sal_True ) == SFX_ITEM_SET ||
+        rNewSet.GetItemState( ATTR_SHADOW, sal_True ) == SFX_ITEM_SET;
+        bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY, sal_True ) == SFX_ITEM_SET;
+    }
+
+    sal_uInt16 nExtFlags = 0;
+    if ( bSetLines )
+        nExtFlags |= SC_PF_LINES;
+    if ( bSetAlign )
+        nExtFlags |= SC_PF_WHOLEROWS;
+
+    SCCOL nStartCol = aMarkRange.aStart.Col();
+    SCROW nStartRow = aMarkRange.aStart.Row();
+    SCTAB nStartTab = aMarkRange.aStart.Tab();
+    SCCOL nEndCol = aMarkRange.aEnd.Col();
+    SCROW nEndRow = aMarkRange.aEnd.Row();
+    SCTAB nEndTab = aMarkRange.aEnd.Tab();
+    pDocShell->PostPaint( nStartCol, nStartRow, nStartTab,
+        nEndCol,   nEndRow,   nEndTab,
+        PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
+    ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
+    pTabViewShell->CellContentChanged();
+    pTabViewShell->AdjustBlockHeight(true, const_cast<ScMarkData*>(&rSel));
+}
 
 
 

@@ -78,7 +78,7 @@
 #include "scslots.hxx"
 
 #include "scabstdlg.hxx"
-
+#include <editeng/fontitem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1412,10 +1412,17 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
+    ScDocument* pDoc = GetViewData()->GetDocument();
     if ( !pNewAttrs )
     {
         switch ( nSlot )
         {
+            case SID_ATTR_CHAR_ENDPREVIEW_FONT:
+            {
+                pDoc->SetPreviewFont(NULL);
+                pTabViewShell->UpdateSelectionArea( pDoc->GetPreviewSelection() );
+                break;
+            }
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_FONT:
             case SID_ATTR_CHAR_FONTHEIGHT:
@@ -1451,6 +1458,32 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
     {
         switch ( nSlot )
         {
+            case SID_ATTR_CHAR_PREVIEW_FONT:
+            {
+                SfxItemPool& rPool = GetPool();
+                sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+                const SvxFontItem& rFont = ( const SvxFontItem&)pNewAttrs->Get( nWhich );
+                SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, rPool );
+                sal_uInt8 nScript = pTabViewShell->GetSelectionScriptType();
+                aSetItem.PutItemForScriptType( nScript, rFont );
+
+                ScMarkData aFuncMark( pViewData->GetMarkData() );
+                ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
+                pDoc->SetPreviewFont( aSetItem.GetItemSet().Clone() );
+                aFuncMark.MarkToMulti();
+
+                if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
+                {
+                    SCCOL nCol = pViewData->GetCurX();
+                    SCROW nRow = pViewData->GetCurY();
+                    SCTAB nTab = pViewData->GetTabNo();
+                    ScRange aRange( nCol, nRow, nTab );
+                    aFuncMark.SetMarkArea( aRange );
+                }
+                pDoc->SetPreviewSelection( aFuncMark );
+                pTabViewShell->UpdateSelectionArea( aFuncMark );
+                break;
+            }
             case SID_ATTR_CHAR_OVERLINE:
             case SID_ATTR_CHAR_STRIKEOUT:
             case SID_ATTR_ALIGN_LINEBREAK:
@@ -1549,7 +1582,6 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     ::editeng::SvxBorderLine*          pDefLine = pTabViewShell->GetDefaultFrameLine();
                     const ScPatternAttr*    pOldAttrs = pTabViewShell->GetSelectionPattern();
-                    ScDocument*             pDoc = GetViewData()->GetDocument();
                     SfxItemSet*             pOldSet =
                                                 new SfxItemSet(
                                                         *(pDoc->GetPool()),

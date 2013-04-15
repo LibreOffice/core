@@ -94,6 +94,7 @@ private:
         ScRefCellValue          maCell;
         const ScPatternAttr*    mpPattern;
         const SfxItemSet*       mpCondSet;
+        const SfxItemSet*       mpPreviewFontSet;
         const ScPatternAttr*    mpOldPattern;
         const SfxItemSet*       mpOldCondSet;
         const RowInfo*          mpThisRowInfo;

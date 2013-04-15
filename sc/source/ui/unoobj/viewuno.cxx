@@ -68,6 +68,8 @@
 #include "preview.hxx"
 #include <svx/sdrhittesthelper.hxx>
 #include <boost/foreach.hpp>
+#include "formatsh.hxx"
+#include "sfx2/app.hxx"
 
 using namespace com::sun::star;
 

@@ -187,9 +187,18 @@ private:
     bool                           bRelease;
     Reference< XDispatchProvider > m_xDispatchProvider;
     Reference< XFrame >            m_xFrame;
+    bool            mbEndPreview;
 
     void            ReleaseFocus_Impl();
     void            EnableControls_Impl();
+
+    void            EndPreview()
+    {
+        Sequence< PropertyValue > aArgs;
+        SfxToolBoxControl::Dispatch( m_xDispatchProvider,
+                                         OUString( ".uno:CharEndPreviewFontName" ),
+                                         aArgs );
+    }
     DECL_DLLPRIVATE_LINK( CheckAndMarkUnknownFont, VclWindowEvent* );
 
 protected:
@@ -209,6 +218,7 @@ public:
     void            Fill( const FontList* pList )
                         { FontNameBox::Fill( pList );
                           nFtCount = pList->GetFontNameCount(); }
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
@@ -785,7 +795,8 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDis
     nFtCount           ( 0 ),
     bRelease           ( true ),
     m_xDispatchProvider( rDispatchProvider ),
-    m_xFrame (_xFrame)
+    m_xFrame (_xFrame),
+    mbEndPreview(false)
 {
     SetSizePixel(LogicToPixel( aLogicalSize, MAP_APPFONT ));
     EnableControls_Impl();
@@ -874,6 +885,9 @@ long SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
 long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
+    mbEndPreview = false;
+    if ( rNEvt.GetType() == EVENT_KEYUP )
+        mbEndPreview = true;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -895,6 +909,7 @@ long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_ESCAPE:
                 SetText( aCurText );
                 ReleaseFocus_Impl();
+                EndPreview();
                 break;
         }
     }
@@ -903,6 +918,8 @@ long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
         Window* pFocusWin = Application::GetFocusWindow();
         if ( !HasFocus() && GetSubEdit() != pFocusWin )
             SetText( GetSavedValue() );
+        // send EndPreview
+        EndPreview();
     }
 
     return nHandled ? nHandled : FontNameBox::Notify( rNEvt );
@@ -956,43 +973,88 @@ void SvxFontNameBox_Impl::EnableControls_Impl()
 
 // -----------------------------------------------------------------------
 
+void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
+{
+    FontNameBox::UserDraw( rUDEvt );
+
+    // Hack - GetStyle now contains the currently
+    // selected item in the list box
+    // ItemId contains the id of the current item to draw
+    // or select
+    if (  rUDEvt.GetItemId() == rUDEvt.GetStyle() )
+    {
+        Sequence< PropertyValue > aArgs( 1 );
+        FontInfo aInfo( pFontList->Get( GetEntry( rUDEvt.GetItemId() ),
+            aCurFont.GetWeight(),
+            aCurFont.GetItalic() ) );
+
+        SvxFontItem aFontItem( aInfo.GetFamily(),
+            aInfo.GetName(),
+            aInfo.GetStyleName(),
+            aInfo.GetPitch(),
+            aInfo.GetCharSet(),
+            SID_ATTR_CHAR_FONT );
+        aFontItem.QueryValue( aArgs[0].Value );
+        aArgs[0].Name   = OUString( "CharPreviewFontName" );
+        SfxToolBoxControl::Dispatch( m_xDispatchProvider,
+            OUString( ".uno:CharPreviewFontName" ),
+                aArgs );
+    }
+}
+
 void SvxFontNameBox_Impl::Select()
 {
     FontNameBox::Select();
 
+    Sequence< PropertyValue > aArgs( 1 );
+    std::auto_ptr<SvxFontItem> pFontItem;
+    if ( pFontList )
+    {
+        FontInfo aInfo( pFontList->Get( GetText(),
+            aCurFont.GetWeight(),
+            aCurFont.GetItalic() ) );
+        aCurFont = aInfo;
+
+        pFontItem.reset( new SvxFontItem( aInfo.GetFamily(),
+            aInfo.GetName(),
+            aInfo.GetStyleName(),
+            aInfo.GetPitch(),
+            aInfo.GetCharSet(),
+            SID_ATTR_CHAR_FONT ) );
+
+        Any a;
+        pFontItem->QueryValue( a );
+        aArgs[0].Value  = a;
+    }
     if ( !IsTravelSelect() )
     {
-        if ( pFontList )
+        //  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+        //  This instance may be deleted in the meantime (i.e. when a dialog is opened
+        //  while in Dispatch()), accessing members will crash in this case.
+        ReleaseFocus_Impl();
+        EndPreview();
+        if ( pFontItem.get() )
         {
-            FontInfo aInfo( pFontList->Get( GetText(),
-                                            aCurFont.GetWeight(),
-                                            aCurFont.GetItalic() ) );
-            aCurFont = aInfo;
-
-            SvxFontItem aFontItem( aInfo.GetFamily(),
-                                   aInfo.GetName(),
-                                   aInfo.GetStyleName(),
-                                   aInfo.GetPitch(),
-                                   aInfo.GetCharSet(),
-                                   SID_ATTR_CHAR_FONT );
-
-            Any a;
-            Sequence< PropertyValue > aArgs( 1 );
             aArgs[0].Name   = OUString( "CharFontName" );
-            aFontItem.QueryValue( a );
-            aArgs[0].Value  = a;
-
-            //  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-            //  This instance may be deleted in the meantime (i.e. when a dialog is opened
-            //  while in Dispatch()), accessing members will crash in this case.
-            ReleaseFocus_Impl();
-
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
                                          OUString( ".uno:CharFontName" ),
                                          aArgs );
         }
-        else
-            ReleaseFocus_Impl();
+    }
+    else
+    {
+        if ( mbEndPreview )
+        {
+            EndPreview();
+            return;
+        }
+        if ( pFontItem.get() )
+        {
+            aArgs[0].Name   = OUString( "CharPreviewFontName" );
+            SfxToolBoxControl::Dispatch( m_xDispatchProvider,
+                                         OUString( ".uno:CharPreviewFontName" ),
+                                         aArgs );
+        }
     }
 }
 

@@ -113,6 +113,9 @@
 #define SID_ATTR_CHAR_LATIN_POSTURE                     ( SID_SVX_START + 997 )
 #define SID_ATTR_CHAR_LATIN_WEIGHT                      ( SID_SVX_START + 998 )
 #define SID_ATTR_PARA_OUTLINE_LEVEL                     ( SID_SVX_START +1092 )
+#define SID_ATTR_CHAR_PREVIEW_FONT                      ( SID_SVX_START + 1093 )
+#define SID_ATTR_CHAR_ENDPREVIEW_FONT                   ( SID_SVX_START + 1094 )
+
 
 // this ID didn't exist prior to the svx split
 #define SID_ATTR_CHAR_OVERLINE                          ( SID_EDIT_START + 68 )

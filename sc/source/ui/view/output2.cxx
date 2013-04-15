@@ -36,6 +36,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/fontitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
@@ -53,6 +54,11 @@
 #include "progress.hxx"
 #include "scmod.hxx"
 #include "fillinfo.hxx"
+#include "viewdata.hxx"
+#include "tabvwsh.hxx"
+#include "docsh.hxx"
+#include "markdata.hxx"
+#include "stlsheet.hxx"
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/string.hxx>
@@ -1578,6 +1584,22 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         pPattern = mpDoc->GetPattern( nCellX, nCellY, nTab );
                         pCondSet = mpDoc->GetCondResult( nCellX, nCellY, nTab );
                     }
+                    if ( mpDoc->GetPreviewFont() )
+                    {
+                        aAltPatterns.push_back(new ScPatternAttr(*pPattern));
+                        ScPatternAttr* pAltPattern = &aAltPatterns.back();
+                        if ( SfxItemSet* pFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab ) )
+                        {
+                            const SfxPoolItem* pItem;
+                            if ( pFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SFX_ITEM_SET )
+                                pAltPattern->GetItemSet().Put( (const SvxFontItem&)*pItem );
+                            if ( pFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SFX_ITEM_SET )
+                                pAltPattern->GetItemSet().Put( (const SvxFontItem&)*pItem );
+                            if ( pFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SFX_ITEM_SET )
+                                pAltPattern->GetItemSet().Put( (const SvxFontItem&)*pItem );
+                        }
+                        pPattern = pAltPattern;
+                    }
 
                     if (aCell.hasNumeric() &&
                         static_cast<const SfxBoolItem&>(
@@ -2230,6 +2252,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mpEngine(NULL),
     mpPattern(pPattern),
     mpCondSet(pCondSet),
+    mpPreviewFontSet(NULL),
     mpOldPattern(NULL),
     mpOldCondSet(NULL),
     mpThisRowInfo(NULL)
@@ -2284,7 +2307,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     // syntax highlighting mode is ignored here
     // StringDiffer doesn't look at hyphenate, language items
 
-    if (mpPattern == mpOldPattern && mpCondSet == mpOldCondSet)
+    if (mpPattern == mpOldPattern && mpCondSet == mpOldCondSet && !mpPreviewFontSet)
         return;
 
     sal_Int32 nConfBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
@@ -2293,7 +2316,28 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
 
     SfxItemSet* pSet = new SfxItemSet( mpEngine->GetEmptyItemSet() );
     mpPattern->FillEditItemSet( pSet, mpCondSet );
-
+    if ( mpPreviewFontSet )
+    {
+        const SfxPoolItem* pItem;
+        if ( mpPreviewFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SFX_ITEM_SET )
+        {
+            SvxFontItem aFontItem(EE_CHAR_FONTINFO);
+            aFontItem = (const SvxFontItem&)*pItem;
+            pSet->Put( aFontItem );
+        }
+        if ( mpPreviewFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SFX_ITEM_SET )
+        {
+            SvxFontItem aCjkFontItem(EE_CHAR_FONTINFO_CJK);
+            aCjkFontItem = (const SvxFontItem&)*pItem;
+            pSet->Put( aCjkFontItem );
+        }
+        if ( mpPreviewFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SFX_ITEM_SET )
+        {
+            SvxFontItem aCtlFontItem(EE_CHAR_FONTINFO_CTL);
+            aCtlFontItem = (const SvxFontItem&)*pItem;
+            pSet->Put( aCtlFontItem );
+        }
+    }
     mpEngine->SetDefaults( pSet );
     mpOldPattern = mpPattern;
     mpOldCondSet = mpCondSet;
@@ -4563,6 +4607,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
             long nPosX = 0;
             for (SCCOL nX=0; nX<=nX2; nX++)                 // wegen Ueberhaengen
             {
+                std::auto_ptr< ScPatternAttr > pPreviewPattr;
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
                 CellInfo*   pInfo = &pThisRowInfo->pCellInfo[nX+1];
@@ -4635,6 +4680,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                     }
                     if (bDoCell)
                     {
+                        SfxItemSet* pPreviewFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab );
                         if (!pEngine)
                             pEngine = CreateOutputEditEngine();
                         else
@@ -4657,6 +4703,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         aParam.mnPosX = nPosX;
                         aParam.mnPosY = nPosY;
                         aParam.mnInitPosX = nInitPosX;
+                        aParam.mpPreviewFontSet = pPreviewFontSet;
                         aParam.mpOldPattern = pOldPattern;
                         aParam.mpOldCondSet = pOldCondSet;
                         aParam.mpThisRowInfo = pThisRowInfo;

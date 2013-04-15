@@ -46,6 +46,7 @@
 #include <boost/scoped_ptr.hpp>
 
 namespace editeng { class SvxBorderLine; }
+class SvxFontItem;
 
 class KeyEvent;
 class OutputDevice;
@@ -294,6 +295,8 @@ private:
 
     ScLookupCacheMapImpl* pLookupCacheMapImpl;          // cache for lookups like VLOOKUP and MATCH
 
+    SfxItemSet*         pPreviewFont; // convert to std::auto_ptr or whatever
+    ScMarkData*         pPreviewSelection;
     sal_Int64           nUnoObjectId;                   // counted up for UNO objects
 
     sal_uInt32          nRangeOverflowType;             // used in (xml) loading for overflow warnings
@@ -943,6 +946,11 @@ public:
     bool CompileErrorCells(sal_uInt16 nErrCode);
 
     ScAutoNameCache* GetAutoNameCache()     { return pAutoNameCache; }
+    void             SetPreviewFont( SfxItemSet* pFontSet );
+    SfxItemSet*      GetPreviewFont() { return pPreviewFont; }
+    SfxItemSet*      GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    const ScMarkData&      GetPreviewSelection();
+    void             SetPreviewSelection( ScMarkData& rSel );
     SC_DLLPUBLIC  void             SetAutoNameCache(  ScAutoNameCache* pCache );
 
                     /** Creates a ScLookupCache cache for the range if it

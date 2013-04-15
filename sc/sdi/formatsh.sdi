@@ -23,6 +23,8 @@ interface TableFont
 ]
 {
     SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_PREVIEW_FONT  [ ExecMethod = ExecuteAttr; ]
+    SID_ATTR_CHAR_ENDPREVIEW_FONT  [ ExecMethod = ExecuteAttr; ]
     SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_COLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_WEIGHT    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]

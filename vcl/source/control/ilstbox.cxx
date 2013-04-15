@@ -1811,7 +1811,12 @@ void ImplListBoxWindow::ImplPaint( sal_uInt16 nPos, sal_Bool bErase, bool bLayou
         if ( nPos < GetEntryList()->GetMRUCount() )
             nPos = GetEntryList()->FindEntry( GetEntryList()->GetEntryText( nPos ) );
         nPos = sal::static_int_cast<sal_uInt16>(nPos - GetEntryList()->GetMRUCount());
-        UserDrawEvent aUDEvt( this, aRect, nPos, 0 );
+        sal_uInt16 nCurr = mnCurrentPos;
+        if ( mnCurrentPos < GetEntryList()->GetMRUCount() )
+            nCurr = GetEntryList()->FindEntry( GetEntryList()->GetEntryText( nCurr ) );
+        nCurr = sal::static_int_cast<sal_uInt16>( nCurr - GetEntryList()->GetMRUCount());
+
+        UserDrawEvent aUDEvt( this, aRect, nPos, nCurr );
         maUserDrawHdl.Call( &aUDEvt );
         mbInUserDraw = sal_False;
     }
