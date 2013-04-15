@@ -136,7 +136,7 @@ gb_Library_FILENAMES := \
 		,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += \
 	$(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT)) \
-	$(foreach lib,$(gb_Library_NOILIBFILENAMES_D),$(lib):$(lib)d$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_NOILIBFILENAMES_D),$(lib):$(lib)$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_LIBLIBFILENAMES),$(lib):lib$(lib)$(gb_Library_PLAINEXT))
 
 endif # ifeq ($(COM),GCC)
