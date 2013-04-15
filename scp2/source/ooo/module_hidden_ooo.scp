@@ -156,7 +156,7 @@ Module gid_Module_Root_Files_4
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root4,
-	auto_File_Lib_ALL,
+	auto_File_Lib_ALL
 	gid_File_Filter_Eme,
 	gid_File_Filter_Sdfilt,
 	gid_File_Filter_Icg,

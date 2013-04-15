@@ -46,7 +46,7 @@ Module gid_Module_Prg_Wrt_Bin
     Styles = (HIDDEN_ROOT);
     Files = (gid_File_Bin_Cde_Sagenda,gid_File_Bin_Cde_Sfax,gid_File_Bin_Cde_Slabel,
     gid_File_Bin_Cde_Sletter,gid_File_Bin_Cde_Smemo,gid_File_Bin_Cde_Svcard,
-    auto_Writer_Lib_ALL,
+    auto_Writer_Lib_ALL
     gid_File_Lib_Vbaswobj,
     gid_File_Jar_Email, 
     gid_File_Jar_Mail, 

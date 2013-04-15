@@ -832,7 +832,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_Unixlink_File_Dl_Store,
             gid_Unixlink_File_Dl_Jvmaccess,
             gid_Unixlink_File_Dl_Jvmfwk,
-            auto_Ure_Private_Lib_ALL,
+            auto_Ure_Private_Lib_ALL
             gid_File_Dl_JrepropertiesClass,
             gid_File_Dl_Profile_Jvmfwk3rc,
             gid_File_Dl_Jpipe,
