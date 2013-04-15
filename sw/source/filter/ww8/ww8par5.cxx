@@ -2245,7 +2245,7 @@ bool ConvertMacroSymbol( const String& rName, String& rReference )
     if( rReference.EqualsAscii( "(" ) )
     {
         bConverted = true;
-        sal_Unicode cSymbol;
+        sal_Unicode cSymbol = sal_Unicode(); // silence false warning
         if( rName.EqualsAscii( "CheckIt" ) )
             cSymbol = 0xF06F;
         else if( rName.EqualsAscii( "UncheckIt" ) )
