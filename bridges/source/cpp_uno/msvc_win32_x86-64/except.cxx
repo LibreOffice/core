@@ -178,7 +178,7 @@ void
   constructcatchobject(
   cxxregistration *             cxxreg,
   const ehandler *        const catchblock,
-  catchabletype *         const convertable,
+  catchabletype *         const convertible,
   const dispatcher_context* const dispatch
   )
   const
@@ -196,18 +196,18 @@ void
         : reinterpret_cast<eobject**>(catchblock->eobject_bpoffset + cxxreg->fp.FramePointers);
       if(catchblock->isreference){
         // just ref/pointer
-        *objplace = adjust_pointer(get_object(), convertable);
-      }else if(convertable->memmoveable){
+        *objplace = adjust_pointer(get_object(), convertible);
+      }else if(convertible->memmoveable){
         // POD
-        std::memcpy(objplace, get_object(), convertable->object_size);
-        if(convertable->object_size == sizeof(void*) && *objplace)
-          *objplace = adjust_pointer((void*)*objplace, convertable);
+        std::memcpy(objplace, get_object(), convertible->object_size);
+        if(convertible->object_size == sizeof(void*) && *objplace)
+          *objplace = adjust_pointer((void*)*objplace, convertible);
       }else{
         // if copy ctor exists, call it; binary copy otherwise
-        if(convertable->copyctor){
-          cinfo = convertable->hasvirtbase ? civirtual : cicomplex;
+        if(convertible->copyctor){
+          cinfo = convertible->hasvirtbase ? civirtual : cicomplex;
         }else{
-          std::memcpy(objplace, (const void*)adjust_pointer(get_object(), convertable), convertable->object_size);
+          std::memcpy(objplace, (const void*)adjust_pointer(get_object(), convertible), convertible->object_size);
         }
       }
     }
@@ -216,8 +216,8 @@ void
       eobject* objthis = catchblock->ishz
         ? reinterpret_cast<eobject*>(cxxreg)
         : reinterpret_cast<eobject*>(catchblock->eobject_bpoffset + cxxreg->fp.FramePointers);
-      void* copyctor = thrown_va(convertable->copyctor);
-      eobject* copyarg = adjust_pointer(get_object(), convertable);
+      void* copyctor = thrown_va(convertible->copyctor);
+      eobject* copyarg = adjust_pointer(get_object(), convertible);
       if(cinfo == cicomplex)
         (eobject::ctor_ptr (copyctor))(objthis, copyarg);
       else
