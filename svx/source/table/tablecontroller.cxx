@@ -2007,10 +2007,6 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
             }
         }
     }
-
-    if( mpView->IsTextEdit() )
-    {
-    }
 }
 
 // --------------------------------------------------------------------
