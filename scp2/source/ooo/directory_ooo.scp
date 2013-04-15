@@ -69,22 +69,6 @@ Directory gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents
 End
 #endif
 
-#if defined MACOSX
-Unixlink gid_Unixlink_Applications
-    BIN_FILE_BODY;
-    Styles = ();
-    Dir = PD_PROGDIR;
-    Name = "Applications";
-    Target = "/Applications";
-End
-#endif
-
-Directory gid_Dir_Addin
-    Styles = (CREATE);
-    ParentID = gid_Brand_Dir_Program;
-    DosName = "addin";
-End
-
 Directory gid_Dir_Wizards
     Styles = (CREATE);
     ParentID = gid_Brand_Dir_Program;
@@ -95,30 +79,6 @@ Directory gid_Dir_Wizards_Ui
     Styles = (CREATE);
     ParentID = gid_Dir_Wizards;
     DosName = "ui";
-End
-
-Directory gid_Dir_Wizards_Ui_Event
-    Styles = (CREATE);
-    ParentID = gid_Dir_Wizards_Ui;
-    DosName = "event";
-End
-
-Directory gid_Dir_Wizards_Fax
-    Styles = (CREATE);
-    ParentID = gid_Dir_Wizards;
-    DosName = "fax";
-End
-
-Directory gid_Dir_Wizards_Letter
-    Styles = (CREATE);
-    ParentID = gid_Dir_Wizards;
-    DosName = "letter";
-End
-
-Directory gid_Dir_Wizards_Agenda
-    Styles = (CREATE);
-    ParentID = gid_Dir_Wizards;
-    DosName = "agenda";
 End
 
 Directory gid_Dir_Resource
@@ -149,52 +109,10 @@ Directory gid_Dir_User
     DosName = "presets";
 End
 
-Directory gid_Dir_User_Autotext
-    ParentID = gid_Dir_User;
-    DosName = "autotext";
-    Styles = (WORKSTATION, CREATE);
-End
-
 Directory gid_Dir_User_Uno_Packages
     ParentID = gid_Dir_User;
     DosName = "uno_packages";
     Styles = (CREATE);
-End
-
-Directory gid_Dir_User_Uno_Packages_Cache
-    ParentID = gid_Dir_User_Uno_Packages;
-    DosName = "cache";
-    Styles = (CREATE);
-End
-
-Directory gid_Dir_User_Temp
-    ParentID = gid_Dir_User;
-    DosName = "temp";
-    Styles = (WORKSTATION, CREATE);
-End
-
-Directory gid_Dir_User_Autocorr
-    ParentID = gid_Dir_User;
-    DosName = "autocorr";
-    Styles = (WORKSTATION, CREATE);
-End
-
-Directory gid_Dir_User_Bookmark
-    ParentID = gid_Dir_User;
-    DosName = "bookmark";
-    Styles = (WORKSTATION);
-End
-
-Directory gid_Dir_User_Scripts
-    ParentID = gid_Dir_User;
-    DosName = "Scripts";
-    Styles = (WORKSTATION,CREATE);
-End
-
-Directory gid_Dir_Backup
-    ParentID = gid_Dir_User;
-    DosName = "backup";
-    Styles = (WORKSTATION, CREATE);
 End
 
 Directory gid_Dir_User_Basic
@@ -211,54 +129,6 @@ End
 Directory gid_Dir_User_Config
     ParentID = gid_Dir_User;
     DosName = "config";
-    Styles = (WORKSTATION, CREATE);
-End
-
-Directory gid_Dir_User_Config_Sofficecfg
-    ParentID = gid_Dir_User_Config;
-    DosName = "soffice.cfg";
-    Styles = (WORKSTATION);
-End
-
-Directory gid_Dir_User_Template
-    ParentID = gid_Dir_User;
-    DosName = "template";
-    Styles = (WORKSTATION, CREATE);
-End
-
-Directory gid_Dir_Database
-    ParentID = gid_Dir_User;
-    DosName = "database";
-    Styles = (WORKSTATION, CREATE);
-End
-
-Directory gid_Dir_Database_Biblio
-    ParentID = gid_Dir_Database;
-    DosName = "biblio";
-    Styles = (WORKSTATION, CREATE);
-End
-
-Directory gid_Dir_User_Gallery
-    ParentID = gid_Dir_User;
-    DosName = "gallery";
-    Styles = (WORKSTATION, CREATE);
-End
-
-Directory gid_Dir_User_Wordbook
-    ParentID = gid_Dir_User;
-    DosName = "wordbook";
-    Styles = (WORKSTATION, CREATE);
-End
-
-Directory gid_Dir_Store
-    ParentID = gid_Dir_User;
-    DosName = "store";
-    Styles = (WORKSTATION, CREATE);
-End
-
-Directory gid_Dir_Plugin
-    ParentID = gid_Brand_Dir_Program;
-    DosName = "plugin";
     Styles = (WORKSTATION, CREATE);
 End
 
@@ -398,59 +268,9 @@ Directory gid_Dir_Share_Config_Sofficecfg
     DosName = "soffice.cfg";
 End
 
-Directory gid_Dir_Share_Config_Sofficecfg_Basicide
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "BasicIDE";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Dbquery
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "dbquery";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Scalc
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "scalc";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Schart
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "schart";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Sdraw
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "sdraw";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Sglobal
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "sglobal";
-End
-
 Directory gid_Dir_Share_Config_Sofficecfg_Simpress
     ParentID = gid_Dir_Share_Config_Sofficecfg;
     DosName = "simpress";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Smath
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "smath";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Startmodule
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "StartModule";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Sweb
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "sweb";
-End
-
-Directory gid_Dir_Share_Config_Sofficecfg_Swriter
-    ParentID = gid_Dir_Share_Config_Sofficecfg;
-    DosName = "swriter";
 End
 
 Directory gid_Dir_Share_Registry_Res
@@ -461,17 +281,6 @@ End
 Directory gid_Dir_Autotext
     ParentID = gid_Brand_Dir_Share;
     DosName = "autotext";
-End
-
-Directory gid_Dir_Autotext_Language
-    ParentID = gid_Dir_Autotext;
-    DIR_ISOLANGUAGE_ALL_LANG_2;
-End
-
-Directory gid_Dir_Share_Autocorr
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "autocorr";
-    Styles = (WORKSTATION, CREATE);
 End
 
 #if defined( ENABLE_LIBLANGTAG ) && !defined( SYSTEM_LIBLANGTAG )
@@ -547,36 +356,6 @@ Directory gid_Dir_Gallery
     DosName = "gallery";
 End
 
-Directory gid_Dir_Gallery_Bullets
-    ParentID = gid_Dir_Gallery;
-    DosName = "bullets";
-End
-
-Directory gid_Dir_Gallery_Htmlexpo
-    ParentID = gid_Dir_Gallery;
-    DosName = "htmlexpo";
-End
-
-Directory gid_Dir_Gallery_Rulers
-    ParentID = gid_Dir_Gallery;
-    DosName = "rulers";
-End
-
-Directory gid_Dir_Gallery_Sounds
-    ParentID = gid_Dir_Gallery;
-    DosName = "sounds";
-End
-
-Directory gid_Dir_Gallery_Wwwback
-    ParentID = gid_Dir_Gallery;
-    DosName = "www-back";
-End
-
-Directory gid_Dir_Gallery_Wwwgraf
-    ParentID = gid_Dir_Gallery;
-    DosName = "www-graf";
-End
-
 Directory gid_Dir_Template
     ParentID = gid_Brand_Dir_Share;
     DosName = "template";
@@ -627,56 +406,6 @@ Directory gid_Dir_Template_Language
     DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
-Directory gid_Dir_Template_Educate
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(educate);
-End
-
-Directory gid_Dir_Template_Finance
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(finance);
-End
-
-Directory gid_Dir_Template_Forms
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(forms);
-End
-
-Directory gid_Dir_Template_Labels
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(labels);
-End
-
-Directory gid_Dir_Template_Layout
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(layout);
-End
-
-Directory gid_Dir_Template_Misc
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(misc);
-End
-
-Directory gid_Dir_Template_Officorr
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(officorr);
-End
-
-Directory gid_Dir_Template_Offimisc
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(offimisc);
-End
-
-Directory gid_Dir_Template_Personal
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(personal);
-End
-
-Directory gid_Dir_Template_Presnt
-    ParentID = gid_Dir_Template_Language;
-    DIR_IDENT_ALL_LANG(presnt);
-End
-
 Directory gid_Dir_Wordbook
     ParentID = gid_Brand_Dir_Share;
     DosName = "wordbook";
@@ -711,26 +440,6 @@ End
 Directory gid_Dir_User_Psprint
     ParentID = gid_Dir_User;
     DosName = "psprint";
-    Styles = (CREATE);
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_User_Psprint_Driver
-    ParentID = gid_Dir_User_Psprint;
-    DosName = "driver";
-    Styles = (CREATE);
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_User_Psprint_Fontmetric
-    ParentID = gid_Dir_User_Psprint;
-    DosName = "fontmetric";
     Styles = (CREATE);
 End
 
@@ -880,18 +589,6 @@ End
 Directory gid_Dir_Samples_Language
     ParentID = gid_Dir_Samples;
     DIR_ISOLANGUAGE_ALL_LANG_2;
-End
-
-/* Samples - Documentations */
-Directory gid_Dir_Samples_Documentations
-    ParentID = gid_Dir_Samples_Language;
-    DosName = "Documentations";
-End
-
-/* Samples - Advertisement */
-Directory gid_Dir_Samples_Advertisement
-    ParentID = gid_Dir_Samples_Language;
-    DosName = "Advertisement";
 End
 
 /* Elements */
