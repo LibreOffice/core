@@ -50,7 +50,14 @@ endif
 ifeq ($(SYSTEM_ZLIB),NO)
 liborcus_CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib
 endif
-ifneq (,$(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID MACOSX,$(OS)))
+#
+# OSes that use the GNU C++ library need to use -D_GLIBCXX_DEBUG in
+# sync with the rest of LibreOffice, i.e. depending on
+# --enable-dbgutil. Note that although Android doesn't use the GNU C
+# library (glibc), the NDK does offer the GNU C++ library as one of
+# the C++ libraries available, and we use it.
+#
+ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX MACOSX NETBSD OPENBSD,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
 liborcus_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
