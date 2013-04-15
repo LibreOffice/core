@@ -56,9 +56,15 @@ gb_EXTRAMERGEDLIBS := \
 	flash \
 	for \
 	forui \
+	fpicker \
+	fps_office \
+	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fwl \
+	fwm \
 	graphicfilter \
+	guesslang \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),hsqldb) \
+	hyphen \
 	icd \
 	icg \
 	idx \
@@ -72,8 +78,10 @@ gb_EXTRAMERGEDLIBS := \
 	itg \
 	iti \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jdbc) \
-	$(if $(filter-out ANDROID IOS,$(OS)),log) \
 	$(if $(filter-out ANDROID IOS,$(OS)),ldapbe2) \
+	lnth \
+	$(if $(filter-out ANDROID IOS,$(OS)),log) \
+	lwpft \
 	$(call gb_Helper_optional,DESKTOP,migrationoo2) \
 	$(call gb_Helper_optional,DESKTOP,migrationoo3) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mork) \
@@ -86,12 +94,17 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,pcr) \
 	pdffilter \
 	placeware \
+	$(call gb_Helper_optional,PYUNO,pythonloader) \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	res \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,rptui) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,rptxml) \
 	$(if $(filter-out ANDROID IOS,$(OS)),scn) \
 	sd \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
+	$(if $(filter unx,$(GUIBASE)),spa) \
+	spell \
 	$(if $(filter-out WNT MACOSX ANDROID IOS,$(OS)),spl_unx) \
 	svgfilter \
 	swd \

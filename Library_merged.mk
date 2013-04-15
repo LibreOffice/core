@@ -71,9 +71,14 @@ $(eval $(call gb_Library_use_externals,merged,\
 ))
 
 ifeq (ALL,$(MERGELIBS))
+$(eval $(call gb_Library_use_static_libraries,merged,\
+	ulingu \
+))
 $(eval $(call gb_Library_use_externals,merged,\
 	cppunit \
+	hyphen \
 	libexslt \
+	libexttextcat \
 	$(if $(filter-out ANDROID IOS,$(OS)),openldap) \
 	$(call gb_Helper_optional,PYUNO,python) \
 ))
