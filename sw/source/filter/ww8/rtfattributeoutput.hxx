@@ -25,6 +25,9 @@
 #include "rtfstringbuffer.hxx"
 
 #include <rtl/strbuf.hxx>
+#include <svx/xenum.hxx>
+
+#include <boost/optional.hpp>
 
 class SwGrfNode;
 class SwOLENode;
@@ -556,6 +559,8 @@ private:
     const Size* m_pFlyFrameSize;
 
     std::vector< std::pair<OString, OString> > m_aFlyProperties;
+
+    boost::optional<XFillStyle> m_oFillStyle;
 
 public:
     RtfAttributeOutput( RtfExport &rExport );

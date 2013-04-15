@@ -72,6 +72,7 @@
 #include <filter/msfilter/rtfutil.hxx>
 #include <svtools/miscopt.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+#include <svx/xflgrit.hxx>
 
 #include <docufld.hxx>
 #include <fmtclds.hxx>
@@ -2963,12 +2964,36 @@ void RtfAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
 }
 
-void RtfAttributeOutput::FormatFillStyle( const XFillStyleItem& /*rFillStyle*/ )
+void RtfAttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 {
+    m_oFillStyle.reset(rFillStyle.GetValue());
 }
 
-void RtfAttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGradient*/ )
+void RtfAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGradient )
 {
+    if (*m_oFillStyle == XFILL_GRADIENT)
+    {
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("fillType", OString::number(7))); // Shade using the fillAngle
+
+        const XGradient& rGradient = rFillGradient.GetGradientValue();
+        const Color& rStartColor = rGradient.GetStartColor();
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("fillBackColor", OString::number(msfilter::util::BGRToRGB(rStartColor.GetColor()))));
+
+        const Color& rEndColor = rGradient.GetEndColor();
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("fillColor", OString::number(msfilter::util::BGRToRGB(rEndColor.GetColor()))));
+
+        switch (rGradient.GetGradientStyle())
+        {
+            case XGRAD_LINEAR: break;
+            case XGRAD_AXIAL:
+               m_aFlyProperties.push_back(std::make_pair<OString, OString>("fillFocus", OString::number(50)));
+               break;
+            case XGRAD_RADIAL: break;
+            case XGRAD_ELLIPTICAL: break;
+            case XGRAD_SQUARE: break;
+            case XGRAD_RECT: break;
+        }
+    }
 }
 
 void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
