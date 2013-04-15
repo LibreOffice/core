@@ -212,6 +212,19 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
+ifeq ($(CROSS_COMPILING),YES)
+
+define gb_Module_add_check_target
+endef
+
+define gb_Module_add_slowcheck_target
+endef
+
+define gb_Module_add_subsequentcheck_target
+endef
+
+else
+
 define gb_Module_add_check_target
 $(call gb_Module__read_targetfile,$(1),$(2),check target)
 
@@ -235,6 +248,8 @@ $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
+
+endif
 
 define gb_Module_add_moduledir
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
