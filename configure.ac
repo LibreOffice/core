@@ -8588,8 +8588,8 @@ if test "$enable_neon" != "no" && test "$enable_openssl" = "no"; then
     AC_MSG_RESULT([yes])
     AM_PATH_LIBGCRYPT()
     PKG_CHECK_MODULES(GNUTLS, [gnutls],,
-        AC_MSG_ERROR([Disabling OpenSSL was requested, but GNUTLS is not
-                      available in the system to use as replacement.]))
+        AC_MSG_ERROR([[Disabling OpenSSL was requested, but GNUTLS is not
+                      available in the system to use as replacement.]]))
 fi
 
 AC_SUBST([LIBGCRYPT_CFLAGS])
