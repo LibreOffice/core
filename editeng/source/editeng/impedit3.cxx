@@ -4320,19 +4320,8 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara,
 
     // #114278# Also setting up digit language from Svt options
     // (cannot reliably inherit the outdev's setting)
-    LanguageType eLang;
-
-    if( !pCTLOptions )
-        pCTLOptions = new SvtCTLOptions;
-
-    if ( SvtCTLOptions::NUMERALS_HINDI == pCTLOptions->GetCTLTextNumerals() )
-        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
-    else if ( SvtCTLOptions::NUMERALS_ARABIC == pCTLOptions->GetCTLTextNumerals() )
-        eLang = LANGUAGE_ENGLISH;
-    else
-        eLang = (LanguageType) Application::GetSettings().GetLanguageTag().getLanguageType();
-
-    pOutDev->SetDigitLanguage( eLang );
+    LanguageType eLang = (LanguageType) Application::GetSettings().GetLanguageTag().getLanguageType();
+    ImplInitDigitMode( pOutDev, eLang );
 }
 
 Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator() const
