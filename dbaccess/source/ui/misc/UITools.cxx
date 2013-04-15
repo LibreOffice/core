@@ -776,7 +776,7 @@ float ConvertFontWeight( ::FontWeight eWeight )
     else if( eWeight == WEIGHT_BLACK )
         return ::com::sun::star::awt::FontWeight::BLACK;
 
-    SAL_WARN("dbaccess.ui", "Unknown FontWeigth" );
+    SAL_WARN("dbaccess.ui", "Unknown FontWeight" );
     return ::com::sun::star::awt::FontWeight::DONTKNOW;
 }
 // -----------------------------------------------------------------------------
