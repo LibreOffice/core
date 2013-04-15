@@ -102,15 +102,15 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony:
 	rm -rf $(instsetoo_OUT)
 ifeq (TRUE,$(LIBO_DEV_INSTALL))
 	$(call instsetoo_native_install_command,openoffice,en-US,,,archive)
-	unzip -q -d $(DEVINSTALLDIR) $(instsetoo_OUT)/LibreOffice$(if $(filter TRUE,$(ENABLE_RELEASE_BUILD)),,_Dev)/archive/install/en-US/LibreOffice_*_archive.zip
-	mv $(DEVINSTALLDIR)/LibreOffice_*_archive/* $(DEVINSTALLDIR)/opt
-	rmdir $(DEVINSTALLDIR)/LibreOffice_*_archive
+	unzip -q -d $(DEVINSTALLDIR) $(instsetoo_OUT)/LibreOffice$(if $(filter TRUE,$(ENABLE_RELEASE_BUILD)),,_Dev)/archive/install/en-US/LibreOffice*_archive.zip
+	mv $(DEVINSTALLDIR)/LibreOffice*_archive/* $(DEVINSTALLDIR)/opt
+	rmdir $(DEVINSTALLDIR)/LibreOffice*_archive
 	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,archive)
-	unzip -q -d $(DEVINSTALLDIR) $(instsetoo_OUT)/LibreOffice$(if $(filter TRUE,$(ENABLE_RELEASE_BUILD)),,_Dev)_SDK/archive/install/en-US/LibreOffice_*_archive_sdk.zip
-	mv $(DEVINSTALLDIR)/LibreOffice_*_archive_sdk/LibreOffice_*_SDK/sdk \
+	unzip -q -d $(DEVINSTALLDIR) $(instsetoo_OUT)/LibreOffice$(if $(filter TRUE,$(ENABLE_RELEASE_BUILD)),,_Dev)_SDK/archive/install/en-US/LibreOffice*_archive_sdk.zip
+	mv $(DEVINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK/sdk \
         $(DEVINSTALLDIR)/opt/
-	rmdir $(DEVINSTALLDIR)/LibreOffice_*_archive_sdk/LibreOffice_*_SDK
-	rmdir $(DEVINSTALLDIR)/LibreOffice_*_archive_sdk
+	rmdir $(DEVINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK
+	rmdir $(DEVINSTALLDIR)/LibreOffice*_archive_sdk
 else # LIBO_DEV_INSTALL
 	$(call instsetoo_native_install_command,openoffice,$(instsetoo_native_WITH_LANG),,,$(PKGFORMAT))
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
