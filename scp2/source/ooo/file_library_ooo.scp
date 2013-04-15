@@ -430,8 +430,6 @@ STD_LIB_FILE( gid_File_Lib_Evoab , evoab)
 
 STD_LIB_FILE(gid_File_Lib_Evtatt, evtatt)
 
-SPECIAL_LIB_FILE(gid_File_Lib_Fileacc,fileacc)
-
 STD_LIB_FILE(gid_File_Lib_Filterconfig1, filterconfig)
 
 STD_LIB_FILE( gid_File_Lib_Flat, flat)
@@ -599,17 +597,6 @@ File gid_File_Lib_I18nisolang
     Name = STRING(CONCAT3(i18nlangtag,COMID,.dll));
   #endif
     PACKED_LIB_FILE_BODY;
-End
-
-File gid_File_Lib_I18nutil
-    LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT3(libi18nutil,COMID,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(i18nutil,COMID,.dll));
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
 End
 
 #ifndef SYSTEM_ICU
@@ -806,8 +793,6 @@ File gid_File_Lib_Ole
 End
 
 #endif
-
-SPECIAL_LIB_FILE(gid_File_Lib_Package2,package2)
 
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontainer.uno )
 
@@ -1123,17 +1108,6 @@ File gid_File_Lib_Tvhlp1
   #endif
 End
 
-File gid_File_Lib_Ucb1
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libucb1,UNXSUFFIX));
-  #else
-    Name = "ucb1.dll";
-  #endif
-End
-
 File gid_File_Lib_Ucbhelper
     LIB_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
@@ -1195,8 +1169,6 @@ End
 
 #endif
 
-SPECIAL_LIB_FILE(gid_File_Lib_Ucpfile1,ucpfile1)
-
 SPECIAL_LIB_FILE(gid_File_Lib_Ucpftp1,ucpftp1)
 
 SPECIAL_LIB_FILE(gid_File_Lib_Ucphier1,ucphier1)
@@ -1247,8 +1219,6 @@ File gid_File_Lib_Xo
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
-
-SPECIAL_LIB_FILE(gid_File_Lib_Xstor,xstor)
 
 STD_LIB_FILE( gid_File_Lib_Xsltdlg, xsltdlg )
 STD_LIB_FILE( gid_File_Lib_Xsltfilter, xsltfilter )
@@ -1415,13 +1385,6 @@ File gid_File_Lib_Crypto
 	#endif
 End
 #endif
-
-File gid_File_Lib_Soffice
-    LIB_FILE_BODY;
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = SCP2_URE_DL_NORMAL("sofficeapp");
-    Styles = (PACKED);
-End
 
 File gid_File_Lib_Unopkgapp
     LIB_FILE_BODY;

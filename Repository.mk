@@ -444,6 +444,15 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	$(if $(filter WNT,$(OS)),jpipx) \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,OOO, \
+	fileacc \
+	i18nutil \
+	package2 \
+	sofficeapp \
+	ucb1 \
+	ucpfile1 \
+	xstor \
+))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     avmediagst \
     avmediagst_0_10 \
@@ -458,7 +467,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     dict_zh \
     embobj \
     emboleobj \
-    fileacc \
     hsqldb \
     index_data \
     java_uno_accessbridge \
@@ -472,22 +480,18 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     mcnttype \
     mozbootstrap \
     officebean \
-    package2 \
     pyuno \
     pyuno_wrapper \
     recentfile \
     scriptframe \
     sdbc2 \
     smoketest \
-    sofficeapp \
     srtrs1 \
     subsequenttest \
     test \
     textconv_dict \
     tvhlp1 \
-    ucb1 \
     ucpdav1 \
-    ucpfile1 \
     ucpftp1 \
     ucpchelp1 \
     ucphier1 \
@@ -500,7 +504,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     xmlsecurity \
     xsec_fw \
     xsec_xmlsec \
-    xstor \
     $(if $(filter $(OS),ANDROID), \
         lo-bootstrap \
     ) \
@@ -546,7 +549,6 @@ endif
 $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
     i18nlangtag \
-    i18nutil \
     ucbhelper \
 ))
 
