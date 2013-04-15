@@ -355,9 +355,10 @@ define gb_Library_get_dllname
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_DLLFILENAMES)))
 endef
 
-# this is nerfed, it just points to the library to disable the .exports
+# in effect this just causes the .export target to be touched
+# cannot be the .lib itself because that causes attempts to get it linked :(
 define gb_Library_get_exports_target
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1)))
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).exports
 endef
 
 
