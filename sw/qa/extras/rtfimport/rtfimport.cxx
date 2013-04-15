@@ -150,6 +150,7 @@ public:
     void testFdo62288();
     void testFdo37716();
     void testFdo51916();
+    void testFdo61193();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -272,6 +273,7 @@ void Test::run()
         {"fdo62288.rtf", &Test::testFdo62288},
         {"fdo37716.rtf", &Test::testFdo37716},
         {"fdo51916.rtf", &Test::testFdo51916},
+        {"hello.rtf", &Test::testFdo61193},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -924,6 +926,15 @@ void Test::testCopyPasteFootnote()
     paste("copypaste-footnote-paste.rtf", xTextRange);
 
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
+}
+
+void Test::testFdo61193()
+{
+    // Pasting content that contained a footnote caused a crash.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo61193.rtf", xEnd);
 }
 
 void Test::testShptxtPard()

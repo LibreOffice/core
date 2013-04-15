@@ -722,6 +722,8 @@ void lcl_AddRangeAndStyle(
 void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    if (m_aTextAppendStack.empty())
+        return;
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     // n#779642: ignore fly frame inside table as it could lead to messy situations
     if( rAppendContext.pLastParagraphProperties.get() && rAppendContext.pLastParagraphProperties->IsFrameMode()
@@ -965,6 +967,8 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 #endif
 
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
+    if (!m_aTextAppendStack.size())
+        return;
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend >  xTextAppend;
     if (!m_aTextAppendStack.empty())
@@ -1449,14 +1453,14 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         }
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ),
-                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xFootnoteText->getStart())));
+                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xFootnoteText->createTextCursorByRange(xFootnoteText->getStart())));
 
         // Redlines for the footnote anchor
         CheckRedline( xFootnote->getAnchor( ) );
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& e )
     {
-        OSL_FAIL( "exception in PushFootOrEndnote" );
+        SAL_WARN("writerfilter", "exception in PushFootOrEndnote: " << e.Message);
     }
 }
 
