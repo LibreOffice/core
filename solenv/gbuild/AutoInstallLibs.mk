@@ -19,7 +19,7 @@ $(call gb_AutoInstallLibs_get_target,%) :
 	$(call gb_Output_info,install module: $(INSTALLMODULE) contents: $(gb_Library_MODULE_$(INSTALLMODULE)))
 	echo "#define $(SCP2ID)_ALL \ " >> $@
 	$(foreach lib,$(gb_Library_MODULE_$(INSTALLMODULE)),\
-		echo "    $(SCP2ID)_$(lib) \ " >> $@;)
+		echo "    $(SCP2ID)_$(lib), \ " >> $@;)
 	echo "" >> $@
 	$(foreach lib,$(gb_Library_MODULE_$(INSTALLMODULE)),\
 		echo "$(SCP2TEMPLATE)($(SCP2ID)_$(lib),$(call gb_Library_get_runtime_filename,$(lib)))" >> $@;)
