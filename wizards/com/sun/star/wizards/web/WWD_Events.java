@@ -885,7 +885,7 @@ public abstract class WWD_Events extends WWD_Startup
     /**
      * this method will be called when the Status Dialog
      * is hidden. 
-     * It checks if the "Process" was successfull, and if so,
+     * It checks if the "Process" was successful, and if so,
      * it closes the wizard dialog. 
      */
     public void finishWizardFinished()
@@ -929,7 +929,7 @@ public abstract class WWD_Events extends WWD_Startup
     /**
      * finish the wizard
      * @param exitOnCreate_ should the wizard close after
-     * a successfull create.
+     * a successful create.
      * Default is true,
      * I have a hidden feature which enables false here
      */

@@ -58,7 +58,7 @@ namespace svt
         SVT_DLLPUBLIC static void           CopyString( const OUString& _rContent, Window* _pWindow = NULL );
 
         /** extracts a string from the system clipboard given
-            @return <TRUE/> if the extraction was successfull, i.e. if the clipboard contained a string content
+            @return <TRUE/> if the extraction was successful, i.e. if the clipboard contained a string content
         */
         SVT_DLLPUBLIC static sal_Bool       PasteString( OUString& _rContent, Window* _pWindow = NULL );
 

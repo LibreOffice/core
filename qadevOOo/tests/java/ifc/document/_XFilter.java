@@ -45,7 +45,7 @@ import com.sun.star.uno.UnoRuntime;
 *  <li> <code>'XFilter.Checker'</code> <b>(optional)</b> (of type
 *   <code>ifc.document._XFilter.FilterChecker</code>) : implementation
 *   of interface must allow checking that document was exported successfully.
-*   If the relation doesn't exist then by default successfull filtering
+*   If the relation doesn't exist then by default successful filtering
 *   assumed.
 *  </li>
 * <ul> <p>

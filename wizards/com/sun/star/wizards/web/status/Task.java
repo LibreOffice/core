@@ -24,7 +24,7 @@ import java.util.List;
 public class Task
 {
 
-    private int successfull = 0;
+    private int successful = 0;
     private int failed = 0;
     private int max = 0;
     private String taskName;
@@ -58,14 +58,14 @@ public class Task
     {
         if (success_)
         {
-            successfull++;
+            successful++;
         }
         else
         {
             failed++;
         }
         fireTaskStatusChanged();
-        if (failed + successfull == max)
+        if (failed + successful == max)
         {
             fireTaskFinished();
         }
@@ -79,7 +79,7 @@ public class Task
 
     public int getStatus()
     {
-        return successfull + failed;
+        return successful + failed;
     }
 
     public void addTaskListener(TaskListener tl)
@@ -158,6 +158,6 @@ public class Task
 
     public int getSuccessfull()
     {
-        return successfull;
+        return successful;
     }
 }

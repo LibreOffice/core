@@ -282,7 +282,7 @@ namespace svt
             method is able to determine the next state without actually having the page of the current state.
 
             @return
-                <TRUE/> if and only if traveling was successfull
+                <TRUE/> if and only if traveling was successful
 
             @see skipUntil
             @see skipBackwardUntil
@@ -298,7 +298,7 @@ namespace svt
             The skipped states appear in the state history, so <method>travelPrevious</method> will make use of them.
 
             @return
-                <TRUE/> if and only if traveling was successfull
+                <TRUE/> if and only if traveling was successful
 
             @see skip
             @see skipBackwardUntil
@@ -316,7 +316,7 @@ namespace svt
             you from this.
 
             @return
-                <TRUE/> if and only if traveling was successfull
+                <TRUE/> if and only if traveling was successful
 
             @see skipUntil
             @see skip

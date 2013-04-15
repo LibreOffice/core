@@ -101,7 +101,7 @@ namespace comphelper
         @param _rxComponent
             is the component which should be examined.
         @return
-            the pointer to the implementation, if successfull. The only known error condition so far
+            the pointer to the implementation, if successful. The only known error condition so far
             is an invalid context (which means it is <NULL/>, or the implementation is not derived
             from <type>OAccessibleImplementationAccess</type>, or retrieving the implementation failed).
         */

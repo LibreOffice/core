@@ -250,7 +250,7 @@ namespace xmloff
                 the AddressConversion service
 
             @return
-                <TRUE/> if any only if the conversion was successfull
+                <TRUE/> if any only if the conversion was successful
 
             @see com::sun::star::table::CellAddressConversion
             @see com::sun::star::table::CellRangeAddressConversion

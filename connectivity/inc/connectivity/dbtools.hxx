@@ -351,7 +351,7 @@ namespace dbtools
         @param _pAsciiSettingsName
             the ASCII name of the setting to obtain
         @param _rSettingsValue
-            the value of the setting, upon successfull return
+            the value of the setting, upon successful return
 
         @return
             <FALSE/> if the setting is not present in the <member scope="com::sun::star::sdb">DataSource::Info</member>

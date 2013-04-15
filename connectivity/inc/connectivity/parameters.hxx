@@ -261,7 +261,7 @@ namespace dbtools
             @param _rxComponent
                 the database component to initialize from. Must not be <NULL/>
             @return
-                <TRUE/> if and only if the initialization was successfull
+                <TRUE/> if and only if the initialization was successful
 
             @postcond
                 if and only if <TRUE/> is returned, then <member>m_xInnerParamColumns</member> contains the collection of

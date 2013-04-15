@@ -238,7 +238,7 @@ public:
                                  const OUString& rFontName );
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
-    // returns TRUE if creation of subset was successfull
+    // returns TRUE if creation of subset was successful
     // parameters: rToFile: contains a osl file URL to write the subset to
     //             pFont: describes from which font to create a subset
     //             pGlyphIDs: the glyph ids to be extracted

@@ -108,7 +108,7 @@ COMPHELPER_DLLPUBLIC void copyProperties(const staruno::Reference<starbeans::XPr
 //==================================================================
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue
-    @param          _rConvertedValue    the conversion result (if successfull)
+    @param          _rConvertedValue    the conversion result (if successful)
     @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
     @param          _rValueToSet        the new value which is about to be set
     @param          _rCurrentValue      the current value of the property
@@ -132,7 +132,7 @@ sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /
 }
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue for enum values
-    @param          _rConvertedValue    the conversion result (if successfull)
+    @param          _rConvertedValue    the conversion result (if successful)
     @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
     @param          _rValueToSet        the new value which is about to be set
     @param          _rCurrentValue      the current value of the property
@@ -162,7 +162,7 @@ sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::An
 }
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue for boolean properties
-    @param          _rConvertedValue    the conversion result (if successfull)
+    @param          _rConvertedValue    the conversion result (if successful)
     @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
     @param          _rValueToSet        the new value which is about to be set
     @param          _rCurrentValue      the current value of the property
@@ -185,7 +185,7 @@ inline sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno:
 }
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue
-    @param          _rConvertedValue    the conversion result (if successfull)
+    @param          _rConvertedValue    the conversion result (if successful)
     @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
     @param          _rValueToSet        the new value which is about to be set
     @param          _rCurrentValue      the current value of the property

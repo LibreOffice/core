@@ -206,7 +206,7 @@ public:
     }
 
     /** Set the data associated with the data key.
-        @returns True if operation was successfull
+        @returns True if operation was successful
     */
     sal_Bool SAL_CALL setData(void *pData)
     {

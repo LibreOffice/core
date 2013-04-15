@@ -141,7 +141,7 @@ namespace pcr
     private:
         /** returns the script events associated with our introspectee
             @param  _out_rEvents
-                Takes, upon successfull return, the events currently associated with the introspectee
+                Takes, upon successful return, the events currently associated with the introspectee
             @precond
                 Our introspectee is a form component
         */
@@ -151,7 +151,7 @@ namespace pcr
 
         /** returns the script events associated with our introspectee
             @param  _out_rEvents
-                Takes, upon successfull return, the events currently associated with the introspectee
+                Takes, upon successful return, the events currently associated with the introspectee
             @precond
                 Our introspectee is a dialog element
         */
@@ -175,7 +175,7 @@ namespace pcr
 
         /** returns the types of the listeners which can be registered at our introspectee
             @param  _out_rTypes
-                Takes, upon successfull return, the types of possible listeners at the introspectee
+                Takes, upon successful return, the types of possible listeners at the introspectee
         */
         void    impl_getCopmonentListenerTypes_nothrow(
                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >& _out_rTypes

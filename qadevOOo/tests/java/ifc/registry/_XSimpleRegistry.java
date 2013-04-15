@@ -193,7 +193,7 @@ public class _XSimpleRegistry extends MultiMethodTest {
     * Has <b> OK </b> status if the method isn't supported by the component
     * (the object relation <code>'NR'</code> isn't null)
     * or
-    * if it's supported and after successfull merging the keys mentioned
+    * if it's supported and after successful merging the keys mentioned
     * above are recursively equal. <p>
     */
     public void _mergeKey() {

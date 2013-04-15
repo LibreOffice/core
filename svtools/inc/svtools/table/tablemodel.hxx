@@ -185,7 +185,7 @@ namespace svt { namespace table
         /** sets a new column ID
 
             @return
-                <TRUE/> if setting the new ID was successfull. A possible error
+                <TRUE/> if setting the new ID was successful. A possible error
                 conditions is if you try to set an ID which is already used
                 by another column within the same table.
 

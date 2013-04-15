@@ -78,7 +78,7 @@ public:
     /** Connect to the current controller of the view shell as listener.
         This method is called once during initialization and every time a
         FrameActionEvent signals the current controller being exchanged.
-        When the connection is successfull then the flag
+        When the connection is successful then the flag
         mbListeningToController is set to <TRUE/>.
     */
     void ConnectToController (void);

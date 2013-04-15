@@ -412,7 +412,7 @@ public:
 
     /** Set the given window as new parent window.  This is not possible for
         all views, so the return value tells the caller if the relocation
-        was successfull.
+        was successful.
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 

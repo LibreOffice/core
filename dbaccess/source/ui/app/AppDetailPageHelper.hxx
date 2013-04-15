@@ -59,7 +59,7 @@ namespace dbaui
                 the resulting rectangle
 
             @return
-                <TRUE/> when successfull
+                <TRUE/> when successful
         */
         sal_Bool ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
         void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );

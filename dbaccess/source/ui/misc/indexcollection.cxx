@@ -233,7 +233,7 @@ namespace dbaui
 
         // adjust the OIndex structure
         Indexes::iterator aDropped = findOriginal(_rPos->getOriginalName());
-        OSL_ENSURE(aDropped != m_aIndexes.end(), "OIndexCollection::drop: invalid original name, but successfull commit?!");
+        OSL_ENSURE(aDropped != m_aIndexes.end(), "OIndexCollection::drop: invalid original name, but successful commit?!");
         aDropped->flagAsNew(GrantIndexAccess());
 
         return sal_True;

@@ -150,7 +150,7 @@ namespace utl
             The value given is written into the node specified by the given relative path.<br/>
             In opposite to <method>getNodeValue</method>, _rName must refer to a leaf in the configuration tree, not an inner
             node.
-            @return     sal_True if and only if the write was successfull.
+            @return     sal_True if and only if the write was successful.
         */
         sal_Bool            setNodeValue(const OUString& _rPath, const ::com::sun::star::uno::Any& _rValue) const throw();
 
@@ -308,7 +308,7 @@ namespace utl
         /** commit all changes made on the subtree the object is the root for<p/>
             All changes made on any <type>OConfigurationNode</type> object retrieved (maybe indirect) from this root
             object are committed when calling this method.
-            @return     sal_True if and only if the commit was successfull
+            @return     sal_True if and only if the commit was successful
         */
         sal_Bool commit() const throw();
 

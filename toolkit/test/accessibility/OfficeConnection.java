@@ -105,7 +105,7 @@ public class OfficeConnection
     private XMultiServiceFactory  maServiceManager = null;
 
     /** A value of true just indicates that it has been tried to establish a connection,
-        not that that has been successfull.
+        not that that has been successful.
     */
     private boolean mbInitialized = false;
 }

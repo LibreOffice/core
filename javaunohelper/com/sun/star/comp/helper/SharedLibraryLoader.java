@@ -124,7 +124,7 @@ public class SharedLibraryLoader {
     /**
      * Registers the SharedLibraryLoader under a RegistryKey.
      * <p>
-     * @return  true if the registration was successfull - otherwise false
+     * @return  true if the registration was successful - otherwise false
      * @param   smgr    the ServiceManager
      * @param   regKey  the root key under that the component should be registered
      * @see     com.sun.star.loader.SharedLibrary
@@ -143,7 +143,7 @@ public class SharedLibraryLoader {
     /**
      * Registers the SharedLibraryLoader under a RegistryKey.
      * <p>
-     * @return  true if the registration was successfull - otherwise false
+     * @return  true if the registration was successful - otherwise false
      * @param   libName name of the shared library
      * @param   smgr    the ServiceManager
      * @param   regKey  the root key under that the component should be registered

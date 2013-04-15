@@ -38,7 +38,7 @@ class ConfigurationUpdaterLock;
     configuration.  An update is made by activating or deactivating drawing
     framework resources.
 
-    When an update is not successfull, i.e. after the update the current
+    When an update is not successful, i.e. after the update the current
     configuration is not equivalent to the requested configuration, then a
     timer is started to repeat the update after a short time.
 */

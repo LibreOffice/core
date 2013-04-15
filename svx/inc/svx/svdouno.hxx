@@ -140,7 +140,7 @@ protected:
 private:
     /** retrieves the typed ViewContact for the object
         @param _out_rpContact
-            Upon successfull return, ->_out_rpContact contains the ViewContact.
+            Upon successful return, ->_out_rpContact contains the ViewContact.
         @return
             <TRUE/> if and only if the contact was successfully retrieved. In this case,
             ->_out_rpContact contains a pointer to this contact.

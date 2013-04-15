@@ -512,7 +512,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
            delete to. This is done by first searching forward from the
            end of the TOX' section. If no content node is found behind
            the TOX one is searched before it. If this is not
-           successfull, too, insert new text node behind the end of
+           successful, too, insert new text node behind the end of
            the TOX' section. The cursors from the TOX' section will be
            moved to the content node found or the new text node. */
 

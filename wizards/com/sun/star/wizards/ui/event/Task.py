@@ -19,7 +19,7 @@ import traceback
 from .TaskEvent import TaskEvent
 
 class Task:
-    successfull = 0
+    successful = 0
     failed = 0
     maximum = 0
     taskName = ""
@@ -46,13 +46,13 @@ class Task:
 
     def advance(self, success_):
         if success_:
-            self.successfull += 1
-            print ("Success :", self.successfull)
+            self.successful += 1
+            print ("Success :", self.successful)
         else:
             self.failed += 1
             print ("Failed :", self.failed)
         self.fireTaskStatusChanged()
-        if (self.failed + self.successfull == self.maximum):
+        if (self.failed + self.successful == self.maximum):
             self.fireTaskFinished()
 
     def advance1(self, success_, nextSubtaskName):
@@ -60,7 +60,7 @@ class Task:
         self.setSubtaskName(nextSubtaskName)
 
     def getStatus(self):
-        return self.successfull + self.failed
+        return self.successful + self.failed
 
     def addTaskListener(self, tl):
         self.listeners.append(tl)
@@ -111,4 +111,4 @@ class Task:
         return self.failed
 
     def getSuccessfull(self):
-        return self.successfull
+        return self.successful

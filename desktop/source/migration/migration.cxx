@@ -222,7 +222,7 @@ void Migration::migrateSettingsIfNecessary()
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_FAIL(aMsg.getStr());
     }
-    OSL_ENSURE(bResult, "Migration has not been successfull");
+    OSL_ENSURE(bResult, "Migration has not been successful");
     (void)bResult;
 }
 

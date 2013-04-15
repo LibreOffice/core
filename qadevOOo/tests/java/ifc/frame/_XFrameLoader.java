@@ -132,8 +132,8 @@ public class _XFrameLoader extends MultiMethodTest {
     * listener have a chance to be called  and then checks
     * if the load listener was called. <p>
     * Has <b>OK</b> status if <code>cancel</code> method test
-    * didn't interrupt loading and it was successfull, or
-    * if in this method it loads successfull and listener's
+    * didn't interrupt loading and it was successful, or
+    * if in this method it loads successful and listener's
     * <code>finished</code> method was called.
     * The following method tests are to be executed before :
     * <ul>

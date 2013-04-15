@@ -48,7 +48,7 @@ public class SharedLibraryLoader_Test {
         sharedLibraryLoaderFactory = SharedLibraryLoader.getServiceFactory(null, null);
 
         System.out.print("Test - ");
-        System.out.println(sharedLibraryLoaderFactory == null? "failed" : "successfull");
+        System.out.println(sharedLibraryLoaderFactory == null? "failed" : "successful");
         System.out.println("*******************************************************************");
         System.out.println();
 
@@ -69,7 +69,7 @@ public class SharedLibraryLoader_Test {
                 XImplementationLoader.class, sharedLibraryLoaderFactory.createInstance() );
 
         System.out.print("Test - ");
-        System.out.println(sharedLibraryLoader == null? "failed" : "successfull");
+        System.out.println(sharedLibraryLoader == null? "failed" : "successful");
         System.out.println("*******************************************************************");
         System.out.println();
 
@@ -96,7 +96,7 @@ public class SharedLibraryLoader_Test {
         nativeServiceManager = UnoRuntime.queryInterface( XMultiServiceFactory.class, aSMgrFac.createInstance() );
 
         System.out.print("Test - ");
-        System.out.println(nativeServiceManager == null? "failed" : "successfull");
+        System.out.println(nativeServiceManager == null? "failed" : "successful");
 
         System.out.println("*******************************************************************");
         System.out.println();
@@ -122,7 +122,7 @@ public class SharedLibraryLoader_Test {
         simpleRegistry =
             UnoRuntime.queryInterface( XSimpleRegistry.class, aRegFac.createInstance() );
         System.out.print("Test - ");
-        System.out.println(simpleRegistry == null? "failed" : "successfull");
+        System.out.println(simpleRegistry == null? "failed" : "successful");
         System.out.println("*******************************************************************");
         System.err.println();
         return true;
@@ -143,7 +143,7 @@ public class SharedLibraryLoader_Test {
         result = SharedLibraryLoader.writeRegistryServiceInfo( null,  regKey );
 
         System.out.print("Test - ");
-        System.out.println( result==false ? "failed" : "successfull");
+        System.out.println( result==false ? "failed" : "successful");
         System.out.println("*******************************************************************");
         System.out.println();
         return result;

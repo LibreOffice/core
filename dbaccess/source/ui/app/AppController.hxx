@@ -278,7 +278,7 @@ namespace dbaui
             @param  _bMove
                 if <TRUE/> the name of the content must be inserted without any change, otherwise not.
             @return
-                <TRUE/> if the paste opertions was successfull, otherwise <FALSE/>.
+                <TRUE/> if the paste opertions was successful, otherwise <FALSE/>.
         */
         sal_Bool paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData ,const OUString& _sParentFolder = String(),sal_Bool _bMove = sal_False);
 
@@ -346,7 +346,7 @@ namespace dbaui
             @param  _bMove
                 if <TRUE/> the name of the content must be inserted without any change, otherwise not.
             @return
-                <TRUE/> if the insert opertions was successfull, otherwise <FALSE/>.
+                <TRUE/> if the insert opertions was successful, otherwise <FALSE/>.
         */
         sal_Bool insertHierachyElement(  ElementType _eType
                                     ,const OUString& _sParentFolder

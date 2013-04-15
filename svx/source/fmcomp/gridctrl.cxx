@@ -3280,7 +3280,7 @@ sal_Bool DbGridControl::SaveRow()
             // if we are appending we still sit on the insert row
             // we don't move just clear the flags not to move on the current row
             m_xCurrentRow->SetState(m_pDataCursor, sal_False);
-            SAL_INFO("svx.fmcomp", "explicit SetState after a successfull update, new state: " << ROWSTATUS(m_xCurrentRow));
+            SAL_INFO("svx.fmcomp", "explicit SetState after a successful update, new state: " << ROWSTATUS(m_xCurrentRow));
             m_xCurrentRow->SetNew(sal_False);
 
             // adjust the seekcursor if it is on the same position as the datacursor

@@ -64,7 +64,7 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
             the property name with its value.
 
         @returns
-            An empty sequence if all properties are successfull set.
+            An empty sequence if all properties are successful set.
 
             Otherwise for every property value that could not successfully
             be set an entry of the
