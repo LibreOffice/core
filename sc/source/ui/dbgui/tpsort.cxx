@@ -141,7 +141,10 @@ void ScTabPageSortFields::Init()
 
     // Create three sort key dialogs by default
     for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-        AddSortKeyItem(i);
+    {
+        maSortKeyCtrl.AddSortKey(i+1);
+        maSortKeyItems[i].m_pLbSort->SetSelectHdl( LINK( this, ScTabPageSortFields, SelectHdl ) );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -167,8 +170,11 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
     {
         // Make sure that the all sort keys are reset
         for ( sal_uInt16 i=nSortKeyCount; i<aSortData.maKeyState.size(); i++ )
-            AddSortKeyItem(i);
-
+        {
+            maSortKeyCtrl.AddSortKey(i+1);
+            maSortKeyItems[i].m_pLbSort->SetSelectHdl( LINK( this,
+                                 ScTabPageSortFields, SelectHdl ) );
+        }
         nSortKeyCount = aSortData.maKeyState.size();
         FillFieldLists(0);
 
@@ -437,15 +443,6 @@ sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
     return nFieldPos;
 }
 
-//------------------------------------------------------------------------
-
-void ScTabPageSortFields::AddSortKeyItem( sal_uInt16 nItemIndex )
-{
-    maSortKeyCtrl.AddSortKey( nItemIndex );
-    maSortKeyItems[nItemIndex].m_pLbSort->SetSelectHdl(
-                                LINK( this, ScTabPageSortFields, SelectHdl ) );
-}
-
 // -----------------------------------------------------------------------
 // Handler:
 //---------
@@ -466,7 +463,9 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 
             // Add Sort Key Item
             ++nSortKeyCount;
-            AddSortKeyItem( nSortKeyIndex );
+            maSortKeyCtrl.AddSortKey( nSortKeyCount );
+            maSortKeyItems[nSortKeyIndex].m_pLbSort->SetSelectHdl( LINK( this, ScTabPageSortFields, SelectHdl ) );
+
             FillFieldLists( nSortKeyIndex );
 
             // Set Status

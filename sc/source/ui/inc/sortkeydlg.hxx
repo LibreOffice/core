@@ -99,7 +99,7 @@ private:
 public:
     ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& mrSortKeyItems);
     void setScrollRange();
-    void AddSortKey( sal_uInt16 nItemIndex );
+    void AddSortKey( sal_uInt16 nItem );
 };
 
 #endif // SC_SORTKEYDLG_HXX
