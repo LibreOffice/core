@@ -41,10 +41,11 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/instance.hxx>
-#include <vcl/toolbox.hxx>
 #include <salhelper/thread.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/toolbox.hxx>
 #include <unotools/historyoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -843,7 +844,7 @@ void SvtURLBox::TryAutoComplete()
 }
 
 //-------------------------------------------------------------------------
-SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart )
+SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart, bool bSetDefaultHelpID )
     :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOSIZE | WB_AUTOHSCROLL ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( sal_False ),
@@ -853,7 +854,7 @@ SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart )
         bNoSelection( sal_False ),
         bIsAutoCompleteEnabled( sal_True )
 {
-    ImplInit();
+    Init(bSetDefaultHelpID);
 
     if ( GetDesktopRectPixel().GetWidth() > 800 )
         SetSizePixel( Size( 300, 240 ) );
@@ -862,7 +863,8 @@ SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart )
 }
 
 //-------------------------------------------------------------------------
-SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart )
+SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart,
+    bool bSetDefaultHelpID )
     :   ComboBox( pParent, _nStyle ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( sal_False ),
@@ -872,11 +874,21 @@ SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart )
         bNoSelection( sal_False ),
         bIsAutoCompleteEnabled( sal_True )
 {
-    ImplInit();
+    Init(bSetDefaultHelpID);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtURLBox(Window *pParent, VclBuilder::stringmap &)
+{
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
+                       WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
+    SvtURLBox* pListBox = new SvtURLBox(pParent, nWinBits, INET_PROT_NOT_VALID, false);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
 }
 
 //-------------------------------------------------------------------------
-SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart )
+SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart,
+    bool bSetDefaultHelpID )
     :   ComboBox( pParent , _rResId ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( sal_False ),
@@ -886,14 +898,14 @@ SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
         bNoSelection( sal_False ),
         bIsAutoCompleteEnabled( sal_True )
 {
-    ImplInit();
+    Init(bSetDefaultHelpID);
 }
 
-void SvtURLBox::ImplInit()
+void SvtURLBox::Init(bool bSetDefaultHelpID)
 {
     pImp = new SvtURLBox_Impl();
 
-    if ( GetHelpId().getLength() == 0 )
+    if (bSetDefaultHelpID && GetHelpId().isEmpty())
         SetHelpId( ".uno:OpenURL" );
     EnableAutocomplete( sal_False );
 

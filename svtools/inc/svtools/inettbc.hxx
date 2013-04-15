@@ -51,8 +51,7 @@ friend class SvtURLBox_Impl;
     SVT_DLLPRIVATE void                         TryAutoComplete();
     SVT_DLLPRIVATE void                            UpdatePicklistForSmartProtocol_Impl();
     DECL_DLLPRIVATE_LINK(                      AutoCompleteHdl_Impl, void* );
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void                            ImplInit();
+    SVT_DLLPRIVATE void             Init(bool bSetDefaultHelpID);
 
 protected:
     virtual long                    Notify( NotifyEvent& rNEvt );
@@ -61,9 +60,9 @@ protected:
     virtual long                    PreNotify( NotifyEvent& rNEvt );
 
 public:
-                                    SvtURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_NOT_VALID );
-                                    SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart = INET_PROT_NOT_VALID );
-                                    SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart = INET_PROT_NOT_VALID );
+                                    SvtURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
+                                    SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
+                                    SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
                                     ~SvtURLBox();
 
     void                            SetBaseURL( const String& rURL );
