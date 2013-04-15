@@ -85,7 +85,12 @@ public:
     virtual void SAL_CALL setPrintHeadings( sal_Bool printHeadings ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getPaperSize() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPaperSize( sal_Int32 paperSize ) throw (css::uno::RuntimeException);
-
+    virtual ::sal_Bool SAL_CALL getPrintGridlines() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPrintGridlines( ::sal_Bool _printgridlines ) throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getPrintTitleRows() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPrintTitleRows( const ::rtl::OUString& _printtitlerows ) throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getPrintTitleColumns() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPrintTitleColumns( const ::rtl::OUString& _printtitlecolumns ) throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

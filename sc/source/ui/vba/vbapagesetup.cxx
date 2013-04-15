@@ -728,4 +728,30 @@ void SAL_CALL ScVbaPageSetup::setPaperSize( sal_Int32 paperSize) throw (css::uno
     {
     }
 }
+
+::sal_Bool SAL_CALL ScVbaPageSetup::getPrintGridlines() throw (uno::RuntimeException)
+{
+    return false;
+}
+
+void SAL_CALL ScVbaPageSetup::setPrintGridlines( ::sal_Bool /*_printgridlines*/ ) throw (uno::RuntimeException)
+{
+}
+
+::rtl::OUString SAL_CALL ScVbaPageSetup::getPrintTitleRows() throw (uno::RuntimeException)
+{
+    return ::rtl::OUString();
+}
+void SAL_CALL ScVbaPageSetup::setPrintTitleRows( const ::rtl::OUString& /*_printtitlerows*/ ) throw (css::uno::RuntimeException)
+{
+}
+::rtl::OUString SAL_CALL ScVbaPageSetup::getPrintTitleColumns() throw (uno::RuntimeException)
+{
+    return ::rtl::OUString();
+}
+
+void SAL_CALL ScVbaPageSetup::setPrintTitleColumns( const ::rtl::OUString& /*_printtitlecolumns*/ ) throw (uno::RuntimeException)
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
