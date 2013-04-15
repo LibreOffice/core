@@ -70,9 +70,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_filters_test, \
     utl \
     vcl \
     xo \
-	$(if $(filter $(OS),ANDROID), \
-		lo-bootstrap \
-	) \
 	$(gb_UWINAPI) \
 ))
 
@@ -134,11 +131,9 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     xmlsecurity/util/xsec_xmlsec.windows \
 ))
 else
-ifneq ($(filter-out IOS ANDROID,$(OS)),) #FIXME: get nss&xmlsec building
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     xmlsecurity/util/xsec_xmlsec \
 ))
-endif
 endif
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_subsequent_filters_test))

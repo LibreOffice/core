@@ -16,15 +16,9 @@ $(eval $(call gb_CppunitTest_set_include,basebmp_cpputest,\
 
 $(eval $(call gb_CppunitTest_use_external,basebmp_cpputest,boost_headers))
 
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_CppunitTest_use_static_libraries,basebmp_cpputest,\
-    basebmp \
-))
-else
 $(eval $(call gb_CppunitTest_use_libraries,basebmp_cpputest,\
     basebmp \
 ))
-endif
 
 $(eval $(call gb_CppunitTest_use_libraries,basebmp_cpputest,\
     basegfx \

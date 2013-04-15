@@ -76,9 +76,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_filters_test, \
     utl \
     vcl \
     xo \
-	$(if $(filter $(OS),ANDROID), \
-		lo-bootstrap \
-	) \
 	$(gb_UWINAPI) \
 ))
 
