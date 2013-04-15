@@ -107,8 +107,6 @@ File gid_File_Lib_CLucene
 End
 #endif
 
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
-
 File gid_File_Lib_Ldapbe2
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -450,16 +448,7 @@ End
 #endif
 
 #if defined UNX && ! defined MACOSX
-
-File gid_File_Lib_Desktopbe
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(desktopbe1.uno,UNXSUFFIX));
-End
-
 #ifdef ENABLE_TDE
-#ifndef MACOSX
 File gid_File_Bin_TdeFilePicker
     BIN_FILE_BODY;
     Styles = (PACKED);
@@ -467,17 +456,14 @@ File gid_File_Bin_TdeFilePicker
     Name = "tdefilepicker";
 End
 #endif
-#endif
 
 #ifdef ENABLE_KDE
-#ifndef MACOSX
 File gid_File_Bin_KdeFilePicker
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
     Name = "kdefilepicker";
 End
-#endif
 #endif
 #endif
 
@@ -573,8 +559,6 @@ End
 
 #endif
 
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fsstorage, fsstorage.uno )
-
 #ifdef WNT
 
 File gid_File_Lib_Ftransl
@@ -596,17 +580,6 @@ End
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
 
 STD_LIB_FILE( gid_File_Lib_Helplinker, helplinker)
-
-File gid_File_Lib_I18npool
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(i18npool.uno,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT2(i18npool.uno,.dll));
-  #endif
-End
 
 File gid_File_Lib_I18nsearch
     LIB_FILE_BODY;
@@ -1125,7 +1098,6 @@ End
 #endif
 
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Syssh, syssh.uno )
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Localebe, localebe1.uno )
 
 #ifdef WNT
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1.uno )

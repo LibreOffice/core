@@ -105,7 +105,7 @@ gb_MERGEDLIBS := \
 	configmgr \
 	cppcanvas \
 	deploymentmisc \
-	desktopbe1 \
+	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
 	drawinglayer \
 	editeng \

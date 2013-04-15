@@ -560,14 +560,20 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     mtfrenderer \
     OGLTrans \
 ))
+
+$(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
+	configmgr \
+	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
+	fsstorage \
+	i18npool \
+	localebe1 \
+))
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     PresenterScreen \
     basprov \
     cairocanvas \
     canvasfactory \
     cmdmail \
-    configmgr \
-    desktopbe1 \
     directx5canvas \
     directx9canvas \
     dlgprov \
@@ -575,16 +581,13 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fastsax \
     fpicker \
     fps_office \
-    fsstorage \
     gconfbe1 \
     gdipluscanvas \
     hatchwindowfactory \
-    i18npool \
     i18nsearch \
     kdebe1 \
     kde4be1 \
     ldapbe2 \
-    localebe1 \
     losessioninstall \
     macbe1 \
     migrationoo2 \
@@ -615,15 +618,12 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     $(if $(filter $(OS),MACOSX), \
         fps_aqua \
     ) \
+	$(if $(filter $(OS),WNT), \
+		oleautobridge \
+		smplmail \
+		wininetbe1 \
+	) \
 ))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
-    oleautobridge \
-    smplmail \
-    wininetbe1 \
-))
-endif
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     acceptor \
