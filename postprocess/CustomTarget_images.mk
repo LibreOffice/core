@@ -46,6 +46,7 @@ $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 $(packimages_DIR)/images.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
+		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
 		$(call gb_Postprocess_get_target,AllResources)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
@@ -58,6 +59,7 @@ $(packimages_DIR)/images.zip : \
 $(packimages_DIR)/images_%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
+		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
 		$(call gb_Postprocess_get_target,AllResources)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
