@@ -7,17 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,tplwizfax,$(SRCDIR)/extras/source/templates/wizard/fax))
+$(eval $(call gb_Package_Package,extras_tplwizdesktop,$(SRCDIR)/extras/source/templates/wizard/desktop))
 
-$(eval $(call gb_Zip_add_files,tplwizfax,\
-    bus-classic_f.ott \
-    bus-classic-pri_f.ott \
-    bus-modern_f.ott \
-    bus-modern-pri_f.ott \
-    pri-bottle_f.ott \
-    pri-fax_f.ott \
-    pri-lines_f.ott \
-    pri-marine_f.ott \
+$(eval $(call gb_Package_set_outdir,extras_tplwizdesktop,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,tplwizdesktop,share/template/common/internal,\
+	html.stw \
+	idxexample.odt \
 ))
 
 # vim: set noet sw=4 ts=4:

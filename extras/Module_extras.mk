@@ -33,15 +33,15 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_labels \
 	Package_newfiles \
 	Package_palettes \
+	Package_tpllayoutimpr \
+	Package_tplwizagenda \
+	Package_tplwizbitmap \
+	Package_tplwizdesktop \
+	Package_tplwizfax \
+	Package_tplwizletter \
+	Package_tplwizreport \
+	Package_tplwizstyles \
 	Package_wordbook \
-	Zip_tpllayoutimpr \
-	Zip_tplwizagenda \
-	Zip_tplwizbitmap \
-	Zip_tplwizdesktop \
-	Zip_tplwizfax \
-	Zip_tplwizletter \
-	Zip_tplwizreport \
-	Zip_tplwizstyles \
 ))
 
 ifeq ($(WITH_EXTRA_EXTENSIONS),YES)
