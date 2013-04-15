@@ -40,8 +40,15 @@ sub resolve_filelist_flag
 
                 foreach my $path (@{$filelist})
                 {
-                    # TODO: check that the file is really under $outdir
-                    # TODO: check existence of the file
+                    if ((index $path, $outdir) != 0)
+                    {
+                        installer::logger::print_error("file '$path' is not in '$outdir'");
+                    }
+                    if (!-f $path)
+                    {
+                        installer::logger::print_error("file '$path' does not exist");
+                    }
+
                     my $subpath = substr $path, ((length $outdir) + 1); # drop separator too
 
                     my %newfile = ();
