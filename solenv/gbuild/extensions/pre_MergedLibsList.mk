@@ -37,6 +37,8 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	deploymentgui \
 	$(call gb_Helper_optional,EXPORT,egi) \
+	embobj \
+	emboleobj \
 	$(call gb_Helper_optional,EXPORT,eme) \
 	$(call gb_Helper_optional,EXPORT,epb) \
 	$(call gb_Helper_optional,EXPORT,epg) \
