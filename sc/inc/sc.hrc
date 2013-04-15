@@ -1060,7 +1060,7 @@
 #define WID_SIMPLE_REF                  (SC_DIALOGS_START + 126)
 #define RID_POPUP_CHANGES               (SC_DIALOGS_START + 127)
 
-#define RID_SCDLG_DAPITYPE              (SC_DIALOGS_START + 129)
+
 #define RID_SCDLG_DAPISERVICE           (SC_DIALOGS_START + 130)
 #define RID_SCDLG_DAPIDATA              (SC_DIALOGS_START + 131)
 

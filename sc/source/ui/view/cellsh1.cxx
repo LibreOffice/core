@@ -2479,7 +2479,7 @@ void ScCellShell::ExecuteDataPilotDialog()
 
         ::boost::scoped_ptr<AbstractScDataPilotSourceTypeDlg> pTypeDlg(
             pFact->CreateScDataPilotSourceTypeDlg(
-                pTabViewShell->GetDialogParent(), bEnableExt, RID_SCDLG_DAPITYPE));
+                pTabViewShell->GetDialogParent(), bEnableExt));
 
         // Populate named ranges (if any).
         ScRangeName* pRangeName = pDoc->GetRangeName();

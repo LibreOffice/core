@@ -773,30 +773,12 @@ AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilo
     return 0;
 }
 
-
-
-AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg( Window* pParent,
-                                                                                               sal_Bool bEnableExternal,
-                                                                                               int nId )
+AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg(
+    Window* pParent, bool bEnableExternal)
 {
-    ScDataPilotSourceTypeDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_DAPITYPE :
-            pDlg = new ScDataPilotSourceTypeDlg( pParent, bEnableExternal );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScDataPilotSourceTypeDlg_Impl( pDlg );
-    return 0;
+    ScDataPilotSourceTypeDlg* pDlg = new ScDataPilotSourceTypeDlg(pParent, bEnableExternal);
+    return new AbstractScDataPilotSourceTypeDlg_Impl(pDlg);
 }
-
-// add for ScDataPilotSourceTypeDlg end
-
-
 
 AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg( Window* pParent,
                                                                         const com::sun::star::uno::Sequence<OUString>& rServices,

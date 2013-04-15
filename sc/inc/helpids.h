@@ -191,7 +191,6 @@
 #define HID_PASSWD_TABLE                                        "SC_HID_PASSWD_TABLE"
 #define HID_PASSWD_DOC                                          "SC_HID_PASSWD_DOC"
 
-#define HID_DATAPILOT_TYPE                                      "SC_HID_DATAPILOT_TYPE"
 #define HID_DATAPILOT_DATABASE                                  "SC_HID_DATAPILOT_DATABASE"
 #define HID_DATAPILOT_SERVICE                                   "SC_HID_DATAPILOT_SERVICE"
 

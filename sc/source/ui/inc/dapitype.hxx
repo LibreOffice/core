@@ -32,19 +32,15 @@
 class ScDataPilotSourceTypeDlg : public ModalDialog
 {
 private:
-    FixedLine       aFlFrame;
-    RadioButton     aBtnSelection;
-    RadioButton     aBtnNamedRange;
-    RadioButton     aBtnDatabase;
-    RadioButton     aBtnExternal;
-    ListBox         aLbNamedRange;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton* m_pBtnSelection;
+    RadioButton* m_pBtnNamedRange;
+    RadioButton* m_pBtnDatabase;
+    RadioButton* m_pBtnExternal;
+    ListBox*     m_pLbNamedRange;
 
 public:
-            ScDataPilotSourceTypeDlg( Window* pParent, sal_Bool bEnableExternal );
-            ~ScDataPilotSourceTypeDlg();
+    ScDataPilotSourceTypeDlg(Window* pParent, bool bEnableExternal);
+    ~ScDataPilotSourceTypeDlg();
 
     bool IsDatabase() const;
     bool IsExternal() const;

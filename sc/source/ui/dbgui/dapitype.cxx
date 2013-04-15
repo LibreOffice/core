@@ -33,34 +33,27 @@ using namespace com::sun::star;
 
 //-------------------------------------------------------------------------
 
-ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, sal_Bool bEnableExternal ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPITYPE ) ),
-    //
-    aFlFrame        ( this, ScResId( FL_FRAME ) ),
-    aBtnSelection   ( this, ScResId( BTN_SELECTION ) ),
-    aBtnNamedRange  ( this, ScResId( BTN_NAMED_RANGE ) ),
-    aBtnDatabase    ( this, ScResId( BTN_DATABASE ) ),
-    aBtnExternal    ( this, ScResId( BTN_EXTERNAL ) ),
-    aLbNamedRange   ( this, ScResId( LB_NAMED_RANGE ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) )
+ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(Window* pParent, bool bEnableExternal)
+    : ModalDialog( pParent, "SelectSourceDialog", "modules/scalc/ui/selectsource.ui" )
 {
-    aBtnSelection.SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
-    aBtnNamedRange.SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
-    aBtnDatabase.SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
-    aBtnExternal.SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    get(m_pBtnSelection, "selection");
+    get(m_pBtnNamedRange, "namedrange");
+    get(m_pBtnDatabase, "database");
+    get(m_pBtnExternal, "external");
+    get(m_pLbNamedRange, "rangelb");
+    m_pBtnSelection->SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    m_pBtnNamedRange->SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    m_pBtnDatabase->SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    m_pBtnExternal->SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
 
     if (!bEnableExternal)
-        aBtnExternal.Disable();
+        m_pBtnExternal->Disable();
 
-    aBtnSelection.Check();
+    m_pBtnSelection->Check();
 
     // Disabled unless at least one named range exists.
-    aLbNamedRange.Disable();
-    aBtnNamedRange.Disable();
-
-    FreeResource();
+    m_pLbNamedRange->Disable();
+    m_pBtnNamedRange->Disable();
 }
 
 ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
@@ -69,39 +62,39 @@ ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
 
 bool ScDataPilotSourceTypeDlg::IsDatabase() const
 {
-    return aBtnDatabase.IsChecked();
+    return m_pBtnDatabase->IsChecked();
 }
 
 bool ScDataPilotSourceTypeDlg::IsExternal() const
 {
-    return aBtnExternal.IsChecked();
+    return m_pBtnExternal->IsChecked();
 }
 
 bool ScDataPilotSourceTypeDlg::IsNamedRange() const
 {
-    return aBtnNamedRange.IsChecked();
+    return m_pBtnNamedRange->IsChecked();
 }
 
 OUString ScDataPilotSourceTypeDlg::GetSelectedNamedRange() const
 {
-    sal_uInt16 nPos = aLbNamedRange.GetSelectEntryPos();
-    return aLbNamedRange.GetEntry(nPos);
+    sal_uInt16 nPos = m_pLbNamedRange->GetSelectEntryPos();
+    return m_pLbNamedRange->GetEntry(nPos);
 }
 
 void ScDataPilotSourceTypeDlg::AppendNamedRange(const OUString& rName)
 {
-    aLbNamedRange.InsertEntry(rName);
-    if (aLbNamedRange.GetEntryCount() == 1)
+    m_pLbNamedRange->InsertEntry(rName);
+    if (m_pLbNamedRange->GetEntryCount() == 1)
     {
         // Select position 0 only for the first time.
-        aLbNamedRange.SelectEntryPos(0);
-        aBtnNamedRange.Enable();
+        m_pLbNamedRange->SelectEntryPos(0);
+        m_pBtnNamedRange->Enable();
     }
 }
 
 IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, RadioButton*, pBtn )
 {
-    aLbNamedRange.Enable(pBtn == &aBtnNamedRange);
+    m_pLbNamedRange->Enable(pBtn == m_pBtnNamedRange);
     return 0;
 }
 

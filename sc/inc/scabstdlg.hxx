@@ -358,7 +358,8 @@ public:
 
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ) = 0; //add for ScDataPilotDatabaseDlg
 
-    virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg ( Window* pParent, sal_Bool bEnableExternal, int nId ) = 0; //add for ScDataPilotSourceTypeDlg
+    virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg(Window* pParent,
+        bool bEnableExternal) = 0;
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( Window* pParent, //add for ScDataPilotServiceDlg
                                                                         const com::sun::star::uno::Sequence<OUString>& rServices,

@@ -20,10 +20,6 @@
 #define BTN_OK          1
 #define BTN_CANCEL      2
 #define BTN_HELP        3
-#define BTN_SELECTION   4
-#define BTN_NAMED_RANGE 5
-#define BTN_DATABASE    6
-#define BTN_EXTERNAL    7
 
 #define FL_FRAME        8
 #define FT_SERVICE      9
@@ -42,7 +38,5 @@
 #define CB_OBJECT       22
 #define FT_OBJTYPE      23
 #define LB_OBJTYPE      24
-
-#define LB_NAMED_RANGE  25
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
