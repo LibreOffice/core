@@ -4739,7 +4739,7 @@ OSQLParseNode::Rule OSQLParser::RuleIDToRule( sal_uInt32 _nRule )
     OSQLParser::RuleIDMap::const_iterator i (s_aReverseRuleIDLookup.find(_nRule));
     if (i == s_aReverseRuleIDLookup.end())
     {
-        SAL_WARN("connectivity.parse",
+        SAL_INFO("connectivity.parse",
 		 "connectivity::OSQLParser::RuleIDToRule cannot reverse-lookup rule. "
 		 "Reverse mapping incomplete? "
 		 "_nRule='" << _nRule << "' "
