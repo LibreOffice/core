@@ -598,7 +598,32 @@ void SAL_CALL ScVbaPageSetup::setPrintHeadings( sal_Bool printHeadings) throw (c
     }
 }
 
-rtl::OUString
+::sal_Bool SAL_CALL ScVbaPageSetup::getPrintGridlines() throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL ScVbaPageSetup::setPrintGridlines( ::sal_Bool /*_printgridlines*/ ) throw (uno::RuntimeException)
+{
+}
+
+OUString SAL_CALL ScVbaPageSetup::getPrintTitleRows() throw (uno::RuntimeException)
+{
+    return OUString();
+}
+void SAL_CALL ScVbaPageSetup::setPrintTitleRows( const OUString& /*_printtitlerows*/ ) throw (css::uno::RuntimeException)
+{
+}
+OUString SAL_CALL ScVbaPageSetup::getPrintTitleColumns() throw (uno::RuntimeException)
+{
+    return OUString();
+}
+
+void SAL_CALL ScVbaPageSetup::setPrintTitleColumns( const OUString& /*_printtitlecolumns*/ ) throw (uno::RuntimeException)
+{
+}
+
+OUString
 ScVbaPageSetup::getServiceImplName()
 {
     return rtl::OUString("ScVbaPageSetup");
