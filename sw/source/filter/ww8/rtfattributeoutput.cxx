@@ -2948,6 +2948,22 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyTextTop", OString::number(rBox.GetDistance(BOX_LINE_TOP) * 635)));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>("dxTextRight", OString::number(rBox.GetDistance(BOX_LINE_RIGHT) * 635)));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>("dyTextBottom", OString::number(rBox.GetDistance(BOX_LINE_BOTTOM) * 635)));
+
+        const SvxBorderLine* pLeft = rBox.GetLine(BOX_LINE_LEFT);
+        const SvxBorderLine* pRight = rBox.GetLine(BOX_LINE_RIGHT);
+        const SvxBorderLine* pTop = rBox.GetLine(BOX_LINE_TOP);
+        const SvxBorderLine* pBottom = rBox.GetLine(BOX_LINE_BOTTOM);
+        if (pLeft && pRight && pTop && pBottom && *pLeft == *pRight && *pLeft == *pTop && *pLeft == *pBottom)
+        {
+            const Color& rColor = pTop->GetColor();
+            // We in fact need RGB to BGR, but the transformation is symmetric.
+            m_aFlyProperties.push_back(std::make_pair<OString, OString>("lineColor", OString::number(msfilter::util::BGRToRGB(rColor.GetColor()))));
+
+            double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
+            sal_Int32 nWidth = sal_Int32(fConverted * 635); // Twips -> EMUs
+            m_aFlyProperties.push_back(std::make_pair<OString, OString>("lineWidth", OString::number(nWidth)));
+        }
+
         return;
     }
 
