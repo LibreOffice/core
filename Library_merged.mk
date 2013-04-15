@@ -74,6 +74,7 @@ ifeq (ALL,$(MERGELIBS))
 $(eval $(call gb_Library_use_externals,merged,\
 	cppunit \
 	libexslt \
+	$(if $(filter-out ANDROID IOS,$(OS)),openldap) \
 	$(call gb_Helper_optional,PYUNO,python) \
 ))
 endif

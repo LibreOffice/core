@@ -28,11 +28,14 @@
 ifneq ($(MERGELIBS),)
 # set of libraries to link even more stuff into one merged library
 gb_EXTRAMERGEDLIBS := \
+	$(if $(filter-out ANDROID IOS,$(OS)),abp) \
 	$(if $(filter unx,$(GUIBASE)),basebmp) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,bib) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
 	chartcore \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbase) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbp) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	deploymentgui \
@@ -69,6 +72,8 @@ gb_EXTRAMERGEDLIBS := \
 	itg \
 	iti \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jdbc) \
+	$(if $(filter-out ANDROID IOS,$(OS)),log) \
+	$(if $(filter-out ANDROID IOS,$(OS)),ldapbe2) \
 	$(call gb_Helper_optional,DESKTOP,migrationoo2) \
 	$(call gb_Helper_optional,DESKTOP,migrationoo3) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mork) \
@@ -78,10 +83,13 @@ gb_EXTRAMERGEDLIBS := \
 	odfflatxml \
 	offacc \
 	oox \
+	$(call gb_Helper_optional,DBCONNECTIVITY,pcr) \
 	pdffilter \
 	placeware \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
+	res \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
+	$(if $(filter-out ANDROID IOS,$(OS)),scn) \
 	sd \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
 	$(if $(filter-out WNT MACOSX ANDROID IOS,$(OS)),spl_unx) \
@@ -92,6 +100,7 @@ gb_EXTRAMERGEDLIBS := \
 	textfd \
 	$(call gb_Helper_optional,DESKTOP,unopkgapp) \
 	unotest \
+	$(call gb_Helper_optional,DESKTOP,updatefeed) \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	xmlfa \
 	xmlfd \
