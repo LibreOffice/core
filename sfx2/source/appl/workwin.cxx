@@ -613,8 +613,6 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
 
     pBindings->SetWorkWindow_Impl( this );
 
-    pChildWins = new SfxChildWindows_Impl;
-
     // For the ObjectBars a integral place in the Childlist is reserved,
     // so that they always come in a defined order.
     aChildren.insert( aChildren.begin(), SFX_OBJECTBAR_MAX, NULL );
@@ -646,7 +644,6 @@ SfxWorkWindow::~SfxWorkWindow()
 
     // Delete help structure for Child-Windows
     DBG_ASSERT( aChildren.empty(), "dangling children" );
-    delete pChildWins;
 
     if ( m_xLayoutManagerListener.is() )
         m_xLayoutManagerListener->dispose();
@@ -689,11 +686,11 @@ void SfxWorkWindow::DeleteControllers_Impl()
     }
 
     // Delete Child-Windows
-    for ( n=0; n<pChildWins->Count(); )
+    for ( n=0; n<aChildWins.size(); )
     {
-        SfxChildWin_Impl* pCW = (*pChildWins)[n];
-        pChildWins->Remove(n);
-           SfxChildWindow *pChild = pCW->pWin;
+        SfxChildWin_Impl* pCW = aChildWins[n];
+        aChildWins.erase(aChildWins.begin());
+        SfxChildWindow *pChild = pCW->pWin;
         if (pChild)
         {
             pChild->Hide();
@@ -960,9 +957,9 @@ SvBorder SfxWorkWindow::Arrange_Impl()
 
 sal_Bool SfxWorkWindow::PrepareClose_Impl()
 {
-    for (sal_uInt16 n=0; n<pChildWins->Count(); n++)
+    for (sal_uInt16 n=0; n<aChildWins.size(); n++)
     {
-        SfxChildWin_Impl *pCW  = (*pChildWins)[n];
+        SfxChildWin_Impl *pCW  = aChildWins[n];
         SfxChildWindow *pChild = pCW->pWin;
         if ( pChild && !pChild->QueryClose() )
             return sal_False;
@@ -1057,9 +1054,9 @@ void SfxWorkWindow::ShowChildren_Impl()
         {
             // We have to find the SfxChildWin_Impl to retrieve the
             // SFX_CHILDWIN flags that can influence visibility.
-            for (sal_uInt16 n=0; n<pChildWins->Count(); n++)
+            for (sal_uInt16 n=0; n<aChildWins.size(); n++)
             {
-                SfxChildWin_Impl* pCWin = (*pChildWins)[n];
+                SfxChildWin_Impl* pCWin = aChildWins[n];
                 SfxChild_Impl*    pChild  = pCWin->pCli;
                 if ( pChild == pCli )
                 {
@@ -1142,8 +1139,8 @@ void SfxWorkWindow::ResetObjectBars_Impl()
     for ( n = 0; n < aObjBarList.size(); n++ )
         aObjBarList[n].bDestroy = sal_True;
 
-    for ( n = 0; n < pChildWins->Count(); ++n )
-        (*pChildWins)[n]->nId = 0;
+    for ( n = 0; n < aChildWins.size(); ++n )
+        aChildWins[n]->nId = 0;
 }
 
 //------------------------------------------------------------------------
@@ -1435,9 +1432,9 @@ bool SfxWorkWindow::AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW
 void SfxWorkWindow::UpdateChildWindows_Impl()
 {
     // any current or in the context available Childwindows
-    for ( sal_uInt16 n=0; n<pChildWins->Count(); n++ )
+    for ( sal_uInt16 n=0; n<aChildWins.size(); n++ )
     {
-        SfxChildWin_Impl *pCW = (*pChildWins)[n];
+        SfxChildWin_Impl *pCW = aChildWins[n];
         SfxChildWindow *pChildWin = pCW->pWin;
         sal_Bool bCreate = sal_False;
         if ( pCW->nId && !pCW->bDisabled  && (pCW->aInfo.nFlags & SFX_CHILDWIN_ALWAYSAVAILABLE || IsVisible_Impl( pCW->nVisibility ) ) )
@@ -1680,9 +1677,9 @@ sal_Bool SfxWorkWindow::IsVisible_Impl()
 //------------------------------------------------------------------------
 void SfxWorkWindow::HidePopups_Impl(sal_Bool bHide, sal_Bool bParent, sal_uInt16 nId )
 {
-    for ( sal_uInt16 n = 0; n < pChildWins->Count(); ++n )
+    for ( sal_uInt16 n = 0; n < aChildWins.size(); ++n )
     {
-        SfxChildWindow *pCW = (*pChildWins)[n]->pWin;
+        SfxChildWindow *pCW = aChildWins[n]->pWin;
         if (pCW && pCW->GetAlignment() == SFX_ALIGN_NOALIGNMENT && pCW->GetType() != nId)
         {
             Window *pWin = pCW->GetWindow();
@@ -1722,9 +1719,9 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     else
     {
         // configure direct childwindow
-        for (sal_uInt16 n=0; n<pChildWins->Count(); n++)
+        for (sal_uInt16 n=0; n<aChildWins.size(); n++)
         {
-            pCW = (*pChildWins)[n];
+            pCW = aChildWins[n];
             SfxChildWindow *pChild = pCW->pWin;
             if ( pChild )
             {
@@ -1983,11 +1980,11 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, sal_Bool bEnable
     if ( pWork )
     {
         // The Parent already known?
-        sal_uInt16 nCount = pWork->pChildWins->Count();
+        sal_uInt16 nCount = pWork->aChildWins.size();
         for (sal_uInt16 n=0; n<nCount; n++)
-            if ((*pWork->pChildWins)[n]->nSaveId == nId)
+            if (pWork->aChildWins[n]->nSaveId == nId)
             {
-                pCW = (*pWork->pChildWins)[n];
+                pCW = pWork->aChildWins[n];
                 break;
             }
     }
@@ -1995,11 +1992,11 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, sal_Bool bEnable
     if ( !pCW )
     {
         // If no Parent or the Parent us still unknown, then search here
-        sal_uInt16 nCount = pChildWins->Count();
+        sal_uInt16 nCount = aChildWins.size();
         for (sal_uInt16 n=0; n<nCount; n++)
-            if ((*pChildWins)[n]->nSaveId == nId)
+            if (aChildWins[n]->nSaveId == nId)
             {
-                pCW = (*pChildWins)[n];
+                pCW = aChildWins[n];
                 break;
             }
     }
@@ -2012,9 +2009,9 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, sal_Bool bEnable
         pCW->nId = nId;
         InitializeChild_Impl( pCW );
         if ( pWork && !( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) )
-            pWork->pChildWins->Insert( pWork->pChildWins->Count(), pCW );
+            pWork->aChildWins.push_back( pCW );
         else
-            pChildWins->Insert( pChildWins->Count(), pCW );
+            aChildWins.push_back( pCW );
     }
 
     pCW->nId = nId;
@@ -2030,16 +2027,16 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, sal_Bool bEnable
 
 void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, sal_Bool bSetFocus)
 {
-    sal_uInt16 nCount = pChildWins->Count();
+    sal_uInt16 nCount = aChildWins.size();
     sal_uInt16 n;
     for (n=0; n<nCount; n++)
-        if ((*pChildWins)[n]->nId == nId)
+        if (aChildWins[n]->nId == nId)
             break;
 
     if ( n<nCount )
     {
         // The Window is aleady known
-        SfxChildWin_Impl *pCW = (*pChildWins)[n];
+        SfxChildWin_Impl *pCW = aChildWins[n];
         SfxChildWindow *pChild = pCW->pWin;
 
         bool bCreationAllowed( true );
@@ -2121,9 +2118,9 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, sal_Bool bSetFocus)
     }
 
 #ifdef DBG_UTIL
-    nCount = pChildWins->Count();
+    nCount = aChildWins.size();
     for (n=0; n<nCount; n++)
-        if ((*pChildWins)[n]->nSaveId == nId)
+        if (aChildWins[n]->nSaveId == nId)
             break;
 
     if ( n < nCount )
@@ -2141,15 +2138,15 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, sal_Bool bSetFocus)
 
 sal_Bool SfxWorkWindow::HasChildWindow_Impl(sal_uInt16 nId)
 {
-    sal_uInt16 nCount = pChildWins->Count();
+    sal_uInt16 nCount = aChildWins.size();
     sal_uInt16 n;
     for (n=0; n<nCount; n++)
-        if ((*pChildWins)[n]->nSaveId == nId)
+        if (aChildWins[n]->nSaveId == nId)
             break;
 
     if (n<nCount)
     {
-        SfxChildWin_Impl *pCW = (*pChildWins)[n];
+        SfxChildWin_Impl *pCW = aChildWins[n];
         SfxChildWindow *pChild = pCW->pWin;
         return ( pChild && pCW->bCreate );
     }
@@ -2173,11 +2170,11 @@ sal_Bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
     if ( pWork )
     {
         // The Parent already known?
-        sal_uInt16 nCount = pWork->pChildWins->Count();
+        sal_uInt16 nCount = pWork->aChildWins.size();
         for (sal_uInt16 n=0; n<nCount; n++)
-            if ((*pWork->pChildWins)[n]->nSaveId == nId)
+            if (pWork->aChildWins[n]->nSaveId == nId)
             {
-                pCW = (*pWork->pChildWins)[n];
+                pCW = pWork->aChildWins[n];
                 break;
             }
     }
@@ -2185,11 +2182,11 @@ sal_Bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
     if ( !pCW )
     {
         // If no Parent or the Parent us still unknown, then search here
-        sal_uInt16 nCount = pChildWins->Count();
+        sal_uInt16 nCount = aChildWins.size();
         for (sal_uInt16 n=0; n<nCount; n++)
-            if ((*pChildWins)[n]->nSaveId == nId)
+            if (aChildWins[n]->nSaveId == nId)
             {
-                pCW = (*pChildWins)[n];
+                pCW = aChildWins[n];
                 break;
             }
     }
@@ -2204,9 +2201,9 @@ sal_Bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
         pCW->nVisibility = 0;
         InitializeChild_Impl( pCW );
         if ( pWork && !( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) )
-            pWork->pChildWins->Insert( pWork->pChildWins->Count(), pCW );
+            pWork->aChildWins.push_back( pCW );
         else
-            pChildWins->Insert( pChildWins->Count(), pCW );
+            aChildWins.push_back( pCW );
     }
 
     SfxChildAlignment eAlign;
@@ -2221,11 +2218,11 @@ sal_Bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
 sal_Bool SfxWorkWindow::KnowsChildWindow_Impl(sal_uInt16 nId)
 {
     SfxChildWin_Impl *pCW=0;
-    sal_uInt16 nCount = pChildWins->Count();
+    sal_uInt16 nCount = aChildWins.size();
     sal_uInt16 n;
     for (n=0; n<nCount; n++)
     {
-        pCW = (*pChildWins)[n];
+        pCW = aChildWins[n];
         if ( pCW->nSaveId == nId)
              break;
     }
@@ -2257,11 +2254,11 @@ void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, sal_Bool bOn, sal_Bool b
     if ( pWork )
     {
         // The Parent already known?
-        sal_uInt16 nCount = pWork->pChildWins->Count();
+        sal_uInt16 nCount = pWork->aChildWins.size();
         for (sal_uInt16 n=0; n<nCount; n++)
-            if ((*pWork->pChildWins)[n]->nSaveId == nId)
+            if (pWork->aChildWins[n]->nSaveId == nId)
             {
-                pCW = (*pWork->pChildWins)[n];
+                pCW = pWork->aChildWins[n];
                 break;
             }
     }
@@ -2269,11 +2266,11 @@ void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, sal_Bool bOn, sal_Bool b
     if ( !pCW )
     {
         // If no Parent or the Parent us still unknown, then search here
-        sal_uInt16 nCount = pChildWins->Count();
+        sal_uInt16 nCount = aChildWins.size();
         for (sal_uInt16 n=0; n<nCount; n++)
-            if ((*pChildWins)[n]->nSaveId == nId)
+            if (aChildWins[n]->nSaveId == nId)
             {
-                pCW = (*pChildWins)[n];
+                pCW = aChildWins[n];
                 pWork = this;
                 break;
             }
@@ -2287,7 +2284,7 @@ void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, sal_Bool bOn, sal_Bool b
         InitializeChild_Impl( pCW );
         if ( !pWork || pCW->aInfo.nFlags & SFX_CHILDWIN_TASK )
             pWork = this;
-        pWork->pChildWins->Insert( pWork->pChildWins->Count(), pCW );
+        pWork->aChildWins.push_back( pCW );
     }
 
     if ( pCW->bCreate != bOn )
@@ -2298,12 +2295,12 @@ void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, sal_Bool bOn, sal_Bool b
 
 void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, sal_Bool bVisible, sal_Bool bSetFocus)
 {
-    sal_uInt16 nCount = pChildWins->Count();
+    sal_uInt16 nCount = aChildWins.size();
     SfxChildWin_Impl* pCW=0;
     sal_uInt16 n;
     for (n=0; n<nCount; n++)
     {
-        pCW = (*pChildWins)[n];
+        pCW = aChildWins[n];
         if (pCW->nId == nId)
             break;
     }
@@ -2366,9 +2363,9 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, sal_Bool bVisible, sal_
     }
 
 #ifdef DBG_UTIL
-    nCount = pChildWins->Count();
+    nCount = aChildWins.size();
     for (n=0; n<nCount; n++)
-        if ((*pChildWins)[n]->nSaveId == nId)
+        if (aChildWins[n]->nSaveId == nId)
             break;
 
     if ( n<nCount )
@@ -2386,14 +2383,14 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, sal_Bool bVisible, sal_
 
 SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(sal_uInt16 nId)
 {
-    sal_uInt16 nCount = pChildWins->Count();
+    sal_uInt16 nCount = aChildWins.size();
     sal_uInt16 n;
     for (n=0; n<nCount; n++)
-        if ((*pChildWins)[n]->nSaveId == nId)
+        if (aChildWins[n]->nSaveId == nId)
              break;
 
     if (n<nCount)
-        return (*pChildWins)[n]->pWin;
+        return aChildWins[n]->pWin;
     else if ( pParent )
         return pParent->GetChildWindow_Impl( nId );
     return 0;
@@ -2403,10 +2400,10 @@ SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(sal_uInt16 nId)
 
 void SfxWorkWindow::ResetChildWindows_Impl()
 {
-    for ( sal_uInt16 n = 0; n < pChildWins->Count(); ++n )
+    for ( sal_uInt16 n = 0; n < aChildWins.size(); ++n )
     {
-        (*pChildWins)[n]->nId = 0;
-        (*pChildWins)[n]->bEnable = sal_False;
+        aChildWins[n]->nId = 0;
+        aChildWins[n]->bEnable = sal_False;
     }
 }
 
@@ -2875,10 +2872,10 @@ sal_Bool SfxWorkWindow::ActivateNextChild_Impl( sal_Bool bForward )
 void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& )
 {
     sal_uInt16 n;
-    sal_uInt16 nCount = pChildWins->Count();
+    sal_uInt16 nCount = aChildWins.size();
     for (n=0; n<nCount; n++)
     {
-        SfxChildWin_Impl*pCW = (*pChildWins)[n];
+        SfxChildWin_Impl*pCW = aChildWins[n];
         if ( pCW && pCW->pWin )
             pCW->pWin->GetWindow()->UpdateSettings( Application::GetSettings() );
     }

@@ -149,7 +149,7 @@ enum SfxDockingConfig
 };
 
 typedef std::vector<SfxChild_Impl*> SfxChildList_Impl;
-DECL_PTRARRAY( SfxChildWindows_Impl, SfxChildWin_Impl*, 2, 2 )
+typedef std::vector<SfxChildWin_Impl*> SfxChildWindows_Impl;
 
 
 struct SfxObjectBarList_Impl
@@ -161,12 +161,6 @@ struct SfxObjectBarList_Impl
                             { return aArr[n]; }
     SfxObjectBar_Impl       Actual()
                             { return aArr[nAct]; }
-};
-
-struct SfxSplitWin_Impl
-{
-    SfxSplitWindow*         pSplitWin;
-    SfxChildWindows_Impl*   pChildWins;
 };
 
 #define SFX_SPLITWINDOWS_LEFT   0
@@ -227,7 +221,7 @@ protected:
     SfxWorkWindow*          pParent;
     SfxSplitWindow*         pSplit[SFX_SPLITWINDOWS_MAX];
     SfxChildList_Impl       aChildren;
-    SfxChildWindows_Impl*   pChildWins;
+    SfxChildWindows_Impl    aChildWins;
     SfxBindings*            pBindings;
     Window*                 pWorkWin;
     SfxShell*               pConfigShell;
