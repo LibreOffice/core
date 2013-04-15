@@ -64,7 +64,7 @@ using namespace ::rtl;
 
 +(int)convertItalicStyle:(PropertyValue)property {
     int italicStyle = 0;
-    sal_Int16 value = property.Value.get<::css_awt::FontSlant>();
+    sal_Int16 value = property.Value.get< ::css_awt::FontSlant>();
     if ( value == ::css_awt::FontSlant_ITALIC ) {
         italicStyle = NSItalicFontMask;
     }
