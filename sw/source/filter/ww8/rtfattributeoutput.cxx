@@ -2867,12 +2867,6 @@ void RtfAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert 
             m_rExport.OutLong(rFlyVert.GetPos() + m_pFlyFrameSize->Height());
         }
     }
-    else if ( !m_rExport.bRTFFlySyntax )
-    {
-        RTFVertOrient aVO( static_cast< sal_uInt16 >(rFlyVert.GetVertOrient()), static_cast< sal_uInt16 >(rFlyVert.GetRelationOrient()) );
-        m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYVERT);
-        m_aRunText->append((sal_Int32)aVO.GetValue());
-    }
 }
 
 void RtfAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori )
@@ -2914,13 +2908,6 @@ void RtfAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
             m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_SHPRIGHT;
             m_rExport.OutLong(rFlyHori.GetPos() + m_pFlyFrameSize->Width());
         }
-    }
-    else if ( !m_rExport.bRTFFlySyntax )
-    {
-        RTFHoriOrient aHO( static_cast< sal_uInt16 >(rFlyHori.GetHoriOrient()),
-                static_cast< sal_uInt16 >(rFlyHori.GetRelationOrient()) );
-        m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYHORZ);
-        m_aRunText->append((sal_Int32)aHO.GetValue());
     }
 }
 
