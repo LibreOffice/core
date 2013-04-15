@@ -238,8 +238,6 @@ interface XItemList
             raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** retrieves the implementation dependent value associated with the given list item.
-        @see setItemData
-
         @param Position
             the position of the item whose data value should be retrieved. Must be greater or equal to 0, and
             lesser than <member>ItemCount</member>.
