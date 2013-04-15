@@ -56,7 +56,6 @@ class SfxObjectShellArr_Impl;
 class ResMgr;
 class SfxViewFrame;
 class SfxSlotPool;
-class SfxResourceManager;
 class SfxDispatcher;
 class SfxInterface;
 class BasicManager;
@@ -129,7 +128,6 @@ public:
                                 pBasMgrListener;
     SfxViewFrame*               pViewFrame;
     SfxSlotPool*                pSlotPool;
-    SfxResourceManager*         pResMgr;
     SfxDispatcher*              pAppDispat;     // Dispatcher if no document
     SfxInterface**              pInterfaces;
 
