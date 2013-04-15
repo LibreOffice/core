@@ -31,7 +31,7 @@ namespace framework{
 /*-************************************************************************************************************//**
     @short          implement a guard to set read locks
     @descr          This guard should be used to set a lock for reading object internal member.
-                    Nobody can control it but don't use member after successfuly locking for writing!
+                    Nobody can control it but don't use member after successfully locking for writing!
                     We never need a own mutex to safe our internal member access - because
                     a guard is used as function-local member only. There exist no multithreaded access to it realy ...
 

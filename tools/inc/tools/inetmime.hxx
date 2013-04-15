@@ -1210,7 +1210,7 @@ struct INetContentTypeParameter
      */
     const OUString m_sValue;
 
-    /** This is true if the value is successfuly converted to Unicode, and
+    /** This is true if the value is successfully converted to Unicode, and
         false if the value is a special mixture of ISO-LATIN-1 characters and
         characters from Unicode's Private Use Area.
      */

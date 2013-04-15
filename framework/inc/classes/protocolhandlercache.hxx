@@ -135,8 +135,8 @@ class FWI_DLLPUBLIC HandlerCache
     @short          implements configuration access for handler configuration
     @descr          We use the ConfigItem mechanism to read/write values from/to configuration.
                     We set a data container pointer for filling or reading ... this class use it temp.
-                    After successfuly calling of read(), we can use filled container directly or merge it with an existing one.
-                    After successfuly calling of write() all values of given data container are flushed to our configuration -
+                    After successfully calling of read(), we can use filled container directly or merge it with an existing one.
+                    After successfully calling of write() all values of given data container are flushed to our configuration -
                     but current implementation doesn't support writeing realy.
 
     @base           ::utl::ConfigItem

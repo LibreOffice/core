@@ -333,7 +333,7 @@ void SAL_CALL MyDragAndDropListener::dropActionChanged( const DropTargetDragEven
 
 void SAL_CALL MyDragAndDropListener::dragDropEnd( const DragSourceDropEvent& dsde ) throw(RuntimeException)
 {
-    printf( "XDragSourceListener::dropDropEnd called ( Window: %p, %s ).\n", m_pWindow, dsde.DropSuccess ? "sucess" : "failed" );
+    printf( "XDragSourceListener::dropDropEnd called ( Window: %p, %s ).\n", m_pWindow, dsde.DropSuccess ? "success" : "failed" );
 }
 
 // -----------------------------------------------------------------------

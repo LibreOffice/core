@@ -168,7 +168,7 @@ public class _XSheetAuditing extends MultiMethodTest {
 
     /**
      * Check if the amount of shapes is the right one after displaying that stuff
-     * 2do improve this: check taht the shapes are the correct ones -> convwatch
+     * 2do improve this: check that the shapes are the correct ones -> convwatch
      * @desiredValue That's the amount of shapes that have to be here.
      * @return True, if the actual count of shapes is the same
      */

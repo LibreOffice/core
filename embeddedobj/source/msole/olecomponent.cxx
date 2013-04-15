@@ -440,7 +440,7 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
     OSL_ENSURE( m_pUnoOleObject, "No owner object is provided!" );
 
     HRESULT hr = OleInitialize( NULL );
-    OSL_ENSURE( hr == S_OK || hr == S_FALSE, "The ole can not be successfuly initialized\n" );
+    OSL_ENSURE( hr == S_OK || hr == S_FALSE, "The ole can not be successfully initialized\n" );
     if ( hr == S_OK || hr == S_FALSE )
         m_bOleInitialized = sal_True;
 

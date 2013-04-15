@@ -963,7 +963,7 @@ namespace
 
     /** helper to take needed action on ClipRegion change. This method needs to be called
         on any Region change, e.g. at the obvious actions doing this, but also at pop-calls
-        whcih change the Region of the current context. It takes care of creating the
+        which change the Region of the current context. It takes care of creating the
         current embeddec context, set the new Region at the context and eventually prepare
         a new target for embracing new geometry to the current region
      */
@@ -1152,7 +1152,7 @@ namespace
 
     /** helper to create needed data to emulate the VCL Wallpaper Metafile action.
         It is a quite mighty action. This helper decides if color and/or gradient
-        background is needed for the wnated bitmap fill and then creates the needed
+        background is needed for the wanted bitmap fill and then creates the needed
         WallpaperBitmapPrimitive2D. This primitive was created for this purpose and
         takes over all needed logic of orientations and tiling.
      */

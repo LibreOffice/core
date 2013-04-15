@@ -784,7 +784,7 @@ public:
 
     Currently only mouse events get this special treatment.
 
-    Use this sparingly, chances are if you want to use it you're wroking around
+    Use this sparingly, chances are if you want to use it you're working around
     the real problem.
 
     @param bCall

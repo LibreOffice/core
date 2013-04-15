@@ -70,25 +70,25 @@ public:
 
     /** get the ident of the logged in user.
         @param[out] strIdent is the OUString which returns the name
-        @return True, if any user is successfuly logged in, otherwise False
+        @return True, if any user is successfully logged in, otherwise False
     */
     inline sal_Bool  SAL_CALL getUserIdent( rtl::OUString& strIdent) const;
 
     /** get the name of the logged in user.
         @param[out] strName is the OUString which returns the name
-        @return True, if any user is successfuly logged in, otherwise False
+        @return True, if any user is successfully logged in, otherwise False
     */
     inline sal_Bool SAL_CALL getUserName( rtl::OUString& strName) const;
 
     /** get the home directory of the logged in user.
         @param[out] strDirectory is the OUString which returns the directory name
-         @return True, if any user is successfuly logged in, otherwise False
+         @return True, if any user is successfully logged in, otherwise False
     */
     inline sal_Bool SAL_CALL getHomeDir( rtl::OUString& strDirectory) const;
 
     /** get the directory for configuration data of the logged in user.
         @param[out] strDirectory is the OUString which returns the directory name
-        @return True, if any user is successfuly logged in, otherwise False
+        @return True, if any user is successfully logged in, otherwise False
     */
     inline sal_Bool SAL_CALL getConfigDir( rtl::OUString & strDirectory) const;
 

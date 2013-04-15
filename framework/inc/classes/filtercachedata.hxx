@@ -593,8 +593,8 @@ class DataContainer : private ThreadHelpBase
     @descr          We use the ConfigItem mechanism to read/write values from/to configuration.
                     This implementation could be used to handle standard AND additional filter configurations in the same way.
                     We set a data container pointer for filling or reading ... this class use it temp.
-                    After successfuly calling of read(), we can use filled container directly or merge it with an existing one.
-                    After successfuly calling of write() all values of given data container are flushed to our configuration.
+                    After successfully calling of read(), we can use filled container directly or merge it with an existing one.
+                    After successfully calling of write() all values of given data container are flushed to our configuration.
 
     @implements     -
     @base           ConfigItem

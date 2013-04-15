@@ -295,7 +295,7 @@ class AgendaDocument(TextDocument):
 
     '''
     locates the titles (name, location, date, time)
-    and saves a reference to thier Text ranges.
+    and saves a reference to their Text ranges.
     '''
 
     def initializeTitles(self):

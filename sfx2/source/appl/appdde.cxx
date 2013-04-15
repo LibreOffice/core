@@ -297,7 +297,7 @@ long SfxApplication::DdeExecute
 /*  Description]
 
     This method can be overloaded by application developers, to receive
-    DDE-commands directed to thier SfxApplication subclass.
+    DDE-commands directed to their SfxApplication subclass.
 
     The base implementation understands the API functionality of the
     relevant SfxApplication subclass in BASIC syntax. Return values can
@@ -334,7 +334,7 @@ long SfxObjectShell::DdeExecute
 /*  [Description]
 
     This method can be overloaded by application developers, to receive
-    DDE-commands directed to the thier SfxApplication subclass.
+    DDE-commands directed to the their SfxApplication subclass.
 
     The base implementation does nothing and returns 0.
 */
@@ -367,7 +367,7 @@ long SfxObjectShell::DdeGetData
 /*  [Description]
 
     This method can be overloaded by application developers, to receive
-    DDE-data-requests directed to thier SfxApplication subclass.
+    DDE-data-requests directed to their SfxApplication subclass.
 
     The base implementation provides no data and returns 0.
 */
@@ -388,7 +388,7 @@ long SfxObjectShell::DdeSetData
 /*  [Description]
 
     This method can be overloaded by application developers, to receive
-    DDE-data directed to thier SfxApplication subclass.
+    DDE-data directed to their SfxApplication subclass.
 
     The base implementation is not receiving any data and returns 0.
 */
@@ -406,7 +406,7 @@ long SfxObjectShell::DdeSetData
 /*  [Description]
 
     This method can be overloaded by application developers, to establish
-    a DDE-hotlink to thier SfxApplication subclass.
+    a DDE-hotlink to their SfxApplication subclass.
 
     The base implementation is not generate a link and returns 0.
 */
@@ -442,7 +442,7 @@ long SfxViewFrame::DdeExecute
 /*  [Description]
 
     This method can be overloaded by application developers, to receive
-    DDE-commands directed to the thier SfxApplication subclass.
+    DDE-commands directed to the their SfxApplication subclass.
 
     The base implementation understands the API functionality of the
     relevant SfxViewFrame, which is shown and the relevant SfxViewShell
@@ -469,7 +469,7 @@ long SfxViewFrame::DdeGetData
 /*  [Description]
 
     This method can be overloaded by application developers, to receive
-    DDE-data-requests directed to thier SfxApplication subclass.
+    DDE-data-requests directed to their SfxApplication subclass.
 
     The base implementation provides no data and returns 0.
 */
@@ -490,7 +490,7 @@ long SfxViewFrame::DdeSetData
 /*  [Description]
 
     This method can be overloaded by application developers, to receive
-    DDE-data directed to thier SfxApplication subclass.
+    DDE-data directed to their SfxApplication subclass.
 
     The base implementation is not receiving any data and returns 0.
 */
@@ -509,7 +509,7 @@ long SfxViewFrame::DdeSetData
 /*  [Description]
 
     This method can be overloaded by application developers, to establish
-    a DDE-hotlink to thier SfxApplication subclass.
+    a DDE-hotlink to their SfxApplication subclass.
 
     The base implementation is not generate a link and returns 0.
 */

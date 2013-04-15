@@ -249,7 +249,7 @@ namespace xmloff
 
         /** add an arbitrary attribute extracted from an arbitrary property to the export context
 
-            <p>The current value of the property specified wiht <arg>_pPropertyName</arg> is taken and converted
+            <p>The current value of the property specified with <arg>_pPropertyName</arg> is taken and converted
             into a string, no matter what type it has. (Okay, there are the usual limitations: We know Date, Datetime,
             double, integer ... to name just a few).</p>
 

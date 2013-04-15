@@ -417,7 +417,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
 
             aParserInput.aInputStream = xDocStream->getInputStream();
             OSL_ENSURE( aParserInput.aInputStream.is(),
-                        "The stream was successfuly opened for reading, the input part must be accessible!\n" );
+                        "The stream was successfully opened for reading, the input part must be accessible!\n" );
             if ( !aParserInput.aInputStream.is() )
                 throw uno::RuntimeException();
 

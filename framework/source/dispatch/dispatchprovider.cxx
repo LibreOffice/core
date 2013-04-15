@@ -65,7 +65,7 @@ DEFINE_XTYPEPROVIDER_2( DispatchProvider             ,
 
 /**
     @short      standard ctor/dtor
-    @descr      These initialize a new instance of tihs class with needed information for work.
+    @descr      These initialize a new instance of this class with needed information for work.
                 We hold a weakreference to our owner frame which start dispatches at us.
                 We can't use a normal reference because he hold a reference of us too ...
                 nobody can die so ...!

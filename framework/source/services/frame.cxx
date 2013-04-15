@@ -1928,7 +1928,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
         remove himself at this instance ...
         Release m_xFramesHelper after that ... it's the same problem between parent and child!
         "m_xParent->getFrames()->remove( xThis );" needs this helper ...
-        Otherwise we get a null reference and could finish removing successfuly.
+        Otherwise we get a null reference and could finish removing successfully.
         => You see: Order of calling operations is important!!!
      */
     implts_forgetSubFrames();

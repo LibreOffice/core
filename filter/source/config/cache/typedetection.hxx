@@ -216,7 +216,7 @@ private:
                     Note : Its content will be adapted to returned result of this method.
                     Means: The stream will be added to it.
 
-        @throw      Any suitable exception if stream should be opened but operation was not sucessfull.
+        @throw      Any suitable exception if stream should be opened but operation was not successful.
                     Note: If an interactionHandler is part of the given descriptor too, it was already used.
                     Means: let the exception pass trough the top most interface method!
      */

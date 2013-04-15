@@ -228,7 +228,7 @@ public:
 
         @param rString  On success, returns the reconstructed Unicode string.
 
-        @return  True if the string was successfuly read and reconstructed.
+        @return  True if the string was successfully read and reconstructed.
      */
     static OUString readByteString(SvStream & rStream);
 
