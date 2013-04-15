@@ -145,6 +145,7 @@ public:
     void testFdo62288();
     void testFdo37716();
     void testFdo51916();
+    void testFdo61193();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -156,6 +157,26 @@ private:
     void run();
     /// Get page count.
     int getPages();
+    /// Copy&paste helper.
+    void paste(OUString aFilename, uno::Reference<text::XTextRange> xTextRange = uno::Reference<text::XTextRange>())
+    {
+        uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
+        xImporter->setTargetDocument(mxComponent);
+        uno::Sequence<beans::PropertyValue> aDescriptor(xTextRange.is() ? 3 : 2);
+        aDescriptor[0].Name = "InputStream";
+        SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + aFilename, STREAM_WRITE);
+        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+        aDescriptor[0].Value <<= xStream;
+        aDescriptor[1].Name = "IsNewDoc";
+        aDescriptor[1].Value <<= sal_False;
+        if (xTextRange.is())
+        {
+            aDescriptor[2].Name = "TextInsertModeRange";
+            aDescriptor[2].Value <<= xTextRange;
+        }
+        xFilter->filter(aDescriptor);
+    }
 };
 
 void Test::run()
@@ -240,6 +261,7 @@ void Test::run()
         {"fdo62288.rtf", &Test::testFdo62288},
         {"fdo37716.rtf", &Test::testFdo37716},
         {"fdo51916.rtf", &Test::testFdo51916},
+        {"hello.rtf", &Test::testFdo61193},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -904,6 +926,15 @@ void Test::testCopyPasteFootnote()
     xFilter->filter(aDescriptor);
 
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
+}
+
+void Test::testFdo61193()
+{
+    // Pasting content that contained a footnote caused a crash.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo61193.rtf", xEnd);
 }
 
 void Test::testShptxtPard()
