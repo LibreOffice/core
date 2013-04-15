@@ -8584,8 +8584,8 @@ if test "$enable_openssl" = "yes"; then
         libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
     fi
     if test "$with_system_openssl" = "yes"; then
-        libo_MINGW_CHECK_DLL([SSL], [libssl])
-        libo_MINGW_CHECK_DLL([CRYPTO], [libcrypto])
+        libo_MINGW_CHECK_DLL([libssl])
+        libo_MINGW_CHECK_DLL([libcrypto])
     fi
 else
     AC_MSG_RESULT([yes])
