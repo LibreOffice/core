@@ -827,25 +827,12 @@ AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(Win
     return new AbstractScDeleteCellDlg_Impl( pDlg );
 }
 
-AbstractScDataFormDlg* ScAbstractDialogFactory_Impl::CreateScDataFormDlg( Window* pParent, int nId, ScTabViewShell* pTabViewShell )
+AbstractScDataFormDlg* ScAbstractDialogFactory_Impl::CreateScDataFormDlg(Window* pParent,
+    ScTabViewShell* pTabViewShell)
 {
-    ScDataFormDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_DATAFORM :
-            pDlg = new ScDataFormDlg( pParent, pTabViewShell);
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScDataFormDlg_Impl( pDlg );
-    return 0;
+    ScDataFormDlg* pDlg = new ScDataFormDlg(pParent, pTabViewShell);
+    return new AbstractScDataFormDlg_Impl(pDlg);
 }
-
-
-
 
 AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(Window* pParent,
                                                                                      sal_uInt16  nCheckDefaults)

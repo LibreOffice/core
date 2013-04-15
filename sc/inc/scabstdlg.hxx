@@ -367,7 +367,8 @@ public:
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(Window* pParent, bool bDisallowCellMove = false) = 0 ; //add for ScDeleteCellDlg
 
     //for dataform
-    virtual AbstractScDataFormDlg * CreateScDataFormDlg( Window* pParent, int nId, ScTabViewShell*      pTabViewShell ) = 0 ; //add for ScDataFormDlg
+    virtual AbstractScDataFormDlg * CreateScDataFormDlg(Window* pParent,
+        ScTabViewShell* pTabViewShell) = 0;
 
     virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(Window* pParent, //add for ScDeleteContentsDlg
                                                                     sal_uInt16  nCheckDefaults = 0) = 0;

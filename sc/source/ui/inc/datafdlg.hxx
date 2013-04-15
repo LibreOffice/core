@@ -51,19 +51,19 @@
 #define EDIT_LEFT           62
 #define LINE_HEIGHT         16
 
-//zhangyun
 class ScDataFormDlg : public ModalDialog
 {
 private:
 
-    PushButton      aBtnNew;
-    PushButton      aBtnDelete;
-    PushButton      aBtnRestore;
-    PushButton      aBtnPrev;
-    PushButton      aBtnNext;
-    PushButton      aBtnClose;
-    ScrollBar       aSlider;
-    FixedText       aFixedText;
+    PushButton*     m_pBtnNew;
+    PushButton*     m_pBtnDelete;
+    PushButton*     m_pBtnRestore;
+    PushButton*     m_pBtnPrev;
+    PushButton*     m_pBtnNext;
+    PushButton*     m_pBtnClose;
+    ScrollBar*      m_pSlider;
+    VclGrid*        m_pGrid;
+    FixedText*      m_pFixedText;
     OUString        sNewRecord;
 
     ScTabViewShell* pTabViewShell;

@@ -33,7 +33,6 @@
 
 #include "datafdlg.hxx"
 #include "scresid.hxx"
-#include "datafdlg.hrc"
 #include "viewdata.hxx"
 #include "docsh.hxx"
 #include "refundo.hxx"
@@ -44,21 +43,21 @@
 #define HDL(hdl)            LINK( this, ScDataFormDlg, hdl )
 
 
-//zhangyun
-ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DATAFORM ) ),
-    aBtnNew          ( this, ScResId( BTN_DATAFORM_NEW ) ),
-    aBtnDelete          ( this, ScResId( BTN_DATAFORM_DELETE ) ),
-    aBtnRestore          ( this, ScResId( BTN_DATAFORM_RESTORE ) ),
-    aBtnPrev          ( this, ScResId( BTN_DATAFORM_PREV ) ),
-    aBtnNext          ( this, ScResId( BTN_DATAFORM_NEXT ) ),
-    aBtnClose          ( this, ScResId( BTN_DATAFORM_CLOSE ) ),
-    aSlider         ( this, ScResId( WND_DATAFORM_SCROLLBAR ) ),
-    aFixedText          ( this, ScResId( LAB_DATAFORM_RECORDNO ) ),
-    sNewRecord(SC_RESSTR(STR_NEW_RECORD))
+ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
+    : ModalDialog(pParent, "DataFormDialog", "modules/scalc/ui/dataform.ui")
+    , pTabViewShell(pTabViewShellOri)
 {
-    pTabViewShell = pTabViewShellOri;
-    FreeResource();
+    get(m_pBtnNew, "new");
+    get(m_pBtnDelete, "delete");
+    get(m_pBtnRestore, "restore");
+    get(m_pBtnPrev, "prev");
+    get(m_pBtnNext, "next");
+    get(m_pBtnClose, "close");
+    get(m_pFixedText, "label");
+    sNewRecord = m_pFixedText->GetText();
+    get(m_pSlider, "scrollbar");
+    get(m_pGrid, "grid");
+
     //read header form current document, and add new controls
     OSL_ENSURE( pTabViewShell, "pTabViewShell is NULL! :-/" );
     ScViewData* pViewData = pTabViewShell->GetViewData();
@@ -157,42 +156,35 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
 
         nCurrentRow = nStartRow + 1;
 
-        String  aFieldName;
-
-        //align with LAB_DATAFORM_RECORDNO
-        int nTop = LogicToPixel( Size(1,6), MapMode(MAP_APPFONT) ).getHeight();
-        const int nOne = LogicToPixel( Size(1,1), MapMode(MAP_APPFONT) ).getHeight();
-        const int nLineHeight = LogicToPixel( Size(1, LINE_HEIGHT), MapMode(MAP_APPFONT) ).getHeight();
-        const int nFixedLeft = LogicToPixel( Size(FIXED_LEFT, 1), MapMode(MAP_APPFONT) ).getWidth();
-        const int nEditLeft = LogicToPixel( Size(EDIT_LEFT, 1), MapMode(MAP_APPFONT) ).getWidth();
-
-        Size    nFixedSize(LogicToPixel( Size(FIXED_WIDTH, FIXED_HEIGHT), MapMode(MAP_APPFONT) ));
-        Size    nEditSize(LogicToPixel( Size(EDIT_WIDTH, EDIT_HEIGHT), MapMode(MAP_APPFONT) ));
-
         aColLength = nEndCol - nStartCol + 1;
 
         //new the controls
         maFixedTexts.reserve(aColLength);
         maEdits.reserve(aColLength);
 
-        for(sal_uInt16 nIndex = 0; nIndex < aColLength; nIndex++)
+        sal_Int32 nGridRow = 0;
+        for(sal_uInt16 nIndex = 0; nIndex < aColLength; ++nIndex)
         {
-            aFieldName = pDoc->GetString(nIndex + nStartCol, nStartRow, nTab);
+            OUString aFieldName = pDoc->GetString(nIndex + nStartCol, nStartRow, nTab);
             int nColWidth = pDoc->GetColWidth( nIndex + nStartCol, nTab );
             if (nColWidth)
             {
-                maFixedTexts.push_back( new FixedText(this) );
-                maEdits.push_back( new Edit(this, WB_BORDER) );
+                maFixedTexts.push_back( new FixedText(m_pGrid) );
+                maEdits.push_back( new Edit(m_pGrid, WB_BORDER) );
 
-                maFixedTexts[nIndex].SetSizePixel(nFixedSize);
-                maEdits[nIndex].SetSizePixel(nEditSize);
-                maFixedTexts[nIndex].SetPosPixel(Point(nFixedLeft, nTop + nOne));
-                maEdits[nIndex].SetPosPixel(Point(nEditLeft, nTop));
+                maFixedTexts[nIndex].set_grid_left_attach(0);
+                maEdits[nIndex].set_grid_left_attach(1);
+                maFixedTexts[nIndex].set_grid_top_attach(nGridRow);
+                maEdits[nIndex].set_grid_top_attach(nGridRow);
+
+                maEdits[nIndex].SetWidthInChars(32);
+                maEdits[nIndex].set_hexpand(true);
+
+                ++nGridRow;
+
                 maFixedTexts[nIndex].SetText(aFieldName);
                 maFixedTexts[nIndex].Show();
                 maEdits[nIndex].Show();
-
-                nTop += nLineHeight;
             }
             else
             {
@@ -202,35 +194,25 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
             if (!maEdits.is_null(nIndex))
                 maEdits[nIndex].SetModifyHdl( HDL(Impl_DataModifyHdl) );
         }
-
-        Size nDialogSize = this->GetSizePixel();
-        if (nTop > nDialogSize.Height())
-        {
-            nDialogSize.setHeight(nTop);
-            this->SetSizePixel(nDialogSize);
-        }
-        Size nScrollSize = aSlider.GetSizePixel();
-        nScrollSize.setHeight(nDialogSize.Height()-20);
-        aSlider.SetSizePixel(nScrollSize);
     }
 
     FillCtrls(nCurrentRow);
 
-    aSlider.SetPageSize( 10 );
-    aSlider.SetVisibleSize( 1 );
-    aSlider.SetLineSize( 1 );
-    aSlider.SetRange( Range( 0, nEndRow - nStartRow + 1) );
-    aSlider.Show();
+    m_pSlider->SetPageSize( 10 );
+    m_pSlider->SetVisibleSize( 1 );
+    m_pSlider->SetLineSize( 1 );
+    m_pSlider->SetRange( Range( 0, nEndRow - nStartRow + 1) );
+    m_pSlider->Show();
 
-    aBtnNew.SetClickHdl     ( HDL(Impl_NewHdl)    );
-    aBtnPrev.SetClickHdl    ( HDL(Impl_PrevHdl)    );
-    aBtnNext.SetClickHdl    ( HDL(Impl_NextHdl)    );
+    m_pBtnNew->SetClickHdl(HDL(Impl_NewHdl));
+    m_pBtnPrev->SetClickHdl(HDL(Impl_PrevHdl));
+    m_pBtnNext->SetClickHdl(HDL(Impl_NextHdl));
 
-    aBtnRestore.SetClickHdl     ( HDL(Impl_RestoreHdl)    );
-    aBtnDelete.SetClickHdl  ( HDL(Impl_DeleteHdl)    );
-    aBtnClose.SetClickHdl   ( HDL(Impl_CloseHdl)    );
+    m_pBtnRestore->SetClickHdl(HDL(Impl_RestoreHdl));
+    m_pBtnDelete->SetClickHdl(HDL(Impl_DeleteHdl));
+    m_pBtnClose->SetClickHdl(HDL(Impl_CloseHdl));
 
-    aSlider.SetEndScrollHdl( HDL( Impl_ScrollHdl ) );
+    m_pSlider->SetEndScrollHdl(HDL(Impl_ScrollHdl));
 
     SetButtonState();
 }
@@ -263,18 +245,18 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
         aBuf.append(static_cast<sal_Int32>(nCurrentRow - nStartRow));
         aBuf.appendAscii(" / ");
         aBuf.append(static_cast<sal_Int32>(nEndRow - nStartRow));
-        aFixedText.SetText(aBuf.makeStringAndClear());
+        m_pFixedText->SetText(aBuf.makeStringAndClear());
     }
     else
-        aFixedText.SetText(sNewRecord);
+        m_pFixedText->SetText(sNewRecord);
 
-    aSlider.SetThumbPos(nCurrentRow-nStartRow-1);
+    m_pSlider->SetThumbPos(nCurrentRow-nStartRow-1);
 }
 
 IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, Edit*, pEdit)
 {
     if ( pEdit->IsModified() )
-        aBtnRestore.Enable( true );
+        m_pBtnRestore->Enable( true );
     return 0;
 }
 
@@ -301,7 +283,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl)
             if (nCurrentRow >= nEndRow + 2)
             {
                     nEndRow ++ ;
-                    aSlider.SetRange( Range( 0, nEndRow - nStartRow + 1) );
+                    m_pSlider->SetRange( Range( 0, nEndRow - nStartRow + 1) );
             }
             SetButtonState();
             FillCtrls(nCurrentRow);
@@ -375,7 +357,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_CloseHdl)
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_ScrollHdl)
 {
-    long nOffset = aSlider.GetThumbPos();
+    long nOffset = m_pSlider->GetThumbPos();
     nCurrentRow = nStartRow + nOffset + 1;
     SetButtonState();
     FillCtrls(nCurrentRow);
@@ -386,21 +368,21 @@ void ScDataFormDlg::SetButtonState()
 {
     if (nCurrentRow > nEndRow)
     {
-        aBtnDelete.Enable( false );
-        aBtnNext.Enable( false );
+        m_pBtnDelete->Enable( false );
+        m_pBtnNext->Enable( false );
     }
     else
     {
-        aBtnDelete.Enable( true );
-        aBtnNext.Enable( true );
+        m_pBtnDelete->Enable( true );
+        m_pBtnNext->Enable( true );
     }
 
     if (nCurrentRow == nStartRow + 1)
-        aBtnPrev.Enable( false );
+        m_pBtnPrev->Enable( false );
     else
-        aBtnPrev.Enable( true );
+        m_pBtnPrev->Enable( true );
 
-    aBtnRestore.Enable( false );
+    m_pBtnRestore->Enable( false );
     if ( maEdits.size()>=1 && !maEdits.is_null(0) )
         maEdits[0].GrabFocus();
 }
