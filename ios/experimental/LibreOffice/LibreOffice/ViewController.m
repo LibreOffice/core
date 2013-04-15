@@ -9,6 +9,10 @@
 
 #import "ViewController.h"
 
+#include <osl/detail/ios-bootstrap.h>
+
+#import "lo.h"
+
 @implementation ViewController
 
 - (void)viewDidLoad

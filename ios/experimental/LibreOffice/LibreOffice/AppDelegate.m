@@ -26,6 +26,17 @@ static View *theView;
     (void) launchOptions;
 
     CGRect bounds = [[UIScreen mainScreen] bounds];
+
+    NSLog(@"mainScreen bounds: %dx%d@(%d,%d)",
+          (int) bounds.size.width, (int) bounds.size.height,
+          (int) bounds.origin.x, (int) bounds.origin.y);
+
+    CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
+
+    NSLog(@"mainScreen applicationFrame: %dx%d@(%d,%d)",
+          (int) applicationFrame.size.width, (int) applicationFrame.size.height,
+          (int) applicationFrame.origin.x, (int) applicationFrame.origin.y);
+
     self.window = [[UIWindow alloc] initWithFrame:bounds];
     self.window.backgroundColor = [UIColor whiteColor];
 
@@ -51,7 +62,10 @@ static View *theView;
 
     [self.window addGestureRecognizer: tapRecognizer];
 
-    lo_set_view_size(bounds.size.width, bounds.size.height);
+    if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
+        lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);
+    else
+        lo_set_view_size(applicationFrame.size.width, applicationFrame.size.height);
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
@@ -108,6 +122,23 @@ static View *theView;
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     (void) application;
+}
+
+- (void)application:(UIApplication *)application didChangeStatusBarFrame:(CGRect)oldStatusBarFrame
+{
+    (void) application;
+    (void) oldStatusBarFrame;
+
+    CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
+    NSLog(@"New applicationFrame: %dx%d@(%d,%d)",
+          (int) applicationFrame.size.width, (int) applicationFrame.size.height,
+          (int) applicationFrame.origin.x, (int) applicationFrame.origin.y);
+    NSLog(@"statusBarOrientation: %d", [[UIApplication sharedApplication] statusBarOrientation]);
+
+    if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
+        lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);
+    else
+        lo_set_view_size(applicationFrame.size.width, applicationFrame.size.height);
 }
 
 - (void)keyboardWillShow:(NSNotification *)note

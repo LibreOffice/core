@@ -20,8 +20,26 @@
 
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
-    CGContextTranslateCTM(context, 0, self.frame.size.height);
-    CGContextScaleCTM(context, 1, -1);
+
+    switch ([[UIApplication sharedApplication] statusBarOrientation]) {
+    case UIInterfaceOrientationPortrait:
+        CGContextTranslateCTM(context, 0, self.frame.size.height);
+        CGContextScaleCTM(context, 1, -1);
+        break;
+    case UIInterfaceOrientationLandscapeLeft:
+        CGContextTranslateCTM(context, self.frame.size.width, self.frame.size.height);
+        CGContextRotateCTM(context, M_PI/2);
+        CGContextScaleCTM(context, -1, 1);
+        break;
+    case UIInterfaceOrientationLandscapeRight:
+        CGContextRotateCTM(context, -M_PI/2);
+        CGContextScaleCTM(context, -1, 1);
+        break;
+    case UIInterfaceOrientationPortraitUpsideDown:
+        CGContextTranslateCTM(context, self.frame.size.width, 0);
+        CGContextScaleCTM(context, -1, 1);
+        break;
+    }
     lo_render_windows(context, rect);
     CGContextRestoreGState(context);
 
