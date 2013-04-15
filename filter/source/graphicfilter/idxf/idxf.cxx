@@ -27,14 +27,10 @@
 
 class FilterConfigItem;
 
-//================== GraphicImport - die exportierte Funktion ================
-
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
-#define GraphicImport idxGraphicImport
-#endif
+//================== GraphicImport - the exported Function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+idxGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     DXFRepresentation aDXF;
     DXF2GDIMetaFile aConverter;

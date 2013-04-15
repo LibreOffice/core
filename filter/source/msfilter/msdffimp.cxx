@@ -68,7 +68,6 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/module.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdgmoitm.hxx>
 #include <editeng/tstpitem.hxx>

@@ -36,14 +36,10 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 
-#ifdef LIBO_MERGELIBS
-#define GraphicImport itiGraphicImport
-#endif
-
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-        GraphicImport(SvStream & rStream, Graphic & rGraphic,
+        itiGraphicImport(SvStream & rStream, Graphic & rGraphic,
         FilterConfigItem*, sal_Bool);
 }
 
@@ -78,7 +74,7 @@ bool TiffFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, STREAM_READ);
     Graphic aGraphic;
-    return GraphicImport(aFileStream, aGraphic, NULL, 0);
+    return itiGraphicImport(aFileStream, aGraphic, NULL, 0);
 }
 
 void TiffFilterTest::testCVEs()

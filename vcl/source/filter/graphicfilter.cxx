@@ -990,7 +990,7 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
     if( !mpfnImport )
     {
 #ifndef DISABLE_DYNLOADING
-        mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol(OUString(IMPORT_FUNCTION_NAME));
+        mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol(OUString(maFiltername+IMPORT_FUNCTION_NAME));
 #else
         if( maFiltername.EqualsAscii( "icd" ) )
             mpfnImport = icdGraphicImport;
@@ -2070,7 +2070,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 String aPhysicalName( ImpCreateFullFilterPath( getToken(aFilterPath, i, ';'), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
 
-                PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol(OUString(EXPORT_FUNCTION_NAME));
+                PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol(OUString(aFilterName+EXPORT_FUNCTION_NAME));
                 // Dialog in DLL ausfuehren
 #else
                 PFilterCall pFunc = NULL;

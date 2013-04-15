@@ -367,12 +367,8 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
 //================== GraphicImport - the exported Function ================
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
-#define GraphicImport icdGraphicImport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, sal_Bool)
+icdGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, sal_Bool)
 {
     PCDReader aPCDReader(rStream);
     return aPCDReader.ReadPCD(rGraphic, pConfigItem);

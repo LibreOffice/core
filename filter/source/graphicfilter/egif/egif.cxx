@@ -558,12 +558,8 @@ void GIFWriter::WriteTerminator()
 
 // ------------------------------------------------------------------------
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
-#define GraphicExport egiGraphicExport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicExport( SvStream& rStream, Graphic& rGraphic,
+egiGraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                FilterConfigItem* pConfigItem, sal_Bool )
 {
     GIFWriter aWriter(rStream);

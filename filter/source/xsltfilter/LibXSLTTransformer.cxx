@@ -50,7 +50,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <osl/module.h>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <com/sun/star/lang/XComponent.hpp>

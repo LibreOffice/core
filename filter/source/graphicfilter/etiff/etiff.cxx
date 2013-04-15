@@ -596,12 +596,8 @@ void TIFFWriter::EndCompression()
 // - exported function -
 // ---------------------
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
-#define GraphicExport etiGraphicExport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
+etiGraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     TIFFWriter aWriter(rStream);
     return aWriter.WriteTIFF( rGraphic, pFilterConfigItem );

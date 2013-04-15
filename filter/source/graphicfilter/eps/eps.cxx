@@ -2752,12 +2752,8 @@ sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uL
 
 //================== GraphicExport - die exportierte Funktion ================
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
-#define GraphicExport epsGraphicExport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicExport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
+epsGraphicExport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     PSWriter aPSWriter;
     return aPSWriter.WritePS( rGraphic, rStream, pFilterConfigItem );

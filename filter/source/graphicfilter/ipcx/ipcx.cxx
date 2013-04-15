@@ -399,12 +399,8 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
 
 //================== GraphicImport - the exported function ================
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
-#define GraphicImport ipxGraphicImport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+ipxGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     PCXReader aPCXReader(rStream);
     sal_Bool nRetValue = aPCXReader.ReadPCX(rGraphic);

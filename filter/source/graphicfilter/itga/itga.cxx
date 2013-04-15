@@ -795,14 +795,10 @@ sal_Bool TGAReader::ImplReadPalette()
     return mbStatus;
 }
 
-//================== GraphicImport - die exportierte Funktion ================
-
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
-#define GraphicImport itgGraphicImport
-#endif
+//================== GraphicImport - the exported Function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+itgGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     TGAReader aTGAReader(rStream);
 

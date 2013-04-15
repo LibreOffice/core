@@ -520,12 +520,8 @@ sal_Bool PBMReader::ImplReadBody()
 
 //================== GraphicImport - the exported function ================
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
-#define GraphicImport ipbGraphicImport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+ipbGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     PBMReader aPBMReader(rStream);
 

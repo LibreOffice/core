@@ -269,12 +269,8 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
 // - exported function -
 // ---------------------
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
-#define GraphicExport eraGraphicExport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
+eraGraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     RASWriter aRASWriter(rStream);
 
