@@ -1367,432 +1367,432 @@ End
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Af
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Af;
-	Name = "dict-af.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-af.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_An
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_An;
-	Name = "dict-an.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-an.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ar
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ar;
-	Name = "dict-ar.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-ar.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Be
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Be;
-	Name = "dict-be.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-be.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Bg
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Bg;
-	Name = "dict-bg.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-bg.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Bn
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Bn;
-	Name = "dict-bn.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-bn.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Br
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Br;
-	Name = "dict-br.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-br.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Bs
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Bs;
-	Name = "dict-bs.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-bs.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ca
-    Dir = gid_Brand_Dir_Share_Extensions_Dict_Ca;
-    Name = "dict-ca.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    Dir = FILELIST_DIR;
+    Name = "Dictionary/dict-ca.filelist";
+    Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
     UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Cs
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Cs;
-	Name = "dict-cs.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-cs.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Da
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Da;
-	Name = "dict-da.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-da.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_De
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_De;
-	Name = "dict-de.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-de.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_En
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_En;
-	Name = "dict-en.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-en.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_El
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_El;
-	Name = "dict-el.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-el.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Es
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Es;
-	Name = "dict-es.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-es.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Et
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Et;
-	Name = "dict-et.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-et.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Fr
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Fr;
-	Name = "dict-fr.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-fr.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Gd
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gd;
-	Name = "dict-gd.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-gd.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Gl
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gl;
-	Name = "dict-gl.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-gl.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Gu
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gu;
-	Name = "dict-gu.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-gu.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_He
-    Dir = gid_Brand_Dir_Share_Extensions_Dict_He;
-    Name = "dict-he.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    Dir = FILELIST_DIR;
+    Name = "Dictionary/dict-he.filelist";
+    Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
     UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Hi
-    Dir = gid_Brand_Dir_Share_Extensions_Dict_Hi;
-    Name = "dict-hi.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    Dir = FILELIST_DIR;
+    Name = "Dictionary/dict-hi.filelist";
+    Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
     UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Hu
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Hu;
-	Name = "dict-hu.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-hu.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Hr
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Hr;
-	Name = "dict-hr.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-hr.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_It
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_It;
-	Name = "dict-it.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-it.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ku_Tr
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ku_Tr;
-	Name = "dict-ku-TR.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-ku-TR.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Lt
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Lt;
-	Name = "dict-lt.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-lt.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Lv
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Lv;
-	Name = "dict-lv.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-lv.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ne
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ne;
-	Name = "dict-ne.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-ne.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Nl
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Nl;
-	Name = "dict-nl.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-nl.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_No
-    Dir = gid_Brand_Dir_Share_Extensions_Dict_No;
-    Name = "dict-no.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    Dir = FILELIST_DIR;
+    Name = "Dictionary/dict-no.filelist";
+    Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
     UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Oc
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Oc;
-	Name = "dict-oc.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-oc.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pl
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pl;
-	Name = "dict-pl.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-pl.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pt_Br
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Br;
-	Name = "dict-pt-BR.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-pt-BR.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pt_Pt
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt;
-	Name = "dict-pt-PT.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-pt-PT.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ro
-    Dir = gid_Brand_Dir_Share_Extensions_Dict_Ro;
-    Name = "dict-ro.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    Dir = FILELIST_DIR;
+    Name = "Dictionary/dict-ro.filelist";
+    Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
     UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ru
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ru;
-	Name = "dict-ru.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-ru.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Si
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Si;
-	Name = "dict-si.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-si.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sk
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sk;
-	Name = "dict-sk.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-sk.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sl
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sl;
-	Name = "dict-sl.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-sl.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sr
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sr;
-	Name = "dict-sr.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-sr.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sv
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sv;
-	Name = "dict-sv.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-sv.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sw
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sw;
-	Name = "dict-sw.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-sw.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Te
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Te;
-	Name = "dict-te.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-te.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Th
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Th;
-	Name = "dict-th.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-th.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Uk
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Uk;
-	Name = "dict-uk.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-uk.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Vi
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Vi;
-	Name = "dict-vi.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-vi.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Zu
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Zu;
-	Name = "dict-zu.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-zu.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	UnixRights = 444;
 End
 #endif

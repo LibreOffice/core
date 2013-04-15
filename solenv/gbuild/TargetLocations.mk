@@ -32,7 +32,6 @@ gb_CliLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliLibrary_EXT)
 gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLibrary_EXT)
 gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
-gb_Dictionary_get_target = $(OUTDIR)/pck/$(1).oxt
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_Extension_get_target = $(OUTDIR)/bin/$(1).oxt
@@ -105,6 +104,8 @@ gb_CppunitTestFakeExecutable_get_target = \
 gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done
 gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1).done
 gb_CustomTarget_get_workdir = $(WORKDIR)/CustomTarget/$(1)
+gb_DescriptionTranslateTarget_get_target = $(WORKDIR)/DescriptionTranslateTarget/$(1).xml
+gb_Dictionary_get_target = $(WORKDIR)/Dictionary/$(1).done
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
@@ -170,6 +171,7 @@ gb_Postprocess_get_target = $(WORKDIR)/Postprocess/$(1)
 gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.gch.d
 gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.gch
 gb_PrecompiledHeader_get_timestamp = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/Timestamps/$(1)
+gb_PropertiesTranslateTarget_get_target = $(WORKDIR)/PropertiesTranslateTarget/$(1).properties
 gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1).done
 gb_Rdb_get_target = $(WORKDIR)/Rdb/$(1).rdb
 gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
@@ -265,6 +267,8 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CliNativeLibraryTarget \
 	CliUnoApiTarget \
 	ComponentTarget \
+	DescriptionTranslateTarget \
+	Dictionary \
 	ExternalPackage \
 	ExtensionTarget \
 	HelpTarget \
@@ -289,6 +293,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	PackageSet \
 	Pagein \
 	PrecompiledHeader \
+	PropertiesTranslateTarget \
 	Pyuno \
 	PythonTest \
 	Rdb \
@@ -329,7 +334,6 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	CliLibrary \
 	CliNativeLibrary \
 	CliUnoApi \
-	Dictionary \
 	Executable \
 	Extension \
 	InstallScript \
