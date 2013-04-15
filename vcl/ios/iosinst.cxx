@@ -271,12 +271,36 @@ int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
     return 0;
 }
 
+IMPL_LINK( IosSalInstance, DisplayConfigurationChanged, void*, )
+{
+    for( std::list< SalFrame* >::const_iterator it = getFrames().begin();
+         it != getFrames().end();
+         it++ ) {
+        (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, 0 );
+    }
+
+    lo_damaged( CGRectMake( 0, 0, viewWidth, viewHeight ) );
+    return 0;
+}
+
 extern "C"
 void lo_set_view_size(int width, int height)
 {
-    // Horrible
+    int oldWidth = viewWidth;
+
     viewWidth = width;
     viewHeight = height;
+
+    if (oldWidth > 1) {
+        // Inform about change in display size (well, just orientation
+        // presumably).
+        IosSalInstance *pInstance = IosSalInstance::getInstance();
+
+        if ( pInstance == NULL )
+            return;
+
+        Application::PostUserEvent( LINK( pInstance, IosSalInstance, DisplayConfigurationChanged ), NULL );
+    }
 }
 
 IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )

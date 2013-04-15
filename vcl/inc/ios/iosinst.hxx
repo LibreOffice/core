@@ -59,6 +59,8 @@ public:
     } RenderWindowsArg;
     DECL_LINK( RenderWindows, RenderWindowsArg* );
 
+    DECL_LINK( DisplayConfigurationChanged, void* );
+
     pthread_mutex_t m_aRenderMutex;
     pthread_cond_t m_aRenderCond;
 };
