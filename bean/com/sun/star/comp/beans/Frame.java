@@ -49,7 +49,7 @@ public class Frame
     // com.sun.star.frame.XFrame
     //--------------------------------------------------------------
 
-    public void initialize( /*IN*/com.sun.star.awt.XWindow xWindow )
+    public void initialize( /*IN*/ com.sun.star.awt.XWindow xWindow )
     {
         xFrame.initialize( xWindow );
     }
@@ -79,7 +79,7 @@ public class Frame
         xFrame.setName( aName );
     }
 
-    public com.sun.star.frame.XFrame findFrame( /*IN*/String aTargetFrameName, /*IN*/int nSearchFlags )
+    public com.sun.star.frame.XFrame findFrame( /*IN*/ String aTargetFrameName, /*IN*/ int nSearchFlags )
     {
         return xFrame.findFrame( aTargetFrameName, nSearchFlags );
     }
@@ -104,7 +104,7 @@ public class Frame
         return xFrame.isActive();
     }
 
-    public boolean setComponent( /*IN*/com.sun.star.awt.XWindow xComponentWindow, /*IN*/ com.sun.star.frame.XController xController )
+    public boolean setComponent( /*IN*/ com.sun.star.awt.XWindow xComponentWindow, /*IN*/ com.sun.star.frame.XController xController )
     {
         return xFrame.setComponent( xComponentWindow, xController );
     }
