@@ -20,8 +20,8 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
-#include <tools/prex.h>
-#include <tools/postx.h>
+#include <prex.h>
+#include <postx.h>
 #include <tools/fract.hxx>
 
 #include "vcl/salgtype.hxx"

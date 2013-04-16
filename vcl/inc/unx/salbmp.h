@@ -20,8 +20,8 @@
 #ifndef _SV_SALBMP_H
 #define _SV_SALBMP_H
 
-#include <tools/prex.h>
-#include <tools/postx.h>
+#include <prex.h>
+#include <postx.h>
 #ifndef _SV_SALGTYPE
 #include <vcl/salgtype.hxx>
 #endif

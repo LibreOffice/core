@@ -20,7 +20,7 @@
 #ifndef _VCL_GTKFRAME_HXX
 #define _VCL_GTKFRAME_HXX
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <cairo.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
@@ -29,7 +29,7 @@
 #  include <gtk/gtkx.h>
 #endif
 #include <gdk/gdkkeysyms.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <salframe.hxx>
 #include <vcl/sysdata.hxx>

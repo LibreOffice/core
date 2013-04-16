@@ -18,9 +18,9 @@
  */
 
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/Xatom.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <unx/desktops.hxx>
 

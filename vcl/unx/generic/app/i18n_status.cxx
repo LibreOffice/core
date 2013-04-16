@@ -23,10 +23,10 @@
 #endif
 #include <sal/alloca.h>
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/Xlib.h>
 #include <unx/XIM.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <unx/salunx.h>
 #include <unx/i18n_status.hxx>

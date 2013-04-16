@@ -20,9 +20,9 @@
 
 #include <vcl/sysdata.hxx>
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/extensions/Xrender.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <unx/salunx.h>
 #include <unx/saldata.hxx>

@@ -23,10 +23,10 @@
 #include <sal/alloca.h>
 #include <osl/thread.h>
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/Xlocale.h>
 #include <X11/Xlib.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <unx/salunx.h>
 #include <unx/XIM.h>

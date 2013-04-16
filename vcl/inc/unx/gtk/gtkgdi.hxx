@@ -20,11 +20,11 @@
 #ifndef _VCL_GTKGDI_HXX
 #define _VCL_GTKGDI_HXX
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <unx/salgdi.h>
 

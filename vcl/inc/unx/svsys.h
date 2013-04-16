@@ -19,8 +19,8 @@
 #ifndef _SV_SVSYS_H
 #define _SV_SVSYS_H
 
-#include <tools/prex.h>
-#include <tools/postx.h>
+#include <prex.h>
+#include <postx.h>
 
 #endif // _SV_SVSYS_H
 

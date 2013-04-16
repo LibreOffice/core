@@ -26,11 +26,11 @@
 #include <string.h>
 #include <sys/time.h>
 
-#include "tools/prex.h"
+#include <prex.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
-#include "tools/postx.h"
+#include <postx.h>
 #if defined(LINUX) || defined(NETBSD) || defined (FREEBSD) || defined(OPENBSD)
 #include <sys/poll.h>
 #else

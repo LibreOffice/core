@@ -19,9 +19,9 @@
 
 #ifdef USE_RANDR
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/extensions/Xrandr.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include "osl/module.h"
 #include "rtl/ustring.hxx"

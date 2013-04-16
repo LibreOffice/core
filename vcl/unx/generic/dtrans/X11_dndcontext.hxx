@@ -25,9 +25,9 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-#include "tools/prex.h"
+#include <prex.h>
 #include <X11/Xlib.h>
-#include "tools/postx.h"
+#include <postx.h>
 
 using namespace com::sun::star::uno;
 

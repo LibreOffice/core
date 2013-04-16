@@ -20,12 +20,12 @@
 #ifndef _DTRANS_BMP_HXX_
 #define _DTRANS_BMP_HXX_
 
-#include "tools/prex.h"
+#include <prex.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include "tools/postx.h"
+#include <postx.h>
 
 #include <sal/types.h>
 #include <com/sun/star/awt/XBitmap.hpp>

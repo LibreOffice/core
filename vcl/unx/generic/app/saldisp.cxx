@@ -31,7 +31,7 @@
 #include <osl/module.h>
 #endif
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/cursorfont.h>
 #include "unx/x11_cursors/salcursors.h"
 #include "unx/x11_cursors/invert50.h"
@@ -54,7 +54,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #endif
 #endif
 
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <vcl/svapp.hxx>
 #include <unx/salunx.h>

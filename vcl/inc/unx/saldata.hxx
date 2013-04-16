@@ -20,8 +20,8 @@
 #ifndef _SV_SALDATA_HXX
 #define _SV_SALDATA_HXX
 
-#include <tools/prex.h>
-#include <tools/postx.h>
+#include <prex.h>
+#include <postx.h>
 
 #include <unx/salunx.h>
 #include <vcl/salgtype.hxx>

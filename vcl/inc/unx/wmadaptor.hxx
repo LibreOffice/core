@@ -23,9 +23,9 @@
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #ifndef _PREX_H
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/Xlib.h>
-#include <tools/postx.h>
+#include <postx.h>
 #endif
 #include <vclpluginapi.h>
 #include <vector>

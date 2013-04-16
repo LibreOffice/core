@@ -20,8 +20,8 @@
 #ifndef _SV_SALVD_H
 #define _SV_SALVD_H
 
-#include <tools/prex.h>
-#include <tools/postx.h>
+#include <prex.h>
+#include <postx.h>
 
 #include <unx/saltype.h>
 #include <salvd.hxx>

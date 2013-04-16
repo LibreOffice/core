@@ -20,10 +20,10 @@
 #ifndef _SV_XRENDER_PEER_HXX
 #define _SV_XRENDER_PEER_HXX
 
-#include <tools/prex.h>
+#include <prex.h>
 struct _XTrap; // on some older systems this is not declared within Xrender.h
 #include <X11/extensions/Xrender.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <vcl/salgtype.hxx>
 #include <osl/module.h>

@@ -37,9 +37,9 @@
 #include <boost/unordered_map.hpp>
 #include <list>
 
-#include "tools/prex.h"
+#include <prex.h>
 #include <X11/Xlib.h>
-#include "tools/postx.h"
+#include <postx.h>
 
 #define XDND_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndSupport"
 #define XDND_DROPTARGET_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndDropTarget"

@@ -43,10 +43,10 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/Xatom.h>
 #include <gdk/gdkx.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>

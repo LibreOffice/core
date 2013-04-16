@@ -23,9 +23,9 @@
 #include <queue>
 #include <set>
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/Xproto.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include "tools/debug.hxx"
 

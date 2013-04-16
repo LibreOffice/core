@@ -22,9 +22,9 @@
 #include <stdio.h>
 #endif
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/extensions/shape.h>
-#include <tools/postx.h>
+#include <postx.h>
 #include <tools/debug.hxx>
 
 #include <vcl/keycodes.hxx>

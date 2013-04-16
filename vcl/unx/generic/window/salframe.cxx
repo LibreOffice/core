@@ -35,7 +35,7 @@
 #include "vcl/printerinfomanager.hxx"
 #include "vcl/settings.hxx"
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include "FWS.hxx"
@@ -43,7 +43,7 @@
 #if !defined(SOLARIS) && !defined(AIX)
 #include <X11/extensions/dpms.h>
 #endif
-#include <tools/postx.h>
+#include <postx.h>
 
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"

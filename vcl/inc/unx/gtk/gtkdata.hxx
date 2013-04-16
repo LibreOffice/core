@@ -20,11 +20,11 @@
 #ifndef _VCL_GTKDATA_HXX
 #define _VCL_GTKDATA_HXX
 
-#include <tools/prex.h>
+#include <prex.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
-#include <tools/postx.h>
+#include <postx.h>
 
 #include <generic/gendata.hxx>
 #include <unx/saldisp.hxx>

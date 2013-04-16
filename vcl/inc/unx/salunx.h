@@ -20,8 +20,8 @@
 #ifndef _SALUNX_H
 #define _SALUNX_H
 
-#include <tools/prex.h>
-#include <tools/postx.h>
+#include <prex.h>
+#include <postx.h>
 
 #include "unx/salunxtime.h"
 

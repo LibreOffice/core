@@ -19,8 +19,8 @@
 #ifndef _SV_SALFRAME_H
 #define _SV_SALFRAME_H
 
-#include <tools/prex.h>
-#include <tools/postx.h>
+#include <prex.h>
+#include <postx.h>
 
 #include <unx/salunx.h>
 #include <unx/saltype.h>
