@@ -118,9 +118,9 @@ End
 
 File gid_File_Zip_Odkexamples
     TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "odkexamples.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_examples.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
 

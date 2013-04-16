@@ -19,7 +19,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_settings \
 	CustomTarget_autodoc \
 	Executable_unoapploader \
-	Zip_odkexamples \
+	Package_examples \
 ))
 
 ifneq ($(SOLAR_JAVA),)
