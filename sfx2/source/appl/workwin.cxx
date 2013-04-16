@@ -615,7 +615,7 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
 
     // For the ObjectBars a integral place in the Childlist is reserved,
     // so that they always come in a defined order.
-    aChildren.insert( aChildren.begin(), SFX_OBJECTBAR_MAX, NULL );
+    aChildren.insert( aChildren.begin(), SFX_OBJECTBAR_MAX, (SfxChild_Impl*)NULL );
 
     // create and initialize layout manager listener
     Reference< com::sun::star::frame::XFrame > xFrame = GetFrameInterface();
