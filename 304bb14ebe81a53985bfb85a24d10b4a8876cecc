@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///BM\u003d",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-04-16T18:00:48Z",
+      "side": 1,
+      "message": "There is one more compareTo here :)",
+      "revId": "304bb14ebe81a53985bfb85a24d10b4a8876cecc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
