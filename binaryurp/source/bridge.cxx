@@ -165,12 +165,6 @@ void PopOutgoingRequest::clear() {
 
 }
 
-struct Bridge::SubStub {
-    com::sun::star::uno::UnoInterfaceReference object;
-
-    sal_uInt32 references;
-};
-
 Bridge::Bridge(
     rtl::Reference< BridgeFactory > const & factory, rtl::OUString const & name,
     css::uno::Reference< css::connection::XConnection > const & connection,

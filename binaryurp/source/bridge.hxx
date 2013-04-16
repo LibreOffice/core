@@ -229,7 +229,10 @@ private:
                 com::sun::star::lang::XEventListener > >
         Listeners;
 
-    struct SubStub;
+    struct SubStub {
+        com::sun::star::uno::UnoInterfaceReference object;
+        sal_uInt32 references;
+    };
 
     typedef std::map< com::sun::star::uno::TypeDescription, SubStub > Stub;
 
