@@ -466,7 +466,8 @@ SAL_IMPLEMENT_MAIN()
                 "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider",
                 Reference< lang::XMultiServiceFactory >(
                     xContext->getServiceManager(), UNO_QUERY ),
-                Reference< registry::XRegistryKey >() ), UNO_QUERY );
+                Reference< registry::XRegistryKey >(), "bootstrap_" ),
+            UNO_QUERY );
         if (! xTDprov_factory.is())
         {
             throw RuntimeException(
