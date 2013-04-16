@@ -20,6 +20,7 @@
 #ifndef _SV_BITMAP_HXX
 #define _SV_BITMAP_HXX
 
+#include <tools/color.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -823,6 +824,36 @@ public:
     bool                        HasAlpha();
 
 public:
+    /** Draw a blend frame to the Bitmap
+
+        @param nAlpha
+        The blend value defines how strong the frame will be blended with the
+        existing content, 255 == full coverage, 0 == no frame will be drawn
+
+        @param aColorTopLeft, aColorBottomRight, aColorTopRight, aColorBottomLeft
+        The colors defining the frame. If the version without aColorTopRight and
+        aColorBottomLeft is used, these colors are linearly interpolated from
+        aColorTopLeft and aColorBottomRight using the width and height of the area
+
+        @param rTopLeft
+        The start point of the frame in pixels
+
+        @param rSize
+        The size of the frame in pixels
+     */
+    void DrawBlendFrame(
+        sal_uInt8 nAlpha = 128,
+        Color aColorTopLeft = Color(COL_WHITE),
+        Color aColorBottomRight = Color(COL_BLACK));
+    void DrawBlendFrame(
+        const Point& rTopLeft,
+        const Size& rSize,
+        sal_uInt8 nAlpha = 128,
+        Color   aColorTopLeft = Color(COL_WHITE),
+        Color   aColorTopRight = Color(COL_GRAY),
+        Color   aColorBottomRight = Color(COL_BLACK),
+        Color   aColorBottomLeft = Color(COL_GRAY));
+
     BitmapReadAccess*       AcquireReadAccess();
     BitmapWriteAccess*      AcquireWriteAccess();
     void                    ReleaseAccess( BitmapReadAccess* pAccess );

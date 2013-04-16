@@ -54,6 +54,10 @@ namespace
     const char s_sIsAutomaticFontColor[] = "IsAutomaticFontColor";
     const char s_sIsSystemFont[] = "IsSystemFont";
     const char s_sIsSelectionInReadonly[] = "IsSelectionInReadonly";
+    const char s_sColorValueSetMaximumRowCount[] = "ColorValueSetMaximumRowCount";
+    const char s_sColorValueSetEntryEdgeLength[] = "ColorValueSetEntryEdgeLength";
+    const char s_sColorValueSetColumnCount[] = "ColorValueSetColumnCount";
+    const char s_sEdgeBlending[] = "EdgeBlending";
 }
 
 // class SvtAccessibilityOptions_Impl ---------------------------------------------
@@ -78,6 +82,10 @@ public:
     sal_Bool    GetIsSystemFont() const;
     sal_Int16   GetHelpTipSeconds() const;
     sal_Bool    IsSelectionInReadonly() const;
+    sal_Int16   GetColorValueSetMaximumRowCount() const;
+    sal_Int16   GetColorValueSetEntryEdgeLength() const;
+    sal_Int16   GetColorValueSetColumnCount() const;
+    sal_Int16   GetEdgeBlending() const;
 
     void        SetAutoDetectSystemHC(sal_Bool bSet);
     void        SetIsForPagePreviews(sal_Bool bSet);
@@ -88,6 +96,10 @@ public:
     void        SetIsSystemFont(sal_Bool bSet);
     void        SetHelpTipSeconds(sal_Int16 nSet);
     void        SetSelectionInReadonly(sal_Bool bSet);
+    void        SetColorValueSetMaximumRowCount(sal_Int16 nSet);
+    void        SetColorValueSetEntryEdgeLength(sal_Int16 nSet);
+    void        SetColorValueSetColumnCount(sal_Int16 nSet);
+    void        SetEdgeBlending(sal_Int16 nSet);
 
     sal_Bool    IsModified() const { return bIsModified; };
 };
@@ -292,6 +304,78 @@ sal_Bool SvtAccessibilityOptions_Impl::IsSelectionInReadonly() const
     return bRet;
 }
 
+sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetMaximumRowCount() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Int16 nRet = 40;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sColorValueSetMaximumRowCount) >>= nRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+
+    return nRet;
+}
+
+sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetEntryEdgeLength() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Int16 nRet = 14;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sColorValueSetEntryEdgeLength) >>= nRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+
+    return nRet;
+}
+
+sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Int16 nRet = 12;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sColorValueSetColumnCount) >>= nRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+
+    return nRet;
+}
+
+sal_Int16 SvtAccessibilityOptions_Impl::GetEdgeBlending() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Int16 nRet = 35;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sEdgeBlending) >>= nRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+
+    return nRet;
+}
+
 void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(sal_Bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
@@ -489,6 +573,86 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
     Application::SetSettings(aAllSettings);
 }
 
+void SvtAccessibilityOptions_Impl::SetColorValueSetMaximumRowCount(sal_Int16 nSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sColorValueSetMaximumRowCount)!=nSet)
+        {
+            xNode->setPropertyValue(s_sColorValueSetMaximumRowCount, css::uno::makeAny(nSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+}
+
+void SvtAccessibilityOptions_Impl::SetColorValueSetEntryEdgeLength(sal_Int16 nSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sColorValueSetEntryEdgeLength)!=nSet)
+        {
+            xNode->setPropertyValue(s_sColorValueSetEntryEdgeLength, css::uno::makeAny(nSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+}
+
+void SvtAccessibilityOptions_Impl::SetColorValueSetColumnCount(sal_Int16 nSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sColorValueSetColumnCount)!=nSet)
+        {
+            xNode->setPropertyValue(s_sColorValueSetColumnCount, css::uno::makeAny(nSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+}
+
+void SvtAccessibilityOptions_Impl::SetEdgeBlending(sal_Int16 nSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sEdgeBlending)!=nSet)
+        {
+            xNode->setPropertyValue(s_sEdgeBlending, css::uno::makeAny(nSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+}
+
 // -----------------------------------------------------------------------
 // class SvtAccessibilityOptions --------------------------------------------------
 
@@ -582,6 +746,26 @@ sal_Bool SvtAccessibilityOptions::IsSelectionInReadonly() const
     return sm_pSingleImplConfig->IsSelectionInReadonly();
 }
 
+sal_Int16 SvtAccessibilityOptions::GetColorValueSetMaximumRowCount() const
+{
+    return sm_pSingleImplConfig->GetColorValueSetMaximumRowCount();
+}
+
+sal_Int16 SvtAccessibilityOptions::GetColorValueSetEntryEdgeLength() const
+{
+    return sm_pSingleImplConfig->GetColorValueSetEntryEdgeLength();
+}
+
+sal_Int16 SvtAccessibilityOptions::GetColorValueSetColumnCount() const
+{
+    return sm_pSingleImplConfig->GetColorValueSetColumnCount();
+}
+
+sal_Int16 SvtAccessibilityOptions::GetEdgeBlending() const
+{
+    return sm_pSingleImplConfig->GetEdgeBlending();
+}
+
 // -----------------------------------------------------------------------
 void SvtAccessibilityOptions::SetAutoDetectSystemHC(sal_Bool bSet)
 {
@@ -619,10 +803,25 @@ void SvtAccessibilityOptions::SetSelectionInReadonly(sal_Bool bSet)
 {
     sm_pSingleImplConfig->SetSelectionInReadonly(bSet);
 }
-
 void SvtAccessibilityOptions::SetVCLSettings()
 {
     sm_pSingleImplConfig->SetVCLSettings();
+}
+void SvtAccessibilityOptions::SetColorValueSetMaximumRowCount(sal_Int16 nSet)
+{
+    sm_pSingleImplConfig->SetColorValueSetMaximumRowCount(nSet);
+}
+void SvtAccessibilityOptions::SetColorValueSetEntryEdgeLength(sal_Int16 nSet)
+{
+    sm_pSingleImplConfig->SetColorValueSetEntryEdgeLength(nSet);
+}
+void SvtAccessibilityOptions::SetColorValueSetColumnCount(sal_Int16 nSet)
+{
+    sm_pSingleImplConfig->SetColorValueSetColumnCount(nSet);
+}
+void SvtAccessibilityOptions::SetEdgeBlending(sal_Int16 nSet)
+{
+    sm_pSingleImplConfig->SetEdgeBlending(nSet);
 }
 // -----------------------------------------------------------------------
 

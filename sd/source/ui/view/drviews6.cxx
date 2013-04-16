@@ -30,7 +30,7 @@
 #include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/xftsfit.hxx>
-#include <svx/colrctrl.hxx>
+#include <svx/SvxColorChildWindow.hxx>
 #include <svx/f3dchild.hxx>
 #include "optsitem.hxx"
 #include <svx/extrusionbar.hxx>

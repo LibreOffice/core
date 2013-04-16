@@ -27,6 +27,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/tabarea.hxx>
+#include <svx/SvxColorValueSet.hxx>
 
 class SdrModel;
 class SdrView;
@@ -650,7 +651,7 @@ private:
     Edit*               m_pEdtName;
     ColorLB*            m_pLbColor;
 
-    ValueSet*           m_pValSetColorList;
+    SvxColorValueSet*   m_pValSetColorList;
 
     SvxXRectPreview*    m_pCtlPreviewOld;
     SvxXRectPreview*    m_pCtlPreviewNew;
@@ -698,7 +699,8 @@ private:
     sal_uInt16  ColorToPercent_Impl( sal_uInt16 nColor );
     sal_uInt16  PercentToColor_Impl( sal_uInt16 nPercent );
 
-    void    FillValueSet_Impl( ValueSet& rVs );
+    void ImpColorCountChanged();
+
     //-----------------------------------------------------------------------------------------------------
     DECL_LINK( ClickAddHdl_Impl, void * );
     DECL_LINK( ClickModifyHdl_Impl, void * );

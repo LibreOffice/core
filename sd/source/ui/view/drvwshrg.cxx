@@ -26,7 +26,7 @@
 #include <svx/bmpmask.hxx>
 #include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
-#include <svx/colrctrl.hxx>
+#include <svx/SvxColorChildWindow.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <svx/f3dchild.hxx>

@@ -19,6 +19,7 @@
 
 #include <svtools/valueset.hxx>
 #include <boost/function.hpp>
+#include <svx/SvxColorValueSet.hxx>
 
 class Window;
 class SfxBindings;
@@ -69,7 +70,7 @@ public:
 
 private:
     SfxBindings* mpBindings;
-    ValueSet maVSColor;
+    SvxColorValueSet maVSColor;
     FloatingWindow* mpFloatingWindow;
     const String msNoColorString;
     ::boost::function<Color(void)> maNoColorGetter;

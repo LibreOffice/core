@@ -413,6 +413,8 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     FillColorValueSets_Impl();
 
     m_pBackgroundColorSet->SetSelectHdl( HDL(BackgroundColorHdl_Impl) );
+    m_pBackgroundColorSet->SetStyle(m_pBackgroundColorSet->GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD);
+    m_pBackgroundColorSet->SetText(SVX_RESSTR(RID_SVXSTR_TRANSPARENT));
 }
 
 //------------------------------------------------------------------------
@@ -1169,47 +1171,23 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
     XColorListRef pColorTable = NULL;
-    const Size aSize15x15 = Size( 15, 15 );
-
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
+    {
         pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
+    }
 
     if ( !pColorTable.is() )
         pColorTable = XColorList::CreateStdColorList();
 
     if ( pColorTable.is() )
     {
-        short i = 0;
-        long nCount = pColorTable->Count();
-        XColorEntry* pEntry = NULL;
-        Color aColWhite( COL_WHITE );
-        String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
-        WinBits nBits = ( m_pBackgroundColorSet->GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD );
-        m_pBackgroundColorSet->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
-        m_pBackgroundColorSet->SetStyle( nBits );
-        m_pBackgroundColorSet->SetAccessibleName(m_pBackGroundColorFrame->get_label_widget()->GetText());
-        for ( i = 0; i < nCount; i++ )
-        {
-            pEntry = pColorTable->GetColor(i);
-            m_pBackgroundColorSet->InsertItem( i + 1, pEntry->GetColor(), pEntry->GetName() );
-        }
-
-        while ( i < 104 )
-        {
-            m_pBackgroundColorSet->InsertItem( i + 1, aColWhite, aStrWhite );
-            i++;
-        }
-
-        if ( nCount > 104 )
-        {
-            m_pBackgroundColorSet->SetStyle( nBits | WB_VSCROLL );
-        }
+        m_pBackgroundColorSet->Clear();
+        m_pBackgroundColorSet->addEntriesForXColorList(*pColorTable);
     }
 
-    m_pBackgroundColorSet->SetColCount( 8 );
-    m_pBackgroundColorSet->SetLineCount( 13 );
-    m_pBackgroundColorSet->CalcWindowSizePixel( aSize15x15 );
-
+    const WinBits nBits(m_pBackgroundColorSet->GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD);
+    m_pBackgroundColorSet->SetStyle(nBits);
+    m_pBackgroundColorSet->SetColCount(m_pBackgroundColorSet->getColumnCount());
 }
 
 //------------------------------------------------------------------------

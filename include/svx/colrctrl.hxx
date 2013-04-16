@@ -21,7 +21,7 @@
 
 #include <sfx2/dockwin.hxx>
 #include <sfx2/childwin.hxx>
-#include <svtools/valueset.hxx>
+#include <svx/SvxColorValueSet.hxx>
 #include <svtools/transfer.hxx>
 #include <svl/lstner.hxx>
 #include <svx/svxdllapi.h>
@@ -31,17 +31,16 @@ class SvData;
 
 /*************************************************************************
 |*
-|* SvxColorValueSet
+|* SvxColorValueSet_docking
 |*
 \************************************************************************/
 
-class SvxColorValueSet : public ValueSet, public DragSourceHelper
+class SvxColorValueSet_docking : public SvxColorValueSet, public DragSourceHelper
 {
-    using ValueSet::StartDrag;
-
 private:
+    using SvxColorValueSet::StartDrag;
 
-    sal_Bool            bLeft;
+    bool            mbLeftButton;
     Point           aDragPosPixel;
 
 protected:
@@ -56,27 +55,13 @@ protected:
     // DragSourceHelper
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPtPixel );
 
-                    DECL_STATIC_LINK(SvxColorValueSet, ExecDragHdl, void*);
+                    DECL_STATIC_LINK(SvxColorValueSet_docking, ExecDragHdl, void*);
 
 public:
-                    SvxColorValueSet( Window* pParent, const ResId& rResId );
+                    SvxColorValueSet_docking( Window* pParent, WinBits nWinStyle = WB_ITEMBORDER );
+                    SvxColorValueSet_docking( Window* pParent, const ResId& rResId );
 
-    sal_Bool            IsLeftButton() const { return bLeft; }
-};
-
-/*************************************************************************
-|*
-|* Derivation from SfxChildWindow as "container" for Controller
-|*
-\************************************************************************/
-
-class SVX_DLLPUBLIC SvxColorChildWindow : public SfxChildWindow
-{
- public:
-    SvxColorChildWindow( Window*, sal_uInt16, SfxBindings*,
-                         SfxChildWinInfo* );
-
-    SFX_DECL_CHILDWINDOW_WITHID(SvxColorChildWindow);
+    bool IsLeftButton() const { return mbLeftButton; }
 };
 
 /*************************************************************************
@@ -91,13 +76,12 @@ class SvxColorDockingWindow : public SfxDockingWindow, public SfxListener
 
 private:
     XColorListRef       pColorList;
-    SvxColorValueSet    aColorSet;
+    SvxColorValueSet_docking aColorSet;
     sal_uInt16          nLeftSlot;
     sal_uInt16          nRightSlot;
     sal_uInt16          nCols;
     sal_uInt16          nLines;
     long                nCount;
-    Size                aColorSize;
     Size                aItemSize;
 
     void                FillValueSet();

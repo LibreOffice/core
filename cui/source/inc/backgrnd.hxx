@@ -22,7 +22,7 @@
 #include <vcl/group.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/valueset.hxx>
+#include <svx/SvxColorValueSet.hxx>
 #include <svx/dlgctrl.hxx>
 #include <editeng/brushitem.hxx>
 
@@ -82,7 +82,7 @@ private:
     ListBox*                m_pParaLBox;
 
     VclFrame*               m_pBackGroundColorFrame;
-    ValueSet*               m_pBackgroundColorSet;
+    SvxColorValueSet*       m_pBackgroundColorSet;
     BackgroundPreviewImpl*  m_pPreviewWin1;
 
     FixedText*              m_pColTransFT;///<color transparency

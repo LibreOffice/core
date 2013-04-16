@@ -93,6 +93,7 @@
 #include <editeng/shdditem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/SvxColorChildWindow.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/scripttypeitem.hxx>

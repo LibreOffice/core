@@ -391,10 +391,7 @@ SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
         LINK( this, SvxColorTabPage, ClickDeleteHdl_Impl ) );
 
     // ValueSet
-    m_pValSetColorList->SetStyle( m_pValSetColorList->GetStyle() | WB_VSCROLL | WB_ITEMBORDER );
-    m_pValSetColorList->SetColCount( 8 );
-    m_pValSetColorList->SetLineCount( 13 );
-    m_pValSetColorList->SetExtraSpacing( 0 );
+    m_pValSetColorList->SetStyle( m_pValSetColorList->GetStyle() | WB_ITEMBORDER );
     m_pValSetColorList->Show();
 }
 
@@ -405,11 +402,24 @@ SvxColorTabPage::~SvxColorTabPage()
 
 // -----------------------------------------------------------------------
 
+void SvxColorTabPage::ImpColorCountChanged()
+{
+    if (!pColorList.is())
+        return;
+    m_pValSetColorList->SetColCount(m_pValSetColorList->getColumnCount());
+}
+
+// -----------------------------------------------------------------------
+
 void SvxColorTabPage::Construct()
 {
-    m_pLbColor->Fill(pColorList);
-    FillValueSet_Impl(*m_pValSetColorList);
-    UpdateTableName();
+    if (pColorList.is())
+    {
+        m_pLbColor->Fill(pColorList);
+        m_pValSetColorList->addEntriesForXColorList(*pColorList);
+        ImpColorCountChanged();
+        UpdateTableName();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -722,6 +732,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
         m_pLbColor->Append( pEntry );
         m_pValSetColorList->InsertItem( m_pValSetColorList->GetItemCount() + 1,
                 pEntry->GetColor(), pEntry->GetName() );
+        ImpColorCountChanged();
 
         m_pLbColor->SelectEntryPos( m_pLbColor->GetEntryCount() - 1 );
 
@@ -874,7 +885,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
             // update Listbox and ValueSet
             m_pLbColor->RemoveEntry( nPos );
             m_pValSetColorList->Clear();
-            FillValueSet_Impl(*m_pValSetColorList);
+            m_pValSetColorList->addEntriesForXColorList(*pColorList);
+            ImpColorCountChanged();
+            //FillValueSet_Impl(*m_pValSetColorList);
 
             // positioning
             m_pLbColor->SelectEntryPos( nPos );
@@ -1043,20 +1056,20 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
 
 //------------------------------------------------------------------------
 
-void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
-{
-    long nCount = pColorList->Count();
-    XColorEntry* pColorEntry;
-
-    if( nCount > 104 )
-        rVs.SetStyle( rVs.GetStyle() | WB_VSCROLL );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        pColorEntry = pColorList->GetColor( i );
-        rVs.InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
-    }
-}
+//void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
+//{
+//    long nCount = pColorList->Count();
+//    XColorEntry* pColorEntry;
+//
+//    if( nCount > 104 )
+//        rVs.SetStyle( rVs.GetStyle() | WB_VSCROLL );
+//
+//    for( long i = 0; i < nCount; i++ )
+//    {
+//        pColorEntry = pColorList->GetColor( i );
+//        rVs.InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
+//    }
+//}
 
 //------------------------------------------------------------------------
 

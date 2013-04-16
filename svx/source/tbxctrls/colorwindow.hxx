@@ -28,6 +28,7 @@
 #include <svl/lstner.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <svx/SvxColorValueSet.hxx>
 
 //========================================================================
 // class SvxColorWindow_Impl --------------------------------------------------
@@ -39,7 +40,7 @@ class SvxColorWindow_Impl : public SfxPopupWindow
 
 private:
     const sal_uInt16 theSlotId;
-    ValueSet       aColorSet;
+    SvxColorValueSet aColorSet;
     OUString  maCommand;
     const Color    mLastColor;
 

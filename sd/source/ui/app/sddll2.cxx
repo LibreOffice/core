@@ -28,7 +28,7 @@
 #include <svx/galbrws.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/fontwork.hxx>
-#include <svx/colrctrl.hxx>
+#include <svx/SvxColorChildWindow.hxx>
 #include <svx/verttexttbxctrl.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/fillctrl.hxx>

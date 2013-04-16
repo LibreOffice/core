@@ -84,7 +84,6 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     const SfxPoolItem* pItem = NULL;
     XColorListRef pColorList;
 
-    const Size aSize15x15 = Size( 15, 15 );
     sal_uInt16 nSelectedItem = 0;
 
     OSL_ENSURE( pDocSh, "DocShell not found!" );
@@ -94,39 +93,72 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     if ( !pColorList.is() )
         pColorList = XColorList::CreateStdColorList();
 
+    long nColorCount(0);
+
     if ( pColorList.is() )
     {
-        sal_uInt16 i = 0;
-        long nCount = pColorList->Count();
-        XColorEntry* pEntry = NULL;
+        nColorCount = pColorList->Count();
         Color aColWhite( COL_WHITE );
         String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
-        WinBits nBits = ( aTabBgColorSet.GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_NOPOINTERFOCUS);
+        aTabBgColorSet.addEntriesForXColorList(*pColorList);
+    }
+
+    if(nColorCount)
+    {
+        const WinBits nBits(aTabBgColorSet.GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_NOPOINTERFOCUS);
         aTabBgColorSet.SetText( aTabBgColorNoColorText );
         aTabBgColorSet.SetStyle( nBits );
-        for ( i = 0; i < nCount; i++ )
-        {
-            pEntry = pColorList->GetColor(i);
-            aTabBgColorSet.InsertItem( i + 1, pEntry->GetColor(), pEntry->GetName() );
-            if (pEntry->GetColor() == aTabBgColor)
-                nSelectedItem = (i + 1);
-        }
+        static sal_Int32 nAdd = 4;
 
-        while ( i < 80 )
-        {
-            aTabBgColorSet.InsertItem( i + 1, aColWhite, aStrWhite );
-            i++;
-        }
+        // calculate new size of color control as base, derive size of border win
+        const Size aNewSize(aTabBgColorSet.layoutAllVisible(nColorCount));
+        const Size aNewSizeBorderWin(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd);
 
-        if ( nCount > 80 )
-        {
-            aTabBgColorSet.SetStyle( nBits | WB_VSCROLL );
-        }
+        // from that, calculate a new dialog size
+        const Size aCurrentSizeDialog(GetOutputSizePixel());
+        const Size aCurrentSizeBorderWin(aBorderWin.GetOutputSizePixel());
+        const long nOffsetX(aCurrentSizeDialog.Width() - aCurrentSizeBorderWin.Width());
+        const long nOffsetY(aCurrentSizeDialog.Height() - aCurrentSizeBorderWin.Height());
+        const Size aNewSizeDialog(aNewSizeBorderWin.Width() + nOffsetX, aNewSizeBorderWin.Height() + nOffsetY);
+
+        // also need to adapt pos and size for the three buttons; as a base, take their original
+        // distance from the dialog bottom and get new Y-Pos
+        const long aButtonOffsetFromBottom(aCurrentSizeDialog.Height() - aBtnOk.GetPosPixel().Y());
+        const long aNewButtonY(aNewSizeDialog.Height() - aButtonOffsetFromBottom);
+
+        // for each button, scale width and x-pos by old/new dialog sizes and re-layout
+        // for Okay-Button
+        const long aNewWidthOkay((aBtnOk.GetSizePixel().Width() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
+        const long aNewPosOkay((aBtnOk.GetPosPixel().X() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
+        const Size aNewSizeOkay(aNewWidthOkay, aBtnOk.GetOutputSizePixel().Height());
+        aBtnOk.SetOutputSizePixel(aNewSizeOkay);
+        aBtnOk.SetPosSizePixel(Point(aNewPosOkay, aNewButtonY), aNewSizeOkay);
+
+        // for Cancel-Button
+        const long aNewWidthCancel((aBtnCancel.GetSizePixel().Width() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
+        const long aNewPosCancel((aBtnCancel.GetPosPixel().X() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
+        const Size aNewSizeCancel(aNewWidthCancel, aBtnCancel.GetOutputSizePixel().Height());
+        aBtnCancel.SetOutputSizePixel(aNewSizeCancel);
+        aBtnCancel.SetPosSizePixel(Point(aNewPosCancel, aNewButtonY), aNewSizeCancel);
+
+        // for Help-Button
+        const long aNewWidthHelp((aBtnHelp.GetSizePixel().Width() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
+        const long aNewPosHelp((aBtnHelp.GetPosPixel().X() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
+        const Size aNewSizeHelp(aNewWidthHelp, aBtnHelp.GetOutputSizePixel().Height());
+        aBtnHelp.SetOutputSizePixel(aNewSizeHelp);
+        aBtnHelp.SetPosSizePixel(Point(aNewPosHelp, aNewButtonY), aNewSizeHelp);
+
+        // set new sizes for color control
+        aTabBgColorSet.SetOutputSizePixel(aNewSize);
+        aTabBgColorSet.SetPosSizePixel(Point(nAdd/2, nAdd/2), aNewSize);
+
+        // set new size for border win
+        aBorderWin.SetOutputSizePixel(aNewSizeBorderWin);
+
+        // set new size for dialog itself
+        SetOutputSizePixel(aNewSizeDialog);
     }
-    aTabBgColorSet.SetColCount( 10 );
-    aTabBgColorSet.SetLineCount( 10 );
-    aTabBgColorSet.CalcWindowSizePixel( aSize15x15 );
-    aTabBgColorSet.Format();
+
     aTabBgColorSet.SelectItem(nSelectedItem);
     aTabBgColorSet.Resize();
 }
@@ -156,7 +188,7 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl)
 }
 
 ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet( Control* pParent, const ResId& rResId, ScTabBgColorDlg* pTabBgColorDlg ) :
-    ValueSet(pParent, rResId)
+    SvxColorValueSet(pParent, rResId)
 {
     aTabBgColorDlg = pTabBgColorDlg;
 }
@@ -175,7 +207,7 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
         }
         break;
     }
-    ValueSet::KeyInput(rKEvt);
+    SvxColorValueSet::KeyInput(rKEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

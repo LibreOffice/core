@@ -1165,4 +1165,196 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
 }
 
 
+void impMixPixel(BitmapWriteAccess& rAcc, long y, long x, const Color& rColor, sal_uInt8 nAlpha)
+{
+    const BitmapColor aBitmapColor(rColor);
+
+    if(nAlpha)
+    {
+        if(255 != nAlpha)
+        {
+            BitmapColor aTarget(rAcc.GetColor(y, x));
+
+            aTarget.Merge(aBitmapColor, nAlpha);
+            rAcc.SetPixel(y, x, aTarget);
+        }
+    }
+    else
+    {
+        rAcc.SetPixel(y, x, aBitmapColor);
+    }
+}
+
+inline bool impVisibleX(long x, const Size& rSizePixel)
+{
+    return x >= 0 && x < rSizePixel.Width();
+}
+
+inline bool impVisibleY(long y, const Size& rSizePixel)
+{
+    return y >= 0 && y < rSizePixel.Width();
+}
+
+inline bool impVisibleXY(long y, long x, const Size& rSizePixel)
+{
+    return impVisibleX(x, rSizePixel) && impVisibleY(y, rSizePixel);
+}
+
+void Bitmap::DrawBlendFrame(
+    const Point& rTopLeft,
+    const Size& rSize,
+    sal_uInt8 nAlpha,
+    Color aColorTopLeft,
+    Color aColorTopRight,
+    Color aColorBottomRight,
+    Color aColorBottomLeft)
+{
+    if(!IsEmpty())
+    {
+        const Size aSizePixel(GetSizePixel());
+
+        if(aSizePixel.Width() && aSizePixel.Height())
+        {
+            const long nW(rSize.Width());
+            const long nH(rSize.Height());
+
+            if(nW || nH)
+            {
+                BitmapWriteAccess* pAcc = AcquireWriteAccess();
+                const long nStartX(rTopLeft.X());
+                const long nStartY(rTopLeft.X());
+                const long nEndX(rTopLeft.X() + nW);
+                const long nEndY(rTopLeft.X() + nH);
+                long x(nStartX);
+                long y(nStartY);
+
+                if(pAcc)
+                {
+                    if(impVisibleXY(y, x, aSizePixel))
+                    {
+                        // x == nStartX, y == nStartY
+                        impMixPixel(*pAcc, y, x, aColorTopLeft, nAlpha);
+                    }
+
+                    if(impVisibleY(y, aSizePixel))
+                    {
+                        for(x = 1; x < nEndX - 1; x++) // y == nStartY
+                        {
+                            if(impVisibleX(x, aSizePixel))
+                            {
+                                Color aMix(aColorTopLeft);
+                                aMix.Merge(aColorTopRight, 255 - sal_uInt8(((x - nStartX) * 255) / nW));
+                                impMixPixel(*pAcc, y, x, aMix, nAlpha);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        x = nEndX - 1;
+                    }
+
+                    if(impVisibleXY(y, x, aSizePixel))
+                    {
+                        // x == nEndX - 1, y == nStartY
+                        impMixPixel(*pAcc, y, x, aColorTopRight, nAlpha);
+                    }
+
+                    const bool bLeftVisible(impVisibleX(nStartX, aSizePixel));
+                    const bool bRightVisible(impVisibleX(x, aSizePixel));
+
+                    if(bLeftVisible || bRightVisible)
+                    {
+                        if(bLeftVisible)
+                        {
+                            for(y = 1; y < nEndY - 1; y++) // x == nStartX and nEndX-1
+                            {
+                                if(impVisibleY(y, aSizePixel))
+                                {
+                                    Color aMix(aColorTopLeft);
+                                    aMix.Merge(aColorBottomLeft, 255 - sal_uInt8(((y - nStartY) * 255) / nH));
+                                    impMixPixel(*pAcc, y, nStartX, aMix, nAlpha);
+                                }
+                            }
+                        }
+
+                        if(bRightVisible)
+                        {
+                            for(y = 1; y < nEndY - 1; y++) // x == nStartX and nEndX-1
+                            {
+                                if(impVisibleY(y, aSizePixel))
+                                {
+                                    Color aMix(aColorTopRight);
+                                    aMix.Merge(aColorBottomRight, 255 - sal_uInt8(((y -nStartY) * 255) / nH));
+                                    impMixPixel(*pAcc, y, x, aMix, nAlpha);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        y = nEndY - 1;
+                    }
+
+                    if(impVisibleXY(y, x, aSizePixel))
+                    {
+                        x = nStartX; // x == nStartX, y == nEndY-1
+                        impMixPixel(*pAcc, y, x, aColorBottomLeft, nAlpha);
+                    }
+
+                    if(impVisibleY(y, aSizePixel))
+                    {
+                        for(x = 1; x < nEndX - 1; x++) // y == nEndY-1
+                        {
+                            if(impVisibleX(x, aSizePixel))
+                            {
+                                Color aMix(aColorBottomLeft);
+                                aMix.Merge(aColorBottomRight, 255 - sal_uInt8(((x - nStartX)* 255) / nW));
+                                impMixPixel(*pAcc, y, x, aMix, nAlpha);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        x = nEndX - 1;
+                    }
+
+                    if(impVisibleXY(y, x, aSizePixel))
+                    {
+                        // x == nEndX - 1, y == nEndY - 1
+                        impMixPixel(*pAcc, y, x, aColorBottomRight, nAlpha);
+                    }
+
+                    ReleaseAccess(pAcc);
+                }
+            }
+        }
+    }
+}
+
+void Bitmap::DrawBlendFrame(
+    sal_uInt8 nAlpha,
+    Color aColorTopLeft,
+    Color aColorBottomRight)
+{
+    if(!IsEmpty())
+    {
+        const Point aTopLeft(0, 0);
+        const Size aSize(GetSizePixel());
+        const sal_uInt32 nW(aSize.Width());
+        const sal_uInt32 nH(aSize.Height());
+
+        if(nW || nH)
+        {
+            Color aColTopRight(aColorTopLeft);
+            Color aColBottomLeft(aColorTopLeft);
+            const sal_uInt32 nDE(nW + nH);
+
+            aColTopRight.Merge(aColorBottomRight, 255 - sal_uInt8((nW * 255) / nDE));
+            aColBottomLeft.Merge(aColorBottomRight, 255 - sal_uInt8((nH * 255) / nDE));
+
+            DrawBlendFrame(aTopLeft, aSize, nAlpha, aColorTopLeft, aColTopRight, aColorBottomRight, aColBottomLeft);
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

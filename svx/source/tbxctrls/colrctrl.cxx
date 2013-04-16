@@ -36,8 +36,6 @@
 #include "svx/xexch.hxx"
 #include <vcl/svapp.hxx>
 
-SFX_IMPL_DOCKINGWINDOW_WITHID( SvxColorChildWindow, SID_COLOR_CONTROL )
-
 // ------------------------
 // - SvxColorValueSetData -
 // ------------------------
@@ -92,41 +90,41 @@ sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, 
 
 /*************************************************************************
 |*
-|* SvxColorValueSet: Ctor
+|* SvxColorValueSet_docking: Ctor
 |*
 \************************************************************************/
 
-SvxColorValueSet::SvxColorValueSet( Window* _pParent, const ResId& rResId ) :
-    ValueSet( _pParent, rResId ),
+SvxColorValueSet_docking::SvxColorValueSet_docking( Window* _pParent, const ResId& rResId ) :
+    SvxColorValueSet( _pParent, rResId ),
     DragSourceHelper( this ),
-    bLeft (sal_True)
+    mbLeftButton(true)
 {
     SetAccessibleName(String( SVX_RES( STR_COLORTABLE )  ));
 }
 
 /*************************************************************************
 |*
-|* SvxColorValueSet: MouseButtonDown
+|* SvxColorValueSet_docking: MouseButtonDown
 |*
 \************************************************************************/
 
-void SvxColorValueSet::MouseButtonDown( const MouseEvent& rMEvt )
+void SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // Fuer Mac noch anders handlen !
     if( rMEvt.IsLeft() )
     {
-        bLeft = sal_True;
-        ValueSet::MouseButtonDown( rMEvt );
+        mbLeftButton = true;
+        SvxColorValueSet::MouseButtonDown( rMEvt );
     }
     else
     {
-        bLeft = sal_False;
+        mbLeftButton = false;
         MouseEvent aMEvt( rMEvt.GetPosPixel(),
                           rMEvt.GetClicks(),
                           rMEvt.GetMode(),
                           MOUSE_LEFT,
                           rMEvt.GetModifier() );
-        ValueSet::MouseButtonDown( aMEvt );
+        SvxColorValueSet::MouseButtonDown( aMEvt );
     }
 
     aDragPosPixel = GetPointerPosPixel();
@@ -134,27 +132,27 @@ void SvxColorValueSet::MouseButtonDown( const MouseEvent& rMEvt )
 
 /*************************************************************************
 |*
-|* SvxColorValueSet: MouseButtonUp
+|* SvxColorValueSet_docking: MouseButtonUp
 |*
 \************************************************************************/
 
-void SvxColorValueSet::MouseButtonUp( const MouseEvent& rMEvt )
+void SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
 {
     // Fuer Mac noch anders handlen !
     if( rMEvt.IsLeft() )
     {
-        bLeft = sal_True;
-        ValueSet::MouseButtonUp( rMEvt );
+        mbLeftButton = true;
+        SvxColorValueSet::MouseButtonUp( rMEvt );
     }
     else
     {
-        bLeft = sal_False;
+        mbLeftButton = false;
         MouseEvent aMEvt( rMEvt.GetPosPixel(),
                           rMEvt.GetClicks(),
                           rMEvt.GetMode(),
                           MOUSE_LEFT,
                           rMEvt.GetModifier() );
-        ValueSet::MouseButtonUp( aMEvt );
+        SvxColorValueSet::MouseButtonUp( aMEvt );
     }
     SetNoSelection();
 }
@@ -165,10 +163,10 @@ void SvxColorValueSet::MouseButtonUp( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-void SvxColorValueSet::Command(const CommandEvent& rCEvt)
+void SvxColorValueSet_docking::Command(const CommandEvent& rCEvt)
 {
     // Basisklasse
-    ValueSet::Command(rCEvt);
+    SvxColorValueSet::Command(rCEvt);
 }
 
 /*************************************************************************
@@ -177,9 +175,9 @@ void SvxColorValueSet::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-void SvxColorValueSet::StartDrag( sal_Int8 , const Point&  )
+void SvxColorValueSet_docking::StartDrag( sal_Int8 , const Point&  )
 {
-    Application::PostUserEvent(STATIC_LINK(this, SvxColorValueSet, ExecDragHdl));
+    Application::PostUserEvent(STATIC_LINK(this, SvxColorValueSet_docking, ExecDragHdl));
 }
 
 /*************************************************************************
@@ -188,7 +186,7 @@ void SvxColorValueSet::StartDrag( sal_Int8 , const Point&  )
 |*
 \************************************************************************/
 
-void SvxColorValueSet::DoDrag()
+void SvxColorValueSet_docking::DoDrag()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     sal_uInt16          nItemId = GetItemId( aDragPosPixel );
@@ -207,36 +205,13 @@ void SvxColorValueSet::DoDrag()
     }
 }
 
-IMPL_STATIC_LINK(SvxColorValueSet, ExecDragHdl, void*, EMPTYARG)
+IMPL_STATIC_LINK(SvxColorValueSet_docking, ExecDragHdl, void*, EMPTYARG)
 {
     // Als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch die
     // Farbleiste geloescht werden darf
     pThis->DoDrag();
     return(0);
 }
-
-/*************************************************************************
-|*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Animator
-|*
-\************************************************************************/
-
-SvxColorChildWindow::SvxColorChildWindow( Window* _pParent,
-                                          sal_uInt16 nId,
-                                          SfxBindings* pBindings,
-                                          SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( _pParent, nId )
-{
-    SvxColorDockingWindow* pWin = new SvxColorDockingWindow( pBindings, this,
-                                        _pParent, SVX_RES( RID_SVXCTRL_COLOR ) );
-    pWindow = pWin;
-
-    eChildAlignment = SFX_ALIGN_BOTTOM;
-
-    pWin->Initialize( pInfo );
-}
-
-
 
 /*************************************************************************
 |*
@@ -258,8 +233,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
     nLeftSlot       ( SID_ATTR_FILL_COLOR ),
     nRightSlot      ( SID_ATTR_LINE_COLOR ),
     nCols           ( 20 ),
-    nLines          ( 1 ),
-    aColorSize      ( 14, 14 )
+    nLines          ( 1 )
 
 {
     FreeResource();
@@ -294,10 +268,11 @@ SvxColorDockingWindow::SvxColorDockingWindow
             FillValueSet();
         }
     }
-    aItemSize = aColorSet.CalcItemSizePixel( aColorSize );
-    aItemSize.Width() = aItemSize.Width() + aColorSize.Width();
+
+    aItemSize = aColorSet.CalcItemSizePixel(Size(aColorSet.getEntryEdgeLength(), aColorSet.getEntryEdgeLength()));
+    aItemSize.Width() = aItemSize.Width() + aColorSet.getEntryEdgeLength();
     aItemSize.Width() /= 2;
-    aItemSize.Height() = aItemSize.Height() + aColorSize.Height();
+    aItemSize.Height() = aItemSize.Height() + aColorSet.getEntryEdgeLength();
     aItemSize.Height() /= 2;
 
     SetSize();
@@ -345,12 +320,15 @@ void SvxColorDockingWindow::FillValueSet()
 {
     if( pColorList.is() )
     {
+        nCount = pColorList->Count();
         aColorSet.Clear();
 
-        // Erster Eintrag: unsichtbar
+        // create the first entry for 'invisible/none'
+        const Size aColorSize(aColorSet.getEntryEdgeLength(), aColorSet.getEntryEdgeLength());
         long nPtX = aColorSize.Width() - 1;
         long nPtY = aColorSize.Height() - 1;
         VirtualDevice aVD;
+
         aVD.SetOutputSizePixel( aColorSize );
         aVD.SetLineColor( Color( COL_BLACK ) );
         aVD.SetBackground( Wallpaper( Color( COL_WHITE ) ) );
@@ -361,15 +339,7 @@ void SvxColorDockingWindow::FillValueSet()
 
         aColorSet.InsertItem( (sal_uInt16)1, Image(aBmp), SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
 
-        XColorEntry* pEntry;
-        nCount = pColorList->Count();
-
-        for( long i = 0; i < nCount; i++ )
-        {
-            pEntry = pColorList->GetColor( i );
-            aColorSet.InsertItem( (sal_uInt16)i+2,
-                            pEntry->GetColor(), pEntry->GetName() );
-        }
+        aColorSet.addEntriesForXColorList(*pColorList, 2);
     }
 }
 

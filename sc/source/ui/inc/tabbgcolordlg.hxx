@@ -23,7 +23,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <svtools/valueset.hxx>
+#include <svx/SvxColorValueSet.hxx>
 
 //------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ public:
     void GetSelectedColor( Color& rColor ) const;
 
 private:
-    class ScTabBgColorValueSet : public ValueSet
+    class ScTabBgColorValueSet : public SvxColorValueSet
     {
     public:
         ScTabBgColorValueSet(Control* pParent, const ResId& rResId, ScTabBgColorDlg* pTabBgColorDlg);
