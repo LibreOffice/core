@@ -557,7 +557,7 @@ public:
         // interpolate between nIndex and nIndex+1 values
         (*mpAnim)(
             getPresentationValue(
-                accumulate( maValues.back(),
+                accumulate<ValueType>( maValues.back(),
                             mbCumulative ? nRepeatCount : 0,
                             maInterpolator( maValues[ nIndex ],
                                             maValues[ nIndex+1 ],
@@ -577,7 +577,7 @@ public:
         // this is discrete, thus no lerp here.
         (*mpAnim)(
             getPresentationValue(
-                accumulate( maValues.back(),
+                accumulate<ValueType>( maValues.back(),
                             mbCumulative ? nRepeatCount : 0,
                             maValues[ nFrame ] ) ) );
     }
