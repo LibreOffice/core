@@ -43,10 +43,13 @@ XCSFILES= \
     Compatibility.xcs \
     DataAccess.xcs \
     Draw.xcs \
-    Events.xcs \
     Embedding.xcs \
+    Events.xcs \
+    ExtendedColorScheme.xcs \
     ExtensionDependencies.xcs \
     ExtensionManager.xcs \
+    FormWizard.xcs \
+    Histories.xcs \
     Impress.xcs \
     Java.xcs \
     Jobs.xcs \
@@ -54,26 +57,24 @@ XCSFILES= \
     Linguistic.xcs \
     Logging.xcs \
     Math.xcs \
+    OOoImprovement.xcs \
     OptionsDialog.xcs \
+    Paths.xcs \
+    PresenterScreen.xcs \
     ProtocolHandler.xcs \
+    Recovery.xcs \
     SFX.xcs \
-    Substitution.xcs \
-    TableWizard.xcs \
-    UI.xcs \
-    Views.xcs \
-    Writer.xcs \
-    WriterWeb.xcs \
     Scripting.xcs \
     Security.xcs \
-    WebWizard.xcs \
-    Recovery.xcs \
-    FormWizard.xcs \
-    ExtendedColorScheme.xcs \
-    TypeDetection.xcs \
+    Substitution.xcs \
     TabBrowse.xcs \
-    Paths.xcs \
-    Histories.xcs \
-    OOoImprovement.xcs
+    TableWizard.xcs \
+    TypeDetection.xcs \
+    UI.xcs \
+    Views.xcs \
+    WebWizard.xcs \
+    Writer.xcs \
+    WriterWeb.xcs \
 
 .INCLUDE :  target.mk
 
