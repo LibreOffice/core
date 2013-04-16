@@ -787,7 +787,7 @@ OUString SAL_CALL OLESimpleStorage::getImplementationName()
     uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
+        if ( ServiceName == aSeq[nInd] )
             return sal_True;
 
     return sal_False;

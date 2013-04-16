@@ -1368,7 +1368,7 @@ namespace svxform
         const PropertyValue* pPropsEnd = pProps + _xPropSeq.getLength();
         for ( ; pProps != pPropsEnd; ++pProps )
         {
-            if ( sInstModel.compareTo( pProps->Name ) == 0 )
+            if ( sInstModel == pProps->Name )
             {
                 Reference< css::xml::dom::XNode > xRoot;
                 if ( pProps->Value >>= xRoot )
@@ -1395,9 +1395,9 @@ namespace svxform
                     }
                 }
             }
-            else if ( sInstName.compareTo( pProps->Name ) == 0 && ( pProps->Value >>= sTemp ) )
+            else if ( sInstName == pProps->Name && ( pProps->Value >>= sTemp ) )
                 m_sInstanceName = sRet = sTemp;
-            else if ( sInstURL.compareTo( pProps->Name ) == 0 && ( pProps->Value >>= sTemp ) )
+            else if ( sInstURL == pProps->Name && ( pProps->Value >>= sTemp ) )
                 m_sInstanceURL = sTemp;
         }
 
@@ -2203,7 +2203,7 @@ namespace svxform
         const PropertyValue* pPropsEnd = pProps + _xPropSeq.getLength();
         for ( ; pProps != pPropsEnd; ++pProps )
         {
-            if ( sID.compareTo( pProps->Name ) == 0 )
+            if ( sID == pProps->Name )
             {
                 pProps->Value >>= sInstName;
                 break;

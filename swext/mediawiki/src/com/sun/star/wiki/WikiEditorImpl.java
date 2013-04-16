@@ -146,7 +146,7 @@ public final class WikiEditorImpl extends WeakBase
     {
         final com.sun.star.util.URL myURL = aURL;
         //logger.log( Level.INFO, "received dispatch request for: "+aURL.Complete );
-        if ( aURL.Protocol.compareTo( protocolName ) == 0 )
+        if ( aURL.Protocol == protocolName )
         {
             /*
             synchronized( this )
@@ -158,7 +158,7 @@ public final class WikiEditorImpl extends WeakBase
 
             try
             {
-                if ( myURL.Path.compareTo( "send" ) == 0 )
+                if ( myURL.Path == "send" )
                 {
                     sendArticle();
                 }
