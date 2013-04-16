@@ -45,6 +45,7 @@ public class OOoBean
     int nOOoCheckCycle =    1000;
 
     // This member contains the connection to an OOo instance if established.
+    @SuppressWarnings("deprecation")
     private transient OfficeConnection      iConnection;
     private transient EventListener         xConnectionListener;
 
@@ -53,6 +54,7 @@ public class OOoBean
     // This member contains the OOo window
     // if a connection is established.
     // It is a child of the OOoBean canvas.
+    @SuppressWarnings("deprecation")
     private OfficeWindow xFrameWindow;
 
     // application environment
@@ -120,6 +122,7 @@ public class OOoBean
         the dispose method of the OfficeConnection or the OOoBean's stopOOoConnection
         method would make all instances of OOoBean stop working.
      */
+    @SuppressWarnings("deprecation")
     public OOoBean( OfficeConnection iConnection )
         throws NoConnectionException
     {
@@ -159,6 +162,7 @@ public class OOoBean
 
         @internal
      */
+    @SuppressWarnings("deprecation")
     private synchronized void setOOoConnection( OfficeConnection iNewConnection )
         throws  HasConnectionException, NoConnectionException
     {
@@ -192,6 +196,7 @@ public class OOoBean
         @throws NoConnectionException
             if the specified connection cannot be established
      */
+    @SuppressWarnings("deprecation")
     public void startOOoConnection( String aConnectionURL )
         throws  java.net.MalformedURLException,
             HasConnectionException,
@@ -226,6 +231,7 @@ public class OOoBean
         When the OOoBean is displayed in an applet by a web browser, then this
         method must be called from within java.applet.Applet.stop.
      */
+    @SuppressWarnings("deprecation")
     public synchronized void stopOOoConnection()
     {
         // clear OOo document, frame etc.
@@ -263,6 +269,7 @@ public class OOoBean
             if no connection can be established
 
      */
+     @SuppressWarnings("deprecation")
     public synchronized OfficeConnection getOOoConnection()
         throws NoConnectionException
     {
@@ -282,6 +289,7 @@ public class OOoBean
         @throws NoConnectionException
             if no connection is established and no default connection can be established.
      */
+    @SuppressWarnings("deprecation")
     public synchronized com.sun.star.lang.XMultiServiceFactory getMultiServiceFactory()
         throws NoConnectionException
     {
@@ -1444,6 +1452,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         }
 
         /// watching the connection
+        @SuppressWarnings("deprecation")
         public void run()
         {
             dbgPrint( "EventListener(" + aTag + ").run()" );
