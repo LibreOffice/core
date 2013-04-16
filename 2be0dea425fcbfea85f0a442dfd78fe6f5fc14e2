@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//++A\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "this can go now",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+98\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+94\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+90\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto (and the #ifdef, too)",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9w\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9s\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "maybe here a standard assert() would be better",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9o\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "I would use a standard assert() for those two, too",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9k\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2727,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "this line should be removed now",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9g\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9c\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2883,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9Y\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2952,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9U\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3077,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9Q\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9M\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3397,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+9I\u003d",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3750,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T22:51:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2be0dea425fcbfea85f0a442dfd78fe6f5fc14e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
