@@ -23,7 +23,6 @@
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
-#include <list>
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>
 #include <cppuhelper/queryinterface.hxx>
