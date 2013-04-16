@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cstring>
+
 #include "codemaker/commonjava.hxx"
 
 #include "skeletoncommon.hxx"
@@ -26,21 +30,15 @@ using namespace ::rtl;
 
 namespace skeletonmaker { namespace java {
 
-void printType(std::ostream & o,
-               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-               OString const & type, bool referenceType,
-               bool defaultvalue);
-
-void printType(std::ostream & o,
-               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-               codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-               OString const & name, sal_Int32 rank,
-               std::vector< OString > const & arguments, bool referenceType,
-               bool defaultvalue)
+void printType(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
+    std::vector< OUString > const & arguments, bool referenceType,
+    bool defaultvalue)
 {
-    if ( defaultvalue && rank == 0 && sort <= codemaker::UnoType::SORT_CHAR ) {
-        switch (sort)
-        {
+    if (defaultvalue && rank == 0 && sort <= codemaker::UnoType::SORT_CHAR) {
+        switch (sort) {
         case codemaker::UnoType::SORT_BOOLEAN:
             o << "false";
             return;
@@ -56,217 +54,287 @@ void printType(std::ostream & o,
         case codemaker::UnoType::SORT_DOUBLE:
             o << "0";
             return;
-        case codemaker::UnoType::SORT_VOID:
-        case codemaker::UnoType::SORT_STRING:
-        case codemaker::UnoType::SORT_TYPE:
-        case codemaker::UnoType::SORT_ANY:
-        case codemaker::UnoType::SORT_COMPLEX: default: //TODO
+        default:
             break;
         }
     }
 
-    if ( defaultvalue ) {
-        if ( sort == codemaker::UnoType::SORT_COMPLEX &&
-            typeClass == RT_TYPE_INTERFACE ) {
+    if (defaultvalue) {
+        if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE) {
             o << "null";
             return;
-        } else if ( sort == codemaker::UnoType::SORT_ANY && rank==0 ) {
+        } else if (sort == codemaker::UnoType::SORT_ANY && rank == 0) {
             o << "com.sun.star.uno.Any.VOID";
             return;
-        } else if ( sort == codemaker::UnoType::SORT_TYPE && rank==0 ) {
+        } else if (sort == codemaker::UnoType::SORT_TYPE && rank == 0) {
             o << "com.sun.star.uno.Type.VOID";
             return;
-        } else
-            if ( typeClass != RT_TYPE_ENUM || rank > 0 )
-                o << "new ";
+        } else if (sort != codemaker::UnoType::SORT_ENUM_TYPE || rank != 0) {
+            o << "new ";
+        }
     }
 
-    OString sType(codemaker::java::translateUnoToJavaType(
-                      sort, name, referenceType && rank==0).replace('/', '.'));
-    if ( sType.indexOf("java.lang.") == 0 )
-        sType = sType.copy(10);
-    o << sType.getStr();
-    if ( !arguments.empty() && options.java5 ) {
+    OString sType(
+        codemaker::java::translateUnoToJavaType(
+            sort, u2b(nucleus), referenceType && rank == 0));
+    if (sType.startsWith("java.lang.")) {
+        sType = sType.copy(std::strlen("java.lang."));
+    }
+    o << sType;
+    if (!arguments.empty() && options.java5) {
         o << '<';
-        for ( std::vector< OString >::const_iterator i(arguments.begin());
-              i != arguments.end(); ++i )
+        for (std::vector< OUString >::const_iterator i(arguments.begin());
+             i != arguments.end(); ++i)
         {
-            if ( i != arguments.begin() ) {
+            if (i != arguments.begin()) {
                 o << ", ";
             }
-
             printType(o, options, manager, *i, true, false);
         }
         o << '>';
     }
-    for ( sal_Int32 i = 0; i < rank; ++i ) {
-        if ( defaultvalue )
+    for (sal_Int32 i = 0; i != rank; ++i) {
+        if (defaultvalue)
             o << "[0]";
         else
             o << "[]";
     }
 
-    if ( defaultvalue && sort > codemaker::UnoType::SORT_CHAR && rank == 0 ) {
-        if ( typeClass == RT_TYPE_ENUM )
+    if (defaultvalue && sort > codemaker::UnoType::SORT_CHAR && rank == 0) {
+        if (sort == codemaker::UnoType::SORT_ENUM_TYPE)
             o << ".getDefault()";
         else
             o << "()";
     }
 }
 
-void printType(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    OString const & type, bool referenceType, bool defaultvalue)
+void printType(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager, OUString const & name,
+    bool referenceType, bool defaultvalue)
 {
-    RTTypeClass typeClass;
-    OString name;
+    OUString nucleus;
     sal_Int32 rank;
-    std::vector< OString > arguments;
-    codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
-        manager, type, true, true, true, &typeClass, &name, &rank, &arguments);
-    printType(o,
-        options, manager, sort, typeClass, name, rank, arguments,
-        referenceType, defaultvalue);
+    std::vector< OUString > arguments;
+    codemaker::UnoType::Sort sort = manager->decompose(
+        name, true, &nucleus, &rank, &arguments, 0);
+    printType(
+        o, options, manager, sort, nucleus, rank, arguments, referenceType,
+        defaultvalue);
 }
 
-bool printConstructorParameters(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, typereg::Reader const & outerReader,
-    std::vector< OString > const & arguments)
+bool printConstructorParameters(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::UnoType::Sort sort,
+    rtl::Reference< unoidl::Entity > const & entity, OUString const & name,
+    std::vector< OUString > const & arguments)
 {
     bool previous = false;
-    if ( reader.getSuperTypeCount() != 0 ) {
-        OString super(
-            codemaker::convertString(reader.getSuperTypeName(0)));
-        typereg::Reader superReader(manager->getTypeReader(super));
-        if ( !superReader.isValid() ) {
-            throw CannotDumpException("Bad type library entity " + b2u(super));
-        }
-        previous = printConstructorParameters(o,
-            options, manager, superReader, outerReader, arguments);
-    }
-    for ( sal_uInt16 i = 0; i < reader.getFieldCount(); ++i ) {
-        if ( previous ) {
-            o << ", ";
-        }
-        previous = true;
-        if ( (reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) == 0  ) {
-            printType(o,
-                options, manager,
-                codemaker::convertString(reader.getFieldTypeName(i)),
-                false);
-        } else if ( arguments.empty() ) {
-            o << "java.lang.Object";
-        } else {
-            sal_uInt16 tparam = 0;
-            while ( outerReader.getReferenceTypeName(tparam)
-                    != reader.getFieldTypeName(i) )
-            {
-                ++tparam;
-                OSL_ASSERT(tparam < outerReader.getReferenceCount());
+    switch (sort) {
+    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+        {
+            rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
+                dynamic_cast< unoidl::PlainStructTypeEntity * >(entity.get()));
+            assert(ent2.is());
+            if (!ent2->getDirectBase().isEmpty()) {
+                rtl::Reference< unoidl::Entity > baseEnt;
+                codemaker::UnoType::Sort baseSort = manager->getSort(
+                    ent2->getDirectBase(), &baseEnt);
+                previous = printConstructorParameters(
+                    o, options, manager, baseSort, baseEnt,
+                    ent2->getDirectBase(), std::vector< OUString >());
             }
-            // assume std::vector< OString >::size_type is at least as
-            // large as sal_uInt16:
-            printType(o, options, manager, arguments[tparam], true);
+            for (std::vector< unoidl::PlainStructTypeEntity::Member >::
+                     const_iterator i(ent2->getDirectMembers().begin());
+                 i != ent2->getDirectMembers().end(); ++i)
+            {
+                if (previous) {
+                    o << ", ";
+                }
+                previous = true;
+                printType(o, options, manager, i->type, false);
+                o << ' '
+                  << codemaker::java::translateUnoToJavaIdentifier(
+                      u2b(i->name), "param");
+            }
+            break;
         }
-        o
-            << ' '
-            << (codemaker::java::translateUnoToJavaIdentifier(
-                    codemaker::convertString(reader.getFieldName(i)),
-                    "param").
-                getStr());
+    case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+        {
+            rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
+                dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
+                    entity.get()));
+            assert(ent2.is());
+            for (std::vector<
+                     unoidl::PolymorphicStructTypeTemplateEntity::Member >::
+                     const_iterator i(ent2->getMembers().begin());
+                 i != ent2->getMembers().end(); ++i)
+            {
+                if (previous) {
+                    o << ", ";
+                }
+                previous = true;
+                if (i->parameterized) {
+                    o << i->type;
+                } else {
+                    printType(o, options, manager, i->type, false);
+                }
+                o << ' '
+                  << codemaker::java::translateUnoToJavaIdentifier(
+                      u2b(i->name), "param");
+            }
+            break;
+        }
+    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+        {
+            rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
+                dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
+                    entity.get()));
+            assert(ent2.is());
+            for (std::vector<
+                     unoidl::PolymorphicStructTypeTemplateEntity::Member >::
+                     const_iterator i(ent2->getMembers().begin());
+                 i != ent2->getMembers().end(); ++i)
+            {
+                if (previous) {
+                    o << ", ";
+                }
+                previous = true;
+                if (i->parameterized) {
+                    for (std::vector< OUString >::const_iterator j(
+                             ent2->getTypeParameters().begin());
+                         j != ent2->getTypeParameters().end(); ++j)
+                    {
+                        if (i->type == *j) {
+                            o << arguments[
+                                j - ent2->getTypeParameters().begin()];
+                            break;
+                        }
+                    }
+                } else {
+                    printType(o, options, manager, i->type, false);
+                }
+                o << ' '
+                  << codemaker::java::translateUnoToJavaIdentifier(
+                      u2b(i->name), "param");
+            }
+            break;
+        }
+    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+        {
+            rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
+                dynamic_cast< unoidl::ExceptionTypeEntity * >(entity.get()));
+            assert(ent2.is());
+            if (!ent2->getDirectBase().isEmpty()) {
+                rtl::Reference< unoidl::Entity > baseEnt;
+                codemaker::UnoType::Sort baseSort = manager->getSort(
+                    ent2->getDirectBase(), &baseEnt);
+                previous = printConstructorParameters(
+                    o, options, manager, baseSort, baseEnt,
+                    ent2->getDirectBase(), std::vector< OUString >());
+            }
+            for (std::vector< unoidl::ExceptionTypeEntity::Member >::
+                     const_iterator i(ent2->getDirectMembers().begin());
+                 i != ent2->getDirectMembers().end(); ++i)
+            {
+                if (previous) {
+                    o << ", ";
+                }
+                previous = true;
+                printType(o, options, manager, i->type, false);
+                o << ' '
+                  << codemaker::java::translateUnoToJavaIdentifier(
+                      u2b(i->name), "param");
+            }
+            break;
+        }
+    default:
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::cpp::printConstructorParameters");
     }
     return previous;
 }
 
-void printConstructor(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader,
-    std::vector< OString > const & arguments)
+void printConstructor(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::UnoType::Sort sort,
+    rtl::Reference< unoidl::Entity > const & entity, OUString const & name,
+    std::vector< OUString > const & arguments)
 {
-    OString type(codemaker::convertString(reader.getTypeName()));
-    o << "public " << type.copy(type.lastIndexOf('/') + 1) << '(';
-    printConstructorParameters(o, options, manager, reader, reader, arguments);
+    o << "public " << name.copy(name.lastIndexOf('.') + 1) << '(';
+    printConstructorParameters(
+        o, options, manager, sort, entity, name, arguments);
     o << ");\n";
 }
 
-void printMethodParameters(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, sal_uInt16 method, bool previous,
-    bool withtype)
+void printMethodParameters(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    std::vector< unoidl::InterfaceTypeEntity::Method::Parameter > const &
+        parameters,
+    bool withType)
 {
-    for ( sal_uInt16 i = 0; i < reader.getMethodParameterCount(method); ++i ) {
-        if ( previous  )
+    for (std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
+             const_iterator i(parameters.begin());
+         i != parameters.end(); ++i)
+    {
+        if (i != parameters.begin()) {
             o << ", ";
-        else
-            previous = true;
-
-        if ( withtype ) {
-            printType(o, options, manager,
-                      codemaker::convertString(
-                          reader.getMethodParameterTypeName(method, i)),
-                      false);
-            if ( reader.getMethodParameterFlags(method, i) == RT_PARAM_OUT
-                 || reader.getMethodParameterFlags(method, i) == RT_PARAM_INOUT )
+        }
+        if (withType) {
+            printType(o, options, manager, i->type, false);
+            if (i->direction
+                != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
             {
                 o << "[]";
-            } else if ( (reader.getMethodParameterFlags(method, i) & RT_PARAM_REST )
-                       != 0)
-            {
-                o << (options.java5 ? "..." : "[]");
             }
             o << ' ';
         }
-        o << (codemaker::java::translateUnoToJavaIdentifier(
-                  codemaker::convertString(
-                      reader.getMethodParameterName(method, i)),
-                  "param").
-              getStr());
+        o << codemaker::java::translateUnoToJavaIdentifier(
+            u2b(i->name), "param");
     }
 }
 
-void printExceptionSpecification(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, sal_uInt16 method)
+void printExceptionSpecification(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    std::vector< OUString > const & exceptions)
 {
-    if ( reader.getMethodExceptionCount(method) > 0 ) {
+    if (!exceptions.empty()) {
         o << " throws ";
-        for ( sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method); ++i )
+        for (std::vector< OUString >::const_iterator i(exceptions.begin());
+             i != exceptions.end(); ++i)
         {
-            if ( i != 0 ) {
+            if (i !=exceptions.begin() ) {
                 o << ", ";
             }
-            printType(o,
-                options, manager,
-                codemaker::convertString(
-                    reader.getMethodExceptionTypeName(method, i)),
-                false);
+            printType(o, options, manager, *i, false);
         }
     }
 }
 
 
-void printSetPropertyMixinBody(std::ostream & o,
-                               typereg::Reader const & reader,
-                               sal_uInt16 field,
-                               sal_uInt16 method,
-                               OString const & indentation)
+void printSetPropertyMixinBody(
+    std::ostream & o, unoidl::InterfaceTypeEntity::Attribute const & attribute,
+    OString const & indentation)
 {
-    RTFieldAccess propFlags = checkAdditionalPropertyFlags(reader, field, method);
-    OString fieldname = codemaker::convertString(reader.getFieldName(field));
-    bool bound = (reader.getFieldFlags(field) & RT_ACCESS_BOUND ? true : false);
+    unoidl::AccumulationBasedServiceEntity::Property::Attributes propFlags
+        = checkAdditionalPropertyFlags(attribute);
 
     o << "\n" << indentation << "{\n";
 
-    if ( bound ) {
+    if ( attribute.bound ) {
         o << indentation << "    PropertySetMixin.BoundListeners l = "
             "new PropertySetMixin.BoundListeners();\n\n";
     }
 
     o << indentation << "    m_prophlp.prepareSet(\""
-      << fieldname << "\", ";
-    if ( propFlags & RT_ACCESS_CONSTRAINED ) {
-        OString fieldtype = codemaker::convertString(reader.getFieldTypeName(field));
+      << attribute.name << "\", ";
+    if ( propFlags & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_CONSTRAINED ) {
+        OString fieldtype = codemaker::convertString(attribute.type);
 
         sal_Int32 index = fieldtype.lastIndexOf('<');
         sal_Int32 nPos=0;
@@ -324,17 +392,17 @@ void printSetPropertyMixinBody(std::ostream & o,
             o << ", ";
     }
 
-    if ( bound )
+    if ( attribute.bound )
         o << "l";
     else
         o << "null";
     o << ");\n";
 
     o << indentation << "    synchronized (this) {\n"
-      << indentation << "        m_" << fieldname
+      << indentation << "        m_" << attribute.name
       << " = the_value;\n" << indentation << "    }\n";
 
-    if ( bound ) {
+    if ( attribute.bound ) {
         o << indentation << "    l.notifyListeners();\n";
     }
     o  << indentation << "}\n\n";
@@ -346,31 +414,30 @@ void generateXPropertyAccessBodies(std::ostream& o);
 
 void printMethods(std::ostream & o,
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader,
+    OUString const & name,
     codemaker::GeneratedTypeSet & generated,
     OString const & delegate, OString const & indentation,
     bool defaultvalue, bool usepropertymixin)
 {
-    OString type(codemaker::convertString(reader.getTypeName()));
-    if ( generated.contains(type) || type == "com/sun/star/uno/XInterface" ||
+    if ( generated.contains(u2b(name)) || name == "com.sun.star.uno.XInterface" ||
          ( defaultvalue &&
-           ( type.equals("com/sun/star/lang/XComponent") ||
-             type.equals("com/sun/star/lang/XTypeProvider") ||
-             type.equals("com/sun/star/uno/XWeak") ) ) ) {
+           ( name == "com.sun.star.lang.XComponent" ||
+             name == "com.sun.star.lang.XTypeProvider" ||
+             name == "com.sun.star.uno.XWeak" ) ) ) {
         return;
     }
 
     if ( usepropertymixin ) {
-        if ( type.equals("com/sun/star/beans/XPropertySet") ) {
-            generated.add(type);
+        if (name == "com.sun.star.beans.XPropertySet") {
+            generated.add(u2b(name));
             generateXPropertySetBodies(o);
             return;
-        } else if ( type.equals("com/sun/star/beans/XFastPropertySet") ) {
-            generated.add(type);
+        } else if (name == "com.sun.star.beans.XFastPropertySet") {
+            generated.add(u2b(name));
             generateXFastPropertySetBodies(o);
             return;
-        } else if ( type.equals("com/sun/star/beans/XPropertyAccess") ) {
-            generated.add(type);
+        } else if (name == "com.sun.star.beans.XPropertyAccess") {
+            generated.add(u2b(name));
             generateXPropertyAccessBodies(o);
             return;
         }
@@ -380,63 +447,57 @@ void printMethods(std::ostream & o,
     bool body = !delegate.isEmpty();
     bool defaultbody = ((delegate.equals(sd)) ? true : false);
 
-    generated.add(type);
+    generated.add(u2b(name));
+    rtl::Reference< unoidl::Entity > ent;
+    if (manager->getSort(name, &ent) != codemaker::UnoType::SORT_INTERFACE_TYPE)
+    {
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::java::printMethods");
+    }
+    rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
+        dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
+    assert(ent2.is());
     if ( options.all || defaultvalue ) {
-        for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
-            typereg::Reader super(
-                manager->getTypeReader(
-                    codemaker::convertString(
-                        reader.getSuperTypeName(i))));
-            if ( !super.isValid() ) {
-                throw CannotDumpException(
-                    "Bad type library entity " + reader.getSuperTypeName(i));
-            }
-            printMethods(o, options, manager, super, generated, delegate,
-                         indentation, defaultvalue, usepropertymixin);
+        for (std::vector< OUString >::const_iterator i(
+                 ent2->getDirectMandatoryBases().begin());
+             i != ent2->getDirectMandatoryBases().end(); ++i)
+        {
+            printMethods(
+                o, options, manager, *i, generated, delegate, indentation,
+                defaultvalue, usepropertymixin);
         }
-        if ( reader.getFieldCount() > 0 || reader.getMethodCount() > 0 ) {
+        if (!(ent2->getDirectAttributes().empty()
+              && ent2->getDirectMethods().empty()))
+        {
             o << indentation << "// ";
-            printType(o, options, manager, type, false);
+            printType(o, options, manager, name, false);
             o << ":\n";
         }
     }
-    sal_uInt16 method = 0;
-    for ( sal_uInt16 i = 0; i < reader.getFieldCount(); ++i ) {
+    for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::const_iterator
+             i(ent2->getDirectAttributes().begin());
+         i != ent2->getDirectAttributes().end(); ++i)
+    {
         o << indentation << "public ";
-        printType(o,
-            options, manager,
-            codemaker::convertString(reader.getFieldTypeName(i)), false);
-        o << " get"
-          << codemaker::convertString(reader.getFieldName(i)).getStr()
-          << "()";
-
-        if ( method < reader.getMethodCount()
-             && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_GET
-             && reader.getMethodName(method) == reader.getFieldName(i) )
-        {
-            printExceptionSpecification(o, options, manager, reader, method++);
-        }
+        printType(o, options, manager, i->type, false);
+        o << " get" << i->name << "()";
+        printExceptionSpecification(o, options, manager, i->getExceptions);
         if ( body ) {
             if ( defaultbody ) {
                 if ( usepropertymixin ) {
                     o << "\n" << indentation << "{\n" << indentation
-                      << "    return m_"
-                      << codemaker::convertString(reader.getFieldName(i)).getStr()
-                      << ";\n" << indentation << "}\n\n";
+                      << "    return m_" << i->name << ";\n" << indentation
+                      << "}\n\n";
                 } else {
                     o << "\n" << indentation << "{\n" << indentation
                       << "    return ";
-                    printType(o,
-                              options, manager,
-                              codemaker::convertString(reader.getFieldTypeName(i)),
-                              false, true);
+                    printType(o, options, manager, i->type, false, true);
                     o << ";\n" << indentation << "}\n\n";
                 }
             } else {
-                o << "\n" << indentation << "{\n" << indentation <<
-                    "    return "
-                  << delegate.getStr() << "get"
-                  << codemaker::convertString(reader.getFieldName(i)).getStr()
+                o << "\n" << indentation << "{\n" << indentation
+                  << "    return " << delegate.getStr() << "get" << i->name
                   << "();\n" << indentation << "}\n\n";
             }
         } else {
@@ -444,66 +505,45 @@ void printMethods(std::ostream & o,
         }
 
         // REMOVE next line
-        if ( (reader.getFieldFlags(i) & RT_ACCESS_READONLY) == 0 ) {
-            bool setAttrMethod = false;
-            o << indentation << "public void set"
-              << (codemaker::convertString(reader.getFieldName(i)).
-                  getStr())
-              << '(';
-            printType(o,
-                options, manager,
-                codemaker::convertString(reader.getFieldTypeName(i)),
-                false);
+        if (!i->readOnly) {
+            o << indentation << "public void set" << i->name << '(';
+            printType(o, options, manager, i->type, false);
             o << " the_value)";
-            if ( method < reader.getMethodCount()
-                 && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_SET
-                 && reader.getMethodName(method) == reader.getFieldName(i) )
-            {
-                setAttrMethod=true;
-                printExceptionSpecification(o, options, manager, reader, method);
-            }
+            printExceptionSpecification(o, options, manager, i->setExceptions);
             if ( body ) {
                 if ( defaultbody ) {
                     if ( usepropertymixin ) {
-                        printSetPropertyMixinBody(o, reader, i, method,
-                                                  indentation);
+                        printSetPropertyMixinBody(o, *i, indentation);
                     } else {
                         o << "\n" << indentation << "{\n\n" << indentation
                           << "}\n\n";
                     }
                 } else {
                     o << "\n" << indentation << "{\n" << indentation
-                      << "    " << delegate.getStr() << "set"
-                      << codemaker::convertString(reader.getFieldName(i)).getStr()
+                      << "    " << delegate.getStr() << "set" << i->name
                       << "(the_value);\n" << indentation << "}\n\n";
                 }
             } else {
                 o << ";\n";
             }
-            if (setAttrMethod) ++method;
         }
     }
-    for ( ; method < reader.getMethodCount(); ++method ) {
+    for (std::vector< unoidl::InterfaceTypeEntity::Method >::const_iterator i(
+             ent2->getDirectMethods().begin());
+         i != ent2->getDirectMethods().end(); ++i)
+    {
         o << indentation << "public ";
-        printType(o,
-            options, manager,
-            codemaker::convertString(
-                reader.getMethodReturnTypeName(method)),
-            false);
-
-        const OString methodName(codemaker::convertString(reader.getMethodName(method)));
-
-        o << ' ' << methodName.getStr() << '(';
-        printMethodParameters(o, options, manager, reader, method, false, true);
+        printType(o, options, manager, i->returnType, false);
+        o << ' ' << i->name << '(';
+        printMethodParameters(o, options, manager, i->parameters, true);
         o << ')';
-        printExceptionSpecification(o, options, manager, reader, method);
+        printExceptionSpecification(o, options, manager, i->exceptions);
         if ( body ) {
-            static OUString s("void");
             if ( defaultbody ) {
                 o << "\n" << indentation << "{\n";
-                if ( !reader.getMethodReturnTypeName(method).equals(s) ) {
+                if (i->returnType != "void") {
                     o << indentation << "    // TODO: Exchange the default return "
-                      << "implementation for \"" << methodName << "\" !!!\n";
+                      << "implementation for \"" << i->name << "\" !!!\n";
                     o << indentation << "    // NOTE: "
                         "Default initialized polymorphic structs can cause problems"
                         "\n" << indentation << "    // because of missing default "
@@ -512,27 +552,21 @@ void printMethods(std::ostream & o,
                         " in Java and C++\n" << indentation
                       << "    // polymorphic structs.\n" << indentation
                       << "    return ";
-                    printType(o,
-                        options, manager,
-                        codemaker::convertString(
-                            reader.getMethodReturnTypeName(method)),
-                        false, true);
+                    printType(o, options, manager, i->returnType, false, true);
                     o << ";";
                 } else {
                     o << indentation << "    // TODO: Insert your implementation for \""
-                      << methodName << "\" here.";
+                      << i->name << "\" here.";
                 }
                 o << "\n" << indentation << "}\n\n";
             } else {
                 o << "\n" << indentation << "{\n" << indentation << "    ";
-                if ( !reader.getMethodReturnTypeName(method).equals(s) )
+                if (i->returnType != "void") {
                     o << "return ";
-                o << delegate.getStr()
-                  << (codemaker::convertString(
-                          reader.getMethodName(method)).getStr())
-                  << '(';
-                printMethodParameters(o, options, manager, reader, method,
-                                         false, false);
+                }
+                o << delegate.getStr() << i->name << '(';
+                printMethodParameters(
+                    o, options, manager, i->parameters, false);
                 o << ");\n" << indentation << "}\n\n";
             }
         } else {
@@ -541,27 +575,51 @@ void printMethods(std::ostream & o,
     }
 }
 
-void printConstructionMethods(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader)
+void printConstructors(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager, OUString const & name)
 {
-    for ( sal_uInt16 i = 0; i < reader.getMethodCount(); ++i ) {
+    rtl::Reference< unoidl::Entity > ent;
+    if (manager->getSort(name, &ent)
+        != codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE)
+    {
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::java::printConstructors");
+    }
+    rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > ent2(
+        dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(ent.get()));
+    assert(ent2.is());
+    for (std::vector< unoidl::SingleInterfaceBasedServiceEntity::Constructor >::
+             const_iterator i(ent2->getConstructors().begin());
+         i != ent2->getConstructors().end(); ++i)
+    {
         o << "public static ";
-        printType(o,
-            options, manager,
-            codemaker::convertString(reader.getSuperTypeName(0)), false);
+        printType(o, options, manager, ent2->getBase(), false);
         o << ' ';
-        if ( reader.getMethodName(i).isEmpty() ) {
+        if (i->defaultConstructor) {
             o << "create";
         } else {
-            o << (codemaker::java::translateUnoToJavaIdentifier(
-                      codemaker::convertString(reader.getMethodName(i)),
-                      "method").getStr());
+            o << codemaker::java::translateUnoToJavaIdentifier(
+                u2b(i->name), "method");
         }
         o << "(com.sun.star.uno.XComponentContext the_context";
-        printMethodParameters(o, options, manager, reader, i, true, true);
+        for (std::vector<
+                 unoidl::SingleInterfaceBasedServiceEntity::Constructor::
+                 Parameter >::const_iterator j(i->parameters.begin());
+             j != i->parameters.end(); ++i)
+        {
+            o << ", ";
+            printType(o, options, manager, j->type, false);
+            if (j->rest) {
+                o << (options.java5 ? "..." : "[]");
+            }
+            o << ' '
+              << codemaker::java::translateUnoToJavaIdentifier(
+                  u2b(j->name), "param");
+        }
         o << ')';
-        printExceptionSpecification(o, options, manager, reader, i);
+        printExceptionSpecification(o, options, manager, i->exceptions);
         o << ";\n";
     }
 }
@@ -570,57 +628,58 @@ void generateDocumentation(std::ostream & o,
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     OString const & type);
 
-void printServiceMembers(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, OString const & type,
+void printServiceMembers(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    OUString const & name,
+    rtl::Reference< unoidl::AccumulationBasedServiceEntity > const & entity,
     OString const & delegate)
 {
-    for ( sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i ) {
-        OString referenceType(
-            codemaker::convertString(
-                reader.getReferenceTypeName(i)).replace('/', '.'));
-
-        if ( reader.getReferenceSort(i) == RT_REF_SUPPORTS ) {
-            o << "\n// supported interface " << referenceType.getStr() << "\n";
-            generateDocumentation(o, options, manager, referenceType, delegate);
-        } else if ( reader.getReferenceSort(i) == RT_REF_EXPORTS ) {
-            o << "\n// exported service " << referenceType.getStr() << "\n";
-            generateDocumentation(o, options, manager, referenceType, delegate);
-        }
+    assert(entity.is());
+    for (std::vector< OUString >::const_iterator i(
+             entity->getDirectMandatoryBaseServices().begin());
+         i != entity->getDirectMandatoryBaseServices().end(); ++i)
+    {
+        o << "\n// exported service " << *i << "\n";
+        generateDocumentation(o, options, manager, u2b(*i), delegate);
     }
-
-    o << "\n// properties of service \""<< type.getStr() << "\"\n";
-    for ( sal_uInt16 i = 0; i < reader.getFieldCount(); ++i ) {
-        OString fieldName(
-            codemaker::convertString(reader.getFieldName(i)));
-        OString fieldType(
-            codemaker::convertString(reader.getFieldTypeName(i)));
-
+    for (std::vector< OUString >::const_iterator i(
+             entity->getDirectMandatoryBaseInterfaces().begin());
+         i != entity->getDirectMandatoryBaseInterfaces().end(); ++i)
+    {
+        o << "\n// supported interface " << *i << "\n";
+        generateDocumentation(o, options, manager, u2b(*i), delegate);
+    }
+    o << "\n// properties of service \""<< name << "\"\n";
+    for (std::vector< unoidl::AccumulationBasedServiceEntity::Property >::
+             const_iterator i(entity->getDirectProperties().begin());
+         i != entity->getDirectProperties().end(); ++i)
+    {
         o << "// private ";
-        printType(o, options, manager, fieldType, false);
+        printType(o, options, manager, i->type, false);
         o << " "
           << codemaker::java::translateUnoToJavaIdentifier(
-              fieldName, "property").getStr()
+              u2b(i->name), "property")
           << ";\n";
     }
 }
 
-void printMapsToJavaType(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    OString const & name, sal_Int32 rank,
-    std::vector< OString > const & arguments, const char * javaTypeSort)
+void printMapsToJavaType(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
+    std::vector< OUString > const & arguments, const char * javaTypeSort)
 {
     o << "maps to Java " << (options.java5 ? "1.5" : "1.4") << " ";
-    if ( javaTypeSort != 0 ) {
+    if (javaTypeSort != 0) {
         o << javaTypeSort << ' ';
     }
     o << "type \"";
-    if ( rank == 0 && name == "com/sun/star/uno/XInterface" ) {
+    if (rank == 0 && nucleus == "com.sun.star.uno.XInterface") {
         o << "com.sun.star.uno.XInterface";
     } else {
-        printType(o,
-            options, manager, sort, typeClass, name, rank, arguments, false);
+        printType(
+            o, options, manager, sort, nucleus, rank, arguments, false, false);
     }
     o << '"';
 }
@@ -629,89 +688,79 @@ void generateDocumentation(std::ostream & o,
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     OString const & type, OString const & delegate)
 {
-    if ( type.indexOf('/') >= 0 ) {
-        throw CannotDumpException("Illegal type name " + b2u(type));
-    }
-    OString binType(type.replace('.', '/'));
-    RTTypeClass typeClass;
-    OString name;
+    OUString nucleus;
     sal_Int32 rank;
-    std::vector< OString > arguments;
-    codemaker::UnoType::Sort sort = decomposeResolveAndCheck(
-        manager, binType, false, true, true, &typeClass, &name, &rank,
-        &arguments);
+    codemaker::UnoType::Sort sort = manager->decompose(
+        b2u(type), false, &nucleus, &rank, 0, 0);
 
-    bool comment=true;
-    if ( !delegate.isEmpty() ) {
-        if ( typeClass != RT_TYPE_INTERFACE && typeClass != RT_TYPE_SERVICE )
+    bool comment = true;
+    if (!delegate.isEmpty()) {
+        if (sort != codemaker::UnoType::SORT_INTERFACE_TYPE &&
+            sort != codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE &&
+            sort != codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE )
+        {
             return;
-
-        comment=false;
+        }
+        comment = false;
     }
 
-    if ( comment ) {
+    if (comment) {
         o << "\n// UNO";
-        if ( rank > 0 ) {
+        if (rank != 0) {
             o << " sequence type";
-        } else if ( sort != codemaker::UnoType::SORT_COMPLEX ) {
+        } else if (sort <= codemaker::UnoType::SORT_ANY) {
             o << " simple type";
         } else {
-            typereg::Reader reader(manager->getTypeReader(name));
-            if ( !reader.isValid() ) {
-                throw CannotDumpException("Bad type library entity " + b2u(name));
-            }
-            switch ( typeClass ) {
-            case RT_TYPE_INTERFACE:
+            switch (sort) {
+            case codemaker::UnoType::SORT_INTERFACE_TYPE:
                 o << " interface type";
                 break;
 
-            case RT_TYPE_MODULE:
+            case codemaker::UnoType::SORT_MODULE:
                 o << "IDL module";
                 break;
 
-            case RT_TYPE_STRUCT:
-                if ( reader.getReferenceCount() == 0 ) {
-                    o << " simple struct type";
-                } else if ( arguments.empty() ) {
-                    o << " polymorphic struct type template";
-                } else {
-                    o << " instantiated polymorphic struct type";
-                }
+            case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+                o << " simple struct type";
                 break;
 
-            case RT_TYPE_ENUM:
+            case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+                o << " polymorphic struct type template";
+                break;
+
+            case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+                o << " instantiated polymorphic struct type";
+                break;
+
+            case codemaker::UnoType::SORT_ENUM_TYPE:
                 o << " enum type";
                 break;
 
-            case RT_TYPE_EXCEPTION:
+            case codemaker::UnoType::SORT_EXCEPTION_TYPE:
                 o << " exception type";
                 break;
 
-            case RT_TYPE_TYPEDEF:
+            case codemaker::UnoType::SORT_TYPEDEF:
                 o << "IDL typedef";
                 break;
 
-            case RT_TYPE_SERVICE:
-                if ( reader.getSuperTypeCount() > 0 ) {
-                    o << " single-inheritance--based service";
-                } else {
-                    o << "IDL accumulation-based service";
-                }
+            case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+                o << " single-inheritance--based service";
                 break;
 
-            case RT_TYPE_SINGLETON:
-                if ( (manager->getTypeReader(
-                          codemaker::convertString(
-                              reader.getSuperTypeName(0))).getTypeClass())
-                     == RT_TYPE_INTERFACE )
-                {
-                    o << " inheritance-based singleton";
-                } else {
-                    o << "IDL service-based singleton";
-                }
+            case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+                o << "IDL accumulation-based service";
                 break;
 
-            case RT_TYPE_CONSTANTS:
+            case codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON:
+                o << " inheritance-based singleton";
+                break;
+
+            case codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON:
+                o << "IDL service-based singleton";
+                break;
+
+            case codemaker::UnoType::SORT_CONSTANT_GROUP:
                 o << "IDL constant group";
                 break;
 
@@ -720,119 +769,126 @@ void generateDocumentation(std::ostream & o,
                 break;
             }
         }
-        o << " \"" << type.getStr() << "\" ";
+        o << " \"" << type << "\" ";
     }
-    sort = codemaker::decomposeAndResolve(
-        manager, binType, true, true, true, &typeClass, &name, &rank,
-        &arguments);
-    if ( rank > 0 ) {
-        printMapsToJavaType(o,
-            options, manager, sort, typeClass, name, rank, arguments, "array");
+    std::vector< OUString > arguments;
+    rtl::Reference< unoidl::Entity > entity;
+    sort = manager->decompose(
+        b2u(type), true, &nucleus, &rank, &arguments, &entity);
+    if (rank != 0) {
+        printMapsToJavaType(
+            o, options, manager, sort, nucleus, rank, arguments, "array");
         o << '\n';
-    } else if ( sort != codemaker::UnoType::SORT_COMPLEX ) {
-        printMapsToJavaType(o,
-            options, manager, sort, typeClass, name, rank, arguments, 0);
+    } else if (sort <= codemaker::UnoType::SORT_ANY) {
+        printMapsToJavaType(
+            o, options, manager, sort, nucleus, rank, arguments, 0);
         o << '\n';
     } else {
-        typereg::Reader reader(manager->getTypeReader(name));
-        if ( !reader.isValid() ) {
-            throw CannotDumpException("Bad type library entity " + b2u(name));
-        }
-        switch ( typeClass ) {
-        case RT_TYPE_INTERFACE:
-            printMapsToJavaType(o,
-                options, manager, sort, typeClass, name, rank, arguments,
+        switch (sort) {
+        case codemaker::UnoType::SORT_INTERFACE_TYPE:
+            printMapsToJavaType(
+                o, options, manager, sort, nucleus, rank, arguments,
                 "interface");
-            if ( name == "com/sun/star/uno/XInterface" ) {
+            if (nucleus == "com.sun.star.uno.XInterface") {
                 o << '\n';
             } else {
-                o
-                    << "; " << (options.all ? "all" : "direct")
-                    << " methods:\n";
+                o << "; " << (options.all ? "all" : "direct") << " methods:\n";
                 codemaker::GeneratedTypeSet generated;
-                printMethods(o, options, manager, reader, generated,
-                             delegate, "");
+                printMethods(
+                    o, options, manager, nucleus, generated, delegate, "");
             }
             break;
 
-        case RT_TYPE_MODULE:
-            printMapsToJavaType(o,
-                options, manager, sort, typeClass, name, rank, arguments,
-                "package");
+        case codemaker::UnoType::SORT_MODULE:
+            printMapsToJavaType(
+                o, options, manager, sort, nucleus, rank, arguments, "package");
             o << '\n';
             break;
 
-        case RT_TYPE_STRUCT:
-            if ( reader.getReferenceCount() == 0 ) {
-                printMapsToJavaType(o,
-                    options, manager, sort, typeClass, name, rank, arguments,
-                    "class");
-            } else if ( arguments.empty() ) {
-                printMapsToJavaType(o,
-                    options, manager, sort, typeClass, name, rank, arguments,
-                    options.java5 ? "generic class" : "class");
-            } else {
-                printMapsToJavaType(o,
-                    options, manager, sort, typeClass, name, rank, arguments,
-                    options.java5 ? "generic class instantiation" : "class");
-            }
+        case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+            printMapsToJavaType(
+                o, options, manager, sort, nucleus, rank, arguments, "class");
             o << "; full constructor:\n";
-            printConstructor(o, options, manager, reader, arguments);
+            printConstructor(
+                o, options, manager, codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE,
+                entity, nucleus, arguments);
             break;
 
-        case RT_TYPE_ENUM:
-        case RT_TYPE_CONSTANTS:
-            printMapsToJavaType(o,
-                options, manager, sort, typeClass, name, rank, arguments,
-                "class");
+        case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+            printMapsToJavaType(
+                o, options, manager, sort, nucleus, rank, arguments,
+                options.java5 ? "generic class" : "class");
+            o << "; full constructor:\n";
+            printConstructor(
+                o, options, manager,
+                codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE,
+                entity, nucleus, arguments);
+            break;
+
+        case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+            printMapsToJavaType(
+                o, options, manager, sort, nucleus, rank, arguments,
+                options.java5 ? "generic class instantiation" : "class");
+            o << "; full constructor:\n";
+            printConstructor(
+                o, options, manager,
+                codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE,
+                entity, nucleus, arguments);
+            break;
+
+        case codemaker::UnoType::SORT_ENUM_TYPE:
+        case codemaker::UnoType::SORT_CONSTANT_GROUP:
+            printMapsToJavaType(
+                o, options, manager, sort, nucleus, rank, arguments, "class");
             o << '\n';
             break;
 
-        case RT_TYPE_EXCEPTION:
-            printMapsToJavaType(o,
-                options, manager, sort, typeClass, name, rank, arguments,
+        case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+            printMapsToJavaType(
+                o, options, manager, sort, nucleus, rank, arguments,
                 "exception class");
             o << "; full constructor:\n";
-            printConstructor(o, options, manager, reader, arguments);
+            printConstructor(
+                o, options, manager, codemaker::UnoType::SORT_EXCEPTION_TYPE,
+                entity, nucleus, arguments);
             break;
 
-        case RT_TYPE_SERVICE:
-            if ( reader.getSuperTypeCount() > 0 ) {
-                printMapsToJavaType(o,
-                    options, manager, sort, typeClass, name, rank, arguments,
-                    "class");
-                o << "; construction methods:\n";
-                printConstructionMethods(o, options, manager, reader);
-
-                OString super(
-                    codemaker::convertString(
-                        reader.getSuperTypeName(0)).replace('/', '.'));
-
-                generateDocumentation(o, options, manager, super, delegate);
-            } else {
-                o << ("does not map to Java\n"
-                      "// the service members are generated instead\n");
-                printServiceMembers(o, options, manager, reader, type, delegate);
-            }
+        case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+            printMapsToJavaType(
+                o, options, manager, sort, nucleus, rank, arguments, "class");
+            o << "; construction methods:\n";
+            printConstructors(o, options, manager, nucleus);
+            generateDocumentation(
+                o, options, manager,
+                u2b(dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
+                        entity.get())->getBase()),
+                delegate);
             break;
 
-        case RT_TYPE_SINGLETON:
-            if ( reader.getSuperTypeCount() > 0 &&
-                 ((manager->getTypeReader(
-                       codemaker::convertString(
-                           reader.getSuperTypeName(0))).getTypeClass())
-                  == RT_TYPE_INTERFACE) ) {
-                printMapsToJavaType(o, options, manager, sort, typeClass,
-                                    name, rank, arguments, "class");
-                o << "; get method:\npublic static ";
-                printType(o, options, manager,
-                          codemaker::convertString(reader.getSuperTypeName(0)),
-                          false);
-                o
-                    << " get(com.sun.star.uno.XComponentContext context);\n";
-            } else {
-                o << "does not map to Java\n";
-            }
+        case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+            o << ("does not map to Java\n"
+                  "// the service members are generated instead\n");
+            printServiceMembers(
+                o, options, manager, nucleus,
+                dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
+                    entity.get()),
+                delegate);
+            break;
+
+        case codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON:
+            printMapsToJavaType(
+                o, options, manager, sort, nucleus, rank, arguments, "class");
+            o << "; get method:\npublic static ";
+            printType(
+                o, options, manager,
+                dynamic_cast< unoidl::InterfaceBasedSingletonEntity * >(
+                    entity.get())->getBase(),
+                false);
+            o << " get(com.sun.star.uno.XComponentContext context);\n";
+            break;
+
+        case codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON:
+            o << "does not map to Java\n";
             break;
 
         default:

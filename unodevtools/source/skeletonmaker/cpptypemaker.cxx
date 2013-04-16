@@ -27,16 +27,16 @@ using namespace ::codemaker::cpp;
 
 namespace skeletonmaker { namespace cpp {
 
-void printType(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    OString const & name, sal_Int32 rank,
-    std::vector< OString > const & arguments, short referenceType,
+void printType(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
+    std::vector< OUString > const & arguments,
+    rtl::Reference< unoidl::Entity > const & entity, short referenceType,
     bool defaultvalue)
 {
     if (defaultvalue && rank == 0 && sort <= codemaker::UnoType::SORT_CHAR) {
-        switch (sort)
-        {
+        switch (sort) {
         case codemaker::UnoType::SORT_BOOLEAN:
             o << "sal_False";
             return;
@@ -52,28 +52,23 @@ void printType(std::ostream & o,
         case codemaker::UnoType::SORT_DOUBLE:
             o << "0";
             return;
-        case codemaker::UnoType::SORT_VOID:
-        case codemaker::UnoType::SORT_STRING:
-        case codemaker::UnoType::SORT_TYPE:
-        case codemaker::UnoType::SORT_ANY:
-        case codemaker::UnoType::SORT_COMPLEX: default: //TODO
+        default:
             break;
         }
     }
 
     if (defaultvalue && referenceType == 16) {
-        if (typeClass == RT_TYPE_ENUM) {
-            typereg::Reader reader(manager->getTypeReader(name));
-            o << name.copy(name.lastIndexOf('/'))
-              << "_"
-              << codemaker::convertString(reader.getFieldName(0));
+        if (sort == codemaker::UnoType::SORT_ENUM_TYPE) {
+            o << nucleus.copy(nucleus.lastIndexOf('.') + 1) << "_"
+              << dynamic_cast< unoidl::EnumTypeEntity * >(entity.get())->
+                getMembers()[0].name;
         }
         return;
     }
     bool bReference = false;
     if (((sort > codemaker::UnoType::SORT_CHAR ||
           rank > 0) && referenceType != 8 &&
-         !(typeClass == RT_TYPE_ENUM && referenceType == 4 && rank == 0)) ||
+         !(sort == codemaker::UnoType::SORT_ENUM_TYPE && referenceType == 4 && rank == 0)) ||
         (sort <= codemaker::UnoType::SORT_CHAR && referenceType == 2))
     {
         bReference = true;
@@ -86,21 +81,20 @@ void printType(std::ostream & o,
         o << ((options.shortnames) ? "css::uno::Sequence< " :
               "::com::sun::star::uno::Sequence< ");
     }
-    if (typeClass == RT_TYPE_INTERFACE && referenceType > 0) {
+    if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE && referenceType > 0) {
         o << ((options.shortnames) ? "css::uno::Reference< " :
               "::com::sun::star::uno::Reference< ");
     }
 
-    o << scopedCppName(codemaker::cpp::translateUnoToCppType(
-                           sort, typeClass, name, false),
+    o << scopedCppName(codemaker::cpp::translateUnoToCppType(sort, nucleus),
                        options.shortnames && referenceType > 0);
 
-    if (typeClass == RT_TYPE_INTERFACE && referenceType > 0)
+    if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE && referenceType > 0)
         o << " >";
 
     if (!arguments.empty()) {
         o << "< ";
-        for (std::vector< OString >::const_iterator i(arguments.begin());
+        for (std::vector< OUString >::const_iterator i(arguments.begin());
              i != arguments.end(); ++i)
         {
             if (i != arguments.begin())
@@ -121,153 +115,229 @@ void printType(std::ostream & o,
         o << "()";
 }
 
-void printType(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    OString const & type, short referenceType, bool defaultvalue)
+void printType(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager, OUString const & name,
+    short referenceType, bool defaultvalue)
 {
-    RTTypeClass typeClass;
-    OString name;
+    OUString nucleus;
     sal_Int32 rank;
-    std::vector< OString > arguments;
-    codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
-        manager, type, true, true, true, &typeClass, &name, &rank, &arguments);
-    printType(o,
-        options, manager, sort, typeClass, name, rank, arguments,
+    std::vector< OUString > arguments;
+    rtl::Reference< unoidl::Entity > entity;
+    codemaker::UnoType::Sort sort = manager->decompose(
+        name, true, &nucleus, &rank, &arguments, &entity);
+    printType(
+        o, options, manager, sort, nucleus, rank, arguments, entity,
         referenceType, defaultvalue);
 }
 
-bool printConstructorParameters(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, typereg::Reader const & outerReader,
-    std::vector< OString > const & arguments)
+bool printConstructorParameters(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::UnoType::Sort sort,
+    rtl::Reference< unoidl::Entity > const & entity, OUString const & name,
+    std::vector< OUString > const & arguments)
 {
     bool previous = false;
-    if (reader.getSuperTypeCount() != 0) {
-        OString super(
-            codemaker::convertString(reader.getSuperTypeName(0)));
-        typereg::Reader superReader(manager->getTypeReader(super));
-        if (!superReader.isValid())
-            throw CannotDumpException("Bad type library entity " + b2u(super));
-
-        previous = printConstructorParameters(o,
-            options, manager, superReader, outerReader, arguments);
-    }
-    for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
-        if (previous)
-            o << ", ";
-        else
-            previous = true;
-
-        if ((reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) == 0) {
-            printType(o, options, manager,
-                      codemaker::convertString(reader.getFieldTypeName(i)), 4);
-        } else if (arguments.empty()) {
-            // ToDo !
-            // o << "com::sun::star::uno::Any";
-        } else {
-            sal_uInt16 tparam = 0;
-            while (outerReader.getReferenceTypeName(tparam)
-                   != reader.getFieldTypeName(i))
-            {
-                ++tparam;
-                OSL_ASSERT(tparam < outerReader.getReferenceCount());
+    switch (sort) {
+    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+        {
+            rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
+                dynamic_cast< unoidl::PlainStructTypeEntity * >(entity.get()));
+            assert(ent2.is());
+            if (!ent2->getDirectBase().isEmpty()) {
+                rtl::Reference< unoidl::Entity > baseEnt;
+                codemaker::UnoType::Sort baseSort = manager->getSort(
+                    ent2->getDirectBase(), &baseEnt);
+                previous = printConstructorParameters(
+                    o, options, manager, baseSort, baseEnt,
+                    ent2->getDirectBase(), std::vector< OUString >());
             }
-            // assume std::vector< OString >::size_type is at least as
-            // large as sal_uInt16:
-            printType(o, options, manager, arguments[tparam], 4);
+            for (std::vector< unoidl::PlainStructTypeEntity::Member >::
+                     const_iterator i(ent2->getDirectMembers().begin());
+                 i != ent2->getDirectMembers().end(); ++i)
+            {
+                if (previous) {
+                    o << ", ";
+                }
+                previous = true;
+                printType(o, options, manager, i->type, 4);
+                o << ' '
+                  << codemaker::cpp::translateUnoToCppIdentifier(
+                      u2b(i->name), "param");
+            }
+            break;
         }
-        o << ' '
-          << (codemaker::cpp::translateUnoToCppIdentifier(
-                  codemaker::convertString(reader.getFieldName(i)),
-                  "param").
-              getStr());
+    case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+        {
+            rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
+                dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
+                    entity.get()));
+            assert(ent2.is());
+            for (std::vector<
+                     unoidl::PolymorphicStructTypeTemplateEntity::Member >::
+                     const_iterator i(ent2->getMembers().begin());
+                 i != ent2->getMembers().end(); ++i)
+            {
+                if (previous) {
+                    o << ", ";
+                }
+                previous = true;
+                if (i->parameterized) {
+                    o << i->type;
+                } else {
+                    printType(o, options, manager, i->type, 4);
+                }
+                o << ' '
+                  << codemaker::cpp::translateUnoToCppIdentifier(
+                      u2b(i->name), "param");
+            }
+            break;
+        }
+    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+        {
+            rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
+                dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
+                    entity.get()));
+            assert(ent2.is());
+            for (std::vector<
+                     unoidl::PolymorphicStructTypeTemplateEntity::Member >::
+                     const_iterator i(ent2->getMembers().begin());
+                 i != ent2->getMembers().end(); ++i)
+            {
+                if (previous) {
+                    o << ", ";
+                }
+                previous = true;
+                if (i->parameterized) {
+                    for (std::vector< OUString >::const_iterator j(
+                             ent2->getTypeParameters().begin());
+                         j != ent2->getTypeParameters().end(); ++j)
+                    {
+                        if (i->type == *j) {
+                            o << arguments[
+                                j - ent2->getTypeParameters().begin()];
+                            break;
+                        }
+                    }
+                } else {
+                    printType(o, options, manager, i->type, 4);
+                }
+                o << ' '
+                  << codemaker::cpp::translateUnoToCppIdentifier(
+                      u2b(i->name), "param");
+            }
+            break;
+        }
+    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+        {
+            rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
+                dynamic_cast< unoidl::ExceptionTypeEntity * >(entity.get()));
+            assert(ent2.is());
+            if (!ent2->getDirectBase().isEmpty()) {
+                rtl::Reference< unoidl::Entity > baseEnt;
+                codemaker::UnoType::Sort baseSort = manager->getSort(
+                    ent2->getDirectBase(), &baseEnt);
+                previous = printConstructorParameters(
+                    o, options, manager, baseSort, baseEnt,
+                    ent2->getDirectBase(), std::vector< OUString >());
+            }
+            for (std::vector< unoidl::ExceptionTypeEntity::Member >::
+                     const_iterator i(ent2->getDirectMembers().begin());
+                 i != ent2->getDirectMembers().end(); ++i)
+            {
+                if (previous) {
+                    o << ", ";
+                }
+                previous = true;
+                printType(o, options, manager, i->type, 4);
+                o << ' '
+                  << codemaker::cpp::translateUnoToCppIdentifier(
+                      u2b(i->name), "param");
+            }
+            break;
+        }
+    default:
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::cpp::printConstructorParameters");
     }
     return previous;
 }
 
-void printConstructor(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader,
-    std::vector< OString > const & arguments)
+void printConstructor(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::UnoType::Sort sort,
+    rtl::Reference< unoidl::Entity > const & entity, OUString const & name,
+    std::vector< OUString > const & arguments)
 {
-    OString type(codemaker::convertString(reader.getTypeName()));
-    o << "public ";
-    o << type.copy(type.lastIndexOf('/') + 1) << '(';
-    printConstructorParameters(o, options, manager, reader, reader,
-                               arguments);
+    o << "public " << name.copy(name.lastIndexOf('.') + 1) << '(';
+    printConstructorParameters(
+        o, options, manager, sort, entity, name, arguments);
     o << ");\n";
 }
 
-void printMethodParameters(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, sal_uInt16 method, bool previous,
-    bool withtype)
+void printMethodParameters(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    std::vector< unoidl::InterfaceTypeEntity::Method::Parameter > const &
+        parameters,
+    bool withType)
 {
-    short referenceType = 4;
-    for (sal_uInt16 i = 0; i < reader.getMethodParameterCount(method); ++i) {
-        if (previous)
+    for (std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
+             const_iterator i(parameters.begin());
+         i != parameters.end(); ++i)
+    {
+        if (i != parameters.begin()) {
             o << ", ";
-
-        previous = true;
-
-        if (reader.getMethodParameterFlags(method, i) == RT_PARAM_OUT
-            || reader.getMethodParameterFlags(method, i) == RT_PARAM_INOUT)
-        {
-            referenceType = 2;
-        } else {
-            referenceType = 4;
         }
-
-        if (withtype) {
-            printType(o, options, manager,
-                codemaker::convertString(
-                    reader.getMethodParameterTypeName(method, i)),
-                         referenceType);
+        if (withType) {
+            short referenceType;
+            if (i->direction
+                == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+            {
+                referenceType = 4;
+            } else {
+                referenceType = 2;
+            }
+            printType(o, options, manager, i->type, referenceType);
             o << ' ';
         }
-
-        o << (codemaker::cpp::translateUnoToCppIdentifier(
-                  codemaker::convertString(
-                      reader.getMethodParameterName(method, i)),
-                  "param").
-              getStr());
+        o << codemaker::cpp::translateUnoToCppIdentifier(u2b(i->name), "param");
     }
 }
 
-void printExceptionSpecification(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, sal_uInt16 method)
+void printExceptionSpecification(
+    std::ostream & o,
+    ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    std::vector< OUString > const & exceptions)
 {
     o << ((options.shortnames) ? " throw (css::uno::RuntimeException" :
           " throw (::com::sun::star::uno::RuntimeException");
-    if (reader.getMethodExceptionCount(method) > 0) {
-        for (sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method); ++i) {
-            o << ", ";
-            printType(o, options, manager,
-                codemaker::convertString(
-                    reader.getMethodExceptionTypeName(method, i)), 1);
-        }
+    for (std::vector< OUString >::const_iterator i(exceptions.begin());
+         i != exceptions.end(); ++i)
+    {
+        o << ", ";
+        printType(o, options, manager, *i, 1);
     }
     o << ")";
 }
 
-void printSetPropertyMixinBody(std::ostream & o,
-                               typereg::Reader const & reader,
-                               sal_uInt16 field,
-                               sal_uInt16 method)
+void printSetPropertyMixinBody(
+    std::ostream & o, unoidl::InterfaceTypeEntity::Attribute const & attribute)
 {
-    RTFieldAccess propFlags = checkAdditionalPropertyFlags(reader, field, method);
-    OString fieldname = codemaker::convertString(reader.getFieldName(field));
-    bool bound = (reader.getFieldFlags(field) & RT_ACCESS_BOUND ? true : false);
+    unoidl::AccumulationBasedServiceEntity::Property::Attributes propFlags
+        = checkAdditionalPropertyFlags(attribute);
 
     o << "\n{\n";
 
-    if (bound)
+    if (attribute.bound)
         o << "    BoundListeners l;\n";
 
-    if (propFlags & RT_ACCESS_CONSTRAINED) {
-        OString fieldtype = codemaker::convertString(
-                                reader.getFieldTypeName(field));
+    if (propFlags & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_CONSTRAINED) {
+        OString fieldtype = codemaker::convertString(attribute.type);
 
         sal_Int32 index = fieldtype.lastIndexOf('<');
         sal_Int32 nPos=0;
@@ -319,21 +389,21 @@ void printSetPropertyMixinBody(std::ostream & o,
         }
 
         o << "    prepareSet(\n        rtl::OUString(\""
-          << fieldname << "\"),\n        css::uno::Any(), v, ";
+          << attribute.name << "\"),\n        css::uno::Any(), v, ";
     } else {
         o << "    prepareSet(\n        rtl::OUString(\""
-          << fieldname << "\"),\n        css::uno::Any(), css::uno::Any(), ";
+          << attribute.name << "\"),\n        css::uno::Any(), css::uno::Any(), ";
     }
 
-    if (bound)
+    if (attribute.bound)
         o << "&l);\n";
     else
         o << "0);\n";
 
     o << "    {\n        osl::MutexGuard g(m_aMutex);\n        m_"
-      << fieldname << " = the_value;\n    }\n";
+      << attribute.name << " = the_value;\n    }\n";
 
-    if (bound)
+    if (attribute.bound)
         o << "    l.notify();\n";
 
     o  << "}\n\n";
@@ -368,17 +438,16 @@ void generateXDispatchProvider(std::ostream& o,
 
 void printMethods(std::ostream & o,
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, codemaker::GeneratedTypeSet & generated,
+    OUString const & name, codemaker::GeneratedTypeSet & generated,
     OString const & delegate, OString const & classname,
     OString const & indentation, bool defaultvalue,
-    OString const & propertyhelper)
+    OUString const & propertyhelper)
 {
-    OString type(codemaker::convertString(reader.getTypeName()));
-    if (generated.contains(type) || type.equals("com/sun/star/uno/XInterface") ||
+    if (generated.contains(u2b(name)) || name == "com.sun.star.uno.XInterface" ||
         (defaultvalue &&
-         ( type.equals("com/sun/star/lang/XComponent") ||
-           type.equals("com/sun/star/lang/XTypeProvider") ||
-           type.equals("com/sun/star/uno/XWeak")) ) )
+         ( name == "com.sun.star.lang.XComponent" ||
+           name == "com.sun.star.lang.XTypeProvider" ||
+           name == "com.sun.star.uno.XWeak" ) ) )
     {
         return;
     }
@@ -388,147 +457,137 @@ void printMethods(std::ostream & o,
     bool defaultbody = ((delegate.equals(sd)) ? true : false);
 
     if (body && propertyhelper.getLength() > 1) {
-        if ( type.equals("com/sun/star/beans/XPropertySet")) {
-            generated.add(type);
+        if (name == "com.sun.star.beans.XPropertySet") {
+            generated.add(u2b(name));
             generateXPropertySetBodies(
-                o, classname, scopedCppName(propertyhelper));
+                o, classname, scopedCppName(u2b(propertyhelper)));
             return;
-        } else if ( type.equals("com/sun/star/beans/XFastPropertySet")) {
-            generated.add(type);
+        } else if (name == "com.sun.star.beans.XFastPropertySet") {
+            generated.add(u2b(name));
             generateXFastPropertySetBodies(
-                o, classname, scopedCppName(propertyhelper));
+                o, classname, scopedCppName(u2b(propertyhelper)));
             return;
-        } else if ( type.equals("com/sun/star/beans/XPropertyAccess")) {
-            generated.add(type);
+        } else if (name == "com.sun.star.beans.XPropertyAccess") {
+            generated.add(u2b(name));
             generateXPropertyAccessBodies(
-                o, classname, scopedCppName(propertyhelper));
+                o, classname, scopedCppName(u2b(propertyhelper)));
             return;
         }
     }
 
     if (body && options.componenttype == 2) {
-        if (type.equals("com/sun/star/lang/XServiceName")) {
+        if (name == "com.sun.star.lang.XServiceName") {
             o << "// ::com::sun::star::lang::XServiceName:\n"
                 "::rtl::OUString SAL_CALL " << classname << "getServiceName() "
                 "throw (css::uno::RuntimeException)\n{\n    "
                 "return ::rtl::OUString("
                 "sADDIN_SERVICENAME);\n}\n";
-            generated.add(type);
+            generated.add(u2b(name));
             return;
-        } else if (type.equals("com/sun/star/sheet/XAddIn")) {
+        } else if (name == "com.sun.star.sheet.XAddIn") {
             generateXAddInBodies(o, classname);
-            generated.add(type);
+            generated.add(u2b(name));
 
             // special handling of XLocalizable -> parent of XAddIn
-            if (!generated.contains("com/sun/star/lang/XLocalizable")) {
+            if (!generated.contains("com.sun.star.lang.XLocalizable")) {
                 generateXLocalizable(o, classname);
-                generated.add("com/sun/star/lang/XLocalizable");
+                generated.add("com.sun.star.lang.XLocalizable");
             }
             return;
-        } else if (type.equals("com/sun/star/lang/XLocalizable")) {
+        } else if (name == "com.sun.star.lang.XLocalizable") {
             generateXLocalizable(o, classname);
-            generated.add(type);
+            generated.add(u2b(name));
             return;
-        } else if (type.equals("com/sun/star/sheet/XCompatibilityNames")) {
+        } else if (name == "com.sun.star.sheet.XCompatibilityNames") {
             generateXCompatibilityNamesBodies(o, classname);
-            generated.add(type);
+            generated.add(u2b(name));
             return;
         }
     }
 
     if (body && options.componenttype == 3) {
-        if (type.equals("com/sun/star/lang/XInitialization")) {
+        if (name == "com.sun.star.lang.XInitialization") {
             generateXInitialization(o, classname);
-            generated.add(type);
+            generated.add(u2b(name));
             return;
-        } else if (type.equals("com/sun/star/frame/XDispatch")) {
+        } else if (name == "com.sun.star.frame.XDispatch") {
             generateXDispatch(o, classname, options.protocolCmdMap);
-            generated.add(type);
+            generated.add(u2b(name));
             return;
-        } else if (type.equals("com/sun/star/frame/XDispatchProvider")) {
+        } else if (name == "com.sun.star.frame.XDispatchProvider") {
             generateXDispatchProvider(o, classname, options.protocolCmdMap);
-            generated.add(type);
+            generated.add(u2b(name));
             return;
         }
     }
 
-    generated.add(type);
+    generated.add(u2b(name));
+    rtl::Reference< unoidl::Entity > ent;
+    if (manager->getSort(name, &ent) != codemaker::UnoType::SORT_INTERFACE_TYPE)
+    {
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::cpp::printMethods");
+    }
+    rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
+        dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
+    assert(ent2.is());
     if (options.all || defaultvalue) {
-        for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
-            typereg::Reader super(
-                manager->getTypeReader(
-                    codemaker::convertString(
-                        reader.getSuperTypeName(i))));
-            if (!super.isValid()) {
-                throw CannotDumpException(
-                    "Bad type library entity " + reader.getSuperTypeName(i));
-            }
-
-            printMethods(o, options, manager, super, generated, delegate,
-                            classname, indentation, defaultvalue, propertyhelper);
+        for (std::vector< OUString >::const_iterator i(
+                 ent2->getDirectMandatoryBases().begin());
+             i != ent2->getDirectMandatoryBases().end(); ++i)
+        {
+            printMethods(
+                o, options, manager, *i, generated, delegate, classname,
+                indentation, defaultvalue, propertyhelper);
         }
-
-        if (reader.getFieldCount() > 0 || reader.getMethodCount() > 0) {
+        if (!(ent2->getDirectAttributes().empty()
+              && ent2->getDirectMethods().empty()))
+        {
             o << indentation << "// ";
-            printType(o, options, manager, type, 0);
+            printType(o, options, manager, name, 0);
             o << ":\n";
         }
     }
-    sal_uInt16 method = 0;
-    for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
+    for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::const_iterator
+             i(ent2->getDirectAttributes().begin());
+         i != ent2->getDirectAttributes().end(); ++i)
+    {
         o << indentation;
         if (!body)
             o << "virtual ";
 
-        printType(o, options, manager,
-                  codemaker::convertString(reader.getFieldTypeName(i)), 1);
+        printType(o, options, manager, i->type, 1);
         o << " SAL_CALL ";
         if (!classname.isEmpty())
             o << classname;
 
-        o << "get"
-          << codemaker::convertString(reader.getFieldName(i)).getStr()
-          << "()";
-        if (method < reader.getMethodCount()
-            && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_GET
-            && reader.getMethodName(method) == reader.getFieldName(i))
-        {
-            printExceptionSpecification(o, options, manager, reader, method++);
-        } else {
-            o << ((options.shortnames) ? " throw (css::uno::RuntimeException)" :
-                  " throw (::com::sun::star::uno::RuntimeException)");
-        }
+        o << "get" << i->name << "()";
+        printExceptionSpecification(o, options, manager, i->getExceptions);
         if (body) {
             if (defaultbody) {
                 if (!propertyhelper.isEmpty()) {
                     o << "\n{\n    osl::MutexGuard g(m_aMutex);\n    return m_"
-                      << codemaker::convertString(reader.getFieldName(i)).getStr()
-                      << ";\n}\n\n";
+                      << i->name << ";\n}\n\n";
                 } else {
                     o << "\n{\n    return ";
                     if (options.componenttype == 1) {
-                        o << "m_"
-                          << codemaker::convertString(
-                              reader.getFieldName(i)).getStr();
+                        o << "m_" << i->name;
                     } else {
-                        printType(o, options, manager,
-                                  codemaker::convertString(
-                                      reader.getFieldTypeName(i)),
-                                  8, true);
+                        printType(o, options, manager, i->type, 8, true);
                     }
                     o << ";\n}\n\n";
                 }
             } else {
                 o << "\n" << indentation << "{\n" << indentation << "    return "
-                  << delegate.getStr() << "get"
-                  << codemaker::convertString(reader.getFieldName(i)).getStr()
-                  << "();\n" << indentation << "}\n\n";
+                  << delegate.getStr() << "get" << i->name << "();\n"
+                  << indentation << "}\n\n";
             }
         } else {
             o << ";\n";
         }
 
-        if ((reader.getFieldFlags(i) & RT_ACCESS_READONLY) == 0) {
+        if (!i->readOnly) {
             o << indentation;
             if (!body)
                 o << "virtual ";
@@ -537,30 +596,17 @@ void printMethods(std::ostream & o,
             if (!classname.isEmpty())
                 o << classname;
 
-            o << "set"
-              << (codemaker::convertString(reader.getFieldName(i)).getStr())
-              << '(';
-            printType(o, options, manager,
-                      codemaker::convertString(reader.getFieldTypeName(i)), 4);
+            o << "set" << i->name << '(';
+            printType(o, options, manager, i->type, 4);
             o << " the_value)";
-            if (method < reader.getMethodCount()
-                && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_SET
-                && reader.getMethodName(method) == reader.getFieldName(i))
-            {
-                printExceptionSpecification(o, options, manager, reader, method++);
-            } else {
-                o << ((options.shortnames) ? " throw (css::uno::RuntimeException)" :
-                      " throw (::com::sun::star::uno::RuntimeException)");
-            }
+            printExceptionSpecification(o, options, manager, i->setExceptions);
             if (body) {
                 if (defaultbody) {
                     if (!propertyhelper.isEmpty()) {
-                        printSetPropertyMixinBody(o, reader, i, method);
+                        printSetPropertyMixinBody(o, *i);
                     } else {
                         if (options.componenttype == 1) {
-                            o << "\n{\n    m_"
-                              << codemaker::convertString(
-                                  reader.getFieldName(i)).getStr()
+                            o << "\n{\n    m_" << i->name
                               << " = the_value;\n}\n\n";
                         } else {
                             o << "\n{\n\n}\n\n";
@@ -568,8 +614,7 @@ void printMethods(std::ostream & o,
                     }
                 } else {
                     o << "\n" << indentation << "{\n" << indentation << "    "
-                      << delegate.getStr() << "set"
-                      << codemaker::convertString(reader.getFieldName(i)).getStr()
+                      << delegate.getStr() << "set" << i->name
                       << "(the_value);\n" << indentation << "}\n\n";
                 }
             } else {
@@ -577,57 +622,50 @@ void printMethods(std::ostream & o,
             }
         }
     }
-    for (; method < reader.getMethodCount(); ++method) {
+    for (std::vector< unoidl::InterfaceTypeEntity::Method >::const_iterator i(
+             ent2->getDirectMethods().begin());
+         i != ent2->getDirectMethods().end(); ++i)
+    {
         o << indentation;
         if (!body)
             o << "virtual ";
 
-        printType(o, options, manager,
-                  codemaker::convertString(
-                      reader.getMethodReturnTypeName(method)), 1);
+        printType(o, options, manager, i->returnType, 1);
         o << " SAL_CALL ";
         if (!classname.isEmpty())
             o << classname;
 
-        const OString methodName(codemaker::convertString(reader.getMethodName(method)));
-
-        o << methodName << '(';
-        printMethodParameters(o, options, manager, reader, method, false, true);
+        o << i->name << '(';
+        printMethodParameters(o, options, manager, i->parameters, true);
         o << ')';
-        printExceptionSpecification(o, options, manager, reader, method);
+        printExceptionSpecification(o, options, manager, i->exceptions);
         if (body) {
-            static OUString s("void");
             if (defaultbody) {
                 o << "\n{\n";
-                if (!reader.getMethodReturnTypeName(method).equals(s)) {
+                if (i->returnType != "void") {
                     o << "    // TODO: Exchange the default return implementation for \""
-                      << methodName << "\" !!!\n";
+                      << i->name << "\" !!!\n";
                     o << "    // Exchange the default return implementation.\n"
                         "    // NOTE: Default initialized polymorphic structs "
                         "can cause problems because of\n    // missing default "
                         "initialization of primitive types of some C++ compilers or"
                         "\n    // different Any initialization in Java and C++ "
                         "polymorphic structs.\n    return ";
-                    printType(o, options, manager,
-                        codemaker::convertString(
-                            reader.getMethodReturnTypeName(method)), 8, true);
+                    printType(o, options, manager, i->returnType, 8, true);
                     o << ";";
                 } else {
                     o << "    // TODO: Insert your implementation for \""
-                      << methodName << "\" here.";
+                      << i->name << "\" here.";
                 }
                 o << "\n}\n\n";
             } else {
                 o << "\n" << indentation << "{\n" << indentation << "    ";
-                if (!reader.getMethodReturnTypeName(method).equals(s))
+                if (i->returnType != "void")
                     o << "return ";
 
-                o << delegate.getStr()
-                  << (codemaker::convertString(
-                          reader.getMethodName(method)).getStr())
-                  << '(';
-                printMethodParameters(o, options, manager, reader, method,
-                                      false, false);
+                o << delegate.getStr() << i->name << '(';
+                printMethodParameters(
+                    o, options, manager, i->parameters, false);
                 o << ");\n" << indentation << "}\n\n";
             }
         } else {
@@ -635,92 +673,115 @@ void printMethods(std::ostream & o,
         }
     }
 
-    if (method > 0 && !body)
+    if (!body)
         o << "\n";
 }
 
-void printConstructionMethods(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader)
+void printConstructors(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager, OUString const & name)
 {
-    for (sal_uInt16 i = 0; i < reader.getMethodCount(); ++i) {
+    rtl::Reference< unoidl::Entity > ent;
+    if (manager->getSort(name, &ent)
+        != codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE)
+    {
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::java::printConstructors");
+    }
+    rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > ent2(
+        dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(ent.get()));
+    assert(ent2.is());
+    for (std::vector< unoidl::SingleInterfaceBasedServiceEntity::Constructor >::
+             const_iterator i(ent2->getConstructors().begin());
+         i != ent2->getConstructors().end(); ++i)
+    {
         o << "static ";
-        printType(o,
-            options, manager,
-            codemaker::convertString(reader.getSuperTypeName(0)), 1);
+        printType(o, options, manager, ent2->getBase(), 1);
         o << ' ';
-        if (reader.getMethodName(i).isEmpty()) {
+        if (i->defaultConstructor) {
             o << "create";
         } else {
-            o << (codemaker::cpp::translateUnoToCppIdentifier(
-                      codemaker::convertString(reader.getMethodName(i)),
-                      "method").
-                  getStr());
+            o << codemaker::cpp::translateUnoToCppIdentifier(
+                u2b(i->name), "method");
         }
         o << ((options.shortnames) ? "(css::uno::Reference< css" :
               "(::com::sun::star::uno::Reference< ::com::sun::star")
           << "::uno::XComponentContext > const & the_context";
-        printMethodParameters(o, options, manager, reader, i,
-                              true, true);
+        for (std::vector<
+                 unoidl::SingleInterfaceBasedServiceEntity::Constructor::
+                 Parameter >::const_iterator j(i->parameters.begin());
+             j != i->parameters.end(); ++j)
+        {
+            o << ", ";
+            printType(o, options, manager, j->type, 4);
+            o << ' '
+              << codemaker::cpp::translateUnoToCppIdentifier(
+                  u2b(j->name), "param");
+        }
         o << ')';
-        printExceptionSpecification(o, options, manager, reader, i);
+        printExceptionSpecification(o, options, manager, i->exceptions);
         o << ";\n";
     }
 }
 
-void printServiceMembers(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    typereg::Reader const & reader, OString const & type,
+void printServiceMembers(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    OUString const & name,
+    rtl::Reference< unoidl::AccumulationBasedServiceEntity > const & entity,
     OString const & delegate)
 {
-    for (sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i) {
-        OString referenceType(
-            codemaker::convertString(
-                reader.getReferenceTypeName(i)).replace('/', '.'));
-
-        if ( reader.getReferenceSort(i) == RT_REF_SUPPORTS ) {
-            o << "\n// supported interface " << referenceType.getStr() << "\n";
-            generateDocumentation(o, options, manager, referenceType, delegate);
-        } else if ( reader.getReferenceSort(i) == RT_REF_EXPORTS ) {
-            o << "\n// exported service " << referenceType.getStr() << "\n";
-            generateDocumentation(o, options, manager, referenceType, delegate);
-            o << "\n// end of exported service " << referenceType.getStr() << "\n";
-        }
+    assert(entity.is());
+    for (std::vector< OUString >::const_iterator i(
+             entity->getDirectMandatoryBaseServices().begin());
+         i != entity->getDirectMandatoryBaseServices().end(); ++i)
+    {
+        o << "\n// exported service " << *i << "\n";
+        generateDocumentation(o, options, manager, u2b(*i), delegate);
+        o << "\n// end of exported service " << *i << "\n";
     }
-
+    for (std::vector< OUString >::const_iterator i(
+             entity->getDirectMandatoryBaseInterfaces().begin());
+         i != entity->getDirectMandatoryBaseInterfaces().end(); ++i)
+    {
+        o << "\n// supported interface " << *i << "\n";
+        generateDocumentation(o, options, manager, u2b(*i), delegate);
+    }
     if (delegate.isEmpty()) {
-        o << "\n// properties of service \""<< type.getStr() << "\"\n";
-        for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
-            OString fieldName(
-                codemaker::convertString(reader.getFieldName(i)));
-            OString fieldType(
-                codemaker::convertString(reader.getFieldTypeName(i)));
-
+        o << "\n// properties of service \""<< name << "\"\n";
+        for (std::vector< unoidl::AccumulationBasedServiceEntity::Property >::
+                 const_iterator i(entity->getDirectProperties().begin());
+             i != entity->getDirectProperties().end(); ++i)
+        {
             o << "// private ";
-            printType(o, options, manager, fieldType, 1);
+            printType(o, options, manager, i->type, 1);
             o << " "
               << codemaker::cpp::translateUnoToCppIdentifier(
-                  fieldName, "property").getStr()
+                  u2b(i->name), "property")
               << ";\n";
         }
     }
 }
 
-void printMapsToCppType(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    OString const & name, sal_Int32 rank,
-    std::vector< OString > const & arguments, const char * cppTypeSort)
+void printMapsToCppType(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
+    std::vector< OUString > const & arguments,
+    rtl::Reference< unoidl::Entity > const & entity, const char * cppTypeSort)
 {
     o << "maps to C++ ";
     if (cppTypeSort != 0)
         o << cppTypeSort << ' ';
 
     o << "type \"";
-    if (rank == 0 && name == "com/sun/star/uno/XInterface") {
+    if (rank == 0 && nucleus == "com.sun.star.uno.XInterface") {
         o << "Reference< com::sun::star::uno::XInterface >";
     } else {
-        printType(o, options, manager, sort, typeClass, name, rank, arguments, 0);
+        printType(
+            o, options, manager, sort, nucleus, rank, arguments, entity, 0,
+            false);
     }
     o << '"';
 }
@@ -729,88 +790,79 @@ void generateDocumentation(std::ostream & o,
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     OString const & type, OString const & delegate)
 {
-    if (type.indexOf('/') >= 0)
-        throw CannotDumpException("Illegal type name " + b2u(type));
-
-    OString binType(type.replace('.', '/'));
-    RTTypeClass typeClass;
-    OString name;
+    OUString nucleus;
     sal_Int32 rank;
-    std::vector< OString > arguments;
-    codemaker::UnoType::Sort sort = decomposeResolveAndCheck(
-        manager, binType, false, true, true, &typeClass, &name, &rank,
-        &arguments);
+    codemaker::UnoType::Sort sort = manager->decompose(
+        b2u(type), false, &nucleus, &rank, 0, 0);
 
-    bool comment=true;
+    bool comment = true;
     if (!delegate.isEmpty()) {
-        if (typeClass != RT_TYPE_INTERFACE &&
-            typeClass != RT_TYPE_SERVICE )
+        if (sort != codemaker::UnoType::SORT_INTERFACE_TYPE &&
+            sort != codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE &&
+            sort != codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE )
         {
             return;
         }
-        comment=false;
+        comment = false;
     }
 
     if (comment) {
         o << "\n// UNO";
-        if (rank > 0) {
+        if (rank != 0) {
             o << " sequence type";
-        } else if (sort != codemaker::UnoType::SORT_COMPLEX) {
+        } else if (sort <= codemaker::UnoType::SORT_ANY) {
             o << " simple type";
         } else {
-            typereg::Reader reader(manager->getTypeReader(name));
-            if (!reader.isValid())
-                throw CannotDumpException("Bad type library entity " + b2u(name));
-
-            switch (typeClass)
-            {
-            case RT_TYPE_INTERFACE:
+            switch (sort) {
+            case codemaker::UnoType::SORT_INTERFACE_TYPE:
                 o << " interface type";
                 break;
 
-            case RT_TYPE_MODULE:
+            case codemaker::UnoType::SORT_MODULE:
                 o << "IDL module";
                 break;
 
-            case RT_TYPE_STRUCT:
-                if (reader.getReferenceCount() == 0)
-                    o << " simple struct type";
-                else if (arguments.empty())
-                    o << " polymorphic struct type template";
-                else
-                    o << " instantiated polymorphic struct type";
+            case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+                o << " simple struct type";
                 break;
 
-            case RT_TYPE_ENUM:
+            case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+                o << " polymorphic struct type template";
+                break;
+
+            case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+                o << " instantiated polymorphic struct type";
+                break;
+
+            case codemaker::UnoType::SORT_ENUM_TYPE:
                 o << " enum type";
                 break;
 
-            case RT_TYPE_EXCEPTION:
+            case codemaker::UnoType::SORT_EXCEPTION_TYPE:
                 o << " exception type";
                 break;
 
-            case RT_TYPE_TYPEDEF:
+            case codemaker::UnoType::SORT_TYPEDEF:
                 o << "IDL typedef";
                 break;
 
-            case RT_TYPE_SERVICE:
-                if (reader.getSuperTypeCount() > 0)
-                    o << " single-inheritance--based service";
-                else
-                    o << "IDL accumulation-based service";
+            case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+                o << " single-inheritance--based service";
                 break;
 
-            case RT_TYPE_SINGLETON:
-                if ((manager->getTypeReader(
-                         codemaker::convertString(
-                             reader.getSuperTypeName(0))).getTypeClass())
-                    == RT_TYPE_INTERFACE)
-                    o << " inheritance-based singleton";
-                else
-                    o << "IDL service-based singleton";
+            case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+                o << "IDL accumulation-based service";
                 break;
 
-            case RT_TYPE_CONSTANTS:
+            case codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON:
+                o << " inheritance-based singleton";
+                break;
+
+            case codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON:
+                o << "IDL service-based singleton";
+                break;
+
+            case codemaker::UnoType::SORT_CONSTANT_GROUP:
                 o << "IDL constant group";
                 break;
 
@@ -819,36 +871,33 @@ void generateDocumentation(std::ostream & o,
                 break;
             }
         }
-        o << " \"" << type.getStr() << "\" ";
+        o << " \"" << type << "\" ";
     }
-    sort = codemaker::decomposeAndResolve(
-        manager, binType, true, true, true, &typeClass, &name, &rank,
-        &arguments);
-    if (rank > 0) {
+    std::vector< OUString > arguments;
+    rtl::Reference< unoidl::Entity > entity;
+    sort = manager->decompose(
+        b2u(type), true, &nucleus, &rank, &arguments, &entity);
+    if (rank != 0) {
         if (comment) {
-            printMapsToCppType(o,
-                options, manager, sort, typeClass, name, rank, arguments, "array");
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity,
+                "array");
             o << '\n';
         }
-    } else if (sort != codemaker::UnoType::SORT_COMPLEX) {
+    } else if (sort <= codemaker::UnoType::SORT_ANY) {
         if (comment) {
-            printMapsToCppType(o,
-                options, manager, sort, typeClass, name, rank, arguments, 0);
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity, 0);
             o << '\n';
         }
     } else {
-        typereg::Reader reader(manager->getTypeReader(name));
-        if (!reader.isValid())
-            throw CannotDumpException("Bad type library entity " + b2u(name));
-
-        switch (typeClass)
-        {
-        case RT_TYPE_INTERFACE:
+        switch (sort) {
+        case codemaker::UnoType::SORT_INTERFACE_TYPE:
             if (comment)
-                printMapsToCppType(o,
-                    options, manager, sort, typeClass, name, rank, arguments,
+                printMapsToCppType(
+                    o, options, manager, sort, nucleus, rank, arguments, entity,
                     "interface");
-            if (name == "com/sun/star/uno/XInterface") {
+            if (nucleus == "com.sun.star.uno.XInterface") {
                 if (comment)
                     o << '\n';
             } else {
@@ -856,96 +905,116 @@ void generateDocumentation(std::ostream & o,
                     o << "; " << (options.all ? "all" : "direct") << " methods:\n";
 
                 codemaker::GeneratedTypeSet generated;
-                printMethods(o, options, manager, reader, generated,
-                             delegate, options.implname, "");
+                printMethods(
+                    o, options, manager, nucleus, generated, delegate,
+                    options.implname, "");
             }
             break;
 
-        case RT_TYPE_MODULE:
-            printMapsToCppType(o,
-                options, manager, sort, typeClass, name, rank, arguments,
+        case codemaker::UnoType::SORT_MODULE:
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity,
                 "namespace");
             o << '\n';
             break;
 
-        case RT_TYPE_STRUCT:
-            if (reader.getReferenceCount() == 0) {
-                printMapsToCppType(o,
-                    options, manager, sort, typeClass, name, rank, arguments,
-                    "class");
-            } else if (arguments.empty()) {
-                printMapsToCppType(o,
-                    options, manager, sort, typeClass, name, rank, arguments,
-                    options.java5 ? "generic class" : "class");
-            } else {
-                printMapsToCppType(o,
-                    options, manager, sort, typeClass, name, rank, arguments,
-                    options.java5 ? "generic class instantiation" : "class");
-            }
+        case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity,
+                "class");
             o << "; full constructor:\n";
-            printConstructor(o, options, manager, reader, arguments);
+            printConstructor(
+                o, options, manager, codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE,
+                entity, nucleus, arguments);
             break;
 
-        case RT_TYPE_ENUM:
-            printMapsToCppType(o,
-                options, manager, sort, typeClass, name, rank, arguments,
+        case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity,
+                options.java5 ? "generic class" : "class");
+            o << "; full constructor:\n";
+            printConstructor(
+                o, options, manager,
+                codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE,
+                entity, nucleus, arguments);
+            break;
+
+        case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity,
+                options.java5 ? "generic class instantiation" : "class");
+            o << "; full constructor:\n";
+            printConstructor(
+                o, options, manager,
+                codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE,
+                entity, nucleus, arguments);
+            break;
+
+        case codemaker::UnoType::SORT_ENUM_TYPE:
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity,
                 "enum");
             o << '\n';
             break;
 
-        case RT_TYPE_CONSTANTS:
-            printMapsToCppType(o,
-                options, manager, sort, typeClass, name, rank, arguments,
+        case codemaker::UnoType::SORT_CONSTANT_GROUP:
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity,
                 "namespace");
             o << '\n';
             break;
 
-        case RT_TYPE_EXCEPTION:
-            printMapsToCppType(o,
-                options, manager, sort, typeClass, name, rank, arguments,
+        case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity,
                 "exception class");
             o << "; full constructor:\n";
-            printConstructor(o, options, manager, reader, arguments);
+            printConstructor(
+                o, options, manager, codemaker::UnoType::SORT_EXCEPTION_TYPE,
+                entity, nucleus, arguments);
             break;
 
-        case RT_TYPE_SERVICE:
-            if (reader.getSuperTypeCount() > 0) {
-                if (comment) {
-                    printMapsToCppType(o, options, manager, sort, typeClass,
-                                       name, rank, arguments, "class");
-                    o << "; construction methods:\n";
-                    printConstructionMethods(o, options, manager, reader);
-                }
-
-                OString super(
-                    codemaker::convertString(
-                        reader.getSuperTypeName(0)).replace('/', '.'));
-                generateDocumentation(o, options, manager, super, delegate);
-            } else {
-                if (comment)
-                    o << ("does not map to C++\n"
-                          "// the service members are generated instead\n");
-                printServiceMembers(o, options, manager, reader, type, delegate);
-            }
-            break;
-
-        case RT_TYPE_SINGLETON:
-            if (reader.getSuperTypeCount() > 0 &&
-                ((manager->getTypeReader(
-                     codemaker::convertString(
-                         reader.getSuperTypeName(0))).
-                    getTypeClass()) == RT_TYPE_INTERFACE) )
-            {
-                printMapsToCppType(o, options, manager, sort, typeClass,
-                                   name, rank, arguments,
+        case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+            if (comment) {
+                printMapsToCppType(
+                    o, options, manager, sort, nucleus, rank, arguments, entity,
                     "class");
-                o << "; get method:\nstatic ";
-                printType(o, options, manager,
-                          codemaker::convertString(reader.getSuperTypeName(0)), 1);
-                o << " get(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);\n";
-            } else {
-                o << "does not map to C++\n";
+                o << "; construction methods:\n";
+                printConstructors(o, options, manager, nucleus);
             }
+            generateDocumentation(
+                o, options, manager,
+                u2b(dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
+                        entity.get())->getBase()),
+                delegate);
+            break;
+
+        case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+            if (comment)
+                o << ("does not map to C++\n"
+                      "// the service members are generated instead\n");
+            printServiceMembers(
+                o, options, manager, nucleus,
+                dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
+                    entity.get()),
+                delegate);
+            break;
+
+        case codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON:
+            printMapsToCppType(
+                o, options, manager, sort, nucleus, rank, arguments, entity,
+                "class");
+            o << "; get method:\nstatic ";
+            printType(
+                o, options, manager,
+                dynamic_cast< unoidl::InterfaceBasedSingletonEntity * >(
+                    entity.get())->getBase(),
+                1);
+            o << " get(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);\n";
+            break;
+
+        case codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON:
+            o << "does not map to C++\n";
             break;
 
         default:

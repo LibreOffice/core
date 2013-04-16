@@ -33,84 +33,20 @@ namespace skeletonmaker { namespace cpp {
 // 4 = const reference  (includes css::uno::Reference for interfaces)
 // 8 = default construction for example for return types, means "return <type>();"
 // 16 = default member initialization in a constructor
-void printType(std::ostream & o,
-               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-               codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-               OString const & name, sal_Int32 rank,
-               std::vector< OString > const & arguments,
-               short referenceType, bool defaultvalue=false);
-
-void printType(std::ostream & o,
-               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-               OString const & type, short referenceType,
-               bool defaultvalue=false);
-
-
-bool printConstructorParameters(std::ostream & o,
-                                ProgramOptions const & options,
-                                rtl::Reference< TypeManager > const & manager,
-                                typereg::Reader const & reader,
-                                typereg::Reader const & outerReader,
-                                std::vector< OString > const & arguments);
-
-
-void printConstructor(std::ostream & o,
-                      ProgramOptions const & options,
-                      rtl::Reference< TypeManager > const & manager,
-                      typereg::Reader const & reader,
-                      std::vector< OString > const & arguments);
-
-
-void printMethodParameters(std::ostream & o,
-                           ProgramOptions const & options,
-                           rtl::Reference< TypeManager > const & manager,
-                           typereg::Reader const & reader,
-                           sal_uInt16 method, bool previous,
-                           bool withtype);
-
-
-void printExceptionSpecification(std::ostream & o,
-                                 ProgramOptions const & options,
-                                 rtl::Reference< TypeManager > const & manager,
-                                 typereg::Reader const & reader,
-                                 sal_uInt16 method);
-
+void printType(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager, OUString const & name,
+    short referenceType, bool defaultvalue = false);
 
 void printMethods(std::ostream & o,
                   ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-                  typereg::Reader const & reader,
+                  OUString const & name,
                   codemaker::GeneratedTypeSet & generated,
                   OString const & delegate,
                   OString const & classname=OString(),
                   OString const & indentation=OString(),
                   bool defaultvalue=false,
-                  OString const & propertyhelper=OString());
-
-
-void printConstructionMethods(std::ostream & o,
-                              ProgramOptions const & options,
-                              rtl::Reference< TypeManager > const & manager,
-                              typereg::Reader const & reader);
-
-
-void printServiceMembers(std::ostream & o,
-                         ProgramOptions const & options,
-                         rtl::Reference< TypeManager > const & manager,
-                         typereg::Reader const & reader,
-                         OString const & type,
-                         OString const & delegate);
-
-
-void printMapsToCppType(std::ostream & o,
-                        ProgramOptions const & options,
-                        rtl::Reference< TypeManager > const & manager,
-                        codemaker::UnoType::Sort sort,
-                        RTTypeClass typeClass,
-                        OString const & name,
-                        sal_Int32 rank,
-                        std::vector< OString > const & arguments,
-                        const char * cppTypeSort);
-
+                  OUString const & propertyhelper=OUString());
 
 void generateDocumentation(std::ostream & o,
                            ProgramOptions const & options,

@@ -38,12 +38,6 @@ namespace codemaker {
 
 rtl::OString convertString(rtl::OUString const & string);
 
-codemaker::UnoType::Sort decomposeAndResolve(
-    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
-    bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
-    RTTypeClass * typeClass, rtl::OString * name, sal_Int32 * rank,
-    std::vector< rtl::OString > * arguments);
-
 }
 
 #endif // INCLUDED_CODEMAKER_CODEMAKER_HXX

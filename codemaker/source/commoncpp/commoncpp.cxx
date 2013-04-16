@@ -67,36 +67,26 @@ OString scopedCppName(OString const & type, bool ns_alias)
 
 
 OString translateUnoToCppType(
-    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    OString const & nucleus, bool shortname)
+    codemaker::UnoType::Sort sort, OUString const & nucleus)
 {
     OStringBuffer buf;
-    if (sort == codemaker::UnoType::SORT_COMPLEX) {
-        if (typeClass == RT_TYPE_INTERFACE
-            && nucleus == OString("com/sun/star/uno/XInterface"))
-        {
-            buf.append("::com::sun::star::uno::XInterface");
-        } else {
-            //TODO: check that nucleus is a valid (UTF-8) identifier
-            buf.append(nucleus);
-        }
-    } else {
+    if (sort <= codemaker::UnoType::SORT_ANY) {
         static char const * const cppTypes[codemaker::UnoType::SORT_ANY + 1] = {
             "void", "::sal_Bool", "::sal_Int8", "::sal_Int16", "::sal_uInt16",
             "::sal_Int32", "::sal_uInt32", "::sal_Int64", "::sal_uInt64",
             "float", "double", "::sal_Unicode", "rtl::OUString",
             "::com::sun::star::uno::Type", "::com::sun::star::uno::Any" };
         buf.append(cppTypes[sort]);
+    } else {
+        if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE
+            && nucleus == "com.sun.star.uno.XInterface")
+        {
+            buf.append("::com::sun::star::uno::XInterface");
+        } else {
+            //TODO: check that nucleus is a valid (UTF-8) identifier
+            buf.append(u2b(nucleus));
+        }
     }
-
-    if (shortname) {
-        OString s(buf.makeStringAndClear());
-        if (s.indexOf("::com::sun::star") == 0)
-            return s.replaceAt(0, 16, "css");
-        else
-            return s;
-    }
-
     return buf.makeStringAndClear();
 }
 

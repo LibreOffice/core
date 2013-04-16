@@ -23,22 +23,21 @@
 
 #include "rtl/ref.hxx"
 #include "rtl/string.hxx"
-#include "registry/reader.hxx"
 #include "codemaker/typemanager.hxx"
 #include "codemaker/unotype.hxx"
+#include "unoidl/unoidl.hxx"
 
 #include <fstream>
-#include <boost/unordered_set.hpp>
 #include <map>
+#include <set>
 
 namespace skeletonmaker {
 
 typedef ::std::map< OString, ::std::vector< OString >,
                     ::std::less< OString > > ProtocolCmdMap;
 
-typedef ::std::vector< ::std::pair< OString,
-                     ::std::pair< OString, sal_Int16 > > > AttributeInfo;
-
+typedef ::std::vector< unoidl::AccumulationBasedServiceEntity::Property >
+AttributeInfo;
 
 struct ProgramOptions {
     ProgramOptions(): java5(true), all(false), dump(false), license(false),
@@ -97,42 +96,23 @@ bool getOutputStream(ProgramOptions const & options,
                      OString & targetSourceFileName,
                      OString & tmpSourceFileName);
 
-codemaker::UnoType::Sort decomposeResolveAndCheck(
-    rtl::Reference< TypeManager > const & manager, OString const & type,
-    bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
-    RTTypeClass * typeClass, OString * name, sal_Int32 * rank,
-    std::vector< OString > * arguments);
-
 void checkType(rtl::Reference< TypeManager > const & manager,
-               OString const & type,
-               boost::unordered_set< OString, OStringHash >& interfaceTypes,
-               boost::unordered_set< OString, OStringHash >& serviceTypes,
+               OUString const & type,
+               std::set< OUString >& interfaceTypes,
+               std::set< OUString >& serviceTypes,
                AttributeInfo& properties);
 
 void checkDefaultInterfaces(
-    boost::unordered_set< OString, OStringHash >& interfaces,
-    const boost::unordered_set< OString, OStringHash >& services,
-    const OString & propertyhelper);
+    std::set< OUString >& interfaces,
+    const std::set< OUString >& services,
+    const OUString & propertyhelper);
 
-OString checkPropertyHelper(
+OUString checkPropertyHelper(
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    const boost::unordered_set< OString, OStringHash >& services,
-    const boost::unordered_set< OString, OStringHash >& interfaces,
+    const std::set< OUString >& services,
+    const std::set< OUString >& interfaces,
     AttributeInfo& attributes,
-    boost::unordered_set< OString, OStringHash >& propinterfaces);
-
-/**
-   checks whether the return and parameters types are valid and allowed
-   calc add-in type. The function throws a CannotDumpException with an
-   detailed error description which type is wrong
-
-   @param manager a type manager
-   @param reader a registry type reader of an interface defining
-                 calc add-in functions
-*/
-void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
-                     typereg::Reader const & reader);
-
+    std::set< OUString >& propinterfaces);
 
 /**
    checks if XComponent have to be supported, if yes it removes it from the
@@ -145,17 +125,17 @@ void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
    @return true if XComponent have to be supported
 */
 bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
-         boost::unordered_set< OString, OStringHash >& interfaces);
+                            std::set< OUString >& interfaces);
 
 
-sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
-                                        sal_uInt16 field, sal_uInt16 method);
-
+unoidl::AccumulationBasedServiceEntity::Property::Attributes
+checkAdditionalPropertyFlags(
+    unoidl::InterfaceTypeEntity::Attribute const & attribute);
 
 void generateFunctionParameterMap(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager,
-         const boost::unordered_set< OString, OStringHash >& interfaces);
+         const std::set< OUString >& interfaces);
 
 }
 

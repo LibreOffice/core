@@ -22,6 +22,8 @@
 #include "sal/main.h"
 #include "rtl/process.h"
 #include "unodevtools/options.hxx"
+#include "unoidl/unoidl.hxx"
+
 #include "skeletonjava.hxx"
 #include "skeletoncpp.hxx"
 
@@ -266,11 +268,10 @@ SAL_IMPLEMENT_MAIN()
     }
 
     rtl::Reference< TypeManager > manager(new TypeManager);
-    if ( !manager->init(registries) ) {
-        std::cerr
-            << ("\nError: Using the binary type libraries failed, check the -L"
-                " options\n");
-        exit(EXIT_FAILURE);
+    for (std::vector< OString >::const_iterator i(registries.begin());
+         i != registries.end(); ++i)
+    {
+        manager->loadProvider(b2u(*i), true);
     }
 
     if ( options.dump ) {
@@ -309,9 +310,17 @@ SAL_IMPLEMENT_MAIN()
         }
     }
 
-    } catch (const CannotDumpException & e) {
-        std::cout.flush();
-        std::cerr << "\nError: " << e.getMessage() << std::endl;
+    } catch (CannotDumpException & e) {
+        std::cerr << "ERROR: " << e.getMessage() << '\n';
+        return EXIT_FAILURE;
+    } catch (unoidl::NoSuchFileException & e) {
+        std::cerr << "ERROR: No such file <" << e.getUri() << ">\n";
+        return EXIT_FAILURE;
+    } catch (unoidl::FileFormatException & e) {
+        std::cerr
+            << "ERROR: Bad format of <" << e.getUri() << ">, \""
+            << e.getDetail() << "\"\n";
+        return EXIT_FAILURE;
     }
 
     return 0;

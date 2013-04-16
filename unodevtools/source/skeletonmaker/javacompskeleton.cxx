@@ -37,7 +37,7 @@ void generatePackage(std::ostream & o, const OString & implname)
 }
 
 void generateImports(std::ostream & o, ProgramOptions const & options,
-         const OString & propertyhelper,
+         const OUString & propertyhelper,
          bool serviceobject, bool supportxcomponent)
 {
     if (options.componenttype == 3)
@@ -183,7 +183,9 @@ void generateXPropertyAccessBodies(std::ostream& o)
 }
 
 
-bool checkAttribute(OStringBuffer& attributeValue, sal_uInt16 attribute)
+bool checkAttribute(
+    OStringBuffer& attributeValue,
+    unoidl::AccumulationBasedServiceEntity::Property::Attributes attribute)
 {
     bool cast = false;
     sal_uInt16 attributes[9] = {
@@ -254,15 +256,15 @@ void registerProperties(std::ostream& o,
         for (AttributeInfo::const_iterator i(properties.begin());
              i != properties.end(); ++i)
         {
-            if (i->second.second > 0) {
-                cast = checkAttribute(attributeValue, i->second.second);
+            if (i->attributes != 0) {
+                cast = checkAttribute(attributeValue, i->attributes);
             } else {
                 cast = true;
                 attributeValue.append('0');
             }
 
-            o << indentation << "registerProperty(\"" << i->first
-              << "\", \"m_" << i->first << "\",\n"
+            o << indentation << "registerProperty(\"" << i->name
+              << "\", \"m_" << i->name << "\",\n"
               << indentation << "      ";
             if (cast)
                 o << "(short)";
@@ -504,29 +506,28 @@ void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & opt
 void generateMethodBodies(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager,
-         const boost::unordered_set< OString, OStringHash >& interfaces,
+         const std::set< OUString >& interfaces,
          const OString& indentation, bool usepropertymixin)
 {
-    boost::unordered_set< OString, OStringHash >::const_iterator iter =
-        interfaces.begin();
+    std::set< OUString >::const_iterator iter = interfaces.begin();
     codemaker::GeneratedTypeSet generated;
     while (iter != interfaces.end()) {
-        OString type(*iter);
+        OUString type(*iter);
         ++iter;
         if (type.equals("com.sun.star.lang.XServiceInfo")) {
             generateXServiceInfoBodies(o);
-            generated.add(type);
+            generated.add(u2b(type));
         } else {
             if (options.componenttype == 2) {
                 if (type.equals("com.sun.star.lang.XServiceName")) {
                     o << "    // com.sun.star.lang.XServiceName:\n"
                         "    public String getServiceName() {\n"
                         "        return sADDIN_SERVICENAME;\n    }\n";
-                    generated.add(type);
+                    generated.add(u2b(type));
                     continue;
                 } else if (type.equals("com.sun.star.sheet.XAddIn")) {
                     generateXAddInBodies(o, options);
-                    generated.add(type);
+                    generated.add(u2b(type));
 
                     // special handling of XLocalizable -> parent of XAddIn
                     if (!generated.contains("com.sun.star.lang.XLocalizable")) {
@@ -536,31 +537,30 @@ void generateMethodBodies(std::ostream& o,
                     continue;
                 } else if (type.equals("com.sun.star.lang.XLocalizable")) {
                     generateXLocalizableBodies(o);
-                    generated.add(type);
+                    generated.add(u2b(type));
                     continue;
                 } else if (type.equals("com.sun.star.sheet.XCompatibilityNames")) {
                     generateXCompatibilityNamesBodies(o);
-                    generated.add(type);
+                    generated.add(u2b(type));
                     continue;
                 }
             }
             if (options.componenttype == 3) {
                 if (type.equals("com.sun.star.lang.XInitialization")) {
                     generateXInitializationBodies(o);
-                    generated.add(type);
+                    generated.add(u2b(type));
                     continue;
                 } else if (type.equals("com.sun.star.frame.XDispatch")) {
                     generateXDispatchBodies(o, options);
-                    generated.add(type);
+                    generated.add(u2b(type));
                     continue;
                 } else if (type.equals("com.sun.star.frame.XDispatchProvider")) {
                     generateXDispatchProviderBodies(o, options);
-                    generated.add(type);
+                    generated.add(u2b(type));
                     continue;
                 }
             }
-            typereg::Reader reader(manager->getTypeReader(type.replace('.','/')));
-            printMethods(o, options, manager, reader, generated, "_",
+            printMethods(o, options, manager, type, generated, "_",
                          indentation, true, usepropertymixin);
         }
     }
@@ -576,8 +576,8 @@ static const char* propcomment=
 void generateAddinConstructorAndHelper(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager, const OString & classname,
-         const boost::unordered_set< OString, OStringHash >& services,
-         const boost::unordered_set< OString, OStringHash >& interfaces)
+         const std::set< OUString >& services,
+         const std::set< OUString >& interfaces)
 {
     o << "    private com.sun.star.lang.Locale m_locale = "
         "new com.sun.star.lang.Locale();\n";
@@ -591,10 +591,10 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 
 
     // get the one and only add-in service for later use
-    boost::unordered_set< OString, OStringHash >::const_iterator iter = services.begin();
-    OString sAddinService = (*iter).replace('/', '.');
-    if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
-        sAddinService = (*(++iter)).replace('/', '.');
+    std::set< OUString >::const_iterator iter = services.begin();
+    OUString sAddinService = *iter;
+    if (sAddinService == "com.sun.star.sheet.AddIn") {
+        sAddinService = *(++iter);
     }
 
 
@@ -722,11 +722,11 @@ void generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager,
          const OString & classname,
-         const boost::unordered_set< OString, OStringHash >& services,
-         const boost::unordered_set< OString, OStringHash >& interfaces,
+         const std::set< OUString >& services,
+         const std::set< OUString >& interfaces,
          const AttributeInfo& properties,
          const AttributeInfo& attributes,
-         const OString& propertyhelper, bool supportxcomponent)
+         const OUString& propertyhelper, bool supportxcomponent)
 {
     o << "\n\npublic final class " << classname << " extends ";
 
@@ -740,8 +740,7 @@ void generateClassDefinition(std::ostream& o,
                 o << "WeakBase\n";
         }
         o << "   implements ";
-        boost::unordered_set< OString, OStringHash >::const_iterator iter =
-            interfaces.begin();
+        std::set< OUString >::const_iterator iter = interfaces.begin();
         while (iter != interfaces.end()) {
             o << (*iter);
             ++iter;
@@ -767,8 +766,7 @@ void generateClassDefinition(std::ostream& o,
 
     if (!services.empty()) {
         o << "    private static final String[] m_serviceNames = {\n";
-        boost::unordered_set< OString, OStringHash >::const_iterator iter =
-            services.begin();
+        std::set< OUString >::const_iterator iter = services.begin();
         while (iter != services.end()) {
             o << "        \"" << (*iter).replace('/','.') << "\"";
             ++iter;
@@ -786,9 +784,8 @@ void generateClassDefinition(std::ostream& o,
         o << "    // properties\n";
         while (iter != properties.end()) {
             o << "    protected ";
-            printType(o, options, manager, iter->second.first.replace('.','/'),
-                      false, false);
-            o << " m_" << iter->first << ";\n";
+            printType(o, options, manager, iter->type, false, false);
+            o << " m_" << iter->name << ";\n";
             ++iter;
         }
     } else if (!attributes.empty()) {
@@ -797,11 +794,9 @@ void generateClassDefinition(std::ostream& o,
         o << "    // attributes\n";
         while (iter != attributes.end()) {
             o << "    private ";
-            printType(o, options, manager, iter->second.first.replace('.','/'),
-                      false, false);
-            o << " m_" << iter->first << " = ";
-            printType(o, options, manager, iter->second.first.replace('.','/'),
-                      false, true);
+            printType(o, options, manager, iter->type, false, false);
+            o << " m_" << iter->name << " = ";
+            printType(o, options, manager, iter->type, false, true);
             o <<";\n";
             ++iter;
         }
@@ -843,17 +838,17 @@ void generateSkeleton(ProgramOptions const & options,
                       rtl::Reference< TypeManager > const & manager,
                       std::vector< OString > const & types)
 {
-    boost::unordered_set< OString, OStringHash > interfaces;
-    boost::unordered_set< OString, OStringHash > services;
+    std::set< OUString > interfaces;
+    std::set< OUString > services;
     AttributeInfo properties;
     AttributeInfo attributes;
-    boost::unordered_set< OString, OStringHash > propinterfaces;
+    std::set< OUString > propinterfaces;
     bool serviceobject = false;
     bool supportxcomponent = false;
 
     std::vector< OString >::const_iterator iter = types.begin();
     while (iter != types.end()) {
-        checkType(manager, *iter, interfaces, services, properties);
+        checkType(manager, b2u(*iter), interfaces, services, properties);
         ++iter;
     }
 
@@ -898,7 +893,7 @@ void generateSkeleton(ProgramOptions const & options,
     if (!services.empty())
         serviceobject = true;
 
-    OString propertyhelper = checkPropertyHelper(
+    OUString propertyhelper = checkPropertyHelper(
         options, manager, services, interfaces, attributes, propinterfaces);
     checkDefaultInterfaces(interfaces, services, propertyhelper);
 

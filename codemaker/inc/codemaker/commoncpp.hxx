@@ -36,8 +36,7 @@ namespace codemaker { namespace cpp {
 rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias=true);
 
 rtl::OString translateUnoToCppType(
-    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    rtl::OString const & nucleus, bool shortname);
+    codemaker::UnoType::Sort sort, rtl::OUString const & nucleus);
 
 enum IdentifierTranslationMode {
     ITM_GLOBAL,

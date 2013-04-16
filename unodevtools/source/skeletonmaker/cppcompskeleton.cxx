@@ -30,8 +30,8 @@ using namespace ::codemaker::cpp;
 namespace skeletonmaker { namespace cpp {
 
 void generateIncludes(std::ostream & o,
-         const boost::unordered_set< OString, OStringHash >& interfaces,
-         OString propertyhelper, bool serviceobject,
+         const std::set< OUString >& interfaces,
+         OUString propertyhelper, bool serviceobject,
          bool supportxcomponent)
 {
     o << "#include \"sal/config.h\"\n";
@@ -55,7 +55,7 @@ void generateIncludes(std::ostream & o,
             o << "#include \"cppuhelper/propertysetmixin.hxx\"\n";
     }
 
-    boost::unordered_set< OString, OStringHash >::const_iterator iter = interfaces.begin();
+    std::set< OUString >::const_iterator iter = interfaces.begin();
     while (iter != interfaces.end())
     {
         o << "#include \""
@@ -138,7 +138,7 @@ OString generateCompHelperDeclaration(std::ostream & o,
 void generateCompHelperDefinition(std::ostream & o,
          const OString & implname,
          const OString & classname,
-         const boost::unordered_set< OString, OStringHash >& services)
+         const std::set< OUString >& services)
 {
     OString nm;
     short nbrackets = generateNamespace(o, implname, true, nm);
@@ -151,12 +151,12 @@ void generateCompHelperDefinition(std::ostream & o,
         "_getSupportedServiceNames()\n{\n    css::uno::Sequence< "
       << "::rtl::OUString >" << " s(" << services.size() << ");\n";
 
-    boost::unordered_set< OString, OStringHash >::const_iterator iter = services.begin();
+    std::set< OUString >::const_iterator iter = services.begin();
     short i=0;
     while (iter != services.end())
     {
         o << "    s[" << i++ << "] = ::rtl::OUString(\""
-          << (*iter).replace('/','.') << "\");\n";
+          << *iter << "\");\n";
         ++iter;
     }
     o << "    return s;\n}\n\n";
@@ -500,7 +500,7 @@ void generateXDispatchProvider(std::ostream& o,
 void generateAddinConstructorAndHelper(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager, const OString & classname,
-         const boost::unordered_set< OString, OStringHash >& interfaces)
+         const std::set< OUString >& interfaces)
 {
     o << classname << "::" << classname
       << "(css::uno::Reference< css::uno::XComponentContext > const & context) :\n"
@@ -582,18 +582,13 @@ void generateMemberInitialization(std::ostream& o,
         for (AttributeInfo::const_iterator i(members.begin());
              i != members.end(); ++i)
         {
-            RTTypeClass typeClass;
-            OString type(i->second.first.replace('.','/'));
-            OString name;
             sal_Int32 rank;
-            std::vector< OString > arguments;
-            codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
-                manager, type, true, true, true, &typeClass, &name, &rank,
-                &arguments);
-
-            if (sort <= codemaker::UnoType::SORT_CHAR && rank == 0) {
-                o << ",\n    m_" << i->first << "(";
-                printType(o, options, manager, type, 16, true);
+            if ((manager->decompose(i->type, true, 0, &rank, 0, 0)
+                 <= codemaker::UnoType::SORT_CHAR)
+                && rank == 0)
+            {
+                o << ",\n    m_" << i->name << "(";
+                printType(o, options, manager, i->type, 16, true);
                 o << ")";
             }
         }
@@ -609,9 +604,8 @@ void generateMemberDeclaration(std::ostream& o,
          i != members.end(); ++i)
     {
         o << "    ";
-        printType(o, options, manager, i->second.first.replace('.','/'),
-                  1, false);
-        o << " m_" << i->first << ";\n";
+        printType(o, options, manager, i->type, 1, false);
+        o << " m_" << i->name << ";\n";
     }
 }
 
@@ -619,11 +613,11 @@ OString generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager,
          OString const & classname,
-         boost::unordered_set< OString, OStringHash > const & interfaces,
+         std::set< OUString > const & interfaces,
          AttributeInfo const & properties,
          AttributeInfo const & attributes,
-         boost::unordered_set< OString, OStringHash > const & propinterfaces,
-         OString const & propertyhelper, bool supportxcomponent)
+         std::set< OUString > const & propinterfaces,
+         OUString const & propertyhelper, bool supportxcomponent)
 {
     OStringBuffer parentname(64);
     o << "class " << classname << ":\n";
@@ -641,11 +635,10 @@ OString generateClassDefinition(std::ostream& o,
             o << "    public ::cppu::WeakImplHelper" << interfaces.size() << "<";
         }
 
-        boost::unordered_set< OString, OStringHash >::const_iterator iter =
-            interfaces.begin();
+        std::set< OUString >::const_iterator iter = interfaces.begin();
         while (iter != interfaces.end())
         {
-            o << "\n        " << scopedCppName(*iter);
+            o << "\n        " << scopedCppName(u2b(*iter));
             ++iter;
             if (iter != interfaces.end())
                 o << ",";
@@ -656,7 +649,7 @@ OString generateClassDefinition(std::ostream& o,
 
     if (propertyhelper.getLength() > 1) {
         o << ",\n    public ::cppu::PropertySetMixin< "
-          << scopedCppName(propertyhelper) << " >";
+          << scopedCppName(u2b(propertyhelper)) << " >";
     }
 
     o << "\n{\npublic:\n"
@@ -682,11 +675,10 @@ OString generateClassDefinition(std::ostream& o,
         OStringBuffer buffer(256);
         buffer.append(parentname.toString());
         buffer.append("< ");
-        boost::unordered_set< OString, OStringHash >::const_iterator iter =
-            interfaces.begin();
+        std::set< OUString >::const_iterator iter = interfaces.begin();
         while (iter != interfaces.end())
         {
-            buffer.append(scopedCppName(*iter));
+            buffer.append(scopedCppName(u2b(*iter)));
             ++iter;
             if (iter != interfaces.end())
                 buffer.append(", ");
@@ -700,13 +692,11 @@ OString generateClassDefinition(std::ostream& o,
           << parent << "::release(); }\n\n";
     }
 
-    boost::unordered_set< OString, OStringHash >::const_iterator it =
-        interfaces.begin();
+    std::set< OUString >::const_iterator it = interfaces.begin();
     codemaker::GeneratedTypeSet generated;
     while (it != interfaces.end())
     {
-        typereg::Reader reader(manager->getTypeReader((*it).replace('.','/')));
-        printMethods(o, options, manager, reader, generated, "", "", "    ",
+        printMethods(o, options, manager, *it, generated, "", "", "    ",
                      true, propertyhelper);
         ++it;
     }
@@ -794,10 +784,9 @@ OString generateClassDefinition(std::ostream& o,
           << "(css::uno::Reference< css::uno::XComponentContext > const & context) :\n";
         if (supportxcomponent) {
             o << "    ::cppu::WeakComponentImplHelper" << interfaces.size() << "<";
-            boost::unordered_set< OString, OStringHash >::const_iterator iter =
-                interfaces.begin();
+            std::set< OUString >::const_iterator iter = interfaces.begin();
             while (iter != interfaces.end()) {
-                o << "\n        " << scopedCppName(*iter);
+                o << "\n        " << scopedCppName(u2b(*iter));
                 ++iter;
                 if (iter != interfaces.end())
                     o << ",";
@@ -807,7 +796,7 @@ OString generateClassDefinition(std::ostream& o,
         }
         if (propertyhelper.getLength() > 1) {
             o << "    ::cppu::PropertySetMixin< "
-              << scopedCppName(propertyhelper) << " >(\n"
+              << scopedCppName(u2b(propertyhelper)) << " >(\n"
               << "        context, static_cast< Implements >(\n            ";
             OStringBuffer buffer(128);
             if (propinterfaces.find("com/sun/star/beans/XPropertySet")
@@ -881,22 +870,20 @@ void generateXServiceInfoBodies(std::ostream& o,
 void generateMethodBodies(std::ostream& o,
         ProgramOptions const & options,
         rtl::Reference< TypeManager > const & manager,
-        boost::unordered_set< OString, OStringHash > const & interfaces,
+        std::set< OUString > const & interfaces,
         OString const & classname,
         OString const & comphelpernamespace,
-        OString const & propertyhelper)
+        OUString const & propertyhelper)
 {
     OString name(classname.concat("::"));
-    boost::unordered_set< OString, OStringHash >::const_iterator iter =
-        interfaces.begin();
+    std::set< OUString >::const_iterator iter = interfaces.begin();
     codemaker::GeneratedTypeSet generated;
     while (iter != interfaces.end()) {
         if ( (*iter).equals("com.sun.star.lang.XServiceInfo") ) {
             generateXServiceInfoBodies(o, name, comphelpernamespace);
-            generated.add(*iter);
+            generated.add(u2b(*iter));
         } else {
-            typereg::Reader reader(manager->getTypeReader((*iter).replace('.','/')));
-            printMethods(o, options, manager, reader, generated, "_",
+            printMethods(o, options, manager, *iter, generated, "_",
                          name, "", true, propertyhelper);
         }
         ++iter;
@@ -906,10 +893,10 @@ void generateMethodBodies(std::ostream& o,
 void generateQueryInterface(std::ostream& o,
                             ProgramOptions const & options,
                             rtl::Reference< TypeManager > const & manager,
-                            const boost::unordered_set< OString, OStringHash >& interfaces,
+                            const std::set< OUString >& interfaces,
                             OString const & parentname,
                             OString const & classname,
-                            OString const & propertyhelper)
+                            OUString const & propertyhelper)
 {
     if (propertyhelper.isEmpty())
         return;
@@ -924,11 +911,10 @@ void generateQueryInterface(std::ostream& o,
         o << "css::uno::Any a(";
 
     o   << parentname << "<";
-    boost::unordered_set< OString, OStringHash >::const_iterator iter =
-        interfaces.begin();
+    std::set< OUString >::const_iterator iter = interfaces.begin();
     while (iter != interfaces.end())
     {
-        o << "\n        " << scopedCppName(*iter);
+        o << "\n        " << scopedCppName(u2b(*iter));
         ++iter;
         if (iter != interfaces.end())
             o << ",";
@@ -945,8 +931,7 @@ void generateQueryInterface(std::ostream& o,
             o << "::cppu::OPropertySetHelper::queryInterface(type));\n";
         } else {
             o << "::cppu::PropertySetMixin<\n            ";
-            printType(o, options, manager, propertyhelper.replace('.', '/'),
-                      0, false);
+            printType(o, options, manager, propertyhelper, 0, false);
             o << " >::queryInterface(\n               type));\n";
         }
     }
@@ -963,17 +948,17 @@ void generateSkeleton(ProgramOptions const & options,
         return;
     }
 
-    boost::unordered_set< OString, OStringHash > interfaces;
-    boost::unordered_set< OString, OStringHash > services;
+    std::set< OUString > interfaces;
+    std::set< OUString > services;
     AttributeInfo properties;
     AttributeInfo attributes;
-    boost::unordered_set< OString, OStringHash > propinterfaces;
+    std::set< OUString > propinterfaces;
     bool serviceobject = false;
     bool supportxcomponent = false;
 
     std::vector< OString >::const_iterator iter = types.begin();
     while (iter != types.end()) {
-        checkType(manager, *iter, interfaces, services, properties);
+        checkType(manager, b2u(*iter), interfaces, services, properties);
         ++iter;
     }
 
@@ -992,7 +977,7 @@ void generateSkeleton(ProgramOptions const & options,
     if (!services.empty())
         serviceobject = true;
 
-    OString propertyhelper = checkPropertyHelper(
+    OUString propertyhelper = checkPropertyHelper(
         options, manager, services, interfaces, attributes, propinterfaces);
 
     checkDefaultInterfaces(interfaces, services, propertyhelper);
@@ -1095,22 +1080,22 @@ void generateCalcAddin(ProgramOptions const & options,
                        rtl::Reference< TypeManager > const & manager,
                        std::vector< OString > const & types)
 {
-    boost::unordered_set< OString, OStringHash > interfaces;
-    boost::unordered_set< OString, OStringHash > services;
+    std::set< OUString > interfaces;
+    std::set< OUString > services;
     AttributeInfo properties;
     AttributeInfo attributes;
-    boost::unordered_set< OString, OStringHash > propinterfaces;
+    std::set< OUString > propinterfaces;
     bool serviceobject = false;
     bool supportxcomponent = false;
 
 
     std::vector< OString >::const_iterator iter = types.begin();
     while (iter != types.end()) {
-        checkType(manager, *iter, interfaces, services, properties);
+        checkType(manager, b2u(*iter), interfaces, services, properties);
         ++iter;
     }
 
-    OString sAddinService;
+    OUString sAddinService;
     if (services.size() != 1) {
         throw CannotDumpException(
             "for calc add-in components one and only one service type is necessary!"
@@ -1119,10 +1104,10 @@ void generateCalcAddin(ProgramOptions const & options,
 
 
     // get the one and only add-in service for later use
-    boost::unordered_set< OString, OStringHash >::const_iterator iter2 = services.begin();
-    sAddinService = (*iter2).replace('/', '.');
+    std::set< OUString >::const_iterator iter2 = services.begin();
+    sAddinService = *iter2;
     if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
-        sAddinService = (*(++iter2)).replace('/', '.');
+        sAddinService = *(++iter2);
     }
 
     // if backwardcompatible==true the AddIn service needs to be added to the
@@ -1142,7 +1127,7 @@ void generateCalcAddin(ProgramOptions const & options,
         }
     }
 
-    OString propertyhelper = checkPropertyHelper(
+    OUString propertyhelper = checkPropertyHelper(
         options, manager, services, interfaces, attributes, propinterfaces);
 
     if (!propertyhelper.isEmpty())

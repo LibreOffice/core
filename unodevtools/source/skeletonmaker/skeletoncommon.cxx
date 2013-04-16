@@ -22,9 +22,11 @@
 #include "codemaker/commonjava.hxx"
 #include "codemaker/commoncpp.hxx"
 #include "codemaker/generatedtypeset.hxx"
+#include "unoidl/unoidl.hxx"
 
 #include "skeletoncommon.hxx"
 
+#include <cassert>
 #include <iostream>
 
 using namespace ::rtl;
@@ -89,34 +91,11 @@ bool getOutputStream(ProgramOptions const & options,
     return bStandardout;
 }
 
-codemaker::UnoType::Sort decomposeResolveAndCheck(
-    rtl::Reference< TypeManager > const & manager, OString const & type,
-    bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
-    RTTypeClass * typeClass, OString * name, sal_Int32 * rank,
-    std::vector< OString > * arguments)
-{
-    codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
-        manager, type, resolveTypedefs, allowVoid, allowExtraEntities,
-        typeClass, name, rank, arguments);
-    for ( std::vector< OString >::iterator i(arguments->begin());
-          i != arguments->end(); ++i )
-    {
-        RTTypeClass typeClass2;
-        OString name2;
-        sal_Int32 rank2;
-        std::vector< OString > arguments2;
-        decomposeResolveAndCheck(
-            manager, *i, true, false, false, &typeClass2, &name2, &rank2,
-            &arguments2);
-    }
-    return sort;
-}
-
-bool containsAttribute(AttributeInfo& attributes, OString const & attrname)
+bool containsAttribute(AttributeInfo& attributes, OUString const & attrname)
 {
     for ( AttributeInfo::const_iterator i(attributes.begin());
           i != attributes.end(); ++i ) {
-        if ( (*i).first == attrname ) {
+        if ( (*i).name == attrname ) {
             return true;
         }
     }
@@ -125,145 +104,172 @@ bool containsAttribute(AttributeInfo& attributes, OString const & attrname)
 
 // collect attributes including inherited attributes
 void checkAttributes(rtl::Reference< TypeManager > const & manager,
-                     const typereg::Reader& reader,
+                     OUString const & name,
                      AttributeInfo& attributes,
-                     boost::unordered_set< OString, OStringHash >& propinterfaces)
+                     std::set< OUString >& propinterfaces)
 {
-    OString typeName = codemaker::convertString(reader.getTypeName());
-    if ( typeName.equals("com/sun/star/beans/XPropertySet") ||
-         typeName.equals("com/sun/star/beans/XFastPropertySet") ||
-//        typeName.equals("com/sun/star/beans/XMultiPropertySet") ||
-         typeName.equals("com/sun/star/beans/XPropertyAccess") )
+    if ( name == "com.sun.star.beans.XPropertySet" ||
+         name == "com.sun.star.beans.XFastPropertySet" ||
+         name == "com.sun.star.beans.XPropertyAccess" )
     {
-        propinterfaces.insert(typeName);
+        propinterfaces.insert(name);
     }
-
-    for ( sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i ) {
-        typereg::Reader supertype(manager->getTypeReader(
-                                  codemaker::convertString(
-                                      reader.getSuperTypeName(i))));
-        if ( !supertype.isValid() ) {
-            throw CannotDumpException(
-                "Bad type library entity " + reader.getSuperTypeName(i));
+    rtl::Reference< unoidl::Entity > ent;
+    switch (manager->getSort(name, &ent)) {
+    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+        {
+            rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
+                dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
+            assert(ent2.is());
+            for (std::vector< OUString >::const_iterator i(
+                     ent2->getDirectMandatoryBases().begin());
+                 i != ent2->getDirectMandatoryBases().end(); ++i)
+            {
+                checkAttributes(manager, *i, attributes, propinterfaces);
+            }
+            for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::
+                     const_iterator i(ent2->getDirectAttributes().begin());
+                 i != ent2->getDirectAttributes().end(); ++i)
+            {
+                if (!containsAttribute(attributes, i->name)) {
+                    attributes.push_back(
+                        unoidl::AccumulationBasedServiceEntity::Property(
+                            i->name,
+                            i->type,
+                            (unoidl::AccumulationBasedServiceEntity::Property::
+                             Attributes(
+                                 ((i->bound
+                                   ? (unoidl::AccumulationBasedServiceEntity::
+                                      Property::ATTRIBUTE_BOUND)
+                                   : 0)
+                                  | (i->readOnly
+                                     ? (unoidl::AccumulationBasedServiceEntity::
+                                        Property::ATTRIBUTE_READ_ONLY)
+                                     : 0))))));
+                }
+            }
+            break;
         }
-        checkAttributes(manager, supertype, attributes, propinterfaces);
-    }
-
-    for ( sal_uInt16 i = 0; i < reader.getFieldCount(); ++i ) {
-        OString fieldName(
-            codemaker::convertString(reader.getFieldName(i)).
-            replace('/', '.'));
-
-        if ( !containsAttribute(attributes, fieldName) ) {
-            OString fieldType(
-                codemaker::convertString(reader.getFieldTypeName(i)).
-                replace('/', '.'));
-            attributes.push_back(AttributeInfo::value_type(
-                                     fieldName, std::pair<OString, sal_Int16>(
-                                         fieldType, reader.getFieldFlags(i))));
+    case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+        {
+            rtl::Reference< unoidl::AccumulationBasedServiceEntity > ent2(
+                dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
+                    ent.get()));
+            assert(ent2.is());
+            for (std::vector< OUString >::const_iterator i(
+                     ent2->getDirectMandatoryBaseServices().begin());
+                 i != ent2->getDirectMandatoryBaseServices().end(); ++i)
+            {
+                checkAttributes(manager, *i, attributes, propinterfaces);
+            }
+            for (std::vector< OUString >::const_iterator i(
+                     ent2->getDirectMandatoryBaseInterfaces().begin());
+                 i != ent2->getDirectMandatoryBaseInterfaces().end(); ++i)
+            {
+                checkAttributes(manager, *i, attributes, propinterfaces);
+            }
+            for (std::vector<
+                     unoidl::AccumulationBasedServiceEntity::Property >::
+                     const_iterator i(ent2->getDirectProperties().begin());
+                 i != ent2->getDirectProperties().end(); ++i)
+            {
+                if (!containsAttribute(attributes, i->name)) {
+                    attributes.push_back(*i);
+                }
+            }
+            break;
         }
+    default:
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::checkAttributes");
     }
 }
 
 void checkType(rtl::Reference< TypeManager > const & manager,
-               OString const & type,
-               boost::unordered_set< OString, OStringHash >& interfaceTypes,
-               boost::unordered_set< OString, OStringHash >& serviceTypes,
+               OUString const & name,
+               std::set< OUString >& interfaceTypes,
+               std::set< OUString >& serviceTypes,
                AttributeInfo& properties)
 {
-
-    OString binType(type.replace('.', '/'));
-    typereg::Reader reader(manager->getTypeReader(binType));
-    if ( !reader.isValid() ) {
-        throw CannotDumpException("Bad type library entity " + b2u(binType));
-    }
-
-    switch ( reader.getTypeClass() )
-    {
-    case RT_TYPE_INTERFACE:
-    {
-        // com/sun/star/lang/XComponent should be also not in the list
+    rtl::Reference< unoidl::Entity > ent;
+    switch (manager->getSort(name, &ent)) {
+    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+        // com.sun.star.lang.XComponent should be also not in the list
         // but it will be used for checking the impl helper and will be
         // removed later if necessary.
-        if ( binType.equals("com/sun/star/lang/XTypeProvider") ||
-             binType.equals("com/sun/star/uno/XWeak") )
+        if ( name == "com.sun.star.lang.XTypeProvider" ||
+             name == "com.sun.star.uno.XWeak" )
             return;
-        if (interfaceTypes.find(type) == interfaceTypes.end()) {
-            interfaceTypes.insert(type);
+        if (interfaceTypes.find(name) == interfaceTypes.end()) {
+            interfaceTypes.insert(name);
         }
-    }
         break;
-    case RT_TYPE_SERVICE:
-        if ( serviceTypes.find(binType) == serviceTypes.end() ) {
-            serviceTypes.insert(binType);
-
-            if ( reader.getSuperTypeCount() > 0 ) {
-                OString supername(codemaker::convertString(
-                    reader.getSuperTypeName(0).replace('/', '.')));
-                if ( interfaceTypes.find(supername) == interfaceTypes.end() ) {
-                    interfaceTypes.insert(supername);
-
-                    typereg::Reader supertype(manager->getTypeReader(
-                                  codemaker::convertString(
-                                      reader.getSuperTypeName(0))));
-                    if ( !supertype.isValid() ) {
-                        throw CannotDumpException(
-                            "Bad type library entity "
-                            + reader.getSuperTypeName(0));
-                    }
-                }
-
+    case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+        if (serviceTypes.find(name) == serviceTypes.end()) {
+            serviceTypes.insert(name);
+            rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > ent2(
+                dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
+                    ent.get()));
+            assert(ent2.is());
+            if (interfaceTypes.find(ent2->getBase()) == interfaceTypes.end()) {
+                interfaceTypes.insert(ent2->getBase());
                 // check if constructors are specified, if yes automatically
                 // support of XInitialization. We will take care of the default
-                // constructor because in this case XInitialization is not called.
-                if ( reader.getMethodCount() > 1 ||
-                     ( reader.getMethodCount() == 1 &&
-                       !reader.getMethodName(0).isEmpty() ) )
+                // constructor because in this case XInitialization is not
+                // called.
+                if (ent2->getConstructors().size() > 1 ||
+                    (ent2->getConstructors().size() == 1 &&
+                     !ent2->getConstructors()[0].defaultConstructor))
                 {
-                    OString s("com.sun.star.lang.XInitialization");
-                    if ( interfaceTypes.find(s) == interfaceTypes.end() )
+                    OUString s("com.sun.star.lang.XInitialization");
+                    if (interfaceTypes.find(s) == interfaceTypes.end())
                         interfaceTypes.insert(s);
-                }
-            } else {
-                for ( sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i ) {
-                    OString referenceType(
-                        codemaker::convertString(
-                            reader.getReferenceTypeName(i)).replace('/', '.'));
-
-                    if ( reader.getReferenceSort(i) == RT_REF_SUPPORTS ) {
-                        checkType(manager, referenceType, interfaceTypes,
-                                  serviceTypes, properties);
-                    } else if ( reader.getReferenceSort(i) == RT_REF_EXPORTS ) {
-                        checkType(manager, referenceType, interfaceTypes,
-                                  serviceTypes, properties);
-                    }
-                }
-
-                for ( sal_uInt16 i = 0; i < reader.getFieldCount(); ++i ) {
-                    OString fieldName(
-                        codemaker::convertString(reader.getFieldName(i)).
-                        replace('/', '.'));
-                    OString fieldType(
-                        codemaker::convertString(reader.getFieldTypeName(i)).
-                        replace('/', '.'));
-
-                    properties.push_back(AttributeInfo::value_type(
-                        fieldName, std::pair<OString, sal_Int16>(
-                            fieldType, reader.getFieldFlags(i))));
                 }
             }
         }
         break;
-    default:
-        OSL_ASSERT(false);
+    case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+        if ( serviceTypes.find(name) == serviceTypes.end() ) {
+            serviceTypes.insert(name);
+            rtl::Reference< unoidl::AccumulationBasedServiceEntity > ent2(
+                dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
+                    ent.get()));
+            assert(ent2.is());
+            for (std::vector< OUString >::const_iterator i(
+                     ent2->getDirectMandatoryBaseServices().begin());
+                 i != ent2->getDirectMandatoryBaseServices().end(); ++i)
+            {
+                checkType(
+                    manager, *i, interfaceTypes, serviceTypes, properties);
+            }
+            for (std::vector< OUString >::const_iterator i(
+                     ent2->getDirectMandatoryBaseInterfaces().begin());
+                 i != ent2->getDirectMandatoryBaseInterfaces().end(); ++i)
+            {
+                checkType(
+                    manager, *i, interfaceTypes, serviceTypes, properties);
+            }
+            for (std::vector<
+                     unoidl::AccumulationBasedServiceEntity::Property >::
+                     const_iterator i(ent2->getDirectProperties().begin());
+                 i != ent2->getDirectProperties().end(); ++i)
+            {
+                properties.push_back(*i);
+            }
+        }
         break;
+    default:
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::checkType");
     }
 }
 
 void checkDefaultInterfaces(
-         boost::unordered_set< OString, OStringHash >& interfaces,
-         const boost::unordered_set< OString, OStringHash >& services,
-       const OString & propertyhelper)
+    std::set< OUString >& interfaces,
+    const std::set< OUString >& services,
+    const OUString & propertyhelper)
 {
     if ( services.empty() ) {
         if (interfaces.find("com.sun.star.lang.XServiceInfo") != interfaces.end())
@@ -287,20 +293,25 @@ void checkDefaultInterfaces(
 }
 
 bool checkServiceProperties(rtl::Reference< TypeManager > const & manager,
-                            const typereg::Reader & reader)
+                            OUString const & name)
 {
-    if ( reader.getFieldCount() > 0 )
-        return true;
-
-    if ( reader.getReferenceCount() > 0 ) {
-        for ( sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i ) {
-            if ( reader.getReferenceSort(i) == RT_REF_EXPORTS ) {
-                typereg::Reader refreader(
-                    manager->getTypeReader(
-                        codemaker::convertString(reader.getReferenceTypeName(i))));
-
-                if ( checkServiceProperties(manager, refreader) )
-                    return true;
+    rtl::Reference< unoidl::Entity > ent;
+    if (manager->getSort(name, &ent)
+        == codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE)
+    {
+        rtl::Reference< unoidl::AccumulationBasedServiceEntity > ent2(
+            dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
+                ent.get()));
+        assert(ent2.is());
+        if (!ent2->getDirectProperties().empty()) {
+            return true;
+        }
+        for (std::vector< OUString >::const_iterator i(
+                 ent2->getDirectMandatoryBaseServices().begin());
+             i != ent2->getDirectMandatoryBaseServices().end(); ++i)
+        {
+            if (checkServiceProperties(manager, *i)) {
+                return true;
             }
         }
     }
@@ -308,16 +319,16 @@ bool checkServiceProperties(rtl::Reference< TypeManager > const & manager,
 }
 
 
-OString checkPropertyHelper(
+OUString checkPropertyHelper(
     ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
-    const boost::unordered_set< OString, OStringHash >& services,
-    const boost::unordered_set< OString, OStringHash >& interfaces,
+    const std::set< OUString >& services,
+    const std::set< OUString >& interfaces,
     AttributeInfo& attributes,
-    boost::unordered_set< OString, OStringHash >& propinterfaces)
+    std::set< OUString >& propinterfaces)
 {
-    boost::unordered_set< OString, OStringHash >::const_iterator iter;
-    boost::unordered_set< OString, OStringHash >::const_iterator end;
+    std::set< OUString >::const_iterator iter;
+    std::set< OUString >::const_iterator end;
 
     if ( !services.empty() ) {
         iter = services.begin();
@@ -329,65 +340,64 @@ OString checkPropertyHelper(
 
     bool oldStyleWithProperties = false;
     while ( iter != end ) {
-        typereg::Reader reader(manager->getTypeReader((*iter).replace('.', '/')));
-
+        rtl::Reference< unoidl::Entity > ent;
+        codemaker::UnoType::Sort sort = manager->getSort(*iter, &ent);
         if ( !services.empty() ) {
-            if ( options.supportpropertysetmixin && reader.getSuperTypeCount() > 0 )
+            if (options.supportpropertysetmixin
+                && (sort
+                    == codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE))
             {
-                typereg::Reader supertype(
-                    manager->getTypeReader(
-                        codemaker::convertString(
-                            reader.getSuperTypeName(0))));
-                if ( !supertype.isValid() ) {
-                    throw CannotDumpException(
-                        "Bad type library entity "
-                        + reader.getSuperTypeName(0));
-                }
-
-                checkAttributes(manager, supertype, attributes, propinterfaces);
-
-                if ( !(attributes.empty() || propinterfaces.empty()) ) {
-                    return OUStringToOString(
-                        supertype.getTypeName().replace('/', '.'),
-                        osl_getThreadTextEncoding());
+                rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity >
+                    ent2(
+                        dynamic_cast<
+                        unoidl::SingleInterfaceBasedServiceEntity * >(
+                            ent.get()));
+                assert(ent2.is());
+                checkAttributes(
+                    manager, ent2->getBase(), attributes, propinterfaces);
+                if (!(attributes.empty() || propinterfaces.empty())) {
+                    return ent2->getBase();
                 }
             } else {
-                oldStyleWithProperties = checkServiceProperties(manager, reader);
+                oldStyleWithProperties = checkServiceProperties(manager, *iter);
             }
         } else {
-            checkAttributes(manager, reader, attributes, propinterfaces);
-            if ( !(attributes.empty() || propinterfaces.empty()) ) {
-                return OUStringToOString(
-                    reader.getTypeName().replace('/', '.'),
-                    osl_getThreadTextEncoding());
+            checkAttributes(manager, *iter, attributes, propinterfaces);
+            if (!(attributes.empty() || propinterfaces.empty())) {
+                return *iter;
             }
         }
         ++iter;
     }
 
-    return (oldStyleWithProperties ? "_" : "");
+    return oldStyleWithProperties ? OUString("_") : OUString();
 }
 
-bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
-                            typereg::Reader const & reader)
+bool checkXComponentSupport(
+    rtl::Reference< TypeManager > const & manager, OUString const & name)
 {
-    static OUString s( "com/sun/star/lang/XComponent");
-    if ( reader.getTypeName().equals(s) )
+    assert(manager.is());
+    if (name == "com.sun.star.lang.XComponent") {
         return true;
-
-    for ( sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i ) {
-        typereg::Reader super(
-            manager->getTypeReader(
-                codemaker::convertString(
-                    reader.getSuperTypeName(i))));
-        if ( !super.isValid() ) {
-            throw CannotDumpException(
-                "Bad type library entity " + reader.getSuperTypeName(i));
-        }
-        if ( checkXComponentSupport(manager, super) )
-            return true;
     }
-
+    rtl::Reference< unoidl::Entity > ent;
+    codemaker::UnoType::Sort sort = manager->getSort(name, &ent);
+    if (sort != codemaker::UnoType::SORT_INTERFACE_TYPE) {
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::checkXComponentSupport");
+    }
+    rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
+        dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
+    assert(ent2.is());
+    for (std::vector< OUString >::const_iterator i(
+             ent2->getDirectMandatoryBases().begin());
+         i != ent2->getDirectMandatoryBases().end(); ++i)
+    {
+        if (checkXComponentSupport(manager, *i)) {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -395,20 +405,18 @@ bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
 // if XComponent is directly specified, return true and remove it from the
 // supported interfaces list
 bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
-         boost::unordered_set< OString, OStringHash >& interfaces)
+                            std::set< OUString >& interfaces)
 {
     if ( interfaces.empty() )
         return false;
 
-    boost::unordered_set< OString, OStringHash >::const_iterator iter =
-        interfaces.begin();
+    std::set< OUString >::const_iterator iter = interfaces.begin();
     while ( iter != interfaces.end() ) {
         if ( (*iter).equals("com.sun.star.lang.XComponent") ) {
             interfaces.erase("com.sun.star.lang.XComponent");
             return true;
         }
-        typereg::Reader reader(manager->getTypeReader((*iter).replace('.', '/')));
-        if ( checkXComponentSupport(manager, reader) )
+        if ( checkXComponentSupport(manager, *iter) )
             return true;
         ++iter;
     }
@@ -416,60 +424,48 @@ bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
     return false;
 }
 
-sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
-                                        sal_uInt16 field, sal_uInt16 method)
+unoidl::AccumulationBasedServiceEntity::Property::Attributes
+checkAdditionalPropertyFlags(
+    unoidl::InterfaceTypeEntity::Attribute const & attribute)
 {
-    sal_uInt16 flags = 0;
+    int flags = 0;
     bool getterSupportsUnknown = false;
-
-    OUString su( "com/sun/star/beans/UnknownPropertyException");
-    if ( method < reader.getMethodCount()
-         && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_GET
-         && reader.getMethodName(method) == reader.getFieldName(field) )
+    for (std::vector< OUString >::const_iterator i(
+             attribute.getExceptions.begin());
+         i != attribute.getExceptions.end(); ++i)
     {
-        if ( reader.getMethodExceptionCount(method) > 0 ) {
-            for ( sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method);
-                  ++i )
-            {
-                if (su.equals(reader.getMethodExceptionTypeName(method, i)))
-                    getterSupportsUnknown = true;
-            }
-        }
-        method++;
-    }
-    if ( method < reader.getMethodCount()
-         && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_SET
-         && reader.getMethodName(method) == reader.getFieldName(field) )
-    {
-        if ( reader.getMethodExceptionCount(method) > 0 ) {
-            OUString s( "com/sun/star/beans/PropertyVetoException");
-            for ( sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method);
-                  ++i )
-            {
-                if ( s.equals(reader.getMethodExceptionTypeName(method, i)) )
-                    flags |= RT_ACCESS_CONSTRAINED;
-                if ( getterSupportsUnknown &&
-                     su.equals(reader.getMethodExceptionTypeName(method, i)) )
-                    flags |= RT_ACCESS_OPTIONAL;
-            }
+        if (*i == "com.sun.star.beans.UnknownPropertyException") {
+            getterSupportsUnknown = true;
         }
     }
-    return flags;
+    for (std::vector< OUString >::const_iterator i(
+             attribute.setExceptions.begin());
+         i != attribute.setExceptions.end(); ++i)
+    {
+        if (*i == "com.sun.star.beans.PropertyVetoException") {
+            flags |= unoidl::AccumulationBasedServiceEntity::Property::
+                ATTRIBUTE_CONSTRAINED;
+        } else if (getterSupportsUnknown
+                   && *i == "com.sun.star.beans.UnknownPropertyException")
+        {
+            flags |= unoidl::AccumulationBasedServiceEntity::Property::
+                ATTRIBUTE_OPTIONAL;
+        }
+    }
+    return unoidl::AccumulationBasedServiceEntity::Property::Attributes(flags);
 }
 
 // This function checks if the specified types for parameters and return
 // types are allowed add-in types, for more info see the com.sun.star.sheet.AddIn
 // service description
 bool checkAddinType(rtl::Reference< TypeManager > const & manager,
-                    OString const & type, bool & bLastAny,
+                    OUString const & type, bool & bLastAny,
                     bool & bHasXPropertySet, bool bIsReturn)
 {
-    RTTypeClass typeClass;
-    OString name;
+    assert(manager.is());
     sal_Int32 rank;
-    std::vector< OString > arguments;
-    codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
-        manager, type, true, true, true, &typeClass, &name, &rank, &arguments);
+    codemaker::UnoType::Sort sort = manager->decompose(
+        type, true, 0, &rank, 0, 0);
 
     if ( sort == codemaker::UnoType::SORT_LONG ||
          sort == codemaker::UnoType::SORT_DOUBLE ||
@@ -490,14 +486,13 @@ bool checkAddinType(rtl::Reference< TypeManager > const & manager,
             return true;
         }
     }
-    if ( sort == codemaker::UnoType::SORT_COMPLEX &&
-         typeClass == RT_TYPE_INTERFACE )
+    if ( sort == codemaker::UnoType::SORT_INTERFACE_TYPE )
     {
-        if ( bIsReturn && type.equals("com/sun/star/sheet/XVolatileResult") )
+        if ( bIsReturn && type == "com.sun.star.sheet.XVolatileResult" )
             return true;
-        if ( !bIsReturn && type.equals("com/sun/star/table/XCellRange") )
+        if ( !bIsReturn && type == "com.sun.star.table.XCellRange" )
             return true;
-        if ( !bIsReturn && type.equals("com/sun/star/beans/XPropertySet") )
+        if ( !bIsReturn && type == "com.sun.star.beans.XPropertySet" )
         {
             if ( bHasXPropertySet ) {
                 return false;
@@ -510,39 +505,40 @@ bool checkAddinType(rtl::Reference< TypeManager > const & manager,
     return false;
 }
 
-void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
-                     typereg::Reader const & reader)
+void checkAddInTypes(
+    rtl::Reference< TypeManager > const & manager, OUString const & name,
+    rtl::Reference< unoidl::InterfaceTypeEntity > const & entity)
 {
-    OString sType(codemaker::convertString(reader.getTypeName()).replace('/', '.'));
+    assert(entity.is());
     bool bLastAny = false;
     bool bHasXPropertySet = false;
-    for ( sal_uInt16 m = 0; m < reader.getMethodCount(); ++m ) {
-        OString sMethod(codemaker::convertString(reader.getMethodName(m)));
-
-        OString sReturnType(codemaker::convertString(
-                                reader.getMethodReturnTypeName(m)));
+    for (std::vector< unoidl::InterfaceTypeEntity::Method >::const_iterator i(
+             entity->getDirectMethods().begin());
+         i != entity->getDirectMethods().end(); ++i)
+    {
         if ( !checkAddinType(
-                 manager, sReturnType, bLastAny, bHasXPropertySet, true) )
+                 manager, i->returnType, bLastAny, bHasXPropertySet, true) )
         {
             throw CannotDumpException(
-                "the return type of the calc add-in function '" + b2u(sType)
-                + ":" + b2u(sMethod)
+                "the return type of the calc add-in function '" + name
+                + ":" + i->name
                 + "' is invalid. Please check your IDL defintion.");
         }
 
         bHasXPropertySet = false;
-        for ( sal_uInt16 p = 0; p < reader.getMethodParameterCount(m); ++p ) {
+        for (std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
+                 const_iterator j(i->parameters.begin());
+             j != i->parameters.end(); ++j)
+        {
             bLastAny = false;
-            OString sParamType(codemaker::convertString(
-                                   reader.getMethodParameterTypeName(m, p)));
-            if ( !checkAddinType(manager, sParamType,
+            if ( !checkAddinType(manager, j->type,
                                 bLastAny, bHasXPropertySet, false) ||
                  bLastAny )
             {
                 throw CannotDumpException(
-                    "the type of the " + OUString::number(p + 1)
-                    + ". parameter of the calc add-in function '" + b2u(sType)
-                    + ":" + b2u(sMethod) + "' is invalid."
+                    "the type of the " + j->name
+                    + " parameter of the calc add-in function '" + name
+                    + ":" + i->name + "' is invalid."
                     + (bLastAny
                        ? OUString(
                            " The type 'sequence<any>' is allowed as last"
@@ -558,49 +554,55 @@ void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
     }
 }
 
-void generateFunctionParamterMap(std::ostream& o,
+void generateFunctionParameterMap(std::ostream& o,
                                  ProgramOptions const & options,
                                  rtl::Reference< TypeManager > const & manager,
-                                 typereg::Reader const & reader,
+                                 OUString const & name,
                                  ::codemaker::GeneratedTypeSet & generated,
                                  bool bFirst)
 {
-    OString sType(codemaker::convertString(reader.getTypeName()));
-    if ( sType.equals("com/sun/star/uno/XInterface") ||
-         sType.equals("com/sun/star/lang/XLocalizable") ||
-         sType.equals("com/sun/star/lang/XServiceInfo") ||
+    if ( name == "com.sun.star.uno.XInterface" ||
+         name == "com.sun.star.lang.XLocalizable" ||
+         name == "com.sun.star.lang.XServiceInfo" ||
          // the next three checks becomes obsolete when configuration is used
-         sType.equals("com/sun/star/sheet/XAddIn") ||
-         sType.equals("com/sun/star/sheet/XCompatibilityNames") ||
-         sType.equals("com/sun/star/lang/XServiceName") )
+         name == "com.sun.star.sheet.XAddIn" ||
+         name == "com.sun.star.sheet.XCompatibilityNames" ||
+         name == "com.sun.star.lang.XServiceName" )
     {
         return;
     }
 
-    // check if the specified add-in functions supports valid types
-    checkAddInTypes(manager, reader);
+    rtl::Reference< unoidl::Entity > ent;
+    codemaker::UnoType::Sort sort = manager->getSort(name, &ent);
+    if (sort != codemaker::UnoType::SORT_INTERFACE_TYPE) {
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to skeletonmaker::generateFunctionParameterMap");
+    }
+    rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
+        dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
+    assert(ent2.is());
 
-    for ( sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i ) {
-        typereg::Reader super(
-            manager->getTypeReader(
-                codemaker::convertString(
-                    reader.getSuperTypeName(i))));
-        if ( !super.isValid() ) {
-            throw CannotDumpException(
-                "Bad type library entity " + reader.getSuperTypeName(i));
-        }
-        generateFunctionParamterMap(o, options, manager, super, generated, bFirst);
+    // check if the specified add-in functions supports valid types
+    checkAddInTypes(manager, name, ent2);
+
+    for (std::vector< OUString >::const_iterator i(
+             ent2->getDirectMandatoryBases().begin());
+         i != ent2->getDirectMandatoryBases().end(); ++i)
+    {
+        generateFunctionParameterMap(
+            o, options, manager, *i, generated, bFirst);
     }
 
-    OString type(codemaker::convertString(reader.getTypeName()));
-    if ( generated.contains(type) )
+    if ( generated.contains(u2b(name)) )
         return;
     else
-        generated.add(type);
+        generated.add(u2b(name));
 
-    for ( sal_uInt16 m = 0; m < reader.getMethodCount(); ++m ) {
-        OString sMethod(codemaker::convertString(reader.getMethodName(m)));
-
+    for (std::vector< unoidl::InterfaceTypeEntity::Method >::const_iterator i(
+             ent2->getDirectMethods().begin());
+         i != ent2->getDirectMethods().end(); ++i)
+    {
         if ( bFirst ) {
             if (options.language == 2) {
                 o << "        ParamMap fpm;\n";
@@ -626,33 +628,37 @@ void generateFunctionParamterMap(std::ostream& o,
                     o << "        fpm = new java.util.Hashtable();\n";
             }
 
-        for ( sal_uInt16 p = 0; p < reader.getMethodParameterCount(m); ++p ) {
+        std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::size_type
+            n = 0;
+        for (std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
+                 const_iterator j(i->parameters.begin());
+             j != i->parameters.end(); ++j)
+        {
             if ( options.language == 2 ) {
-                o << "        fpm[" << p
+                o << "        fpm[" << n
                   << "] = ::rtl::OUString(\""
-                  << codemaker::convertString(reader.getMethodParameterName(m, p))
+                  << j->name
                   << "\");\n";
             }
             else {
                 if ( options.java5 )
-                    o << "        fpm.put(" << p << ", \""
-                      << codemaker::convertString(
-                          reader.getMethodParameterName(m, p))
+                    o << "        fpm.put(" << n << ", \""
+                      << j->name
                       << "\");\n";
                 else
-                    o << "       fpm.put(new Integer(" << p << "), \""
-                      << codemaker::convertString(
-                          reader.getMethodParameterName(m, p))
+                    o << "       fpm.put(new Integer(" << n << "), \""
+                      << j->name
                       << "\");\n";
             }
+            ++n;
         }
 
         if ( options.language == 2 ) {
             o << "        m_functionMap[::rtl::OUString(\""
-              << sMethod << "\")] = fpm;\n\n";
+              << i->name << "\")] = fpm;\n\n";
         }
         else {
-            o << "        m_functionMap.put(\"" << sMethod << "\", fpm);\n\n";
+            o << "        m_functionMap.put(\"" << i->name << "\", fpm);\n\n";
         }
     }
 }
@@ -660,19 +666,13 @@ void generateFunctionParamterMap(std::ostream& o,
 void generateFunctionParameterMap(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager,
-         const boost::unordered_set< OString, OStringHash >& interfaces)
+         const std::set< OUString >& interfaces)
 {
     ::codemaker::GeneratedTypeSet generated;
     bool bFirst = true;
-    boost::unordered_set< OString, OStringHash >::const_iterator iter = interfaces.begin();
+    std::set< OUString >::const_iterator iter = interfaces.begin();
     while ( iter != interfaces.end() ) {
-        typereg::Reader reader(manager->getTypeReader((*iter).replace('.','/')));
-        if (!reader.isValid()) {
-            throw CannotDumpException(
-                "Bad type library entity " + reader.getTypeName());
-        }
-
-        generateFunctionParamterMap(o, options, manager, reader, generated, bFirst);
+        generateFunctionParameterMap(o, options, manager, *iter, generated, bFirst);
         ++iter;
     }
 }

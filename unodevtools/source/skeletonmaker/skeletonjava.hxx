@@ -26,72 +26,19 @@
 
 namespace skeletonmaker { namespace java {
 
-void printType(std::ostream & o,
-               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-               codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-               OString const & name, sal_Int32 rank,
-               std::vector< OString > const & arguments,
-               bool referenceType, bool defaultvalue=false);
-
-void printType(std::ostream & o,
-               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-               OString const & type, bool referenceType,
-               bool defaultvalue=false);
-
-bool printConstructorParameters(std::ostream & o,
-                                ProgramOptions const & options,
-                                rtl::Reference< TypeManager > const & manager,
-                                typereg::Reader const & reader,
-                                typereg::Reader const & outerReader,
-                                std::vector< OString > const & arguments);
-
-void printConstructor(std::ostream & o,
-                      ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-                      typereg::Reader const & reader,
-                      std::vector< OString > const & arguments);
-
-void printMethodParameters(std::ostream & o,
-                           ProgramOptions const & options,
-                           rtl::Reference< TypeManager > const & manager,
-                           typereg::Reader const & reader,
-                           sal_uInt16 method, bool previous,
-                           bool withtype);
-
-void printExceptionSpecification(std::ostream & o,
-                                 ProgramOptions const & options,
-                                 rtl::Reference< TypeManager > const & manager,
-                                 typereg::Reader const & reader,
-                                 sal_uInt16 method);
+void printType(
+    std::ostream & o, ProgramOptions const & options,
+    rtl::Reference< TypeManager > const & manager, OUString const & name,
+    bool referenceType, bool defaultvalue = false);
 
 void printMethods(std::ostream & o,
                   ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-                  typereg::Reader const & reader,
+                  OUString const & name,
                   codemaker::GeneratedTypeSet & generated,
                   OString const & delegate,
                   OString const & indentation=OString(),
                   bool defaultvalue=false,
                   bool usepropertymixin=false);
-
-void printConstructionMethods(std::ostream & o,
-                              ProgramOptions const & options,
-                              rtl::Reference< TypeManager > const & manager,
-                              typereg::Reader const & reader);
-
-void printServiceMembers(std::ostream & o,
-                         ProgramOptions const & options,
-                         rtl::Reference< TypeManager > const & manager,
-                         typereg::Reader const & reader,
-                         OString const & type,
-                         OString const & delegate);
-
-void printMapsToJavaType(std::ostream & o,
-                         ProgramOptions const & options,
-                         rtl::Reference< TypeManager > const & manager,
-                         codemaker::UnoType::Sort sort,
-                         RTTypeClass typeClass,
-                         OString const & name, sal_Int32 rank,
-                         std::vector< OString > const & arguments,
-                         const char * javaTypeSort);
 
 void generateDocumentation(std::ostream & o,
                            ProgramOptions const & options,
