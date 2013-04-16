@@ -2,6 +2,14 @@ Index: branches/release/boost/multi_array/base.hpp
 ===================================================================
 --- a/branches/release/boost/multi_array/base.hpp
 +++ b/branches/release/boost/multi_array/base.hpp
+@@ -18,6 +18,7 @@
+ // functionality is acquired
+ //
+ 
++#include "boost/multi_array/collection_concept.hpp"
+ #include "boost/multi_array/extent_range.hpp"
+ #include "boost/multi_array/extent_gen.hpp"
+ #include "boost/multi_array/index_range.hpp"
 @@ -82,5 +82,6 @@
  class const_sub_array;
  
@@ -51,7 +59,7 @@ Index: branches/release/boost/multi_array/base.hpp
                             const index* index_bases) const {
 -
 +    boost::function_requires<
-+      CollectionConcept<IndexList> >();
++      detail::multi_array::CollectionConcept<IndexList> >();
      ignore_unused_variable_warning(index_bases);
      ignore_unused_variable_warning(extents);
 @@ -333,7 +355,13 @@
