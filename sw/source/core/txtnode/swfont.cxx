@@ -733,7 +733,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
     Size aTxtSize;
-    xub_StrLen nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
+    xub_StrLen nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().getLength()
                                                    : rInf.GetLen() );
     rInf.SetLen( nLn );
     if( IsCapital() && nLn )
@@ -793,7 +793,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
         }
     }
 
-    if (1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetText().GetChar(rInf.GetIdx()))
+    if (1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetText()[rInf.GetIdx()])
     {
         xub_StrLen nOldIdx(rInf.GetIdx());
         xub_StrLen nOldLen(rInf.GetLen());
@@ -805,7 +805,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
     }
-    else if (1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetText().GetChar(rInf.GetIdx()))
+    else if (1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetText()[ rInf.GetIdx() ])
     {
         xub_StrLen nOldIdx(rInf.GetIdx());
         xub_StrLen nOldLen(rInf.GetLen());
@@ -828,7 +828,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
 {
     rInf.SetGreyWave( bGrey );
-    xub_StrLen nLn = rInf.GetText().Len();
+    xub_StrLen nLn = rInf.GetText().getLength();
     if( !rInf.GetLen() || !nLn )
         return;
     if( STRING_LEN == rInf.GetLen() )
@@ -960,7 +960,7 @@ static sal_Char const sDoubleSpace[] = "  ";
 
 void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
 {
-    if( !rInf.GetLen() || !rInf.GetText().Len() )
+    if( !rInf.GetLen() || !rInf.GetText().getLength() )
         return;
 
     FontUnderline nOldUnder = UNDERLINE_NONE;
@@ -1050,7 +1050,7 @@ xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
 
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
-    xub_StrLen nLn = rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
+    xub_StrLen nLn = rInf.GetLen() == STRING_LEN ? rInf.GetText().getLength()
                                                  : rInf.GetLen();
     rInf.SetLen( nLn );
     xub_StrLen nCrsr = 0;

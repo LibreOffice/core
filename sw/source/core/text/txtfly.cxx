@@ -482,7 +482,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     SwRect aRect( rInf.GetPos(), rInf.GetSize() );
     if( rInf.GetSpace() )
     {
-        xub_StrLen nTmpLen = STRING_LEN == rInf.GetLen() ? rInf.GetText().Len() :
+        xub_StrLen nTmpLen = STRING_LEN == rInf.GetLen() ? rInf.GetText().getLength() :
                                                       rInf.GetLen();
         if( rInf.GetSpace() > 0 )
         {
@@ -490,7 +490,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
             const xub_StrLen nEndPos = rInf.GetIdx() + nTmpLen;
             for( xub_StrLen nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
             {
-                if( CH_BLANK == rInf.GetText().GetChar( nPos ) )
+                if( CH_BLANK == rInf.GetText()[ nPos ] )
                     ++nSpaceCnt;
             }
             if( nSpaceCnt )
