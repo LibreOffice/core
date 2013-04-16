@@ -32,7 +32,7 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#include <svtools/valueset.hxx>
+#include <svx/SvxColorValueSet.hxx>
 #include <svx/dlgctrl.hxx>
 
 // class SvxBackgroundTabPage --------------------------------------------
@@ -89,7 +89,7 @@ private:
      ListBox                 aParaLBox;
     // Hintergrundfarbe ------------------------------------
     Control                 aBorderWin;
-    ValueSet                aBackgroundColorSet;
+    SvxColorValueSet        aBackgroundColorSet;
     FixedLine               aBackgroundColorBox;
     BackgroundPreviewImpl*  pPreviewWin1;
     //color transparency

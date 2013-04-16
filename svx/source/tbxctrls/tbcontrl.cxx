@@ -815,10 +815,6 @@ void SvxFontNameBox_Impl::Select()
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #endif
 
-#define PALETTE_X 10
-#define PALETTE_Y 11
-#define PALETTE_SIZE (PALETTE_X * PALETTE_Y)
-
 SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           sal_uInt16                     nSlotId,
                                           const Reference< XFrame >& rFrame,
@@ -836,7 +832,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     const SfxPoolItem* pItem = NULL;
     XColorList* pColorTable = NULL;
     sal_Bool bKillTable = sal_False;
-    const Size aSize12( 13, 13 );
 
     if ( pDocSh )
         if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
@@ -877,43 +872,23 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
     if ( pColorTable )
     {
-        short i = 0;
-        long nCount = pColorTable->Count();
-        XColorEntry* pEntry = NULL;
-        ::Color aColWhite( COL_WHITE );
-        String aStrWhite( EditResId(RID_SVXITEMS_COLOR_WHITE) );
+        const long nColorCount(pColorTable->Count());
+        const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
+        aColorSet.SetOutputSizePixel(aNewSize);
+        static sal_Int32 nAdd = 4;
 
-        if ( nCount > PALETTE_SIZE )
-            // Show scrollbar if more than PALLETTE_SIZE colors are available
-            aColorSet.SetStyle( aColorSet.GetStyle() | WB_VSCROLL );
-
-        for ( i = 0; i < nCount; i++ )
-        {
-            pEntry = pColorTable->GetColor(i);
-            aColorSet.InsertItem( i+1, pEntry->GetColor(), pEntry->GetName() );
-        }
-
-        while ( i < PALETTE_SIZE )
-        {
-            // fill empty elements if less then PALLETTE_SIZE colors are available
-            aColorSet.InsertItem( i+1, aColWhite, aStrWhite );
-            i++;
-        }
+        SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
+        aColorSet.Clear();
+        aColorSet.addEntriesForXColorList(*pColorTable);
     }
 
     aColorSet.SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
-    aColorSet.SetColCount( PALETTE_X );
-    aColorSet.SetLineCount( PALETTE_Y );
-
-    lcl_CalcSizeValueSet( *this, aColorSet, aSize12 );
-
     SetHelpId( HID_POPUP_COLOR );
     aColorSet.SetHelpId( HID_POPUP_COLOR_CTRL );
-
     SetText( rWndTitle );
     aColorSet.Show();
-
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
+
     if ( bKillTable )
         delete pColorTable;
 }
@@ -1019,33 +994,14 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
             if ( pColorTable )
             {
                 // Die Liste der Farben (ColorTable) hat sich ge"andert:
-                short i = 0;
-                long nCount = pColorTable->Count();
-                XColorEntry* pEntry = NULL;
-                ::Color aColWhite( COL_WHITE );
-                String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
+                const long nColorCount(pColorTable->Count());
+                const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
+                aColorSet.SetOutputSizePixel(aNewSize);
+                static sal_Int32 nAdd = 4;
 
-                // ScrollBar an oder aus
-                WinBits nBits = aColorSet.GetStyle();
-                if ( nCount > PALETTE_SIZE )
-                    nBits &= ~WB_VSCROLL;
-                else
-                    nBits |= WB_VSCROLL;
-                aColorSet.SetStyle( nBits );
-
-                for ( i = 0; i < nCount; ++i )
-                {
-                    pEntry = pColorTable->GetColor(i);
-                    aColorSet.SetItemColor( i + 1, pEntry->GetColor() );
-                    aColorSet.SetItemText ( i + 1, pEntry->GetName() );
-                }
-
-                while ( i < PALETTE_SIZE )
-                {
-                    aColorSet.SetItemColor( i + 1, aColWhite );
-                    aColorSet.SetItemText ( i + 1, aStrWhite );
-                    i++;
-                }
+                SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
+                aColorSet.Clear();
+                aColorSet.addEntriesForXColorList(*pColorTable);
             }
         }
     }

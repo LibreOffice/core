@@ -26,6 +26,7 @@
 // include ---------------------------------------------------------------
 
 #include <svx/tabarea.hxx>
+#include <svx/SvxColorValueSet.hxx>
 
 /*************************************************************************
 |*
@@ -698,7 +699,7 @@ private:
     ColorLB             aLbColor;
 
     FixedText           aTableNameFT;
-    ValueSet            aValSetColorTable;
+    SvxColorValueSet    aValSetColorTable;
 
     SvxXRectPreview     aCtlPreviewOld;
     SvxXRectPreview     aCtlPreviewNew;
@@ -749,7 +750,8 @@ private:
     sal_uInt16  ColorToPercent_Impl( sal_uInt16 nColor );
     sal_uInt16  PercentToColor_Impl( sal_uInt16 nPercent );
 
-    void    FillValueSet_Impl( ValueSet& rVs );
+    void ImpColorCountChanged();
+
     //-----------------------------------------------------------------------------------------------------
     DECL_LINK( ClickAddHdl_Impl, void * );      // Button 'Hinzufuegen'
     DECL_LINK( ClickModifyHdl_Impl, void * );   // Button 'Aendern'

@@ -109,6 +109,7 @@ ColorControl::ColorControl (
       maColorSetter(rColorSetter)
 {
     FreeResource();
+    FillColors();
 }
 
 
@@ -126,40 +127,37 @@ void ColorControl::FillColors (void)
 
     if (pColorTable)
     {
-        const long nColorCount (pColorTable->Count());
+        const long nColorCount(pColorTable->Count());
         if (nColorCount <= 0)
             return;
-        const sal_Int32 nColumnCount (ceil(sqrt(double(nColorCount))));
-        const sal_Int32 nRowCount (ceil(double(nColorCount)/nColumnCount));
-        maVSColor.SetColCount(nColumnCount);
-        maVSColor.SetLineCount(nRowCount);
-        const sal_Int32 nItemSize (15*12 / ::std::max<sal_Int32>(nColumnCount, nRowCount));
-        maVSColor.CalcWindowSizePixel(Size(nItemSize,nItemSize));
-        Link aLink =  LINK(this, ColorControl, VSSelectHdl);
-        maVSColor.SetSelectHdl(aLink);
-        maVSColor.SetStyle(
-            (maVSColor.GetStyle()
-                | WB_TABSTOP | WB_ITEMBORDER | WB_NAMEFIELD// | WB_FLATVALUESET
-                | WB_NO_DIRECTSELECT | WB_MENUSTYLEVALUESET | WB_NO_DIRECTSELECT)
-                        & ~WB_VSCROLL);
 
-        if (msNoColorString.Len() > 0)
+        const WinBits aWinBits(maVSColor.GetStyle() | WB_TABSTOP | WB_ITEMBORDER | WB_NAMEFIELD |
+            WB_NO_DIRECTSELECT | WB_MENUSTYLEVALUESET | WB_NO_DIRECTSELECT);
+
+        maVSColor.SetStyle(aWinBits);
+
+        // neds to be done *before* layouting
+        if(msNoColorString.Len() > 0)
         {
             maVSColor.SetStyle(maVSColor.GetStyle() | WB_NONEFIELD);
             maVSColor.SetText(msNoColorString);
         }
 
+        const Size aNewSize(maVSColor.layoutAllVisible(nColorCount));
+        maVSColor.SetOutputSizePixel(aNewSize);
+        static sal_Int32 nAdd = 4;
+
+        SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
+        Link aLink = LINK(this, ColorControl, VSSelectHdl);
+        maVSColor.SetSelectHdl(aLink);
+
         // Now, after all calls to SetStyle, we can change the
         // background color.
         maVSColor.SetBackground(Theme::GetWallpaper(Theme::Paint_DropDownBackground));
 
+        // add entrties
         maVSColor.Clear();
-        XColorEntry* pEntry = NULL;
-        for (sal_Int32 nIndex=0; nIndex<nColorCount; ++nIndex)
-        {
-            pEntry = pColorTable->GetColor(nIndex);
-            maVSColor.InsertItem(nIndex+1, pEntry->GetColor(), pEntry->GetName() );
-        }
+        maVSColor.addEntriesForXColorList(*pColorTable);
     }
 
     maVSColor.Show();
@@ -178,7 +176,7 @@ void ColorControl::GetFocus (void)
 
 void ColorControl::SetCurColorSelect (Color aCol, bool bAvailable)
 {
-    FillColors();
+//  FillColors();
     short nCol = GetItemId_Imp( maVSColor, aCol );
     if(! bAvailable)
     {
@@ -193,7 +191,9 @@ void ColorControl::SetCurColorSelect (Color aCol, bool bAvailable)
     }
     else
     {
-        maVSColor.SelectItem( nCol );
+        // remove selection first to force evtl. scroll when scroll is needed
+        maVSColor.SetNoSelection();
+        maVSColor.SelectItem(nCol);
     }
 }
 

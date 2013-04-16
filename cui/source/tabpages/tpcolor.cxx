@@ -163,10 +163,7 @@ SvxColorTabPage::SvxColorTabPage
     aBtnSave.SetClickHdl( LINK( this, SvxColorTabPage, ClickSaveHdl_Impl ) );
 
     // ValueSet
-    aValSetColorTable.SetStyle( aValSetColorTable.GetStyle() | WB_VSCROLL | WB_ITEMBORDER );
-    aValSetColorTable.SetColCount( 8 );
-    aValSetColorTable.SetLineCount( 10 );
-    aValSetColorTable.SetExtraSpacing( 0 );
+    aValSetColorTable.SetStyle( aValSetColorTable.GetStyle() | WB_ITEMBORDER );
     aValSetColorTable.Show();
 
     aLbColorModel.SetAccessibleName( String( CUI_RES(STR_CUI_COLORMODEL) ) );
@@ -178,10 +175,37 @@ SvxColorTabPage::SvxColorTabPage
 
 // -----------------------------------------------------------------------
 
+void SvxColorTabPage::ImpColorCountChanged()
+{
+    if(pColorTab)
+    {
+        aValSetColorTable.SetColCount(aValSetColorTable.getColumnCount());
+
+        // here we have enough space to the left, so layout with fixed column size
+        // and fixed height, adapt width. Apply the adapted width by moving the left
+        // edge of the control to the left, keeping the right edge aligned
+        // with the original position
+        const Point aCurrentPos(aValSetColorTable.GetPosPixel());
+        const Size aCurrentSize(aValSetColorTable.GetOutputSizePixel());
+        const long nColorCount(pColorTab->Count());
+        const Size aNewSize(aValSetColorTable.layoutToGivenHeight(aCurrentSize.Height(), nColorCount));
+        const Point aNewPos((aCurrentPos.X() + aCurrentSize.Width()) - aNewSize.Width(), aCurrentPos.Y());
+
+        aValSetColorTable.SetOutputSizePixel(aNewSize);
+        aValSetColorTable.SetPosSizePixel(aNewPos, aNewSize);
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void SvxColorTabPage::Construct()
 {
-    aLbColor.Fill( pColorTab );
-    FillValueSet_Impl( aValSetColorTable );
+    if(pColorTab)
+    {
+        aLbColor.Fill(pColorTab);
+        aValSetColorTable.addEntriesForXColorList(*pColorTab);
+        ImpColorCountChanged();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -529,6 +553,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         aLbColor.Append( pEntry );
         aValSetColorTable.InsertItem( aValSetColorTable.GetItemCount() + 1,
                 pEntry->GetColor(), pEntry->GetName() );
+        ImpColorCountChanged();
 
         aLbColor.SelectEntryPos( aLbColor.GetEntryCount() - 1 );
 
@@ -704,7 +729,9 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
             // Listbox und ValueSet aktualisieren
             aLbColor.RemoveEntry( nPos );
             aValSetColorTable.Clear();
-            FillValueSet_Impl( aValSetColorTable );
+            aValSetColorTable.addEntriesForXColorList(*pColorTab);
+            ImpColorCountChanged();
+            //FillValueSet_Impl( aValSetColorTable );
 
             // Positionieren
             aLbColor.SelectEntryPos( nPos );
@@ -1162,17 +1189,17 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
 
 //------------------------------------------------------------------------
 
-void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
-{
-    long nCount = pColorTab->Count();
-    XColorEntry* pColorEntry;
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        pColorEntry = pColorTab->GetColor( i );
-        rVs.InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
-    }
-}
+//void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
+//{
+//  long nCount = pColorTab->Count();
+//  XColorEntry* pColorEntry;
+//
+//  for( long i = 0; i < nCount; i++ )
+//  {
+//        pColorEntry = pColorTab->GetColor( i );
+//      rVs.InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
+//  }
+//}
 
 //------------------------------------------------------------------------
 

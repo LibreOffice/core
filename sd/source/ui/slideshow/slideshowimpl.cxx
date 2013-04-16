@@ -56,7 +56,7 @@
 #include <svx/f3dchild.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/fontwork.hxx>
-#include <svx/colrctrl.hxx>
+#include <svx/SvxColorChildWindow.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyprlink.hxx>
