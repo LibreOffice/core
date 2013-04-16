@@ -48,68 +48,68 @@ void MultiLineEditSyntaxHighlight::SetText(const OUString& rNewText)
     UpdateData();
 }
 
-void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 aKey)
+void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 nKey)
 {
     TextSelection aCurrentPos = GetTextView()->GetSelection();
-    xub_StrLen aStartPos  = aCurrentPos.GetStart().GetIndex();
+    xub_StrLen nStartPos = aCurrentPos.GetStart().GetIndex();
     sal_uLong nStartPara = aCurrentPos.GetStart().GetPara();
-    sal_uInt16 aCount = 0;
-    int aChar = -1;
+    sal_uInt16 nCount = 0;
+    int nChar = -1;
 
-    switch (aKey)
+    switch (nKey)
     {
         case '\'':  // no break
         case '"':
         {
-            aChar = aKey;
+            nChar = nKey;
             break;
         }
         case '}' :
         {
-            aChar = '{';
+            nChar = '{';
             break;
         }
         case ')':
         {
-            aChar = '(';
+            nChar = '(';
             break;
         }
         case ']':
         {
-            aChar = '[';
+            nChar = '[';
             break;
         }
     }
 
-    if (aChar != -1)
+    if (nChar != -1)
     {
-        for (long aPara =nStartPara; aPara>=0;--aPara)
+        for (long nPara = nStartPara; nPara>=0; --nPara)
         {
-            if ( aStartPos == 0 )
+            if (nStartPos == 0)
                 continue;
 
-            String aLine( GetTextEngine()->GetText( aPara ) );
+            OUString aLine( GetTextEngine()->GetText( nPara ) );
 
-            if (aLine.Len() == 0)
+            if (aLine.isEmpty())
                 continue;
 
-            for (sal_uInt16 i = ((unsigned long)aPara==nStartPara) ? aStartPos-1 : (sal_uInt16)(aLine.Len()-1); i>0; --i)
+            for (sal_Int32 i = ((sal_uLong)nPara==nStartPara) ? nStartPos-1 : aLine.getLength()-1; i>0; --i)
             {
-                if (aLine.GetChar(i)==aChar)
+                if (aLine[i] == nChar)
                 {
-                    if (!aCount)
+                    if (!nCount)
                     {
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), aPara, i, i+1, sal_True );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), aPara, i, i+1, sal_True );
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, aStartPos, aStartPos, sal_True );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, aStartPos, aStartPos, sal_True );
+                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nPara, i, i+1, sal_True );
+                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nPara, i, i+1, sal_True );
+                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, nStartPos, nStartPos, sal_True );
+                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, nStartPos, nStartPos, sal_True );
                         return;
                     }
                     else
-                        aCount--;
+                        --nCount;
                 }
-                if (aLine.GetChar(i)==aKey)
-                    aCount++;
+                if (aLine[i] == nKey)
+                    ++nCount;
             }
         }
     }
