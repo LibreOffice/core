@@ -71,7 +71,7 @@ FunctionDescription::getExceptions() const {
         try {
             any = m_manager->getByHierarchicalName(name);
         } catch (const css::container::NoSuchElementException & e) {
-            throw new css::uno::RuntimeException(
+            throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.container.NoSuchElementException: "))
@@ -81,7 +81,7 @@ FunctionDescription::getExceptions() const {
         if (!(any >>= exceptions[i])
             || exceptions[i]->getTypeClass() != css::uno::TypeClass_EXCEPTION)
         {
-            throw new css::uno::RuntimeException(
+            throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("not an exception type: "))
                  + name),
