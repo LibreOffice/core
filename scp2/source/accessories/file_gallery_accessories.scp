@@ -35,9 +35,10 @@
 #ifdef WITH_EXTRA_GALLERY
 
 File gid_File_Extra_Gallery_Accessories
-    Dir = gid_Dir_Gallery;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgallery.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgallery.filelist";
 End
 
 File gid_File_Extra_Gallery_Draws_People_Accessories
