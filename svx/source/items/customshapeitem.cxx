@@ -31,23 +31,12 @@ SdrCustomShapeDataItem::SdrCustomShapeDataItem()
 :   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, String() )
 {}
 
-bool SdrCustomShapeGeometryItem::PropertyEq::operator()( const OUString& r1, const OUString& r2 ) const
-{
-    return r1.equals( r2 );
-}
-bool SdrCustomShapeGeometryItem::PropertyPairEq::operator()( const SdrCustomShapeGeometryItem::PropertyPair& r1, const SdrCustomShapeGeometryItem::PropertyPair& r2 ) const
-{
-    return ( r1.first.equals( r2.first ) ) && ( r1.second.equals( r2.second ) );
-}
-size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const
-{
-    return (size_t)r1.first.hashCode() + r1.second.hashCode();
-};
-
 TYPEINIT1_FACTORY( SdrCustomShapeGeometryItem, SfxPoolItem , new  SdrCustomShapeGeometryItem);
+
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem()
 :   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
 {}
+
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< beans::PropertyValue >& rVal )
 :   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
 {

@@ -127,6 +127,23 @@ public:
     SdrTextAutoGrowSizeItem( SvStream& rIn )   :        SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, rIn )   {}
 };
 
+// some useful inline methods
+
+inline bool SdrCustomShapeGeometryItem::PropertyEq::operator()( const OUString& r1, const OUString& r2 ) const
+{
+    return r1.equals( r2 );
+}
+
+inline bool SdrCustomShapeGeometryItem::PropertyPairEq::operator()( const SdrCustomShapeGeometryItem::PropertyPair& r1, const SdrCustomShapeGeometryItem::PropertyPair& r2 ) const
+{
+    return ( r1.first.equals( r2.first ) ) && ( r1.second.equals( r2.second ) );
+}
+
+inline size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const
+{
+    return (size_t)r1.first.hashCode() + r1.second.hashCode();
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
