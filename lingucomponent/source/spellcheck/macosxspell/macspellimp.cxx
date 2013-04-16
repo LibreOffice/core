@@ -114,11 +114,8 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         SvtPathOptions aPathOpt;
         rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
 
-        std::vector<objc_object *> postspdict;
-        std::vector<objc_object *> postupdict;
-        //std::vector<dictentry *> postspdict;
-        //std::vector<dictentry *> postupdict;
-
+        std::vector<NSString*> postspdict;
+        std::vector<NSString*> postupdict;
 
     if (!numdict) {
 
@@ -131,9 +128,10 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         //Test for existence of the dictionaries
         for (unsigned int i = 0; i < [aLocales count]; i++)
         {
-            if( [macSpell setLanguage:[aLocales objectAtIndex:i] ] )
+            NSString* pLangStr = (NSString*)[aLocales objectAtIndex:i];
+            if( [macSpell setLanguage:pLangStr ] )
             {
-                postspdict.push_back( [ aLocales objectAtIndex:i ] );
+                postspdict.push_back( pLangStr );
             }
         }
 
