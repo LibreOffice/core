@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,accessoriesgallery,$(call gb_UnpackedTarball_get_dir,gallery-pack)/accessories))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessoriesgallery,gallery-pack))
 
-$(eval $(call gb_Zip_add_dependencies,accessoriesgallery,\
-	$(call gb_UnpackedTarball_get_target,gallery-pack) \
-))
+$(eval $(call gb_ExternalPackage_set_outdir,accessoriesgallery,$(INSTDIR)))
 
-$(eval $(call gb_Zip_add_files,accessoriesgallery,\
+$(eval $(call gb_ExternalPackage_use_unpacked,accessoriesgallery,gallery-pack))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessoriesgallery,share/gallery/accessories,\
 	sg1010.sdg \
 	sg1010.sdv \
 	sg1010.thm \
