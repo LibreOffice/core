@@ -38,7 +38,7 @@ import com.sun.star.lib.uno.helper.UnoUrl;
 import com.sun.star.lib.util.NativeLibraryLoader;
 
 /**
- * This class reprecents a connection to the local office application.
+ * This class represents a connection to the local office application.
  *
  * @since OOo 2.0.0
  */
@@ -49,22 +49,22 @@ public class LocalOfficeConnection
     public static final String      OFFICE_LIB_NAME     = "officebean";
     public static final String      OFFICE_ID_SUFFIX    = "_Office";
 
-    private Process             mProcess;
+    private Process                 mProcess;
     private ContainerFactory        mContainerFactory;
     private XComponentContext       mContext;
     private XBridge mBridge;
 
-    private String              mURL;
-    private String              mConnType;
-    private String              mPipe;
-    private String              mPort;
-    private String              mProtocol;
-    private String              mInitialObject;
+    private String                  mURL;
+    private String                  mConnType;
+    private String                  mPipe;
+    private String                  mPort;
+    private String                  mProtocol;
+    private String                  mInitialObject;
 
     private List<XEventListener> mComponents = new ArrayList<XEventListener>();
 
     private static long m_nBridgeCounter = 0;
-    //-------------------------------------------------------------------------
+
     static
     {
         // preload shared libraries whichs import lips are linked to officebean
@@ -115,7 +115,6 @@ public class LocalOfficeConnection
         NativeLibraryLoader.loadLibrary( LocalOfficeConnection.class.getClassLoader(), "officebean" );
     }
 
-    //-------------------------------------------------------------------------
 
     /**
      * Constructor.
@@ -190,7 +189,7 @@ public class LocalOfficeConnection
     }
 
     /**
-     * Sets an AWT container catory.
+     * Sets an AWT container factory.
      *
      * @param containerFactory This is a application provided AWT container
      *  factory.
@@ -201,7 +200,7 @@ public class LocalOfficeConnection
     }
 
     /**
-     * Retrives the UNO component context.
+     * Retrieves the UNO component context.
      * Establishes a connection if necessary and initialises the
      * UNO service manager if it has not already been initialised.
      * This method can return <code>null</code> if it fails to connect
@@ -242,12 +241,12 @@ public class LocalOfficeConnection
         }
         mComponents.clear();
 
-        //Terminate the bridge. It turned out that this is necessary for the bean
-        //to work properly when displayed in an applet within Internet Explorer.
-        //When navigating off the page which is showing  the applet and then going
-        //back to it, then the Java remote bridge is damaged. That is the Java threads
-        //do not work properly anymore. Therefore when Applet.stop is called the connection
-        //to the office including the bridge needs to be terminated.
+        // Terminate the bridge. It turned out that this is necessary for the bean
+        // to work properly when displayed in an applet within Internet Explorer.
+        // When navigating off the page which is showing  the applet and then going
+        // back to it, then the Java remote bridge is damaged. That is the Java threads
+        // do not work properly anymore. Therefore when Applet.stop is called the connection
+        // to the office including the bridge needs to be terminated.
         if (mBridge != null)
         {
             XComponent comp = UnoRuntime.queryInterface(
@@ -379,19 +378,19 @@ public class LocalOfficeConnection
     }
 
 
-    //The function is copied and adapted from the UrlResolver.resolve.
-    //We cannot use the URLResolver because we need access to the bridge which has
-    //to be disposed when Applet.stop is called.
+    // The function is copied and adapted from the UrlResolver.resolve.
+    // We cannot use the URLResolver because we need access to the bridge which has
+    // to be disposed when Applet.stop is called.
     private Object resolve(XComponentContext xLocalContext, String dcp)
         throws com.sun.star.connection.NoConnectException,
             com.sun.star.connection.ConnectionSetupException,
             com.sun.star.lang.IllegalArgumentException
     {
-         String conDcp = null;
+        String conDcp = null;
         String protDcp = null;
         String rootOid = null;
 
-        if(dcp.indexOf(';') == -1) {// use old style
+        if(dcp.indexOf(';') == -1) { // use old style
             conDcp = dcp;
             protDcp = "iiop";
             rootOid = "classic_uno";
@@ -437,9 +436,9 @@ public class LocalOfficeConnection
                 // connect to the server
                 XConnection xConnection = connector_xConnector.connect(conDcp);
                 // create the bridge name. This should not be necessary if we pass an
-                //empty string as bridge name into createBridge. Then we should always get
-                //a new bridge. This does not work because of (i51323). Therefore we
-                //create unique bridge names for the current process.
+                // empty string as bridge name into createBridge. Then we should always get
+                // a new bridge. This does not work because of (i51323). Therefore we
+                // create unique bridge names for the current process.
                 String sBridgeName = "OOoBean_private_bridge_" + String.valueOf(m_nBridgeCounter++);
                 try {
                     mBridge = xBridgeFactory.createBridge(sBridgeName, protDcp, xConnection, null);
@@ -478,7 +477,7 @@ public class LocalOfficeConnection
     private void parseUnoUrlWithOfficePath(String url, String prefix)
         throws java.net.MalformedURLException
     {
-        // Extruct parameters.
+        // Extract parameters.
         int idx = url.indexOf(";urp;StarOffice.ServiceManager");
         if (idx < 0)
             throw new java.net.MalformedURLException(
@@ -589,7 +588,7 @@ public class LocalOfficeConnection
                 }
                 break;
 
-            case 5: // a delimeter after the value
+            case 5: // a delimiter after the value
                 switch(ch) {
                 case ' ':
                     break;
@@ -670,7 +669,7 @@ public class LocalOfficeConnection
         implements NativeService
     {
         /**
-         * Retrive the office service identifier.
+         * Retrieve the office service identifier.
          *
          * @return The identifier of the office service.
          */
@@ -690,12 +689,12 @@ public class LocalOfficeConnection
         {
             int nSizeCmdArray = 4;
             String sOption = null;
-            //examine if user specified command-line options in system properties.
-            //We may offer later a more sophisticated way of providing options if
-            //the need arises. Currently this is intended to ease the pain during
-            //development  with pre-release builds of LibO where one wants to start
-            //LibO with the --norestore options. The value of the property is simple
-            //passed on to the Runtime.exec call.
+            // examine if user specified command-line options in system properties.
+            // We may offer later a more sophisticated way of providing options if
+            // the need arises. Currently this is intended to ease the pain during
+            // development  with pre-release builds of LibO where one wants to start
+            // LibO with the --norestore options. The value of the property is simple
+            // passed on to the Runtime.exec call.
             try {
                 sOption = System.getProperty("com.sun.star.officebean.Options");
                 if (sOption != null)
@@ -704,7 +703,7 @@ public class LocalOfficeConnection
             {
                 e.printStackTrace();
             }
-           // create call with arguments
+            // create call with arguments
             String[] cmdArray = new String[nSizeCmdArray];
 
             // read UNO_PATH environment variable to get path to soffice binary
@@ -712,7 +711,6 @@ public class LocalOfficeConnection
             if (unoPath == null)
                 throw new java.io.IOException( "UNO_PATH environment variable is not set (required system path to the office program directory)" );
 
-//          cmdArray[0] = (new File(getProgramPath(), OFFICE_APP_NAME)).getPath();
             cmdArray[0] = (new File(unoPath, OFFICE_APP_NAME)).getPath();
             cmdArray[1] = "--nologo";
             cmdArray[2] = "--nodefault";
@@ -736,9 +734,9 @@ public class LocalOfficeConnection
         }
 
         /**
-         * Retrives the ammount of time to wait for the startup.
+         * Retrieves the amount of time to wait for the startup.
          *
-         * @return The ammount of time to wait in seconds(?).
+         * @return The amount of time to wait in seconds(?).
          */
         public int getStartupTime()
         {

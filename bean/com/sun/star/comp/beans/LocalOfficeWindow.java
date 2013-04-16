@@ -66,7 +66,7 @@ public class LocalOfficeWindow
     }
 
     /**
-     * Retrives an AWT component object associated with the OfficeWindow.
+     * Retrieves an AWT component object associated with the OfficeWindow.
      *
      * @return The AWT component object associated with the OfficeWindow.
      */
@@ -76,7 +76,7 @@ public class LocalOfficeWindow
     }
 
     /**
-     * Retrives an UNO XWindowPeer object associated with the OfficeWindow.
+     * Retrieves an UNO XWindowPeer object associated with the OfficeWindow.
      *
      * @return The UNO XWindowPeer object associated with the OfficeWindow.
      */
@@ -233,24 +233,24 @@ public class LocalOfficeWindow
     }
 
     /**
-     * Retrives a platform dependant system window identifier.
+     * Retrieves a platform dependent system window identifier.
      *
      * @return The system window identifier.
      */
     private native long getNativeWindow();
 
     /**
-     * Retrives a platform dependant system window type.
+     * Retrieves a platform dependent system window type.
      *
      * @return The system window type.
      */
     private native int getNativeWindowSystemType();
 
     /**
-    Returns an Any containing a sequences of com.sun.star.beans.NamedValue. One NamedValue
-    contains the name "WINDOW" and the value is a Long representing the window handle.
-    The second NamedValue  has the name "XEMBED" and the value is true, when the XEmbed
-    protocol shall be used fore embedding the native Window.
+     * Returns an Any containing a sequences of com.sun.star.beans.NamedValue. One NamedValue
+     * contains the name "WINDOW" and the value is a Long representing the window handle.
+     * The second NamedValue  has the name "XEMBED" and the value is true, when the XEmbed
+     * protocol shall be used fore embedding the native Window.
     */
     protected Any getWrappedWindowHandle()
     {
