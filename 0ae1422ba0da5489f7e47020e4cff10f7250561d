@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//++M\u003d",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-16T20:51:33Z",
+      "side": 1,
+      "message": "hmm... not sure if the copy here is always ok.... but rInf should hopefully have GetIdx() + GetLen() \u003c\u003d GetText().Len()",
+      "revId": "0ae1422ba0da5489f7e47020e4cff10f7250561d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
