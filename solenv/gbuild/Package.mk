@@ -75,10 +75,16 @@ $(call gb_Package_get_clean_target,%) :
 $(call gb_Package_get_preparation_target,%) :
 	mkdir -p $(dir $@) && touch $@
 
+# NOTE: It is possible that a file has been added to the package more
+# than once, so we must drop the duplicates, or Windows installer will
+# be unhappy.
+# TODO: this is only for convenience for impl. of gbuild classes. There
+# should be check that it does not happen in "normal" use, i.e., in
+# Package_foo makefiles.
 $(call gb_Package_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PKG,2)
 	rm -f $@ && \
-	mv $(call var2file,$@.tmp,100,$(FILES)) $@
+	mv $(call var2file,$@.tmp,100,$(sort $(FILES))) $@
 
 # for other targets that want to create Packages, does not register at Module
 define gb_Package_Package_internal
