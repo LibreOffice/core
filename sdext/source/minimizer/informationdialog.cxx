@@ -26,12 +26,19 @@
 
 #include "informationdialog.hxx"
 #include "optimizationstats.hxx"
+#include "minimizer.hrc"
+#include "helpid.hrc"
+
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/awt/XUnitConversion.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicType.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
+#include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 
 #define DIALOG_WIDTH    240
 #define DIALOG_HEIGHT   80
@@ -43,7 +50,6 @@
 // - INFORMATIONDIALOG -
 // ---------------------
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
@@ -56,12 +62,19 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
-
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------------
 
-rtl::OUString InsertFixedText( InformationDialog& rInformationDialog, const rtl::OUString& rControlName, const OUString& rLabel,
-                                sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
+Reference< XFixedText > InformationDialog::InsertFixedText(
+    const rtl::OUString& rControlName,
+    const OUString& rLabel,
+    sal_Int32 nXPos,
+    sal_Int32 nYPos,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight,
+    sal_Bool bMultiLine,
+    sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
         TKGet( TK_Height ),
@@ -88,12 +101,10 @@ rtl::OUString InsertFixedText( InformationDialog& rInformationDialog, const rtl:
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
-    rInformationDialog.insertFixedText( rControlName, aNames, aValues );
-    return rControlName;
+    return insertFixedText( rControlName, aNames, aValues );
 }
 
-rtl::OUString InsertImage(
-    InformationDialog& rInformationDialog,
+Reference< XControl > InformationDialog::InsertImage(
     const OUString& rControlName,
     const OUString& rURL,
     sal_Int32 nPosX,
@@ -124,17 +135,23 @@ rtl::OUString InsertImage(
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
-    rInformationDialog.insertImage( rControlName, aNames, aValues );
-    return rControlName;
+    return insertImage( rControlName, aNames, aValues );
 }
 
-rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& rControlName,
-    const Reference< XItemListener > xItemListener, const OUString& rLabel,
-        sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
+Reference< XCheckBox > InformationDialog::InsertCheckBox(
+    const OUString& rControlName,
+    const OUString& rLabel,
+    const OUString& rHelpURL,
+    sal_Int32 nXPos,
+    sal_Int32 nYPos,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight,
+    sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
         TKGet( TK_Enabled ),
         TKGet( TK_Height ),
+        TKGet( TK_HelpURL ),
         TKGet( TK_Label ),
         TKGet( TK_PositionX ),
         TKGet( TK_PositionY ),
@@ -145,6 +162,7 @@ rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUStr
     Any pValues[] = {
         Any( sal_True ),
         Any( nHeight ),
+        Any( rHelpURL ),
         Any( rLabel ),
         Any( nXPos ),
         Any( nYPos ),
@@ -157,14 +175,17 @@ rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUStr
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
-    Reference< XCheckBox > xCheckBox( rInformationDialog.insertCheckBox( rControlName, aNames, aValues ) );
-    if ( xItemListener.is() )
-        xCheckBox->addItemListener( xItemListener );
-    return rControlName;
+    return insertCheckBox( rControlName, aNames, aValues );
 }
 
-rtl::OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
-    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, PPPOptimizerTokenEnum nResID )
+Reference< XButton > InformationDialog::InsertButton(
+    const OUString& rControlName,
+    sal_Int32 nXPos,
+    sal_Int32 nYPos,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight,
+    sal_Int16 nTabIndex,
+    sal_Int32 nResID )
 {
     OUString pNames[] = {
         TKGet( TK_Enabled ),
@@ -180,7 +201,7 @@ rtl::OUString InsertButton( InformationDialog& rInformationDialog, const OUStrin
     Any pValues[] = {
         Any( sal_True ),
         Any( nHeight ),
-        Any( rInformationDialog.getString( nResID ) ),
+        Any( getString( nResID ) ),
         Any( nXPos ),
         Any( nYPos ),
         Any( static_cast< sal_Int16 >( PushButtonType_OK ) ),
@@ -194,8 +215,7 @@ rtl::OUString InsertButton( InformationDialog& rInformationDialog, const OUStrin
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
-    rInformationDialog.insertButton( rControlName, xActionListener, aNames, aValues );
-    return rControlName;
+    return insertButton( rControlName, Reference< XActionListener >(), aNames, aValues );
 }
 
 
@@ -221,6 +241,7 @@ void InformationDialog::InitDialog()
     OUString pNames[] = {
         TKGet( TK_Closeable ),
         TKGet( TK_Height ),
+        TKGet( TK_HelpURL ),
         TKGet( TK_Moveable ),
         TKGet( TK_PositionX ),
         TKGet( TK_PositionY ),
@@ -230,10 +251,11 @@ void InformationDialog::InitDialog()
     Any pValues[] = {
         Any( sal_True ),
         Any( nDialogHeight ),
+        Any( HID( HID_SDEXT_MINIMIZER_INFOBOX_DLG ) ),
         Any( sal_True ),
         Any( sal_Int32( 245 ) ),
         Any( sal_Int32( 115 ) ),
-        Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
+        Any( getString( STR_INFO_DIALOG ) ),
         Any( sal_Int32( DIALOG_WIDTH ) ) };
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
@@ -246,30 +268,30 @@ void InformationDialog::InitDialog()
     sal_Int64 nSource = mnSourceSize;
     sal_Int64 nDest   = mnDestSize;
 
-    PPPOptimizerTokenEnum eInfoString( STR_INFO_1 );
+    sal_Int32 nInfoStrResId( STR_INFO_1 );
     if ( mnSourceSize )
     {
         if ( mnDestSize )
-            eInfoString = STR_INFO_1;
+            nInfoStrResId = STR_INFO_1;
         else
         {
-            eInfoString = STR_INFO_2;
+            nInfoStrResId = STR_INFO_2;
             nDest = mnApproxSize;
         }
     }
     else if ( mnDestSize )
-        eInfoString = STR_INFO_3;
+        nInfoStrResId = STR_INFO_3;
     else
     {
-        eInfoString = STR_INFO_4;
+        nInfoStrResId = STR_INFO_4;
         nDest = mnApproxSize;
     }
 
     rtl::OUString aTitle;
     if ( maSaveAsURL.getLength() )
     {
-        Reference< XURLTransformer > xURLTransformer( mxMSF->getServiceManager()->createInstanceWithContext(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ), mxMSF ), UNO_QUERY );
+        Reference< XURLTransformer > xURLTransformer( mxContext->getServiceManager()->createInstanceWithContext(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ), mxContext ), UNO_QUERY );
         if ( xURLTransformer.is() )
         {
             util::URL aURL, aPresentationURL;
@@ -285,7 +307,7 @@ void InformationDialog::InitDialog()
         }
     }
 
-    OUString aInfoString( getString( eInfoString ) );
+    OUString aInfoString( getString( nInfoStrResId ) );
     const OUString aOldSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%OLDFILESIZE" ) );
     const OUString aNewSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%NEWFILESIZE" ) );
     const OUString aTitlePlaceholder( aTitle.getLength() ? OUString::createFromAscii( "%TITLE" ) : OUString::createFromAscii( "'%TITLE'" ) );
@@ -302,38 +324,106 @@ void InformationDialog::InitDialog()
     if ( k >= 0 )
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
-    InsertImage( *this,
-                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "aboutimage" ) ),
+
+    Reference< XControl > xImageCtrl = InsertImage( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "aboutimage" ) ),
                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:standardimage/query" ) ),
-                 5, 5, 25, 25, sal_False );
-    InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
+                 3, 3, 25, 25, sal_False );
+    Reference< XControl > xFixedText( InsertFixedText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "fixedtext" ) ), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 ), UNO_QUERY);
+
     if ( maSaveAsURL.getLength() )
-        InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
-    InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
+        mxCheckBox = InsertCheckBox( TKGet( TK_OpenNewDocument ),
+                                     getString( STR_AUTOMATICALLY_OPEN ),
+                                     HID( HID_SDEXT_MINIMIZER_INFOBOX_CB_OPENNEW ),
+                                     PAGE_POS_X, 42,
+                                     PAGE_WIDTH, 8, 1 );
+    Reference< XControl> xButtonCtrl( InsertButton( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "button" ) ), DIALOG_WIDTH / 2 - 15, nDialogHeight - 20, 30, 14, 2, STR_OK ), UNO_QUERY );
 
     sal_Bool bOpenNewDocument = mrbOpenNewDocument;
     setControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ), Any( (sal_Int16)bOpenNewDocument ) );
+
+    sal_Int32 nX, nY, nDlgWidth;
+    Size aSize3( 3, 3 );
+    Reference< XUnitConversion > xUnitConverter( mxDialogWindow, UNO_QUERY_THROW );
+    aSize3 = xUnitConverter->convertSizeToPixel( aSize3, util::MeasureUnit::APPFONT );
+    nX = nY = aSize3.Width;
+
+    Reference< XPropertySet > xImageProps (xImageCtrl->getModel(), UNO_QUERY_THROW );
+    Reference< graphic::XGraphic > xGraphic(
+        xImageProps->getPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic") ) ), UNO_QUERY_THROW );
+    if ( xGraphic.is() && xGraphic->getType() != graphic::GraphicType::EMPTY )
+    {
+        Size aSizePixel;
+        Rectangle aPosSizePixel;
+        Reference< XPropertySet > xGraphicProps( xGraphic, UNO_QUERY_THROW );
+        xGraphicProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SizePixel"))) >>= aSizePixel;
+        Reference< XWindow > xImage (xImageCtrl->getPeer(), UNO_QUERY_THROW );
+
+        xImage->setPosSize( nX, nY,
+                            aSizePixel.Width,
+                            aSizePixel.Height,
+                            awt::PosSize::POSSIZE );
+
+        nX += aSizePixel.Width + aSize3.Width;
+
+        Reference< XWindow > xLabel ( xFixedText->getPeer(), UNO_QUERY_THROW );
+        aPosSizePixel = xLabel->getPosSize();
+        xLabel->setPosSize( nX, nY,
+                            aPosSizePixel.Width,
+                            aPosSizePixel.Height,
+                            awt::PosSize::POSSIZE );
+
+        nDlgWidth = nX + aPosSizePixel.Width + aSize3.Width;
+        nY += aPosSizePixel.Height + aSize3.Height;
+
+        if ( mxCheckBox.is() )
+        {
+            Reference< XControl > xCheckBoxCtrl( mxCheckBox, UNO_QUERY_THROW );
+            Reference< XWindow > xCheckBox( xCheckBoxCtrl->getPeer(), UNO_QUERY_THROW );
+            Rectangle aCBSize = xCheckBox->getPosSize();
+            xCheckBox->setPosSize( nX, nY,
+                                   aPosSizePixel.Width,
+                                   aCBSize.Height ,
+                                   awt::PosSize::POSSIZE);
+            nY += aCBSize.Height + aSize3.Height;
+        }
+
+        nY += aSize3.Height;
+        Reference< XWindow > xButton ( xButtonCtrl->getPeer(), UNO_QUERY_THROW );
+        aPosSizePixel = xButton->getPosSize();
+        xButton->setPosSize( nDlgWidth / 2 - aPosSizePixel.Width / 2,
+                             nY ,
+                             aPosSizePixel.Width,
+                             aPosSizePixel.Height,
+                             awt::PosSize::POSSIZE );
+        nY += aPosSizePixel.Height + aSize3.Height;
+        mxDialogWindow->setPosSize( 0, 0, nDlgWidth, nY, awt::PosSize::SIZE );
+    }
+
+    centerDialog();
 }
 
 // -----------------------------------------------------------------------------
 
-InformationDialog::InformationDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame, const rtl::OUString& rSaveAsURL, sal_Bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
-    UnoDialog( rxMSF, rxFrame ),
-    ConfigurationAccess( rxMSF, NULL ),
-    mxMSF( rxMSF ),
-    mxFrame( rxFrame ),
-    mxActionListener( new OKActionListener( *this ) ),
+InformationDialog::InformationDialog(
+    const Reference< XComponentContext > &rxContext,
+    const Reference< XWindowPeer>& rxParent,
+    const rtl::OUString& rSaveAsURL,
+    sal_Bool& rbOpenNewDocument,
+    const sal_Int64& rSourceSize,
+    const sal_Int64& rDestSize,
+    const sal_Int64& rApproxSize )
+:   UnoDialog( rxContext, rxParent ),
+    ConfigurationAccess( rxContext, NULL ),
+    mxContext( rxContext ),
     mnSourceSize( rSourceSize ),
     mnDestSize( rDestSize ),
     mnApproxSize( rApproxSize ),
     mrbOpenNewDocument( rbOpenNewDocument ),
     maSaveAsURL( rSaveAsURL )
 {
-    Reference< XFrame > xFrame( mxController->getFrame() );
-    Reference< XWindow > xContainerWindow( xFrame->getContainerWindow() );
-    Reference< XWindowPeer > xWindowPeer( xContainerWindow, UNO_QUERY_THROW );
-    createWindowPeer( xWindowPeer );
+    OSL_TRACE( "InformationDialog::InformationDialog" );
+    createWindowPeer();
 
     InitDialog();
 }
@@ -342,38 +432,23 @@ InformationDialog::InformationDialog( const Reference< XComponentContext > &rxMS
 
 InformationDialog::~InformationDialog()
 {
+    OSL_TRACE( "InformationDialog::~InformationDialog" );
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool InformationDialog::execute()
 {
+    OSL_TRACE( "InformationDialog::execute" );
     UnoDialog::execute();
 
-    if ( maSaveAsURL.getLength() )
+    if ( maSaveAsURL.getLength() && mxCheckBox.is() )
     {
-        sal_Int16 nInt16 = 0;
-        Any aAny( getControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ) ) );
-        if ( aAny >>= nInt16 )
-        {
-            sal_Bool bOpenNewDocument = static_cast< sal_Bool >( nInt16 );
-            mrbOpenNewDocument = bOpenNewDocument;
-        }
+        sal_Bool bOpenNewDocument = static_cast< sal_Bool >( mxCheckBox->getState() );
+        mrbOpenNewDocument = bOpenNewDocument;
     }
+
+    endExecute( sal_True );
     return mbStatus;
 }
 
-// -----------------------------------------------------------------------------
-
-void OKActionListener::actionPerformed( const ActionEvent& rEvent )
-    throw ( com::sun::star::uno::RuntimeException )
-{
-    if ( rEvent.ActionCommand == rtl::OUString( rtl::OUString::createFromAscii( "button" ) ) )
-    {
-        mrInformationDialog.endExecute( sal_True );
-    }
-}
-void OKActionListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw ( com::sun::star::uno::RuntimeException )
-{
-}

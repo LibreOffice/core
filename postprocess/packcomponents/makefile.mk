@@ -174,7 +174,8 @@ my_components = \
     xmlfd \
     xmx \
     xsltdlg \
-    xstor
+    xstor \
+    PresentationMinimizer
 
 .IF "$(OS)" == "MACOSX"
 my_components += component/vcl/vcl.macosx
