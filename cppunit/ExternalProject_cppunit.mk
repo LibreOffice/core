@@ -35,6 +35,29 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	,src/cppunit)
 endif
 else
+
+cppunit_CXXFLAGS=$(CXXFLAGS)
+
+ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX MACOSX NETBSD OPENBSD,$(OS)))
+ifneq (,$(gb_ENABLE_DBGUTIL))
+cppunit_CXXFLAGS+=-D_GLIBCXX_DEBUG
+endif
+endif
+
+ifeq ($(OS),MACOSX)
+ifneq (,$(gb_ENABLE_DBGUTIL))
+cppunit_CXXFLAGS+=-D_GLIBCXX_FULLY_DYNAMIC_STRING
+endif
+endif
+
+ifeq ($(OS)-$(COM),WNT-GCC)
+cppunit_CXXFLAGS+=-mthreads
+endif
+
+ifneq (,$(debug))
+cppunit_CXXFLAGS+=-g
+endif
+
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
@@ -48,8 +71,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 			$(if $(filter WNT,$(OS)),LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
 			$(if $(filter SOLARIS,$(OS)),LIBS="-lm") \
 			$(if $(filter ANDROID,$(OS)),LIBS="-lgnustl_shared -lm") \
-			CXXFLAGS="$(if $(filter GCC,$(COM)),$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID MACOSX,$(OS)),$(if $(filter TRUE,$(ENABLE_DBGUTIL)),-D_GLIBCXX_DEBUG),$(if $(filter WNT,$(OS)),-mthreads))) \
-			$(if $(debug),-g)" \
+			CXXFLAGS="$(cppunit_CXXFLAGS)" \
 		&& cd src \
 		&& $(MAKE) \
 	)
