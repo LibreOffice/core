@@ -120,9 +120,10 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         //Test for existence of the dictionaries
         for (unsigned int i = 0; i < [aLocales count]; i++)
         {
-            if( [macSpell setLanguage:[aLocales objectAtIndex:i] ] )
+            NSString* pLangStr = (NSString*)[aLocales objectAtIndex:i];
+            if( [macSpell setLanguage:pLangStr ] )
             {
-                postspdict.push_back( [ aLocales objectAtIndex:i ] );
+                postspdict.push_back( pLangStr );
             }
         }
 
