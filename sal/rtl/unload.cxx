@@ -17,79 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/unload.h>
+#include "sal/config.h"
 
-#include <rtl/ustring.hxx>
-#include <rtl/instance.hxx>
-#include <osl/mutex.hxx>
+#include "osl/time.h"
+#include "rtl/unload.h"
 
-using osl::MutexGuard;
+extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount *) {}
 
-//----------------------------------------------------------------------------
+extern "C" void rtl_moduleCount_release(rtl_ModuleCount *) {}
 
-#ifndef DISABLE_DYNLOADING
-
-namespace
+extern "C" sal_Bool rtl_moduleCount_canUnload(
+    rtl_StandardModuleCount *, TimeValue *)
 {
-    class theUnloadingMutex : public rtl::Static<osl::Mutex, theUnloadingMutex>{};
-}
-
-static osl::Mutex& getUnloadingMutex()
-{
-    return theUnloadingMutex::get();
-}
-
-#endif
-
-extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )
-{
-#ifdef DISABLE_DYNLOADING
-    (void) that;
-#else
-    rtl_StandardModuleCount* pMod= (rtl_StandardModuleCount*)that;
-    osl_atomic_increment( &pMod->counter);
-#endif
-}
-
-extern "C" void rtl_moduleCount_release( rtl_ModuleCount * that )
-{
-#ifdef DISABLE_DYNLOADING
-    (void) that;
-#else
-    rtl_StandardModuleCount* pMod= (rtl_StandardModuleCount*)that;
-    OSL_ENSURE( pMod->counter >0 , "library counter incorrect" );
-    osl_atomic_decrement( &pMod->counter);
-    if( pMod->counter == 0)
-    {
-        MutexGuard guard( getUnloadingMutex());
-
-        if( sal_False == osl_getSystemTime( &pMod->unusedSince) )
-        {
-            // set the time to 0 if we could not get the time
-            pMod->unusedSince.Seconds= 0;
-            pMod->unusedSince.Nanosec= 0;
-        }
-    }
-#endif
-}
-
-extern "C" sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue * libUnused)
-{
-#ifdef DISABLE_DYNLOADING
-    (void) that;
-    (void) libUnused;
-    return sal_False;
-#else
-    if (that->counter == 0)
-    {
-        MutexGuard guard( getUnloadingMutex());
-        if (libUnused && (that->counter == 0))
-        {
-            memcpy(libUnused, &that->unusedSince, sizeof(TimeValue));
-        }
-    }
-    return (that->counter == 0);
-#endif
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

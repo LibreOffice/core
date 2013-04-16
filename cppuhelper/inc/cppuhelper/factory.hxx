@@ -133,7 +133,8 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
     @param fptr function pointer for instanciating the object
     @param rImplementationName implementation name of service
     @param rServiceNames supported services
-    @param pModCount for future extension (library unloading concept).
+    @param pModCount a backwards-compatibility remainder of a removed library
+           unloading feature; always set to null
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
 SAL_CALL createSingleComponentFactory(
@@ -148,7 +149,8 @@ SAL_CALL createSingleComponentFactory(
     @param fptr function pointer for instanciating the object
     @param rImplementationName implementation name of service
     @param rServiceNames supported services
-    @param pModCount for future extension (library unloading concept).
+    @param pModCount a backwards-compatibility remainder of a removed library
+           unloading feature; always set to null
 
     @see createSingleComponentFactory
 */
@@ -175,7 +177,8 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
     @param rImplementationName  the implementation name. An empty string is possible.
     @param pCreateFunction      the function pointer to create an object.
     @param rServiceNames        the service supported by the implementation.
-    @param pModCount            for future extension (library unloading concept).
+    @param pModCount a backwards-compatibility remainder of a removed library
+           unloading feature; always set to null.
     @return a factory that support the interfaces XServiceProvider, XServiceInfo
     XSingleServiceFactory and XComponent.
 
@@ -217,7 +220,8 @@ createFactoryProxy(
     @param rComponentName       the implementation name. An empty string is possible.
     @param pCreateFunction      the function pointer to create an object.
     @param rServiceNames        the service supported by the implementation.
-    @param pModCount            for future extension (library unloading concept).
+    @param pModCount a backwards-compatibility remainder of a removed library
+           unloading feature; always set to null.
     @return a factory that support the interfaces XServiceProvider, XServiceInfo
     XSingleServiceFactory and XComponent.
 

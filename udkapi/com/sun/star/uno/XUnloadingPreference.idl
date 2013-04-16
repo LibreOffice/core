@@ -24,32 +24,12 @@
 
 module com {  module sun {  module star {  module uno {
 
-/** Components can implement <code>XUnloadingPreference</code> in order to indicate
-    how they should be treated when their hosting library is to be unloaded.
+/** Backwards-compatibility remainder of a removed library unloading feature.
 
-   When someone calls <code>rtl_unloadUnusedModules</code> then the unloading
-    listeners are notified by calling previously registered callback
-    functions. A listener is an entity that employs, registers, and
-    unregisters the callback functions on its behalf. Upon notification
-    (the callback function is being called)
-    a listener may release references to UNO components. Thus, the
-    loaded libraries can be unloaded, if no one else keeps any
-    objects from the library alive. <br>
-    Before a listener releases references, it should ask for this interface.
-    If the interface is not implemented, then the listener may release the
-    object; otherwise, it calls <code>releaseOnNotification</code>. If the function
-    returns false then the listener should keep the reference, otherwise
-    it may release it.
+    @deprecated Do not use.
 */
 published interface XUnloadingPreference: com::sun::star::uno::XInterface
 {
-    /**
-        The return value determines if the object wants to stay
-        alive in case of an unloading procedure.
-        @return
-        <FALSE/>do not release references to this object,otherwise
-        <TRUE/>
-    */
     boolean releaseOnNotification();
 };
 

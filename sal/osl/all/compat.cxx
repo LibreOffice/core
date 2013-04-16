@@ -39,6 +39,12 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_tryToAcquireSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_addUnloadingListener(
+    void (SAL_CALL *)(void *), void *)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_compareMemory(
     void const *, void const *, sal_Size)
 {
@@ -67,33 +73,24 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_moveMemory(
     std::abort();
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_zeroMemory(void *, sal_Size) {
-    std::abort();
-}
-
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL rtl_registerModuleForUnloading(oslModule)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_unregisterModuleForUnloading(oslModule)
-{
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_removeUnloadingListener(sal_Int32) {
     std::abort();
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_unloadUnusedModules(TimeValue *)
-{
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_unloadUnusedModules(TimeValue *) {
     std::abort();
 }
 
-typedef void (SAL_CALL *rtl_unloadingListenerFunc)(void *id);
-SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_addUnloadingListener(rtl_unloadingListenerFunc, void *)
-{
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_unregisterModuleForUnloading(oslModule) {
+    std::abort();
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_removeUnloadingListener(sal_Int32)
-{
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_zeroMemory(void *, sal_Size) {
     std::abort();
 }
 

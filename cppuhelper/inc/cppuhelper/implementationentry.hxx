@@ -54,6 +54,9 @@ struct ImplementationEntry
      com::sun::star::uno::Sequence< rtl::OUString > MY_FN_PTR( getSupportedServiceNames ) ();
 
     /** Function that creates a SingleComponentFactory.
+
+        The pModCount parameter is a backwards-compatibility remainder of a
+        removed library unloading feature; always set to null.
     */
      ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
      MY_FN_PTR( createFactory )(
@@ -62,8 +65,8 @@ struct ImplementationEntry
          ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
          rtl_ModuleCount * pModCount );
 
-    /** The shared-library module-counter of the implementation. Maybe 0. The module-counter
-        is used during by the createFactory()-function.
+    /** Backwards-compatibility remainder of a removed library unloading
+        feature; always set to null.
     */
      rtl_ModuleCount * moduleCounter;
 

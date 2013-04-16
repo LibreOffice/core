@@ -280,48 +280,8 @@ public:
         : OComponentHelper( aMutex )
         , OSingleFactoryHelper( rServiceManager, rImplementationName_, pCreateFunction_, fptr, pServiceNames_ )
         , bOneInstance( bOneInstance_ )
-        , pModuleCount(0)
         {
         }
-
-    // Used by the createXXXFactory functions. The argument pModCount is used to  prevent the unloading of the module
-    // which contains pCreateFunction_
-    OFactoryComponentHelper(
-        const Reference<XMultiServiceFactory > & rServiceManager,
-        const OUString & rImplementationName_,
-        ComponentInstantiation pCreateFunction_,
-        ComponentFactoryFunc fptr,
-        const Sequence< OUString > * pServiceNames_,
-        rtl_ModuleCount * pModCount,
-        sal_Bool bOneInstance_ = sal_False )
-        SAL_THROW(())
-        : OComponentHelper( aMutex )
-        , OSingleFactoryHelper( rServiceManager, rImplementationName_, pCreateFunction_, fptr, pServiceNames_ )
-        , bOneInstance( bOneInstance_ )
-        , pModuleCount(pModCount)
-        {
-            if(pModuleCount)
-                pModuleCount->acquire( pModuleCount);
-        }
-
-    // old function, only for backward compatibility
-    OFactoryComponentHelper(
-        const Reference<XMultiServiceFactory > & rServiceManager,
-        const OUString & rImplementationName_,
-        sal_Bool bOneInstance_ = sal_False )
-        SAL_THROW(())
-        : OComponentHelper( aMutex )
-        , OSingleFactoryHelper( rServiceManager, rImplementationName_ )
-        , bOneInstance( bOneInstance_ )
-        , pModuleCount(0)
-        {
-        }
-
-    ~OFactoryComponentHelper()
-    {
-        if(pModuleCount)
-            pModuleCount->release( pModuleCount);
-    }
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType )
@@ -363,7 +323,6 @@ public:
 private:
     Reference<XInterface >  xTheInstance;
     sal_Bool                bOneInstance;
-    rtl_ModuleCount *       pModuleCount;
 protected:
     // needed for implementing XUnloadingPreference in inheriting classes
     sal_Bool isOneInstance() {return bOneInstance;}
@@ -1024,11 +983,11 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     const OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
     const Sequence< OUString > & rServiceNames,
-    rtl_ModuleCount *pModCount )
+    rtl_ModuleCount * )
     SAL_THROW(())
 {
     return new OFactoryComponentHelper(
-        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_False );
+        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, sal_False );
 }
 
 // global function
@@ -1046,11 +1005,11 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
     const OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
     const Sequence< OUString > & rServiceNames,
-    rtl_ModuleCount *pModCount )
+    rtl_ModuleCount * )
     SAL_THROW(())
 {
     return new OFactoryComponentHelper(
-        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
+        rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, sal_True );
 }
 
 // global function
@@ -1080,22 +1039,22 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory
     ComponentFactoryFunc fptr,
     OUString const & rImplementationName,
     Sequence< OUString > const & rServiceNames,
-    rtl_ModuleCount * pModCount)
+    rtl_ModuleCount *)
     SAL_THROW(())
 {
     return new OFactoryComponentHelper(
-        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, pModCount, sal_False );
+        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, sal_False );
 }
 
 Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFactory(
     ComponentFactoryFunc fptr,
     OUString const & rImplementationName,
     Sequence< OUString > const & rServiceNames,
-    rtl_ModuleCount * pModCount)
+    rtl_ModuleCount *)
     SAL_THROW(())
 {
     return new OFactoryComponentHelper(
-        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, pModCount, sal_True );
+        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, sal_True );
 }
 
 }
