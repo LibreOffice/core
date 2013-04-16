@@ -123,6 +123,8 @@ void ScOrcusFactory::finalize()
 
     if (mxStatusIndicator.is())
         mxStatusIndicator->end();
+
+    maDoc.finalize();
 }
 
 size_t ScOrcusFactory::appendString(const OUString& rStr)

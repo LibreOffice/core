@@ -14,6 +14,7 @@
 #include "cell.hxx"
 #include "formulacell.hxx"
 #include "docoptio.hxx"
+#include "globalnames.hxx"
 
 ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mrDoc(rDoc) {}
 ScDocumentImport::ScDocumentImport(const ScDocumentImport& r) : mrDoc(r.mrDoc) {}
@@ -87,6 +88,37 @@ void ScDocumentImport::setFormulaCell(
 void ScDocumentImport::setFormulaCell(const ScAddress& rPos, const ScTokenArray& rArray)
 {
     insertCell(rPos, new ScFormulaCell(&mrDoc, rPos, &rArray));
+}
+
+void ScDocumentImport::finalize()
+{
+    // Populate the text width and script type arrays in all columns.
+    ScDocument::TableContainer::iterator itTab = mrDoc.maTabs.begin(), itTabEnd = mrDoc.maTabs.end();
+    for (; itTab != itTabEnd; ++itTab)
+    {
+        if (!*itTab)
+            continue;
+
+        ScTable& rTab = **itTab;
+        ScColumn* pCol = &rTab.aCol[0];
+        ScColumn* pColEnd = pCol + static_cast<size_t>(MAXCOLCOUNT);
+        for (; pCol != pColEnd; ++pCol)
+        {
+            ScColumn& rCol = *pCol;
+            if (rCol.maItems.empty())
+                // Column has no cells. Skip it.
+                continue;
+
+            ScColumn::TextWidthType::iterator itWidthPos = rCol.maTextWidths.begin();
+            ScColumn::ScriptType::iterator itScriptPos = rCol.maScriptTypes.begin();
+            std::vector<ColEntry>::iterator itCell = rCol.maItems.begin(), itCellEnd = rCol.maItems.end();
+            for (; itCell != itCellEnd; ++itCell)
+            {
+                itWidthPos = rCol.maTextWidths.set<unsigned short>(itWidthPos, itCell->nRow, TEXTWIDTH_DIRTY);
+                itScriptPos = rCol.maScriptTypes.set<unsigned short>(itScriptPos, itCell->nRow, SC_SCRIPTTYPE_UNKNOWN);
+            }
+        }
+    }
 }
 
 void ScDocumentImport::insertCell(const ScAddress& rPos, ScBaseCell* pCell)

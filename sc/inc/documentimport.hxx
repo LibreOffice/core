@@ -58,6 +58,8 @@ public:
     void setFormulaCell(const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar);
     void setFormulaCell(const ScAddress& rPos, const ScTokenArray& rArray);
 
+    void finalize();
+
 private:
     void insertCell(const ScAddress& rPos, ScBaseCell* pCell);
 };
