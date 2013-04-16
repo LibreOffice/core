@@ -482,50 +482,41 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
     // I.e. they are prefiltered to have only relevant ones?
     // Else, at least support all keywords from
     // http://www.postgresql.org/docs/9.0/interactive/libpq-connect.html
+
+    static const char* keyword_list[] = {
+        "password",
+        "user",
+        "port",
+        "dbname",
+        "connect_timeout",
+        "options",
+        "requiressl"
+    };
+
     for( int i = 0; i < args.getLength() ; ++i )
     {
-        bool append = true;
-        // TODO: rewrite this as a static table of keywords, and a loop over these keywords.
-        if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "password" ) ) )
+        bool append = false;
+        for( size_t j = 0; j < SAL_N_ELEMENTS( keyword_list ); j++)
         {
-            keywords.push_back( "password", SAL_NO_ACQUIRE );
+            if( args[i].Name.equalsIgnoreAsciiCaseAscii( keyword_list[j] ))
+            {
+                keywords.push_back( keyword_list[j], SAL_NO_ACQUIRE );
+                append = true;
+                break;
+            }
         }
-        else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) )
-        {
-            keywords.push_back( "user", SAL_NO_ACQUIRE );
-        }
-        else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "port" ) ) )
-        {
-            keywords.push_back( "port", SAL_NO_ACQUIRE );
-        }
-        else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "dbname" ) ) )
-        {
-            keywords.push_back( "dbname", SAL_NO_ACQUIRE );
-        }
-        else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "connect_timeout" ) ) )
-        {
-            keywords.push_back( "connect_timeout", SAL_NO_ACQUIRE );
-        }
-        else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "options" ) ) )
-        {
-            keywords.push_back( "options", SAL_NO_ACQUIRE );
-        }
-        else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "requiressl" ) ) )
-        {
-            keywords.push_back( "requiressl", SAL_NO_ACQUIRE );
-        }
-        else
-        {
-            append = false;
-            // ignore for now
-            OSL_TRACE("sdbc-postgresql: unknown argument '%s'", OUStringToOString( args[i].Name, RTL_TEXTENCODING_UTF8 ).getStr() );
-        }
+
         if( append )
         {
             OUString value;
             tc->convertTo( args[i].Value, getCppuType( &value) ) >>= value;
             char *v = strdup(OUStringToOString(value, enc).getStr());
             values.push_back ( v );
+        }
+        else
+        {
+            // ignore for now
+            OSL_TRACE("sdbc-postgresql: unknown argument '%s'", OUStringToOString( args[i].Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 }
