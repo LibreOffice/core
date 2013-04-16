@@ -62,6 +62,10 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, sal_Bool bE
     aBtnNamedRange.Disable();
 
     FreeResource();
+
+     // Intentionally hide this to see if someone complains. Eventually we'll
+     // remove this option.
+    aBtnExternal.Show(false);
 }
 
 ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
