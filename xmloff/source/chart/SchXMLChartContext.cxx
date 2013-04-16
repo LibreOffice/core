@@ -57,6 +57,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 
+
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 using com::sun::star::uno::Reference;
@@ -104,7 +105,7 @@ void lcl_MoveDataToCandleStickSeries(
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL( "Exception caught while moving data to candlestick series" );
+        SAL_WARN("xmloff.chart", "Exception caught while moving data to candlestick series" );
     }
 }
 
@@ -163,7 +164,7 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
     catch(const uno::Exception& ex)
     {
         OString aBStr(OUStringToOString(ex.Message, RTL_TEXTENCODING_ASCII_US));
-        OSL_TRACE( "Exception caught while removing empty chart types: %s", aBStr.getStr());
+        SAL_INFO("xmloff.chart", "Exception caught while removing empty chart types: " << aBStr);
     }
 }
 
@@ -246,7 +247,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetChartAttrTokenMap();
 
     uno::Reference< embed::XVisualObject > xVisualObject( mrImportHelper.GetChartDocument(), uno::UNO_QUERY);
-    DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
+    SAL_WARN_IF(!xVisualObject.is(), "xmloff.chart", "need xVisualObject for page size");
     if( xVisualObject.is() )
         maChartSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT ); //#i103460# take the size given from the parent frame as default
 
@@ -332,7 +333,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
     if( aOldChartTypeName.isEmpty() )
     {
-        OSL_FAIL( "need a charttype to create a diagram" );
+        SAL_WARN("xmloff.chart", "need a charttype to create a diagram" );
         //set a fallback value:
         OUString aChartClass_Bar( GetXMLToken(XML_BAR ) );
         aOldChartTypeName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, true /* bUseOldNames */ );
@@ -360,7 +361,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             }
             catch(const uno::Exception&)
             {
-                OSL_FAIL( "Exception during import SchXMLChartContext::StartElement" );
+                SAL_WARN("xmloff.chart", "Exception during import SchXMLChartContext::StartElement" );
             }
         }
     }
@@ -405,14 +406,14 @@ struct NewDonutSeries
 
     void setSeriesStyleNameToPoint( const OUString& rStyleName, sal_Int32 nPointIndex )
     {
-        DBG_ASSERT(nPointIndex < static_cast<sal_Int32>(m_aSeriesStyles.size()),"donut point <-> series count mismatch");
+        SAL_WARN_IF(nPointIndex >= static_cast<sal_Int32>(m_aSeriesStyles.size()), "xmloff.chart", "donut point <-> series count mismatch");
         if( nPointIndex < static_cast<sal_Int32>(m_aSeriesStyles.size()) )
             m_aSeriesStyles[nPointIndex]=rStyleName;
     }
 
     void setPointStyleNameToPoint( const OUString& rStyleName, sal_Int32 nPointIndex )
     {
-        DBG_ASSERT(nPointIndex < static_cast<sal_Int32>(m_aPointStyles.size()),"donut point <-> series count mismatch");
+        SAL_WARN_IF(nPointIndex >= static_cast<sal_Int32>(m_aPointStyles.size()), "xmloff.chart", "donut point <-> series count mismatch");
         if( nPointIndex < static_cast<sal_Int32>(m_aPointStyles.size()) )
             m_aPointStyles[nPointIndex]=rStyleName;
     }
@@ -698,7 +699,7 @@ void SchXMLChartContext::EndElement()
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
-                    OSL_FAIL( "Property String for Title not available" );
+                    SAL_WARN("xmloff.chart", "Property String for Title not available" );
                 }
             }
         }
@@ -715,7 +716,7 @@ void SchXMLChartContext::EndElement()
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
-                    OSL_FAIL( "Property String for Title not available" );
+                    SAL_WARN("xmloff.chart", "Property String for Title not available" );
                 }
             }
         }
@@ -816,7 +817,7 @@ void SchXMLChartContext::EndElement()
             catch(const uno::Exception&)
             {
                 //try to fallback to internal data
-                OSL_FAIL( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
+                SAL_WARN("xmloff.chart", "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
                 if(!bHasOwnData)
                 {
                     bHasOwnData = true;
@@ -831,7 +832,7 @@ void SchXMLChartContext::EndElement()
                         }
                         catch(const uno::Exception&)
                         {
-                            OSL_FAIL( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
+                            SAL_WARN("xmloff.chart", "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
                         }
                     }
                 }
@@ -840,7 +841,7 @@ void SchXMLChartContext::EndElement()
     }
     else
     {
-        OSL_FAIL( " Must not get here" );
+        SAL_WARN("xmloff.chart", "Must not get here" );
     }
 
     // now all series and data point properties are available and can be set
@@ -982,7 +983,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL( "Exception while merging series for stock chart" );
+        SAL_WARN("xmloff.chart", "Exception while merging series for stock chart" );
     }
 }
 
@@ -1083,7 +1084,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                 if( xSupp.is())
                     mxDrawPage = uno::Reference< drawing::XShapes >( xSupp->getDrawPage(), uno::UNO_QUERY );
 
-                DBG_ASSERT( mxDrawPage.is(), "Invalid Chart Page" );
+                SAL_WARN_IF( !mxDrawPage.is(), "xmloff.chart", "Invalid Chart Page" );
             }
             if( mxDrawPage.is())
                 pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
@@ -1110,7 +1111,7 @@ void SchXMLChartContext::InitChart(
     sal_Bool /* bSetSwitchData */ )
 {
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
-    DBG_ASSERT( xDoc.is(), "No valid document!" );
+    SAL_WARN_IF( !xDoc.is(), "xmloff.chart", "No valid document!" );
     uno::Reference< frame::XModel > xModel (xDoc, uno::UNO_QUERY );
 
     // Remove Title and Diagram ("De-InitNew")
