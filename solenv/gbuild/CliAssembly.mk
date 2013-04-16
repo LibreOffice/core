@@ -52,15 +52,21 @@ endef
 
 gb_CliAssemblyTarget_KEYFILE_DEFAULT := $(SRCDIR)/cli_ure/source/cliuno.snk
 
+
+# FIXME: The mono linker does not allow to define the config file defined by path
+#        The only solution is to define the name and have the file copied in the output directory
+#        Note that the file can't be removed after the "al" call because there might be race condition with other targets using the same config file
+#        Tested with mono-devel-2.6.7-0.9.1 on SLED11
 define gb_CliAssemblyTarget__command
 $(call gb_Output_announce,$(2),$(true),AL ,2)
 $(call gb_Helper_abbreviate_dirs,\
+	$(if $(filter YES,$(ENABLE_MONO_CLIMAKER)),cp $(CLI_ASSEMBLY_CONFIGFILE) $(dir $(CLI_ASSEMBLY_OUTFILE)) && ) \
 	al \
 		-nologo \
 		-out:$(CLI_ASSEMBLY_OUTFILE) \
 		-version:$(CLI_ASSEMBLY_VERSION) \
 		-keyfile:$(call gb_Helper_windows_path,$(CLI_ASSEMBLY_KEYFILE)) \
-		-link:$(CLI_ASSEMBLY_CONFIGFILE) \
+		$(if $(filter YES,$(ENABLE_MONO_CLIMAKER)),-link:$(notdir $(CLI_ASSEMBLY_CONFIGFILE)),-link:$(CLI_ASSEMBLY_CONFIGFILE) ) \
 		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) && \
 	touch $(1) \
 )
