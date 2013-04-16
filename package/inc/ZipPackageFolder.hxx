@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <HashMaps.hxx>
+#include <vector>
 #include <ZipPackageEntry.hxx>
 #include <cppuhelper/implbase2.hxx>
 
