@@ -54,6 +54,9 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(Window* pParent, bool bEnable
     // Disabled unless at least one named range exists.
     m_pLbNamedRange->Disable();
     m_pBtnNamedRange->Disable();
+
+    // Intentionally hide this button to see if anyone complains.
+    m_pBtnExternal->Show(false);
 }
 
 ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
