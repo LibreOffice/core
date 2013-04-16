@@ -24,11 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <svtools/svmedit.hxx>
 #include <svl/eitem.hxx>

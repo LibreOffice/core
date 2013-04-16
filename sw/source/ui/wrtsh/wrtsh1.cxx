@@ -33,9 +33,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#if STLPORT_VERSION>=321
 #include <math.h>   // prevent conflict between exception and std::exception
-#endif
 #include <hintids.hxx>
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>

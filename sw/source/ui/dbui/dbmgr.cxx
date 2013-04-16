@@ -23,11 +23,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#if STLPORT_VERSION>=321
-#include <cstdarg>
-#endif
 
-#include <stdio.h>
+#include <cstdarg>
+#include <cstdio>
+
 #include <unotxdoc.hxx>
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <sfx2/app.hxx>

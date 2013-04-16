@@ -28,11 +28,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#if STLPORT_VERSION<321
-#include <stddef.h>
-#else
 #include <cstddef>
-#endif
 #include <cstdio>
 
 #include <string.h>
