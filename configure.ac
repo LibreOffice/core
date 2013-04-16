@@ -3769,7 +3769,6 @@ linux-android*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARINC="$SOLARINC -I$SRC_ROOT/solenv/inc/$OUTPATH"
     SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
@@ -3801,7 +3800,7 @@ mingw*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARINC="$SOLARINC -I$SRC_ROOT/solenv/inc/win32 -I$SRC_ROOT/solenv/inc/$OUTPATH"
+    SOLARINC="$SOLARINC -I$SRC_ROOT/include/wntgcci"
     SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
@@ -3941,7 +3940,7 @@ else
     INSTDIR=${BUILDDIR}/instdir/${INPATH}
 fi
 OUTDIR="${SOLARVER}/${INPATH}"
-SOLARINC="-I. -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I${INSTDIR}/${SDKDIR}/include -I$SRC_ROOT/solenv/inc $SOLARINC"
+SOLARINC="-I. -I$SRC_ROOT/include -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I${INSTDIR}/${SDKDIR}/include $SOLARINC"
 AC_SUBST(COM)
 AC_SUBST(CPU)
 AC_SUBST(CPUNAME)
