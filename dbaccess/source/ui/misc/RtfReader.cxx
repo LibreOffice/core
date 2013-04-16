@@ -33,6 +33,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include "dbustrings.hrc"
 #include <svtools/rtftoken.h>
+#include <toolkit/helper/vclunohelper.hxx>
 #include "dbu_misc.hrc"
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbconversion.hxx>
@@ -270,7 +271,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     int nTmpToken2 = nToken;
     String aColumnName;
 
-    FontDescriptor aFont = ::dbaui::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
+    FontDescriptor aFont = VCLUnoHelper::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     do
     {
         switch(nTmpToken2)

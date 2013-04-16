@@ -182,12 +182,6 @@ namespace dbaui
     */
     SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment);
 
-    /** convert Font to ::com::sun::star::awt::FontDescriptor
-        @param  _rFont  Font to be converted
-        @return the new FontDescriptor
-    */
-    ::com::sun::star::awt::FontDescriptor CreateFontDescriptor( const Font& _rFont );
-
     /** call the format dialog and set the selected format at the column
         @param  _xAffectedCol   Font to be converted
         @param  _xField         Font to be converted

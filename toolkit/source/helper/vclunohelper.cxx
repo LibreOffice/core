@@ -305,7 +305,7 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     else if( f <= ::com::sun::star::awt::FontWeight::BLACK )
         return WEIGHT_BLACK;
 
-    OSL_FAIL( "Unknown FontWeigth" );
+    OSL_FAIL( "Unknown FontWeight" );
     return WEIGHT_DONTKNOW;
 }
 

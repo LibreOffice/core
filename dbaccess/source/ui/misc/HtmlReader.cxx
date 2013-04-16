@@ -20,6 +20,7 @@
 #include "HtmlReader.hxx"
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/tenccvt.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
@@ -439,7 +440,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     SvxCellHorJustify eVal;
 
     String aTableName;
-    FontDescriptor aFont = ::dbaui::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
+    FontDescriptor aFont = VCLUnoHelper::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     sal_Int32 nTextColor = 0;
     do
     {

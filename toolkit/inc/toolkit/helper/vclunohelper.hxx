@@ -94,7 +94,10 @@ public:
     // Polygon
     static Polygon                                  CreatePolygon( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX, const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY );
 
-    // Font
+    /** convert Font to ::com::sun::star::awt::FontDescriptor
+        @param  rFont  Font to be converted
+        @return the new FontDescriptor
+    */
     static ::com::sun::star::awt::FontDescriptor    CreateFontDescriptor( const Font& rFont );
     static Font                                     CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const Font& rInitFont );
     static Font                                     CreateFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont );
