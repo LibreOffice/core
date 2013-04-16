@@ -335,14 +335,14 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
         for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
         {
             Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[i] );
-            OSL_ASSERT( xCooSys.is());
+            SAL_WARN_IF( !xCooSys.is(), "xmloff.chart", "xCooSys is NULL" );
             for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
             {
                 const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
                 for(sal_Int32 nI=0; nI<=nMaxAxisIndex; ++nI)
                 {
                     Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension( nN, nI );
-                    OSL_ASSERT( xAxis.is());
+                    SAL_WARN_IF( !xAxis.is(), "xmloff.chart", "xAxis is NULL");
                     if( xAxis.is())
                     {
                         chart2::ScaleData aScaleData = xAxis->getScaleData();
@@ -359,11 +359,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
-                        OUString(  "Exception caught. Type: " ) +
-                        OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString(  ", Message: " ) +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
     }
 
     return xResult;
@@ -475,11 +471,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
-                        OUString(  "Exception caught. Type: " ) +
-                        OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString(  ", Message: " ) +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
     }
 
     return bResult;
@@ -923,8 +915,7 @@ lcl_TableData lcl_getDataForLocalTable(
     catch( const uno::Exception & rEx )
     {
         (void)rEx; // avoid warning for pro build
-        OSL_TRACE( OUStringToOString( OUString(
-                    "something went wrong during table data collection: " ) + rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        SAL_INFO("xmloff.chart", "something went wrong during table data collection: " << rEx.Message);
     }
 
     return aResult;
@@ -975,7 +966,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
         {
 #ifdef DBG_UTIL
             OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-            OSL_TRACE( "chart:exporting error bar ranges: %s", aBStr.getStr());
+            SAL_INFO("xmloff.chart", "chart:exporting error bar ranges: " << aBStr );
 #else
             (void)rEx; // avoid warning
 #endif
@@ -1123,7 +1114,7 @@ void SchXMLExportHelper_Impl::exportChart( Reference< chart::XChartDocument > rC
                                       sal_Bool bIncludeTable )
 {
     parseDocument( rChartDoc, sal_True, bIncludeTable );
-    DBG_ASSERT( maAutoStyleNameQueue.empty(), "There are still remaining autostyle names in the queue" );
+    SAL_WARN_IF( !maAutoStyleNameQueue.empty(), "xmloff.chart", "There are still remaining autostyle names in the queue" );
 }
 
 static OUString lcl_GetStringFromNumberSequence( const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
@@ -1157,7 +1148,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     Reference< chart2::XChartDocument > xNewDoc( rChartDoc, uno::UNO_QUERY );
     if( !rChartDoc.is() || !xNewDoc.is() )
     {
-        OSL_FAIL( "No XChartDocument was given for export." );
+        SAL_WARN("xmloff.chart", "No XChartDocument was given for export." );
         return;
     }
 
@@ -1219,7 +1210,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         }
         catch( const beans::UnknownPropertyException & )
         {
-            DBG_WARNING( "Required property not found in ChartDocument" );
+            SAL_WARN("xmloff.chart", "Required property not found in ChartDocument" );
         }
     }
 
@@ -1273,7 +1264,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         {
             enum XMLTokenEnum eXMLChartType = SchXMLTools::getTokenByChartType( sChartType, true /* bUseOldNames */ );
 
-            DBG_ASSERT( eXMLChartType != XML_TOKEN_INVALID, "invalid chart class" );
+            SAL_WARN_IF( eXMLChartType == XML_TOKEN_INVALID, "xmloff.chart", "invalid chart class" );
             if( eXMLChartType == XML_TOKEN_INVALID )
                 eXMLChartType = XML_BAR;
 
@@ -1431,7 +1422,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 }
                 catch( const beans::UnknownPropertyException & )
                 {
-                    DBG_WARNING( "Property Align not found in ChartLegend" );
+                    SAL_WARN("xmloff.chart", "Property Align not found in ChartLegend" );
                 }
 
                 // export absolute legend position
@@ -1465,7 +1456,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                     }
                     catch( const beans::UnknownPropertyException & )
                     {
-                        DBG_WARNING( "Property Expansion not found in ChartLegend" );
+                        SAL_WARN("xmloff.chart", "Property Expansion not found in ChartLegend" );
                     }
                 }
             }
@@ -1507,7 +1498,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 for( sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++ )
                 {
                     mxAdditionalShapes->getByIndex( nShapeId ) >>= xShape;
-                    DBG_ASSERT( xShape.is(), "Shape without an XShape?" );
+                    SAL_WARN_IF( !xShape.is(), "xmloff.chart",  "Shape without an XShape?" );
                     if( ! xShape.is())
                         continue;
 
@@ -1528,11 +1519,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
             catch( const uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
-                OSL_TRACE(
-                    OUStringToOString(
-                        OUString( "AdditionalShapes not found: " ) +
-                        rEx.Message,
-                        RTL_TEXTENCODING_ASCII_US ).getStr());
+                SAL_INFO("xmloff.chart", "AdditionalShapes not found: " << rEx.Message );
             }
 
             if( mxAdditionalShapes.is())
@@ -1542,11 +1529,11 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 // ZOrder which might be (actually is) larger than the number of
                 // shapes in mxAdditionalShapes
                 Reference< drawing::XDrawPageSupplier > xSupplier( rChartDoc, uno::UNO_QUERY );
-                DBG_ASSERT( xSupplier.is(), "Cannot retrieve draw page to initialize shape export" );
+                SAL_WARN_IF( !xSupplier.is(), "xmloff.chart", "Cannot retrieve draw page to initialize shape export" );
                 if( xSupplier.is() )
                 {
                     Reference< drawing::XShapes > xDrawPage( xSupplier->getDrawPage(), uno::UNO_QUERY );
-                    DBG_ASSERT( xDrawPage.is(), "Invalid draw page for initializing shape export" );
+                    SAL_WARN_IF( !xDrawPage.is(), "xmloff.chart", "Invalid draw page for initializing shape export" );
                     if( xDrawPage.is())
                         mrExport.GetShapeExport()->seekShapes( xDrawPage );
                 }
@@ -1561,7 +1548,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 for( sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++ )
                 {
                     mxAdditionalShapes->getByIndex( nShapeId ) >>= xShape;
-                    DBG_ASSERT( xShape.is(), "Shape without an XShape?" );
+                    SAL_WARN_IF( !xShape.is(), "xmloff.chart", "Shape without an XShape?" );
                     if( ! xShape.is())
                         continue;
 
@@ -1748,7 +1735,7 @@ void SchXMLExportHelper_Impl::exportTable()
                 ++aColumnDescriptions_RangeIter;
             }
         }
-        OSL_ASSERT( bHasOwnData || aColumnDescriptions_RangeIter == aColumnDescriptions_RangeEnd );
+        SAL_WARN_IF( !bHasOwnData && (aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd), "xmloff.chart", "bHasOwnData == false && aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd" );
     } // closing row and header-rows elements
 
     // export value rows
@@ -1829,8 +1816,8 @@ void SchXMLExportHelper_Impl::exportTable()
     }
 
     // if range iterator was used it should have reached its end
-    OSL_ASSERT( bHasOwnData || (aDataRangeIter == aDataRangeEndIter) );
-    OSL_ASSERT( bHasOwnData || (aRowDescriptions_RangeIter == aRowDescriptions_RangeEnd) );
+    SAL_WARN_IF( !bHasOwnData && (aDataRangeIter != aDataRangeEndIter), "xmloff.chart", "bHasOwnData == false && aDataRangeIter != aDataRangeEndIter" );
+    SAL_WARN_IF( !bHasOwnData && (aRowDescriptions_RangeIter != aRowDescriptions_RangeEnd), "xmloff.chart", "bHasOwnData == false && aRowDescriptions_RangeIter != aRowDescriptions_RangeEnd" );
 }
 
 namespace
@@ -1891,7 +1878,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     sal_Bool bExportContent,
     sal_Bool bIncludeTable )
 {
-    DBG_ASSERT( xDiagram.is(), "Invalid XDiagram as parameter" );
+    SAL_WARN_IF( !xDiagram.is(), "xmloff.chart", "Invalid XDiagram as parameter" );
     if( ! xDiagram.is())
         return;
 
@@ -1958,7 +1945,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                     }
                     catch( const beans::UnknownPropertyException & )
                     {
-                        SAL_WARN( "xmloff.chart", "Properties missing" );
+                        SAL_WARN("xmloff.chart", "Properties missing" );
                     }
                 }
             }
@@ -1986,7 +1973,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             {
 #ifdef DBG_UTIL
                 OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-                OSL_TRACE("chart:TableNumberList property caught: %s", aBStr.getStr());
+                SAL_INFO("xmloff.chart", "chart:TableNumberList property caught: " << aBStr );
 #else
                 (void)rEx; // avoid warning
 #endif
@@ -2022,7 +2009,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             {
 #ifdef DBG_UTIL
                 OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-                OSL_TRACE( "chart:exportPlotAreaException caught: %s", aBStr.getStr());
+                SAL_INFO("xmloff.chart", "chart:exportPlotAreaException caught: " << aBStr);
 #else
                 (void)rEx; // avoid warning
 #endif
@@ -2203,7 +2190,7 @@ void SchXMLExportHelper_Impl::exportCoordinateRegion( const uno::Reference< char
         return;
 
     Reference< chart::XDiagramPositioning > xDiaPos( xDiagram, uno::UNO_QUERY );
-    DBG_ASSERT( xDiaPos.is(), "Invalid xDiaPos as parameter" );
+    SAL_WARN_IF( !xDiaPos.is(), "xmloff.chart", "Invalid xDiaPos as parameter" );
     if( !xDiaPos.is() )
         return;
 
@@ -2435,7 +2422,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     const Reference< chart2::XDiagram > & xNewDiagram,
     sal_Bool bExportContent )
 {
-    DBG_ASSERT( xDiagram.is(), "Invalid XDiagram as parameter" );
+    SAL_WARN_IF( !xDiagram.is(), "xmloff.chart", "Invalid XDiagram as parameter" );
     if( ! xDiagram.is())
         return;
 
@@ -2498,7 +2485,7 @@ void SchXMLExportHelper_Impl::exportAxes(
 
     if ( ! aDiagramProperties.GetProperties ())
     {
-        DBG_WARNING ("Required properties not found in Chart diagram");
+        SAL_INFO("xmloff.chart", "Required properties not found in Chart diagram");
     }
 
     Reference< chart2::XCoordinateSystem > xCooSys( lcl_getCooSys(xNewDiagram) );
@@ -2738,11 +2725,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                             catch( const uno::Exception & rEx )
                             {
                                 (void)rEx; // avoid warning for pro build
-                                OSL_TRACE(
-                                    OUStringToOString(
-                                        OUString( "Series not found or no XPropertySet: " ) +
-                                        rEx.Message,
-                                        RTL_TEXTENCODING_ASCII_US ).getStr());
+                                SAL_INFO("xmloff.chart", "Series not found or no XPropertySet: " << rEx.Message );
                                 continue;
                             }
                             if( xPropSet.is())
@@ -2765,11 +2748,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 catch( const beans::UnknownPropertyException & rEx )
                                 {
                                     (void)rEx; // avoid warning for pro build
-                                    OSL_TRACE(
-                                        OUStringToOString(
-                                            OUString( "Required property not found in DataRowProperties: " ) +
-                                            rEx.Message,
-                                            RTL_TEXTENCODING_ASCII_US ).getStr());
+                                    SAL_INFO("xmloff.chart", "Required property not found in DataRowProperties: " << rEx.Message );
                                 }
 
                                 const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
@@ -2902,8 +2881,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         catch( const uno::Exception & rEx )
                         {
                             (void)rEx; // avoid warning for pro build
-                            OSL_TRACE( "Exception caught during Export of series - optional DataMeanValueProperties not available: %s",
-                                        OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                            SAL_INFO("xmloff.chart", "Exception caught during Export of series - optional DataMeanValueProperties not available: " << rEx.Message );
                         }
 
                         if( xStatProp.is() )
@@ -2972,8 +2950,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
     catch( const uno::Exception & rEx )
     {
         (void)rEx; // avoid warning for pro build
-        OSL_TRACE( "Exception caught during Export of series - optional DataRegressionProperties not available: %s",
-                    OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        SAL_INFO("xmloff.chart", "Exception caught during Export of series - optional DataRegressionProperties not available: " << rEx.Message );
     }
 
     if( xStatProp.is() )
@@ -3098,10 +3075,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
         catch( const beans::UnknownPropertyException & rEx )
         {
             (void)rEx; // avoid warning for pro build
-            OSL_TRACE(
-                OUStringToOString(OUString("Required property not found in DataRowProperties: " ) +
-                    rEx.Message,
-                    RTL_TEXTENCODING_ASCII_US ).getStr());
+            SAL_INFO("xmloff.chart", "Required property not found in DataRowProperties: " << rEx.Message );
         }
 
         if( nErrorBarStyle != chart::ErrorBarStyle::NONE && (bNegative || bPositive))
@@ -3314,7 +3288,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
 
         sal_Int32 nSize = aDataPointSeq.getLength();
-        DBG_ASSERT( nSize <= nSeriesLength, "Too many point attributes" );
+        SAL_WARN_IF( nSize > nSeriesLength, "xmloff.chart", "Too many point attributes" );
 
         const sal_Int32 * pPoints = aDataPointSeq.getConstArray();
         sal_Int32 nElement;
@@ -3351,8 +3325,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     catch( const uno::Exception & rEx )
                     {
                         (void)rEx; // avoid warning for pro build
-                        OSL_TRACE( "Exception caught during Export of data point: %s",
-                                    OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                        SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx.Message );
                     }
                 }
                 else
@@ -3361,7 +3334,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     xPropSet.set( new ::xmloff::chart::ColorPropertySet(
                                         xColorScheme->getColorByIndex( nElement )));
                 }
-                DBG_ASSERT( xPropSet.is(), "Pie Segments should have properties" );
+                SAL_WARN_IF( !xPropSet.is(), "xmloff.chart", "Pie Segments should have properties" );
                 if( xPropSet.is())
                 {
                     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
@@ -3377,7 +3350,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         if( bExportContent )
                         {
                             // write data-point with style
-                            DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
+                            SAL_WARN_IF( maAutoStyleNameQueue.empty(), "xmloff.chart", "Autostyle queue empty!" );
 
                             SchXMLDataPointStruct aPoint;
                             aPoint.maStyleName = maAutoStyleNameQueue.front();
@@ -3391,8 +3364,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     }
                 }
             }
-            DBG_ASSERT( !bExportContent || (static_cast<sal_Int32>(aDataPointList.size()) == nSeriesLength),
-                        "not enough data points on content export" );
+            SAL_WARN_IF( bExportContent && (static_cast<sal_Int32>(aDataPointList.size()) != nSeriesLength), "xmloff.chart", "not enough data points on content export" );
         }
         else
         {
@@ -3423,8 +3395,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 catch( const uno::Exception & rEx )
                 {
                     (void)rEx; // avoid warning for pro build
-                    OSL_TRACE( "Exception caught during Export of data point: %s",
-                                OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                    SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx.Message );
                 }
                 if( xPropSet.is())
                 {
@@ -3441,7 +3412,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         if( bExportContent )
                         {
                             // write data-point with style
-                            DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
+                            SAL_WARN_IF( maAutoStyleNameQueue.empty(), "xmloff.chart", "Autostyle queue empty!" );
                             SchXMLDataPointStruct aPoint;
                             aPoint.maStyleName = maAutoStyleNameQueue.front();
                             maAutoStyleNameQueue.pop();
@@ -3563,7 +3534,7 @@ awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartD
 {
     awt::Size aSize( 8000, 7000 );
     uno::Reference< embed::XVisualObject > xVisualObject( xChartDoc, uno::UNO_QUERY );
-    DBG_ASSERT( xVisualObject.is(),"need XVisualObject for page size" );
+    SAL_WARN_IF( !xVisualObject.is(), "xmloff.chart", "need XVisualObject for page size" );
     if( xVisualObject.is() )
         aSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
 
@@ -3580,7 +3551,7 @@ void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPrope
 {
     if( !aStates.empty() )
     {
-        DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
+        SAL_WARN_IF( maAutoStyleNameQueue.empty(), "xmloff.chart", "Autostyle queue empty!" );
 
         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME,  maAutoStyleNameQueue.front() );
         maAutoStyleNameQueue.pop();
@@ -3634,7 +3605,7 @@ void SchXMLExport::_ExportStyles( sal_Bool bUsed )
 void SchXMLExport::_ExportMasterStyles()
 {
     // not available in chart
-    DBG_WARNING( "Master Style Export requested. Not available for Chart" );
+    SAL_INFO("xmloff.chart", "Master Style Export requested. Not available for Chart" );
 }
 
 void SchXMLExport::_ExportAutoStyles()
@@ -3650,7 +3621,7 @@ void SchXMLExport::_ExportAutoStyles()
         }
         else
         {
-            OSL_FAIL( "Couldn't export chart due to wrong XModel (must be XChartDocument)" );
+            SAL_WARN("xmloff.chart", "Couldn't export chart due to wrong XModel (must be XChartDocument)" );
         }
     }
 }
@@ -3706,7 +3677,7 @@ void SchXMLExport::_ExportContent()
                         }
                         catch( const beans::UnknownPropertyException & )
                         {
-                            OSL_FAIL( "Property ChartRangeAddress not supported by ChartDocument" );
+                            SAL_WARN("xmloff.chart", "Property ChartRangeAddress not supported by ChartDocument" );
                         }
                     }
                 }
@@ -3716,7 +3687,7 @@ void SchXMLExport::_ExportContent()
     }
     else
     {
-        OSL_FAIL( "Couldn't export chart due to wrong XModel" );
+        SAL_WARN("xmloff.chart", "Couldn't export chart due to wrong XModel" );
     }
 }
 
@@ -3731,7 +3702,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
         try
         {
             Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
-            OSL_ENSURE( xDataProvider.is(), "No DataProvider" );
+            SAL_WARN_IF( !xDataProvider.is(), "xmloff.chart", "No DataProvider" );
             if( xDataProvider.is())
             {
                 Reference< chart2::data::XDataSource > xDataSource( lcl_pressUsedDataIntoRectangularFormat( xChartDoc, mbHasCategoryLabels ));
@@ -3777,11 +3748,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
         catch( const uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_FAIL( OUStringToOString(
-                            OUString(  "Exception caught. Type: " ) +
-                            OUString::createFromAscii( typeid( ex ).name()) +
-                            OUString(  ", Message: " ) +
-                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+            SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
         }
 }
 

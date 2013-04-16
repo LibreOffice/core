@@ -180,7 +180,7 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             aPropName = "HasZAxisTitle";
             break;
         case SCH_XML_AXIS_UNDEF:
-            OSL_TRACE( "Invalid axis" );
+            SAL_INFO("xmloff.chart", "Invalid axis" );
             break;
     }
     xDiaProp->setPropertyValue( aPropName, uno::makeAny(sal_True) );
@@ -217,7 +217,7 @@ void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName, bool bIsMajor )
                 aPropName = "HasZAxisHelpGrid";
             break;
         case SCH_XML_AXIS_UNDEF:
-            OSL_TRACE( "Invalid axis" );
+            SAL_INFO("xmloff.chart", "Invalid axis" );
             break;
     }
     xDiaProp->setPropertyValue( aPropName, uno::makeAny(sal_True) );
@@ -364,7 +364,7 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< frame::XModel >& xChart
     }
     catch( uno::Exception & )
     {
-        OSL_TRACE( "Couldn't get axis" );
+        SAL_INFO("xmloff.chart", "Couldn't get axis" );
     }
 
     return xAxis;
@@ -423,7 +423,7 @@ void SchXMLAxisContext::CreateAxis()
                 aPropName = "HasSecondaryXAxis";
             break;
         case SCH_XML_AXIS_UNDEF:
-            OSL_TRACE( "Invalid axis" );
+            SAL_INFO("xmloff.chart", "Invalid axis" );
             break;
     }
     try
@@ -432,7 +432,7 @@ void SchXMLAxisContext::CreateAxis()
     }
     catch( beans::UnknownPropertyException & )
     {
-        OSL_TRACE( "Couldn't turn on axis" );
+        SAL_INFO("xmloff.chart", "Couldn't turn on axis" );
     }
     if( m_aCurrentAxis.eDimension==SCH_XML_AXIS_Z )
     {
@@ -443,7 +443,7 @@ void SchXMLAxisContext::CreateAxis()
         }
         catch( beans::UnknownPropertyException & )
         {
-            OSL_TRACE( "Couldn't turn on z axis" );
+            SAL_INFO("xmloff.chart", "Couldn't turn on z axis" );
         }
         if( !bSettingZAxisSuccedded )
             return;
@@ -460,7 +460,7 @@ void SchXMLAxisContext::CreateAxis()
         }
         catch( beans::UnknownPropertyException & )
         {
-            OSL_TRACE( "Couldn't turn on x axis" );
+            SAL_INFO("xmloff.chart", "Couldn't turn on x axis" );
         }
     }
 
@@ -602,7 +602,7 @@ void SchXMLAxisContext::SetAxisTitle()
         }
         catch( beans::UnknownPropertyException & )
         {
-            OSL_TRACE( "Property String for Title not available" );
+            SAL_INFO("xmloff.chart", "Property String for Title not available" );
         }
     }
 }
