@@ -19,8 +19,8 @@
 package com.sun.star.comp.beans;
 
 /** This exception is called when a method is called which
-     needs an established connection but no connection is
-    established yet or anymore.
+    needs an established connection but no connection is
+    established yet.
 
     @since OOo 2.0.0
  */
