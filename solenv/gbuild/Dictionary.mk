@@ -371,4 +371,28 @@ $(foreach propertyfile,$(3),$(call gb_Dictionary_add_propertyfile,$(1),$(2)/$(no
 
 endef
 
+# Add a configuration file to the dictionary.
+#
+# HACK: The xcu file might come from $(WORKDIR), if we are building with
+# langs (because it is localized then), or from $(SRCDIR), if we are
+# not. So we must handle it specially.
+#
+# gb_Dictionary_add_xcufile dictionary destfile xcufile
+define gb_Dictionary_add_xcufile
+ifeq ($(gb_WITH_LANG),)
+$(call gb_Dictionary_add_file,$(1),$(2),$(3))
+else
+$(call gb_Dictionary_add_generated_file,$(1),$(2),$(call gb_XcuMergeTarget_get_target,$(3)))
+endif
+
+endef
+
+# Add several configuration file to the dictionary at once.
+#
+# gb_Dictionary_add_xcufiles dictionary destdir xcufile(s)
+define gb_Dictionary_add_xcufiles
+$(foreach xcufile,$(3),$(call gb_Dictionary_add_xcufile,$(1),$(2)/$(notdir $(xcufile)),$(xcufile)))
+
+endef
+
 # vim: set noet sw=4 ts=4:
