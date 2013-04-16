@@ -285,6 +285,20 @@ $(foreach file,$(3),$(call gb_Dictionary_add_generated_file,$(1),$(2)/$(notdir $
 
 endef
 
+# Adds a localized xcu file, which needs special handling because it may be
+# in $(WORKDIR) or $(SRCDIR) depending on whether translations are built.
+#
+# gb_Dictionary_add_localized_xcu_file dictionary destdir file
+define gb_Dictionary_add_localized_xcu_file
+ifeq ($(gb_WITH_LANG),)
+$(call gb_Dictionary__add_file,$(1),$(1),$(2),$(strip $(3)))
+else
+$(call gb_Dictionary__add_file,$(1),$(1)_generated,$(2),$(subst $(WORKDIR)/,,$(call gb_XcuFile_for_extension,$(strip $(3)))))
+$(call gb_PackageSet_add_package,$(call gb_Dictionary_get_packagesetname,$(1)),$(call gb_Dictionary_get_packagename,$(1)_generated))
+endif
+
+endef
+
 # Adds a file to the root dir of the dictionary
 #
 # gb_Dictionary_add_root_file dictionary file
