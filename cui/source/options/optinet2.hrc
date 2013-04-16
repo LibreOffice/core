@@ -72,13 +72,6 @@
 #define PB_MAILERURL                5
 #define STR_DEFAULT_FILENAME        6
 
-// plugin
-#define GB_MOZPLUGIN    1
-#define CB_MOZPLUGIN_CODE   2
-
-
 #endif // #ifndef _SVX_OPTINET_HRC
-
-// ******************************************************************* EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

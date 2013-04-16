@@ -193,8 +193,7 @@ public:
 
 class MozPluginTabPage : public SfxTabPage
 {
-    FixedLine       aMSWordGB;
-    CheckBox        aWBasicCodeCB;
+    CheckBox* m_pWBasicCodeCB;
 
     sal_Bool isInstalled(void);
     sal_Bool installPlugin(void);

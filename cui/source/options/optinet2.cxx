@@ -953,11 +953,9 @@ void SvxSecurityTabPage::Reset( const SfxItemSet& )
 }
 
 MozPluginTabPage::MozPluginTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_MOZPLUGIN ), rSet ),
-    aMSWordGB       ( this, CUI_RES( GB_MOZPLUGIN       ) ),
-    aWBasicCodeCB   ( this, CUI_RES( CB_MOZPLUGIN_CODE ) )
+    : SfxTabPage(pParent, "OptBrowserPage", "cui/ui/optbrowserpage.ui", rSet)
 {
-    FreeResource();
+    get(m_pWBasicCodeCB, "display");
 }
 
 MozPluginTabPage::~MozPluginTabPage()
@@ -972,7 +970,7 @@ SfxTabPage* MozPluginTabPage::Create( Window* pParent,
 sal_Bool MozPluginTabPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool hasInstall = isInstalled();
-    sal_Bool hasChecked = aWBasicCodeCB.IsChecked();
+    sal_Bool hasChecked = m_pWBasicCodeCB->IsChecked();
     if(hasInstall && (!hasChecked)){
         //try to uninstall
         uninstallPlugin();
@@ -988,8 +986,8 @@ sal_Bool MozPluginTabPage::FillItemSet( SfxItemSet& )
 }
 void MozPluginTabPage::Reset( const SfxItemSet& )
 {
-        aWBasicCodeCB.Check( isInstalled());
-        aWBasicCodeCB.SaveValue();
+        m_pWBasicCodeCB->Check( isInstalled());
+        m_pWBasicCodeCB->SaveValue();
 }
 
 #ifdef WNT

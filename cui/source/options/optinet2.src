@@ -28,30 +28,6 @@
 /*                                                                      */
 /************************************************************************/
 
-TabPage RID_SVXPAGE_INET_MOZPLUGIN
-{
-    HelpID = "cui:TabPage:RID_SVXPAGE_INET_MOZPLUGIN";
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-
-    FixedLine GB_MOZPLUGIN
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT (  248 , 8  ) ;
-        Text[ en-US ] = "Browser Plug-in";
-    };
-    CheckBox CB_MOZPLUGIN_CODE
-    {
-        HelpID = "cui:CheckBox:RID_SVXPAGE_INET_MOZPLUGIN:CB_MOZPLUGIN_CODE";
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT (  236 , 10  ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Display documents in browser" ;
-    };
-};
-
 TabPage RID_SVXPAGE_INET_PROXY
 {
     HelpId = HID_OPTIONS_PROXY ;
