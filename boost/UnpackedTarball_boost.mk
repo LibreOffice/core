@@ -59,6 +59,9 @@ boost_patches += boost_1_44_0-gthreads.patch
 
 boost_patches += boost_1_44_0-gcc4.8.patch
 
+# https://svn.boost.org/trac/boost/changeset/78496
+boost_patches += boost.4874.patch
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
