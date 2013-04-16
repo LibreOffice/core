@@ -618,86 +618,6 @@
         </constraints>
         <value>10000</value>
       </prop>
-      <prop oor:name="ColorValueSetMaximumRowCount" oor:type="xs:short">
-        <info>
-          <author>ALG</author>
-          <desc>Defines the maximum row count for ColorValueSets. If more rows are needed, a Scrollbar will be used.</desc>
-          <label>A Scrollbar will be used when more rows are needed.</label>
-        </info>
-        <constraints>
-          <minInclusive oor:value="10">
-            <info>
-              <desc>Specifies the minimum number of rows before a Scrollbar will be used.</desc>
-            </info>
-          </minInclusive>
-          <maxInclusive oor:value="99">
-            <info>
-              <desc>Specifies the maximum number of rows before a Scrollbar will be used.</desc>
-            </info>
-          </maxInclusive>
-        </constraints>
-        <value>40</value>
-      </prop>
-      <prop oor:name="ColorValueSetEntryEdgeLength" oor:type="xs:short">
-        <info>
-          <author>ALG</author>
-          <desc>Defines the EdgeLength in Pixels for Entries generated inside of ColorValueSets. The Entries are quadratic for Colors.</desc>
-          <label>Entries in ColorValueSets will have this quadratic size in Pixels.</label>
-        </info>
-        <constraints>
-          <minInclusive oor:value="8">
-            <info>
-              <desc>Specifies the minimum EdgeLength for Entries in ColorValueSets.</desc>
-            </info>
-          </minInclusive>
-          <maxInclusive oor:value="18">
-            <info>
-              <desc>Specifies the minimum EdgeLength for Entries in ColorValueSets.</desc>
-            </info>
-          </maxInclusive>
-        </constraints>
-        <value>14</value>
-      </prop>
-      <prop oor:name="ColorValueSetColumnCount" oor:type="xs:short">
-        <info>
-          <author>ALG</author>
-          <desc>Defines how many colums are to be used in ColorValueSets. The idea is to use this defined count to have a good visualisation in ColorValueSets which offers the used ColorTable schema nicely layouted to the User.</desc>
-          <label>The ColumnCount used in ColorValueSets.</label>
-        </info>
-        <constraints>
-          <minInclusive oor:value="12">
-            <info>
-              <desc>Specifies the perfect number of columns for ColorValueSet layout.</desc>
-            </info>
-          </minInclusive>
-          <maxInclusive oor:value="24">
-            <info>
-              <desc>Specifies a maximum number of columns for ColorValueSet layout.</desc>
-            </info>
-          </maxInclusive>
-        </constraints>
-        <value>12</value>
-      </prop>
-      <prop oor:name="EdgeBlending" oor:type="xs:short">
-        <info>
-          <author>ALG</author>
-          <desc>Option to use EdgeBlending for previews in the UI (for ColorValueSet, ColorDropDown, FillStyle/LineStyle previews, etc...). EdgeBlending will visualize a one pixel border on the preview object so that a noce 3D effect is shown. It is a percent value describing how strong the effect shall be. The value 0% switches it off, while the value 100% will cover the preview object completely on it's borders.</desc>
-          <label>Defines the EdgeBlending for Previews in percent.</label>
-        </info>
-        <constraints>
-          <minInclusive oor:value="0">
-            <info>
-              <desc>Specifies that no EdgeBlending shall happen.</desc>
-            </info>
-          </minInclusive>
-          <maxInclusive oor:value="99">
-            <info>
-              <desc>Specifies that EdgeBlending will cover the edges of Previews completely.</desc>
-            </info>
-          </maxInclusive>
-        </constraints>
-        <value>35</value>
-      </prop>
     </group>
     <group oor:name="ObjectNames">
       <info>
@@ -6288,6 +6208,53 @@
           <label>Use text selection mode in readonly texts.</label>
         </info>
         <value>false</value>
+      </prop>
+      <prop oor:name="ColorValueSetMaximumRowCount" oor:type="xs:short">
+        <info>
+          <author>ALG</author>
+          <desc>
+            Defines the maximum row count for ColorValueSets. If more rows are needed, a Scrollbar will be used.
+          </desc>
+          <label>A Scrollbar will be used when more rows are needed.</label>
+        </info>
+        <value>40</value>
+      </prop>
+      <prop oor:name="ColorValueSetEntryEdgeLength" oor:type="xs:short">
+        <info>
+          <author>ALG</author>
+          <desc>
+            Defines the EdgeLength in Pixels for Entries generated inside of ColorValueSets. The Entries are quadratic for Colors.
+           </desc>
+          <label>Entries in ColorValueSets will have this quadratic size in Pixels.</label>
+        </info>
+        <value>14</value>
+      </prop>
+      <prop oor:name="ColorValueSetColumnCount" oor:type="xs:short">
+        <info>
+          <author>ALG</author>
+          <desc>
+            Defines how many colums are to be used in ColorValueSets. The idea is to use this defined count to have a
+            good visualisation in ColorValueSets which offers the used ColorTable Schema nicely layouted to the User.
+            This Schema is layouted to a width of twelve colums, though this value should not be changed.
+          </desc>
+          <label>The ColumnCount used in ColorValueSets.</label>
+        </info>
+        <value>12</value>
+      </prop>
+      <prop oor:name="EdgeBlending" oor:type="xs:short">
+        <info>
+          <author>ALG</author>
+          <desc>
+            Option to use EdgeBlending for previews in the UI (for ColorValueSet, ColorDropDown, FillStyle/LineStyle 
+            previews, etc...). EdgeBlending will visualize a one pixel border on the preview object with interpolated
+            colors (default: TopLeft White, BottomRight Black) so that a nice 3D effect is shown. It is a percent 
+            value describing how strong the effect shall be. The value 0% switches it off, while the value 100% will 
+            cover the preview object's border completely with one pixel. Values in-between vill be alpha-blended with
+            the original preview image.
+          </desc>
+          <label>Defines the EdgeBlending for Previews in Percent.</label>
+        </info>
+        <value>35</value>
       </prop>
     </group>
     <group oor:name="ExternalApps" oor:extensible="true">
