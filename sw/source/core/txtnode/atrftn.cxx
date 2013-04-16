@@ -172,8 +172,16 @@ void SwFmtFtn::GetFtnText( XubString& rStr ) const
         if( !pCNd )
             pCNd = aIdx.GetNodes().GoNext( &aIdx );
 
-        if( pCNd->IsTxtNode() )
+        if( pCNd->IsTxtNode() ) {
             rStr = ((SwTxtNode*)pCNd)->GetExpandTxt();
+
+            ++aIdx;
+            while ( !aIdx.GetNode().IsEndNode() ) {
+                if ( aIdx.GetNode().IsTxtNode() )
+                    rStr += OUString("  ") + ((SwTxtNode*)(aIdx.GetNode().GetTxtNode()))->GetExpandTxt();
+                ++aIdx;
+            }
+        }
     }
 }
 
