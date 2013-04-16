@@ -139,28 +139,30 @@ namespace animcore
             }
         };
 
-        // A hash map which maps a XShape to the corresponding vector of initial properties
-        typedef ::boost::unordered_map< ShapeHashKey,
-                                 VectorOfNamedValues,
-                                 ::std::size_t (*)(const ShapeHashKey&) > XShapeHash;
-
-        ::std::size_t refhasher( const ShapeHashKey& rKey )
+        // A hash functor for ShapeHashKey objects
+        struct ShapeKeyHasher
         {
-            // TODO(P2): Maybe a better hash function would be to
-            // spread mnParagraphIndex to 32 bit: a0b0c0d0e0... Hakmem
-            // should have a formula.
-            //
-            // Yes it has:
-            // x = (x & 0x0000FF00) << 8) | (x >> 8) & 0x0000FF00 | x & 0xFF0000FF;
-            // x = (x & 0x00F000F0) << 4) | (x >> 4) & 0x00F000F0 | x & 0xF00FF00F;
-            // x = (x & 0x0C0C0C0C) << 2) | (x >> 2) & 0x0C0C0C0C | x & 0xC3C3C3C3;
-            // x = (x & 0x22222222) << 1) | (x >> 1) & 0x22222222 | x & 0x99999999;
-            //
-            // Costs about 17 cycles on a RISC machine with infinite
-            // instruction level parallelism (~42 basic
-            // instructions). Thus I truly doubt this pays off...
-            return reinterpret_cast< ::std::size_t >(rKey.mxRef.get()) ^ (rKey.mnParagraphIndex << 16L);
-        }
+            ::std::size_t operator()( const ShapeHashKey& rKey ) const
+            {
+                // TODO(P2): Maybe a better hash function would be to
+                // spread mnParagraphIndex to 32 bit: a0b0c0d0e0... Hakmem
+                // should have a formula.
+                //
+                // Yes it has:
+                // x = (x & 0x0000FF00) << 8) | (x >> 8) & 0x0000FF00 | x & 0xFF0000FF;
+                // x = (x & 0x00F000F0) << 4) | (x >> 4) & 0x00F000F0 | x & 0xF00FF00F;
+                // x = (x & 0x0C0C0C0C) << 2) | (x >> 2) & 0x0C0C0C0C | x & 0xC3C3C3C3;
+                // x = (x & 0x22222222) << 1) | (x >> 1) & 0x22222222 | x & 0x99999999;
+                //
+                // Costs about 17 cycles on a RISC machine with infinite
+                // instruction level parallelism (~42 basic
+                // instructions). Thus I truly doubt this pays off...
+                return reinterpret_cast< ::std::size_t >(rKey.mxRef.get()) ^ (rKey.mnParagraphIndex << 16L);
+            }
+        };
+
+        // A hash map which maps a XShape to the corresponding vector of initial properties
+        typedef ::boost::unordered_map< ShapeHashKey, VectorOfNamedValues, ShapeKeyHasher > XShapeHash;
 
 
         class NodeFunctor
@@ -419,8 +421,7 @@ namespace animcore
 
         // scan all nodes for visibility changes, and record first
         // 'visibility=true' for each shape
-        XShapeHash aShapeHash( 101,
-                               &refhasher );
+        XShapeHash aShapeHash( 101 );
 
         NodeFunctor aFunctor( aShapeHash );
 
