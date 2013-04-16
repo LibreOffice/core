@@ -21,11 +21,7 @@ gb_CliLibraryTarget_CSCFLAGS_DEBUG := \
 	-define:TRACE \
 
 ifeq ($(strip $(debug)),)
-ifeq ($(strip $(PRODUCT)),)
-gb_CliLibraryTarget__get_csflags = $(gb_CliLibraryTarget_CSCFLAGS) $(gb_CliLibraryTarget_CSCFLAGS_DEBUG)
-else
-gb_CliLibraryTarget__get_csflags = $(gb_CliLibraryTarget_CSCFLAGS) -o
-endif
+gb_CliLibraryTarget__get_csflags = $(gb_CliLibraryTarget_CSCFLAGS)
 else
 gb_CliLibraryTarget__get_csflags = $(gb_CliLibraryTarget_CSCFLAGS) $(gb_CliLibraryTarget_CSCFLAGS_DEBUG) -debug+
 endif
