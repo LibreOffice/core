@@ -431,7 +431,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,URE, \
 	$(if $(SOLAR_JAVA),sunjavaplugin) \
 	unoidl \
 	unsafe_uno \
-	$(if $(MERGELIBS),urelibs) \
+	$(if $(URELIBS),urelibs) \
 	xmlreader \
 	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(CPUNAME)),msci,mscx),gcc3)_uno \
 ))

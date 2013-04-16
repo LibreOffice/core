@@ -179,20 +179,21 @@ gb_MERGEDLIBS := \
 	xstor \
 	$(if $(filter ALL,$(MERGELIBS)),$(gb_EXTRAMERGEDLIBS))
 
+ifneq (,$(URELIBS))
 gb_URELIBS := \
+	cppu \
+	cppuhelper \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmaccess) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmfwk) \
+	purpenvhelper \
 	reg \
+	sal \
+	salhelper \
 	store \
 	unoidl \
-	xmlreader \
-	$(if $(filter ALL,$(MERGELIBS)), \
-		cppu \
-		cppuhelper \
-		purpenvhelper \
-		sal \
-		salhelper \
-	)
+	xmlreader
+
+endif
 
 endif
 
