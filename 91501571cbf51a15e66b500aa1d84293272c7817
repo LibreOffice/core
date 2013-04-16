@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///Cw\u003d",
+        "filename": "extras/ExternalPackage_accessoriesgallery.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-16T14:32:49Z",
+      "side": 1,
+      "message": "It would be nice to add the usual prefix (extras_) to the package name, but I will not block the review because of that.",
+      "revId": "91501571cbf51a15e66b500aa1d84293272c7817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///C4\u003d",
+        "filename": "extras/ExternalPackage_accessoriesgallery.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-16T14:32:49Z",
+      "side": 1,
+      "message": "gb_ExternalPackage_use_unpacked is not defined, so this line should be removed. The dependency is created already in gb_ExternalPackage_ExternalPackage.",
+      "revId": "91501571cbf51a15e66b500aa1d84293272c7817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///C0\u003d",
+        "filename": "extras/ExternalPackage_accessoriesgallery.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-16T14:32:49Z",
+      "side": 1,
+      "message": "So, this is incorrect in two ways:\n\n1. it puts the files into a wrong directory. I double-checked in scp2 and they should be directly in share/gallery.\n\n2. the source path is wrong. The source dir is the top-level dir of the unpacked tarball, i.e., $(WORKDIR)/UnpackedTarball/gallery-pack. That means that the files must be listed including a subpath: accessories/sg1010.sdg etc. This is why make complains.",
+      "revId": "91501571cbf51a15e66b500aa1d84293272c7817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
