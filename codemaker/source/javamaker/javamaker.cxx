@@ -48,12 +48,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     }
     try {
         rtl::Reference< TypeManager > typeMgr(new TypeManager);
-        if (!typeMgr->init(
-                options.getInputFiles(), options.getExtraInputFiles()))
-        {
-            std::cerr << "Initialization of registries failed\n";
-            return EXIT_FAILURE;
-        }
         for (std::vector< rtl::OString >::const_iterator i(
                  options.getExtraInputFiles().begin());
              i != options.getExtraInputFiles().end(); ++i)

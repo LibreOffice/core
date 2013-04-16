@@ -20,7 +20,11 @@
 #ifndef INCLUDED_CODEMAKER_COMMONJAVA_HXX
 #define INCLUDED_CODEMAKER_COMMONJAVA_HXX
 
-#include "codemaker/codemaker.hxx"
+#include "sal/config.h"
+
+#include "codemaker/unotype.hxx"
+
+namespace rtl { class OString; }
 
 namespace codemaker { namespace java {
 

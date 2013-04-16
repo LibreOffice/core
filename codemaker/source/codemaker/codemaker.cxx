@@ -17,36 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sal/config.h"
 
 #include "codemaker/codemaker.hxx"
-
-#include "codemaker/options.hxx"
-#include "codemaker/typemanager.hxx"
-#include "codemaker/unotype.hxx"
-
-#include "osl/diagnose.h"
-#include "registry/reader.hxx"
-#include "registry/types.h"
-#include "rtl/strbuf.h"
-#include "rtl/string.h"
+#include "codemaker/global.hxx"
 #include "rtl/string.hxx"
+#include "rtl/textcvt.h"
+#include "rtl/textenc.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
-
-#include <vector>
 
 namespace codemaker {
 
-rtl::OString convertString(rtl::OUString const & string) {
-    rtl::OString s;
+OString convertString(OUString const & string) {
+    OString s;
     if (!string.convertToString(
             &s, RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
              | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
-        throw CannotDumpException("Failure converting string from UTF-16 to UTF-8");
+        throw CannotDumpException(
+            "Failure converting string from UTF-16 to UTF-8");
     }
     return s;
 }

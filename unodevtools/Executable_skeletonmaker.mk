@@ -34,7 +34,6 @@ $(eval $(call gb_Executable_set_include,uno-skeletonmaker,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,uno-skeletonmaker,\
-    reg \
     sal \
     salhelper \
     unoidl \

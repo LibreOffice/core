@@ -29,7 +29,6 @@ $(eval $(call gb_Executable_Executable,javamaker))
 $(eval $(call gb_Executable_use_external,javamaker,boost_headers))
 
 $(eval $(call gb_Executable_use_libraries,javamaker,\
-    reg \
     sal \
     salhelper \
     unoidl \

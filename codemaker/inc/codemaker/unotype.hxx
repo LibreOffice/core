@@ -48,7 +48,6 @@ namespace UnoType {
         SORT_STRING,
         SORT_TYPE,
         SORT_ANY,
-
         SORT_SEQUENCE_TYPE,
         SORT_MODULE,
         SORT_ENUM_TYPE,
@@ -63,24 +62,9 @@ namespace UnoType {
         SORT_ACCUMULATION_BASED_SERVICE,
         SORT_INTERFACE_BASED_SINGLETON,
         SORT_SERVICE_BASED_SINGLETON
-
-        ,SORT_COMPLEX=SORT_SEQUENCE_TYPE //TODO
     };
 
-    /** TODO
-       Maps from a binary UNO type name or UNO type registry name to its type
-       sort.
-
-       @param type a binary UNO type name or UNO type registry name
-
-       @return the sort of the UNO type denoted by the given type; the detection
-       of the correct sort is purely syntactical (especially, if the given input
-       is a UNO type registry name that denotes something other than a UNO type,
-       SORT_COMPLEX is returned)
-     */
-    Sort getSort(rtl::OString const & type);
-
-    /** TODO
+    /**
        Decomposes a UNO type name or UNO type registry name.
 
        @param type a binary UNO type name or UNO type registry name

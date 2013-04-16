@@ -28,6 +28,7 @@
 #include <utility>
 #include <vector>
 
+#include "codemaker/codemaker.hxx"
 #include "codemaker/exceptiontree.hxx"
 #include "codemaker/generatedtypeset.hxx"
 #include "codemaker/global.hxx"

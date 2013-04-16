@@ -26,26 +26,6 @@
 
 #include <vector>
 
-codemaker::UnoType::Sort codemaker::UnoType::getSort(OString const & type)
-{
-    return type == "void" ? SORT_VOID
-        : type == "boolean" ? SORT_BOOLEAN
-        : type == "byte" ? SORT_BYTE
-        : type == "short" ? SORT_SHORT
-        : type == "unsigned short" ? SORT_UNSIGNED_SHORT
-        : type == "long" ? SORT_LONG
-        : type == "unsigned long" ? SORT_UNSIGNED_LONG
-        : type == "hyper" ? SORT_HYPER
-        : type == "unsigned hyper" ? SORT_UNSIGNED_HYPER
-        : type == "float" ? SORT_FLOAT
-        : type == "double" ? SORT_DOUBLE
-        : type == "char" ? SORT_CHAR
-        : type == "string" ? SORT_STRING
-        : type == "type" ? SORT_TYPE
-        : type == "any" ? SORT_ANY
-        : SORT_COMPLEX;
-}
-
 OString codemaker::UnoType::decompose(
     OString const & type, sal_Int32 * rank,
     std::vector< OString > * arguments)

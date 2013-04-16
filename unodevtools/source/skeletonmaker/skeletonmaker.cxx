@@ -18,6 +18,7 @@
  */
 #include <iostream>
 
+#include "codemaker/global.hxx"
 #include "codemaker/typemanager.hxx"
 #include "sal/main.h"
 #include "rtl/process.h"

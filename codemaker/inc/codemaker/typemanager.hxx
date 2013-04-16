@@ -20,18 +20,17 @@
 #ifndef INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 #define INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 
-#include "codemaker/global.hxx"
-#include "codemaker/unotype.hxx"
-#include "registry/registry.hxx"
-#include "registry/types.h"
-#include "rtl/ref.hxx"
-#include "salhelper/simplereferenceobject.hxx"
+#include "sal/config.h"
 
-#include <boost/unordered_map.hpp>
-#include <list>
 #include <vector>
 
-namespace typereg { class Reader; }
+#include "codemaker/unotype.hxx"
+#include "rtl/ref.hxx"
+#include "rtl/string.hxx"
+#include "rtl/textenc.h"
+#include "rtl/ustring.hxx"
+#include "salhelper/simplereferenceobject.hxx"
+
 namespace unoidl {
     class Entity;
     class Manager;
@@ -39,45 +38,9 @@ namespace unoidl {
     class Provider;
 }
 
-//typedef ::std::list< Registry* >  RegistryList;
-typedef ::std::vector< Registry* >  RegistryList;
-typedef ::std::pair< RegistryKey, sal_Bool >    KeyPair;
-typedef ::std::vector< KeyPair >    RegistryKeyList;
-
-typedef ::boost::unordered_map
-<
-    ::rtl::OString, // Typename
-    RTTypeClass,    // TypeClass
-    HashString,
-    EqualString
-> T2TypeClassMap;
-
-class TypeManager : public salhelper::SimpleReferenceObject
-{
+class TypeManager: public salhelper::SimpleReferenceObject {
 public:
     TypeManager();
-
-    sal_Bool init(const StringVector& regFiles, const StringVector& extraFiles = StringVector() );
-
-    ::rtl::OString getTypeName(RegistryKey& rTypeKey) const;
-
-    sal_Bool    isValidType(const ::rtl::OString& name) const
-        { return searchTypeKey(name, 0).isValid(); }
-    RegistryKey getTypeKey(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const
-        { return searchTypeKey(name, pIsExtraType); }
-    RegistryKeyList getTypeKeys(const ::rtl::OString& name) const;
-    typereg::Reader getTypeReader(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
-    typereg::Reader getTypeReader(RegistryKey& rTypeKey) const;
-    RTTypeClass getTypeClass(const ::rtl::OString& name) const;
-    RTTypeClass getTypeClass(RegistryKey& rTypeKey) const;
-
-    void setBase(const ::rtl::OString& base);
-    ::rtl::OString getBase() const { return m_base; }
-
-    sal_Int32 getSize() const { return m_t2TypeClass.size(); }
-
 
     void loadProvider(OUString const & uri, bool primary);
 
@@ -95,28 +58,19 @@ public:
 private:
     virtual ~TypeManager();
 
-    RegistryKey searchTypeKey(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
-    void        freeRegistries();
-
-    mutable T2TypeClassMap m_t2TypeClass;
-    RegistryList    m_registries;
-    RegistryList    m_extra_registries;
-    ::rtl::OString  m_base;
-
     rtl::Reference< unoidl::Manager > manager_;
     std::vector< rtl::Reference< unoidl::Provider > > primaryProviders_;
 };
 
 
-inline rtl::OString u2b(rtl::OUString const & s) {
-    return rtl::OUStringToOString(s, RTL_TEXTENCODING_UTF8);
+inline OString u2b(OUString const & s) {
+    return OUStringToOString(s, RTL_TEXTENCODING_UTF8);
 }
 
-inline rtl::OUString b2u(rtl::OString const & s) {
-    return rtl::OStringToOUString(s, RTL_TEXTENCODING_UTF8);
+inline OUString b2u(OString const & s) {
+    return OStringToOUString(s, RTL_TEXTENCODING_UTF8);
 }
 
-#endif // INCLUDED_CODEMAKER_TYPEMANAGER_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

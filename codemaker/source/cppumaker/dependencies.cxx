@@ -23,6 +23,7 @@
 #include <utility>
 #include <vector>
 
+#include "codemaker/global.hxx"
 #include "codemaker/typemanager.hxx"
 #include "codemaker/unotype.hxx"
 

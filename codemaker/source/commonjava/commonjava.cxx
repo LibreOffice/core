@@ -27,8 +27,6 @@
 #include "codemaker/unotype.hxx"
 
 #include "osl/diagnose.h"
-#include "registry/reader.hxx"
-#include "registry/types.h"
 #include "rtl/strbuf.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"

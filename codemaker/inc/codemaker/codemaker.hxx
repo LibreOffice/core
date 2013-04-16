@@ -21,18 +21,11 @@
 #define INCLUDED_CODEMAKER_CODEMAKER_HXX
 
 #include "sal/config.h"
-#include "codemaker/unotype.hxx"
-#include "registry/types.h"
-#include "rtl/ref.hxx"
-#include "sal/types.h"
-
-#include <vector>
 
 namespace rtl {
     class OString;
     class OUString;
 }
-class TypeManager;
 
 namespace codemaker {
 

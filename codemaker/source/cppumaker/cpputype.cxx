@@ -3357,9 +3357,9 @@ void ServiceType::dumpHxxFile(
                                  i->parameters.begin());
                          j != i->parameters.end(); ++j)
                     {
-                        if (codemaker::UnoType::getSort(
-                                codemaker::UnoType::decompose(
-                                    u2b(j->type), 0, 0))
+                        if (m_typeMgr->getSort(
+                                b2u(codemaker::UnoType::decompose(
+                                        u2b(j->type), 0, 0)))
                             == codemaker::UnoType::SORT_CHAR)
                         {
                             includes.addCppuUnotypeHxx();
@@ -3506,9 +3506,9 @@ void ServiceType::dumpHxxFile(
                                 u2b(j->name), "param",
                                 codemaker::cpp::ITM_NONGLOBAL));
                         sal_Int32 rank;
-                        if (codemaker::UnoType::getSort(
-                                codemaker::UnoType::decompose(
-                                    u2b(j->type), &rank, 0))
+                        if (m_typeMgr->getSort(
+                                b2u(codemaker::UnoType::decompose(
+                                        u2b(j->type), &rank, 0)))
                             == codemaker::UnoType::SORT_CHAR)
                         {
                             o << "= ::com::sun::star::uno::Any(&" << param

@@ -21,7 +21,9 @@
 
 #include <cstring>
 
+#include "codemaker/codemaker.hxx"
 #include "codemaker/commonjava.hxx"
+#include "codemaker/global.hxx"
 
 #include "skeletoncommon.hxx"
 #include "skeletonjava.hxx"

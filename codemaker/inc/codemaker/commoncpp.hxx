@@ -20,7 +20,14 @@
 #ifndef INCLUDED_CODEMAKER_COMMONCPP_HXX
 #define INCLUDED_CODEMAKER_COMMONCPP_HXX
 
-#include "codemaker/codemaker.hxx"
+#include "sal/config.h"
+
+#include "codemaker/unotype.hxx"
+
+namespace rtl {
+    class OString;
+    class OUString;
+}
 
 namespace codemaker { namespace cpp {
 
