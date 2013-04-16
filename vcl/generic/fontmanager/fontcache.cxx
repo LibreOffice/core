@@ -264,10 +264,10 @@ void FontCache::read()
     do
     {
         aStream.ReadLine( aLine );
-        if( aLine.compareTo( "FontCacheDirectory:" ) == 0 ||
-            aLine.compareTo( "EmptyFontCacheDirectory:" ) == 0 )
+        if( aLine == "FontCacheDirectory:" ||
+            aLine == "EmptyFontCacheDirectory:" )
         {
-            bool bEmpty = (aLine.compareTo( "Empty" ) == 0);
+            bool bEmpty = (aLine == "Empty" );
             sal_Int32 nSearchIndex = bEmpty ? 24 : 19;
 
             OString aDir;
@@ -309,7 +309,7 @@ void FontCache::read()
                 m_aCache[ nDir ].m_bUserOverrideOnly = bKeepOnlyUserOverridden;
             }
         }
-        else if( pDir && aLine.compareTo( "File:" ) == 0 )
+        else if( pDir && aLine == "File:")
         {
             OString aFile( aLine.copy( 5 ) );
             aStream.ReadLine( aLine );

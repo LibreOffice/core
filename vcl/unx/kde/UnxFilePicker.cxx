@@ -660,7 +660,7 @@ sal_Bool SAL_CALL UnxFilePicker::supportsService( const OUString& ServiceName )
 
     for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
     {
-        if ( SupportedServicesNames[n].compareTo( ServiceName ) == 0 )
+        if ( SupportedServicesNames[n] == ServiceName )
             return sal_True;
     }
 
