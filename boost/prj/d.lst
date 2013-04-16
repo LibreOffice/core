@@ -1037,8 +1037,9 @@ mkdir: %_DEST%\inc%_EXT%\boost\xpressive\traits\detail
 ..\%__SRC%\inc\boost\math\special_functions\detail\* %_DEST%\inc%_EXT%\boost\math\special_functions\detail
 ..\%__SRC%\inc\boost\math\tools\* %_DEST%\inc%_EXT%\boost\math\tools
 ..\%__SRC%\inc\boost\math\tools\detail\* %_DEST%\inc%_EXT%\boost\math\tools\detail
-..\%__SRC%\inc\boost\mpi\collectives\* %_DEST%\inc%_EXT%\boost\mpi\collectives
+..\%__SRC%\inc\boost\move\* %_DEST%\inc%_EXT%\boost\move
 ..\%__SRC%\inc\boost\mpi\* %_DEST%\inc%_EXT%\boost\mpi
+..\%__SRC%\inc\boost\mpi\collectives\* %_DEST%\inc%_EXT%\boost\mpi\collectives
 ..\%__SRC%\inc\boost\mpi\detail\* %_DEST%\inc%_EXT%\boost\mpi\detail
 ..\%__SRC%\inc\boost\mpi\python\* %_DEST%\inc%_EXT%\boost\mpi\python
 ..\%__SRC%\inc\boost\mpl\aux_\config\* %_DEST%\inc%_EXT%\boost\mpl\aux_\config
