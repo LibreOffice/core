@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///EQ\u003d",
+        "filename": "bean/com/sun/star/comp/beans/OOoBean.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2013-04-16T12:53:57Z",
+      "side": 1,
+      "message": "I before E except after C",
+      "revId": "1d019afc8471aa1652e19a6701aa6cf063fd09c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///EM\u003d",
+        "filename": "bean/com/sun/star/comp/beans/OOoBean.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2013-04-16T12:53:57Z",
+      "side": 1,
+      "message": "Rather just fix the spelling and the call-sites in a follow-up patch",
+      "revId": "1d019afc8471aa1652e19a6701aa6cf063fd09c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
