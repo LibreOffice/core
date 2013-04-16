@@ -60,7 +60,6 @@
 
 
 using namespace ::std;
-using namespace ::boost;
 using namespace ::sw::mark;
 
 namespace
@@ -363,39 +362,39 @@ namespace sw { namespace mark
             " - creating duplicate CrossRefBookmark");
 
         // create mark
-        pMark_t pMark;
+        MarkBase* pMarkBase = NULL;
         switch(eType)
         {
             case IDocumentMarkAccess::TEXT_FIELDMARK:
-                pMark = shared_ptr<IMark>(new TextFieldmark(rPaM));
+                pMarkBase = new TextFieldmark(rPaM);
                 break;
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
-                pMark = shared_ptr<IMark>(new CheckboxFieldmark(rPaM));
+                pMarkBase = new CheckboxFieldmark(rPaM);
                 break;
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:
-                pMark = shared_ptr<IMark>(new NavigatorReminder(rPaM));
+                pMarkBase = new NavigatorReminder(rPaM);
                 break;
             case IDocumentMarkAccess::BOOKMARK:
-                pMark = shared_ptr<IMark>(new Bookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMarkBase = new Bookmark(rPaM, KeyCode(), rName, ::rtl::OUString());
                 break;
             case IDocumentMarkAccess::DDE_BOOKMARK:
-                pMark = shared_ptr<IMark>(new DdeBookmark(rPaM));
+                pMarkBase = new DdeBookmark(rPaM);
                 break;
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-                pMark = shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMarkBase = new CrossRefHeadingBookmark(rPaM, KeyCode(), rName, ::rtl::OUString());
                 break;
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-                pMark = shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMarkBase = new CrossRefNumItemBookmark(rPaM, KeyCode(), rName, ::rtl::OUString());
                 break;
             case IDocumentMarkAccess::UNO_BOOKMARK:
-                pMark = shared_ptr<IMark>(new UnoMark(rPaM));
+                pMarkBase = new UnoMark(rPaM);
                 break;
         }
-        OSL_ENSURE(pMark.get(),
+        OSL_ENSURE( pMarkBase!=NULL,
             "MarkManager::makeMark(..)"
             " - Mark was not created.");
-        MarkBase* pMarkBase = dynamic_cast<MarkBase*>(pMark.get());
 
+        pMark_t pMark = boost::shared_ptr<IMark>( pMarkBase);
         if(pMark->GetMarkPos() != pMark->GetMarkStart())
             pMarkBase->Swap();
 
@@ -762,7 +761,7 @@ namespace sw { namespace mark
         iterator_t pMarkHigh = m_vMarks.end();
         iterator_t pMarkFound = find_if(
             pMarkLow, pMarkHigh,
-            bind(equal_to<const IMark*>(), bind(&shared_ptr<IMark>::get, _1), pMark));
+            bind(equal_to<const IMark*>(), bind(&boost::shared_ptr<IMark>::get, _1), pMark));
         if(pMarkFound != pMarkHigh)
             deleteMark(pMarkFound);
     }
