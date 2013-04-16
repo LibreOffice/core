@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+9A\u003d",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-16T23:09:44Z",
+      "side": 1,
+      "message": "Almost correct, but this is \"aToken !\u003d aPpmMarker\".\n\ncompareTo returns 0 if they are equal, but zero is false as boolean. So this is only entered if the strings are unequal.",
+      "revId": "ac779d4235062f25e834f0fcfbc59133efa8d4e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
