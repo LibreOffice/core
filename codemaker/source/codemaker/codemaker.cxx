@@ -37,17 +37,6 @@
 
 #include <vector>
 
-namespace {
-
-void checkNoTypeArguments(std::vector< rtl::OString > const & arguments) {
-    if (!arguments.empty()) {
-        throw CannotDumpException("Bad type information");
-            //TODO
-    }
-}
-
-}
-
 namespace codemaker {
 
 rtl::OString convertString(rtl::OUString const & string) {
