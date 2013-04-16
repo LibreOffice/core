@@ -49,6 +49,8 @@
 #include <tools/urlobj.hxx>
 #include <tools/tenccvt.hxx>
 
+#include <rtl/tencinfo.h>
+
 #include "htmlpars.hxx"
 #include "global.hxx"
 #include "document.hxx"
