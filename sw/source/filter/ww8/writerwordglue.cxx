@@ -22,30 +22,30 @@
 #include <doc.hxx>
 #include "writerhelper.hxx"
 
-#include <algorithm>                //std::find_if
-#include <functional>               //std::unary_function
+#include <algorithm>
+#include <functional>
 
 #include <rtl/tencinfo.h>
 
-#include <unicode/ubidi.h>          //ubidi_getLogicalRun
-#include <tools/tenccvt.hxx>        //GetExtendedTextEncoding
-#include <com/sun/star/i18n/ScriptType.hpp> //ScriptType
+#include <unicode/ubidi.h>
+#include <tools/tenccvt.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
-#include <unotools/fontcvt.hxx>  //GetSubsFontName
-#include <editeng/paperinf.hxx>  //lA0Width...
-#include <editeng/lrspitem.hxx>  //SvxLRSpaceItem
-#include <editeng/ulspitem.hxx>  //SvxULSpaceItem
-#include <editeng/boxitem.hxx>   //SvxBoxItem
-#include <editeng/fontitem.hxx>  //SvxFontItem
-#include <frmfmt.hxx>            //SwFrmFmt
-#include <fmtclds.hxx>           //SwFmtCol
-#include <hfspacingitem.hxx>     //SwHeaderAndFooterEatSpacingItem
-#include <fmtfsize.hxx>          //SwFmtFrmSize
-#include <swrect.hxx>            //SwRect
-#include <fmthdft.hxx>           //SwFmtHeader/SwFmtFooter
-#include <frmatr.hxx>            //GetLRSpace...
-#include <ndtxt.hxx>             //SwTxtNode
-#include <breakit.hxx>           //pBreakIt
+#include <unotools/fontcvt.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <frmfmt.hxx>
+#include <fmtclds.hxx>
+#include <hfspacingitem.hxx>
+#include <fmtfsize.hxx>
+#include <swrect.hxx>
+#include <fmthdft.hxx>
+#include <frmatr.hxx>
+#include <ndtxt.hxx>
+#include <breakit.hxx>
 #include <i18nlangtag/mslangid.hxx>
 
 #define ASSIGN_CONST_ASC(s) AssignAscii(s)
