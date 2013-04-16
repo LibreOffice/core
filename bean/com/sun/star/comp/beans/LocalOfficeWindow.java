@@ -44,6 +44,7 @@ import com.sun.star.beans.NamedValue;
  *
  * @since OOo 2.0.0
  */
+@SuppressWarnings("deprecation")
 public class LocalOfficeWindow
     extends java.awt.Canvas
     implements OfficeWindow, XEventListener
