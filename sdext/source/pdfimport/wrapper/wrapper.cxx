@@ -297,7 +297,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath( double* pArea = NULL
 {
     const OString aSubPathMarker( "subpath" );
 
-    if( 0 != readNextToken().compareTo( aSubPathMarker ) )
+    if( readNextToken() != aSubPathMarker )
         OSL_PRECOND(false, "broken path");
 
     basegfx::B2DPolyPolygon aResult;
@@ -313,7 +313,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath( double* pArea = NULL
         sal_Int32 nDummy=m_nCharIndex;
         OString aCurrToken( m_aLine.getToken(m_nNextToken,' ',nDummy) );
 
-        while( m_nCharIndex != -1 && 0 != aCurrToken.compareTo(aSubPathMarker) )
+        while( m_nCharIndex != -1 && aCurrToken != aSubPathMarker )
         {
             sal_Int32 nCurveFlag;
             double    nX, nY;
@@ -634,15 +634,15 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
     const sal_Int32 nImageSize( readInt32() );
 
     OUString           aFileName;
-    if( aToken.compareTo( aPngMarker ) == 0 )
+    if( aToken == aPngMarker )
         aFileName = aPngFile;
-    else if( aToken.compareTo( aJpegMarker ) == 0 )
+    else if( aToken == aJpegMarker )
         aFileName = aJpegFile;
-    else if( aToken.compareTo( aPbmMarker ) == 0 )
+    else if( aToken == aPbmMarker )
         aFileName = aPbmFile;
     else
     {
-        SAL_WARN_IF(aToken.compareTo( aPpmMarker ),"sdext.pdfimport","Invalid bitmap format");
+        SAL_WARN_IF(aToken != aPpmMarker,"sdext.pdfimport","Invalid bitmap format");
         aFileName = aPpmFile;
     }
 
