@@ -26,7 +26,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     OutputSize = TRUE ;
     HelpId = HID_DATAPILOT_TYPE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 241 , 76 ) ;
+    Size = MAP_APPFONT ( 241 , 63 ) ;
     Moveable = TRUE ;
     Closeable = FALSE ;
 
