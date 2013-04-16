@@ -2056,6 +2056,7 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
         }
         break;
     }
+    SC_MOD()->SetInputMode( SC_INPUT_TABLE );
 }
 
 void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
