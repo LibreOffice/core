@@ -74,7 +74,7 @@ sal_Int32 Client::run(css::uno::Sequence< OUString > const &)
     css::uno::Reference< css::lang::XMultiComponentFactory > factory(
         context->getServiceManager());
     if (!factory.is()) {
-        throw new css::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             OUString( "no component context service manager" ),
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -94,7 +94,7 @@ sal_Int32 Client::run(css::uno::Sequence< OUString > const &)
     }
     relay->start(this);
     if (!data.setData(reinterpret_cast< void * >(12345))) {
-        throw new css::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             OUString( "osl::ThreadData::setData failed" ),
             static_cast< cppu::OWeakObject * >(this));
     }

@@ -63,7 +63,7 @@ sal_Int32 Server::get() throw (css::uno::RuntimeException) {
     css::uno::Reference< css::lang::XMultiComponentFactory > factory(
         context->getServiceManager());
     if (!factory.is()) {
-        throw new css::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             OUString( "no component context service manager" ),
             static_cast< cppu::OWeakObject * >(this));
     }
