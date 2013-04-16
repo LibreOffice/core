@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///Ew\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3943,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-16T12:21:17Z",
+      "side": 1,
+      "message": "hmm.. can you move SRC_ROOT/include first, before SOLARVER? it should help prevent incremental build breakage if somebody modifies a header that somebody else moves.",
+      "revId": "10b6fdd5b2c9633e94bbf81121c27e31aa21ec8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
