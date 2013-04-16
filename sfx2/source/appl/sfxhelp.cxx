@@ -56,6 +56,7 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>
@@ -68,6 +69,8 @@
 #include <sfx2/frame.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -291,12 +294,19 @@ class SfxHelp_Impl
 private:
     SfxHelpOptions_Impl* m_pOpt; // the options
 
+    typedef std::map< OUString, OUString > IdToTextType;
+    typedef std::map< OUString, IdToTextType > ModuleToTooltipsType;
+    ModuleToTooltipsType maToolTips;
+
+    OUString GetHelpText_Impl( const OUString& rCommandURL, const OUString& rModule );
+    IdToTextType loadHelpStrings( const OUString& rModule );
+
 public:
     SfxHelp_Impl();
     ~SfxHelp_Impl();
 
-    SfxHelpOptions_Impl*    GetOptions();
-    static OUString         GetHelpText( const OUString& aCommandURL, const OUString& rModule );
+    SfxHelpOptions_Impl* GetOptions();
+    OUString GetHelpText( const OUString& aCommandURL, const OUString& rModule );
 };
 
 SfxHelp_Impl::SfxHelp_Impl() :
@@ -309,17 +319,72 @@ SfxHelp_Impl::~SfxHelp_Impl()
     delete m_pOpt;
 }
 
+std::map<OUString, OUString> SfxHelp_Impl::loadHelpStrings( const OUString& rModule)
+{
+    OUString lang = utl::ConfigManager::getLocale().replace('-','_');
+    SAL_WARN("sfx2.appl", lang);
+    IdToTextType aRet;
+    OUString uri("$BRAND_BASE_DIR/help/tooltip/");
+    rtl::Bootstrap::expandMacros(uri);
+    OUString aFileURL = uri + rModule + "_" + lang + ".properties";
+    SAL_WARN("sfx2.appl", "file url: " << aFileURL);
+    boost::scoped_ptr<SvFileStream> pStrm( new SvFileStream( aFileURL, (STREAM_READ| STREAM_SHARE_DENYWRITE | STREAM_NOCREATE) ) );
+    if( pStrm->GetError() == 0 )
+    {
+        bool bRead = true;
+        while(bRead)
+        {
+            OUString aLine;
+            bRead = pStrm->ReadByteStringLine(aLine, RTL_TEXTENCODING_UTF8);
+            if(bRead)
+            {
+                sal_Int32 nIndex = 0;
+                OUString aId = aLine.getToken(0, '=', nIndex);
+                SAL_WARN_IF(nIndex == -1, "sfx.appl", "not a valid line");
+                if(nIndex != -1)
+                {
+                    OUString aValue = aLine.copy(nIndex);
+                    aRet.insert( std::pair< OUString, OUString >( aId, aValue ) );
+                    //SAL_WARN("sfx2.appl", "added help string with id: " << aId << " and value: " << aValue);
+                }
+            }
+        }
+    }
+    else
+    {
+        SAL_WARN("sfx2.appl", "problem opening tooltip file: " << aFileURL);
+    }
+
+    return aRet;
+}
+
+OUString SfxHelp_Impl::GetHelpText_Impl( const OUString& rCommandURL, const OUString& rModule )
+{
+    ModuleToTooltipsType::const_iterator itr = maToolTips.find(rModule);
+
+    if(itr == maToolTips.end())
+    {
+        IdToTextType aHelpTexts = loadHelpStrings(rModule);
+        itr = maToolTips.insert( std::pair< OUString, IdToTextType >( rModule, aHelpTexts ) ).first;
+    }
+
+    assert(itr != maToolTips.end());
+
+    IdToTextType::const_iterator it = itr->second.find(rCommandURL);
+    if(it != itr->second.end())
+        return it->second;
+
+    SAL_WARN("sfx2.appl", "could not find help text for " << rCommandURL << " in Module: " << rModule);
+    return OUString();
+}
+
 OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString& rModule )
 {
-    // create help url
-    OUStringBuffer aHelpURL( SfxHelp::CreateHelpURL( aCommandURL, rModule ) );
-    // added 'active' parameter
-    sal_Int32 nIndex = aHelpURL.lastIndexOf( '#' );
-    if ( nIndex < 0 )
-        nIndex = aHelpURL.getLength();
-    aHelpURL.insert( nIndex, "&Active=true" );
-    // load help string
-    return SfxContentHelper::GetActiveHelpString( aHelpURL.makeStringAndClear() );
+    OUString aHelpText = GetHelpText_Impl( aCommandURL, rModule );
+    if(aHelpText.isEmpty())
+        aHelpText = GetHelpText_Impl( aCommandURL, "shared" );
+
+    return aHelpText;
 }
 
 SfxHelpOptions_Impl* SfxHelp_Impl::GetOptions()
