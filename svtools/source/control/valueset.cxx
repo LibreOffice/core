@@ -38,7 +38,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/ustring.hxx>
-
+#include <svtools/accessibilityoptions.hxx>
 #include "valueimp.hxx"
 
 #define _SV_VALUESET_CXX
@@ -284,6 +284,25 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
         {
             maVirDev.SetFillColor( pItem->maColor );
             maVirDev.DrawRect( aRect );
+
+            const SvtAccessibilityOptions aOptions;
+            const sal_Int16 nEdgeBlendingPercent(aOptions.GetEdgeBlending());
+            static bool bTest(false);
+
+            if(nEdgeBlendingPercent && bTest)
+            {
+                Bitmap aBitmap(maVirDev.GetBitmap(aRect.TopLeft(), aRect.GetSize()));
+
+                if(!aBitmap.IsEmpty())
+                {
+                    const Color aTopLeft(COL_WHITE);
+                    const Color aBottomRight(COL_BLACK);
+                    const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+
+                    aBitmap.DrawBlendFrame(nAlpha, aTopLeft, aBottomRight);
+                    maVirDev.DrawBitmap(aRect.TopLeft(), aBitmap);
+                }
+            }
         }
         else
         {

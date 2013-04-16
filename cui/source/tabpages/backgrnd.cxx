@@ -1236,11 +1236,13 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     const Size aCurrentSizeContainer(aBorderWin.GetOutputSizePixel());
     const Size aCurrentSizeContent(aBackgroundColorSet.GetOutputSizePixel());
     const Size aNewSizeContent(aBackgroundColorSet.layoutToGivenHeight(aCurrentSizeContent.Height() - 4, nColorCount));
-    const Size aNewSizeContainer(aNewSizeContent.Width() + 4, aNewSizeContent.Height() + 4);
+    static sal_Int32 nAdd = 4;
+    const Size aNewSizeContainer(aNewSizeContent.Width() + nAdd, aNewSizeContent.Height() + nAdd);
     const Point aNewPos((aCurrentPosContainer.X() + aCurrentSizeContainer.Width()) - aNewSizeContainer.Width(), aCurrentPosContainer.Y());
 
     aBorderWin.SetOutputSizePixel(aNewSizeContainer);
     aBackgroundColorSet.SetOutputSizePixel(aNewSizeContent);
+    aBackgroundColorSet.SetPosSizePixel(Point(nAdd/2, nAdd/2), aNewSizeContent);
     aBorderWin.SetPosSizePixel(aNewPos, aNewSizeContainer);
 }
 
