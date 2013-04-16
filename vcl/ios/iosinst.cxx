@@ -165,6 +165,12 @@ public:
         IosSalInstance::getInstance()->GetWorkArea( rRect );
     }
 
+    void ShowFullScreen( sal_Bool, sal_Int32 )
+    {
+        SetPosSize( 0, 0, viewWidth, viewHeight,
+                    SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
+    }
+
     virtual void damaged( const basegfx::B2IBox& rDamageRect )
     {
         if (rDamageRect.isEmpty())
@@ -276,7 +282,10 @@ IMPL_LINK( IosSalInstance, DisplayConfigurationChanged, void*, )
     for( std::list< SalFrame* >::const_iterator it = getFrames().begin();
          it != getFrames().end();
          it++ ) {
+        (*it)->Show( sal_False, sal_False );
         (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, 0 );
+        (*it)->SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
+        (*it)->Show( sal_True, sal_False );
     }
 
     lo_damaged( CGRectMake( 0, 0, viewWidth, viewHeight ) );

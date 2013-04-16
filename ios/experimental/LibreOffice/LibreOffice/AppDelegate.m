@@ -62,6 +62,8 @@ static View *theView;
 
     [self.window addGestureRecognizer: tapRecognizer];
 
+    NSLog(@"statusBarOrientation: %d", [[UIApplication sharedApplication] statusBarOrientation]);
+
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
         lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);
     else

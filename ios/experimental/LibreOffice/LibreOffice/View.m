@@ -15,8 +15,9 @@
 - (void)drawRect:(CGRect)rect
 {
     NSLog(@"drawRect: %dx%d@(%d,%d)", (int) rect.size.width, (int) rect.size.height, (int) rect.origin.x, (int) rect.origin.y);
+    NSLog(@"statusBarOrientation: %d", [[UIApplication sharedApplication] statusBarOrientation]);
 
-    NSDate *startDate = [NSDate date];
+    // NSDate *startDate = [NSDate date];
 
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
@@ -27,23 +28,22 @@
         CGContextScaleCTM(context, 1, -1);
         break;
     case UIInterfaceOrientationLandscapeLeft:
-        CGContextTranslateCTM(context, self.frame.size.width, self.frame.size.height);
-        CGContextRotateCTM(context, M_PI/2);
-        CGContextScaleCTM(context, -1, 1);
+        CGContextTranslateCTM(context, 0, self.frame.size.width);
+        CGContextScaleCTM(context, 1, -1);
         break;
     case UIInterfaceOrientationLandscapeRight:
-        CGContextRotateCTM(context, -M_PI/2);
-        CGContextScaleCTM(context, -1, 1);
+        CGContextTranslateCTM(context, 0, self.frame.size.width);
+        CGContextScaleCTM(context, 1, -1);
         break;
     case UIInterfaceOrientationPortraitUpsideDown:
-        CGContextTranslateCTM(context, self.frame.size.width, 0);
-        CGContextScaleCTM(context, -1, 1);
+        CGContextTranslateCTM(context, 0, self.frame.size.height);
+        CGContextScaleCTM(context, 1, -1);
         break;
     }
     lo_render_windows(context, rect);
     CGContextRestoreGState(context);
 
-    NSLog(@"drawRect: lo_render_windows took %f s", [[NSDate date] timeIntervalSinceDate: startDate]);
+    // NSLog(@"drawRect: lo_render_windows took %f s", [[NSDate date] timeIntervalSinceDate: startDate]);
 }
 
 - (void) tapGesture:(UIGestureRecognizer *)gestureRecognizer

@@ -25,6 +25,13 @@
     NSLog(@"  frame=%dx%d@(%d,%d)", (int)rect.size.width, (int)rect.size.height, (int)rect.origin.x, (int)rect.origin.y);
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    (void) fromInterfaceOrientation;
+
+    NSLog(@"didRotateFromInterfaceOrientation: statusBarOrientation: %d interfaceOrientation: %d", [[UIApplication sharedApplication] statusBarOrientation], [self interfaceOrientation]);
+}
+
 @end
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:
