@@ -89,6 +89,10 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 aKey)
                 continue;
 
             String aLine( GetTextEngine()->GetText( aPara ) );
+
+            if (aLine.Len() == 0)
+                continue;
+
             for (sal_uInt16 i = ((unsigned long)aPara==nStartPara) ? aStartPos-1 : (sal_uInt16)(aLine.Len()-1); i>0; --i)
             {
                 if (aLine.GetChar(i)==aChar)
