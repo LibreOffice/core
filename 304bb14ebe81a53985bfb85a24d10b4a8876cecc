@@ -16,6 +16,24 @@
       "revId": "304bb14ebe81a53985bfb85a24d10b4a8876cecc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///A8\u003d",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000334
+      },
+      "writtenOn": "2013-04-16T18:13:22Z",
+      "side": 1,
+      "message": "Yep, I didn’t fixed it because I don’t know what this macros does — maybe it needs number as a parameter returned via compareTo :-?",
+      "parentUuid": "AAAAXH///BM\u003d",
+      "revId": "304bb14ebe81a53985bfb85a24d10b4a8876cecc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
