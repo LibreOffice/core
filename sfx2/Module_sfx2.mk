@@ -23,6 +23,9 @@ $(eval $(call gb_Module_add_targets,sfx2,\
     AllLangResTarget_sfx2 \
     Library_sfx \
     Package_inc \
+	CustomTarget_tooltip \
+	Package_tooltip \
+	Package_tooltip_properties \
     Package_sdi \
     UIConfig_sfx \
 ))

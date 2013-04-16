@@ -478,6 +478,8 @@ Module gid_Module_Root_Files_6
         gid_File_Share_Config_Sofficecfg_uiconfig_uui,
         gid_File_Share_Config_Sofficecfg_uiconfig_vcl,
         gid_File_Share_Config_Sofficecfg_uiconfig_xmlsec,
+        gid_File_SharedTooltips,
+        gid_File_SharedTooltipsEn,
 	gid_File_Dtd_Accelerator,
 	gid_File_Dtd_Dialog,
 	gid_File_Dtd_Event,
