@@ -113,7 +113,7 @@ namespace toolkit
     {
         Window* pWindow = i_rOwningWindow.GetWindow();
         if ( !pWindow )
-            throw new RuntimeException();
+            throw RuntimeException();
         pWindow->AddEventListener( LINK( m_pData.get(), WindowStyleSettings_Data, OnWindowEvent ) );
     }
 

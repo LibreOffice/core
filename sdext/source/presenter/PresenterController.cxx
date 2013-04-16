@@ -115,7 +115,7 @@ PresenterController::PresenterController (
     OSL_ASSERT(mxController.is());
 
     if ( ! mxSlideShowController.is())
-        throw new lang::IllegalArgumentException(
+        throw lang::IllegalArgumentException(
             "missing slide show controller",
             static_cast<XWeak*>(this),
             2);
