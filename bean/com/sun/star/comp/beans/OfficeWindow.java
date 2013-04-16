@@ -23,8 +23,8 @@ import java.awt.Component;
 import com.sun.star.awt.XWindowPeer;
 
 /**
- * The concreate implementation of the OfficeWindow extends an
- * approperate type of visual component (java.awt.Canvas for local
+ * The concrete implementation of the OfficeWindow extends an
+ * appropriate type of visual component (java.awt.Canvas for local
  * and java.awt.Container for remote).
 
     @deprecated
@@ -32,14 +32,14 @@ import com.sun.star.awt.XWindowPeer;
 public interface OfficeWindow
 {
     /**
-     * Retrives an AWT component object associated with the OfficeWindow.
+     * Retrieves an AWT component object associated with the OfficeWindow.
      *
      * @return The AWT component object associated with the OfficeWindow.
      */
     Component getAWTComponent();
 
     /**
-     * Retrives an UNO XWindowPeer object associated with the OfficeWindow.
+     * Retrieves an UNO XWindowPeer object associated with the OfficeWindow.
      *
      * @return The UNO XWindowPeer object associated with the OfficeWindow.
      */

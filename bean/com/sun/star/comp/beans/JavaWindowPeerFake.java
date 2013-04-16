@@ -25,7 +25,7 @@ import com.sun.star.awt.*;
  *
  * @since OOo 2.0.0
  */
-/* package */ class JavaWindowPeerFake
+class JavaWindowPeerFake
     implements XSystemDependentWindowPeer, XWindowPeer
 {
      protected int localSystemType;
@@ -44,7 +44,7 @@ import com.sun.star.awt.*;
     /** <p>Implementation of XSystemDependentWindowPeer (that's all we really need)</p>
      *  This method is called back from the OpenOffice.org toolkit to retrieve the system data.
      */
-    public Object getWindowHandle(/*IN*/byte[] ProcessId, /*IN*/short SystemType)
+    public Object getWindowHandle(/*IN*/ byte[] ProcessId, /*IN*/ short SystemType)
         throws com.sun.star.uno.RuntimeException
     {
         if (SystemType == localSystemType) {
@@ -63,28 +63,28 @@ import com.sun.star.awt.*;
 
     /** not really neaded.
      */
-    public void setPointer(/*IN*/XPointer Pointer)
+    public void setPointer(/*IN*/ XPointer Pointer)
         throws com.sun.star.uno.RuntimeException
     {
     }
 
     /** not really neaded.
      */
-    public void setBackground(/*IN*/int Color)
+    public void setBackground(/*IN*/ int Color)
         throws com.sun.star.uno.RuntimeException
     {
     }
 
     /** not really neaded.
      */
-    public void invalidate(/*IN*/short Flags)
+    public void invalidate(/*IN*/ short Flags)
         throws com.sun.star.uno.RuntimeException
     {
     }
 
     /** not really neaded.
      */
-    public void invalidateRect(/*IN*/com.sun.star.awt.Rectangle Rect, /*IN*/short Flags)
+    public void invalidateRect(/*IN*/ com.sun.star.awt.Rectangle Rect, /*IN*/ short Flags)
         throws com.sun.star.uno.RuntimeException
     {
     }
@@ -98,14 +98,14 @@ import com.sun.star.awt.*;
 
     /** not really neaded.
      */
-    public void addEventListener(/*IN*/com.sun.star.lang.XEventListener xListener)
+    public void addEventListener(/*IN*/ com.sun.star.lang.XEventListener xListener)
         throws com.sun.star.uno.RuntimeException
     {
     }
 
     /** not really neaded.
      */
-    public void removeEventListener(/*IN*/com.sun.star.lang.XEventListener aListener)
+    public void removeEventListener(/*IN*/ com.sun.star.lang.XEventListener aListener)
         throws com.sun.star.uno.RuntimeException
     {
     }

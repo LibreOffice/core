@@ -50,8 +50,7 @@ public class OOoBean
 
     // @requirement FUNC.BEAN.VIEW/0.4
     // @requirement FUNC.BEAN.EDIT/0.4
-    // This member contains the OOo window
-    // if a connection is established.
+    // This member contains the OOo window if a connection is established.
     // It is a child of the OOoBean canvas.
     private OfficeWindow xFrameWindow;
 
@@ -146,7 +145,7 @@ public class OOoBean
         nOOoCallTimeOut = nMilliSecs;
     }
 
-    /** Sets the period length in milli seconds to check the OOo connection.
+    /** Sets the period length in milliseconds to check the OOo connection.
 
         This method does not need a connection to an OOo instance.
      */
@@ -155,7 +154,7 @@ public class OOoBean
         nOOoCheckCycle = nMilliSecs;
     }
 
-    /** Sets the a connection to an OOo instance.
+    /** Sets a connection to an OOo instance.
 
         @internal
      */
@@ -209,8 +208,8 @@ public class OOoBean
 
         @deprecated This method is not useful in a multithreaded environment. Then
         all threads accessing the instance would have to be synchronized in order to
-        make is method work. It is better
-        to call OOoBean's methods and be prepared to catch a NoConnectionException.
+        make is method work. It is better to call OOoBean's methods and be prepared
+        to catch a NoConnectionException.
      */
     public boolean isOOoConnected()
     {
@@ -247,16 +246,15 @@ public class OOoBean
 
     // @requirement FUNC.CON.STOP/0.4 (via XComponent.dispose())
        // @requirement FUNC.CON.NTFY/0.4 (via XComponent.addEventListener())
-    /** Returns the a connection to an OOo instance.
+    /** Returns a connection to an OOo instance.
 
         If no connection exists, a default connection will be created. An OfficeConnection
         can be used to register listeners of type com.sun.star.lang.EventListener,
-        which are notified when the connection to the
-        office dies. One should not call the dispose method, because this may result
-        in receiving com.sun.star.lang.DisposedExceptions when calling
-        {@link #stopOOoConnection stopOOoConnection} or other API methods. If other instances share the
-        same connection then they will stop function properly, because they loose their
-        connection as well. The recommended way to end the connection is
+        which are notified when the connection to the office dies. One should not call the
+        dispose method, because this may result in receiving com.sun.star.lang.DisposedExceptions
+        when calling {@link #stopOOoConnection stopOOoConnection} or other API methods. If other
+        instances share the same connection then they will stop function properly, because
+        they lose their connection as well. The recommended way to end the connection is by
         calling {@link #stopOOoConnection stopOOoConnection}.
 
         @throws NoConnectionException
@@ -378,8 +376,8 @@ public class OOoBean
         {
             CallWatchThread aCallWatchThread =
                 new CallWatchThread( nOOoCallTimeOut, "clear" );
-            //By closing the frame we avoid that dialogs are displayed, for example when
-            //the document is modified.
+            // By closing the frame we avoid that dialogs are displayed, for example when
+            // the document is modified.
             com.sun.star.util.XCloseable xCloseable = UnoRuntime.queryInterface( com.sun.star.util.XCloseable.class, aFrame );
             if ( xCloseable != null )
             {
@@ -446,16 +444,17 @@ public class OOoBean
         was made visible (java.lang.Component.setVisible(true)).
         <p>
         Another scenario is that a OOoBean contains a document and is removed
-        from a Java container and later added again. Then aquireSystemWindow needs
+        from a Java container and later added again. Then acquireSystemWindow needs
         to be called after the container window is displayed.
+        <p>
 
         @throws SystemWindowException
-            if no system window can be aquired.
+            if no system window can be acquired.
 
         @throws NoConnectionException
             if the connection is not established.
      */
-    public synchronized void aquireSystemWindow()
+    public synchronized void acquireSystemWindow()
         throws
             SystemWindowException,
 
@@ -482,7 +481,7 @@ public class OOoBean
         from it's parent container.
 
         @throws SystemWindowException
-            if system window is not aquired.
+            if system window is not acquired.
 
         @throws NoConnectionException
             if the connection is not established.
@@ -608,14 +607,14 @@ public class OOoBean
                                 ") without com.sun.star.frame.XComponentLoader" );
                     }
 
-                    // Avoid Dialog 'Document changed' while reloading
+                    // Avoid dialog 'Document changed' while reloading
                     if ( aDocument != null )
                     {
                         try {
                             aDocument.setModified(false);
                         } catch (com.sun.star.beans.PropertyVetoException ep) {
-                            //it dosn't make sense to throw the exception here. The interface does not
-                            //offer a way to add/remove respective listeners.
+                            // it doesn't make sense to throw the exception here. The interface does not
+                            // offer a way to add/remove respective listeners.
                         } catch (com.sun.star.lang.DisposedException ed) {
                             // can be disposed if user closed document via UI
                         }
@@ -643,10 +642,9 @@ public class OOoBean
                             "MacroExecutionMode", -1,
                             new Short( com.sun.star.document.MacroExecMode.USE_CONFIG ),
                             com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
-                                    //String fn = aFRame.getName();
 
                     com.sun.star.lang.XComponent xComponent = xLoader.loadComponentFromURL(
-                        aURL, /*aFrame.getName()*/"_self", 0, aArgs );
+                        aURL, "_self", 0, aArgs );
 
                     // nothing loaded?
                     if ( xComponent == null && aDocument != null )
@@ -660,7 +658,6 @@ public class OOoBean
                         throw new java.io.IOException(
                             "Can not load a document: \"" + aURL + "\"");
                     }
-                    // mDocumentURL = aURL; TBD: still needed?
 
                     // Get document's XModifiable interface if any.
                     aDocument = new OfficeDocument(
@@ -717,13 +714,8 @@ public class OOoBean
             com.sun.star.util.CloseVetoException
     {
         // wrap Java stream into UNO stream
-                /*
-        com.sun.star.io.XInputStream xStream =
-                new com.sun.star.lib.uno.adapter.InputStreamToXInputStreamAdapter(
-                    iInStream );
-                 */
-                 // copy stream....
 
+                 // copy stream....
                  int s = 4096;
                  int r=0 ,n = 0;
                  byte[] buffer = new byte[s];
@@ -1002,9 +994,9 @@ public class OOoBean
 
     /** Sets visibility of all tool bars known by this OOoBean version.
 
-         Initially all tool bars are visible.  By hiding all tool bars
+        Initially all tool bars are visible.  By hiding all tool bars
         utilizing this method, it is possible to turn just a subset of
-        tool bars on afterwards, no matter whether all available tool
+        toolbars on afterwards, no matter whether all available tool
         bars are known or not.
         <p>
         If an older OOoBean instance is used with a newer OOo instance,
@@ -1147,7 +1139,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
       /** Returns the visibility of the menu bar.
 
-           This method works independently from a connetion or loaded document.
+        This method works independently from a connection or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1195,7 +1187,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
       /** Returns the visibility of the main function bar.
 
-           This method works independently from a connetion or loaded document.
+           This method works independently from a connection or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1243,7 +1235,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
       /** Returns the visibility of the tool function bar.
 
-           This method works independently from a connetion or loaded document.
+           This method works independently from a conneiction or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1291,7 +1283,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
       /**   Returns the visibility of the status function bar.
 
-           This method works independently from a connetion or loaded document.
+           This method works independently from a connection or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1492,7 +1484,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 catch ( java.lang.InterruptedException aExc )
                 {
                     dbgPrint("EventListener(" + aTag + ") interupted.");
-                    //thread can be ended by EvendListener.end();
+                    // thread can be ended by EvendListener.end();
                     break;
                 }
             }
@@ -1500,6 +1492,3 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
     }
 
 }
-
-
-
