@@ -479,18 +479,15 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
 
         // Fenstertitel anpassen
         sOldDialogText = m_pWindow->GetText();
-        if (pRefBtn)
+        if (Window *pLabel = pRefEdit->GetLabelWidgetForShrinkMode())
         {
-            if (Window *pLabel = pRefBtn->GetLabelWidgetForShrinkMode())
+            OUString sLabel = pLabel->GetText();
+            if (!sLabel.isEmpty())
             {
-                OUString sLabel = pLabel->GetText();
-                if (!sLabel.isEmpty())
-                {
-                    String sNewDialogText = sOldDialogText;
-                    sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-                    sNewDialogText += sLabel;
-                    m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
-                }
+                String sNewDialogText = sOldDialogText;
+                sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
+                sNewDialogText += sLabel;
+                m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
             }
         }
 

@@ -34,6 +34,7 @@ class FORMULA_DLLPUBLIC RefEdit : public Edit
 private:
     Timer               aTimer;
     IControlReferenceHandler*      pAnyRefDlg;         // parent dialog
+    Window*             pLabelWidget;
 
     DECL_LINK( UpdateHdl, void* );
 
@@ -43,8 +44,10 @@ protected:
     virtual void        LoseFocus();
 
 public:
-                        RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId );
-                        RefEdit( Window* _pParent, WinBits nStyle = WB_BORDER );
+                        RefEdit( Window* _pParent,IControlReferenceHandler* pParent,
+                            Window* pShrinkModeLabel, const ResId& rResId );
+                        RefEdit( Window* _pParent, Window* pShrinkModeLabel,
+                            WinBits nStyle = WB_BORDER );
     virtual             ~RefEdit();
 
     void                SetRefString( const XubString& rStr );
@@ -61,8 +64,9 @@ public:
 
     void                StartUpdateData();
 
-    void                SetRefDialog( IControlReferenceHandler* pDlg );
+    void                SetReferences( IControlReferenceHandler* pDlg, Window *pLabelWidget );
     IControlReferenceHandler* GetRefDialog() { return pAnyRefDlg; }
+    Window*             GetLabelWidgetForShrinkMode() { return pLabelWidget; }
 };
 
 
@@ -77,7 +81,6 @@ private:
     OUString            aExpandQuickHelp;
     IControlReferenceHandler*      pAnyRefDlg;     // parent dialog
     RefEdit*            pRefEdit;       // zugeordnetes Edit-Control
-    Window*             pLabelWidget;
 
 protected:
     virtual void        Click();
@@ -89,16 +92,14 @@ public:
                         RefButton(Window* _pParent, const ResId& rResId);
                         RefButton(Window* _pParent, WinBits nStyle = 0);
                         RefButton(Window* _pParent, const ResId& rResId,
-                                  RefEdit* pEdit, Window* pShrinkModeLabel,
-                                  IControlReferenceHandler* pDlg);
+                                  RefEdit* pEdit, IControlReferenceHandler* pDlg);
 
     void                SetReferences( IControlReferenceHandler* pDlg,
-                                       RefEdit* pEdit, Window* pShrinkModeLabel );
+                                       RefEdit* pEdit );
 
     void                SetStartImage();
     void                SetEndImage();
     void                DoRef() { Click(); }
-    Window*             GetLabelWidgetForShrinkMode() { return pLabelWidget; }
 };
 
 } // formula

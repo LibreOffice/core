@@ -60,15 +60,15 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 {
     get(m_pFtFormulaCell, "formulatext");
     get(m_pEdFormulaCell, "formulaedit");
-    m_pEdFormulaCell->SetRefDialog(this);
+    m_pEdFormulaCell->SetReferences(this, m_pFtFormulaCell);
     get(m_pRBFormulaCell, "formulabutton");
-    m_pRBFormulaCell->SetReferences(this, m_pEdFormulaCell, m_pFtFormulaCell),
+    m_pRBFormulaCell->SetReferences(this, m_pEdFormulaCell),
     get(m_pEdTargetVal, "target");
     get(m_pFtVariableCell, "vartext");
     get(m_pEdVariableCell, "varedit");
-    m_pEdVariableCell->SetRefDialog(this);
+    m_pEdVariableCell->SetReferences(this, m_pFtVariableCell);
     get(m_pRBVariableCell, "varbutton");
-    m_pRBVariableCell->SetReferences(this, m_pEdVariableCell, m_pFtVariableCell);
+    m_pRBVariableCell->SetReferences(this, m_pEdVariableCell);
     get(m_pBtnOk, "ok");
     get(m_pBtnCancel, "cancel");
     Init();

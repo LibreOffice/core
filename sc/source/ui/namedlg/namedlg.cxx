@@ -66,8 +66,9 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 {
     get(m_pEdName, "name");
     get(m_pEdAssign, "range");
+    m_pEdAssign->SetReferences(this, m_pEdName);
     get(m_pRbAssign, "assign");
-    m_pRbAssign->SetReferences(this, m_pEdAssign, m_pEdName);
+    m_pRbAssign->SetReferences(this, m_pEdAssign);
     get(m_pLbScope, "scope");
     get(m_pBtnPrintArea, "printrange");
     get(m_pBtnColHeader, "colheader");

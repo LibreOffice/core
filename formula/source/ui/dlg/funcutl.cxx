@@ -87,7 +87,7 @@ void ValWnd::SetValue( const String& rStrVal )
 //----------------------------------------------------------------------------
 
 ArgEdit::ArgEdit( Window* pParent, const ResId& rResId )
-    :   RefEdit( pParent, NULL, rResId ),
+    :   RefEdit( pParent, NULL, NULL, rResId ),
         pEdPrev ( NULL ),
         pEdNext ( NULL ),
         pSlider ( NULL ),
@@ -847,17 +847,20 @@ void EditBox::UpdateOldSel()
 
 #define SC_ENABLE_TIME 100
 
-RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId )
+RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent,
+    Window* pShrinkModeLabel, const ResId& rResId )
     : Edit( _pParent, rResId )
     , pAnyRefDlg( pParent )
+    , pLabelWidget(pShrinkModeLabel)
 {
     aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
     aTimer.SetTimeout( SC_ENABLE_TIME );
 }
 
-RefEdit::RefEdit( Window* _pParent, WinBits nStyle )
+RefEdit::RefEdit( Window* _pParent, Window* pShrinkModeLabel, WinBits nStyle )
     : Edit( _pParent, nStyle )
     , pAnyRefDlg( NULL )
+    , pLabelWidget(pShrinkModeLabel)
 {
     aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
     aTimer.SetTimeout( SC_ENABLE_TIME );
@@ -865,7 +868,7 @@ RefEdit::RefEdit( Window* _pParent, WinBits nStyle )
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRefEdit(Window *pParent, VclBuilder::stringmap &)
 {
-    return new RefEdit(pParent, WB_BORDER);
+    return new RefEdit(pParent, NULL, WB_BORDER);
 }
 
 RefEdit::~RefEdit()
@@ -904,9 +907,10 @@ void RefEdit::StartUpdateData()
     aTimer.Start();
 }
 
-void RefEdit::SetRefDialog( IControlReferenceHandler* pDlg )
+void RefEdit::SetReferences( IControlReferenceHandler* pDlg, Window* pLabel )
 {
     pAnyRefDlg = pDlg;
+    pLabelWidget = pLabel;
 
     if( pDlg )
     {
@@ -967,8 +971,7 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId) :
     aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
     aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( NULL ),
-    pRefEdit( NULL ),
-    pLabelWidget( NULL )
+    pRefEdit( NULL )
 {
     SetStartImage();
 }
@@ -980,8 +983,7 @@ RefButton::RefButton( Window* _pParent, WinBits nStyle ) :
     aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
     aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( NULL ),
-    pRefEdit( NULL ),
-    pLabelWidget( NULL )
+    pRefEdit( NULL )
 {
     SetStartImage();
 }
@@ -991,15 +993,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRefButton(Window *pParent, 
     return new RefButton(pParent, 0);
 }
 
-RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, Window* pShrinkModeLabel, IControlReferenceHandler* _pDlg ) :
+RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, IControlReferenceHandler* _pDlg ) :
     ImageButton( _pParent, rResId ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
     aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
     aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
     aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( _pDlg ),
-    pRefEdit( pEdit ),
-    pLabelWidget( pShrinkModeLabel )
+    pRefEdit( pEdit )
 {
     SetStartImage();
 }
@@ -1016,11 +1017,10 @@ void RefButton::SetEndImage()
     SetQuickHelpText( aExpandQuickHelp );
 }
 
-void RefButton::SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit, Window* pShrinkModeLabel )
+void RefButton::SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit )
 {
     pAnyRefDlg = pDlg;
     pRefEdit = pEdit;
-    pLabelWidget = pShrinkModeLabel;
 }
 
 //----------------------------------------------------------------------------

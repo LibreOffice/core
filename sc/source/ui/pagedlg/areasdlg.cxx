@@ -109,18 +109,18 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
         //
         aFlPrintArea    ( this, ScResId( FL_PRINTAREA ) ),
         aLbPrintArea    ( this, ScResId( LB_PRINTAREA ) ),
-        aEdPrintArea    ( this, this, ScResId( ED_PRINTAREA ) ),
-        aRbPrintArea    ( this, ScResId( RB_PRINTAREA ), &aEdPrintArea, &aFlPrintArea, this ),
+        aEdPrintArea    ( this, this, &aFlPrintArea, ScResId( ED_PRINTAREA ) ),
+        aRbPrintArea    ( this, ScResId( RB_PRINTAREA ), &aEdPrintArea, this ),
         //
         aFlRepeatRow    ( this, ScResId( FL_REPEATROW ) ),
         aLbRepeatRow    ( this, ScResId( LB_REPEATROW ) ),
-        aEdRepeatRow    ( this, this, ScResId( ED_REPEATROW ) ),
-        aRbRepeatRow    ( this, ScResId( RB_REPEATROW ), &aEdRepeatRow, &aFlRepeatRow, this ),
+        aEdRepeatRow    ( this, this, &aFlRepeatRow, ScResId( ED_REPEATROW ) ),
+        aRbRepeatRow    ( this, ScResId( RB_REPEATROW ), &aEdRepeatRow, this ),
         //
         aFlRepeatCol    ( this, ScResId( FL_REPEATCOL ) ),
         aLbRepeatCol    ( this, ScResId( LB_REPEATCOL ) ),
-        aEdRepeatCol    ( this, this, ScResId( ED_REPEATCOL ) ),
-        aRbRepeatCol    ( this, ScResId( RB_REPEATCOL ), &aEdRepeatCol, &aFlRepeatCol, this ),
+        aEdRepeatCol    ( this, this, &aFlRepeatCol, ScResId( ED_REPEATCOL ) ),
+        aRbRepeatCol    ( this, ScResId( RB_REPEATCOL ), &aEdRepeatCol, this ),
         //
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),

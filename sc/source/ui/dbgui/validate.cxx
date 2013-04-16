@@ -317,10 +317,10 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     maFtValue ( this, ScResId( FT_VALUE ) ),
     maLbValue ( this, ScResId( LB_VALUE ) ),
     maFtMin   ( this, ScResId( FT_MIN ) ),
-    maEdMin   ( this, NULL, ScResId( EDT_MIN ) ),
+    maEdMin   ( this, NULL, &maFtMin, ScResId( EDT_MIN ) ),
     maEdList  ( this, ScResId( EDT_LIST ) ),
     maFtMax   ( this, ScResId( FT_MAX ) ),
-    maEdMax   ( this, NULL, ScResId( EDT_MAX ) ),
+    maEdMax   ( this, NULL, &maFtMax, ScResId( EDT_MAX ) ),
     maFtHint  ( this, ScResId( FT_SOURCEHINT ) ),
     maStrMin  ( ScResId( SCSTR_VALID_MINIMUM ) ),
     maStrMax  ( ScResId( SCSTR_VALID_MAXIMUM ) ),
@@ -511,9 +511,9 @@ void ScTPValidationValue::SetupRefDlg()
                 m_pRefEdit->GrabFocus();
 
             if( m_pRefEdit )
-                m_pRefEdit->SetRefDialog( pValidationDlg );
+                m_pRefEdit->SetReferences( pValidationDlg, pLabel );
 
-            m_btnRef.SetReferences( pValidationDlg, m_pRefEdit, pLabel );
+            m_btnRef.SetReferences( pValidationDlg, m_pRefEdit );
         }
     }
 }
@@ -531,10 +531,10 @@ void ScTPValidationValue::RemoveRefDlg()
             pValidationDlg->SetRefInputDonePostHdl( NULL );
 
             if( m_pRefEdit )
-                m_pRefEdit->SetRefDialog( NULL );
+                m_pRefEdit->SetReferences( NULL, NULL );
             m_pRefEdit = NULL;
 
-            m_btnRef.SetReferences( NULL, NULL, NULL );
+            m_btnRef.SetReferences( NULL, NULL );
 
 #if ! defined( WNT ) && !defined( _MSC_VER )
             TidyListBoxes();

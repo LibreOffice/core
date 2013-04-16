@@ -228,8 +228,8 @@ private:
         void Click();
     public:
         ScRefButtonEx( Window* pParent, const ResId& rResId, formula::RefEdit* pEdit = NULL,
-            Window* pShrinkLabel = NULL, ScRefHandler *pRefHdlr = NULL )
-            : ::formula::RefButton( pParent, rResId, pEdit, pShrinkLabel, pRefHdlr )
+            ScRefHandler *pRefHdlr = NULL )
+            : ::formula::RefButton( pParent, rResId, pEdit, pRefHdlr )
         {
         }
     }m_btnRef;

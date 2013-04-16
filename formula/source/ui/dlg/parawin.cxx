@@ -387,8 +387,8 @@ void ParaWin::InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, ImageButton& rBt
                         ArgEdit& rEdArg, RefButton& rRefBtn)
 {
 
-    rRefBtn.SetReferences(pMyParent, &rEdArg, &rFtArg);
-    rEdArg.SetRefDialog(pMyParent);
+    rRefBtn.SetReferences(pMyParent, &rEdArg);
+    rEdArg.SetReferences(pMyParent, &rFtArg);
 
     aArgInput[nPos].InitArgInput (&rFtArg,&rBtnFx,&rEdArg,&rRefBtn);
 
