@@ -93,7 +93,7 @@ void SAL_CALL DiscoveryService::run()
         socklen_t aLen = sizeof( aAddr );
         recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
         OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
-        if ( aString.compareTo( "LOREMOTE_SEARCH" ) == 0 )
+        if ( aString == "LOREMOTE_SEARCH" )
         {
             OStringBuffer aStringBuffer("LOREMOTE_ADVERTISE\n");
             aStringBuffer.append( OUStringToOString(

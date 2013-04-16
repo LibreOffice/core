@@ -202,7 +202,7 @@ sal_Bool DropTarget::supportsService( const OUString& ServiceName ) throw()
     Sequence < OUString > SupportedServicesNames = Xdnd_dropTarget_getSupportedServiceNames();
 
     for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
+        if (SupportedServicesNames[n] == ServiceName)
             return sal_True;
 
     return sal_False;

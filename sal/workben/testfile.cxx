@@ -1760,7 +1760,7 @@ void DirectoryItemTest( void )
         }
 
 
-        if ( str1[0].compareTo(str1[1]) == 0 )
+        if ( str1[0] == str1[1] )
             print_error( rtl::OString( "Reset" ),FileBase::E_None );
         else
             print_error( rtl::OString( "Reset" ),FileBase::E_invalidError );
