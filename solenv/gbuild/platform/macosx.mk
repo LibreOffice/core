@@ -77,10 +77,15 @@ gb_COMPILERDEFS += \
 
 endif
 
-# enable debug STL
+# Enable debug libstdc++
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_COMPILERDEFS += \
 	-D_GLIBCXX_DEBUG \
+
+# See http://lists.apple.com/archives/cocoa-dev/2009/Sep/msg01199.html ,
+# http://stackoverflow.com/questions/2234557/c-using-getline-prints-pointer-being-freed-was-not-allocated-in-xcode
+gb_COMPILERDEFS += \
+	-D_GLIBCXX_FULLY_DYNAMIC_STRING \
 
 endif
 
