@@ -1247,37 +1247,16 @@ struct SvxEMailTabPage_Impl
     MailerProgramCfg_Impl aMailConfig;
 };
 
-SvxEMailTabPage::SvxEMailTabPage(Window* pParent, const SfxItemSet& rSet) :
-    SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_INET_MAIL ), rSet),
-    aMailFL(this,           CUI_RES(FL_MAIL           )),
-    aMailerURLFI(this,      CUI_RES(FI_MAILERURL      )),
-    aMailerURLFT(this,      CUI_RES(FT_MAILERURL      )),
-    aMailerURLED(this,      CUI_RES(ED_MAILERURL      )),
-    aMailerURLPB(this,      CUI_RES(PB_MAILERURL      )),
-    m_sDefaultFilterName(   CUI_RES(STR_DEFAULT_FILENAME        )),
-    pImpl(new SvxEMailTabPage_Impl)
+SvxEMailTabPage::SvxEMailTabPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage( pParent, "OptEmailPage", "cui/ui/optemailpage.ui", rSet)
+    , pImpl(new SvxEMailTabPage_Impl)
 {
-    FreeResource();
-
-    aMailerURLPB.SetClickHdl( LINK( this, SvxEMailTabPage, FileDialogHdl_Impl ) );
-
-    // FixedText not wide enough?
-    long nTxtW = aMailerURLFT.GetCtrlTextWidth( aMailerURLFT.GetText() );
-    long nCtrlW = aMailerURLFT.GetSizePixel().Width();
-    if ( nTxtW >= nCtrlW )
-    {
-        long nDelta = Max( (long)10, nTxtW - nCtrlW );
-        // so FixedText wider
-        Size aNewSz = aMailerURLFT.GetSizePixel();
-        aNewSz.Width() += nDelta;
-        aMailerURLFT.SetSizePixel( aNewSz );
-        // and Edit smaller
-        aNewSz = aMailerURLED.GetSizePixel();
-        aNewSz.Width() -= nDelta;
-        Point aNewPt = aMailerURLED.GetPosPixel();
-        aNewPt.X() += nDelta;
-        aMailerURLED.SetPosSizePixel( aNewPt, aNewSz );
-    }
+    get(m_pMailContainer, "OptEmailPage");
+    get(m_pMailerURLFI, "lockemail");
+    get(m_pMailerURLED, "url");
+    get(m_pMailerURLPB, "browse");
+    m_sDefaultFilterName = get<FixedText>("browsetitle")->GetText();
+    m_pMailerURLPB->SetClickHdl( LINK( this, SvxEMailTabPage, FileDialogHdl_Impl ) );
 }
 
 /* -------------------------------------------------------------------------*/
@@ -1299,9 +1278,9 @@ SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
 sal_Bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool bMailModified = sal_False;
-    if(!pImpl->aMailConfig.bROProgram && aMailerURLED.GetSavedValue() != aMailerURLED.GetText())
+    if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->GetSavedValue() != m_pMailerURLED->GetText())
     {
-        pImpl->aMailConfig.sProgram = aMailerURLED.GetText();
+        pImpl->aMailConfig.sProgram = m_pMailerURLED->GetText();
         bMailModified = sal_True;
     }
     if ( bMailModified )
@@ -1314,33 +1293,28 @@ sal_Bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
 
 void SvxEMailTabPage::Reset( const SfxItemSet& )
 {
-    aMailerURLED.Enable(sal_True );
-    aMailerURLPB.Enable(sal_True );
+    m_pMailerURLED->Enable(sal_True );
+    m_pMailerURLPB->Enable(sal_True );
 
-    if(pImpl->aMailConfig.bROProgram)
-        aMailerURLFI.Show();
+    if (pImpl->aMailConfig.bROProgram)
+        m_pMailerURLFI->Show();
 
-    aMailerURLED.SetText(pImpl->aMailConfig.sProgram);
-    aMailerURLED.SaveValue();
-    aMailerURLED.Enable(!pImpl->aMailConfig.bROProgram);
-    aMailerURLPB.Enable(!pImpl->aMailConfig.bROProgram);
-    aMailerURLFT.Enable(!pImpl->aMailConfig.bROProgram);
+    m_pMailerURLED->SetText(pImpl->aMailConfig.sProgram);
+    m_pMailerURLED->SaveValue();
 
-    aMailFL.Enable(aMailerURLFT.IsEnabled() ||
-                   aMailerURLED.IsEnabled() ||
-                   aMailerURLPB.IsEnabled());
+    m_pMailContainer->Enable(!pImpl->aMailConfig.bROProgram);
 }
 
 /* -------------------------------------------------------------------------*/
 
 IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
 {
-    if ( &aMailerURLPB == pButton && !pImpl->aMailConfig.bROProgram )
+    if (m_pMailerURLPB == pButton && !pImpl->aMailConfig.bROProgram)
     {
         FileDialogHelper aHelper(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
-        OUString sPath = aMailerURLED.GetText();
+        OUString sPath = m_pMailerURLED->GetText();
         if ( sPath.isEmpty() )
             sPath = OUString("/usr/bin");
 
@@ -1353,7 +1327,7 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
         {
             sUrl = aHelper.GetPath();
             ::utl::LocalFileHelper::ConvertURLToPhysicalName(sUrl, sPath);
-            aMailerURLED.SetText(sPath);
+            m_pMailerURLED->SetText(sPath);
         }
     }
     return 0;

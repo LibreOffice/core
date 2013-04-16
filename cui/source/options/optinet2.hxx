@@ -215,13 +215,12 @@ public:
 struct SvxEMailTabPage_Impl;
 class SvxEMailTabPage : public SfxTabPage
 {
-    FixedLine       aMailFL;
-    ReadOnlyImage   aMailerURLFI;
-    FixedText       aMailerURLFT;
-    Edit            aMailerURLED;
-    PushButton      aMailerURLPB;
+    VclContainer* m_pMailContainer;
+    FixedImage*   m_pMailerURLFI;
+    Edit*         m_pMailerURLED;
+    PushButton*   m_pMailerURLPB;
 
-    String          m_sDefaultFilterName;
+    OUString      m_sDefaultFilterName;
 
     SvxEMailTabPage_Impl* pImpl;
 
