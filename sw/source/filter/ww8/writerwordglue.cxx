@@ -25,6 +25,8 @@
 #include <algorithm>                //std::find_if
 #include <functional>               //std::unary_function
 
+#include <rtl/tencinfo.h>
+
 #include <unicode/ubidi.h>          //ubidi_getLogicalRun
 #include <tools/tenccvt.hxx>        //GetExtendedTextEncoding
 #include <com/sun/star/i18n/ScriptType.hpp> //ScriptType

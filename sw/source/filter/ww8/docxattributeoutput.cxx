@@ -98,6 +98,7 @@
 #include <txtinet.hxx>
 
 #include <osl/file.hxx>
+#include <rtl/tencinfo.h>
 #include <vcl/embeddedfontshelper.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>

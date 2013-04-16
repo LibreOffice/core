@@ -29,6 +29,7 @@
 #include "fchrfmt.hxx"
 
 #include <rtl/ustring.hxx>
+#include <rtl/tencinfo.h>
 #include <svtools/rtfkeywd.hxx>
 
 #include <editeng/fontitem.hxx>
