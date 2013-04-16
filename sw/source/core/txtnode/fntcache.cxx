@@ -219,7 +219,7 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
    const long nTmpSpaceAdd = rData.rInf.GetSpace() / SPACING_PRECISION_FACTOR;
 
    if ( nEnd < rData.nCnt
-       && CH_BLANK == rData.rInf.GetText().GetChar( rData.rInf.GetIdx() + nEnd ) )
+       && CH_BLANK == rData.rInf.GetText()[ rData.rInf.GetIdx() + nEnd ] )
    {
        if( nEnd + 1 == rData.nCnt )
            nBlank -= nTmpSpaceAdd;
@@ -933,7 +933,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         pTmpFont->SetColor( aOldColor );
 
     if ( STRING_LEN == rInf.GetLen() )
-        rInf.SetLen( rInf.GetText().Len() );
+        rInf.SetLen( rInf.GetText().getLength() );
 
 
     //
@@ -974,7 +974,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             long nNextFix;
 
             // punctuation characters are not centered
-            sal_Unicode cChar = rInf.GetText().GetChar( rInf.GetIdx() );
+            sal_Unicode cChar = rInf.GetText()[ rInf.GetIdx() ];
             sal_uInt8 nType = lcl_WhichPunctuation( cChar );
             switch ( nType )
             {
@@ -997,7 +997,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 nNextFix += nWidthPerChar;
 
                 // punctuation characters are not centered
-                cChar = rInf.GetText().GetChar( rInf.GetIdx() + j );
+                cChar = rInf.GetText()[ rInf.GetIdx() + j ];
                 nType = lcl_WhichPunctuation( cChar );
                 switch ( nType )
                 {
@@ -1099,14 +1099,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         for( xub_StrLen i = 0; i < rInf.GetLen(); i++, nKernSum += rInf.GetKern() )
                         {
-                            if ( CH_BLANK == rInf.GetText().GetChar(rInf.GetIdx()+i) )
+                            if ( CH_BLANK == rInf.GetText()[ rInf.GetIdx()+i ] )
                                 nKernSum += nSpaceAdd;
                             pKernArray[i] += nKernSum;
                         }
                         ///With through/uderstr. Grouped style requires a blank at the end
                         ///of a text edition special measures:
                         if( bPaintBlank && rInf.GetLen() && (CH_BLANK ==
-                            rInf.GetText().GetChar( rInf.GetIdx() + rInf.GetLen() - 1) ) )
+                            rInf.GetText()[ rInf.GetIdx() + rInf.GetLen() - 1 ] ) )
                         {
                             ///If it concerns a singular, underlined space acts,
                             ///we must spend two:
@@ -1137,7 +1137,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         long nSpaceSum = 0;
                         for( i = 0; i < rInf.GetLen(); i++ )
                         {
-                            if( CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + i) )
+                            if( CH_BLANK == rInf.GetText()[ rInf.GetIdx() + i ] )
                             {
                                 nSpaceSum += nSpaceAdd;
                                 if( j < i)
@@ -1310,7 +1310,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 for( xub_StrLen i = 0; i < rInf.GetLen(); i++,
                      nKernSum += rInf.GetKern() )
                 {
-                    if ( CH_BLANK == rInf.GetText().GetChar(rInf.GetIdx()+i) )
+                    if ( CH_BLANK == rInf.GetText()[ rInf.GetIdx()+i ] )
                         nKernSum += nSpaceAdd;
                     pKernArray[i] += nKernSum;
                 }
@@ -1318,7 +1318,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // In case of underlined/strike-through justified text
                 // a blank at the end requires special handling:
                 if( bPaintBlank && rInf.GetLen() && ( CH_BLANK ==
-                    rInf.GetText().GetChar( rInf.GetIdx()+rInf.GetLen()-1 ) ) )
+                    rInf.GetText()[ rInf.GetIdx()+rInf.GetLen()-1 ] ) )
                 {
                     // If it is a single underlined space, output 2 spaces:
                     if( 1 == rInf.GetLen() )
@@ -1346,7 +1346,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 xub_StrLen i;
                 for( i = 0; i < rInf.GetLen(); i++ )
                 {
-                    if( CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx()+i ) )
+                    if( CH_BLANK == rInf.GetText()[ rInf.GetIdx()+i ] )
                     {
                         nKernSum += nSpaceAdd;
                         if( j < i )
@@ -1401,8 +1401,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     else
     {
-        const String* pStr = &rInf.GetText();
-        String aStr;
+        const OUString* pStr = &rInf.GetText();
+        OUString aStr;
         sal_Bool bBullet = rInf.GetBullet();
         if( bSymbol )
             bBullet = sal_False;
@@ -1523,25 +1523,25 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 --nCopyStart;
 
             xub_StrLen nCopyLen = rInf.GetLen();
-            if ( nCopyStart + nCopyLen < rInf.GetText().Len() )
+            if ( nCopyStart + nCopyLen < rInf.GetText().getLength() )
                 ++nCopyLen;
 
-            aStr = rInf.GetText().Copy( nCopyStart, nCopyLen );
+            aStr = rInf.GetText().copy( nCopyStart, nCopyLen );
             pStr = &aStr;
 
-            for( xub_StrLen i = 0; i < aStr.Len(); ++i )
-                if( CH_BLANK == aStr.GetChar( i ) )
-                    aStr.SetChar( i, CH_BULLET );
+            for( sal_Int32 i = 0; i < aStr.getLength(); ++i )
+                if( CH_BLANK == aStr[ i ] )
+                    aStr = aStr.replaceAt(i, 1, OUString(CH_BULLET));
         }
 
-        xub_StrLen nCnt = rInf.GetText().Len();
+        xub_StrLen nCnt = rInf.GetText().getLength();
         if ( nCnt < rInf.GetIdx() )
             nCnt = 0;
         else
             nCnt = nCnt - rInf.GetIdx();
         nCnt = Min( nCnt, rInf.GetLen() );
         long nKernSum = rInf.GetKern();
-        sal_Unicode cChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
+        sal_Unicode cChPrev = rInf.GetText()[ rInf.GetIdx() ];
 
         // In case of a single underlined space in justified text,
         // have to output 2 spaces:
@@ -1594,7 +1594,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 nSpaceSum = nHalfSpace;
             for ( xub_StrLen i=1; i<nCnt; ++i,nKernSum += rInf.GetKern() )
             {
-                nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
+                nCh = rInf.GetText()[ rInf.GetIdx() + i ];
 
                 OSL_ENSURE( pScrArray, "Where is the screen array?" );
                 long nScr;
@@ -1770,7 +1770,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 {
     Size aTxtSize;
     const xub_StrLen nLn = ( STRING_LEN != rInf.GetLen() ) ? rInf.GetLen() :
-                           rInf.GetText().Len();
+                           rInf.GetText().getLength();
 
     // be sure to have the correct layout mode at the printer
     if ( pPrinter )
@@ -1897,13 +1897,13 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
                                         rInf.GetIdx(), rInf.GetLen() );
             nScrPos = pScrArray[ 0 ];
-            xub_StrLen nCnt = rInf.GetText().Len();
+            xub_StrLen nCnt = rInf.GetText().getLength();
             if ( nCnt < rInf.GetIdx() )
                 nCnt=0;
             else
                 nCnt = nCnt - rInf.GetIdx();
             nCnt = Min (nCnt, nLn);
-            sal_Unicode nChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
+            sal_Unicode nChPrev = rInf.GetText()[ rInf.GetIdx() ];
 
             sal_Unicode nCh;
 
@@ -1915,7 +1915,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             const sal_uInt16 nDiv = nMul+1;
             for( xub_StrLen i=1; i<nCnt; i++ )
             {
-                nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
+                nCh = rInf.GetText()[ rInf.GetIdx() + i ];
                 long nScr;
                 nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
                 if ( nCh == CH_BLANK )
@@ -2143,7 +2143,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     while ( ( nRight < long( rInf.GetOfst() ) ) && ( nIdx < nEnd ) )
     {
-        if ( nSpaceAdd && CH_BLANK == rInf.GetText().GetChar( nIdx ) )
+        if ( nSpaceAdd && CH_BLANK == rInf.GetText()[ nIdx ] )
             nSpaceSum += nSpaceAdd;
 
         // go to next character (cell).
@@ -2322,7 +2322,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     sal_uInt16 nTxtBreak = 0;
     long nKern = 0;
 
-    sal_uInt16 nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
+    sal_uInt16 nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().getLength()
                                                : rInf.GetLen() );
 
     if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() &&
@@ -2395,8 +2395,8 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     {
         nKern = CheckKerning();
 
-        const XubString* pTmpText;
-        XubString aTmpText;
+        const OUString* pTmpText;
+        OUString aTmpText;
         xub_StrLen nTmpIdx;
         xub_StrLen nTmpLen;
         bool bTextReplaced = false;
@@ -2426,14 +2426,13 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                     // In this case, the beginning of aTmpText is wrong.
                     XubString aSnippetTmp( aSnippet, 0, 1 );
                     aSnippetTmp = aSub[nActual].CalcCaseMap( aSnippetTmp );
-                    aTmpText.Erase( 0, aSnippetTmp.Len() );
-                    aTmpText.Insert( aSnippet.GetChar( 0 ), 0 );
+                    aTmpText = aTmpText.replaceAt( 0, aSnippetTmp.Len(), OUString(aSnippet.GetChar( 0 )) );
                 }
             }
 
             pTmpText = &aTmpText;
             nTmpIdx = 0;
-            nTmpLen = aTmpText.Len();
+            nTmpLen = aTmpText.getLength();
             bTextReplaced = true;
         }
 

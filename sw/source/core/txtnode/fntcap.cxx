@@ -535,7 +535,7 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
     // hochgezogen in SwFont: const Point aPos( CalcPos(rPos) );
 
     if( rInf.GetLen() == STRING_LEN )
-        rInf.SetLen( rInf.GetText().Len() );
+        rInf.SetLen( rInf.GetText().getLength() );
 
     const Point& rOldPos = rInf.GetPos();
     const sal_uInt16 nCapWidth = (sal_uInt16)( GetCapitalSize( rInf ).Width() );
@@ -559,8 +559,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     Size aPartSize;
     long nKana = 0;
     const XubString aTxt( CalcCaseMap( rDo.GetInf().GetText() ) );
-    xub_StrLen nMaxPos = Min( sal_uInt16(rDo.GetInf().GetText().Len()
-                            - rDo.GetInf().GetIdx()), rDo.GetInf().GetLen() );
+    xub_StrLen nMaxPos = Min( sal_uInt16(rDo.GetInf().GetText().getLength() - rDo.GetInf().GetIdx()),
+                             rDo.GetInf().GetLen() );
     rDo.GetInf().SetLen( nMaxPos );
 
     const XubString& rOldText = rDo.GetInf().GetText();

@@ -22,6 +22,7 @@
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
+#include <tools/debug.hxx>
 
 class SwTxtFrm;
 class OutputDevice;
@@ -42,7 +43,7 @@ class SwDrawTextInfo
     ViewShell* pSh;
     const SwScriptInfo* pScriptInfo;
     const Point* pPos;
-    const XubString* pText;
+    const OUString* pText;
     const SwWrongList* pWrong;
     const SwWrongList* pGrammarCheck;
     const SwWrongList* pSmartTags;
@@ -103,7 +104,7 @@ public:
 #endif
 
     SwDrawTextInfo( ViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
-                    const XubString &rSt, xub_StrLen nI, xub_StrLen nL,
+                    const OUString &rSt, xub_StrLen nI, xub_StrLen nL,
                     sal_uInt16 nW = 0, sal_Bool bB = sal_False )
     {
         pFrm = NULL;
@@ -202,7 +203,7 @@ public:
         return pHyphPos;
     }
 
-    const XubString &GetText() const
+    const OUString &GetText() const
     {
         return *pText;
     }
@@ -415,7 +416,7 @@ public:
 #endif
     }
 
-    void SetText( const XubString &rNew )
+    void SetText( const OUString &rNew )
     {
         pText = &rNew;
     }
