@@ -18,7 +18,7 @@
 
 package com.sun.star.comp.beans;
 
-/** indicates that an operation needed a document, but no document was loaded.
+/** Indicates that an operation needed a document, but no document was loaded.
 
     @since OOo 2.0.0
  */

@@ -24,16 +24,16 @@ import com.sun.star.connection.XConnection;
  *
  * @deprecated.
  */
-/* package */ class NativeConnection
+class NativeConnection
     implements XConnection
 {
     public native void connect(NativeService aNativeService)
         throws com.sun.star.io.IOException;
 
-    public native int read(/*OUT*/byte[][] aReadBytes, /*IN*/int nBytesToRead)
+    public native int read(/*OUT*/ byte[][] aReadBytes, /*IN*/ int nBytesToRead)
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
 
-    public native void write(/*IN*/byte[] aData)
+    public native void write(/*IN*/ byte[] aData)
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
 
     public native void flush()
