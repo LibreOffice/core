@@ -26,6 +26,7 @@
 #include <hash_map>
 #include <string>
 #include <map>
+#include <vector>
 #include <functional>
 #include <boost/shared_ptr.hpp>
 #include <sal/types.h>
@@ -113,7 +114,48 @@ public:
     string toString() const;
 };
 
-class CellInfo;
+class CellInfo
+{
+    SwRect m_aRect;
+    WW8TableNodeInfo * m_pNodeInfo;
+    unsigned long m_nFmtFrmWidth;
+
+public:
+    CellInfo(const SwRect & aRect, WW8TableNodeInfo * pNodeInfo);
+
+    CellInfo(const CellInfo & aRectAndTableInfo)
+        : m_aRect(aRectAndTableInfo.m_aRect),
+          m_pNodeInfo(aRectAndTableInfo.m_pNodeInfo),
+          m_nFmtFrmWidth(aRectAndTableInfo.m_nFmtFrmWidth)
+    {
+    }
+
+    ~CellInfo() {}
+
+    bool operator < (const CellInfo & aCellInfo) const;
+
+    long top() const { return m_aRect.Top(); }
+    long bottom() const { return m_aRect.Bottom(); }
+    long left() const { return m_aRect.Left(); }
+    long right() const { return m_aRect.Right(); }
+    long width() const { return m_aRect.Width(); }
+    long height() const { return m_aRect.Height(); }
+    SwRect getRect() const { return m_aRect; }
+    WW8TableNodeInfo * getTableNodeInfo() const
+    { return m_pNodeInfo; }
+    unsigned long getFmtFrmWidth() const
+    {
+        return m_nFmtFrmWidth;
+    }
+
+    void setFmtFrmWidth(unsigned long nFmtFrmWidth)
+    {
+        m_nFmtFrmWidth = nFmtFrmWidth;
+    }
+
+    ::std::string toString() const;
+};
+
 typedef ::std::multiset<CellInfo, less<CellInfo> > CellInfoMultiSet;
 typedef boost::shared_ptr<CellInfoMultiSet> CellInfoMultiSetPtr;
 
@@ -306,47 +348,6 @@ public:
     WW8TableNodeInfo * reorderByLayout(const SwTable * pTable);
 };
 
-class CellInfo
-{
-    SwRect m_aRect;
-    WW8TableNodeInfo * m_pNodeInfo;
-    unsigned long m_nFmtFrmWidth;
-
-public:
-    CellInfo(const SwRect & aRect, WW8TableNodeInfo * pNodeInfo);
-
-    CellInfo(const CellInfo & aRectAndTableInfo)
-        : m_aRect(aRectAndTableInfo.m_aRect),
-          m_pNodeInfo(aRectAndTableInfo.m_pNodeInfo),
-          m_nFmtFrmWidth(aRectAndTableInfo.m_nFmtFrmWidth)
-    {
-    }
-
-    ~CellInfo() {}
-
-    bool operator < (const CellInfo & aCellInfo) const;
-
-    long top() const { return m_aRect.Top(); }
-    long bottom() const { return m_aRect.Bottom(); }
-    long left() const { return m_aRect.Left(); }
-    long right() const { return m_aRect.Right(); }
-    long width() const { return m_aRect.Width(); }
-    long height() const { return m_aRect.Height(); }
-    SwRect getRect() const { return m_aRect; }
-    WW8TableNodeInfo * getTableNodeInfo() const
-    { return m_pNodeInfo; }
-    unsigned long getFmtFrmWidth() const
-    {
-        return m_nFmtFrmWidth;
-    }
-
-    void setFmtFrmWidth(unsigned long nFmtFrmWidth)
-    {
-        m_nFmtFrmWidth = nFmtFrmWidth;
-    }
-
-    ::std::string toString() const;
-};
-
 }
 #endif // WW8_TABLE_INFO_HXX
+
