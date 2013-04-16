@@ -55,21 +55,18 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    FixedLine       aFlVariables;
-    FixedText       aFtFormulaCell;
-    formula::RefEdit        aEdFormulaCell;
-    formula::RefButton      aRBFormulaCell;
+    FixedText*      m_pFtFormulaCell;
+    formula::RefEdit*   m_pEdFormulaCell;
+    formula::RefButton* m_pRBFormulaCell;
 
-    FixedText       aFtTargetVal;
-    Edit            aEdTargetVal;
+    Edit*           m_pEdTargetVal;
 
-    FixedText       aFtVariableCell;
-    formula::RefEdit        aEdVariableCell;
-    formula::RefButton      aRBVariableCell;
+    FixedText*      m_pFtVariableCell;
+    formula::RefEdit*   m_pEdVariableCell;
+    formula::RefButton* m_pRBVariableCell;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton*       m_pBtnOk;
+    CancelButton*   m_pBtnCancel;
 
     ScAddress       theFormulaCell;
     ScAddress       theVariableCell;

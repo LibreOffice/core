@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="goalseek">
+  <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkDialog" id="GoalSeekDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Goal Seek</property>
@@ -9,7 +10,7 @@
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -20,6 +21,8 @@
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -69,26 +72,30 @@
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="label2">
+                      <object class="GtkLabel" id="formulatext">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_Formula cell</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">formulaedit</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -103,6 +110,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Target _value</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">target</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -112,11 +120,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label4">
+                      <object class="GtkLabel" id="vartext">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Variable _cell</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">varedit</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -129,11 +138,14 @@
                       <object class="GtkBox" id="box1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkEntry" id="entry1">
+                          <object class="foruilo-RefEdit" id="formulaedit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="hexpand">True</property>
                             <property name="invisible_char">•</property>
                           </object>
                           <packing>
@@ -143,10 +155,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkImage" id="image1">
+                          <object class="foruilo-RefButton" id="formulabutton">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-missing-image</property>
+                            <property name="receives_default">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -163,9 +175,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="entry2">
+                      <object class="GtkEntry" id="target">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
                         <property name="invisible_char">•</property>
                       </object>
                       <packing>
@@ -179,11 +193,14 @@
                       <object class="GtkBox" id="box2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkEntry" id="entry3">
+                          <object class="foruilo-RefEdit" id="varedit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="hexpand">True</property>
                             <property name="invisible_char">•</property>
                           </object>
                           <packing>
@@ -193,10 +210,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkImage" id="image2">
+                          <object class="foruilo-RefButton" id="varbutton">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-missing-image</property>
+                            <property name="receives_default">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>

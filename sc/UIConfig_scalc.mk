@@ -67,6 +67,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/deletecontents \
 	sc/uiconfig/scalc/ui/externaldata \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
+	sc/uiconfig/scalc/ui/goalseekdlg \
 	sc/uiconfig/scalc/ui/insertname \
 	sc/uiconfig/scalc/ui/insertsheet \
 	sc/uiconfig/scalc/ui/managenamesdialog \

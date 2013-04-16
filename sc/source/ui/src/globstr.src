@@ -2072,6 +2072,22 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Years" ;
     };
+    String STR_INVALIDVAL
+    {
+        Text [ en-US ] = "Invalid target value." ;
+    };
+    String STR_INVALIDVAR
+    {
+        Text [ en-US ] = "Undefined name for variable cell." ;
+    };
+    String STR_INVALIDFORM
+    {
+        Text [ en-US ] = "Undefined name as formula cell." ;
+    };
+    String STR_NOFORMULA
+    {
+        Text [ en-US ] = "Cell must contain a formula." ;
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

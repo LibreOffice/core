@@ -60,7 +60,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/toolbox.src \
     sc/source/ui/src/scfuncs.src \
     sc/source/ui/src/textdlgs.src \
-    sc/source/ui/src/solvrdlg.src \
     sc/source/ui/src/sc.src \
     sc/source/ui/src/pseudo.src \
     sc/source/ui/src/subtdlg.src \

@@ -670,7 +670,12 @@
 
 #define STR_MULTI_SELECT            537
 
-#define STR_COUNT                   538
+#define STR_INVALIDVAL              538
+#define STR_INVALIDVAR              539
+#define STR_INVALIDFORM             540
+#define STR_NOFORMULA               541
+
+#define STR_COUNT                   542
 
 #endif
 

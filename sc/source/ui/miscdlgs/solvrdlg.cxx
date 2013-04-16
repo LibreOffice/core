@@ -27,7 +27,8 @@
 #include "reffact.hxx"
 #include "document.hxx"
 #include "scresid.hxx"
-#include "solvrdlg.hrc"
+#include "globstr.hrc"
+#include "sc.hrc"
 
 #define _SOLVRDLG_CXX
 #include "solvrdlg.hxx"
@@ -45,37 +46,32 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           ScDocument* pDocument,
                           ScAddress aCursorPos )
 
-    :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_SOLVER ),
-        //
-        aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
-        aFtFormulaCell      ( this, ScResId( FT_FORMULACELL ) ),
-        aEdFormulaCell      ( this, this, ScResId( ED_FORMULACELL ) ),
-        aRBFormulaCell      ( this, ScResId( RB_FORMULACELL ), &aEdFormulaCell, &aFtFormulaCell, this ),
-        aFtTargetVal        ( this, ScResId( FT_TARGETVAL ) ),
-        aEdTargetVal        ( this, ScResId( ED_TARGETVAL ) ),
-        aFtVariableCell     ( this, ScResId( FT_VARCELL ) ),
-        aEdVariableCell     ( this, this, ScResId( ED_VARCELL ) ),
-        aRBVariableCell     ( this, ScResId( RB_VARCELL ), &aEdVariableCell, &aFtVariableCell, this ),
-        aBtnOk              ( this, ScResId( BTN_OK ) ),
-        aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp            ( this, ScResId( BTN_HELP ) ),
-        //
-        theFormulaCell      ( aCursorPos ),
-        theVariableCell     ( aCursorPos ),
-        pDoc                ( pDocument ),
-        nCurTab             ( aCursorPos.Tab() ),
-        pEdActive           ( NULL ),
-        bDlgLostFocus       ( false ),
-        errMsgInvalidVar    ( ScResId( STR_INVALIDVAR ) ),
-        errMsgInvalidForm   ( ScResId( STR_INVALIDFORM ) ),
-        errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
-        errMsgInvalidVal    ( ScResId( STR_INVALIDVAL ) )
+    : ScAnyRefDlg(pB, pCW, pParent, "GoalSeekDialog", "modules/scalc/ui/goalseekdlg.ui")
+    , theFormulaCell(aCursorPos)
+    , theVariableCell(aCursorPos)
+    , pDoc(pDocument)
+    , nCurTab(aCursorPos.Tab())
+    , pEdActive(NULL)
+    , bDlgLostFocus(false)
+    , errMsgInvalidVar(ScGlobal::GetRscString(STR_INVALIDVAR))
+    , errMsgInvalidForm(ScGlobal::GetRscString(STR_INVALIDFORM))
+    , errMsgNoFormula(ScGlobal::GetRscString(STR_NOFORMULA))
+    , errMsgInvalidVal(ScGlobal::GetRscString(STR_INVALIDVAL))
 {
+    get(m_pFtFormulaCell, "formulatext");
+    get(m_pEdFormulaCell, "formulaedit");
+    m_pEdFormulaCell->SetRefDialog(this);
+    get(m_pRBFormulaCell, "formulabutton");
+    m_pRBFormulaCell->SetReferences(this, m_pEdFormulaCell, m_pFtFormulaCell),
+    get(m_pEdTargetVal, "target");
+    get(m_pFtVariableCell, "vartext");
+    get(m_pEdVariableCell, "varedit");
+    m_pEdVariableCell->SetRefDialog(this);
+    get(m_pRBVariableCell, "varbutton");
+    m_pRBVariableCell->SetReferences(this, m_pEdVariableCell, m_pFtVariableCell);
+    get(m_pBtnOk, "ok");
+    get(m_pBtnCancel, "cancel");
     Init();
-    FreeResource();
-
-    aRBFormulaCell.SetAccessibleRelationMemberOf(&aFlVariables);
-    aRBVariableCell.SetAccessibleRelationMemberOf(&aFlVariables);
 }
 
 //----------------------------------------------------------------------------
@@ -90,27 +86,27 @@ void ScSolverDlg::Init()
 {
     String          aStr;
 
-    aBtnOk.         SetClickHdl     ( LINK( this, ScSolverDlg, BtnHdl ) );
-    aBtnCancel.     SetClickHdl     ( LINK( this, ScSolverDlg, BtnHdl ) );
+    m_pBtnOk->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
+    m_pBtnCancel->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
 
     Link aLink = LINK( this, ScSolverDlg, GetFocusHdl );
-    aEdFormulaCell. SetGetFocusHdl  ( aLink );
-    aRBFormulaCell. SetGetFocusHdl  ( aLink );
-    aEdVariableCell.SetGetFocusHdl  ( aLink );
-    aRBVariableCell.SetGetFocusHdl  ( aLink );
-    aEdTargetVal.   SetGetFocusHdl  ( aLink );
+    m_pEdFormulaCell->SetGetFocusHdl( aLink );
+    m_pRBFormulaCell->SetGetFocusHdl( aLink );
+    m_pEdVariableCell->SetGetFocusHdl( aLink );
+    m_pRBVariableCell->SetGetFocusHdl( aLink );
+    m_pEdTargetVal->SetGetFocusHdl( aLink );
 
     aLink = LINK( this, ScSolverDlg, LoseFocusHdl );
-    aEdFormulaCell. SetLoseFocusHdl ( aLink );
-    aRBFormulaCell. SetLoseFocusHdl ( aLink );
-    aEdVariableCell.SetLoseFocusHdl ( aLink );
-    aRBVariableCell.SetLoseFocusHdl ( aLink );
+    m_pEdFormulaCell->SetLoseFocusHdl ( aLink );
+    m_pRBFormulaCell->SetLoseFocusHdl ( aLink );
+    m_pEdVariableCell->SetLoseFocusHdl ( aLink );
+    m_pRBVariableCell->SetLoseFocusHdl ( aLink );
 
     theFormulaCell.Format( aStr, SCA_ABS, NULL, pDoc->GetAddressConvention() );
 
-    aEdFormulaCell.SetText( aStr );
-    aEdFormulaCell.GrabFocus();
-    pEdActive = &aEdFormulaCell;
+    m_pEdFormulaCell->SetText( aStr );
+    m_pEdFormulaCell->GrabFocus();
+    pEdActive = m_pEdFormulaCell;
 }
 
 //----------------------------------------------------------------------------
@@ -155,9 +151,9 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
         pEdActive->SetRefString( aStr );
 
-        if ( pEdActive == &aEdFormulaCell )
+        if ( pEdActive == m_pEdFormulaCell )
             theFormulaCell = aAdr;
-        else if ( pEdActive == &aEdVariableCell )
+        else if ( pEdActive == m_pEdVariableCell )
             theVariableCell = aAdr;
     }
 }
@@ -170,22 +166,22 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
     {
         case SOLVERR_NOFORMULA:
             ERRORBOX( errMsgNoFormula );
-            aEdFormulaCell.GrabFocus();
+            m_pEdFormulaCell->GrabFocus();
             break;
 
         case SOLVERR_INVALID_FORMULA:
             ERRORBOX( errMsgInvalidForm );
-            aEdFormulaCell.GrabFocus();
+            m_pEdFormulaCell->GrabFocus();
             break;
 
         case SOLVERR_INVALID_VARIABLE:
             ERRORBOX( errMsgInvalidVar );
-            aEdVariableCell.GrabFocus();
+            m_pEdVariableCell->GrabFocus();
             break;
 
         case SOLVERR_INVALID_TARGETVALUE:
             ERRORBOX( errMsgInvalidVal );
-            aEdTargetVal.GrabFocus();
+            m_pEdTargetVal->GrabFocus();
             break;
     }
 }
@@ -212,9 +208,9 @@ sal_Bool ScSolverDlg::CheckTargetValue( String& rStrVal )
 
 IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
 {
-    if ( pBtn == &aBtnOk )
+    if (pBtn == m_pBtnOk)
     {
-        theTargetValStr = aEdTargetVal.GetText();
+        theTargetValStr = m_pEdTargetVal->GetText();
 
         // Zu ueberpruefen:
         // 1. enthalten die Strings korrekte Tabellenkoordinaten/def.Namen?
@@ -222,8 +218,8 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
         // 3. wurde ein korrekter Zielwert eingegeben
 
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        sal_uInt16  nRes1 = theFormulaCell .Parse( aEdFormulaCell.GetText(),  pDoc, eConv );
-        sal_uInt16  nRes2 = theVariableCell.Parse( aEdVariableCell.GetText(), pDoc, eConv );
+        sal_uInt16  nRes1 = theFormulaCell .Parse( m_pEdFormulaCell->GetText(),  pDoc, eConv );
+        sal_uInt16  nRes2 = theVariableCell.Parse( m_pEdVariableCell->GetText(), pDoc, eConv );
 
         if ( SCA_VALID == ( nRes1 & SCA_VALID ) )
         {
@@ -260,7 +256,7 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
         }
         else RaiseError( SOLVERR_INVALID_FORMULA );
     }
-    else if ( pBtn == &aBtnCancel )
+    else if (pBtn == m_pBtnCancel)
     {
         Close();
     }
@@ -275,12 +271,12 @@ IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
     Edit* pEdit = NULL;
     pEdActive = NULL;
 
-    if( (pCtrl == (Control*)&aEdFormulaCell) || (pCtrl == (Control*)&aRBFormulaCell) )
-        pEdit = pEdActive = &aEdFormulaCell;
-    else if( (pCtrl == (Control*)&aEdVariableCell) || (pCtrl == (Control*)&aRBVariableCell) )
-        pEdit = pEdActive = &aEdVariableCell;
-    else if( pCtrl == (Control*)&aEdTargetVal )
-        pEdit = &aEdTargetVal;
+    if( (pCtrl == (Control*)m_pEdFormulaCell) || (pCtrl == (Control*)m_pRBFormulaCell) )
+        pEdit = pEdActive = m_pEdFormulaCell;
+    else if( (pCtrl == (Control*)m_pEdVariableCell) || (pCtrl == (Control*)m_pRBVariableCell) )
+        pEdit = pEdActive = m_pEdVariableCell;
+    else if( pCtrl == (Control*)m_pEdTargetVal )
+        pEdit = m_pEdTargetVal;
 
     if( pEdit )
         pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
