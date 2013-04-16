@@ -11723,7 +11723,6 @@ if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
     fi
     if test "$enable_mergelibs" = "all"; then
         MERGELIBS="ALL"
-        URELIBS="TRUE"
     else
         MERGELIBS="CORE"
     fi
@@ -11732,7 +11731,6 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST([MERGELIBS])
-AC_SUBST([URELIBS])
 
 # ===================================================================
 # Create hardlinks on deliver instead of copying for smaller size and speed up
