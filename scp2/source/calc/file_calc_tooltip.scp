@@ -1,0 +1,23 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+File gid_File_Sc_tooltip
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "scalc_tooltip_properties.filelist";
+End
+
+File gid_File_Sc_tooltipEn
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "scalc_tooltip.filelist";
+End

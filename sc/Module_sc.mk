@@ -29,6 +29,9 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_scd \
 	Library_scfilt \
 	Library_scui \
+	Package_sc_tooltip \
+	CustomTarget_sc_tooltip \
+	Package_sc_tooltip_properties \
 	UIConfig_scalc \
 ))
 

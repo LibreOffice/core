@@ -37,6 +37,7 @@ $(eval $(call gb_InstallModule_add_templates,scp2/calc,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/calc,\
     scp2/source/calc/file_calc \
+	scp2/source/calc/file_calc_tooltip \
 ))
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/calc,\
