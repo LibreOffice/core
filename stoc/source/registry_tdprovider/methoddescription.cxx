@@ -90,7 +90,7 @@ css::uno::Reference< css::reflection::XTypeDescription > Parameter::getType()
             m_manager->getByHierarchicalName(m_typeName),
             css::uno::UNO_QUERY_THROW);
     } catch (const css::container::NoSuchElementException & e) {
-        throw new css::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             (OUString(
                     "com.sun.star.container.NoSuchElementException: ")
              + e.Message),
