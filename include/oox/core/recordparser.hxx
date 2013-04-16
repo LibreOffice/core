@@ -25,12 +25,10 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>
 #include "oox/helper/binaryinputstream.hxx"
+#include "oox/core/fragmenthandler.hxx"
 
 namespace oox {
 namespace core {
-
-class FragmentHandler;
-struct RecordInfo;
 
 namespace prv { class Locator; }
 namespace prv { class ContextStack; }
