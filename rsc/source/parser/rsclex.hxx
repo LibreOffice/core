@@ -105,11 +105,7 @@ extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( const char * );
 extern "C" int  yylex( void );
 #else
-#if defined ( WTC ) || defined ( GCC ) || (_MSC_VER >= 1400)
-int yyparse();              // forward Deklaration fuer erzeugte Funktion
-#else
-yyparse();              // forward Deklaration fuer erzeugte Funktion
-#endif
+int yyparse();              // forward declaration for generated function
 void yyerror( char * );
 int  yylex( void );
 #endif
