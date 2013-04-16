@@ -84,9 +84,9 @@ sub add_profile_into_filelist
 
     my %profile = ();
 
-    # Taking the base data from the "auto_File_Lib_vcl"
+    # Taking the base data from the "gid_File_Lib_Oox"
 
-    my $vclgid = "auto_File_Lib_vcl";
+    my $vclgid = "gid_File_Lib_Oox";
     if ( $allvariables->{'GLOBALFILEGID'} ) { $vclgid = $allvariables->{'GLOBALFILEGID'}; }
     my ($vclfile) = grep {$_->{gid} eq $vclgid} @{$filesarrayref};
     if (! defined $vclfile) {
