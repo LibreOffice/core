@@ -63,6 +63,12 @@ liborcus_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
 endif
 
+ifeq ($(OS),MACOSX)
+ifneq (,$(gb_ENABLE_DBGUTIL))
+liborcus_CPPFLAGS+=-D_GLIBCXX_FULLY_DYNAMIC_STRING
+endif
+endif
+
 liborcus_CXXFLAGS=$(CXXFLAGS)
 ifeq ($(COM),MSC)
 liborcus_CXXFLAGS+=$(BOOST_CXXFLAGS)
