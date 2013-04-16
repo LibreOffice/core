@@ -24,9 +24,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <deque>
 #include <float.h>
-#include <functional>
 #include <limits.h>
 #include <list>
 #include <sstream>

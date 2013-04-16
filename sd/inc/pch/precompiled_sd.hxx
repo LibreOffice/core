@@ -188,6 +188,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
@@ -411,6 +412,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/measfld.hxx>
+#include <editeng/numdef.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>

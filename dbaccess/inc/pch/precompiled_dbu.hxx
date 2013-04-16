@@ -108,6 +108,7 @@
 #include <com/sun/star/form/XSubmitListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
@@ -333,7 +334,6 @@
 #include <framework/undomanagerhelper.hxx>
 #include <functional>
 #include <i18nlangtag/mslangid.hxx>
-#include <jvmaccess/virtualmachine.hxx>
 #include <limits>
 #include <list>
 #include <map>

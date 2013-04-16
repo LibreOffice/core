@@ -139,6 +139,7 @@
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -146,7 +147,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -170,11 +170,6 @@
 #include <com/sun/star/io/XPersist.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/java/InvalidJavaSettingsException.hpp>
-#include <com/sun/star/java/JavaDisabledException.hpp>
-#include <com/sun/star/java/JavaNotFoundException.hpp>
-#include <com/sun/star/java/JavaVMCreationFailureException.hpp>
-#include <com/sun/star/java/RestartRequiredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -204,10 +199,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionAbort.hpp>
-#include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -302,7 +294,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/unicode.hxx>
-#include <jvmfwk/framework.h>
 #include <limits.h>
 #include <limits>
 #include <list>
