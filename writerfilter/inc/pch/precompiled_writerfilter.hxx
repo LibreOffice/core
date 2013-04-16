@@ -176,12 +176,16 @@
 #include <map>
 #include <math.h>
 #include <oox/core/filterdetect.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/graphichelper.hxx>
+#include <oox/helper/modelobjecthelper.hxx>
+#include <oox/helper/propertyset.hxx>
 #include <oox/mathml/import.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/vml/vmlformatting.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <ooxml/OOXMLnamespaceids.hxx>
 #include <ooxml/resourceids.hxx>

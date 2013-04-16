@@ -289,6 +289,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/unicode.hxx>
+#include <iomanip>
 #include <iostream>
 #include <jerror.h>
 #include <jpeglib.h>

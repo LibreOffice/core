@@ -157,6 +157,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
+#include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/OOoEmbeddedObjectFactory.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -426,6 +427,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/xforms/Model.hpp>
+#include <com/sun/star/xforms/XForms.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>

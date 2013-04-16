@@ -210,6 +210,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
