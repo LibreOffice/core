@@ -11,8 +11,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,ct2n,ConvertTextToNumber))
 
 $(eval $(call gb_ExternalPackage_set_outdir,ct2n,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_use_unpacked,ct2n,ConvertTextToNumber))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files_with_dir,ct2n,share/extensions/ConvertTextToNumber,\
     Addons.xcu \
     CT2N/MainCode.xba \
