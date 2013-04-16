@@ -40,8 +40,10 @@ import com.sun.star.lib.util.NativeLibraryLoader;
 /**
  * This class reprecents a connection to the local office application.
  *
+ * @deprecated
  * @since OOo 2.0.0
  */
+@SuppressWarnings("deprecation")
 public class LocalOfficeConnection
     implements OfficeConnection
 {
