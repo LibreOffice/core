@@ -140,7 +140,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			for p in $(UNPACKED_PATCHES); do \
 				pl=$(UNPACKED_PATCHLEVEL); \
 				s=$${p##*.}; case "$$s" in [0-9]$(CLOSE_PAREN) pl="$$s"; ;; esac ; \
-				$(GNUPATCH) -s "-p$$pl" < "$$p"; \
+				$(GNUPATCH) -f -s "-p$$pl" < "$$p"; \
 				if test "$$?" -ne 0; then echo "Patch FAILED: $$p"; exit 1; fi;\
 			done && \
 		) \
