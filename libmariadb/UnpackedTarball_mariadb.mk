@@ -31,6 +31,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,mariadb,\
     libmariadb/mariadb-swap.patch \
     libmariadb/mariadb-trunk-40.patch \
     libmariadb/mariadb-static-inline.patch \
+    libmariadb/mariadb-msvc.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,mariadb,\
