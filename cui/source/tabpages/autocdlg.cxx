@@ -59,11 +59,12 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
-    SfxTabDialog( pParent,  CUI_RES( RID_OFA_AUTOCORR_DLG ), _pSet ),
-    aLanguageFT ( this,     CUI_RES( FT_LANG ) ),
-    aLanguageLB ( this,     CUI_RES( LB_LANG ) )
+OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet )
+    : SfxTabDialog(pParent, "AutoCorrectDialog", "cui/ui/autocorrectdialog.ui", _pSet)
 {
+    get(m_pLanguageBox, "langbox");
+    get(m_pLanguageLB, "lang");
+
     sal_Bool bShowSWOptions = sal_False;
     sal_Bool bOpenSmartTagOptions = sal_False;
 
@@ -78,21 +79,16 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
             bOpenSmartTagOptions = sal_True;
     }
 
-    aLanguageFT.SetZOrder(0, WINDOW_ZORDER_FIRST);
-    aLanguageLB.SetZOrder(&aLanguageFT, WINDOW_ZORDER_BEHIND);
-    aLanguageLB.SetHelpId(HID_AUTOCORR_LANGUAGE);
-    FreeResource();
-
-    AddTabPage(RID_OFAPAGE_AUTOCORR_OPTIONS, OfaAutocorrOptionsPage::Create, 0);
-    AddTabPage(RID_OFAPAGE_AUTOFMT_APPLY, OfaSwAutoFmtOptionsPage::Create, 0);
-    AddTabPage(RID_OFAPAGE_AUTOCOMPLETE_OPTIONS, OfaAutoCompleteTabPage::Create, 0);
-    AddTabPage(RID_OFAPAGE_SMARTTAG_OPTIONS, OfaSmartTagOptionsTabPage::Create, 0);
+    AddTabPage("options", OfaAutocorrOptionsPage::Create, 0);
+    AddTabPage("apply", OfaSwAutoFmtOptionsPage::Create, 0);
+    AddTabPage("wordcompletion", OfaAutoCompleteTabPage::Create, 0);
+    AddTabPage("smarttags", OfaSmartTagOptionsTabPage::Create, 0);
 
     if (!bShowSWOptions)
     {
-        RemoveTabPage(RID_OFAPAGE_AUTOFMT_APPLY);
-        RemoveTabPage(RID_OFAPAGE_AUTOCOMPLETE_OPTIONS);
-        RemoveTabPage(RID_OFAPAGE_SMARTTAG_OPTIONS);
+        RemoveTabPage("apply");
+        RemoveTabPage("wordcompletion");
+        RemoveTabPage("smarttags");
     }
     else
     {
@@ -100,14 +96,14 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
         if ( !pOpt || !pOpt->pSmartTagMgr || 0 == pOpt->pSmartTagMgr->NumberOfRecognizers() )
-            RemoveTabPage(RID_OFAPAGE_SMARTTAG_OPTIONS);
+            RemoveTabPage("smarttags");
 
-        RemoveTabPage(RID_OFAPAGE_AUTOCORR_OPTIONS);
+        RemoveTabPage("options");
     }
 
-    AddTabPage(RID_OFAPAGE_AUTOCORR_REPLACE, OfaAutocorrReplacePage::Create, 0);
-    AddTabPage(RID_OFAPAGE_AUTOCORR_EXCEPT,  OfaAutocorrExceptPage::Create, 0);
-    AddTabPage(RID_OFAPAGE_AUTOCORR_QUOTE,   OfaQuoteTabPage::Create, 0);
+    m_nReplacePageId = AddTabPage("replace", OfaAutocorrReplacePage::Create, 0);
+    m_nExceptionsPageId = AddTabPage("exceptions",  OfaAutocorrExceptPage::Create, 0);
+    AddTabPage("localized", OfaQuoteTabPage::Create, 0);
 
     // initialize languages
     //! LANGUAGE_NONE is displayed as '[All]' and the LanguageType
@@ -116,31 +112,31 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
 
     if( SvtLanguageOptions().IsCTLFontEnabled() )
         nLangList |= LANG_LIST_CTL;
-    aLanguageLB.SetLanguageList( nLangList, sal_True, sal_True );
-    aLanguageLB.SelectLanguage( LANGUAGE_NONE );
-    sal_uInt16 nPos = aLanguageLB.GetSelectEntryPos();
+    m_pLanguageLB->SetLanguageList( nLangList, sal_True, sal_True );
+    m_pLanguageLB->SelectLanguage( LANGUAGE_NONE );
+    sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
-    aLanguageLB.SetEntryData( nPos, (void*)(long) LANGUAGE_UNDETERMINED );
+    m_pLanguageLB->SetEntryData( nPos, (void*)(long) LANGUAGE_UNDETERMINED );
 
     // Initializing doesn't work for static on linux - therefore here
     if( LANGUAGE_SYSTEM == eLastDialogLanguage )
         eLastDialogLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
 
     LanguageType nSelectLang = LANGUAGE_UNDETERMINED;
-    nPos = aLanguageLB.GetEntryPos( (void*)(long) eLastDialogLanguage );
+    nPos = m_pLanguageLB->GetEntryPos( (void*)(long) eLastDialogLanguage );
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
         nSelectLang = eLastDialogLanguage;
-    aLanguageLB.SelectLanguage( nSelectLang );
+    m_pLanguageLB->SelectLanguage( nSelectLang );
 
-    aLanguageLB.SetSelectHdl(LINK(this, OfaAutoCorrDlg, SelectLanguageHdl));
-
-    Size aMinSize(aLanguageFT.CalcMinimumSize());
-    //reserve some extra space for CJK accelerators that are possible inserted
-    //later (like '(A)')
-    aLanguageFT.setPosSizePixel( 0, 0, aMinSize.Width() + 20, 0, WINDOW_POSSIZE_WIDTH );
+    m_pLanguageLB->SetSelectHdl(LINK(this, OfaAutoCorrDlg, SelectLanguageHdl));
 
     if ( bOpenSmartTagOptions )
-        SetCurPageId( RID_OFAPAGE_SMARTTAG_OPTIONS );
+        SetCurPageId("smarttags");
+}
+
+void OfaAutoCorrDlg::EnableLanguage(bool bEnable)
+{
+    m_pLanguageBox->Enable(bEnable);
 }
 
 static sal_Bool lcl_FindEntry( ListBox& rLB, const String& rEntry,
@@ -171,9 +167,9 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
     if(eNewLang != eLastDialogLanguage)
     {
         sal_uInt16  nPageId = GetCurPageId();
-        if(RID_OFAPAGE_AUTOCORR_REPLACE == nPageId)
+        if (m_nReplacePageId == nPageId)
             ((OfaAutocorrReplacePage*)GetTabPage( nPageId ))->SetLanguage(eNewLang);
-        else if(RID_OFAPAGE_AUTOCORR_EXCEPT == nPageId)
+        else if (m_nExceptionsPageId == nPageId)
             ((OfaAutocorrExceptPage*)GetTabPage( nPageId ))->SetLanguage(eNewLang);
     }
     return 0;

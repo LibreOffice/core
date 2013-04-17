@@ -38,18 +38,18 @@ namespace editeng { class SortedAutoCompleteStrings; }
 
 class OfaAutoCorrDlg : public SfxTabDialog
 {
-    FixedText       aLanguageFT;
-    SvxLanguageBox  aLanguageLB;
+    VclContainer* m_pLanguageBox;
+    SvxLanguageBox*  m_pLanguageLB;
+
+    sal_uInt16 m_nReplacePageId;
+    sal_uInt16 m_nExceptionsPageId;
 
     DECL_LINK(SelectLanguageHdl, ListBox*);
 public:
 
-    OfaAutoCorrDlg(Window* pParent, const SfxItemSet *pSet );
+    OfaAutoCorrDlg(Window* pParent, const SfxItemSet *pSet);
 
-    void    EnableLanguage(sal_Bool bEnable)
-            {   aLanguageFT.Enable(bEnable);
-                aLanguageLB.Enable(bEnable);}
-
+    void EnableLanguage(bool bEnable);
 };
 
 #ifdef _OFA_AUTOCDLG_CXX
