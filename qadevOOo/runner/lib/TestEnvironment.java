@@ -98,18 +98,6 @@ public final class TestEnvironment {
     }
 
     /**
-     * Checks if an auxiliary object has been registered with name
-     *
-     * @param name a name referencing an auxiliarx object
-     *
-     * @return <tt>true</tt> if the object has been associated, <tt>false</tt>
-     * otherwise.
-     */
-    public boolean hasObjRelation(String name) {
-        return (relations.get(name) != null) ;
-    }
-
-    /**
      * Sets the <code>TestCase</code> that created the environment.
      */
     public void setTestCase( TestCase tCase) {

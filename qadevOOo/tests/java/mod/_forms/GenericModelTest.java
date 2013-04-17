@@ -124,26 +124,26 @@ import util.utils;
 * @see ifc.container._XChild
 */
 public class GenericModelTest extends TestCase {
-    private static XTextDocument m_xTextDoc;
-    private static Object m_dbSrc = null;
-    private static DBTools.DataSourceInfo m_srcInf = null;
+    private XTextDocument m_xTextDoc;
+    private Object m_dbSrc = null;
+    private DBTools.DataSourceInfo m_srcInf = null;
     /**
      * This is the name of the Data Base which the test uses: "APITestDatabase"
      */
-    protected final static String m_dbSourceName = "APITestDatabase";
-    protected final static String m_TestDB = "TestDB";
+    private final static String m_dbSourceName = "APITestDatabase";
+    private final static String m_TestDB = "TestDB";
     private DBTools m_dbTools = null;
 
-    private static boolean m_ConnectionColsed = false;
+    private boolean m_ConnectionColsed = false;
 
     /**
-     * descibes the kind of the shape which should be created.
+     * describes the kind of the shape which should be created.
      * Example: m_kindOfshape=DateFiled
      */
-    public static String m_kindOfControl = null;
+    protected String m_kindOfControl = null;
 
     /**
-     * If your object needs some special propery values you can specify them with this
+     * If your object needs some special property values you can specify them with this
      * <CODE>ArrayList</CODE>. You have to add a <CODE>NamedValue</CODE> to this list.
      * Example:
      * NamedValue myProp = new NamedValue();
@@ -151,7 +151,7 @@ public class GenericModelTest extends TestCase {
      * myProp.Value = "My special Value";
      * m_propertiesToSet.add(myProp);
      */
-    public static ArrayList<NamedValue> m_propertiesToSet = new ArrayList<NamedValue>();
+    protected ArrayList<NamedValue> m_propertiesToSet = new ArrayList<NamedValue>();
 
     /**
      * This variable contains the name of the property which should be changed while
@@ -161,56 +161,53 @@ public class GenericModelTest extends TestCase {
      * @see ifc.form._XUpdateBroadcaster.UpdateChecker
      * @see ifc.form._XUpdateBroadcaster
      */
-    public static String m_ChangePropertyName = null;
+    protected String m_ChangePropertyName = null;
     /**
      * This variable contains the value the property should be set while
      * interface <CODE>com::sun::star::form::XUpdateBroadcaster</CODE> is tested.
      * The interface test needs the <CODE>ObjectRelation</CODE>
      * "XUpdateBroadcaster.Checker" which is a <CODE>ifc.form._XUpdateBroadcaster.UpdateChecker</CODE>.
-     * Normaly the <CODE>Checker</CODE> uses <CODE>util.ValueChanger</CODE> to change
+     * Normally the <CODE>Checker</CODE> uses <CODE>util.ValueChanger</CODE> to change
      * the value of the property. If the current of this property is NULL the
      * <CODE>ValueChanger</CODE> is unable to change the value. In this case the value
      * of this variable was used.
      */
-    public static Object m_ChangePropertyValue = null;
+    protected Object m_ChangePropertyValue = null;
 
     /**
-     * This variable contains the implelemtation name of the object.
+     * This variable contains the implementation name of the object.
      */
-    public static String m_ObjectName = null;
+    protected String m_ObjectName = null;
 
     /**
-     * For local implementaions of <CODE>Checker</CODE> this variable contains the
+     * For local implementations of <CODE>Checker</CODE> this variable contains the
      * <CODE>FormLoader</CODE>
      */
-    protected static XLoadable m_XFormLoader = null;
+    protected XLoadable m_XFormLoader = null;
     /**
-     * For local implementaions of <CODE>Checker</CODE> this variable contains the
+     * For local implementations of <CODE>Checker</CODE> this variable contains the
      * <CODE>XPropertySet</CODE>
      */
-    protected static XPropertySet m_XPS = null;
+    protected XPropertySet m_XPS = null;
     /**
-     * For local implementaions of <CODE>Checker</CODE> this variable contains the
+     * For local implementations of <CODE>Checker</CODE> this variable contains the
      * <CODE>Control</CODE>
      */
-    protected static XInterface m_XCtrl = null;
+    protected XInterface m_XCtrl = null;
     /**
-     * The insterface test of <CODE>ifc.form._DataWareControlModel</CODE> expects an
+     * The interface test of <CODE>ifc.form._DataWareControlModel</CODE> expects an
      * object relation <CODE>'LC'</CODE>. This is a <CODE>XControlModel</CODE> of a shape.
      * This variable contains the kind of shape to create for the interface test,
      * f.e. "FixedText"
      * @see ifc.form._DataAwareControlModel
      */
-    protected static String m_LCShape_Type = null;
+    protected String m_LCShape_Type = null;
 
-    protected static String m_XPropertyAccess_propertyToChange = "HelpText";
-
-    protected static String m_XPropertyContainer_propertyNotRemovable = "HelpText";
     /**
-     * If this variable is true some more debug info was logged. It was setted by the parameter variable
+     * If this variable is true some more debug info was logged. It was set by the parameter variable
      * <code>debug_is_active</code>
      */
-    protected static boolean debug = false;
+    private boolean debug = false;
 
     /**
      * Creates Writer document where controls are placed.
@@ -484,10 +481,10 @@ public class GenericModelTest extends TestCase {
         tEnv.addObjRelation("XFastPropertySet.ExcludeProps", exclude);
 
         PropertyValue propVal = new PropertyValue();
-        propVal.Name = m_XPropertyAccess_propertyToChange;
+        propVal.Name = "HelpText";
         propVal.Value = "Text since XPropertyAccess";
         tEnv.addObjRelation("XPropertyAccess.propertyToChange", propVal);
-        tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", m_XPropertyContainer_propertyNotRemovable);
+        tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "HelpText");
 
 
         return tEnv;

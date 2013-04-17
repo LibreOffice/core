@@ -19,8 +19,8 @@
 package lib;
 
 import java.io.PrintWriter;
-
 import lib.TestParameters;
+
 /**
  * <code>TestCase</code> represent a factory for <code>TestEnvironment</code>s
  * creation and disposing for a given implementation object. The
@@ -49,9 +49,7 @@ public abstract class TestCase {
     /**
      * Specifies the PrintWriter to log information.
      */
-    public PrintWriter log;
-
-    //public static TestCase tCase;
+    protected PrintWriter log;
 
     /**
      * Sets the log to write information during testing.
@@ -66,7 +64,7 @@ public abstract class TestCase {
      *
      * @param tParam test parameters.
      */
-    public void initializeTestCase( TestParameters tParam ) {
+    public final void initializeTestCase( TestParameters tParam ) {
         initialize( tParam, log );
     }
 
@@ -89,7 +87,7 @@ public abstract class TestCase {
      *
      * @param tParam test parameters
      */
-    public void cleanupTestCase( TestParameters tParam ) {
+    public final void cleanupTestCase( TestParameters tParam ) {
         cleanup( tParam, log );
     }
 
