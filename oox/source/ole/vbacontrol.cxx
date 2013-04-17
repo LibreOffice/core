@@ -36,6 +36,7 @@
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/textinputstream.hxx"
 #include "oox/ole/vbahelper.hxx"
+#include <boost/unordered_map.hpp>
 
 namespace oox {
 namespace ole {
@@ -259,10 +260,13 @@ ControlModelRef VbaSiteModel::createControlModel( const AxClassTable& rClassTabl
             case VBA_SITE_COMBOBOX:         xCtrlModel.reset( new AxComboBoxModel );        break;
             case VBA_SITE_SPINBUTTON:       xCtrlModel.reset( new AxSpinButtonModel );      break;
             case VBA_SITE_SCROLLBAR:        xCtrlModel.reset( new AxScrollBarModel );       break;
-            case VBA_SITE_TABSTRIP:                                                         break;
+            case VBA_SITE_TABSTRIP:         xCtrlModel.reset( new AxTabStripModel );
+            break;
             case VBA_SITE_FRAME:            xCtrlModel.reset( new AxFrameModel );           break;
-            case VBA_SITE_MULTIPAGE:                                                        break;
-            case VBA_SITE_FORM:                                                             break;
+            case VBA_SITE_MULTIPAGE:        xCtrlModel.reset( new AxMultiPageModel );
+            break;
+            case VBA_SITE_FORM:             xCtrlModel.reset( new AxPageModel );
+            break;
             default:    OSL_FAIL( "VbaSiteModel::createControlModel - unknown type index" );
         }
     }
@@ -405,7 +409,6 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                 maControls vector). Ignore failure of importSiteModels() but
                 try to import as much controls as possible. */
             importEmbeddedSiteModels( aFStrm );
-
             /*  Open the 'o' stream containing models of embedded simple
                 controls. Stream may be empty or missing, if this control
                 contains no controls or only container controls. */
@@ -417,6 +420,58 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
             maControls.forEachMem( &VbaFormControl::importModelOrStorage,
                 ::boost::ref( aOStrm ), ::boost::ref( rStrg ), ::boost::cref( maClassTable ) );
 
+            // Special handling for multi-page which has non-standard
+            // containment and additionally needs to re-order Page children
+            if ( pContainerModel->getControlType() == API_CONTROL_MULTIPAGE )
+            {
+                AxMultiPageModel* pMultiPage = dynamic_cast< AxMultiPageModel* >( pContainerModel );
+                if ( pMultiPage )
+                {
+                    BinaryXInputStream aXStrm( rStrg.openInputStream( "x" ), true );
+                    pMultiPage->importPageAndMultiPageProperties( aXStrm, maControls.size() );
+                }
+                typedef boost::unordered_map< sal_uInt32, ::boost::shared_ptr< VbaFormControl > > IdToPageMap;
+                IdToPageMap idToPage;
+                VbaFormControlVector::iterator it = maControls.begin();
+                VbaFormControlVector::iterator it_end = maControls.end();
+                typedef std::vector< sal_uInt32 > UInt32Array;
+                AxArrayString sCaptions;
+
+                for ( ; it != it_end; ++it )
+                {
+                    if ( (*it)->mxCtrlModel->getControlType() == API_CONTROL_PAGE )
+                    {
+                        VbaSiteModelRef xPageSiteRef = (*it)->mxSiteModel;
+                        if ( xPageSiteRef.get() )
+                            idToPage[ xPageSiteRef->getId() ] = (*it);
+                    }
+                    else
+                    {
+                        AxTabStripModel* pTabStrip = static_cast<AxTabStripModel*> ( (*it)->mxCtrlModel.get() );
+                        sCaptions = pTabStrip->maItems;
+                        pMultiPage->mnActiveTab = pTabStrip->mnListIndex;
+                        pMultiPage->mnTabStyle = pTabStrip->mnTabStyle;
+                    }
+                }
+                // apply caption/titles to pages
+                UInt32Array::iterator itCtrlId = pMultiPage->mnIDs.begin();
+                UInt32Array::iterator itCtrlId_end = pMultiPage->mnIDs.end();
+                AxArrayString::iterator itCaption = sCaptions.begin();
+
+                maControls.clear();
+                // need to sort the controls according to the order of the ids
+                for ( sal_Int32 index = 1 ; ( sCaptions.size() == idToPage.size() ) && itCtrlId != itCtrlId_end; ++itCtrlId, ++itCaption, ++index )
+                {
+                    IdToPageMap::iterator iter = idToPage.find( *itCtrlId );
+                    if ( iter != idToPage.end() )
+                    {
+                        AxPageModel* pPage = static_cast<AxPageModel*> ( iter->second->mxCtrlModel.get() );
+
+                        pPage->importProperty( XML_Caption, *itCaption );
+                        maControls.push_back( iter->second );
+                    }
+                }
+            }
             /*  Reorder the controls (sorts all option buttons of an option
                 group together), and move all children of all embedded frames
                 (group boxes) to this control (UNO group boxes cannot contain

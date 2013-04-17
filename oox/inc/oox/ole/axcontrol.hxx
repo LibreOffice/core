@@ -157,13 +157,13 @@ enum ApiControlType
     API_CONTROL_COMBOBOX,
     API_CONTROL_SPINBUTTON,
     API_CONTROL_SCROLLBAR,
-    API_CONTROL_TABSTRIP,
+    API_CONTROL_TABSTRIP, //11
     API_CONTROL_PROGRESSBAR,
     API_CONTROL_GROUPBOX,
-    API_CONTROL_FRAME,
-    API_CONTROL_PAGE,
-    API_CONTROL_MULTIPAGE,
-    API_CONTROL_DIALOG
+    API_CONTROL_FRAME, // 14
+    API_CONTROL_PAGE,  // 15
+    API_CONTROL_MULTIPAGE, // 16
+    API_CONTROL_DIALOG // 17
 };
 
 // ============================================================================
@@ -600,6 +600,24 @@ private:
     bool                mbPicTiling;        ///< True = picture is repeated.
 };
 
+class OOX_DLLPUBLIC AxTabStripModel : public AxFontDataModel
+{
+public:
+    explicit            AxTabStripModel();
+
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+
+    virtual ApiControlType getControlType() const;
+
+public:
+    sal_uInt32   mnListIndex;
+    sal_uInt32   mnTabStyle;
+    sal_uInt32   mnTabData;
+    sal_uInt32   mnVariousPropertyBits;
+    std::vector< ::rtl::OUString > maItems; // captions for each tab
+    std::vector< ::rtl::OUString > maTabNames; // names for each tab
+};
+
 // ============================================================================
 
 /** Base class for a Forms 2.0 morph data control. */
@@ -851,6 +869,28 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+};
+
+class OOX_DLLPUBLIC AxPageModel : public AxContainerModelBase
+{
+public:
+    explicit            AxPageModel();
+
+    virtual ApiControlType getControlType() const;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+};
+
+class OOX_DLLPUBLIC AxMultiPageModel : public AxContainerModelBase
+{
+public:
+    explicit            AxMultiPageModel();
+
+    virtual ApiControlType getControlType() const;
+    virtual bool        importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages );
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    std::vector<sal_uInt32> mnIDs;
+    sal_uInt32          mnActiveTab;
+    sal_uInt32          mnTabStyle;
 };
 
 // ============================================================================

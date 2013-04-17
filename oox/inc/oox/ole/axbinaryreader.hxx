@@ -87,7 +87,7 @@ private:
 typedef ::std::pair< sal_Int32, sal_Int32 > AxPairData;
 
 /** An array of string values as a property. */
-typedef ::std::vector< OUString > AxStringArray;
+typedef ::std::vector< OUString > AxArrayString;
 
 // ============================================================================
 
@@ -112,6 +112,9 @@ public:
     /** Reads the next string property from the stream, if the respective flag
         in the property mask is set. */
     void                readStringProperty( OUString& orValue );
+    /** Reads ArrayString, an array of fmString ( compressed or uncompressed )
+        is read from the stream and inserted into rStrings */
+    void                readArrayStringProperty( std::vector< OUString >& rStrings );
     /** Reads the next GUID property from the stream, if the respective flag
         in the property mask is set. The GUID will be enclosed in braces. */
     void                readGuidProperty( OUString& orGuid );
@@ -135,6 +138,9 @@ public:
     /** Skips the next string property in the stream, if the respective flag in
         the property mask is set. */
     inline void         skipStringProperty() { readStringProperty( maDummyString ); }
+    /** Skips the next ArrayString property in the stream, if the respective flag in
+        the property mask is set. */
+    inline void         skipArrayStringProperty() { readArrayStringProperty( maDummyArrayString ); }
     /** Skips the next GUID property in the stream, if the respective flag in
         the property mask is set. */
     inline void         skipGuidProperty() { readGuidProperty( maDummyString ); }
@@ -185,11 +191,11 @@ private:
     };
 
     /** Complex property for an array of strings. */
-    struct StringArrayProperty : public ComplexProperty
+    struct ArrayStringProperty : public ComplexProperty
     {
-        AxStringArray&      mrArray;
+        AxArrayString&      mrArray;
         sal_uInt32          mnSize;
-        inline explicit     StringArrayProperty( AxStringArray& rArray, sal_uInt32 nSize ) :
+        inline explicit     ArrayStringProperty( AxArrayString& rArray, sal_uInt32 nSize ) :
                                 mrArray( rArray ), mnSize( nSize ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm );
     };
@@ -234,7 +240,7 @@ private:
     AxFontData          maDummyFontData;    ///< Dummy font for unsupported properties.
     StreamDataSequence  maDummyPicData;     ///< Dummy picture for unsupported properties.
     OUString     maDummyString;      ///< Dummy string for unsupported properties.
-    AxStringArray       maDummyStringArray; ///< Dummy string array for unsupported properties.
+    AxArrayString maDummyArrayString; ///< Dummy strings for unsupported ArrayString properties.
     sal_Int64           mnPropFlags;        ///< Flags specifying existing properties.
     sal_Int64           mnNextProp;         ///< Next property to read.
     sal_Int64           mnPropsEnd;         ///< End position of simple/large properties.

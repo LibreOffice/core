@@ -144,7 +144,7 @@ bool AxBinaryPropertyReader::StringProperty::readProperty( AxAlignedInputStream&
     return lclReadString( rInStrm, mrValue, mnSize, false );
 }
 
-bool AxBinaryPropertyReader::StringArrayProperty::readProperty( AxAlignedInputStream& rInStrm )
+bool AxBinaryPropertyReader::ArrayStringProperty::readProperty( AxAlignedInputStream& rInStrm )
 {
     sal_Int64 nEndPos = rInStrm.tell() + mnSize;
     while( rInStrm.tell() < nEndPos )
@@ -211,6 +211,15 @@ void AxBinaryPropertyReader::readStringProperty( OUString& orValue )
     {
         sal_uInt32 nSize = maInStrm.readAligned< sal_uInt32 >();
         maLargeProps.push_back( ComplexPropVector::value_type( new StringProperty( orValue, nSize ) ) );
+    }
+}
+
+void AxBinaryPropertyReader::readArrayStringProperty( std::vector<OUString>& orValue )
+{
+    if( startNextProperty() )
+    {
+        sal_uInt32 nSize = maInStrm.readAligned< sal_uInt32 >();
+        maLargeProps.push_back( ComplexPropVector::value_type( new ArrayStringProperty( orValue, nSize ) ) );
     }
 }
 

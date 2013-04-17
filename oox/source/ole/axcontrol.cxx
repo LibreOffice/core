@@ -1351,6 +1351,53 @@ void AxImageModel::convertProperties( PropertyMap& rPropMap, const ControlConver
 
 // ============================================================================
 
+AxTabStripModel::AxTabStripModel() :
+    mnListIndex( 0 ),
+    mnTabStyle( 0 ),
+    mnTabData( 0 ),
+    mnVariousPropertyBits( 0 )
+{
+}
+
+bool AxTabStripModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    // not worth reading much here, basically we are interested
+    // in whether we have tabs, the width, the height and the
+    // captions, everything else we can pretty much discard ( for now )
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.readIntProperty< sal_uInt32 >( mnListIndex ); // ListIndex
+    aReader.skipIntProperty< sal_uInt32 >(); // Backcolor
+    aReader.skipIntProperty< sal_uInt32 >(); // ForeColor
+    aReader.skipUndefinedProperty();
+    aReader.readPairProperty( maSize );
+    aReader.readArrayStringProperty( maItems );
+    aReader.skipIntProperty< sal_uInt8 >();  // MousePointer
+    aReader.skipUndefinedProperty();
+    aReader.skipIntProperty< sal_uInt32 >(); // TabOrientation
+    aReader.readIntProperty< sal_uInt32 >(mnTabStyle); // TabStyle
+    aReader.skipBoolProperty();              // MultiRow
+    aReader.skipIntProperty< sal_uInt32 >(); // TabFixedWidth
+    aReader.skipIntProperty< sal_uInt32 >(); // TabFixedHeight
+    aReader.skipBoolProperty();              // ToolTips
+    aReader.skipUndefinedProperty();
+    aReader.skipArrayStringProperty();  // ToolTip strings
+    aReader.skipUndefinedProperty();
+    aReader.readArrayStringProperty( maTabNames ); // Tab names
+    aReader.readIntProperty< sal_uInt32 >(mnVariousPropertyBits); // VariousPropertyBits
+    aReader.skipBoolProperty();// NewVersion
+    aReader.skipIntProperty< sal_uInt32 >(); // TabsAllocated
+    aReader.skipArrayStringProperty();  // Tags
+    aReader.readIntProperty<sal_uInt32 >(mnTabData);  // TabData
+    aReader.skipArrayStringProperty();  // Accelerators
+    aReader.skipPictureProperty(); // Mouse Icon
+    return aReader.finalizeImport() && AxFontDataModel::importBinaryModel( rInStrm );
+}
+
+ApiControlType AxTabStripModel::getControlType() const
+{
+    return API_CONTROL_TABSTRIP;
+}
+
 AxMorphDataModelBase::AxMorphDataModelBase() :
     mnTextColor( AX_SYSCOLOR_WINDOWTEXT ),
     mnBackColor( AX_SYSCOLOR_WINDOWBACK ),
@@ -2384,6 +2431,74 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
 #endif
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
+
+AxPageModel::AxPageModel()
+{
+}
+
+ApiControlType AxPageModel::getControlType() const
+{
+    return API_CONTROL_PAGE;
+}
+
+void AxPageModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    rPropMap.setProperty( PROP_Title, maCaption );
+    rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
+    rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
+    AxContainerModelBase::convertProperties( rPropMap, rConv );
+}
+
+AxMultiPageModel::AxMultiPageModel() :
+    mnActiveTab( 0 ),
+    mnTabStyle( AX_TABSTRIP_TABS )
+{
+}
+
+ApiControlType AxMultiPageModel::getControlType() const
+{
+    return API_CONTROL_MULTIPAGE;
+}
+
+
+bool AxMultiPageModel::importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages )
+{
+    // PageProperties
+    for ( sal_Int32 nPage = 0; nPage < nPages; ++nPage )
+    {
+        AxBinaryPropertyReader aReader( rInStrm );
+        aReader.skipUndefinedProperty();
+        aReader.skipIntProperty< sal_uInt32 >(); // TransistionEffect
+        aReader.skipIntProperty< sal_uInt32 >(); // TransitionPeriod
+    }
+    // MultiPageProperties
+    AxBinaryPropertyReader aReader( rInStrm );
+    sal_uInt32 nPageCount = 0;
+    aReader.skipUndefinedProperty();
+    aReader.readIntProperty< sal_uInt32 >(nPageCount); // PageCount
+    aReader.skipIntProperty< sal_uInt32 >(); //ID
+
+    // IDs
+    for ( sal_uInt32 count = 0; count < nPageCount; ++count )
+    {
+        sal_Int32 nID = 0;
+        rInStrm >> nID;
+        mnIDs.push_back( nID );
+    }
+    return true;
+}
+
+void AxMultiPageModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    rPropMap.setProperty( PROP_Title, maCaption );
+    rPropMap.setProperty( PROP_MultiPageValue, mnActiveTab + 1);
+    rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
+    rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
+    rPropMap.setProperty( PROP_Decoration, mnTabStyle != AX_TABSTRIP_NONE );
+
+    AxContainerModelBase::convertProperties( rPropMap, rConv );
+}
+
 
 // ============================================================================
 
