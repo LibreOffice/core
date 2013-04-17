@@ -113,7 +113,6 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
         nEntryCount++;
     }
 
-    const sal_uInt32 nRowCount(ceil(double(nEntryCount)/getColumnCount()));
     const Size aItemSize(getEntryEdgeLength(), getEntryEdgeLength());
     const WinBits aWinBits(GetStyle() & ~WB_VSCROLL);
 
@@ -127,7 +126,7 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
     Size aNewSize(CalcWindowSizePixel(aItemSize, getColumnCount()));
 
     // evtl. activate vertical scroll
-    const bool bAdaptHeight(aNewSize.Height() > nHeight);
+    const bool bAdaptHeight(static_cast< sal_uInt32 >(aNewSize.Height()) > nHeight);
 
     if(bAdaptHeight)
     {
