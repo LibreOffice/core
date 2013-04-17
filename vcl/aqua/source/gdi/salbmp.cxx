@@ -96,7 +96,7 @@ bool AquaSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     CreateContext();
 
     // copy layer content into the bitmap buffer
-    const CGPoint aSrcPoint = { -nX, -nY };
+    const CGPoint aSrcPoint = CGPointMake( -nX, -nY);
     ::CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
     return true;
 }
@@ -731,7 +731,7 @@ CGImageRef AquaSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, int
     else
     {
         nY = mnHeight - (nY + nNewHeight); // adjust for y-mirrored context
-        const CGRect aCropRect = {{nX, nY}, {nNewWidth, nNewHeight}};
+        const CGRect aCropRect = CGRectMake( nX, nY, nNewWidth, nNewHeight);
         xCroppedImage = CGImageCreateWithImageInRect( mxCachedImage, aCropRect );
     }
 

@@ -242,7 +242,7 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
     }
     else if( i_nWidth > 0 && i_nHeight > 0 )
     {
-        NSSize aPaperSize = { TenMuToPt(i_nWidth), TenMuToPt(i_nHeight) };
+        NSSize aPaperSize = NSMakeSize( TenMuToPt(i_nWidth), TenMuToPt(i_nHeight));
         [mpPrintInfo setPaperSize: aPaperSize];
     }
     // this seems counterintuitive

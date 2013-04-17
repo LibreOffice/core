@@ -209,7 +209,7 @@ void AquaSalFrame::initWindowAndView()
     [mpWindow setHasShadow: YES];
     [mpWindow setDelegate: mpWindow];
 
-    NSRect aRect = { { 0,0 }, { maGeometry.nWidth, maGeometry.nHeight } };
+    const NSRect aRect = NSMakeRect( 0,0, maGeometry.nWidth, maGeometry.nHeight );
     mnTrackingRectTag = [mpView addTrackingRect: aRect owner: mpView userData: nil assumeInside: NO];
 
     maSysData.pView = mpView;
@@ -500,7 +500,7 @@ void AquaSalFrame::SetMinClientSize( long nWidth, long nHeight )
         nWidth += maGeometry.nLeftDecoration + maGeometry.nRightDecoration;
         nHeight += maGeometry.nTopDecoration + maGeometry.nBottomDecoration;
 
-        NSSize aSize = { nWidth, nHeight };
+        const NSSize aSize = NSMakeSize( nWidth, nHeight);
 
         // Size of full window (content+structure) although we only
         // have the client size in arguments
@@ -529,7 +529,7 @@ void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
         if (nWidth>32767) nWidth=32767;
         if (nHeight>32767) nHeight=32767;
 
-        NSSize aSize = { nWidth, nHeight };
+        const NSSize aSize = NSMakeSize( nWidth, nHeight);
 
         // Size of full window (content+structure) although we only
         // have the client size in arguments
@@ -546,7 +546,7 @@ void AquaSalFrame::SetClientSize( long nWidth, long nHeight )
 
     if( mpWindow )
     {
-        NSSize aSize = { nWidth, nHeight };
+        const NSSize aSize = NSMakeSize( nWidth, nHeight);
 
         [mpWindow setContentSize: aSize];
         UpdateFrameGeometry();
@@ -956,7 +956,7 @@ void AquaSalFrame::SetPointerPos( long nX, long nY )
     // FIXME: use Cocoa functions
 
     // FIXME: multiscreen support
-    CGPoint aPoint = { nX + maGeometry.nX, nY + maGeometry.nY };
+    const CGPoint aPoint = CGPointMake( nX + maGeometry.nX, nY + maGeometry.nY);
     CGDirectDisplayID mainDisplayID = CGMainDisplayID();
     CGDisplayMoveCursorToPoint( mainDisplayID, aPoint );
 }
@@ -993,7 +993,7 @@ void AquaSalFrame::Flush( const Rectangle& rRect )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    NSRect aNSRect = { {rRect.Left(), rRect.Top()}, { rRect.GetWidth(), rRect.GetHeight() } };
+    NSRect aNSRect = NSMakeRect( rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
     VCLToCocoa( aNSRect, false );
     [mpView setNeedsDisplayInRect: aNSRect];
 
@@ -1755,7 +1755,7 @@ void AquaSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
 
     if( nWidth && nHeight )
     {
-        NSRect aRect = { { nX, nY }, { nWidth, nHeight } };
+        NSRect aRect = NSMakeRect( nX, nY, nWidth, nHeight);
         VCLToCocoa( aRect, false );
         maClippingRects.push_back( CGRectMake(aRect.origin.x, aRect.origin.y, aRect.size.width, aRect.size.height) );
     }

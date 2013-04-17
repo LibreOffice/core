@@ -137,9 +137,8 @@
         NSRect aImgRect = { { 2, 0 }, { 0, 0 } };
         for( size_t i = 0; i < rButtons.size(); ++i )
         {
-            NSRect aFromRect = { { 0, 0 },
-                                 { rButtons[i].maButton.maImage.GetSizePixel().Width(),
-                                   rButtons[i].maButton.maImage.GetSizePixel().Height() } };
+            const Size aPixSize = rButtons[i].maButton.maImage.GetSizePixel();
+            const NSRect aFromRect = NSMakeRect( 0, 0, aPixSize.Width(), aPixSize.Height());
             aImgRect.origin.y = floor((aFrame.size.height - aFromRect.size.height)/2);
             aImgRect.size = aFromRect.size;
             if( rButtons[i].mpNSImage )
@@ -161,9 +160,8 @@
         NSPoint aMousePt = [pEvent locationInWindow];
         for( size_t i = 0; i < rButtons.size(); ++i )
         {
-            NSRect aFromRect = { { 0, 0 },
-                                 { rButtons[i].maButton.maImage.GetSizePixel().Width(),
-                                   rButtons[i].maButton.maImage.GetSizePixel().Height() } };
+            const Size aPixSize = rButtons[i].maButton.maImage.GetSizePixel();
+            const NSRect aFromRect = NSMakeRect( 0, 0, aPixSize.Width(), aPixSize.Height());
             aImgRect.origin.y = (aFrame.size.height - aFromRect.size.height)/2;
             aImgRect.size = aFromRect.size;
             if( aMousePt.x >= aImgRect.origin.x && aMousePt.x <= (aImgRect.origin.x+aImgRect.size.width) &&
@@ -195,9 +193,9 @@
             aSize.width = 2;
             for( size_t i = 0; i < rButtons.size(); ++i )
             {
-                NSRect aImgRect = { { aSize.width, floor((aSize.height-rButtons[i].maButton.maImage.GetSizePixel().Height())/2) },
-                                     { rButtons[i].maButton.maImage.GetSizePixel().Width(),
-                                       rButtons[i].maButton.maImage.GetSizePixel().Height() } };
+                const Size aPixSize = rButtons[i].maButton.maImage.GetSizePixel();
+                const int nY = floor( aSize.height - aPixSize.Height() ) / 2;
+                NSRect aImgRect = NSMakeRect( aSize.width, nY, aPixSize.Width(), aPixSize.Height());
                 if( rButtons[i].mpToolTipString )
                     [self addToolTipRect: aImgRect owner: rButtons[i].mpToolTipString userData: NULL];
                 aSize.width += 2 + aImgRect.size.width;

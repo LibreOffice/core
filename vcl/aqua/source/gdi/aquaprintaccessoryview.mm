@@ -805,7 +805,7 @@ static void addBool( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                     ControlTarget* pCtrlTarget
                     )
 {
-    NSRect aCheckRect = { { rCurX + nAttachOffset, 0 }, { 0, 15 } };
+    NSRect aCheckRect = NSMakeRect( rCurX + nAttachOffset, 0, 0, 15);
     NSButton* pBtn = [[NSButton alloc] initWithFrame: aCheckRect];
     [pBtn setButtonType: NSSwitchButton];                
     [pBtn setState: bValue ? NSOnState : NSOffState];
@@ -874,7 +874,7 @@ static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttach
     // setup radio matrix
     NSButtonCell* pProto = [[NSButtonCell alloc] init];
     
-    NSRect aRadioRect = { { rCurX + nOff, 0 }, { 280 - rCurX, 5*rChoices.getLength() } };
+    NSRect aRadioRect = NSMakeRect( rCurX + nOff, 0, 280 - rCurX, 5*rChoices.getLength());
     [pProto setTitle: @"RadioButtonGroup"];
     [pProto setButtonType: NSRadioButton];
     NSMatrix* pMatrix = [[NSMatrix alloc] initWithFrame: aRadioRect
@@ -932,7 +932,7 @@ static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long /*nAttac
     aTextRect.origin.x = rCurX /* + nAttachOffset*/;
 
     // don't indent attached lists, looks bad in the existing cases
-    NSRect aBtnRect = { { rCurX /*+ nAttachOffset*/ + aTextRect.size.width, 0 }, { 0, 15 } };
+    NSRect aBtnRect = NSMakeRect( rCurX /*+ nAttachOffset*/ + aTextRect.size.width, 0, 0, 15);
     NSPopUpButton* pBtn = [[NSPopUpButton alloc] initWithFrame: aBtnRect pullsDown: NO];
 
     // iterate options
@@ -1008,7 +1008,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
         nOff = aTextRect.size.width + 5;
     }
     
-    NSRect aFieldRect = { { rCurX + nOff +  nAttachOffset, 0 }, { 100, 25 } };
+    NSRect aFieldRect = NSMakeRect( rCurX + nOff + nAttachOffset, 0, 100, 25);
     NSTextField* pFieldView = [[NSTextField alloc] initWithFrame: aFieldRect];
     [pFieldView setEditable: YES];
     [pFieldView setSelectable: YES];
@@ -1032,9 +1032,9 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     if( rCtrlType.equalsAscii( "Range" ) )
     {
         // add a stepper control
-        NSRect aStepFrame = { { aFieldRect.origin.x + aFieldRect.size.width + 5,
-                                aFieldRect.origin.y },
-                            { 15, aFieldRect.size.height } };
+        NSRect aStepFrame = NSMakeRect(
+                                aFieldRect.origin.x + aFieldRect.size.width + 5, aFieldRect.origin.y,
+                                15, aFieldRect.size.height);
         NSStepper* pStep = [[NSStepper alloc] initWithFrame: aStepFrame];
         [pStep setIncrement: 1];
         [pStep setValueWraps: NO];
