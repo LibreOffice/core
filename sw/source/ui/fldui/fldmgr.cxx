@@ -75,6 +75,8 @@
 #include <flddropdown.hxx>
 #include <fldui.hrc>
 #include <tox.hxx>
+#include <misc.hrc>
+#include <cnttab.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -679,6 +681,9 @@ String SwFldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
     {
         if(xNumberingInfo.is())
         {
+            SwOLENames aNames(SW_RES(STRRES_NUMTYPES));
+            ResStringArray& rNames = aNames.GetNames();
+
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();
             sal_Int32 nOffset = aSwFlds[nPos].nFmtEnd - nStart;
@@ -690,7 +695,15 @@ String SwFldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
                 {
                     if(nValidEntry == ((sal_Int32)nFormatId) - nOffset)
                     {
-                        aRet = xNumberingInfo->getNumberingIdentifier( pTypes[nType] );
+                        sal_uInt32 n = rNames.FindIndex(pTypes[nType]);
+                        if (n != RESARRAY_INDEX_NOTFOUND)
+                        {
+                            aRet = rNames.GetString(n);
+                        }
+                        else
+                        {
+                            aRet = xNumberingInfo->getNumberingIdentifier( pTypes[nType] );
+                        }
                         break;
                     }
                     ++nValidEntry;
