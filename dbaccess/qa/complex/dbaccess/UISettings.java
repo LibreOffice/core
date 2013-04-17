@@ -78,9 +78,9 @@ public class UISettings extends TestCase
             tableViewController.getCurrentControl().getModel() );
 
         // verify the properties
-        assertEquals( "wrong font name", "Andale Sans UI", (String)tableControlModel.getPropertyValue( "FontName" ) );
-        assertEquals( "wrong font height", (float)20, ((Float)tableControlModel.getPropertyValue( "FontHeight" )).floatValue(), 0 );
-        assertEquals( "wrong font slant", FontSlant.ITALIC, (FontSlant)tableControlModel.getPropertyValue( "FontSlant" ) );
+        assertEquals( "wrong font name", "Andale Sans UI", tableControlModel.getPropertyValue( "FontName" ) );
+        assertEquals( "wrong font height", 20, ((Float)tableControlModel.getPropertyValue( "FontHeight" )).floatValue(), 0 );
+        assertEquals( "wrong font slant", FontSlant.ITALIC, tableControlModel.getPropertyValue( "FontSlant" ) );
 
         // close the doc
         database.saveAndClose();

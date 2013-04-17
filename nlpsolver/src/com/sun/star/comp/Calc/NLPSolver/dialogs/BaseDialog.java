@@ -76,9 +76,9 @@ public abstract class BaseDialog extends BaseControl {
     public XFrame getCurrentFrame() {
         try {
             Object oDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", context);
-            XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, oDesktop);
+            XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, oDesktop);
             XComponent xComponent = xDesktop.getCurrentComponent();
-            XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xComponent);
+            XModel xModel = UnoRuntime.queryInterface(XModel.class, xComponent);
             XController xController = xModel.getCurrentController();
             return xController.getFrame();
         } catch (Exception e) {
@@ -96,26 +96,26 @@ public abstract class BaseDialog extends BaseControl {
         try {
             xMCF = context.getServiceManager();
             setUnoModel(xMCF.createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", context));
-            xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, getUnoModel());
+            xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, getUnoModel());
             
             setProperty("Title", title);
             setPosition(x, y);
             setSize(width, height);
 
             unoControl = xMCF.createInstanceWithContext("com.sun.star.awt.UnoControlDialog", context);
-            XControl xControl = (XControl)UnoRuntime.queryInterface(XControl.class, unoControl);
-            XControlModel xControlModel = (XControlModel)UnoRuntime.queryInterface(XControlModel.class, getUnoModel());
+            XControl xControl = UnoRuntime.queryInterface(XControl.class, unoControl);
+            XControlModel xControlModel = UnoRuntime.queryInterface(XControlModel.class, getUnoModel());
             xControl.setModel(xControlModel);
             
             toolkit = xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", context);
-            XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(XToolkit.class, toolkit);
-            xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, unoControl);
+            XToolkit xToolkit = UnoRuntime.queryInterface(XToolkit.class, toolkit);
+            xWindow = UnoRuntime.queryInterface(XWindow.class, unoControl);
             xWindow.setVisible(false);
-            XWindowPeer xParentWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, getCurrentFrame().getComponentWindow());
+            XWindowPeer xParentWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, getCurrentFrame().getComponentWindow());
             xControl.createPeer(xToolkit, xParentWindowPeer);
             xWindowPeer = xControl.getPeer();
             
-            xDialog = (XDialog) UnoRuntime.queryInterface(XDialog.class, unoControl);
+            xDialog = UnoRuntime.queryInterface(XDialog.class, unoControl);
             
             //center if necessary
             if (x < 0 || y < 0) {
@@ -137,7 +137,7 @@ public abstract class BaseDialog extends BaseControl {
 
     @Override
     protected void finalize() throws Throwable {
-        XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, unoControl);
+        XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, unoControl);
         xComponent.dispose();
         super.finalize();
     }

@@ -83,8 +83,8 @@ public class SelectionChangeListener implements XSelectionChangeListener {
 
         // insert a cell range with 4 columns and 12 rows filled with random numbers
         XCellRange aRange = aCalcHelper.insertRandomRange( 4, 12 );
-        CellRangeAddress aRangeAddress = ((XCellRangeAddressable) UnoRuntime.queryInterface(
-            XCellRangeAddressable.class, aRange)).getRangeAddress();
+        CellRangeAddress aRangeAddress = UnoRuntime.queryInterface(
+            XCellRangeAddressable.class, aRange).getRangeAddress();
 
         // change view to sheet containing the chart
         aCalcHelper.raiseChartSheet();
@@ -113,10 +113,10 @@ public class SelectionChangeListener implements XSelectionChangeListener {
 
         while( bTrying ) {
             // start listening for selection changes
-            XSelectionSupplier aSelSupp = (XSelectionSupplier) UnoRuntime.queryInterface(
+            XSelectionSupplier aSelSupp = UnoRuntime.queryInterface(
                 XSelectionSupplier.class,
-                (((XModel) UnoRuntime.queryInterface(
-                XModel.class, maChartDocument )).getCurrentController()) );
+                (UnoRuntime.queryInterface(
+                XModel.class, maChartDocument ).getCurrentController()) );
             if( aSelSupp != null ) {
                 aSelSupp.addSelectionChangeListener( this );
                 System.out.println( "Successfully attached as selection change listener" );
@@ -124,7 +124,7 @@ public class SelectionChangeListener implements XSelectionChangeListener {
             }
 
             // start listening for death of Controller
-            XComponent aComp = (XComponent) UnoRuntime.queryInterface( XComponent.class, aSelSupp );
+            XComponent aComp = UnoRuntime.queryInterface( XComponent.class, aSelSupp );
             if( aComp != null ) {
                 aComp.addEventListener( this );
                 System.out.println( "Successfully attached as dispose listener" );
@@ -144,13 +144,13 @@ public class SelectionChangeListener implements XSelectionChangeListener {
         System.out.println( "disposing called.  detaching as listener" );
 
         // stop listening for selection changes
-        XSelectionSupplier aCtrl = (XSelectionSupplier) UnoRuntime.queryInterface(
+        XSelectionSupplier aCtrl = UnoRuntime.queryInterface(
             XSelectionSupplier.class, aSourceObj );
         if( aCtrl != null )
             aCtrl.removeSelectionChangeListener( this );
 
         // remove as dispose listener
-        XComponent aComp = (XComponent) UnoRuntime.queryInterface( XComponent.class, aSourceObj );
+        XComponent aComp = UnoRuntime.queryInterface( XComponent.class, aSourceObj );
         if( aComp != null )
             aComp.removeEventListener( this );
 
@@ -162,7 +162,7 @@ public class SelectionChangeListener implements XSelectionChangeListener {
 
     // XSelectionChangeListener
     public void selectionChanged( EventObject aEvent ) {
-        XController aCtrl = (XController) UnoRuntime.queryInterface( XController.class, aEvent.Source );
+        XController aCtrl = UnoRuntime.queryInterface( XController.class, aEvent.Source );
         if( aCtrl != null ) {
             XMultiComponentFactory mMCF = maContext.getServiceManager();
 
@@ -195,18 +195,18 @@ public class SelectionChangeListener implements XSelectionChangeListener {
                 Object oDesktop = mMCF.createInstanceWithContext("com.sun.star.frame.Desktop", maContext);
                 Object oToolKit = mMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", maContext);
 
-                aDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, oDesktop);
-                aToolKit = (XInterface) UnoRuntime.queryInterface(XInterface.class, oToolKit);
+                aDesktop = UnoRuntime.queryInterface(XDesktop.class, oDesktop);
+                aToolKit = UnoRuntime.queryInterface(XInterface.class, oToolKit);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
             XWindow xWin = aDesktop.getCurrentFrame().getContainerWindow();
-            XWindowPeer aWinPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xWin);
+            XWindowPeer aWinPeer = UnoRuntime.queryInterface(XWindowPeer.class, xWin);
 
             Rectangle aRect = new Rectangle();
             int button = com.sun.star.awt.MessageBoxButtons.BUTTONS_OK;
-            XMessageBoxFactory aMBF = (XMessageBoxFactory) UnoRuntime.queryInterface(XMessageBoxFactory.class, aToolKit);
+            XMessageBoxFactory aMBF = UnoRuntime.queryInterface(XMessageBoxFactory.class, aToolKit);
             XMessageBox xMB = aMBF.createMessageBox(aWinPeer, aRect, "infobox" , button, "Event-Notify", "Listener was called, selcetion has changed");
             xMB.execute();
         }

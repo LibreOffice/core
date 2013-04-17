@@ -59,8 +59,8 @@ public class ObjectInspector extends complexlib.ComplexTestCase
     public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         m_orb = (XMultiServiceFactory)param.getMSF();
-        m_context = (XComponentContext)UnoRuntime.queryInterface( XComponentContext.class,
-                ((XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_orb )).getPropertyValue( "DefaultContext" ) );
+        m_context = UnoRuntime.queryInterface( XComponentContext.class,
+                UnoRuntime.queryInterface( XPropertySet.class, m_orb ).getPropertyValue( "DefaultContext" ) );
         m_desktop = new Frame( m_orb.createInstance( "com.sun.star.frame.Desktop" ) );
     }
 
@@ -145,7 +145,7 @@ public class ObjectInspector extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     private com.sun.star.awt.XWindow createFloatingWindow() throws com.sun.star.uno.Exception
     {
-        com.sun.star.awt.XToolkit toolkit = (com.sun.star.awt.XToolkit)UnoRuntime.queryInterface(
+        com.sun.star.awt.XToolkit toolkit = UnoRuntime.queryInterface(
                 com.sun.star.awt.XToolkit.class, m_orb.createInstance( "com.sun.star.awt.Toolkit" ) );
 
         com.sun.star.awt.WindowDescriptor windowDescriptor = new com.sun.star.awt.WindowDescriptor();
@@ -161,7 +161,7 @@ public class ObjectInspector extends complexlib.ComplexTestCase
                                             +   com.sun.star.awt.WindowAttribute.CLOSEABLE
                                             +   com.sun.star.awt.VclWindowPeerAttribute.CLIPCHILDREN;
 
-    return (com.sun.star.awt.XWindow)UnoRuntime.queryInterface( com.sun.star.awt.XWindow.class,
+    return UnoRuntime.queryInterface( com.sun.star.awt.XWindow.class,
                 toolkit.createWindow( windowDescriptor ) );
     }
 }

@@ -87,7 +87,7 @@ public class ControlValidation extends complexlib.ComplexTestCase implements com
             // close our document
             if ( m_document != null )
             {
-                XCloseable closeDoc = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,
+                XCloseable closeDoc = UnoRuntime.queryInterface( XCloseable.class,
                     m_document.getDocument() );
                 closeDoc.close( true );
             }

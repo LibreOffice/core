@@ -53,7 +53,7 @@ public class TableCellTextBinding
     /** Creates a new instance of TableCellTextBinding */
     public TableCellTextBinding( XCell cell )
     {
-        m_cellText = (XTextRange)UnoRuntime.queryInterface( XTextRange.class, cell );
+        m_cellText = UnoRuntime.queryInterface( XTextRange.class, cell );
 
         m_newCellText = new String();
         m_listeners = new java.util.LinkedList();

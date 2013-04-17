@@ -97,6 +97,7 @@ public class StorageAccess implements org.hsqldb.lib.Storage {
         return readonly;
     }
 
+    @SuppressWarnings("cast")
     public long readLong() throws java.io.IOException {
         return (((long) readInt()) << 32) + (((long) readInt()) & 0xFFFFFFFFL);
     }

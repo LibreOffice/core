@@ -94,12 +94,12 @@ public class DocumentViewHelper
         // go get the current view
         XController xController = (XController)query( XController.class );
         // go get the dispatch provider of it's frame
-        XDispatchProvider xProvider = (XDispatchProvider)UnoRuntime.queryInterface(
+        XDispatchProvider xProvider = UnoRuntime.queryInterface(
             XDispatchProvider.class, xController.getFrame() );
         if ( null != xProvider )
         {
             // need an URLTransformer
-            XURLTransformer xTransformer = (XURLTransformer)UnoRuntime.queryInterface(
+            XURLTransformer xTransformer = UnoRuntime.queryInterface(
                     XURLTransformer.class, m_orb.createInstance( "com.sun.star.util.URLTransformer" ) );
             xTransformer.parseStrict( aURL );
 
@@ -155,14 +155,14 @@ public class DocumentViewHelper
     /* ------------------------------------------------------------------ */
     public XControl getControl( Object aModel ) throws com.sun.star.uno.Exception
     {
-        XControlModel xModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class, aModel );
+        XControlModel xModel = UnoRuntime.queryInterface( XControlModel.class, aModel );
         return getControl( xModel );
     }
 
     /* ------------------------------------------------------------------ */
     public Object getControl( Object aModel, Class aInterfaceClass ) throws com.sun.star.uno.Exception
     {
-        XControlModel xModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class, aModel );
+        XControlModel xModel = UnoRuntime.queryInterface( XControlModel.class, aModel );
         return UnoRuntime.queryInterface( aInterfaceClass, getControl( xModel ) );
     }
 
@@ -206,7 +206,7 @@ public class DocumentViewHelper
         XControl xControl = getControl( xModel );
 
         // the focus can be set to an XWindow only
-        XWindow xControlWindow = (XWindow)UnoRuntime.queryInterface( XWindow.class,
+        XWindow xControlWindow = UnoRuntime.queryInterface( XWindow.class,
             xControl );
 
         // grab the focus
@@ -229,7 +229,7 @@ public class DocumentViewHelper
             XPropertySet xControlProps = dbfTools.queryPropertySet( xForm.getByIndex( i ) );
             if ( FormComponentType.FIXEDTEXT != ((Short)xControlProps.getPropertyValue( "ClassId" )).shortValue() )
             {
-                XControlModel xControlModel = (XControlModel)UnoRuntime.queryInterface(
+                XControlModel xControlModel = UnoRuntime.queryInterface(
                     XControlModel.class, xControlProps );
                 // set the focus to this control
                 grabControlFocus( xControlModel );

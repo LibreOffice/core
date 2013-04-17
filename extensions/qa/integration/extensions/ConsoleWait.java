@@ -75,7 +75,7 @@ public class ConsoleWait implements com.sun.star.lang.XEventListener
     public ConsoleWait( Object _disposable )
     {
         m_disposable = _disposable;
-        XComponent component = (XComponent)UnoRuntime.queryInterface( XComponent.class, _disposable );
+        XComponent component = UnoRuntime.queryInterface( XComponent.class, _disposable );
         if ( component != null )
             component.addEventListener( this );
     }

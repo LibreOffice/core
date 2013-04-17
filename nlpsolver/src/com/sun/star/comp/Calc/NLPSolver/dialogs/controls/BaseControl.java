@@ -62,7 +62,7 @@ public abstract class BaseControl {
      */
     protected void setUnoModel(Object unoModel) {
         this.unoModel = unoModel;
-        properties = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, unoModel);
+        properties = UnoRuntime.queryInterface(XPropertySet.class, unoModel);
     }
     
     public Object getUnoControl() {
@@ -73,10 +73,10 @@ public abstract class BaseControl {
         //TODO : remove from existing parentControl
         try {
             String name = getName();
-            XNameContainer nameContainer = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, parentControl.unoModel);
+            XNameContainer nameContainer = UnoRuntime.queryInterface(XNameContainer.class, parentControl.unoModel);
             nameContainer.insertByName(name, unoModel);
             
-            XControlContainer controlContainer = (XControlContainer) UnoRuntime.queryInterface(XControlContainer.class, parentControl.unoControl);
+            XControlContainer controlContainer = UnoRuntime.queryInterface(XControlContainer.class, parentControl.unoControl);
             unoControl = controlContainer.getControl(name);
             
             this.parentControl = parentControl;
@@ -138,7 +138,7 @@ public abstract class BaseControl {
     }
 
     public void setVisible(boolean visible) {
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, unoControl);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, unoControl);
         xWindow.setVisible(visible);
     }
     

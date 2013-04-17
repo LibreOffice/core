@@ -32,9 +32,9 @@ public class Model
 
     protected Model( Object _model )
     {
-        m_model = (XModel)UnoRuntime.queryInterface( XModel.class, _model );
-        m_modelProps = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, _model );
-        m_helper = (XFormsUIHelper1)UnoRuntime.queryInterface( XFormsUIHelper1.class,
+        m_model = UnoRuntime.queryInterface( XModel.class, _model );
+        m_modelProps = UnoRuntime.queryInterface( XPropertySet.class, _model );
+        m_helper = UnoRuntime.queryInterface( XFormsUIHelper1.class,
             m_model );
     }
 

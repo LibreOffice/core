@@ -86,7 +86,7 @@ public abstract class BaseNLPSolver extends WeakBase
         m_componentFactory = xContext.getServiceManager();
         try {
             Object toolkit = m_componentFactory.createInstanceWithContext("com.sun.star.awt.Toolkit", xContext);
-            m_xReschedule = (XReschedule) UnoRuntime.queryInterface(XReschedule.class, toolkit);
+            m_xReschedule = UnoRuntime.queryInterface(XReschedule.class, toolkit);
         } catch (Exception ex) {
             Logger.getLogger(BaseNLPSolver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -145,7 +145,7 @@ public abstract class BaseNLPSolver extends WeakBase
 
     public void setDocument(XSpreadsheetDocument document) {
         m_document = document;
-        m_xModel = (XModel) UnoRuntime.queryInterface(XModel.class, m_document);
+        m_xModel = UnoRuntime.queryInterface(XModel.class, m_document);
     }
 
     public CellAddress getObjective() {
@@ -348,8 +348,8 @@ public abstract class BaseNLPSolver extends WeakBase
     protected XCell getCell(int col, int row, int sheet) {
         try {
             XSpreadsheets xSpreadsheets = m_document.getSheets();
-            XIndexAccess xSheetIndex = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-            XSpreadsheet xSpreadsheet = (XSpreadsheet) UnoRuntime.queryInterface(XSpreadsheet.class, xSheetIndex.getByIndex(sheet));
+            XIndexAccess xSheetIndex = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+            XSpreadsheet xSpreadsheet = UnoRuntime.queryInterface(XSpreadsheet.class, xSheetIndex.getByIndex(sheet));
             return xSpreadsheet.getCellByPosition(col, row);
         } catch (IndexOutOfBoundsException ex) {
             Logger.getLogger(BaseNLPSolver.class.getName()).log(Level.SEVERE, null, ex);
@@ -368,9 +368,9 @@ public abstract class BaseNLPSolver extends WeakBase
     protected XCellRangeData getCellRangeData(int sheet, int startCol, int startRow, int endCol, int endRow) {
         try {
             XSpreadsheets xSpreadsheets = m_document.getSheets();
-            XIndexAccess xSheetIndex = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-            XSpreadsheet xSpreadsheet = (XSpreadsheet) UnoRuntime.queryInterface(XSpreadsheet.class, xSheetIndex.getByIndex(sheet));
-            return (XCellRangeData) UnoRuntime.queryInterface(XCellRangeData.class, xSpreadsheet.getCellRangeByPosition(startCol, startRow, endCol, endRow));
+            XIndexAccess xSheetIndex = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+            XSpreadsheet xSpreadsheet = UnoRuntime.queryInterface(XSpreadsheet.class, xSheetIndex.getByIndex(sheet));
+            return UnoRuntime.queryInterface(XCellRangeData.class, xSpreadsheet.getCellRangeByPosition(startCol, startRow, endCol, endRow));
         } catch (IndexOutOfBoundsException ex) {
             Logger.getLogger(BaseNLPSolver.class.getName()).log(Level.SEVERE, null, ex);
         } catch (WrappedTargetException ex) {
@@ -388,9 +388,9 @@ public abstract class BaseNLPSolver extends WeakBase
     protected XChartDataArray getChartDataArray(int sheet, int startCol, int startRow, int endCol, int endRow) {
         try {
             XSpreadsheets xSpreadsheets = m_document.getSheets();
-            XIndexAccess xSheetIndex = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
-            XSpreadsheet xSpreadsheet = (XSpreadsheet) UnoRuntime.queryInterface(XSpreadsheet.class, xSheetIndex.getByIndex(sheet));
-            return (XChartDataArray) UnoRuntime.queryInterface(XChartDataArray.class, xSpreadsheet.getCellRangeByPosition(startCol, startRow, endCol, endRow));
+            XIndexAccess xSheetIndex = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+            XSpreadsheet xSpreadsheet = UnoRuntime.queryInterface(XSpreadsheet.class, xSheetIndex.getByIndex(sheet));
+            return UnoRuntime.queryInterface(XChartDataArray.class, xSpreadsheet.getCellRangeByPosition(startCol, startRow, endCol, endRow));
         } catch (IndexOutOfBoundsException ex) {
             Logger.getLogger(BaseNLPSolver.class.getName()).log(Level.SEVERE, null, ex);
         } catch (WrappedTargetException ex) {
@@ -494,17 +494,17 @@ public abstract class BaseNLPSolver extends WeakBase
             m_xModel.unlockControllers();
 
         try {
-            XIndexAccess xSpreadsheets = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, m_document.getSheets());
+            XIndexAccess xSpreadsheets = UnoRuntime.queryInterface(XIndexAccess.class, m_document.getSheets());
             int sheets = xSpreadsheets.getCount();
             for (int i = 0; i < sheets; i++) {
                 Object sheet = xSpreadsheets.getByIndex(i);
-                XTableChartsSupplier xTableChartsSupplier = (XTableChartsSupplier) UnoRuntime.queryInterface(XTableChartsSupplier.class, sheet);
-                XIndexAccess xCharts = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTableChartsSupplier.getCharts());
+                XTableChartsSupplier xTableChartsSupplier = UnoRuntime.queryInterface(XTableChartsSupplier.class, sheet);
+                XIndexAccess xCharts = UnoRuntime.queryInterface(XIndexAccess.class, xTableChartsSupplier.getCharts());
                 int charts = xCharts.getCount();
                 for (int j = 0; j < charts; j++) {
                     Object chart = xCharts.getByIndex(j);
-                    XEmbeddedObjectSupplier xChartObjects = (XEmbeddedObjectSupplier) UnoRuntime.queryInterface(XEmbeddedObjectSupplier.class, chart);
-                    XModel xChartModel = (XModel) UnoRuntime.queryInterface(XModel.class, xChartObjects.getEmbeddedObject());
+                    XEmbeddedObjectSupplier xChartObjects = UnoRuntime.queryInterface(XEmbeddedObjectSupplier.class, chart);
+                    XModel xChartModel = UnoRuntime.queryInterface(XModel.class, xChartObjects.getEmbeddedObject());
                     if (lock)
                         xChartModel.lockControllers();
                     else

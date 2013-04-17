@@ -82,11 +82,11 @@ public class ValueBinding extends integration.forms.TestCase
 
         // insert a table with exactly one cell. The content of this table will be synced with
         // the content of a form control
-        XTextDocument textDoc = (XTextDocument)UnoRuntime.queryInterface( XTextDocument.class,  m_document.getDocument() );
+        XTextDocument textDoc = UnoRuntime.queryInterface( XTextDocument.class,  m_document.getDocument() );
         XText documentText = textDoc.getText();
         XTextCursor textCursor = documentText.createTextCursor();
 
-        XTextTable table = (XTextTable)UnoRuntime.queryInterface( XTextTable.class,
+        XTextTable table = UnoRuntime.queryInterface( XTextTable.class,
             m_document.createInstance( "com.sun.star.text.TextTable" )
         );
         table.initialize( 1, 1 );
@@ -98,7 +98,7 @@ public class ValueBinding extends integration.forms.TestCase
         // create a value binding for the first cell of the table
         XValueBinding cellBinding = new TableCellTextBinding( table.getCellByName( "A1" ) );
         // and bind it to the control
-        XBindableValue bindable = (XBindableValue)UnoRuntime.queryInterface(
+        XBindableValue bindable = UnoRuntime.queryInterface(
             XBindableValue.class, textControl
         );
         bindable.setValueBinding( cellBinding );

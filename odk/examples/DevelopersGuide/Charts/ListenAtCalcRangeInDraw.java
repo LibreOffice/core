@@ -95,7 +95,7 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
             "com.sun.star.chart.XYDiagram" );
 
         // attach the data coming from the cell range to the chart
-        maChartData = (XChartData) UnoRuntime.queryInterface( XChartData.class, aRange );
+        maChartData = UnoRuntime.queryInterface( XChartData.class, aRange );
         maChartDocument.attachData( maChartData );
     }
 
@@ -105,17 +105,17 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
     {
         try
         {
-            ((XPropertySet) UnoRuntime.queryInterface(
-                XPropertySet.class, maChartDocument )).setPropertyValue(
+            UnoRuntime.queryInterface(
+                XPropertySet.class, maChartDocument ).setPropertyValue(
                 "HasSubTitle", new Boolean( true ));
 
             // start listening for death of spreadsheet
-            ((XComponent) UnoRuntime.queryInterface(
-                XComponent.class, maSheetDoc )).addEventListener( this );
+            UnoRuntime.queryInterface(
+                XComponent.class, maSheetDoc ).addEventListener( this );
 
             // start listening for death of chart
-            ((XComponent) UnoRuntime.queryInterface(
-                XComponent.class, maChartDocument )).addEventListener( this );
+            UnoRuntime.queryInterface(
+                XComponent.class, maChartDocument ).addEventListener( this );
 
             //start listening for change of data
             maChartData.addChartDataChangeEventListener( this );
@@ -146,10 +146,10 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
         maChartData.removeChartDataChangeEventListener( this );
 
         // remove dispose listeners
-        ((XComponent) UnoRuntime.queryInterface(
-            XComponent.class, maSheetDoc )).removeEventListener( this );
-        ((XComponent) UnoRuntime.queryInterface(
-            XComponent.class, maChartDocument )).removeEventListener( this );
+        UnoRuntime.queryInterface(
+            XComponent.class, maSheetDoc ).removeEventListener( this );
+        UnoRuntime.queryInterface(
+            XComponent.class, maChartDocument ).removeEventListener( this );
 
         System.exit( 0 );
     }
@@ -164,12 +164,12 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
 
         try
         {
-            XPropertySet aDocProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet aDocProp = UnoRuntime.queryInterface(
                 XPropertySet.class, maChartDocument );
             aDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
 
-            ((XPropertySet) UnoRuntime.queryInterface(
-                XPropertySet.class, maChartDocument.getSubTitle())).setPropertyValue(
+            UnoRuntime.queryInterface(
+                XPropertySet.class, maChartDocument.getSubTitle()).setPropertyValue(
                 "String", aTitle );
 
             maChartDocument.attachData( maChartData );

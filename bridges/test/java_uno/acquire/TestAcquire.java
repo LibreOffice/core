@@ -65,17 +65,17 @@ public final class TestAcquire {
         WaitUnreachable u;
 
         u = new WaitUnreachable(new XInterface() {});
-        test.setInterfaceToInterface((XInterface) u.get());
+        test.setInterfaceToInterface(u.get());
         receive(test.getInterfaceFromInterface());
         test.clearInterface();
         u.waitUnreachable();
         u = new WaitUnreachable(new XBase() {});
-        test.setInterfaceToInterface((XBase) u.get());
+        test.setInterfaceToInterface(u.get());
         receive(test.getInterfaceFromInterface());
         test.clearInterface();
         u.waitUnreachable();
         u = new WaitUnreachable(new XDerived() {});
-        test.setInterfaceToInterface((XDerived) u.get());
+        test.setInterfaceToInterface(u.get());
         receive(test.getInterfaceFromInterface());
         test.clearInterface();
         u.waitUnreachable();
@@ -126,13 +126,13 @@ public final class TestAcquire {
         u.waitUnreachable();
 
         u = new WaitUnreachable(new XInterface() {});
-        receive(test.roundTripInterfaceToInterface((XInterface) u.get()));
+        receive(test.roundTripInterfaceToInterface(u.get()));
         u.waitUnreachable();
         u = new WaitUnreachable(new XBase() {});
-        receive(test.roundTripInterfaceToInterface((XBase) u.get()));
+        receive(test.roundTripInterfaceToInterface(u.get()));
         u.waitUnreachable();
         u = new WaitUnreachable(new XDerived() {});
-        receive(test.roundTripInterfaceToInterface((XDerived) u.get()));
+        receive(test.roundTripInterfaceToInterface(u.get()));
         u.waitUnreachable();
 
         u = new WaitUnreachable(new XBase() {});

@@ -80,10 +80,10 @@ public class JavaSampleChartAddIn extends WeakBase implements
     {
         if( aArguments.length > 0 )
         {
-            maChartDocument = (XChartDocument) UnoRuntime.queryInterface(
+            maChartDocument = UnoRuntime.queryInterface(
                 XChartDocument.class, aArguments[ 0 ]);
 
-            XPropertySet aDocProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet aDocProp = UnoRuntime.queryInterface(
                 XPropertySet.class, maChartDocument );
             if( aDocProp != null )
             {
@@ -92,14 +92,14 @@ public class JavaSampleChartAddIn extends WeakBase implements
             }
 
             // get the draw page
-            XDrawPageSupplier aPageSupp = (XDrawPageSupplier) UnoRuntime.queryInterface(
+            XDrawPageSupplier aPageSupp = UnoRuntime.queryInterface(
                 XDrawPageSupplier.class, maChartDocument );
             if( aPageSupp != null )
-                maDrawPage = (XDrawPage) UnoRuntime.queryInterface(
+                maDrawPage = UnoRuntime.queryInterface(
                     XDrawPage.class, aPageSupp.getDrawPage() );
 
             // get a factory for creating shapes
-            maShapeFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(
+            maShapeFactory = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, maChartDocument );
         }
     }
@@ -112,13 +112,13 @@ public class JavaSampleChartAddIn extends WeakBase implements
             maTopLine == null )
         {
             // try to recycle loaded shapes
-            XPropertySet aDocProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet aDocProp = UnoRuntime.queryInterface(
                 XPropertySet.class, maChartDocument );
             if( aDocProp != null )
             {
                 try
                 {
-                    XIndexAccess aShapesIA = (XIndexAccess) UnoRuntime.queryInterface(
+                    XIndexAccess aShapesIA = UnoRuntime.queryInterface(
                         XIndexAccess.class, aDocProp.getPropertyValue( "AdditionalShapes" ));
                     if( aShapesIA != null &&
                         aShapesIA.getCount() > 0 )
@@ -127,11 +127,11 @@ public class JavaSampleChartAddIn extends WeakBase implements
                         String aName;
                         for( int i = aShapesIA.getCount() - 1; i >= 0; --i )
                         {
-                            aShape = (XShape) UnoRuntime.queryInterface(
+                            aShape = UnoRuntime.queryInterface(
                                 XShape.class, aShapesIA.getByIndex( i ));
                             if( aShape != null )
                             {
-                                XPropertySet aProp = (XPropertySet) UnoRuntime.queryInterface(
+                                XPropertySet aProp = UnoRuntime.queryInterface(
                                     XPropertySet.class, aShape );
                                 aName = (String) aProp.getPropertyValue( "Name" );
 
@@ -159,12 +159,12 @@ public class JavaSampleChartAddIn extends WeakBase implements
         {
             if( maTopLine == null )
             {
-                maTopLine = (XShape) UnoRuntime.queryInterface(
+                maTopLine = UnoRuntime.queryInterface(
                     XShape.class, maShapeFactory.createInstance( "com.sun.star.drawing.LineShape" ));
                 maDrawPage.add( maTopLine );
 
                 // make line red and thicker
-                XPropertySet aShapeProp = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet aShapeProp = UnoRuntime.queryInterface(
                     XPropertySet.class, maTopLine );
 
                 aShapeProp.setPropertyValue( "LineColor", new Integer( 0xe01010 ));
@@ -182,12 +182,12 @@ public class JavaSampleChartAddIn extends WeakBase implements
         {
             if( maBottomLine == null )
             {
-                maBottomLine = (XShape) UnoRuntime.queryInterface(
+                maBottomLine = UnoRuntime.queryInterface(
                     XShape.class, maShapeFactory.createInstance( "com.sun.star.drawing.LineShape" ));
                 maDrawPage.add( maBottomLine );
 
                 // make line green and thicker
-                XPropertySet aShapeProp = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet aShapeProp = UnoRuntime.queryInterface(
                     XPropertySet.class, maBottomLine );
 
                 aShapeProp.setPropertyValue( "LineColor", new Integer( 0x10e010 ));
@@ -211,18 +211,18 @@ public class JavaSampleChartAddIn extends WeakBase implements
         // --------------
 
         // get data
-        XChartDataArray aDataArray = (XChartDataArray) UnoRuntime.queryInterface(
+        XChartDataArray aDataArray = UnoRuntime.queryInterface(
             XChartDataArray.class, maChartDocument.getData());
         double aData[][] = aDataArray.getData();
 
         // get axes
         XDiagram aDiagram = maChartDocument.getDiagram();
-        XShape aXAxis = (XShape) UnoRuntime.queryInterface(
-            XShape.class, ((XAxisXSupplier) UnoRuntime.queryInterface(
-                               XAxisXSupplier.class, aDiagram )).getXAxis() );
-        XShape aYAxis = (XShape) UnoRuntime.queryInterface(
-            XShape.class, ((XAxisYSupplier) UnoRuntime.queryInterface(
-                               XAxisYSupplier.class, aDiagram )).getYAxis() );
+        XShape aXAxis = UnoRuntime.queryInterface(
+            XShape.class, UnoRuntime.queryInterface(
+                               XAxisXSupplier.class, aDiagram ).getXAxis() );
+        XShape aYAxis = UnoRuntime.queryInterface(
+            XShape.class, UnoRuntime.queryInterface(
+                               XAxisYSupplier.class, aDiagram ).getYAxis() );
 
         // calculate points for hull
         final int nLength = aData.length;
@@ -253,11 +253,11 @@ public class JavaSampleChartAddIn extends WeakBase implements
         // apply point sequences to lines
         try
         {
-            XPropertySet aShapeProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet aShapeProp = UnoRuntime.queryInterface(
                 XPropertySet.class, maTopLine );
             aShapeProp.setPropertyValue( "PolyPolygon", aMaxPtSeq );
 
-            aShapeProp = (XPropertySet) UnoRuntime.queryInterface(
+            aShapeProp = UnoRuntime.queryInterface(
                 XPropertySet.class, maBottomLine );
             aShapeProp.setPropertyValue( "PolyPolygon", aMinPtSeq );
         }
@@ -330,20 +330,20 @@ public class JavaSampleChartAddIn extends WeakBase implements
     // XShape : XDiagram
     public Size getSize() throws RuntimeException
     {
-        return ((XShape) UnoRuntime.queryInterface( XShape.class, maChartDocument.getDiagram())).getSize();
+        return UnoRuntime.queryInterface( XShape.class, maChartDocument.getDiagram()).getSize();
     }
     public void setSize( Size aSize ) throws RuntimeException, PropertyVetoException
     {
-        ((XShape) UnoRuntime.queryInterface( XShape.class, maChartDocument.getDiagram())).setSize( aSize );
+        UnoRuntime.queryInterface( XShape.class, maChartDocument.getDiagram()).setSize( aSize );
     }
 
     public Point getPosition() throws RuntimeException
     {
-        return ((XShape) UnoRuntime.queryInterface( XShape.class, maChartDocument.getDiagram())).getPosition();
+        return UnoRuntime.queryInterface( XShape.class, maChartDocument.getDiagram()).getPosition();
     }
     public void setPosition( Point aPos ) throws RuntimeException
     {
-        ((XShape) UnoRuntime.queryInterface( XShape.class, maChartDocument.getDiagram())).setPosition( aPos );
+        UnoRuntime.queryInterface( XShape.class, maChartDocument.getDiagram()).setPosition( aPos );
     }
 
     // XShapeDescriptor : XShape : XDiagram
@@ -370,7 +370,7 @@ public class JavaSampleChartAddIn extends WeakBase implements
 
         if( aAxis != null )
         {
-            XPropertySet aAxisProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet aAxisProp = UnoRuntime.queryInterface(
                 XPropertySet.class, aAxis );
 
             try
@@ -386,13 +386,13 @@ public class JavaSampleChartAddIn extends WeakBase implements
                     if( bVertical )
                     {
                         nResult = aAxis.getPosition().Y +
-                            (int)((double)(aAxis.getSize().Height) *
+                            (int)((aAxis.getSize().Height) *
                                   (1.0 - (( fValue - fMin ) / fRange )));
                     }
                     else
                     {
                         nResult = aAxis.getPosition().X +
-                            (int)((double)(aAxis.getSize().Width) *
+                            (int)((aAxis.getSize().Width) *
                                   (( fValue - fMin ) / fRange ));
                     }
                 }

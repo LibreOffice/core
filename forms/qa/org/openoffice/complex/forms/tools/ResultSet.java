@@ -39,8 +39,8 @@ public class ResultSet implements XResultSet, XRow
 
     public ResultSet( final Object _resultSet )
     {
-        m_resultSet = (XResultSet)UnoRuntime.queryInterface( XResultSet.class, _resultSet );
-        m_row = (XRow)UnoRuntime.queryInterface( XRow.class, _resultSet );
+        m_resultSet = UnoRuntime.queryInterface( XResultSet.class, _resultSet );
+        m_row = UnoRuntime.queryInterface( XRow.class, _resultSet );
     }
 
     public

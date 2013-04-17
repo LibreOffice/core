@@ -310,15 +310,15 @@ public class FormLayer
      */
     public XPropertySet getControlModel( int[] _accessPath ) throws com.sun.star.uno.Exception
     {
-        XIndexAccess indexAcc = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
+        XIndexAccess indexAcc = UnoRuntime.queryInterface( XIndexAccess.class,
             m_document.getFormComponentTreeRoot() );
         XPropertySet controlModel = null;
         int i=0;
         while ( ( indexAcc != null ) && ( i < _accessPath.length ) )
         {
-            controlModel = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+            controlModel = UnoRuntime.queryInterface( XPropertySet.class,
                 indexAcc.getByIndex( _accessPath[i] ) );
-            indexAcc = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
+            indexAcc = UnoRuntime.queryInterface( XIndexAccess.class,
                 controlModel );
             ++i;
         }
@@ -335,9 +335,9 @@ public class FormLayer
         int i=0;
         while ( ( nameAcc != null ) && ( i < _accessPath.length ) )
         {
-            controlModel = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+            controlModel = UnoRuntime.queryInterface( XPropertySet.class,
                 nameAcc.getByName( _accessPath[i] ) );
-            nameAcc = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
+            nameAcc = UnoRuntime.queryInterface( XNameAccess.class,
                 controlModel );
             ++i;
         }

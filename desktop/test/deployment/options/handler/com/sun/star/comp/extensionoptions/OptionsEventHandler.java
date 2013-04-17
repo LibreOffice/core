@@ -89,7 +89,7 @@ public class OptionsEventHandler {
             //We get the com.sun.star.container.XNameAccess from the instance of
             //ConfigurationUpdateAccess and save it for later use.
             try {
-                m_xAccessLeaves = (XNameAccess) UnoRuntime.queryInterface(
+                m_xAccessLeaves = UnoRuntime.queryInterface(
                     XNameAccess.class, xConfig.createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess", args));
 
@@ -185,7 +185,7 @@ public class OptionsEventHandler {
 
             //To access the separate controls of the window we need to obtain the
             //XControlContainer from the window implementation
-            XControlContainer xContainer = (XControlContainer) UnoRuntime.queryInterface(
+            XControlContainer xContainer = UnoRuntime.queryInterface(
                 XControlContainer.class, aWindow);
             if (xContainer == null)
                 throw new com.sun.star.uno.Exception(
@@ -209,7 +209,7 @@ public class OptionsEventHandler {
                 //From the control we get the model, which in turn supports the
                 //XPropertySet interface, which we finally use to get the data from
                 //the control.
-                XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet xProp = UnoRuntime.queryInterface(
                     XPropertySet.class, xControl.getModel());
 
                 if (xProp == null)
@@ -235,7 +235,7 @@ public class OptionsEventHandler {
                 //com.sun.star.container.XNameAccess. The XNameAccess is used to get the
                 //particular registry node which represents this options page.
                 //Fortunately the name of the window is the same as the registry node.
-                XPropertySet xLeaf = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet xLeaf = UnoRuntime.queryInterface(
                     XPropertySet.class, m_xAccessLeaves.getByName(sWindowName));
                 if (xLeaf == null)
                     throw new  com.sun.star.uno.Exception(
@@ -247,7 +247,7 @@ public class OptionsEventHandler {
 
             //Committing the changes will cause or changes to be written to the registry.
             XChangesBatch xUpdateCommit =
-                (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, m_xAccessLeaves);
+                UnoRuntime.queryInterface(XChangesBatch.class, m_xAccessLeaves);
             xUpdateCommit.commitChanges();
         }
 
@@ -264,7 +264,7 @@ public class OptionsEventHandler {
 
             //To acces the separate controls of the window we need to obtain the
             //XControlContainer from window implementation
-            XControlContainer xContainer = (XControlContainer) UnoRuntime.queryInterface(
+            XControlContainer xContainer = UnoRuntime.queryInterface(
                 XControlContainer.class, aWindow);
             if (xContainer == null)
                 throw new com.sun.star.uno.Exception(
@@ -280,7 +280,7 @@ public class OptionsEventHandler {
                 //of com.sun.star.configuration.ConfigurationUpdateAccess which supports
                 //com.sun.star.container.XNameAccess. We obtain now the section
                 //of the registry which is assigned to this options page.
-                XPropertySet xLeaf = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet xLeaf = UnoRuntime.queryInterface(
                     XPropertySet.class, m_xAccessLeaves.getByName(sWindowName));
                 if (xLeaf == null)
                     throw new  com.sun.star.uno.Exception(
@@ -304,7 +304,7 @@ public class OptionsEventHandler {
                 //From the control we get the model, which in turn supports the
                 //XPropertySet interface, which we finally use to set the data at the
                 //control
-                XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet xProp = UnoRuntime.queryInterface(
                     XPropertySet.class, xControl.getModel());
 
                 if (xProp == null)
@@ -329,7 +329,7 @@ public class OptionsEventHandler {
 
             //We need to get the control model of the window. Therefore the first step is
             //to query for it.
-            XControl xControlDlg = (XControl) UnoRuntime.queryInterface(
+            XControl xControlDlg = UnoRuntime.queryInterface(
                 XControl.class, aWindow);
 
             if (xControlDlg == null)
@@ -343,7 +343,7 @@ public class OptionsEventHandler {
                     "Cannot obtain XControlModel from XWindow in method external_event.", this);
             //The model itself does not provide any information except that its
             //implementation supports XPropertySet which is used to access the data.
-            XPropertySet xPropDlg = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xPropDlg = UnoRuntime.queryInterface(
                 XPropertySet.class, xModelDlg);
             if (xPropDlg == null)
                 throw new com.sun.star.uno.Exception(

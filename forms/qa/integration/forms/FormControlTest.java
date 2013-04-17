@@ -453,7 +453,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         // close our document
         if ( m_document != null )
         {
-            XCloseable closeDoc = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,
+            XCloseable closeDoc = UnoRuntime.queryInterface( XCloseable.class,
                 m_document.getDocument() );
             closeDoc.close( true );
         }
@@ -465,9 +465,9 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     {
         m_orb = (XMultiServiceFactory)param.getMSF();
 
-        XNameAccess databaseContext = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
+        XNameAccess databaseContext = UnoRuntime.queryInterface( XNameAccess.class,
             m_orb.createInstance( "com.sun.star.sdb.DatabaseContext" ) );
-        XNamingService namingService = (XNamingService)UnoRuntime.queryInterface( XNamingService.class,
+        XNamingService namingService = UnoRuntime.queryInterface( XNamingService.class,
             databaseContext );
 
         // revoke the data source, if it previously existed
@@ -479,11 +479,11 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         String documentURL = m_databaseDocument.getDocumentURL();
         namingService.registerObject( m_dataSourceName, databaseContext.getByName( documentURL ) );
 
-        m_dataSource = (XDataSource)UnoRuntime.queryInterface( XDataSource.class,
+        m_dataSource = UnoRuntime.queryInterface( XDataSource.class,
             databaseContext.getByName( m_dataSourceName ) );
         m_dataSourceProps = dbfTools.queryPropertySet( m_dataSource );
 
-        XPropertySet dataSourceSettings = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+        XPropertySet dataSourceSettings = UnoRuntime.queryInterface( XPropertySet.class,
             m_dataSourceProps.getPropertyValue( "Settings" ) );
         dataSourceSettings.setPropertyValue( "FormsCheckRequiredFields", new Boolean( false ) );
 
@@ -495,9 +495,9 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     */
     private XPropertySet getControlModel( String name ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        XNameAccess nameAccess = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
+        XNameAccess nameAccess = UnoRuntime.queryInterface( XNameAccess.class,
             m_masterForm );
-        return (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+        return UnoRuntime.queryInterface( XPropertySet.class,
             nameAccess.getByName( name ) );
     }
 
@@ -547,7 +547,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         m_document.getCurrentView( ).toggleFormDesignMode( );
 
         m_masterFormController = m_document.getCurrentView().getFormController( m_masterForm );
-        XSQLErrorBroadcaster errorBroadcaster = (XSQLErrorBroadcaster)UnoRuntime.queryInterface( XSQLErrorBroadcaster.class,
+        XSQLErrorBroadcaster errorBroadcaster = UnoRuntime.queryInterface( XSQLErrorBroadcaster.class,
             m_masterFormController );
         errorBroadcaster.addSQLErrorListener( this );
 
@@ -796,21 +796,21 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     /* ------------------------------------------------------------------ */
     private void moveToInsertRow() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        XResultSetUpdate xResultSet = (XResultSetUpdate)UnoRuntime.queryInterface( XResultSetUpdate.class, m_masterForm );
+        XResultSetUpdate xResultSet = UnoRuntime.queryInterface( XResultSetUpdate.class, m_masterForm );
         xResultSet.moveToInsertRow( );
     }
 
     /* ------------------------------------------------------------------ */
     private void moveToFirst() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        XResultSet xResultSet = (XResultSet)UnoRuntime.queryInterface( XResultSet.class, m_masterForm );
+        XResultSet xResultSet = UnoRuntime.queryInterface( XResultSet.class, m_masterForm );
         xResultSet.first( );
     }
 
     /* ------------------------------------------------------------------ */
     private void moveToNext() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        XResultSet xResultSet = (XResultSet)UnoRuntime.queryInterface( XResultSet.class, m_masterForm );
+        XResultSet xResultSet = UnoRuntime.queryInterface( XResultSet.class, m_masterForm );
         xResultSet.next( );
     }
 
@@ -823,7 +823,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
 
         URL[] url = new URL[] { new URL() };
         url[0].Complete = slotURL;
-        XURLTransformer xTransformer = (XURLTransformer)UnoRuntime.queryInterface(
+        XURLTransformer xTransformer = UnoRuntime.queryInterface(
                 XURLTransformer.class, m_orb.createInstance( "com.sun.star.util.URLTransformer" ) );
         xTransformer.parseStrict( url );
 
@@ -913,7 +913,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         XPropertySet xImageModel = getControlModel( "f_blob" );
 
         // check if the image control properly says that there currently is no image on the first record
-        XImageProducerSupplier xSuppProducer = (XImageProducerSupplier)UnoRuntime.queryInterface( XImageProducerSupplier.class,
+        XImageProducerSupplier xSuppProducer = UnoRuntime.queryInterface( XImageProducerSupplier.class,
             xImageModel );
         XImageProducer xProducer = xSuppProducer.getImageProducer();
 
