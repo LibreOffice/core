@@ -399,7 +399,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         break;
 
         case FN_FORMAT_FRAME_DLG:
-        case FN_PROPERTY_WRAP_DLG:
+        case FN_DRAW_WRAP_DLG:
         {
             const int nSel = rSh.GetSelectionType();
             if (nSel & nsSelectionType::SEL_GRF)
@@ -483,7 +483,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                         nDefPage);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
-                if ( nSlot == FN_PROPERTY_WRAP_DLG )
+                if ( nSlot == FN_DRAW_WRAP_DLG )
                 {
                     pDlg->SetCurPageId(TP_FRM_WRAP);
                 }

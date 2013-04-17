@@ -184,7 +184,7 @@ interface BaseTextFrame
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_PROPERTY_WRAP_DLG // status(final|play)
+    FN_DRAW_WRAP_DLG // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

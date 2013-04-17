@@ -80,9 +80,7 @@ public:
 
     void ShowMenu (void);
     sal_uInt16 GetBulletTypeIndex(){ return mnBulletTypeIndex; }
-    void SetBulletTypeIndex(sal_uInt16 nInd){ mnBulletTypeIndex = nInd; }
     sal_uInt16 GetNumTypeIndex(){ return mnNumTypeIndex; }
-    void SetNumTypeIndex(sal_uInt16 nInd){ mnNumTypeIndex = nInd; }
     FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
 
     void EndSpacingPopupMode (void);

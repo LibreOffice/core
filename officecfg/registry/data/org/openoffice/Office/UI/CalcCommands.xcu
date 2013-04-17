@@ -16,6 +16,11 @@
           <value xml:lang="en-US">Flip Vertically</value>
         </prop>
       </node>
+      <node oor:name=".uno:NumberFormatType" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Number Format Type</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ObjectMirrorHorizontal" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Flip Object Horizontally</value>
@@ -727,6 +732,11 @@
       <node oor:name=".uno:InputLineVisible" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Formula Bar</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ViewGridLines" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">View Grid lines</value>
         </prop>
       </node>
       <node oor:name=".uno:ViewRowColumnHeaders" oor:op="replace">
@@ -1616,6 +1626,11 @@
       <node oor:name=".uno:FilterMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Filter</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SCDialogBorder" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Cell Borders</value>
         </prop>
       </node>
       <node oor:name=".uno:SendTo" oor:op="replace">

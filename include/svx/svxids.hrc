@@ -949,8 +949,6 @@
 
 #define SID_CELL_FORMAT_BORDER                          (SID_SVX_START+1132)
 #define SID_CHAR_DLG_EFFECT                             (SID_SVX_START+1133)
-#define SID_ATTR_PARA_LEFT                              (SID_SVX_START+1134)
-#define SID_ATTR_PARA_RIGHT                             (SID_SVX_START+1135)
 
 #define FN_SVX_SET_NUMBER                               (SID_SVX_START+1136)
 #define FN_SVX_SET_BULLET                               (SID_SVX_START+1137)

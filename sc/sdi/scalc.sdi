@@ -8489,7 +8489,7 @@ SfxVoidItem ExportAsGraphic SID_EXPORT_AS_GRAPHIC
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ViewOption SID_SCGRIDSHOW
+SfxBoolItem ViewGridLines SID_SCGRIDSHOW
 [
     AutoUpdate = TRUE,
     Cachable = Cachable,
@@ -8506,15 +8506,15 @@ SfxBoolItem ViewOption SID_SCGRIDSHOW
     Readonly = FALSE,
 
     /* config */
-    AccelConfig = FALSE, //TRUE
+    AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE, //FALSE
-    GroupId = GID_DATA;
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt16Item NumberType SID_NUMBER_TYPE_FORMAT
+SfxUInt16Item NumberFormatType SID_NUMBER_TYPE_FORMAT
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8535,6 +8535,6 @@ SfxUInt16Item NumberType SID_NUMBER_TYPE_FORMAT
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
 ]

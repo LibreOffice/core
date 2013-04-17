@@ -1482,6 +1482,11 @@
           <value xml:lang="en-US">Backspace</value>
         </prop>
       </node>
+      <node oor:name=".uno:SwPageColumnType" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Page Column Type</value>
+        </prop>
+      </node>
       <node oor:name=".uno:GotoPrevInputField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To Previous Input Field</value>
@@ -2301,6 +2306,11 @@
       <node oor:name=".uno:AutoFormatMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">AutoCorr~ect</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:PageSettingDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Page Settings - Paper format</value>
         </prop>
       </node>
       <node oor:name=".uno:SelectionModeMenu" oor:op="replace">

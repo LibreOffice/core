@@ -1611,6 +1611,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:TransAngle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Rotation Angle</value>
+        </prop>
+      </node>
       <node oor:name=".uno:TransformDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Position and Si~ze...</value>
@@ -2547,6 +2552,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:LineCap" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Line Cap Style</value>
+        </prop>
+      </node>
       <node oor:name=".uno:LineDash" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Line Dash/Dot</value>
@@ -2558,6 +2568,11 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LineTransparence" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Line Transparency</value>
         </prop>
       </node>
       <node oor:name=".uno:LineWidth" oor:op="replace">
@@ -2877,6 +2892,11 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LineJoint" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Line Corner Style</value>
         </prop>
       </node>
       <node oor:name=".uno:LineStyle" oor:op="replace">
@@ -3286,14 +3306,6 @@
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:FontDialog" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">C~haracter...</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:DistributeSelection" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Distribution...</value>
@@ -3390,6 +3402,16 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TransRotX" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Rotation Pivot Point X</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TransRotY" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Rotation Pivot Point Y</value>
         </prop>
       </node>
       <node oor:name=".uno:TwainSelect" oor:op="replace">
@@ -3840,6 +3862,16 @@
       <node oor:name=".uno:MergeDocuments" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Merge Documen~t...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SvxFlipHorizontal" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Flip Horizontally</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SvxFlipVertical" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Flip Vertically</value>
         </prop>
       </node>
       <node oor:name=".uno:SwEditOptions" oor:op="replace">
@@ -4662,9 +4694,19 @@
           <value xml:lang="en-US">Current Context</value>
         </prop>
       </node>
+      <node oor:name=".uno:CurrentNumListType" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Current Numbering List Type</value>
+        </prop>
+      </node>
       <node oor:name=".uno:CurrentTime" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Current Time</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:CurrentBulletListType" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Current Bullet List Type</value>
         </prop>
       </node>
       <node oor:name=".uno:CurrentDate" oor:op="replace">
@@ -4784,6 +4826,16 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FillFloatTransparence" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Gradient Fill Transparency</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FillTransparence" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Fill Transparency</value>
         </prop>
       </node>
       <node oor:name=".uno:FilterCrit" oor:op="replace">
@@ -5257,6 +5309,19 @@
       <node oor:name=".uno:Scan" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Scan</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FontDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Character...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FontDialogEff" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Character Font Effects...</value>
         </prop>
       </node>
       <node oor:name=".uno:FormatMenu" oor:op="replace">

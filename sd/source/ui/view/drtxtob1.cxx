@@ -228,7 +228,6 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         break;
 
         case SID_OUTLINE_LEFT:
-        case SID_ATTR_PARA_LEFT:
         {
             if (pOLV)
             {
@@ -244,7 +243,6 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         break;
 
         case SID_OUTLINE_RIGHT:
-        case SID_ATTR_PARA_RIGHT:
         {
             if (pOLV)
             {

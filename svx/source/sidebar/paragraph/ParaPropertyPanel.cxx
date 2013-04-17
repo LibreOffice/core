@@ -923,37 +923,12 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
     {
         case BT_TBX_INDENT_PROMOTE:
         {
-            SvxLRSpaceItem aMargin( SID_ATTR_PARA_RIGHT );
-
-            maTxtLeft += INDENT_STEP;
-            sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-            nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
-            aMargin.SetTxtLeft( (const long)nVal );
-            aMargin.SetRight( (const long)GetCoreValue( *maRightIndent.get(), m_eLRSpaceUnit ) );
-            aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ) );
-
-            GetBindings()->GetDispatcher()->Execute(
-                SID_ATTR_PARA_RIGHT, SFX_CALLMODE_RECORD, &aMargin, 0L);
+            GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_RIGHT, SFX_CALLMODE_RECORD );
         }
         break;
         case BT_TBX_INDENT_DEMOTE:
         {
-            if((maTxtLeft - INDENT_STEP) < 0)
-                maTxtLeft = DEFAULT_VALUE;
-            else
-                maTxtLeft -= INDENT_STEP;
-
-            SvxLRSpaceItem aMargin( SID_ATTR_PARA_LEFT );
-
-            sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-            nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
-
-            aMargin.SetTxtLeft( (const long)nVal );
-            aMargin.SetRight( (const long)GetCoreValue( *maRightIndent.get(), m_eLRSpaceUnit ) );
-            aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ) );
-
-            GetBindings()->GetDispatcher()->Execute(
-                SID_ATTR_PARA_LEFT, SFX_CALLMODE_RECORD, &aMargin, 0L);
+            GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_LEFT, SFX_CALLMODE_RECORD );
         }
         break;
         case SD_HANGING_INDENT:
@@ -963,8 +938,7 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
             aMargin.SetRight( (const long)GetCoreValue( *maRightIndent.get(), m_eLRSpaceUnit ) );
             aMargin.SetTxtFirstLineOfst( ((const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ))*(-1) );
 
-            GetBindings()->GetDispatcher()->Execute(
-                SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
+            GetBindings()->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
         }
         break;
     }

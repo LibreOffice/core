@@ -3373,31 +3373,6 @@ SfxVoidItem GraphicDialog FN_FORMAT_GRAFIC_DLG
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ObjectWrapDialog FN_PROPERTY_WRAP_DLG
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_GRAPHIC;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem Grow FN_GROW_FONT_SIZE
 ()
 [
@@ -6253,10 +6228,10 @@ SfxVoidItem PageSettingDialog FN_FORMAT_PAGE_SETTING_DLG
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -10380,7 +10355,7 @@ SfxVoidItem OpenFromWriter FN_OPEN_FILE
     GroupId = GID_APPLICATION;
 ]
 
-SfxInt16Item SwPageColumn SID_ATTR_PAGE_COLUMN
+SfxInt16Item SwPageColumnType SID_ATTR_PAGE_COLUMN
 
 [
     /* flags: */
@@ -10399,11 +10374,11 @@ SfxInt16Item SwPageColumn SID_ATTR_PAGE_COLUMN
     Readonly = TRUE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
 ]
 
 SvxLongULSpaceItem SwPageULMargin SID_ATTR_PAGE_ULSPACE

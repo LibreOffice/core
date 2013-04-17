@@ -807,7 +807,7 @@
           <value>PropertyDeck</value>
         </prop>
         <prop oor:name="DefaultMenuCommand">
-          <value>.uno:ObjectWrapDialog</value>
+          <value>.uno:TextWrap</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
