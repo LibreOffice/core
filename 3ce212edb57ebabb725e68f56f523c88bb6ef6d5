@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+6Y\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3895,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-17T14:49:45Z",
+      "side": 1,
+      "message": "This looks odd. SvStream supports char which sal_Int8 should had been transformed into. However, this changes the length of the value stored in the stream at only the writing part, the reading part in SvxBrushItem::SvxBrushItem() still wants to read a sal_Int8. To me, no change in length should be done here.",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+6U\u003d",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-17T14:49:45Z",
+      "side": 1,
+      "message": "Instead of reading a hard coded count of items SvxNumRule::Store() should store the number of items it stores, so this could be read here and used instead of SVX_MAX_NUM.",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
