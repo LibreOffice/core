@@ -31,14 +31,14 @@ interface TextDraw : TextDrawBase
     SID_ATTR_LINE_START
     [
         ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = DisableState ;
+        StateMethod = GetDrawAttrState ;
         Export = FALSE;
     ]
 
     SID_ATTR_LINE_END
     [
         ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = DisableState ;
+        StateMethod = GetDrawAttrState ;
         Export = FALSE;
     ]
 
