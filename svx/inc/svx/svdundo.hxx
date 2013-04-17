@@ -71,6 +71,8 @@ protected:
 
 public:
     TYPEINFO();
+    virtual ~SdrUndoAction() {}
+
     virtual sal_Bool CanRepeat(SfxRepeatTarget& rView) const;
     virtual void Repeat(SfxRepeatTarget& rView);
 
@@ -141,6 +143,7 @@ protected:
 
 protected:
     SdrUndoObj(SdrObject& rNewObj);
+    virtual ~SdrUndoObj() {}
 
     void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, FASTBOOL bRepeat=sal_False) const;
 
@@ -187,6 +190,7 @@ protected:
 public:
     SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1=sal_False, FASTBOOL bSaveText=sal_False);
     virtual ~SdrUndoAttrObj();
+
     void SetRepeatAttr(const SfxItemSet& rSet);
     virtual void Undo();
     virtual void Redo();
@@ -214,6 +218,7 @@ protected:
 public:
     SdrUndoMoveObj(SdrObject& rNewObj): SdrUndoObj(rNewObj) {}
     SdrUndoMoveObj(SdrObject& rNewObj, const Size& rDist): SdrUndoObj(rNewObj),aDistance(rDist) {}
+    virtual ~SdrUndoMoveObj() {}
 
     void SetDistance(const Size& rDist) { aDistance=rDist; }
     const Size& GetDistance() const { return aDistance; }
@@ -333,6 +338,7 @@ class SVX_DLLPUBLIC SdrUndoDelObj : public SdrUndoRemoveObj
 public:
     SdrUndoDelObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=sal_False)
     :   SdrUndoRemoveObj(rNewObj,bOrdNumDirect) { SetOwner(sal_True); }
+    virtual ~SdrUndoDelObj() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -357,6 +363,7 @@ class SVX_DLLPUBLIC SdrUndoNewObj : public SdrUndoInsertObj
 public:
     SdrUndoNewObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=sal_False)
     :   SdrUndoInsertObj(rNewObj,bOrdNumDirect) {}
+    virtual ~SdrUndoNewObj() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -411,6 +418,7 @@ class SdrUndoCopyObj : public SdrUndoNewObj
 public:
     SdrUndoCopyObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=sal_False)
     :   SdrUndoNewObj(rNewObj,bOrdNumDirect) {}
+    virtual ~SdrUndoCopyObj() {}
 
     virtual String GetComment() const;
 };
@@ -427,6 +435,7 @@ protected:
 
 public:
     SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1);
+    virtual ~SdrUndoObjOrdNum() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -445,6 +454,7 @@ protected:
 
 public:
     SdrUndoObjectLayerChange(SdrObject& rObj, SdrLayerID aOldLayer, SdrLayerID aNewLayer);
+    virtual ~SdrUndoObjectLayerChange() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -501,6 +511,7 @@ public:
                        const ObjStrAttrType eObjStrAttr,
                        const String& sOldStr,
                        const String& sNewStr);
+    virtual ~SdrUndoObjStrAttr() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -538,6 +549,7 @@ protected:
 
 protected:
     SdrUndoLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
+public:
     virtual ~SdrUndoLayer();
 };
 
@@ -553,6 +565,7 @@ class SdrUndoNewLayer : public SdrUndoLayer
 public:
     SdrUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
     : SdrUndoLayer(nLayerNum,rNewLayerAdmin,rNewModel) {}
+    virtual ~SdrUndoNewLayer() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -572,6 +585,7 @@ class SdrUndoDelLayer : public SdrUndoLayer
 public:
     SdrUndoDelLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
     : SdrUndoLayer(nLayerNum,rNewLayerAdmin,rNewModel) { bItsMine=sal_True; }
+    virtual ~SdrUndoDelLayer() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -593,6 +607,7 @@ class SdrUndoMoveLayer : public SdrUndoLayer
 public:
     SdrUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1)
     :   SdrUndoLayer(nLayerNum,rNewLayerAdmin,rNewModel), nNeuPos(nNeuPos1) {}
+    virtual ~SdrUndoMoveLayer() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -631,6 +646,7 @@ protected:
 
 protected:
     SdrUndoPage(SdrPage& rNewPg);
+    virtual ~SdrUndoPage() {}
 
     void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 n=0, FASTBOOL bRepeat=sal_False) const;
 };
@@ -697,6 +713,7 @@ class SVX_DLLPUBLIC SdrUndoNewPage : public SdrUndoPageList
 {
 public:
     SdrUndoNewPage(SdrPage& rNewPg): SdrUndoPageList(rNewPg) {}
+    virtual ~SdrUndoNewPage() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -716,6 +733,7 @@ class SdrUndoCopyPage : public SdrUndoNewPage
 {
 public:
     SdrUndoCopyPage(SdrPage& rNewPg): SdrUndoNewPage(rNewPg) {}
+    virtual ~SdrUndoCopyPage() {}
 
     virtual String GetComment() const;
     virtual String GetSdrRepeatComment(SdrView& rView) const;
@@ -741,6 +759,7 @@ protected:
 public:
     SdrUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1)
     :   SdrUndoPage(rNewPg),nOldPageNum(nOldPageNum1),nNewPageNum(nNewPageNum1) {}
+    virtual ~SdrUndoSetPageNum() {}
 
     virtual void Undo();
     virtual void Redo();
@@ -818,6 +837,7 @@ protected:
 
 public:
     SdrUndoPageChangeMasterPage(SdrPage& rChangedPage);
+    virtual ~SdrUndoPageChangeMasterPage() {}
 
     virtual void Undo();
     virtual void Redo();
