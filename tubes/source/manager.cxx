@@ -889,7 +889,9 @@ TeleManagerImpl::TeleManagerImpl()
         mpFileTransferClient( NULL),
         mpAccountManager( NULL)
 {
+#if !defined(GLIB_VERSION_2_36)
     g_type_init();
+#endif
 }
 
 TeleManagerImpl::~TeleManagerImpl()
