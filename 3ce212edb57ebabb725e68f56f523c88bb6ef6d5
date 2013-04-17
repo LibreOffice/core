@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//+6M\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3895,
+      "author": {
+        "id": 1000311
+      },
+      "writtenOn": "2013-04-17T15:02:08Z",
+      "side": 1,
+      "message": "The reading part is already changed in this file in line 3478? When it\u0027s set to sal_Int8, nPos is set to something like \"10 \u0027\\n\u0027 \" which I found less clean than sal_uInt16.",
+      "parentUuid": "AAAAXH//+6Y\u003d",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//+6U\u003d",
         "filename": "editeng/source/items/numitem.cxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2013-04-17T14:49:45Z",
       "side": 1,
       "message": "Instead of reading a hard coded count of items SvxNumRule::Store() should store the number of items it stores, so this could be read here and used instead of SVX_MAX_NUM.",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+6I\u003d",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000311
+      },
+      "writtenOn": "2013-04-17T15:02:08Z",
+      "side": 1,
+      "message": "Yes it could be done but we will have to add level number for each valid level. I don\u0027t know it will cost more or less than just \"0\" for each invalid level because normally for now all level are valid.",
+      "parentUuid": "AAAAXH//+6U\u003d",
       "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
