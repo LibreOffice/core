@@ -31,10 +31,6 @@
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-#define STR2(x) #x
-#define STR(x) STR2(x)
-#define PRAGMA_MSG( msg ) message( __FILE__ "(" STR(__LINE__) "): " #msg )
-
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -427,9 +423,7 @@ void CDOTransferable::clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, 
         break;
 
     case TYMED_ISTREAM:
-        #ifdef _MSC_VER
-        #pragma PRAGMA_MSG( Has to be implemented )
-        #endif
+        //TODO: Has to be implemented
         break;
 
     default:
