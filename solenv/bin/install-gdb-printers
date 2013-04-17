@@ -184,8 +184,11 @@ if [[ -n "${MERGELIBS}" ]]; then
         make_autoload sw program libswlo."$DYLIB"
     fi
 else
+    make_autoload cppu ure-link/lib libuno_cppu."$DYLIB".3
+    make_autoload sal ure-link/lib libuno_sal."$DYLIB".3
     make_autoload svl program libsvllo."$DYLIB"
     make_autoload tl program libtllo."$DYLIB"
+    make_autoload sw program libswlo."$DYLIB"
 fi
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
