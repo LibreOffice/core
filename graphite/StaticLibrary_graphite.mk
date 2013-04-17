@@ -24,9 +24,11 @@ $(eval $(call gb_StaticLibrary_add_defs,graphite,\
 ))
 
 ifeq ($(COM),GCC)
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
 $(eval $(call gb_StaticLibrary_add_cxxflags,graphite,\
 	 -fpermissive \
 ))
+endif
 endif
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,graphite,cpp))
