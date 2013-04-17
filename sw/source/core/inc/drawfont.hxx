@@ -42,12 +42,12 @@ class SwDrawTextInfo
     OutputDevice* pOut;
     ViewShell* pSh;
     const SwScriptInfo* pScriptInfo;
-    const Point* pPos;
-    const OUString* pText;
+    Point pPos;
+    OUString pText;
     const SwWrongList* pWrong;
     const SwWrongList* pGrammarCheck;
     const SwWrongList* pSmartTags;
-    const Size* pSize;
+    Size pSize;
     SwFont *pFnt;
     SwUnderlineFont* pUnderFnt;
     xub_StrLen* pHyphPos;
@@ -111,7 +111,7 @@ public:
         pSh = pS;
         pOut = &rO;
         pScriptInfo = pSI;
-        pText = &rSt;
+        pText = rSt;
         nIdx = nI;
         nLen = nL;
         nKern = 0;
@@ -129,11 +129,9 @@ public:
 
         // These values are initialized but have to be set explicitly via their
         // Set-function before they may be accessed by their Get-function:
-        pPos = 0;
         pWrong = 0;
         pGrammarCheck = 0;
         pSmartTags = 0;
-        pSize = 0;
         pFnt = 0;
         pHyphPos = 0;
         nLeft = 0;
@@ -192,7 +190,7 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bPos, "DrawTextInfo: Undefined Position" );
 #endif
-        return *pPos;
+        return pPos;
     }
 
     xub_StrLen *GetHyphPos() const
@@ -205,7 +203,7 @@ public:
 
     const OUString &GetText() const
     {
-        return *pText;
+        return pText;
     }
 
     const SwWrongList* GetWrong() const
@@ -234,7 +232,7 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bSize, "DrawTextInfo: Undefined Size" );
 #endif
-        return *pSize;
+        return pSize;
     }
 
     SwFont* GetFont() const
@@ -402,7 +400,7 @@ public:
 
     void SetPos( const Point &rNew )
     {
-        pPos = &rNew;
+        pPos = rNew;
 #ifdef DBG_UTIL
         m_bPos = true;
 #endif
@@ -418,7 +416,7 @@ public:
 
     void SetText( const OUString &rNew )
     {
-        pText = &rNew;
+        pText = rNew;
     }
 
     void SetWrong( const SwWrongList* pNew )
@@ -444,7 +442,7 @@ public:
 
     void SetSize( const Size &rNew )
     {
-        pSize = &rNew;
+        pSize = rNew;
 #ifdef DBG_UTIL
         m_bSize = true;
 #endif
