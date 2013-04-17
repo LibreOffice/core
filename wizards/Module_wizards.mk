@@ -49,7 +49,6 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	Zip_tools \
 	Zip_tutorials \
 	Zip_usr \
-	Zip_web \
 ))
 
 ifeq ($(SOLAR_JAVA),TRUE)
