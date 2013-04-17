@@ -43,7 +43,6 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	Zip_form \
 	Zip_gimmicks \
 	Zip_import \
-	Zip_launcher \
 	Zip_share \
 	Zip_standard \
 	Zip_template \
