@@ -367,6 +367,10 @@ DLLPOST=".so"
 
 LINKFLAGSNOUNDEFS="-Wl,-z,defs"
 
+# Most platforms use GNU libstdc++
+CPP_LIBRARY="GLIBCXX"
+AC_SUBST(CPP_LIBRARY)
+
 case "$host_os" in
 
 solaris*)
@@ -1126,6 +1130,13 @@ AC_ARG_WITH(macosx-bundle-identifier,
         [Define the OS X bundle identifier. Default is the somewhat weird
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
+
+AC_ARG_ENABLE(libc++,
+    AS_HELP_STRING([--enable-libc++],
+        [Use the libc++ C++ library instead of GNU libstdc++ on OS X. Only effective
+         if --with-macosx-version-min-required is 10.7 or later. Experimental work in
+         progress, very likely breaks something, don't use unless you plan to fix that.]),
+,)
 
 AC_ARG_ENABLE(ios-simulator,
     AS_HELP_STRING([--enable-ios-simulator],
@@ -2537,12 +2548,26 @@ if test "$_os" = "Darwin"; then
             fi
             ;;
         10.7|10.8)
+            if test "$enable_libc__" = yes -a "$with_macosx_version_min_required" != 10.6; then
+                # Use libc++ instead of libstdc++ when possible
+                # and also compile as C++11
+                stdlib="-std=c++11 -stdlib=libc++"
+                CPP_LIBRARY="LIBCPP"
+            fi
             CC="`xcrun -find clang` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            CXX="`xcrun -find clang++` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="`xcrun -find clang++` $bitness $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             XCRUN=xcrun
             ;;
         esac
         AC_MSG_RESULT([$CC and $CXX])
+    else
+        # In case somebody insists on passing in CXX, and perhaps CFLAGS or CXXFLAGS to choose
+        # compiler. Not really something we encourage or support.
+        case "$CXX $CFLAGS $CXXFLAGS" in
+        *-stdlib=libc++*)
+            CPP_LIBRARY="LIBCPP"
+            ;;
+        esac
     fi
 
     case "$with_macosx_version_max_allowed" in
@@ -3447,6 +3472,7 @@ cygwin*)
     OS=WNT
     RTL_OS=Windows
     P_SEP=";"
+    CPP_LIBRARY="MSVCRT"
 
     case "$host_cpu" in
     i*86|x86_64)
@@ -5604,7 +5630,15 @@ b thingb[]={{0,0}, {1,1}};
 size_t i = sizeof(sal_n_array_size(thinga));
 size_t j = sizeof(sal_n_array_size(thingb));
 return !(i != 0 && j != 0);
-]])],[HAVE_CXX0X=TRUE CXXFLAGS_CXX11=-std=gnu++0x],[])
+]])
+        ],[
+            HAVE_CXX0X=TRUE
+            if test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
+                : Already set CXX to contain -std=c++11
+            else
+                CXXFLAGS_CXX11=-std=gnu++0x
+            fi
+        ],[])
 
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
