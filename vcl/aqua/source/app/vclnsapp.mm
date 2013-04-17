@@ -457,7 +457,7 @@
 {
     (void)pNotification;
     SalData* pSalData = GetSalData();
-    if (pSalData->mpMainController->remoteControl)
+    if( pSalData->mpMainController && pSalData->mpMainController->remoteControl)
     {
         // [remoteControl startListening: self];
         // does crash because the right thing to do is
@@ -483,7 +483,7 @@
 {
     (void)pNotification;
     SalData* pSalData = GetSalData();
-    if (pSalData->mpMainController->remoteControl)
+    if( pSalData->mpMainController && pSalData->mpMainController->remoteControl)
     {
         // [remoteControl stopListening: self];
         // does crash because the right thing to do is
