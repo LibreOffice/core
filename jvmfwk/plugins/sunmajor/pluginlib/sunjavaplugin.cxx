@@ -65,8 +65,6 @@
 #endif
 #endif
 
-#define SUN_MICRO "Sun Microsystems Inc."
-
 using namespace osl;
 using namespace std;
 using namespace jfw_plugin;
@@ -86,7 +84,7 @@ OString getPluginJarPath(
     OUString sName1("javaplugin.jar");
     OUString sName2("plugin.jar");
     OUString sPath;
-    if ( sVendor == SUN_MICRO )
+    if ( sVendor == "Sun Microsystems Inc." )
     {
         SunVersion ver142("1.4.2-ea");
         SunVersion ver150("1.5.0-ea");
