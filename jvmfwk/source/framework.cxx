@@ -34,13 +34,6 @@
 #include "elements.hxx"
 #include "fwkbase.hxx"
 
-#ifdef WNT
-/** The existence of the file useatjava.txt decides if a Java should be used
-    that supports accessibility tools.
- */
-#define USE_ACCESSIBILITY_FILE "useatjava.txt"
-#endif
-
 namespace {
 
 static bool g_bEnabledSwitchedOn = false;
