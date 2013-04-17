@@ -22,7 +22,7 @@ $(eval $(call gb_Module_add_targets,sysui,\
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,sysui,\
-	Zip_osxicons \
+	Package_osxicons \
 	CustomTarget_infoplist \
 	Package_infoplist \
 ))

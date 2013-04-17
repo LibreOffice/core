@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,osxicons,$(SRCDIR)/sysui/desktop))
+$(eval $(call gb_Package_Package,sysui_osxicons,$(SRCDIR)/sysui/desktop))
 
-$(eval $(call gb_Zip_add_files,osxicons,\
+$(eval $(call gb_Package_set_outdir,sysui_osxicons,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files_with_dir,sysui_osxicons,Resources,\
     icons/text.icns \
     icons/oasis-text.icns \
     icons/spreadsheet.icns \
