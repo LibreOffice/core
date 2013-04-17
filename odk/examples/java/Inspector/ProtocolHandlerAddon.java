@@ -204,35 +204,31 @@ public class ProtocolHandlerAddon {
         }
 
         public void showMessageBox(String sTitle, String sMessage) {
-            try {
-                if ( null != m_xFrame && null != m_xToolkit ) {
+            if ( null != m_xFrame && null != m_xToolkit ) {
 
-                    // describe window properties.
-                    WindowDescriptor aDescriptor = new WindowDescriptor();
-                    aDescriptor.Type              = WindowClass.MODALTOP;
-                    aDescriptor.WindowServiceName = new String( "infobox" );
-                    aDescriptor.ParentIndex       = -1;
-                    aDescriptor.Parent            = (XWindowPeer)UnoRuntime.queryInterface(
-                        XWindowPeer.class, m_xFrame.getContainerWindow());
-                    aDescriptor.Bounds            = new Rectangle(0,0,300,200);
-                    aDescriptor.WindowAttributes  = WindowAttribute.BORDER |
-                        WindowAttribute.MOVEABLE |
-                        WindowAttribute.CLOSEABLE;
+                // describe window properties.
+                WindowDescriptor aDescriptor = new WindowDescriptor();
+                aDescriptor.Type              = WindowClass.MODALTOP;
+                aDescriptor.WindowServiceName = new String( "infobox" );
+                aDescriptor.ParentIndex       = -1;
+                aDescriptor.Parent            = (XWindowPeer)UnoRuntime.queryInterface(
+                    XWindowPeer.class, m_xFrame.getContainerWindow());
+                aDescriptor.Bounds            = new Rectangle(0,0,300,200);
+                aDescriptor.WindowAttributes  = WindowAttribute.BORDER |
+                    WindowAttribute.MOVEABLE |
+                    WindowAttribute.CLOSEABLE;
 
-                    XWindowPeer xPeer = m_xToolkit.createWindow( aDescriptor );
-                    if ( null != xPeer ) {
-                        XMessageBox xMsgBox = (XMessageBox)UnoRuntime.queryInterface(
-                            XMessageBox.class, xPeer);
-                        if ( null != xMsgBox )
-                        {
-                            xMsgBox.setCaptionText( sTitle );
-                            xMsgBox.setMessageText( sMessage );
-                            xMsgBox.execute();
-                        }
+                XWindowPeer xPeer = m_xToolkit.createWindow( aDescriptor );
+                if ( null != xPeer ) {
+                    XMessageBox xMsgBox = (XMessageBox)UnoRuntime.queryInterface(
+                        XMessageBox.class, xPeer);
+                    if ( null != xMsgBox )
+                    {
+                        xMsgBox.setCaptionText( sTitle );
+                        xMsgBox.setMessageText( sMessage );
+                        xMsgBox.execute();
                     }
                 }
-            } catch ( com.sun.star.uno.Exception e) {
-                // do your error handling
             }
         }
     }
