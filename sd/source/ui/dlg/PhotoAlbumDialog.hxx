@@ -95,6 +95,14 @@ private:
     Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
         Reference< graphic::XGraphicProvider> xProvider);
 
+    enum SlideImageLayout
+    {
+        FIT_TO_SLIDE=0,
+        TITLE_ONE_IMAGE,
+        TWO_IMAGES,
+        FOUR_IMAGES
+    };
+
 };
 
 } // end of namespace sd
