@@ -19,13 +19,6 @@
 
 
 /*
- * Turn off DEBUG Assertions
- */
-#ifdef _DEBUG
-#undef _DEBUG
-#endif
-
-/*
  * and turn off the additional virtual methods which are part of some interfaces when compiled
  * with debug
  */
