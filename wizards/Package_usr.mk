@@ -26,21 +26,13 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicsrveuro,$(SRCDIR)/wizards/source/euro))
+$(eval $(call gb_Package_Package,wizards_basicusr,$(SRCDIR)/wizards/source/config))
 
-$(eval $(call gb_Zip_add_files,basicsrveuro,\
-	AutoPilotRun.xba \
-	Common.xba \
-	ConvertRun.xba \
-	dialog.xlb \
-	DlgConvert.xdl \
-	DlgPassword.xdl \
-	Hard.xba \
-	Init.xba \
-	Protect.xba \
-	script.xlb \
-	Soft.xba \
-	Writer.xba \
+$(eval $(call gb_Package_set_outdir,wizards_basicusr,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicusr,presets/basic,\
+	dialog.xlc \
+	script.xlc \
 ))
 
 # vim: set noet sw=4 ts=4:

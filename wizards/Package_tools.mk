@@ -26,20 +26,20 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicsrvtutorials,$(SRCDIR)/wizards/source/tutorials))
+$(eval $(call gb_Package_Package,wizards_basicsrvtools,$(SRCDIR)/wizards/source/tools))
 
-$(eval $(call gb_Zip_add_files,basicsrvtutorials,\
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvtools,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicsrvtools,share/basic/Tools,\
+	Debug.xba \
 	dialog.xlb \
-	Functions.xba \
-	RoadMap.xba \
+	DlgOverwriteAll.xdl \
+	Listbox.xba \
+	Misc.xba \
+	ModuleControls.xba\
 	script.xlb \
-	ShowInfoDialog.xba \
-	TutorialClose.xba \
-	TutorialCloseDialog.xdl \
-	TutorialCreator.xba \
-	TutorialOpen.xba\
-	TutorialOpenDialog.xdl \
-	TutorialsDialog.xdl \
+	Strings.xba \
+	UCB.xba \
 ))
 
 # vim: set noet sw=4 ts=4:

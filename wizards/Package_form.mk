@@ -26,17 +26,20 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicsrvimport,$(SRCDIR)/wizards/source/importwizard))
+$(eval $(call gb_Package_Package,wizards_basicsrvform,$(SRCDIR)/wizards/source/formwizard))
 
-$(eval $(call gb_Zip_add_files,basicsrvimport,\
-	API.xba \
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvform,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicsrvform,share/basic/FormWizard,\
+	DBMeta.xba \
+	develop.xba \
 	dialog.xlb \
-	DialogModul.xba \
-	FilesModul.xba \
-	ImportDialog.xdl \
-	Language.xba\
-	Main.xba \
+	DlgFormDB.xdl \
+	FormWizard.xba \
+	Language.xba \
+	Layouter.xba \
 	script.xlb \
+	tools.xba \
 ))
 
 # vim: set noet sw=4 ts=4:

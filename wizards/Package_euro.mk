@@ -26,18 +26,23 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicsrvtools,$(SRCDIR)/wizards/source/tools))
+$(eval $(call gb_Package_Package,wizards_basicsrveuro,$(SRCDIR)/wizards/source/euro))
 
-$(eval $(call gb_Zip_add_files,basicsrvtools,\
-	Debug.xba \
+$(eval $(call gb_Package_set_outdir,wizards_basicsrveuro,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicsrveuro,share/basic/Euro,\
+	AutoPilotRun.xba \
+	Common.xba \
+	ConvertRun.xba \
 	dialog.xlb \
-	DlgOverwriteAll.xdl \
-	Listbox.xba \
-	Misc.xba \
-	ModuleControls.xba\
+	DlgConvert.xdl \
+	DlgPassword.xdl \
+	Hard.xba \
+	Init.xba \
+	Protect.xba \
 	script.xlb \
-	Strings.xba \
-	UCB.xba \
+	Soft.xba \
+	Writer.xba \
 ))
 
 # vim: set noet sw=4 ts=4:

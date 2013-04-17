@@ -26,11 +26,22 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicshare,$(SRCDIR)/wizards/source/configshare))
+$(eval $(call gb_Package_Package,wizards_basicsrvtutorials,$(SRCDIR)/wizards/source/tutorials))
 
-$(eval $(call gb_Zip_add_files,basicshare,\
-	dialog.xlc \
-	script.xlc \
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvtutorials,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicsrvtutorials,share/basic/Tutorials,\
+	dialog.xlb \
+	Functions.xba \
+	RoadMap.xba \
+	script.xlb \
+	ShowInfoDialog.xba \
+	TutorialClose.xba \
+	TutorialCloseDialog.xdl \
+	TutorialCreator.xba \
+	TutorialOpen.xba\
+	TutorialOpenDialog.xdl \
+	TutorialsDialog.xdl \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -26,17 +26,31 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicsrvtemplate,$(SRCDIR)/wizards/source/template))
+$(eval $(call gb_Package_Package,wizards_basicsrvdepot,$(SRCDIR)/wizards/source/depot))
 
-$(eval $(call gb_Zip_add_files,basicsrvtemplate,\
-	Autotext.xba \
-	Correspondence.xba \
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvdepot,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicsrvdepot,share/basic/Depot,\
+	CommonLang.xba \
+	Currency.xba \
+	Depot.xba \
 	dialog.xlb \
-	DialogStyles.xdl \
-	ModuleAgenda.xba \
-	Samples.xba \
+	Dialog2.xdl \
+	Dialog3.xdl \
+	Dialog4.xdl \
+	Internet.xba \
+	Lang_de.xba \
+	Lang_en.xba \
+	Lang_es.xba \
+	Lang_fr.xba \
+	Lang_it.xba \
+	Lang_ja.xba \
+	Lang_ko.xba \
+	Lang_sv.xba \
+	Lang_tw.xba \
+	Lang_zh.xba \
 	script.xlb \
-	TemplateDialog.xdl \
+	tools.xba \
 ))
 
 # vim: set noet sw=4 ts=4:
