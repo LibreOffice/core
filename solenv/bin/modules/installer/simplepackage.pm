@@ -281,7 +281,6 @@ sub create_package
         my $volume_name_classic = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
         my $volume_name_classic_app = $volume_name;  # "app" should not contain version number
         $volume_name_classic = $volume_name_classic;
-        $volume_name_classic_app = $volume_name_classic_app;
         if ( $allvariables->{'DMG_VOLUMEEXTENSION'} ) {
             $volume_name = $volume_name . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
             $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
