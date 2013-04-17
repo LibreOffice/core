@@ -26,7 +26,7 @@
 // Resource-Id's ------------------------------------------------------------
 
 // !!! IMPORTANT: consider and update FIRSTFREE when introducing new RIDs !!! (not for RIDs for Strings - they have there own)
-#define RID_SVX_FIRSTFREE                   332
+#define RID_SVX_FIRSTFREE                   333
 
 // some strings also used in CUI
 #define RID_SVXERRCTX                       (RID_SVX_START + 351)
@@ -270,6 +270,7 @@
 #define RID_POPUPPANEL_PARAPAGE_LINESPACING (RID_SVX_START + 329)
 #define RID_POPUPPANEL_PARAPAGE_BULLETS     (RID_SVX_START + 330)
 #define RID_POPUPPANEL_PARAPAGE_NUMBERING   (RID_SVX_START + 331)
+#define RID_POPUPPANEL_PARAPAGE_BACK_COLOR  (RID_SVX_START + 332)
 
 // !!! IMPORTANT: consider and update RID_SVX_FIRSTFREE when introducing new RIDs !!! (see above)
 

@@ -83,11 +83,6 @@ namespace {
         return bFound ? n : -1;
     }
 
-    Color GetTransparentColor (void)
-    {
-        return COL_TRANSPARENT;
-    }
-
     void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList)
     {
         const sal_uInt32 nCount(rList.Count());
@@ -898,10 +893,16 @@ IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )
 
 
 
+namespace
+{
+    Color GetTransparentColor (void)
+    {
+        return COL_TRANSPARENT;
+    }
+} // end of anonymous namespace
+
 PopupControl* LinePropertyPanel::CreateColorPopupControl (PopupContainer* pParent)
 {
-    const ResId aResId(SVX_RES(STR_AUTOMATICE));
-
     return new ColorControl(
         pParent,
         mpBindings,
@@ -910,7 +911,7 @@ PopupControl* LinePropertyPanel::CreateColorPopupControl (PopupContainer* pParen
         ::boost::bind(GetTransparentColor),
         ::boost::bind(&LinePropertyPanel::SetColor, this, _1, _2),
         pParent,
-        &aResId);
+        0);
 }
 
 

@@ -757,11 +757,6 @@ void ParaPropertyPanel::ParaBKGStateChanged(sal_uInt16 /*nSID*/, SfxItemState eS
     }
 }
 
-Color ParaPropertyPanel::GetBGColor (void) const
-{
-    return maColor;
-}
-
 void ParaPropertyPanel::SetBGColor (
     const String& /*rsColorName*/,
     const Color aColor)
@@ -1528,17 +1523,27 @@ PopupControl* ParaPropertyPanel::CreateNumberingPopupControl (PopupContainer* pP
     return new ParaNumberingControl(pParent, *this);
 }
 
+namespace
+{
+    Color GetNoBackgroundColor(void)
+    {
+        return COL_TRANSPARENT;
+    }
+} // end of anonymous namespace
+
 PopupControl* ParaPropertyPanel::CreateBGColorPopupControl (PopupContainer* pParent)
 {
+    const ResId aResId(SVX_RES(STR_NOFILL));
+
     return new ColorControl(
         pParent,
         mpBindings,
-        SVX_RES(RID_POPUPPANEL_TEXTPAGE_FONT_COLOR),
+        SVX_RES(RID_POPUPPANEL_PARAPAGE_BACK_COLOR),
         SVX_RES(VS_FONT_COLOR),
-        ::boost::bind(&ParaPropertyPanel::GetBGColor, this),
+        ::boost::bind(GetNoBackgroundColor),
         ::boost::bind(&ParaPropertyPanel::SetBGColor, this, _1,_2),
         pParent,
-        0);
+        &aResId);
 }
 
 

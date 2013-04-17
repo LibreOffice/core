@@ -85,30 +85,42 @@ PopupControl* TextPropertyPanel::CreateUnderlinePopupControl (PopupContainer* pP
     return new TextUnderlineControl(pParent, *this);
 }
 
+namespace
+{
+    Color GetAutomaticColor(void)
+    {
+        return COL_AUTO;
+    }
+} // end of anonymous namespace
+
 PopupControl* TextPropertyPanel::CreateFontColorPopupControl (PopupContainer* pParent)
 {
+    const ResId aResId(SVX_RES(STR_AUTOMATICE));
+
     return new ColorControl(
         pParent,
         mpBindings,
         SVX_RES(RID_POPUPPANEL_TEXTPAGE_FONT_COLOR),
         SVX_RES(VS_FONT_COLOR),
-        ::boost::bind(&TextPropertyPanel::GetFontColor, this),
+        ::boost::bind(GetAutomaticColor),
         ::boost::bind(&TextPropertyPanel::SetFontColor, this, _1,_2),
         pParent,
-        0);
+        &aResId);
 }
 
 PopupControl* TextPropertyPanel::CreateBrushColorPopupControl (PopupContainer* pParent)
 {
+    const ResId aResId(SVX_RES(STR_AUTOMATICE));
+
     return new ColorControl(
         pParent,
         mpBindings,
         SVX_RES(RID_POPUPPANEL_TEXTPAGE_FONT_COLOR),
         SVX_RES(VS_FONT_COLOR),
-        ::boost::bind(&TextPropertyPanel::GetBrushColor, this),
+        ::boost::bind(GetAutomaticColor),
         ::boost::bind(&TextPropertyPanel::SetBrushColor, this, _1,_2),
         pParent,
-        0);
+        &aResId);
 }
 
 long TextPropertyPanel::GetSelFontSize()
@@ -1531,11 +1543,6 @@ void  TextPropertyPanel::UpdateFontScript()
     }
 }
 
-Color TextPropertyPanel::GetFontColor (void) const
-{
-    return maColor;
-}
-
 void TextPropertyPanel::SetFontColor (
     const String& /*rsColorName*/,
     const Color aColor)
@@ -1543,11 +1550,6 @@ void TextPropertyPanel::SetFontColor (
     SvxColorItem aColorItem(aColor, SID_ATTR_CHAR_COLOR);
     mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR, SFX_CALLMODE_RECORD, &aColorItem, 0L);
     maColor = aColor;
-}
-
-Color TextPropertyPanel::GetBrushColor (void) const
-{
-    return maBackColor;
 }
 
 void TextPropertyPanel::SetBrushColor (

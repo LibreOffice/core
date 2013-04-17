@@ -65,9 +65,7 @@ public:
     void SetSpacing(long nKern);
     void EndSpacingPopupMode (void);
     void EndUnderlinePopupMode (void);
-    Color GetFontColor (void) const;
     void SetFontColor (const String& rsColorName,const Color aColor);
-    Color GetBrushColor (void) const;
     void SetBrushColor (const String& rsColorName,const Color aColor);
     void SetUnderline(FontUnderline eUnderline);
     Color& GetUnderlineColor();

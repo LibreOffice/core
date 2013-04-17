@@ -288,10 +288,6 @@ Control RID_POPUPPANEL_LINEPAGE_COLOR
         TabStop = TRUE ;
         Text = "Color";
     };
-    String STR_AUTOMATICE
-    {
-        Text [ en-US ] = "No Color";
-    };
 };
 Control RID_POPUPPANEL_LINEPAGE_STYLE
 {

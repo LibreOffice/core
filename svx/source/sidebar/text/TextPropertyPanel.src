@@ -500,7 +500,6 @@ Control RID_POPUPPANEL_TEXTPAGE_FONT_COLOR
 
     Control VS_FONT_COLOR
     {
-//      HelpID = HID_COLOR_VS ;
         HelpID = HID_PPROPERTYPANEL_TEXT_COLOR_VS;
         Hide = TRUE ;
         Pos = MAP_APPFONT ( OFFSET_X , OFFSET_Y );
@@ -512,7 +511,6 @@ Control RID_POPUPPANEL_TEXTPAGE_FONT_COLOR
     {
         Text [ en-US ] = "Automatic";
     };
-
 };
 
 Control RID_POPUPPANEL_TEXTPAGE_SPACING

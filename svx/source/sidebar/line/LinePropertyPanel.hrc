@@ -58,7 +58,6 @@
 
 //color popup page
 #define VS_COLOR        1
-#define STR_AUTOMATICE  2
 
 //style popup page
 #define VS_STYLE                1
