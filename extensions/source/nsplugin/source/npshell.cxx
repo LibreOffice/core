@@ -45,8 +45,6 @@
 
 #ifdef WNT
 
-#define _WINDOWS
-
 #ifdef _MSC_VER
 #pragma warning (push,1)
 #pragma warning (disable:4668)

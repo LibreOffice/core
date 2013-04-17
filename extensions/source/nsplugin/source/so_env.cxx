@@ -40,7 +40,6 @@
 #endif // End UNIX
 
 #ifdef WNT
-#define _WINDOWS
 
 #ifdef _MSC_VER
 #pragma warning (push,1)
