@@ -62,7 +62,9 @@ namespace shell { namespace sessioninstall
 {
     SyncDbusSessionHelper::SyncDbusSessionHelper(Reference<XComponentContext> const&)
     {
+#if !defined(GLIB_VERSION_2_36)
         g_type_init ();
+#endif
     }
     void SAL_CALL SyncDbusSessionHelper::InstallPackageNames( const ::sal_uInt32 nXid, const Sequence< OUString >& vPackages, const OUString& sInteraction ) throw (RuntimeException)
     {
