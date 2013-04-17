@@ -196,6 +196,8 @@ class AutoCorrEdit : public Edit
     public:
                     AutoCorrEdit(Window* pParent, const ResId& rResId) :
                         Edit(pParent, rResId), bSpaces(sal_False){}
+                    AutoCorrEdit(Window* pParent) :
+                        Edit(pParent), bSpaces(sal_False){}
 
     void            SetActionHdl( const Link& rLink )
                                 { aActionLink = rLink;}
@@ -236,17 +238,15 @@ private:
 
         StringChangeTable aChangesTable;
 
-        CheckBox        aTextOnlyCB;
-        FixedText       aShortFT;
-        AutoCorrEdit    aShortED;
-        FixedText       aReplaceFT;
-        AutoCorrEdit    aReplaceED;
-        SvTabListBox    aReplaceTLB;
-        PushButton      aNewReplacePB;
-        PushButton      aDeleteReplacePB;
+        CheckBox*       m_pTextOnlyCB;
+        AutoCorrEdit*   m_pShortED;
+        AutoCorrEdit*   m_pReplaceED;
+        SvTabListBox*   m_pReplaceTLB;
+        PushButton*     m_pNewReplacePB;
+        PushButton*     m_pDeleteReplacePB;
 
-        String          sModify;
-        String          sNew;
+        OUString        sModify;
+        OUString        sNew;
 
         std::set<OUString> aFormatText;
         DoubleStringTable       aDoubleStringTable;

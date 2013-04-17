@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/keycodes.hxx>
@@ -847,25 +848,24 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
 }
 
 OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
-                                                const SfxItemSet& rSet ) :
-    SfxTabPage          ( pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_REPLACE ), rSet),
-    aTextOnlyCB         ( this, CUI_RES(CB_TEXT_ONLY )),
-    aShortFT            ( this, CUI_RES(FT_SHORT )),
-    aShortED            ( this, CUI_RES(ED_SHORT )),
-    aReplaceFT          ( this, CUI_RES(FT_REPLACE )),
-    aReplaceED          ( this, CUI_RES(ED_REPLACE )),
-    aReplaceTLB         ( this, CUI_RES(TLB_REPLACE )),
-    aNewReplacePB       ( this, CUI_RES(PB_NEW_REPLACE )),
-    aDeleteReplacePB    ( this,CUI_RES(PB_DELETE_REPLACE )),
-    sModify             ( CUI_RES(STR_MODIFY) ),
-    sNew                ( aNewReplacePB.GetText() ),
-    eLang               ( eLastDialogLanguage ),
-    bHasSelectionText   ( sal_False ),
-    bFirstSelect        ( sal_True ),
-    bReplaceEditChanged ( sal_False ),
-    bSWriter            ( sal_True )
+                                                const SfxItemSet& rSet )
+    : SfxTabPage(pParent, "AcorReplacePage", "cui/ui/acorreplacepage.ui", rSet)
+    , eLang(eLastDialogLanguage)
+    , bHasSelectionText(false)
+    , bFirstSelect(true)
+    , bReplaceEditChanged(false)
+    , bSWriter(true)
 {
-    FreeResource();
+    get(m_pTextOnlyCB, "textonly");
+    get(m_pDeleteReplacePB, "delete");
+    get(m_pNewReplacePB, "new");
+    sNew = m_pNewReplacePB->GetText();
+    sModify = get<PushButton>("replace")->GetText();
+    get(m_pShortED, "origtext");
+    get(m_pReplaceED, "newtext");
+    get(m_pReplaceTLB, "tabview");
+    m_pReplaceTLB->set_height_request(16 * GetTextHeight());
+
     SfxModule *pMod = *(SfxModule**)GetAppData(SHL_WRITER);
     bSWriter = pMod == SfxModule::GetActiveModule();
 
@@ -875,20 +875,19 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     pCharClass = new CharClass( aLanguageTag );
 
     static long nTabs[] = { 2 /* Tab-Count */, 1, 61 };
-    aReplaceTLB.SetTabs( &nTabs[0], MAP_APPFONT );
+    m_pReplaceTLB->SetTabs( &nTabs[0], MAP_APPFONT );
 
-    aReplaceTLB.SetStyle( aReplaceTLB.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN );
-    aReplaceTLB.SetSelectHdl( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
-    aNewReplacePB.SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
-    aDeleteReplacePB.SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
-    aShortED.SetModifyHdl( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
-    aReplaceED.SetModifyHdl( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
-    aShortED.SetActionHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
-    aReplaceED.SetActionHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
+    m_pReplaceTLB->SetStyle( m_pReplaceTLB->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN );
+    m_pReplaceTLB->SetSelectHdl( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
+    m_pNewReplacePB->SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
+    m_pDeleteReplacePB->SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
+    m_pShortED->SetModifyHdl( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
+    m_pReplaceED->SetModifyHdl( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
+    m_pShortED->SetActionHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
+    m_pReplaceED->SetActionHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
 
-    aReplaceED.SetSpaces( sal_True );
-    aShortED.SetSpaces( sal_True );
-    aShortED.SetMaxTextLen( 30 );
+    m_pReplaceED->SetSpaces( sal_True );
+    m_pShortED->SetSpaces( sal_True );
 }
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
@@ -970,20 +969,20 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
             pArray = &aDoubleStringTable[eOldLanguage]; // create new array
         }
 
-        sal_uInt32 nListBoxCount = (sal_uInt32) aReplaceTLB.GetEntryCount();
+        sal_uInt32 nListBoxCount = (sal_uInt32) m_pReplaceTLB->GetEntryCount();
         sal_uInt32 i;
         for(i = 0; i < nListBoxCount; i++)
         {
             pArray->push_back(DoubleString());
             DoubleString& rDouble = (*pArray)[pArray->size() - 1];
-            SvTreeListEntry*  pEntry = aReplaceTLB.GetEntry( i );
-            rDouble.sShort = aReplaceTLB.GetEntryText(pEntry, 0);
-            rDouble.sLong = aReplaceTLB.GetEntryText(pEntry, 1);
+            SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( i );
+            rDouble.sShort = m_pReplaceTLB->GetEntryText(pEntry, 0);
+            rDouble.sLong = m_pReplaceTLB->GetEntryText(pEntry, 1);
             rDouble.pUserData = pEntry->GetUserData();
         }
     }
 
-    aReplaceTLB.Clear();
+    m_pReplaceTLB->Clear();
     if( !bSWriter )
         aFormatText.clear();
 
@@ -1000,8 +999,8 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                 String sEntry(rDouble.sShort);
                 sEntry += '\t';
                 sEntry += rDouble.sLong;
-                SvTreeListEntry* pEntry = aReplaceTLB.InsertEntry(sEntry);
-                aTextOnlyCB.Check(bTextOnly);
+                SvTreeListEntry* pEntry = m_pReplaceTLB->InsertEntry(sEntry);
+                m_pTextOnlyCB->Check(bTextOnly);
                 if(!bTextOnly)
                     pEntry->SetUserData(rDouble.pUserData); // that means: with format info or even with selection text
             }
@@ -1015,7 +1014,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     {
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
-        aReplaceTLB.SetUpdateMode(sal_False);
+        m_pReplaceTLB->SetUpdateMode(sal_False);
         SvxAutocorrWordList::Content aContent = pWordList->getSortedContent();
         for( SvxAutocorrWordList::Content::const_iterator it = aContent.begin();
              it != aContent.end(); ++it )
@@ -1028,19 +1027,19 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                 String sEntry(pWordPtr->GetShort());
                 sEntry += '\t';
                 sEntry += pWordPtr->GetLong();
-                SvTreeListEntry* pEntry = aReplaceTLB.InsertEntry(sEntry);
-                aTextOnlyCB.Check(pWordPtr->IsTextOnly());
+                SvTreeListEntry* pEntry = m_pReplaceTLB->InsertEntry(sEntry);
+                m_pTextOnlyCB->Check(pWordPtr->IsTextOnly());
                 if(!bTextOnly)
-                    pEntry->SetUserData(&aTextOnlyCB); // that means: with format info
+                    pEntry->SetUserData(m_pTextOnlyCB); // that means: with format info
             }
             else
             {
                 aFormatText.insert(pWordPtr->GetShort());
             }
         }
-        aNewReplacePB.Enable(sal_False);
-        aDeleteReplacePB.Enable(sal_False);
-        aReplaceTLB.SetUpdateMode(sal_True);
+        m_pNewReplacePB->Enable(sal_False);
+        m_pDeleteReplacePB->Enable(sal_False);
+        m_pReplaceTLB->SetUpdateMode(sal_True);
     }
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -1048,20 +1047,20 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     {
         bHasSelectionText = sal_True;
         const String sSelection( pViewShell->GetSelectionText() );
-        aReplaceED.SetText( sSelection );
-        aTextOnlyCB.Check( !bSWriter );
-        aTextOnlyCB.Enable( bSWriter && sSelection.Len() );
+        m_pReplaceED->SetText( sSelection );
+        m_pTextOnlyCB->Check( !bSWriter );
+        m_pTextOnlyCB->Enable( bSWriter && sSelection.Len() );
     }
     else
     {
-        aTextOnlyCB.Enable( sal_False );
+        m_pTextOnlyCB->Enable( sal_False );
     }
 }
 
 void OfaAutocorrReplacePage::Reset( const SfxItemSet& )
 {
     RefillReplaceBox(sal_True, eLang, eLang);
-    aShortED.GrabFocus();
+    m_pShortED->GrabFocus();
 }
 
 void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
@@ -1078,7 +1077,7 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
         pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
         pCharClass = new CharClass( aLanguageTag );
-        ModifyHdl(&aShortED);
+        ModifyHdl(m_pShortED);
     }
 }
 
@@ -1090,28 +1089,28 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
         OUString sTmpShort(pBox->GetEntryText(pEntry, 0));
         // if the text is set via ModifyHdl, the cursor is always at the beginning
         // of a word, although you're editing here
-        sal_Bool bSameContent = 0 == pCompareClass->compareString( sTmpShort, aShortED.GetText() );
-        Selection aSel = aShortED.GetSelection();
-        if(aShortED.GetText() != sTmpShort)
+        sal_Bool bSameContent = 0 == pCompareClass->compareString( sTmpShort, m_pShortED->GetText() );
+        Selection aSel = m_pShortED->GetSelection();
+        if(m_pShortED->GetText() != sTmpShort)
         {
-            aShortED.SetText(sTmpShort);
+            m_pShortED->SetText(sTmpShort);
             // if it was only a different notation, the selection has to be set again
             if(bSameContent)
             {
-                aShortED.SetSelection(aSel);
+                m_pShortED->SetSelection(aSel);
             }
         }
-        aReplaceED.SetText( pBox->GetEntryText(pEntry, 1) );
+        m_pReplaceED->SetText( pBox->GetEntryText(pEntry, 1) );
         // with UserData there is a Formatinfo
-        aTextOnlyCB.Check( pEntry->GetUserData() == 0);
+        m_pTextOnlyCB->Check( pEntry->GetUserData() == 0);
     }
     else
     {
         bFirstSelect = sal_False;
     }
 
-    aNewReplacePB.Enable(sal_False);
-    aDeleteReplacePB.Enable();
+    m_pNewReplacePB->Enable(sal_False);
+    m_pDeleteReplacePB->Enable();
     return 0;
 };
 
@@ -1173,60 +1172,60 @@ void OfaAutocorrReplacePage::DeleteEntry(String sShort, String sLong)
 
 IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
 {
-    SvTreeListEntry* pEntry = aReplaceTLB.FirstSelected();
-    if( pBtn == &aDeleteReplacePB )
+    SvTreeListEntry* pEntry = m_pReplaceTLB->FirstSelected();
+    if( pBtn == m_pDeleteReplacePB )
     {
         DBG_ASSERT( pEntry, "no entry selected" );
         if( pEntry )
         {
-            DeleteEntry(aReplaceTLB.GetEntryText(pEntry, 0), aReplaceTLB.GetEntryText(pEntry, 1));
-            aReplaceTLB.GetModel()->Remove(pEntry);
-            ModifyHdl(&aShortED);
+            DeleteEntry(m_pReplaceTLB->GetEntryText(pEntry, 0), m_pReplaceTLB->GetEntryText(pEntry, 1));
+            m_pReplaceTLB->GetModel()->Remove(pEntry);
+            ModifyHdl(m_pShortED);
             return 0;
         }
     }
-    if(pBtn == &aNewReplacePB || aNewReplacePB.IsEnabled())
+    if(pBtn == m_pNewReplacePB || m_pNewReplacePB->IsEnabled())
     {
-        SvTreeListEntry* _pNewEntry = aReplaceTLB.FirstSelected();
-        String sEntry(aShortED.GetText());
-        if(sEntry.Len() && ( !aReplaceED.GetText().isEmpty() ||
+        SvTreeListEntry* _pNewEntry = m_pReplaceTLB->FirstSelected();
+        String sEntry(m_pShortED->GetText());
+        if(sEntry.Len() && ( !m_pReplaceED->GetText().isEmpty() ||
                 ( bHasSelectionText && bSWriter ) ))
         {
-            NewEntry(aShortED.GetText(), aReplaceED.GetText());
-            aReplaceTLB.SetUpdateMode(sal_False);
+            NewEntry(m_pShortED->GetText(), m_pReplaceED->GetText());
+            m_pReplaceTLB->SetUpdateMode(sal_False);
             sal_uInt32 nPos = UINT_MAX;
             sEntry += '\t';
-            sEntry += aReplaceED.GetText();
+            sEntry += m_pReplaceED->GetText();
             if(_pNewEntry)
             {
-                nPos = (sal_uInt32) aReplaceTLB.GetModel()->GetAbsPos(_pNewEntry);
-                aReplaceTLB.GetModel()->Remove(_pNewEntry);
+                nPos = (sal_uInt32) m_pReplaceTLB->GetModel()->GetAbsPos(_pNewEntry);
+                m_pReplaceTLB->GetModel()->Remove(_pNewEntry);
             }
             else
             {
                 sal_uInt32 j;
-                for( j = 0; j < aReplaceTLB.GetEntryCount(); j++ )
+                for( j = 0; j < m_pReplaceTLB->GetEntryCount(); j++ )
                 {
-                    SvTreeListEntry* pReplaceEntry = aReplaceTLB.GetEntry(j);
-                    if( 0 >=  pCompareClass->compareString(sEntry, aReplaceTLB.GetEntryText(pReplaceEntry, 0) ) )
+                    SvTreeListEntry* pReplaceEntry = m_pReplaceTLB->GetEntry(j);
+                    if( 0 >=  pCompareClass->compareString(sEntry, m_pReplaceTLB->GetEntryText(pReplaceEntry, 0) ) )
                         break;
                 }
                 nPos = j;
             }
-            SvTreeListEntry* pInsEntry = aReplaceTLB.InsertEntry(
+            SvTreeListEntry* pInsEntry = m_pReplaceTLB->InsertEntry(
                                         sEntry, static_cast< SvTreeListEntry * >(NULL), false,
                                         nPos == UINT_MAX ? LIST_APPEND : nPos);
-            if( !bReplaceEditChanged && !aTextOnlyCB.IsChecked())
+            if( !bReplaceEditChanged && !m_pTextOnlyCB->IsChecked())
             {
                 pInsEntry->SetUserData(&bHasSelectionText); // new formatted text
             }
 
-            aReplaceTLB.MakeVisible( pInsEntry );
-            aReplaceTLB.SetUpdateMode( sal_True );
+            m_pReplaceTLB->MakeVisible( pInsEntry );
+            m_pReplaceTLB->SetUpdateMode( sal_True );
             // if the request came from the ReplaceEdit, give focus to the ShortEdit
-            if(aReplaceED.HasFocus())
+            if(m_pReplaceED->HasFocus())
             {
-                aShortED.GrabFocus();
+                m_pShortED->GrabFocus();
             }
         }
     }
@@ -1236,16 +1235,16 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
         // which means EndDialog() - has to be evaluated in KeyInput
         return 0;
     }
-    ModifyHdl( &aShortED );
+    ModifyHdl(m_pShortED);
     return 1;
 }
 
 IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
 {
-    SvTreeListEntry* pFirstSel = aReplaceTLB.FirstSelected();
-    sal_Bool bShort = pEdt == &aShortED;
+    SvTreeListEntry* pFirstSel = m_pReplaceTLB->FirstSelected();
+    sal_Bool bShort = pEdt == m_pShortED;
     const String rEntry = pEdt->GetText();
-    const String rRepString = aReplaceED.GetText();
+    const String rRepString = m_pReplaceED->GetText();
     String aWordStr( pCharClass->lowercase( rEntry ));
 
     if(bShort)
@@ -1255,19 +1254,19 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
             sal_Bool bFound = sal_False;
             sal_Bool bTmpSelEntry=sal_False;
 
-            for(sal_uInt32 i = 0; i < aReplaceTLB.GetEntryCount(); i++)
+            for(sal_uInt32 i = 0; i < m_pReplaceTLB->GetEntryCount(); i++)
             {
-                SvTreeListEntry*  pEntry = aReplaceTLB.GetEntry( i );
-                String aTestStr=aReplaceTLB.GetEntryText(pEntry, 0);
+                SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( i );
+                String aTestStr=m_pReplaceTLB->GetEntryText(pEntry, 0);
                 if( pCompareClass->compareString(rEntry, aTestStr ) == 0 )
                 {
                     if( rRepString.Len() )
                     {
                         bFirstSelect = sal_True;
                     }
-                    aReplaceTLB.SetCurEntry(pEntry);
+                    m_pReplaceTLB->SetCurEntry(pEntry);
                     pFirstSel = pEntry;
-                    aNewReplacePB.SetText(sModify);
+                    m_pNewReplacePB->SetText(sModify);
                     bFound = sal_True;
                     break;
                 }
@@ -1276,25 +1275,25 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                     aTestStr = pCharClass->lowercase( aTestStr );
                     if( aTestStr.Search(aWordStr) == 0 && !bTmpSelEntry )
                     {
-                        aReplaceTLB.MakeVisible( pEntry );
+                        m_pReplaceTLB->MakeVisible( pEntry );
                         bTmpSelEntry = sal_True;
                     }
                 }
             }
             if( !bFound )
             {
-                aReplaceTLB.SelectAll( sal_False );
+                m_pReplaceTLB->SelectAll( sal_False );
                 pFirstSel = 0;
-                aNewReplacePB.SetText( sNew );
+                m_pNewReplacePB->SetText( sNew );
                 if( bReplaceEditChanged )
-                    aTextOnlyCB.Enable(sal_False);
+                    m_pTextOnlyCB->Enable(sal_False);
             }
-            aDeleteReplacePB.Enable( bFound );
+            m_pDeleteReplacePB->Enable( bFound );
         }
-        else if( aReplaceTLB.GetEntryCount() > 0 )
+        else if( m_pReplaceTLB->GetEntryCount() > 0 )
         {
-            SvTreeListEntry*  pEntry = aReplaceTLB.GetEntry( 0 );
-            aReplaceTLB.MakeVisible( pEntry );
+            SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( 0 );
+            m_pReplaceTLB->MakeVisible( pEntry );
         }
 
     }
@@ -1303,16 +1302,16 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
         bReplaceEditChanged = sal_True;
         if( pFirstSel )
         {
-            aNewReplacePB.SetText( sModify );
+            m_pNewReplacePB->SetText( sModify );
         }
     }
 
-    const String& rShortTxt = aShortED.GetText();
+    const String& rShortTxt = m_pShortED->GetText();
     sal_Bool bEnableNew = rShortTxt.Len() &&
                         ( rRepString.Len() ||
                                 ( bHasSelectionText && bSWriter )) &&
                         ( !pFirstSel || rRepString !=
-                                aReplaceTLB.GetEntryText( pFirstSel, 1 ) );
+                                m_pReplaceTLB->GetEntryText( pFirstSel, 1 ) );
     if( bEnableNew )
     {
         for(std::set<OUString>::iterator i = aFormatText.begin(); i != aFormatText.end(); ++i)
@@ -1324,7 +1323,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
             }
         }
     }
-    aNewReplacePB.Enable( bEnableNew );
+    m_pNewReplacePB->Enable( bEnableNew );
 
     return 0;
 }
@@ -1685,6 +1684,12 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
         aDelDoublePB.Enable(bSame && bEntryLen);
     }
     return 0;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeAutoCorrEdit(Window *pParent,
+    VclBuilder::stringmap &)
+{
+    return new AutoCorrEdit(pParent);
 }
 
 void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
