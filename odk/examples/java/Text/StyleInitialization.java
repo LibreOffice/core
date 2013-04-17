@@ -70,12 +70,10 @@ public class StyleInitialization {
             // you travel only at the model, not at the view. The cursor that you can
             // see on the document doesn't change the position
             com.sun.star.text.XTextCursor xTextCursor = null;
-            xTextCursor = (com.sun.star.text.XTextCursor)
-                xTextDocument.getText().createTextCursor();
+            xTextCursor = xTextDocument.getText().createTextCursor();
 
-            com.sun.star.beans.XPropertySet oCPS = (com.sun.star.beans.XPropertySet)
-                UnoRuntime.queryInterface(
-                    com.sun.star.beans.XPropertySet.class, xTextCursor);
+            com.sun.star.beans.XPropertySet oCPS = UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertySet.class, xTextCursor);
             try {
                 oCPS.setPropertyValue("CharFontName","Helvetica");
             }
@@ -101,9 +99,8 @@ public class StyleInitialization {
 
             // the text range not the cursor contains the 'parastyle' property
             xTextRange = xText.getEnd();
-            xPropertySet = (com.sun.star.beans.XPropertySet)
-                UnoRuntime.queryInterface(
-                    com.sun.star.beans.XPropertySet.class, xTextRange );
+            xPropertySet = UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertySet.class, xTextRange );
 
             // To run the sample with StarOffice 5.2 you'll have to change
             // 'ParaStyleName' to 'ParaStyle' in the next line
@@ -118,18 +115,16 @@ public class StyleInitialization {
 
             // The first way, with the paragraph cursor
             com.sun.star.text.XParagraphCursor xParagraphCursor = null;
-            xParagraphCursor = (com.sun.star.text.XParagraphCursor)
-                UnoRuntime.queryInterface(
-                    com.sun.star.text.XParagraphCursor.class, xTextRange );
+            xParagraphCursor = UnoRuntime.queryInterface(
+                com.sun.star.text.XParagraphCursor.class, xTextRange );
 
             xParagraphCursor.gotoStart( false );
             xParagraphCursor.gotoEndOfParagraph( true );
 
             // The second way, with the paragraph enumeration
             com.sun.star.container.XEnumerationAccess xEnumerationAccess = null;
-            xEnumerationAccess = (com.sun.star.container.XEnumerationAccess)
-                UnoRuntime.queryInterface(
-                    com.sun.star.container.XEnumerationAccess.class, xText );
+            xEnumerationAccess = UnoRuntime.queryInterface(
+                com.sun.star.container.XEnumerationAccess.class, xText );
 
             // the enumeration contains all paragraph form the document
             com.sun.star.container.XEnumeration xParagraphEnumeration = null;
@@ -144,10 +139,9 @@ public class StyleInitialization {
             // check if a paragraph is available
             while ( xParagraphEnumeration.hasMoreElements() ) {
                 // get the next paragraph
-                xParagraph = (com.sun.star.text.XTextContent)
-                    UnoRuntime.queryInterface(
-                        com.sun.star.text.XTextContent.class,
-                        xParagraphEnumeration.nextElement());
+                xParagraph = UnoRuntime.queryInterface(
+                    com.sun.star.text.XTextContent.class,
+                    xParagraphEnumeration.nextElement());
 
                 // you need the method getAnchor to a TextRange -> to manipulate
                 // the paragraph
@@ -163,14 +157,13 @@ public class StyleInitialization {
 
                 // The enumeration from the paragraphs contain parts from the
                 // paragraph with a different attributes.
-                xParaEnumerationAccess = (com.sun.star.container.XEnumerationAccess)
-                    UnoRuntime.queryInterface(
-                        com.sun.star.container.XEnumerationAccess.class, xParagraph);
+                xParaEnumerationAccess = UnoRuntime.queryInterface(
+                    com.sun.star.container.XEnumerationAccess.class, xParagraph);
                 xPortionEnumeration = xParaEnumerationAccess.createEnumeration();
 
                 while ( xPortionEnumeration.hasMoreElements() ) {
                     // output of all parts from the paragraph with different attributes
-                    xWord = (com.sun.star.text.XTextRange) UnoRuntime.queryInterface(
+                    xWord = UnoRuntime.queryInterface(
                         com.sun.star.text.XTextRange.class,
                         xPortionEnumeration.nextElement());
                     String sWordString = xWord.getString();
@@ -182,7 +175,7 @@ public class StyleInitialization {
 
             // craete a supplier to get the styles-collection
             com.sun.star.style.XStyleFamiliesSupplier xSupplier = null;
-            xSupplier = ( com.sun.star.style.XStyleFamiliesSupplier ) UnoRuntime.queryInterface(
+            xSupplier = UnoRuntime.queryInterface(
                 com.sun.star.style.XStyleFamiliesSupplier.class, xTextDocument );
 
             // use the name access from the collection
@@ -190,7 +183,7 @@ public class StyleInitialization {
             xNameAccess = xSupplier.getStyleFamilies();
 
             com.sun.star.container.XNameContainer xParaStyleCollection = null;
-            xParaStyleCollection = (com.sun.star.container.XNameContainer) UnoRuntime.queryInterface(
+            xParaStyleCollection = UnoRuntime.queryInterface(
                 com.sun.star.container.XNameContainer.class, xNameAccess.getByName( "ParagraphStyles" ));
 
             // create a array from strings with the name of all paragraph styles from the text document
@@ -200,12 +193,12 @@ public class StyleInitialization {
             for( int iCounter = 0;  iCounter < iElementCount; iCounter++ ) {
                 // specify one paragraph style
                 com.sun.star.style.XStyle xStyle = null;
-                xStyle = (com.sun.star.style.XStyle) UnoRuntime.queryInterface(
+                xStyle = UnoRuntime.queryInterface(
                     com.sun.star.style.XStyle.class,
                     xParaStyleCollection.getByName( sElementNames[iCounter] ));
 
                 // create a property set of all properties from the style
-                xPropertySet = (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
+                xPropertySet = UnoRuntime.queryInterface(
                     com.sun.star.beans.XPropertySet.class, xStyle );
 
                 AnyConverter aAnyConv = new AnyConverter();
@@ -215,7 +208,7 @@ public class StyleInitialization {
                 // if the style use the font 'Albany', apply it to the current paragraph
                 if( sFontname.compareTo("albany") == 0 ) {
                     // create a property set from the current paragraph, to change the paragraph style
-                    xPropertySet = (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
+                    xPropertySet = UnoRuntime.queryInterface(
                         com.sun.star.beans.XPropertySet.class, xTextRange );
 
                     // To run the sample with StarOffice 5.2 you'll have to change 'ParaStyleName'
@@ -255,7 +248,7 @@ public class StyleInitialization {
 
                 Object oDesktop = xMCF.createInstanceWithContext(
                     "com.sun.star.frame.Desktop", xContext);
-                xDesktop = (com.sun.star.frame.XDesktop) UnoRuntime.queryInterface(
+                xDesktop = UnoRuntime.queryInterface(
                     com.sun.star.frame.XDesktop.class, oDesktop);
             }
             else
@@ -278,9 +271,8 @@ public class StyleInitialization {
         try {
             com.sun.star.lang.XComponent xComponent = CreateNewDocument(xDesktop,
                                                                         "swriter");
-            aTextDocument = (com.sun.star.text.XTextDocument)
-                UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextDocument.class, xComponent);
+            aTextDocument = UnoRuntime.queryInterface(
+                com.sun.star.text.XTextDocument.class, xComponent);
         }
         catch( Exception e) {
             e.printStackTrace(System.err);
@@ -304,9 +296,8 @@ public class StyleInitialization {
             new com.sun.star.beans.PropertyValue[0];
 
         try {
-            xComponentLoader = (com.sun.star.frame.XComponentLoader)
-                UnoRuntime.queryInterface(
-                    com.sun.star.frame.XComponentLoader.class, xDesktop);
+            xComponentLoader = UnoRuntime.queryInterface(
+                com.sun.star.frame.XComponentLoader.class, xDesktop);
 
             xComponent  = xComponentLoader.loadComponentFromURL(
                 sURL, "_blank", 0, xEmptyArgs);

@@ -69,8 +69,7 @@ public class ScriptStorage extends TestCase {
             XMultiServiceFactory xMSF = (XMultiServiceFactory) tParam.getMSF();
             Object xInterface =
                 xMSF.createInstance( "com.sun.star.ucb.SimpleFileAccess" );
-            access = ( XSimpleFileAccess )
-                UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
+            access = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
             oObj = ( XInterface )xMSF.createInstanceWithArguments(
                 "drafts.com.sun.star.script.framework.storage.ScriptStorage",
                 new Object[]{ access, new Integer(99), docPath } );

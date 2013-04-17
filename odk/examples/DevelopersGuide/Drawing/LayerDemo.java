@@ -84,8 +84,7 @@ public class LayerDemo
 
             // create two rectangles
             XDrawPage xPage = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
-            XShapes xShapes = (XShapes)
-                    UnoRuntime.queryInterface( XShapes.class, xPage );
+            XShapes xShapes = UnoRuntime.queryInterface( XShapes.class, xPage );
 
             XShape xRect1 = ShapeHelper.createShape( xDrawDoc,
                 new Point( 1000, 1000 ), new Size( 5000, 5000 ),
@@ -109,12 +108,10 @@ public class LayerDemo
 
 
             // query for the XLayerManager
-            XLayerSupplier xLayerSupplier = (XLayerSupplier)
-                (XLayerSupplier)UnoRuntime.queryInterface(
+            XLayerSupplier xLayerSupplier = UnoRuntime.queryInterface(
                     XLayerSupplier.class, xDrawDoc );
             XNameAccess xNameAccess = xLayerSupplier.getLayerManager();
-            XLayerManager xLayerManager = (XLayerManager)
-                (XLayerManager)UnoRuntime.queryInterface(
+            XLayerManager xLayerManager = UnoRuntime.queryInterface(
                     XLayerManager.class, xNameAccess );
 
             // create a layer and set its properties
@@ -122,8 +119,7 @@ public class LayerDemo
             XLayer xNotVisibleAndEditable = xLayerManager.insertNewByIndex(
                 xLayerManager.getCount() );
 
-            xLayerPropSet = (XPropertySet)
-                (XPropertySet)UnoRuntime.queryInterface(
+            xLayerPropSet = UnoRuntime.queryInterface(
                     XPropertySet.class, xNotVisibleAndEditable );
             xLayerPropSet.setPropertyValue( "Name", "NotVisibleAndEditable" );
             xLayerPropSet.setPropertyValue( "IsVisible", new Boolean( false ) );
@@ -133,8 +129,7 @@ public class LayerDemo
             XLayer xNotEditable = xLayerManager.insertNewByIndex(
                 xLayerManager.getCount() );
 
-            xLayerPropSet = (XPropertySet)
-                (XPropertySet)UnoRuntime.queryInterface(
+            xLayerPropSet = UnoRuntime.queryInterface(
                     XPropertySet.class, xNotEditable );
             xLayerPropSet.setPropertyValue( "Name", "NotEditable" );
             xLayerPropSet.setPropertyValue( "IsVisible", new Boolean( true ) );

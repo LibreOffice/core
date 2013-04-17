@@ -82,8 +82,7 @@ public class Organigram {
 
         Object desktop = xRemoteServiceManager.createInstanceWithContext(
             "com.sun.star.frame.Desktop", xRemoteContext);
-        XComponentLoader xComponentLoader = (XComponentLoader)
-            UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+        XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, desktop);
 
         PropertyValue[] loadProps = new PropertyValue[0];
         XComponent xDrawComponent = xComponentLoader.loadComponentFromURL(
@@ -91,22 +90,21 @@ public class Organigram {
 
         // get draw page by index
         com.sun.star.drawing.XDrawPagesSupplier xDrawPagesSupplier =
-            (com.sun.star.drawing.XDrawPagesSupplier)UnoRuntime.queryInterface(
-                com.sun.star.drawing.XDrawPagesSupplier.class, xDrawComponent );
+            UnoRuntime.queryInterface(
+                    com.sun.star.drawing.XDrawPagesSupplier.class, xDrawComponent );
         com.sun.star.drawing.XDrawPages xDrawPages =
             xDrawPagesSupplier.getDrawPages();
         Object drawPage = xDrawPages.getByIndex(0);
-        com.sun.star.drawing.XDrawPage xDrawPage = (com.sun.star.drawing.XDrawPage)
-            UnoRuntime.queryInterface(com.sun.star.drawing.XDrawPage.class,
-                                      drawPage);
+        com.sun.star.drawing.XDrawPage xDrawPage = UnoRuntime.queryInterface(com.sun.star.drawing.XDrawPage.class,
+                drawPage);
 
         com.sun.star.lang.XMultiServiceFactory xDocumentFactory =
-            (com.sun.star.lang.XMultiServiceFactory)UnoRuntime.queryInterface(
-                com.sun.star.lang.XMultiServiceFactory.class, xDrawComponent);
+            UnoRuntime.queryInterface(
+                    com.sun.star.lang.XMultiServiceFactory.class, xDrawComponent);
 
         com.sun.star.beans.XPropertySet xPageProps =
-            (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
-                com.sun.star.beans.XPropertySet.class, xDrawPage);
+            UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet.class, xDrawPage);
 
         int pageWidth = AnyConverter.toInt(xPageProps.getPropertyValue("Width"));
         int pageHeight = AnyConverter.toInt(xPageProps.getPropertyValue("Height"));
@@ -144,15 +142,13 @@ public class Organigram {
                          (levelCount[level] - 1) * horSpace) / 2
                          + i * shapeWidth + i * horSpace;
                 Object shape = xDocumentFactory.createInstance("com.sun.star.drawing.RectangleShape");
-                com.sun.star.drawing.XShape xShape = (com.sun.star.drawing.XShape)
-                    UnoRuntime.queryInterface(
+                com.sun.star.drawing.XShape xShape = UnoRuntime.queryInterface(
                         com.sun.star.drawing.XShape.class, shape);
                 xShape.setPosition(new com.sun.star.awt.Point(shapeX, levelY));
                 xShape.setSize(new com.sun.star.awt.Size(shapeWidth, shapeHeight));
                 xDrawPage.add(xShape);
 
-                com.sun.star.text.XText xText = (com.sun.star.text.XText)
-                    UnoRuntime.queryInterface(
+                com.sun.star.text.XText xText = UnoRuntime.queryInterface(
                         com.sun.star.text.XText.class, xShape);
 
                 xText.setString(orgUnits[level][i]);
@@ -164,11 +160,11 @@ public class Organigram {
                 if (level == 1) {
                     Object connector = xDocumentFactory.createInstance("com.sun.star.drawing.ConnectorShape");
                     com.sun.star.beans.XPropertySet xConnectorProps =
-                        (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
-                            com.sun.star.beans.XPropertySet.class, connector);
+                        UnoRuntime.queryInterface(
+                                com.sun.star.beans.XPropertySet.class, connector);
                 com.sun.star.drawing.XShape xConnector =
-                    (com.sun.star.drawing.XShape)UnoRuntime.queryInterface(
-                        com.sun.star.drawing.XShape.class, connector);
+                    UnoRuntime.queryInterface(
+                            com.sun.star.drawing.XShape.class, connector);
                     xDrawPage.add(xConnector);
                     xConnectorProps.setPropertyValue("StartShape", xStartShape);
                     xConnectorProps.setPropertyValue("EndShape", xShape);

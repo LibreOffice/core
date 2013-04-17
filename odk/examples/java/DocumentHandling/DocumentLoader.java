@@ -63,9 +63,8 @@ public class DocumentLoader {
                 "com.sun.star.frame.Desktop", xContext);
 
             com.sun.star.frame.XComponentLoader xCompLoader =
-                (com.sun.star.frame.XComponentLoader)
-                     UnoRuntime.queryInterface(
-                         com.sun.star.frame.XComponentLoader.class, oDesktop);
+                UnoRuntime.queryInterface(
+                 com.sun.star.frame.XComponentLoader.class, oDesktop);
 
             String sUrl = args[0];
             if ( sUrl.indexOf("private:") != 0) {

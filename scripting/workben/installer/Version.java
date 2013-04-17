@@ -211,7 +211,7 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         wizard.clearLocations();
         int len = tableModel.data.size();
         for (int i = 0; i < len; i++) {
-            ArrayList<?> list = (ArrayList<?>)tableModel.data.get(i);
+            ArrayList<?> list = tableModel.data.get(i);
             if (((Boolean)list.get(0)).booleanValue() == true)
                 wizard.storeLocation((String)list.get(2));
         }
@@ -306,7 +306,7 @@ class MyTableModel extends AbstractTableModel {
             col < 0 || col > getColumnCount())
             return null;
 
-        ArrayList<?> aRow = (ArrayList<?>)data.get(row);
+        ArrayList<?> aRow = data.get(row);
         return aRow.get(col);
     }
 

@@ -77,11 +77,9 @@ public class ObjectTransformationDemo
                 "private:factory/simpress", "_blank", 0, pPropValues );
 
             XDrawPage xPage = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
-            XPropertySet xPagePropSet= (XPropertySet)
-                    UnoRuntime.queryInterface( XPropertySet.class, xPage );
+            XPropertySet xPagePropSet= UnoRuntime.queryInterface( XPropertySet.class, xPage );
 
-            XShapes xShapes = (XShapes)
-                    UnoRuntime.queryInterface( XShapes.class, xPage );
+            XShapes xShapes = UnoRuntime.queryInterface( XShapes.class, xPage );
 
 
             XShape xShape = ShapeHelper.createShape( xDrawDoc,
@@ -89,8 +87,7 @@ public class ObjectTransformationDemo
                     "com.sun.star.drawing.RectangleShape" );
             xShapes.add( xShape );
 
-            XPropertySet xPropSet = (XPropertySet)
-                    UnoRuntime.queryInterface( XPropertySet.class, xShape );
+            XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, xShape );
 
             HomogenMatrix3 aHomogenMatrix3 = (HomogenMatrix3)
                 xPropSet.getPropertyValue( "Transformation" );

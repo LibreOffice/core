@@ -111,14 +111,14 @@ public class NotesAccess implements Runnable {
             NotesAccess notesaccess = new NotesAccess();
 
             // Allowing only local calls to the Domino classes.
-            thread = new NotesThread( ( Runnable ) notesaccess );
+            thread = new NotesThread( notesaccess );
         }
         else {
             // Extracting the host, user, and password.
             NotesAccess notesaccess = new NotesAccess();
 
             // Allowing remote calls to the Domino classes.
-            thread = new Thread( ( Runnable ) notesaccess );
+            thread = new Thread( notesaccess );
         }
 
         // Starting the thread.
@@ -147,10 +147,9 @@ public class NotesAccess implements Runnable {
                frames in which components can be loaded. Desktop is the
                environment for components which can instanciate within
                frames. */
-            XComponentLoader xLoader = ( XComponentLoader )
-                UnoRuntime.queryInterface(XComponentLoader.class,
-                    xMCF.createInstanceWithContext(
-                        "com.sun.star.frame.Desktop", xContext));
+            XComponentLoader xLoader = UnoRuntime.queryInterface(XComponentLoader.class,
+                xMCF.createInstanceWithContext(
+                    "com.sun.star.frame.Desktop", xContext));
 
             // Load a Writer document, which will be automaticly displayed
             XComponent xComponent = xLoader.loadComponentFromURL(
@@ -159,18 +158,18 @@ public class NotesAccess implements Runnable {
 
             // Querying for the interface XSpreadsheetDocument
             XSpreadsheetDocument xSpreadsheetDoc =
-                (XSpreadsheetDocument) UnoRuntime.queryInterface(
-                    XSpreadsheetDocument.class, xComponent);
+                UnoRuntime.queryInterface(
+                XSpreadsheetDocument.class, xComponent);
 
             // Getting all sheets from the spreadsheet document.
             XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets() ;
 
             // Querying for the interface XIndexAccess.
-            XIndexAccess xIndexAccess = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess xIndexAccess = UnoRuntime.queryInterface(
                 XIndexAccess.class, xSpreadsheets);
 
             // Getting the first spreadsheet.
-            XSpreadsheet xSpreadsheet = (XSpreadsheet) UnoRuntime.queryInterface(
+            XSpreadsheet xSpreadsheet = UnoRuntime.queryInterface(
                 XSpreadsheet.class, xIndexAccess.getByIndex(0));
 
             Session session;

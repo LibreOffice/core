@@ -203,19 +203,18 @@ public class various extends TestCase {
             XInterface oAcctr = (XInterface)xMSF.createInstance(
                     "com.sun.star.connection.Acceptor") ;
 
-            xAcctr = (XAcceptor)UnoRuntime.queryInterface(
+            xAcctr = UnoRuntime.queryInterface(
                     XAcceptor.class, oAcctr);
             // create connector
             XInterface oCntr = (XInterface)xMSF.createInstance(
                     "com.sun.star.connection.Connector") ;
-            xCntr = (XConnector)UnoRuntime.queryInterface(
+            xCntr = UnoRuntime.queryInterface(
                     XConnector.class, oCntr);
 
             // create bridge factory
             XInterface oBrdg = (XInterface)xMSF.createInstance(
                     "com.sun.star.bridge.BridgeFactory") ;
-            xBrdgFctr = (XBridgeFactory)
-                        UnoRuntime.queryInterface(XBridgeFactory.class, oBrdg);
+            xBrdgFctr = UnoRuntime.queryInterface(XBridgeFactory.class, oBrdg);
 
             // create own implementation of XInstanceProvider
             XInstanceProvider xInstProv = new MyInstanceProvider(xMSF);
@@ -267,20 +266,20 @@ public class various extends TestCase {
         if (accThread.isAlive()) {
             accThread.interrupt();
         }
-        XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+        XComponent xComp = UnoRuntime.queryInterface(
                 XComponent.class, xAcctr);
         if (xComp != null)
             xComp.dispose();
-        xComp = (XComponent)UnoRuntime.queryInterface(
+        xComp = UnoRuntime.queryInterface(
                 XComponent.class, xCntr);
         if (xComp != null)
             xComp.dispose();
-        xComp = (XComponent)UnoRuntime.queryInterface(
+        xComp = UnoRuntime.queryInterface(
                 XComponent.class, xBrdgFctr);
         if (xComp != null)
             xComp.dispose();
 
-        xComp = (XComponent)UnoRuntime.queryInterface(
+        xComp = UnoRuntime.queryInterface(
                 XComponent.class, bridge);
         if (xComp != null) {
             System.out.println("######## Dispose bridge");

@@ -95,10 +95,10 @@ public void run()
         XInterface x = (XInterface) xMSF.createInstance(
                                     "com.sun.star.awt.Toolkit") ;
         XExtendedToolkit tk =
-                (XExtendedToolkit)UnoRuntime.queryInterface(
-                                        XExtendedToolkit.class,x);
+                UnoRuntime.queryInterface(
+                                XExtendedToolkit.class,x);
         AccessibilityTools at = new AccessibilityTools();
-        XWindow xWindow = (XWindow)UnoRuntime.queryInterface(
+        XWindow xWindow = UnoRuntime.queryInterface(
                                 XWindow.class,tk.getActiveTopWindow());
         XAccessible xRoot = at.getAccessibleObject(xWindow);
         xCon = xRoot.getAccessibleContext();
@@ -135,8 +135,8 @@ public void run()
                 // want to do this action now
                 // probably equates to toggle cb
                 XAccessibleAction xAction =
-                        (XAccessibleAction)UnoRuntime.queryInterface(
-                        XAccessibleAction.class, xAcc.getAccessibleContext());
+                        UnoRuntime.queryInterface(
+                XAccessibleAction.class, xAcc.getAccessibleContext());
                 xAction.doAccessibleAction(0);
 
                 // might be worth using oObj2 to double check the new state??
@@ -149,8 +149,8 @@ public void run()
         }
         // press button
         XAccessibleAction xAction =
-                (XAccessibleAction)UnoRuntime.queryInterface(
-                XAccessibleAction.class, oObj);
+                UnoRuntime.queryInterface(
+        XAccessibleAction.class, oObj);
         xAction.doAccessibleAction(0);
     }
     catch(com.sun.star.lang.IndexOutOfBoundsException e) {

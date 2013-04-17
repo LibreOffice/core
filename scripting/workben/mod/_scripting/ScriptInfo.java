@@ -72,12 +72,11 @@ public class ScriptInfo extends TestCase {
             XMultiServiceFactory xMSF = (XMultiServiceFactory) tParam.getMSF();
             Object xInterface =
                 xMSF.createInstance( "com.sun.star.ucb.SimpleFileAccess" );
-            access = ( XSimpleFileAccess )
-                UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
-            Object storageObj = ( XInterface )xMSF.createInstanceWithArguments(
+            access = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
+            Object storageObj = xMSF.createInstanceWithArguments(
                 "drafts.com.sun.star.script.framework.storage.ScriptStorage",
                 new Object[]{ access, new Integer(99), docPath } );
-            XScriptInfoAccess infoAccess = ( XScriptInfoAccess )UnoRuntime.queryInterface(XScriptInfoAccess.class, storageObj);
+            XScriptInfoAccess infoAccess = UnoRuntime.queryInterface(XScriptInfoAccess.class, storageObj);
             XScriptInfo[] infos = infoAccess.getImplementations("script://MemoryUtils.MemUsage?location=document");
            oObj = infos[0];
         } catch (com.sun.star.uno.Exception e) {

@@ -35,6 +35,9 @@
 // __________ Imports __________
 
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.lang.XComponent;
+import com.sun.star.frame.XComponentLoader;
 
 public class Helper
 {
@@ -44,11 +47,11 @@ public class Helper
      * A new connection is established and the service manger from the running
      * offic eis returned.
      */
-    static public com.sun.star.uno.XComponentContext connect()
+    static public XComponentContext connect()
         throws Exception
     {
         // get the remote office component context
-        com.sun.star.uno.XComponentContext xOfficeContext =
+        XComponentContext xOfficeContext =
             com.sun.star.comp.helper.Bootstrap.bootstrap();
 
         // if connection fails an exception is thrown
@@ -65,15 +68,15 @@ public class Helper
         com.sun.star.beans.PropertyValue[] aArgs )
             throws Exception
     {
-        com.sun.star.lang.XComponent xComponent = null;
-        com.sun.star.frame.XComponentLoader aLoader =
-            (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface(
-                com.sun.star.frame.XComponentLoader.class,
-                xOfficeContext.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.frame.Desktop", xOfficeContext));
+        XComponentLoader aLoader =
+            UnoRuntime.queryInterface(
+                    XComponentLoader.class,
+                    xOfficeContext.getServiceManager().createInstanceWithContext(
+                            "com.sun.star.frame.Desktop", xOfficeContext));
 
-        xComponent = (com.sun.star.lang.XComponent)UnoRuntime.queryInterface(
-            com.sun.star.lang.XComponent.class, aLoader.loadComponentFromURL(
+        XComponent xComponent =
+            UnoRuntime.queryInterface(
+            XComponent.class, aLoader.loadComponentFromURL(
                 sURL, sTargetFrame, nSearchFlags, aArgs ) );
 
         if ( xComponent == null )

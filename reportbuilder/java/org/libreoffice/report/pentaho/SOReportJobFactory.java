@@ -198,7 +198,7 @@ public class SOReportJobFactory
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             try
             {
-                final XSimpleRegistry simpleReg = (XSimpleRegistry) UnoRuntime.queryInterface(XSimpleRegistry.class,
+                final XSimpleRegistry simpleReg = UnoRuntime.queryInterface(XSimpleRegistry.class,
                         m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.configuration.ConfigurationRegistry", m_cmpCtx));
 
                 String currentLocale = getLocaleFromRegistry(simpleReg, "org.openoffice.Setup", "L10N/ooSetupSystemLocale");
@@ -244,23 +244,23 @@ public class SOReportJobFactory
                 final NamedValue aProps = namedValue[i];
                 if ("ActiveConnection".equalsIgnoreCase(aProps.Name))
                 {
-                    activeConnection = (XConnection) UnoRuntime.queryInterface(XConnection.class, aProps.Value);
+                    activeConnection = UnoRuntime.queryInterface(XConnection.class, aProps.Value);
                 }
                 else if ("ReportDefinition".equalsIgnoreCase(aProps.Name))
                 {
-                    report = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aProps.Value);
+                    report = UnoRuntime.queryInterface(XReportDefinition.class, aProps.Value);
                 }
                 else if ("InputStorage".equalsIgnoreCase(aProps.Name))
                 {
-                    input = (XStorage) UnoRuntime.queryInterface(XStorage.class, aProps.Value);
+                    input = UnoRuntime.queryInterface(XStorage.class, aProps.Value);
                 }
                 else if ("OutputStorage".equalsIgnoreCase(aProps.Name))
                 {
-                    output = (XStorage) UnoRuntime.queryInterface(XStorage.class, aProps.Value);
+                    output = UnoRuntime.queryInterface(XStorage.class, aProps.Value);
                 }
                 else if ("RowSet".equalsIgnoreCase(aProps.Name))
                 {
-                    rowSet = (XRowSet) UnoRuntime.queryInterface(XRowSet.class, aProps.Value);
+                    rowSet = UnoRuntime.queryInterface(XRowSet.class, aProps.Value);
                 }
                 else if ("mimetype".equalsIgnoreCase(aProps.Name))
                 {
@@ -295,12 +295,12 @@ public class SOReportJobFactory
             }
             else
             {
-                final XPropertySet set = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
+                final XPropertySet set = UnoRuntime.queryInterface(XPropertySet.class, rowSet);
                 if (set == null)
                 {
                     throw new com.sun.star.lang.IllegalArgumentException();
                 }
-                activeConnection = (XConnection) UnoRuntime.queryInterface(XConnection.class, set.getPropertyValue("ActiveConnection"));
+                activeConnection = UnoRuntime.queryInterface(XConnection.class, set.getPropertyValue("ActiveConnection"));
             }
             if (mimetype == null)
             {

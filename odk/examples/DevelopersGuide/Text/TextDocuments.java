@@ -186,11 +186,9 @@ public class TextDocuments {
             newDocComponentFromTemplate( sTemplateFileUrl.toString() );
 
         // get XTextFieldsSupplier, XBookmarksSupplier interfaces
-        XTextFieldsSupplier xTextFieldsSupplier = (XTextFieldsSupplier)
-            UnoRuntime.queryInterface(XTextFieldsSupplier.class,
-                                      xTemplateComponent);
-        XBookmarksSupplier xBookmarksSupplier = (XBookmarksSupplier)
-            UnoRuntime.queryInterface(XBookmarksSupplier.class, xTemplateComponent);
+        XTextFieldsSupplier xTextFieldsSupplier = UnoRuntime.queryInterface(XTextFieldsSupplier.class,
+                                  xTemplateComponent);
+        XBookmarksSupplier xBookmarksSupplier = UnoRuntime.queryInterface(XBookmarksSupplier.class, xTemplateComponent);
 
         // access the TextFields and the TextFieldMasters collections
         XNameAccess xNamedFieldMasters = xTextFieldsSupplier.getTextFieldMasters();
@@ -207,14 +205,14 @@ public class TextDocuments {
                 "com.sun.star.text.fieldmaster.User." + key);
 
             // query the XPropertySet interface, we need to set the Content property
-            XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xPropertySet = UnoRuntime.queryInterface(
                 XPropertySet.class, fieldMaster);
 
             // insert the column value into field master
             xPropertySet.setPropertyValue("Content", recipient.get(key));
         }
         // afterwards we must refresh the textfields collection
-        XRefreshable xRefreshable = (XRefreshable)UnoRuntime.queryInterface(
+        XRefreshable xRefreshable = UnoRuntime.queryInterface(
             XRefreshable.class, xEnumeratedFields);
         xRefreshable.refresh();
 
@@ -225,7 +223,7 @@ public class TextDocuments {
         Object bookmark = xNamedBookmarks.getByName("Subscription");
         // we need its XTextRange which is available from getAnchor(),
         // so query for XTextContent
-        XTextContent xBookmarkContent = (XTextContent)UnoRuntime.queryInterface(
+        XTextContent xBookmarkContent = UnoRuntime.queryInterface(
             XTextContent.class, bookmark);
         // get the anchor of the bookmark (its XTextRange)
         XTextRange xBookmarkRange = xBookmarkContent.getAnchor();
@@ -248,28 +246,28 @@ public class TextDocuments {
         Object desktop = mxRemoteServiceManager.createInstanceWithContext(
             "com.sun.star.frame.Desktop", mxRemoteContext);
         // query its XDesktop interface, we need the current component
-        XDesktop xDesktop = (XDesktop)UnoRuntime.queryInterface(
+        XDesktop xDesktop = UnoRuntime.queryInterface(
             XDesktop.class, desktop);
         // retrieve the current component and access the controller
         XComponent xCurrentComponent = xDesktop.getCurrentComponent();
-        XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class,
+        XModel xModel = UnoRuntime.queryInterface(XModel.class,
                                                           xCurrentComponent);
         XController xController = xModel.getCurrentController();
         // the controller gives us the TextViewCursor
         XTextViewCursorSupplier xViewCursorSupplier =
-            (XTextViewCursorSupplier)UnoRuntime.queryInterface(
-                XTextViewCursorSupplier.class, xController);
+            UnoRuntime.queryInterface(
+            XTextViewCursorSupplier.class, xController);
         XTextViewCursor xViewCursor = xViewCursorSupplier.getViewCursor();
 
         // query its XPropertySet interface, we want to set character and paragraph
         // properties
-        XPropertySet xCursorPropertySet = (XPropertySet)UnoRuntime.queryInterface(
+        XPropertySet xCursorPropertySet = UnoRuntime.queryInterface(
             XPropertySet.class, xViewCursor);
         // set the appropriate properties for character and paragraph style
         xCursorPropertySet.setPropertyValue("CharStyleName", "Quotation");
         xCursorPropertySet.setPropertyValue("ParaStyleName", "Quotations");
         // print the current page number
-        XPageCursor xPageCursor = (XPageCursor)UnoRuntime.queryInterface(
+        XPageCursor xPageCursor = UnoRuntime.queryInterface(
             XPageCursor.class, xViewCursor);
         System.out.println("The current page number is " + xPageCursor.getPage());
         // the model cursor is much more powerful, so
@@ -284,8 +282,7 @@ public class TextDocuments {
         // or XDocumentInsertable, XSortable or XContentEnumerationAccess
         // and work with the properties of com.sun.star.text.TextCursor
         // in this case we just go to the end of the paragraph and add some text.
-        XParagraphCursor xParagraphCursor = (XParagraphCursor)
-            UnoRuntime.queryInterface(XParagraphCursor.class, xModelCursor);
+        XParagraphCursor xParagraphCursor = UnoRuntime.queryInterface(XParagraphCursor.class, xModelCursor);
         // goto the end of the paragraph
         xParagraphCursor.gotoEndOfParagraph(false);
         xParagraphCursor.setString(" ***** Fin de semana! ******");
@@ -299,7 +296,7 @@ public class TextDocuments {
         // create empty swriter document
         XComponent xEmptyWriterComponent = newDocComponent("swriter");
         // query its XTextDocument interface to get the text
-        mxDoc = (XTextDocument)UnoRuntime.queryInterface(
+        mxDoc = UnoRuntime.queryInterface(
             XTextDocument.class, xEmptyWriterComponent);
 
         // get a reference to the body text of the document
@@ -307,7 +304,7 @@ public class TextDocuments {
 
         // Get a reference to the document's property set. This contains document
         // information like the current word count
-        mxDocProps = (XPropertySet) UnoRuntime.queryInterface(
+        mxDocProps = UnoRuntime.queryInterface(
             XPropertySet.class, mxDoc );
 
         // Simple text insertion example
@@ -323,7 +320,7 @@ public class TextDocuments {
 
         // Access the text document's multi service factory, which we will need
         // for most of the following examples
-        mxDocFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(
+        mxDocFactory = UnoRuntime.queryInterface(
             XMultiServiceFactory.class, mxDoc );
 
         // Examples of text fields, dependant text fields and field masters
@@ -372,7 +369,7 @@ public class TextDocuments {
         // XDrawPageSupplier interface
         DrawPageExample ();
 
-        mxFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+        mxFactory = UnoRuntime.queryInterface(
             XMultiServiceFactory.class, mxRemoteServiceManager);
         // This example demonstrates the use of the AutoTextContainer,
         // AutoTextGroup and AutoTextEntry services and shows how to create,
@@ -386,8 +383,7 @@ public class TextDocuments {
         // retrieve the Desktop object, we need its XComponentLoader
         Object desktop = mxRemoteServiceManager.createInstanceWithContext(
             "com.sun.star.frame.Desktop", mxRemoteContext);
-        XComponentLoader xComponentLoader = (XComponentLoader)
-            UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+        XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, desktop);
         PropertyValue[] loadProps = new PropertyValue[0];
 
         java.io.File sourceFile = new java.io.File("PrintDemo.odt");
@@ -428,8 +424,7 @@ public class TextDocuments {
         mxRemoteServiceManager = this.getRemoteServiceManager();
         Object desktop = mxRemoteServiceManager.createInstanceWithContext(
             "com.sun.star.frame.Desktop", mxRemoteContext);
-        XComponentLoader xComponentLoader = (XComponentLoader)
-            UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+        XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, desktop);
         PropertyValue[] loadProps = new PropertyValue[0];
         return xComponentLoader.loadComponentFromURL(loadUrl, "_blank",
                                                      0, loadProps);
@@ -445,8 +440,7 @@ public class TextDocuments {
         // retrieve the Desktop object, we need its XComponentLoader
         Object desktop = mxRemoteServiceManager.createInstanceWithContext(
             "com.sun.star.frame.Desktop", mxRemoteContext);
-        XComponentLoader xComponentLoader = (XComponentLoader)
-            UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+        XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, desktop);
 
         // define load properties according to com.sun.star.document.MediaDescriptor
         // the boolean property AsTemplate tells the office to create a new document
@@ -466,7 +460,7 @@ public class TextDocuments {
         throws java.lang.Exception
     {
 
-        XStorable xStorable = (XStorable)UnoRuntime.queryInterface(
+        XStorable xStorable = UnoRuntime.queryInterface(
             XStorable.class, xDoc);
         PropertyValue[] storeProps = new PropertyValue[1];
         storeProps[0] = new PropertyValue();
@@ -478,7 +472,7 @@ public class TextDocuments {
     }
 
     protected void printDocComponent(XComponent xDoc) throws java.lang.Exception {
-        XPrintable xPrintable = (XPrintable)UnoRuntime.queryInterface(
+        XPrintable xPrintable = UnoRuntime.queryInterface(
             XPrintable.class, xDoc);
         PropertyValue[] printerDesc = new PropertyValue[1];
         printerDesc[0] = new PropertyValue();
@@ -538,12 +532,11 @@ public class TextDocuments {
         try
         {
             // First, get the XSentenceCursor interface of our text cursor
-            XSentenceCursor xSentenceCursor = (XSentenceCursor)
-                UnoRuntime.queryInterface(XSentenceCursor.class, mxDocCursor );
+            XSentenceCursor xSentenceCursor = UnoRuntime.queryInterface(XSentenceCursor.class, mxDocCursor );
             // Goto the next cursor, without selecting it
             xSentenceCursor.gotoNextSentence( false );
             // Get the XWordCursor interface of our text cursor
-            XWordCursor xWordCursor = (XWordCursor) UnoRuntime.queryInterface(
+            XWordCursor xWordCursor = UnoRuntime.queryInterface(
                 XWordCursor.class, mxDocCursor );
             // Skip the first four words of this sentence and select the fifth
             xWordCursor.gotoNextWord( false );
@@ -558,7 +551,7 @@ public class TextDocuments {
 
             // Access the property set of the cursor, and set the currently
             // selected text (which is the string we just inserted) to be bold
-            XPropertySet xCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xCursorProps = UnoRuntime.queryInterface(
                 XPropertySet.class, mxDocCursor );
             xCursorProps.setPropertyValue ( "CharWeight",
                              new Float(com.sun.star.awt.FontWeight.BOLD) );
@@ -585,7 +578,7 @@ public class TextDocuments {
         {
             // Use the text document's factory to create a DateTime text field,
             // and access it's XTextField interface
-            XTextField xDateField = (XTextField) UnoRuntime.queryInterface (
+            XTextField xDateField = UnoRuntime.queryInterface (
                 XTextField.class, mxDocFactory.createInstance (
                     "com.sun.star.text.TextField.DateTime" ) );
 
@@ -595,13 +588,13 @@ public class TextDocuments {
             // Use the text document's factory to create a user text field,
             // and access it's XDependentTextField interface
             XDependentTextField xUserField =
-                (XDependentTextField) UnoRuntime.queryInterface (
-                    XDependentTextField.class, mxDocFactory.createInstance (
-                        "com.sun.star.text.TextField.User" ) );
+                UnoRuntime.queryInterface (
+                XDependentTextField.class, mxDocFactory.createInstance (
+                    "com.sun.star.text.TextField.User" ) );
 
             // Create a fieldmaster for our newly created User Text field, and
             // access it's XPropertySet interface
-            XPropertySet xMasterPropSet = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xMasterPropSet = UnoRuntime.queryInterface(
                 XPropertySet.class, mxDocFactory.createInstance (
                     "com.sun.star.text.fieldmaster.User" ) );
 
@@ -638,8 +631,7 @@ public class TextDocuments {
             // the text the service refers to.
 
             // Here, we access this interface
-            XEnumerationAccess xParaAccess = (XEnumerationAccess)
-                UnoRuntime.queryInterface(XEnumerationAccess.class, mxDocText );
+            XEnumerationAccess xParaAccess = UnoRuntime.queryInterface(XEnumerationAccess.class, mxDocText );
             // Call the XEnumerationAccess's only method to access the actual
             // Enumeration
             XEnumeration xParaEnum = xParaAccess.createEnumeration();
@@ -652,14 +644,14 @@ public class TextDocuments {
                 // the element if it is a TextTable, if it doesn't support the
                 // com.sun.star.text.TextTable service, then it is safe to assume
                 // that it really is a paragraph
-                XServiceInfo xInfo = (XServiceInfo) UnoRuntime.queryInterface(
+                XServiceInfo xInfo = UnoRuntime.queryInterface(
                     XServiceInfo.class, xParaEnum.nextElement() );
                 if ( !xInfo.supportsService ( "com.sun.star.text.TextTable" ) )
                 {
                     // Access the paragraph's property set...the properties in this
                     // property set are listed in:
                     // com.sun.star.style.ParagraphProperties
-                    XPropertySet xSet = (XPropertySet) UnoRuntime.queryInterface(
+                    XPropertySet xSet = UnoRuntime.queryInterface(
                         XPropertySet.class, xInfo );
                     // Set the justification to be center justified
                     xSet.setPropertyValue ( "ParaAdjust",
@@ -687,13 +679,13 @@ public class TextDocuments {
                                          XTextTable xTable)
     {
         // Access the XText interface of the cell referred to by sCellName
-        XText xCellText = (XText) UnoRuntime.queryInterface(
+        XText xCellText = UnoRuntime.queryInterface(
             XText.class, xTable.getCellByName ( sCellName ) );
 
         // create a text cursor from the cells XText interface
         XTextCursor xCellCursor = xCellText.createTextCursor();
         // Get the property set of the cell's TextCursor
-        XPropertySet xCellCursorProps = (XPropertySet)UnoRuntime.queryInterface(
+        XPropertySet xCellCursorProps = UnoRuntime.queryInterface(
             XPropertySet.class, xCellCursor );
 
         try
@@ -717,7 +709,7 @@ public class TextDocuments {
         try
         {
             // Create a new table from the document's factory
-            XTextTable xTable = (XTextTable) UnoRuntime.queryInterface(
+            XTextTable xTable = UnoRuntime.queryInterface(
                 XTextTable.class, mxDocFactory .createInstance(
                     "com.sun.star.text.TextTable" ) );
 
@@ -731,7 +723,7 @@ public class TextDocuments {
 
             // Access the property set of the first row (properties listed in
             // service description: com.sun.star.text.TextTableRow)
-            XPropertySet xRow = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xRow = UnoRuntime.queryInterface(
                 XPropertySet.class, xRows.getByIndex ( 0 ) );
             // If BackTransparant is false, then the background color is visible
             xRow.setPropertyValue( "BackTransparent", new Boolean(false));
@@ -739,7 +731,7 @@ public class TextDocuments {
             xRow.setPropertyValue( "BackColor", new Integer(6710932));
 
             // Access the property set of the whole table
-            XPropertySet xTableProps = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xTableProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xTable );
             // We want visible background colors
             xTableProps.setPropertyValue( "BackTransparent", new Boolean(false));
@@ -786,14 +778,14 @@ public class TextDocuments {
         {
             // Use the document's factory to create a new text frame and
             // immediately access it's XTextFrame interface
-            XTextFrame xFrame = (XTextFrame) UnoRuntime.queryInterface (
+            XTextFrame xFrame = UnoRuntime.queryInterface (
                 XTextFrame.class, mxDocFactory.createInstance (
                     "com.sun.star.text.TextFrame" ) );
 
             // Access the XShape interface of the TextFrame
-            XShape xShape = (XShape)UnoRuntime.queryInterface(XShape.class, xFrame);
+            XShape xShape = UnoRuntime.queryInterface(XShape.class, xFrame);
             // Access the XPropertySet interface of the TextFrame
-            XPropertySet xFrameProps = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xFrameProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xFrame );
 
             // Set the size of the new Text Frame using the XShape's 'setSize'
@@ -850,18 +842,17 @@ public class TextDocuments {
             mxDocText.insertControlCharacter ( mxDocCursor,
                           ControlCharacter.PARAGRAPH_BREAK, false );
             // Position the cursor in the second paragraph
-            XParagraphCursor xParaCursor = (XParagraphCursor)
-                UnoRuntime.queryInterface(XParagraphCursor.class, mxDocCursor );
+            XParagraphCursor xParaCursor = UnoRuntime.queryInterface(XParagraphCursor.class, mxDocCursor );
             xParaCursor.gotoPreviousParagraph ( false );
 
             // Get an XNameAccess interface to all auto text groups from the
             // document factory
-            XNameAccess xContainer = (XNameAccess) UnoRuntime.queryInterface(
+            XNameAccess xContainer = UnoRuntime.queryInterface(
                 XNameAccess.class, mxFactory.createInstance (
                     "com.sun.star.text.AutoTextContainer" ) );
 
             // Create a new table at the document factory
-            XTextTable xTable = (XTextTable) UnoRuntime.queryInterface(
+            XTextTable xTable = UnoRuntime.queryInterface(
                 XTextTable.class, mxDocFactory .createInstance(
                     "com.sun.star.text.TextTable" ) );
 
@@ -876,7 +867,7 @@ public class TextDocuments {
                 xTable.initialize( aGroupNames.length+1,1);
 
                 // Access the XPropertySet of the table
-                XPropertySet xTableProps = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet xTableProps = UnoRuntime.queryInterface(
                     XPropertySet.class, xTable );
 
                 // We want a visible background
@@ -893,7 +884,7 @@ public class TextDocuments {
                 XIndexAccess xRows = xTable.getRows();
 
                 // Get the first row in the table
-                XPropertySet xRow = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet xRow = UnoRuntime.queryInterface(
                     XPropertySet.class, xRows.getByIndex ( 0 ) );
 
                 // We want the background of the first row to be visible too
@@ -916,7 +907,7 @@ public class TextDocuments {
                     String sCellName = xTableCursor.getRangeName ();
 
                     // Get the XText interface of the current cell
-                    XText xCellText = (XText) UnoRuntime.queryInterface (
+                    XText xCellText = UnoRuntime.queryInterface (
                         XText.class, xTable.getCellByName ( sCellName ) );
 
                     // Set the cell contents of the current cell to be
@@ -924,9 +915,8 @@ public class TextDocuments {
                     xCellText.setString ( aGroupNames[i] );
 
                     // Access the autotext group with this name
-                    XAutoTextGroup xGroup = (XAutoTextGroup)
-                        UnoRuntime.queryInterface (XAutoTextGroup.class,
-                                       xContainer.getByName(aGroupNames[i]));
+                    XAutoTextGroup xGroup = UnoRuntime.queryInterface (XAutoTextGroup.class,
+                                   xContainer.getByName(aGroupNames[i]));
 
                     // Get the titles of each autotext block in this group
                     String [] aBlockNames = xGroup.getTitles();
@@ -951,7 +941,7 @@ public class TextDocuments {
                         for ( int j = 0 ; j < aBlockNames.length ; j ++ )
                         {
                             // Get the XText interface of the current cell
-                            xCellText = (XText) UnoRuntime.queryInterface (
+                            xCellText = UnoRuntime.queryInterface (
                                 XText.class, xTable.getCellByName (
                                     xTableCursor.getRangeName() ) );
 
@@ -984,7 +974,7 @@ public class TextDocuments {
                                              aGroupNames.length );
 
                     // Get the autotext group at this name
-                    xGroup  = ( XAutoTextGroup ) UnoRuntime.queryInterface (
+                    xGroup  = UnoRuntime.queryInterface (
                         XAutoTextGroup.class, xContainer.getByName (
                             aGroupNames[ nRandom ] ) );
 
@@ -1003,10 +993,9 @@ public class TextDocuments {
                     // XAutoTextEntry interface
                     int nRandom = Math.abs ( maRandom.nextInt()
                                              % aBlockNames.length );
-                    XAutoTextEntry xEntry = ( XAutoTextEntry )
-                        UnoRuntime.queryInterface (
-                            XAutoTextEntry.class, xGroup.getByName (
-                                aBlockNames[ nRandom ] ) );
+                    XAutoTextEntry xEntry = UnoRuntime.queryInterface (
+                        XAutoTextEntry.class, xGroup.getByName (
+                            aBlockNames[ nRandom ] ) );
                     // insert the modified autotext block at the end of the document
                     xEntry.applyTo ( mxDocCursor );
 
@@ -1014,7 +1003,7 @@ public class TextDocuments {
                     String [] aBlockTitles = xGroup.getTitles();
 
                     // Get the XNamed interface of the autotext group
-                    XNamed xGroupNamed = ( XNamed ) UnoRuntime.queryInterface (
+                    XNamed xGroupNamed = UnoRuntime.queryInterface (
                         XNamed.class, xGroup );
 
                     // Output the short cut and title of the random block
@@ -1060,12 +1049,11 @@ public class TextDocuments {
             // Insert a new paragraph and position the cursor in it
             mxDocText.insertControlCharacter ( mxDocCursor,
                           ControlCharacter.PARAGRAPH_BREAK, false );
-            XParagraphCursor xParaCursor = (XParagraphCursor)
-                UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
+            XParagraphCursor xParaCursor = UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
             xParaCursor.gotoPreviousParagraph ( false );
 
             // Create a new ContentIndexMark and get it's XPropertySet interface
-            XPropertySet xEntry = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xEntry = UnoRuntime.queryInterface(
                 XPropertySet.class,
                 mxDocFactory.createInstance("com.sun.star.text.ContentIndexMark"));
 
@@ -1077,7 +1065,7 @@ public class TextDocuments {
             xEntry.setPropertyValue ( "Level", new Short ( (short) 1 ) );
 
             // Create a ContentIndex and access it's XPropertySet interface
-            XPropertySet xIndex = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xIndex = UnoRuntime.queryInterface(
                 XPropertySet.class,
                 mxDocFactory.createInstance ( "com.sun.star.text.ContentIndex" ) );
 
@@ -1086,9 +1074,9 @@ public class TextDocuments {
 
             // Access the XTextContent interfaces of both the Index and the
             // IndexMark
-            XTextContent xIndexContent = (XTextContent) UnoRuntime.queryInterface(
+            XTextContent xIndexContent = UnoRuntime.queryInterface(
                 XTextContent.class, xIndex );
-            XTextContent xEntryContent = (XTextContent) UnoRuntime.queryInterface(
+            XTextContent xEntryContent = UnoRuntime.queryInterface(
                 XTextContent.class, xEntry );
 
             // Insert both in the document
@@ -1096,7 +1084,7 @@ public class TextDocuments {
             mxDocText.insertTextContent ( mxDocCursor, xIndexContent, false );
 
             // Get the XDocumentIndex interface of the Index
-            XDocumentIndex xDocIndex = (XDocumentIndex) UnoRuntime.queryInterface(
+            XDocumentIndex xDocIndex = UnoRuntime.queryInterface(
                 XDocumentIndex.class, xIndex );
 
             // And call it's update method
@@ -1123,33 +1111,31 @@ public class TextDocuments {
                 mxDocCursor, ControlCharacter.PARAGRAPH_BREAK, false );
 
             // Get the Paragraph cursor
-            XParagraphCursor xParaCursor = (XParagraphCursor)
-                UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
+            XParagraphCursor xParaCursor = UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
 
             // Move the cursor into the new paragraph
             xParaCursor.gotoPreviousParagraph ( false );
 
             // Create a new ReferenceMark and get it's XNamed interface
-            XNamed xRefMark = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed xRefMark = UnoRuntime.queryInterface(XNamed.class,
                   mxDocFactory.createInstance ("com.sun.star.text.ReferenceMark"));
 
             // Set the name to TableHeader
             xRefMark.setName ( "TableHeader" );
 
             // Get the TextTablesSupplier interface of the document
-            XTextTablesSupplier xTableSupplier = ( XTextTablesSupplier )
-                UnoRuntime.queryInterface(XTextTablesSupplier.class, mxDoc);
+            XTextTablesSupplier xTableSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, mxDoc);
 
             // Get an XIndexAccess of TextTables
-            XIndexAccess xTables = (XIndexAccess)UnoRuntime.queryInterface(
+            XIndexAccess xTables = UnoRuntime.queryInterface(
                 XIndexAccess.class, xTableSupplier.getTextTables());
 
             // We've only inserted one table, so get the first one from index zero
-            XTextTable xTable = ( XTextTable ) UnoRuntime.queryInterface (
+            XTextTable xTable = UnoRuntime.queryInterface (
                 XTextTable.class, xTables.getByIndex( 0 ) );
 
             // Get the first cell from the table
-            XText xTableText = (XText) UnoRuntime.queryInterface(
+            XText xTableText = UnoRuntime.queryInterface(
                 XText.class, xTable.getCellByName ( "A1" ) );
 
             // Get a text cursor for the first cell
@@ -1157,7 +1143,7 @@ public class TextDocuments {
 
             // Get the XTextContent interface of the reference mark so we can
             // insert it
-            XTextContent xContent = ( XTextContent ) UnoRuntime.queryInterface (
+            XTextContent xContent = UnoRuntime.queryInterface (
                 XTextContent.class, xRefMark );
 
             // Insert the reference mark into the first cell of the table
@@ -1165,16 +1151,15 @@ public class TextDocuments {
 
             // Create a 'GetReference' text field to refer to the reference mark
             // we just inserted, and get it's XPropertySet interface
-            XPropertySet xFieldProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xFieldProps = UnoRuntime.queryInterface(
                 XPropertySet.class, mxDocFactory.createInstance (
                     "com.sun.star.text.TextField.GetReference" ) );
 
             // Get the XReferenceMarksSupplier interface of the document
-            XReferenceMarksSupplier xRefSupplier = ( XReferenceMarksSupplier )
-                UnoRuntime.queryInterface( XReferenceMarksSupplier.class, mxDoc );
+            XReferenceMarksSupplier xRefSupplier = UnoRuntime.queryInterface( XReferenceMarksSupplier.class, mxDoc );
 
             // Get an XNameAccess which refers to all inserted reference marks
-            XNameAccess xMarks = ( XNameAccess ) UnoRuntime.queryInterface (
+            XNameAccess xMarks = UnoRuntime.queryInterface (
                 XNameAccess.class, xRefSupplier.getReferenceMarks() );
 
             // Put the names of each reference mark into an array of strings
@@ -1204,7 +1189,7 @@ public class TextDocuments {
 
 
                 // Get the XTextContent interface of the GetReference text field
-                XTextContent xRefContent = (XTextContent) UnoRuntime.queryInterface(
+                XTextContent xRefContent = UnoRuntime.queryInterface(
                     XTextContent.class, xFieldProps );
 
                 // Go to the end of the document
@@ -1221,7 +1206,7 @@ public class TextDocuments {
                               " contains the sum of some random numbers.", false );
 
                 // Refresh the document
-                XRefreshable xRefresh = (XRefreshable) UnoRuntime.queryInterface(
+                XRefreshable xRefresh = UnoRuntime.queryInterface(
                     XRefreshable.class, mxDoc );
                 xRefresh.refresh();
             }
@@ -1241,7 +1226,7 @@ public class TextDocuments {
         {
             // Create a new footnote from the document factory and get it's
             // XFootnote interface
-            XFootnote xFootnote = (XFootnote) UnoRuntime.queryInterface(
+            XFootnote xFootnote = UnoRuntime.queryInterface(
                 XFootnote.class, mxDocFactory.createInstance (
                     "com.sun.star.text.Footnote" ) );
 
@@ -1249,30 +1234,29 @@ public class TextDocuments {
             xFootnote.setLabel ( "Numbers" );
 
             // Get the footnotes XTextContent interface so we can...
-            XTextContent xContent = ( XTextContent ) UnoRuntime.queryInterface (
+            XTextContent xContent = UnoRuntime.queryInterface (
                 XTextContent.class, xFootnote );
 
             // ...insert it into the document
             mxDocText.insertTextContent ( mxDocCursor, xContent, false );
 
             // Get the XFootnotesSupplier interface of the document
-            XFootnotesSupplier xFootnoteSupplier = (XFootnotesSupplier)
-                UnoRuntime.queryInterface(XFootnotesSupplier.class, mxDoc );
+            XFootnotesSupplier xFootnoteSupplier = UnoRuntime.queryInterface(XFootnotesSupplier.class, mxDoc );
 
             // Get an XIndexAccess interface to all footnotes
-            XIndexAccess xFootnotes = ( XIndexAccess ) UnoRuntime.queryInterface (
+            XIndexAccess xFootnotes = UnoRuntime.queryInterface (
                 XIndexAccess.class, xFootnoteSupplier.getFootnotes() );
 
             // Get the XFootnote interface to the first footnote inserted ('Numbers')
-            XFootnote xNumbers = ( XFootnote ) UnoRuntime.queryInterface (
+            XFootnote xNumbers = UnoRuntime.queryInterface (
                 XFootnote.class, xFootnotes.getByIndex( 0 ) );
 
             // Get the XSimpleText interface to the Footnote
-            XSimpleText xSimple = (XSimpleText ) UnoRuntime.queryInterface (
+            XSimpleText xSimple = UnoRuntime.queryInterface (
                 XSimpleText.class, xNumbers );
 
             // Create a text cursor for the foot note text
-            XTextRange xRange = (XTextRange ) UnoRuntime.queryInterface (
+            XTextRange xRange = UnoRuntime.queryInterface (
                 XTextRange.class, xSimple.createTextCursor() );
 
             // And insert the actual text of the footnote.
@@ -1301,19 +1285,18 @@ public class TextDocuments {
                           ControlCharacter.PARAGRAPH_BREAK, false);
 
             // Get the XParagraphCursor interface of our document cursor
-            XParagraphCursor xParaCursor = (XParagraphCursor)
-                UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
+            XParagraphCursor xParaCursor = UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
 
             // Position the cursor in the 2nd paragraph
             xParaCursor.gotoPreviousParagraph ( false );
 
             // Create a RectangleShape using the document factory
-            XShape xRect = (XShape) UnoRuntime.queryInterface(
+            XShape xRect = UnoRuntime.queryInterface(
                 XShape.class, mxDocFactory.createInstance (
                     "com.sun.star.drawing.RectangleShape" ) );
 
             // Create an EllipseShape using the document factory
-            XShape xEllipse = (XShape) UnoRuntime.queryInterface(
+            XShape xEllipse = UnoRuntime.queryInterface(
                 XShape.class, mxDocFactory.createInstance (
                     "com.sun.star.drawing.EllipseShape" ) );
 
@@ -1333,9 +1316,9 @@ public class TextDocuments {
             xRect.setPosition ( aPoint );
 
             // Get the XPropertySet interfaces of both shapes
-            XPropertySet xRectProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xRectProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xRect );
-            XPropertySet xEllipseProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xEllipseProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xEllipse );
 
             // And set the AnchorTypes of both shapes to 'AT_PARAGRAPH'
@@ -1345,11 +1328,10 @@ public class TextDocuments {
                                              TextContentAnchorType.AT_PARAGRAPH );
 
             // Access the XDrawPageSupplier interface of the document
-            XDrawPageSupplier xDrawPageSupplier = (XDrawPageSupplier)
-                UnoRuntime.queryInterface (XDrawPageSupplier.class, mxDoc );
+            XDrawPageSupplier xDrawPageSupplier = UnoRuntime.queryInterface (XDrawPageSupplier.class, mxDoc );
 
             // Get the XShapes interface of the draw page
-            XShapes xShapes = ( XShapes ) UnoRuntime.queryInterface (
+            XShapes xShapes = UnoRuntime.queryInterface (
                 XShapes.class, xDrawPageSupplier.getDrawPage () );
 
             // Add both shapes
@@ -1398,28 +1380,27 @@ public class TextDocuments {
                 mxDocCursor, ControlCharacter.PARAGRAPH_BREAK, false );
 
             // Create a new style from the document's factory
-            XStyle xStyle = (XStyle) UnoRuntime.queryInterface(
+            XStyle xStyle = UnoRuntime.queryInterface(
                 XStyle.class, mxDocFactory.createInstance(
                     "com.sun.star.style.ParagraphStyle" ) );
 
             // Access the XPropertySet interface of the new style
-            XPropertySet xStyleProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xStyleProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xStyle );
 
             // Give the new style a light blue background
             xStyleProps.setPropertyValue ( "ParaBackColor", new Integer (13421823));
 
             // Get the StyleFamiliesSupplier interface of the document
-            XStyleFamiliesSupplier xSupplier = (XStyleFamiliesSupplier)
-                UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, mxDoc);
+            XStyleFamiliesSupplier xSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, mxDoc);
 
             // Use the StyleFamiliesSupplier interface to get the XNameAccess
             // interface of the actual style families
-            XNameAccess xFamilies = ( XNameAccess ) UnoRuntime.queryInterface (
+            XNameAccess xFamilies = UnoRuntime.queryInterface (
                 XNameAccess.class, xSupplier.getStyleFamilies() );
 
             // Access the 'ParagraphStyles' Family
-            XNameContainer xFamily = (XNameContainer ) UnoRuntime.queryInterface (
+            XNameContainer xFamily = UnoRuntime.queryInterface (
                         XNameContainer.class,
                         xFamilies.getByName ( "ParagraphStyles" ) );
 
@@ -1427,15 +1408,14 @@ public class TextDocuments {
             xFamily.insertByName ( "All-Singing All-Dancing Style", xStyle );
 
             // Get the XParagraphCursor interface of the document cursor
-            XParagraphCursor xParaCursor = (XParagraphCursor)
-                UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
+            XParagraphCursor xParaCursor = UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
 
             // Select the first paragraph inserted
             xParaCursor.gotoPreviousParagraph ( false );
             xParaCursor.gotoPreviousParagraph ( true );
 
             // Access the property set of the cursor selection
-            XPropertySet xCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xCursorProps = UnoRuntime.queryInterface(
                 XPropertySet.class, mxDocCursor );
 
             // Set the style of the cursor selection to our newly created style
@@ -1469,17 +1449,17 @@ public class TextDocuments {
             mxDocCursor.gotoEnd( false );
             // Get the RelativeTextContentInsert interface of the document
             XRelativeTextContentInsert xRelative =
-                (XRelativeTextContentInsert ) UnoRuntime.queryInterface (
-                    XRelativeTextContentInsert.class, mxDocText );
+                UnoRuntime.queryInterface (
+                XRelativeTextContentInsert.class, mxDocText );
 
             // Use the document's factory to create the NumberingRules service,
             // and get it's XIndexAccess interface
-            XIndexAccess xNum = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess xNum = UnoRuntime.queryInterface(
                 XIndexAccess.class,
                 mxDocFactory.createInstance( "com.sun.star.text.NumberingRules" ) );
 
             // Also get the NumberingRule's XIndexReplace interface
-            XIndexReplace xReplace = (XIndexReplace) UnoRuntime.queryInterface(
+            XIndexReplace xReplace = UnoRuntime.queryInterface(
                 XIndexReplace.class, xNum );
 
             // Create an array of XPropertySets, one for each of the three
@@ -1488,13 +1468,13 @@ public class TextDocuments {
             for ( int i = 0 ; i < 3 ; ++ i )
             {
                 // Create a new paragraph
-                XTextContent xNewPara = (XTextContent) UnoRuntime.queryInterface(
+                XTextContent xNewPara = UnoRuntime.queryInterface(
                     XTextContent.class, mxDocFactory.createInstance(
                         "com.sun.star.text.Paragraph" ) );
 
                 // Get the XPropertySet interface of the new paragraph and put
                 // it in our array
-                xParas[i] = (XPropertySet) UnoRuntime.queryInterface(
+                xParas[i] = UnoRuntime.queryInterface(
                     XPropertySet.class, xNewPara );
 
                 // Insert the new paragraph into the document after the fish
@@ -1535,8 +1515,7 @@ public class TextDocuments {
                 }
             }
             // Get the XParagraphCursor interface of our text cursro
-            XParagraphCursor xParaCursor = (XParagraphCursor)
-                UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
+            XParagraphCursor xParaCursor = UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
             // Go to the end of the document, then select the preceding paragraphs
             mxDocCursor.gotoEnd ( false );
             xParaCursor.gotoPreviousParagraph ( false );
@@ -1544,7 +1523,7 @@ public class TextDocuments {
             xParaCursor.gotoPreviousParagraph ( true );
 
             // Get the XPropertySet of the cursor's currently selected text
-            XPropertySet xCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xCursorProps = UnoRuntime.queryInterface(
                 XPropertySet.class, mxDocCursor );
 
             // Set the updated Numbering rules to the cursor's property set
@@ -1585,7 +1564,7 @@ public class TextDocuments {
 
             // Create a new TextSection from the document factory and access
             // it's XNamed interface
-            XNamed xChildNamed = (XNamed) UnoRuntime.queryInterface(
+            XNamed xChildNamed = UnoRuntime.queryInterface(
                 XNamed.class, mxDocFactory.createInstance(
                     "com.sun.star.text.TextSection" ) );
             // Set the new sections name to 'Child_Section'
@@ -1593,13 +1572,12 @@ public class TextDocuments {
 
             // Access the Child_Section's XTextContent interface and insert it
             // into the document
-            XTextContent xChildSection = (XTextContent) UnoRuntime.queryInterface(
+            XTextContent xChildSection = UnoRuntime.queryInterface(
                 XTextContent.class, xChildNamed );
             mxDocText.insertTextContent ( mxDocCursor, xChildSection, false );
 
             // Access the XParagraphCursor interface of our text cursor
-            XParagraphCursor xParaCursor = (XParagraphCursor)
-                UnoRuntime.queryInterface(XParagraphCursor.class, mxDocCursor);
+            XParagraphCursor xParaCursor = UnoRuntime.queryInterface(XParagraphCursor.class, mxDocCursor);
 
             // Go back one paragraph (into Child_Section)
             xParaCursor.gotoPreviousParagraph ( false );
@@ -1617,14 +1595,14 @@ public class TextDocuments {
             mxDocCursor.gotoEnd ( true );
 
             // Create another text section and access it's XNamed interface
-            XNamed xParentNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed xParentNamed = UnoRuntime.queryInterface(XNamed.class,
                       mxDocFactory.createInstance("com.sun.star.text.TextSection"));
 
             // Set this text section's name to Parent_Section
             xParentNamed.setName ( "Parent_Section" );
 
             // Access the Parent_Section's XTextContent interface ...
-            XTextContent xParentSection = (XTextContent) UnoRuntime.queryInterface(
+            XTextContent xParentSection = UnoRuntime.queryInterface(
                 XTextContent.class, xParentNamed );
             // ...and insert it into the document
             mxDocText.insertTextContent ( mxDocCursor, xParentSection, false );
@@ -1638,31 +1616,31 @@ public class TextDocuments {
             xParaCursor.gotoPreviousParagraph ( true );
 
             // Create a new Text Section and access it's XNamed interface
-            XNamed xLinkNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed xLinkNamed = UnoRuntime.queryInterface(XNamed.class,
                       mxDocFactory.createInstance("com.sun.star.text.TextSection"));
             // Set the new text section's name to Linked_Section
             xLinkNamed.setName ( "Linked_Section" );
 
             // Access the Linked_Section's XTextContent interface
-            XTextContent xLinkedSection = (XTextContent) UnoRuntime.queryInterface(
+            XTextContent xLinkedSection = UnoRuntime.queryInterface(
                 XTextContent.class, xLinkNamed );
             // And insert the Linked_Section into the document
             mxDocText.insertTextContent ( mxDocCursor, xLinkedSection, false );
 
             // Access the Linked_Section's XPropertySet interface
-            XPropertySet xLinkProps = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xLinkProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xLinkNamed );
             // Set the linked section to be linked to the Child_Section
             xLinkProps.setPropertyValue ( "LinkRegion", "Child_Section" );
 
             // Access the XPropertySet interface of the Child_Section
-            XPropertySet xChildProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xChildProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xChildNamed );
             // Set the Child_Section's background colour to blue
             xChildProps.setPropertyValue( "BackColor", new Integer(13421823));
 
             // Refresh the document, so the linked section matches the Child_Section
-            XRefreshable xRefresh = (XRefreshable) UnoRuntime.queryInterface(
+            XRefreshable xRefresh = UnoRuntime.queryInterface(
                 XRefreshable.class, mxDoc );
             xRefresh.refresh();
         }
@@ -1695,8 +1673,7 @@ public class TextDocuments {
                 mxDocCursor, ControlCharacter.PARAGRAPH_BREAK, false );
 
             // Get the XParagraphCursor interface of our text cursor
-            XParagraphCursor xParaCursor = (XParagraphCursor)
-                UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
+            XParagraphCursor xParaCursor = UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
             // Jump back before all the text we just inserted
             xParaCursor.gotoPreviousParagraph ( false );
             xParaCursor.gotoPreviousParagraph ( false );
@@ -1709,14 +1686,14 @@ public class TextDocuments {
             xParaCursor.gotoNextParagraph ( true );
 
             // Create a new text section and get it's XNamed interface
-            XNamed xSectionNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed xSectionNamed = UnoRuntime.queryInterface(XNamed.class,
                       mxDocFactory.createInstance("com.sun.star.text.TextSection"));
 
             // Set the name of our new section (appropiately) to 'Fish'
             xSectionNamed.setName ( "Fish" );
 
             // Create the TextColumns service and get it's XTextColumns interface
-            XTextColumns xColumns = (XTextColumns) UnoRuntime.queryInterface(
+            XTextColumns xColumns = UnoRuntime.queryInterface(
                 XTextColumns.class,
                 mxDocFactory.createInstance ( "com.sun.star.text.TextColumns" ) );
 
@@ -1733,26 +1710,25 @@ public class TextDocuments {
             xColumns.setColumns ( aSequence );
 
             // Get the property set interface of our 'Fish' section
-            XPropertySet xSectionProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xSectionProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xSectionNamed );
 
             // Set the columns to the Text Section
             xSectionProps.setPropertyValue ( "TextColumns", xColumns );
 
             // Get the XTextContent interface of our 'Fish' section
-            mxFishSection = (XTextContent) UnoRuntime.queryInterface(
+            mxFishSection = UnoRuntime.queryInterface(
                 XTextContent.class, xSectionNamed );
 
             // Insert the 'Fish' section over the currently selected text
             mxDocText.insertTextContent ( mxDocCursor, mxFishSection, true );
 
             // Get the wonderful XRelativeTextContentInsert interface
-            XRelativeTextContentInsert xRelative = (XRelativeTextContentInsert )
-                UnoRuntime.queryInterface (
-                    XRelativeTextContentInsert.class, mxDocText );
+            XRelativeTextContentInsert xRelative = UnoRuntime.queryInterface (
+                XRelativeTextContentInsert.class, mxDocText );
 
             // Create a new empty paragraph and get it's XTextContent interface
-            XTextContent xNewPara = (XTextContent) UnoRuntime.queryInterface(
+            XTextContent xNewPara = UnoRuntime.queryInterface(
                 XTextContent.class,
                 mxDocFactory.createInstance("com.sun.star.text.Paragraph"));
 

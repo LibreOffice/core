@@ -70,7 +70,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
         try {
             m_oUnoObject = _oUnoObject;
             Object o = m_xMCF.createInstanceWithContext("com.sun.star.beans.Introspection", m_xContext);
-            XIntrospection m_xIntrospection = ( XIntrospection ) UnoRuntime.queryInterface(XIntrospection.class, o );
+            XIntrospection m_xIntrospection = UnoRuntime.queryInterface(XIntrospection.class, o );
             // the variable m_xIntrospectionAccess offers functionality to access all methods and properties
             // of a variable
             m_xIntrospectionAccess = m_xIntrospection.inspect(_oUnoObject);
@@ -89,11 +89,11 @@ public class UnoDialogSample2 extends UnoDialogSample {
             PropertyValue[] aPropertyValues = new PropertyValue[]{};
             // create an arbitrary Uno-Object - in this case an empty writer document..
             Object oDesktop =xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext);
-            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
+            XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
             Object oUnoObject = xComponentLoader.loadComponentFromURL("private:factory/swriter", "_default", 0, aPropertyValues);
 
             // define some coordinates where to position the controls
-            final int nButtonPosX = (int)((nDialogWidth/2) - (nButtonWidth/2));
+            final int nButtonPosX = (nDialogWidth/2) - (nButtonWidth/2);
             final int nButtonPosY = nDialogHeight - nButtonHeight - nControlMargin;
             final int nControlPosX = nRoadmapWidth + 2*nControlMargin;
             final int nControlWidth = nDialogWidth - 3*nControlMargin - nRoadmapWidth;
@@ -129,7 +129,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             oUnoDialogSample2.insertRoadmapItem(4, true, "Properties", 5);
             oUnoDialogSample2.m_xRMPSet.setPropertyValue("CurrentItemID", new Short((short) 1));
             oUnoDialogSample2.m_xRMPSet.setPropertyValue("Complete", Boolean.TRUE);
-            oUnoDialogSample2.xDialog = (XDialog) UnoRuntime.queryInterface(XDialog.class, oUnoDialogSample2.m_xDialogControl);
+            oUnoDialogSample2.xDialog = UnoRuntime.queryInterface(XDialog.class, oUnoDialogSample2.m_xDialogControl);
             oUnoDialogSample2.xDialog.execute();
         }catch( Exception ex ) {
             ex.printStackTrace(System.err);
@@ -167,7 +167,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
         String[] sSupportedServiceNames = new String[]{};
         // If the Uno-Object supports "com.sun.star.lang.XServiceInfo"
         // this will give access to all supported servicenames
-        XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, m_oUnoObject);
+        XServiceInfo xServiceInfo = UnoRuntime.queryInterface( XServiceInfo.class, m_oUnoObject);
         if ( xServiceInfo != null ) {
             sSupportedServiceNames = xServiceInfo.getSupportedServiceNames();
         }
@@ -196,7 +196,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
         Type[] aTypes = new Type[]{};
         String[] sTypeNames = new String[]{};
         // The XTypeProvider interfaces offers access to all exported interfaces
-        XTypeProvider xTypeProvider = ( XTypeProvider ) UnoRuntime.queryInterface( XTypeProvider.class, m_oUnoObject);
+        XTypeProvider xTypeProvider = UnoRuntime.queryInterface( XTypeProvider.class, m_oUnoObject);
         if ( xTypeProvider != null ) {
             aTypes = xTypeProvider.getTypes();
             sTypeNames = new String[aTypes.length];
@@ -216,7 +216,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             String sName = createUniqueName(m_xDlgModelNameContainer, "ListBox");
             // create a controlmodel at the multiservicefactory of the dialog model...
             Object oListBoxModel = m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlListBoxModel");
-            XMultiPropertySet xLBModelMPSet = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, oListBoxModel);
+            XMultiPropertySet xLBModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oListBoxModel);
             // Set the properties at the model - keep in mind to pass the property names in alphabetical order!
             xLBModelMPSet.setPropertyValues(
                 new String[]  {"Dropdown", "Height", "Name", "PositionX", "PositionY", "ReadOnly", "Step", "StringItemList", "Width" } ,
@@ -236,7 +236,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             int nHeight = _nLineCount * nFixedTextHeight;
             // create a controlmodel at the multiservicefactory of the dialog model...
             Object oFTModel = m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
-            XMultiPropertySet xFTModelMPSet = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, oFTModel);
+            XMultiPropertySet xFTModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTModel);
             // Set the properties at the model - keep in mind to pass the property names in alphabetical order!
             xFTModelMPSet.setPropertyValues(
                 new String[] {"Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "Width"},

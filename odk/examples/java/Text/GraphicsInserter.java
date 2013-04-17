@@ -68,14 +68,13 @@ public class GraphicsInserter {
                frames in which components can be loaded. Desktop is the
                environment for components which can instanciate within
                frames. */
-            com.sun.star.frame.XDesktop xDesktop = (com.sun.star.frame.XDesktop)
-                UnoRuntime.queryInterface(com.sun.star.frame.XDesktop.class,
-                    xMCF.createInstanceWithContext("com.sun.star.frame.Desktop",
-                                                   xContext ) );
+            com.sun.star.frame.XDesktop xDesktop = UnoRuntime.queryInterface(com.sun.star.frame.XDesktop.class,
+                xMCF.createInstanceWithContext("com.sun.star.frame.Desktop",
+                                               xContext ) );
 
             com.sun.star.frame.XComponentLoader xCompLoader =
-                (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface(
-                    com.sun.star.frame.XComponentLoader.class, xDesktop);
+                UnoRuntime.queryInterface(
+                com.sun.star.frame.XComponentLoader.class, xDesktop);
 
             // Load a Writer document, which will be automaticly displayed
             com.sun.star.lang.XComponent xComp = xCompLoader.loadComponentFromURL(
@@ -84,13 +83,13 @@ public class GraphicsInserter {
 
             // Querying for the interface XTextDocument on the xcomponent
             com.sun.star.text.XTextDocument xTextDoc =
-                (com.sun.star.text.XTextDocument)UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextDocument.class, xComp);
+                UnoRuntime.queryInterface(
+                com.sun.star.text.XTextDocument.class, xComp);
 
             // Querying for the interface XMultiServiceFactory on the xtextdocument
             com.sun.star.lang.XMultiServiceFactory xMSFDoc =
-                (com.sun.star.lang.XMultiServiceFactory)UnoRuntime.queryInterface(
-                    com.sun.star.lang.XMultiServiceFactory.class, xTextDoc);
+                UnoRuntime.queryInterface(
+                com.sun.star.lang.XMultiServiceFactory.class, xTextDoc);
 
             // Providing a log file for output
             PrintWriter printwriterLog = new PrintWriter(
@@ -115,8 +114,8 @@ public class GraphicsInserter {
 
             // Querying for the interface XTextContent on the GraphicObject
             com.sun.star.text.XTextContent xTextContent =
-                (com.sun.star.text.XTextContent)UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextContent.class, oGraphic );
+                UnoRuntime.queryInterface(
+                com.sun.star.text.XTextContent.class, oGraphic );
 
             // Printing information to the log file
             printwriterLog.println( "inserting graphic" );
@@ -133,8 +132,8 @@ public class GraphicsInserter {
 
             // Querying for the interface XPropertySet on GraphicObject
             com.sun.star.beans.XPropertySet xPropSet =
-                (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
-                    com.sun.star.beans.XPropertySet.class, oGraphic);
+                UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertySet.class, oGraphic);
             try {
                 // Creating a string for the graphic url
                 java.io.File sourceFile = new java.io.File(args[0]);

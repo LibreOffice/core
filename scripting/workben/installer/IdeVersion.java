@@ -178,7 +178,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         wizard.clearLocations();
         int len = tableModel.data.size();
         for (int i = 0; i < len; i++) {
-            ArrayList<?> list = (ArrayList<?>)tableModel.data.get(i);
+            ArrayList<?> list = tableModel.data.get(i);
             if (((Boolean)list.get(0)).booleanValue() == true)
                 wizard.storeLocation((String)list.get(2));
         }
@@ -315,7 +315,7 @@ class MyTableModelIDE extends AbstractTableModel {
             col < 0 || col > getColumnCount())
             return null;
 
-        ArrayList<?> aRow = (ArrayList<?>)data.get(row);
+        ArrayList<?> aRow = data.get(row);
         return aRow.get(col);
     }
 
@@ -332,7 +332,7 @@ class MyTableModelIDE extends AbstractTableModel {
         }
 
         public void setValueAt(Object value, int row, int col) {
-        ArrayList<Object> aRow = (ArrayList<Object>)data.get(row);
+        ArrayList<Object> aRow = data.get(row);
         aRow.set(col, value);
         fireTableCellUpdated(row, col);
         }

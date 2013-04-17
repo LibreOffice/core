@@ -95,27 +95,27 @@ public class HelloTextTableShape {
         try {
             // create new writer document and get text, then manipulate text
             XComponent xWriterComponent = newDocComponent("swriter");
-            XTextDocument xTextDocument = (XTextDocument)UnoRuntime.queryInterface(
+            XTextDocument xTextDocument = UnoRuntime.queryInterface(
                 XTextDocument.class, xWriterComponent);
             XText xText = xTextDocument.getText();
 
             manipulateText(xText);
 
             // get internal service factory of the document
-            XMultiServiceFactory xWriterFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+            XMultiServiceFactory xWriterFactory = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, xWriterComponent);
 
             // insert TextTable and get cell text, then manipulate text in cell
             Object table = xWriterFactory.createInstance("com.sun.star.text.TextTable");
-            XTextContent xTextContentTable = (XTextContent)UnoRuntime.queryInterface(
+            XTextContent xTextContentTable = UnoRuntime.queryInterface(
                 XTextContent.class, table);
 
             xText.insertTextContent(xText.getEnd(), xTextContentTable, false);
 
-            XCellRange xCellRange = (XCellRange)UnoRuntime.queryInterface(
+            XCellRange xCellRange = UnoRuntime.queryInterface(
                 XCellRange.class, table);
             XCell xCell = xCellRange.getCellByPosition(0, 1);
-            XText xCellText = (XText)UnoRuntime.queryInterface(XText.class, xCell);
+            XText xCellText = UnoRuntime.queryInterface(XText.class, xCell);
 
             manipulateText(xCellText);
             manipulateTable(xCellRange);
@@ -123,21 +123,21 @@ public class HelloTextTableShape {
             // insert RectangleShape and get shape text, then manipulate text
             Object writerShape = xWriterFactory.createInstance(
                 "com.sun.star.drawing.RectangleShape");
-            XShape xWriterShape = (XShape)UnoRuntime.queryInterface(
+            XShape xWriterShape = UnoRuntime.queryInterface(
                 XShape.class, writerShape);
             xWriterShape.setSize(new Size(10000, 10000));
-            XTextContent xTextContentShape = (XTextContent)UnoRuntime.queryInterface(
+            XTextContent xTextContentShape = UnoRuntime.queryInterface(
                 XTextContent.class, writerShape);
 
             xText.insertTextContent(xText.getEnd(), xTextContentShape, false);
 
-            XPropertySet xShapeProps = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xShapeProps = UnoRuntime.queryInterface(
                 XPropertySet.class, writerShape);
             // wrap text inside shape
             xShapeProps.setPropertyValue("TextContourFrame", new Boolean(true));
 
 
-            XText xShapeText = (XText)UnoRuntime.queryInterface(XText.class, writerShape);
+            XText xShapeText = UnoRuntime.queryInterface(XText.class, writerShape);
 
             manipulateText(xShapeText);
             manipulateShape(xWriterShape);
@@ -204,50 +204,50 @@ public class HelloTextTableShape {
             // create new calc document and manipulate cell text
             XComponent xCalcComponent = newDocComponent("scalc");
             XSpreadsheetDocument  xSpreadsheetDocument  =
-                (XSpreadsheetDocument)UnoRuntime.queryInterface(
-                    XSpreadsheetDocument .class, xCalcComponent);
+                UnoRuntime.queryInterface(
+                XSpreadsheetDocument .class, xCalcComponent);
             Object sheets = xSpreadsheetDocument.getSheets();
-            XIndexAccess xIndexedSheets = (XIndexAccess)UnoRuntime.queryInterface(
+            XIndexAccess xIndexedSheets = UnoRuntime.queryInterface(
                 XIndexAccess.class, sheets);
             Object sheet =  xIndexedSheets.getByIndex(0);
 
             //get cell A2 in first sheet
-            XCellRange xSpreadsheetCells = (XCellRange)UnoRuntime.queryInterface(
+            XCellRange xSpreadsheetCells = UnoRuntime.queryInterface(
                 XCellRange.class, sheet);
             XCell xCell = xSpreadsheetCells.getCellByPosition(0,1);
-            XPropertySet xCellProps = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xCellProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xCell);
             xCellProps.setPropertyValue("IsTextWrapped", new Boolean(true));
 
-            XText xCellText = (XText)UnoRuntime.queryInterface(XText.class, xCell);
+            XText xCellText = UnoRuntime.queryInterface(XText.class, xCell);
 
             manipulateText(xCellText);
             manipulateTable(xSpreadsheetCells);
 
             // get internal service factory of the document
-            XMultiServiceFactory xCalcFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+            XMultiServiceFactory xCalcFactory = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, xCalcComponent);
             // get Drawpage
-            XDrawPageSupplier xDrawPageSupplier = (XDrawPageSupplier)UnoRuntime.queryInterface(XDrawPageSupplier.class, sheet);
+            XDrawPageSupplier xDrawPageSupplier = UnoRuntime.queryInterface(XDrawPageSupplier.class, sheet);
             XDrawPage xDrawPage = xDrawPageSupplier.getDrawPage();
 
             // create and insert RectangleShape and get shape text, then manipulate text
             Object calcShape = xCalcFactory.createInstance(
                 "com.sun.star.drawing.RectangleShape");
-            XShape xCalcShape = (XShape)UnoRuntime.queryInterface(
+            XShape xCalcShape = UnoRuntime.queryInterface(
                 XShape.class, calcShape);
             xCalcShape.setSize(new Size(10000, 10000));
             xCalcShape.setPosition(new Point(7000, 3000));
 
             xDrawPage.add(xCalcShape);
 
-            XPropertySet xShapeProps = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xShapeProps = UnoRuntime.queryInterface(
                 XPropertySet.class, calcShape);
             // wrap text inside shape
             xShapeProps.setPropertyValue("TextContourFrame", new Boolean(true));
 
 
-            XText xShapeText = (XText)UnoRuntime.queryInterface(XText.class, calcShape);
+            XText xShapeText = UnoRuntime.queryInterface(XText.class, calcShape);
 
             manipulateText(xShapeText);
             manipulateShape(xCalcShape);
@@ -265,29 +265,29 @@ public class HelloTextTableShape {
             //create new draw document and insert ractangle shape
             XComponent xDrawComponent = newDocComponent("sdraw");
             XDrawPagesSupplier xDrawPagesSupplier =
-                (XDrawPagesSupplier)UnoRuntime.queryInterface(
-                    XDrawPagesSupplier.class, xDrawComponent);
+                UnoRuntime.queryInterface(
+                XDrawPagesSupplier.class, xDrawComponent);
 
             Object drawPages = xDrawPagesSupplier.getDrawPages();
-            XIndexAccess xIndexedDrawPages = (XIndexAccess)UnoRuntime.queryInterface(
+            XIndexAccess xIndexedDrawPages = UnoRuntime.queryInterface(
                 XIndexAccess.class, drawPages);
             Object drawPage = xIndexedDrawPages.getByIndex(0);
-            XDrawPage xDrawPage = (XDrawPage)UnoRuntime.queryInterface(XDrawPage.class, drawPage);
+            XDrawPage xDrawPage = UnoRuntime.queryInterface(XDrawPage.class, drawPage);
 
             // get internal service factory of the document
             XMultiServiceFactory xDrawFactory =
-                (XMultiServiceFactory)UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, xDrawComponent);
+                UnoRuntime.queryInterface(
+                XMultiServiceFactory.class, xDrawComponent);
 
             Object drawShape = xDrawFactory.createInstance(
                 "com.sun.star.drawing.RectangleShape");
-            XShape xDrawShape = (XShape)UnoRuntime.queryInterface(XShape.class, drawShape);
+            XShape xDrawShape = UnoRuntime.queryInterface(XShape.class, drawShape);
             xDrawShape.setSize(new Size(10000, 20000));
             xDrawShape.setPosition(new Point(5000, 5000));
             xDrawPage.add(xDrawShape);
 
-            XText xShapeText = (XText)UnoRuntime.queryInterface(XText.class, drawShape);
-            XPropertySet xShapeProps = (XPropertySet)UnoRuntime.queryInterface(
+            XText xShapeText = UnoRuntime.queryInterface(XText.class, drawShape);
+            XPropertySet xShapeProps = UnoRuntime.queryInterface(
                 XPropertySet.class, drawShape);
 
             // wrap text inside shape
@@ -312,7 +312,7 @@ public class HelloTextTableShape {
 
         // create text cursor for selecting and formatting
         XTextCursor xTextCursor = xText.createTextCursor();
-        XPropertySet xCursorProps = (XPropertySet)UnoRuntime.queryInterface(
+        XPropertySet xCursorProps = UnoRuntime.queryInterface(
             XPropertySet.class, xTextCursor);
 
         // use cursor to select "He lay" and apply bold italic
@@ -342,32 +342,32 @@ public class HelloTextTableShape {
 
         // enter column titles and a cell value
         XCell xCell = xCellRange.getCellByPosition(0,0);
-        XText xCellText = (XText)UnoRuntime.queryInterface(XText.class, xCell);
+        XText xCellText = UnoRuntime.queryInterface(XText.class, xCell);
         xCellText.setString("Quotation");
         xCell = xCellRange.getCellByPosition(1,0);
-        xCellText = (XText)UnoRuntime.queryInterface(XText.class, xCell);
+        xCellText = UnoRuntime.queryInterface(XText.class, xCell);
         xCellText.setString("Year");
         xCell = xCellRange.getCellByPosition(1,1);
         xCell.setValue(1940);
         XCellRange xSelectedCells = xCellRange.getCellRangeByName("A1:B1");
-        XPropertySet xCellProps = (XPropertySet)UnoRuntime.queryInterface(
+        XPropertySet xCellProps = UnoRuntime.queryInterface(
             XPropertySet.class, xSelectedCells);
 
         // format table headers and table borders
         // we need to distinguish text and sheet tables:
         // property name for cell colors is different in text and sheet cells
         // we want to apply TableBorder to whole text table, but only to sheet cells with content
-        XServiceInfo xServiceInfo = (XServiceInfo)UnoRuntime.queryInterface(
+        XServiceInfo xServiceInfo = UnoRuntime.queryInterface(
             XServiceInfo.class, xCellRange);
         if (xServiceInfo.supportsService("com.sun.star.sheet.Spreadsheet")) {
             backColorPropertyName = "CellBackColor";
             xSelectedCells = xCellRange.getCellRangeByName("A1:B2");
-            xTableProps = (XPropertySet)UnoRuntime.queryInterface(
+            xTableProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xSelectedCells);
         }
         else if (xServiceInfo.supportsService("com.sun.star.text.TextTable")) {
             backColorPropertyName = "BackColor";
-            xTableProps = (XPropertySet)UnoRuntime.queryInterface(
+            xTableProps = UnoRuntime.queryInterface(
                 XPropertySet.class, xCellRange);
         }
         // set cell background color
@@ -398,7 +398,7 @@ public class HelloTextTableShape {
     }
 
     protected void manipulateShape(XShape xShape) throws com.sun.star.uno.Exception {
-        XPropertySet xShapeProps = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xShape);
+        XPropertySet xShapeProps = UnoRuntime.queryInterface(XPropertySet.class, xShape);
         xShapeProps.setPropertyValue("FillColor", new Integer(0x99CCFF));
         xShapeProps.setPropertyValue("LineColor", new Integer(0x000099));
         xShapeProps.setPropertyValue("RotateAngle", new Integer(3000));
@@ -415,7 +415,7 @@ public class HelloTextTableShape {
         xRemoteServiceManager = this.getRemoteServiceManager();
         Object desktop = xRemoteServiceManager.createInstanceWithContext(
             "com.sun.star.frame.Desktop", xRemoteContext);
-        XComponentLoader xComponentLoader = (XComponentLoader)UnoRuntime.queryInterface(
+        XComponentLoader xComponentLoader = UnoRuntime.queryInterface(
             XComponentLoader.class, desktop);
         PropertyValue[] loadProps = new PropertyValue[0];
         return xComponentLoader.loadComponentFromURL(loadUrl, "_blank", 0, loadProps);

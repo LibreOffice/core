@@ -92,7 +92,7 @@ public class PathSettingsTest extends java.lang.Object {
 
             Object pathSubst = xRemoteServiceManager.createInstanceWithContext(
                 "com.sun.star.comp.framework.PathSettings", xRemoteContext );
-            xPathSettingsService = (XPropertySet)UnoRuntime.queryInterface(
+            xPathSettingsService = UnoRuntime.queryInterface(
                 XPropertySet.class, pathSubst);
 
             /* Work with path settings */

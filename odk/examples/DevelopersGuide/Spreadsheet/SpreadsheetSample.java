@@ -214,8 +214,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- Insert two text paragraphs into the cell. ---
-        com.sun.star.text.XText xText = (com.sun.star.text.XText)
-            UnoRuntime.queryInterface( com.sun.star.text.XText.class, xCell );
+        com.sun.star.text.XText xText = UnoRuntime.queryInterface( com.sun.star.text.XText.class, xCell );
         com.sun.star.text.XTextCursor xTextCursor = xText.createTextCursor();
 
         xText.insertString( xTextCursor, "Text in first line.", false );
@@ -224,40 +223,36 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xText.insertString( xTextCursor, "And a ", false );
 
         // create a hyperlink
-        com.sun.star.lang.XMultiServiceFactory xServiceMan = (com.sun.star.lang.XMultiServiceFactory)
-            UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
+        com.sun.star.lang.XMultiServiceFactory xServiceMan = UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
         Object aHyperlinkObj = xServiceMan.createInstance( "com.sun.star.text.TextField.URL" );
-        xPropSet = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aHyperlinkObj );
+        xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aHyperlinkObj );
         xPropSet.setPropertyValue( "URL", "http://www.example.org" );
         xPropSet.setPropertyValue( "Representation", "hyperlink" );
         // ... and insert
-        com.sun.star.text.XTextContent xContent = (com.sun.star.text.XTextContent)
-            UnoRuntime.queryInterface( com.sun.star.text.XTextContent.class, aHyperlinkObj );
+        com.sun.star.text.XTextContent xContent = UnoRuntime.queryInterface( com.sun.star.text.XTextContent.class, aHyperlinkObj );
         xText.insertTextContent( xTextCursor, xContent, false );
 
 
         // --- Query the separate paragraphs. ---
         com.sun.star.container.XEnumerationAccess xParaEA =
-            (com.sun.star.container.XEnumerationAccess) UnoRuntime.queryInterface(
-                com.sun.star.container.XEnumerationAccess.class, xCell );
+            UnoRuntime.queryInterface(
+            com.sun.star.container.XEnumerationAccess.class, xCell );
         com.sun.star.container.XEnumeration xParaEnum = xParaEA.createEnumeration();
         // Go through the paragraphs
         while( xParaEnum.hasMoreElements() )
         {
             Object aPortionObj = xParaEnum.nextElement();
             com.sun.star.container.XEnumerationAccess xPortionEA =
-                (com.sun.star.container.XEnumerationAccess) UnoRuntime.queryInterface(
-                    com.sun.star.container.XEnumerationAccess.class, aPortionObj );
+                UnoRuntime.queryInterface(
+                com.sun.star.container.XEnumerationAccess.class, aPortionObj );
             com.sun.star.container.XEnumeration xPortionEnum = xPortionEA.createEnumeration();
             aText = "";
             // Go through all text portions of a paragraph and construct string.
             Object nextElement;
             while( xPortionEnum.hasMoreElements() )
             {
-                com.sun.star.text.XTextRange xRange = (com.sun.star.text.XTextRange)
-                    UnoRuntime.queryInterface(com.sun.star.text.XTextRange.class,
-                                              xPortionEnum.nextElement());
+                com.sun.star.text.XTextRange xRange = UnoRuntime.queryInterface(com.sun.star.text.XTextRange.class,
+                                          xPortionEnum.nextElement());
                 aText += xRange.getString();
             }
             System.out.println( "Paragraph text: " + aText );
@@ -265,8 +260,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- Change cell properties. ---
-        xPropSet = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCell );
+        xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCell );
         // from styles.CharacterProperties
         xPropSet.setPropertyValue( "CharColor", new Integer( 0x003399 ) );
         xPropSet.setPropertyValue( "CharHeight", new Float( 20.0 ) );
@@ -278,8 +272,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- Get cell address. ---
-        com.sun.star.sheet.XCellAddressable xCellAddr = (com.sun.star.sheet.XCellAddressable)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellAddressable.class, xCell );
+        com.sun.star.sheet.XCellAddressable xCellAddr = UnoRuntime.queryInterface( com.sun.star.sheet.XCellAddressable.class, xCell );
         com.sun.star.table.CellAddress aAddress = xCellAddr.getCellAddress();
         aText = "Address of this cell:  Column=" + aAddress.Column;
         aText += ";  Row=" + aAddress.Row;
@@ -289,13 +282,12 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // --- Insert an annotation ---
         com.sun.star.sheet.XSheetAnnotationsSupplier xAnnotationsSupp =
-            (com.sun.star.sheet.XSheetAnnotationsSupplier) UnoRuntime.queryInterface(
-                com.sun.star.sheet.XSheetAnnotationsSupplier.class, xSheet );
+            UnoRuntime.queryInterface(
+            com.sun.star.sheet.XSheetAnnotationsSupplier.class, xSheet );
         com.sun.star.sheet.XSheetAnnotations xAnnotations = xAnnotationsSupp.getAnnotations();
         xAnnotations.insertNew( aAddress, "This is an annotation" );
 
-        com.sun.star.sheet.XSheetAnnotationAnchor xAnnotAnchor = (com.sun.star.sheet.XSheetAnnotationAnchor)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XSheetAnnotationAnchor.class, xCell );
+        com.sun.star.sheet.XSheetAnnotationAnchor xAnnotAnchor = UnoRuntime.queryInterface( com.sun.star.sheet.XSheetAnnotationAnchor.class, xCell );
         com.sun.star.sheet.XSheetAnnotation xAnnotation = xAnnotAnchor.getAnnotation();
         xAnnotation.setIsVisible( true );
     }
@@ -320,8 +312,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- Change cell range properties. ---
-        xPropSet = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
+        xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
         // from com.sun.star.styles.CharacterProperties
         xPropSet.setPropertyValue( "CharColor", new Integer( 0x003399 ) );
         xPropSet.setPropertyValue( "CharHeight", new Float( 20.0 ) );
@@ -333,8 +324,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- Replace text in all cells. ---
-        com.sun.star.util.XReplaceable xReplace = (com.sun.star.util.XReplaceable)
-            UnoRuntime.queryInterface( com.sun.star.util.XReplaceable.class, xCellRange );
+        com.sun.star.util.XReplaceable xReplace = UnoRuntime.queryInterface( com.sun.star.util.XReplaceable.class, xCellRange );
         com.sun.star.util.XReplaceDescriptor xReplaceDesc = xReplace.createReplaceDescriptor();
         xReplaceDesc.setSearchString( "cell" );
         xReplaceDesc.setReplaceString( "text" );
@@ -347,8 +337,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // --- Merge cells. ---
         xCellRange = xSheet.getCellRangeByName( "F3:G6" );
         prepareRange( xSheet, "E1:H7", "XMergeable" );
-        com.sun.star.util.XMergeable xMerge = (com.sun.star.util.XMergeable)
-            UnoRuntime.queryInterface( com.sun.star.util.XMergeable.class, xCellRange );
+        com.sun.star.util.XMergeable xMerge = UnoRuntime.queryInterface( com.sun.star.util.XMergeable.class, xCellRange );
         xMerge.merge( true );
 
 
@@ -373,17 +362,15 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // --- Column properties. ---
         xCellRange = xSheet.getCellRangeByName( "B1" );
-        com.sun.star.table.XColumnRowRange xColRowRange = (com.sun.star.table.XColumnRowRange)
-            UnoRuntime.queryInterface( com.sun.star.table.XColumnRowRange.class, xCellRange );
+        com.sun.star.table.XColumnRowRange xColRowRange = UnoRuntime.queryInterface( com.sun.star.table.XColumnRowRange.class, xCellRange );
         com.sun.star.table.XTableColumns xColumns = xColRowRange.getColumns();
 
         Object aColumnObj = xColumns.getByIndex( 0 );
-        xPropSet = (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
+        xPropSet = UnoRuntime.queryInterface(
             com.sun.star.beans.XPropertySet.class, aColumnObj );
         xPropSet.setPropertyValue( "Width", new Integer( 6000 ) );
 
-        com.sun.star.container.XNamed xNamed = (com.sun.star.container.XNamed)
-            UnoRuntime.queryInterface( com.sun.star.container.XNamed.class, aColumnObj );
+        com.sun.star.container.XNamed xNamed = UnoRuntime.queryInterface( com.sun.star.container.XNamed.class, aColumnObj );
         System.out.println( "The name of the wide column is " + xNamed.getName() + "." );
 
 
@@ -391,8 +378,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         prepareRange( xSheet, "A9:C30", "XCellRangeData" );
 
         xCellRange = xSheet.getCellRangeByName( "A10:C30" );
-        com.sun.star.sheet.XCellRangeData xData = (com.sun.star.sheet.XCellRangeData)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xCellRange );
+        com.sun.star.sheet.XCellRangeData xData = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xCellRange );
         Object[][] aValues =
         {
             { "Name",   "Fruit",    "Quantity" },
@@ -421,8 +407,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- Get cell range address. ---
-        com.sun.star.sheet.XCellRangeAddressable xRangeAddr = (com.sun.star.sheet.XCellRangeAddressable)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeAddressable.class, xCellRange );
+        com.sun.star.sheet.XCellRangeAddressable xRangeAddr = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeAddressable.class, xCellRange );
         aRangeAddress = xRangeAddr.getRangeAddress();
         System.out.println( "Address of this range:  Sheet=" + aRangeAddress.Sheet );
         System.out.println( "Start column=" + aRangeAddress.StartColumn + ";  Start row=" + aRangeAddress.StartRow );
@@ -431,8 +416,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // --- Sheet operation. ---
         // uses the range filled with XCellRangeData
-        com.sun.star.sheet.XSheetOperation xSheetOp = (com.sun.star.sheet.XSheetOperation)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XSheetOperation.class, xData );
+        com.sun.star.sheet.XSheetOperation xSheetOp = UnoRuntime.queryInterface( com.sun.star.sheet.XSheetOperation.class, xData );
         double fResult = xSheetOp.computeFunction( com.sun.star.sheet.GeneralFunction.AVERAGE );
         System.out.println( "Average value of the data table A10:C30: " + fResult );
 
@@ -483,8 +467,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // --- Array formulas ---
         xCellRange = xSheet.getCellRangeByName( "E21:G23" );
         prepareRange( xSheet, "E20:G23", "XArrayFormulaRange" );
-        com.sun.star.sheet.XArrayFormulaRange xArrayFormula = (com.sun.star.sheet.XArrayFormulaRange)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XArrayFormulaRange.class, xCellRange );
+        com.sun.star.sheet.XArrayFormulaRange xArrayFormula = UnoRuntime.queryInterface( com.sun.star.sheet.XArrayFormulaRange.class, xCellRange );
         // Insert a 3x3 unit matrix.
         xArrayFormula.setArrayFormula( "=A10:C12" );
         System.out.println( "Array formula is: " + xArrayFormula.getArrayFormula() );
@@ -509,8 +492,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         com.sun.star.table.CellAddress aRowCell = createCellAddress( xSheet, "F26" );
 
         xCellRange = xSheet.getCellRangeByName( "E26:J31" );
-        com.sun.star.sheet.XMultipleOperation xMultOp = (com.sun.star.sheet.XMultipleOperation)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XMultipleOperation.class, xCellRange );
+        com.sun.star.sheet.XMultipleOperation xMultOp = UnoRuntime.queryInterface( com.sun.star.sheet.XMultipleOperation.class, xCellRange );
         xMultOp.setTableOperation(
             aFormulaRange, com.sun.star.sheet.TableOperationMode.BOTH, aColCell, aRowCell );
 
@@ -519,16 +501,14 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // Row cell not needed
 
         xCellRange = xSheet.getCellRangeByName( "E34:H38" );
-        xMultOp = (com.sun.star.sheet.XMultipleOperation)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XMultipleOperation.class, xCellRange );
+        xMultOp = UnoRuntime.queryInterface( com.sun.star.sheet.XMultipleOperation.class, xCellRange );
         xMultOp.setTableOperation(
             aFormulaRange, com.sun.star.sheet.TableOperationMode.COLUMN, aColCell, aRowCell );
 
 
         // --- Cell Ranges Query ---
         xCellRange = xSheet.getCellRangeByName( "A10:C30" );
-        com.sun.star.sheet.XCellRangesQuery xRangesQuery = (com.sun.star.sheet.XCellRangesQuery)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangesQuery.class, xCellRange );
+        com.sun.star.sheet.XCellRangesQuery xRangesQuery = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangesQuery.class, xCellRange );
         com.sun.star.sheet.XSheetCellRanges xCellRanges =
             xRangesQuery.queryContentCells( (short)com.sun.star.sheet.CellFlags.STRING );
         System.out.println(
@@ -543,7 +523,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
     private com.sun.star.sheet.XCellSeries getCellSeries(
             com.sun.star.sheet.XSpreadsheet xSheet, String aRange )
     {
-        return (com.sun.star.sheet.XCellSeries) UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
             com.sun.star.sheet.XCellSeries.class, xSheet.getCellRangeByName( aRange ) );
     }
 
@@ -556,12 +536,12 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // Create a new cell range container
         com.sun.star.lang.XMultiServiceFactory xDocFactory =
-            (com.sun.star.lang.XMultiServiceFactory) UnoRuntime.queryInterface(
-                com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
+            UnoRuntime.queryInterface(
+            com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
         com.sun.star.sheet.XSheetCellRangeContainer xRangeCont =
-            (com.sun.star.sheet.XSheetCellRangeContainer) UnoRuntime.queryInterface(
-                com.sun.star.sheet.XSheetCellRangeContainer.class,
-                xDocFactory.createInstance( "com.sun.star.sheet.SheetCellRanges" ) );
+            UnoRuntime.queryInterface(
+            com.sun.star.sheet.XSheetCellRangeContainer.class,
+            xDocFactory.createInstance( "com.sun.star.sheet.SheetCellRanges" ) );
 
 
         // --- Insert ranges ---
@@ -577,8 +557,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         while( xEnum.hasMoreElements() )
         {
             Object aCellObj = xEnum.nextElement();
-            com.sun.star.sheet.XCellAddressable xAddr = (com.sun.star.sheet.XCellAddressable)
-                UnoRuntime.queryInterface( com.sun.star.sheet.XCellAddressable.class, aCellObj );
+            com.sun.star.sheet.XCellAddressable xAddr = UnoRuntime.queryInterface( com.sun.star.sheet.XCellAddressable.class, aCellObj );
             com.sun.star.table.CellAddress aAddr = xAddr.getCellAddress();
             System.out.print( getCellAddressString( aAddr.Column, aAddr.Row ) + " " );
         }
@@ -623,21 +602,18 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // --- Find the array formula using a cell cursor ---
         com.sun.star.table.XCellRange xRange = xSheet.getCellRangeByName( "F22" );
-        com.sun.star.sheet.XSheetCellRange xCellRange = (com.sun.star.sheet.XSheetCellRange)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XSheetCellRange.class, xRange );
+        com.sun.star.sheet.XSheetCellRange xCellRange = UnoRuntime.queryInterface( com.sun.star.sheet.XSheetCellRange.class, xRange );
         com.sun.star.sheet.XSheetCellCursor xCursor = xSheet.createCursorByRange( xCellRange );
 
         xCursor.collapseToCurrentArray();
-        com.sun.star.sheet.XArrayFormulaRange xArray = (com.sun.star.sheet.XArrayFormulaRange)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XArrayFormulaRange.class, xCursor );
+        com.sun.star.sheet.XArrayFormulaRange xArray = UnoRuntime.queryInterface( com.sun.star.sheet.XArrayFormulaRange.class, xCursor );
         System.out.println(
             "Array formula in " + getCellRangeAddressString( xCursor, false )
             + " contains formula " + xArray.getArrayFormula() );
 
 
         // --- Find the used area ---
-        com.sun.star.sheet.XUsedAreaCursor xUsedCursor = (com.sun.star.sheet.XUsedAreaCursor)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XUsedAreaCursor.class, xCursor );
+        com.sun.star.sheet.XUsedAreaCursor xUsedCursor = UnoRuntime.queryInterface( com.sun.star.sheet.XUsedAreaCursor.class, xCursor );
         xUsedCursor.gotoStartOfUsedArea( false );
         xUsedCursor.gotoEndOfUsedArea( true );
         // xUsedCursor and xCursor are interfaces of the same object -
@@ -660,23 +636,19 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // --- Cell styles ---
         // get the cell style container
-        com.sun.star.style.XStyleFamiliesSupplier xFamiliesSupplier = (com.sun.star.style.XStyleFamiliesSupplier)
-            UnoRuntime.queryInterface( com.sun.star.style.XStyleFamiliesSupplier.class, getDocument() );
+        com.sun.star.style.XStyleFamiliesSupplier xFamiliesSupplier = UnoRuntime.queryInterface( com.sun.star.style.XStyleFamiliesSupplier.class, getDocument() );
         com.sun.star.container.XNameAccess xFamiliesNA = xFamiliesSupplier.getStyleFamilies();
         Object aCellStylesObj = xFamiliesNA.getByName( "CellStyles" );
-        com.sun.star.container.XNameContainer xCellStylesNA = (com.sun.star.container.XNameContainer)
-            UnoRuntime.queryInterface( com.sun.star.container.XNameContainer.class, aCellStylesObj );
+        com.sun.star.container.XNameContainer xCellStylesNA = UnoRuntime.queryInterface( com.sun.star.container.XNameContainer.class, aCellStylesObj );
 
         // create a new cell style
-        xDocServiceManager = (com.sun.star.lang.XMultiServiceFactory)
-            UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
+        xDocServiceManager = UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
         Object aCellStyle = xDocServiceManager.createInstance( "com.sun.star.style.CellStyle" );
         String aStyleName = "MyNewCellStyle";
         xCellStylesNA.insertByName( aStyleName, aCellStyle );
 
         // modify properties of the new style
-        xPropSet = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aCellStyle );
+        xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aCellStyle );
         xPropSet.setPropertyValue( "CellBackColor", new Integer( 0x888888 ) );
         xPropSet.setPropertyValue( "IsCellBackgroundTransparent", new Boolean( false ) );
 
@@ -685,12 +657,12 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // --- Query equal-formatted cell ranges ---
         // prepare example, use the new cell style
         xCellRange = xSheet.getCellRangeByName( "D2:F2" );
-        xPropSet = (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
+        xPropSet = UnoRuntime.queryInterface(
             com.sun.star.beans.XPropertySet.class, xCellRange );
         xPropSet.setPropertyValue( "CellStyle", aStyleName );
 
         xCellRange = xSheet.getCellRangeByName( "A3:G3" );
-        xPropSet = (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
+        xPropSet = UnoRuntime.queryInterface(
             com.sun.star.beans.XPropertySet.class, xCellRange );
         xPropSet.setPropertyValue( "CellStyle", aStyleName );
 
@@ -698,22 +670,22 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xCellRange = xSheet.getCellRangeByName( "A1:G3" );
         System.out.println( "Service CellFormatRanges:" );
         com.sun.star.sheet.XCellFormatRangesSupplier xFormatSupp =
-            (com.sun.star.sheet.XCellFormatRangesSupplier) UnoRuntime.queryInterface(
-                com.sun.star.sheet.XCellFormatRangesSupplier.class, xCellRange );
+            UnoRuntime.queryInterface(
+            com.sun.star.sheet.XCellFormatRangesSupplier.class, xCellRange );
         xRangeIA = xFormatSupp.getCellFormatRanges();
         System.out.println( getCellRangeListString( xRangeIA ) );
 
         // Ranges sorted in SheetCellRanges containers
         System.out.println( "\nService UniqueCellFormatRanges:" );
         com.sun.star.sheet.XUniqueCellFormatRangesSupplier xUniqueFormatSupp =
-            (com.sun.star.sheet.XUniqueCellFormatRangesSupplier) UnoRuntime.queryInterface(
-                com.sun.star.sheet.XUniqueCellFormatRangesSupplier.class, xCellRange );
+            UnoRuntime.queryInterface(
+            com.sun.star.sheet.XUniqueCellFormatRangesSupplier.class, xCellRange );
         com.sun.star.container.XIndexAccess xRangesIA = xUniqueFormatSupp.getUniqueCellFormatRanges();
         int nCount = xRangesIA.getCount();
         for (int nIndex = 0; nIndex < nCount; ++nIndex)
         {
             Object aRangesObj = xRangesIA.getByIndex( nIndex );
-            xRangeIA = (com.sun.star.container.XIndexAccess) UnoRuntime.queryInterface(
+            xRangeIA = UnoRuntime.queryInterface(
                 com.sun.star.container.XIndexAccess.class, aRangesObj );
             System.out.println(
                 "Container " + (nIndex + 1) + ": " + getCellRangeListString( xRangeIA ) );
@@ -728,8 +700,8 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         Object aAutoFormatsObj = xServiceManager.createInstanceWithContext(
             "com.sun.star.sheet.TableAutoFormats", getContext());
         com.sun.star.container.XNameContainer xAutoFormatsNA =
-            (com.sun.star.container.XNameContainer)UnoRuntime.queryInterface(
-                com.sun.star.container.XNameContainer.class, aAutoFormatsObj );
+            UnoRuntime.queryInterface(
+            com.sun.star.container.XNameContainer.class, aAutoFormatsObj );
 
         // create a new table auto format and insert into the container
         String aAutoFormatName =  "Temp_Example";
@@ -749,8 +721,8 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         }
         // index access to the auto format fields
         com.sun.star.container.XIndexAccess xAutoFormatIA =
-            (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
-                com.sun.star.container.XIndexAccess.class, aAutoFormatObj );
+            UnoRuntime.queryInterface(
+            com.sun.star.container.XIndexAccess.class, aAutoFormatObj );
 
         // set properties of all auto format fields
         for (int nRow = 0; nRow < 4; ++nRow)
@@ -772,17 +744,15 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
                 // get the auto format field and apply properties
                 Object aFieldObj = xAutoFormatIA.getByIndex( 4 * nRow + nColumn );
-                xPropSet = (com.sun.star.beans.XPropertySet)
-                    UnoRuntime.queryInterface(
-                        com.sun.star.beans.XPropertySet.class, aFieldObj );
+                xPropSet = UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet.class, aFieldObj );
                 xPropSet.setPropertyValue( "CellBackColor", new Integer( nColor ) );
             }
         }
 
         // set the auto format to the spreadsheet
         xCellRange = xSheet.getCellRangeByName( "A5:H25" );
-        com.sun.star.table.XAutoFormattable xAutoForm = (com.sun.star.table.XAutoFormattable)
-            UnoRuntime.queryInterface( com.sun.star.table.XAutoFormattable.class, xCellRange );
+        com.sun.star.table.XAutoFormattable xAutoForm = UnoRuntime.queryInterface( com.sun.star.table.XAutoFormattable.class, xCellRange );
         xAutoForm.autoFormat( aAutoFormatName );
 
         // remove the auto format
@@ -799,12 +769,11 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // get the conditional format object of the cell range
         xCellRange = xSheet.getCellRangeByName( "K21:K23" );
-        xPropSet = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
+        xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
         com.sun.star.sheet.XSheetConditionalEntries xEntries =
-            (com.sun.star.sheet.XSheetConditionalEntries) UnoRuntime.queryInterface(
-                com.sun.star.sheet.XSheetConditionalEntries.class,
-                xPropSet.getPropertyValue( "ConditionalFormat" ));
+            UnoRuntime.queryInterface(
+            com.sun.star.sheet.XSheetConditionalEntries.class,
+            xPropSet.getPropertyValue( "ConditionalFormat" ));
 
         // create a condition and apply it to the range
         com.sun.star.beans.PropertyValue[] aCondition = new com.sun.star.beans.PropertyValue[3];
@@ -841,16 +810,14 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         setFormula( xSheet, "A3", "=SUM(A2:B2)" );
         setFormula( xSheet, "B3", "=FORMULA(A3)" );
 
-        com.sun.star.sheet.XCellRangeMovement xMovement = (com.sun.star.sheet.XCellRangeMovement)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeMovement.class, xSheet );
+        com.sun.star.sheet.XCellRangeMovement xMovement = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeMovement.class, xSheet );
         com.sun.star.table.CellRangeAddress aSourceRange = createCellRangeAddress( xSheet, "A2:B3" );
         com.sun.star.table.CellAddress aDestCell = createCellAddress( xSheet, "D2" );
         xMovement.copyRange( aDestCell, aSourceRange );
 
 
         // --- Print automatic column page breaks ---
-        com.sun.star.sheet.XSheetPageBreak xPageBreak = (com.sun.star.sheet.XSheetPageBreak)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XSheetPageBreak.class, xSheet );
+        com.sun.star.sheet.XSheetPageBreak xPageBreak = UnoRuntime.queryInterface( com.sun.star.sheet.XSheetPageBreak.class, xSheet );
         com.sun.star.sheet.TablePageBreakData[] aPageBreakArray = xPageBreak.getColumnPageBreaks();
 
         System.out.print( "Automatic column page breaks:" );
@@ -861,8 +828,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- Document properties ---
-        com.sun.star.beans.XPropertySet xPropSet = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, getDocument() );
+        com.sun.star.beans.XPropertySet xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, getDocument() );
 
         AnyConverter aAnyConv = new AnyConverter();
         String aText = "Value of property IsIterationEnabled: ";
@@ -883,19 +849,16 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         setFormula( xSheet, "A6", "Insert values between 0.0 and 5.0 below:" );
 
         com.sun.star.table.XCellRange xCellRange = xSheet.getCellRangeByName( "A7:C7" );
-        com.sun.star.beans.XPropertySet xCellPropSet = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
+        com.sun.star.beans.XPropertySet xCellPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
         // validation properties
-        com.sun.star.beans.XPropertySet xValidPropSet = (com.sun.star.beans.XPropertySet)
-             UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
-                                       xCellPropSet.getPropertyValue( "Validation" ));
+        com.sun.star.beans.XPropertySet xValidPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
+                                   xCellPropSet.getPropertyValue( "Validation" ));
         xValidPropSet.setPropertyValue( "Type", com.sun.star.sheet.ValidationType.DECIMAL );
         xValidPropSet.setPropertyValue( "ShowErrorMessage", new Boolean( true ) );
         xValidPropSet.setPropertyValue( "ErrorMessage", "This is an invalid value!" );
         xValidPropSet.setPropertyValue( "ErrorAlertStyle", com.sun.star.sheet.ValidationAlertStyle.STOP );
         // condition
-        com.sun.star.sheet.XSheetCondition xCondition = (com.sun.star.sheet.XSheetCondition)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XSheetCondition.class, xValidPropSet );
+        com.sun.star.sheet.XSheetCondition xCondition = UnoRuntime.queryInterface( com.sun.star.sheet.XSheetCondition.class, xValidPropSet );
         xCondition.setOperator( com.sun.star.sheet.ConditionOperator.BETWEEN );
         xCondition.setFormula1( "0.0" );
         xCondition.setFormula2( "5.0" );
@@ -945,20 +908,17 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         com.sun.star.table.XCellRange xCellRange = xSheet.getCellRangeByName( aRange );
 
         // create the range address sequence
-        com.sun.star.sheet.XCellRangeAddressable xAddr = (com.sun.star.sheet.XCellRangeAddressable)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeAddressable.class, xCellRange );
+        com.sun.star.sheet.XCellRangeAddressable xAddr = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeAddressable.class, xCellRange );
         com.sun.star.table.CellRangeAddress[] aRangesSeq = new com.sun.star.table.CellRangeAddress[1];
         aRangesSeq[0] = xAddr.getRangeAddress();
 
         // create the scenario
-        com.sun.star.sheet.XScenariosSupplier xScenSupp = (com.sun.star.sheet.XScenariosSupplier)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XScenariosSupplier.class, xSheet );
+        com.sun.star.sheet.XScenariosSupplier xScenSupp = UnoRuntime.queryInterface( com.sun.star.sheet.XScenariosSupplier.class, xSheet );
         com.sun.star.sheet.XScenarios xScenarios = xScenSupp.getScenarios();
         xScenarios.addNewByName( aScenarioName, aRangesSeq, aScenarioComment );
 
         // insert the values into the range
-        com.sun.star.sheet.XCellRangeData xData = (com.sun.star.sheet.XCellRangeData)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xCellRange );
+        com.sun.star.sheet.XCellRangeData xData = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xCellRange );
         xData.setDataArray( aValueArray );
     }
 
@@ -970,14 +930,12 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             String aScenarioName ) throws RuntimeException, Exception
     {
         // get the scenario set
-        com.sun.star.sheet.XScenariosSupplier xScenSupp = (com.sun.star.sheet.XScenariosSupplier)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XScenariosSupplier.class, xSheet );
+        com.sun.star.sheet.XScenariosSupplier xScenSupp = UnoRuntime.queryInterface( com.sun.star.sheet.XScenariosSupplier.class, xSheet );
         com.sun.star.sheet.XScenarios xScenarios = xScenSupp.getScenarios();
 
         // get the scenario and activate it
         Object aScenarioObj = xScenarios.getByName( aScenarioName );
-        com.sun.star.sheet.XScenario xScenario = (com.sun.star.sheet.XScenario)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XScenario.class, aScenarioObj );
+        com.sun.star.sheet.XScenario xScenario = UnoRuntime.queryInterface( com.sun.star.sheet.XScenario.class, aScenarioObj );
         xScenario.apply();
     }
 
@@ -998,11 +956,9 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xSheet.getCellByPosition( 7, 43 ).setValue( 4 );
 
         // insert a named range
-        com.sun.star.beans.XPropertySet xDocProp = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xDocument );
+        com.sun.star.beans.XPropertySet xDocProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xDocument );
         Object aRangesObj = xDocProp.getPropertyValue( "NamedRanges" );
-        com.sun.star.sheet.XNamedRanges xNamedRanges = (com.sun.star.sheet.XNamedRanges)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XNamedRanges.class, aRangesObj );
+        com.sun.star.sheet.XNamedRanges xNamedRanges = UnoRuntime.queryInterface( com.sun.star.sheet.XNamedRanges.class, aRangesObj );
         com.sun.star.table.CellAddress aRefPos = new com.sun.star.table.CellAddress();
         aRefPos.Sheet  = 0;
         aRefPos.Column = 6;
@@ -1017,8 +973,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // --- Label ranges ---
         prepareRange( xSheet, "G47:I50", "Label ranges" );
         com.sun.star.table.XCellRange xRange = xSheet.getCellRangeByPosition( 6, 47, 7, 49 );
-        com.sun.star.sheet.XCellRangeData xData = ( com.sun.star.sheet.XCellRangeData )
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xRange );
+        com.sun.star.sheet.XCellRangeData xData = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xRange );
         Object[][] aValues =
         {
             { "Apples", "Oranges" },
@@ -1029,8 +984,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // insert a column label range
         Object aLabelsObj = xDocProp.getPropertyValue( "ColumnLabelRanges" );
-        com.sun.star.sheet.XLabelRanges xLabelRanges = (com.sun.star.sheet.XLabelRanges)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XLabelRanges.class, aLabelsObj );
+        com.sun.star.sheet.XLabelRanges xLabelRanges = UnoRuntime.queryInterface( com.sun.star.sheet.XLabelRanges.class, aLabelsObj );
         com.sun.star.table.CellRangeAddress aLabelArea = new com.sun.star.table.CellRangeAddress();
         aLabelArea.Sheet       = 0;
         aLabelArea.StartColumn = 6;
@@ -1060,10 +1014,10 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         {
             com.sun.star.lang.XMultiComponentFactory xServiceManager = getServiceManager();
             com.sun.star.container.XNameAccess xContext =
-                (com.sun.star.container.XNameAccess) UnoRuntime.queryInterface(
-                    com.sun.star.container.XNameAccess.class,
-                    xServiceManager.createInstanceWithContext(
-                        "com.sun.star.sdb.DatabaseContext", getContext()) );
+                UnoRuntime.queryInterface(
+                com.sun.star.container.XNameAccess.class,
+                xServiceManager.createInstanceWithContext(
+                    "com.sun.star.sdb.DatabaseContext", getContext()) );
             String[] aNames = xContext.getElementNames();
             if ( aNames.length > 0 )
                 aDatabase = aNames[0];
@@ -1088,23 +1042,22 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         try
         {
             com.sun.star.lang.XMultiComponentFactory xServiceManager = getServiceManager();
-            com.sun.star.container.XNameAccess xContext = (com.sun.star.container.XNameAccess)
-                UnoRuntime.queryInterface( com.sun.star.container.XNameAccess.class,
-                    xServiceManager.createInstanceWithContext(
-                        "com.sun.star.sdb.DatabaseContext", getContext()) );
+            com.sun.star.container.XNameAccess xContext = UnoRuntime.queryInterface( com.sun.star.container.XNameAccess.class,
+                xServiceManager.createInstanceWithContext(
+                    "com.sun.star.sdb.DatabaseContext", getContext()) );
             com.sun.star.sdb.XCompletedConnection xSource =
-                (com.sun.star.sdb.XCompletedConnection)UnoRuntime.queryInterface(
-                    com.sun.star.sdb.XCompletedConnection.class,
-                    xContext.getByName( aDatabase ) );
+                UnoRuntime.queryInterface(
+                com.sun.star.sdb.XCompletedConnection.class,
+                xContext.getByName( aDatabase ) );
             com.sun.star.task.XInteractionHandler xHandler =
-                (com.sun.star.task.XInteractionHandler)UnoRuntime.queryInterface(
-                    com.sun.star.task.XInteractionHandler.class,
-                    xServiceManager.createInstanceWithContext(
-                        "com.sun.star.task.InteractionHandler", getContext()) );
+                UnoRuntime.queryInterface(
+                com.sun.star.task.XInteractionHandler.class,
+                xServiceManager.createInstanceWithContext(
+                    "com.sun.star.task.InteractionHandler", getContext()) );
             com.sun.star.sdbcx.XTablesSupplier xSupplier =
-                (com.sun.star.sdbcx.XTablesSupplier)UnoRuntime.queryInterface(
-                    com.sun.star.sdbcx.XTablesSupplier.class,
-                    xSource.connectWithCompletion( xHandler ) );
+                UnoRuntime.queryInterface(
+                com.sun.star.sdbcx.XTablesSupplier.class,
+                xSource.connectWithCompletion( xHandler ) );
             com.sun.star.container.XNameAccess xTables = xSupplier.getTables();
             String[] aNames = xTables.getElementNames();
             if ( aNames.length > 0 )
@@ -1128,8 +1081,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // --- put some example data into the sheet ---
         com.sun.star.table.XCellRange xRange = xSheet.getCellRangeByName( "B3:D24" );
-        com.sun.star.sheet.XCellRangeData xData = ( com.sun.star.sheet.XCellRangeData )
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xRange );
+        com.sun.star.sheet.XCellRangeData xData = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xRange );
         Object[][] aValues =
         {
             { "Name",             "Year",            "Sales" },
@@ -1159,8 +1111,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- filter for second column >= 1998 ---
-        com.sun.star.sheet.XSheetFilterable xFilter = ( com.sun.star.sheet.XSheetFilterable )
-            UnoRuntime.queryInterface( com.sun.star.sheet.XSheetFilterable.class, xRange );
+        com.sun.star.sheet.XSheetFilterable xFilter = UnoRuntime.queryInterface( com.sun.star.sheet.XSheetFilterable.class, xRange );
         com.sun.star.sheet.XSheetFilterDescriptor xFilterDesc =
             xFilter.createFilterDescriptor( true );
         com.sun.star.sheet.TableFilterField[] aFilterFields =
@@ -1171,24 +1122,21 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         aFilterFields[0].Operator     = com.sun.star.sheet.FilterOperator.GREATER_EQUAL;
         aFilterFields[0].NumericValue = 1998;
         xFilterDesc.setFilterFields( aFilterFields );
-        com.sun.star.beans.XPropertySet xFilterProp = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xFilterDesc );
+        com.sun.star.beans.XPropertySet xFilterProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xFilterDesc );
         xFilterProp.setPropertyValue( "ContainsHeader", new Boolean( true ) );
         xFilter.filter( xFilterDesc );
 
 
         // --- do the same filter as above, using criteria from a cell range ---
         com.sun.star.table.XCellRange xCritRange = xSheet.getCellRangeByName( "B27:B28" );
-        com.sun.star.sheet.XCellRangeData xCritData = ( com.sun.star.sheet.XCellRangeData )
-            UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xCritRange );
+        com.sun.star.sheet.XCellRangeData xCritData = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeData.class, xCritRange );
         Object[][] aCritValues =
         {
             { "Year"    },
             { ">= 1998" }
         };
         xCritData.setDataArray( aCritValues );
-        com.sun.star.sheet.XSheetFilterableEx xCriteria = ( com.sun.star.sheet.XSheetFilterableEx )
-            UnoRuntime.queryInterface( com.sun.star.sheet.XSheetFilterableEx.class, xCritRange );
+        com.sun.star.sheet.XSheetFilterableEx xCriteria = UnoRuntime.queryInterface( com.sun.star.sheet.XSheetFilterableEx.class, xCritRange );
         xFilterDesc = xCriteria.createFilterDescriptorByObject( xFilter );
         if ( xFilterDesc != null )
             xFilter.filter( xFilterDesc );
@@ -1210,14 +1158,12 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         aSortDesc[1].Name   = "ContainsHeader";
         aSortDesc[1].Value  = new Boolean( true );
 
-        com.sun.star.util.XSortable xSort = ( com.sun.star.util.XSortable )
-            UnoRuntime.queryInterface( com.sun.star.util.XSortable.class, xRange );
+        com.sun.star.util.XSortable xSort = UnoRuntime.queryInterface( com.sun.star.util.XSortable.class, xRange );
         xSort.sort( aSortDesc );
 
 
         // --- insert subtotals ---
-        com.sun.star.sheet.XSubTotalCalculatable xSub = ( com.sun.star.sheet.XSubTotalCalculatable )
-            UnoRuntime.queryInterface( com.sun.star.sheet.XSubTotalCalculatable.class, xRange );
+        com.sun.star.sheet.XSubTotalCalculatable xSub = UnoRuntime.queryInterface( com.sun.star.sheet.XSubTotalCalculatable.class, xRange );
         com.sun.star.sheet.XSubTotalDescriptor xSubDesc = xSub.createSubTotalDescriptor( true );
         com.sun.star.sheet.SubTotalColumn[] aColumns = new com.sun.star.sheet.SubTotalColumn[1];
         // calculate sum of third column
@@ -1245,34 +1191,29 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             aImportDesc[2].Value    = aTableName;
 
             com.sun.star.table.XCellRange xImportRange = xSheet.getCellRangeByName( "B35:B35" );
-            com.sun.star.util.XImportable xImport = ( com.sun.star.util.XImportable )
-                UnoRuntime.queryInterface( com.sun.star.util.XImportable.class, xImportRange );
+            com.sun.star.util.XImportable xImport = UnoRuntime.queryInterface( com.sun.star.util.XImportable.class, xImportRange );
             xImport.doImport( aImportDesc );
 
 
             // --- use the temporary database range to find the imported data's size ---
-            com.sun.star.beans.XPropertySet xDocProp = (com.sun.star.beans.XPropertySet)
-                UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, getDocument() );
+            com.sun.star.beans.XPropertySet xDocProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, getDocument() );
             Object aRangesObj = xDocProp.getPropertyValue( "DatabaseRanges" );
             com.sun.star.container.XNameAccess xRanges =
-                (com.sun.star.container.XNameAccess) UnoRuntime.queryInterface(
-                    com.sun.star.container.XNameAccess.class, aRangesObj );
+                UnoRuntime.queryInterface(
+                com.sun.star.container.XNameAccess.class, aRangesObj );
             String[] aNames = xRanges.getElementNames();
             AnyConverter aAnyConv = new AnyConverter();
             for ( int i=0; i<aNames.length; i++ )
             {
                 Object aRangeObj = xRanges.getByName( aNames[i] );
-                com.sun.star.beans.XPropertySet xRangeProp = (com.sun.star.beans.XPropertySet)
-                    UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aRangeObj );
+                com.sun.star.beans.XPropertySet xRangeProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aRangeObj );
                 boolean bUser = aAnyConv.toBoolean(xRangeProp.getPropertyValue( "IsUserDefined" ));
                 if ( !bUser )
                 {
                     // this is the temporary database range - get the cell range and format it
-                    com.sun.star.sheet.XCellRangeReferrer xRef = ( com.sun.star.sheet.XCellRangeReferrer )
-                        UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeReferrer.class, aRangeObj );
+                    com.sun.star.sheet.XCellRangeReferrer xRef = UnoRuntime.queryInterface( com.sun.star.sheet.XCellRangeReferrer.class, aRangeObj );
                     com.sun.star.table.XCellRange xResultRange = xRef.getReferredCells();
-                    com.sun.star.beans.XPropertySet xResultProp = (com.sun.star.beans.XPropertySet)
-                        UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xResultRange );
+                    com.sun.star.beans.XPropertySet xResultProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xResultRange );
                     xResultProp.setPropertyValue( "IsCellBackgroundTransparent", new Boolean( false ) );
                     xResultProp.setPropertyValue( "CellBackColor", new Integer( 0xFFFFCC ) );
                 }
@@ -1292,8 +1233,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // --- Create a new DataPilot table ---
         prepareRange( xSheet, "A38:C38", "Data Pilot" );
-        com.sun.star.sheet.XDataPilotTablesSupplier xDPSupp = (com.sun.star.sheet.XDataPilotTablesSupplier)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XDataPilotTablesSupplier.class, xSheet );
+        com.sun.star.sheet.XDataPilotTablesSupplier xDPSupp = UnoRuntime.queryInterface( com.sun.star.sheet.XDataPilotTablesSupplier.class, xSheet );
         com.sun.star.sheet.XDataPilotTables xDPTables = xDPSupp.getDataPilotTables();
         com.sun.star.sheet.XDataPilotDescriptor xDPDesc = xDPTables.createDataPilotDescriptor();
         // set source range (use data range from CellRange test)
@@ -1305,18 +1245,15 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         com.sun.star.beans.XPropertySet xFieldProp;
         // use first column as column field
         aFieldObj = xFields.getByIndex(0);
-        xFieldProp = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aFieldObj );
+        xFieldProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aFieldObj );
         xFieldProp.setPropertyValue( "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.COLUMN );
         // use second column as row field
         aFieldObj = xFields.getByIndex(1);
-        xFieldProp = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aFieldObj );
+        xFieldProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aFieldObj );
         xFieldProp.setPropertyValue( "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.ROW );
         // use third column as data field, calculating the sum
         aFieldObj = xFields.getByIndex(2);
-        xFieldProp = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aFieldObj );
+        xFieldProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aFieldObj );
         xFieldProp.setPropertyValue( "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.DATA );
         xFieldProp.setPropertyValue( "Function", com.sun.star.sheet.GeneralFunction.SUM );
         // select output position
@@ -1326,13 +1263,11 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
         // --- Modify the DataPilot table ---
         Object aDPTableObj = xDPTables.getByName( "DataPilotExample" );
-        xDPDesc = (com.sun.star.sheet.XDataPilotDescriptor)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XDataPilotDescriptor.class, aDPTableObj );
+        xDPDesc = UnoRuntime.queryInterface( com.sun.star.sheet.XDataPilotDescriptor.class, aDPTableObj );
         xFields = xDPDesc.getDataPilotFields();
         // add a second data field from the third column, calculating the average
         aFieldObj = xFields.getByIndex(2);
-        xFieldProp = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aFieldObj );
+        xFieldProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aFieldObj );
         xFieldProp.setPropertyValue( "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.DATA );
         xFieldProp.setPropertyValue( "Function", com.sun.star.sheet.GeneralFunction.AVERAGE );
     }
@@ -1349,8 +1284,8 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         Object aFuncInst = xServiceManager.createInstanceWithContext(
             "com.sun.star.sheet.FunctionAccess", getContext());
         com.sun.star.sheet.XFunctionAccess xFuncAcc =
-            (com.sun.star.sheet.XFunctionAccess)UnoRuntime.queryInterface(
-                com.sun.star.sheet.XFunctionAccess.class, aFuncInst );
+            UnoRuntime.queryInterface(
+            com.sun.star.sheet.XFunctionAccess.class, aFuncInst );
         // put the data in a two-dimensional array
         double[][] aData = { { 1.0, 2.0, 3.0 } };
         // construct the array of function arguments
@@ -1366,8 +1301,8 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         Object aRecInst = xServiceManager.createInstanceWithContext(
             "com.sun.star.sheet.RecentFunctions", getContext());
         com.sun.star.sheet.XRecentFunctions xRecFunc =
-            (com.sun.star.sheet.XRecentFunctions)UnoRuntime.queryInterface(
-                com.sun.star.sheet.XRecentFunctions.class, aRecInst );
+            UnoRuntime.queryInterface(
+            com.sun.star.sheet.XRecentFunctions.class, aRecInst );
         int[] nRecentIds = xRecFunc.getRecentFunctionIds();
 
 
@@ -1375,8 +1310,8 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         Object aDescInst = xServiceManager.createInstanceWithContext(
             "com.sun.star.sheet.FunctionDescriptions", getContext());
         com.sun.star.sheet.XFunctionDescriptions xFuncDesc =
-            (com.sun.star.sheet.XFunctionDescriptions)UnoRuntime.queryInterface(
-                com.sun.star.sheet.XFunctionDescriptions.class, aDescInst );
+            UnoRuntime.queryInterface(
+            com.sun.star.sheet.XFunctionDescriptions.class, aDescInst );
         System.out.print("Recently used functions: ");
         for (int nFunction=0; nFunction<nRecentIds.length; nFunction++)
         {
@@ -1401,8 +1336,8 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         Object aSettings = xServiceManager.createInstanceWithContext(
             "com.sun.star.sheet.GlobalSheetSettings", getContext());
         com.sun.star.beans.XPropertySet xPropSet =
-            (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
-                com.sun.star.beans.XPropertySet.class, aSettings );
+            UnoRuntime.queryInterface(
+            com.sun.star.beans.XPropertySet.class, aSettings );
         AnyConverter aAnyConv = new AnyConverter();
         String[] aEntries = (String[])
             aAnyConv.toObject(String[].class,

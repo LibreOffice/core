@@ -67,29 +67,27 @@ public class Clipboard
             Object oDesktop = xServiceManager.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xOfficeContext);
 
-            XComponentLoader xCompLoader =(XComponentLoader)
-                UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
+            XComponentLoader xCompLoader =UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
 
             com.sun.star.lang.XComponent xComponent =
                 xCompLoader.loadComponentFromURL("private:factory/swriter",
                     "_blank", 0, new com.sun.star.beans.PropertyValue[0]);
             {
-            XTextDocument xDoc =(XTextDocument)
-                UnoRuntime.queryInterface(XTextDocument.class, xComponent);
+            XTextDocument xDoc =UnoRuntime.queryInterface(XTextDocument.class, xComponent);
             xDoc.getText().setString("In the first step, paste the current content of the clipboard in the document!\nThe text \"Hello world!\" shall be insert at the current cursor position below.\n\nIn the second step, please select some words and put it into the clipboard! ...\n\nCurrent clipboard content = ");
 
             // ensure that the document content is optimal visible
             com.sun.star.frame.XModel xModel =
-                (com.sun.star.frame.XModel)UnoRuntime.queryInterface(
-                    com.sun.star.frame.XModel.class, xDoc);
+                UnoRuntime.queryInterface(
+                com.sun.star.frame.XModel.class, xDoc);
             // get the frame for later usage
             com.sun.star.frame.XFrame xFrame =
                 xModel.getCurrentController().getFrame();
 
             com.sun.star.view.XViewSettingsSupplier xViewSettings =
-                (com.sun.star.view.XViewSettingsSupplier)UnoRuntime.queryInterface(
-                    com.sun.star.view.XViewSettingsSupplier.class,
-                    xModel.getCurrentController());
+                UnoRuntime.queryInterface(
+                com.sun.star.view.XViewSettingsSupplier.class,
+                xModel.getCurrentController());
             xViewSettings.getViewSettings().setPropertyValue(
                 "ZoomType", new Short((short)0));
             }
@@ -99,15 +97,13 @@ public class Clipboard
                 "com.sun.star.datatransfer.clipboard.SystemClipboard",
                 xOfficeContext);
 
-            XClipboard xClipboard = (XClipboard)
-                UnoRuntime.queryInterface(XClipboard.class, oClipboard);
+            XClipboard xClipboard = UnoRuntime.queryInterface(XClipboard.class, oClipboard);
 
             //---------------------------------------------------
             // registering as clipboard listener
             //---------------------------------------------------
 
-            XClipboardNotifier xClipNotifier = (XClipboardNotifier)
-                UnoRuntime.queryInterface(XClipboardNotifier.class, oClipboard);
+            XClipboardNotifier xClipNotifier = UnoRuntime.queryInterface(XClipboardNotifier.class, oClipboard);
 
             ClipboardListener aClipListener= new ClipboardListener();
 
@@ -152,9 +148,8 @@ public class Clipboard
             xClipNotifier.removeClipboardListener(aClipListener);
 
             // close test document
-            com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
-                UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class,
-                                          xComponent );
+            com.sun.star.util.XCloseable xCloseable = UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class,
+                                      xComponent );
 
             if (xCloseable != null ) {
                 xCloseable.close(false);

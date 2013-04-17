@@ -49,15 +49,13 @@ public class SayHello
     private static XTextDocument createDocument(XScriptContext ctxt)
         throws Exception
     {
-        XComponentLoader loader = (XComponentLoader)
-            UnoRuntime.queryInterface(
-                XComponentLoader.class, ctxt.getDesktop());
+        XComponentLoader loader = UnoRuntime.queryInterface(
+            XComponentLoader.class, ctxt.getDesktop());
 
         XComponent comp = loader.loadComponentFromURL(
             "private:factory/swriter", "_blank", 4, new PropertyValue[0]);
 
-        XTextDocument doc = (XTextDocument)
-            UnoRuntime.queryInterface( XTextDocument.class, comp);
+        XTextDocument doc = UnoRuntime.queryInterface( XTextDocument.class, comp);
 
         return doc;
     }

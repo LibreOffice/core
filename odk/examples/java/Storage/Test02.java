@@ -49,11 +49,11 @@ public class Test02 implements StorageTest {
 
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
-            pArgs[0] = (Object) xTempFileStream;
+            pArgs[0] = xTempFileStream;
             pArgs[1] = new Integer( ElementModes.WRITE );
 
             Object oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
-            XStorage xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
+            XStorage xTempStorage = UnoRuntime.queryInterface( XStorage.class, oTempStorage );
             if ( xTempStorage == null )
             {
                 m_aTestHelper.Error( "Can't create temporary storage representation!" );
@@ -121,10 +121,10 @@ public class Test02 implements StorageTest {
             // open input stream
             // since no mode is provided the result storage must be opened readonly
             Object pOneArg[] = new Object[1];
-            pOneArg[0] = (Object) xTempInStream;
+            pOneArg[0] = xTempInStream;
 
             Object oResultStorage = m_xStorageFactory.createInstanceWithArguments( pOneArg );
-            XStorage xResultStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResultStorage );
+            XStorage xResultStorage = UnoRuntime.queryInterface( XStorage.class, oResultStorage );
             if ( xResultStorage == null )
             {
                 m_aTestHelper.Error( "Can't open storage based on input stream!" );

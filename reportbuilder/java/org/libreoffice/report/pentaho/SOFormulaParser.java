@@ -89,7 +89,7 @@ public final class SOFormulaParser extends ComponentBase
         parser = new FormulaParser();
         try
         {
-            final XFormulaOpCodeMapper mapper = (XFormulaOpCodeMapper) UnoRuntime.queryInterface(XFormulaOpCodeMapper.class, m_xContext.getServiceManager().createInstanceWithContext("simple.formula.FormulaOpCodeMapperObj", m_xContext));
+            final XFormulaOpCodeMapper mapper = UnoRuntime.queryInterface(XFormulaOpCodeMapper.class, m_xContext.getServiceManager().createInstanceWithContext("simple.formula.FormulaOpCodeMapperObj", m_xContext));
             FormulaOpCodeMapEntry[] opCodes = mapper.getAvailableMappings(FormulaLanguage.ODFF, FormulaMapGroup.FUNCTIONS);
             final DefaultFormulaContext defaultContext = new DefaultFormulaContext();
             final FunctionRegistry functionRegistry = defaultContext.getFunctionRegistry();

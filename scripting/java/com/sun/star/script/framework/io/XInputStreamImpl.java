@@ -73,7 +73,7 @@ public class XInputStreamImpl implements XInputStream
         long bytesSkipped = 0;
         try
         {
-            bytesSkipped = is.skip( (long)nBytesToSkip );
+            bytesSkipped = is.skip( nBytesToSkip );
         }
         catch ( IOException e )
         {

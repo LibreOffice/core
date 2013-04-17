@@ -66,8 +66,7 @@ public class ShapeHelper
     {
         XShape xShape = createShape( xDrawDoc, aPos, aSize, sShapeType );
         xShapes.add( xShape );
-        XPropertySet xPropSet = (XPropertySet)
-            UnoRuntime.queryInterface( XPropertySet.class, xShape );
+        XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, xShape );
         return xPropSet;
     }
 
@@ -79,10 +78,10 @@ public class ShapeHelper
     {
         XShape xShape = null;
         XMultiServiceFactory xFactory =
-            (XMultiServiceFactory )UnoRuntime.queryInterface(
-                XMultiServiceFactory.class, xDrawDoc );
+            UnoRuntime.queryInterface(
+                    XMultiServiceFactory.class, xDrawDoc );
         Object xObj = xFactory.createInstance( sShapeType );
-        xShape = (XShape)UnoRuntime.queryInterface(
+        xShape = UnoRuntime.queryInterface(
             XShape.class, xObj );
         xShape.setPosition( aPos );
         xShape.setSize( aSize );
@@ -96,8 +95,7 @@ public class ShapeHelper
     public static XPropertySet addPortion( XShape xShape, String sText, boolean bNewParagraph )
         throws com.sun.star.lang.IllegalArgumentException
     {
-        XText xText = (XText)
-            UnoRuntime.queryInterface( XText.class, xShape );
+        XText xText = UnoRuntime.queryInterface( XText.class, xShape );
 
         XTextCursor xTextCursor = xText.createTextCursor();
         xTextCursor.gotoEnd( false );
@@ -106,12 +104,10 @@ public class ShapeHelper
             xText.insertControlCharacter( xTextCursor, ControlCharacter.PARAGRAPH_BREAK, false );
             xTextCursor.gotoEnd( false );
         }
-        XTextRange xTextRange = (XTextRange)
-            UnoRuntime.queryInterface( XTextRange.class, xTextCursor );
+        XTextRange xTextRange = UnoRuntime.queryInterface( XTextRange.class, xTextCursor );
         xTextRange.setString( sText );
         xTextCursor.gotoEnd( true );
-        XPropertySet xPropSet = (XPropertySet)
-            UnoRuntime.queryInterface( XPropertySet.class, xTextRange );
+        XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, xTextRange );
         return xPropSet;
     }
 
@@ -123,8 +119,7 @@ public class ShapeHelper
                         com.sun.star.lang.WrappedTargetException,
                             com.sun.star.container.NoSuchElementException
     {
-        XEnumerationAccess xEnumerationAccess = (XEnumerationAccess)
-            UnoRuntime.queryInterface( XEnumerationAccess.class, xText );
+        XEnumerationAccess xEnumerationAccess = UnoRuntime.queryInterface( XEnumerationAccess.class, xText );
         if ( xEnumerationAccess.hasElements() )
         {
             XEnumeration xEnumeration = xEnumerationAccess.createEnumeration();
@@ -133,10 +128,9 @@ public class ShapeHelper
                 Object xObj = xEnumeration.nextElement();
                 if ( xEnumeration.hasMoreElements() == false )
                 {
-                    XTextContent xTextContent = (XTextContent)UnoRuntime.queryInterface(
+                    XTextContent xTextContent = UnoRuntime.queryInterface(
                         XTextContent.class, xObj );
-                    XPropertySet xParaPropSet = (XPropertySet)
-                        UnoRuntime.queryInterface( XPropertySet.class, xTextContent );
+                    XPropertySet xParaPropSet = UnoRuntime.queryInterface( XPropertySet.class, xTextContent );
                     xParaPropSet.setPropertyValue( sPropName, aValue );
                 }
             }

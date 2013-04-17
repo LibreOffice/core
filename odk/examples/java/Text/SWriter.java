@@ -116,16 +116,15 @@ public class SWriter  {
 
         //getting MSF of the document
         com.sun.star.lang.XMultiServiceFactory xDocMSF =
-            (com.sun.star.lang.XMultiServiceFactory) UnoRuntime.queryInterface(
-                com.sun.star.lang.XMultiServiceFactory.class, myDoc);
+            UnoRuntime.queryInterface(
+            com.sun.star.lang.XMultiServiceFactory.class, myDoc);
 
         //create instance of a text table
         com.sun.star.text.XTextTable xTT = null;
 
         try {
             Object oInt = xDocMSF.createInstance("com.sun.star.text.TextTable");
-            xTT = (com.sun.star.text.XTextTable)
-                UnoRuntime.queryInterface(com.sun.star.text.XTextTable.class,oInt);
+            xTT = UnoRuntime.queryInterface(com.sun.star.text.XTextTable.class,oInt);
         } catch (Exception e) {
             System.err.println("Couldn't create instance "+ e);
             e.printStackTrace(System.err);
@@ -141,7 +140,7 @@ public class SWriter  {
             xText.insertTextContent(xTCursor, xTT, false);
             // get first Row
             com.sun.star.container.XIndexAccess xTTRows = xTT.getRows();
-            xTTRowPS = (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
+            xTTRowPS = UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertySet.class, xTTRows.getByIndex(0));
 
         } catch (Exception e) {
@@ -152,8 +151,7 @@ public class SWriter  {
 
         // get the property set of the text table
 
-        com.sun.star.beans.XPropertySet xTTPS = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, xTT);
+        com.sun.star.beans.XPropertySet xTTPS = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, xTT);
 
         // Change the BackColor
         try {
@@ -202,9 +200,8 @@ public class SWriter  {
         //*************************************************************************
 
         // get the property set of the cursor
-        com.sun.star.beans.XPropertySet xTCPS = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
-                                      xTCursor);
+        com.sun.star.beans.XPropertySet xTCPS = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
+                                  xTCursor);
 
         Object oldValue = null;
 
@@ -257,9 +254,9 @@ public class SWriter  {
 
         try {
             Object oInt = xDocMSF.createInstance("com.sun.star.text.TextFrame");
-            xTF = (com.sun.star.text.XTextFrame) UnoRuntime.queryInterface(
+            xTF = UnoRuntime.queryInterface(
                 com.sun.star.text.XTextFrame.class,oInt);
-            xTFS = (com.sun.star.drawing.XShape) UnoRuntime.queryInterface(
+            xTFS = UnoRuntime.queryInterface(
                 com.sun.star.drawing.XShape.class,oInt);
 
             com.sun.star.awt.Size aSize = new com.sun.star.awt.Size();
@@ -273,8 +270,7 @@ public class SWriter  {
         }
 
         // get the property set of the text frame
-        com.sun.star.beans.XPropertySet xTFPS = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, xTF);
+        com.sun.star.beans.XPropertySet xTFPS = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, xTF);
 
         // Change the AnchorType
         try {
@@ -352,16 +348,14 @@ public class SWriter  {
             Object oDesktop = xMCF.createInstanceWithContext(
                                         "com.sun.star.frame.Desktop", xContext);
 
-            xCLoader = (com.sun.star.frame.XComponentLoader)
-                UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class,
-                                          oDesktop);
+            xCLoader = UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class,
+                                      oDesktop);
             com.sun.star.beans.PropertyValue [] szEmptyArgs =
                 new com.sun.star.beans.PropertyValue [0];
             String strDoc = "private:factory/swriter";
             xComp = xCLoader.loadComponentFromURL(strDoc, "_blank", 0, szEmptyArgs);
-            xDoc = (com.sun.star.text.XTextDocument)
-                UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
-                                          xComp);
+            xDoc = UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
+                                      xComp);
 
         } catch(Exception e){
             System.err.println(" Exception " + e);
@@ -373,15 +367,13 @@ public class SWriter  {
     public static void insertIntoCell(String CellName, String theText,
                                       com.sun.star.text.XTextTable xTTbl) {
 
-        com.sun.star.text.XText xTableText = (com.sun.star.text.XText)
-            UnoRuntime.queryInterface(com.sun.star.text.XText.class,
-                                      xTTbl.getCellByName(CellName));
+        com.sun.star.text.XText xTableText = UnoRuntime.queryInterface(com.sun.star.text.XText.class,
+                                  xTTbl.getCellByName(CellName));
 
         //create a cursor object
         com.sun.star.text.XTextCursor xTC = xTableText.createTextCursor();
 
-        com.sun.star.beans.XPropertySet xTPS = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, xTC);
+        com.sun.star.beans.XPropertySet xTPS = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, xTC);
 
         try {
             xTPS.setPropertyValue("CharColor",new Integer(16777215));

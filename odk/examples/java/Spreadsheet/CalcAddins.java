@@ -100,14 +100,14 @@ public class CalcAddins {
         public int getMyFirstValue(
             com.sun.star.beans.XPropertySet xOptions
         ) {
-            return (int) 1;
+            return 1;
         }
 
         public int getMySecondValue(
             com.sun.star.beans.XPropertySet xOptions,
             int intDummy
         ) {
-            return( (int) ( 2 + intDummy ) );
+            return( 2 + intDummy );
         }
 
 

@@ -244,8 +244,7 @@ public class _XScriptStorageManager extends MultiMethodTest {
             Object fa = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
-            access = (XSimpleFileAccess)
-                UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
+            access = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
         }
         catch (com.sun.star.uno.Exception e) {
             return null;

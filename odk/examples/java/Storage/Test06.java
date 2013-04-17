@@ -42,7 +42,7 @@ public class Test06 implements StorageTest {
             // create temporary storage based on arbitrary medium
             // after such a storage is closed it is lost
             Object oTempStorage = m_xStorageFactory.createInstance();
-            XStorage xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
+            XStorage xTempStorage = UnoRuntime.queryInterface( XStorage.class, oTempStorage );
             if ( xTempStorage == null )
             {
                 m_aTestHelper.Error( "Can't create temporary storage representation!" );
@@ -192,7 +192,7 @@ public class Test06 implements StorageTest {
 
             // create new temporary storage based on arbitrary medium
             Object oTargetStorage = m_xStorageFactory.createInstance();
-            XStorage xTargetStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTargetStorage );
+            XStorage xTargetStorage = UnoRuntime.queryInterface( XStorage.class, oTargetStorage );
             if ( xTargetStorage == null )
             {
                 m_aTestHelper.Error( "Can't create temporary storage representation!" );

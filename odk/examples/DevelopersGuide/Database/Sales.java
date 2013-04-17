@@ -99,7 +99,7 @@ public class Sales
         String query =  "SELECT NAME, PRICE FROM SALES " +
                         "WHERE SALENR = 1";
         XResultSet rs = stmt.executeQuery(query);
-        XRow      row = (XRow)UnoRuntime.queryInterface(XRow.class, rs);
+        XRow      row = UnoRuntime.queryInterface(XRow.class, rs);
         while (rs.next()) {
                 String s = row.getString(1);
                 float  n = row.getFloat(2);
@@ -112,13 +112,13 @@ public class Sales
     {
         // example for a programmatic way to do updates.
         XStatement stmt = con.createStatement();
-        XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,stmt);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
 
         xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
         xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.UPDATABLE));
 
         XResultSet srs = stmt.executeQuery("SELECT NAME, PRICE FROM SALES");
-        XRow       row = (XRow)UnoRuntime.queryInterface(XRow.class,srs);
+        XRow       row = UnoRuntime.queryInterface(XRow.class,srs);
 
         srs.afterLast();
         while (srs.previous()) {
@@ -128,10 +128,10 @@ public class Sales
         }
 
         srs.last();
-        XRowUpdate updateRow = (XRowUpdate)UnoRuntime.queryInterface(XRowUpdate.class,srs);
+        XRowUpdate updateRow = UnoRuntime.queryInterface(XRowUpdate.class,srs);
         updateRow.updateFloat(2, (float)0.69);
 
-        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime.queryInterface(
+        XResultSetUpdate updateRs = UnoRuntime.queryInterface(
             XResultSetUpdate.class,srs);
         updateRs.updateRow(); // this call updates the data in DBMS
 
@@ -151,15 +151,15 @@ public class Sales
 //                   "VALUES (4, 102, 5, 'FTOP Darjeeling tea', '2002-01-02',150)");
 //
 //      stmt = con.createStatement();
-        XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,stmt);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
         xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
         xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.UPDATABLE));
         XResultSet rs = stmt.executeQuery("SELECT * FROM SALES");
-        XRow       row = (XRow)UnoRuntime.queryInterface(XRow.class,rs);
+        XRow       row = UnoRuntime.queryInterface(XRow.class,rs);
 
         // insert a new row
-        XRowUpdate updateRow = (XRowUpdate)UnoRuntime.queryInterface(XRowUpdate.class,rs);
-        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
+        XRowUpdate updateRow = UnoRuntime.queryInterface(XRowUpdate.class,rs);
+        XResultSetUpdate updateRs = UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
         updateRs.moveToInsertRow();
         updateRow.updateInt(1, 4);
         updateRow.updateInt(2, 102);
@@ -175,13 +175,13 @@ public class Sales
     {
         // example for a programmatic way to do updates.
         XStatement stmt = con.createStatement();
-        XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,stmt);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
         xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
         xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.UPDATABLE));
         XResultSet rs = stmt.executeQuery("SELECT * FROM SALES");
-        XRow       row = (XRow)UnoRuntime.queryInterface(XRow.class,rs);
+        XRow       row = UnoRuntime.queryInterface(XRow.class,rs);
 
-        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
+        XResultSetUpdate updateRs = UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
         // move to the inserted row
         rs.absolute(4);
         updateRs.deleteRow();
@@ -195,17 +195,17 @@ public class Sales
         insertRow();
 
         XStatement stmt = con.createStatement();
-        XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,stmt);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
         xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
         xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.READ_ONLY));
         XResultSet rs = stmt.executeQuery("SELECT NAME, PRICE FROM SALES");
-        XRow       row = (XRow)UnoRuntime.queryInterface(XRow.class, rs);
+        XRow       row = UnoRuntime.queryInterface(XRow.class, rs);
         rs.absolute(4);
         float price1 = row.getFloat(2);
 
         // modifiy the 4 row
-        XRowUpdate updateRow = (XRowUpdate)UnoRuntime.queryInterface(XRowUpdate.class,rs);
-        XResultSetUpdate updateRs = ( XResultSetUpdate )UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
+        XRowUpdate updateRow = UnoRuntime.queryInterface(XRowUpdate.class,rs);
+        XResultSetUpdate updateRs = UnoRuntime. queryInterface(XResultSetUpdate.class,rs);
         updateRow.updateFloat(2, 150);
         updateRs.updateRow();
         // repositioning
@@ -224,12 +224,11 @@ public class Sales
     public void displayColumnNames() throws com.sun.star.uno.Exception
     {
         XStatement stmt = con.createStatement();
-        XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,stmt);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class,stmt);
         xProp.setPropertyValue("ResultSetType", new java.lang.Integer(ResultSetType.SCROLL_INSENSITIVE));
         xProp.setPropertyValue("ResultSetConcurrency", new java.lang.Integer(ResultSetConcurrency.READ_ONLY));
         XResultSet rs = stmt.executeQuery("SELECT NAME, PRICE FROM SALES");
-        XResultSetMetaDataSupplier xRsMetaSup = (XResultSetMetaDataSupplier)
-            UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class,rs);
+        XResultSetMetaDataSupplier xRsMetaSup = UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class,rs);
         XResultSetMetaData xRsMetaData =  xRsMetaSup.getMetaData();
         int nColumnCount =  xRsMetaData.getColumnCount();
         for(int i=1 ; i <= nColumnCount ; ++i)

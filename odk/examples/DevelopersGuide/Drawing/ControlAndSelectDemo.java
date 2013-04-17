@@ -88,46 +88,45 @@ public class ControlAndSelectDemo
                 "private:factory/sdraw", "_blank", 0, pPropValues );
 
             XMultiServiceFactory xFactory =
-                (XMultiServiceFactory )UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, xComponent );
+                UnoRuntime.queryInterface(
+                        XMultiServiceFactory.class, xComponent );
 
             XDrawPagesSupplier xDrawPagesSupplier =
-                (XDrawPagesSupplier)UnoRuntime.queryInterface(
-                    XDrawPagesSupplier.class, xComponent );
+                UnoRuntime.queryInterface(
+                        XDrawPagesSupplier.class, xComponent );
             XDrawPages xDrawPages = xDrawPagesSupplier.getDrawPages();
-            XDrawPage xDrawPage = (XDrawPage)UnoRuntime.queryInterface(
+            XDrawPage xDrawPage = UnoRuntime.queryInterface(
                 XDrawPage.class, xDrawPages.getByIndex( 0 ));
-            XShapes xShapes = (XShapes)UnoRuntime.queryInterface(XShapes.class,
+            XShapes xShapes = UnoRuntime.queryInterface(XShapes.class,
                                                                  xDrawPage );
 
 
             // create and insert the ControlShape
             Object xObj = xFactory.createInstance(
                 "com.sun.star.drawing.ControlShape" );
-            XShape xShape = (XShape)UnoRuntime.queryInterface( XShape.class, xObj );
+            XShape xShape = UnoRuntime.queryInterface( XShape.class, xObj );
             xShape.setPosition( new Point( 1000, 1000 ) );
             xShape.setSize( new Size( 2000, 2000 ) );
             xShapes.add( xShape );
 
             // create and set the control
-            XControlModel xControlModel = (XControlModel)UnoRuntime.queryInterface(
+            XControlModel xControlModel = UnoRuntime.queryInterface(
                 XControlModel.class,
                 xFactory.createInstance( "com.sun.star.form.component.GroupBox" ) );
-            XControlShape xControlShape = (XControlShape)UnoRuntime.queryInterface(
+            XControlShape xControlShape = UnoRuntime.queryInterface(
                 XControlShape.class, xShape );
             xControlShape.setControl( xControlModel );
 
 
             // the following code will demonstrate how to
             // make a selection that contains our new created ControlShape
-            XModel xModel = (XModel)UnoRuntime.queryInterface( XModel.class,
+            XModel xModel = UnoRuntime.queryInterface( XModel.class,
                                                                xComponent );
             XController xController = xModel.getCurrentController();
-            XSelectionSupplier xSelectionSupplier =(XSelectionSupplier)
-                UnoRuntime.queryInterface( XSelectionSupplier.class, xController );
+            XSelectionSupplier xSelectionSupplier =UnoRuntime.queryInterface( XSelectionSupplier.class, xController );
             // take care to use the global service factory only and not the one
             // that is provided by the component if you create the ShapeColletion
-            XShapes xSelection = (XShapes)UnoRuntime.queryInterface( XShapes.class,
+            XShapes xSelection = UnoRuntime.queryInterface( XShapes.class,
                 xOfficeContext.getServiceManager().createInstanceWithContext(
                     "com.sun.star.drawing.ShapeCollection", xOfficeContext ) );
             xSelection.add( xShape );

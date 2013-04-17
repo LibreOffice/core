@@ -49,7 +49,7 @@ public class _XChild {
         gotten = oObj.getParent();
         if (!hasParent)
             return gotten == null;
-        XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class,gotten);
+        XNamed the_name = UnoRuntime.queryInterface(XNamed.class,gotten);
         if (the_name != null)
             log.println("Parent:"+the_name.getName());
         return gotten != null;

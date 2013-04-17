@@ -77,7 +77,7 @@ public class MessageBox  {
 
             XWindowPeer xWindowPeer = oMessageBox.getWindowPeerOfFrame(xComp);
             if (xWindowPeer != null) {
-                XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
+                XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
                 boolean bisHighContrast = oMessageBox.isHighContrastModeActivated(xVclWindowPeer);
                 oMessageBox.showErrorMessageBox(xWindowPeer, "My Sampletitle", "HighContrastMode is enabled: " + bisHighContrast);
             } else{
@@ -90,7 +90,7 @@ public class MessageBox  {
         } finally {
             if (xComp != null) {
                 try {
-                    XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, xComp);
+                    XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xComp);
                     if (xClose != null) {
                         xClose.close(false);
                     } else {
@@ -114,21 +114,21 @@ public class MessageBox  {
             XFrame xFrame = null;
 
             if (xComp != null) {
-                XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, xComp);
+                XModel xModel = UnoRuntime.queryInterface(XModel.class, xComp);
                 xFrame = xModel.getCurrentController().getFrame();
 
             } else {
                 // Note: This method is potentially dangerous and should only be used for debugging
                 // purposes as it relies on the platform dependent window handler..
                 Object oDesktop = m_xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
-                XFramesSupplier xFramesSupplier = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, oDesktop);
+                XFramesSupplier xFramesSupplier = UnoRuntime.queryInterface(XFramesSupplier.class, oDesktop);
                 xFrame = xFramesSupplier.getActiveFrame();
             }
 
             if (xFrame != null){
                 XWindow xWindow = xFrame.getContainerWindow();
                 if (xWindow != null){
-                    XWindowPeer xWindowPeer =  (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xWindow);
+                    XWindowPeer xWindowPeer =  UnoRuntime.queryInterface(XWindowPeer.class, xWindow);
                     return xWindowPeer;
                 }
             }
@@ -147,8 +147,7 @@ public class MessageBox  {
 
             // get the component laoder from the desktop to create a new
             // text document
-            com.sun.star.frame.XComponentLoader xCLoader =(com.sun.star.frame.XComponentLoader)
-                UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class,oDesktop);
+            com.sun.star.frame.XComponentLoader xCLoader =UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class,oDesktop);
 
             com.sun.star.beans.PropertyValue[] args = new com.sun.star.beans.PropertyValue [1];
             args[0] = new com.sun.star.beans.PropertyValue();
@@ -173,11 +172,11 @@ public class MessageBox  {
         XComponent xComponent = null;
         try {
             Object oToolkit = m_xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", m_xContext);
-            XMessageBoxFactory xMessageBoxFactory = (XMessageBoxFactory) UnoRuntime.queryInterface(XMessageBoxFactory.class, oToolkit);
+            XMessageBoxFactory xMessageBoxFactory = UnoRuntime.queryInterface(XMessageBoxFactory.class, oToolkit);
             // rectangle may be empty if position is in the center of the parent peer
             Rectangle aRectangle = new Rectangle();
             XMessageBox xMessageBox = xMessageBoxFactory.createMessageBox(_xParentWindowPeer, aRectangle, "errorbox", com.sun.star.awt.MessageBoxButtons.BUTTONS_OK, _sTitle, _sMessage);
-            xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xMessageBox);
+            xComponent = UnoRuntime.queryInterface(XComponent.class, xMessageBox);
             if (xMessageBox != null){
                 short nResult = xMessageBox.execute();
             }
@@ -217,25 +216,25 @@ public class MessageBox  {
     }
 
     public static int getRedColorShare(int _nColor) {
-        int nRed = (int) _nColor/65536;
+        int nRed = _nColor/65536;
         int nRedModulo = _nColor % 65536;
-        int nGreen = (int) (nRedModulo / 256);
+        int nGreen = nRedModulo / 256;
         int nGreenModulo = (nRedModulo % 256);
         int nBlue = nGreenModulo;
         return nRed;
     }
 
     public static int getGreenColorShare(int _nColor) {
-        int nRed = (int) _nColor/65536;
+        int nRed = _nColor/65536;
         int nRedModulo = _nColor % 65536;
-        int nGreen = (int) (nRedModulo / 256);
+        int nGreen = nRedModulo / 256;
         return nGreen;
     }
 
     public static int getBlueColorShare(int _nColor) {
-        int nRed = (int) _nColor/65536;
+        int nRed = _nColor/65536;
         int nRedModulo = _nColor % 65536;
-        int nGreen = (int) (nRedModulo / 256);
+        int nGreen = nRedModulo / 256;
         int nGreenModulo = (nRedModulo % 256);
         int nBlue = nGreenModulo;
         return nBlue;
