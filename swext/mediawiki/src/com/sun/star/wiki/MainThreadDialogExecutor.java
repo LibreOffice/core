@@ -78,7 +78,7 @@ public class MainThreadDialogExecutor implements XCallback
                     if ( xFactory == null )
                         throw new com.sun.star.uno.RuntimeException();
 
-                    XRequestCallback xRequest = (XRequestCallback)UnoRuntime.queryInterface(
+                    XRequestCallback xRequest = UnoRuntime.queryInterface(
                         XRequestCallback.class,
                         xFactory.createInstanceWithContext( "com.sun.star.awt.AsyncCallback", xContext ) );
                     if ( xRequest != null )

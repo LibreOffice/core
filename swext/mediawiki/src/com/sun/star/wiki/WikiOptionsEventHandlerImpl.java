@@ -31,7 +31,7 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import java.util.Hashtable;
+import java.util.Map;
 
 public final class WikiOptionsEventHandlerImpl extends WeakBase
     implements XServiceInfo, XContainerWindowEventHandler, XDialogEventHandler
@@ -65,7 +65,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
         if ( m_xControlContainer != null )
         {
             XControl xControl = m_xControlContainer.getControl(sControl);
-            XPropertySet xListProps = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel() );
+            XPropertySet xListProps = UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel() );
             return xListProps;
         }
 
@@ -128,7 +128,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
         XPropertySet xListProps = GetPropSet( "WikiList" );
         if ( xListProps != null )
         {
-            Hashtable ht = null;
+            Map<String,String> ht = null;
             try
             {
                 short[] pSel = (short []) xListProps.getPropertyValue( "SelectedItems" );
@@ -136,7 +136,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                 if ( pSel.length > 0 && pItems.length > pSel[0] )
                 {
                     String selName = pItems[pSel[0]];
-                    ht = m_aSettings.getSettingByUrl( pItems[pSel[0]] );
+                    ht = m_aSettings.getSettingByUrl( selName );
                 }
             }
             catch ( Exception ex )
@@ -178,7 +178,6 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     {
         try
         {
-
             GetPropSet( "FixedLine1" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_MEDIAWIKIEXTENSION_STRING ) );
             GetPropSet( "AddButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_ADDBUTTON ) );
             GetPropSet( "EditButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_EDITBUTTON ) );
@@ -221,7 +220,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
         {
             try
             {
-                String sEvent = (String)AnyConverter.toString( aEventObject );
+                String sEvent = AnyConverter.toString( aEventObject );
                 if ( sEvent != null )
                 {
                     if ( sEvent.equals( sOk ) )
@@ -233,9 +232,8 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                     {
                         if ( sEvent.equals( sInitialize ) )
                         {
-                            m_xDialog = (XDialog)UnoRuntime.queryInterface( XDialog.class, xWindow );
-                            m_xControlContainer = (XControlContainer)UnoRuntime.queryInterface(
-                                                            XControlContainer.class, m_xDialog );
+                            m_xDialog = UnoRuntime.queryInterface( XDialog.class, xWindow );
+                            m_xControlContainer = UnoRuntime.queryInterface( XControlContainer.class, m_xDialog );
                             m_aSettings = Settings.getSettings( m_xContext );
                             m_aSettings.loadConfiguration(); // throw away all the noncommited changes
                             InitStrings();
@@ -277,8 +275,6 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     public boolean callHandlerMethod( XDialog xDialog, Object aEventObject, String sMethod )
         throws WrappedTargetException, com.sun.star.uno.RuntimeException
     {
-
-
         return true;
     }
 
