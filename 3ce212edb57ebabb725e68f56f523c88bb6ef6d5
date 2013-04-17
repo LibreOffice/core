@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//+5c\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3895,
+      "author": {
+        "id": 1000311
+      },
+      "writtenOn": "2013-04-17T18:27:07Z",
+      "side": 1,
+      "message": "I searched and found no place currently use SvxBrushItem::Create yet",
+      "parentUuid": "AAAAXH//+58\u003d",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//+6U\u003d",
         "filename": "editeng/source/items/numitem.cxx",
         "patchSetId": 4
@@ -108,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//+5Y\u003d",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000311
+      },
+      "writtenOn": "2013-04-17T18:27:07Z",
+      "side": 1,
+      "message": "Ah I thought you meant that we should store only the valid levels and ignore all the invalid ones.",
+      "parentUuid": "AAAAXH//+54\u003d",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//+50\u003d",
         "filename": "editeng/source/items/numitem.cxx",
         "patchSetId": 4
@@ -119,6 +155,24 @@
       "writtenOn": "2013-04-17T16:32:47Z",
       "side": 1,
       "message": "Just a nitpick ;-)\n\nI\u0027d write that as\n\n ((rStream.GetVersion() \u0026\u0026 (rStream.GetVersion() \u003c\u003d SOFFICE_FILEFORMAT_50))\n\nso GetVersion() needs to be called only once.\n\nNowadays, as not used in persistent file storage anymore, that stream version should be meaningless anyway so the entire check could be removed.",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+5U\u003d",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000311
+      },
+      "writtenOn": "2013-04-17T18:27:07Z",
+      "side": 1,
+      "message": "If we remove the entire check it means the font conversion is always executed? Or we remove the conversion?",
+      "parentUuid": "AAAAXH//+50\u003d",
       "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
