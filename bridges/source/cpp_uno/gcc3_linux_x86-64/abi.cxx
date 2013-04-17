@@ -56,7 +56,7 @@
    OTHER DEALINGS IN THE SOFTWARE.
    ----------------------------------------------------------------------- */
 
-#include <abi.hxx>
+#include "abi.hxx"
 
 #include <rtl/ustring.hxx>
 
