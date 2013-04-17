@@ -100,9 +100,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpgio1_component_getFactory( co
     uno::Reference< lang::XMultiServiceFactory > xSMgr
         (reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
-
+#if !defined(GLIB_VERSION_2_36)
     g_type_init();
-
+#endif
     if ( !::gio::ContentProvider::getImplementationName_Static().compareToAscii( pImplName ) )
         xFactory = ::gio::ContentProvider::createServiceFactory( xSMgr );
 
