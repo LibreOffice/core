@@ -52,8 +52,8 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
             OfficeConnect aConnect = OfficeConnect.createConnection();
 
             com.sun.star.frame.XDesktop xDesktop =
-                (com.sun.star.frame.XDesktop)aConnect.createRemoteInstance(
-                    com.sun.star.frame.XDesktop.class,"com.sun.star.frame.Desktop");
+                aConnect.createRemoteInstance(
+                com.sun.star.frame.XDesktop.class,"com.sun.star.frame.Desktop");
 
             // create a new test document
             com.sun.star.frame.XComponentLoader xCompLoader =

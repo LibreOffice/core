@@ -62,7 +62,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
             if ( m_document != null )
             {
                 // first, set the document to "unmodified"
-                XModifiable docModify = (XModifiable)m_document.query( XModifiable.class );
+                XModifiable docModify = m_document.query( XModifiable.class );
                 docModify.setModified( false );
 
                 m_document.getCurrentView().dispatch( ".uno:CloseDoc" );
@@ -87,7 +87,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
             // close our document
             if ( m_document != null )
             {
-                XCloseable closeDoc = (XCloseable)m_document.query( XCloseable.class );
+                XCloseable closeDoc = m_document.query( XCloseable.class );
                 closeDoc.close( true );
             }
         }

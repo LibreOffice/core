@@ -133,12 +133,12 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     public boolean isModified()
     {
-        XModifiable modify = (XModifiable)query( XModifiable.class );
+        XModifiable modify = query( XModifiable.class );
         return modify.isModified();
     }
 
     /* ------------------------------------------------------------------ */
-    public Object query( Class aInterfaceClass )
+    public <T> T query( Class<T> aInterfaceClass )
     {
         return UnoRuntime.queryInterface( aInterfaceClass, m_documentComponent );
     }

@@ -96,7 +96,7 @@ public class ListSelection extends integration.forms.TestCase
             for ( int i = 0; i < runs; ++i )
             {
                 // obtain the active sheet
-                XSpreadsheetView view = (XSpreadsheetView)m_document.getCurrentView().query( XSpreadsheetView.class );
+                XSpreadsheetView view = m_document.getCurrentView().query( XSpreadsheetView.class );
                 XSpreadsheet activeSheet = view.getActiveSheet();
 
                 // Accessibility access to the list box control in this sheet
@@ -259,7 +259,7 @@ public class ListSelection extends integration.forms.TestCase
 
         try
         {
-            XStorable storable = (XStorable)m_document.query( XStorable.class );
+            XStorable storable = m_document.query( XStorable.class );
             java.io.File testFile = java.io.File.createTempFile( getTestObjectName(),".ods");
             storable.storeAsURL( testFile.getAbsoluteFile().toURI().toURL().toString(), new com.sun.star.beans.PropertyValue[]{} );
             testFile.deleteOnExit();
@@ -277,7 +277,7 @@ public class ListSelection extends integration.forms.TestCase
         XDrawPageSupplier suppPage = UnoRuntime.queryInterface(
             XDrawPageSupplier.class, sheet );
         FormComponent formsRoot = new FormComponent( suppPage.getDrawPage() );
-        XControlModel listBoxModel = (XControlModel)formsRoot.getByIndex( 0 ).
+        XControlModel listBoxModel = formsRoot.getByIndex( 0 ).
             getByName( "ListBox" ).query( XControlModel.class );
         return listBoxModel;
     }

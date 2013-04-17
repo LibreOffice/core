@@ -73,7 +73,7 @@ public class DocumentViewHelper
         @param aInterfaceClass
                 the class of the interface which shall be returned
     */
-    public Object query( Class aInterfaceClass )
+    public <T> T query( Class<T> aInterfaceClass )
     {
         return UnoRuntime.queryInterface( aInterfaceClass, m_controller );
     }
@@ -92,7 +92,7 @@ public class DocumentViewHelper
         XDispatch xReturn = null;
 
         // go get the current view
-        XController xController = (XController)query( XController.class );
+        XController xController = query( XController.class );
         // go get the dispatch provider of it's frame
         XDispatchProvider xProvider = UnoRuntime.queryInterface(
             XDispatchProvider.class, xController.getFrame() );
@@ -147,7 +147,7 @@ public class DocumentViewHelper
     public XControl getControl( XControlModel xModel ) throws com.sun.star.uno.Exception
     {
         // the current view of the document
-        XControlAccess xCtrlAcc = (XControlAccess)query( XControlAccess.class );
+        XControlAccess xCtrlAcc = query( XControlAccess.class );
         // delegate the task of looking for the control
         return xCtrlAcc.getControl( xModel );
     }
@@ -160,7 +160,7 @@ public class DocumentViewHelper
     }
 
     /* ------------------------------------------------------------------ */
-    public Object getControl( Object aModel, Class aInterfaceClass ) throws com.sun.star.uno.Exception
+    public <T> T getControl( Object aModel, Class<T> aInterfaceClass ) throws com.sun.star.uno.Exception
     {
         XControlModel xModel = UnoRuntime.queryInterface( XControlModel.class, aModel );
         return UnoRuntime.queryInterface( aInterfaceClass, getControl( xModel ) );
@@ -171,7 +171,7 @@ public class DocumentViewHelper
      */
     public XFormController getFormController( XForm _form )
     {
-        XFormLayerAccess formLayerAccess = (XFormLayerAccess)query( XFormLayerAccess.class );
+        XFormLayerAccess formLayerAccess = query( XFormLayerAccess.class );
         return formLayerAccess.getFormController( _form );
     }
 
