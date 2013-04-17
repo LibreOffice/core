@@ -199,7 +199,7 @@ void XMLFootnoteSeparatorImport::StartElement(
     XMLPropertyState aLineTextDistance( nIndex, aAny);
     rProperties.push_back(aLineTextDistance);
 
-    DBG_ASSERT( rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WEIGTH) == nPropIndex,
+    DBG_ASSERT( rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WEIGHT) == nPropIndex,
                 "Received wrong property map index!" );
     aAny <<= nLineWeight;
     XMLPropertyState aLineWeight( nPropIndex, aAny );

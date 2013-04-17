@@ -3182,7 +3182,7 @@ namespace xmloff { namespace token {
         TOKEN( "horizontal-bar",               XML_HORIZONTAL_BAR ),
         TOKEN( "vertical-bar",                 XML_VERTICAL_BAR ),
 
-        TOKEN( "std-weight", XML_ERROR_STANDARD_WEIGTH ),
+        TOKEN( "std-weight", XML_ERROR_STANDARD_WEIGHT ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
