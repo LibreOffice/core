@@ -221,10 +221,10 @@ End
 
 #ifndef WITHOUT_PPDS
 File gid_File_Extra_Fontunxppds
-    Dir = gid_Dir_Psprint_Driver;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    Name = "fontunxppds.zip";
+    Styles = (FILELIST);
+    Name = "psprint_config_fontunxppds.filelist";
 End
 #endif
 
@@ -233,10 +233,10 @@ End
 #ifdef UNX
 
 File gid_File_Extra_Fontunxpsprint
-    Dir = gid_Dir_Psprint;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE, CONFIGFILE);
-    Name = "fontunxpsprint.zip";
+    Styles = (FILELIST, DONT_OVERWRITE, CONFIGFILE);
+    Name = "psprint_config_fontunxpsprint.filelist";
 End
 
 #endif

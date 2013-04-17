@@ -28,8 +28,8 @@
 $(eval $(call gb_Module_Module,psprint_config))
 
 $(eval $(call gb_Module_add_targets,psprint_config,\
-	Zip_fontunxppds \
-	Zip_fontunxpsprint \
+	Package_fontunxppds \
+	Package_fontunxpsprint \
 ))
 
 # vim: set noet sw=4:
