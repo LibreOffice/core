@@ -94,12 +94,6 @@ static struct ImplementationEntry g_entries[] =
     rdbtdp_getSupportedServiceNames, createSingleComponentFactory,
     0, 0
     },
-    //tdmanager
-    {
-    ManagerImpl_create, tdmgr_getImplementationName,
-    tdmgr_getSupportedServiceNames, createSingleComponentFactory,
-    0, 0
-    },
     //end
     { 0, 0, 0, 0, 0, 0 }
 };

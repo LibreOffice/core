@@ -483,17 +483,15 @@ SAL_IMPLEMENT_MAIN()
                 Sequence< Any >( &arg, 1 ), xContext ) );
         // insert provider to tdmgr
         Reference< container::XSet > xSet( xTDmgr, UNO_QUERY_THROW );
-        Any provider( makeAny( xTD_provider ) );
-        xSet->insert( provider );
-        OSL_ASSERT( xSet->has( provider ) );
-        if (! extra_registries.empty())
+        for (vector< OUString >::iterator i(extra_registries.begin());
+             i != extra_registries.end(); ++i)
         {
-            arg = makeAny( open_registries( extra_registries, xContext ) );
-            provider = makeAny(
-                xTDprov_factory->createInstanceWithArgumentsAndContext(
-                    Sequence< Any >( &arg, 1 ), xContext ) );
-            xSet->insert( provider );
-            OSL_ASSERT( xSet->has( provider ) );
+            xSet->insert(makeAny(*i));
+        }
+        for (vector< OUString >::iterator i(mandatory_registries.begin());
+             i != mandatory_registries.end(); ++i)
+        {
+            xSet->insert(makeAny(*i));
         }
 
         if (0 == output.getLength()) // no output file specified

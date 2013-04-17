@@ -91,13 +91,6 @@ namespace stoc_bootstrap
     throw(::com::sun::star::uno::Exception);
     ::com::sun::star::uno::Sequence< OUString > rdbtdp_getSupportedServiceNames();
     OUString rdbtdp_getImplementationName();
-
-    //tdmanager
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ManagerImpl_create(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& )
-    SAL_THROW( (::com::sun::star::uno::Exception) );
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL tdmgr_getSupportedServiceNames();
-    OUString SAL_CALL tdmgr_getImplementationName();
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
