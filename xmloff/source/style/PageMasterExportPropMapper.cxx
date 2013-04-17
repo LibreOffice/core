@@ -292,7 +292,7 @@ void XMLPageMasterExportPropMapper::handleElementItem(
         case CTF_PM_TEXTCOLUMNS:
             pThis->aTextColumnsExport.exportXML( rProperty.maValue );
             break;
-        case CTF_PM_FTN_LINE_WEIGTH:
+        case CTF_PM_FTN_LINE_WEIGHT:
             pThis->aFootnoteSeparatorExport.exportXML( pProperties, nIdx,
                                                        getPropertySetMapper());
             break;

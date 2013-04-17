@@ -105,7 +105,7 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
                                               rProperties );
         break;
 
-    case CTF_PM_FTN_LINE_WEIGTH:
+    case CTF_PM_FTN_LINE_WEIGHT:
         pContext = new XMLFootnoteSeparatorImport(
             GetImport(), nPrefix, rLocalName, rProperties,
             mxMapper->getPropertySetMapper(), rProp.mnIndex);
