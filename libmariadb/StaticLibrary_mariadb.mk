@@ -22,6 +22,11 @@ $(eval $(call gb_StaticLibrary_set_include,mariadblib,\
 	-I$(call gb_UnpackedTarball_get_dir,mariadb)/include \
 ))
 
+# This is needed for MSVC 2008: it somehow finds a dlopen somewhere
+# but the static library then contains unreferenced symbols.
+# This macro enables a re-definition to native Win32 APIs in my_global.h.
+$(eval $(call gb_StaticLibrary_add_cflags,mariadblib,-DHAVE_DLOPEN))
+
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadblib,\
     UnpackedTarball/mariadb/libmysql/array \
     UnpackedTarball/mariadb/libmysql/bchange \
