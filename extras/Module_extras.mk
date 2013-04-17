@@ -61,7 +61,7 @@ ifeq ($(WITH_EXTRA_GALLERY),YES)
 $(eval $(call gb_Module_add_targets,extras,\
 	UnpackedTarball_gallery_pack \
 	ExternalPackage_accessoriesgallery \
-	Zip_accessoriesgallerydrawspeople \
+	ExternalPackage_accessoriesgallerydrawspeople \
 	Zip_accessoriesgalleryelementsbullets2 \
 	Zip_accessoriesgallerynonfree \
 	Zip_accessoriesgalleryphotosbuildings \
