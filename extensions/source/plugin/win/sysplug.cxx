@@ -33,14 +33,18 @@
 
 #include <plugin/impl.hxx>
 
+#if defined _MSC_VER
 #pragma warning (push,1)
 #pragma warning (disable:4005)
+#endif
 
 #include <string.h>
 #include <tchar.h>
 #include <objbase.h>
 
+#if defined _MSC_VER
 #pragma warning (pop)
+#endif
 
 #include <list>
 #include <map>

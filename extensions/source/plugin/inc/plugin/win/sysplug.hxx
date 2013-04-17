@@ -29,17 +29,25 @@
 #ifndef __PLUGIN_INC_WINPLUG_HXX
 #define __PLUGIN_INC_WINPLUG_HXX
 
+#if defined _MSC_VER
 #pragma warning (push,1)
 #pragma warning (disable:4005)
+#endif
 
 #include <tchar.h>
 
+#if defined _MSC_VER
 #pragma pack( push, 8 )
+#endif
 #include "npapi.h"
 #include <npsdk/npupp.h>
+#if defined _MSC_VER
 #pragma pack( pop )
+#endif
 
+#if defined _MSC_VER
 #pragma warning (pop)
+#endif
 
 #include <list>
 #include <map>
