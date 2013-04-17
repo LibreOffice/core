@@ -149,7 +149,8 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         :
         : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR ),
           "m" ( rax ), "m" ( rdx ), "m" ( xmm0 ), "m" ( xmm1 )
-        : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11"
+        : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11",
+          "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "xmm6", "xmm7"
     );
 
     switch (pReturnTypeRef->eTypeClass)
