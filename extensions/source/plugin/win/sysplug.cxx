@@ -90,7 +90,9 @@ PluginComm_Impl::PluginComm_Impl( const OUString& /*rMIME*/, const OUString& rNa
     _NPPfuncs.version = 0;
     NPError nErr = (*pEntry)( &_NPPfuncs );
 
-    DBG_ASSERT( nErr == NPERR_NO_ERROR, "### NP_GetEntryPoints() failed!" );
+    SAL_WARN_IF(
+        nErr != NPERR_NO_ERROR, "extensions.plugin",
+        "NP_GetEntryPoints() failed");
     DBG_ASSERT( (_NPPfuncs.version >> 8) >= NP_VERSION_MAJOR,
                 "### version failure!" );
 
