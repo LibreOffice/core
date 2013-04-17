@@ -436,6 +436,26 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,URE, \
 	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(CPUNAME)),msci,mscx),gcc3)_uno \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_URE,URE, \
+	acceptor \
+	binaryurp \
+	bootstrap \
+	connector \
+	introspection \
+	invocadapt \
+	invocation \
+	$(if $(SOLAR_JAVA),javaloader) \
+	$(if $(SOLAR_JAVA),javavm) \
+	namingservice \
+	proxyfac \
+	reflection \
+	stocservices \
+	streams \
+	textinstream \
+	textoutstream \
+	uuresolver \
+))
+
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
 	$(if $(filter MSC,$(COM)),cli_uno) \
@@ -628,26 +648,9 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
-    acceptor \
-    binaryurp \
-    bootstrap \
-    connector \
-    introspection \
-    invocadapt \
-    invocation \
-    javaloader \
-    javavm \
-    namingservice \
-    proxyfac \
-    reflection \
-    stocservices \
-    streams \
     testtools_cppobj \
     testtools_bridgetest \
     testtools_constructors \
-    textinstream \
-    textoutstream \
-    uuresolver \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
