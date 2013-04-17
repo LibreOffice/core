@@ -18,37 +18,67 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="LDAP" oor:package="org.openoffice" xml:lang="en-US">
-    <info>
-        <desc>Specifies the LDAP related settings</desc>
-    </info>
-    <templates>
-        <group oor:name="ServerDefinition">
-            <info><desc>Specifies LDAP server settings</desc></info>
-            <prop oor:name="Server" oor:type="xs:string"><info><desc>Host name of LDAP Server</desc></info>
-            </prop>
-            <prop oor:name="Port" oor:type="xs:int" oor:nillable="false"><info><desc>Port number of the LDAP Server</desc></info>
-    			<value>389</value>
-            </prop>
-            <prop oor:name="BaseDN" oor:type="xs:string"><info><desc>Root entry of the LDAP server</desc></info>
-            </prop>
-		</group>
-    </templates>
-	<component>
-    	<group oor:name="UserDirectory">
-            <info><desc>Specifies LDAP settings used for UserProfile settings</desc></info>
-            <prop oor:name="SearchUser" oor:type="xs:string"><info><desc>DN of user with read-only access to LDAP repository. Only required if anonymous access is not supported.</desc></info>
-            </prop>
-            <prop oor:name="SearchPassword" oor:type="xs:string"><info><desc>Password of Search User. Only required if anonymous access is not supported.</desc></info>
-            </prop>
-            <prop oor:name="UserObjectClass" oor:type="xs:string"><info><desc>Name of User entity object class in LDAP repository</desc></info>
-			</prop>
-			<prop oor:name="UserUniqueAttribute" oor:type="xs:string"><info><desc>Name of User entity unique attribute in LDAP repository</desc></info>
-			</prop>
-			<prop oor:name="Mapping" oor:type="xs:string"><info><desc>Obsolete and unused</desc></info>
-            </prop>
-			<node-ref oor:name="ServerDefinition" oor:node-type="ServerDefinition">
-				<info><desc>Specifies the LDAP related settings</desc></info>
-			</node-ref>
-		</group>
-    </component>
+  <info>
+    <desc>Specifies the LDAP related settings</desc>
+  </info>
+  <templates>
+    <group oor:name="ServerDefinition">
+      <info>
+        <desc>Specifies LDAP server settings</desc>
+      </info>
+      <prop oor:name="Server" oor:type="xs:string">
+        <info>
+          <desc>Host name of LDAP Server</desc>
+        </info>
+      </prop>
+      <prop oor:name="Port" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Port number of the LDAP Server</desc>
+        </info>
+        <value>389</value>
+      </prop>
+      <prop oor:name="BaseDN" oor:type="xs:string">
+        <info>
+          <desc>Root entry of the LDAP server</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="UserDirectory">
+      <info>
+        <desc>Specifies LDAP settings used for UserProfile settings</desc>
+      </info>
+      <prop oor:name="SearchUser" oor:type="xs:string">
+        <info>
+          <desc>DN of user with read-only access to LDAP repository. Only required if anonymous access is not supported.</desc>
+        </info>
+      </prop>
+      <prop oor:name="SearchPassword" oor:type="xs:string">
+        <info>
+          <desc>Password of Search User. Only required if anonymous access is not supported.</desc>
+        </info>
+      </prop>
+      <prop oor:name="UserObjectClass" oor:type="xs:string">
+        <info>
+          <desc>Name of User entity object class in LDAP repository</desc>
+        </info>
+      </prop>
+      <prop oor:name="UserUniqueAttribute" oor:type="xs:string">
+        <info>
+          <desc>Name of User entity unique attribute in LDAP repository</desc>
+        </info>
+      </prop>
+      <prop oor:name="Mapping" oor:type="xs:string">
+        <info>
+          <desc>Obsolete and unused</desc>
+        </info>
+      </prop>
+      <node-ref oor:name="ServerDefinition" oor:node-type="ServerDefinition">
+        <info>
+          <desc>Specifies the LDAP related settings</desc>
+        </info>
+      </node-ref>
+    </group>
+  </component>
 </oor:component-schema>
