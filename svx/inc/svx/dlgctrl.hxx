@@ -388,18 +388,24 @@ public:
 \************************************************************************/
 class SVX_DLLPUBLIC LineLB : public ListBox
 {
+private:
+    /// bitfield
+    /// defines if standard fields (none, solid) are added, default is true
+    bool        mbAddStandardFields : 1;
 
 public:
-         LineLB( Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
-         LineLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
+    LineLB(Window* pParent, ResId Id);
+    LineLB(Window* pParent, WinBits aWB);
+    virtual ~LineLB();
 
-    virtual void Fill( const XDashList* pList );
+    virtual void Fill(const XDashList* pList);
 
-    void Append( XDashEntry* pEntry, const Bitmap* pBmp = NULL );
-    void Modify( XDashEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp = NULL );
-    void SelectEntryByList( const XDashList* pList, const String& rStr,
-                            const XDash& rDash, sal_uInt16 nDist = 0 );
-    // void FillStyles();
+    bool getAddStandardFields() const { return mbAddStandardFields; }
+    void setAddStandardFields(bool bNew);
+
+    void Append(XDashEntry* pEntry, const Bitmap* pBmp = 0);
+    void Modify(XDashEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp = 0);
+    void SelectEntryByList(const XDashList* pList, const String& rStr, const XDash& rDash, sal_uInt16 nDist = 0);
 };
 
 /*************************************************************************

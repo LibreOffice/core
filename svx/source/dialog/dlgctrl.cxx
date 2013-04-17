@@ -1778,15 +1778,42 @@ void FillTypeLB::Fill()
 |*  Fuellt die Listbox (vorlaeufig) mit Strings
 |*
 \************************************************************************/
+LineLB::LineLB(Window* pParent, ResId Id)
+:   ListBox(pParent, Id),
+    mbAddStandardFields(true)
+{
+}
+
+LineLB::LineLB(Window* pParent, WinBits aWB)
+:   ListBox(pParent, aWB),
+    mbAddStandardFields(true)
+{
+}
+
+LineLB::~LineLB()
+{
+}
+
+void LineLB::setAddStandardFields(bool bNew)
+{
+    if(getAddStandardFields() != bNew)
+    {
+        mbAddStandardFields = bNew;
+    }
+}
+
 void LineLB::Fill( const XDashList* pList )
 {
     Clear();
 
-    // entry for 'none'
-    InsertEntry(pList->GetStringForUiNoLine());
+    if(getAddStandardFields())
+    {
+        // entry for 'none'
+        InsertEntry(pList->GetStringForUiNoLine());
 
-    // entry for solid line
-    InsertEntry(pList->GetStringForUiSolidLine(), pList->GetBitmapForUISolidLine());
+        // entry for solid line
+        InsertEntry(pList->GetStringForUiSolidLine(), pList->GetBitmapForUISolidLine());
+    }
 
     // entries for dashed lines
     long nCount = pList->Count();
