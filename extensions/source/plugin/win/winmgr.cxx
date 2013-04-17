@@ -352,10 +352,8 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                     ::VerQueryValue( pVersionData, _T("\\StringFileInfo\\040904E4\\FileExtents"),
                                      (void**)&pInfo2, &nSize ) && pInfo2)
                 {
-                    OString aStr2( pInfo2 );
-                    OString aExt( aStr2 );
-                    OString aStr( pInfo );
-                    OString aMIME( aStr );
+                    OString aExt( pInfo2 );
+                    OString aMIME( pInfo );
                     aMIME.trim();
 
                     // count mime tokens
