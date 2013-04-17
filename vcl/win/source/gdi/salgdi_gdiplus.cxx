@@ -26,13 +26,6 @@
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
 
-#ifndef min
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
-#endif
-#ifndef max
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
-#endif
-
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif

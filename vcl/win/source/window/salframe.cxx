@@ -119,7 +119,7 @@ sal_Bool WinSalFrame::mbInReparent = FALSE;
 // =======================================================================
 
 // Macros for support of WM_UNICHAR & Keyman 6.0
-#define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
+//#define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
 #define Uni_UTF32ToSurrogate2(ch)   (((unsigned long) (ch) - 0x10000) % 0x400 + 0xDC00)
 #define Uni_SupplementaryPlanesStart    0x10000
 

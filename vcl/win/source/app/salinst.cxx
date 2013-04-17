@@ -43,13 +43,6 @@
 #include <salimestatus.hxx>
 #include <salsys.hxx>
 
-#ifndef min
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
-#endif
-#ifndef max
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
-#endif
-
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning( disable: 4917 )
