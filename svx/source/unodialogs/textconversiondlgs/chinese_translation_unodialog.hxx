@@ -123,8 +123,8 @@ private:
 
     ChineseTranslationDialog*     m_pDialog;
 
-    sal_Bool m_bDisposed; ///Dispose call ready.
-    sal_Bool m_bInDispose;///In dispose call
+    bool m_bDisposed; ///Dispose call ready.
+    bool m_bInDispose;///In dispose call
     osl::Mutex                      m_aContainerMutex;
     cppu::OInterfaceContainerHelper m_aDisposeEventListeners;
 };

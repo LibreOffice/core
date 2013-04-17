@@ -260,7 +260,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
     }
 
     // if it is not in our own sets, modify the pool!
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     sal_uInt32 nSurrogate;
     const sal_uInt32 nStartCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINESTART ) : 0;
@@ -270,7 +270,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         if( pItem && pItem->GetName() == aSearchName )
         {
             pItem->PutValue( aElement );
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }
@@ -282,7 +282,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         if( pItem && pItem->GetName() == aSearchName )
         {
             pItem->PutValue( aElement );
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }
@@ -293,7 +293,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         throw container::NoSuchElementException();
 }
 
-static sal_Bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool, sal_uInt16 nWhich, uno::Any& rAny )
+static bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool, sal_uInt16 nWhich, uno::Any& rAny )
 {
     NameOrIndex *pItem;
     const sal_uInt32 nSurrogateCount = pPool ? pPool->GetItemCount2( nWhich ) : 0;
@@ -304,11 +304,11 @@ static sal_Bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool
         if( pItem && pItem->GetName() == rSearchName )
         {
             pItem->QueryValue( rAny, 0 );
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 // XNameAccess

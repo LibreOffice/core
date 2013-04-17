@@ -1080,7 +1080,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
         return;
     }
 
-    sal_Bool bClearMe = sal_False;
+    bool bClearMe = false;
 
     switch( pSdrHint->GetKind() )
     {
@@ -1091,7 +1091,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
         }
         case HINT_MODELCLEARED:
         {
-            bClearMe = sal_True;
+            bClearMe = true;
             mpModel = NULL;
             break;
         }
@@ -1119,7 +1119,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 // Prefixing with 'svx' and marking static to make sure name collisions
 // do not occur.
 
-static sal_Bool svx_needLogicRectHack( SdrObject* pObj )
+static bool svx_needLogicRectHack( SdrObject* pObj )
 {
     if( pObj->GetObjInventor() == SdrInventor)
     {
@@ -1139,10 +1139,10 @@ static sal_Bool svx_needLogicRectHack( SdrObject* pObj )
         case OBJ_PATHPOLY:
         case OBJ_PATHPLIN:
         case OBJ_MEASURE:
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 //----------------------------------------------------------------------
@@ -1700,7 +1700,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
-            sal_Bool bIsNotPersist = pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST && pMap->nWID != SDRATTR_TEXTDIRECTION;
+            bool bIsNotPersist = pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST && pMap->nWID != SDRATTR_TEXTDIRECTION;
 
             if( pMap->nWID == SDRATTR_ECKENRADIUS )
             {
@@ -2929,13 +2929,13 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             const Graphic* pGraphic = pObj->GetGraphic();
             if( pGraphic )
             {
-                sal_Bool bIsWMF = sal_False;
+                bool bIsWMF = false;
                 if ( pGraphic->IsLink() )
                 {
                     GfxLink aLnk = pGraphic->GetLink();
                     if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
                     {
-                        bIsWMF = sal_True;
+                        bIsWMF = true;
                         uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
                         rValue <<= aSeq;
                     }

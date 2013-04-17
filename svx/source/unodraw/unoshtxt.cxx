@@ -90,14 +90,14 @@ private:
     SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
     css::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
     Point                           maTextOffset;
-    sal_Bool                            mbDataValid;
-    sal_Bool                            mbDestroyed;
-    sal_Bool                            mbIsLocked;
-    sal_Bool                            mbNeedsUpdate;
+    bool                            mbDataValid;
+    bool                            mbDestroyed;
+    bool                            mbIsLocked;
+    bool                            mbNeedsUpdate;
     sal_Bool                            mbOldUndoMode;
-    sal_Bool                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
-    sal_Bool                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
-    sal_Bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
+    bool                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
+    bool                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
+    bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
 
     XInterface*                     mpOwner;
     SvxUnoTextRangeBaseList         maTextRanges;
@@ -108,11 +108,11 @@ private:
 
     void                            SetupOutliner();
 
-    sal_Bool                        HasView() const { return mpView ? sal_True : sal_False; }
-    sal_Bool                        IsEditMode() const
+    bool                            HasView() const { return mpView ? true : false; }
+    bool                            IsEditMode() const
                                     {
                                         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-                                        return mbShapeIsEditMode && pTextObj && pTextObj->IsTextEditActive() ? sal_True : sal_False;
+                                        return mbShapeIsEditMode && pTextObj && pTextObj->IsTextEditActive() ? true : false;
                                     }
 
     void                            dispose();
@@ -168,14 +168,14 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
     mpViewForwarder ( NULL ),
-    mbDataValid     ( sal_False ),
-    mbDestroyed     ( sal_False ),
-    mbIsLocked      ( sal_False ),
-    mbNeedsUpdate   ( sal_False ),
+    mbDataValid     ( false ),
+    mbDestroyed     ( false ),
+    mbIsLocked      ( false ),
+    mbNeedsUpdate   ( false ),
     mbOldUndoMode   ( sal_False ),
-    mbForwarderIsEditMode ( sal_False ),
-    mbShapeIsEditMode     ( sal_False ),
-    mbNotificationsDisabled ( sal_False ),
+    mbForwarderIsEditMode ( false ),
+    mbShapeIsEditMode     ( false ),
+    mbNotificationsDisabled ( false ),
     mpOwner( pOwner )
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
@@ -206,14 +206,14 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
     mpViewForwarder ( NULL ),
-    mbDataValid     ( sal_False ),
-    mbDestroyed     ( sal_False ),
-    mbIsLocked      ( sal_False ),
-    mbNeedsUpdate   ( sal_False ),
+    mbDataValid     ( false ),
+    mbDestroyed     ( false ),
+    mbIsLocked      ( false ),
+    mbNeedsUpdate   ( false ),
     mbOldUndoMode   ( sal_False ),
-    mbForwarderIsEditMode ( sal_False ),
-    mbShapeIsEditMode     ( sal_True ),
-    mbNotificationsDisabled ( sal_False ),
+    mbForwarderIsEditMode ( false ),
+    mbShapeIsEditMode     ( true ),
+    mbNotificationsDisabled ( false ),
     mpOwner(0)
 {
     if( !mpText )
@@ -238,7 +238,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
 
 SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
 {
-    DBG_ASSERT( mbIsLocked == sal_False, "text edit source was not unlocked before dispose!" );
+    DBG_ASSERT( mbIsLocked == false, "text edit source was not unlocked before dispose!" );
     if( mpObject )
         mpObject->RemoveObjectUser( *this );
 
@@ -354,7 +354,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case HINT_OBJCHG:
             {
-                mbDataValid = sal_False;                        // Text muss neu geholt werden
+                mbDataValid = false;                        // Text muss neu geholt werden
 
                 if( HasView() )
                 {
@@ -386,7 +386,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
 
                     // #104157# Only now we're really in edit mode
-                    mbShapeIsEditMode = sal_True;
+                    mbShapeIsEditMode = true;
 
                     Broadcast( *pSdrHint );
                 }
@@ -398,7 +398,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     Broadcast( *pSdrHint );
 
                     // #104157# We're no longer in edit mode
-                    mbShapeIsEditMode = sal_False;
+                    mbShapeIsEditMode = false;
 
                     // remove as listener - outliner might outlive ourselves
                     if( mpView && mpView->GetTextEditOutliner() )
@@ -416,7 +416,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     // invalid.
                     if( mbForwarderIsEditMode )
                     {
-                        mbForwarderIsEditMode = sal_False;
+                        mbForwarderIsEditMode = false;
                         delete mpTextForwarder;
                         mpTextForwarder = NULL;
                     }
@@ -540,10 +540,10 @@ void SvxTextEditSourceImpl::UpdateOutliner()
 
 SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 {
-    sal_Bool bCreated = sal_False;
+    bool bCreated = false;
 
     // #99840#: prevent EE/Outliner notifications during setup
-    mbNotificationsDisabled = sal_True;
+    mbNotificationsDisabled = true;
 
     if (!mpTextForwarder)
     {
@@ -585,9 +585,9 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
         mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
         // delay listener subscription and UAA initialization until Outliner is fully setup
-        bCreated = sal_True;
+        bCreated = true;
 
-        mbForwarderIsEditMode = sal_False;
+        mbForwarderIsEditMode = false;
     }
 
     if( mpObject && mpText && !mbDataValid && mpObject->IsInserted() && mpObject->GetPage() )
@@ -622,7 +622,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         }
         else
         {
-            sal_Bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : sal_False;
+            bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : false;
 
             // set objects style sheet on empty outliner
             SfxStyleSheetPool* pPool = (SfxStyleSheetPool*)mpObject->GetModel()->GetStyleSheetPool();
@@ -653,7 +653,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             }
         }
 
-        mbDataValid = sal_True;
+        mbDataValid = true;
 
         if( bOwnParaObj )
             delete pOutlinerParaObject;
@@ -667,7 +667,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     }
 
     // #99840#: prevent EE/Outliner notifications during setup
-    mbNotificationsDisabled = sal_False;
+    mbNotificationsDisabled = false;
 
     return mpTextForwarder;
 }
@@ -683,7 +683,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
         if( pEditOutliner )
         {
             mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
-            mbForwarderIsEditMode = sal_True;
+            mbForwarderIsEditMode = true;
         }
     }
 
@@ -820,7 +820,7 @@ void SvxTextEditSourceImpl::UpdateData()
     {
         if( mbIsLocked  )
         {
-            mbNeedsUpdate = sal_True;
+            mbNeedsUpdate = true;
         }
         else
         {
@@ -860,7 +860,7 @@ void SvxTextEditSourceImpl::UpdateData()
 
 void SvxTextEditSourceImpl::lock()
 {
-    mbIsLocked = sal_True;
+    mbIsLocked = true;
     if( mpOutliner )
     {
         ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_False );
@@ -871,12 +871,12 @@ void SvxTextEditSourceImpl::lock()
 
 void SvxTextEditSourceImpl::unlock()
 {
-    mbIsLocked = sal_False;
+    mbIsLocked = false;
 
     if( mbNeedsUpdate )
     {
         UpdateData();
-        mbNeedsUpdate = sal_False;
+        mbNeedsUpdate = false;
     }
 
     if( mpOutliner )

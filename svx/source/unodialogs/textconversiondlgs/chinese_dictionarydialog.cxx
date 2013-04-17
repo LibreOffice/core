@@ -253,7 +253,7 @@ void DictionaryList::addEntry( const OUString& rTerm, const OUString& rMapping
     if( hasTerm( rTerm ) )
         return;
 
-    DictionaryEntry* pEntry = new DictionaryEntry( rTerm, rMapping, nConversionPropertyType, sal_True );
+    DictionaryEntry* pEntry = new DictionaryEntry( rTerm, rMapping, nConversionPropertyType, true );
     SvTreeListEntry* pLBEntry = InsertEntryToColumn( makeTabString( *pEntry ), nPos );
     pLBEntry->SetUserData( pEntry );
     SelectRow( GetEntryPos( pLBEntry ) );
@@ -421,7 +421,7 @@ SvLBoxItem* DictionaryList::getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16
 
 DictionaryEntry::DictionaryEntry( const OUString& rTerm, const OUString& rMapping
                     , sal_Int16 nConversionPropertyType
-                    , sal_Bool bNewEntry )
+                    , bool bNewEntry )
         : m_aTerm( rTerm )
         , m_aMapping( rMapping )
         , m_nConversionPropertyType( nConversionPropertyType )

@@ -47,8 +47,8 @@ ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog( const uno::Reference
                     : m_xCC( xContext )
                     , m_xParentWindow( 0 )
                     , m_pDialog( 0 )
-                    , m_bDisposed(sal_False)
-                    , m_bInDispose(sal_False)
+                    , m_bDisposed(false)
+                    , m_bInDispose(false)
                     , m_aContainerMutex()
                     , m_aDisposeEventListeners(m_aContainerMutex)
 {

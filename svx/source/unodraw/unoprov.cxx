@@ -1143,10 +1143,10 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
         break;
 
     default:
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
@@ -1188,18 +1188,18 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
             sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
             ResId aNewRes( SVX_RES( nNewResId ));
             rString.Replace( 0, aShortString.Len(), String( aNewRes ) );
-            return sal_True;
+            return true;
         }
         else if( rString == aCompare )
         {
             sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
             ResId aNewRes( SVX_RES( nNewResId ));
             rString = String( aNewRes );
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 static sal_uInt16 SvxUnoColorNameDefResId[] =

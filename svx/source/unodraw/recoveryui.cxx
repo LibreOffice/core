@@ -274,7 +274,7 @@ sal_Bool RecoveryUI::impl_doEmergencySave()
 //===============================================
 void RecoveryUI::impl_doRecovery()
 {
-    sal_Bool bRecoveryOnly( sal_False );
+    bool bRecoveryOnly( false );
 
     OUString CFG_PACKAGE_RECOVERY( "org.openoffice.Office.Recovery/");
     OUString CFG_PATH_CRASHREPORTER(  "CrashReporter" );

@@ -415,7 +415,7 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWid
 
     pVDev->SetMapMode( aMM );
 #ifdef DBG_UTIL
-    sal_Bool bAbort = !
+    bool bAbort = !
 #endif
         pVDev->SetOutputSize(aPageSize);
     DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
@@ -804,7 +804,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     if( bRet && !aShapes.empty() )
     {
         // special treatment for only one SdrGrafObj that has text
-        sal_Bool bSingleGraphic = sal_False;
+        bool bSingleGraphic = false;
 
         if( 1 == aShapes.size() )
         {
@@ -829,7 +829,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                         // #118804# only accept for bitmap graphics, else the
                         // conversion to bitmap will happen anywhere without size control
                         // as evtl. defined in rSettings.mnWidth/mnHeight
-                        bSingleGraphic = sal_True;
+                        bSingleGraphic = true;
                     }
                 }
             }
@@ -878,7 +878,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 
                     aGraphic = Graphic( *pMtf );
 
-                    bSingleGraphic = sal_True;
+                    bSingleGraphic = true;
                 }
             }
         }
@@ -1147,7 +1147,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
             SdrObject* pObj;
             Reference< XShape > xShape;
 
-            sal_Bool bOk = sal_True;
+            bool bOk = true;
 
             const sal_Int32 nCount = mxShapes->getCount();
 

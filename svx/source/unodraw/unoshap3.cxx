@@ -389,9 +389,9 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             pScene->SetCamera(aCam);
 
             // #91047# use imported VRP, VPN and VUP (if used)
-            sal_Bool bVRPUsed(!aVRP.equal(basegfx::B3DPoint(0.0, 0.0, 1.0)));
-            sal_Bool bVPNUsed(!aVPN.equal(basegfx::B3DVector(0.0, 0.0, 1.0)));
-            sal_Bool bVUPUsed(!aVUP.equal(basegfx::B3DVector(0.0, 1.0, 0.0)));
+            bool bVRPUsed(!aVRP.equal(basegfx::B3DPoint(0.0, 0.0, 1.0)));
+            bool bVPNUsed(!aVPN.equal(basegfx::B3DVector(0.0, 0.0, 1.0)));
+            bool bVUPUsed(!aVUP.equal(basegfx::B3DVector(0.0, 1.0, 0.0)));
 
             if(bVRPUsed || bVPNUsed || bVUPUsed)
             {

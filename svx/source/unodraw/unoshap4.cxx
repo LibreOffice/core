@@ -223,13 +223,13 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
             const Graphic* pGraphic = pObj->GetGraphic();
             if( pGraphic )
             {
-                sal_Bool bIsWMF = sal_False;
+                bool bIsWMF = false;
                 if ( pGraphic->IsLink() )
                 {
                     GfxLink aLnk = pGraphic->GetLink();
                     if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
                     {
-                        bIsWMF = sal_True;
+                        bIsWMF = true;
                         uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
                         rValue <<= aSeq;
                     }

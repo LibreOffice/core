@@ -102,14 +102,14 @@ void SvxShapeCollection::dispose()
 
     // Guard dispose against multible threading
     // Remark: It is an error to call dispose more than once
-    sal_Bool bDoDispose = sal_False;
+    bool bDoDispose = false;
     {
     osl::MutexGuard aGuard( mrBHelper.rMutex );
     if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
     {
         // only one call go into this section
         mrBHelper.bInDispose = sal_True;
-        bDoDispose = sal_True;
+        bDoDispose = true;
     }
     }
 

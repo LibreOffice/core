@@ -183,7 +183,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     }
 
     // if it is not in our own sets, modify the pool!
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     sal_uInt32 nSurrogate;
     sal_uInt32 nCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
@@ -193,7 +193,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
         if (pItem && aName.equals(pItem->GetName()))
         {
             pItem->PutValue( aElement, mnMemberId );
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }

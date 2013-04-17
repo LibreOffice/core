@@ -49,7 +49,7 @@ struct DictionaryEntry
 {
     DictionaryEntry( const OUString& rTerm, const OUString& rMapping
                     , sal_Int16 nConversionPropertyType //linguistic2::ConversionPropertyType
-                    , sal_Bool bNewEntry = sal_False );
+                    , bool bNewEntry = false );
 
     virtual ~DictionaryEntry();
 
@@ -59,7 +59,7 @@ struct DictionaryEntry
     OUString m_aMapping;
     sal_Int16     m_nConversionPropertyType; //linguistic2::ConversionPropertyType
 
-    sal_Bool      m_bNewEntry;
+    bool     m_bNewEntry;
 };
 
 class DictionaryList : public SvHeaderTabListBox
