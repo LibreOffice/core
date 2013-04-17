@@ -36,7 +36,6 @@
 /* Data for use in (un)LoadProfile Functions */
 /* Declarations based on USERENV.H for Windows 2000 Beta 2 */
 #define PI_NOUI         0x00000001   // Prevents displaying of messages
-#define PI_APPLYPOLICY  0x00000002   // Apply NT4 style policy
 
 typedef struct _PROFILEINFOW {
   DWORD    dwSize;          // Must be set to sizeof(PROFILEINFO)

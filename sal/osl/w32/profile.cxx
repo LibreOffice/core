@@ -69,12 +69,6 @@ static inline void copy_ustr_n( void *dest, const void *source, size_t length ) 
 #define SVERSION_DIRS       { "bin", "program" }
 #define SVERSION_USER       "user"
 
-#define DEFAULT_PMODE   (_S_IREAD | _S_IWRITE)
-
-#define _BUILD_STR_(n)  # n
-#define BUILD_STR(n)    _BUILD_STR_(n)
-
-
 /*#define DEBUG_OSL_PROFILE 1*/
 /*#define TRACE_OSL_PROFILE 1*/
 

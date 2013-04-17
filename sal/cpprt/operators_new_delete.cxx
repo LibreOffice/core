@@ -18,10 +18,10 @@
  */
 
 
-#ifdef WNT /* avoid 'std::bad_alloc' unresolved externals */
+#ifdef _MSC_VER /* avoid 'std::bad_alloc' unresolved externals */
 #define _CRTIMP
 #define _NTSDK
-#endif /* WNT */
+#endif
 
 #include <algorithm>
 #include <new>

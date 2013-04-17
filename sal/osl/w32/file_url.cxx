@@ -533,8 +533,6 @@ static DWORD GetCaseCorrectPathNameEx(
 }
 
 //#####################################################
-#define WSTR_SYSTEM_ROOT_PATH               L"\\\\.\\"
-
 DWORD GetCaseCorrectPathName(
     LPCTSTR lpszShortPath,  // file name
     LPTSTR  lpszLongPath,   // path buffer

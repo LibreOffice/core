@@ -39,8 +39,6 @@ typedef struct _osl_TThreadImpl
 
 } osl_TThreadImpl;
 
-#define THREADIMPL_FLAGS_TERMINATE  0x0001
-
 static unsigned __stdcall oslWorkerWrapperFunction(void* pData);
 static oslThread oslCreateThread(oslWorkerFunction pWorker, void* pThreadData, sal_uInt32 nFlags);
 

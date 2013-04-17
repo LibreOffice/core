@@ -99,7 +99,6 @@ static DWORD ProtocolMap[]= {
 };
 
 /* macros */
-#define PROTOCOL_FROM_NATIVE(y) osl_ProtocolFromNative(y)
 #define PROTOCOL_TO_NATIVE(x)   ProtocolMap[x]
 
 /*****************************************************************************/
@@ -162,7 +161,6 @@ static DWORD OptionMap[]= {
 
 /* macros */
 #define OPTION_TO_NATIVE(x)     OptionMap[x]
-#define OPTION_FROM_NATIVE(y)   osl_SocketOptionFromNative(y)
 
 /*****************************************************************************/
 /* enum oslSocketOptionLevel */
@@ -176,7 +174,6 @@ static DWORD OptionLevelMap[]= {
 
 /* macros */
 #define OPTION_LEVEL_TO_NATIVE(x)       OptionLevelMap[x]
-#define OPTION_LEVEL_FROM_NATIVE(y)     osl_SocketOptionLevelFromNative(y)
 
 /*****************************************************************************/
 /* enum oslSocketMsgFlag */
@@ -192,7 +189,6 @@ static DWORD SocketMsgFlagMap[]= {
 
 /* macros */
 #define MSG_FLAG_TO_NATIVE(x)       SocketMsgFlagMap[x]
-#define MSG_FLAG_FROM_NATIVE(y)     osl_SocketMsgFlagFromNative(y)
 
 /*****************************************************************************/
 /* enum oslSocketDirection */
@@ -206,7 +202,6 @@ static DWORD SocketDirection[]= {
 
 /* macros */
 #define DIRECTION_TO_NATIVE(x)      SocketDirection[x]
-#define DIRECTION_FROM_NATIVE(y)    osl_SocketDirectionFromNative(y)
 
 /*****************************************************************************/
 /* enum oslSocketError */
@@ -264,7 +259,6 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 }
 
 /* macros */
-#define ERROR_TO_NATIVE(x)      SocketError[x]
 #define ERROR_FROM_NATIVE(y)    osl_SocketErrorFromNative(y)
 
 /*****************************************************************************/

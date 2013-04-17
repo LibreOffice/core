@@ -274,7 +274,6 @@ struct DirectoryItem_Impl
 
 #define DIRECTORYTYPE_LOCALROOT     0
 #define DIRECTORYTYPE_NETROOT       1
-#define DIRECTORYTYPE_NETRESORCE    2
 #define DIRECTORYTYPE_FILESYSTEM    3
 
 struct Directory_Impl

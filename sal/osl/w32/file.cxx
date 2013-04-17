@@ -1139,9 +1139,6 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 }
 
 //#############################################
-#define osl_File_CopyRecursive  0x0001
-#define osl_File_CopyOverwrite  0x0002
-
 oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPath )
 {
     rtl_uString *strSysPath = NULL, *strSysDestPath = NULL;
