@@ -52,10 +52,6 @@
 
 using namespace ::com::sun::star;
 
-#define TWAIN_SELECT            0x00000001UL
-#define TWAIN_ACQUIRE           0x00000002UL
-#define TWAIN_TERMINATE         0xFFFFFFFFUL
-
 #define TWAIN_EVENT_NONE        0x00000000UL
 #define TWAIN_EVENT_QUIT        0x00000001UL
 #define TWAIN_EVENT_SCANNING    0x00000002UL
