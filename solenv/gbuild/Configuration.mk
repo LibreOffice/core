@@ -32,14 +32,13 @@
 # => XcuLangpackTarget: langpack (per lang)
 # 	 => buildtools
 #	 => Xcu data source
-# => zip (per lang)
-#	 => XcuResTarget: resources (per lang)
-# 	    => buildtools
-#	    => XcuMergeTarget: merge
-#          => buildtools (cfgex)
-#	       => Xcu data source
-#          => *.po
-#       => XcsTarget (schema)
+# => XcuResTarget: resources (per lang)
+#    => buildtools
+#    => XcuMergeTarget: merge
+#       => buildtools (cfgex)
+#       => Xcu data source
+#       => *.po
+#    => XcsTarget (schema)
 
 # TODO: This is obsolete--we do not have multiple repos anymore. Drop
 # the first arugment of gb_Configuration__get_source and clean up its
@@ -251,7 +250,7 @@ $(call gb_XcuMergeTarget_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_XcuMergeTarget_get_target,$*))
 
-# $(call gb_XcuMergeTarget_XcuMergeTarget,target,zipfile,prefix,xcufile)
+# $(call gb_XcuMergeTarget_XcuMergeTarget,target,configuration,prefix,xcufile)
 define gb_XcuMergeTarget_XcuMergeTarget
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	$(call gb_Configuration__get_source,$(2),$(3)/$(4)) \
@@ -288,7 +287,7 @@ $(call gb_XcuResTarget_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_XcuResTarget_get_target,$*))
 
-# $(call gb_XcuResTarget_XcuResTarget,target,zipfile,prefix,xcufile,lang)
+# $(call gb_XcuResTarget_XcuResTarget,target,configuration,prefix,xcufile,lang)
 # this depends either on the source or on the merge target (if WITH_LANG)
 define gb_XcuResTarget_XcuResTarget
 ifeq ($(strip $(gb_WITH_LANG)),)
@@ -321,32 +320,18 @@ $(call gb_Configuration_get_preparation_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
-# TODO: ?
-define gb_Configuration_Configuration_nozip
-$$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),Configuration)
-endef
-
-# $(call gb_Configuration_Configuration,zipfile,repo,nodeliver)
+# $(call gb_Configuration_Configuration,configuration,repo,nodeliver)
 # cannot use target local variable for REPO because it's needed in prereq
 # last parameter may be used to turn off delivering of files
 define gb_Configuration_Configuration
 $(eval gb_Configuration_NODELIVER_$(1) := $(2))
-$(foreach lang,$(gb_Configuration_LANGS),$(eval \
-	$(call gb_Zip_Zip_internal,$(1)_$(lang),$(call gb_XcuResTarget_get_target,$(1)/$(lang)))))
-$(foreach lang,$(gb_Configuration_LANGS),$(eval \
-	$(call gb_Configuration_get_target,$(1)) : \
-	 $(call gb_Zip_get_final_target,$(1)_$(lang))))
-$(foreach lang,$(gb_Configuration_LANGS),$(eval \
-	$(call gb_Configuration_get_clean_target,$(1)) : \
-	 $(call gb_Zip_get_clean_target,$(1)_$(lang))))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Configuration)
 
 endef
 
-# $(call gb_Configuration_add_schema,zipfile,prefix,xcsfile)
+# $(call gb_Configuration_add_schema,configuration,prefix,xcsfile)
 # FIXME this is always delivered because commands depend on it...
 # hopefully extensions do not need to add schemas with same name as officecfg
 define gb_Configuration_add_schema
@@ -368,13 +353,13 @@ $(call gb_Deliver_add_deliverable,$(call gb_XcsTarget_get_outdir_target,$(3)),\
 
 endef
 
-#$(call gb_Configuration_add_schemas,zipfile,prefix,xcsfiles)
+#$(call gb_Configuration_add_schemas,configuration,prefix,xcsfiles)
 define gb_Configuration_add_schemas
 $(foreach xcs,$(3),$(call gb_Configuration_add_schema,$(1),$(2),$(xcs)))
 
 endef
 
-# $(call gb_Configuration_add_data,zipfile,prefix,xcufile)
+# $(call gb_Configuration_add_data,configuration,prefix,xcufile)
 define gb_Configuration_add_data
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuDataTarget_get_clean_target,$(2)/$(3))
@@ -402,13 +387,13 @@ endif
 
 endef
 
-#$(call gb_Configuration_add_datas,zipfile,prefix,xcufiles)
+#$(call gb_Configuration_add_datas,configuration,prefix,xcufiles)
 define gb_Configuration_add_datas
 $(foreach xcu,$(3),$(call gb_Configuration_add_data,$(1),$(2),$(xcu)))
 
 endef
 
-# $(call gb_Configuration_add_spool_module,zipfile,prefix,xcufile)
+# $(call gb_Configuration_add_spool_module,configuration,prefix,xcufile)
 define gb_Configuration_add_spool_module
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3))
@@ -435,7 +420,7 @@ endif
 
 endef
 
-# $(call gb_Configuration_add_spool_modules,zipfile,prefix,xcufiles)
+# $(call gb_Configuration_add_spool_modules,configuration,prefix,xcufiles)
 define gb_Configuration_add_spool_modules
 $(foreach xcu,$(3),$(call gb_Configuration_add_spool_module,$(1),$(2),$(xcu)))
 
@@ -462,14 +447,14 @@ $(call gb_Deliver_add_deliverable,\
 
 endef
 
-# $(call gb_Configuration_add_spool_langpack,zipfile,prefix,xcufile)
+# $(call gb_Configuration_add_spool_langpack,configuration,prefix,xcufile)
 define gb_Configuration_add_spool_langpack
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Configuration__add_langpack,$(1),$(2),$(strip $(3)),$(lang))))
 
 endef
 
-# $(call gb_Configuration_add_localized_data,zipfile,prefix,xcufile)
+# $(call gb_Configuration_add_localized_data,configuration,prefix,xcufile)
 define gb_Configuration_add_localized_data
 $(eval $(call gb_Configuration_add_data,$(1),$(2),$(3)))
 ifneq ($(strip $(gb_WITH_LANG)),)
@@ -480,14 +465,15 @@ endif
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
  $(call gb_XcuResTarget_XcuResTarget,$(1)/$(lang)/$(3),$(1),$(2),$(3),$(lang))))
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
-    $(call gb_Zip_add_file,$(1)_$(lang),$(3))))
+  $(call gb_Configuration_get_target,$(1)) : \
+	$(call gb_XcuResTarget_get_target,$(1)/$(lang)/$(3))))
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
   $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuResTarget_get_clean_target,$(1)/$(lang)/$(3))))
 
 endef
 
-# $(call gb_Configuration_add_localized_datas,zipfile,prefix,xcufile)
+# $(call gb_Configuration_add_localized_datas,configuration,prefix,xcufile)
 define gb_Configuration_add_localized_datas
 $(foreach xcu,$(3),$(call gb_Configuration_add_localized_data,$(1),$(2),$(xcu)))
 

@@ -55,7 +55,7 @@ $(call filter_XcuFilterTypesTarget_get_clean_target,%) :
 		rm -f $(call filter_XcuFilterTypesTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
 
-# $(call filter_Configuration__add_module,zipfile,module,prefix,xcufiles,target,cleantarget)
+# $(call filter_Configuration__add_module,configuration,module,prefix,xcufiles,target,cleantarget)
 define filter_Configuration__add_module
 $(call gb_Configuration_get_target,$(1)) : \
 	$(call gb_XcuModuleTarget_get_outdir_target,$(2))
@@ -69,7 +69,7 @@ $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuModuleTarget_get_outdir_target,$(2)),$(5),$(2))
 endef
 
-# $(call filter_Configuration_add_types,zipfile,typesfile,prefix,xcufiles)
+# $(call filter_Configuration_add_types,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_types
 $(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call filter_XcuFilterTypesTarget_get_target,$(2)),\
@@ -103,7 +103,7 @@ $(call filter_XcuFilterFiltersTarget_get_clean_target,%) :
 		rm -f $(call filter_XcuFilterFiltersTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
 
-# $(call filter_Configuration_add_filters,zipfile,typesfile,prefix,xcufiles)
+# $(call filter_Configuration_add_filters,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_filters
 $(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call filter_XcuFilterFiltersTarget_get_target,$(2)),\
@@ -140,7 +140,7 @@ $(call filter_XcuFilterOthersTarget_get_clean_target,%) :
 
 # delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
 
-# $(call filter_Configuration_add_others,zipfile,typesfile,prefix,xcufiles)
+# $(call filter_Configuration_add_others,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_others
 $(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call filter_XcuFilterOthersTarget_get_target,$(2)),\
@@ -175,7 +175,7 @@ $(call filter_XcuFilterInternalTarget_get_clean_target,%) :
 		rm -f $(call filter_XcuFilterInternalTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
 
-# $(call filter_Configuration_add_internal_filters,zipfile,typesfile,prefix,xcufiles)
+# $(call filter_Configuration_add_internal_filters,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_internal_filters
 $(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call filter_XcuFilterInternalTarget_get_target,$(2)),\
@@ -185,7 +185,7 @@ endef
 
 ### filter configuration rules: l10n stuff: #########################
 
-# zip  fcfg_langpack_$(lang).zip
+# Configuration fcfg_langpack
 #  => $(lang)/org/openoffice/TypeDetection/Filter.xcu
 #     xslt=> filter_ui.xcu
 #         merge=> *.xcu $(ALL_UI_FILTERS) [if WITH_LANG]
@@ -238,11 +238,18 @@ endef
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call filter_XcuResTarget__rule,$(lang))))
 
-$(foreach lang,$(gb_Configuration_LANGS),$(eval \
-  $(call gb_Configuration_get_clean_target,fcfg_langpack) : \
-	$(call gb_XcuResTarget_get_clean_target,fcfg_langpack/$(lang)/$(filter_XCU_filter))))
+define filter_Configuration_Configuration
+$(call gb_Configuration_Configuration,$(1))
 
-# $(call filter_Configuration_add_ui_filter,zipfile,prefix,xcufile)
+$(call gb_Configuration_get_target,$(1)) : \
+	$(foreach lang,$(gb_Configuration_LANGS),$(call filter_XcuResTarget_get_target,$(lang)))
+$(call gb_Configuration_get_clean_target,$(1)) : \
+	$(foreach lang,$(gb_Configuration_LANGS),$(call filter_XcuResTarget_get_clean_target,$(lang)))
+
+endef
+
+
+# $(call filter_Configuration_add_ui_filter,configuration,prefix,xcufile)
 define filter_Configuration_add_ui_filter
 ifeq ($(WITH_LANG),)
 $(filter_XcuFilterUiTarget) : \
@@ -256,7 +263,7 @@ $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuMergeTarget_get_clean_target,$(2)/$(3))
 endef
 
-# $(call filter_Configuration_add_ui_filters,zipfile,prefix,xcufile)
+# $(call filter_Configuration_add_ui_filters,configuration,prefix,xcufile)
 define filter_Configuration_add_ui_filters
 $(foreach xcu,$(3),$(eval \
 	$(call filter_Configuration_add_ui_filter,$(1),$(2),$(xcu).xcu)))
@@ -265,10 +272,7 @@ endef
 
 ### the filter configuration ########################################
 
-$(eval $(call gb_Configuration_Configuration,fcfg_langpack))
-
-$(foreach lang,$(gb_Configuration_LANGS),$(eval \
- $(call gb_Zip_add_file,fcfg_langpack_$(lang),$(filter_XCU_filter))))
+$(eval $(call filter_Configuration_Configuration,fcfg_langpack))
 
 # fcfg_base
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_base_types.xcu,filter/source/config/fragments/types,\

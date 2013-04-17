@@ -13,8 +13,6 @@ $(eval $(call gb_CustomTarget_CustomTarget,postprocess/registry))
 # Variables
 #
 
-postprocess_UNZIP := unzip $(if $(VERBOSE)$(verbose),,-q)
-
 postprocess_XCS := registry/schema/org/openoffice
 postprocess_XCU := registry/data/org/openoffice
 postprocess_MOD := registry/spool
@@ -514,35 +512,23 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).xcd : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list : \
-	$(call gb_XcuModuleTarget_get_outdir_target,Langpack-$(1).xcu) \
-	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
+	$(call gb_XcuLangpackTarget_get_outdir_target,Langpack-$(1).xcu)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).xcd : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list : \
-	$(call gb_Zip_get_target,fcfg_langpack_$(1)) \
-	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).unzip/.dir
+	$(call gb_Configuration_get_target,fcfg_langpack)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).xcd : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).list : \
-	$(call gb_Zip_get_target,registry_$(1)) \
-	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)), \
-		$(foreach driver,$(postprocess_DRIVERS),$(call gb_Zip_get_target,$(driver)_$(1))) \
+	$(call gb_Configuration_get_target,registry) \
+	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
+		$(foreach driver,$(postprocess_DRIVERS),$(call gb_Configuration_get_target,$(driver))) \
 	) \
-	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)), \
-		$(call gb_Zip_get_target,updchk_$(1)) \
-	) \
-	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).unzip/.dir \
-	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)), \
-		$(foreach driver,$(postprocess_DRIVERS), \
-			$(call gb_CustomTarget_get_workdir,postprocess/registry)/$(driver)_$(1).unzip/.dir ) \
-	) \
-	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)), \
-		$(call gb_CustomTarget_get_workdir,postprocess/registry)/updchk_$(1).unzip/.dir \
-	)
+	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),$(call gb_Configuration_get_target,updchk))
 
 endef
 $(foreach lang,$(gb_Configuration_LANGS),$(eval $(call postprocess_lang_deps,$(lang))))
@@ -555,19 +541,19 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.xcd : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(call gb_XcuModuleTarget_get_outdir_target) -o $@ \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ \
 		$(SOLARENV)/bin/packregistry.xslt $< \
 	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
-	echo '<list><dependency file="main"/><filename>Langpack-$*.xcu</filename></list>' > $@
+	echo '<list><dependency file="main"/><filename>$(call gb_XcuLangpackTarget_get_outdir_target,Langpack-$*.xcu)</filename></list>' > $@
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.xcd : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(call gb_CustomTarget_get_workdir,postprocess/registry)/ \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 		-o $@ $(SOLARENV)/bin/packregistry.xslt $< \
 	)
 
@@ -577,64 +563,40 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.xcd : \
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
 	$(call gb_Helper_abbreviate_dirs, \
-	cd $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$*.unzip \
-	&& rm -rf * \
-	&& $(postprocess_UNZIP) $< \
-	&& cd .. \
-	&& echo '<list>' > $@ \
-	&& ( find fcfg_langpack_$*.unzip -name *.xcu -size +0c -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>\n') >> $@ \
-	&& echo '</list>' >> $@ \
+		echo '<list>' > $@ \
+		&& ( find $(call gb_XcuResTarget_get_target,fcfg_langpack/$*/) -name *.xcu -size +0c -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>') >> $@ \
+		&& echo '</list>' >> $@ \
 	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.xcd : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(call gb_CustomTarget_get_workdir,postprocess/registry)/ \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 		-o $@ $(SOLARENV)/bin/packregistry.xslt $< \
 	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
-	echo '<list>' > $@
-	# Add registry_*.zip content to *.list:
-	$(call gb_Helper_abbreviate_dirs, \
-	cd $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$*.unzip \
-	&& rm -rf * \
-	&& $(postprocess_UNZIP) $(call gb_Zip_get_target,registry_$*) \
-	&& cd .. \
-	&& (find registry_$*.unzip -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>\n') >> $@ \
-	)
-ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-	# Add fcfg_drivers_*.zip content to *.list:
-	$(call gb_Helper_abbreviate_dirs, \
-	true \
-	$(foreach driver,$(postprocess_DRIVERS), \
-		&& cd $(call gb_CustomTarget_get_workdir,postprocess/registry)/$(driver)_$*.unzip \
-		&& rm -rf * \
-		&& $(postprocess_UNZIP) $(call gb_Zip_get_target,$(driver)_$*) \
-		&& cd .. \
-		&& (find $(driver)_$*.unzip -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>\n') >> $@ \
+	echo '<list>' > $@ \
+	&& $(call gb_Helper_abbreviate_dirs, \
+		(find $(call gb_XcuResTarget_get_target,registry/$*/) -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>') >> $@ \
+		$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
+			$(foreach driver,$(postprocess_DRIVERS), \
+				&& (find $(call gb_XcuResTarget_get_target,$(driver)/$*/) -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>') >> $@ \
+			) \
+		) \
+		$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\
+			&& (find $(call gb_XcuResTarget_get_target,updchk/$*/) -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>') >> $@ \
+		) \
 	) \
-	)
-endif
-ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
-	# Add updchk_*.zip content to *.list:
-	$(call gb_Helper_abbreviate_dirs, \
-	cd $(call gb_CustomTarget_get_workdir,postprocess/registry)/updchk_$*.unzip \
-	&& rm -rf * \
-	&& $(postprocess_UNZIP) $(call gb_Zip_get_target,updchk_$*) \
-	&& cd .. \
-	&& (find updchk_$*.unzip -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>\n') >> $@ \
-	)
-endif
-	echo '</list>' >> $@
+	&& echo '</list>' >> $@
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/%.xcd : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(OUTDIR)/xml/ \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 		-o $@ $(SOLARENV)/bin/packregistry.xslt $< \
 	)
 
@@ -642,6 +604,6 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
 	echo '<list>' $(foreach i,$(postprocess_DEPS_$*), '<dependency file="$i"/>') \
 		$(foreach i,$(postprocess_OPTDEPS_$*), '<dependency file="$i" optional="true"/>') \
-		$(foreach i,$(postprocess_FILES_$*), '<filename>$i</filename>') '</list>' > $@
+		$(foreach i,$(postprocess_FILES_$*), '<filename>$(OUTDIR)/xml/$(i)</filename>') '</list>' > $@
 
 # vim: set noet sw=4 ts=4:
