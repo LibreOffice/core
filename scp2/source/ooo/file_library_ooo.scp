@@ -141,18 +141,6 @@ End
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail.uno )
 #endif
 
-
-File gid_File_Lib_Comphelper2
-    LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT3(libcomphelp,COMID,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(comphelp,COMID,.dll));
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
 #ifndef SYSTEM_CURL
 
 File gid_File_Lib_Curl
@@ -497,15 +485,6 @@ End
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
 
 STD_LIB_FILE( gid_File_Lib_I18nsearch, i18nsearch )
-
-File gid_File_Lib_I18nisolang
-  #ifdef UNX
-    Name = STRING(CONCAT3(libi18nlangtag,COMID,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(i18nlangtag,COMID,.dll));
-  #endif
-    PACKED_LIB_FILE_BODY;
-End
 
 #ifndef SYSTEM_ICU
 
@@ -953,17 +932,6 @@ File gid_File_Lib_Tvhlp1
     Name = STRING(CONCAT2(libtvhlp1,UNXSUFFIX));
   #else
     Name = "tvhlp1.dll";
-  #endif
-End
-
-File gid_File_Lib_Ucbhelper
-    LIB_FILE_BODY;
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-  #ifdef UNX
-    Name = STRING(CONCAT3(libucbhelper4,COMID,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(ucbhelper4,COMID,.dll));
   #endif
 End
 

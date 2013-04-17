@@ -465,13 +465,16 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,OOO, \
+	comphelper \
 	deployment \
 	fileacc \
+	i18nlangtag \
 	i18nutil \
 	mcnttype \
 	package2 \
 	sofficeapp \
 	ucb1 \
+	ucbhelper \
 	ucpfile1 \
 	xstor \
 ))
@@ -565,12 +568,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	unowinreg \
 ))
 endif
-
-$(eval $(call gb_Helper_register_libraries,RTLIBS, \
-    comphelper \
-    i18nlangtag \
-    ucbhelper \
-))
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
