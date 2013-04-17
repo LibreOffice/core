@@ -18,13 +18,17 @@
 
 package com.sun.star.wiki;
 
-import java.io.*;
-import java.util.Hashtable;
-import javax.swing.text.html.*;
-import com.sun.star.uno.XComponentContext;
+import java.io.StringReader;
+import java.util.Map;
 
-import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.methods.*;
+import javax.swing.text.html.HTMLEditorKit;
+
+import org.apache.commons.httpclient.HostConfiguration;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+
+import com.sun.star.uno.XComponentContext;
 
 
 public class WikiArticle
@@ -34,27 +38,27 @@ public class WikiArticle
     private String m_sEditTime = "";
     private String m_sEditToken = "";
 
-    protected String m_sHTMLCode;
+    private String m_sHTMLCode;
     private boolean m_bNoArticle = true;
 
-    protected String m_sWikiUser;
-    protected String m_sWikiPass;
+    private String m_sWikiUser;
+    private String m_sWikiPass;
 
-    protected String m_sTitle = "";
+    private String m_sTitle = "";
 
     private URI m_aMainURI;
     private HostConfiguration m_aHostConfig;
 
 
     /** Creates a new instance of WikiArticle */
-    public WikiArticle( XComponentContext xContext, String sTitle, Hashtable wikiSettings, boolean bLogin, WikiPropDialog aPropDialog )
+    public WikiArticle( XComponentContext xContext, String sTitle, Map<String,String> wikiSettings, boolean bLogin, WikiPropDialog aPropDialog )
         throws java.net.MalformedURLException, com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
     {
         m_xContext = xContext;
 
-        String sMainUrl = (String) wikiSettings.get("Url");
-        m_sWikiUser = (String) wikiSettings.get("Username");
-        m_sWikiPass = (String) wikiSettings.get("Password");
+        String sMainUrl = wikiSettings.get("Url");
+        m_sWikiUser = wikiSettings.get("Username");
+        m_sWikiPass = wikiSettings.get("Password");
         m_sTitle = sTitle;
 
         m_aMainURI = new URI( sMainUrl );
@@ -77,8 +81,8 @@ public class WikiArticle
 
                     if ( MainThreadDialogExecutor.Show( xContext, aDialog ) )
                     {
-                        m_sWikiUser = (String) wikiSettings.get("Username");
-                        m_sWikiPass = (String) wikiSettings.get("Password");
+                        m_sWikiUser = wikiSettings.get("Username");
+                        m_sWikiPass = wikiSettings.get("Password");
                     }
                     else
                         throw new WikiCancelException();

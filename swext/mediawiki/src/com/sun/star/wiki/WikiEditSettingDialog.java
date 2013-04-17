@@ -18,24 +18,27 @@
 
 package com.sun.star.wiki;
 
-import com.sun.star.awt.XDialog;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lang.EventObject;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.net.ssl.SSLException;
 
-import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.methods.*;
+import org.apache.commons.httpclient.HostConfiguration;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.methods.GetMethod;
+
+import com.sun.star.awt.XDialog;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.EventObject;
+import com.sun.star.uno.XComponentContext;
 
 public class WikiEditSettingDialog extends WikiDialog
 {
 
     private final String sOKMethod = "OK";
 
-    String[] Methods =
-    {sOKMethod };
-    private Hashtable setting;
+    private String[] Methods = {sOKMethod };
+    private Map<String,String> setting;
     private boolean addMode;
     private boolean m_bAllowURLChange = true;
 
@@ -43,7 +46,7 @@ public class WikiEditSettingDialog extends WikiDialog
     {
         super( xContext, DialogURL );
         super.setMethods( Methods );
-        setting = new Hashtable();
+        setting = new HashMap<String,String>();
         addMode = true;
 
         InsertThrobber( 184, 20, 10, 10 );
@@ -51,7 +54,7 @@ public class WikiEditSettingDialog extends WikiDialog
         InitSaveCheckbox( xContext, false );
     }
 
-    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL, Hashtable ht, boolean bAllowURLChange )
+    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL, Map<String,String> ht, boolean bAllowURLChange )
     {
         super( xContext, DialogURL );
         super.setMethods( Methods );
@@ -69,8 +72,8 @@ public class WikiEditSettingDialog extends WikiDialog
 
             if ( Helper.PasswordStoringIsAllowed( m_xContext ) )
             {
-                String[] pPasswords = Helper.GetPasswordsForURLAndUser( m_xContext, (String)ht.get( "Url" ), (String)ht.get( "Username" ) );
-                bInitSaveCheckBox = ( pPasswords != null && pPasswords.length > 0 && pPasswords[0].equals( (String)ht.get( "Password" ) ) );
+                String[] pPasswords = Helper.GetPasswordsForURLAndUser( m_xContext, ht.get( "Url" ), ht.get( "Username" ) );
+                bInitSaveCheckBox = ( pPasswords != null && pPasswords.length > 0 && pPasswords[0].equals( ht.get( "Password" ) ) );
             }
 
             // the password should be entered by the user or the Cancel should be pressed
@@ -100,9 +103,9 @@ public class WikiEditSettingDialog extends WikiDialog
             if ( bResult && Helper.PasswordStoringIsAllowed( m_xContext )
               && ( (Short)( GetPropSet( "SaveBox" ).getPropertyValue("State") ) ).shortValue() != (short)0 )
             {
-                String sURL = (String)setting.get( "Url" );
-                String sUserName = (String)setting.get( "Username" );
-                String sPassword = (String)setting.get( "Password" );
+                String sURL = setting.get( "Url" );
+                String sUserName = setting.get( "Username" );
+                String sPassword = setting.get( "Password" );
 
                 if ( sURL != null && sURL.length() > 0 && sUserName != null && sUserName.length() > 0 && sPassword != null && sPassword.length() > 0 )
                 {

@@ -18,6 +18,12 @@
 
 package com.sun.star.wiki;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
@@ -27,23 +33,18 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XChangesBatch;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
 
 public class Settings
 {
 
-    private XComponentContext m_xContext;
-    private int lastUsedWikiServer = 0;
-
-
-    /* Singelton */
+    /* Singleton */
     private static Settings m_instance;
 
 
-    private Vector<Hashtable<String, String>> m_WikiConnections = new Vector<Hashtable<String, String>>();
-    private Vector<Hashtable<String, Object>> m_aWikiDocs = new Vector<Hashtable<String, Object>>();
+    private XComponentContext m_xContext;
+    private int lastUsedWikiServer = 0;
+    private List<Map<String, String>> m_WikiConnections = new ArrayList<Map<String, String>>();
+    private List<Map<String, Object>> m_aWikiDocs = new ArrayList<Map<String, Object>>();
 
     private Settings( XComponentContext ctx )
     {
@@ -61,13 +62,13 @@ public class Settings
     }
 
 
-    public void addWikiCon ( Hashtable<String, String> wikiCon )
+    public void addWikiCon ( Map<String, String> wikiCon )
     {
         m_WikiConnections.add( wikiCon );
     }
 
 
-    public Vector<Hashtable<String, String>> getWikiCons()
+    public List<Map<String, String>> getWikiCons()
     {
         return m_WikiConnections;
     }
@@ -77,17 +78,17 @@ public class Settings
         String url = "";
         if ( num >=0 && num < m_WikiConnections.size() )
         {
-            Hashtable ht = m_WikiConnections.get( num );
-            url = ( String ) ht.get( "Url" );
+            Map<String,String> ht = m_WikiConnections.get( num );
+            url = ht.get( "Url" );
         }
         return url;
     }
 
 
-    public void addWikiDoc ( Hashtable<String, Object> aWikiDoc )
+    public void addWikiDoc ( Map<String, Object> aWikiDoc )
     {
         String sURL = ( String ) aWikiDoc.get( "CompleteUrl" );
-        Hashtable aEntry = getDocByCompleteUrl( sURL );
+        Map<String,Object> aEntry = getDocByCompleteUrl( sURL );
 
         if ( aEntry != null )
         {
@@ -104,7 +105,7 @@ public class Settings
     }
 
 
-    public Vector<Hashtable<String, Object>> getWikiDocs()
+    public List<Map<String, Object>> getWikiDocs()
     {
         return m_aWikiDocs;
     }
@@ -112,11 +113,11 @@ public class Settings
     public Object[] getWikiDocList( int serverid, int num )
     {
         String wikiserverurl = getWikiConUrlByNumber( serverid );
-        Vector<String> theDocs = new Vector<String>();
+        List<String> theDocs = new ArrayList<String>();
         String [] docs = new String[0];
         for ( int i=0; i<m_aWikiDocs.size(); i++ )
         {
-            Hashtable ht = m_aWikiDocs.get( i );
+            Map<String,Object> ht = m_aWikiDocs.get( i );
             String docurl = ( String ) ht.get( "Url" );
             if ( docurl.equals( wikiserverurl ) )
             {
@@ -141,19 +142,19 @@ public class Settings
         String [] WikiList = new String [m_WikiConnections.size()];
         for ( int i=0; i<m_WikiConnections.size(); i++ )
         {
-            Hashtable ht = m_WikiConnections.get( i );
-            WikiList[i] = ( String ) ht.get( "Url" );
+            Map<String,String> ht = m_WikiConnections.get( i );
+            WikiList[i] = ht.get( "Url" );
         }
         return WikiList;
     }
 
 
-    public Hashtable<String, String> getSettingByUrl( String sUrl )
+    public Map<String, String> getSettingByUrl( String sUrl )
     {
-        Hashtable<String, String> ht = null;
+        Map<String, String> ht = null;
         for( int i=0;i<m_WikiConnections.size();i++ )
         {
-            Hashtable<String, String> h1 = m_WikiConnections.get( i );
+            Map<String, String> h1 = m_WikiConnections.get( i );
             String u1 = h1.get( "Url" );
             if ( u1.equals( sUrl ) )
             {
@@ -180,12 +181,12 @@ public class Settings
         return ht;
     }
 
-    public Hashtable getDocByCompleteUrl( String curl )
+    public Map<String,Object> getDocByCompleteUrl( String curl )
     {
-        Hashtable ht = null;
+        Map<String,Object> ht = null;
         for( int i=0;i<m_aWikiDocs.size();i++ )
         {
-            Hashtable h1 = m_aWikiDocs.get( i );
+            Map<String,Object> h1 = m_aWikiDocs.get( i );
             String u1 = ( String ) h1.get( "CompleteUrl" );
             if ( u1.equals( curl ) )
             {
@@ -198,11 +199,10 @@ public class Settings
 
     public void removeSettingByUrl( String sUrl )
     {
-        Hashtable ht = null;
         for( int i=0;i<m_WikiConnections.size();i++ )
         {
-            Hashtable h1 = m_WikiConnections.get( i );
-            String u1 = ( String ) h1.get( "Url" );
+            Map<String,String> h1 = m_WikiConnections.get( i );
+            String u1 = h1.get( "Url" );
             if ( u1.equals( sUrl ) )
             {
                 m_WikiConnections.remove( i );
@@ -228,13 +228,13 @@ public class Settings
             for ( int i=0; i< m_WikiConnections.size(); i++ )
             {
                 Object oNewConnection = xConnectionFactory.createInstance();
-                Hashtable ht = m_WikiConnections.get( i );
+                Map<String,String> ht = m_WikiConnections.get( i );
                 XNameReplace xNewConn = UnoRuntime.queryInterface( XNameReplace.class, oNewConnection );
 
                 if ( xNewConn != null )
                     xNewConn.replaceByName( "UserName", ht.get( "Username" ) );
 
-                xContainer.insertByName( (String)ht.get( "Url" ), xNewConn );
+                xContainer.insertByName( ht.get( "Url" ), xNewConn );
             }
             // commit changes
             XChangesBatch xBatch = UnoRuntime.queryInterface( XChangesBatch.class, xContainer );
@@ -251,15 +251,14 @@ public class Settings
             XSingleServiceFactory xDocListFactory = UnoRuntime.queryInterface( XSingleServiceFactory.class, xContainer2 );
             for ( int i=0; i< m_aWikiDocs.size(); i++ )
             {
-                Hashtable ht = m_aWikiDocs.get( i );
+                Map<String,Object> ht = m_aWikiDocs.get( i );
 
                 Object oNewDoc = xDocListFactory.createInstance();
                 XNameReplace xNewDoc = UnoRuntime.queryInterface( XNameReplace.class, oNewDoc );
 
-                Enumeration e = ht.keys();
-                while ( e.hasMoreElements() )
+                for ( Iterator<String> iter = ht.keySet().iterator(); iter.hasNext(); )
                 {
-                    String key = ( String ) e.nextElement();
+                    String key = iter.next();
                     xNewDoc.replaceByName( key, ht.get( key ) );
                 }
 
@@ -292,7 +291,7 @@ public class Settings
                 String [] allCons = xConnectionList.getElementNames();
                 for ( int i=0; i<allCons.length; i++ )
                 {
-                    Hashtable<String, String> ht = new Hashtable<String, String>();
+                    Map<String, String> ht = new HashMap<String, String>();
                     ht.put( "Url", allCons[i] );
                     ht.put( "Username", "" );
                     ht.put( "Password", "" );
@@ -322,7 +321,7 @@ public class Settings
                 {
                     Object oDoc = xRecentDocs.getByName( allDocs[i] );
                     XNameAccess xDoc = UnoRuntime.queryInterface( XNameAccess.class, oDoc );
-                    Hashtable<String, Object> ht = new Hashtable<String, Object>();
+                    Map<String, Object> ht = new HashMap<String, Object>();
                     ht.put( "Url", xDoc.getByName( "Url" ) );
                     ht.put( "CompleteUrl", xDoc.getByName( "CompleteUrl" ) );
                     ht.put( "Doc", xDoc.getByName( "Doc" ) );

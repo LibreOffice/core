@@ -29,7 +29,6 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
     protected String m_sLoginToken = "";
     protected String m_sMainURL = "";
 
-    private int m_nWikiArticleHash = 0;
     private boolean m_bHTMLStartFound = false;
     private boolean m_bInHead = false;
 
@@ -138,7 +137,6 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
             {
                 if ( sName.equalsIgnoreCase( "wpTextbox1" ) )
                 {
-                    m_nWikiArticleHash = t.hashCode();
                     m_nWikiArticleStart = pos;
                 }
             }
