@@ -21,6 +21,11 @@ orcus_patches += liborcus_0.1.0-configure.patch
 # don't use dllimport
 orcus_patches += liborcus_0.1.0-dllimport.patch
 
+ifeq ($(OS),MACOSX)
+# no "tac" command on OS X, but "tail -r"
+orcus_patches += liborcus_0.1.0-tac.patch
+endif
+
 # <https://gitorious.org/orcus/orcus/merge_requests/2#
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8-
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8@2>:
