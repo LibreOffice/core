@@ -119,7 +119,7 @@ PluginComm_Impl::~PluginComm_Impl()
 }
 
 //--------------------------------------------------------------------------------------------------
-BOOL PluginComm_Impl::retrieveFunction( TCHAR* pName, void** ppFunc ) const
+BOOL PluginComm_Impl::retrieveFunction( TCHAR const * pName, void** ppFunc ) const
 {
     if( ! _plDLL )
         return FALSE;

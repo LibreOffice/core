@@ -114,7 +114,7 @@ public:
     virtual NPError     NPP_SetValue( NPP instance, NPNVariable variable, void *ret_alue );
 
 private:
-    BOOL                retrieveFunction( TCHAR* pName, void** ppFunc ) const;
+    BOOL                retrieveFunction( TCHAR const * pName, void** ppFunc ) const;
 
 private:
     HINSTANCE           _plDLL;
