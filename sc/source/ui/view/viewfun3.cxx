@@ -1615,9 +1615,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         }
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<ScDocument> pMixDoc;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<ScDocument> pMixDoc;
     if (bSkipEmpty || nFunction)
     {
         if (nFlags & IDF_CONTENTS)
