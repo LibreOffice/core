@@ -1588,7 +1588,7 @@ void SfxDispatcher::FlushImpl()
         if(i->bPush)
         {
             // Actually push
-            DBG_ASSERT( std::find(pImp->aStack.begin(), pImp->aStack.end(), i->pCluster) != pImp->aStack.end(),
+            DBG_ASSERT( std::find(pImp->aStack.begin(), pImp->aStack.end(), i->pCluster) == pImp->aStack.end(),
                        "pushed SfxShell already on stack" );
             pImp->aStack.push_back(i->pCluster);
             i->pCluster->SetDisableFlags(pImp->nDisableFlags);
