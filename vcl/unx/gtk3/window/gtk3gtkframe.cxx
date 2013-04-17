@@ -27,6 +27,6 @@
  * instead of those above.
  */
 
-#include "../../gtk/window/gtkframe.cxx"
+#include "../../gtk/window/gtksalframe.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
