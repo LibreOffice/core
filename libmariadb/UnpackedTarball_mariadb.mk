@@ -33,4 +33,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,mariadb,\
     libmariadb/mariadb-static-inline.patch \
 ))
 
+$(eval $(call gb_UnpackedTarball_fix_end_of_line,mariadb,\
+	libmysql/libmysql_exports.def \
+))
+
 # vim: set noet sw=4 ts=4:
