@@ -79,8 +79,6 @@
 #define STR_MSSG_SOLVE_2            58
 #define STR_MSSG_SOLVE_3            59
 #define STR_MSSG_SOLVE_4            60
-#define STR_MSSG_SOLVE_5            61
-#define STR_MSSG_SOLVE_6            62
 
 #define STR_TABLE_GESAMTERGEBNIS    64
 #define STR_TABLE_ERGEBNIS          65
