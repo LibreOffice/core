@@ -3900,10 +3900,10 @@ SfxVoidItem FontDialogEff SID_CHAR_DLG_EFFECT
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -4310,55 +4310,6 @@ XFormTextStyleItem FontWorkTextStyle SID_FORMTEXT_STYLE
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_SPECIAL;
-]
-
-SvxLRSpaceItem ParaOutlineLeft SID_ATTR_PARA_LEFT
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
-SvxLRSpaceItem ParaOutlineRight SID_ATTR_PARA_RIGHT
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 //--------------------------------------------------------------------------
@@ -6403,7 +6354,7 @@ SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
     GroupId = GID_ENUMERATION;
 ]
 
-SfxBoolItem CurrentBulNumRule FN_BUL_NUM_RULE_INDEX
+SfxBoolItem CurrentBulletListType FN_BUL_NUM_RULE_INDEX
 (SfxUInt16Item On FN_PARAM_1)
 [
     /* flags: */
@@ -6425,13 +6376,13 @@ SfxBoolItem CurrentBulNumRule FN_BUL_NUM_RULE_INDEX
     SlotType = SfxBoolItem
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_ENUMERATION;
 ]
-SfxBoolItem CurrentNumNumRule FN_NUM_NUM_RULE_INDEX
+SfxBoolItem CurrentNumListType FN_NUM_NUM_RULE_INDEX
 (SfxUInt16Item On FN_PARAM_1)
 [
     /* flags: */
@@ -6453,10 +6404,10 @@ SfxBoolItem CurrentNumNumRule FN_NUM_NUM_RULE_INDEX
     SlotType = SfxBoolItem
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_ENUMERATION;
 ]
 
@@ -15332,10 +15283,10 @@ SfxUInt16Item FillTransparence SID_ATTR_FILL_TRANSPARENCE
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -15386,10 +15337,10 @@ SfxUInt16Item LineTransparence SID_ATTR_LINE_TRANSPARENCE
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -15416,10 +15367,10 @@ XLineJointItem LineJoint SID_ATTR_LINE_JOINT
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -15443,10 +15394,10 @@ XLineCapItem LineCap SID_ATTR_LINE_CAP
     Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -15630,10 +15581,10 @@ SfxUInt32Item TransAngle SID_ATTR_TRANSFORM_ANGLE
 
     Readonly = FALSE,
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -15655,10 +15606,10 @@ SfxUInt32Item TransRotX SID_ATTR_TRANSFORM_ROT_X
 
     Readonly = FALSE,
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -15680,10 +15631,10 @@ SfxUInt32Item TransRotY SID_ATTR_TRANSFORM_ROT_Y
 
     Readonly = FALSE,
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -15705,10 +15656,10 @@ SfxBoolItem ProtectPos SID_ATTR_TRANSFORM_PROTECT_POS
 
     Readonly = FALSE,
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -15730,10 +15681,10 @@ SfxBoolItem ProtectSize SID_ATTR_TRANSFORM_PROTECT_SIZE
 
     Readonly = FALSE,
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -15760,8 +15711,8 @@ SfxVoidItem SvxFlipHorizontal SID_FLIP_HORIZONTAL
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
 ]
 
 //--------------------------------------------------------------------------
@@ -15787,62 +15738,8 @@ SfxVoidItem SvxFlipVertical SID_FLIP_VERTICAL
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
-
-SfxBoolItem SvxAutoWidth SID_ATTR_TRANSFORM_AUTOWIDTH
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
-
-SfxVoidItem SvxFlipVertical SID_FLIP_VERTICAL
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
 ]
 
 //--------------------------------------------------------------------------
@@ -15969,10 +15866,10 @@ SfxVoidItem SCDialogBorder SID_CELL_FORMAT_BORDER
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
