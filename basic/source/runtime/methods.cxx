@@ -90,7 +90,6 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 #include <basic/sbobjmod.hxx>
 
 #ifdef WNT
-#define GradientStyle_RECT BLA_GradientStyle_RECT
 #if defined _MSC_VER
 #pragma warning (push, 1)
 #pragma warning (disable: 4005)
