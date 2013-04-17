@@ -1267,10 +1267,10 @@ End
 
 #ifdef MACOSX
 File gid_File_Icns_Bundle
-    ARCHIVE_TXT_FILE_BODY;
-    Dir = gid_Dir_Bundle_Contents_Resources;
-    Name = "osxicons.zip";
-    Styles = (ARCHIVE);
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "sysui_osxicons.filelist";
 End
 #endif
 
