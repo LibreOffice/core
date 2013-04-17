@@ -168,7 +168,10 @@ ScOptSolverSave::ScOptSolverSave( const String& rObjective, sal_Bool bMax, sal_B
 ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           ScDocShell* pDocSh, ScAddress aCursorPos )
 
-    :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_OPTSOLVER ),
+    :   ScAnyRefDlg( pB, pCW, pParent, "SolverDialog", "modules/scalc/ui/solverdlg.ui" )
+
+    ,
+
         //
         maFtObjectiveCell   ( this, ScResId( FT_OBJECTIVECELL ) ),
         maEdObjectiveCell   ( this, this, &maFtObjectiveCell, ScResId( ED_OBJECTIVECELL ) ),
