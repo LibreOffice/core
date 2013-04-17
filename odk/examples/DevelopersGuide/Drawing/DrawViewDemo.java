@@ -88,15 +88,15 @@ public class DrawViewDemo
                                                 sUrl.toString(), "_blank", 0,
                                                 pPropValues );
             XModel xModel =
-                (XModel)UnoRuntime.queryInterface(
-                    XModel.class, xComponent );
+                UnoRuntime.queryInterface(
+                        XModel.class, xComponent );
 
 
             // print all available properties of first view
             System.out.println("*** print all available properties of first view");
             XViewDataSupplier xViewDataSupplier =
-                (XViewDataSupplier)UnoRuntime.queryInterface(
-                    XViewDataSupplier.class, xModel );
+                UnoRuntime.queryInterface(
+                        XViewDataSupplier.class, xModel );
             XIndexAccess xIndexAccess = xViewDataSupplier.getViewData();
             if ( xIndexAccess.getCount() != 0 )
             {
@@ -116,8 +116,8 @@ public class DrawViewDemo
             System.out.println("*** print all properties that are supported by the controller");
             XController xController = xModel.getCurrentController();
             XPropertySet xPropSet =
-                (XPropertySet)UnoRuntime.queryInterface(
-                    XPropertySet.class, xController );
+                UnoRuntime.queryInterface(
+                        XPropertySet.class, xController );
             XPropertySetInfo xPropSetInfo = xPropSet.getPropertySetInfo();
             Property[] aPropSeq = xPropSetInfo.getProperties();
             for( int i = 0; i < aPropSeq.length; i++ )

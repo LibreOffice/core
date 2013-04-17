@@ -85,17 +85,17 @@ public class EuroAdaption {
 
         // create a sheet document
         XSpreadsheetDocument xSheetdocument = null;
-        xSheetdocument = ( XSpreadsheetDocument ) createSheetdocument( xDesktop );
+        xSheetdocument = createSheetdocument( xDesktop );
         System.out.println( "Create a new Spreadsheet" );
 
         // get the collection of all sheets from the document
         XSpreadsheets xSheets = null;
-        xSheets = (XSpreadsheets) xSheetdocument.getSheets();
+        xSheets = xSheetdocument.getSheets();
 
         // the Action Interface provides methods to hide actions,
         // like inserting data, on a sheet, that increase the performance
         XActionLockable xActionInterface = null;
-        xActionInterface = (XActionLockable) UnoRuntime.queryInterface(
+        xActionInterface = UnoRuntime.queryInterface(
             XActionLockable.class, xSheetdocument );
 
         // lock all actions
@@ -104,11 +104,11 @@ public class EuroAdaption {
         com.sun.star.sheet.XSpreadsheet xSheet = null;
         try {
             // get via the index access the first sheet
-            XIndexAccess xElements = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess xElements = UnoRuntime.queryInterface(
                 XIndexAccess.class, xSheets );
 
             // specify the first sheet from the spreadsheet
-            xSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+            xSheet = UnoRuntime.queryInterface(
                 XSpreadsheet.class, xElements.getByIndex( 0 ));
         }
         catch( Exception e) {
@@ -117,7 +117,7 @@ public class EuroAdaption {
 
         // get the interface to apply and create new numberformats
         XNumberFormatsSupplier xNumberFormatSupplier = null;
-        xNumberFormatSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(
+        xNumberFormatSupplier = UnoRuntime.queryInterface(
             XNumberFormatsSupplier.class, xSheetdocument );
         XNumberFormats xNumberFormats = null;
         xNumberFormats = xNumberFormatSupplier.getNumberFormats();
@@ -154,14 +154,14 @@ public class EuroAdaption {
             // you have to use the FormatSupplier interface to get the
             // CellFormat enumeration
             XCellFormatRangesSupplier xCellFormatSupplier =
-                (XCellFormatRangesSupplier)UnoRuntime.queryInterface(
-                    XCellFormatRangesSupplier.class, xSheet );
+                UnoRuntime.queryInterface(
+                XCellFormatRangesSupplier.class, xSheet );
 
             // getCellFormatRanges() has the interfaces for the enumeration
             XEnumerationAccess xEnumerationAccess =
-                (XEnumerationAccess)UnoRuntime.queryInterface(
-                    XEnumerationAccess.class,
-                    xCellFormatSupplier.getCellFormatRanges() );
+                UnoRuntime.queryInterface(
+                XEnumerationAccess.class,
+                xCellFormatSupplier.getCellFormatRanges() );
 
             XEnumeration xRanges = xEnumerationAccess.createEnumeration();
 
@@ -170,11 +170,11 @@ public class EuroAdaption {
 
             while( xRanges.hasMoreElements() ) {
                 // the enumeration returns a cellrange
-                XCellRange xCellRange = (XCellRange) UnoRuntime.queryInterface(
+                XCellRange xCellRange = UnoRuntime.queryInterface(
                     XCellRange.class, xRanges.nextElement());
 
                 // the PropertySet the get and set the properties from the cellrange
-                XPropertySet xCellProp = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet xCellProp = UnoRuntime.queryInterface(
                     XPropertySet.class, xCellRange );
 
                 // getPropertyValue returns an Object, you have to cast it to
@@ -183,8 +183,7 @@ public class EuroAdaption {
                 int iNumberFormat = aAnyConv.toInt(oNumberObject);
 
                 // get the properties from the cellrange numberformat
-                XPropertySet xFormat = (XPropertySet)
-                    xNumberFormats.getByKey(iNumberFormat );
+                XPropertySet xFormat = xNumberFormats.getByKey(iNumberFormat );
 
                 short fType = aAnyConv.toShort(xFormat.getPropertyValue("Type"));
                 String sCurrencySymbol = aAnyConv.toString(
@@ -221,9 +220,8 @@ public class EuroAdaption {
 
                     // interate over all cells from the cellrange with an
                     // content and use the DM/EUR factor
-                    XCellRangesQuery xCellRangesQuery = (XCellRangesQuery)
-                        UnoRuntime.queryInterface(
-                        XCellRangesQuery.class, xCellRange );
+                    XCellRangesQuery xCellRangesQuery = UnoRuntime.queryInterface(
+                    XCellRangesQuery.class, xCellRange );
 
                     XSheetCellRanges xSheetCellRanges =
                         xCellRangesQuery.queryContentCells(
@@ -236,9 +234,9 @@ public class EuroAdaption {
                             xCellEnumerationAccess.createEnumeration();
 
                         while( xCellEnumeration.hasMoreElements() ) {
-                            XCell xCell = (XCell) UnoRuntime.queryInterface(
+                            XCell xCell = UnoRuntime.queryInterface(
                                 XCell.class, xCellEnumeration.nextElement());
-                            xCell.setValue( (double) xCell.getValue() / fFactor );
+                            xCell.setValue( xCell.getValue() / fFactor );
                         }
                     }
                 }
@@ -299,7 +297,7 @@ public class EuroAdaption {
                                                             2, 1 + iCounter );
 
                 // get the ProperySet from the cell, to change the numberformat
-                XPropertySet xCellProp = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet xCellProp = UnoRuntime.queryInterface(
                     XPropertySet.class, xCellRange );
                 xCellProp.setPropertyValue( "NumberFormat",
                                             new Integer(iNumberFormatKey) );
@@ -327,7 +325,7 @@ public class EuroAdaption {
 
                 Object oDesktop = xMCF.createInstanceWithContext(
                     "com.sun.star.frame.Desktop", xContext);
-                xDesktop = (XDesktop) UnoRuntime.queryInterface(
+                xDesktop = UnoRuntime.queryInterface(
                     XDesktop.class, oDesktop);
             }
             else
@@ -350,7 +348,7 @@ public class EuroAdaption {
             XComponent xComponent = null;
             xComponent = CreateNewDocument( xDesktop, "scalc" );
 
-            aSheetDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(
+            aSheetDocument = UnoRuntime.queryInterface(
                 XSpreadsheetDocument.class, xComponent);
         }
         catch( Exception e) {
@@ -370,7 +368,7 @@ public class EuroAdaption {
         PropertyValue xEmptyArgs[] = new PropertyValue[0];
 
         try {
-            xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(
+            xComponentLoader = UnoRuntime.queryInterface(
                 XComponentLoader.class, xDesktop );
 
             xComponent  = xComponentLoader.loadComponentFromURL(

@@ -86,9 +86,8 @@ public class Number_Formats
 
         // Query the number formats supplier of the spreadsheet document
         com.sun.star.util.XNumberFormatsSupplier xNumberFormatsSupplier =
-            (com.sun.star.util.XNumberFormatsSupplier)
             UnoRuntime.queryInterface(
-            com.sun.star.util.XNumberFormatsSupplier.class, maSpreadsheetDoc );
+        com.sun.star.util.XNumberFormatsSupplier.class, maSpreadsheetDoc );
 
         // Get the number formats from the supplier
         com.sun.star.util.XNumberFormats xNumberFormats =
@@ -96,9 +95,8 @@ public class Number_Formats
 
         // Query the XNumberFormatTypes interface
         com.sun.star.util.XNumberFormatTypes xNumberFormatTypes =
-            (com.sun.star.util.XNumberFormatTypes)
             UnoRuntime.queryInterface(
-            com.sun.star.util.XNumberFormatTypes.class, xNumberFormats );
+        com.sun.star.util.XNumberFormatTypes.class, xNumberFormats );
 
         // Get the number format index key of the default currency format,
         // note the empty locale for default locale
@@ -112,9 +110,8 @@ public class Number_Formats
 
         // Query the property set of the cell range
         com.sun.star.beans.XPropertySet xCellProp =
-            (com.sun.star.beans.XPropertySet)
             UnoRuntime.queryInterface(
-            com.sun.star.beans.XPropertySet.class, xCellRange );
+        com.sun.star.beans.XPropertySet.class, xCellRange );
 
         // Set number format to default currency
         xCellProp.setPropertyValue( "NumberFormat", new Integer(nCurrencyKey) );
@@ -123,9 +120,8 @@ public class Number_Formats
         com.sun.star.table.XCell xCell = maSheet.getCellByPosition( 1, 2 );
 
         // Query the property set of the cell
-        xCellProp = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface(
-            com.sun.star.beans.XPropertySet.class, xCell );
+        xCellProp = UnoRuntime.queryInterface(
+        com.sun.star.beans.XPropertySet.class, xCell );
 
         // Get the number format index key of the cell's properties
         int nIndexKey = ((Integer) xCellProp.getPropertyValue( "NumberFormat" )).intValue();
@@ -168,19 +164,16 @@ public class Number_Formats
         // Set column containing the example values to optimal width to show
         // the new format of cell B3
         com.sun.star.table.XColumnRowRange xColRowRange =
-            (com.sun.star.table.XColumnRowRange)
             UnoRuntime.queryInterface(com.sun.star.table.XColumnRowRange.class,
-                                      maSheet);
+                                  maSheet);
 
         com.sun.star.container.XIndexAccess xIndexAccess =
-            (com.sun.star.container.XIndexAccess)
             UnoRuntime.queryInterface(com.sun.star.container.XIndexAccess.class,
-                                      xColRowRange.getColumns());
+                                  xColRowRange.getColumns());
 
         com.sun.star.beans.XPropertySet xColPropSet =
-            (com.sun.star.beans.XPropertySet)
             UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class,
-                                      xIndexAccess.getByIndex(1));
+                                  xIndexAccess.getByIndex(1));
 
         xColPropSet.setPropertyValue( "OptimalWidth", new Boolean(true) );
     }
@@ -196,11 +189,11 @@ public class Number_Formats
         maServiceManager = maOfficeContext.getServiceManager();
 
         // create a new spreadsheet document
-        XComponentLoader aLoader = (XComponentLoader) UnoRuntime.queryInterface(
+        XComponentLoader aLoader = UnoRuntime.queryInterface(
             XComponentLoader.class, maServiceManager.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", maOfficeContext) );
 
-        maSpreadsheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
+        maSpreadsheetDoc = UnoRuntime.queryInterface(
             XSpreadsheetDocument.class,
             aLoader.loadComponentFromURL( "private:factory/scalc",
                                           "_blank",
@@ -231,14 +224,14 @@ public class Number_Formats
         XSpreadsheets aSheets = maSpreadsheetDoc.getSheets();
         try
         {
-            XIndexAccess aSheetsIA = (XIndexAccess) UnoRuntime.queryInterface( XIndexAccess.class, aSheets );
-            maSheet = (XSpreadsheet) UnoRuntime.queryInterface(XSpreadsheet.class, aSheetsIA.getByIndex( 0 ));
+            XIndexAccess aSheetsIA = UnoRuntime.queryInterface( XIndexAccess.class, aSheets );
+            maSheet = UnoRuntime.queryInterface(XSpreadsheet.class, aSheetsIA.getByIndex( 0 ));
 
             // enter some values in B3:B11
             for( int iCounter=1; iCounter < 10; iCounter++ )
             {
                 XCell aCell = maSheet.getCellByPosition( 1, 1 + iCounter );
-                aCell.setValue( (double) iCounter );
+                aCell.setValue( iCounter );
             }
         }
         catch( Exception ex )

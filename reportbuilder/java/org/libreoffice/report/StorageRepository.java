@@ -91,7 +91,7 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         try
         {
-            final XStream xStream = (XStream) UnoRuntime.queryInterface(XStream.class, input.openStreamElement(name, ElementModes.READ));
+            final XStream xStream = UnoRuntime.queryInterface(XStream.class, input.openStreamElement(name, ElementModes.READ));
             return new BufferedInputStream(new XInputStreamToInputStreamAdapter(xStream.getInputStream()), 102400);
         }
         catch (com.sun.star.uno.Exception e)
@@ -121,7 +121,7 @@ public class StorageRepository implements InputRepository, OutputRepository
             stream.getInputStream().closeInput();
             if (mimeType != null)
             {
-                final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, stream);
+                final XPropertySet prop = UnoRuntime.queryInterface(XPropertySet.class, stream);
                 prop.setPropertyValue("MediaType", mimeType);
             }
             return new BufferedOutputStream(new XOutputStreamToOutputStreamAdapter(stream.getOutputStream()), 204800);
@@ -201,7 +201,7 @@ public class StorageRepository implements InputRepository, OutputRepository
             {
                 throw new IOException();
             }
-            final XStorage storage = (XStorage) UnoRuntime.queryInterface(XStorage.class, input.openStorageElement(temp, ElementModes.READ));
+            final XStorage storage = UnoRuntime.queryInterface(XStorage.class, input.openStorageElement(temp, ElementModes.READ));
             return new StorageRepository(storage, false, rootURL);
         }
         catch (NoSuchElementException ex)
@@ -246,10 +246,10 @@ public class StorageRepository implements InputRepository, OutputRepository
         try
         {
             final String temp = shortenName(name);
-            final XStorage storage = (XStorage) UnoRuntime.queryInterface(XStorage.class, output.openStorageElement(temp, ElementModes.WRITE));
+            final XStorage storage = UnoRuntime.queryInterface(XStorage.class, output.openStorageElement(temp, ElementModes.WRITE));
             if (mimeType != null)
             {
-                final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, storage);
+                final XPropertySet prop = UnoRuntime.queryInterface(XPropertySet.class, storage);
                 prop.setPropertyValue("MediaType", mimeType);
             }
             return new StorageRepository(storage, true, rootURL);
@@ -296,7 +296,7 @@ public class StorageRepository implements InputRepository, OutputRepository
         {
             try
             {
-                final XTransactedObject obj = (XTransactedObject) UnoRuntime.queryInterface(XTransactedObject.class, output);
+                final XTransactedObject obj = UnoRuntime.queryInterface(XTransactedObject.class, output);
                 if (obj != null)
                 {
                     obj.commit();

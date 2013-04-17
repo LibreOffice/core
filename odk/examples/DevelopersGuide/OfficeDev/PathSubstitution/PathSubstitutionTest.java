@@ -66,7 +66,7 @@ public class PathSubstitutionTest extends java.lang.Object {
 
             Object pathSubst = xRemoteServiceManager.createInstanceWithContext(
                 "com.sun.star.comp.framework.PathSubstitution", xRemoteContext );
-            xPathSubstService = (XStringSubstitution)UnoRuntime.queryInterface(
+            xPathSubstService = UnoRuntime.queryInterface(
                 XStringSubstitution.class, pathSubst);
 
             /* Work with path variables */

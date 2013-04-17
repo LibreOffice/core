@@ -84,8 +84,7 @@ public class GluePointDemo
 
 
             XDrawPage xPage = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
-            XShapes xShapes = (XShapes)
-                    UnoRuntime.queryInterface( XShapes.class, xPage );
+            XShapes xShapes = UnoRuntime.queryInterface( XShapes.class, xPage );
 
             // create two rectangles
             XShape xShape1 = ShapeHelper.createShape( xDrawDoc,
@@ -106,8 +105,7 @@ public class GluePointDemo
             xShapes.add( xShape2 );
             xShapes.add( xConnector );
 
-            XPropertySet xConnectorPropSet = (XPropertySet)
-                UnoRuntime.queryInterface( XPropertySet.class, xConnector );
+            XPropertySet xConnectorPropSet = UnoRuntime.queryInterface( XPropertySet.class, xConnector );
 
 //          Index value of 0 : the shape is connected at the top
 //          Index value of 1 : the shape is connected at the left
@@ -140,21 +138,17 @@ public class GluePointDemo
             aGluePoint.Position.Y = 0;
 
             // create and insert a glue point at shape1
-            xGluePointsSupplier = (XGluePointsSupplier)
-                UnoRuntime.queryInterface( XGluePointsSupplier.class, xShape1 );
+            xGluePointsSupplier = UnoRuntime.queryInterface( XGluePointsSupplier.class, xShape1 );
             xIndexContainer = xGluePointsSupplier.getGluePoints();
-            xIdentifierContainer = (XIdentifierContainer)
-                UnoRuntime.queryInterface( XIdentifierContainer.class,
-                                           xIndexContainer );
+            xIdentifierContainer = UnoRuntime.queryInterface( XIdentifierContainer.class,
+                    xIndexContainer );
             int nIndexOfGluePoint1 = xIdentifierContainer.insert( aGluePoint );
 
             // create and insert a glue point at shape2
-            xGluePointsSupplier = (XGluePointsSupplier)
-                UnoRuntime.queryInterface( XGluePointsSupplier.class, xShape2 );
+            xGluePointsSupplier = UnoRuntime.queryInterface( XGluePointsSupplier.class, xShape2 );
             xIndexContainer = xGluePointsSupplier.getGluePoints();
-            xIdentifierContainer = (XIdentifierContainer)
-                UnoRuntime.queryInterface( XIdentifierContainer.class,
-                                           xIndexContainer );
+            xIdentifierContainer = UnoRuntime.queryInterface( XIdentifierContainer.class,
+                    xIndexContainer );
             int nIndexOfGluePoint2 = xIdentifierContainer.insert( aGluePoint );
 
             // create and add a connector
@@ -164,8 +158,7 @@ public class GluePointDemo
                         "com.sun.star.drawing.ConnectorShape" );
             xShapes.add( xConnector2 );
 
-            XPropertySet xConnector2PropSet = (XPropertySet)
-                UnoRuntime.queryInterface( XPropertySet.class, xConnector2 );
+            XPropertySet xConnector2PropSet = UnoRuntime.queryInterface( XPropertySet.class, xConnector2 );
 
             xConnector2PropSet.setPropertyValue( "StartShape", xShape1 );
             xConnector2PropSet.setPropertyValue( "StartGluePointIndex",

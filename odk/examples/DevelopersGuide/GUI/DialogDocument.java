@@ -68,7 +68,7 @@ public class DialogDocument extends UnoDialogSample {
                     new Object[] { new Integer(400), Boolean.TRUE, "Dialog1", new Integer(102),new Integer(41), new Integer(1), new Short((short) 0), "Document-Dialog", new Integer(300)});
             oDialogDocument.createWindowPeer();
             Object oFTHeaderModel = oDialogDocument.m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
-            XMultiPropertySet xFTHeaderModelMPSet = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
+            XMultiPropertySet xFTHeaderModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
             xFTHeaderModelMPSet.setPropertyValues(
                     new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Width"},
                     new Object[] { new Integer(8), "This code-sample demonstrates how to display an office document in a dialog window", "HeaderLabel", new Integer(6), new Integer(6), new Integer(300)});
@@ -96,7 +96,7 @@ public class DialogDocument extends UnoDialogSample {
         try {
             // The Toolkit is the creator of all windows...
             Object oToolkit = m_xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", m_xContext);
-            XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(XToolkit.class, oToolkit);
+            XToolkit xToolkit = UnoRuntime.queryInterface(XToolkit.class, oToolkit);
 
             // set up a window description and create the window. A parent window is always necessary for this...
             com.sun.star.awt.WindowDescriptor aWindowDescriptor = new com.sun.star.awt.WindowDescriptor();
@@ -112,17 +112,17 @@ public class DialogDocument extends UnoDialogSample {
             // The attribute CLIPCHILDREN causes the parent to not repaint the areas of the children...
             aWindowDescriptor.WindowAttributes = VclWindowPeerAttribute.CLIPCHILDREN + WindowAttribute.BORDER + WindowAttribute.SHOW;
             XWindowPeer xWindowPeer = xToolkit.createWindow(aWindowDescriptor);
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xWindowPeer);
-            XView xView = (XView) UnoRuntime.queryInterface(XView.class, xWindow);
+            XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, xWindowPeer);
+            XView xView = UnoRuntime.queryInterface(XView.class, xWindow);
 
             // create a frame and initialize it with the created window...
             Object oFrame = m_xMCF.createInstanceWithContext("com.sun.star.frame.Frame", m_xContext);
             // The frame should be of global scope because it's within the responsibility to dispose it after usage
-            m_xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, oFrame);
+            m_xFrame = UnoRuntime.queryInterface(XFrame.class, oFrame);
             m_xFrame.initialize(xWindow);
 
             // load the document and open it in preview mode
-            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, m_xFrame);
+            XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, m_xFrame);
             PropertyValue[] aPropertyValues = new PropertyValue[2];
             PropertyValue aPropertyValue = new PropertyValue();
             aPropertyValue.Name = "Preview";

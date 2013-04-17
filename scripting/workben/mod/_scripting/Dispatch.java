@@ -58,15 +58,14 @@ public class Dispatch extends TestCase {
             SOF = SOfficeFactory.getFactory( xMSF );
             String docPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
             XComponent doc = SOF.loadDocument( docPath );
-            XModel model = ( XModel ) UnoRuntime.queryInterface( XModel.class,
+            XModel model = UnoRuntime.queryInterface( XModel.class,
                 doc );
             XFrame frame = model.getCurrentController().getFrame();
             oObj = ( XInterface )xMSF.createInstanceWithArguments( "com.sun.star.comp.ScriptProtocolHandler", new Object[] { frame } );
 
-            XURLTransformer xParser=(XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-                    ((XMultiServiceFactory)tParam.getMSF()).createInstance
-                        ("com.sun.star.util.URLTransformer"));
+            XURLTransformer xParser=UnoRuntime.queryInterface(XURLTransformer.class,
+                ((XMultiServiceFactory)tParam.getMSF()).createInstance
+                    ("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of
             // URL objects.
             URL[] aParseURL = new URL[1];

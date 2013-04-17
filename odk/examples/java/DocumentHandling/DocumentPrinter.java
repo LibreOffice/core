@@ -61,9 +61,8 @@ public class DocumentPrinter {
                 "com.sun.star.frame.Desktop", xContext);
 
             com.sun.star.frame.XComponentLoader xCompLoader =
-                (com.sun.star.frame.XComponentLoader)
-                     UnoRuntime.queryInterface(
-                         com.sun.star.frame.XComponentLoader.class, oDesktop);
+                UnoRuntime.queryInterface(
+                 com.sun.star.frame.XComponentLoader.class, oDesktop);
 
             java.io.File sourceFile = new java.io.File(args[1]);
             StringBuffer sUrl = new StringBuffer("file:///");
@@ -76,8 +75,8 @@ public class DocumentPrinter {
 
             // Querying for the interface XPrintable on the loaded document
             com.sun.star.view.XPrintable xPrintable =
-                (com.sun.star.view.XPrintable)UnoRuntime.queryInterface(
-                    com.sun.star.view.XPrintable.class, xComp);
+                UnoRuntime.queryInterface(
+                com.sun.star.view.XPrintable.class, xComp);
 
             // Setting the property "Name" for the favoured printer (name of
             // IP address)

@@ -46,7 +46,7 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
                                     new Object[] { new Integer(140), Boolean.TRUE, "Dialog1", new Integer(102),new Integer(41), new Integer(1), new Short((short) 0), "Menu-Dialog", new Integer(200)});
 
         Object oFTHeaderModel = oUnoMenu2.m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
-        XMultiPropertySet xFTHeaderModelMPSet = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
+        XMultiPropertySet xFTHeaderModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
         xFTHeaderModelMPSet.setPropertyValues(
             new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Width"},
             new Object[] { new Integer(8), "This code-sample demonstrates the creation of a popup-menu", "HeaderLabel", new Integer(6), new Integer(6), new Integer(200)});
@@ -72,14 +72,14 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
     try{
         String sName = "lblPopup";
         Object oFTModel = m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
-        XMultiPropertySet xFTModelMPSet = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, oFTModel);
+        XMultiPropertySet xFTModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTModel);
         // Set the properties at the model - keep in mind to pass the property names in alphabetical order!
         xFTModelMPSet.setPropertyValues(
             new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Width"},
             new Object[] { new Integer(8), "Right-click here", sName, new Integer(50), new Integer(50), new Integer(100)});
         // add the model to the NameContainer of the dialog model
         m_xDlgModelNameContainer.insertByName(sName, oFTModel);
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, m_xDlgContainer.getControl(sName));
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, m_xDlgContainer.getControl(sName));
         xWindow.addMouseListener(this);
     }catch( Exception e ) {
         System.err.println( e + e.getMessage());
@@ -96,7 +96,7 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
     public void mousePressed(MouseEvent mouseEvent) {
         if (mouseEvent.PopupTrigger){
             Rectangle aRectangle = new Rectangle(mouseEvent.X, mouseEvent.Y, 0, 0);
-            XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, mouseEvent.Source);
+            XControl xControl = UnoRuntime.queryInterface(XControl.class, mouseEvent.Source);
             getPopupMenu().execute( xControl.getPeer(), aRectangle, com.sun.star.awt.PopupMenuDirection.DEFAULT);
         }
     }

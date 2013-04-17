@@ -203,7 +203,7 @@ public class FilterOptions
     private void impl_openStreams( boolean bImport )
     {
         try{
-            com.sun.star.ucb.XSimpleFileAccess xHelper = (com.sun.star.ucb.XSimpleFileAccess)UnoRuntime.queryInterface(
+            com.sun.star.ucb.XSimpleFileAccess xHelper = UnoRuntime.queryInterface(
                 com.sun.star.ucb.XSimpleFileAccess.class,
                 m_xMCF.createInstanceWithContext("com.sun.star.ucb.SimpleFileAccess", m_Ctx));
             if (xHelper!=null)

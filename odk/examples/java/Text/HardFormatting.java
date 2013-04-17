@@ -69,8 +69,7 @@ public class HardFormatting {
             // you travel only at the model, not at the view. The cursor that you can
             // see on the document doesn't change the position
             com.sun.star.text.XTextCursor xTextCursor = null;
-            xTextCursor = (com.sun.star.text.XTextCursor)
-                xTextDocument.getText().createTextCursor();
+            xTextCursor = xTextDocument.getText().createTextCursor();
 
             xText.insertString( xTextCursor, "Headline", false );
             xText.insertControlCharacter(xTextCursor,
@@ -84,15 +83,13 @@ public class HardFormatting {
             // BEGIN: 'Hard formating'
             // the text range not the cursor contains the 'parastyle' property
             xTextRange = xText.getEnd();
-            xPropertySet = (com.sun.star.beans.XPropertySet)
-                UnoRuntime.queryInterface(
-                    com.sun.star.beans.XPropertySet.class, xTextRange);
+            xPropertySet = UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertySet.class, xTextRange);
 
             // create a paragraph cursor to travel throught the paragraphs
             com.sun.star.text.XParagraphCursor xParagraphCursor = null;
-            xParagraphCursor = (com.sun.star.text.XParagraphCursor)
-                UnoRuntime.queryInterface(
-                    com.sun.star.text.XParagraphCursor.class, xTextRange);
+            xParagraphCursor = UnoRuntime.queryInterface(
+                com.sun.star.text.XParagraphCursor.class, xTextRange);
 
             xParagraphCursor.gotoStart( false );
             xParagraphCursor.gotoEndOfParagraph( true );
@@ -100,13 +97,12 @@ public class HardFormatting {
 
             // create a WordCursor to travel into the paragraph
             com.sun.star.text.XWordCursor xWordCursor = null;
-            xWordCursor = (com.sun.star.text.XWordCursor) UnoRuntime.queryInterface(
+            xWordCursor = UnoRuntime.queryInterface(
                 com.sun.star.text.XWordCursor.class, xTextRange);
 
             // the PropertySet from the cursor contains the text attributes
-            xPropertySet = (com.sun.star.beans.XPropertySet)
-                UnoRuntime.queryInterface(
-                    com.sun.star.beans.XPropertySet.class, xWordCursor);
+            xPropertySet = UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertySet.class, xWordCursor);
             System.out.println(
                 "Parastyle : "
                 +xPropertySet.getPropertyValue("ParaStyleName").toString()
@@ -119,9 +115,8 @@ public class HardFormatting {
             xWordCursor.gotoNextWord(false);
             xWordCursor.gotoEndOfWord(true);
 
-            xPropertySet = (com.sun.star.beans.XPropertySet)
-                UnoRuntime.queryInterface(
-                    com.sun.star.beans.XPropertySet.class, xWordCursor);
+            xPropertySet = UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertySet.class, xWordCursor);
             xPropertySet.setPropertyValue("CharWeight",
                                           new Float(com.sun.star.awt.FontWeight.BOLD));
             xPropertySet.setPropertyValue("CharColor", new Integer( 255 ) );
@@ -137,9 +132,8 @@ public class HardFormatting {
             // the PropertyState contains information where the attribute is set,
             // is a text part hard formated or not.
             com.sun.star.beans.XPropertyState xPropertyState = null;
-            xPropertyState = (com.sun.star.beans.XPropertyState)
-                UnoRuntime.queryInterface(
-                    com.sun.star.beans.XPropertyState.class, xWordCursor);
+            xPropertyState = UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertyState.class, xWordCursor);
 
             com.sun.star.beans.PropertyState xPropertyStateValue =
                 xPropertyState.getPropertyState("CharWeight");
@@ -221,7 +215,7 @@ public class HardFormatting {
 
                 Object oDesktop = xMCF.createInstanceWithContext(
                     "com.sun.star.frame.Desktop", xContext);
-                xDesktop = (com.sun.star.frame.XDesktop) UnoRuntime.queryInterface(
+                xDesktop = UnoRuntime.queryInterface(
                     com.sun.star.frame.XDesktop.class, oDesktop);
             }
             else
@@ -244,9 +238,8 @@ public class HardFormatting {
         try {
             com.sun.star.lang.XComponent xComponent = CreateNewDocument(xDesktop,
                                                                         "swriter");
-            aTextDocument = (com.sun.star.text.XTextDocument)
-                UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextDocument.class, xComponent);
+            aTextDocument = UnoRuntime.queryInterface(
+                com.sun.star.text.XTextDocument.class, xComponent);
         }
         catch( Exception e) {
             e.printStackTrace(System.err);
@@ -270,9 +263,8 @@ public class HardFormatting {
             new com.sun.star.beans.PropertyValue[0];
 
         try {
-            xComponentLoader = (com.sun.star.frame.XComponentLoader)
-                UnoRuntime.queryInterface(
-                    com.sun.star.frame.XComponentLoader.class, xDesktop);
+            xComponentLoader = UnoRuntime.queryInterface(
+                com.sun.star.frame.XComponentLoader.class, xDesktop);
 
             xComponent  = xComponentLoader.loadComponentFromURL(
                 sURL, "_blank", 0, xEmptyArgs);

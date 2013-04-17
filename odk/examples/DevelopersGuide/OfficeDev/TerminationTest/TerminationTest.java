@@ -58,7 +58,7 @@ public class TerminationTest extends java.lang.Object {
 
             Object desktop = xRemoteServiceManager.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xRemoteContext);
-            xDesktop = (XDesktop)UnoRuntime.queryInterface(XDesktop.class, desktop);
+            xDesktop = UnoRuntime.queryInterface(XDesktop.class, desktop);
 
             TerminateListener terminateListener = new TerminateListener();
             xDesktop.addTerminateListener(terminateListener);

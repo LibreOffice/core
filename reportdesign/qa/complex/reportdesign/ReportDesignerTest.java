@@ -115,7 +115,7 @@ class PropertyHelper
                     aSaveProperties = new PropertyValue[_aPropertyList.size()];
                     for (int i = 0;i<_aPropertyList.size(); i++)
                     {
-                        aSaveProperties[i] = (PropertyValue) _aPropertyList.get(i);
+                        aSaveProperties[i] = _aPropertyList.get(i);
                     }
                 }
                 else

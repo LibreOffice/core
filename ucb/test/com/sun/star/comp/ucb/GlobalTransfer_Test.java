@@ -82,8 +82,8 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
         }
 
         XCommandProcessor xCmdProc
-            = (XCommandProcessor)UnoRuntime.queryInterface(
-                                               XCommandProcessor.class, oObj );
+            = UnoRuntime.queryInterface(
+                                           XCommandProcessor.class, oObj );
         assure( "UCB does not implement mandatory interface XCommandProcessor!",
                 xCmdProc != null);
 
@@ -180,10 +180,9 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
                     }
 */
                     XInteractionSupplyName xSupplyName
-                        = (XInteractionSupplyName)
-                            UnoRuntime.queryInterface(
-                                XInteractionSupplyName.class,
-                                continuations[ i ] );
+                        = UnoRuntime.queryInterface(
+                        XInteractionSupplyName.class,
+                        continuations[ i ] );
                     if ( xSupplyName != null ) {
                         String newname = "renamed_" + req.ClashingName;
                         log.println( "Interaction Handler selects: NEW NAME: "

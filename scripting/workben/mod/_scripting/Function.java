@@ -53,11 +53,11 @@ public class Function extends TestCase {
             SOF = SOfficeFactory.getFactory( xMSF );
             String docPath = util.utils.getFullTestURL(doc);
             XComponent doc = SOF.loadDocument( docPath );
-            XModel model = ( XModel ) UnoRuntime.queryInterface( XModel.class,
+            XModel model = UnoRuntime.queryInterface( XModel.class,
                 doc );
             oObj  =
                 (XInterface)xMSF.createInstanceWithArguments( "drafts.com.sun.star.script.framework.provider.FunctionProvider", new Object[]{ model } );
-            provider = ( XFunctionProvider )UnoRuntime.queryInterface( XFunctionProvider.class, oObj );
+            provider = UnoRuntime.queryInterface( XFunctionProvider.class, oObj );
             oObj = provider.getFunction( script );
 
         } catch (com.sun.star.uno.Exception e) {

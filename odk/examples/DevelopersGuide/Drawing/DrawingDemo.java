@@ -166,7 +166,7 @@ public class DrawingDemo
                 PageHelper.getDrawPageCount( xDrawDoc ) - 1 );
 
             // each drawpage is supporting an XNamed interface
-            XNamed xNamed = (XNamed)UnoRuntime.queryInterface(
+            XNamed xNamed = UnoRuntime.queryInterface(
                 XNamed.class, xLastPage );
 
             // beware, the page must have an unique name
@@ -249,8 +249,7 @@ public class DrawingDemo
                 int nRndObjPosY = aRndGen.nextInt( nHalfHeight - nRndObjHeight )
                     + nHalfHeight;
 
-                XShapes xShapes = (XShapes)
-                    UnoRuntime.queryInterface( XShapes.class, pPages[ i ] );
+                XShapes xShapes = UnoRuntime.queryInterface( XShapes.class, pPages[ i ] );
                 ShapeHelper.createAndInsertShape( xDrawDoc, xShapes,
                     new Point( nRndObjPosX, nRndObjPosY ),
                         new Size( nRndObjWidth, nRndObjHeight ),
@@ -283,16 +282,13 @@ public class DrawingDemo
                 xDrawPage = PageHelper.getMasterPageByIndex( xDrawDoc, 0 );
             else
                 xDrawPage = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
-            XShapes xShapes = (XShapes)
-                UnoRuntime.queryInterface( XShapes.class, xDrawPage );
+            XShapes xShapes = UnoRuntime.queryInterface( XShapes.class, xDrawPage );
             xShapes.add( xPolyPolygonBezier );
 
-            XPropertySet xShapeProperties = (XPropertySet)
-                UnoRuntime.queryInterface( XPropertySet.class, xPolyPolygonBezier );
+            XPropertySet xShapeProperties = UnoRuntime.queryInterface( XPropertySet.class, xPolyPolygonBezier );
 
             // get pagesize
-            XPropertySet xPageProperties = (XPropertySet)
-                UnoRuntime.queryInterface( XPropertySet.class, xDrawPage );
+            XPropertySet xPageProperties = UnoRuntime.queryInterface( XPropertySet.class, xDrawPage );
             int nPageWidth = ((Integer)xPageProperties.getPropertyValue( "Width" )).intValue() / 2;
             int nPageHeight = ((Integer)xPageProperties.getPropertyValue( "Height" )).intValue() / 2;
 
@@ -369,12 +365,10 @@ public class DrawingDemo
             // before it is possible to insert shapes,
             // the group must have been added to the page
             XDrawPage xDrawPage = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
-            XShapes xShapes = (XShapes)
-                UnoRuntime.queryInterface( XShapes.class, xDrawPage );
+            XShapes xShapes = UnoRuntime.queryInterface( XShapes.class, xDrawPage );
             xShapes.add( xGroup );
 
-            XShapes xShapesGroup = (XShapes)
-                UnoRuntime.queryInterface( XShapes.class, xGroup );
+            XShapes xShapesGroup = UnoRuntime.queryInterface( XShapes.class, xGroup );
 
             Size aPageSize = PageHelper.getPageSize( xDrawPage );
 
@@ -408,11 +402,9 @@ public class DrawingDemo
         try
         {
             XDrawPage xDrawPage = PageHelper.getDrawPageByIndex( xDrawDoc, 0 );
-            XShapeGrouper xShapeGrouper = (XShapeGrouper)
-                UnoRuntime.queryInterface( XShapeGrouper.class, xDrawPage );
+            XShapeGrouper xShapeGrouper = UnoRuntime.queryInterface( XShapeGrouper.class, xDrawPage );
 
-            XShapes xShapesPage = (XShapes)
-                UnoRuntime.queryInterface( XShapes.class, xDrawPage );
+            XShapes xShapesPage = UnoRuntime.queryInterface( XShapes.class, xDrawPage );
 
             xShapeGrouper.group( xShapesPage );
         }

@@ -768,8 +768,8 @@ public class RDFRepositoryTest
     static boolean eq(XQuerySelectResult i_Result,
             String[] i_Vars, XNode[][] i_Bindings) throws Exception
     {
-        String[] vars = (String[]) i_Result.getBindingNames();
-        XEnumeration iter = (XEnumeration) i_Result;
+        String[] vars = i_Result.getBindingNames();
+        XEnumeration iter = i_Result;
         XNode[][] bindings = toSeqs(iter);
         if (bindings.length != i_Bindings.length) {
             System.out.println("binding lengths differ: " + i_Bindings.length +

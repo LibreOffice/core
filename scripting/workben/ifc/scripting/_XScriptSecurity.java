@@ -203,8 +203,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         Object oProv = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
             "com.sun.star.configuration.ConfigurationProvider" );
 
-        XMultiServiceFactory xProv = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
+        XMultiServiceFactory xProv = UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
 
         //the path to the security settings in the registry
         PropertyValue aPathArg = new PropertyValue();
@@ -221,7 +220,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         Object oConfigUpdate = xProv.createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess",
             aArgs );
-        XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
+        XPropertySet xPropertySet = UnoRuntime.queryInterface(
                 XPropertySet.class, oConfigUpdate );
 
         String[] paths = (String[])xPropertySet.getPropertyValue("SecureURL");
@@ -245,8 +244,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         Object oProv = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
             "com.sun.star.configuration.ConfigurationProvider" );
 
-        XMultiServiceFactory xProv = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
+        XMultiServiceFactory xProv = UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
 
         //the path to the security settings in the registry
         PropertyValue aPathArg = new PropertyValue();
@@ -263,9 +261,9 @@ public class _XScriptSecurity extends MultiMethodTest {
         Object oConfigUpdate = xProv.createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationUpdateAccess",
             aArgs );
-        XNameReplace xNameReplace = (XNameReplace)UnoRuntime.queryInterface(
+        XNameReplace xNameReplace = UnoRuntime.queryInterface(
                 XNameReplace.class, oConfigUpdate );
-        XChangesBatch xChangesBatch = (XChangesBatch)UnoRuntime.queryInterface(
+        XChangesBatch xChangesBatch = UnoRuntime.queryInterface(
                 XChangesBatch.class, oConfigUpdate );
 
         Object[] aSecureURLs;
@@ -323,19 +321,17 @@ public class _XScriptSecurity extends MultiMethodTest {
 
         if (storageManager == null) {
             try {
-                XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet xProp = UnoRuntime.queryInterface(
                     XPropertySet.class, tParam.getMSF());
 
-                XComponentContext xContext = (XComponentContext)
-                    UnoRuntime.queryInterface(XComponentContext.class,
-                    xProp.getPropertyValue("DefaultContext"));
+                XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class,
+                xProp.getPropertyValue("DefaultContext"));
 
                 XInterface ifc = (XInterface)
                     xContext.getValueByName("/singletons/drafts.com.sun.star." +
                     "script.framework.storage.theScriptStorageManager");
 
-                storageManager = (XScriptStorageManager)
-                    UnoRuntime.queryInterface(XScriptStorageManager.class, ifc);
+                storageManager = UnoRuntime.queryInterface(XScriptStorageManager.class, ifc);
             }
             catch( Exception e ) {
                 return -1;
@@ -358,8 +354,7 @@ public class _XScriptSecurity extends MultiMethodTest {
             Object fa = ((XMultiServiceFactory)tParam.getMSF()).createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
-            access = (XSimpleFileAccess)
-                UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
+            access = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
         }
         catch (com.sun.star.uno.Exception e) {
             return null;
@@ -375,7 +370,7 @@ public class _XScriptSecurity extends MultiMethodTest {
 
         try {
             Object obj = factory.loadDocument(fullname);
-            model = (XModel) UnoRuntime.queryInterface(XModel.class, obj);
+            model = UnoRuntime.queryInterface(XModel.class, obj);
         }
         catch (com.sun.star.lang.IllegalArgumentException iae) {
             return null;

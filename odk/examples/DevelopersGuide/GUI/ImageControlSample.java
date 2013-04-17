@@ -71,7 +71,7 @@ public class ImageControlSample extends UnoDialogSample{
             oImageControlSample.initialize( new String[] {"Height", "Moveable", "Name","PositionX","PositionY", "Step", "TabIndex","Title","Width"},
                     new Object[] { new Integer(100), Boolean.TRUE, "MyTestDialog", new Integer(102),new Integer(41), new Integer(0), new Short((short) 0), "OpenOffice", new Integer(230)});
             Object oFTHeaderModel = oImageControlSample.m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
-            XMultiPropertySet xFTHeaderModelMPSet = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
+            XMultiPropertySet xFTHeaderModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oFTHeaderModel);
             xFTHeaderModelMPSet.setPropertyValues(
                     new String[] {"Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Width"},
                     new Object[] { new Integer(16), "This code-sample demonstrates how to create an ImageControlSample within a dialog", Boolean.TRUE, "HeaderLabel", new Integer(6), new Integer(6), new Integer(210)});
@@ -84,7 +84,7 @@ public class ImageControlSample extends UnoDialogSample{
             // may not be set before the peer of the dialog has been created.
             XGraphic xGraphic = oImageControlSample.getGraphic(oImageControlSample.m_xMCF, args[0]);
             xICModelPropertySet.setPropertyValue("Graphic", xGraphic);
-            oImageControlSample.xDialog = (XDialog) UnoRuntime.queryInterface(XDialog.class, oImageControlSample.m_xDialogControl);
+            oImageControlSample.xDialog = UnoRuntime.queryInterface(XDialog.class, oImageControlSample.m_xDialogControl);
             oImageControlSample.executeDialog();
         }catch( Exception e ) {
             System.err.println( e + e.getMessage());
@@ -110,8 +110,8 @@ public class ImageControlSample extends UnoDialogSample{
 
             // create a controlmodel at the multiservicefactory of the dialog model...
             Object oICModel = m_xMSFDialogModel.createInstance("com.sun.star.awt.UnoControlImageControlModel");
-            XMultiPropertySet xICModelMPSet = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, oICModel);
-            xICModelPropertySet =(XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oICModel);
+            XMultiPropertySet xICModelMPSet = UnoRuntime.queryInterface(XMultiPropertySet.class, oICModel);
+            xICModelPropertySet =UnoRuntime.queryInterface(XPropertySet.class, oICModel);
             // Set the properties at the model - keep in mind to pass the property names in alphabetical order!
             // The image is not scaled
             xICModelMPSet.setPropertyValues(
@@ -143,12 +143,12 @@ public class ImageControlSample extends UnoDialogSample{
         try{
             java.io.File oFile = new java.io.File(_sImageSystemPath);
             Object oFCProvider = _xMCF.createInstanceWithContext("com.sun.star.ucb.FileContentProvider", this.m_xContext);
-            XFileIdentifierConverter xFileIdentifierConverter = (XFileIdentifierConverter) UnoRuntime.queryInterface(XFileIdentifierConverter.class, oFCProvider);
+            XFileIdentifierConverter xFileIdentifierConverter = UnoRuntime.queryInterface(XFileIdentifierConverter.class, oFCProvider);
             String sImageUrl = xFileIdentifierConverter.getFileURLFromSystemPath(_sImageSystemPath, oFile.getAbsolutePath());
 
             // create a GraphicProvider at the global service manager...
             Object oGraphicProvider = m_xMCF.createInstanceWithContext("com.sun.star.graphic.GraphicProvider", m_xContext);
-            XGraphicProvider xGraphicProvider = (XGraphicProvider) UnoRuntime.queryInterface(XGraphicProvider.class, oGraphicProvider);
+            XGraphicProvider xGraphicProvider = UnoRuntime.queryInterface(XGraphicProvider.class, oGraphicProvider);
             // create the graphic object
             PropertyValue[] aPropertyValues = new PropertyValue[1];
             PropertyValue aPropertyValue = new PropertyValue();

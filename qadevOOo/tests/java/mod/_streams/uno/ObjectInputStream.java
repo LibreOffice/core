@@ -96,9 +96,8 @@ public class ObjectInputStream extends TestCase {
             try {
                 Object o = xMSF.createInstance(
                         "com.sun.star.registry.ImplementationRegistration");
-                xir = (XImplementationRegistration)
-                                    UnoRuntime.queryInterface(
-                                    XImplementationRegistration.class, o);
+                xir = UnoRuntime.queryInterface(
+                XImplementationRegistration.class, o);
 
             }
             catch (com.sun.star.uno.Exception e) {
@@ -189,7 +188,7 @@ public class ObjectInputStream extends TestCase {
                 ("com.sun.star.io.MarkableInputStream");
             mostream = xMSF.createInstance
                 ("com.sun.star.io.MarkableOutputStream");
-            xConnect = (XInterface)xMSF.createInstance
+            xConnect = xMSF.createInstance
                 ("com.sun.star.io.DataInputStream") ;
 
         } catch( com.sun.star.uno.Exception e ) {
@@ -199,35 +198,26 @@ public class ObjectInputStream extends TestCase {
         // Creating construction :
         // ObjectOutputStream -> MarkableOutputStream -> Pipe ->
         // -> MarkableInputStream -> ObjectInputStream
-        XActiveDataSource xdSo = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, ostream);
+        XActiveDataSource xdSo = UnoRuntime.queryInterface(XActiveDataSource.class, ostream);
 
-        XActiveDataSource xdSmo = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
+        XActiveDataSource xdSmo = UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
 
-        XOutputStream moStream = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class, mostream);
+        XOutputStream moStream = UnoRuntime.queryInterface(XOutputStream.class, mostream);
 
-        XOutputStream PipeOut = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class, aPipe);
-        XInputStream PipeIn = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class, aPipe);
+        XOutputStream PipeOut = UnoRuntime.queryInterface(XOutputStream.class, aPipe);
+        XInputStream PipeIn = UnoRuntime.queryInterface(XInputStream.class, aPipe);
 
         xdSo.setOutputStream(moStream);
         xdSmo.setOutputStream(PipeOut);
 
-        XObjectInputStream iStream = (XObjectInputStream)
-            UnoRuntime.queryInterface(XObjectInputStream.class, istream);
+        XObjectInputStream iStream = UnoRuntime.queryInterface(XObjectInputStream.class, istream);
         XObjectOutputStream oStream = null;
-        oStream = (XObjectOutputStream)
-            UnoRuntime.queryInterface(XObjectOutputStream.class, ostream);
+        oStream = UnoRuntime.queryInterface(XObjectOutputStream.class, ostream);
 
-        XActiveDataSink xmSi = (XActiveDataSink)
-            UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
-        XInputStream xmIstream = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class, mistream);
+        XActiveDataSink xmSi = UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
+        XInputStream xmIstream = UnoRuntime.queryInterface(XInputStream.class, mistream);
 
-        XActiveDataSink xdSi = (XActiveDataSink) UnoRuntime.queryInterface
+        XActiveDataSink xdSi = UnoRuntime.queryInterface
             (XActiveDataSink.class, istream);
         xdSi.setInputStream(xmIstream);
         xmSi.setInputStream(PipeIn);
@@ -237,8 +227,7 @@ public class ObjectInputStream extends TestCase {
         try {
             Object oPersObj = xMSF.createInstance
                 ("com.sun.star.cmp.PersistObject");
-            xPersObj = (XPersistObject)
-                UnoRuntime.queryInterface(XPersistObject.class, oPersObj);
+            xPersObj = UnoRuntime.queryInterface(XPersistObject.class, oPersObj);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Can't write persist object.", e);

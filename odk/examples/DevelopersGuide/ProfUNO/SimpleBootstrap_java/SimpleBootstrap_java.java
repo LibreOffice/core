@@ -57,8 +57,8 @@ public class SimpleBootstrap_java {
 
             // query the XComponentLoader interface from the desktop
             XComponentLoader xComponentLoader =
-                (XComponentLoader)UnoRuntime.queryInterface(
-                    XComponentLoader.class, desktop );
+                UnoRuntime.queryInterface(
+                XComponentLoader.class, desktop );
 
             // load a spreadsheet document
             String loadURL = "private:factory/scalc";

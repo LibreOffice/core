@@ -84,12 +84,10 @@ public class FillAndLineStyleDemo
                     new Size( 15000, 12000 ),
                         "com.sun.star.drawing.RectangleShape" );
 
-            XShapes xShapes = (XShapes)
-                    UnoRuntime.queryInterface( XShapes.class, xPage );
+            XShapes xShapes = UnoRuntime.queryInterface( XShapes.class, xPage );
             xShapes.add( xRectangle );
 
-            XPropertySet xPropSet = (XPropertySet)
-                UnoRuntime.queryInterface( XPropertySet.class, xRectangle );
+            XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, xRectangle );
 
             /* apply a gradient fill style that goes from top left to bottom
                right and is changing its color from green to yellow */

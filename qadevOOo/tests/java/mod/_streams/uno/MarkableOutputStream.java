@@ -109,18 +109,14 @@ public class MarkableOutputStream extends TestCase {
 
         // Creating construction :
         // MarkableOutputStream -> Pipe -> MarkableInputStream
-        XActiveDataSource xdSmo = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
+        XActiveDataSource xdSmo = UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
 
-        final XOutputStream PipeOut = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class,aPipe);
-        final XInputStream PipeIn = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class,aPipe);
+        final XOutputStream PipeOut = UnoRuntime.queryInterface(XOutputStream.class,aPipe);
+        final XInputStream PipeIn = UnoRuntime.queryInterface(XInputStream.class,aPipe);
 
         xdSmo.setOutputStream(PipeOut);
 
-        XActiveDataSink xmSi = (XActiveDataSink)
-            UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
+        XActiveDataSink xmSi = UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
 
         xmSi.setInputStream(PipeIn) ;
 
@@ -173,15 +169,14 @@ public class MarkableOutputStream extends TestCase {
                     try {
                         Object oInStream = msf.createInstance(
                             "com.sun.star.io.MarkableInputStream");
-                        xInStream = (XInputStream) UnoRuntime.queryInterface
+                        xInStream = UnoRuntime.queryInterface
                             (XInputStream.class, oInStream);
                     } catch(com.sun.star.uno.Exception e) {
                         return null;
                     }
 
-                    XActiveDataSink xDataSink = (XActiveDataSink)
-                        UnoRuntime.queryInterface(
-                            XActiveDataSink.class, xInStream);
+                    XActiveDataSink xDataSink = UnoRuntime.queryInterface(
+                        XActiveDataSink.class, xInStream);
                     xDataSink.setInputStream(PipeIn);
 
                     return xInStream;

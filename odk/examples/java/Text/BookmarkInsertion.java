@@ -84,14 +84,13 @@ public class BookmarkInsertion {
         try {
             for( iCounter = 0; iCounter < mList.length; iCounter++ ) {
                 // the findfirst returns a XInterface
-                xSearchInterface = (com.sun.star.uno.XInterface)FindFirst(
+                xSearchInterface = FindFirst(
                     xTextDocument, mList[ iCounter ] );
 
                 if( xSearchInterface != null ) {
                     // get the TextRange form the XInterface
-                    xSearchTextRange = (com.sun.star.text.XTextRange)
-                        UnoRuntime.queryInterface(
-                            com.sun.star.text.XTextRange.class, xSearchInterface);
+                    xSearchTextRange = UnoRuntime.queryInterface(
+                        com.sun.star.text.XTextRange.class, xSearchInterface);
 
                     InsertBookmark(xTextDocument, xSearchTextRange,
                                    sPrefix + iCounter);
@@ -112,9 +111,8 @@ public class BookmarkInsertion {
         try {
             // get the MultiServiceFactory from the text document
             com.sun.star.lang.XMultiServiceFactory xDocMSF;
-            xDocMSF = (com.sun.star.lang.XMultiServiceFactory)
-                UnoRuntime.queryInterface(
-                    com.sun.star.lang.XMultiServiceFactory.class, xTextDocument);
+            xDocMSF = UnoRuntime.queryInterface(
+                com.sun.star.lang.XMultiServiceFactory.class, xTextDocument);
 
             // the bookmark service is a context dependend service, you need
             // the MultiServiceFactory from the document
@@ -122,17 +120,15 @@ public class BookmarkInsertion {
 
             // set the name from the bookmark
             com.sun.star.container.XNamed xNameAccess = null;
-            xNameAccess = (com.sun.star.container.XNamed)
-                UnoRuntime.queryInterface(
-                    com.sun.star.container.XNamed.class, xObject);
+            xNameAccess = UnoRuntime.queryInterface(
+                com.sun.star.container.XNamed.class, xObject);
 
             xNameAccess.setName(sBookName);
 
             // create a XTextContent, for the method 'insertTextContent'
             com.sun.star.text.XTextContent xTextContent = null;
-            xTextContent = (com.sun.star.text.XTextContent)
-                UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextContent.class, xNameAccess);
+            xTextContent = UnoRuntime.queryInterface(
+                com.sun.star.text.XTextContent.class, xNameAccess);
 
             // insertTextContent need a TextRange not a cursor to specify the
             // position from the bookmark
@@ -153,18 +149,15 @@ public class BookmarkInsertion {
         com.sun.star.uno.XInterface xSearchInterface = null;
 
         try {
-            xSearchable = (com.sun.star.util.XSearchable)
-                UnoRuntime.queryInterface(
-                    com.sun.star.util.XSearchable.class, xTextDocument);
-            xSearchDescriptor = (com.sun.star.util.XSearchDescriptor)
-                xSearchable.createSearchDescriptor();
+            xSearchable = UnoRuntime.queryInterface(
+                com.sun.star.util.XSearchable.class, xTextDocument);
+            xSearchDescriptor = xSearchable.createSearchDescriptor();
 
             xSearchDescriptor.setSearchString(sSearchString);
 
             com.sun.star.beans.XPropertySet xPropertySet = null;
-            xPropertySet = (com.sun.star.beans.XPropertySet)
-                UnoRuntime.queryInterface(
-                    com.sun.star.beans.XPropertySet.class, xSearchDescriptor);
+            xPropertySet = UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertySet.class, xSearchDescriptor);
 
             xPropertySet.setPropertyValue("SearchRegularExpression",
                                           new Boolean( true ) );
@@ -185,8 +178,7 @@ public class BookmarkInsertion {
         com.sun.star.text.XTextCursor xTextCursor = null;
 
         try {
-            xTextCursor = (com.sun.star.text.XTextCursor)
-                xTextDocument.getText().createTextCursor();
+            xTextCursor = xTextDocument.getText().createTextCursor();
 
             xTextCursor.setString( "He heard quiet steps behind him. That didn't bode well. Who could be following him this late at night and in this deadbeat part of town? And at this particular moment, just after he pulled off the big time and was making off with the greenbacks. Was there another crook who'd had the same idea, and was now watching him and waiting for a chance to grab the fruit of his labor?" );
             xTextCursor.collapseToEnd();
@@ -219,7 +211,7 @@ public class BookmarkInsertion {
 
                 Object oDesktop = xMCF.createInstanceWithContext(
                     "com.sun.star.frame.Desktop", xContext);
-                xDesktop = (com.sun.star.frame.XDesktop) UnoRuntime.queryInterface(
+                xDesktop = UnoRuntime.queryInterface(
                     com.sun.star.frame.XDesktop.class, oDesktop);
             }
             else
@@ -242,9 +234,8 @@ public class BookmarkInsertion {
         try {
             com.sun.star.lang.XComponent xComponent = CreateNewDocument(xDesktop,
                                                                         "swriter");
-            aTextDocument = (com.sun.star.text.XTextDocument)
-                UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextDocument.class, xComponent);
+            aTextDocument = UnoRuntime.queryInterface(
+                com.sun.star.text.XTextDocument.class, xComponent);
         }
         catch( Exception e) {
             e.printStackTrace(System.err);
@@ -268,9 +259,8 @@ public class BookmarkInsertion {
             new com.sun.star.beans.PropertyValue[0];
 
         try {
-            xComponentLoader = (com.sun.star.frame.XComponentLoader)
-                UnoRuntime.queryInterface(
-                    com.sun.star.frame.XComponentLoader.class, xDesktop);
+            xComponentLoader = UnoRuntime.queryInterface(
+                com.sun.star.frame.XComponentLoader.class, xDesktop);
 
             xComponent  = xComponentLoader.loadComponentFromURL(
                 sURL, "_blank", 0, xEmptyArgs);

@@ -113,8 +113,7 @@ public class LinguisticExamples
         if (mxRemoteContext != null && mxRemoteServiceManager != null) {
             Object aObj = mxRemoteServiceManager.createInstanceWithContext(
                 "com.sun.star.linguistic2.LinguServiceManager", mxRemoteContext );
-            mxLinguSvcMgr = (XLinguServiceManager)
-                    UnoRuntime.queryInterface(XLinguServiceManager.class, aObj);
+            mxLinguSvcMgr = UnoRuntime.queryInterface(XLinguServiceManager.class, aObj);
         }
         return mxLinguSvcMgr != null;
     }
@@ -291,7 +290,7 @@ public class LinguisticExamples
         // get access to LinguProperties property set
         Object aObj = mxRemoteServiceManager.createInstanceWithContext(
             "com.sun.star.linguistic2.LinguProperties", mxRemoteContext);
-        XPropertySet aLinguProps = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet aLinguProps = UnoRuntime.queryInterface(
             XPropertySet.class,aObj);
 
         // set a spellchecker and hyphenator property value to a defined state

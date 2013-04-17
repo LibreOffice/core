@@ -57,7 +57,7 @@ public class StorageFunctionality  {
         try
         {
             Object oStorageFactory = xMSF.createInstance( "com.sun.star.embed.StorageFactory" );
-            xStorageFactory = (XSingleServiceFactory)UnoRuntime.queryInterface( XSingleServiceFactory.class,
+            xStorageFactory = UnoRuntime.queryInterface( XSingleServiceFactory.class,
                                                                                 oStorageFactory );
 
             if ( xStorageFactory == null )
@@ -76,15 +76,15 @@ public class StorageFunctionality  {
 
         final int nNumTests = 9;
         StorageTest pTests[] = new StorageTest[nNumTests];
-        pTests[0] = (StorageTest) new Test01( xMSF, xStorageFactory );
-        pTests[1] = (StorageTest) new Test02( xMSF, xStorageFactory );
-        pTests[2] = (StorageTest) new Test03( xMSF, xStorageFactory );
-        pTests[3] = (StorageTest) new Test04( xMSF, xStorageFactory );
-        pTests[4] = (StorageTest) new Test05( xMSF, xStorageFactory );
-        pTests[5] = (StorageTest) new Test06( xMSF, xStorageFactory );
-        pTests[6] = (StorageTest) new Test07( xMSF, xStorageFactory );
-        pTests[7] = (StorageTest) new Test08( xMSF, xStorageFactory );
-        pTests[8] = (StorageTest) new Test09( xMSF, xStorageFactory );
+        pTests[0] = new Test01( xMSF, xStorageFactory );
+        pTests[1] = new Test02( xMSF, xStorageFactory );
+        pTests[2] = new Test03( xMSF, xStorageFactory );
+        pTests[3] = new Test04( xMSF, xStorageFactory );
+        pTests[4] = new Test05( xMSF, xStorageFactory );
+        pTests[5] = new Test06( xMSF, xStorageFactory );
+        pTests[6] = new Test07( xMSF, xStorageFactory );
+        pTests[7] = new Test08( xMSF, xStorageFactory );
+        pTests[8] = new Test09( xMSF, xStorageFactory );
 
            System.out.println( "\nstart testing\n" );
 
@@ -130,11 +130,11 @@ public class StorageFunctionality  {
         // create a connector, so that it can contact the office
         Object  oUrlResolver  = xLocalServiceManager.createInstanceWithContext(
         "com.sun.star.bridge.UnoUrlResolver", xComponentContext );
-        XUnoUrlResolver xUrlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
+        XUnoUrlResolver xUrlResolver = UnoRuntime.queryInterface(
             XUnoUrlResolver.class, oUrlResolver );
 
         Object oInitialObject = xUrlResolver.resolve( sConnectStr );
-        XNamingService xName = (XNamingService)UnoRuntime.queryInterface(
+        XNamingService xName = UnoRuntime.queryInterface(
             XNamingService.class, oInitialObject );
 
         XMultiServiceFactory xMSF = null;
@@ -142,8 +142,7 @@ public class StorageFunctionality  {
             System.err.println( "got the remote naming service !" );
             Object oMSF = xName.getRegisteredObject("StarOffice.ServiceManager" );
 
-            xMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface( XMultiServiceFactory.class, oMSF );
+            xMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, oMSF );
         }
         else
             System.out.println( "Error: Can't get XNamingService interface from url resolver!" );

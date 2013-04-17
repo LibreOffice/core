@@ -86,7 +86,7 @@ public final class LocalOfficeImpl
             Object  object = null;
             object      = mComponentContext.getValueByName(STORAGE_MRG_SINGLETON);
             XScriptStorageManager storageMgr;
-            storageMgr  = (XScriptStorageManager)UnoRuntime.queryInterface(
+            storageMgr  = UnoRuntime.queryInterface(
                 XScriptStorageManager.class, object);
             storageMgr.refreshScriptStorage(uri);
         } catch (java.lang.Exception ex) {
@@ -128,13 +128,13 @@ System.out.println("*** LocalOfficeImpl.refreshStorage: DONE");
             "uno:socket,host=localhost,port=" +
             port +
             ";urp;StarOffice.ServiceManager");
-        mComponentFactory   = (XMultiComponentFactory)UnoRuntime.queryInterface(
+        mComponentFactory   = UnoRuntime.queryInterface(
             XMultiComponentFactory.class, object);
         XPropertySet    factoryProps;
-        factoryProps        = (XPropertySet)UnoRuntime.queryInterface(
+        factoryProps        = UnoRuntime.queryInterface(
             XPropertySet.class, mComponentFactory);
         object              = factoryProps.getPropertyValue("DefaultContext");
-        mComponentContext   = (XComponentContext)UnoRuntime.queryInterface(
+        mComponentContext   = UnoRuntime.queryInterface(
             XComponentContext.class, object);
     }
 }

@@ -208,10 +208,10 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 fillParameter(parameters, rowSet, paramDef);
                 rowSetCreated = rowSetCreated && (maxRows == null || maxRows == 0);
 
-                final XCompletedExecution execute = (XCompletedExecution) UnoRuntime.queryInterface(XCompletedExecution.class, rowSet);
+                final XCompletedExecution execute = UnoRuntime.queryInterface(XCompletedExecution.class, rowSet);
                 if (rowSetCreated && execute != null && paramDef.parameterCount > 0)
                 {
-                    final XInteractionHandler handler = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.sdb.InteractionHandler", m_cmpCtx));
+                    final XInteractionHandler handler = UnoRuntime.queryInterface(XInteractionHandler.class, m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.sdb.InteractionHandler", m_cmpCtx));
                     execute.executeWithCompletion(handler);
                 }
                 else
@@ -306,7 +306,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         parameter[0] = int.class;
         parameter[1] = String.class;
         parameter[2] = out.getClass();
-        final XConnectionTools tools = (XConnectionTools) UnoRuntime.queryInterface(XConnectionTools.class, connection);
+        final XConnectionTools tools = UnoRuntime.queryInterface(XConnectionTools.class, connection);
         try
         {
             tools.getClass().getMethod("getFieldsByCommandDescriptor", parameter);
@@ -362,7 +362,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         final ArrayList<?> masterValues = (ArrayList<?>) parameters.get(MASTER_VALUES);
         if (masterValues != null && !masterValues.isEmpty())
         {
-            final XParameters para = (XParameters) UnoRuntime.queryInterface(XParameters.class, rowSet);
+            final XParameters para = UnoRuntime.queryInterface(XParameters.class, rowSet);
 
             for (int i = 0;
                     i < masterValues.size();
@@ -392,8 +392,8 @@ public class SDBCReportDataFactory implements DataSourceFactory
         }
 
         rowSetCreated = true;
-        final XRowSet rowSet = (XRowSet) UnoRuntime.queryInterface(XRowSet.class, m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.sdb.RowSet", m_cmpCtx));
-        final XPropertySet rowSetProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
+        final XRowSet rowSet = UnoRuntime.queryInterface(XRowSet.class, m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.sdb.RowSet", m_cmpCtx));
+        final XPropertySet rowSetProp = UnoRuntime.queryInterface(XPropertySet.class, rowSet);
 
         rowSetProp.setPropertyValue("ActiveConnection", connection);
         rowSetProp.setPropertyValue(ESCAPEPROCESSING, rowSetProps.escapeProcessing);
@@ -415,7 +415,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             rowSetProp.setPropertyValue("MaxRows", rowSetProps.maxRows);
         }
 
-        final XConnectionTools tools = (XConnectionTools) UnoRuntime.queryInterface(XConnectionTools.class, connection);
+        final XConnectionTools tools = UnoRuntime.queryInterface(XConnectionTools.class, connection);
         fillOrderStatement(rowSetProps.command, rowSetProps.commandType, parameters, tools, rowSetProp);
         final ParameterDefinition paramDef = createParameter(parameters, tools, rowSetProps, rowSet);
 
@@ -441,7 +441,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         final XSingleSelectQueryComposer composer = getComposer(tools, rowSetProps.command, rowSetProps.commandType);
         if (composer != null)
         {
-            final XPropertySet rowSetProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
+            final XPropertySet rowSetProp = UnoRuntime.queryInterface(XPropertySet.class, rowSet);
             if ((Boolean) rowSetProp.getPropertyValue(APPLY_FILTER))
             {
                 composer.setFilter((String) rowSetProp.getPropertyValue("Filter"));
@@ -449,7 +449,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             // get old parameter count
             final ArrayList<?> detailColumns = (ArrayList<?>) parameters.get(DETAIL_COLUMNS);
             final ArrayList<String> handledColumns = new ArrayList<String>();
-            final XParametersSupplier paraSup = (XParametersSupplier) UnoRuntime.queryInterface(XParametersSupplier.class, composer);
+            final XParametersSupplier paraSup = UnoRuntime.queryInterface(XParametersSupplier.class, composer);
             if (paraSup != null)
             {
                 final XIndexAccess params = paraSup.getParameters();
@@ -463,7 +463,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         {
                             try
                             {
-                                final XPropertySet parameter = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
+                                final XPropertySet parameter = UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
                                 if (parameter != null)
                                 {
                                     final String name = (String) parameter.getPropertyValue("Name");
@@ -564,11 +564,11 @@ public class SDBCReportDataFactory implements DataSourceFactory
             {
                 if (commandType == CommandType.QUERY)
                 {
-                    final XQueriesSupplier xSupplyQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, connection);
+                    final XQueriesSupplier xSupplyQueries = UnoRuntime.queryInterface(XQueriesSupplier.class, connection);
                     final XNameAccess queries = xSupplyQueries.getQueries();
                     if (queries.hasByName(command))
                     {
-                        final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, queries.getByName(command));
+                        final XPropertySet prop = UnoRuntime.queryInterface(XPropertySet.class, queries.getByName(command));
                         final Boolean escape = (Boolean) prop.getPropertyValue(ESCAPEPROCESSING);
                         rowSetProp.setPropertyValue(ESCAPEPROCESSING, escape);
                         final String queryCommand = (String) prop.getPropertyValue(UNO_COMMAND);

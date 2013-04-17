@@ -577,10 +577,10 @@ class ExampleDimension implements
         return new ExamplePropertySetInfo( new com.sun.star.beans.Property[] {
             new com.sun.star.beans.Property( "Original", -1,
                 new com.sun.star.uno.Type( com.sun.star.container.XNamed.class),
-                (short) com.sun.star.beans.PropertyAttribute.READONLY ),
+                com.sun.star.beans.PropertyAttribute.READONLY ),
             new com.sun.star.beans.Property( "IsDataLayoutDimension", -1,
                 new com.sun.star.uno.Type( Boolean.class),
-                (short) com.sun.star.beans.PropertyAttribute.READONLY ),
+                com.sun.star.beans.PropertyAttribute.READONLY ),
             new com.sun.star.beans.Property( "Orientation", -1,
                 new com.sun.star.uno.Type(
                   com.sun.star.sheet.DataPilotFieldOrientation.class), (short) 0),

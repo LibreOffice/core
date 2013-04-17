@@ -50,7 +50,7 @@ public class Test01 implements OLESimpleStorageTest
 
             //create OLESimpleStorage based on it
             Object pArgs[] = new Object[2];
-            pArgs[0] = (Object) xTempFile;
+            pArgs[0] = xTempFile;
             pArgs[1] = new Boolean( true );
             Object oOLESimpleStorage = m_xMSF.createInstanceWithArguments ( "com.sun.star.embed.OLESimpleStorage", pArgs );
             XOLESimpleStorage xOLESimpleStorage = UnoRuntime.queryInterface(XOLESimpleStorage.class, oOLESimpleStorage);
@@ -95,7 +95,7 @@ public class Test01 implements OLESimpleStorageTest
             m_aTestHelper.Message ( "Storage closed." );
 
             //open the same stream with the constructor for inputstream
-            pArgs[0] = (Object)xTempFile.getInputStream ();
+            pArgs[0] = xTempFile.getInputStream ();
             oOLESimpleStorage = m_xMSF.createInstanceWithArguments ( "com.sun.star.embed.OLESimpleStorage", pArgs );
             xOLESimpleStorage = UnoRuntime.queryInterface(XOLESimpleStorage.class, oOLESimpleStorage);
             m_aTestHelper.Message ( "Storage reopened, based on XInputStream." );

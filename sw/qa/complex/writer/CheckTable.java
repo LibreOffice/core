@@ -279,8 +279,7 @@ public class CheckTable
         XTextRange xAnchor = xTable.getAnchor();
         // check all properties on the anchor - shouldn't crash despite
         // pointing to a non-SwTxtNode
-        XPropertySet xProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xAnchor);
+        XPropertySet xProps = UnoRuntime.queryInterface(XPropertySet.class, xAnchor);
         XPropertySetInfo xPropsInfo = xProps.getPropertySetInfo();
         Property[] props = xPropsInfo.getProperties();
         for (int i = 0; i < props.length; ++i)

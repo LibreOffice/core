@@ -43,7 +43,7 @@ public class Test03 implements StorageTest {
             // create temporary storage based on arbitrary medium
             // after such a storage is closed it is lost
             Object oTempStorage = m_xStorageFactory.createInstance();
-            XStorage xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
+            XStorage xTempStorage = UnoRuntime.queryInterface( XStorage.class, oTempStorage );
             if ( xTempStorage == null )
             {
                 m_aTestHelper.Error( "Can't create temporary storage representation!" );
@@ -118,7 +118,7 @@ public class Test03 implements StorageTest {
                 return false;
             }
 
-            XNameAccess xRootNameAccess = (XNameAccess) UnoRuntime.queryInterface( XNameAccess.class, xTempStorage );
+            XNameAccess xRootNameAccess = UnoRuntime.queryInterface( XNameAccess.class, xTempStorage );
             if ( xRootNameAccess == null )
             {
                 m_aTestHelper.Error( "Root storage doesn't support XNameAccess!" );
@@ -170,7 +170,7 @@ public class Test03 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType3", false, ElementModes.READ ) )
                 return false;
 
-            XNameAccess xChildAccess = (XNameAccess) UnoRuntime.queryInterface( XNameAccess.class, xResultSubStorage );
+            XNameAccess xChildAccess = UnoRuntime.queryInterface( XNameAccess.class, xResultSubStorage );
             if ( xChildAccess == null )
             {
                 m_aTestHelper.Error( "Child storage doesn't support XNameAccess!" );
@@ -199,7 +199,7 @@ public class Test03 implements StorageTest {
         try
         {
             Object oStorage = xAccess.getByName( sName );
-            XStorage xResult = (XStorage) UnoRuntime.queryInterface( XStorage.class, oStorage );
+            XStorage xResult = UnoRuntime.queryInterface( XStorage.class, oStorage );
 
             if ( xResult != null )
                 return xResult;

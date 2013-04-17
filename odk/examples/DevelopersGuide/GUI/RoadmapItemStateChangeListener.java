@@ -49,7 +49,7 @@ public class RoadmapItemStateChangeListener implements XItemListener {
         try {
             // get the new ID of the roadmap that is supposed to refer to the new step of the dialogmodel
             int nNewID = itemEvent.ItemId;
-            XPropertySet xDialogModelPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, m_xMSFDialogModel);
+            XPropertySet xDialogModelPropertySet = UnoRuntime.queryInterface(XPropertySet.class, m_xMSFDialogModel);
             int nOldStep = ((Integer) xDialogModelPropertySet.getPropertyValue("Step")).intValue();
             // in the following line "ID" and "Step" are mixed together.
             // In fact in this case they denot the same

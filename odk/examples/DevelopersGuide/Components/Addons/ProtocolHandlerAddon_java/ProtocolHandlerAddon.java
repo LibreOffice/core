@@ -100,12 +100,12 @@ public class ProtocolHandlerAddon {
 
             if ( object.length > 0 )
             {
-                m_xFrame = ( XFrame ) UnoRuntime.queryInterface(
+                m_xFrame = UnoRuntime.queryInterface(
                     XFrame.class, object[ 0 ] );
             }
 
             // Create the toolkit to have access to it later
-            m_xToolkit = (XToolkit) UnoRuntime.queryInterface(
+            m_xToolkit = UnoRuntime.queryInterface(
                 XToolkit.class,
                 m_xCmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit",
                                                                         m_xCmpCtx));
@@ -210,7 +210,7 @@ public class ProtocolHandlerAddon {
                 aDescriptor.Type              = WindowClass.MODALTOP;
                 aDescriptor.WindowServiceName = new String( "infobox" );
                 aDescriptor.ParentIndex       = -1;
-                aDescriptor.Parent            = (XWindowPeer)UnoRuntime.queryInterface(
+                aDescriptor.Parent            = UnoRuntime.queryInterface(
                     XWindowPeer.class, m_xFrame.getContainerWindow());
                 aDescriptor.Bounds            = new Rectangle(0,0,300,200);
                 aDescriptor.WindowAttributes  = WindowAttribute.BORDER |
@@ -219,7 +219,7 @@ public class ProtocolHandlerAddon {
 
                 XWindowPeer xPeer = m_xToolkit.createWindow( aDescriptor );
                 if ( null != xPeer ) {
-                    XMessageBox xMsgBox = (XMessageBox)UnoRuntime.queryInterface(
+                    XMessageBox xMsgBox = UnoRuntime.queryInterface(
                         XMessageBox.class, xPeer);
                     if ( null != xMsgBox )
                     {

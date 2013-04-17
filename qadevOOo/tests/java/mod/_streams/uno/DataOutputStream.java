@@ -93,11 +93,9 @@ public class DataOutputStream extends TestCase {
 
         oObj = (XInterface) oInterface;
 
-        final XOutputStream xPipeOutput = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class, oPipe);
+        final XOutputStream xPipeOutput = UnoRuntime.queryInterface(XOutputStream.class, oPipe);
 
-        XActiveDataSource xDataSource = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, oObj);
+        XActiveDataSource xDataSource = UnoRuntime.queryInterface(XActiveDataSource.class, oObj);
 
         xDataSource.setOutputStream(xPipeOutput);
 
@@ -124,8 +122,7 @@ public class DataOutputStream extends TestCase {
 
         //add relation for io.XOutputStream
         final XMultiServiceFactory msf = xMSF;
-        final XInputStream xPipeInput = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class, oPipe);
+        final XInputStream xPipeInput = UnoRuntime.queryInterface(XInputStream.class, oPipe);
         tEnv.addObjRelation("XOutputStream.StreamChecker",
             new ifc.io._XOutputStream.StreamChecker() {
                 XInputStream xInStream = null;
@@ -149,15 +146,14 @@ public class DataOutputStream extends TestCase {
                     try {
                         Object oInStream = msf.createInstance(
                             "com.sun.star.io.DataInputStream");
-                        xInStream = (XInputStream) UnoRuntime.queryInterface
+                        xInStream = UnoRuntime.queryInterface
                             (XInputStream.class, oInStream);
                     } catch(com.sun.star.uno.Exception e) {
                         return null;
                     }
 
-                    XActiveDataSink xDataSink = (XActiveDataSink)
-                        UnoRuntime.queryInterface(
-                            XActiveDataSink.class, xInStream);
+                    XActiveDataSink xDataSink = UnoRuntime.queryInterface(
+                        XActiveDataSink.class, xInStream);
                     xDataSink.setInputStream(xPipeInput);
 
                     return xInStream;

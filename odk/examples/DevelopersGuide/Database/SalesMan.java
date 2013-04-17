@@ -96,7 +96,7 @@ public class SalesMan
     {
         XPreparedStatement updateStreet = con.prepareStatement(
             "UPDATE SALESMAN SET STREET = ? WHERE SNR = ?");
-        XParameters setPara = (XParameters)UnoRuntime.queryInterface(XParameters.class,updateStreet);
+        XParameters setPara = UnoRuntime.queryInterface(XParameters.class,updateStreet);
         setPara.setString(1, "34 Main Road");
         setPara.setInt(2, 1);
         updateStreet.executeUpdate();
@@ -124,7 +124,7 @@ public class SalesMan
     {
         XStatement stmt = con.createStatement();
         XResultSet rs   = stmt.executeQuery("SELECT FIRSTNAME, LASTNAME, BIRTHDATE FROM SALESMAN");
-        XRow row = (XRow)UnoRuntime.queryInterface(XRow.class,rs);
+        XRow row = UnoRuntime.queryInterface(XRow.class,rs);
         while ( rs != null && rs.next() ) {
             String fn = row.getString( 1 );
             String ln = row.getString( 2 );

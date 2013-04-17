@@ -43,12 +43,11 @@ public class TypeDescriptionManager extends TestCase {
 
         try {
             XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
-            XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xProp = UnoRuntime.queryInterface(
                                                 XPropertySet.class, xMSF);
             // get context
-            XComponentContext xContext = (XComponentContext)
-                            UnoRuntime.queryInterface(XComponentContext.class,
-                            xProp.getPropertyValue("DefaultContext"));
+            XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class,
+            xProp.getPropertyValue("DefaultContext"));
             // get the type description manager from context
             oInterface = xContext.getValueByName("/singletons/" +
                         "com.sun.star.reflection.theTypeDescriptionManager");

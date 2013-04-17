@@ -42,12 +42,11 @@ public class ScriptStorageManager extends TestCase {
 
     try {
             XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
-            XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xProp = UnoRuntime.queryInterface(
                                                 XPropertySet.class, xMSF);
             // get context
-            XComponentContext xContext = (XComponentContext)
-                            UnoRuntime.queryInterface(XComponentContext.class,
-                            xProp.getPropertyValue("DefaultContext"));
+            XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class,
+            xProp.getPropertyValue("DefaultContext"));
             // get the script storage manager from context
             oInterface = xContext.getValueByName("/singletons/" +
                         "drafts.com.sun.star.script.framework.storage.theScriptStorageManager");

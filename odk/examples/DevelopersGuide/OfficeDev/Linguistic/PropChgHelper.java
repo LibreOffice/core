@@ -83,7 +83,7 @@ public class PropChgHelper implements
         for (int i = 0;  i < nCnt;  ++i)
         {
             XLinguServiceEventListener xLstnr =
-                    (XLinguServiceEventListener) aLngSvcEvtListeners.get(i);
+                    aLngSvcEvtListeners.get(i);
             if (xLstnr != null)
                 xLstnr.processLinguServiceEvent( aEvt );
         }
@@ -105,7 +105,7 @@ public class PropChgHelper implements
                 {
                     try {
                         xPropSet.addPropertyChangeListener(
-                                aPropNames[i], (XPropertyChangeListener) this );
+                                aPropNames[i], this );
                     }
                     catch( Exception e ) {
                     }
@@ -125,7 +125,7 @@ public class PropChgHelper implements
                 {
                     try {
                         xPropSet.removePropertyChangeListener(
-                                aPropNames[i], (XPropertyChangeListener) this );
+                                aPropNames[i], this );
                     }
                     catch( Exception e ) {
                     }

@@ -50,7 +50,7 @@ public class ExtensionFinder implements MethodFinder {
         findFiles(files, basedir, parcelName);
 
         if (files.size() != 0)
-            return (ScriptEntry[])files.toArray(empty);
+            return files.toArray(empty);
         return empty;
     }
 

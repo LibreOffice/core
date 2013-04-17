@@ -89,11 +89,11 @@ public class CustomShowDemo
             pPropValues[ 0 ].Value = new Boolean( true );
 
             xDrawDoc = Helper.createDocument( xOfficeContext,
-                "private:factory/simpress", "_blank", 0, pPropValues );
+                    "private:factory/simpress", "_blank", 0, pPropValues );
 
             XDrawPagesSupplier xDrawPagesSupplier =
-                (XDrawPagesSupplier)UnoRuntime.queryInterface(
-                    XDrawPagesSupplier.class, xDrawDoc );
+                UnoRuntime.queryInterface(
+                        XDrawPagesSupplier.class, xDrawDoc );
             XDrawPages xDrawPages = xDrawPagesSupplier.getDrawPages();
 
             // take care that this document has ten pages
@@ -106,9 +106,9 @@ public class CustomShowDemo
             int i;
             for ( i = 0; i < 10; i++ )
             {
-                XDrawPage xDrawPage = (XDrawPage)UnoRuntime.queryInterface(
+                XDrawPage xDrawPage = UnoRuntime.queryInterface(
                     XDrawPage.class, xDrawPages.getByIndex( i ));
-                XNamed xPageName = (XNamed)UnoRuntime.queryInterface(
+                XNamed xPageName = UnoRuntime.queryInterface(
                     XNamed.class, xDrawPage );
                 xPageName.setName( aNameArray[ i ] );
 
@@ -116,22 +116,19 @@ public class CustomShowDemo
                 XShape xTextObj = ShapeHelper.createShape( xDrawDoc, new Point( 10000, 9000 ),
                     new Size( 10000, 5000 ),
                         "com.sun.star.drawing.TextShape" );
-                XShapes xShapes = (XShapes)
-                        UnoRuntime.queryInterface( XShapes.class, xDrawPage );
+                XShapes xShapes = UnoRuntime.queryInterface( XShapes.class, xDrawPage );
                 xShapes.add( xTextObj );
                 ShapeHelper.addPortion( xTextObj, aNameArray[ i ], true );
             }
 
             /* create two custom shows, one will play slide 6 to 10 and is named "ShortVersion"
                the other one will play slide 2 til 10 and is named "LongVersion" */
-            XCustomPresentationSupplier xCustPresSupplier = (XCustomPresentationSupplier)
-                UnoRuntime.queryInterface( XCustomPresentationSupplier.class, xDrawDoc );
+            XCustomPresentationSupplier xCustPresSupplier = UnoRuntime.queryInterface( XCustomPresentationSupplier.class, xDrawDoc );
 
             /* the following container is a container for further container
                which concludes the list of pages that are to play within a custom show */
             XNameContainer xNameContainer = xCustPresSupplier.getCustomPresentations();
-            XSingleServiceFactory xFactory = (XSingleServiceFactory)
-                UnoRuntime.queryInterface( XSingleServiceFactory.class, xNameContainer );
+            XSingleServiceFactory xFactory = UnoRuntime.queryInterface( XSingleServiceFactory.class, xNameContainer );
 
             Object          xObj;
             XIndexContainer xContainer;
@@ -139,7 +136,7 @@ public class CustomShowDemo
             /* instanciate an IndexContainer that will take
                a list of draw pages for the first custom show */
             xObj = xFactory.createInstance();
-            xContainer = (XIndexContainer)UnoRuntime.queryInterface( XIndexContainer.class, xObj );
+            xContainer = UnoRuntime.queryInterface( XIndexContainer.class, xObj );
             for ( i = 5; i < 10; i++ )
                 xContainer.insertByIndex( xContainer.getCount(), xDrawPages.getByIndex( i ) );
             xNameContainer.insertByName( "ShortVersion", xContainer );
@@ -147,7 +144,7 @@ public class CustomShowDemo
             /* instanciate an IndexContainer that will take
                a list of draw page for the second custom show */
             xObj = xFactory.createInstance();
-            xContainer = (XIndexContainer)UnoRuntime.queryInterface( XIndexContainer.class, xObj );
+            xContainer = UnoRuntime.queryInterface( XIndexContainer.class, xObj );
             for ( i = 1; i < 10; i++ )
                 xContainer.insertByIndex( xContainer.getCount(), xDrawPages.getByIndex( i ) );
             xNameContainer.insertByName( "LongVersion", xContainer );
@@ -155,11 +152,9 @@ public class CustomShowDemo
             /* which custom show is to use
                can been set in the presentation settings */
 
-            XPresentationSupplier xPresSupplier = (XPresentationSupplier)
-                UnoRuntime.queryInterface( XPresentationSupplier.class, xDrawDoc );
+            XPresentationSupplier xPresSupplier = UnoRuntime.queryInterface( XPresentationSupplier.class, xDrawDoc );
             XPresentation xPresentation = xPresSupplier.getPresentation();
-            XPropertySet xPresPropSet = (XPropertySet)
-                UnoRuntime.queryInterface( XPropertySet.class, xPresentation );
+            XPropertySet xPresPropSet = UnoRuntime.queryInterface( XPropertySet.class, xPresentation );
             xPresPropSet.setPropertyValue( "CustomShow", "ShortVersion" );
         }
         catch( Exception ex )

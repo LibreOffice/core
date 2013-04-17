@@ -115,7 +115,7 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
 
     for( int i = 0; i < versions.length; i++ ) {
         String key = versions[i];
-        String progPath = ( String )props.getProperty( key );
+        String progPath = props.getProperty( key );
         if ( progPath != null ){
             progPath = progPath  + File.separator + "program";
 

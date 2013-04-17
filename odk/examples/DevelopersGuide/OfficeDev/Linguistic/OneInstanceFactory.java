@@ -90,14 +90,14 @@ public class OneInstanceFactory implements
 
             //!! workaround for services not always being created
             //!! via 'createInstanceWithArguments'
-            XInitialization xIni = (XInitialization) UnoRuntime.queryInterface(
+            XInitialization xIni = UnoRuntime.queryInterface(
                 XInitialization.class, createInstance());
             if (xIni != null)
             {
                 Object[] aArguments = new Object[]{ null, null };
                 if (xMultiFactory != null)
                 {
-                    XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(
+                    XPropertySet xPropSet = UnoRuntime.queryInterface(
                         XPropertySet.class ,  xMultiFactory.createInstance(
                             "com.sun.star.linguistic2.LinguProperties" ) );
                     aArguments[0] = xPropSet;
@@ -114,7 +114,7 @@ public class OneInstanceFactory implements
     {
         if (xInstantiatedService == null)
         {
-            XInitialization xIni = (XInitialization) UnoRuntime.queryInterface(
+            XInitialization xIni = UnoRuntime.queryInterface(
                 XInitialization.class, createInstance());
             if (xIni != null)
                 xIni.initialize( aArguments );

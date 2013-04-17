@@ -93,8 +93,7 @@ public class DataInputStream extends TestCase {
 
         // creating and connecting DataOutputStream to the
         // DataInputStream created through the Pipe
-        XActiveDataSink xDataSink = (XActiveDataSink)
-            UnoRuntime.queryInterface(XActiveDataSink.class, oObj);
+        XActiveDataSink xDataSink = UnoRuntime.queryInterface(XActiveDataSink.class, oObj);
 
         XInterface oPipe = null;
         try {
@@ -105,10 +104,8 @@ public class DataInputStream extends TestCase {
             throw new StatusException("Couldn't create instance", e);
         }
 
-        XInputStream xPipeInput = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class, oPipe);
-        XOutputStream xPipeOutput = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class, oPipe);
+        XInputStream xPipeInput = UnoRuntime.queryInterface(XInputStream.class, oPipe);
+        XOutputStream xPipeOutput = UnoRuntime.queryInterface(XOutputStream.class, oPipe);
 
         XInterface oDataOutput = null;
         try {
@@ -119,10 +116,8 @@ public class DataInputStream extends TestCase {
             throw new StatusException("Couldn't create instance", e);
         }
 
-        XDataOutputStream xDataOutput = (XDataOutputStream)
-            UnoRuntime.queryInterface(XDataOutputStream.class, oDataOutput) ;
-        XActiveDataSource xDataSource = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, oDataOutput) ;
+        XDataOutputStream xDataOutput = UnoRuntime.queryInterface(XDataOutputStream.class, oDataOutput) ;
+        XActiveDataSource xDataSource = UnoRuntime.queryInterface(XActiveDataSource.class, oDataOutput) ;
 
         xDataSource.setOutputStream(xPipeOutput) ;
         xDataSink.setInputStream(xPipeInput) ;
