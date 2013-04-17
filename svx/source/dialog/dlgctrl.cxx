@@ -1486,22 +1486,49 @@ void FillTypeLB::Fill()
     SetUpdateMode( sal_True );
 }
 
+LineLB::LineLB(Window* pParent, ResId Id)
+:   ListBox(pParent, Id),
+    mbAddStandardFields(true)
+{
+}
+
+LineLB::LineLB(Window* pParent, WinBits aWB)
+:   ListBox(pParent, aWB),
+    mbAddStandardFields(true)
+{
+}
+
+LineLB::~LineLB()
+{
+}
+
+void LineLB::setAddStandardFields(bool bNew)
+{
+    if(getAddStandardFields() != bNew)
+    {
+        mbAddStandardFields = bNew;
+    }
+}
+
 // Fills the listbox (provisional) with strings
 
 void LineLB::Fill( const XDashListRef &pList )
 {
     Clear();
 
-    // entry for 'none'
-    InsertEntry(pList->GetStringForUiNoLine());
-
-    // entry for solid line
-    InsertEntry(pList->GetStringForUiSolidLine(), pList->GetBitmapForUISolidLine());
-
-    // entries for dashed lines
-
     if( !pList.is() )
         return;
+
+    if(getAddStandardFields())
+    {
+        // entry for 'none'
+        InsertEntry(pList->GetStringForUiNoLine());
+
+        // entry for solid line
+        InsertEntry(pList->GetStringForUiSolidLine(), pList->GetBitmapForUISolidLine());
+    }
+
+    // entries for dashed lines
 
     long nCount = pList->Count();
     XDashEntry* pEntry;
