@@ -1003,7 +1003,7 @@ void Desktop::HandleBootstrapErrors(
         OUString aMessage;
         OUStringBuffer aDiagnosticMessage( 100 );
         OUString aErrorMsg;
-        aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
+        aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_USERINSTALL_FAILED,
             OUString( "User installation could not be completed" ) );
         aDiagnosticMessage.append( aErrorMsg );
         aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
