@@ -101,33 +101,12 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
         Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY );
         Reference< lang::XMultiServiceFactory > xShapeFactory( pDoc->getUnoModel(), uno::UNO_QUERY  );
 
-        // Create the title slide
-        const sal_Int32 nSlideCount = pDoc->GetSdPageCount(PK_STANDARD);
-
-        if(nSlideCount == 1)
-        {
-            // we have created an empty presentation (probably)
-            Reference< drawing::XDrawPage > xTitleSlide = appendNewSlide(AUTOLAYOUT_TITLE, xDrawPages);
-
-            SdPage* pFirstSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-            SvtUserOptions aUserOptions;
-            SdrObject* pTitleObj = pFirstSlide->GetPresObj(PRESOBJ_TITLE, 0);
-            SvxShapeText* pTitleText = new SvxShapeText(pTitleObj);
-            pTitleText->SetShapeType("com.sun.star.presentation.TitleTextShape");
-            pTitleText->setString(SD_RESSTR(STR_PHOTO_ALBUM_TITLE));
-
-            SdrObject* pTextObj = pFirstSlide->GetPresObj(PRESOBJ_TEXT, 0);
-            SvxShapeText* pTextShape = new SvxShapeText(pTextObj);
-            pTextShape->SetShapeType("com.sun.star.presentation.TextShape");
-            pTextShape->setString(SD_RESSTR(STR_PHOTO_ALBUM_AUTHOR) + " " + aUserOptions.GetFullName());
-        }
-
         Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
 
         // get the option
-        OUString sOpt = pInsTypeCombo->GetEntry(pInsTypeCombo->GetSelectEntryPos());
-        if ( sOpt == "Fit to slide")
+        sal_uInt16 nOpt = pInsTypeCombo->GetSelectEntryPos();
+        if ( nOpt == FIT_TO_SLIDE )
         {
             OUString sUrl;
 
@@ -184,11 +163,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 {
                     appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
                 }
-                delete pData;
-                pData = NULL;
             }
         }
-        else if( sOpt == "1 image with title" )
+        else if( nOpt == TITLE_ONE_IMAGE )
         {
             OUString sUrl;
 
@@ -196,7 +173,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
             {
                 OUString* pData = (OUString*) pImagesLst->GetEntryData(i);
                 sUrl = *pData;
-                if ( sUrl != "Text Box" )
+                if ( sUrl != SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) )
                 {
 
                     Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
@@ -227,11 +204,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 {
                     appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
                 }
-                delete pData;
-                pData = NULL;
             }
         }
-        else if( sOpt == "2 images" )
+        else if( nOpt == TWO_IMAGES )
         {
             OUString sUrl1("");
             OUString sUrl2("");
@@ -252,13 +227,15 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     OUString("Height")) >>= aPageSize.Height;
 
                 // grab the left one
-                pData = (OUString*) pImagesLst->GetEntryData(i);
+                void* pD1 = pImagesLst->GetEntryData(i);
+                pData = (OUString*) pD1;
                 sUrl1 = pData ? OUString(*pData) : "";
                 // grab the right one
-                pData = (OUString*) pImagesLst->GetEntryData(i+1);
+                void* pD2 = pImagesLst->GetEntryData(i+1);
+                pData = (OUString*) pD2;
                 sUrl2 = pData ? OUString(*pData) : "";
 
-                if( sUrl1 == "Text Box" ) // create a Text Box
+                if( sUrl1 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
                 {
                     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
                     pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(100,100), Point(aPageSize.Width/2-100, aPageSize.Height-100)), sal_True);
@@ -300,7 +277,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xSlide->add(xShape);
                 }
 
-                if( sUrl2 == "Text Box" ) // create a Text Box
+                if( sUrl2 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
                 {
                     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
                     pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(aPageSize.Width/2 + 100,100), Point(aPageSize.Width-100, aPageSize.Height-100)), sal_True);
@@ -340,11 +317,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
                 }
-                delete pData;
-                pData = NULL;
             }
         }
-        else if( sOpt == "4 images" )
+        else if( nOpt == FOUR_IMAGES )
         {
             OUString sUrl1("");
             OUString sUrl2("");
@@ -366,22 +341,26 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     OUString("Height")) >>= aPageSize.Height;
 
                 // grab the upper left one
-                pData = (OUString*) pImagesLst->GetEntryData(i);
+                void* pD1 = pImagesLst->GetEntryData(i);
+                pData = (OUString*) pD1;
                 sUrl1 = pData ? OUString(*pData) : "";
 
                 // grab the upper right one
-                pData = (OUString*) pImagesLst->GetEntryData(i+1);
+                void* pD2 = pImagesLst->GetEntryData(i+1);
+                pData = (OUString*) pD2;
                 sUrl2 = pData ? OUString(*pData) : "";
 
                 // grab the lower left one
-                pData = (OUString*) pImagesLst->GetEntryData(i+2);
+                void* pD3 = pImagesLst->GetEntryData(i+2);
+                pData = (OUString*) pD3;
                 sUrl3 = pData ? OUString(*pData) : "";
 
                 // grab the lower right one
-                pData = (OUString*) pImagesLst->GetEntryData(i+3);
+                void* pD4 = pImagesLst->GetEntryData(i+3);
+                pData = (OUString*) pD4;
                 sUrl4 = pData ? OUString(*pData) : "";
 
-                if( sUrl1 == "Text Box" ) // create a Text Box
+                if( sUrl1 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
                 {
                     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
                     pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(100,100), Point(aPageSize.Width/2-100, aPageSize.Height/2-100)), sal_True);
@@ -423,7 +402,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xSlide->add(xShape);
                 }
 
-                if( sUrl2 == "Text Box" ) // create a Text Box
+                if( sUrl2 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
                 {
                     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
                     pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(aPageSize.Width/2 + 100,100), Point(aPageSize.Width-100, aPageSize.Height/2-100)), sal_True);
@@ -464,7 +443,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xSlide->add(xShape);
                 }
 
-                if( sUrl3 == "Text Box" ) // create a Text Box
+                if( sUrl3 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
                 {
                     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
                     pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(100,aPageSize.Height/2-100), Point(aPageSize.Width/2-100, aPageSize.Height-100)), sal_True);
@@ -507,7 +486,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xSlide->add(xShape);
                 }
 
-                if( sUrl4 == "Text Box" ) // create a Text Box
+                if( sUrl4 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
                 {
                     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
                     pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(aPageSize.Width/2 + 100,aPageSize.Height/2 - 100), Point(aPageSize.Width-100, aPageSize.Height-100)), sal_True);
@@ -547,8 +526,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
                 }
-                delete pData;
-                pData = NULL;
             }
         }
         else
@@ -652,11 +629,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, TextHdl)
     sal_Int16 nPos;
     sal_Int16 nInsertPos = pImagesLst->GetSelectEntryPos();
     if (nInsertPos < 0)
-        nPos = pImagesLst->InsertEntry( OUString("Text Box"));
+        nPos = pImagesLst->InsertEntry( OUString(SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX)));
     else
-        nPos = pImagesLst->InsertEntry( OUString("Text Box"), nInsertPos);
+        nPos = pImagesLst->InsertEntry( OUString(SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX)), nInsertPos);
 
-    OUString sStr("Text Box");
+    OUString sStr(SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX));
     pImagesLst->SetEntryData(nPos, (void*)new OUString(sStr));
 
     if(pImagesLst->GetEntryCount() >= 1)
@@ -792,7 +769,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
         pDownBtn->Enable();
     }
 
-    if (sImgUrl != "Text Box")
+    if (sImgUrl != SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX))
     {
         GraphicFilter aCurFilter;
         Graphic aGraphic;
