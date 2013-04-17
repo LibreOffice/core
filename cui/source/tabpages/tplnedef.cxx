@@ -141,6 +141,10 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aLbLineStyles.SetSelectHdl(
         LINK( this, SvxLineDefTabPage, SelectLinestyleHdl_Impl ) );
 
+    // #i122042# switch off default adding of 'none' and 'solid' entries
+    // for this ListBox; we want to select only editable/dashed styles
+    aLbLineStyles.setAddStandardFields(false);
+
     // absolute (in mm) or relative (in %)
     aCbxSynchronize.SetClickHdl(
         LINK( this, SvxLineDefTabPage, ChangeMetricHdl_Impl ) );
@@ -168,6 +172,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
 void SvxLineDefTabPage::Construct()
 {
+    // Line style fill; do *not* add default fields here
     aLbLineStyles.Fill( pDashList );
 }
 
@@ -349,14 +354,17 @@ SfxTabPage* SvxLineDefTabPage::Create( Window* pWindow,
 
 IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
 {
-    if( pDashList->Count() > 0 )
+    if(pDashList->Count())
     {
         int nTmp = aLbLineStyles.GetSelectEntryPos();
-        if( nTmp == LISTBOX_ENTRY_NOTFOUND )
+
+        if(LISTBOX_ENTRY_NOTFOUND == nTmp)
         {
+            OSL_ENSURE(false, "OOps, non-existent LineDash selected (!)");
+            nTmp = 1;
         }
-        else
-            aDash = pDashList->GetDash( nTmp )->GetDash();
+
+        aDash = pDashList->GetDash( nTmp )->GetDash();
 
         FillDialog_Impl();
 
