@@ -167,7 +167,7 @@ $(call gb_XcsTarget_get_outdir_target,$(basename $(subst -,.,$(basename $(1)))).
 endef
 
 define gb_XcuModuleTarget__command
-$(call gb_Output_announce,$(2),$(true),XCU,3)
+$(call gb_Output_announce,$(2),$(true),XCM,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
@@ -184,7 +184,7 @@ $(call gb_XcuModuleTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang) \
 	$(call gb_XcuModuleTarget__command,$@,$*,$(filter %.xcu,$^),$(filter %.xcs,$^))
 
 $(call gb_XcuModuleTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),XCU,3)
+	$(call gb_Output_announce,$*,$(false),XCM,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_XcuModuleTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$(XCUFILE)))
@@ -202,7 +202,7 @@ gb_XcuLangpackTarget__get_target_with_lang = \
 gb_XcuLangpackTarget_SED_delcomment := $(OUTDIR)/xml/processing/delcomment.sed
 
 define gb_XcuLangpackTarget__command
-$(call gb_Output_announce,$(2),$(true),XCU,4)
+$(call gb_Output_announce,$(2),$(true),XCL,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	sed -e "s/__LANGUAGE__/$(LANG)/" -f $(gb_XcuLangpackTarget_SED_delcomment)\
@@ -214,7 +214,7 @@ $(call gb_XcuLangpackTarget_get_target,%) : \
 	$(call gb_XcuLangpackTarget__command,$@,$*,$(filter %.tmpl,$^))
 
 $(call gb_XcuLangpackTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),XCU,4)
+	$(call gb_Output_announce,$*,$(false),XCL,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(foreach lang,$(gb_Configuration_LANGS),\
 			  $(call gb_XcuLangpackTarget__get_target_with_lang,$*,$(lang)) \
@@ -227,7 +227,7 @@ gb_XcuMergeTarget_CFGEXDEPS := $(call gb_Executable_get_runtime_dependencies,cfg
 gb_XcuMergeTarget_CFGEXCOMMAND := $(call gb_Executable_get_command,cfgex)
 
 define gb_XcuMergeTarget__command
-$(call gb_Output_announce,$(2),$(true),XCU,5)
+$(call gb_Output_announce,$(2),$(true),XCX,1)
 MERGEINPUT=`$(gb_MKTEMP)` && \
 echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
@@ -247,7 +247,7 @@ $(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXDEPS)
 		mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
 
 $(call gb_XcuMergeTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),XCU,5)
+	$(call gb_Output_announce,$*,$(false),XCX,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_XcuMergeTarget_get_target,$*))
 
@@ -266,7 +266,7 @@ endef
 
 # locale is extracted from the stem (parameter $(2))
 define gb_XcuResTarget__command
-$(call gb_Output_announce,$(2),$(true),XCU,6)
+$(call gb_Output_announce,$(2),$(true),XCR,2)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
@@ -284,7 +284,7 @@ $(call gb_XcuResTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang) \
 	$(call gb_XcuResTarget__command,$@,$*,$(filter %.xcu,$^))
 
 $(call gb_XcuResTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),XCU,6)
+	$(call gb_Output_announce,$*,$(false),XCR,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_XcuResTarget_get_target,$*))
 
@@ -308,12 +308,12 @@ endef
 # Configuration class
 
 $(call gb_Configuration_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),CFG,1)
+	$(call gb_Output_announce,$*,$(false),CFG,4)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_Configuration_get_target,$*) $(call gb_Configuration_get_preparation_target,$*))
 
 $(call gb_Configuration_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),CFG,1)
+	$(call gb_Output_announce,$*,$(true),CFG,4)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
