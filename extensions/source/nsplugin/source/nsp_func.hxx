@@ -43,7 +43,6 @@
 
 //for pipe()
 typedef int NSP_PIPE_FD;
-#define NSP_Inherited_Pipe(fp) pipe(fd)
 #define NSP_Close_Pipe(fp)    close(fp)
 //for write(), read()
 #define NSP_Write_Pipe(a, b, c, d) write(a, b, c)
@@ -76,8 +75,6 @@ typedef int NSP_PIPE_FD;
 
 //for pipe()
 typedef HANDLE NSP_PIPE_FD;
-static SECURITY_ATTRIBUTES  NSP_pipe_access = { sizeof(SECURITY_ATTRIBUTES), NULL, TRUE};
-#define NSP_Inherited_Pipe(fd) (!CreatePipe(&fd[0], &fd[1], &NSP_pipe_access, 1024*10))
 #define NSP_Close_Pipe(fp)    CloseHandle(fp)
 //for write(), read()
 #define NSP_Write_Pipe(a, b, c, d) WriteFile(a, b, c, d, NULL)

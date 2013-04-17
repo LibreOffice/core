@@ -91,6 +91,15 @@
 #define NP_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
 #endif
 
+#if defined WNT
+static SECURITY_ATTRIBUTES NSP_pipe_access = {
+    sizeof (SECURITY_ATTRIBUTES), NULL, TRUE };
+#define NSP_Inherited_Pipe(fd) \
+    (!CreatePipe(&fd[0], &fd[1], &NSP_pipe_access, 1024 * 10))
+#else
+#define NSP_Inherited_Pipe(fp) pipe(fd)
+#endif
+
 /***********************************************************************
  *
  * Implementations of plugin API functions
