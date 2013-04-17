@@ -25,9 +25,11 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,fontunxppds,$(SRCDIR)/psprint_config/configuration/ppds))
+$(eval $(call gb_Package_Package,psprint_config_fontunxppds,$(SRCDIR)/psprint_config/configuration/ppds))
 
-$(eval $(call gb_Zip_add_files,fontunxppds,\
+$(eval $(call gb_Package_set_outdir,psprint_config_fontunxppds,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,psprint_config_fontunxppds,share/psprint/driver,\
 	SGENPRT.PS \
 	SGENT42.PS \
 ))

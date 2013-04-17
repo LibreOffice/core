@@ -25,9 +25,11 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,fontunxpsprint,$(SRCDIR)/psprint_config/configuration))
+$(eval $(call gb_Package_Package,psprint_config_fontunxpsprint,$(SRCDIR)/psprint_config/configuration))
 
-$(eval $(call gb_Zip_add_files,fontunxpsprint,\
+$(eval $(call gb_Package_set_outdir,psprint_config_fontunxpsprint,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,psprint_config_fontunxpsprint,share/psprint,\
 	psprint.conf \
 ))
 
