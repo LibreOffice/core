@@ -498,6 +498,24 @@ SwPageFrm* SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
     return pPage;
 }
 
+// #114798# - unlock position on start and end of page
+// layout process.
+static void unlockPositionOfObjects( SwPageFrm *pPageFrm )
+{
+    assert( pPageFrm );
+
+    SwSortedObjs* pObjs = pPageFrm->GetSortedObjs();
+    if ( pObjs )
+    {
+        sal_uInt32 i = 0;
+        for ( ; i < pObjs->Count(); ++i )
+        {
+            SwAnchoredObject* pObj = (*pObjs)[i];
+            pObj->UnlockPosition();
+        }
+    }
+}
+
 void SwLayAction::InternalAction()
 {
     OSL_ENSURE( pRoot->Lower()->IsPageFrm(), ":-( No page below the root.");
@@ -597,6 +615,8 @@ void SwLayAction::InternalAction()
             while ( !IsInterrupt() && !IsNextCycle() &&
                     ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
             {
+                unlockPositionOfObjects( pPage );
+
                 // #i28701#
                 SwObjectFormatter::FormatObjsAtFrm( *pPage, *pPage, this );
                 if ( !IS_FLYS )
@@ -655,6 +675,8 @@ void SwLayAction::InternalAction()
                     if( bNoLoop )
                         pLayoutAccess->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
                 }
+
+                unlockPositionOfObjects( pPage );
             }
 
             // A previous page may be invalid again.
@@ -769,6 +791,8 @@ void SwLayAction::InternalAction()
         while ( pPg && ( pPg->Frm().Top() < nBottom ||
                          ( IsIdle() && pPg == pPage ) ) )
         {
+            unlockPositionOfObjects( pPg );
+
             XCHECKPAGE;
 
             // #i81146# new loop control
@@ -843,6 +867,8 @@ void SwLayAction::InternalAction()
                     }
                 }
             }
+
+            unlockPositionOfObjects( pPg );
             pPg = (SwPageFrm*)pPg->GetNext();
         }
         // reset flag for special interrupt content formatting.
