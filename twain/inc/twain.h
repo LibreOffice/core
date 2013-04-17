@@ -115,7 +115,7 @@
 #ifdef  WIN32
     #ifdef __MINGW32__
         #pragma pack (push, 2)
-    #elif __BORLANDC__ //(Mentor June 13, 1996) if using a Borland compiler
+    #elif defined __BORLANDC__ //(Mentor June 13, 1996) if using a Borland compiler
         #pragma option -a2  //(Mentor June 13, 1996) switch to word alignment
     #else   //(Mentor June 13, 1996) if we're using some other compiler
         #pragma pack (push, before_twain)
@@ -1999,7 +1999,7 @@ typedef TW_UINT16 (*DSENTRYPROC)(pTW_IDENTITY,
 #ifdef  WIN32
     #ifdef __MINGW32__
         #pragma pack (pop)
-    #elif __BORLANDC__ //(Mentor June 13, 1996) if we're using a Borland compiler
+    #elif defined __BORLANDC__ //(Mentor June 13, 1996) if we're using a Borland compiler
         #pragma option -a.  //(Mentor October 30, 1996) switch back to original alignment
     #else   //(Mentor June 13, 1996) if NOT using a Borland compiler
         #pragma pack (pop, before_twain)
