@@ -26,9 +26,11 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicusr,$(SRCDIR)/wizards/source/config))
+$(eval $(call gb_Package_Package,wizards_basicshare,$(SRCDIR)/wizards/source/configshare))
 
-$(eval $(call gb_Zip_add_files,basicusr,\
+$(eval $(call gb_Package_set_outdir,wizards_basicshare,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicshare,share/basic,\
 	dialog.xlc \
 	script.xlc \
 ))

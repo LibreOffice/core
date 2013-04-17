@@ -34,21 +34,21 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	AllLangResTarget_imp \
 	AllLangResTarget_tpl \
 	AllLangResTarget_wzi \
+	Package_depot \
+	Package_euro \
+	Package_form \
+	Package_gimmicks \
+	Package_import \
+	Package_share \
+	Package_standard \
+	Package_template \
+	Package_tools \
+	Package_tutorials \
+	Package_usr \
 	Pyuno_fax \
 	Pyuno_letter \
 	Pyuno_agenda \
 	Pyuno_commonwizards \
-	Zip_depot \
-	Zip_euro \
-	Zip_form \
-	Zip_gimmicks \
-	Zip_import \
-	Zip_share \
-	Zip_standard \
-	Zip_template \
-	Zip_tools \
-	Zip_tutorials \
-	Zip_usr \
 ))
 
 ifeq ($(SOLAR_JAVA),TRUE)

@@ -28,33 +28,38 @@
 #include "macros.inc"
 
 File gid_File_Basic_Depot
-    Dir = gid_Dir_Basic_Depot;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrvdepot.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "wizards_basicsrvdepot.filelist";
 End
 
 File gid_File_Basic_Euro
-    Dir = gid_Dir_Basic_Euro;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrveuro.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "wizards_basicsrveuro.filelist";
 End
 
 File gid_File_Basic_Gimmicks
-    Dir = gid_Dir_Basic_Gimmicks;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrvgimmicks.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "wizards_basicsrvgimmicks.filelist";
 End
 
 File gid_File_Basic_Importwiz
-    Dir = gid_Dir_Basic_Importwiz;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrvimport.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "wizards_basicsrvimport.filelist";
 End
 
 File gid_File_Basic_Formwiz
-    Dir = gid_Dir_Basic_Formwiz;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrvform.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "wizards_basicsrvform.filelist";
 End
 
 #ifndef DISABLE_SCRIPTING
@@ -68,42 +73,45 @@ End
 #endif
 
 File gid_File_Basic_Template
-    Dir = gid_Dir_Basic_Template;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrvtemplate.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "wizards_basicsrvtemplate.filelist";
 End
 
 File gid_File_Basic_Tools
-    Dir = gid_Dir_Basic_Tools;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrvtools.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "wizards_basicsrvtools.filelist";
 End
 
 File gid_File_Basic_User
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    Dir = gid_Dir_User_Basic;
-    Name = "basicusr.zip";
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Name = "wizards_basicusr.filelist";
 End
 
 File gid_File_Basic_Share
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    Dir = gid_Dir_Basic;
-    Name = "basicshare.zip";
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Name = "wizards_basicshare.filelist";
 End
 
 File gid_File_Basic_User_Standard
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    Dir = gid_Dir_Basic_Standard;
-    Name = "basicsrvstandard.zip";
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Name = "wizards_basicsrvstandard.filelist";
 End
 
 File gid_File_Basic_Tutorials
-    Dir = gid_Dir_Basic_Tutorials;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrvtutorials.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "wizards_basicsrvtutorials.filelist";
 End
 
 #if defined ENABLE_NPAPI_INTO_BROWSER
