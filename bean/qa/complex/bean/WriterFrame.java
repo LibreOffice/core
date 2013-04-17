@@ -61,7 +61,7 @@ class WriterFrame extends java.awt.Frame
                 pack();
                 setBounds(x, y, width, height);
                 setVisible(true);
-                m_bean.aquireSystemWindow();
+                m_bean.acquireSystemWindow();
             }
         }
         catch (Exception e)
@@ -193,7 +193,7 @@ class WriterFrame extends java.awt.Frame
     public void addOOoBean() throws Exception
     {
         add(m_bean, BorderLayout.CENTER);
-        m_bean.aquireSystemWindow();
+        m_bean.acquireSystemWindow();
         validate();
     }
 
