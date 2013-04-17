@@ -41,6 +41,9 @@
 #          => *.po
 #       => XcsTarget (schema)
 
+# TODO: This is obsolete--we do not have multiple repos anymore. Drop
+# the first arugment of gb_Configuration__get_source and clean up its
+# uses. Or just replace it by $(SRCDIR)/... .
 # Per-repo pattern rules for each repository do not work for all targets
 # because the prerequisites of some targets need to have the stem mangled
 # and this does not seem to be possible in GNU make because when the stem is
