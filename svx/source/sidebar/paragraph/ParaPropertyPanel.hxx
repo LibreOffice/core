@@ -278,7 +278,6 @@ private:
     void InitToolBoxSpacing();
     void InitToolBoxLineSpacing();
 
-    Color GetBGColor (void) const;
     void SetBGColor (const String& rsColorName, const Color aColor);
 };
 
