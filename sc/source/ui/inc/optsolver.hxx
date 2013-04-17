@@ -43,6 +43,7 @@ class ScCursorRefEdit : public formula::RefEdit
 
 public:
             ScCursorRefEdit( ScAnyRefDlg* pParent, Window *pLabel, const ResId& rResId );
+            ScCursorRefEdit( Window* pParent, Window *pLabel );
     void    SetCursorLinks( const Link& rUp, const Link& rDown );
 
 protected:
@@ -106,62 +107,56 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    FixedText       maFtObjectiveCell;
-    formula::RefEdit       maEdObjectiveCell;
-    formula::RefButton     maRBObjectiveCell;
+    FixedText*       m_pFtObjectiveCell;
+    formula::RefEdit*    m_pEdObjectiveCell;
+    formula::RefButton*  m_pRBObjectiveCell;
 
-    FixedText       maFtDirection;
-    RadioButton     maRbMax;
-    RadioButton     maRbMin;
-    RadioButton     maRbValue;
-    formula::RefEdit       maEdTargetValue;
-    formula::RefButton     maRBTargetValue;
+    RadioButton*     m_pRbMax;
+    RadioButton*     m_pRbMin;
+    RadioButton*     m_pRbValue;
+    formula::RefEdit*   m_pEdTargetValue;
+    formula::RefButton* m_pRBTargetValue;
 
-    FixedText       maFtVariableCells;
-    formula::RefEdit       maEdVariableCells;
-    formula::RefButton     maRBVariableCells;
+    FixedText*       m_pFtVariableCells;
+    formula::RefEdit*   m_pEdVariableCells;
+    formula::RefButton* m_pRBVariableCells;
 
-    FixedLine       maFlConditions;
+    FixedText*       m_pFtCellRef; // labels are together with controls for the first row
+    ScCursorRefEdit* m_pEdLeft1;
+    formula::RefButton* m_pRBLeft1;
+    FixedText*       m_pFtOperator;
+    ListBox*         m_pLbOp1;
+    FixedText*       m_pFtConstraint;
+    ScCursorRefEdit* m_pEdRight1;
+    formula::RefButton* m_pRBRight1;
+    PushButton*      m_pBtnDel1;
 
-    FixedText       maFtCellRef;        // labels are together with controls for the first row
-    ScCursorRefEdit maEdLeft1;
-    formula::RefButton     maRBLeft1;
-    FixedText       maFtOperator;
-    ListBox         maLbOp1;
-    FixedText       maFtConstraint;
-    ScCursorRefEdit maEdRight1;
-    formula::RefButton     maRBRight1;
-    ImageButton     maBtnDel1;
+    ScCursorRefEdit* m_pEdLeft2;
+    formula::RefButton* m_pRBLeft2;
+    ListBox*         m_pLbOp2;
+    ScCursorRefEdit* m_pEdRight2;
+    formula::RefButton* m_pRBRight2;
+    PushButton*      m_pBtnDel2;
 
-    ScCursorRefEdit maEdLeft2;
-    formula::RefButton     maRBLeft2;
-    ListBox         maLbOp2;
-    ScCursorRefEdit maEdRight2;
-    formula::RefButton     maRBRight2;
-    ImageButton     maBtnDel2;
+    ScCursorRefEdit* m_pEdLeft3;
+    formula::RefButton* m_pRBLeft3;
+    ListBox*         m_pLbOp3;
+    ScCursorRefEdit* m_pEdRight3;
+    formula::RefButton* m_pRBRight3;
+    PushButton*      m_pBtnDel3;
 
-    ScCursorRefEdit maEdLeft3;
-    formula::RefButton     maRBLeft3;
-    ListBox         maLbOp3;
-    ScCursorRefEdit maEdRight3;
-    formula::RefButton     maRBRight3;
-    ImageButton     maBtnDel3;
+    ScCursorRefEdit* m_pEdLeft4;
+    formula::RefButton* m_pRBLeft4;
+    ListBox*         m_pLbOp4;
+    ScCursorRefEdit* m_pEdRight4;
+    formula::RefButton* m_pRBRight4;
+    PushButton*      m_pBtnDel4;
 
-    ScCursorRefEdit maEdLeft4;
-    formula::RefButton     maRBLeft4;
-    ListBox         maLbOp4;
-    ScCursorRefEdit maEdRight4;
-    formula::RefButton     maRBRight4;
-    ImageButton     maBtnDel4;
+    ScrollBar*       m_pScrollBar;
 
-    ScrollBar       maScrollBar;
-
-    FixedLine       maFlButtons;
-
-    PushButton      maBtnOpt;
-    HelpButton      maBtnHelp;
-    CancelButton    maBtnCancel;
-    PushButton      maBtnSolve;
+    PushButton*      m_pBtnOpt;
+    PushButton*      m_pBtnCancel;
+    PushButton*      m_pBtnSolve;
 
     String          maInputError;
     String          maConditionError;
@@ -178,7 +173,7 @@ private:
     ScCursorRefEdit* mpRightEdit[EDIT_ROW_COUNT];
     formula::RefButton*     mpRightButton[EDIT_ROW_COUNT];
     ListBox*         mpOperator[EDIT_ROW_COUNT];
-    ImageButton*     mpDelButton[EDIT_ROW_COUNT];
+    PushButton*      mpDelButton[EDIT_ROW_COUNT];
 
     std::vector<ScOptConditionRow> maConditions;
     long            nScrollPos;

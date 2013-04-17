@@ -163,6 +163,10 @@
                         generic-name="Reference Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
+    <glade-widget-class title="Cursor Reference Edit" name="sclo-ScCursorRefEdit"
+                        generic-name="Cursor Reference Edit" parent="foruilo-RefEdit"
+                        icon-name="widget-gtk-textentry"/>
+
     <glade-widget-class title="Open Document ListBox" name="dbulo-OpenDocumentListBox"
                         generic-name="Open Document ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>

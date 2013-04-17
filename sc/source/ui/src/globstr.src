@@ -2080,6 +2080,14 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Cell must contain a formula." ;
     };
+    String STR_INVALIDINPUT
+    {
+        Text [ en-US ] = "Invalid input." ;
+    };
+    String STR_INVALIDCONDITION
+    {
+        Text [ en-US ] = "Invalid condition." ;
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

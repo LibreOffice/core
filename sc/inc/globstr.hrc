@@ -675,7 +675,10 @@
 #define STR_INVALIDFORM             540
 #define STR_NOFORMULA               541
 
-#define STR_COUNT                   542
+#define STR_INVALIDINPUT            542
+#define STR_INVALIDCONDITION        543
+
+#define STR_COUNT                   544
 
 #endif
 

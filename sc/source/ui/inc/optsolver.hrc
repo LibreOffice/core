@@ -19,25 +19,6 @@
 
 #include "sc.hrc"
 
-#define ED_OBJECTIVECELL        1
-#define ED_TARGET               2
-#define ED_VARIABLECELLS        3
-#define ED_LEFT1                4
-#define ED_LEFT2                5
-#define ED_LEFT3                6
-#define ED_LEFT4                7
-#define ED_RIGHT1               8
-#define ED_RIGHT2               9
-#define ED_RIGHT3               10
-#define ED_RIGHT4               11
-
-#define FT_OBJECTIVECELL        1
-#define FT_DIRECTION            2
-#define FT_VARIABLECELLS        3
-#define FT_CELLREF              4
-#define FT_OPERATOR             5
-#define FT_CONSTRAINT           6
-
 #define FT_PROGRESS             7
 #define FT_TIMELIMIT            8
 #define FT_NOSOLUTION           9
@@ -49,41 +30,9 @@
 #define FL_CONDITIONS           1
 #define FL_BUTTONS              2
 
-#define IB_OBJECTIVECELL        1
-#define IB_TARGET               2
-#define IB_VARIABLECELLS        3
-#define IB_LEFT1                4
-#define IB_LEFT2                5
-#define IB_LEFT3                6
-#define IB_LEFT4                7
-#define IB_RIGHT1               8
-#define IB_RIGHT2               9
-#define IB_RIGHT3               10
-#define IB_RIGHT4               11
-#define IB_DELETE1              12
-#define IB_DELETE2              13
-#define IB_DELETE3              14
-#define IB_DELETE4              15
-
-#define LB_OP1                  1
-#define LB_OP2                  2
-#define LB_OP3                  3
-#define LB_OP4                  4
-
-#define RB_MAX                  1
-#define RB_MIN                  2
-#define RB_VALUE                3
-
-#define SB_SCROLL               1
-
-#define BTN_OPTIONS             1
 #define BTN_HELP                2
 #define BTN_CLOSE               3
-#define BTN_SOLVE               4
-#define BTN_OK                  5
-#define BTN_CANCEL              6
-
-#define STR_INVALIDINPUT        1
-#define STR_INVALIDCONDITION    2
+#define BTN_OK                  4
+#define BTN_CANCEL              5
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
