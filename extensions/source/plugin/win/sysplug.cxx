@@ -304,7 +304,7 @@ NPError PluginComm_Impl::NPP_DestroyStream( NPP instance, NPStream* stream, NPEr
     m_eCall = eNPP_DestroyStream;
     m_aArgs[0] = (void*)instance;
     m_aArgs[1] = (void*)stream;
-    m_aArgs[2] = (void*)reason;
+    m_aArgs[2] = reinterpret_cast< void * >(static_cast< sal_IntPtr >(reason));
     return (NPError)execute();
 }
 
@@ -316,8 +316,8 @@ NPError PluginComm_Impl::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t 
     m_eCall = eNPP_New;
     m_aArgs[0] = (void*)pluginType;
     m_aArgs[1] = (void*)instance;
-    m_aArgs[2] = (void*)mode;
-    m_aArgs[3] = (void*)argc;
+    m_aArgs[2] = reinterpret_cast< void * >(static_cast< sal_uIntPtr >(mode));
+    m_aArgs[3] = reinterpret_cast< void * >(static_cast< sal_IntPtr >(argc));
     m_aArgs[4] = (void*)argn;
     m_aArgs[5] = (void*)argv;
     m_aArgs[6] = (void*)saved;
@@ -333,7 +333,8 @@ NPError PluginComm_Impl::NPP_NewStream( NPP instance, NPMIMEType type, NPStream*
     m_aArgs[0] = (void*)instance;
     m_aArgs[1] = (void*)type;
     m_aArgs[2] = (void*)stream;
-    m_aArgs[3] = (void*)seekable;
+    m_aArgs[3] = reinterpret_cast< void * >(
+        static_cast< sal_uIntPtr >(seekable));
     m_aArgs[4] = (void*)stype;
     return (NPError)execute();
 }
@@ -376,7 +377,7 @@ void PluginComm_Impl::NPP_URLNotify( NPP instance, const char* url, NPReason rea
     m_eCall = eNPP_URLNotify;
     m_aArgs[0] = (void*)instance;
     m_aArgs[1] = (void*)url;
-    m_aArgs[2] = (void*)reason;
+    m_aArgs[2] = reinterpret_cast< void * >(static_cast< sal_IntPtr >(reason));
     m_aArgs[3] = notifyData;
     execute();
 }
