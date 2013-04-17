@@ -65,8 +65,6 @@
 #include "ns_debug.hxx"
 #include <sal/config.h>
 
-#define PLUGIN_NAME         "LibreOffice"
-
 // Tranform all strings like %20 in pPath to one char like space
 /*int retoreUTF8(char* pPath)
 {
@@ -393,6 +391,7 @@ int UnixToDosPath(char* sPath)
 }
 
 #ifdef UNIX
+#define PLUGIN_NAME "LibreOffice"
 char productName[128] = {0};
 char* NSP_getProductName()
 {
