@@ -30,7 +30,9 @@
 #define DEFAULT_DRAGMODE    2
 #define DEFAULT_SNAPMODE    0
 #define DEFAULT_SCALEFACTOR 100
+#if defined UNX
 #define DEFAULT_AAMINHEIGHT 8
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
