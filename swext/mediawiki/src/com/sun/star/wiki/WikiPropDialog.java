@@ -18,25 +18,26 @@
 
 package com.sun.star.wiki;
 
+import java.util.Map;
+
 import com.sun.star.awt.XDialog;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.XComponentContext;
-import java.util.Hashtable;
 
 public class WikiPropDialog extends WikiDialog{
 
-    WikiEditorImpl m_aWikiEditor;
+    private WikiEditorImpl m_aWikiEditor;
 
     private final String sSendMethod = "Send";
     private final String sWikiListMethod = "WikiListChange";
     private final String sArticleTextMethod = "ArticleTextChange";
     private final String sAddWikiMethod = "AddWiki";
 
-    String[] m_pMethods = {sSendMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
+    private String[] m_pMethods = {sSendMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
 
     private String m_sWikiTitle = "";
-    protected String m_sWikiEngineURL = "";
+    private String m_sWikiEngineURL = "";
     protected String m_sWikiComment = "";
     protected boolean m_bWikiMinorEdit = false;
 
@@ -283,7 +284,7 @@ public class WikiPropDialog extends WikiDialog{
             SetThrobberActive( true );
 
             // the following method might show a dialog, should be used in main thread
-            final Hashtable aWikiSettings = m_aSettings.getSettingByUrl( m_sWikiEngineURL );
+            final Map<String,String> aWikiSettings = m_aSettings.getSettingByUrl( m_sWikiEngineURL );
             if ( Helper.AllowThreadUsage( m_xContext ) )
             {
                 m_aThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
