@@ -1602,7 +1602,6 @@
         </info>
         <prop oor:name="Path" oor:type="xs:string" oor:nillable="false">
         <info>
-        <author>GM</author>
         <desc>
             Access path, where images were loaded last time.
             The default is work directory.
