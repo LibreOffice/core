@@ -19,7 +19,7 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="System" oor:package="org.openoffice" xml:lang="en-US">
 	<info>
-		<desc >Contains preferences which are dynamically read from the system like UI locales.</desc>
+		<desc>Contains preferences which are dynamically read from the system like UI locales.</desc>
 	</info>
 	<component>
 		<group oor:name="L10N">

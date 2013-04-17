@@ -18,7 +18,7 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="VCL" oor:package="org.openoffice" xml:lang="en-US"> <info>
-		<desc >Contains preferences for the VCL (Visual Class Library).</desc>
+		<desc>Contains preferences for the VCL (Visual Class Library).</desc>
 	</info>
 	<templates>
 		<group oor:name="LFonts">

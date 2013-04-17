@@ -22,7 +22,7 @@
     xmlns:oor="http://openoffice.org/2001/registry"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <info>
-    <desc >Contains linguistic (spell checking, hyphenation, thesaurus) related
+    <desc>Contains linguistic (spell checking, hyphenation, thesaurus) related
     configurations.</desc>
   </info>
   <templates>

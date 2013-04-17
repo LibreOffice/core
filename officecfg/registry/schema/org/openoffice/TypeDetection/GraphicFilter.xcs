@@ -19,7 +19,7 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="GraphicFilter" oor:package="org.openoffice.TypeDetection" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <info>
-        <desc >Contains specialized data for internal graphic filter.</desc>
+        <desc>Contains specialized data for internal graphic filter.</desc>
     </info>
     <templates>
 		<group oor:name="Filter">

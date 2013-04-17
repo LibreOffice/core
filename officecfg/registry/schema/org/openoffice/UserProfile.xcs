@@ -18,7 +18,7 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UserProfile" oor:package="org.openoffice" xml:lang="en-US"> <info>
-		<desc >Contains user-related information, such as name and address.</desc>
+		<desc>Contains user-related information, such as name and address.</desc>
 	</info>
 	<component>
 		<group oor:name="Data">

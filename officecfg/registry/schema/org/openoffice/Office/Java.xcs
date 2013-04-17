@@ -22,7 +22,7 @@
 	<component>
 		<group oor:name="VirtualMachine">
 			<info>
-				<desc >Provides information used to initialize a Java Virtual Machine. </desc>
+				<desc>Provides information used to initialize a Java Virtual Machine. </desc>
 			</info>
 			<prop oor:name="Home" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Java -->

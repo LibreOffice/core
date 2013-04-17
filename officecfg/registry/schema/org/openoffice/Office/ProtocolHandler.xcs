@@ -18,7 +18,7 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ProtocolHandler" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc >Contains UNO services that support special URL protocols. These services are used generically.</desc>
+		<desc>Contains UNO services that support special URL protocols. These services are used generically.</desc>
 	</info>
 	<templates>
 		<group oor:name="Handler">

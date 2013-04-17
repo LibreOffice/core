@@ -19,7 +19,7 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="DrawImpressCommands" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
     <info>
-		<desc >Contains general information about ~ and rules, and about actions based on office commands.</desc>
+		<desc>Contains general information about ~ and rules, and about actions based on office commands.</desc>
 	</info>
 	<import oor:component="org.openoffice.Office.UI.Commands"/>
 	<uses oor:component="org.openoffice.Office.UI.Commands"/>

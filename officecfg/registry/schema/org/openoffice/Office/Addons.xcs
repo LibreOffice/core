@@ -18,7 +18,7 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Addons" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc >Contains general structures used to integrate external components into the Office user interface.</desc>
+		<desc>Contains general structures used to integrate external components into the Office user interface.</desc>
 	</info>
 	<templates>
 		<group oor:name="MenuItem">

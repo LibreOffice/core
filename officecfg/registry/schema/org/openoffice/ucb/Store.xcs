@@ -18,7 +18,7 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Store" oor:package="org.openoffice.ucb" xml:lang="en-US"> <info>
-		<desc >Contains components and templates used for storing UCB related data.</desc>
+		<desc>Contains components and templates used for storing UCB related data.</desc>
 	</info>
 	<templates>
 		<group oor:name="PropertyValue">

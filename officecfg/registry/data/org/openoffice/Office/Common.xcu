@@ -152,45 +152,45 @@
   <node oor:name="I18N">
     <node oor:name="CTL">
       <prop oor:name="CTLFont" install:module="ctl">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="CTLSequenceChecking" install:module="ctlseqcheck">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="CTLSequenceCheckingRestricted" install:module="ctlseqcheck">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="CTLSequenceCheckingTypeAndReplace" install:module="ctlseqcheck">
-        <value >true</value>
+        <value>true</value>
       </prop>
     </node>
     <node oor:name="CJK" install:module="cjk">
       <prop oor:name="VerticalText">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="VerticalCallOut">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="Ruby">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="JapaneseFind">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="EmphasisMarks">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="DoubleLines">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="CJKFont">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="ChangeCaseMap">
-        <value >true</value>
+        <value>true</value>
       </prop>
       <prop oor:name="AsianTypography">
-        <value >true</value>
+        <value>true</value>
       </prop>
     </node>
   </node>
@@ -198,79 +198,79 @@
     <node oor:name="New">
       <node oor:name="m0" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/swriter</value>
+          <value>private:factory/swriter</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Text Document</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m1" oor:op="replace" install:module="calc">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/scalc</value>
+          <value>private:factory/scalc</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Spreadsheet</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m2" oor:op="replace" install:module="impress">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/simpress?slot=6686</value>
+          <value>private:factory/simpress?slot=6686</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Presentation</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m3" oor:op="replace" install:module="draw">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/sdraw</value>
+          <value>private:factory/sdraw</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Drawing</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m4" oor:op="replace" install:module="base">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/sdatabase?Interactive</value>
+          <value>private:factory/sdatabase?Interactive</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">Database</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3245</value>
+          <value>private:image/3245</value>
         </prop>
       </node>
       <node oor:name="m5" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:separator</value>
+          <value>private:separator</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m6" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/swriter/web</value>
+          <value>private:factory/swriter/web</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~HTML Document</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m7" oor:op="replace" install:module="writer">
@@ -286,228 +286,228 @@
       </node>
       <node oor:name="m8" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/swriter/GlobalDocument</value>
+          <value>private:factory/swriter/GlobalDocument</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">M~aster Document</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m9" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:separator</value>
+          <value>private:separator</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m10" oor:op="replace" install:module="math">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/smath</value>
+          <value>private:factory/smath</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">F~ormula</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m11" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/swriter?slot=21051</value>
+          <value>private:factory/swriter?slot=21051</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Labels</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3255</value>
+          <value>private:image/3255</value>
         </prop>
       </node>
       <node oor:name="m12" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/swriter?slot=21052</value>
+          <value>private:factory/swriter?slot=21052</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">B~usiness Cards</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3255</value>
+          <value>private:image/3255</value>
         </prop>
       </node>
       <node oor:name="m13" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:separator</value>
+          <value>private:separator</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value>_default</value>
         </prop>
       </node>
       <node oor:name="m14" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >slot:5500</value>
+          <value>slot:5500</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">Templates</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3242</value>
+          <value>private:image/3242</value>
         </prop>
       </node>
     </node>
     <node oor:name="Wizard">
       <node oor:name="m0" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >service:com.sun.star.wizards.letter.CallWizard?insert</value>
+          <value>service:com.sun.star.wizards.letter.CallWizard?insert</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Letter...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
+          <value>private:image/3216</value>
         </prop>
       </node>
       <node oor:name="m1" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >service:com.sun.star.wizards.fax.CallWizard?insert</value>
+          <value>service:com.sun.star.wizards.fax.CallWizard?insert</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Fax...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
+          <value>private:image/3216</value>
         </prop>
       </node>
       <node oor:name="m2" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >service:com.sun.star.wizards.agenda.CallWizard?insert</value>
+          <value>service:com.sun.star.wizards.agenda.CallWizard?insert</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Agenda...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
+          <value>private:image/3216</value>
         </prop>
       </node>
       <node oor:name="m4" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:separator</value>
+          <value>private:separator</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
       </node>
       <node oor:name="m5" oor:op="replace" install:module="impress">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >slot:10425</value>
+          <value>slot:10425</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Presentation...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
+          <value>private:image/3216</value>
         </prop>
       </node>
       <node oor:name="m6" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:separator</value>
+          <value>private:separator</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
       </node>
       <node oor:name="m7" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >service:com.sun.star.wizards.web.CallWizard?start</value>
+          <value>service:com.sun.star.wizards.web.CallWizard?start</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Web Page...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
+          <value>private:image/3216</value>
         </prop>
       </node>
       <node oor:name="m10" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:separator</value>
+          <value>private:separator</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
       </node>
       <node oor:name="m11" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >macro:///ImportWizard.Main.Main</value>
+          <value>macro:///ImportWizard.Main.Main</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">Document ~Converter...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
+          <value>private:image/3216</value>
         </prop>
       </node>
       <node oor:name="m12" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >macro:///Euro.AutoPilotRun.StartAutoPilot</value>
+          <value>macro:///Euro.AutoPilotRun.StartAutoPilot</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Euro Converter...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
+          <value>private:image/3216</value>
         </prop>
       </node>
       <node oor:name="m13" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:separator</value>
+          <value>private:separator</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
       </node>
       <node oor:name="m14" oor:op="replace" install:module="base">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >slot:10934</value>
+          <value>slot:10934</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">Address Data Source...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
+          <value>_self</value>
         </prop>
         <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
+          <value>private:image/3216</value>
         </prop>
       </node>
     </node>
