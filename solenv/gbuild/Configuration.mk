@@ -226,7 +226,6 @@ $(call gb_XcuLangpackTarget_get_clean_target,%) :
 gb_XcuMergeTarget_CFGEXDEPS := $(call gb_Executable_get_runtime_dependencies,cfgex)
 gb_XcuMergeTarget_CFGEXCOMMAND := $(call gb_Executable_get_command,cfgex)
 
-# PRJNAME is computed from the stem (parameter $(2))
 define gb_XcuMergeTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,5)
 MERGEINPUT=`$(gb_MKTEMP)` && \
