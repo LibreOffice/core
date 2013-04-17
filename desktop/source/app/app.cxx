@@ -748,11 +748,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         if ( !aTemp.isEmpty() )
             aProductKey = aTemp;
 
-        OUString        aMessage;
-        OUStringBuffer    aBuffer( 100 );
-        aBuffer.append( aDiagnosticMessage );
-
-        aBuffer.appendAscii( "\n" );
+        OUString const aMessage(aDiagnosticMessage + "\n");
 
         ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
         aBootstrapFailedBox.SetText( aProductKey );
