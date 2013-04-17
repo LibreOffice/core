@@ -288,7 +288,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             assureEquals( "#i105235#: default value in sub form not working (not propagated to column model)", defaultValue, actualValue );
             // However, checking the column model's value alone is not enough - we need to ensure it is properly
             // propagated to the control.
-            XGridFieldDataSupplier gridData = (XGridFieldDataSupplier)subDocument.getCurrentView().getControl(
+            XGridFieldDataSupplier gridData = subDocument.getCurrentView().getControl(
                 gridControlModel, XGridFieldDataSupplier.class );
             actualValue = (String)(gridData.queryFieldData( 0, Type.STRING )[1]);
             assureEquals( "#i105235#: default value in sub form not working (not propagated to column)", defaultValue, actualValue );

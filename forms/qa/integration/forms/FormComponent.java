@@ -79,7 +79,7 @@ public class FormComponent
         @param aInterfaceClass
                 the class of the interface which shall be returned
     */
-    public Object query( Class aInterfaceClass )
+    public <T> T query( Class<T> aInterfaceClass )
     {
         return UnoRuntime.queryInterface( aInterfaceClass, m_component );
     }
