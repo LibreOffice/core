@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//+58\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3895,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-17T16:32:47Z",
+      "side": 1,
+      "message": "Ah, sorry, I overlooked the previous diff above the reading part.\n\nThis code is not used anywhere else than in copy\u0026paste or operations within the same LO version, or is it? Especially not in persistent streams.",
+      "parentUuid": "AAAAXH//+6M\u003d",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//+6U\u003d",
         "filename": "editeng/source/items/numitem.cxx",
         "patchSetId": 4
@@ -66,6 +84,41 @@
       "side": 1,
       "message": "Yes it could be done but we will have to add level number for each valid level. I don\u0027t know it will cost more or less than just \"0\" for each invalid level because normally for now all level are valid.",
       "parentUuid": "AAAAXH//+6U\u003d",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+54\u003d",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-17T16:32:47Z",
+      "side": 1,
+      "message": "Not sure what you mean. What I meant is that Store() should write the value SVX_MAX_NUM before the single items and then the reading part could read that value and loop over the value instead of the here hard coded SVX_MAX_NUM. Anyway, it doesn\u0027t matter as this code is to be executed only for copy\u0026paste, it would be different for persistent streams.",
+      "parentUuid": "AAAAXH//+6I\u003d",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+50\u003d",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-17T16:32:47Z",
+      "side": 1,
+      "message": "Just a nitpick ;-)\n\nI\u0027d write that as\n\n ((rStream.GetVersion() \u0026\u0026 (rStream.GetVersion() \u003c\u003d SOFFICE_FILEFORMAT_50))\n\nso GetVersion() needs to be called only once.\n\nNowadays, as not used in persistent file storage anymore, that stream version should be meaningless anyway so the entire check could be removed.",
       "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
