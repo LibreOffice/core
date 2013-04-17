@@ -26,18 +26,19 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicsrvgimmicks,$(SRCDIR)/wizards/source/gimmicks))
+$(eval $(call gb_Package_Package,wizards_basicsrvimport,$(SRCDIR)/wizards/source/importwizard))
 
-$(eval $(call gb_Zip_add_files,basicsrvgimmicks,\
-	AutoText.xba \
-	ChangeAllChars.xba \
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvimport,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicsrvimport,share/basic/ImportWizard,\
+	API.xba \
 	dialog.xlb \
-	GetTexts.xba \
-	ReadDir.xba \
-	ReadFolderDlg.xdl \
+	DialogModul.xba \
+	FilesModul.xba \
+	ImportDialog.xdl \
+	Language.xba\
+	Main.xba \
 	script.xlb \
-	UserfieldDlg.xdl \
-	Userfields.xba \
 ))
 
 # vim: set noet sw=4 ts=4:

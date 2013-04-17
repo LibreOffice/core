@@ -26,12 +26,20 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicsrvstandard,$(SRCDIR)/wizards/source/standard))
+$(eval $(call gb_Package_Package,wizards_basicsrvtools,$(SRCDIR)/wizards/source/tools))
 
-$(eval $(call gb_Zip_add_files,basicsrvstandard,\
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvtools,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicsrvtools,share/basic/Tools,\
+	Debug.xba \
 	dialog.xlb \
-	Module1.xba \
+	DlgOverwriteAll.xdl \
+	Listbox.xba \
+	Misc.xba \
+	ModuleControls.xba\
 	script.xlb \
+	Strings.xba \
+	UCB.xba \
 ))
 
 # vim: set noet sw=4 ts=4:

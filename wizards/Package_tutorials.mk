@@ -26,9 +26,11 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Zip_Zip,basicsrvtutorials,$(SRCDIR)/wizards/source/tutorials))
+$(eval $(call gb_Package_Package,wizards_basicsrvtutorials,$(SRCDIR)/wizards/source/tutorials))
 
-$(eval $(call gb_Zip_add_files,basicsrvtutorials,\
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvtutorials,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,wizards_basicsrvtutorials,share/basic/Tutorials,\
 	dialog.xlb \
 	Functions.xba \
 	RoadMap.xba \
