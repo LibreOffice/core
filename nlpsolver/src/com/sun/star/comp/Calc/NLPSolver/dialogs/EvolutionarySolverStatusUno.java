@@ -274,7 +274,7 @@ public class EvolutionarySolverStatusUno extends BaseDialog
     }
 
     public void dispose() {
-        XComponent component = (XComponent) UnoRuntime.queryInterface(XComponent.class, xDialog);
+        XComponent component = UnoRuntime.queryInterface(XComponent.class, xDialog);
         component.dispose();
     }
 

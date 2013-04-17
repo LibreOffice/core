@@ -117,7 +117,7 @@ public class testclient
                 {
                     System.out.println( "after connect" );
                     String rootOid = "OfficeDaemon.Factory";
-                    com.sun.star.uno.IBridge bridge = (IBridge ) UnoRuntime.getBridgeByName(
+                    com.sun.star.uno.IBridge bridge = UnoRuntime.getBridgeByName(
                         "java",
                         null,
                         "remote",

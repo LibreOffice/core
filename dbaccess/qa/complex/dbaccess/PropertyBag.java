@@ -294,7 +294,7 @@ public class PropertyBag extends TestCase
                 { "BoolValue", Boolean.TRUE },
                 { "StringValue", "" },
                 { "IntegerValue", Integer.valueOf( 3 ) },
-                { "InterfaceValue", (XInterface)m_bag }
+                { "InterfaceValue", m_bag }
             };
             for ( int i=0; i<properties.length; ++i )
             {

@@ -59,7 +59,7 @@ public class Button extends LabeledControl {
     @Override
     public void setParentControl(BaseControl parentControl) {
         super.setParentControl(parentControl);
-        xButton = (XButton) UnoRuntime.queryInterface(XButton.class, unoControl);
+        xButton = UnoRuntime.queryInterface(XButton.class, unoControl);
     }
     
     public void addActionListener(XActionListener actionListener) {

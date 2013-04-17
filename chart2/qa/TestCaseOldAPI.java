@@ -113,7 +113,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         else
             mxChartModel = createChartModel();
 
-        mxOldDoc = (XChartDocument) UnoRuntime.queryInterface(
+        mxOldDoc = UnoRuntime.queryInterface(
             XChartDocument.class, mxChartModel );
     }
 
@@ -121,7 +121,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
     public void after()
     {
-        XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(
+        XCloseable xCloseable = UnoRuntime.queryInterface(
             XCloseable.class, mxChartModel );
         assure( "document is no XCloseable", xCloseable != null );
 
@@ -146,7 +146,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
     {
         try
         {
-            XPropertySet xDocProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xDocProp = UnoRuntime.queryInterface(
                 XPropertySet.class, mxOldDoc );
             assure( "Chart Document is no XPropertySet", xDocProp != null );
             xDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
@@ -154,7 +154,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                         xDocProp.getPropertyValue( "HasMainTitle" )));
 
             XShape xTitleShape = mxOldDoc.getTitle();
-            XPropertySet xTitleProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xTitleProp = UnoRuntime.queryInterface(
                 XPropertySet.class, xTitleShape );
 
             // set property via old API
@@ -196,7 +196,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
     {
         try
         {
-            XPropertySet xDocProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xDocProp = UnoRuntime.queryInterface(
                 XPropertySet.class, mxOldDoc );
             assure( "Chart Document is no XPropertySet", xDocProp != null );
             xDocProp.setPropertyValue( "HasSubTitle", new Boolean( true ));
@@ -204,7 +204,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                         xDocProp.getPropertyValue( "HasSubTitle" )));
 
             XShape xTitleShape = mxOldDoc.getSubTitle();
-            XPropertySet xTitleProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xTitleProp = UnoRuntime.queryInterface(
                 XPropertySet.class, xTitleShape );
 
             // set Property via old API
@@ -245,7 +245,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             XDiagram xDia = mxOldDoc.getDiagram();
             if( xDia != null )
             {
-                X3DDisplay xDisp = (X3DDisplay) UnoRuntime.queryInterface(
+                X3DDisplay xDisp = UnoRuntime.queryInterface(
                     X3DDisplay.class, xDia );
                 assure( "X3DDisplay not supported", xDisp != null );
 
@@ -263,7 +263,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                             "com.sun.star.chart.BarDiagram" ));
 
                 // Diagram properties
-                xProp = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, xDia );
+                xProp = UnoRuntime.queryInterface( XPropertySet.class, xDia );
                 assure( "Diagram is no property set", xProp != null );
 
                 // y-axis
@@ -295,7 +295,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                     xProp.getPropertyValue( "HasSecondaryYAxis" ));
                 assure( "Adding a second y-axis does not work", bNewSecYAxisValue == bSecondaryYAxis );
 
-                XTwoAxisYSupplier xSecYAxisSuppl = (XTwoAxisYSupplier) UnoRuntime.queryInterface(
+                XTwoAxisYSupplier xSecYAxisSuppl = UnoRuntime.queryInterface(
                     XTwoAxisYSupplier.class, xDia );
                 assure( "XTwoAxisYSupplier not implemented", xSecYAxisSuppl != null );
                 assure( "No second y-axis found", xSecYAxisSuppl.getSecondaryYAxis() != null );
@@ -303,7 +303,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
             // move diagram
             {
-                XShape xDiagramShape = (XShape) UnoRuntime.queryInterface(
+                XShape xDiagramShape = UnoRuntime.queryInterface(
                     XShape.class, xDia );
 
                 Point aOldPos = xDiagramShape.getPosition();
@@ -323,7 +323,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
             // size diagram
             {
-                XShape xDiagramShape = (XShape) UnoRuntime.queryInterface(
+                XShape xDiagramShape = UnoRuntime.queryInterface(
                     XShape.class, xDia );
 
                 Size aOldSize = xDiagramShape.getSize();
@@ -354,7 +354,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
     {
         try
         {
-            XAxisYSupplier xYAxisSuppl = (XAxisYSupplier) UnoRuntime.queryInterface(
+            XAxisYSupplier xYAxisSuppl = UnoRuntime.queryInterface(
                 XAxisYSupplier.class, mxOldDoc.getDiagram() );
             assure( "Diagram is no y-axis supplier", xYAxisSuppl != null );
 
@@ -452,7 +452,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         XShape xLegend = mxOldDoc.getLegend();
         assure( "No Legend returned", xLegend != null );
 
-        XPropertySet xLegendProp = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet xLegendProp = UnoRuntime.queryInterface(
             XPropertySet.class, xLegend );
         assure( "Legend is no property set", xLegendProp != null );
 
@@ -532,7 +532,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
     public void testChartType()
     {
-        XMultiServiceFactory xFact = (XMultiServiceFactory) UnoRuntime.queryInterface(
+        XMultiServiceFactory xFact = UnoRuntime.queryInterface(
             XMultiServiceFactory.class, mxOldDoc );
         assure( "document is no factory", xFact != null );
 
@@ -553,13 +553,13 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
             if( bServiceFound )
             {
-                XDiagram xDia = (XDiagram) UnoRuntime.queryInterface(
+                XDiagram xDia = UnoRuntime.queryInterface(
                     XDiagram.class, xFact.createInstance( aMyServiceName ));
                 assure( aMyServiceName + " could not be created", xDia != null );
 
                 mxOldDoc.setDiagram( xDia );
 
-                XPropertySet xDiaProp = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet xDiaProp = UnoRuntime.queryInterface(
                     XPropertySet.class, xDia );
                 assure( "Diagram is no XPropertySet", xDiaProp != null );
 
@@ -599,11 +599,11 @@ public class TestCaseOldAPI extends ComplexTestCase {
     public void testAggregation()
     {
         // query to new type
-        XChartDocument xDiaProv = (XChartDocument) UnoRuntime.queryInterface(
+        XChartDocument xDiaProv = UnoRuntime.queryInterface(
             XChartDocument.class, mxOldDoc );
         assure( "query to new interface failed", xDiaProv != null );
 
-        com.sun.star.chart.XChartDocument xDoc = (com.sun.star.chart.XChartDocument) UnoRuntime.queryInterface(
+        com.sun.star.chart.XChartDocument xDoc = UnoRuntime.queryInterface(
             com.sun.star.chart.XChartDocument.class, xDiaProv );
         assure( "querying back to old interface failed", xDoc != null );
     }
@@ -616,7 +616,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         {
             XDiagram xDia = mxOldDoc.getDiagram();
             assure( "Invalid Diagram", xDia != null );
-            XMultiServiceFactory xFact = (XMultiServiceFactory) UnoRuntime.queryInterface(
+            XMultiServiceFactory xFact = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, mxOldDoc );
             assure( "document is no factory", xFact != null );
 
@@ -632,7 +632,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
             // note: the FillGradient property is optional, however it was
             // supported in the old chart's API
-            XNameContainer xGradientTable = (XNameContainer) UnoRuntime.queryInterface(
+            XNameContainer xGradientTable = UnoRuntime.queryInterface(
                 XNameContainer.class,
                 xFact.createInstance( "com.sun.star.drawing.GradientTable" ));
             assure( "no gradient table", xGradientTable != null );
@@ -674,7 +674,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
             // note: the FillHatch property is optional, however it was
             // supported in the old chart's API
-            XNameContainer xHatchTable = (XNameContainer) UnoRuntime.queryInterface(
+            XNameContainer xHatchTable = UnoRuntime.queryInterface(
                 XNameContainer.class,
                 xFact.createInstance( "com.sun.star.drawing.HatchTable" ));
             assure( "no hatch table", xHatchTable != null );
@@ -735,7 +735,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
     {
         try
         {
-            XPropertySet xDiaProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xDiaProp = UnoRuntime.queryInterface(
                 XPropertySet.class, mxOldDoc.getDiagram() );
 
             ChartDataRowSource eNewSource = ChartDataRowSource.ROWS;
@@ -766,7 +766,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
 
             XChartData xData = mxOldDoc.getData();
-            XChartDataArray xDataArray = (XChartDataArray) UnoRuntime.queryInterface(
+            XChartDataArray xDataArray = UnoRuntime.queryInterface(
                 XChartDataArray.class, xData );
             assure( "document has no XChartDataArray", xDataArray != null );
 
@@ -791,18 +791,18 @@ public class TestCaseOldAPI extends ComplexTestCase {
         {
             setStockData_Type4();
 
-            XMultiServiceFactory xFact = (XMultiServiceFactory) UnoRuntime.queryInterface(
+            XMultiServiceFactory xFact = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, mxOldDoc );
             assure( "document is no factory", xFact != null );
 
             String aMyServiceName = new String( "com.sun.star.chart.StockDiagram" );
-            XDiagram xDia = (XDiagram) UnoRuntime.queryInterface(
+            XDiagram xDia = UnoRuntime.queryInterface(
                 XDiagram.class, xFact.createInstance( aMyServiceName ));
             assure( aMyServiceName + " could not be created", xDia != null );
 
             mxOldDoc.setDiagram( xDia );
 
-            XPropertySet xDiaProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xDiaProp = UnoRuntime.queryInterface(
                 XPropertySet.class, xDia );
             assure( "Diagram is no XPropertySet", xDiaProp != null );
 
@@ -813,7 +813,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             assure( "Has UpDown", AnyConverter.toBoolean( xDiaProp.getPropertyValue( "UpDown" )));
 
             // MinMaxLine
-            XStatisticDisplay xMinMaxProvider = (XStatisticDisplay) UnoRuntime.queryInterface(
+            XStatisticDisplay xMinMaxProvider = UnoRuntime.queryInterface(
                 XStatisticDisplay.class, xDia );
             assure( "Diagram is no XStatisticDisplay", xMinMaxProvider != null );
             XPropertySet xMinMaxProp = xMinMaxProvider.getMinMaxLine();
@@ -837,7 +837,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
     {
         try
         {
-            XMultiServiceFactory xFact = (XMultiServiceFactory) UnoRuntime.queryInterface(
+            XMultiServiceFactory xFact = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, mxOldDoc );
             assure( "document is no factory", xFact != null );
 
@@ -873,7 +873,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 "First Row", "Second Row", "Third Row"
             };
 
-            XPropertySet xDiaProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xDiaProp = UnoRuntime.queryInterface(
                     XPropertySet.class, mxOldDoc.getDiagram() );
             ChartDataRowSource eNewSource = ChartDataRowSource.ROWS;
             xDiaProp.setPropertyValue( "DataRowSource", eNewSource );
@@ -883,7 +883,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                         xDiaProp.getPropertyValue( "DataRowSource" )) == eNewSource );
 
             XChartData xData = mxOldDoc.getData();
-            XChartDataArray xDataArray = (XChartDataArray) UnoRuntime.queryInterface(
+            XChartDataArray xDataArray = UnoRuntime.queryInterface(
                 XChartDataArray.class, xData );
             assure( "document has no XChartDataArray", xDataArray != null );
 
@@ -900,7 +900,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
             // refetch data
             xData = mxOldDoc.getData();
-            xDataArray = (XChartDataArray) UnoRuntime.queryInterface(
+            xDataArray = UnoRuntime.queryInterface(
                 XChartDataArray.class, xData );
             assure( "document has no XChartDataArray", xDataArray != null );
 
@@ -945,11 +945,11 @@ public class TestCaseOldAPI extends ComplexTestCase {
         XModel aResult = null;
         try
         {
-            XComponentLoader aLoader = (XComponentLoader) UnoRuntime.queryInterface(
+            XComponentLoader aLoader = UnoRuntime.queryInterface(
                 XComponentLoader.class,
                 ((XMultiServiceFactory)param.getMSF()).createInstance( "com.sun.star.frame.Desktop" ) );
 
-            aResult = (XModel) UnoRuntime.queryInterface(
+            aResult = UnoRuntime.queryInterface(
                 XModel.class,
                 aLoader.loadComponentFromURL( "private:factory/" + sDocType,
                                               "_blank",
@@ -972,7 +972,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
         XModel aResult = null;
         try
         {
-            aResult = (XModel) UnoRuntime.queryInterface(
+            aResult = UnoRuntime.queryInterface(
                 XModel.class,
                 ((XMultiServiceFactory)param.getMSF()).createInstance( "com.sun.star.comp.chart2.ChartModel" ) );
         }
@@ -991,7 +991,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
     {
         XComponentContext xResult = null;
 
-        XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet xProp = UnoRuntime.queryInterface(
             XPropertySet.class, xFact );
         if( xProp != null )
             try

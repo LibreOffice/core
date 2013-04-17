@@ -45,12 +45,12 @@ public class Frame implements   XFrame,
     {
         if ( _frameComponent != null )
         {
-            m_frame = (XFrame)UnoRuntime.queryInterface( XFrame.class, _frameComponent );
-            m_dispatchProvider = (XDispatchProvider)UnoRuntime.queryInterface( XDispatchProvider.class, _frameComponent );
-            m_dispatchProviderInterception = (XDispatchProviderInterception)UnoRuntime.queryInterface( XDispatchProviderInterception.class, _frameComponent );
-            m_framesSupplier = (XFramesSupplier)UnoRuntime.queryInterface( XFramesSupplier.class, _frameComponent );
-            m_statusIndicatorFactory = (XStatusIndicatorFactory)UnoRuntime.queryInterface( XStatusIndicatorFactory.class, _frameComponent );
-            m_closeable = (XCloseable)UnoRuntime.queryInterface( XCloseable.class, _frameComponent );
+            m_frame = UnoRuntime.queryInterface( XFrame.class, _frameComponent );
+            m_dispatchProvider = UnoRuntime.queryInterface( XDispatchProvider.class, _frameComponent );
+            m_dispatchProviderInterception = UnoRuntime.queryInterface( XDispatchProviderInterception.class, _frameComponent );
+            m_framesSupplier = UnoRuntime.queryInterface( XFramesSupplier.class, _frameComponent );
+            m_statusIndicatorFactory = UnoRuntime.queryInterface( XStatusIndicatorFactory.class, _frameComponent );
+            m_closeable = UnoRuntime.queryInterface( XCloseable.class, _frameComponent );
         }
     }
 

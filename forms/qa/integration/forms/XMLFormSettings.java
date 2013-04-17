@@ -101,7 +101,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
         File tempFile = File.createTempFile( "xmlforms", ".odt" );
         tempFile.deleteOnExit();
         String fileURL = tempFile.toURI().toURL().toExternalForm();
-        XStorable store = (XStorable)UnoRuntime.queryInterface( XStorable.class,
+        XStorable store = UnoRuntime.queryInterface( XStorable.class,
             m_document.getDocument() );
         store.storeAsURL( fileURL, new PropertyValue[] {} );
         assure( "document still modified after saving it", !m_document.isModified() );
@@ -118,7 +118,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     {
         if ( m_document != null )
         {
-            XCloseable closeDoc = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,
+            XCloseable closeDoc = UnoRuntime.queryInterface( XCloseable.class,
                 m_document.getDocument() );
             closeDoc.close( true );
         }
@@ -127,9 +127,9 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     private static void impl_bind( XPropertySet _control, XPropertySet _binding ) throws IncompatibleTypesException
     {
-        XBindableValue bindableControl = (XBindableValue)UnoRuntime.queryInterface(
+        XBindableValue bindableControl = UnoRuntime.queryInterface(
             XBindableValue.class, _control );
-        XValueBinding binding = (XValueBinding)UnoRuntime.queryInterface(
+        XValueBinding binding = UnoRuntime.queryInterface(
             XValueBinding.class, _binding );
         bindableControl.setValueBinding( binding );
     }
@@ -209,7 +209,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
      */
     private void impl_storeDocument() throws IOException
     {
-        XStorable store = (XStorable)UnoRuntime.queryInterface( XStorable.class,
+        XStorable store = UnoRuntime.queryInterface( XStorable.class,
             m_document.getDocument() );
         store.store();
         assure( "document still modified after saving it", !m_document.isModified() );

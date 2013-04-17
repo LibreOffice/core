@@ -41,18 +41,18 @@ public class TestPGP {
 
 
     static void doSomething(Object r) throws com.sun.star.uno.Exception, IOException, Exception {
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(XNamingService.class, r);
+        XNamingService rName = UnoRuntime.queryInterface(XNamingService.class, r);
 
         if(rName != null) {
             System.err.println("got the remote naming service !");
             Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager");
 
-            XMultiServiceFactory rSmgr = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class, rXsmgr);
+            XMultiServiceFactory rSmgr = UnoRuntime.queryInterface(XMultiServiceFactory.class, rXsmgr);
             if(rSmgr != null) {
                 System.err.println("got the remote service manager !");
             }
 
-            XSet set= (XSet)UnoRuntime.queryInterface(XSet.class, rSmgr);
+            XSet set= UnoRuntime.queryInterface(XSet.class, rSmgr);
             if( set == null) {
                 System.err.println(" couldn't get XSet from ServiceFactory");
                 return;

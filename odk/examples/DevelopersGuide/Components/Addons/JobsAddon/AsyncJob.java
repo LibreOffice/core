@@ -253,7 +253,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         try
         {
             // get access to the office toolkit environment
-            com.sun.star.awt.XToolkit xKit = (com.sun.star.awt.XToolkit)UnoRuntime.queryInterface(
+            com.sun.star.awt.XToolkit xKit = UnoRuntime.queryInterface(
                  com.sun.star.awt.XToolkit.class,
                  m_xCmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit",
                                                                          m_xCmpCtx));
@@ -267,13 +267,13 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
                                             com.sun.star.awt.WindowAttribute.CLOSEABLE;
             aDescriptor.Type              = com.sun.star.awt.WindowClass.MODALTOP;
             aDescriptor.ParentIndex       = 1;
-            aDescriptor.Parent            = (com.sun.star.awt.XWindowPeer)UnoRuntime.queryInterface(
+            aDescriptor.Parent            = UnoRuntime.queryInterface(
                                                 com.sun.star.awt.XWindowPeer.class,
                                                 xParent);
 
             // create the info box window
             com.sun.star.awt.XWindowPeer xPeer    = xKit.createWindow(aDescriptor);
-            com.sun.star.awt.XMessageBox xInfoBox = (com.sun.star.awt.XMessageBox)UnoRuntime.queryInterface(
+            com.sun.star.awt.XMessageBox xInfoBox = UnoRuntime.queryInterface(
                                                         com.sun.star.awt.XMessageBox.class,
                                                         xPeer);
             if (xInfoBox == null)

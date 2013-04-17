@@ -73,7 +73,7 @@ public class ChartInWriter
         Helper aHelper = new Helper( args );
 
         ChartHelper aChartHelper = new ChartHelper(
-            (XModel) UnoRuntime.queryInterface( XModel.class,
+            UnoRuntime.queryInterface( XModel.class,
                                                 aHelper.createTextDocument()));
 
         // the unit for measures is 1/100th of a millimeter
@@ -126,7 +126,7 @@ public class ChartInWriter
     public void lockControllers()
         throws RuntimeException
     {
-        ((XModel) UnoRuntime.queryInterface( XModel.class, maChartDocument )).lockControllers();
+        UnoRuntime.queryInterface( XModel.class, maChartDocument ).lockControllers();
     }
 
     // ____________________
@@ -134,7 +134,7 @@ public class ChartInWriter
     public void unlockControllers()
         throws RuntimeException
     {
-        ((XModel) UnoRuntime.queryInterface( XModel.class, maChartDocument )).unlockControllers();
+        UnoRuntime.queryInterface( XModel.class, maChartDocument ).unlockControllers();
     }
 
     // ____________________
@@ -143,8 +143,8 @@ public class ChartInWriter
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
                com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
-        XPropertySet aWall = ((X3DDisplay) UnoRuntime.queryInterface(
-                                  X3DDisplay.class, maDiagram )).getWall();
+        XPropertySet aWall = UnoRuntime.queryInterface(
+                                  X3DDisplay.class, maDiagram ).getWall();
 
         // change background color of area
         aWall.setPropertyValue( "FillColor", new Integer( 0xeecc99 ));

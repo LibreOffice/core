@@ -100,12 +100,12 @@ public class ListSelection extends integration.forms.TestCase
                 XSpreadsheet activeSheet = view.getActiveSheet();
 
                 // Accessibility access to the list box control in this sheet
-                XAccessible accessibleListBox = (XAccessible)UnoRuntime.queryInterface(
+                XAccessible accessibleListBox = UnoRuntime.queryInterface(
                     XAccessible.class, getListBoxControl( activeSheet ) );
                 XAccessibleContext context = accessibleListBox.getAccessibleContext();
 
                 // the first "accessible child" of a list box is its list
-                XAccessibleSelection accessibleList = (XAccessibleSelection)UnoRuntime.queryInterface(
+                XAccessibleSelection accessibleList = UnoRuntime.queryInterface(
                     XAccessibleSelection.class, context.getAccessibleChild( 1 ) );
 
                 int selectPosition = generator.nextInt( 5 );
@@ -120,7 +120,7 @@ public class ListSelection extends integration.forms.TestCase
                 }
                 catch( java.lang.InterruptedException e ) { }
 
-                XNamed sheetName = (XNamed)UnoRuntime.queryInterface( XNamed.class, view.getActiveSheet() );
+                XNamed sheetName = UnoRuntime.queryInterface( XNamed.class, view.getActiveSheet() );
                 assure( "sheet was not selected as expected!", sheetName.getName().equals( selectSheetName ) );
             }
         }
@@ -137,7 +137,7 @@ public class ListSelection extends integration.forms.TestCase
         try
         {
             XPropertySet docProps = dbfTools.queryPropertySet( m_document.getDocument() );
-            XLibraryContainer basicLibs = (XLibraryContainer)UnoRuntime.queryInterface(
+            XLibraryContainer basicLibs = UnoRuntime.queryInterface(
                 XLibraryContainer.class, docProps.getPropertyValue( "BasicLibraries" ) );
             XNameContainer basicLib = basicLibs.createLibrary( "default" );
 
@@ -184,7 +184,7 @@ public class ListSelection extends integration.forms.TestCase
         {
             XIndexContainer parentForm = (XIndexContainer)dbfTools.getParent( controlModel, XIndexContainer.class );
 
-            XEventAttacherManager manager = (XEventAttacherManager)UnoRuntime.queryInterface(
+            XEventAttacherManager manager = UnoRuntime.queryInterface(
                 XEventAttacherManager.class, parentForm );
 
             int containerPosition = -1;
@@ -230,7 +230,7 @@ public class ListSelection extends integration.forms.TestCase
         String[] newSheetNames = new String[] { "first", "second", "third", "forth", "fifth" };
 
         // give the first one the right name
-        XNamed sheet = (XNamed)UnoRuntime.queryInterface( XNamed.class,
+        XNamed sheet = UnoRuntime.queryInterface( XNamed.class,
             sheets.getByName( sheetNames[ 0 ] )
         );
         sheet.setName( newSheetNames[ 0 ] );
@@ -274,7 +274,7 @@ public class ListSelection extends integration.forms.TestCase
     /* ------------------------------------------------------------------ */
     protected XControlModel getListBoxModel( XSpreadsheet sheet )
     {
-        XDrawPageSupplier suppPage = (XDrawPageSupplier)UnoRuntime.queryInterface(
+        XDrawPageSupplier suppPage = UnoRuntime.queryInterface(
             XDrawPageSupplier.class, sheet );
         FormComponent formsRoot = new FormComponent( suppPage.getDrawPage() );
         XControlModel listBoxModel = (XControlModel)formsRoot.getByIndex( 0 ).
@@ -285,7 +285,7 @@ public class ListSelection extends integration.forms.TestCase
     /* ------------------------------------------------------------------ */
     protected XListBox getListBoxControl( XSpreadsheet sheet ) throws com.sun.star.uno.Exception
     {
-        return (XListBox)UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
             XListBox.class, m_document.getCurrentView().getControl( getListBoxModel( sheet ) ) );
     }
  }

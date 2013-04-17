@@ -60,12 +60,12 @@ public class ResourceManager {
         m_resourceBaseUrl = m_oxtRoot + relativeResourceBaseUrl;
 
         try {
-            XMultiServiceFactory xConfig = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class,
+            XMultiServiceFactory xConfig = UnoRuntime.queryInterface(XMultiServiceFactory.class,
                 m_context.getServiceManager().createInstanceWithContext("com.sun.star.configuration.ConfigurationProvider", m_context));
 
             Object[] args = new Object[1];
             args[0] = new PropertyValue("nodepath", 0, "/org.openoffice.Setup/L10N", PropertyState.DIRECT_VALUE);
-            XPropertySet xConfigProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,
+            XPropertySet xConfigProps = UnoRuntime.queryInterface(XPropertySet.class,
                 xConfig.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args));
             String[] locale = AnyConverter.toString(xConfigProps.getPropertyValue("ooLocale")).split("-");
             String lang = locale[0];

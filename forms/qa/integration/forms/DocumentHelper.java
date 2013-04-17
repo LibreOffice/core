@@ -67,7 +67,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
     {
-        XComponentLoader aLoader = (XComponentLoader)UnoRuntime.queryInterface(
+        XComponentLoader aLoader = UnoRuntime.queryInterface(
             XComponentLoader.class,
             orb.createInstance( "com.sun.star.frame.Desktop" )
         );
@@ -89,7 +89,7 @@ public class DocumentHelper
     {
         XComponent document = implLoadAsComponent( orb, documentOrFactoryURL, i_args );
 
-        XServiceInfo xSI = (XServiceInfo)UnoRuntime.queryInterface( XServiceInfo.class,
+        XServiceInfo xSI = UnoRuntime.queryInterface( XServiceInfo.class,
             document );
         if ( xSI.supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
             return new SpreadsheetDocument( orb, document );
@@ -157,7 +157,7 @@ public class DocumentHelper
     public DocumentViewHelper getCurrentView( )
     {
         // get the model interface for the document
-        XModel xDocModel = (XModel)UnoRuntime.queryInterface(XModel.class, m_documentComponent );
+        XModel xDocModel = UnoRuntime.queryInterface(XModel.class, m_documentComponent );
         // get the current controller for the document - as a controller is tied to a view,
         // this gives us the currently active view for the document.
         XController xController = xDocModel.getCurrentController();
@@ -188,7 +188,7 @@ public class DocumentHelper
 
         getCurrentView().dispatch( ".uno:Reload" );
 
-        m_documentComponent = (XComponent)UnoRuntime.queryInterface( XComponent.class,
+        m_documentComponent = UnoRuntime.queryInterface( XComponent.class,
             frame.getController().getModel() );
 
         XModel newModel = getCurrentView().getController().getModel();
@@ -222,7 +222,7 @@ public class DocumentHelper
         }
 
         // outta here
-        return (XIndexContainer)UnoRuntime.queryInterface( XIndexContainer.class, xNewForm );
+        return UnoRuntime.queryInterface( XIndexContainer.class, xNewForm );
     }
 
     /* ------------------------------------------------------------------ */
@@ -237,7 +237,7 @@ public class DocumentHelper
     public XIndexContainer createSubForm( Object aParentContainer, String sInitialName )
         throws com.sun.star.uno.Exception
     {
-        XIndexContainer xParentContainer = (XIndexContainer)UnoRuntime.queryInterface(
+        XIndexContainer xParentContainer = UnoRuntime.queryInterface(
             XIndexContainer.class, aParentContainer );
         return createSubForm( xParentContainer, sInitialName );
     }
@@ -265,13 +265,13 @@ public class DocumentHelper
     */
     static public DocumentHelper getDocumentForComponent( Object aFormComponent, XMultiServiceFactory orb )
     {
-        XChild xChild = (XChild)UnoRuntime.queryInterface( XChild.class, aFormComponent );
+        XChild xChild = UnoRuntime.queryInterface( XChild.class, aFormComponent );
         XModel xModel = null;
         while ( ( null != xChild ) && ( null == xModel ) )
         {
             XInterface xParent = (XInterface)xChild.getParent();
-            xModel = (XModel)UnoRuntime.queryInterface( XModel.class, xParent );
-            xChild = (XChild)UnoRuntime.queryInterface( XChild.class, xParent );
+            xModel = UnoRuntime.queryInterface( XModel.class, xParent );
+            xChild = UnoRuntime.queryInterface( XChild.class, xParent );
         }
 
         return new DocumentHelper( orb, xModel );
@@ -298,7 +298,7 @@ public class DocumentHelper
     */
     public DocumentType classify( )
     {
-        XServiceInfo xSI = (XServiceInfo)UnoRuntime.queryInterface(
+        XServiceInfo xSI = UnoRuntime.queryInterface(
             XServiceInfo.class, m_documentComponent );
 
         if ( xSI.supportsService( "com.sun.star.text.TextDocument" ) )
@@ -321,11 +321,11 @@ public class DocumentHelper
      */
     protected XDrawPage getDrawPage( int index ) throws com.sun.star.lang.IndexOutOfBoundsException, com.sun.star.lang.WrappedTargetException
     {
-        XDrawPagesSupplier xSuppPages = (XDrawPagesSupplier)UnoRuntime.queryInterface(
+        XDrawPagesSupplier xSuppPages = UnoRuntime.queryInterface(
             XDrawPagesSupplier.class, getDocument() );
         XDrawPages xPages = xSuppPages.getDrawPages();
 
-        return (XDrawPage)UnoRuntime.queryInterface( XDrawPage.class, xPages.getByIndex( index ) );
+        return UnoRuntime.queryInterface( XDrawPage.class, xPages.getByIndex( index ) );
     }
 
     /* ------------------------------------------------------------------ */
@@ -336,18 +336,18 @@ public class DocumentHelper
         XDrawPage xReturn;
 
         // in case of a Writer document, this is rather easy: simply ask the XDrawPageSupplier
-        XDrawPageSupplier xSuppPage = (XDrawPageSupplier)UnoRuntime.queryInterface(
+        XDrawPageSupplier xSuppPage = UnoRuntime.queryInterface(
             XDrawPageSupplier.class, getDocument() );
         if ( null != xSuppPage )
             xReturn = xSuppPage.getDrawPage();
         else
         {   // the model itself is no draw page supplier - okay, it may be a Writer or Calc document
             // (or any other multi-page document)
-            XDrawPagesSupplier xSuppPages = (XDrawPagesSupplier)UnoRuntime.queryInterface(
+            XDrawPagesSupplier xSuppPages = UnoRuntime.queryInterface(
                 XDrawPagesSupplier.class, getDocument() );
             XDrawPages xPages = xSuppPages.getDrawPages();
 
-            xReturn = (XDrawPage)UnoRuntime.queryInterface( XDrawPage.class, xPages.getByIndex( 0 ) );
+            xReturn = UnoRuntime.queryInterface( XDrawPage.class, xPages.getByIndex( 0 ) );
 
             // Note that this is no really error-proof code: If the document model does not support the
             // XDrawPagesSupplier interface, or if the pages collection returned is empty, this will break.
@@ -361,7 +361,7 @@ public class DocumentHelper
     */
     protected XNameContainer getFormComponentTreeRoot( ) throws com.sun.star.uno.Exception
     {
-        XFormsSupplier xSuppForms = (XFormsSupplier)UnoRuntime.queryInterface(
+        XFormsSupplier xSuppForms = UnoRuntime.queryInterface(
             XFormsSupplier.class, getMainDrawPage( ) );
 
         XNameContainer xFormsCollection = null;
@@ -377,7 +377,7 @@ public class DocumentHelper
     */
     public XInterface createInstance( String serviceSpecifier ) throws com.sun.star.uno.Exception
     {
-        XMultiServiceFactory xORB = (XMultiServiceFactory)UnoRuntime.queryInterface( XMultiServiceFactory.class,
+        XMultiServiceFactory xORB = UnoRuntime.queryInterface( XMultiServiceFactory.class,
             m_documentComponent );
         return (XInterface)xORB.createInstance( serviceSpecifier );
     }
@@ -387,7 +387,7 @@ public class DocumentHelper
     */
     public XInterface createInstanceWithArguments( String serviceSpecifier, Object[] arguments ) throws com.sun.star.uno.Exception
     {
-        XMultiServiceFactory xORB = (XMultiServiceFactory)UnoRuntime.queryInterface( XMultiServiceFactory.class,
+        XMultiServiceFactory xORB = UnoRuntime.queryInterface( XMultiServiceFactory.class,
             m_documentComponent );
         return (XInterface) xORB.createInstanceWithArguments( serviceSpecifier, arguments );
     }

@@ -121,7 +121,7 @@ public class ChartInDraw
     public void lockControllers()
         throws RuntimeException
     {
-        ((XModel) UnoRuntime.queryInterface( XModel.class, maChartDocument )).lockControllers();
+        UnoRuntime.queryInterface( XModel.class, maChartDocument ).lockControllers();
     }
 
     // ____________________
@@ -129,7 +129,7 @@ public class ChartInDraw
     public void unlockControllers()
         throws RuntimeException
     {
-        ((XModel) UnoRuntime.queryInterface( XModel.class, maChartDocument )).unlockControllers();
+        UnoRuntime.queryInterface( XModel.class, maChartDocument ).unlockControllers();
     }
 
     // ____________________
@@ -154,8 +154,8 @@ public class ChartInDraw
         throws RuntimeException, UnknownPropertyException, PropertyVetoException,
                com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
-        XPropertySet aWall = ((X3DDisplay) UnoRuntime.queryInterface(
-                                  X3DDisplay.class, maDiagram )).getWall();
+        XPropertySet aWall = UnoRuntime.queryInterface(
+                                  X3DDisplay.class, maDiagram ).getWall();
 
         // change background color of area
         aWall.setPropertyValue( "FillColor", new Integer( 0xcccccc ));
@@ -169,12 +169,12 @@ public class ChartInDraw
                com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
         // change main title
-        XPropertySet aDocProp = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet aDocProp = UnoRuntime.queryInterface(
             XPropertySet.class, maChartDocument );
         aDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
 
         XShape aTitle = maChartDocument.getTitle();
-        XPropertySet aTitleProp = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, aTitle );
+        XPropertySet aTitleProp = UnoRuntime.queryInterface( XPropertySet.class, aTitle );
 
         // set new text
         if( aTitleProp != null )
@@ -190,7 +190,7 @@ public class ChartInDraw
                com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
         XShape aLegend = maChartDocument.getLegend();
-        XPropertySet aLegendProp = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, aLegend );
+        XPropertySet aLegendProp = UnoRuntime.queryInterface( XPropertySet.class, aLegend );
 
         aLegendProp.setPropertyValue( "Alignment", ChartLegendPosition.LEFT );
         aLegendProp.setPropertyValue( "FillStyle", FillStyle.SOLID );
@@ -204,7 +204,7 @@ public class ChartInDraw
         com.sun.star.lang.IllegalArgumentException, WrappedTargetException,
         com.sun.star.lang.IndexOutOfBoundsException
     {
-        XPropertySet aDiaProp = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, maDiagram );
+        XPropertySet aDiaProp = UnoRuntime.queryInterface( XPropertySet.class, maDiagram );
         Boolean aTrue = new Boolean( true );
 
         aDiaProp.setPropertyValue( "Dim3D", aTrue );
@@ -213,8 +213,8 @@ public class ChartInDraw
         aDiaProp.setPropertyValue( "SolidType", new Integer( ChartSolidType.CYLINDER ));
 
         // change floor color to Magenta6
-        XPropertySet aFloor = ((X3DDisplay) UnoRuntime.queryInterface(
-                                   X3DDisplay.class, maDiagram )).getFloor();
+        XPropertySet aFloor = UnoRuntime.queryInterface(
+                                   X3DDisplay.class, maDiagram ).getFloor();
         aFloor.setPropertyValue( "FillColor", new Integer( 0x6b2394 ));
 
         // apply changes to get a 3d scene

@@ -57,7 +57,7 @@ public class ProgressBar extends BaseControl {
     @Override
     public void setParentControl(BaseControl parentControl) {
         super.setParentControl(parentControl);
-        m_progressBar = (XProgressBar) UnoRuntime.queryInterface(XProgressBar.class, unoControl);
+        m_progressBar = UnoRuntime.queryInterface(XProgressBar.class, unoControl);
     }
 
     public void setRange(int min, int max) {

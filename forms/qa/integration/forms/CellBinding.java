@@ -80,7 +80,7 @@ public class CellBinding extends complexlib.ComplexTestCase
             // close our document
             if ( m_document != null )
             {
-                XCloseable closeDoc = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,
+                XCloseable closeDoc = UnoRuntime.queryInterface( XCloseable.class,
                     m_document.getDocument() );
                 closeDoc.close( true );
             }
@@ -385,7 +385,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private boolean verifyVoidCell( short col, short row, String failErrorMessage ) throws com.sun.star.uno.Exception
     {
-        XCellRangeData cell = (XCellRangeData)UnoRuntime.queryInterface( XCellRangeData.class,
+        XCellRangeData cell = UnoRuntime.queryInterface( XCellRangeData.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
         );
         Object cellContent = cell.getDataArray()[0][0];
@@ -402,7 +402,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private boolean verifyNumericCellContent( short col, short row, double value, String failErrorMessage ) throws com.sun.star.uno.Exception
     {
-        XCell cell = (XCell)UnoRuntime.queryInterface( XCell.class,
+        XCell cell = UnoRuntime.queryInterface( XCell.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
         );
         if ( cell.getValue() != value )
@@ -418,7 +418,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private boolean verifyStringCellContent( short col, short row, String text, String failErrorMessage ) throws com.sun.star.uno.Exception
     {
-        XTextRange cell = (XTextRange)UnoRuntime.queryInterface( XTextRange.class,
+        XTextRange cell = UnoRuntime.queryInterface( XTextRange.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
         );
         if ( !cell.getString().equals( text ) )
@@ -434,7 +434,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private void setCellText( short col, short row, String text ) throws com.sun.star.uno.Exception
     {
-        XTextRange cell = (XTextRange)UnoRuntime.queryInterface( XTextRange.class,
+        XTextRange cell = UnoRuntime.queryInterface( XTextRange.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
         );
         cell.setString( text );
@@ -445,7 +445,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private void setCellValue( short col, short row, double value ) throws com.sun.star.uno.Exception
     {
-        XCell cell = (XCell)UnoRuntime.queryInterface( XCell.class,
+        XCell cell = UnoRuntime.queryInterface( XCell.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
         );
         cell.setValue( value );
@@ -458,7 +458,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     {
         // as long as #i29130# is not fixed, we do not set the cell to "empty", but to
         // an invalid formular, which serves well for our purpose
-        XCellRangeFormula cell = (XCellRangeFormula)UnoRuntime.queryInterface( XCellRangeFormula.class,
+        XCellRangeFormula cell = UnoRuntime.queryInterface( XCellRangeFormula.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
         );
         String[][] args = new String[][] { new String[] { "=INVALID_FUNCTION()" } };
@@ -471,7 +471,7 @@ public class CellBinding extends complexlib.ComplexTestCase
      */
     private void bindToCell( XPropertySet controlModel, short column, short row, String _bindingServiceName ) throws com.sun.star.uno.Exception
     {
-        XBindableValue bindableModel = (XBindableValue)UnoRuntime.queryInterface( XBindableValue.class,
+        XBindableValue bindableModel = UnoRuntime.queryInterface( XBindableValue.class,
             controlModel
         );
 
@@ -484,7 +484,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         parameters[0].Name = "BoundCell";
         parameters[0].Value = address;
 
-        XValueBinding cellBinding = (XValueBinding)UnoRuntime.queryInterface( XValueBinding.class,
+        XValueBinding cellBinding = UnoRuntime.queryInterface( XValueBinding.class,
             m_document.createInstanceWithArguments( _bindingServiceName, parameters )
         );
 
@@ -504,13 +504,13 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private void setListSource( XPropertySet _listSink, short _sourceCol, short _rowStart, short _rowEnd ) throws com.sun.star.uno.Exception
     {
-        CellRangeAddress listSourceAddress = new CellRangeAddress( (short)0, (int)_sourceCol, (int)_rowStart, (int)_sourceCol, (int)_rowEnd );
+        CellRangeAddress listSourceAddress = new CellRangeAddress( (short)0, _sourceCol, _rowStart, _sourceCol, _rowEnd );
         NamedValue addressParameter = new NamedValue( "CellRange", listSourceAddress );
 
-        XListEntrySource listSource = (XListEntrySource)UnoRuntime.queryInterface( XListEntrySource.class,
+        XListEntrySource listSource = UnoRuntime.queryInterface( XListEntrySource.class,
             m_document.createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", new NamedValue[]{ addressParameter } )
         );
-        XListEntrySink listSink = (XListEntrySink)UnoRuntime.queryInterface( XListEntrySink.class,
+        XListEntrySink listSink = UnoRuntime.queryInterface( XListEntrySink.class,
             _listSink );
         listSink.setListEntrySource( listSource );
     }
@@ -520,10 +520,10 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private void simulateUserRadioCheck( XPropertySet radioModel ) throws com.sun.star.uno.Exception
     {
-        XAccessible accessible = (XAccessible)UnoRuntime.queryInterface(
+        XAccessible accessible = UnoRuntime.queryInterface(
             XAccessible.class, m_document.getCurrentView().getControl( radioModel ) );
 
-        XAccessibleValue xValue = (XAccessibleValue)UnoRuntime.queryInterface(
+        XAccessibleValue xValue = UnoRuntime.queryInterface(
             XAccessibleValue.class, accessible.getAccessibleContext() );
 
         Integer newValue = new Integer( 1 );
@@ -535,10 +535,10 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private void simulateUserCheckBoxCheck( XPropertySet checkBox, short state ) throws com.sun.star.uno.Exception
     {
-        XAccessible accessible = (XAccessible)UnoRuntime.queryInterface(
+        XAccessible accessible = UnoRuntime.queryInterface(
             XAccessible.class, m_document.getCurrentView().getControl( checkBox ) );
 
-        XAccessibleValue xValue = (XAccessibleValue)UnoRuntime.queryInterface(
+        XAccessibleValue xValue = UnoRuntime.queryInterface(
             XAccessibleValue.class, accessible.getAccessibleContext() );
 
         xValue.setCurrentValue( new Short( state ) );
@@ -549,7 +549,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private void simulateUserListBoxSelection( XPropertySet _listBox, String _selectEntry ) throws com.sun.star.uno.Exception
     {
-        XListBox listBoxControl = (XListBox)UnoRuntime.queryInterface(
+        XListBox listBoxControl = UnoRuntime.queryInterface(
             XListBox.class, m_document.getCurrentView().getControl( _listBox ) );
         listBoxControl.selectItem( _selectEntry, true );
     }
@@ -559,14 +559,14 @@ public class CellBinding extends complexlib.ComplexTestCase
     */
     private void simulateUserTextInput( XPropertySet controlModel, String text ) throws com.sun.star.uno.Exception
     {
-        XAccessible accessible = (XAccessible)UnoRuntime.queryInterface(
+        XAccessible accessible = UnoRuntime.queryInterface(
             XAccessible.class, m_document.getCurrentView().getControl( controlModel ) );
 
         XAccessibleContext context = accessible.getAccessibleContext();
-        XServiceInfo si = (XServiceInfo)UnoRuntime.queryInterface( XServiceInfo.class,
+        XServiceInfo si = UnoRuntime.queryInterface( XServiceInfo.class,
             accessible.getAccessibleContext() );
 
-        XAccessibleEditableText textAccess = (XAccessibleEditableText)UnoRuntime.queryInterface(
+        XAccessibleEditableText textAccess = UnoRuntime.queryInterface(
             XAccessibleEditableText.class, accessible.getAccessibleContext() );
 
         textAccess.setText( text );
