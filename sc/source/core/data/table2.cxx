@@ -1128,6 +1128,12 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (bFlagChange)
         pDestTab->InvalidatePageBreaks();
 
+    if(nFlags & IDF_ATTRIB)
+    {
+        pDestTab->mpCondFormatList->DeleteArea(nCol1, nRow1, nCol2, nRow2);
+        pDestTab->CopyConditionalFormat(nCol1, nRow1, nCol2, nRow2, 0, 0, this);
+    }
+
     pDestTab->SetOutlineTable( pOutlineTable );     // auch nur wenn bColRowFlags
 }
 
