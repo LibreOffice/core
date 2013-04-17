@@ -35,7 +35,7 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
 
-rtl::Reference< AquaA11yFocusListener > AquaA11yFocusListener::theListener;
+static rtl::Reference< AquaA11yFocusListener > theListener;
 
 //------------------------------------------------------------------------------
 

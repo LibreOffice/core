@@ -37,10 +37,8 @@ class AquaA11yFocusListener :
 {
     id m_focusedObject;
 
-    static rtl::Reference< AquaA11yFocusListener > theListener;
-
-    AquaA11yFocusListener::AquaA11yFocusListener();
-    virtual AquaA11yFocusListener::~AquaA11yFocusListener() {};
+    explicit AquaA11yFocusListener();
+    virtual ~AquaA11yFocusListener() {};
 public:
 
     static rtl::Reference< AquaA11yFocusListener > get();
@@ -56,3 +54,4 @@ public:
 };
 
 #endif // _AQUA11YFOCUSLISTENER_HXX_
+
