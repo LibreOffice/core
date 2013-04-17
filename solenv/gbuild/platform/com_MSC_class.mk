@@ -215,6 +215,14 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) \
 	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(DLLTARGET).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(DLLTARGET).manifest -outputresource:$(DLLTARGET)\;2 && touch -r $(1) $(DLLTARGET).manifest $(DLLTARGET); fi) \
 	$(if $(filter Executable,$(TARGETTYPE)),&& if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(1).manifest -outputresource:$(1)\;1 && touch -r $(1) $(1).manifest; fi) \
+	$(if $(filter Library,$(TARGETTYPE)),&& \
+		echo $(notdir $(DLLTARGET)) > $(1).exports.tmp && \
+		$(if $(filter YES,$(LIBRARY_X64)),$(LINK_X64_BINARY),$(gb_LINK)) \
+			-dump -exports $(1) >> $(1).exports.tmp && \
+		if cmp -s $(1).exports.tmp $(1).exports; \
+			then rm $(1).exports.tmp; \
+			else mv $(1).exports.tmp $(1).exports; touch -r $(1) $(1).exports; \
+		fi) \
 	; exit $$RC)
 endef
 
