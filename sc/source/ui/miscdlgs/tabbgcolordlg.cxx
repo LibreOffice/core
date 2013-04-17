@@ -115,7 +115,6 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     if ( pColorTable )
     {
         nColorCount = pColorTable->Count();
-        XColorEntry* pEntry = NULL;
         Color aColWhite( COL_WHITE );
         String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
 
