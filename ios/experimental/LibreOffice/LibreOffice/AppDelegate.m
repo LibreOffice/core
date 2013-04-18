@@ -168,6 +168,10 @@ static View *theView;
 
 @end
 
+// Functions called in the LO thread, which thus need to dispatch any
+// CocoaTouch activity to happen on the GUI thread. Use
+// dispatch_async() consistently.
+
 void lo_damaged(CGRect rect)
 {
     (void) rect;
