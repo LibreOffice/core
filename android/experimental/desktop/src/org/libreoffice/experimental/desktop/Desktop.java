@@ -68,7 +68,12 @@ public class Desktop
 
         Bootstrap.setup(this);
 
-        Bootstrap.putenv("SAL_LOG=+WARN+INFO");
+        // To enable the putenv below, which turns on all SAL_INFO
+        // logging, do: "adb shell setprop log.tag.LODesktopLogging
+        // VERBOSE".
+
+        if (Log.isLoggable("LODesktopLogging", Log.VERBOSE))
+            Bootstrap.putenv("SAL_LOG=+WARN+INFO");
     }
 
     // This sucks, we need to experiment and think, can an app process
