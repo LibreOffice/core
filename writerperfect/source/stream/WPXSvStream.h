@@ -16,15 +16,7 @@
 
 #include <libwpd-stream/libwpd-stream.h>
 
-typedef struct
-{
-    SotStorageRef ref;
-} SotStorageRefWrapper;
-
-typedef struct
-{
-    SotStorageStreamRef ref;
-} SotStorageStreamRefWrapper;
+class WPXSvInputStreamImpl;
 
 class WPXSvInputStream : public WPXInputStream
 {
@@ -42,14 +34,7 @@ public:
     virtual bool atEOS();
 
 private:
-    std::vector< SotStorageRefWrapper > mxChildrenStorages;
-    std::vector< SotStorageStreamRefWrapper > mxChildrenStreams;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::io::XInputStream > mxStream;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::io::XSeekable > mxSeekable;
-    ::com::sun::star::uno::Sequence< sal_Int8 > maData;
-    sal_Int64 mnLength;
+    WPXSvInputStreamImpl *mpImpl;
 };
 
 #endif

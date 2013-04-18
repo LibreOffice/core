@@ -13,6 +13,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits>
+#include <vector>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -27,7 +28,42 @@ static void splitPath( std::vector<OUString> &rElems, const OUString &rPath )
 
 } // anonymous namespace
 
-WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
+typedef struct
+{
+    SotStorageRef ref;
+} SotStorageRefWrapper;
+
+typedef struct
+{
+    SotStorageStreamRef ref;
+} SotStorageStreamRefWrapper;
+
+class WPXSvInputStreamImpl : public WPXInputStream
+{
+public :
+    WPXSvInputStreamImpl( ::com::sun::star::uno::Reference<
+                      ::com::sun::star::io::XInputStream > xStream );
+    ~WPXSvInputStreamImpl();
+
+    bool isOLEStream();
+    WPXInputStream * getDocumentOLEStream(const char *name);
+
+    const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
+    int seek(long offset, WPX_SEEK_TYPE seekType);
+    long tell();
+    bool atEOS();
+private:
+    ::std::vector< SotStorageRefWrapper > mxChildrenStorages;
+    ::std::vector< SotStorageStreamRefWrapper > mxChildrenStreams;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::io::XInputStream > mxStream;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::io::XSeekable > mxSeekable;
+    ::com::sun::star::uno::Sequence< sal_Int8 > maData;
+    sal_Int64 mnLength;
+};
+
+WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) :
     WPXInputStream(),
     mxChildrenStorages(),
     mxChildrenStreams(),
@@ -56,11 +92,11 @@ WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
     }
 }
 
-WPXSvInputStream::~WPXSvInputStream()
+WPXSvInputStreamImpl::~WPXSvInputStreamImpl()
 {
 }
 
-const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
+const unsigned char *WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
     numBytesRead = 0;
 
@@ -74,7 +110,7 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
     return (const unsigned char *)maData.getConstArray();
 }
 
-long WPXSvInputStream::tell()
+long WPXSvInputStreamImpl::tell()
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return -1L;
@@ -87,7 +123,7 @@ long WPXSvInputStream::tell()
     }
 }
 
-int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
+int WPXSvInputStreamImpl::seek(long offset, WPX_SEEK_TYPE seekType)
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return -1;
@@ -130,14 +166,14 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
     }
 }
 
-bool WPXSvInputStream::atEOS()
+bool WPXSvInputStreamImpl::atEOS()
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return true;
     return (mxSeekable->getPosition() >= mnLength);
 }
 
-bool WPXSvInputStream::isOLEStream()
+bool WPXSvInputStreamImpl::isOLEStream()
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return false;
@@ -155,7 +191,7 @@ bool WPXSvInputStream::isOLEStream()
     return bAns;
 }
 
-WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
+WPXInputStream *WPXSvInputStreamImpl::getDocumentOLEStream(const char *name)
 {
     if (!name)
         return 0;
@@ -221,6 +257,47 @@ WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
         return new WPXSvInputStream( xContents );
     else
         return 0;
+}
+
+
+WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
+    mpImpl(new WPXSvInputStreamImpl(xStream))
+{
+}
+
+WPXSvInputStream::~WPXSvInputStream()
+{
+   delete mpImpl;
+}
+
+const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
+{
+    return mpImpl->read(numBytes, numBytesRead);
+}
+
+long WPXSvInputStream::tell()
+{
+    return mpImpl->tell();
+}
+
+int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
+{
+    return mpImpl->seek(offset, seekType);
+}
+
+bool WPXSvInputStream::atEOS()
+{
+    return mpImpl->atEOS();
+}
+
+bool WPXSvInputStream::isOLEStream()
+{
+    return mpImpl->isOLEStream();
+}
+
+WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
+{
+    return mpImpl->getDocumentOLEStream(name);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
