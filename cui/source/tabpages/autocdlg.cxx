@@ -1347,51 +1347,40 @@ static sal_Bool lcl_FindInArray(std::vector<OUString>& rStrings, const String& r
     return sal_False;
 }
 
-OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
-                                                const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_EXCEPT ), rSet),
-    aAbbrevFL       (this, CUI_RES(FL_ABBREV         )),
-    aAbbrevED       (this, CUI_RES(ED_ABBREV         )),
-    aAbbrevLB       (this, CUI_RES(LB_ABBREV         )),
-    aNewAbbrevPB    (this, CUI_RES(PB_NEWABBREV  )),
-    aDelAbbrevPB    (this, CUI_RES(PB_DELABBREV  )),
-    aAutoAbbrevCB   (this, CUI_RES(CB_AUTOABBREV     )),
-    aDoubleCapsFL   (this, CUI_RES(FL_DOUBLECAPS     )),
-    aDoubleCapsED   (this, CUI_RES(ED_DOUBLE_CAPS    )),
-    aDoubleCapsLB   (this, CUI_RES(LB_DOUBLE_CAPS    )),
-    aNewDoublePB    (this, CUI_RES(PB_NEWDOUBLECAPS)),
-    aDelDoublePB    (this, CUI_RES(PB_DELDOUBLECAPS)),
-    aAutoCapsCB     (this, CUI_RES(CB_AUTOCAPS   )),
-    eLang(eLastDialogLanguage)
+OfaAutocorrExceptPage::OfaAutocorrExceptPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "AcorExceptPage", "cui/ui/acorexceptpage.ui", rSet)
+    , eLang(eLastDialogLanguage)
 {
-    aNewAbbrevPB.SetAccessibleName(String(CUI_RES(STR_PB_NEWABBREV) ) );
-    aDelAbbrevPB.SetAccessibleName(String(CUI_RES(STR_PB_DELABBREV) ) );
-    aNewDoublePB.SetAccessibleName(String(CUI_RES(STR_PB_NEWDOUBLECAPS) ) );
-    aDelDoublePB.SetAccessibleName(String(CUI_RES(STR_PB_DELDOUBLECAPS) ) );
+    get(m_pAbbrevED, "abbrev");
+    get(m_pAbbrevLB, "abbrevlist");
+    m_pAbbrevLB->SetStyle(m_pAbbrevLB->GetStyle() | WB_SORT);
+    get(m_pNewAbbrevPB, "newabbrev");
+    get(m_pDelAbbrevPB, "delabbrev");
+    get(m_pAutoAbbrevCB, "autoabbrev");
 
-    FreeResource();
+    get(m_pDoubleCapsED, "double");
+    get(m_pDoubleCapsLB, "doublelist");
+    m_pDoubleCapsLB->SetStyle(m_pDoubleCapsLB->GetStyle() | WB_SORT);
+    get(m_pNewDoublePB, "newdouble");
+    get(m_pDelDoublePB, "deldouble");
+    get(m_pAutoCapsCB, "autodouble");
 
     ::com::sun::star::lang::Locale aLcl( LanguageTag(eLastDialogLanguage ).getLocale());
     pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
     pCompareClass->loadDefaultCollator( aLcl, 0 );
 
-    aNewAbbrevPB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
-    aDelAbbrevPB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
-    aNewDoublePB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
-    aDelDoublePB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
+    m_pNewAbbrevPB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
+    m_pDelAbbrevPB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
+    m_pNewDoublePB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
+    m_pDelDoublePB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
 
-    aAbbrevLB.SetSelectHdl(LINK(this, OfaAutocorrExceptPage, SelectHdl));
-    aDoubleCapsLB.SetSelectHdl(LINK(this, OfaAutocorrExceptPage, SelectHdl));
-    aAbbrevED.SetModifyHdl(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
-    aDoubleCapsED.SetModifyHdl(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
+    m_pAbbrevLB->SetSelectHdl(LINK(this, OfaAutocorrExceptPage, SelectHdl));
+    m_pDoubleCapsLB->SetSelectHdl(LINK(this, OfaAutocorrExceptPage, SelectHdl));
+    m_pAbbrevED->SetModifyHdl(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
+    m_pDoubleCapsED->SetModifyHdl(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
 
-    aAbbrevED.SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
-    aDoubleCapsED.SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
-
-    aNewAbbrevPB.SetAccessibleRelationMemberOf(&aAbbrevFL);
-    aDelAbbrevPB.SetAccessibleRelationMemberOf(&aAbbrevFL);
-    aNewDoublePB.SetAccessibleRelationMemberOf(&aDoubleCapsFL);
-    aDelDoublePB.SetAccessibleRelationMemberOf(&aDoubleCapsFL);
+    m_pAbbrevED->SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
+    m_pDoubleCapsED->SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
 }
 
 OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
@@ -1491,16 +1480,16 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         for( i = nCount; i; )
         {
             String* pString = (*pWrdList)[ --i ];
-            if( USHRT_MAX == aDoubleCapsLB.GetEntryPos(*pString) )
+            if( USHRT_MAX == m_pDoubleCapsLB->GetEntryPos(*pString) )
             {
                 delete (*pWrdList)[ i ];
                 pWrdList->erase(i);
             }
         }
-        nCount = aDoubleCapsLB.GetEntryCount();
+        nCount = m_pDoubleCapsLB->GetEntryCount();
         for( i = 0; i < nCount; ++i )
         {
-            String* pEntry = new String( aDoubleCapsLB.GetEntry( i ) );
+            String* pEntry = new String( m_pDoubleCapsLB->GetEntry( i ) );
             if( !pWrdList->insert( pEntry ).second)
                 delete pEntry;
         }
@@ -1516,25 +1505,25 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         for( i = nCount; i; )
         {
             String* pString = (*pCplList)[ --i ];
-            if( USHRT_MAX == aAbbrevLB.GetEntryPos(*pString) )
+            if( USHRT_MAX == m_pAbbrevLB->GetEntryPos(*pString) )
             {
                 delete (*pCplList)[ i ];
                 pCplList->erase(i);
             }
         }
-        nCount = aAbbrevLB.GetEntryCount();
+        nCount = m_pAbbrevLB->GetEntryCount();
         for( i = 0; i < nCount; ++i )
         {
-            String* pEntry = new String( aAbbrevLB.GetEntry( i ) );
+            String* pEntry = new String( m_pAbbrevLB->GetEntry( i ) );
             if( !pCplList->insert( pEntry ).second)
                 delete pEntry;
         }
         pAutoCorrect->SaveCplSttExceptList(eLang);
     }
-    if(aAutoAbbrevCB.IsChecked() != aAutoAbbrevCB.GetSavedValue())
-        pAutoCorrect->SetAutoCorrFlag( SaveWordCplSttLst, aAutoAbbrevCB.IsChecked());
-    if(aAutoCapsCB.IsChecked() != aAutoCapsCB.GetSavedValue())
-        pAutoCorrect->SetAutoCorrFlag( SaveWordWrdSttLst, aAutoCapsCB.IsChecked());
+    if(m_pAutoAbbrevCB->IsChecked() != m_pAutoAbbrevCB->GetSavedValue())
+        pAutoCorrect->SetAutoCorrFlag( SaveWordCplSttLst, m_pAutoAbbrevCB->IsChecked());
+    if(m_pAutoCapsCB->IsChecked() != m_pAutoCapsCB->GetSavedValue())
+        pAutoCorrect->SetAutoCorrFlag( SaveWordWrdSttLst, m_pAutoCapsCB->IsChecked());
     return sal_False;
 }
 
@@ -1548,8 +1537,8 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         delete pCompareClass;
         pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
         pCompareClass->loadDefaultCollator( LanguageTag( eLastDialogLanguage ).getLocale(), 0 );
-        ModifyHdl(&aAbbrevED);
-        ModifyHdl(&aDoubleCapsED);
+        ModifyHdl(m_pAbbrevED);
+        ModifyHdl(m_pDoubleCapsED);
     }
 }
 
@@ -1577,26 +1566,26 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         }
 
         sal_uInt16 i;
-        for(i = 0; i < aAbbrevLB.GetEntryCount(); i++)
-            pArrays->aAbbrevStrings.push_back(OUString(aAbbrevLB.GetEntry(i)));
+        for(i = 0; i < m_pAbbrevLB->GetEntryCount(); i++)
+            pArrays->aAbbrevStrings.push_back(OUString(m_pAbbrevLB->GetEntry(i)));
 
-        for(i = 0; i < aDoubleCapsLB.GetEntryCount(); i++)
-            pArrays->aDoubleCapsStrings.push_back(OUString(aDoubleCapsLB.GetEntry(i)));
+        for(i = 0; i < m_pDoubleCapsLB->GetEntryCount(); i++)
+            pArrays->aDoubleCapsStrings.push_back(OUString(m_pDoubleCapsLB->GetEntry(i)));
     }
-    aDoubleCapsLB.Clear();
-    aAbbrevLB.Clear();
+    m_pDoubleCapsLB->Clear();
+    m_pAbbrevLB->Clear();
     String sTemp;
-    aAbbrevED.SetText(sTemp);
-    aDoubleCapsED.SetText(sTemp);
+    m_pAbbrevED->SetText(sTemp);
+    m_pDoubleCapsED->SetText(sTemp);
 
     if(aStringsTable.find(eLang) != aStringsTable.end())
     {
         StringsArrays& rArrays = aStringsTable[eLang];
         for(std::vector<OUString>::iterator i = rArrays.aAbbrevStrings.begin(); i != rArrays.aAbbrevStrings.end(); ++i)
-            aAbbrevLB.InsertEntry(*i);
+            m_pAbbrevLB->InsertEntry(*i);
 
         for(std::vector<OUString>::iterator i = rArrays.aDoubleCapsStrings.begin(); i != rArrays.aDoubleCapsStrings.end(); ++i)
-            aDoubleCapsLB.InsertEntry(*i);
+            m_pDoubleCapsLB->InsertEntry(*i);
     }
     else
     {
@@ -1606,11 +1595,11 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         sal_uInt16 i;
         for( i = 0; i < pCplList->size(); i++ )
         {
-            aAbbrevLB.InsertEntry(*(*pCplList)[i]);
+            m_pAbbrevLB->InsertEntry(*(*pCplList)[i]);
         }
         for( i = 0; i < pWrdList->size(); i++ )
         {
-            aDoubleCapsLB.InsertEntry(*(*pWrdList)[i]);
+            m_pDoubleCapsLB->InsertEntry(*(*pWrdList)[i]);
         }
     }
 }
@@ -1619,52 +1608,52 @@ void OfaAutocorrExceptPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     RefillReplaceBoxes(sal_True, eLang, eLang);
-    aAutoAbbrevCB.  Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordCplSttLst ));
-    aAutoCapsCB.    Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordWrdSttLst ));
-    aAutoAbbrevCB.SaveValue();
-    aAutoCapsCB.SaveValue();
+    m_pAutoAbbrevCB->  Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordCplSttLst ));
+    m_pAutoCapsCB->    Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordWrdSttLst ));
+    m_pAutoAbbrevCB->SaveValue();
+    m_pAutoCapsCB->SaveValue();
 }
 
 IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, PushButton*, pBtn)
 {
-    if((pBtn == &aNewAbbrevPB || pBtn == (PushButton*)&aAbbrevED )
-        && !aAbbrevED.GetText().isEmpty())
+    if((pBtn == m_pNewAbbrevPB || pBtn == (PushButton*)m_pAbbrevED )
+        && !m_pAbbrevED->GetText().isEmpty())
     {
-        aAbbrevLB.InsertEntry(aAbbrevED.GetText());
-        ModifyHdl(&aAbbrevED);
+        m_pAbbrevLB->InsertEntry(m_pAbbrevED->GetText());
+        ModifyHdl(m_pAbbrevED);
     }
-    else if(pBtn == &aDelAbbrevPB)
+    else if(pBtn == m_pDelAbbrevPB)
     {
-        aAbbrevLB.RemoveEntry(aAbbrevED.GetText());
-        ModifyHdl(&aAbbrevED);
+        m_pAbbrevLB->RemoveEntry(m_pAbbrevED->GetText());
+        ModifyHdl(m_pAbbrevED);
     }
-    else if((pBtn == &aNewDoublePB || pBtn == (PushButton*)&aDoubleCapsED )
-            && !aDoubleCapsED.GetText().isEmpty())
+    else if((pBtn == m_pNewDoublePB || pBtn == (PushButton*)m_pDoubleCapsED )
+            && !m_pDoubleCapsED->GetText().isEmpty())
     {
-        aDoubleCapsLB.InsertEntry(aDoubleCapsED.GetText());
-        ModifyHdl(&aDoubleCapsED);
+        m_pDoubleCapsLB->InsertEntry(m_pDoubleCapsED->GetText());
+        ModifyHdl(m_pDoubleCapsED);
     }
-    else if(pBtn == &aDelDoublePB)
+    else if(pBtn == m_pDelDoublePB)
     {
-        aDoubleCapsLB.RemoveEntry(aDoubleCapsED.GetText());
-        ModifyHdl(&aDoubleCapsED);
+        m_pDoubleCapsLB->RemoveEntry(m_pDoubleCapsED->GetText());
+        ModifyHdl(m_pDoubleCapsED);
     }
     return 0;
 }
 
 IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox*, pBox)
 {
-    if(pBox == &aAbbrevLB)
+    if (pBox == m_pAbbrevLB)
     {
-        aAbbrevED.SetText(pBox->GetSelectEntry());
-        aNewAbbrevPB.Enable(sal_False);
-        aDelAbbrevPB.Enable();
+        m_pAbbrevED->SetText(pBox->GetSelectEntry());
+        m_pNewAbbrevPB->Enable(sal_False);
+        m_pDelAbbrevPB->Enable();
     }
     else
     {
-        aDoubleCapsED.SetText(pBox->GetSelectEntry());
-        aNewDoublePB.Enable(sal_False);
-        aDelDoublePB.Enable();
+        m_pDoubleCapsED->SetText(pBox->GetSelectEntry());
+        m_pNewDoublePB->Enable(sal_False);
+        m_pDelDoublePB->Enable();
     }
     return 0;
 }
@@ -1674,21 +1663,21 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
 //  sal_Bool bSame = pEdt->GetText() == ->GetSelectEntry();
     const String& sEntry = pEdt->GetText();
     sal_Bool bEntryLen = 0!= sEntry.Len();
-    if(pEdt == &aAbbrevED)
+    if(pEdt == m_pAbbrevED)
     {
-        sal_Bool bSame = lcl_FindEntry(aAbbrevLB, sEntry, *pCompareClass);
-        if(bSame && sEntry != aAbbrevLB.GetSelectEntry())
-            pEdt->SetText(aAbbrevLB.GetSelectEntry());
-        aNewAbbrevPB.Enable(!bSame && bEntryLen);
-        aDelAbbrevPB.Enable(bSame && bEntryLen);
+        sal_Bool bSame = lcl_FindEntry(*m_pAbbrevLB, sEntry, *pCompareClass);
+        if(bSame && sEntry != m_pAbbrevLB->GetSelectEntry())
+            pEdt->SetText(m_pAbbrevLB->GetSelectEntry());
+        m_pNewAbbrevPB->Enable(!bSame && bEntryLen);
+        m_pDelAbbrevPB->Enable(bSame && bEntryLen);
     }
     else
     {
-        sal_Bool bSame = lcl_FindEntry(aDoubleCapsLB, sEntry, *pCompareClass);
-        if(bSame && sEntry != aDoubleCapsLB.GetSelectEntry())
-            pEdt->SetText(aDoubleCapsLB.GetSelectEntry());
-        aNewDoublePB.Enable(!bSame && bEntryLen);
-        aDelDoublePB.Enable(bSame && bEntryLen);
+        sal_Bool bSame = lcl_FindEntry(*m_pDoubleCapsLB, sEntry, *pCompareClass);
+        if(bSame && sEntry != m_pDoubleCapsLB->GetSelectEntry())
+            pEdt->SetText(m_pDoubleCapsLB->GetSelectEntry());
+        m_pNewDoublePB->Enable(!bSame && bEntryLen);
+        m_pDelDoublePB->Enable(bSame && bEntryLen);
     }
     return 0;
 }

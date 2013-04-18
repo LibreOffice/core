@@ -31,30 +31,8 @@
 #define FT_ENDQUOTE                     14
 #define PB_ENDQUOTE                     15
 
-#define FL_ABBREV                       16
-#define ED_ABBREV                       17
-#define LB_ABBREV                       18
-#define PB_NEWABBREV                    19
-#define PB_DELABBREV                    20
-#define FL_DOUBLECAPS                   21
-#define ED_DOUBLE_CAPS                  22
-#define LB_DOUBLE_CAPS                  23
-#define PB_NEWDOUBLECAPS                24
-#define PB_DELDOUBLECAPS                25
-
-#define ED_SHORT                        31
-#define ED_REPLACE                      32
-#define TLB_REPLACE                     33
-#define CB_TEXT_ONLY                    34
-#define PB_NEW_REPLACE                  35
-#define PB_DELETE_REPLACE               36
-#define STR_MODIFY                      37
-#define FT_SHORT                        39
-#define FT_REPLACE                      40
 #define STR_CHANGE_START                41
 #define STR_CHANGE_END                  42
-#define CB_AUTOABBREV                   43
-#define CB_AUTOCAPS                     44
 
 #define FT_SGL_STARTQUOTE               45
 #define PB_SGL_STARTQUOTE               46

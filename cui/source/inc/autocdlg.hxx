@@ -301,23 +301,21 @@ class OfaAutocorrExceptPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-        FixedLine       aAbbrevFL;
-        AutoCorrEdit    aAbbrevED;
-        ListBox         aAbbrevLB;
-        PushButton      aNewAbbrevPB;
-        PushButton      aDelAbbrevPB;
-        CheckBox        aAutoAbbrevCB;
+    AutoCorrEdit*   m_pAbbrevED;
+    ListBox*        m_pAbbrevLB;
+    PushButton*     m_pNewAbbrevPB;
+    PushButton*     m_pDelAbbrevPB;
+    CheckBox*       m_pAutoAbbrevCB;
 
-        FixedLine       aDoubleCapsFL;
-        AutoCorrEdit    aDoubleCapsED;
-        ListBox         aDoubleCapsLB;
-        PushButton      aNewDoublePB;
-        PushButton      aDelDoublePB;
-        CheckBox        aAutoCapsCB;
+    AutoCorrEdit*   m_pDoubleCapsED;
+    ListBox*        m_pDoubleCapsLB;
+    PushButton*     m_pNewDoublePB;
+    PushButton*     m_pDelDoublePB;
+    CheckBox*       m_pAutoCapsCB;
 
-        StringsTable    aStringsTable;
-        CollatorWrapper* pCompareClass;
-        LanguageType    eLang;
+    StringsTable    aStringsTable;
+    CollatorWrapper* pCompareClass;
+    LanguageType    eLang;
 
     DECL_LINK(NewDelHdl, PushButton*);
     DECL_LINK(SelectHdl, ListBox*);
