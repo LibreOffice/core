@@ -114,80 +114,80 @@ End
 /* ** Templates - Common ** */
 
 File gid_File_Extra_Templates_Common
-    Dir = gid_Dir_Template_Common;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommon.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommon.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Layout
-    Dir = gid_Dir_Template_Common_Layout;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommonlayout.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommonlayout.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Present
-    Dir = gid_Dir_Template_Common_Presnt;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommonpresent.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommonpresent.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Educate
-    Dir = gid_Dir_Template_Common_Educate;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommoneducate.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommoneducate.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Finance
-    Dir = gid_Dir_Template_Common_Finance;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommonfinance.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommonfinance.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Forms
-    Dir = gid_Dir_Template_Common_Forms;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommonforms.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommonforms.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Labels
-    Dir = gid_Dir_Template_Common_Labels;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommonlabels.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommonlabels.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Misc
-    Dir = gid_Dir_Template_Common_Misc;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommonmisc.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommonmisc.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Officorr
-    Dir = gid_Dir_Template_Common_Officorr;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommonofficorr.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommonofficorr.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Offimisc
-    Dir = gid_Dir_Template_Common_Offimisc;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommonoffimisc.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommonoffimisc.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Personal
-    Dir = gid_Dir_Template_Common_Personal;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "accessoriestemplatescommonpersonal.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "extras_accessoriestemplatescommonpersonal.filelist";
 End
 
 /* ** Templates - NON FREE ** */

@@ -49,9 +49,10 @@ File gid_File_Extra_Gallery_Draws_People_Accessories
 End
 
 File gid_File_Extra_Gallery_Photos_Plants_Accessories
-    Dir = gid_Dir_Gallery_Photos_Plants;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotosplants.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotosplants.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Celebration_Accessories
