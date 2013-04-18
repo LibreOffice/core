@@ -26,16 +26,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Zip_Zip,ScriptsJavaScript,$(SRCDIR)/scripting/examples))
+$(eval $(call gb_Package_Package,scripting_scriptbindinglib,$(SRCDIR)/scripting/workben/bindings))
 
-$(eval $(call gb_Zip_add_files,ScriptsJavaScript,\
-	javascript/ExportSheetsToHTML/exportsheetstohtml.js \
-	javascript/ExportSheetsToHTML/parcel-descriptor.xml \
-	javascript/HelloWorld/helloworld.js \
-	javascript/HelloWorld/parcel-descriptor.xml \
-	javascript/Highlight/ButtonPressHandler.js \
-	javascript/Highlight/parcel-descriptor.xml \
-	javascript/Highlight/ShowDialog.js \
+$(eval $(call gb_Package_set_outdir,scripting_scriptbindinglib,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,scripting_scriptbindinglib,share/basic/ScriptBindingLibrary,\
+	Highlight.xdl \
+	dialog.xlb \
+	script.xlb \
 ))
 
 # vim: set noet sw=4 ts=4:

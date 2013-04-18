@@ -144,10 +144,10 @@ End
 //Scripting Framework Python example scripts
 
 File gid_File_Scripts_Python
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    Dir = gid_Dir_Share_Scripts;
-    Name = "ScriptsPython.zip";
+    Styles = (FILELIST);
+    Name = "scripting_ScriptsPython.filelist";
 End
 
 // Scripting Framework Python configuration settings

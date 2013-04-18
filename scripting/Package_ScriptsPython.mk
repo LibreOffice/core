@@ -26,9 +26,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Zip_Zip,ScriptsPython,$(SRCDIR)/scripting/examples))
+$(eval $(call gb_Package_Package,scripting_ScriptsPython,$(SRCDIR)/scripting/examples))
 
-$(eval $(call gb_Zip_add_files,ScriptsPython,\
+$(eval $(call gb_Package_set_outdir,scripting_ScriptsPython,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files_with_dir,Scripting_ScriptsPython,share/Scripts,\
 	python/Capitalise.py \
 	python/HelloWorld.py \
 	python/pythonSamples/TableSample.py \
