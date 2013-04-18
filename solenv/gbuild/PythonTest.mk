@@ -9,10 +9,11 @@
 
 # PythonTest class
 
-# TODO: FixMe problem with internal python:
-# Fatal Python error: Py_Initialize: Unable to get the locale encoding
-#gb_Python_EXE := $(call gb_Executable_get_command,python)
-gb_Python_EXE := python3
+ifeq ($(SYSTEM_PYTHON),NO)
+gb_Python_EXE := $(OUTDIR)/installation/opt/program/python.bin
+else
+gb_Python_EXE := $(PYTHON_FOR_BUILD)
+endif
 
 gb_PythonTest_COMMAND := $(gb_Python_EXE) -m unittest
 
