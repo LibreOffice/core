@@ -75,13 +75,6 @@ gb_OBJCFLAGS := -x objective-c $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 gb_COMPILERDEFS += \
 		-DBOOST_DETAIL_NO_CONTAINER_FWD
 
-# enable debug STL
-ifeq ($(gb_ENABLE_DBGUTIL),$(true))
-gb_COMPILERDEFS += \
-	-D_GLIBCXX_DEBUG \
-
-endif
-
 gb_LinkTarget_LDFLAGS := $(SOLARLIB) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
