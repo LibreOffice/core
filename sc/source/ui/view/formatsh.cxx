@@ -2056,11 +2056,6 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
     pTabViewShell->HideListBox();               // Autofilter-DropDown-Listbox
-    if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
-    {
-        SC_MOD()->InputEnterHandler();
-        pTabViewShell->UpdateInputHandler();
-    }
 
     sal_uInt16 nSlot = rReq.GetSlot();
     switch( nSlot )
