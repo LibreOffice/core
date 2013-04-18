@@ -7499,6 +7499,10 @@ if test $enable_python = system; then
                AC_MSG_ERROR([no usable python found])])
         test -n "$PYTHON_CFLAGS" && break
     fi
+    # let the PYTHON_FOR_BUILD match the same python installation that
+    # provides PYTHON_CFLAGS/PYTHON_LDFLAGS for pyuno, which should be
+    # better for PythonTests.
+    PYTHON_FOR_BUILD=$PYTHON
 fi
 
 dnl By now enable_python should be "system", "internal" or "no"
