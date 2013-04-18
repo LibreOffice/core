@@ -559,8 +559,13 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    cairocanvas \
+    msforms \
     mtfrenderer \
     OGLTrans \
+    vbaevents \
+    vbaobj \
+    vbaswobj \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
@@ -574,7 +579,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     PresenterScreen \
     basprov \
-    cairocanvas \
     canvasfactory \
     cmdmail \
     directx5canvas \
@@ -595,7 +599,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     macbe1 \
     migrationoo2 \
     migrationoo3 \
-    msforms \
     nullcanvas \
     passwordcontainer \
     pdfimport \
@@ -613,9 +616,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     ucpgvfs1 \
     ucptdoc1 \
     updatefeed \
-    vbaevents \
-    vbaobj \
-    vbaswobj \
     vclcanvas \
     $(if $(filter $(OS),MACOSX), \
         fps_aqua \
