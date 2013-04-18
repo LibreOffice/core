@@ -623,6 +623,7 @@ OUString ControlModelBase::getServiceName() const
         case API_CONTROL_SCROLLBAR:     return OUString( "com.sun.star.form.component.ScrollBar" );
         case API_CONTROL_PROGRESSBAR:   return OUString( "com.sun.star.awt.UnoControlProgressBarModel" );
         case API_CONTROL_GROUPBOX:      return OUString( "com.sun.star.form.component.GroupBox" );
+        case API_CONTROL_FRAME:         return OUString( "com.sun.star.awt.UnoFrameModel" );
         case API_CONTROL_PAGE:          return OUString( "com.sun.star.awt.UnoPageModel" );
         case API_CONTROL_MULTIPAGE:     return OUString( "com.sun.star.awt.UnoMultiPageModel" );
         case API_CONTROL_DIALOG:        return OUString( "com.sun.star.awt.UnoControlDialogModel" );
