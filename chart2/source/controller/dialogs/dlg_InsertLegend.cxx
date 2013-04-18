@@ -22,13 +22,7 @@
 #include "res_LegendPosition.hxx"
 #include "ObjectNameProvider.hxx"
 #include "ResId.hxx"
-#include "chartview/ChartSfxItemIds.hxx"
 #include "NoWarningThisInCTOR.hxx"
-
-// header for enum SvxChartLegendPos
-#include <svx/chrtitem.hxx>
-// header for class SfxItemPool
-#include <svl/itempool.hxx>
 
 //.............................................................................
 namespace chart
