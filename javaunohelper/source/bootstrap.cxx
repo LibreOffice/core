@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
 #include "osl/diagnose.h"
 
@@ -36,6 +37,7 @@
 #include "jvmaccess/virtualmachine.hxx"
 #include "jvmaccess/unovirtualmachine.hxx"
 
+#include "juhx-export-functions.hxx"
 #include "vm.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -66,7 +68,7 @@ inline ::rtl::OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
 }
 
 //==================================================================================================
-extern "C" SAL_JNI_EXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
+jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     JNIEnv * jni_env, SAL_UNUSED_PARAMETER jclass, jstring juno_rc, jobjectArray jpairs,
     jobject loader )
 {
