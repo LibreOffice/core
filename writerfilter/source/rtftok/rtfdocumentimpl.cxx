@@ -572,9 +572,14 @@ void RTFDocumentImpl::seek(sal_uInt32 nPos)
 
 sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
 {
-    if (nIndex < m_aColorTable.size())
-        return m_aColorTable[nIndex];
-    return 0;
+    if (!m_pSuperstream)
+    {
+        if (nIndex < m_aColorTable.size())
+            return m_aColorTable[nIndex];
+        return 0;
+    }
+    else
+        return m_pSuperstream->getColorTable(nIndex);
 }
 
 rtl_TextEncoding RTFDocumentImpl::getEncoding(sal_uInt32 nFontIndex)
