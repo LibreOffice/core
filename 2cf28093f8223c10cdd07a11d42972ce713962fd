@@ -33,6 +33,24 @@
       "revId": "2cf28093f8223c10cdd07a11d42972ce713962fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+2o\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-04-18T11:23:09Z",
+      "side": 1,
+      "message": "I blame mst for reintroducing them with 857adeada9cc3276e79ceb828959a3ffe2d7409b a week ago ...",
+      "parentUuid": "AAAAXH//+3U\u003d",
+      "revId": "2cf28093f8223c10cdd07a11d42972ce713962fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
