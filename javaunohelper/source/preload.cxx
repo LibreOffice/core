@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
 #include "jni.h"
 
 #include "rtl/ustring.hxx"
 #include "osl/module.h"
+
+#include "juhx-export-types.hxx"
 
 // In retrospect, the reason to create a juh wrapper around the juhx library was
 // probably because java.lang.System.loadLibrary uses RTLD_LOCAL, so uniqueness
@@ -34,16 +37,10 @@
 
 extern "C"
 {
-typedef jboolean (JNICALL * fptr_writeInfo)(
-    JNIEnv *, jclass, jstring, jobject, jobject, jobject );
-typedef jobject (JNICALL * fptr_getFactory)(
-    JNIEnv *, jclass, jstring, jstring, jobject, jobject, jobject );
-typedef jobject (JNICALL * fptr_bootstrap)(
-    JNIEnv *_env, jclass, jstring, jobjectArray, jobject );
 
-static fptr_writeInfo s_writeInfo;
-static fptr_getFactory s_getFactory;
-static fptr_bootstrap s_bootstrap;
+static javaunohelper::detail::Func_writeInfo * s_writeInfo;
+static javaunohelper::detail::Func_getFactory * s_getFactory;
+static javaunohelper::detail::Func_bootstrap * s_bootstrap;
 static bool s_inited = false;
 
 extern "C" { static void SAL_CALL thisModule() {} }
@@ -67,16 +64,16 @@ static bool inited_juhx( JNIEnv * jni_env )
     {
         OUString symbol =
               "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo";
-        s_writeInfo = (fptr_writeInfo)osl_getFunctionSymbol(
+        s_writeInfo = (javaunohelper::detail::Func_writeInfo *)osl_getFunctionSymbol(
             hModule, symbol.pData );
         symbol =
             "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory";
-        s_getFactory = (fptr_getFactory)osl_getFunctionSymbol(
+        s_getFactory = (javaunohelper::detail::Func_getFactory *)osl_getFunctionSymbol(
             hModule, symbol.pData );
         symbol =
             "Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap";
         s_bootstrap =
-            (fptr_bootstrap)osl_getFunctionSymbol( hModule, symbol.pData );
+            (javaunohelper::detail::Func_bootstrap *)osl_getFunctionSymbol( hModule, symbol.pData );
 
         if (0 == s_writeInfo ||
             0 == s_getFactory ||
