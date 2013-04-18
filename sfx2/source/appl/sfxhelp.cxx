@@ -332,6 +332,8 @@ std::map<OUString, OUString> SfxHelp_Impl::loadHelpStrings( const OUString& rMod
     if( pStrm->GetError() == 0 )
     {
         bool bRead = true;
+        OUString aProductName = utl::ConfigManager::getProductName();
+        OUString aProductVersion = utl::ConfigManager::getProductVersion();
         while(bRead)
         {
             OUString aLine;
@@ -344,6 +346,8 @@ std::map<OUString, OUString> SfxHelp_Impl::loadHelpStrings( const OUString& rMod
                 if(nIndex != -1)
                 {
                     OUString aValue = aLine.copy(nIndex);
+                    aValue = aValue.replaceAll("%PRODUCTNAME", aProductName);
+                    aValue = aValue.replaceAll("%PRODUCTVERSION", aProductVersion);
                     aRet.insert( std::pair< OUString, OUString >( aId, aValue ) );
                     //SAL_WARN("sfx2.appl", "added help string with id: " << aId << " and value: " << aValue);
                 }
@@ -380,6 +384,9 @@ OUString SfxHelp_Impl::GetHelpText_Impl( const OUString& rCommandURL, const OUSt
 
 OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString& rModule )
 {
+    if(aCommandURL.isEmpty())
+        return OUString();
+
     OUString aHelpText = GetHelpText_Impl( aCommandURL, rModule );
     if(aHelpText.isEmpty())
         aHelpText = GetHelpText_Impl( aCommandURL, "shared" );
