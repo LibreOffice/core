@@ -34,10 +34,7 @@ $(eval $(call gb_Executable_use_libraries,climaker,\
 
 $(eval $(call gb_Executable_use_system_win32_libs,climaker,\
 	mscoree \
-	$(if $(USE_DEBUG_RUNTIME) \
-		,msvcmrtd \
-		,msvcmrt \
-	) \
+	msvcmrt \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,climaker,\

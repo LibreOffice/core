@@ -49,10 +49,7 @@ $(eval $(call gb_Library_use_system_win32_libs,cli_cppuhelper,\
 	advapi32 \
 	delayimp \
 	mscoree \
-	$(if $(USE_DEBUG_RUNTIME)\
-		,msvcmrtd \
-		,msvcmrt \
-	) \
+	msvcmrt \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cli_cppuhelper,\

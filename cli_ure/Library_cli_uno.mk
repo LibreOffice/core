@@ -28,10 +28,7 @@ $(eval $(call gb_Library_use_libraries,cli_uno,\
 
 $(eval $(call gb_Library_use_system_win32_libs,cli_uno,\
 	mscoree \
-	$(if $(USE_DEBUG_RUNTIME)\
-		,msvcmrtd \
-		,msvcmrt \
-	) \
+	msvcmrt \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cli_uno,\
