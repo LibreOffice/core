@@ -342,7 +342,7 @@ $(call gb_LinkTarget_get_target,$(2)) : RPATH :=
 endef
 
 define gb_CppunitTest_postprocess
-$(SRCDIR)/solenv/bin/gdb-core-bt.sh $(1) $(2)
+$(SRCDIR)/solenv/bin/gdb-core-bt.sh $(1) $(2) $(3)
 endef
 
 # JunitTest class

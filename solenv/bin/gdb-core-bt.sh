@@ -30,6 +30,7 @@
 
 EXECUTABLE=${1}
 COREDIR=${2}
+EXITCODE=${3}
 
 if test -n "$(which gdb)"
 then
@@ -45,7 +46,7 @@ then
         rm "$GDBCOMMANDFILE"
         echo
         exit 0
-    else
+    elif [ $EXITCODE -ge 128 ]; then
         echo
         echo "No core file identified in directory ${COREDIR}"
         echo "To show backtraces for crashes during test execution,"

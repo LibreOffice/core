@@ -97,9 +97,9 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 		$(call gb_CppunitTest__make_args) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
-			|| (cat $@.log && $(UNIT_FAILED_MSG) \
+			|| (RET=$$? && cat $@.log && $(UNIT_FAILED_MSG) \
 				$(if $(value gb_CppunitTest_postprocess), \
-					&& $(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core)) \
+					&& $(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET)) \
 				&& false))))
 
 define gb_CppunitTest_CppunitTest
