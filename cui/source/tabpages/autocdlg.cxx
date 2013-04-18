@@ -1354,6 +1354,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(Window* pParent, const SfxItemSet& 
     get(m_pAbbrevED, "abbrev");
     get(m_pAbbrevLB, "abbrevlist");
     m_pAbbrevLB->SetStyle(m_pAbbrevLB->GetStyle() | WB_SORT);
+    m_pAbbrevLB->SetDropDownLineCount(7);
     get(m_pNewAbbrevPB, "newabbrev");
     get(m_pDelAbbrevPB, "delabbrev");
     get(m_pAutoAbbrevCB, "autoabbrev");
@@ -1361,6 +1362,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(Window* pParent, const SfxItemSet& 
     get(m_pDoubleCapsED, "double");
     get(m_pDoubleCapsLB, "doublelist");
     m_pDoubleCapsLB->SetStyle(m_pDoubleCapsLB->GetStyle() | WB_SORT);
+    m_pDoubleCapsLB->SetDropDownLineCount(7);
     get(m_pNewDoublePB, "newdouble");
     get(m_pDelDoublePB, "deldouble");
     get(m_pAutoCapsCB, "autodouble");
