@@ -30,6 +30,7 @@
 #include <connectivity/dbexception.hxx>
 #include "resource/kab_res.hrc"
 #include "resource/sharedresources.hxx"
+#include <tools/time.hxx>
 
 using namespace connectivity::kab;
 using namespace cppu;
