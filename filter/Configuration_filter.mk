@@ -36,7 +36,7 @@ filter_XcuFilterTypesTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterTypesTarget/$(1)
 
 $(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
-	$(call gb_Output_announce,$*,$(true),XCU,1)
+	$(call gb_Output_announce,$*,$(true),FIT,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -50,7 +50,7 @@ $(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 # delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
 
 $(call filter_XcuFilterTypesTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),XCU,1)
+	$(call gb_Output_announce,$*,$(false),FIT,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call filter_XcuFilterTypesTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
@@ -84,7 +84,7 @@ filter_XcuFilterFiltersTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterFiltersTarget/$(1)
 
 $(call filter_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
-	$(call gb_Output_announce,$*,$(true),XCU,1)
+	$(call gb_Output_announce,$*,$(true),FIF,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -98,7 +98,7 @@ $(call filter_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
 # delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
 
 $(call filter_XcuFilterFiltersTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),XCU,1)
+	$(call gb_Output_announce,$*,$(false),FIF,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call filter_XcuFilterFiltersTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
@@ -117,7 +117,7 @@ filter_XcuFilterOthersTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterOthersTarget/$(1)
 
 $(call filter_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
-	$(call gb_Output_announce,$*,$(true),XCU,1)
+	$(call gb_Output_announce,$*,$(true),FIO,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -133,7 +133,7 @@ $(call filter_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
 		rm -f $${RESPONSEFILE} $${RESPONSEFILE2})
 
 $(call filter_XcuFilterOthersTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),XCU,1)
+	$(call gb_Output_announce,$*,$(false),FIO,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call filter_XcuFilterOthersTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
@@ -155,7 +155,7 @@ filter_XcuFilterInternalTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterInternalTarget/$(1)
 
 $(call filter_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
-	$(call gb_Output_announce,$*,$(true),XCU,1)
+	$(call gb_Output_announce,$*,$(true),FII,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -170,7 +170,7 @@ $(call filter_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
 # delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
 
 $(call filter_XcuFilterInternalTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),XCU,1)
+	$(call gb_Output_announce,$*,$(false),FII,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call filter_XcuFilterInternalTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
@@ -201,7 +201,7 @@ filter_XcuResTarget_get_target = \
  $(call gb_XcuResTarget_get_target,fcfg_langpack/$(1)/$(filter_XCU_filter))
 
 $(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCU,1)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),FIU,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -213,7 +213,7 @@ $(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
 		&& rm -f $${RESPONSEFILE})
 
 $(filter_XcuFilterUiCleanTarget) :
-	$(call gb_Output_announce,$(filter_XcuFilterUiTarget),$(false),XCU,1)
+	$(call gb_Output_announce,$(filter_XcuFilterUiTarget),$(false),FIU,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(filter_XcuFilterUiTarget))
 
