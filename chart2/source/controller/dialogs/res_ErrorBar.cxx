@@ -80,13 +80,6 @@ namespace chart
 {
 //.............................................................................
 
-enum StatIndicator
-{
-    INDICATE_BOTH,
-    INDICATE_UP,
-    INDICATE_DOWN
-};
-
 ErrorBarResources::ErrorBarResources( Window* pParent, Dialog * pParentDialog,
                                       const SfxItemSet& rInAttrs, bool bNoneAvailable,
                                       tErrorBarType eType /* = ERROR_BAR_Y */ ) :
