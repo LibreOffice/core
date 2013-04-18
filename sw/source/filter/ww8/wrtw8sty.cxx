@@ -526,8 +526,6 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, sal_uInt16 nPos )
         GetStyleData( pFmt, bFmtColl, nBase, nWwNext );
 
         String aName = pFmt->GetName();
-        if ( aName.EqualsAscii( "Default" ) )
-            aName = OUString("Normal");
 
         m_rExport.AttrOutput().StartStyle( aName, bFmtColl,
                 nBase, nWwNext, GetWWId( *pFmt ), nPos,
