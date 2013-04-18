@@ -71,6 +71,7 @@ private:
     SvxShowCharSet* m_pShowSet;
     SvxShowText*    m_pShowText;
     OKButton*       m_pOKBtn;
+    PushButton*     m_pDeleteLastBtn;
     PushButton*     m_pDeleteBtn;
     FixedText*      m_pFontText;
     ListBox*        m_pFontLB;
@@ -90,6 +91,7 @@ private:
     DECL_LINK(CharSelectHdl, void *);
     DECL_LINK(CharHighlightHdl, void *);
     DECL_LINK(CharPreSelectHdl, void *);
+    DECL_LINK(DeleteLastHdl, void *);
     DECL_LINK(DeleteHdl, void *);
 
     void fillAllSubsets(ListBox &rListBox);

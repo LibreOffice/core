@@ -54,6 +54,7 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne_, const SfxItem
     get(m_pShowText, "showtext");
     get(m_pOKBtn, "ok");
     get(m_pDeleteBtn, "delete");
+    get(m_pDeleteLastBtn, "deletelast");
     get(m_pFontText, "fontft");
     get(m_pFontLB, "fontlb");
     m_pFontLB->SetStyle(m_pFontLB->GetStyle() | WB_SORT);
@@ -321,6 +322,7 @@ void SvxCharacterMap::init()
         m_pSymbolText->Hide();
         m_pShowText->Hide();
         m_pDeleteBtn->Hide();
+        m_pDeleteLastBtn->Hide();
     }
 
     OUString aDefStr( aFont.GetName() );
@@ -369,6 +371,7 @@ void SvxCharacterMap::init()
     m_pShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
     m_pShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
     m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
+    m_pDeleteLastBtn->SetClickHdl( LINK( this, SvxCharacterMap, DeleteLastHdl ) );
     m_pDeleteBtn->SetClickHdl( LINK( this, SvxCharacterMap, DeleteHdl ) );
 
     if( SvxShowCharSet::getSelectedChar() == ' ')
@@ -521,6 +524,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
 
     }
     m_pOKBtn->Enable();
+    m_pDeleteLastBtn->Enable();
     return 0;
 }
 
@@ -582,10 +586,23 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl)
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK_NOARG(SvxCharacterMap, DeleteLastHdl)
+{
+    OUString aCurrentText = m_pShowText->GetText();
+    m_pShowText->SetText( aCurrentText.copy( 0, aCurrentText.getLength() - 1 ) );
+    if ( m_pShowText->GetText() == "" )
+    {
+        m_pOKBtn->Disable();
+        m_pDeleteLastBtn->Disable();
+    }
+    return 0;
+}
+
 IMPL_LINK_NOARG(SvxCharacterMap, DeleteHdl)
 {
     m_pShowText->SetText( String() );
     m_pOKBtn->Disable();
+    m_pDeleteLastBtn->Disable();
     return 0;
 }
 
