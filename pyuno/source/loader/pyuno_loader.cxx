@@ -223,6 +223,10 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 
         PyThreadState *tstate = PyThreadState_Get();
         PyEval_ReleaseThread( tstate );
+        // This tstate is never used again, so delete it here.
+        // This prevents an assertion in PyThreadState_Swap on the
+        // PyThreadAttach below.
+        PyThreadState_Delete(tstate);
     }
 
     PyThreadAttach attach( PyInterpreterState_Head() );
