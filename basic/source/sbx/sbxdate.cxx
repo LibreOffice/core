@@ -110,24 +110,24 @@ double ImpGetDate( const SbxValues* p )
             // HACK, because the number formatter in PutandConvertEntry replace the wildcard
             // for month, day, year not according to the configuration.
             // Problem: Print Year(Date) under Engl. OS
-            // quod vide basic\source\runtime\runtime.cxx
+            // quod vide basic/source/runtime/runtime.cxx
 
             SvtSysLocale aSysLocale;
             DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
             OUString aDateStr;
             switch( eDate )
             {
-            case MDY: aDateStr = "MM.TT.JJJJ"; break;
-            case DMY: aDateStr = "TT.MM.JJJJ"; break;
-            case YMD: aDateStr = "JJJJ.MM.TT"; break;
-            default:  aDateStr = "MM.TT.JJJJ";
+                default:
+                case MDY: aDateStr = "MM/DD/YYYY"; break;
+                case DMY: aDateStr = "DD/MM/YYYY"; break;
+                case YMD: aDateStr = "YYYY/MM/DD"; break;
             }
 
             OUString aStr( aDateStr );
             aStr += " HH:MM:SS";
 
             pFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
-                                            nIndex, LANGUAGE_GERMAN, eLangType );
+                                            nIndex, LANGUAGE_ENGLISH_US, eLangType );
             sal_Bool bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
             if ( bSuccess )
             {

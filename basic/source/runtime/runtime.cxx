@@ -379,25 +379,25 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     // HACK, beause the numberformatter doesn't swap the place holders
     // for month, day and year according to the system setting.
     // Problem: Print Year(Date) under engl. BS
-    // also have a look at: svtools\source\sbx\sbxdate.cxx
+    // also have a look at: basic/source/sbx/sbxdate.cxx
 
     OUString aDateStr;
     switch( eDate )
     {
-    case MDY: aDateStr = "MM.TT.JJJJ"; break;
-    case DMY: aDateStr = "TT.MM.JJJJ"; break;
-    case YMD: aDateStr = "JJJJ.MM.TT"; break;
-    default:  aDateStr = "MM.TT.JJJJ"; break;
+        default:
+        case MDY: aDateStr = "MM/DD/YYYY"; break;
+        case DMY: aDateStr = "DD/MM/YYYY"; break;
+        case YMD: aDateStr = "YYYY/MM/DD"; break;
     }
     OUString aStr( aDateStr );      // PutandConvertEntry() modifies string!
     rpNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
-        rnStdDateIdx, LANGUAGE_GERMAN, eLangType );
+        rnStdDateIdx, LANGUAGE_ENGLISH_US, eLangType );
     nCheckPos = 0;
     OUString aStrHHMMSS(" HH:MM:SS");
     aDateStr += aStrHHMMSS;
     aStr = aDateStr;
     rpNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
-        rnStdDateTimeIdx, LANGUAGE_GERMAN, eLangType );
+        rnStdDateTimeIdx, LANGUAGE_ENGLISH_US, eLangType );
 }
 
 
