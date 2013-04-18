@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
 #include <osl/diagnose.h>
 #include <osl/module.h>
@@ -46,6 +47,7 @@
 #include "jvmaccess/virtualmachine.hxx"
 #include "jvmaccess/unovirtualmachine.hxx"
 
+#include "juhx-export-functions.hxx"
 #include "vm.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -61,8 +63,7 @@ using ::rtl::OUString;
  * Method:    component_writeInfo
  * Signature: (Ljava/lang/String;Lcom/sun/star/lang/XMultiServiceFactory;Lcom/sun/star/registry/XRegistryKey;)Z
  */
-extern "C" SAL_DLLPUBLIC_EXPORT jboolean JNICALL
-Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
+jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jLibName, jobject jSMgr,
     jobject jRegKey, jobject loader )
 {
@@ -141,8 +142,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
  * Method:    component_getFactory
  * Signature: (Ljava/lang/String;Ljava/lang/String;Lcom/sun/star/lang/XMultiServiceFactory;Lcom/sun/star/registry/XRegistryKey;)Ljava/lang/Object;
  */
-extern "C" SAL_DLLPUBLIC_EXPORT jobject JNICALL
-Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
+jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jLibName, jstring jImplName,
     jobject jSMgr, jobject jRegKey, jobject loader )
 {
@@ -237,7 +237,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
  * Method:    createRegistryServiceFactory
  * Signature: (Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/Object;
  */
-extern "C" SAL_DLLPUBLIC_EXPORT jobject JNICALL
+jobject
 Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory(
     JNIEnv * pJEnv, SAL_UNUSED_PARAMETER jclass, jstring jWriteRegFile,
     jstring jReadRegFile, jboolean jbReadOnly, jobject loader )
