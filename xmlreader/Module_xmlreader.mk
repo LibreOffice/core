@@ -30,7 +30,6 @@ $(eval $(call gb_Module_Module,xmlreader))
 
 $(eval $(call gb_Module_add_targets,xmlreader,\
 	Library_xmlreader \
-	Package_inc \
 ))
 
 # vim: set noet sw=4 ts=4:

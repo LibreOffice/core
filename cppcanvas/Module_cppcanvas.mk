@@ -22,7 +22,6 @@ $(eval $(call gb_Module_Module,cppcanvas))
 $(eval $(call gb_Module_add_targets,cppcanvas,\
 	Library_cppcanvas \
 	Library_mtfrenderer \
-	Package_inc \
 ))
 
 # vim: set noet sw=4 ts=4:

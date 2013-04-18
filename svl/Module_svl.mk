@@ -24,7 +24,6 @@ $(eval $(call gb_Module_add_targets,svl,\
     Library_fsstorage \
     Library_passwordcontainer \
     Library_svl \
-    Package_inc \
 ))
 
 $(eval $(call gb_Module_add_check_targets,svl,\

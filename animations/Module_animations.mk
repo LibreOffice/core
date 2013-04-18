@@ -30,7 +30,6 @@ $(eval $(call gb_Module_Module,animations))
 
 $(eval $(call gb_Module_add_targets,animations,\
     Library_animcore \
-	Package_inc \
 ))
 
 # vim: set noet sw=4 ts=4:

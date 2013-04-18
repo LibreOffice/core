@@ -34,7 +34,6 @@ $(eval $(call gb_Module_add_targets,canvas,\
 	Library_nullcanvas \
 	Library_simplecanvas \
 	Library_vclcanvas \
-	Package_inc \
 ))
 
 ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)

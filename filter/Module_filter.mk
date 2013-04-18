@@ -63,7 +63,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_xmlfd \
 	Library_xsltdlg \
 	Library_xsltfilter \
-	Package_inc \
 	Package_docbook \
 	Package_xslt \
 	UIConfig_xsltdlg \

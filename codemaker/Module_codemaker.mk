@@ -30,7 +30,6 @@ $(eval $(call gb_Module_Module,codemaker))
 ifneq (,$(if $(CROSS_COMPILING),,T)$(filter ODK,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,codemaker,\
-    Package_inc \
     StaticLibrary_codemaker \
     StaticLibrary_codemaker_cpp \
     StaticLibrary_codemaker_java \

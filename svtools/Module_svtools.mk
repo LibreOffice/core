@@ -23,7 +23,6 @@ $(eval $(call gb_Module_add_targets,svtools,\
     AllLangResTarget_svt \
     Library_hatchwindowfactory \
     Library_svt \
-    Package_inc \
     UIConfig_svt \
 ))
 

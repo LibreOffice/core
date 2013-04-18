@@ -29,7 +29,6 @@
 $(eval $(call gb_Module_Module,sot))
 
 $(eval $(call gb_Module_add_targets,sot,\
-    Package_inc \
     Library_sot \
 ))
 

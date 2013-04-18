@@ -31,7 +31,6 @@ ifeq ($(SOLAR_JAVA),TRUE)
 
 $(eval $(call gb_Module_add_targets,jvmfwk,\
     Library_jvmfwk \
-    Package_inc \
     Package_rcfiles \
 ))
 

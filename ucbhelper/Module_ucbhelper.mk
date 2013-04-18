@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,ucbhelper))
 
 $(eval $(call gb_Module_add_targets,ucbhelper,\
 	Library_ucbhelper \
-	Package_inc \
 ))
 
 # vim: set noet sw=4 ts=4:
