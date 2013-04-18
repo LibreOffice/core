@@ -282,6 +282,7 @@ public class Desktop
 
         @Override public boolean onTouchEvent(MotionEvent event)
         {
+            boolean scrollJustEnded = false;
             if (event.getPointerCount() == 1 &&
                 gestureDetector.onTouchEvent(event)) {
                 return true;
@@ -298,6 +299,7 @@ public class Desktop
                 Desktop.scroll((int) translateX, (int) translateY);
                 translateX = translateY = 0;
                 scrollInProgress = false;
+                scrollJustEnded = true;
                 invalidate();
             } else if (event.getPointerCount() == 2 &&
                        scaleDetector.onTouchEvent(event) &&
@@ -315,7 +317,9 @@ public class Desktop
             // the soft one unconditionally? But what if the user
             // wants to input in another script than what the hardware
             // keyboard covers?
-            if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            if (!scrollJustEnded &&
+                event.getPointerCount() == 1 &&
+                event.getActionMasked() == MotionEvent.ACTION_UP) {
                 // show the keyboard so we can enter text
                 InputMethodManager imm = (InputMethodManager) getContext()
                     .getSystemService(Context.INPUT_METHOD_SERVICE);
