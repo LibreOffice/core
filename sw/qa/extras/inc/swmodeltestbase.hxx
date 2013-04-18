@@ -198,10 +198,16 @@ protected:
     }
 
     // Get paragraph (counted from 1), optionally check it contains the given text.
-    uno::Reference<text::XTextContent> getParagraphOrTable(int number) const
+    uno::Reference<text::XTextContent> getParagraphOrTable(int number, uno::Reference<text::XText> xText = uno::Reference<text::XText>()) const
     {
-        uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> paraEnumAccess;
+        if (xText.is())
+            paraEnumAccess.set(xText, uno::UNO_QUERY);
+        else
+        {
+            uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+            paraEnumAccess.set(textDocument->getText(), uno::UNO_QUERY);
+        }
         uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
         for( int i = 1;
              i < number;
@@ -218,6 +224,12 @@ protected:
                 getParagraphOrTable(number), uno::UNO_QUERY_THROW);
         if( !content.isEmpty())
             CPPUNIT_ASSERT_EQUAL( content, xParagraph->getString());
+        return xParagraph;
+    }
+
+    uno::Reference<text::XTextRange> getParagraphOfText(int number, uno::Reference<text::XText> xText) const
+    {
+        uno::Reference<text::XTextRange> const xParagraph(getParagraphOrTable(number, xText), uno::UNO_QUERY_THROW);
         return xParagraph;
     }
 
