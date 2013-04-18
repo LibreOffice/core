@@ -209,7 +209,6 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMem
             OSL_FAIL("sfx2::SvxZoomItem::PutValue(), Wrong MemberId!");
             return false;
     }
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
