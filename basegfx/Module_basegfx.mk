@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,basegfx))
 
 $(eval $(call gb_Module_add_targets,basegfx,\
     Library_basegfx \
-    Package_inc \
 ))
 
 $(eval $(call gb_Module_add_check_targets,basegfx,\

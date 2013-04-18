@@ -27,7 +27,6 @@ $(eval $(call gb_Module_add_targets,framework,\
     Library_fwl \
     Library_fwm \
     Package_dtd \
-    Package_inc \
     UIConfig_startmodule \
 ))
 

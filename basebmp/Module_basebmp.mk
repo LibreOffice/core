@@ -20,7 +20,6 @@ $(eval $(call gb_Module_add_targets,basebmp,\
 endif
 
 $(eval $(call gb_Module_add_targets,basebmp,\
-    Package_inc \
 ))
 
 $(eval $(call gb_Module_add_check_targets,basebmp,\

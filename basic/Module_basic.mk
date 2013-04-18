@@ -27,7 +27,6 @@ endif
 
 $(eval $(call gb_Module_add_targets,basic,\
 	Library_sb \
-	Package_inc \
 ))
 
 # vim: set noet sw=4 ts=4:

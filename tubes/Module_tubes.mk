@@ -15,7 +15,6 @@ ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Module_add_targets,tubes,\
 	Executable_liboapprover \
 	Library_tubes \
-	Package_inc \
 	UIConfig_tubes \
 ))
 

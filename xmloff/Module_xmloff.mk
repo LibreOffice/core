@@ -23,7 +23,6 @@ $(eval $(call gb_Module_add_targets,xmloff,\
     Library_xo \
     Library_xof \
     Package_dtd \
-    Package_inc \
 ))
 
 $(eval $(call gb_Module_add_check_targets,xmloff,\

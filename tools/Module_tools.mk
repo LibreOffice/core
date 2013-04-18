@@ -23,7 +23,6 @@ $(eval $(call gb_Module_Module,tools))
 $(eval $(call gb_Module_add_targets,tools,\
     CustomTarget_reversemap \
     Library_tl \
-    Package_inc \
     StaticLibrary_ooopathutils \
 ))
 

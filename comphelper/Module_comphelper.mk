@@ -21,7 +21,6 @@ $(eval $(call gb_Module_Module,comphelper))
 
 $(eval $(call gb_Module_add_targets,comphelper,\
     Library_comphelper \
-    Package_inc \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,comphelper,\

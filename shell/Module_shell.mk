@@ -48,7 +48,6 @@ endif
 
 ifneq ($(filter TRUE,$(ENABLE_KDE) $(ENABLE_TDE)),)
 $(eval $(call gb_Module_add_targets,shell,\
-	Package_inc \
 ))
 endif
 

@@ -29,7 +29,6 @@
 $(eval $(call gb_Module_Module,rsc))
 
 $(eval $(call gb_Module_add_targets,rsc,\
-	Package_inc \
 ))
 
 $(eval $(call gb_Module_add_targets_for_build,rsc,\

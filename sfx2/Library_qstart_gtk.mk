@@ -23,7 +23,7 @@ $(eval $(call gb_Library_Library,qstart_gtk))
 $(eval $(call gb_Library_set_include,qstart_gtk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sfx2/inc \
-    -I$(SRCDIR)/sfx2/inc/sfx2 \
+    -I$(SRCDIR)/include/sfx2/ \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,qstart_gtk))

@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,unoidl))
 
 $(eval $(call gb_Module_add_targets,unoidl, \
     Library_unoidl \
-    Package_inc \
 ))
 
 $(eval $(call gb_Module_add_targets_for_build,unoidl, \

@@ -28,7 +28,6 @@
 $(eval $(call gb_Module_Module,o3tl))
 
 $(eval $(call gb_Module_add_targets,o3tl,\
-	Package_inc \
 ))
 
 $(eval $(call gb_Module_add_check_targets,o3tl,\

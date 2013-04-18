@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,apple_remote))
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,apple_remote,\
     Library_AppleRemote \
-    Package_inc \
 ))
 endif
 

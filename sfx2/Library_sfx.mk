@@ -32,7 +32,7 @@ $(eval $(call gb_Library_use_sdk_api,sfx))
 
 $(eval $(call gb_Library_set_include,sfx,\
     -I$(SRCDIR)/sfx2/inc \
-    -I$(SRCDIR)/sfx2/inc/sfx2 \
+    -I$(SRCDIR)/include/sfx2/ \
     -I$(SRCDIR)/sfx2/source/inc \
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
     $$(INCLUDE) \
@@ -265,7 +265,7 @@ $(eval $(call gb_SdiTarget_SdiTarget,sfx2/sdi/sfxslots,sfx2/sdi/sfx))
 
 $(eval $(call gb_SdiTarget_set_include,sfx2/sdi/sfxslots,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/sfx2/inc/sfx2 \
+    -I$(SRCDIR)/include/sfx2/ \
     -I$(SRCDIR)/sfx2/inc \
     -I$(SRCDIR)/sfx2/sdi \
 ))

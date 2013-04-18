@@ -14,7 +14,6 @@ $(eval $(call gb_Module_add_targets,formula,\
     AllLangResTarget_forui \
     Library_for \
     Library_forui \
-    Package_inc \
 ))
 
 # vim: set noet sw=4 ts=4:

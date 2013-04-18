@@ -17,7 +17,6 @@ $(eval $(call gb_Module_add_targets,touch,\
 endif
 
 $(eval $(call gb_Module_add_targets,touch,\
-	Package_inc \
 ))
 
 # vim: set noet sw=4 ts=4:

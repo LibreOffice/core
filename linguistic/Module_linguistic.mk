@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,linguistic))
 
 $(eval $(call gb_Module_add_targets,linguistic,\
 	Library_lng \
-	Package_inc \
 ))
 
 #$(eval $(call gb_Module_add_check_targets,linguistic,\

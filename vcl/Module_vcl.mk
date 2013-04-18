@@ -23,7 +23,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     AllLangResTarget_vcl \
     CustomTarget_afm_hash \
     Library_vcl \
-    Package_inc \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
 		StaticLibrary_vclmain \
 		Executable_ui-previewer) \
