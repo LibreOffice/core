@@ -161,3 +161,40 @@ diff -ru misc/boost_1_48_0/boost/spirit/home/classic/debug/impl/parser_names.ipp
                  ).second;
              }
  
+diff -ru misc/boost_1_48_0/boost/unordered/detail/emplace_args.hpp misc/build/boost_1_48_0/boost/unordered/detail/emplace_args.hpp
+--- misc/boost_1_48_0/boost/unordered/detail/emplace_args.hpp
++++ misc/build/boost_1_48_0/boost/unordered/detail/emplace_args.hpp
+@@ -89,5 +89,5 @@
+         BOOST_PP_REPEAT_##z(n, BOOST_UNORDERED_EARGS_MEMBER, _)             \
+         BOOST_PP_CAT(emplace_args, n) (                                     \
+-            BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, Arg, a)                     \
++            BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, Arg, b)                     \
+         ) : BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_EARGS_INIT, _)             \
+         {}                                                                  \
+@@ -99,10 +99,10 @@
+         BOOST_PP_ENUM_PARAMS_Z(z, n, A)                                     \
+     > create_emplace_args(                                                  \
+-        BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_FWD_PARAM, a)                  \
++        BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_FWD_PARAM, b)                  \
+     )                                                                       \
+     {                                                                       \
+         BOOST_PP_CAT(emplace_args, n) <                                     \
+             BOOST_PP_ENUM_PARAMS_Z(z, n, A)                                 \
+-        > e(BOOST_PP_ENUM_PARAMS_Z(z, n, a));                               \
++        > e(BOOST_PP_ENUM_PARAMS_Z(z, n, b));                               \
+         return e;                                                           \
+     }
+@@ -116,5 +116,5 @@
+ #define BOOST_UNORDERED_EARGS_INIT(z, n, _)                                 \
+     BOOST_PP_CAT(a, n)(                                                     \
+-        boost::forward<BOOST_PP_CAT(A,n)>(BOOST_PP_CAT(a, n)))
++        boost::forward<BOOST_PP_CAT(A,n)>(BOOST_PP_CAT(b, n)))
+ 
+ #else
+@@ -126,5 +126,5 @@
+ 
+ #define BOOST_UNORDERED_EARGS_INIT(z, n, _)                                 \
+-    BOOST_PP_CAT(a, n)(BOOST_PP_CAT(a, n))
++    BOOST_PP_CAT(a, n)(BOOST_PP_CAT(b, n))
+ 
+ #endif
