@@ -67,16 +67,16 @@ $(eval $(call gb_Module_add_targets,extras,\
 	ExternalPackage_accessoriesgalleryphotosbuildings \
 	ExternalPackage_accessoriesgalleryphotoscelebration \
 	ExternalPackage_accessoriesgalleryphotoscities \
-	Zip_accessoriesgalleryphotosfauna \
-	Zip_accessoriesgalleryphotosflowers \
-	Zip_accessoriesgalleryphotosfoodsanddrinks \
-	Zip_accessoriesgalleryphotoshumans \
-	Zip_accessoriesgalleryphotoslandscapes \
-	Zip_accessoriesgalleryphotosobjects \
-	Zip_accessoriesgalleryphotosplants \
-	Zip_accessoriesgalleryphotosspace \
-	Zip_accessoriesgalleryphotosstatues \
-	Zip_accessoriesgalleryphotostravel \
+	ExternalPackage_accessoriesgalleryphotosfauna \
+	ExternalPackage_accessoriesgalleryphotosflowers \
+	ExternalPackage_accessoriesgalleryphotosfoodsanddrinks \
+	ExternalPackage_accessoriesgalleryphotoshumans \
+	ExternalPackage_accessoriesgalleryphotoslandscapes \
+	ExternalPackage_accessoriesgalleryphotosobjects \
+	ExternalPackage_accessoriesgalleryphotosplants \
+	ExternalPackage_accessoriesgalleryphotosspace \
+	ExternalPackage_accessoriesgalleryphotosstatues \
+	ExternalPackage_accessoriesgalleryphotostravel \
 ))
 endif
 
