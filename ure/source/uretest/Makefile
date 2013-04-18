@@ -71,12 +71,17 @@ test-javatest: out.sdk/javamain.uno.jar out.sdk/types.rdb out.sdk/services.rdb
             -env:URE_MORE_TYPES=$(URLPREFIX)$(cwd)/out.sdk/types.rdb \
             -env:URE_MORE_SERVICES=$(URLPREFIX)$(cwd)/out.sdk/services.rdb
 
+ifeq "$(PLATFORM)" "windows"
+set_vars = set URE_MORE_TYPES=$(URLPREFIX)$(cwd)/out.sdk/types.rdb && \
+    set URE_MORE_SERVICES=$(URLPREFIX)$(cwd)/out.sdk/services.rdb &&
+else
+set_vars = URE_MORE_TYPES=$(URLPREFIX)$(cwd)/out.sdk/types.rdb \
+    URE_MORE_SERVICES=$(URLPREFIX)$(cwd)/out.sdk/services.rdb
+endif
 .PHONY: test-javanative
 test-javanative: out.sdk/runner.jar out.sdk/javanative.jar \
             out.sdk/services.rdb out.sdk/types.rdb
-	URE_MORE_TYPES=$(URLPREFIX)$(cwd)/out.sdk/types.rdb \
-            URE_MORE_SERVICES=$(URLPREFIX)$(cwd)/out.sdk/services.rdb \
-            $(GCCS_COMPAT) $(SDK_JAVA) -jar out.sdk/runner.jar \
+	$(set_vars) $(GCCS_COMPAT) $(SDK_JAVA) -jar out.sdk/runner.jar \
             $(ure_java_url)/ $(URLPREFIX)$(cwd)/out.sdk/javanative.jar
 
 do_server = $(GCCS_COMPAT) uno -c test.cpp.cppserver.Component \
