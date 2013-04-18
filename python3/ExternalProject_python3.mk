@@ -67,9 +67,6 @@ python3_cflags =
 ifeq ($(ENABLE_VALGRIND),TRUE)
     python3_cflags += $(VALGRIND_CFLAGS)
 endif
-ifeq ($(OS),AIX)
-    python3_cflags += -g0
-endif
 
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_ExternalProject_run,build,\
@@ -78,7 +75,8 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		--with-system-expat \
 		$(if $(filter TRUE,$(ENABLE_VALGRIND)),--with-valgrind) \
 		--prefix=/python-inst \
-		$(if $(filter AIX,$(OS)),--disable-ipv6 --with-threads) \
+		$(if $(filter AIX,$(OS)),--disable-ipv6 --with-threads \
+			OPT="-g0 -fwrapv -O3 -Wall") \
 		$(if $(filter WNT-GCC,$(OS)-$(COM)),--with-threads ac_cv_printf_zd_format=no) \
 		$(if $(filter MACOSX,$(OS)), \
 			$(if $(filter INTEL POWERPC,$(CPUNAME)),--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit) --enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
