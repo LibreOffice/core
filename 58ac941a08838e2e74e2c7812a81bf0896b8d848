@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+zc\u003d",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-18T18:36:15Z",
+      "side": 1,
+      "message": "This field is not the overall file format version, but an internal EditTextObject version instead, please do not change.",
+      "revId": "58ac941a08838e2e74e2c7812a81bf0896b8d848",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+zk\u003d",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-18T18:36:15Z",
+      "side": 1,
+      "message": "This is invalid, see above. The two version numbers are not related.",
+      "revId": "58ac941a08838e2e74e2c7812a81bf0896b8d848",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+zg\u003d",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-18T18:36:15Z",
+      "side": 1,
+      "message": "Why set this encoding at the stream?",
+      "revId": "58ac941a08838e2e74e2c7812a81bf0896b8d848",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
