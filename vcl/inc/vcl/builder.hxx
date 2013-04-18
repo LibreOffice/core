@@ -257,6 +257,8 @@ public:
     //Convert _ gtk markup to ~ vcl markup
     static OString convertMnemonicMarkup(const OString &rIn);
 
+    static OString extractCustomProperty(stringmap &rMap);
+
 private:
     Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
         stringmap &rProps, stringmap &rPangoAttributes,

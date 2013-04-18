@@ -490,20 +490,20 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
     }
 }
 
+OString VclBuilder::extractCustomProperty(VclBuilder::stringmap &rMap)
+{
+    OString sCustomProperty;
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("customproperty"));
+    if (aFind != rMap.end())
+    {
+        sCustomProperty = aFind->second;
+        rMap.erase(aFind);
+    }
+    return sCustomProperty;
+}
+
 namespace
 {
-    OString extractCustomProperty(VclBuilder::stringmap &rMap)
-    {
-        OString sCustomProperty;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("customproperty"));
-        if (aFind != rMap.end())
-        {
-            sCustomProperty = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sCustomProperty;
-    }
-
     bool extractResizable(VclBuilder::stringmap &rMap)
     {
         bool bResizable = true;

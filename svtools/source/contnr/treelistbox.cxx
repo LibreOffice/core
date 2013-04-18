@@ -452,9 +452,13 @@ SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
     SetSublistOpenWithLeftRight();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvTreeListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    return new SvTreeListBox(pParent, WB_TABSTOP);
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SvTreeListBox(pParent, nWinStyle);
 }
 
 void SvTreeListBox::Clear()
