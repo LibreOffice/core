@@ -49,7 +49,7 @@ static OString lcl_DateTimeToOString( const DateTime& rDateTime )
 {
     char sBuf[ 200 ];
     snprintf( sBuf, sizeof( sBuf ),
-            "%d-%02d-%02dT%02d:%02d:%02d.%09dZ",
+            "%d-%02d-%02dT%02d:%02d:%02d.%09" SAL_PRIuUINT32 "Z",
             rDateTime.GetYear(), rDateTime.GetMonth(), rDateTime.GetDay(),
             rDateTime.GetHour(), rDateTime.GetMin(), rDateTime.GetSec(),
             rDateTime.GetNanoSec() );
