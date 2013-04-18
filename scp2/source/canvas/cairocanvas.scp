@@ -27,14 +27,4 @@
 
 #include "macros.inc"
 
-File gid_File_Lib_CairoCanvas
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(cairocanvas.uno,UNXSUFFIX));
-  #else
-    Name = "cairocanvas.uno.dll";
-  #endif
-End
-
+STD_LIB_FILE(gid_File_Lib_CairoCanvas, cairocanvas)
