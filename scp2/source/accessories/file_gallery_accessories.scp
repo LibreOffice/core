@@ -55,9 +55,10 @@ File gid_File_Extra_Gallery_Photos_Plants_Accessories
 End
 
 File gid_File_Extra_Gallery_Photos_Celebration_Accessories
-    Dir = gid_Dir_Gallery_Photos_Celebration;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotoscelebration.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotoscelebration.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Fauna_Accessories
@@ -91,9 +92,10 @@ File gid_File_Extra_Gallery_Photos_Landscapes_Accessories
 End
 
 File gid_File_Extra_Gallery_Photos_Buildings_Accessories
-    Dir = gid_Dir_Gallery_Photos_Buildings;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotosbuildings.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotosbuildings.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Objects_Accessories
@@ -103,9 +105,10 @@ File gid_File_Extra_Gallery_Photos_Objects_Accessories
 End
 
 File gid_File_Extra_Gallery_Photos_Cities_Accessories
-    Dir = gid_Dir_Gallery_Photos_Cities;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotoscities.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotoscities.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Space_Accessories
@@ -127,15 +130,17 @@ File gid_File_Extra_Gallery_Photos_Travel_Accessories
 End
 
 File gid_File_Extra_Gallery_Elements_Bullets2_Accessories
-    Dir = gid_Dir_Gallery_Elements_Bullets2;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryelementsbullets2.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryelementsbullets2.filelist";
 End
 
 File gid_File_Extra_Gallery_NONFREE_Accessories
-    Dir = gid_Dir_Gallery;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgallerynonfree.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgallerynonfree.filelist";
 End
 
 #endif
