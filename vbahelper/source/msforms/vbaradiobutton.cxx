@@ -66,17 +66,16 @@ ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExceptio
     sal_Int16 nOldValue = 0;
     m_xProps->getPropertyValue( STATE ) >>= nOldValue;
 
-    sal_Bool bValue = sal_False;
-    if( _value >>= nValue )
+    if( !( _value >>= nValue ) )
     {
-        if( nValue == -1)
-        nValue = 1;
-    }
-    else if ( _value >>= bValue )
-    {
+        sal_Bool bValue = sal_False;
+        _value >>= bValue;
         if ( bValue )
-            nValue = 1;
+            nValue = -1;
     }
+
+    if( nValue == -1)
+        nValue = 1;
     m_xProps->setPropertyValue( STATE, uno::makeAny( nValue ) );
     if ( nValue != nOldValue )
     {
