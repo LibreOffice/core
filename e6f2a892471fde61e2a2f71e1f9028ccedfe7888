@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+yY\u003d",
+        "filename": "scp2/source/ooo/file_library_ooo.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-04-18T22:55:16Z",
+      "side": 0,
+      "message": "hmm, vbaevents here, while the patch has vbaevent (without the s).\nLooking at the windows build log that seems to be the trouble here ...",
+      "revId": "e6f2a892471fde61e2a2f71e1f9028ccedfe7888",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
