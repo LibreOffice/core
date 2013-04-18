@@ -1436,21 +1436,20 @@ gb_ExternalProject__use_wpg :=
 else # !SYSTEM_WPG
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	wpglib \
+	wpg-0.2 \
 ))
 
 define gb_LinkTarget__use_wpg
 $(call gb_LinkTarget_use_package,$(1),\
-	libwpg_inc \
+	libwpg \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	wpglib \
+	wpg-0.2 \
 )
 
 endef
 define gb_ExternalProject__use_wpg
-$(call gb_ExternalProject_use_package,$(1),libwpg_inc)
-$(call gb_ExternalProject_use_static_libraries,$(1),wpglib)
+$(call gb_ExternalProject_use_package,$(1),libwpg)
 
 endef
 

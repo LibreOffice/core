@@ -12,8 +12,8 @@ $(eval $(call gb_Module_Module,libwpg))
 ifeq ($(SYSTEM_WPG),NO)
 
 $(eval $(call gb_Module_add_targets,libwpg,\
+	ExternalProject_libwpg \
 	ExternalPackage_libwpg \
-	StaticLibrary_wpg \
 	UnpackedTarball_wpg \
 ))
 
