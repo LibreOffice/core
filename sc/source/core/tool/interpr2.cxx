@@ -3108,7 +3108,7 @@ void ScInterpreter::ScGetPivotData()
     // Standard syntax: separate name/value pairs
 
     sal_uInt16 nFilterCount = nParamCount / 2 - 1;
-    uno::Sequence<sheet::DataPilotFieldFilter> aFilters(nFilterCount);
+    std::vector<sheet::DataPilotFieldFilter> aFilters(nFilterCount);
 
     sal_uInt16 i = nFilterCount;
     while (i-- > 0)

@@ -1295,9 +1295,21 @@ public:
     }
 };
 
+class NameInserter : std::unary_function<const ScDPSaveDimension*, void>
+{
+    std::vector<OUString>& mrNames;
+public:
+    NameInserter(std::vector<OUString>& rNames) : mrNames(rNames) {}
+
+    void operator() (const ScDPSaveDimension* pDim)
+    {
+        mrNames.push_back(pDim->GetName());
+    }
+};
+
 }
 
-double ScDPObject::GetPivotData(const OUString& rDataFieldName, const uno::Sequence<sheet::DataPilotFieldFilter>& rFilters)
+double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<sheet::DataPilotFieldFilter>& rFilters)
 {
     double fRet;
     rtl::math::setNan(&fRet);
@@ -1306,23 +1318,40 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, const uno::Seque
 
     CreateObjects();
 
-    std::vector<const ScDPSaveDimension*> aDims;
-    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
-    if (aDims.empty())
+    std::vector<const ScDPSaveDimension*> aDataDims;
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDataDims);
+    if (aDataDims.empty())
         return fRet;
 
     std::vector<const ScDPSaveDimension*>::iterator it = std::find_if(
-        aDims.begin(), aDims.end(), FindByName(rDataFieldName));
-    if (it == aDims.end())
+        aDataDims.begin(), aDataDims.end(), FindByName(rDataFieldName));
+    if (it == aDataDims.end())
         return fRet;
 
-    sal_Int32 nDataIndex = std::distance(aDims.begin(), it);
+    sal_Int32 nDataIndex = std::distance(aDataDims.begin(), it);
 
     uno::Reference<sheet::XDataPilotResults> xDPResults(xSource, uno::UNO_QUERY);
     if (!xDPResults.is())
         return fRet;
 
-    uno::Sequence<uno::Any> aRes = xDPResults->getFilteredResults(rFilters);
+    std::vector<const ScDPSaveDimension*> aRowDims, aColDims;
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aRowDims);
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aColDims);
+
+    // Dimensions must be sorted in order of appearance, and row dimensions
+    // must come before column dimensions.
+    std::vector<OUString> aDimOrder;
+    std::for_each(aRowDims.begin(), aRowDims.end(), NameInserter(aDimOrder));
+    std::for_each(aColDims.begin(), aColDims.end(), NameInserter(aDimOrder));
+
+    // TODO: Sort filters by this dimension order...
+
+    size_t n = rFilters.size();
+    uno::Sequence<sheet::DataPilotFieldFilter> aFilters(n);
+    for (size_t i = 0; i < n; ++i)
+        aFilters[i] = rFilters[i];
+
+    uno::Sequence<uno::Any> aRes = xDPResults->getFilteredResults(aFilters);
 
     fRet = 54.0;
 

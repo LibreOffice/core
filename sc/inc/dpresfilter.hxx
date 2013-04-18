@@ -17,9 +17,9 @@
 
 #if DEBUG_PIVOT_TABLE
 #include <map>
-#else
-#include <boost/unordered_map.hpp>
 #endif
+
+#include <boost/unordered_map.hpp>
 
 struct ScDPResultFilter
 {
@@ -48,6 +48,12 @@ struct ScDPResultFilter
  */
 class ScDPResultFilterSet : boost::noncopyable
 {
+public:
+    typedef std::vector<double> ValuesType;
+    typedef boost::unordered_map<OUString, OUString, OUStringHash> FilterSetType;
+
+private:
+
     struct MemberNode;
     struct DimensionNode;
 #if DEBUG_PIVOT_TABLE
@@ -58,7 +64,6 @@ class ScDPResultFilterSet : boost::noncopyable
     typedef boost::unordered_map<ScDPItemData, MemberNode*, ScDPItemData::Hash> MembersType;
     typedef boost::unordered_map<OUString, DimensionNode*, OUStringHash> DimensionsType;
 #endif
-    typedef std::vector<double> ValuesType;
 
     struct DimensionNode : boost::noncopyable
     {
@@ -92,6 +97,7 @@ class ScDPResultFilterSet : boost::noncopyable
     MemberNode* mpRoot;
 
 public:
+
     ScDPResultFilterSet();
     ~ScDPResultFilterSet();
 
@@ -109,6 +115,10 @@ public:
     void add(const std::vector<ScDPResultFilter>& rFilter, long nCol, long nRow, double fVal);
 
     void swap(ScDPResultFilterSet& rOther);
+
+    bool empty() const;
+
+    bool getValues(FilterSetType& rFilters, ValuesType& rValues) const;
 
 #if DEBUG_PIVOT_TABLE
     void dump() const;

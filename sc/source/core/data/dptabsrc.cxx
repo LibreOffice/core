@@ -45,6 +45,7 @@
 #include "dpitemdata.hxx"
 #include "dputil.hxx"
 #include "dpresfilter.hxx"
+#include "dpmacros.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -457,20 +458,26 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
     return aSeq;
 }
 
+namespace {
+
+struct OUStringPrinter
+{
+    void operator() (const OUString& r) const
+    {
+        std::cout << r << " ";
+    }
+};
+
+}
+
 uno::Sequence<uno::Any> ScDPSource::getFilteredResults(
             const uno::Sequence<sheet::DataPilotFieldFilter>& aFilters )
                 throw (uno::RuntimeException)
 {
-    sal_Int32 n = aFilters.getLength();
-    std::vector<sheet::DataPilotFieldFilter> aSorted;
-    aSorted.reserve(n);
-    for (sal_Int32 i = 0; i < n; ++i)
-        aSorted.push_back(aFilters[i]);
+    if (maResFilterSet.empty())
+        getResults(); // Build result tree first.
 
-    // Sort filters by order of appearance. Row fields come before column fields.
-
-    // TODO: maResFilterSet maintains the result tree, so we can probably
-    // extract the field sort order from there somehow.
+    // TODO: Traverse the tree.
 
     return uno::Sequence<uno::Any>();
 }

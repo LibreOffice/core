@@ -151,6 +151,16 @@ void ScDPResultFilterSet::swap(ScDPResultFilterSet& rOther)
     std::swap<MemberNode*>(mpRoot, rOther.mpRoot);
 }
 
+bool ScDPResultFilterSet::empty() const
+{
+    return mpRoot->maChildDimensions.empty();
+}
+
+bool ScDPResultFilterSet::getValues(FilterSetType& rFilters, ValuesType& rValues) const
+{
+    return false;
+}
+
 #if DEBUG_PIVOT_TABLE
 void ScDPResultFilterSet::dump() const
 {

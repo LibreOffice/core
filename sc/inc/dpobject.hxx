@@ -181,8 +181,7 @@ public:
 
     double GetPivotData(
         const OUString& rDataFieldName,
-        const com::sun::star::uno::Sequence<
-            com::sun::star::sheet::DataPilotFieldFilter>& rFilters);
+        std::vector<com::sun::star::sheet::DataPilotFieldFilter>& rFilters);
 
     bool                GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
                                       const std::vector< ScDPGetPivotDataField >& rFilters );
