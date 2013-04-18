@@ -176,6 +176,24 @@
       "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+2U\u003d",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-18T14:54:29Z",
+      "side": 1,
+      "message": "Conversion was done for binary files to be stored in earlier formats. Encountering such versions isn\u0027t the case anymore with copy\u0026paste and conversion would never be executed, so that code could be removed along with the check. If you want you can remove that code in a follow-up patch, getting rid of unused code is always good :-)\n\nProbably the reason why you had to add the check if a version is set at all is related to that, actually the stream should have the version SOFFICE_FILEFORMAT_CURRENT set so all parts involved elsewhere that do check the version get that correct. Would be nice if you could spot the place where that should be done. Anyhow, I\u0027ll push the current patch as is.",
+      "parentUuid": "AAAAXH//+5U\u003d",
+      "revId": "3ce212edb57ebabb725e68f56f523c88bb6ef6d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
