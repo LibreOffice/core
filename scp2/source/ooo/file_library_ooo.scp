@@ -55,16 +55,7 @@ File gid_File_Lib_Basprov
   #endif
 End
 
-File gid_File_Lib_Vbaevent
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT3(vbaevents,.uno,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(vbaevents,.uno,.dll));
-  #endif
-End
+STD_LIB_FILE(gid_File_Lib_Vbaevent, vbaevents)
 
 File gid_File_Lib_Scriptframe
     LIB_FILE_BODY;
@@ -306,38 +297,11 @@ File gid_File_Lib_Stringresource
   #endif
 End
 
-File gid_File_Lib_Vbaobj
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT3(vbaobj,.uno,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(vbaobj,.uno,.dll));
-  #endif
-End
+STD_LIB_FILE(gid_File_Lib_Vbaobj, vbaobj)
 
-File gid_File_Lib_Vbaswobj
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT3(vbaswobj,.uno,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(vbaswobj,.uno,.dll));
-  #endif
-End
+STD_LIB_FILE(gid_File_Lib_Vbaswobj, vbaswobj)
 
-File gid_File_Lib_Vbamsforms
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT3(msforms,.uno,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(msforms,.uno,.dll));
-  #endif
-End
+STD_LIB_FILE(gid_File_Lib_Vbamsforms, msforms)
 
 File gid_File_Lib_Vbahelper
     LIB_FILE_BODY;
