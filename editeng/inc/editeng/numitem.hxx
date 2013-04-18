@@ -161,7 +161,7 @@ public:
 
     virtual ~SvxNumberFormat();
 
-    SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
+    SvStream&       Store(SvStream &rStream);
     SvxNumberFormat* Create(SvStream& rStream );
 
     SvxNumberFormat& operator=( const SvxNumberFormat&  );

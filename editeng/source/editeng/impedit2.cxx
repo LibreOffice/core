@@ -3372,6 +3372,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     aSelection.Adjust( GetEditDoc() );
 
     EditDataObject* pDataObj = new EditDataObject;
+    pDataObj->GetStream().SetVersion( SOFFICE_FILEFORMAT_CURRENT );
     uno::Reference< datatransfer::XTransferable > xDataObj;
     xDataObj = pDataObj;
 

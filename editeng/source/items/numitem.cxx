@@ -237,15 +237,8 @@ SvxNumberFormat::~SvxNumberFormat()
     delete pBulletFont;
 }
 
-SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
+SvStream&   SvxNumberFormat::Store(SvStream &rStream)
 {
-    if(pConverter && pBulletFont)
-    {
-        cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
-        String sFontName = GetFontToSubsFontName(pConverter);
-        pBulletFont->SetName(sFontName);
-    }
-
     rStream << (sal_uInt16)NUMITEM_VERSION_04;
 
     rStream << (sal_uInt16)GetNumberingType();
@@ -691,7 +684,9 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     rStream >> nTmp16; bContinuousNumbering = nTmp16;
     rStream >> nTmp16; eNumberingType = ( SvxNumRuleType )nTmp16;
 
-    for (sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
+    sal_uInt16 nLevels = SVX_MAX_NUM;
+    rStream >> nLevels;
+    for (sal_uInt16 i = 0; i < nLevels; i++)
     {
         rStream >> nTmp16;
         sal_Bool hasNumberingFormat = nTmp16;
@@ -723,29 +718,20 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
     rStream<<(sal_uInt16)bContinuousNumbering;
     rStream<<(sal_uInt16)eNumberingType;
 
-    FontToSubsFontConverter pConverter = 0;
-    sal_Bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && ( rStream.GetVersion() );
+    //number of levels
+    rStream<<(sal_uInt16)SVX_MAX_NUM;
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         if(aFmts[i])
         {
             rStream << sal_uInt16(1);
-            if(bConvertBulletFont && aFmts[i]->GetBulletFont())
-            {
-                if(!pConverter)
-                    pConverter =
-                        CreateFontToSubsFontConverter(aFmts[i]->GetBulletFont()->GetName(),
-                                    FONTTOSUBSFONT_EXPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS);
-            }
-            aFmts[i]->Store(rStream, pConverter);
+            aFmts[i]->Store(rStream);
         }
         else
             rStream << sal_uInt16(0);
     }
     //second save of nFeatureFlags for new versions
     rStream<<(sal_uInt16)nFeatureFlags;
-    if(pConverter)
-        DestroyFontToSubsFontConverter(pConverter);
 
     return rStream;
 }
