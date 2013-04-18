@@ -238,8 +238,8 @@ SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
     aLSets(1024,16,16),
     pModel(NULL)
 {
-    sal_Char aTextControls[] = "Controls";
-    aControlLayerName = String(aTextControls, sizeof(aTextControls-1));
+    const sal_Char aTextControls[] = "Controls";
+    aControlLayerName = String(aTextControls, sizeof(aTextControls)-1);
     pParent=pNewParent;
 }
 
@@ -249,8 +249,8 @@ SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
     pParent(NULL),
     pModel(NULL)
 {
-    sal_Char aTextControls[] = "Controls";
-    aControlLayerName = String(aTextControls, sizeof(aTextControls-1));
+    const sal_Char aTextControls[] = "Controls";
+    aControlLayerName = String(aTextControls, sizeof(aTextControls)-1);
     *this = rSrcLayerAdmin;
 }
 
