@@ -13,7 +13,6 @@ $(eval $(call gb_Module_add_targets,sax,\
     Library_expwrap \
     Library_fastsax \
     Library_sax \
-    Package_inc \
 	StaticLibrary_sax_shared \
 ))
 

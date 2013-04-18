@@ -22,7 +22,6 @@ $(eval $(call gb_Module_Module,editeng))
 $(eval $(call gb_Module_add_targets,editeng,\
     AllLangResTarget_editeng \
     Library_editeng \
-    Package_inc \
 ))
 
 # add any runtime tests (unit tests) here

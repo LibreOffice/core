@@ -29,7 +29,7 @@ $(eval $(call gb_Library_use_sdk_api,svt))
 
 $(eval $(call gb_Library_set_include,svt,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/svtools/inc/svtools \
+    -I$(SRCDIR)/include/svtools/ \
     -I$(SRCDIR)/svtools/source/inc \
     -I$(SRCDIR)/svtools/inc \
 ))

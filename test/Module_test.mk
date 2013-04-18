@@ -14,7 +14,6 @@ ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,test,\
     Library_test \
     Library_subsequenttest \
-    Package_inc \
     Package_unittest \
 ))
 

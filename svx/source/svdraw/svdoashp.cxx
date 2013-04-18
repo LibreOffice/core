@@ -52,9 +52,9 @@
 #include <svx/svdoutl.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/sdtfchim.hxx>
-#include "../svx/EnhancedCustomShapeGeometry.hxx"
-#include "../svx/EnhancedCustomShapeTypeNames.hxx"
-#include "../svx/EnhancedCustomShape2d.hxx"
+#include "svx/EnhancedCustomShapeGeometry.hxx"
+#include "svx/EnhancedCustomShapeTypeNames.hxx"
+#include "svx/EnhancedCustomShape2d.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>

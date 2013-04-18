@@ -10,7 +10,6 @@ $(eval $(call gb_Module_Module,i18nutil))
 
 $(eval $(call gb_Module_add_targets,i18nutil,\
 	Library_i18nutil \
-	Package_inc \
 ))
 
 # vim: set noet sw=4:

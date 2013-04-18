@@ -32,7 +32,6 @@ $(eval $(call gb_Module_add_targets,package,\
 	Library_package2 \
 	Library_xstor \
 	Package_dtd \
-	Package_inc \
 ))
 
 # vim: set noet sw=4 ts=4:

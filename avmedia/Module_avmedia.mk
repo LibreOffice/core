@@ -31,7 +31,6 @@ $(eval $(call gb_Module_Module,avmedia))
 $(eval $(call gb_Module_add_targets,avmedia,\
 	AllLangResTarget_avmedia \
 	Library_avmedia \
-	Package_inc \
 ))
 
 ifeq ($(ENABLE_GSTREAMER),TRUE)

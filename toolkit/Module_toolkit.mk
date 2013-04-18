@@ -22,7 +22,6 @@ $(eval $(call gb_Module_Module,toolkit))
 $(eval $(call gb_Module_add_targets,toolkit,\
     AllLangResTarget_tk \
     Library_tk \
-    Package_inc \
 ))
 
 ifneq ($(OOO_JUNIT_JAR),)
