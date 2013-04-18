@@ -55,7 +55,7 @@ ifeq "$(PLATFORM)" "windows"
 # Settings for Windows using Microsoft compiler/linker
 
 OS=WIN
-PS=\\
+PS:=$(strip \ )
 ICL=$$
 CC=cl
 LINK=link
