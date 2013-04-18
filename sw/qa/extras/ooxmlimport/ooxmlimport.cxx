@@ -124,6 +124,7 @@ public:
     void testFdo60922();
     void testFdo59273();
     void testTableWidth();
+    void testConditionalstylesTbllook();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -199,6 +200,7 @@ void Test::run()
         {"fdo60922.docx", &Test::testFdo60922},
         {"fdo59273.docx", &Test::testFdo59273},
         {"table_width.docx", &Test::testTableWidth},
+        {"conditionalstyles-tbllook.docx", &Test::testConditionalstylesTbllook},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1311,6 +1313,15 @@ void Test::testTableWidth()
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Relative width wasn't recognized during import.
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xTables->getByIndex(0), "IsWidthRelative")));
+}
+
+void Test::testConditionalstylesTbllook()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // Background was -1.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x7F7F7F), getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
