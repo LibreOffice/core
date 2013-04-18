@@ -59,8 +59,8 @@ using namespace ::com::sun::star;
  * SwXFlatParagraph
  ******************************************************************************/
 
-SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, rtl::OUString aExpandText, const ModelToViewHelper::ConversionMap* pMap ) :
-    SwXTextMarkup( rTxtNode, pMap ),
+SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, rtl::OUString aExpandText, const ModelToViewHelper& rMap ) :
+    SwXTextMarkup( rTxtNode, rMap ),
     maExpandText( aExpandText )
 {
 }
@@ -416,11 +416,10 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     if ( pRet )
     {
         // Expand the string:
-        rtl::OUString aExpandText;
-        const ModelToViewHelper::ConversionMap* pConversionMap =
-                pRet->BuildConversionMap( aExpandText );
+        const ModelToViewHelper aConversionMap(*pRet);
+        rtl::OUString aExpandText = aConversionMap.getViewText();
 
-        xRet = new SwXFlatParagraph( *pRet, aExpandText, pConversionMap );
+        xRet = new SwXFlatParagraph( *pRet, aExpandText, aConversionMap );
         // keep hard references...
         m_aFlatParaList.insert( xRet );
     }
@@ -469,11 +468,10 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     if ( pNextTxtNode )
     {
         // Expand the string:
-        rtl::OUString aExpandText;
-        const ModelToViewHelper::ConversionMap* pConversionMap =
-                pNextTxtNode->BuildConversionMap( aExpandText );
+        const ModelToViewHelper aConversionMap(*pNextTxtNode);
+        rtl::OUString aExpandText = aConversionMap.getViewText();
 
-        xRet = new SwXFlatParagraph( *pNextTxtNode, aExpandText, pConversionMap );
+        xRet = new SwXFlatParagraph( *pNextTxtNode, aExpandText, aConversionMap );
         // keep hard references...
         m_aFlatParaList.insert( xRet );
     }
@@ -516,11 +514,10 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     if ( pPrevTxtNode )
     {
         // Expand the string:
-        rtl::OUString aExpandText;
-        const ModelToViewHelper::ConversionMap* pConversionMap =
-                pPrevTxtNode->BuildConversionMap( aExpandText );
+        const ModelToViewHelper aConversionMap(*pPrevTxtNode);
+        rtl::OUString aExpandText = aConversionMap.getViewText();
 
-        xRet = new SwXFlatParagraph( *pPrevTxtNode, aExpandText, pConversionMap );
+        xRet = new SwXFlatParagraph( *pPrevTxtNode, aExpandText, aConversionMap );
         // keep hard references...
         m_aFlatParaList.insert( xRet );
     }

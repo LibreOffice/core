@@ -1804,7 +1804,7 @@ bool SwDoc::DeleteRange( SwPaM & rPam )
 
 
 void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult& rResult,
-    xub_StrLen /*nBeginGrammarCheck*/, const ModelToViewHelper::ConversionMap* pConversionMap )
+    xub_StrLen /*nBeginGrammarCheck*/, const ModelToViewHelper &rConversionMap )
 {
     if( rTxtNode.IsGrammarCheckDirty() )
         return;
@@ -1816,8 +1816,8 @@ void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult&
         for( i = 0; i < rResult.aErrors.getLength(); ++i )
         {
             const linguistic2::SingleProofreadingError &rError = rResult.aErrors[i];
-            xub_StrLen nStart = (xub_StrLen)ModelToViewHelper::ConvertToModelPosition( pConversionMap, rError.nErrorStart ).mnPos;
-            xub_StrLen nEnd = (xub_StrLen)ModelToViewHelper::ConvertToModelPosition( pConversionMap, rError.nErrorStart + rError.nErrorLength ).mnPos;
+            xub_StrLen nStart = (xub_StrLen)rConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos;
+            xub_StrLen nEnd = (xub_StrLen)rConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos;
             if( i != j )
                 pArray[j] = pArray[i];
             if( pWrong->LookForEntry( nStart, nEnd ) )
@@ -1935,22 +1935,22 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 String aText( ((SwTxtNode*)pNd)->GetTxt().Copy( nBeginGrammarCheck, nEndGrammarCheck - nBeginGrammarCheck ) );
                                 uno::Reference< lang::XComponent > xDoc( ((SwDocShell*)GetDocShell())->GetBaseModel(), uno::UNO_QUERY );
                                 // Expand the string:
-                                rtl::OUString aExpandText;
-                                const ModelToViewHelper::ConversionMap* pConversionMap =
-                                        ((SwTxtNode*)pNd)->BuildConversionMap( aExpandText );
+                                const ModelToViewHelper aConversionMap(*(SwTxtNode*)pNd);
+                                rtl::OUString aExpandText = aConversionMap.getViewText();
+
                                 // get XFlatParagraph to use...
-                                uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *((SwTxtNode*)pNd), aExpandText, pConversionMap );
+                                uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *((SwTxtNode*)pNd), aExpandText, aConversionMap );
 
                                 // get error position of cursor in XFlatParagraph
                                 linguistic2::ProofreadingResult aResult;
                                 sal_Int32 nGrammarErrors;
                                 do
                                 {
-                                    ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
+                                    aConversionMap.ConvertToViewPosition( nBeginGrammarCheck );
                                     aResult = xGCIterator->checkSentenceAtPosition(
                                             xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 
-                                    lcl_syncGrammarError( *((SwTxtNode*)pNd), aResult, nBeginGrammarCheck, pConversionMap );
+                                    lcl_syncGrammarError( *((SwTxtNode*)pNd), aResult, nBeginGrammarCheck, aConversionMap );
 
                                     // get suggestions to use for the specific error position
                                     nGrammarErrors = aResult.aErrors.getLength();
@@ -1972,8 +1972,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     pEndPos->nNode = nCurrNd;
                                     pSpellArgs->pStartNode = ((SwTxtNode*)pNd);
                                     pSpellArgs->pEndNode = ((SwTxtNode*)pNd);
-                                    pSpellArgs->pStartIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)ModelToViewHelper::ConvertToModelPosition( pConversionMap, rError.nErrorStart ).mnPos );
-                                    pSpellArgs->pEndIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)ModelToViewHelper::ConvertToModelPosition( pConversionMap, rError.nErrorStart + rError.nErrorLength ).mnPos );
+                                    pSpellArgs->pStartIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
+                                    pSpellArgs->pEndIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
                                     nCurrNd = nEndNd;
                                 }
                             }

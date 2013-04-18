@@ -653,9 +653,9 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 }
 
 SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
-    const LanguageType* pLang, const ModelToViewHelper::ConversionMap* pConvMap,
+    const LanguageType* pLang, const ModelToViewHelper& rConvMap,
     sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClp )
-    : rNode( rNd ), aText( rTxt), pLanguage( pLang ), pConversionMap( pConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
+    : rNode( rNd ), aText( rTxt), pLanguage( pLang ), rConversionMap( rConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
 {
     OSL_ENSURE( !aText.isEmpty(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
@@ -667,7 +667,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
     }
     else
     {
-        ModelToViewHelper::ModelPosition aModelBeginPos = ModelToViewHelper::ConvertToModelPosition( pConversionMap, nBegin );
+        ModelToViewHelper::ModelPosition aModelBeginPos = rConversionMap.ConvertToModelPosition( nBegin );
         const sal_Int32 nModelBeginPos = aModelBeginPos.mnPos;
         aCurrLang = rNd.GetLang( nModelBeginPos );
     }
@@ -729,7 +729,7 @@ sal_Bool SwScanner::NextWord()
                 if ( !pLanguage )
                 {
                     const sal_uInt16 nNextScriptType = pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
-                    ModelToViewHelper::ModelPosition aModelBeginPos = ModelToViewHelper::ConvertToModelPosition( pConversionMap, nBegin );
+                    ModelToViewHelper::ModelPosition aModelBeginPos = rConversionMap.ConvertToModelPosition( nBegin );
                     const sal_Int32 nBeginModelPos = aModelBeginPos.mnPos;
                     aCurrLang = rNode.GetLang( nBeginModelPos, 1, nNextScriptType );
                 }
@@ -911,7 +911,7 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
 
         // In case 2. we pass the wrong list to the scanned, because only
         // the words in the wrong list have to be checked
-        SwScanner aScanner( *this, m_Text, 0, 0,
+        SwScanner aScanner( *this, m_Text, 0, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD,
                             nBegin, nEnd );
         while( !pArgs->xSpellAlt.is() && aScanner.NextWord() )
@@ -1219,7 +1219,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         uno::Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
         SwDoc* pDoc = pNode->GetDoc();
 
-        SwScanner aScanner( *pNode, pNode->GetTxt(), 0, 0,
+        SwScanner aScanner( *pNode, pNode->GetTxt(), 0, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd);
 
         while( aScanner.NextWord() )
@@ -1369,13 +1369,12 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
     if ( nBegin < nEnd )
     {
         // Expand the string:
-        rtl::OUString aExpandText;
-        const ModelToViewHelper::ConversionMap* pConversionMap =
-                pNode->BuildConversionMap( aExpandText );
+        const ModelToViewHelper aConversionMap(*pNode);
+        rtl::OUString aExpandText = aConversionMap.getViewText();
 
         // Ownership ov ConversionMap is passed to SwXTextMarkup object!
         Reference< com::sun::star::text::XTextMarkup > xTextMarkup =
-             new SwXTextMarkup( *pNode, pConversionMap );
+             new SwXTextMarkup( *pNode, aConversionMap );
 
         Reference< ::com::sun::star::frame::XController > xController = pNode->GetDoc()->GetDocShell()->GetController();
 
@@ -1391,8 +1390,8 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
             const com::sun::star::lang::Locale aLocale = pBreakIt->GetLocale( nLang );
             nLangEnd = Min( nEnd, aIter.GetChgPos() );
 
-            const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nLangBegin );
-            const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nLangEnd );
+            const sal_uInt32 nExpandBegin = aConversionMap.ConvertToViewPosition( nLangBegin );
+            const sal_uInt32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nLangEnd );
 
             rSmartTagMgr.Recognize( aExpandText, xTextMarkup, xController, aLocale, nExpandBegin, nExpandEnd - nExpandBegin );
 
@@ -1454,7 +1453,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
     if( nBegin < nEnd )
     {
         sal_uInt16 nCnt = 200;
-        SwScanner aScanner( *pNode, pNode->GetTxt(), 0, 0,
+        SwScanner aScanner( *pNode, pNode->GetTxt(), 0, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd );
         while( aScanner.NextWord() )
         {
@@ -1826,6 +1825,11 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 void SwTxtNode::CountWords( SwDocStat& rStat,
                             xub_StrLen nStt, xub_StrLen nEnd ) const
 {
+    if (IsInRedlines())
+    {   //not counting txtnodes used to hold deleted redline content
+        return;
+    }
+
     sal_Bool isCountAll = ( (0 == nStt) && (GetTxt().Len() == nEnd) );
 
     ++rStat.nAllPara; // #i93174#: count _all_ paragraphs
@@ -1852,25 +1856,19 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
         return;
     }
 
-    // expand text into pConversionMap for scanner
-    rtl::OUString aExpandText;
-    const ModelToViewHelper::ConversionMap* pConversionMap = BuildConversionMap( aExpandText );
+    // ConversionMap to expand fields, remove invisible and redline deleted text for scanner
+    const ModelToViewHelper aConversionMap(*this, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED);
+    rtl::OUString aExpandText = aConversionMap.getViewText();
 
     // map start and end points onto the ConversionMap
-    const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nStt );
-    const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nEnd );
+    const sal_uInt32 nExpandBegin = aConversionMap.ConvertToViewPosition( nStt );
+    const sal_uInt32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nEnd );
 
     if ( aExpandText.isEmpty() )
     {
         OSL_ENSURE(aExpandText.getLength() >= 0, "Node text expansion error: length < 0." );
         return;
     }
-
-    // make a copy of the expanded text for masking redlined/hidden text with ' '
-    String textCopy = aExpandText;
-    const xub_Unicode cChar(' ');
-    const sal_uInt16 nNumOfMaskedChars = lcl_MaskRedlinesAndHiddenText( *this, textCopy, nExpandBegin, nExpandEnd, cChar, false );
-    aExpandText = textCopy;
 
     //do the count
     // all counts exclude hidden paras and hidden+redlined within para
@@ -1885,7 +1883,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     if( pBreakIt->GetBreakIter().is() )
     {
         // zero is NULL for pLanguage -----------v               last param = true for clipping
-        SwScanner aScanner( *this, aExpandText, 0, pConversionMap, i18n::WordType::WORD_COUNT,
+        SwScanner aScanner( *this, aExpandText, 0, aConversionMap, i18n::WordType::WORD_COUNT,
                             nExpandBegin, nExpandEnd, true );
 
         // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
@@ -1906,7 +1904,6 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     }
 
     nTmpChars = pBreakIt->getGraphemeCount(aExpandText, nExpandBegin, nExpandEnd);
-    nTmpChars -= nNumOfMaskedChars;
 
     // no nTmpCharsExcludingSpaces adjust needed neither for blanked out MaskedChars
     // nor for mid-word selection - set scanner bClip = true at creation
@@ -1922,7 +1919,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
         {
             LanguageType aLanguage = GetLang( 0 );
 
-            SwScanner aScanner( *this, aNumString, &aLanguage, 0,
+            SwScanner aScanner( *this, aNumString, &aLanguage, ModelToViewHelper(),
                                 i18n::WordType::WORD_COUNT, 0, nNumStringLen, true );
 
             while ( aScanner.NextWord() )
@@ -1943,8 +1940,6 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             ++nTmpCharsExcludingSpaces;
         }
     }
-
-    delete pConversionMap;
 
     // If counting the whole para then update cached values and mark clean
     if ( isCountAll )

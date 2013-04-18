@@ -38,6 +38,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/svstdarr.hxx>
 #include <svl/ctloptions.hxx>
+#include <tools/multisel.hxx>
 #include <swmodule.hxx>
 #include <txtfld.hxx>
 #include <txtinet.hxx>
@@ -3108,44 +3109,136 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     return sal_True;
 }
 
-const ModelToViewHelper::ConversionMap*
-        SwTxtNode::BuildConversionMap( rtl::OUString& rRetText ) const
+struct block
 {
-    const rtl::OUString& rNodeText = GetTxt();
-    rRetText = rNodeText;
-    ModelToViewHelper::ConversionMap* pConversionMap = 0;
-
-    const SwpHints* pSwpHints2 = GetpSwpHints();
-    xub_StrLen nPos = 0;
-
-    for ( sal_uInt16 i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
+    sal_Int32 m_nStart;
+    sal_Int32 m_nLen;
+    bool m_bVisible;
+    std::vector<const SwTxtAttr*> m_aAttrs;
+    block(sal_Int32 nStart, sal_Int32 nLen, bool bVisible)
+        : m_nStart(nStart), m_nLen(nLen), m_bVisible(bVisible)
     {
-        const SwTxtAttr* pAttr = (*pSwpHints2)[i];
-        if ( RES_TXTATR_FIELD == pAttr->Which() )
+    }
+};
+
+struct containsPos
+{
+    const sal_Int32 m_nPos;
+    containsPos(const sal_Int32 nPos)
+        : m_nPos(nPos)
+    {
+    }
+    bool operator() (const block& rIn) const
+    {
+        return m_nPos >= rIn.m_nStart && m_nPos < rIn.m_nStart + rIn.m_nLen;
+    }
+};
+
+ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
+{
+    const rtl::OUString& rNodeText = rNode.GetTxt();
+    m_aRetText = rNodeText;
+
+    if (eMode == PASSTHROUGH)
+        return;
+
+    Range aRange( 0, rNodeText.isEmpty() ? 0 : rNodeText.getLength() - 1);
+    MultiSelection aHiddenMulti(aRange);
+
+    if (eMode & HIDEINVISIBLE)
+        SwScriptInfo::selectHiddenTextProperty(rNode, aHiddenMulti);
+
+    if (eMode & HIDEREDLINED)
+        SwScriptInfo::selectRedLineDeleted(rNode, aHiddenMulti);
+
+    std::vector<block> aBlocks;
+
+    sal_Int32 nShownStart = 0;
+    for (size_t i = 0; i < aHiddenMulti.GetRangeCount(); ++i)
+    {
+        const Range& rRange = aHiddenMulti.GetRange(i);
+        sal_Int32 nHiddenStart = rRange.Min();
+        sal_Int32 nHiddenEnd = rRange.Max() + 1;
+        sal_Int32 nHiddenLen = nHiddenEnd - nHiddenStart;
+
+        sal_Int32 nShownEnd = nHiddenStart;
+        sal_Int32 nShownLen = nShownEnd - nShownStart;
+
+        if (nShownLen)
+            aBlocks.push_back(block(nShownStart, nShownLen, true));
+
+        if (nHiddenLen)
+            aBlocks.push_back(block(nHiddenStart, nHiddenLen, false));
+
+        nShownStart = nHiddenEnd;
+    }
+
+    sal_Int32 nTrailingShownLen = rNodeText.getLength() - nShownStart;
+    if (nTrailingShownLen)
+        aBlocks.push_back(block(nShownStart, nTrailingShownLen, true));
+
+    if (eMode & EXPANDFIELDS)
+    {
+        const SwpHints* pSwpHints2 = rNode.GetpSwpHints();
+        for ( sal_uInt16 i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
         {
-            const XubString aExpand(
-                static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
-                    ->ExpandField(true));
-            if ( aExpand.Len() > 0 )
+            const SwTxtAttr* pAttr = (*pSwpHints2)[i];
+            if (pAttr->HasDummyChar())
             {
-                const xub_StrLen nFieldPos = *pAttr->GetStart();
-                rRetText = rRetText.replaceAt( nPos + nFieldPos, 1, aExpand );
-                if ( !pConversionMap )
-                    pConversionMap = new ModelToViewHelper::ConversionMap;
-                pConversionMap->push_back(
-                        ModelToViewHelper::ConversionMapEntry(
-                            nFieldPos, nPos + nFieldPos ) );
-                nPos += ( aExpand.Len() - 1 );
+                xub_StrLen nDummyCharPos = *pAttr->GetStart();
+                if (aHiddenMulti.IsSelected(nDummyCharPos))
+                    continue;
+                std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(), aBlocks.end(), containsPos(nDummyCharPos));
+                aFind->m_aAttrs.push_back(pAttr);
             }
         }
     }
 
-    if ( pConversionMap && pConversionMap->size() )
-        pConversionMap->push_back(
-            ModelToViewHelper::ConversionMapEntry(
-                rNodeText.getLength()+1, rRetText.getLength()+1 ) );
+    sal_Int32 nOffset = 0;
+    for (std::vector<block>::iterator i = aBlocks.begin(); i != aBlocks.end(); ++i)
+    {
+        if (!i->m_bVisible)
+        {
+            const sal_Int32 nHiddenStart = i->m_nStart;
+            const sal_Int32 nHiddenLen = i->m_nLen;
 
-    return pConversionMap;
+            m_aRetText = m_aRetText.replaceAt( nOffset + nHiddenStart, nHiddenLen, rtl::OUString() );
+            m_aMap.push_back( ConversionMapEntry( nHiddenStart, nOffset + nHiddenStart ) );
+            nOffset -= nHiddenLen;
+        }
+        else
+        {
+            for (std::vector<const SwTxtAttr*>::iterator j = i->m_aAttrs.begin(); j != i->m_aAttrs.end(); ++j)
+            {
+                const SwTxtAttr* pAttr = *j;
+                xub_StrLen nFieldPos = *pAttr->GetStart();
+                rtl::OUString aExpand;
+                switch (pAttr->Which())
+                {
+                    case RES_TXTATR_FIELD:
+                        aExpand =
+                            static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
+                                ->ExpandField(true);
+                        break;
+                    case RES_TXTATR_FTN:
+                        {
+                            const SwFmtFtn& rFtn = static_cast<SwTxtFtn const*>(pAttr)->GetFtn();
+                            const SwDoc *pDoc = rNode.GetDoc();
+                            aExpand = rFtn.GetViewNumStr(*pDoc);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                m_aRetText = m_aRetText.replaceAt( nOffset + nFieldPos, 1, aExpand );
+                m_aMap.push_back( ConversionMapEntry( nFieldPos, nOffset + nFieldPos ) );
+                nOffset += ( aExpand.getLength() - 1 );
+            }
+        }
+    }
+
+    if ( !m_aMap.empty() )
+        m_aMap.push_back( ConversionMapEntry( rNodeText.getLength()+1, m_aRetText.getLength()+1 ) );
 }
 
 XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,

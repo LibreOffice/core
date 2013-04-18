@@ -126,6 +126,39 @@ void TestBreakIterator::testLineBreaking()
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == aWord.getLength()+1);
         }
     }
+
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+    for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
+    {
+        //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
+        //
+        //test "Word", then "Word\x01" then "Word\x02"
+        for (sal_Unicode i = 0; i < 3; ++i)
+        {
+            ::rtl::OUString aTest("Word");
+            if (i > 0)
+                aTest += rtl::OUString(i) + rtl::OUString("Word");
+            i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
+            switch (mode)
+            {
+                case i18n::WordType::ANY_WORD:
+                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+                    break;
+                case i18n::WordType::ANYWORD_IGNOREWHITESPACES:
+                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+                    break;
+                case i18n::WordType::DICTIONARY_WORD:
+                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+                    break;
+                case i18n::WordType::WORD_COUNT:
+                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+                    break;
+            }
+
+            CPPUNIT_ASSERT(m_xBreak->isBeginWord(aTest, aBounds.startPos, aLocale, mode));
+            CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, aBounds.endPos, aLocale, mode));
+        }
+    }
 }
 
 //See http://qa.openoffice.org/issues/show_bug.cgi?id=111152

@@ -1132,17 +1132,16 @@ bool SwEditShell::GetGrammarCorrection(
                 uno::Reference< lang::XComponent > xDoc( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
 
                 // Expand the string:
-                rtl::OUString aExpandText;
-                const ModelToViewHelper::ConversionMap* pConversionMap =
-                        pNode->BuildConversionMap( aExpandText );
+                const ModelToViewHelper aConversionMap(*pNode);
+                rtl::OUString aExpandText = aConversionMap.getViewText();
                 // get XFlatParagraph to use...
-                uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNode, aExpandText, pConversionMap );
+                uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNode, aExpandText, aConversionMap );
 
                 // get error position of cursor in XFlatParagraph
-                rErrorPosInText = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBegin );
+                rErrorPosInText = aConversionMap.ConvertToViewPosition( nBegin );
 
-                sal_Int32 nStartOfSentence = ModelToViewHelper::ConvertToViewPosition( pConversionMap, pWrong->getSentenceStart( nBegin ) );
-                sal_Int32 nEndOfSentence = ModelToViewHelper::ConvertToViewPosition( pConversionMap, pWrong->getSentenceEnd( nBegin ) );
+                sal_Int32 nStartOfSentence = aConversionMap.ConvertToViewPosition( pWrong->getSentenceStart( nBegin ) );
+                sal_Int32 nEndOfSentence = aConversionMap.ConvertToViewPosition( pWrong->getSentenceEnd( nBegin ) );
                 if( nEndOfSentence == STRING_LEN )
                 {
                         nEndOfSentence = aExpandText.getLength();
@@ -1603,9 +1602,9 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         pMySh->GoEndSentence();
         if( bGrammarErrorFound )
         {
-            rtl::OUString aExpandText;
-            const ModelToViewHelper::ConversionMap* pConversionMap = ((SwTxtNode*)pCrsr->GetNode())->BuildConversionMap( aExpandText );
-            xub_StrLen nSentenceEnd = (xub_StrLen)ModelToViewHelper::ConvertToViewPosition( pConversionMap, aGrammarResult.nBehindEndOfSentencePosition );
+            const ModelToViewHelper aConversionMap(*(SwTxtNode*)pCrsr->GetNode());
+            rtl::OUString aExpandText = aConversionMap.getViewText();
+            xub_StrLen nSentenceEnd = (xub_StrLen)aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition );
             // remove trailing space
             if( aExpandText[nSentenceEnd - 1] == ' ' )
                 --nSentenceEnd;

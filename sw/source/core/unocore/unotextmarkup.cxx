@@ -44,8 +44,8 @@ using namespace ::com::sun::star;
 /*
  * SwXTextMarkup
  */
-SwXTextMarkup::SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper::ConversionMap* pMap )
-    : mpTxtNode( &rTxtNode ), mpConversionMap( pMap )
+SwXTextMarkup::SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper& rMap )
+    : mpTxtNode( &rTxtNode ), maConversionMap( rMap )
 {
     // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
     SetIsAllowedToBeRemovedInModifyCall(true);
@@ -54,7 +54,6 @@ SwXTextMarkup::SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper::Conv
 
 SwXTextMarkup::~SwXTextMarkup()
 {
-     delete mpConversionMap;
 }
 
 uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfoContainer() throw (uno::RuntimeException)
@@ -133,9 +132,9 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
 
 
     const ModelToViewHelper::ModelPosition aStartPos =
-            ModelToViewHelper::ConvertToModelPosition( mpConversionMap, nStart );
+            maConversionMap.ConvertToModelPosition( nStart );
     const ModelToViewHelper::ModelPosition aEndPos   =
-            ModelToViewHelper::ConvertToModelPosition( mpConversionMap, nStart + nLength - 1);
+            maConversionMap.ConvertToModelPosition( nStart + nLength - 1);
 
     const bool bStartInField = aStartPos.mbIsField;
     const bool bEndInField   = aEndPos.mbIsField;
@@ -181,8 +180,8 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
                 pSubList = new SwGrammarMarkUp();
                 pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
             }
-            const sal_uInt32 nTmpStart = ModelToViewHelper::ConvertToViewPosition( mpConversionMap, aStartPos.mnPos );
-            const sal_uInt32 nTmpLen = ModelToViewHelper::ConvertToViewPosition( mpConversionMap, aStartPos.mnPos + 1 )
+            const sal_uInt32 nTmpStart = maConversionMap.ConvertToViewPosition( aStartPos.mnPos );
+            const sal_uInt32 nTmpLen = maConversionMap.ConvertToViewPosition( aStartPos.mnPos + 1 )
                                        - nTmpStart - aStartPos.mnSubPos;
             if( nTmpLen > 0 )
             {
@@ -233,7 +232,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
 
 
 void lcl_commitGrammarMarkUp(
-    const ModelToViewHelper::ConversionMap* pConversionMap,
+    const ModelToViewHelper& rConversionMap,
     SwGrammarMarkUp* pWList,
     ::sal_Int32 nType,
     const ::rtl::OUString & rIdentifier,
@@ -243,9 +242,9 @@ void lcl_commitGrammarMarkUp(
 {
     OSL_ENSURE( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE, "Wrong mark-up type" );
     const ModelToViewHelper::ModelPosition aStartPos =
-            ModelToViewHelper::ConvertToModelPosition( pConversionMap, nStart );
+            rConversionMap.ConvertToModelPosition( nStart );
     const ModelToViewHelper::ModelPosition aEndPos   =
-            ModelToViewHelper::ConvertToModelPosition( pConversionMap, nStart + nLength - 1);
+            rConversionMap.ConvertToModelPosition( nStart + nLength - 1);
 
     const bool bStartInField = aStartPos.mbIsField;
     const bool bEndInField   = aEndPos.mbIsField;
@@ -288,8 +287,8 @@ void lcl_commitGrammarMarkUp(
                 pSubList = new SwGrammarMarkUp();
                 pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
             }
-            const sal_uInt32 nTmpStart = ModelToViewHelper::ConvertToViewPosition( pConversionMap, aStartPos.mnPos );
-            const sal_uInt32 nTmpLen = ModelToViewHelper::ConvertToViewPosition( pConversionMap, aStartPos.mnPos + 1 )
+            const sal_uInt32 nTmpStart = rConversionMap.ConvertToViewPosition( aStartPos.mnPos );
+            const sal_uInt32 nTmpLen = rConversionMap.ConvertToViewPosition( aStartPos.mnPos + 1 )
                                        - nTmpStart - aStartPos.mnSubPos;
             if( nTmpLen > 0 )
                 pSubList->Insert( rIdentifier, xMarkupInfoContainer,
@@ -391,7 +390,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if( pWList->GetBeginInv() < STRING_LEN )
     {
         const ModelToViewHelper::ModelPosition aSentenceEnd =
-            ModelToViewHelper::ConvertToModelPosition( mpConversionMap,
+            maConversionMap.ConvertToModelPosition(
                 pMarkups[nSentenceMarkUpIndex].nOffset + pMarkups[nSentenceMarkUpIndex].nLength );
         bAcceptGrammarError = (xub_StrLen)aSentenceEnd.mnPos > pWList->GetBeginInv();
         pWList->ClearGrammarList( (xub_StrLen)aSentenceEnd.mnPos );
@@ -402,7 +401,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         for( i = 0;  i < nLen;  ++i )
         {
             const text::TextMarkupDescriptor &rDesc = pMarkups[i];
-            lcl_commitGrammarMarkUp( mpConversionMap, pWList, rDesc.nType,
+            lcl_commitGrammarMarkUp( maConversionMap, pWList, rDesc.nType,
                 rDesc.aIdentifier, rDesc.nOffset, rDesc.nLength, rDesc.xMarkupInfoContainer );
         }
     }
@@ -411,7 +410,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         bRepaint = false;
         i = nSentenceMarkUpIndex;
         const text::TextMarkupDescriptor &rDesc = pMarkups[i];
-        lcl_commitGrammarMarkUp( mpConversionMap, pWList, rDesc.nType,
+        lcl_commitGrammarMarkUp( maConversionMap, pWList, rDesc.nType,
             rDesc.aIdentifier, rDesc.nOffset, rDesc.nLength, rDesc.xMarkupInfoContainer );
     }
 

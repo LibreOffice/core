@@ -233,7 +233,7 @@ void SwDocTest::testSwScanner()
     {
         SwScanner aScanner(*pTxtNode,
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hello World")),
-            0, 0, i18n::WordType::DICTIONARY_WORD, 0,
+            0, ModelToViewHelper(), i18n::WordType::DICTIONARY_WORD, 0,
             RTL_CONSTASCII_LENGTH("Hello World"));
 
         bool bFirstOk = aScanner.NextWord();

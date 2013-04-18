@@ -28,21 +28,15 @@
 
 #include <modeltoviewhelper.hxx>
 
-namespace ModelToViewHelper
-{
-
 /** Converts a model position into a view position
 */
-sal_uInt32 ConvertToViewPosition( const ConversionMap* pMap, sal_uInt32 nModelPos )
+sal_uInt32 ModelToViewHelper::ConvertToViewPosition( sal_uInt32 nModelPos ) const
 {
     sal_uInt32 nRet = nModelPos;
 
-    if ( !pMap )
-        return nRet;
-
-    // Search for entry behind nPos:
+    // Search for entry after nPos:
     ConversionMap::const_iterator aIter;
-    for ( aIter = pMap->begin(); aIter != pMap->end(); ++aIter )
+    for ( aIter = m_aMap.begin(); aIter != m_aMap.end(); ++aIter )
     {
         if ( (*aIter).first >= nModelPos )
         {
@@ -61,17 +55,14 @@ sal_uInt32 ConvertToViewPosition( const ConversionMap* pMap, sal_uInt32 nModelPo
 
 /** Converts a view position into a model position
 */
-ModelPosition ConvertToModelPosition( const ConversionMap* pMap, sal_uInt32 nViewPos )
+ModelToViewHelper::ModelPosition ModelToViewHelper::ConvertToModelPosition( sal_uInt32 nViewPos ) const
 {
     ModelPosition aRet;
     aRet.mnPos = nViewPos;
 
-    if ( !pMap )
-        return aRet;
-
-    // Search for entry behind nPos:
+    // Search for entry after nPos:
     ConversionMap::const_iterator aIter;
-    for ( aIter = pMap->begin(); aIter != pMap->end(); ++aIter )
+    for ( aIter = m_aMap.begin(); aIter != m_aMap.end(); ++aIter )
     {
         if ( (*aIter).second > nViewPos )
         {
@@ -79,7 +70,7 @@ ModelPosition ConvertToModelPosition( const ConversionMap* pMap, sal_uInt32 nVie
             const sal_uInt32 nPosExpand = (*aIter).second;
 
             // If nViewPos is in front of first field, we are finished.
-            if ( aIter == pMap->begin() )
+            if ( aIter == m_aMap.begin() )
                 break;
 
             --aIter;
@@ -115,7 +106,5 @@ ModelPosition ConvertToModelPosition( const ConversionMap* pMap, sal_uInt32 nVie
 
     return aRet;
 }
-
-} // namespace ModelToViewStringConverter end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

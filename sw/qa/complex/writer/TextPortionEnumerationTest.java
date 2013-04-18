@@ -3259,26 +3259,31 @@ public class TextPortionEnumerationTest
         XWordCursor xWordCursor = (XWordCursor)
             UnoRuntime.queryInterface(XWordCursor.class, xTextCursor);
 
-        bSuccess = xWordCursor.gotoNextWord(true);
+        bSuccess = xWordCursor.gotoNextWord(true);              //at start of "words"
         assertTrue("gotoNextWord(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
             assertEquals("gotoNextWord(): wrong string",
                          "Two ", string);
         }
-        bSuccess = xWordCursor.gotoNextWord(false);
+        bSuccess = xWordCursor.gotoNextWord(false);             //at end of "words", cannot leave metafield
         assertFalse("gotoNextWord(): succeeded", bSuccess);
         xTextCursor.collapseToEnd();
-        bSuccess = xWordCursor.gotoPreviousWord(true);
+        bSuccess = xWordCursor.gotoPreviousWord(true);          //at start of "words"
         assertTrue("gotoPreviousWord(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
             assertEquals("gotoPreviousWord(): wrong string",
                          "words", string);
         }
-        bSuccess = xWordCursor.gotoPreviousWord(false);
+        bSuccess = xWordCursor.gotoPreviousWord(false);         //at start of "Two"
+        assertTrue("gotoPreviousWord(): failed", bSuccess);
+
+
+        bSuccess = xWordCursor.gotoPreviousWord(false);         //cannot leave metafield
         assertFalse("gotoPreviousWord(): succeeded", bSuccess);
-        bSuccess = xWordCursor.gotoEndOfWord(true);
+
+        bSuccess = xWordCursor.gotoEndOfWord(true);             //at end of "Two"
         assertTrue("gotoEndOfWord(): failed", bSuccess);
         {
             String string = xTextCursor.getString();
@@ -3362,6 +3367,23 @@ public class TextPortionEnumerationTest
         assertFalse("gotoEndOfParagraph(): succeeded", bSuccess);
     }
 
+    /** See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+        ensure that gotoEndOfWord does not fail when footnote is at word end*/
+    @Test public void testXTextCursor() throws Exception
+    {
+        RangeInserter inserter = new RangeInserter(m_xDoc);
+        XText xDocText = m_xDoc.getText();
+        XTextCursor xDocTextCursor = xDocText.createTextCursor();
+        inserter.insertText(xDocTextCursor, "Text");
+        XWordCursor xWordCursor = UnoRuntime.queryInterface(XWordCursor.class, xDocTextCursor);
+        xWordCursor.gotoEndOfWord(false);
+        inserter.insertFootnote(xDocTextCursor, "footnote");
+        xDocTextCursor.gotoStart(false);
+        boolean bSuccess = xWordCursor.gotoEndOfWord(true);
+        assertTrue("gotoEndOfWord(): failed", bSuccess);
+        String string = xWordCursor.getString();
+        assertEquals("gotoEndOfWord(): wrong string", "Text", string);
+    }
 
     abstract class AttachHelper
     {

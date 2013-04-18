@@ -699,9 +699,6 @@ public:
                        sal_Bool bWithNum = sal_False, sal_Bool bWithFtn = sal_True,
                        sal_Bool bReplaceTabsWithSpaces = sal_False ) const;
 
-    const ModelToViewHelper::ConversionMap*
-            BuildConversionMap( rtl::OUString& rExpandText ) const;
-
     XubString GetRedlineTxt( xub_StrLen nIdx = 0,
                           xub_StrLen nLen = STRING_LEN,
                           sal_Bool bExpandFlds = sal_False,
