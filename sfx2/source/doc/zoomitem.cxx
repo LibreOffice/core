@@ -23,7 +23,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-
+#include "sfx.hrc"
 // -----------------------------------------------------------------------
 
 TYPEINIT1_FACTORY(SvxZoomItem,SfxUInt16Item, new SvxZoomItem);
@@ -107,19 +107,28 @@ int SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
+    switch( nMemberId )
+    {
+        case 0:
+        {
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( ZOOM_PARAMS );
+            aSeq[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_VALUE ));
+            aSeq[0].Value <<= sal_Int32( GetValue() );
+            aSeq[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_VALUESET ));
+            aSeq[1].Value <<= sal_Int16( nValueSet );
+            aSeq[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_TYPE ));
+            aSeq[2].Value <<= sal_Int16( eType );
+            rVal <<= aSeq;
+        }
 
-    assert(nMemberId == 0);
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( ZOOM_PARAMS );
-    aSeq[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_VALUE ));
-    aSeq[0].Value <<= sal_Int32( GetValue() );
-    aSeq[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_VALUESET ));
-    aSeq[1].Value <<= sal_Int16( nValueSet );
-    aSeq[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_TYPE ));
-    aSeq[2].Value <<= sal_Int16( eType );
-    rVal <<= aSeq;
+        case MID_VALUE: rVal <<= (sal_Int32) GetValue(); break;
+        case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
+        case MID_TYPE: rVal <<= (sal_Int16) eType; break;
+        default:
+            OSL_FAIL("sfx2::SvxZoomItem::QueryValue(), Wrong MemberId!");
+            return false;
+    }
 
     return true;
 }
@@ -127,45 +136,80 @@ bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberI
 bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    assert(nMemberId == 0);
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
-    if (( rVal >>= aSeq ) && ( aSeq.getLength() == ZOOM_PARAMS ))
+    switch( nMemberId )
     {
-        sal_Int32 nValueTmp( 0 );
-        sal_Int16 nValueSetTmp( 0 );
-        sal_Int16 nTypeTmp( 0 );
-        sal_Bool  bAllConverted( sal_True );
-        sal_Int16 nConvertedCount( 0 );
-        for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+        case 0:
         {
-            if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_VALUE ))
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
+            if (( rVal >>= aSeq ) && ( aSeq.getLength() == ZOOM_PARAMS ))
             {
-                bAllConverted &= ( aSeq[i].Value >>= nValueTmp );
-                ++nConvertedCount;
+                sal_Int32 nValueTmp( 0 );
+                sal_Int16 nValueSetTmp( 0 );
+                sal_Int16 nTypeTmp( 0 );
+                sal_Bool  bAllConverted( sal_True );
+                sal_Int16 nConvertedCount( 0 );
+                for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+                {
+                    if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_VALUE ))
+                    {
+                        bAllConverted &= ( aSeq[i].Value >>= nValueTmp );
+                        ++nConvertedCount;
+                    }
+                    else if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_VALUESET ))
+                    {
+                        bAllConverted &= ( aSeq[i].Value >>= nValueSetTmp );
+                        ++nConvertedCount;
+                    }
+                    else if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_TYPE ))
+                    {
+                        bAllConverted &= ( aSeq[i].Value >>= nTypeTmp );
+                        ++nConvertedCount;
+                    }
+                }
+
+                if ( bAllConverted && nConvertedCount == ZOOM_PARAMS )
+                {
+                    SetValue( (sal_uInt16)nValueTmp );
+                    nValueSet = nValueSetTmp;
+                    eType = SvxZoomType( nTypeTmp );
+                    return true;
+                }
             }
-            else if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_VALUESET ))
+            return false;
+        }
+        case MID_VALUE:
+        {
+            sal_Int32 nVal = 0;
+            if ( rVal >>= nVal )
             {
-                bAllConverted &= ( aSeq[i].Value >>= nValueSetTmp );
-                ++nConvertedCount;
+                SetValue( (sal_uInt16)nVal );
+                return true;
             }
-            else if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_TYPE ))
-            {
-                bAllConverted &= ( aSeq[i].Value >>= nTypeTmp );
-                ++nConvertedCount;
-            }
+            else
+                return false;
         }
 
-        if ( bAllConverted && nConvertedCount == ZOOM_PARAMS )
+        case MID_VALUESET:
+        case MID_TYPE:
         {
-            SetValue( (sal_uInt16)nValueTmp );
-            nValueSet = nValueSetTmp;
-            eType = SvxZoomType( nTypeTmp );
-            return true;
+            sal_Int16 nVal = sal_Int16();
+            if ( rVal >>= nVal )
+            {
+                if ( nMemberId == MID_VALUESET )
+                    nValueSet = (sal_Int16) nVal;
+                else if ( nMemberId == MID_TYPE )
+                    eType = SvxZoomType( (sal_Int16) nVal );
+                return true;
+            }
+            else
+                return false;
         }
+
+        default:
+            OSL_FAIL("sfx2::SvxZoomItem::PutValue(), Wrong MemberId!");
+            return false;
     }
-
-    return false;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
