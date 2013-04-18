@@ -65,17 +65,16 @@ ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeExcept
     sal_Int16 nValue = 0;
     sal_Int16 nOldValue = 0;
     m_xProps->getPropertyValue( STATE ) >>= nOldValue;
-    sal_Bool bValue = false;
-    if( _value >>= nValue )
+    if( !( _value >>= nValue ) )
     {
-        if( nValue == -1)
-            nValue = 1;
-    }
-    else if ( _value >>= bValue )
-    {
+        sal_Bool bValue = false;
+        _value >>= bValue;
         if ( bValue )
-            nValue = 1;
+            nValue = -1;
     }
+
+    if( nValue == -1)
+        nValue = 1;
     m_xProps->setPropertyValue( STATE, uno::makeAny( nValue ) );
     if ( nValue != nOldValue )
         fireClickEvent();

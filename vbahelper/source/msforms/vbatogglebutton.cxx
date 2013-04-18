@@ -66,11 +66,17 @@ void SAL_CALL
 ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     sal_Int16 nState = 0;
-    _value >>= nState;
+    if ( ! ( _value >>= nState ) )
+    {
+        sal_Bool bState = false;
+        _value >>= bState;
+        if ( bState )
+            nState = -1;
+    }
     SAL_INFO("vbahelper", "nState - " << nState );
     nState = ( nState == -1 ) ?  1 : 0;
     SAL_INFO("vbahelper", "nState - " << nState );
-    m_xProps->setPropertyValue( STATE, uno::makeAny(  nState ) );
+    m_xProps->setPropertyValue( STATE, uno::makeAny(   nState ) );
 }
 
 sal_Bool SAL_CALL ScVbaToggleButton::getAutoSize() throw (uno::RuntimeException)
