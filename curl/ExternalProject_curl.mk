@@ -17,15 +17,31 @@ $(eval $(call gb_ExternalProject_register_targets,curl,\
 
 ifeq ($(GUI),UNX)
 
+curl_CPPFLAGS :=
+curl_LDFLAGS :=
+
+ifneq ($(SYSBASE),)
+curl_CPPFLAGS += -I$(SYSBASE)/usr/include
+curl_LDFLAGS += -L$(SYSBASE)/usr/lib
+endif
+
+# there are 2 include paths, what is passed to --with-nss below is for libs...
+ifeq ($(SYSTEM_NSS),NO)
+curl_CPPFLAGS += -I$(OUTDIR)/inc/mozilla/nspr -I$(OUTDIR)/inc/mozilla/nss
+endif
+
 $(call gb_ExternalProject_get_state_target,curl,build):
 	cd $(EXTERNAL_WORKDIR) \
-	&& PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH ./configure --with-nss --without-ssl \
+	&&  CPPFLAGS="$(curl_CPPFLAGS)" \
+		LDFLAGS="$(curl_LDFLAGS)" \
+	./configure \
+			--with-nss$(if $(filter NO,$(SYSTEM_NSS)),="$(OUTDIR)/") \
+			--without-ssl \
 	--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 	--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 	$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
-	$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include" LDFLAGS="-L$(SYSBASE)/usr/lib") \
 	&& cd lib \
 	&& $(MAKE) \
 	&& touch $@
@@ -34,7 +50,7 @@ else ifeq ($(OS)$(COM),WNTGCC)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	cd $(EXTERNAL_WORKDIR) \
-	&& PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH ./configure --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher \
+	&& PATH=$(OUTDIR)/bin:$$PATH ./configure --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher \
 	--disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 \
 	$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
 	CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
