@@ -484,7 +484,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const util::DateTime& rTi
     char pStr[200];
     // FIXME: my guess is that precision greater than millisecond in undesirable
     //        (forbidden by the standard???)
-    snprintf( pStr, sizeof( pStr ), "%d-%02d-%02dT%02d:%02d:%02d.%09dZ",
+    snprintf( pStr, sizeof( pStr ), "%d-%02d-%02dT%02d:%02d:%02d.%09" SAL_PRIuUINT32 "Z",
             rTime.Year, rTime.Month, rTime.Day,
             rTime.Hours, rTime.Minutes, rTime.Seconds,
             rTime.NanoSeconds);
