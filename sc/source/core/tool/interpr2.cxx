@@ -51,7 +51,6 @@
 using namespace formula;
 
 #define SCdEpsilon                1.0E-7
-#define D_TIMEFACTOR              static_cast<double>(::Time::secondPerDay)
 
 //-----------------------------------------------------------------------------
 // Datum und Zeit
