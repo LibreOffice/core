@@ -49,8 +49,8 @@ $(eval $(call gb_PythonTest_use_components,sw_unoapi,\
 ))
 
 $(eval $(call gb_PythonTest_add_classes,sw_unoapi,\
-    $(SRCDIR)/sw/qa/unoapi/python/set_expression.py \
-    $(SRCDIR)/sw/qa/unoapi/python/get_expression.py \
+    $(SRCDIR)/sw/qa/python/set_expression.py \
+    $(SRCDIR)/sw/qa/python/get_expression.py \
 ))
 
 # vim: set noet sw=4 ts=4:
