@@ -890,7 +890,7 @@ public:
 
 void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 {
-    sal_uInt16 nVer = 602;
+    sal_uInt16 nVer = SOFFICE_FILEFORMAT_CURRENT;
     rOStream << nVer;
 
     rOStream << static_cast<sal_Bool>(bOwnerOfPool);
@@ -1059,6 +1059,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 void EditTextObjectImpl::CreateData( SvStream& rIStream )
 {
     rIStream >> nVersion;
+    rIStream.SetVersion( nVersion );
 
     // The text object was first created with the current setting of
     // pTextObjectPool.
@@ -1087,6 +1088,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
     rIStream >> nCharSet;
 
     rtl_TextEncoding eSrcEncoding = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet );
+    rIStream.SetStreamCharSet( eSrcEncoding );
 
     // The number of paragraphs ...
     sal_uInt16 nParagraphs;
