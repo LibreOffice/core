@@ -38,15 +38,9 @@ else
 
 cppunit_CXXFLAGS=$(CXXFLAGS)
 
-ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX MACOSX NETBSD OPENBSD,$(OS)))
+ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX NETBSD OPENBSD,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
 cppunit_CXXFLAGS+=-D_GLIBCXX_DEBUG
-endif
-endif
-
-ifeq ($(OS),MACOSX)
-ifneq (,$(gb_ENABLE_DBGUTIL))
-cppunit_CXXFLAGS+=-D_GLIBCXX_FULLY_DYNAMIC_STRING
 endif
 endif
 
