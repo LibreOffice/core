@@ -21,7 +21,6 @@
 #include <svl/lstner.hxx>
 
 #include <svx/svdundo.hxx>
-#include "svx/svditext.hxx"
 #include <svx/svdotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
@@ -31,6 +30,7 @@
 #include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache
 #include <svx/scene3d.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/sdr/properties/itemsettools.hxx>

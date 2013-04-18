@@ -22,6 +22,7 @@
 #include <unotools/tempfile.hxx>
 #include <math.h>
 #include <editeng/eeitem.hxx>
+#include <editeng/editdata.hxx>
 #include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/stg.hxx>
@@ -51,7 +52,6 @@
 #include <editeng/numdef.hxx>
 #include <svx/svdattr.hxx>
 #include "svx/xattr.hxx"
-#include "svx/svditext.hxx"
 #include <svx/svdetc.hxx>
 #include <editeng/bulletitem.hxx>
 #include <svx/polysc3d.hxx>

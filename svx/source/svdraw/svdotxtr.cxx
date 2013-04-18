@@ -19,13 +19,13 @@
 
 
 #include <svx/svdotext.hxx>
-#include "svx/svditext.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>   // for Convert
 #include <svx/svdmodel.hxx>  // for Convert
+#include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>

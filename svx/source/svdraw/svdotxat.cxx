@@ -20,13 +20,13 @@
 #include <comphelper/string.hxx>
 #include <svl/style.hxx>
 #include <svx/svdotext.hxx>
-#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx> // for GetMaxObjSize and GetStyleSheetPool
 #include <svx/svdoutl.hxx>
 #include <svx/svdorect.hxx> // for SetDirty at NbcAdjustTextFrameWidthAndHeight
 #include <svx/svdocapt.hxx> // for SetDirty at NbcAdjustTextFrameWidthAndHeight
 #include <svx/svdetc.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>

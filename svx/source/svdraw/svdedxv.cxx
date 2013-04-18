@@ -34,11 +34,11 @@
 #include <vcl/cursor.hxx>
 #include <editeng/unotext.hxx>
 
+#include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include "svx/svditext.hxx"
 #include <svx/svdoutl.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/svdotext.hxx>

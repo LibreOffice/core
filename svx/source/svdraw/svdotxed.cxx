@@ -19,9 +19,9 @@
 
 
 #include <svx/svdotext.hxx>
-#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx> // for GetMaxObjSize
 #include <svx/svdoutl.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/itemset.hxx>

@@ -20,7 +20,6 @@
 
 #include <svx/svdomeas.hxx>
 #include <math.h>
-#include "svx/svditext.hxx" //
 #include <svx/xpoly.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdhdl.hxx>
@@ -34,6 +33,7 @@
 #include "svx/svdstr.hrc"    // the object's name
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>

@@ -43,7 +43,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xlnstit.hxx>
 
-#include "svx/svditext.hxx"
+#include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>   // for EditEngine::CreatePool()
 
 #include <svx/xtable.hxx>

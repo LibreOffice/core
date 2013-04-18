@@ -20,7 +20,6 @@
 
 #include <svx/svdoattr.hxx>
 #include <svx/xpool.hxx>
-#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdattr.hxx>
@@ -46,7 +45,7 @@
 #include <svx/xflbtoxy.hxx>
 #include <svx/xftshit.hxx>
 
-
+#include <editeng/editdata.hxx>
 #include <editeng/colritem.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/fhgtitem.hxx>
