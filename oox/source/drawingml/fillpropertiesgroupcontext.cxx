@@ -23,6 +23,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
+#include <sfx2/docfile.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -166,9 +167,17 @@ BlipContext::BlipContext( ContextHandler& rParent,
     else if( aAttribs.hasAttribute( R_TOKEN( link ) ) )
     {
         // external URL
-        // OUString aRelId = aAttribs.getString( R_TOKEN( link ), OUString() );
-        // OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
-        // TODO: load external picture
+
+        // we will embed this link, this is better than just doing nothing..
+        // TODO: import this graphic as real link, but this requires some
+        // code rework.
+        OUString aRelId = aAttribs.getString( R_TOKEN( link ), OUString() );
+        OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
+        SfxMedium xMed( aTargetLink, STREAM_STD_READ );
+        xMed.DownLoad();
+        Reference< io::XInputStream > xInStrm = xMed.GetInputStream();
+        if ( xInStrm.is() )
+            mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importGraphic( xInStrm );
     }
 }
 
