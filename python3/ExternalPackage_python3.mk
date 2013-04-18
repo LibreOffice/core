@@ -46,6 +46,7 @@ else
 $(eval $(call gb_ExternalPackage_add_file,python3,bin/python,python))
 $(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython$(PYTHON_VERSION_MAJOR).so,libpython$(PYTHON_VERSION_MAJOR).so))
 $(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so))
+$(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so-gdb.py,Tools/gdb/libpython.py))
 # versioned lib/libpython3.3m.so.1.0 appears to be unnecessary?
 
 # Unfortunately the python build system does not allow to explicitly enable or
