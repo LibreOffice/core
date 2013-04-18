@@ -33,15 +33,6 @@ build with GCC on AIX
  	  INSTSONAME="$LDLIBRARY".$SOVERSION
  	  if test "$with_pydebug" != yes
            then
-@@ -6169,7 +6175,7 @@
- 		# debug builds.
- 		OPT="-g -O0 -Wall $STRICT_PROTO"
- 	    else
--		OPT="-g $WRAP -O3 -Wall $STRICT_PROTO"
-+		OPT="$WRAP -O0 -Wall $STRICT_PROTO"
- 	    fi
- 	    ;;
- 	*)
 @@ -8301,8 +8307,13 @@
  then
  	case $ac_sys_system/$ac_sys_release in
