@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+3Y\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-18T09:27:45Z",
+      "side": 1,
+      "message": "cppu, cppuhelper and salhelper (and sal too) contain Package_\u003cmodule\u003e_odk_headers.mk . These are not delivered to $(OUTDIR)/inc, but rather to $(INSTDIR)/sdk/include (and used by the build from there), and they must continue to be delivered, because they are part of SDK. I think we should move them too and then deliver all of them to $(INSTDIR) from ure.\n\nBut that can be done as an additional step.",
+      "revId": "2cf28093f8223c10cdd07a11d42972ce713962fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+3U\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-18T09:27:45Z",
+      "side": 1,
+      "message": "Ehm, are you quite sure registry and store do not contain Package_inc.mk? I see it in both of them :-)",
+      "revId": "2cf28093f8223c10cdd07a11d42972ce713962fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
