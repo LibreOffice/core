@@ -1163,17 +1163,17 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
     switch ( nDir )
     {
     case 0 :
-        pPos.X() += GetSize().Width();
+        m_aPos.X() += GetSize().Width();
         break;
     case 900 :
-        OSL_ENSURE( pPos.Y() >= GetSize().Width(), "Going underground" );
-        pPos.Y() -= GetSize().Width();
+        OSL_ENSURE( m_aPos.Y() >= GetSize().Width(), "Going underground" );
+        m_aPos.Y() -= GetSize().Width();
         break;
     case 1800 :
-        pPos.X() -= GetSize().Width();
+        m_aPos.X() -= GetSize().Width();
         break;
     case 2700 :
-        pPos.Y() += GetSize().Width();
+        m_aPos.Y() += GetSize().Width();
         break;
     }
 }

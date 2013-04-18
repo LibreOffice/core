@@ -42,12 +42,12 @@ class SwDrawTextInfo
     OutputDevice* pOut;
     ViewShell* pSh;
     const SwScriptInfo* pScriptInfo;
-    Point pPos;
-    OUString pText;
+    Point m_aPos;
+    OUString m_aText;
     const SwWrongList* pWrong;
     const SwWrongList* pGrammarCheck;
     const SwWrongList* pSmartTags;
-    Size pSize;
+    Size m_aSize;
     SwFont *pFnt;
     SwUnderlineFont* pUnderFnt;
     xub_StrLen* pHyphPos;
@@ -111,7 +111,7 @@ public:
         pSh = pS;
         pOut = &rO;
         pScriptInfo = pSI;
-        pText = rSt;
+        m_aText = rSt;
         nIdx = nI;
         nLen = nL;
         nKern = 0;
@@ -190,7 +190,7 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bPos, "DrawTextInfo: Undefined Position" );
 #endif
-        return pPos;
+        return m_aPos;
     }
 
     xub_StrLen *GetHyphPos() const
@@ -203,7 +203,7 @@ public:
 
     const OUString &GetText() const
     {
-        return pText;
+        return m_aText;
     }
 
     const SwWrongList* GetWrong() const
@@ -232,7 +232,7 @@ public:
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bSize, "DrawTextInfo: Undefined Size" );
 #endif
-        return pSize;
+        return m_aSize;
     }
 
     SwFont* GetFont() const
@@ -400,7 +400,7 @@ public:
 
     void SetPos( const Point &rNew )
     {
-        pPos = rNew;
+        m_aPos = rNew;
 #ifdef DBG_UTIL
         m_bPos = true;
 #endif
@@ -416,7 +416,7 @@ public:
 
     void SetText( const OUString &rNew )
     {
-        pText = rNew;
+        m_aText = rNew;
     }
 
     void SetWrong( const SwWrongList* pNew )
@@ -442,7 +442,7 @@ public:
 
     void SetSize( const Size &rNew )
     {
-        pSize = rNew;
+        m_aSize = rNew;
 #ifdef DBG_UTIL
         m_bSize = true;
 #endif
