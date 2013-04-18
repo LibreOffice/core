@@ -39,10 +39,10 @@
 
 #include <svl/solar.hrc>
 #include "editeng/xmlcnitm.hxx"
+#include <editeng/editdata.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/xtable.hxx>    // for RGB_Color()
-#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>  // for DEGREE_CHAR
 #include <svx/svdtrans.hxx>
 #include "svx/svdglob.hxx"  // string cache

@@ -24,7 +24,6 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include "officecfg/Office/Common.hxx"
 #include <svx/svdetc.hxx>
-#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
 #include "svx/svdglob.hxx"
@@ -33,6 +32,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/bmpacc.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>

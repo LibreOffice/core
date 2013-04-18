@@ -18,13 +18,13 @@
  */
 
 #include <vector>
+#include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <rtl/strbuf.hxx>
 #include <svx/xexch.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/svditext.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>

@@ -20,7 +20,6 @@
 
 #include <comphelper/string.hxx>
 #include <svx/svdotext.hxx>
-#include "svx/svditext.hxx"
 #include <svx/svdpagv.hxx>  // for the request in Paint to see whether
 #include <svx/svdview.hxx>  // the object is currently being edited
 #include <svx/svdpage.hxx>  // and for AnimationHandler (ticker text)
@@ -32,6 +31,7 @@
 #include <editeng/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svtools/colorcfg.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>

@@ -27,7 +27,6 @@
 #include <svx/rectenum.hxx>
 #include <svx/svxids.hrc>   // for SID_ATTR_TRANSFORM_...
 #include <svx/svdattr.hxx>  // for Get/SetGeoAttr
-#include "svx/svditext.hxx"
 #include "svx/svditer.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
@@ -39,6 +38,7 @@
 #include <svx/svdopath.hxx>  // for Crook
 #include "svx/svdstr.hrc"   // names taken from the resource
 #include "svx/svdglob.hxx"  // StringCache
+#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/whiter.hxx>

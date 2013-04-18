@@ -22,6 +22,7 @@
 #include <math.h>
 #include <svx/xpoly.hxx>
 #include <vcl/svapp.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -47,7 +48,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
-#include "svx/svditext.hxx"
 #include <svx/svdotext.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdocirc.hxx>

@@ -23,7 +23,6 @@
 
 #include <stdlib.h>
 
-#include "svx/svditext.hxx"
 #include <editeng/flditem.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/svdpool.hxx>

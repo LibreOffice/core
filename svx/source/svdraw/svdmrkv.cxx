@@ -22,7 +22,6 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoedge.hxx>
 #include "svx/svdglob.hxx"
-#include "svx/svditext.hxx"
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
@@ -48,6 +47,8 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
+
+#include <editeng/editdata.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Migrate Marking of Objects, Points and GluePoints
