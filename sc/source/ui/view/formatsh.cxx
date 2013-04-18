@@ -2078,6 +2078,12 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
         {
             SvxFrameDirection eDirection = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ) ?
                                                 FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP;
+
+            String aUndo = ScGlobal::GetRscString( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ?
+                                                    STR_UNDO_L2R : STR_UNDO_R2L );
+            ScDocShell* pDocSh = GetViewData()->GetDocShell();
+            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+
             pTabViewShell->ApplyAttr( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ) );
 
             const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
@@ -2102,6 +2108,7 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
                 ExecuteSlot( rReq, GetInterface() );
             }
 
+            pDocSh->GetUndoManager()->LeaveListAction();
         }
         break;
     }

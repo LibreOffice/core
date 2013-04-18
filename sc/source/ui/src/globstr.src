@@ -1815,6 +1815,14 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Insert Current Time";
     };
+    String STR_UNDO_L2R
+    {
+        Text [ en-US ] = "Left-to-right" ;
+    };
+    String STR_UNDO_R2L
+    {
+        Text [ en-US ] = "Right-to-left" ;
+    };
     String STR_MANAGE_NAMES
     {
         Text [ en-US ] = "Manage Names...";
