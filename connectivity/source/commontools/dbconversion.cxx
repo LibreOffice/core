@@ -82,16 +82,13 @@ namespace dbtools
     //------------------------------------------------------------------
     OUString DBTypeConversion::toTimeString(const Time& rTime)
     {
-        const size_t buflen = 19;
-        sal_Char s[buflen];
-        snprintf(s,
-                 buflen,
-                 "%02d:%02d:%02d.%09d",
-                 rTime.Hours,
-                 rTime.Minutes,
-                 rTime.Seconds,
-                 rTime.NanoSeconds);
-        return OUString::createFromAscii(s);
+        std::ostringstream ostr;
+        ostr.fill('0');
+        ostr.width(2);
+        ostr << rTime.Hours << ":" << rTime.Minutes << ":" << rTime.Seconds;
+        ostr.width(9);
+        ostr << "." << rTime.NanoSeconds;
+        return OUString::createFromAscii(ostr.str().c_str());
     }
 
     //------------------------------------------------------------------
