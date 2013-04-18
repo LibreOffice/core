@@ -116,18 +116,18 @@ $(eval $(call gb_Module_add_targets,extras,\
 	AllLangPackage_accessoriestemplatesoffimisc \
 	AllLangPackage_accessoriestemplatespersonal \
 	AllLangPackage_accessoriestemplatespresent \
+	ExternalPackage_accessoriestemplatescommon \
+	ExternalPackage_accessoriestemplatescommoneducate \
+	ExternalPackage_accessoriestemplatescommonfinance \
+	ExternalPackage_accessoriestemplatescommonforms \
+	ExternalPackage_accessoriestemplatescommonlabels \
+	ExternalPackage_accessoriestemplatescommonlayout \
+	ExternalPackage_accessoriestemplatescommonmisc \
+	ExternalPackage_accessoriestemplatescommonofficorr \
+	ExternalPackage_accessoriestemplatescommonoffimisc \
+	ExternalPackage_accessoriestemplatescommonpersonal \
+	ExternalPackage_accessoriestemplatescommonpresent \
 	UnpackedTarball_templates_pack \
-	Zip_accessoriestemplatescommon \
-	Zip_accessoriestemplatescommoneducate \
-	Zip_accessoriestemplatescommonfinance \
-	Zip_accessoriestemplatescommonforms \
-	Zip_accessoriestemplatescommonlabels \
-	Zip_accessoriestemplatescommonlayout \
-	Zip_accessoriestemplatescommonmisc \
-	Zip_accessoriestemplatescommonofficorr \
-	Zip_accessoriestemplatescommonoffimisc \
-	Zip_accessoriestemplatescommonpersonal \
-	Zip_accessoriestemplatescommonpresent \
 ))
 endif
 
