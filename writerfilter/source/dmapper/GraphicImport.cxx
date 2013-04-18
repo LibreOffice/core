@@ -1088,6 +1088,18 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                                    uno::makeAny( aSize.Height ) );
                             xGraphProps->setPropertyValue( rtl::OUString::createFromAscii( "Width" ),
                                    uno::makeAny( aSize.Width ) );
+
+                            {
+                                text::GraphicCrop aGraphicCrop( 0, 0, 0, 0 );
+                                uno::Reference< beans::XPropertySet > xSourceGraphProps( xShape, uno::UNO_QUERY );
+                                uno::Any aAny = xSourceGraphProps->getPropertyValue( rtl::OUString::createFromAscii("GraphicCrop"));
+                                if ( aAny >>= aGraphicCrop )
+                                {
+                                    xGraphProps->setPropertyValue(
+                                        rtl::OUString::createFromAscii("GraphicCrop"),
+                                        uno::makeAny( aGraphicCrop ) );
+                                }
+                            }
                         }
                     }
                     catch( const beans::UnknownPropertyException e )
