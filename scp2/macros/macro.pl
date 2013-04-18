@@ -64,12 +64,9 @@ write_DIR_ISOLANGUAGE_ALL_LANG_LPROJ();
 write_EXTRA_ALL_LANG();
 write_EXTRA_ALL_LANG_BUT_EN_US();
 write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG();
-write_EXTRA_IDENT_ALL_LANG();
 write_RESFILE_ALL_LANG();
 write_README_ALL_LANG();
 write_README_TXT_ALL_LANG();
-write_VALUE_ALL_LANG_LETTER_DIR();
-write_KEY_ALL_LANG_LETTER();
 write_FILE_ALL_LANG_LETTER();
 
 close OUTFILE;
@@ -163,16 +160,6 @@ sub write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG
     print OUTFILE "\n\n";
 }
 
-sub write_EXTRA_IDENT_ALL_LANG
-{
-    print OUTFILE "#define EXTRA_IDENT_ALL_LANG(name) ";
-    foreach $lang (@completelangiso) {
-        print OUTFILE "\\\n\tName ($lang) = STRING(name)";
-        print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
-    }
-    print OUTFILE "\n\n";
-}
-
 sub write_RESFILE_ALL_LANG
 {
     print OUTFILE "#define RESFILE_ALL_LANG(name) ";
@@ -198,29 +185,6 @@ sub write_README_TXT_ALL_LANG
     print OUTFILE "#define README_TXT_ALL_LANG(key, name, ext) ";
     foreach $lang (@completelangiso) {
         print OUTFILE "\\\n\tkey ($lang) = READMETXTFILENAME(name,_$lang,ext)";
-        print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
-    }
-    print OUTFILE "\n\n";
-}
-
-# FIXME: Not used at all in OOo?, #i38597#
-sub write_VALUE_ALL_LANG_LETTER_DIR
-{
-    print OUTFILE "#define VALUE_ALL_LANG_LETTER_DIR ";
-    print OUTFILE "\\\n\tValue (en-US) = STRING(en);";
-    foreach $lang (@completelangiso) {
-        next if ( $lang eq "en-US");
-        print OUTFILE "\\\n\tValue ($lang) = STRING($lang)";
-        print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
-    }
-    print OUTFILE "\n\n";
-}
-
-sub write_KEY_ALL_LANG_LETTER
-{
-    print OUTFILE "#define KEY_ALL_LANG_LETTER ";
-    foreach $lang (@completelangiso) {
-        print OUTFILE "\\\n\tKey ($lang) = STRING($lang)";
         print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
     }
     print OUTFILE "\n\n";
