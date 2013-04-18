@@ -389,6 +389,7 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
         moParaLeftMargin = rSourceProps.moParaLeftMargin;
     if ( rSourceProps.moFirstLineIndentation )
         moFirstLineIndentation = rSourceProps.moFirstLineIndentation;
+    mnLevel = rSourceProps.mnLevel;
 }
 
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
