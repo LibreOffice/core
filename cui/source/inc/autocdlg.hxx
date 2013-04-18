@@ -277,6 +277,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void        Resize();
 
     void    SetLanguage(LanguageType eSet);
     void    DeleteEntry(String sShort, String sLong);

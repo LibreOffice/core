@@ -874,8 +874,8 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
     pCharClass = new CharClass( aLanguageTag );
 
-    static long nTabs[] = { 2 /* Tab-Count */, 1, 61 };
-    m_pReplaceTLB->SetTabs( &nTabs[0], MAP_APPFONT );
+    static long aTabs[] = { 2 /* Tab-Count */, 1, 61 };
+    m_pReplaceTLB->SetTabs( &aTabs[0], MAP_APPFONT );
 
     m_pReplaceTLB->SetStyle( m_pReplaceTLB->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN );
     m_pReplaceTLB->SetSelectHdl( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
@@ -886,8 +886,15 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     m_pShortED->SetActionHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
     m_pReplaceED->SetActionHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
 
-    m_pReplaceED->SetSpaces( sal_True );
-    m_pShortED->SetSpaces( sal_True );
+    m_pReplaceED->SetSpaces(true);
+    m_pShortED->SetSpaces(true);
+}
+
+void OfaAutocorrReplacePage::Resize()
+{
+    SfxTabPage::Resize();
+    m_pReplaceTLB->SetTab(0, m_pShortED->GetPosPixel().X(), MAP_PIXEL);
+    m_pReplaceTLB->SetTab(1, m_pReplaceED->GetPosPixel().X(), MAP_PIXEL);
 }
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
