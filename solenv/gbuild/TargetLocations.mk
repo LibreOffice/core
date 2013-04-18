@@ -191,7 +191,9 @@ gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/SrsTemplatePartTarget/$(firstwo
 gb_SrsTemplateTarget_get_include_dir = $(WORKDIR)/SrsTemplatePartTarget/$(firstword $(subst /, ,$(1)))
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
 gb_ThesaurusIndexTarget_get_target = $(WORKDIR)/ThesaurusIndexTarget/$(basename $(1)).idx
-gb_UIConfig_get_target = $(WORKDIR)/UIConfig/$(1)
+gb_UIConfig_get_imagelist_target = $(WORKDIR)/UIConfig/$(1).ilst
+gb_UIConfig_get_target = $(WORKDIR)/UIConfig/$(1).done
+gb_UIImageListTarget_get_target = $(WORKDIR)/UIImageListTarget/$(1).ilst
 gb_UILocalizeTarget_get_target = $(WORKDIR)/UILocalizeTarget/$(1).done
 gb_UILocalizeTarget_get_workdir = $(WORKDIR)/UILocalizeTarget/$(1)
 gb_UIMenubarTarget_get_target = $(WORKDIR)/UIMenubarTarget/$(1).xml
@@ -311,6 +313,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CustomTarget \
 	ExternalProject \
 	UIConfig \
+	UIImageListTarget \
 	UILocalizeTarget \
 	UIMenubarTarget \
 	UnoApiHeadersTarget \

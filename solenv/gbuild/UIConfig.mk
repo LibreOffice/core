@@ -111,6 +111,49 @@ $(call gb_UIMenubarTarget_UIMenubarTarget_platform,$(1),$(2))
 
 endef
 
+# class UIImageListTarget
+
+# Handles creation of image lists for .ui files.
+
+gb_UIImageListTarget_COMMAND = $(call gb_ExternalExecutable_get_command,xsltproc)
+gb_UIImageListTarget_DEPS = $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+gb_UIImageListTarget_XSLTFILE := $(SRCDIR)/solenv/bin/uiimagelist.xsl
+
+# NOTE: for some reason xsltproc does not produce any file if there is
+# no output, so we touch the target to make sure it exists.
+define gb_UIImageListTarget__command
+$(call gb_Output_announce,$(2),$(true),UIL,1)
+$(call gb_Helper_abbreviate_dirs,\
+	$(gb_UIImageListTarget_COMMAND) -o $@ $(gb_UIImageListTarget_XSLTFILE) $(UIFILE) && \
+	touch $@ \
+)
+endef
+
+$(dir $(call gb_UIImageListTarget_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_UIImageListTarget_get_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(call gb_UIImageListTarget_get_target,%) : $(gb_UIImageListTarget_DEPS) $(gb_UIImageListTarget_XSLTFILE)
+	$(call gb_UIImageListTarget__command,$@,$*)
+
+.PHONY : $(call gb_UIImageListTarget_get_clean_target,%)
+$(call gb_UIImageListTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$(2),$(false),UIL,1)
+	rm -f $(call gb_UIImageListTarget_get_target,$*)
+
+# Extract list of images referenced in a .ui file.
+#
+# gb_UIImageListTarget_UIImageListTarget uifile
+define gb_UIImageListTarget_UIImageListTarget
+$(call gb_UIImageListTarget_get_target,$(1)) : UIFILE := $(SRCDIR)/$(1).ui
+
+$(call gb_UIImageListTarget_get_target,$(1)) : $(SRCDIR)/$(1).ui
+$(call gb_UIImageListTarget_get_target,$(1)) :| $(dir $(call gb_UIImageListTarget_get_target,$(1))).dir
+
+endef
+
 # class UIConfig
 
 # Handles UI configuration files.
@@ -134,10 +177,15 @@ $(dir $(call gb_UIConfig_get_target,%)).dir :
 $(dir $(call gb_UIConfig_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_UIConfig_get_target,%) :
+$(call gb_UIConfig_get_target,%) : $(call gb_UIConfig_get_imagelist_target,%)
 	$(call gb_Output_announce,$*,$(true),UIC,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		touch $@ \
+	)
+
+$(call gb_UIConfig_get_imagelist_target,%) :
+	$(call gb_Helper_abbreviate_dirs,\
+		sort -u $(UI_IMAGELISTS) /dev/null > $@ \
 	)
 
 .PHONY : $(call gb_UIConfig_get_clean_target,%)
@@ -155,6 +203,8 @@ gb_UIConfig_get_packagesetname = UIConfig/$(1)
 #
 # gb_UIConfig_UIConfig modulename
 define gb_UIConfig_UIConfig
+$(call gb_UIConfig_get_imagelist_target,$(1)) : UI_IMAGELISTS :=
+
 $(call gb_PackageSet_PackageSet_internal,$(call gb_UIConfig_get_packagesetname,$(1)))
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)),$(SRCDIR))
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)_generated),$(WORKDIR))
@@ -164,6 +214,7 @@ $(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename,$(1)_generated),
 $(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(call gb_UIConfig_get_packagename,$(1)))
 
 $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
+$(call gb_UIConfig_get_imagelist_target,$(1)) :| $(dir $(call gb_UIConfig_get_imagelist_target,$(1))).dir
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_PackageSet_get_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 $(call gb_Postprocess_get_target,AllUIConfigs) : $(call gb_UIConfig_get_target,$(1))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_PackageSet_get_clean_target,$(call gb_UIConfig_get_packagesetname,$(1)))
@@ -200,6 +251,11 @@ endef
 # gb_UIConfig__add_uifile target file
 define gb_UIConfig__add_uifile
 $(call gb_UIConfig__package_uifile,$(1),$(call gb_UIConfig_get_packagename,$(1)),$(notdir $(2)).ui,$(2).ui)
+$(call gb_UIImageListTarget_UIImageListTarget,$(2))
+
+$(call gb_UIConfig_get_imagelist_target,$(1)) : UI_IMAGELISTS += $(call gb_UIImageListTarget_get_target,$(2))
+$(call gb_UIConfig_get_imagelist_target,$(1)) : $(call gb_UIImageListTarget_get_target,$(2))
+$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UIImageListTarget_get_clean_target,$(2))
 
 endef
 
