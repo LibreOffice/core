@@ -98,7 +98,8 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(filter WNT-GCC,$(OS)-$(COM)), -shared-libgcc \
 				$(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols)) \
 			)" \
-		&& MAKEFLAGS=$(if $(VERBOSE)$(verbose),,s) $(MAKE) $(if $(filter MACOSX,$(OS)), DESTDIR=$(EXTERNAL_WORKDIR)/python-inst install) \
+		&& MAKEFLAGS= $(MAKE) \
+			$(if $(filter MACOSX,$(OS)),DESTDIR=$(EXTERNAL_WORKDIR)/python-inst install) \
 		&& ln -s build/lib.* LO_lib \
 	)
 
