@@ -62,11 +62,11 @@ $(eval $(call gb_Module_add_targets,extras,\
 	UnpackedTarball_gallery_pack \
 	ExternalPackage_accessoriesgallery \
 	ExternalPackage_accessoriesgallerydrawspeople \
-	Zip_accessoriesgalleryelementsbullets2 \
-	Zip_accessoriesgallerynonfree \
-	Zip_accessoriesgalleryphotosbuildings \
-	Zip_accessoriesgalleryphotoscelebration \
-	Zip_accessoriesgalleryphotoscities \
+	ExternalPackage_accessoriesgalleryelementsbullets2 \
+	ExternalPackage_accessoriesgallerynonfree \
+	ExternalPackage_accessoriesgalleryphotosbuildings \
+	ExternalPackage_accessoriesgalleryphotoscelebration \
+	ExternalPackage_accessoriesgalleryphotoscities \
 	Zip_accessoriesgalleryphotosfauna \
 	Zip_accessoriesgalleryphotosflowers \
 	Zip_accessoriesgalleryphotosfoodsanddrinks \
