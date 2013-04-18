@@ -32,6 +32,20 @@ struct ScDPResultFilter
     ScDPResultFilter(const OUString& rDimName, bool bDataLayout);
 };
 
+/**
+ * This class maintains pivot table calculation result in a tree structure
+ * which represents the logical structure of pivot table result layout as
+ * presented in the sheet.
+ *
+ * <p>The root node has two child nodes if the pivot table consists of both
+ * column and row dimensions. The first child stores the result tree that is
+ * first filtered by row dimensions then by column dimensions. The second
+ * child stores the result tree that is filtered by column dimensions only
+ * (for column grand totals).</p>
+ *
+ * <p>If the pivot table layout only consists of either column or row
+ * dimensions, the root node only has one child node.</p>
+ */
 class ScDPResultFilterSet : boost::noncopyable
 {
     struct MemberNode;
@@ -74,6 +88,7 @@ class ScDPResultFilterSet : boost::noncopyable
 #endif
     };
 
+    OUString maPrimaryDimName;
     MemberNode* mpRoot;
 
 public:

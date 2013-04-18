@@ -95,6 +95,9 @@ void ScDPResultFilterSet::add(
         if (filter.mbDataLayout)
             continue;
 
+        if (maPrimaryDimName.isEmpty())
+            maPrimaryDimName = filter.maDimName;
+
         printf("%s: ", rtl::OUStringToOString(filter.maDimName, RTL_TEXTENCODING_UTF8).getStr());
         if (filter.maValue.IsValue())
             printf("%g ", filter.maValue.GetValue());
@@ -144,12 +147,14 @@ void ScDPResultFilterSet::add(
 
 void ScDPResultFilterSet::swap(ScDPResultFilterSet& rOther)
 {
+    std::swap(maPrimaryDimName, rOther.maPrimaryDimName);
     std::swap<MemberNode*>(mpRoot, rOther.mpRoot);
 }
 
 #if DEBUG_PIVOT_TABLE
 void ScDPResultFilterSet::dump() const
 {
+    cout << "primary dimension name: " << maPrimaryDimName << endl;
     mpRoot->dump(0);
 }
 #endif

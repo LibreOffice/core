@@ -469,6 +469,8 @@ uno::Sequence<uno::Any> ScDPSource::getFilteredResults(
 
     // Sort filters by order of appearance. Row fields come before column fields.
 
+    // TODO: maResFilterSet maintains the result tree, so we can probably
+    // extract the field sort order from there somehow.
 
     return uno::Sequence<uno::Any>();
 }
