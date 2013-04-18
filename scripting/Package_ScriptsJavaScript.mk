@@ -26,21 +26,18 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Zip_Zip,ScriptsBeanShell,$(SRCDIR)/scripting/examples))
+$(eval $(call gb_Package_Package,scripting_ScriptsJavaScript,$(SRCDIR)/scripting/examples))
 
-$(eval $(call gb_Zip_add_files,ScriptsBeanShell,\
-	beanshell/Capitalise/capitalise.bsh \
-	beanshell/Capitalise/parcel-descriptor.xml \
-	beanshell/HelloWorld/helloworld.bsh \
-	beanshell/HelloWorld/parcel-descriptor.xml \
-	beanshell/Highlight/ButtonPressHandler.bsh \
-	beanshell/Highlight/highlighter.bsh \
-	beanshell/Highlight/parcel-descriptor.xml \
-	beanshell/Highlight/ShowDialog.bsh \
-	beanshell/MemoryUsage/memusage.bsh \
-	beanshell/MemoryUsage/parcel-descriptor.xml \
-	beanshell/WordCount/parcel-descriptor.xml \
-	beanshell/WordCount/wordcount.bsh \
+$(eval $(call gb_Package_set_outdir,scripting_ScriptsJavaScript,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files_with_dir,scripting_ScriptsJavaScript,share/Scripts,\
+	javascript/ExportSheetsToHTML/exportsheetstohtml.js \
+	javascript/ExportSheetsToHTML/parcel-descriptor.xml \
+	javascript/HelloWorld/helloworld.js \
+	javascript/HelloWorld/parcel-descriptor.xml \
+	javascript/Highlight/ButtonPressHandler.js \
+	javascript/Highlight/parcel-descriptor.xml \
+	javascript/Highlight/ShowDialog.js \
 ))
 
 # vim: set noet sw=4 ts=4:

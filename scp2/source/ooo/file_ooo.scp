@@ -65,9 +65,10 @@ End
 #ifndef DISABLE_SCRIPTING
 
 File gid_File_Basic_Scriptbindinglib
-    Dir = gid_Dir_Basic_Scriptbindinglib;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "scriptbindinglib.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "scripting_scriptbindinglib.filelist";
 End
 
 #endif
@@ -766,17 +767,19 @@ End
 
 #ifndef WITHOUT_SCRIPTING_BEANSHELL
 File gid_File_Scripts_Beanshell
-    Dir = gid_Dir_Share_Scripts;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "ScriptsBeanShell.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "scripting_ScriptsBeanShell.filelist";
 End
 #endif
 
 #ifndef WITHOUT_SCRIPTING_JAVASCRIPT
 File gid_File_Scripts_Javascript
-    Dir = gid_Dir_Share_Scripts;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "ScriptsJavaScript.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "scripting_ScriptsJavaScript.filelist";
 End
 #endif
 #endif

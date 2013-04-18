@@ -47,7 +47,11 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		) \
 		Zip_ScriptsJava \
 	) \
+	Package_scriptbindinglib \
 	Package_scriptproviderforpython \
+	Package_ScriptsBeanShell \
+	Package_ScriptsJavaScript \
+	Package_ScriptsPython \
 	Library_basprov \
 	Library_dlgprov \
 	Library_protocolhandler \
@@ -55,10 +59,6 @@ $(eval $(call gb_Module_add_targets,scripting,\
 	Library_stringresource \
 	Library_vbaevents \
 	Pyuno_mailmerge \
-	Zip_scriptbindinglib \
-	Zip_ScriptsBeanShell \
-	Zip_ScriptsJavaScript \
-	Zip_ScriptsPython \
 ))
 
 endif

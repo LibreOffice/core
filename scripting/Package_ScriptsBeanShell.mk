@@ -26,12 +26,23 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Zip_Zip,scriptbindinglib,$(SRCDIR)/scripting/workben/bindings))
+$(eval $(call gb_Package_Package,scripting_ScriptsBeanShell,$(SRCDIR)/scripting/examples))
 
-$(eval $(call gb_Zip_add_files,scriptbindinglib,\
-	Highlight.xdl \
-	dialog.xlb \
-	script.xlb \
+$(eval $(call gb_Package_set_outdir,scripting_ScriptsBeanShell,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files_with_dir,scripting_ScriptsBeanShell,share/Scripts,\
+	beanshell/Capitalise/capitalise.bsh \
+	beanshell/Capitalise/parcel-descriptor.xml \
+	beanshell/HelloWorld/helloworld.bsh \
+	beanshell/HelloWorld/parcel-descriptor.xml \
+	beanshell/Highlight/ButtonPressHandler.bsh \
+	beanshell/Highlight/highlighter.bsh \
+	beanshell/Highlight/parcel-descriptor.xml \
+	beanshell/Highlight/ShowDialog.bsh \
+	beanshell/MemoryUsage/memusage.bsh \
+	beanshell/MemoryUsage/parcel-descriptor.xml \
+	beanshell/WordCount/parcel-descriptor.xml \
+	beanshell/WordCount/wordcount.bsh \
 ))
 
 # vim: set noet sw=4 ts=4:
