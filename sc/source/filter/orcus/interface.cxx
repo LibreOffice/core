@@ -231,7 +231,7 @@ void ScOrcusSheet::set_date_time(
     long nDateDiff = aDate - aNullDate;
 
     double fTime =
-        static_cast<double>(aTime.Get100Sec()) / 100.0 +
+        static_cast<double>(aTime.GetNanoSec()) / 1e9 +
         aTime.GetSec() +
         aTime.GetMin() * 60.0 +
         aTime.GetHour() * 3600.0;
