@@ -316,8 +316,8 @@
       </menu:menu>
       <menu:menu menu:id=".uno:FlipMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:FlipHorizontal"/>
           <menu:menuitem menu:id=".uno:FlipVertical"/>
+          <menu:menuitem menu:id=".uno:FlipHorizontal"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:RotateMenu">

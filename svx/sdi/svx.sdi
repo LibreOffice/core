@@ -3955,7 +3955,7 @@ SfxVoidItem FontDialog SID_CHAR_DLG
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem FontDialogEff SID_CHAR_DLG_EFFECT
+SfxVoidItem FontEffectsDialog SID_CHAR_DLG_EFFECT
 ()
 [
     /* flags: */
@@ -15762,7 +15762,7 @@ XLineEndItem LineEnd SID_ATTR_LINE_END
 
 //--------------------------------------------------------------------------
 
-SfxUInt32Item SvxTransFormPosX SID_ATTR_TRANSFORM_POS_X
+SfxUInt32Item TransformPosX SID_ATTR_TRANSFORM_POS_X
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -15789,7 +15789,7 @@ SfxUInt32Item SvxTransFormPosX SID_ATTR_TRANSFORM_POS_X
 
 //--------------------------------------------------------------------------
 
-SfxUInt32Item SvxTransFormPosY SID_ATTR_TRANSFORM_POS_Y
+SfxUInt32Item TransformPosY SID_ATTR_TRANSFORM_POS_Y
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -15816,7 +15816,7 @@ SfxUInt32Item SvxTransFormPosY SID_ATTR_TRANSFORM_POS_Y
 
 //--------------------------------------------------------------------------
 
-SfxUInt32Item SvxTransFormWidth SID_ATTR_TRANSFORM_WIDTH
+SfxUInt32Item TransformWidth SID_ATTR_TRANSFORM_WIDTH
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -15843,7 +15843,7 @@ SfxUInt32Item SvxTransFormWidth SID_ATTR_TRANSFORM_WIDTH
 
 //--------------------------------------------------------------------------
 
-SfxUInt32Item SvxTransFormHeight SID_ATTR_TRANSFORM_HEIGHT
+SfxUInt32Item TransformHeight SID_ATTR_TRANSFORM_HEIGHT
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -15870,7 +15870,7 @@ SfxUInt32Item SvxTransFormHeight SID_ATTR_TRANSFORM_HEIGHT
 
 //--------------------------------------------------------------------------
 
-SfxUInt32Item TransAngle SID_ATTR_TRANSFORM_ANGLE
+SfxUInt32Item TransformRotationAngle SID_ATTR_TRANSFORM_ANGLE
 [
     AutoUpdate = TRUE,
     Cachable = Cachable,
@@ -15895,7 +15895,7 @@ SfxUInt32Item TransAngle SID_ATTR_TRANSFORM_ANGLE
 
 //--------------------------------------------------------------------------
 
-SfxUInt32Item TransRotX SID_ATTR_TRANSFORM_ROT_X
+SfxUInt32Item TransformRotationX SID_ATTR_TRANSFORM_ROT_X
 [
     AutoUpdate = TRUE,
     Cachable = Cachable,
@@ -15920,7 +15920,7 @@ SfxUInt32Item TransRotX SID_ATTR_TRANSFORM_ROT_X
 
 //--------------------------------------------------------------------------
 
-SfxUInt32Item TransRotY SID_ATTR_TRANSFORM_ROT_Y
+SfxUInt32Item TransformRotationY SID_ATTR_TRANSFORM_ROT_Y
 [
     AutoUpdate = TRUE,
     Cachable = Cachable,
@@ -15995,34 +15995,7 @@ SfxBoolItem ProtectSize SID_ATTR_TRANSFORM_PROTECT_SIZE
 
 //--------------------------------------------------------------------------
 
-SfxVoidItem SvxFlipHorizontal SID_FLIP_HORIZONTAL
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE
-    GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
-
-SfxVoidItem SvxFlipVertical SID_FLIP_VERTICAL
+SfxVoidItem FlipHorizontal SID_FLIP_HORIZONTAL
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -16049,7 +16022,34 @@ SfxVoidItem SvxFlipVertical SID_FLIP_VERTICAL
 
 //--------------------------------------------------------------------------
 
-SfxBoolItem SvxAutoWidth SID_ATTR_TRANSFORM_AUTOWIDTH
+SfxVoidItem FlipVertical SID_FLIP_VERTICAL
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+
+SfxBoolItem AutomaticWidth SID_ATTR_TRANSFORM_AUTOWIDTH
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -16076,7 +16076,7 @@ SfxBoolItem SvxAutoWidth SID_ATTR_TRANSFORM_AUTOWIDTH
 
 //--------------------------------------------------------------------------
 
-SfxBoolItem SvxAutoHeight SID_ATTR_TRANSFORM_AUTOHEIGHT
+SfxBoolItem AutomaticHeight SID_ATTR_TRANSFORM_AUTOHEIGHT
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -16154,7 +16154,7 @@ SvxLineItem BorderBLTR SID_ATTR_BORDER_DIAG_BLTR
 
 //--------------------------------------------------------------------------
 
-SfxVoidItem SCDialogBorder SID_CELL_FORMAT_BORDER
+SfxVoidItem FormatCellBorders SID_CELL_FORMAT_BORDER
 ()
 [
     /* flags: */

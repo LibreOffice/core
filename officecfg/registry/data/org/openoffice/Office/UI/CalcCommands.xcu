@@ -1628,11 +1628,6 @@
           <value xml:lang="en-US">~Filter</value>
         </prop>
       </node>
-      <node oor:name=".uno:SCDialogBorder" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Cell Borders</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SendTo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sen~d</value>
@@ -1641,6 +1636,11 @@
       <node oor:name=".uno:ProtectMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Protect Document</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormatCellBorders" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Format Cell Borders</value>
         </prop>
       </node>
       <node oor:name=".uno:GroupOutlineMenu" oor:op="replace">

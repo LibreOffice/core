@@ -715,14 +715,6 @@
           <value xml:lang="en-US">Select to Page End</value>
         </prop>
       </node>
-      <node oor:name=".uno:FlipHorizontal" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Flip Vertically</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SendOutlineToClipboard" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Outline to ~Clipboard</value>
@@ -848,6 +840,11 @@
       <node oor:name=".uno:PageColumnDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Page Columns</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:PageColumnType" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Page Column Type</value>
         </prop>
       </node>
       <node oor:name=".uno:BackgroundDialog" oor:op="replace">
@@ -1480,11 +1477,6 @@
       <node oor:name=".uno:SwBackspace" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Backspace</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:SwPageColumnType" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Page Column Type</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoPrevInputField" oor:op="replace">

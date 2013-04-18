@@ -321,9 +321,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SET_SUPER_SCRIPT     (FN_FORMAT + 11) /* superscript */
 #define FN_SET_SUB_SCRIPT       (FN_FORMAT + 12) /* subscript */
 
-#define FN_FLIP_HORZ_GRAFIC     (FN_FORMAT + 25) /* mirror horizontally */
-#define FN_FLIP_VERT_GRAFIC     (FN_FORMAT + 26) /* mirror vertically */
-
 #define FN_FORMAT_PAGE_SETTING_DLG  (FN_FORMAT + 42)  /*  */
 #define FN_NUM_FORMAT_TABLE_DLG     (FN_FORMAT + 45)  /* number format in table */
 #define FN_FORMAT_BORDER_DLG        (FN_FORMAT + 48)  /* */

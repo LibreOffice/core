@@ -1817,56 +1817,6 @@ SfxBoolItem Fields FN_VIEW_FIELDS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem FlipHorizontal FN_FLIP_HORZ_GRAFIC
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem FlipVertical FN_FLIP_VERT_GRAFIC
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
 SvxColorItem FontColor SID_ATTR_CHAR_COLOR2
 
 [
@@ -10355,7 +10305,7 @@ SfxVoidItem OpenFromWriter FN_OPEN_FILE
     GroupId = GID_APPLICATION;
 ]
 
-SfxInt16Item SwPageColumnType SID_ATTR_PAGE_COLUMN
+SfxInt16Item PageColumnType SID_ATTR_PAGE_COLUMN
 
 [
     /* flags: */

@@ -442,16 +442,13 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
 
         switch( nSlot )
         {
-            case FN_FLIP_VERT_GRAFIC:
-            case FN_FLIP_HORZ_GRAFIC:
             case SID_FLIP_VERTICAL:
             case SID_FLIP_HORIZONTAL:
             {
                 GetShell().GetCurAttr( aGrfSet );
-                SwMirrorGrf aMirror( (SwMirrorGrf&)aGrfSet.Get(
-                                                    RES_GRFATR_MIRRORGRF ) );
+                SwMirrorGrf aMirror( (SwMirrorGrf&)aGrfSet.Get( RES_GRFATR_MIRRORGRF ) );
                 sal_uInt16 nMirror = aMirror.GetValue();
-                if( FN_FLIP_VERT_GRAFIC == nSlot || nSlot==SID_FLIP_VERTICAL )
+                if ( nSlot==SID_FLIP_HORIZONTAL )
                     switch( nMirror )
                     {
                     case RES_MIRROR_GRAPH_DONT: nMirror = RES_MIRROR_GRAPH_VERT;
@@ -612,7 +609,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             break;
         }
 
-        case FN_FLIP_VERT_GRAFIC:
+        case SID_FLIP_HORIZONTAL:
             if( !bParentCntProt )
             {
                 MirrorGraph nState = static_cast< MirrorGraph >(((const SwMirrorGrf &) aCoreSet.Get(
@@ -623,7 +620,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             }
             break;
 
-        case FN_FLIP_HORZ_GRAFIC:
+        case SID_FLIP_VERTICAL:
             if( !bParentCntProt )
             {
                 MirrorGraph nState = static_cast< MirrorGraph >(((const SwMirrorGrf &) aCoreSet.Get(
