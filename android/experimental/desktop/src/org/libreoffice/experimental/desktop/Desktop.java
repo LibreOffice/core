@@ -312,11 +312,14 @@ public class Desktop
             // Just temporary hack. We should not show the keyboard
             // unconditionally on a ACTION_UP event here. The LO level
             // should callback to us requesting showing the keyboard
-            // if the user taps in a text area. Also, if the device
-            // has a hardware keyboard, we probably should not show
-            // the soft one unconditionally? But what if the user
-            // wants to input in another script than what the hardware
-            // keyboard covers?
+            // if the user taps in a text area. Unfortunately it seems
+            // less than obvious where the correct place to insert
+            // such a request is.
+
+            // Also, if the device has a hardware keyboard, we
+            // probably should not show the soft one unconditionally?
+            // But what if the user wants to input in another script
+            // than what the hardware keyboard covers?
             if (!scrollJustEnded &&
                 event.getPointerCount() == 1 &&
                 event.getActionMasked() == MotionEvent.ACTION_UP) {
