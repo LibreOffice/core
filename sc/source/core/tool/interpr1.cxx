@@ -6506,7 +6506,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( sal_Bool& rMissingField )
             return pParam.release();
         }
     }
-    return false;
+    return NULL;
 }
 
 

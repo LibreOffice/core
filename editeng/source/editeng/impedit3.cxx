@@ -3717,10 +3717,10 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevi
                 pVDev->Erase();
             }
         }
-        DBG_ASSERT( bVDevValid, "VDef konnte nicht vergroessert werden!" );
+        DBG_ASSERT( bVDevValid, "VirtualDevice failed to be enlarged!" );
         if ( !bVDevValid )
         {
-            Paint( pView, rRec, sal_False /* ohne VDev */ );
+            Paint( pView, rRec, NULL /* without VirtualDevice */ );
             return;
         }
 

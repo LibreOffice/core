@@ -734,7 +734,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                         pDoc->SetSummationOfParagraphs( bIsSummationOfParagraphs );
                         SdDrawDocument* pDocument = pDocSh->GetDoc();
-                        SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
+                        SdrOutliner& rOutl = pDocument->GetDrawOutliner( NULL );
                         nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                         rOutl.SetControlWord( nCntrl | nSum );
                         ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
@@ -763,7 +763,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                     pDoc->SetCharCompressType( (sal_uInt16)nCharCompressType );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
-                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( NULL );
                     rOutl.SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
                     ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
                     if( pOutl )
@@ -788,7 +788,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                     pDoc->SetKernAsianPunctuation( bAsianPunct );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
-                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( NULL );
                     rOutl.SetKernAsianPunctuation( bAsianPunct );
                     ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
                     if( pOutl )

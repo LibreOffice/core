@@ -220,7 +220,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 sDBName += (String)sColumnName;
 
                 SwFldMgr aFldMgr(GetShellPtr());
-                SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, sal_False, sal_True);
+                SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, NULL, sal_True);
                 if(pConnectionItem)
                     aData.aDBConnection = ((SfxUsrAnyItem*)pConnectionItem)->GetValue();
                 if(pColumnItem)
