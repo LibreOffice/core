@@ -589,7 +589,7 @@ static bool needsSynchronization(
 static ::rtl::OUString getBrandSharePreregBundledPathURL()
 {
     ::rtl::OUString url(
-        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/prereg/bundled"));
+        RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/share/prereg/bundled"));
 
     ::rtl::Bootstrap::expandMacros(url);
     return url;
@@ -883,7 +883,7 @@ static bool needsInstallBundledExtensionBlobs (
 // install bundled but non-pre-registered extension blobs
 static void installBundledExtensionBlobs()
 {
-    rtl::OUString aDirUrl( OUSTR("$BRAND_BASE_DIR/share/extensions/install"));
+    rtl::OUString aDirUrl( OUSTR("$OOO_BASE_DIR/share/extensions/install"));
     ::rtl::Bootstrap::expandMacros( aDirUrl);
     ::osl::Directory aDir( aDirUrl);
 

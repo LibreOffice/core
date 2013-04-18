@@ -81,7 +81,7 @@ namespace vcl
     {
         rtl::OUString sImages;
         rtl::OUStringBuffer aBuff( rName );
-        rtl::OUString aBasePath( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program" ) );
+        rtl::OUString aBasePath( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR/program" ) );
         rtl::Bootstrap::expandMacros( aBasePath );
 
         bool bLoaded = false;

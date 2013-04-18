@@ -25,46 +25,37 @@
 
 Directory gid_Dir_Ure_Bin
 #if defined MACOSX
-    ParentID = gid_Dir_UreLink;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_UreLink;
 #else
+//  see ure_into.scp -> should be cleaned up later
     ParentID = gid_Dir_Common_Ure;
 #endif
-    DosName = "bin";
+    DosName = "";
 End
 
 #if !defined(WNT) && !defined(OS2)
 Directory gid_Dir_Ure_Lib
 #if defined MACOSX
-    ParentID = gid_Dir_UreLink;
+    ParentID = gid_Brand_Dir_Program;
+//    Parentid = gid_Dir_UreLink;
 #else
     ParentID = gid_Dir_Common_Ure;
 #endif
-    DosName = "lib";
-End
-#endif
-
-#if !defined(WNT) && !defined(OS2)
-Directory gid_Dir_Ure_Share
-#if defined MACOSX
-    ParentID = gid_Dir_UreLink;
-#else
-    ParentID = gid_Dir_Common_Ure;
-#endif
-    DosName = "share";
+    DosName = "";
 End
 #endif
 
 #if defined SOLAR_JAVA
 Directory gid_Dir_Ure_Java
-    ParentID = SCP2_URE_SHARE_DIR;
-    DosName = "java";
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Program;
+#else
+    ParentID = gid_Dir_Common_Ure;
+#endif
+    DosName = "classes";
 End
 #endif
-
-Directory gid_Dir_Ure_Misc
-    ParentID = SCP2_URE_SHARE_DIR;
-    DosName = "misc";
-End
 
 // Public Executables:
 
@@ -288,13 +279,13 @@ End
 
 // Private Dynamic Libraries:
 
-File gid_File_Dl_Profile_Uno
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = PROFILENAME(/ure/uno);
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "4681F5C1-8F64-486F-B804-03B4D8CEB41F";
-End
+//File gid_File_Dl_Profile_Uno
+//    TXT_FILE_BODY;
+//    Dir = SCP2_URE_DL_DIR;
+//    Name = PROFILENAME(/ure/uno);
+//    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+//    // CompID = "4681F5C1-8F64-486F-B804-03B4D8CEB41F";
+//End
 
 File gid_File_Dl_Reg
     TXT_FILE_BODY;
@@ -1109,29 +1100,13 @@ File gid_File_Java_JavaUnoJar
 End
 #endif
 
-// Public Miscellaneous Files:
-
-File gid_File_Misc_TypesRdb
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Misc;
-    Name = "/ure/types.rdb";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "E5086F6A-855B-4CAE-AD3A-A85A21C5AE44";
-End
-
-File gid_File_Misc_ServicesRdb
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Misc;
-    Name = "/ure/services.rdb";
-    Styles = (PACKED);
-End
-
 // Private Miscellaneous Files:
 
 #if defined SOLAR_JAVA
 File gid_File_Misc_JavavendorsXml
     TXT_FILE_BODY;
-    Dir = gid_Dir_Ure_Misc;
+    //Dir = gid_Dir_Ure_Misc;
+    Dir = gid_Dir_Ure_Bin;
     Name = "javavendors.xml";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "403FCCFE-545B-44F6-91D1-5C75F846E587";
@@ -1159,9 +1134,7 @@ Module gid_Module_Root_Ure_Hidden
 	Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Ure_Bin,
             gid_Dir_Ure_Lib,
-            gid_Dir_Ure_Share,
-            gid_Dir_Ure_Java,
-            gid_Dir_Ure_Misc);
+            gid_Dir_Ure_Java);
     Files = (gid_File_Readme_Ure,
             gid_File_LICENSE_Ure,
             gid_File_NOTICE_Ure,
@@ -1194,7 +1167,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_PurpEnvHelper,
             gid_File_Dl_Sal,
             gid_File_Dl_Salhelper,
-            gid_File_Dl_Profile_Uno,
             gid_File_Dl_Reg,
             gid_File_Dl_Store,
             gid_File_Dl_Xmlreader,
@@ -1248,67 +1220,8 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Java_JurtJar,
             gid_File_Java_RidlJar,
             gid_File_Java_JavaUnoJar,
-            gid_File_Misc_TypesRdb,
-            gid_File_Misc_ServicesRdb,
             gid_File_Misc_JavavendorsXml);
     Unixlinks = (gid_Unixlink_Ure_Bin_Urelibs);
-End
-
-// Profile version.ini
-
-Profile gid_Profile_Version_Ini_Ure
-    ModuleID = gid_Module_Root_Ure_Hidden;
-    Name = PROFILENAME(version);
-    Dir = gid_Dir_Ure_Bin;
-    Styles = ();
-End
-
-ProfileItem gid_Ure_Profileitem_Version_Buildid
-    ProfileID = gid_Profile_Version_Ini_Ure;
-    ModuleID = gid_Module_Root_Ure_Hidden;
-    Section = "Version";
-    Key = "buildid";
-    Value = "<buildid>";
-End
-
-ProfileItem gid_Ure_Profileitem_Version_Productsource
-    ProfileID = gid_Profile_Version_Ini_Ure;
-    ModuleID = gid_Module_Root_Ure_Hidden;
-    Section = "Version";
-    Key = "ProductSource";
-    Value = "<sourceid>";
-End
-
-ProfileItem gid_Ure_Profileitem_Version_Productmajor
-    ProfileID = gid_Profile_Version_Ini_Ure;
-    ModuleID = gid_Module_Root_Ure_Hidden;
-    Section = "Version";
-    Key = "ProductMajor";
-    Value = "<productmajor>";
-End
-
-ProfileItem gid_Ure_Profileitem_Version_Productminor
-    ProfileID = gid_Profile_Version_Ini_Ure;
-    ModuleID = gid_Module_Root_Ure_Hidden;
-    Section = "Version";
-    Key = "ProductMinor";
-    Value = "<productminor>";
-End
-
-ProfileItem gid_Ure_Profileitem_Version_Productbuildid
-    ProfileID = gid_Profile_Version_Ini_Ure;
-    ModuleID = gid_Module_Root_Ure_Hidden;
-    Section = "Version";
-    Key = "ProductBuildid";
-    Value = "<productbuildid>";
-End
-
-ProfileItem gid_Ure_Profileitem_Version_Ooobaseversion
-    ProfileID = gid_Profile_Version_Ini_Ure;
-    ModuleID = gid_Module_Root_Ure_Hidden;
-    Section = "Version";
-    Key = "OOOBaseVersion";
-    Value = "${OOOBASEVERSION}";
 End
 
 // Windows Registry:

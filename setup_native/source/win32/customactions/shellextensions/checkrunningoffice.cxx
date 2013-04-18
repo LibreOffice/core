@@ -184,8 +184,8 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
         // Property empty -> no office installed
         if ( sInstDir.length() == 0 )
             return ERROR_SUCCESS;
-
-        std::_tstring sResourceDir = sInstDir + TEXT("Basis\\program\\resource\\");
+//       std::_tstring sResourceDir = sInstDir + TEXT("Basis\\program\\resource\\");
+        std::_tstring sResourceDir = sInstDir + TEXT("program\\resource\\");
         std::_tstring sPattern = sResourceDir + TEXT("vcl*.res");
 
 //        std::_tstring mystr;

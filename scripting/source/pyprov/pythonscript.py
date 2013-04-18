@@ -167,9 +167,9 @@ class MyUriHelper:
 
     def __init__( self, ctx, location ):
         self.s_UriMap = \
-        { "share" : "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" +  toIniName( "bootstrap") + "::BaseInstallation}/share/Scripts/python" , \
+        { "share" : "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" +  toIniName( "bootstrap") + "::BaseInstallation}/share/Scripts/python" , \
           "share:uno_packages" : "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages", \
-          "user" : "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + toIniName( "bootstrap") + "::UserInstallation}/user/Scripts/python" , \
+          "user" : "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" + toIniName( "bootstrap") + "::UserInstallation}/user/Scripts/python" , \
           "user:uno_packages" : "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages" }
         self.m_uriRefFac = ctx.ServiceManager.createInstanceWithContext("com.sun.star.uri.UriReferenceFactory",ctx)
         if location.startswith( "vnd.sun.star.tdoc" ):

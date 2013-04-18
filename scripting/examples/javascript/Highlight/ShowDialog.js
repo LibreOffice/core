@@ -52,7 +52,7 @@ function tryLoadingLibrary( xmcf, context, name )
         }
 
         libURL = xme.expandMacros(
-                "${$BRAND_BASE_DIR/program/" + bootstrapName + "::BaseInstallation}" +
+                "${$OOO_BASE_DIR/program/" + bootstrapName + "::BaseInstallation}" +
                     "/share/basic/ScriptBindingLibrary/" +
                     name.toLowerCase() + ".xlb/");
 

@@ -737,7 +737,7 @@ static int ReportCrash( int Signal )
                     rtl_string2UString(
                         &crashrep_url,
                         RTL_CONSTASCII_USTRINGPARAM(
-                            "$BRAND_BASE_DIR/program/crashrep"),
+                            "$OOO_BASE_DIR/program/crashrep"),
                         OSTRING_TO_OUSTRING_CVTFLAGS);
                     rtl_bootstrap_expandMacros(&crashrep_url);
                     osl_getSystemPathFromFileURL(crashrep_url, &crashrep_path);

@@ -831,7 +831,7 @@ const char* X11SalData::getFrameClassName()
     if( !aClassName.getLength() )
     {
         rtl::OUString aIni, aProduct;
-        rtl::Bootstrap::get( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aIni );
+        rtl::Bootstrap::get( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OOO_BASE_DIR" ) ), aIni );
         aIni += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
         rtl::Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ProductKey" ) ), aProduct );

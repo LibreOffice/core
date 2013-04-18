@@ -279,7 +279,7 @@ OUString implReadBootstrapKey( const OUString& _rKey )
     OUString sValue(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
-                "${.override:${BRAND_BASE_DIR}/program/edition/edition.ini:")) +
+                "${.override:${OOO_BASE_DIR}/program/edition/edition.ini:")) +
         _rKey + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("}")));
     rtl::Bootstrap::expandMacros(sValue);
     return sValue;
@@ -391,7 +391,7 @@ void SplashScreen::initBitmap()
     {
         OUString sExecutePath;
         ::rtl::Bootstrap::get(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "OOO_BASE_DIR" ) ),
             sExecutePath );
         sExecutePath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" ) );
 
@@ -410,7 +410,7 @@ void SplashScreen::initBitmap()
             rtl::OUString edition(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "${BRAND_BASE_DIR}/program/edition")));
+                        "${OOO_BASE_DIR}/program/edition")));
             rtl::Bootstrap::expandMacros(edition);
             haveBitmap = findBitmap(edition);
         }

@@ -348,10 +348,12 @@ PARFILES=                          \
         profileitem_ooo.par        \
         ure.par                    \
         ure_into_ooo.par           \
-        ure_standalone.par         \
+        ure_standalone.par	   \
+        common_brand.par           \
         common_brand.par           \
         common_brand_readme.par    \
-        ooo_brand.par
+    ooo_brand.par
+
 
 .IF "$(GUI)"=="WNT"
 PARFILES +=                        \

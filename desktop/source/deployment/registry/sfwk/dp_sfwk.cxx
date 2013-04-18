@@ -197,10 +197,10 @@ BackendImpl::BackendImpl(
         {
             OUString basic_path(
                 m_eContext == CONTEXT_USER
-                ? OUSTR("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/"
+                ? OUSTR("vnd.sun.star.expand:${$OOO_BASE_DIR/program/"
                         SAL_CONFIGFILE("bootstrap")
                         ":UserInstallation}/user/basic")
-                : OUSTR("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/"
+                : OUSTR("vnd.sun.star.expand:${$OOO_BASE_DIR/program/"
                         SAL_CONFIGFILE("bootstrap")
                         ":BaseInstallation}/share/basic") );
             m_basic_script_libs.reset(

@@ -42,7 +42,8 @@ namespace script = ::com::sun::star::script;
 
 static const char SHARE[] = "share";
 static const char SHARE_URI[] =
-    "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::BaseInstallation}";
+    "vnd.sun.star.expand:$$OOO_BASE_DIR";
+//    "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::BaseInstallation}";
 
 static const char SHARE_UNO_PACKAGES[] = "share:uno_packages";
 static const char SHARE_UNO_PACKAGES_URI[] =
@@ -50,7 +51,7 @@ static const char SHARE_UNO_PACKAGES_URI[] =
 
 static const char USER[] = "user";
 static const char USER_URI[] =
-    "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
 
 static const char USER_UNO_PACKAGES[] = "user:uno_packages";
 static const char USER_UNO_PACKAGES_DIR[] =

@@ -357,7 +357,7 @@ UpdateInformationProvider::UpdateInformationProvider(
             UNISTRING("ooSetupVersion")));
     rtl::OUString edition(
         UNISTRING(
-            "${${BRAND_BASE_DIR}/program/edition/edition.ini:"
+            "${${OOO_BASE_DIR}/program/edition/edition.ini:"
             "EDITIONNAME}"));
     rtl::Bootstrap::expandMacros(edition);
     if (edition.getLength() != 0) {
@@ -378,10 +378,11 @@ UpdateInformationProvider::UpdateInformationProvider(
     rtl::OUString aBaseBuildId( UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
     rtl::Bootstrap::expandMacros( aBaseBuildId );
 
-    rtl::OUString aBrandBuildId( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
-    rtl::Bootstrap::expandMacros( aBrandBuildId );
+    rtl::OUString aBrandBuildId(aBaseBuildId);
+    // rtl::OUString aBrandBuildId( UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
+    // rtl::Bootstrap::expandMacros( aBrandBuildId );
 
-    rtl::OUString aUserAgent( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" ) );
+    rtl::OUString aUserAgent( UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" ) );
     rtl::Bootstrap::expandMacros( aUserAgent );
 
     if ( ! aBaseBuildId.equals( aBrandBuildId ) )

@@ -343,27 +343,27 @@ void OfficeInstallationDirectories::initDirs()
             {
                 *m_pOfficeBrandDir =
                     xExpander->expandMacros(
-                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR" ) ) );
+                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR" ) ) );
 
                 OSL_ENSURE( m_pOfficeBrandDir->getLength() > 0,
                             "Unable to obtain office brand installation directory!" );
 
                 makeCanonicalFileURL( *m_pOfficeBrandDir );
 
-                *m_pOfficeBaseDir =
-                    xExpander->expandMacros(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":BaseInstallation}" ) ) );
+                *m_pOfficeBaseDir = *m_pOfficeBrandDir;
+                //     xExpander->expandMacros(
+                //         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                //             "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":BaseInstallation}" ) ) );
 
-                OSL_ENSURE( m_pOfficeBaseDir->getLength() > 0,
-                            "Unable to obtain office base installation directory!" );
+                // OSL_ENSURE( m_pOfficeBaseDir->getLength() > 0,
+                //             "Unable to obtain office base installation directory!" );
 
                 makeCanonicalFileURL( *m_pOfficeBaseDir );
 
                 *m_pUserDir =
                     xExpander->expandMacros(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) ) );
+                            "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) ) );
 
                 OSL_ENSURE( m_pUserDir->getLength() > 0,
                             "Unable to obtain office user data directory!" );

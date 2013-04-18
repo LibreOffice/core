@@ -391,10 +391,10 @@ extern "C" int unopkg_main()
             //bootstrapped. Otherwies files could be locked by this process.
 
             //If there is no folder left in
-            //$BRAND_BASE_DIR/share/extensions
+            //$OOO_BASE_DIR/share/extensions
             //then we can delete the registration data at
             //$BUNDLED_EXTENSIONS_USER
-            if (hasNoFolder(OUSTR("$BRAND_BASE_DIR/share/extensions")))
+            if (hasNoFolder(OUSTR("$OOO_BASE_DIR/share/extensions")))
             {
                 removeFolder(OUSTR("$BUNDLED_EXTENSIONS_PREREG"));
                 //return otherwise we create the registration data again

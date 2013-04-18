@@ -1129,7 +1129,8 @@ File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED);
-    Name = "offapi.rdb";
+    Name = "types.rdb";
+//    Name = "offapi.rdb";
 End
 
 File gid_File_Rdb_TypesVba

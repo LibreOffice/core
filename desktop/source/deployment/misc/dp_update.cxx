@@ -237,7 +237,7 @@ OUString getExtensionDefaultUpdateURL()
 {
     ::rtl::OUString sUrl(
         RTL_CONSTASCII_USTRINGPARAM(
-        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
+        "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version")
         ":Version:ExtensionUpdateURL}"));
     ::rtl::Bootstrap::expandMacros(sUrl);
     return sUrl;

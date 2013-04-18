@@ -2340,7 +2340,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         ::rtl::OUString aExecutableFile( aPath );
         aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
         String aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
-        aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/Basis/share/fonts/truetype") );
+        aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype") );
 
         // collect fonts in font path that could not be registered
         osl::Directory aFontDir( aFontDirUrl );
@@ -2351,7 +2351,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
             String aEmptyString;
 
             ::rtl::OUString aBootStrap;
-            rtl::Bootstrap::get( String( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aBootStrap );
+            rtl::Bootstrap::get( String( RTL_CONSTASCII_USTRINGPARAM( "OOO_BASE_DIR" ) ), aBootStrap );
             aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
             rtl::Bootstrap aBootstrap( aBootStrap );
             ::rtl::OUString aUserPath;

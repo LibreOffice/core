@@ -1158,11 +1158,7 @@ void GraphicFilter::ImplInit()
 
     if( bUseConfig )
     {
-#if defined WNT || defined OS2
-        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program"));
-#else
         rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program"));
-#endif
         rtl::Bootstrap::expandMacros(url); //TODO: detect failure
         utl::LocalFileHelper::ConvertURLToPhysicalName(url, aFilterPath);
     }

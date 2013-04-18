@@ -169,93 +169,137 @@ End
 
 #endif
 
+ProfileItem gid_Profileitem_Uno_Ure_Internal_Lib_Dir
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "URE_INTERNAL_LIB_DIR";
+    Value = "${ORIGIN}";
+End
+
+ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Dir
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "URE_INTERNAL_JAVA_DIR";
+    Value = "${ORIGIN}/classes";
+End
+
+ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Classpath
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "URE_INTERNAL_JAVA_CLASSPATH";
+    Value = "${URE_MORE_JAVA_TYPES}";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Types
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "UNO_TYPES";
+    Value = "${ORIGIN}/types.rdb ${URE_MORE_TYPES}";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Services
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "UNO_SERVICES";
+    Value = "${ORIGIN}/services.rdb ${URE_MORE_SERVICES}";
+End
+
 ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 1;
+    Order = 6;
     Key = "BUNDLED_EXTENSIONS";
-    Value = "$BRAND_BASE_DIR/share/extensions";
-End
-
-ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
-    ProfileID = gid_Profile_Uno_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "BUNDLED_EXTENSIONS_USER";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
+    Value = "$OOO_BASE_DIR/share/extensions";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_Prereg
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 1;
+    Order = 7;
     Key = "BUNDLED_EXTENSIONS_PREREG";
-    Value = "$BRAND_BASE_DIR/share/prereg/bundled";
+    Value = "$OOO_BASE_DIR/share/prereg/bundled";
 End
 
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 8;
+    Key = "BUNDLED_EXTENSIONS_USER";
+    Value = "${$OOO_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
+End
 
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 1;
+    Order = 9;
     Key = "UNO_SHARED_PACKAGES";
-    Value = "$BRAND_BASE_DIR/share/uno_packages";
+    Value = "$OOO_BASE_DIR/share/uno_packages";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages_Cache
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 2;
+    Order = 10;
     Key = "UNO_SHARED_PACKAGES_CACHE";
     Value = "$UNO_SHARED_PACKAGES/cache";
-End
-
-ProfileItem gid_Profileitem_Uno_Uno_Shared_Extensions_User
-    ProfileID = gid_Profile_Uno_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "SHARED_EXTENSIONS_USER";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/shared";
-End
-
-ProfileItem gid_Profileitem_Uno_Uno_User_Packages
-    ProfileID = gid_Profile_Uno_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 3;
-    Key = "UNO_USER_PACKAGES";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/uno_packages";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Bundled_Tmp_Extensions
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 1;
+    Order = 11;
     Key = "TMP_EXTENSIONS";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/tmp";
+    Value = "${$OOO_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/tmp";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Shared_Extensions_User
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 12;
+    Key = "SHARED_EXTENSIONS_USER";
+    Value = "${$OOO_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/shared";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_User_Packages
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 13;
+    Key = "UNO_USER_PACKAGES";
+    Value = "${$OOO_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/uno_packages";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Bundled_Bak_Extensions
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 1;
+    Order = 14;
     Key = "BAK_EXTENSIONS";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bak";
+    Value = "${$OOO_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bak";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_User_Packages_Cache
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 4;
+    Order = 15;
     Key = "UNO_USER_PACKAGES_CACHE";
     Value = "$UNO_USER_PACKAGES/cache";
 End
@@ -263,7 +307,7 @@ ProfileItem gid_Profileitem_Uno_Pkg_BundledUnoFile
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 5;
+    Order = 16;
     Key = "PKG_BundledUnoFile";
     Value = "$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
 End
@@ -272,7 +316,7 @@ ProfileItem gid_Profileitem_Uno_Pkg_SharedUnoFile
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 5;
+    Order = 17;
     Key = "PKG_SharedUnoFile";
     Value = "$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
 End
@@ -281,9 +325,28 @@ ProfileItem gid_Profileitem_Uno_Pkg_UserUnoFile
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 6;
+    Order = 18;
     Key = "PKG_UserUnoFile";
     Value = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+End
+
+#ifdef JSC
+// JSC, will be removed soon
+ProfileItem gid_Profileitem_Fundamentalbasis_Brand_Base_Dir
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "BRAND_BASE_DIR";
+    Value = "${ORIGIN}/..";
+End
+#endif
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ooo_Base_Dir
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "OOO_BASE_DIR";
+    Value = "${ORIGIN}/..";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Bundled_Extensions
@@ -355,7 +418,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Types
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_TYPES";
-    Value = "$ORIGIN/offapi.rdb $ORIGIN/oovbaapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
+    Value = "$ORIGIN/oovbaapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Services
@@ -363,7 +426,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Services
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_SERVICES";
-    Value = "${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_SERVICES} $ORIGIN/services.rdb";
+    Value = "${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_SERVICES}";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Java_Types
@@ -379,7 +442,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_Shared_Data
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_OVERRIDE_JAVA_JFW_SHARED_DATA";
-    Value = "${BRAND_BASE_DIR}/share/config/javasettings_${_OS}_${_ARCH}.xml";
+    Value = "${OOO_BASE_DIR}/share/config/javasettings_${_OS}_${_ARCH}.xml";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_User_Data
@@ -387,7 +450,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_User_Data
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_OVERRIDE_JAVA_JFW_USER_DATA";
-    Value = "${${BRAND_BASE_DIR}/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/config/javasettings_${_OS}_${_ARCH}.xml";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/config/javasettings_${_OS}_${_ARCH}.xml";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Classpath_Urls
@@ -413,9 +476,11 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Bin_Dir
     Section = "Bootstrap";
     Key = "URE_BIN_DIR";
 #if defined(WNT) || defined(OS2)
-    Value = "${.link:$ORIGIN/../ure-link}/bin";
+    Value = "$ORIGIN";
+//    Value = "${.link:$ORIGIN/../ure-link}/bin";
 #else
-    Value = "$ORIGIN/../ure-link/bin";
+    Value = "$ORIGIN";
+//    Value = "$ORIGIN/../ure-link/bin";
 #endif
 End
 
@@ -425,13 +490,17 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Lib_Dir
     Section = "Bootstrap";
     Key = "URE_LIB_DIR";
 #if defined(WNT) || defined(OS2)
-    Value = "${.link:$ORIGIN/../ure-link}/bin";
+    Value = "$ORIGIN";
+//    Value = "${.link:$ORIGIN/../ure-link}/bin";
 #else
-    Value = "$ORIGIN/../ure-link/lib";
+    Value = "$ORIGIN";
+//    Value = "$ORIGIN/../ure-link/lib";
 #endif
 End
 
 // Basis layer: gid_Profile_Version_Ini_Basis
+
+#if defined(JSC)
 
 ProfileItem gid_Basis_Profileitem_Version_Buildid
     ProfileID = gid_Profile_Version_Ini_Basis;
@@ -496,3 +565,5 @@ ProfileItem gid_Basis_Profileitem_Version_Ooopackageversion
     Key = "OOOPackageVersion";
     Value = "${OOOPACKAGEVERSION}";
 End
+
+#endif // JSC

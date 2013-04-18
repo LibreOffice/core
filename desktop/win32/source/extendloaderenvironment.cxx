@@ -145,18 +145,19 @@ void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
         exclude1 = true;
     }
     WCHAR * pad2 = exclude1 ? pad : padEnd + 1;
-    pathEnd = tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link"));
+//    pathEnd = tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link"));
+    pathEnd = tools::buildPath(path, path, pathEnd, MY_STRING(L""));
     if (pathEnd == NULL) {
         fail();
     }
-    pathEnd = tools::resolveLink(path);
-    if (pathEnd == NULL) {
-        fail();
-    }
-    padEnd = tools::buildPath(pad2, path, pathEnd, MY_STRING(L"\\bin"));
-    if (padEnd == NULL) {
-        fail();
-    }
+    // pathEnd = tools::resolveLink(path);
+    // if (pathEnd == NULL) {
+    //     fail();
+    // }
+    // padEnd = tools::buildPath(pad2, path, pathEnd, MY_STRING(L"\\bin"));
+    // if (padEnd == NULL) {
+    //     fail();
+    // }
     bool exclude2 = contains(env, pad2, padEnd);
     if (!(exclude1 && exclude2)) {
         if (!(exclude1 || exclude2)) {

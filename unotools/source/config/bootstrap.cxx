@@ -148,7 +148,7 @@ namespace utl
             // s_pData = &s_theData;
             rtl::OUString uri;
             rtl::Bootstrap::get(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OOO_BASE_DIR")), uri);
             s_pData = new Impl(uri + OUString(RTL_CONSTASCII_USTRINGPARAM( "/program/" BOOTSTRAP_DATA_NAME)));
         }
         return *s_pData;
@@ -908,7 +908,7 @@ sal_Bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rVa
     // try to open version.ini (versionrc)
     rtl::OUString uri;
     rtl::Bootstrap::get(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OOO_BASE_DIR")), uri);
     rtl::Bootstrap aData( uri +
                           OUString(RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE("version"))) );
     if ( aData.getHandle() == NULL )

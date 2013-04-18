@@ -23,41 +23,52 @@
 
 #include "macros.inc"
 
-#ifndef MACOSX
+//#ifndef MACOSX
 Directory gid_Dir_Common_Ure
-  #if defined(WNT) || defined(OS2)
+#ifndef MACOSX
     ParentID = gid_Dir_Brand_Root;
-  #else
-    ParentID = gid_Dir_Ooo_Openofficeorg;
-  #endif
-  #if defined(WNT) || defined(OS2)
-    HostName = "URE";
-  #else
-    HostName = "ure";
-  #endif
+#else
+    ParentID = gid_Dir_Bundle_Contents
+#endif
+    HostName = "program";
     Styles = (UREDIRECTORY);
 End
-#endif
 
-#if defined(WNT) || defined(OS2)
-File gid_File_UreLink
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Ooo_Basis;
-    Name = "ure-link";
-    Styles = (PACKED);
-End
-#elif defined MACOSX
-Directory gid_Dir_UreLink
-    ParentID = gid_Brand_Dir_BasisLink;
-    DosName = "ure-link";
-End
-#else
-Unixlink gid_Unixlink_UreLink
-    BIN_FILE_BODY;
-    Styles = ();
-    // Styles = (LAYERLINK);
-    Name = "ure-link";
-    Dir = gid_Dir_Ooo_Basis;
-    Target = "../ure";
-End
-#endif
+//#ifndef MACOSX
+//Directory gid_Dir_Common_Ure
+// #if defined(WNT) || defined(OS2)
+//   ParentID = gid_Dir_Brand_Root;
+// #else
+//   ParentID = gid_Dir_Ooo_Openofficeorg;
+//  #endif
+//  #if defined(WNT) || defined(OS2)
+//    HostName = "URE";
+//  #else
+//    HostName = "ure";
+//  #endif
+//    Styles = (UREDIRECTORY);
+//End
+//#endif
+
+//#if defined(WNT) || defined(OS2)
+//File gid_File_UreLink
+//    TXT_FILE_BODY;
+//    Dir = gid_Dir_Ooo_Basis;
+//    Name = "ure-link";
+//    Styles = (PACKED);
+//End
+//#elif defined MACOSX
+//Directory gid_Dir_UreLink
+//    ParentID = gid_Brand_Dir_BasisLink;
+//    DosName = "ure-link";
+//End
+//#else
+//Unixlink gid_Unixlink_UreLink
+//   BIN_FILE_BODY;
+//    Styles = ();
+//    // Styles = (LAYERLINK);
+//    Name = "ure-link";
+//    Dir = gid_Dir_Ooo_Basis;
+//    Target = "../ure";
+//End
+//#endif

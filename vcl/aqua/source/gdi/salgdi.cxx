@@ -1718,17 +1718,17 @@ static bool AddLocalTempFontDirs( void )
         return false;
     bFirst = false;
 
-    // add private font files found in brand and base layer
+    // add private font files found in office base dir
 
-    rtl::OUString aBrandStr( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR" ) );
-    rtl_bootstrap_expandMacros( &aBrandStr.pData );
-    rtl::OUString aBrandSysPath;
-    OSL_VERIFY( osl_getSystemPathFromFileURL( aBrandStr.pData, &aBrandSysPath.pData ) == osl_File_E_None );
+    // rtl::OUString aBrandStr( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR" ) );
+    // rtl_bootstrap_expandMacros( &aBrandStr.pData );
+    // rtl::OUString aBrandSysPath;
+    // OSL_VERIFY( osl_getSystemPathFromFileURL( aBrandStr.pData, &aBrandSysPath.pData ) == osl_File_E_None );
 
-    rtl::OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
-    aBrandFontDir.append( rtl::OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
-    aBrandFontDir.append( "/share/fonts/truetype/" );
-    bool bBrandSuccess = AddTempFontDir( aBrandFontDir.getStr() );
+    // rtl::OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
+    // aBrandFontDir.append( rtl::OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
+    // aBrandFontDir.append( "/share/fonts/truetype/" );
+    // bool bBrandSuccess = AddTempFontDir( aBrandFontDir.getStr() );
 
     rtl::OUString aBaseStr( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR" ) );
     rtl_bootstrap_expandMacros( &aBaseStr.pData );
@@ -1740,7 +1740,8 @@ static bool AddLocalTempFontDirs( void )
     aBaseFontDir.append( "/share/fonts/truetype/" );
     bool bBaseSuccess = AddTempFontDir( aBaseFontDir.getStr() );
 
-    return bBrandSuccess && bBaseSuccess;
+//    return bBrandSuccess && bBaseSuccess;
+    return bBaseSuccess;
 }
 
 void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )

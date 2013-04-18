@@ -540,7 +540,8 @@ static std::queue< std::_tstring > getProfileKeys( const std::_tstring& aFileNam
 extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 {
     std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-    std::_tstring   sProgramDir = sInstDir + TEXT("Basis\\program\\");
+//  std::_tstring   sProgramDir = sInstDir + TEXT("Basis\\program\\");
+    std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
     std::queue< std::_tstring > aSectionNames;

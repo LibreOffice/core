@@ -43,6 +43,7 @@ End
 
 Profile gid_Profile_Fundamentalbasis_Ini
     ModuleID = gid_Module_Root;
-    Name = PROFILENAME(fundamentalbasis);
+    Name = PROFILENAME(fundamental);
+//    Name = PROFILENAME(fundamentalbasis);
     Dir = gid_Dir_Program;
 End

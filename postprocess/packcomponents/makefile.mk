@@ -35,6 +35,24 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
 my_components = \
+    acceptor \
+    binaryurp \
+    bootstrap \
+    connector \
+    introspection \
+    invocadapt \
+    invocation \
+    javaloader \
+    javavm \
+    juh \
+    namingservice \
+    proxyfac \
+    reflection \
+    stocservices \
+    streams \
+    textinstream \
+    textoutstream \
+    uuresolver \
     abp \
     adabasui \
     analysis \
@@ -110,6 +128,7 @@ my_components = \
     lnth \
     localebe1 \
     log \
+    mailmerge \
     mcnttype \
     migrationoo2 \
     msfilter \

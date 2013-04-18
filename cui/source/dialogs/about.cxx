@@ -71,7 +71,7 @@
 #define NOTICE_FILE     "NOTICE"  FILE_EXTENSION
 
 // Dir where the files are located
-#define BRAND_DIR_SHARE_README  "${BRAND_BASE_DIR}/share/readme/"
+#define OOO_DIR_SHARE_README  "${OOO_BASE_DIR}/share/readme/"
 
 using namespace com::sun::star;
 
@@ -219,13 +219,13 @@ namespace
         maTabCtrl.Show();
 
         // Notice and License are not localized
-        const rtl::OUString sLicense( RTL_CONSTASCII_USTRINGPARAM( BRAND_DIR_SHARE_README LICENSE_FILE ) );
-        const rtl::OUString sNotice( RTL_CONSTASCII_USTRINGPARAM(  BRAND_DIR_SHARE_README NOTICE_FILE ) );
+        const rtl::OUString sLicense( RTL_CONSTASCII_USTRINGPARAM( OOO_DIR_SHARE_README LICENSE_FILE ) );
+        const rtl::OUString sNotice( RTL_CONSTASCII_USTRINGPARAM(  OOO_DIR_SHARE_README NOTICE_FILE ) );
 
         // get localized README
         rtl::OUStringBuffer aBuff;
         lang::Locale aLocale = Application::GetSettings().GetUILocale();
-        aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( BRAND_DIR_SHARE_README README_FILE "_" ) );
+        aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( OOO_DIR_SHARE_README README_FILE "_" ) );
         aBuff.append( aLocale.Language );
         if ( aLocale.Country.getLength() )
         {
@@ -350,6 +350,7 @@ void AboutDialog::ApplyStyleSettings()
     Color aWindowColor( rSettings.GetWindowColor() );
     Wallpaper aWall( aWindowColor );
     SetBackground( aWall );
+
     Font aNewFont( maCopyrightEdit.GetFont() );
     aNewFont.SetTransparent( sal_True );
 
@@ -517,6 +518,13 @@ sal_Bool AboutDialog::Close()
 void AboutDialog::Paint( const Rectangle& rRect )
 {
     SetClipRegion( rRect );
+
+    // workaround to ensure that the background is painted correct
+    // on MacOS for exmaple the background was grey and the image and other controls white
+    SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
+    SetLineColor();
+    DrawRect(rRect);
+
     DrawImage( maMainLogoPos, maMainLogo );
     DrawImage( maAppLogoPos, maAppLogo );
 

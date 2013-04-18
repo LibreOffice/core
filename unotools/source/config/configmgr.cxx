@@ -487,7 +487,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         rtl::OUString name(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${BRAND_BASE_DIR}/program/edition/edition.ini")));
+                    "${OOO_BASE_DIR}/program/edition/edition.ini")));
         rtl::Bootstrap::expandMacros(name);
         if (rtl::Bootstrap(name).getFrom(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EDITIONNAME")),

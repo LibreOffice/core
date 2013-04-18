@@ -120,7 +120,7 @@ static inline rtl::OUString getBuildId()
 //------------------------------------------------------------------------------
 static inline rtl::OUString getBaseInstallation()
 {
-    rtl::OUString aPathVal(UNISTRING("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":BaseInstallation}"));
+    rtl::OUString aPathVal(UNISTRING("${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":BaseInstallation}"));
     rtl::Bootstrap::expandMacros(aPathVal);
     return aPathVal;
 }

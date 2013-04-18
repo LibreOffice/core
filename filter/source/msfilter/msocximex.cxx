@@ -5306,7 +5306,7 @@ sal_Bool OCX_Image::Read(SotStorageStream *pS)
 
         pS->Seek( imagePos );
 
-        sImageUrl =  C2U("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/") + C2U( SAL_CONFIGFILE( "bootstrap" ) ) + C2U("::UserInstallation}/user/temp/") + sName;
+        sImageUrl =  C2U("vnd.sun.star.expand:${$OOO_BASE_DIR/program/") + C2U( SAL_CONFIGFILE( "bootstrap" ) ) + C2U("::UserInstallation}/user/temp/") + sName;
 
         sal_uInt8* pImage = new sal_uInt8[ nImageLen ];
         pS->Read(pImage, nImageLen);

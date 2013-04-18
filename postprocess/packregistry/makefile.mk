@@ -63,15 +63,15 @@ MY_FILES_base = \
     $(MY_MOD)/org/openoffice/Office/Common-base.xcu \
     $(MY_MOD)/org/openoffice/Setup-base.xcu
 
-MY_FILES_brand = \
-    $(MY_XCU)/Office/Compatibility.xcu \
-    $(MY_MOD)/org/openoffice/Office/Common-brand.xcu \
-    $(MY_MOD)/org/openoffice/Office/UI-brand.xcu \
-    $(MY_MOD)/org/openoffice/Setup-brand.xcu
-.IF "$(ENABLE_SVCTAGS)" == "YES"
-MY_FILES_brand += \
-    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
-.END
+#MY_FILES_brand = \
+#    $(MY_XCU)/Office/Compatibility.xcu \
+#    $(MY_MOD)/org/openoffice/Office/Common-brand.xcu \
+#    $(MY_MOD)/org/openoffice/Office/UI-brand.xcu \
+#    $(MY_MOD)/org/openoffice/Setup-brand.xcu
+#.IF "$(ENABLE_SVCTAGS)" == "YES"
+#MY_FILES_brand += \
+#    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
+#.END
 
 MY_DEPS_calc = main
 MY_FILES_calc = \
@@ -230,6 +230,7 @@ MY_FILES_main = \
     $(MY_XCU)/Office/Calc.xcu \
     $(MY_XCU)/Office/Canvas.xcu \
     $(MY_XCU)/Office/Common.xcu \
+    $(MY_XCU)/Office/Compatibility.xcu \
     $(MY_XCU)/Office/DataAccess.xcu \
     $(MY_XCU)/Office/Embedding.xcu \
     $(MY_XCU)/Office/ExtensionDependencies.xcu \
@@ -289,13 +290,20 @@ MY_FILES_main = \
     $(MY_MOD)/fcfg_chart_types.xcu \
     $(MY_MOD)/fcfg_internalgraphics_filters.xcu \
     $(MY_MOD)/fcfg_internalgraphics_types.xcu \
+    $(MY_MOD)/org/openoffice/Office/Common-brand.xcu \
     $(MY_MOD)/org/openoffice/Office/Embedding-chart.xcu \
+    $(MY_MOD)/org/openoffice/Office/UI-brand.xcu \
+    $(MY_MOD)/org/openoffice/Setup-brand.xcu \
     $(MY_MOD)/org/openoffice/Setup-start.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-calc.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-draw.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-impress.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-math.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-writer.xcu
+.IF "$(ENABLE_SVCTAGS)" == "YES"
+MY_FILES_main += \
+    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
+.END
 .IF "$(GUIBASE)" == "aqua"
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/macab.xcu \

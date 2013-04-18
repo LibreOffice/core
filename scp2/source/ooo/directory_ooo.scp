@@ -69,36 +69,47 @@ End
 Directory gid_Dir_Ooo_Openofficeorg
     ParentID = PREDEFINED_PROGDIR;
   #if defined(WNT) || defined(OS2)
-    HostName = "${BASISROOTNAME}";
+    HostName = "${PRODUCTNAME} ${BRANDPACKAGEVERSION}";
   #else
-    HostName = "${UNIXBASISROOTNAME}";
+    HostName = "${UNIXPRODUCTNAME}${BRANDPACKAGEVERSION}";
   #endif
+//    ParentID = PREDEFINED_PROGDIR;
+//  #if defined(WNT) || defined(OS2)
+//    HostName = "${BASISROOTNAME}";
+//  #else
+//    HostName = "${UNIXBASISROOTNAME}";
+//  #endif
 End
 #endif
 
 #ifndef MACOSX
 Directory gid_Dir_Ooo_Basis
-  #if defined(WNT) || defined(OS2)
-    ParentID = gid_Dir_Brand_Root;
-  #else
     ParentID = gid_Dir_Ooo_Openofficeorg;
-  #endif
-  #if defined(WNT) || defined(OS2)
-    HostName = "Basis";
-  #else
-    HostName = "basis${OOOBASEVERSION}";
-  #endif
+    HostName = "";
     Styles = (BASISDIRECTORY);
+//  #if defined(WNT) || defined(OS2)
+//    ParentID = gid_Dir_Brand_Root;
+//  #else
+//    ParentID = gid_Dir_Ooo_Openofficeorg;
+//  #endif
+//  #if defined(WNT) || defined(OS2)
+//    HostName = "";
+//  #else
+//    HostName = "basis${OOOBASEVERSION}";
+//  #endif
+//    Styles = (BASISDIRECTORY);
 End
 #endif
 
 Directory gid_Dir_Program
 #if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Brand_Dir_BasisLink;
 #else
-    ParentID = gid_Dir_Ooo_Basis;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Ooo_Basis;
 #endif
-    DosName = "program";
+    DosName = "";
 End
 
 #if defined MACOSX
@@ -163,7 +174,7 @@ End
 
 Directory gid_Dir_User
 #if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
+    ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Ooo_Basis;
 #endif
@@ -342,7 +353,7 @@ End
 
 Directory gid_Dir_Share
 #if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
+    ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Ooo_Basis;
 #endif
@@ -1236,18 +1247,26 @@ Directory gid_Dir_Share_Fingerprint
     DosName = "fingerprint";
 End
 
+
+#ifndef MACOSX
 Directory gid_Dir_Basis_Sdk
-#if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
-#else
     ParentID = gid_Dir_Ooo_Basis;
-#endif
     DosName = "sdk";
 End
+#endif
+
+//Directory gid_Dir_Basis_Sdk
+//#if defined MACOSX
+//    ParentID = gid_Brand_Dir_BasisLink;
+//#else
+//    ParentID = gid_Dir_Ooo_Basis;
+//#endif
+//    DosName = "sdk";
+//End
 
 Directory gid_Dir_Help
 #if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
+    ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Ooo_Basis;
 #endif
