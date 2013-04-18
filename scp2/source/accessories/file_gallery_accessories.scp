@@ -62,33 +62,38 @@ File gid_File_Extra_Gallery_Photos_Celebration_Accessories
 End
 
 File gid_File_Extra_Gallery_Photos_Fauna_Accessories
-    Dir = gid_Dir_Gallery_Photos_Fauna;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotosfauna.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotosfauna.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Flowers_Accessories
-    Dir = gid_Dir_Gallery_Photos_Flowers;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotosflowers.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotosflowers.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_FoodsandDrinks_Accessories
-    Dir = gid_Dir_Gallery_Photos_FoodsandDrinks;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotosfoodsanddrinks.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotosfoodsanddrinks.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Humans_Accessories
-    Dir = gid_Dir_Gallery_Photos_Humans;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotoshumans.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotoshumans.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Landscapes_Accessories
-    Dir = gid_Dir_Gallery_Photos_Landscapes;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotoslandscapes.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotoslandscapes.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Buildings_Accessories
@@ -99,9 +104,10 @@ File gid_File_Extra_Gallery_Photos_Buildings_Accessories
 End
 
 File gid_File_Extra_Gallery_Photos_Objects_Accessories
-    Dir = gid_Dir_Gallery_Photos_Objects;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotosobjects.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotosobjects.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Cities_Accessories
@@ -112,21 +118,24 @@ File gid_File_Extra_Gallery_Photos_Cities_Accessories
 End
 
 File gid_File_Extra_Gallery_Photos_Space_Accessories
-    Dir = gid_Dir_Gallery_Photos_Space;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotosspace.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotosspace.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Statues_Accessories
-    Dir = gid_Dir_Gallery_Photos_Statues;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotosstatues.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotosstatues.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Travel_Accessories
-    Dir = gid_Dir_Gallery_Photos_Travel;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "accessoriesgalleryphotostravel.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_accessoriesgalleryphotostravel.filelist";
 End
 
 File gid_File_Extra_Gallery_Elements_Bullets2_Accessories
