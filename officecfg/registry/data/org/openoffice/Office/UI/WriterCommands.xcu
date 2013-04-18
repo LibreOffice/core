@@ -380,22 +380,6 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:FlipHorizontal" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Flip Vertically</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:FlipVertical" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Flip Horizontally</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
             <node oor:name=".uno:FootnoteDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Footnotes/Endnotes...</value>
@@ -1188,6 +1172,11 @@
                     <value xml:lang="en-US">Page Columns</value>
                 </prop>
             </node>
+            <node oor:name=".uno:PageColumnType" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Page Column Type</value>
+                </prop>
+            </node>
             <node oor:name=".uno:PageDown" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Next Page</value>
@@ -1549,11 +1538,6 @@
             <node oor:name=".uno:SwBackspace" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Backspace</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:SwPageColumnType" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Page Column Type</value>
                 </prop>
             </node>
             <node oor:name=".uno:TableBoundaries" oor:op="replace">

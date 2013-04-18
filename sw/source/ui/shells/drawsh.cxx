@@ -169,12 +169,10 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             }
             break;
 
-        case FN_FLIP_HORZ_GRAFIC:
-        case SID_FLIP_HORIZONTAL:
+        case SID_FLIP_VERTICAL:
             bMirror = sal_False;
             /* no break */
-        case FN_FLIP_VERT_GRAFIC:
-        case SID_FLIP_VERTICAL:
+        case SID_FLIP_HORIZONTAL:
             rSh.MirrorSelection( bMirror );
             break;
 
@@ -348,16 +346,30 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     rSet.Put( SfxBoolItem( nWhich, !GetView().IsDrawSelMode()));
             break;
 
-            case FN_FLIP_HORZ_GRAFIC:
-            case SID_FLIP_HORIZONTAL:
-                if ( !pSdrView->IsMirrorAllowed() || bProtected )
-                    rSet.DisableItem( nWhich );
-                break;
-
-            case FN_FLIP_VERT_GRAFIC:
             case SID_FLIP_VERTICAL:
                 if ( !pSdrView->IsMirrorAllowed() || bProtected )
+                {
                     rSet.DisableItem( nWhich );
+                }
+                else
+                {
+                    // TTTT - needs to be adapted in aw080:
+                    // state is not kept for drawing objects --> provide not flipped state
+                    rSet.Put( SfxBoolItem( nWhich, sal_False ) );
+                }
+                break;
+
+            case SID_FLIP_HORIZONTAL:
+                if ( !pSdrView->IsMirrorAllowed() || bProtected )
+                {
+                    rSet.DisableItem( nWhich );
+                }
+                else
+                {
+                    // TTTT - needs to be adapted in aw080:
+                    // state is not kept for drawing objects --> provide not flipped state
+                    rSet.Put( SfxBoolItem( nWhich, sal_False ) );
+                }
                 break;
 
             case SID_FONTWORK:

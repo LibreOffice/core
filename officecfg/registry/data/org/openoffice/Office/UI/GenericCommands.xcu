@@ -5147,14 +5147,20 @@
                     <value>9</value>
                 </prop>
             </node>
-            <node oor:name=".uno:SvxFlipHorizontal" oor:op="replace">
+            <node oor:name=".uno:FlipHorizontal" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Flip Horizontally</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
-            <node oor:name=".uno:SvxFlipVertical" oor:op="replace">
+            <node oor:name=".uno:FlipVertical" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Flip Vertically</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SwEditOptions" oor:op="replace">
@@ -5498,7 +5504,7 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:TransAngle" oor:op="replace">
+            <node oor:name=".uno:TransformRotationAngle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Rotation Angle</value>
                 </prop>
@@ -5511,12 +5517,12 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:TransRotX" oor:op="replace">
+            <node oor:name=".uno:TransformRotationX" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Rotation Pivot Point X</value>
                 </prop>
             </node>
-            <node oor:name=".uno:TransRotY" oor:op="replace">
+            <node oor:name=".uno:TransformRotationY" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Rotation Pivot Point Y</value>
                 </prop>
@@ -5841,7 +5847,7 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:FontDialogEff" oor:op="replace">
+            <node oor:name=".uno:FontEffectsDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Character Font Effects...</value>
                 </prop>

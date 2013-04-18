@@ -467,8 +467,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_INDENT_TO_TABSTOP    (FN_FORMAT + 17) /* Einrueckung auf die naechste Tabpostion */
 //schon in svxids.hrc
 //#define FN_SET_JUSTIFY_PARA   (FN_FORMAT + 21) /* Ausrichtung Absatz */
-#define FN_FLIP_HORZ_GRAFIC     (FN_FORMAT + 25) /* Spiegeln horizontal */
-#define FN_FLIP_VERT_GRAFIC     (FN_FORMAT + 26) /* Spiegeln vertikal */
 #define FN_SET_LINE_SPACE       (FN_FORMAT + 27) /* Zeilenabstand parametrisiert */
 #define FN_SET_ADJUST           (FN_FORMAT + 28) /* Ausrichtung parametrisiert */
 #define FN_SET_LRMARGIN         (FN_FORMAT + 29) /* linker/rechter Rand */
