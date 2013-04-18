@@ -47,9 +47,6 @@ Module gid_Module_Optional_Gnome
 #ifdef ENABLE_GTK3
       gid_File_Lib_Vclplug_Gtk3,
 #endif
-#ifdef ENABLE_SYSTRAY_GTK
-      gid_File_Lib_QStart_Gtk,
-#endif
 #ifdef ENABLE_GNOMEVFS
       gid_File_Lib_Gnomevfs, gid_File_Bin_Gnome_Set_Default_Application,
 #endif

@@ -35,7 +35,6 @@
 #include <osl/module.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <cppuhelper/compbase4.hxx>
-#include <sfx2/dllapi.h>
 
 class ResMgr;
 namespace sfx2
@@ -60,7 +59,7 @@ typedef ::cppu::WeakComponentImplHelper4<
 #define STARTMODULE_URL ".uno:ShowStartModule"
 #endif
 
-class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
+class ShutdownIcon : public ShutdownIconServiceBase
 {
         ::osl::Mutex            m_aMutex;
         bool                    m_bVeto;

@@ -48,12 +48,3 @@ End
 #ifdef ENABLE_GCONF
 STD_LIB_FILE( gid_File_Lib_Gconfbe, gconfbe1 )
 #endif
-
-#ifdef ENABLE_SYSTRAY_GTK
-File gid_File_Lib_QStart_Gtk
-    Name = LIBNAME(qstart_gtk);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-#endif

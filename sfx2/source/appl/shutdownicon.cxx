@@ -80,10 +80,6 @@ extern "C" { static void SAL_CALL thisModule() {} }
 # endif
 #endif
 
-#if defined(UNX) && defined(ENABLE_SYSTRAY_GTK) && !defined(PLUGIN_NAME)
-#define PLUGIN_NAME "libqstart_gtklo.so"
-#endif
-
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper1< XDispatchResultListener >
 {
 public:
@@ -138,44 +134,17 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
     *pDeInit = aqua_shutdown_systray;
     return true;
 #  else // UNX
-    osl::Module *pPlugin;
-    pPlugin = new osl::Module();
-
-    oslGenericFunction pTmpInit = NULL;
-    oslGenericFunction pTmpDeInit = NULL;
-
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
-
-    if ( pPlugin->loadRelative( &thisModule, OUString (STRING( PLUGIN_NAME  ) ) ) )
-    {
-        pTmpInit = pPlugin->getFunctionSymbol(
-            OUString( "plugin_init_sys_tray"  ) );
-        pTmpDeInit = pPlugin->getFunctionSymbol(
-            OUString( "plugin_shutdown_sys_tray"  ) );
-    }
-    if ( !pTmpInit || !pTmpDeInit )
-    {
-        delete pPlugin;
-        pPlugin = NULL;
-    }
     if ( pModule )
     {
-        *pModule = pPlugin;
-        *pInit = pTmpInit;
-        *pDeInit = pTmpDeInit;
+        *pInit = plugin_init_sys_tray;
+        *pDeInit = plugin_shutdown_sys_tray;
     }
-    else
-    {
-        bool bRet = pPlugin != NULL;
-        delete pPlugin;
-        return bRet;
-    }
+    return true;
 #  endif // UNX
 #endif // ENABLE_QUICKSTART_APPLET
 
-#if !defined( ENABLE_QUICKSTART_APPLET ) || defined( UNX )
-    // Avoid unreachable code. In the ENABLE_QUICKSTART_APPLET && !UNX
+#if !defined( ENABLE_QUICKSTART_APPLET )
+    // Avoid unreachable code. In the ENABLE_QUICKSTART_APPLET
     // case, we have already returned.
     if ( pModule )
     {

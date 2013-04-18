@@ -410,7 +410,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 #endif
 }
 
-void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
+void plugin_shutdown_sys_tray()
 {
     ::SolarMutexGuard aGuard;
     if( !pTrayIcon )

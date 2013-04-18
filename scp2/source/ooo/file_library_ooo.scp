@@ -164,19 +164,6 @@ End
 
 #endif
 
-#ifdef UNX
-#ifdef ENABLE_GTK
-#ifdef ENABLE_SYSTRAY_GTK
-File gid_File_Lib_QStart_Gtk
-    Name = LIBNAME(qstart_gtk);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-#endif
-#endif
-#endif
-
 File gid_File_Lib_Dbpool
     LIB_FILE_BODY;
     Styles = (PACKED);

@@ -43,14 +43,6 @@ $(eval $(call gb_Library_add_defs,sfx,\
     $(if $(filter TRUE,$(ENABLE_CUPS)),-DENABLE_CUPS) \
 ))
 
-ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Library_add_defs,sfx,\
-    -DENABLE_QUICKSTART_APPLET \
-    -DENABLE_SYSTRAY_GTK \
-    -DPLUGIN_NAME=libqstart_gtk$(gb_Library_OOOEXT) \
-))
-endif
-
 $(eval $(call gb_Library_use_libraries,sfx,\
     basegfx \
     comphelper \
@@ -285,9 +277,8 @@ $(eval $(call gb_Library_add_libs,sfx,\
 $(eval $(call gb_Library_use_system_darwin_frameworks,sfx,\
     Cocoa \
 ))
-endif
 
-ifeq ($(OS),WNT)
+else ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/shutdowniconw32 \
@@ -300,6 +291,22 @@ $(eval $(call gb_Library_use_system_win32_libs,sfx,\
     ole32 \
     shell32 \
     uuid \
+))
+
+else ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
+
+$(eval $(call gb_Library_add_defs,sfx,\
+    -DENABLE_QUICKSTART_APPLET \
+    -DENABLE_SYSTRAY_GTK \
+))
+
+$(eval $(call gb_Library_use_externals,sfx,\
+	gio \
+	gtk \
+))
+
+$(eval $(call gb_Library_add_exception_objects,sfx,\
+    sfx2/source/appl/shutdowniconunx \
 ))
 
 endif
