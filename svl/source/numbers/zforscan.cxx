@@ -481,9 +481,9 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
         const OUString& rColorWord = rKeyword[NF_KEY_COLOR];
-        sal_Int32 nPos = sString.startsWith(rColorWord);
-        if (nPos > 0)
+        if (sString.startsWith(rColorWord))
         {
+            sal_Int32 nPos = rColorWord.getLength();
             sStr = sStr.copy(nPos);
             sStr = comphelper::string::strip(sStr, ' ');
             if (bConvertMode)
