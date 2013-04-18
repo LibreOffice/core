@@ -58,15 +58,6 @@ void lcl_AdjustControlSize( Control & rControl, long nRightEdge )
 namespace chart
 {
 
-enum StatTrendLine
-{
-    TRENDLINE_NONE,
-    TRENDLINE_LINE,
-    TRENDLINE_LOG,
-    TRENDLINE_EXP,
-    TRENDLINE_POW
-};
-
 TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInAttrs, bool bNoneAvailable ) :
         m_aFLType( pParent, SchResId( FL_TYPE )),
 
