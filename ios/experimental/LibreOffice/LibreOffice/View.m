@@ -46,7 +46,7 @@
     // NSLog(@"drawRect: lo_render_windows took %f s", [[NSDate date] timeIntervalSinceDate: startDate]);
 }
 
-- (void) tapGesture:(UIGestureRecognizer *)gestureRecognizer
+- (void)tapGesture:(UITapGestureRecognizer *)gestureRecognizer
 {
     if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
         CGPoint location = [gestureRecognizer locationInView: self];
@@ -55,6 +55,16 @@
         [self->textView becomeFirstResponder];
     } else
         NSLog(@"tapGesture: %@", gestureRecognizer);
+}
+
+- (void)panGesture:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
+        CGPoint translation = [gestureRecognizer translationInView: self];
+        NSLog(@"panGesture: pan: (%d,%d)", (int)translation.x, (int)translation.y);
+        lo_pan(translation.x, translation.y);
+    } else
+        NSLog(@"panGesture: %@", gestureRecognizer);
 }
 
 @end

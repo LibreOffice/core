@@ -15,7 +15,8 @@
     UITextView* textView;
 }
 - (void)drawRect:(CGRect)rect;
-- (void)tapGesture:(UIGestureRecognizer *)gestureRecognizer;
+- (void)tapGesture:(UITapGestureRecognizer *)gestureRecognizer;
+- (void)panGesture:(UIPanGestureRecognizer *)gestureRecognizer;
 
 @end
 

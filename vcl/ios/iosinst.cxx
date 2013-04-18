@@ -403,6 +403,17 @@ void lo_tap(int x, int y)
 }
 
 extern "C"
+void lo_pan(int x, int y)
+{
+    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
+    if (pFocus) {
+        SAL_INFO( "vcl.ios", "scroll: " << "(" << x << "," << y << ")" );
+        ScrollEvent aEvent( x, y );
+        Application::PostScrollEvent(VCLEVENT_WINDOW_SCROLL, pFocus->GetWindow(), &aEvent);
+    }
+}
+
+extern "C"
 void lo_keyboard_input(int c)
 {
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();

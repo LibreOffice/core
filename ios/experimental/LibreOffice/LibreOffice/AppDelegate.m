@@ -59,8 +59,10 @@ static View *theView;
     self.view->textView.delegate = self;
 
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(tapGesture:)];
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self.view action:@selector(panGesture:)];
 
     [self.window addGestureRecognizer: tapRecognizer];
+    [self.window addGestureRecognizer: panRecognizer];
 
     NSLog(@"statusBarOrientation: %d", [[UIApplication sharedApplication] statusBarOrientation]);
 
