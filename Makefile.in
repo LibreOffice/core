@@ -119,6 +119,7 @@ gbuild_TARGETS := AllLangHelp \
 	PackageSet \
 	Pagein \
 	Pyuno \
+	PythonTest \
 	Rdb \
 	StaticLibrary \
 	UIConfig \
