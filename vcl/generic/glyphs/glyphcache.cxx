@@ -410,9 +410,22 @@ ImplServerFontEntry::ImplServerFontEntry( FontSelectPattern& rFSD )
 
 // -----------------------------------------------------------------------
 
+void ImplServerFontEntry::SetServerFont(ServerFont* p)
+{
+    if (p == mpServerFont)
+        return;
+    if (mpServerFont)
+        mpServerFont->Release();
+    mpServerFont = p;
+    if (mpServerFont)
+        mpServerFont->AddRef();
+}
+
 ImplServerFontEntry::~ImplServerFontEntry()
 {
     // TODO: remove the ServerFont here instead of in the GlyphCache
+    if (mpServerFont)
+        mpServerFont->Release();
 }
 
 // =======================================================================

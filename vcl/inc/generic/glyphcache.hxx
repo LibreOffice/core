@@ -224,6 +224,7 @@ public:
 private:
     friend class GlyphCache;
     friend class ServerFontLayout;
+    friend class ImplServerFontEntry;
     friend class X11SalGraphics;
 
     void                        AddRef() const      { ++mnRefCount; }
@@ -301,7 +302,7 @@ private:
 public:
                    ImplServerFontEntry( FontSelectPattern& );
     virtual        ~ImplServerFontEntry();
-    void           SetServerFont( ServerFont* p) { mpServerFont = p; }
+    void           SetServerFont(ServerFont* p);
     void           HandleFontOptions();
 };
 
