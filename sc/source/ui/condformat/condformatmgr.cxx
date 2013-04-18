@@ -216,8 +216,11 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
         sal_Int32 nKey = pFormat->GetKey();
         mpFormatList->erase(nKey);
         ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
-        pNewFormat->SetKey(nKey);
-        mpFormatList->InsertNew(pNewFormat);
+        if (pNewFormat)
+        {
+            pNewFormat->SetKey(nKey);
+            mpFormatList->InsertNew(pNewFormat);
+        }
         maCtrlManager.Update();
     }
     delete pDlg;
