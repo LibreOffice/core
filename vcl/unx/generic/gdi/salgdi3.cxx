@@ -194,10 +194,10 @@ bool X11SalGraphics::setFont( const FontSelectPattern *pEntry, int nFallbackLeve
 
         // apply font specific-hint settings if needed
         // TODO: also disable it for reference devices
-    if( !bPrinter_ )
-    {
-        ImplServerFontEntry* pSFE = static_cast<ImplServerFontEntry*>( pEntry->mpFontEntry );
-        pSFE->HandleFontOptions();
+        if( !bPrinter_ )
+        {
+            ImplServerFontEntry* pSFE = static_cast<ImplServerFontEntry*>( pEntry->mpFontEntry );
+            pSFE->HandleFontOptions();
         }
 
         return true;
