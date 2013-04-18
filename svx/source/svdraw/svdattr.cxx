@@ -2041,7 +2041,7 @@ XubString __EXPORT SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos) const
 
     if((FieldUnit)nPos == FUNIT_NONE)
     {
-        cont sal_Char aText[] = "default";
+        const sal_Char aText[] = "default";
         aRetval += UniString(aText, sizeof(aText)-1);
     }
     else
