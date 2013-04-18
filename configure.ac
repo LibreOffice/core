@@ -7151,34 +7151,22 @@ AC_SUBST(SYSTEM_EXPAT)
 dnl ===================================================================
 dnl Check for system libcdr
 dnl ===================================================================
-# libcdr depends on libwpd and libwpg and those are LGPL, publishing empty flags
-if test $_os != iOS; then
-    libo_CHECK_SYSTEM_MODULE([libcdr],[CDR],[libcdr-0.0 >= 0.0.5])
-fi
+libo_CHECK_SYSTEM_MODULE([libcdr],[CDR],[libcdr-0.0 >= 0.0.5])
 
 dnl ===================================================================
 dnl Check for system libmspub
 dnl ===================================================================
-# libmspub depends on libwpd and libwpg and those are LGPL, publishing empty flags
-if test $_os != iOS; then
-    libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.0])
-fi
+libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.0])
 
 dnl ===================================================================
 dnl Check for system libmwaw
 dnl ===================================================================
-# libmwaw depends on libwpd that is LGPL, publishing empty flags
-if test $_os != iOS; then
-    libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.1])
-fi
+libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.1])
 
 dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
-# libvisio depends on libwpd and libwpg and those are LGPL, publishing empty flags
-if test $_os != iOS; then
-    libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.0])
-fi
+libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.0])
 
 dnl ===================================================================
 dnl Check for system libcmis
@@ -7188,9 +7176,7 @@ libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.3 >= 0.3.1])
 dnl ===================================================================
 dnl Check for system libwpd
 dnl ===================================================================
-if test $_os != iOS; then
-    libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.9 libwpd-stream-0.9],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpdlib"])
-fi
+libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.9 libwpd-stream-0.9],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpdlib"])
 
 dnl ===================================================================
 dnl Check for system lcms2
@@ -7236,9 +7222,7 @@ fi
 dnl ===================================================================
 dnl Check for system libwpg
 dnl ===================================================================
-if test $_os != iOS; then
-    libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpglib"])
-fi
+libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpglib"])
 
 dnl ===================================================================
 dnl Check whether freetype2 supports emboldening
