@@ -73,7 +73,7 @@ endif
 ifneq ($(DISABLE_PYTHON),TRUE)
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
-	PythonTest_sw_unoapi \
+	PythonTest_sw_python \
 ))
 endif
 endif

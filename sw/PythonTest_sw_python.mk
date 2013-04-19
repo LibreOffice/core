@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_PythonTest_PythonTest,sw_unoapi))
+$(eval $(call gb_PythonTest_PythonTest,sw_python))
 
-$(eval $(call gb_PythonTest_use_configuration,sw_unoapi))
+$(eval $(call gb_PythonTest_use_configuration,sw_python))
 
-$(eval $(call gb_PythonTest_use_api,sw_unoapi,offapi))
+$(eval $(call gb_PythonTest_use_api,sw_python,offapi))
 
-# FAIL: this brings in GconfBackend $(eval $(call gb_PythonTest_use_rdb,sw_unoapi,services))
+# FAIL: this brings in GconfBackend $(eval $(call gb_PythonTest_use_rdb,sw_python,services))
 
-$(eval $(call gb_PythonTest_use_components,sw_unoapi,\
+$(eval $(call gb_PythonTest_use_components,sw_python,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -48,7 +48,7 @@ $(eval $(call gb_PythonTest_use_components,sw_unoapi,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_PythonTest_add_modules,sw_unoapi,$(SRCDIR)/sw/qa/python,\
+$(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	set_expression \
 	get_expression \
 ))

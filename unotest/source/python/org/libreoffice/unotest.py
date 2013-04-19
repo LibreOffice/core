@@ -161,9 +161,7 @@ class UnoConnection:
             finally:
                 self.connection = None
 
-class UnoNotConnection:
-    def __init__(self, args):
-        self.args = args
+class UnoInProcess:
     def getContext(self):
         return self.xContext
     def getDoc(self):
