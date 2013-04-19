@@ -18,8 +18,6 @@
 
 $(eval $(call gb_Library_Library,i18nutil))
 
-$(eval $(call gb_Library_use_package,i18nutil,i18nutil_inc))
-
 $(eval $(call gb_Library_use_externals,i18nutil,\
 	boost_headers \
 	icu_headers \

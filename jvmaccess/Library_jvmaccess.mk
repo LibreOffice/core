@@ -10,7 +10,6 @@
 $(eval $(call gb_Library_Library,jvmaccess))
 
 $(eval $(call gb_Library_use_package,jvmaccess,\
-    jvmaccess_inc \
 ))
 
 $(eval $(call gb_Library_add_defs,jvmaccess,\

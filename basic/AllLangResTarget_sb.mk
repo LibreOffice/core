@@ -27,10 +27,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,sb,\
 $(eval $(call gb_SrsTarget_SrsTarget,sb/res))
 
 $(eval $(call gb_SrsTarget_use_packages,sb/res,\
-	basic_inc \
-	svl_inc \
-	svtools_inc \
-	tools_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,sb/res,\

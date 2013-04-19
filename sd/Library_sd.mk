@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_sdi_headers,sd,\
 ))
 
 $(eval $(call gb_Library_use_packages,sd,\
-	animations_inc \
 	bluez_bluetooth_inc \
 ))
 

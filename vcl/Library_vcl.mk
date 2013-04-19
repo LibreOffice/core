@@ -42,8 +42,6 @@ else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
 
-$(eval $(call gb_Library_use_package,vcl,vcl_inc))
-
 $(eval $(call gb_Library_set_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
 
 $(eval $(call gb_Library_use_custom_headers,vcl,vcl/generic/fontmanager))
@@ -347,7 +345,6 @@ $(eval $(call gb_Library_use_external,vcl,graphite))
 endif
 
 $(eval $(call gb_Library_use_packages,vcl,\
-	basebmp_inc \
 ))
 
 vcl_quartz_code= \

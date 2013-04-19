@@ -35,12 +35,7 @@ $(eval $(call gb_AllLangResTarget_add_srs,basctl,\
 $(eval $(call gb_SrsTarget_SrsTarget,basctl/res))
 
 $(eval $(call gb_SrsTarget_use_packages,basctl/res,\
-	editeng_inc \
-	sfx2_inc \
-	svl_inc \
-	svtools_inc \
 	svx_globlmn_hrc \
-	svx_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,basctl/res,\

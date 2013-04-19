@@ -27,7 +27,6 @@
 $(eval $(call gb_Library_Library,reg))
 
 $(eval $(call gb_Library_use_packages,reg,\
-	registry_inc \
 ))
 
 $(eval $(call gb_Library_add_defs,reg,\

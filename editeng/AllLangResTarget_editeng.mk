@@ -25,7 +25,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,editeng, editeng/res))
 $(eval $(call gb_SrsTarget_SrsTarget,editeng/res))
 
 $(eval $(call gb_SrsTarget_use_packages,editeng/res,\
-	svl_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,editeng/res,\

@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,fps_aqua))
 $(eval $(call gb_Library_set_componentfile,fps_aqua,fpicker/source/aqua/fps_aqua))
 
 $(eval $(call gb_Library_use_packages,fps_aqua,\
-	vcl_inc \
 ))
 
 $(eval $(call gb_Library_use_external,fps_aqua,boost_headers))

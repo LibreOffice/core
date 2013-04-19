@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,unotest))
 
-$(eval $(call gb_Library_use_package,unotest,unotest_inc))
-
 $(eval $(call gb_Library_add_defs,unotest,\
 	-DOOO_DLLIMPLEMENTATION_UNOTEST \
 ))

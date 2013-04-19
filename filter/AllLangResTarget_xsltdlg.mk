@@ -25,7 +25,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,xsltdlg,\
 $(eval $(call gb_SrsTarget_SrsTarget,filter/xsltdlg))
 
 $(eval $(call gb_SrsTarget_use_packages,filter/xsltdlg,\
-	svl_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,filter/xsltdlg,\

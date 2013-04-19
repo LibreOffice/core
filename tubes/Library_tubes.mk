@@ -10,8 +10,6 @@
 
 $(eval $(call gb_Library_Library,tubes))
 
-$(eval $(call gb_Library_use_packages,tubes,tubes_inc))
-
 $(eval $(call gb_Library_set_include,tubes,\
 	-I$(SRCDIR)/tubes/inc \
 	$$(INCLUDE) \

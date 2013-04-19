@@ -10,7 +10,6 @@
 $(eval $(call gb_Library_Library,for))
 
 $(eval $(call gb_Library_use_package,for,\
-	formula_inc \
 ))
 
 $(eval $(call gb_Library_set_include,for,\

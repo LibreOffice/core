@@ -42,7 +42,6 @@ $(eval $(call gb_SrsTarget_add_files,fwe/fwk_classes,\
 $(eval $(call gb_SrsTarget_SrsTarget,fwe/fwk_services))
 
 $(eval $(call gb_SrsTarget_use_packages,fwe/fwk_services,\
-	svl_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,fwe/fwk_services,\

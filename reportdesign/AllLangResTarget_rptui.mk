@@ -35,11 +35,7 @@ $(eval $(call gb_AllLangResTarget_add_srs,rptui,reportdesign/rptui))
 $(eval $(call gb_SrsTarget_SrsTarget,reportdesign/rptui))
 
 $(eval $(call gb_SrsTarget_use_packages,reportdesign/rptui,\
-	editeng_inc \
-	sfx2_inc \
-	svl_inc \
 	svx_globlmn_hrc \
-	svx_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,reportdesign/rptui,\

@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Library_Library,test))
 
-$(eval $(call gb_Library_use_package,test,test_inc))
-
 $(eval $(call gb_Library_add_defs,test,\
     -DOOO_DLLIMPLEMENTATION_TEST \
 ))

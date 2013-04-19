@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,lng))
 
-$(eval $(call gb_Library_use_package,lng,linguistic_inc))
-
 $(eval $(call gb_Library_set_componentfile,lng,linguistic/source/lng))
 
 $(eval $(call gb_Library_set_include,lng,\

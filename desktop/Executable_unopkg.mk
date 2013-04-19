@@ -10,7 +10,6 @@
 $(eval $(call gb_Executable_Executable,unopkg))
 
 $(eval $(call gb_Executable_use_packages,unopkg,\
-    sal_inc \
 ))
 
 $(eval $(call gb_Executable_set_targettype_gui,unopkg,YES))

@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,xmlreader))
 
-$(eval $(call gb_Library_use_package,xmlreader,xmlreader_inc))
-
 $(eval $(call gb_Library_add_defs,xmlreader,\
 	-DOOO_DLLIMPLEMENTATION_XMLREADER \
 ))

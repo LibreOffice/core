@@ -20,7 +20,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,ooopathutils))
 
 $(eval $(call gb_StaticLibrary_use_packages,ooopathutils,\
-	tools_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,ooopathutils,\

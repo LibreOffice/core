@@ -35,10 +35,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,bib,bib/res))
 $(eval $(call gb_SrsTarget_SrsTarget,bib/res))
 
 $(eval $(call gb_SrsTarget_use_packages,bib/res,\
-    editeng_inc \
-    sfx2_inc \
-    svl_inc \
-    svx_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,bib/res,\

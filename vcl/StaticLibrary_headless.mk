@@ -29,15 +29,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,headless))
 
 $(eval $(call gb_StaticLibrary_use_packages,headless,\
-	basebmp_inc \
-	basegfx_inc \
-	comphelper_inc \
-	i18nlangtag_inc \
-	i18nutil_inc \
-	o3tl_inc \
-	rsc_inc \
-	tools_inc \
-	unotools_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_use_external,headless,boost_headers))

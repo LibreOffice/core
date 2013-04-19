@@ -24,9 +24,6 @@ $(eval $(call gb_SrsTarget_set_include,sm/res,\
 ))
 
 $(eval $(call gb_SrsTarget_use_packages,sm/res,\
-	editeng_inc \
-	sfx2_inc \
-	svl_inc \
 	svx_globlmn_hrc \
 ))
 
