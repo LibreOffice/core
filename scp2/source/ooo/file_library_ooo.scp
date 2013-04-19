@@ -44,16 +44,7 @@ STD_LIB_FILE( gid_File_Lib_Ado, ado)
 
 STD_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 
-File gid_File_Lib_Basprov
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT3(basprov,.uno,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(basprov,.uno,.dll));
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_Basprov, basprov )
 
 STD_LIB_FILE(gid_File_Lib_Vbaevent, vbaevents)
 
@@ -98,16 +89,7 @@ File gid_File_Lib_CLucene
 End
 #endif
 
-File gid_File_Lib_Ldapbe2
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(ldapbe2.uno,UNXSUFFIX));
-  #else
-    Name = "ldapbe2.uno.dll";
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_Ldapbe2, ldapbe2 )
 
 #if defined _MSC_VER
 
@@ -275,27 +257,9 @@ End
 
 #ifndef DISABLE_SCRIPTING
 
-File gid_File_Lib_Dlgprov
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT3(dlgprov,.uno,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(dlgprov,.uno,.dll));
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_Dlgprov, dlgprov )
 
-File gid_File_Lib_Stringresource
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT3(stringresource,.uno,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(stringresource,.uno,.dll));
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_Stringresource, stringresource )
 
 STD_LIB_FILE(gid_File_Lib_Vbaobj, vbaobj)
 
@@ -532,16 +496,7 @@ End
 
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
 
-File gid_File_Lib_I18nsearch
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(i18nsearch.uno,UNXSUFFIX));
-  #else
-    Name = "i18nsearch.uno.dll";
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_I18nsearch, i18nsearch )
 
 File gid_File_Lib_I18nisolang
   #ifdef UNX
@@ -893,27 +848,9 @@ File gid_File_Lib_Res
     Dir = SCP2_OOO_BIN_DIR;
 End
 
-File gid_File_Lib_Expwrap_Uno
-    LIB_FILE_BODY;
-    Styles = (PACKED,DONT_OVERWRITE);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(expwrap.uno,UNXSUFFIX));
-  #else
-    Name = "expwrap.uno.dll";
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_Expwrap_Uno, expwrap )
 
-File gid_File_Lib_Fastsax_Uno
-    LIB_FILE_BODY;
-    Styles = (PACKED,DONT_OVERWRITE);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(fastsax.uno,UNXSUFFIX));
-  #else
-    Name = "fastsax.uno.dll";
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_Fastsax_Uno, fastsax )
 
 STD_LIB_FILE( gid_File_Lib_Oox , oox)
 
@@ -922,16 +859,7 @@ STD_LIB_FILE( gid_File_Lib_Scn, scn)
 STD_LIB_FILE( gid_File_Lib_Sd , sd)
 STD_LIB_FILE( gid_File_Lib_Sdui, sdui)
 
-File gid_File_Lib_Slideshow
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(slideshow.uno,UNXSUFFIX));
-  #else
-    Name = "slideshow.uno.dll";
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_Slideshow, slideshow )
 
 File gid_File_Lib_Sdbc_2
     LIB_FILE_BODY;
@@ -1234,27 +1162,9 @@ End
 #endif
 #endif
 
-File gid_File_Lib_Migrationoo2
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(migrationoo2.uno,UNXSUFFIX));
-  #else
-    Name = "migrationoo2.uno.dll";
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_Migrationoo2, migrationoo2 )
 
-File gid_File_Lib_Migrationoo3
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(migrationoo3.uno,UNXSUFFIX));
-  #else
-    Name = "migrationoo3.uno.dll";
-  #endif
-End
+STD_LIB_FILE( gid_File_Lib_Migrationoo3, migrationoo3 )
 
 STD_LIB_FILE( gid_File_Lib_Guesslang, guesslang )
 
