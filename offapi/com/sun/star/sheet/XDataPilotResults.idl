@@ -45,7 +45,7 @@ interface XDataPilotResults: com::sun::star::uno::XInterface
      */
     sequence< sequence< DataResult > > getResults();
 
-    sequence<any> getFilteredResults(
+    sequence<double> getFilteredResults(
         [in] sequence<com::sun::star::sheet::DataPilotFieldFilter> aFilters );
 };
 
