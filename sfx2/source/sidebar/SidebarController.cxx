@@ -67,6 +67,7 @@ using namespace cssu;
 using ::rtl::OUString;
 
 
+#undef VERBOSE
 
 namespace sfx2 { namespace sidebar {
 
@@ -157,7 +158,6 @@ void SAL_CALL SidebarController::disposing (void)
     if (mpCurrentDeck)
     {
         mpCurrentDeck->Dispose();
-        OSL_TRACE("deleting deck window subtree");
         mpCurrentDeck->PrintWindowTree();
         mpCurrentDeck.reset();
     }
@@ -264,7 +264,7 @@ void SidebarController::NotifyResize (void)
         mnSavedSidebarWidth = nWidth;
 
     RestrictWidth();
-#ifdef DEBUG
+#ifdef VERBOSE
     if (mpCurrentDeck)
     {
         mpCurrentDeck->PrintWindowTree();
@@ -323,6 +323,10 @@ void SidebarController::UpdateConfigurations (const Context& rContext)
         {
             msCurrentDeckId = pDeckDescriptor->msId;
             SwitchToDeck(*pDeckDescriptor, rContext);
+
+            // Tell the tab bar to highlight the button associated
+            // with the deck.
+            mpTabBar->HighlightDeck(msCurrentDeckId);
         }
 
 #ifdef DEBUG
@@ -447,7 +451,6 @@ void SidebarController::SwitchToDeck (
         {
             // Panel already exists in current deck.  Reuse it.
             aNewPanels[nWriteIndex] = *iPanel;
-            OSL_TRACE("    reusing panel %s", S2A(rPanelContexDescriptor.msId));
         }
         else
         {
@@ -456,7 +459,6 @@ void SidebarController::SwitchToDeck (
                 rPanelContexDescriptor.msId,
                 mpCurrentDeck->GetPanelParentWindow(),
                 rPanelContexDescriptor.msMenuCommand);
-            OSL_TRACE("    creating panel %s", S2A(rPanelContexDescriptor.msId));
             bHasPanelSetChanged = true;
         }
         if (aNewPanels[nWriteIndex] != NULL)
@@ -479,10 +481,6 @@ void SidebarController::SwitchToDeck (
     mpCurrentDeck->SetPanels(aNewPanels);
     mpCurrentDeck->Show();
 
-    // Tell the tab bar to highlight the button associated with the
-    // deck.
-    mpTabBar->HighlightDeck(rDeckDescriptor.msId);
-
     mpParentWindow->SetText(rDeckDescriptor.msTitle);
 
     if (bHasPanelSetChanged)
@@ -501,7 +499,7 @@ bool SidebarController::ArePanelSetsEqual (
     const SharedPanelContainer& rCurrentPanels,
     const ResourceManager::PanelContextDescriptorContainer& rRequestedPanels)
 {
-#ifdef DEBUG
+#ifdef VERBOSE
     OSL_TRACE("current panel list:");
     for (SharedPanelContainer::const_iterator
              iPanel(rCurrentPanels.begin()),
@@ -546,12 +544,6 @@ SharedPanel SidebarController::CreatePanel (
     const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
     if (pPanelDescriptor == NULL)
         return SharedPanel();
-
-#ifdef DEBUG
-    // Prevent the panel not being created in the same memory of an old panel.
-    ::boost::scoped_array<char> pUnused (new char[sizeof(Panel)]);
-    OSL_TRACE("allocated memory at %x", pUnused.get());
-#endif
 
     // Create the panel which is the parent window of the UIElement.
     SharedPanel pPanel (new Panel(
