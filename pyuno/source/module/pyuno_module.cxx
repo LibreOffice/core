@@ -342,9 +342,13 @@ static PyObject* initPoniesMode(
         if (!xMSF.is()) { abort(); }
         char *const outdir = getenv("OUTDIR");
         if (!outdir) { abort(); }
-        OStringBuffer libname(outdir);
-        libname.append("/lib/");
-        libname.append(SAL_MODULENAME("test"));
+        OString const libname = (OString(OString(outdir, strlen(outdir)) +
+#ifdef _WIN32
+                "/bin/")).replaceAll(OString('/'), OString('\\'))
+#else
+                "/lib/"))
+#endif
+                + SAL_MODULENAME("test");
         oslModule const mod( osl_loadModuleAscii(libname.getStr(),
                                 SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL) );
         if (!mod) { abort(); }
