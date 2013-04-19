@@ -208,6 +208,7 @@ endef
 # gb_UIConfig__add_uifile_for_lang target file lang
 define gb_UIConfig__add_uifile_for_lang
 $(call gb_UIConfig__package_uifile,$(1),$(call gb_UIConfig_get_packagename_for_lang,$(1),$(3)),res/$(3)/$(notdir $(2)),$(2)/$(3).ui)
+$(call gb_Package_get_preparation_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(3))) : $(call gb_UILocalizeTarget_get_target,$(2))
 
 endef
 
@@ -218,8 +219,8 @@ endef
 # gb_UIConfig__add_uifile_for_real_lang target file lang
 define gb_UIConfig__add_uifile_for_real_lang
 $(if $(filter qtz,$(3)),$(call gb_Output_error,gb_UIConfig__add_uifile_for_real_lang called with qtz))
-$(call gb_Package_get_preparation_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(lang))) : $(call gb_UILocalizeTarget_get_target,$(2))
-$(call gb_UIConfig__add_uifile_for_lang,$(1),$(2),$(lang))
+$(call gb_UIConfig__add_uifile_for_lang,$(1),$(2),$(3))
+
 endef
 
 # gb_UIConfig__add_translations_impl target uifile langs
