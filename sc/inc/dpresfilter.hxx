@@ -12,14 +12,10 @@
 
 #include "dpitemdata.hxx"
 
+#include <map>
 #include <vector>
 #include <boost/noncopyable.hpp>
 
-#if DEBUG_PIVOT_TABLE
-#include <map>
-#endif
-
-#include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
@@ -59,14 +55,8 @@ private:
 
     struct MemberNode;
     struct DimensionNode;
-#if DEBUG_PIVOT_TABLE
-    // To keep the entries sorted in the tree dump.
     typedef std::map<ScDPItemData, MemberNode*> MembersType;
     typedef std::map<OUString, DimensionNode*> DimensionsType;
-#else
-    typedef boost::unordered_map<ScDPItemData, MemberNode*, ScDPItemData::Hash> MembersType;
-    typedef boost::unordered_map<OUString, DimensionNode*, OUStringHash> DimensionsType;
-#endif
 
     struct DimensionNode : boost::noncopyable
     {

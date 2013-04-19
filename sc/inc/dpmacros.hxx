@@ -29,7 +29,7 @@
 #ifndef __SC_DPMACROS_HXX__
 #define __SC_DPMACROS_HXX__
 
-#define DEBUG_PIVOT_TABLE 1
+#define DEBUG_PIVOT_TABLE 0
 
 #if DEBUG_PIVOT_TABLE
 #include <iostream>

@@ -85,13 +85,12 @@ ScDPResultFilterSet::~ScDPResultFilterSet()
 }
 
 void ScDPResultFilterSet::add(
-    const std::vector<ScDPResultFilter>& rFilters, long nCol, long nRow, double fVal)
+    const std::vector<ScDPResultFilter>& rFilters, long /*nCol*/, long /*nRow*/, double fVal)
 {
     // TODO: I'll work on the col / row to value node mapping later.
 
     MemberNode* pMemNode = mpRoot;
 
-    fprintf(stdout, "(row=%ld; col=%ld; value=%g) : ", nRow, nCol, fVal);
     std::vector<ScDPResultFilter>::const_iterator itFilter = rFilters.begin(), itFilterEnd = rFilters.end();
     for (; itFilter != itFilterEnd; ++itFilter)
     {
@@ -101,12 +100,6 @@ void ScDPResultFilterSet::add(
 
         if (maPrimaryDimName.isEmpty())
             maPrimaryDimName = filter.maDimName;
-
-        printf("%s: ", rtl::OUStringToOString(filter.maDimName, RTL_TEXTENCODING_UTF8).getStr());
-        if (filter.maValue.IsValue())
-            printf("%g ", filter.maValue.GetValue());
-        else
-            printf("'%s' ", rtl::OUStringToOString(filter.maValue.GetString(), RTL_TEXTENCODING_UTF8).getStr());
 
         // See if this dimension exists.
         DimensionsType& rDims = pMemNode->maChildDimensions;
@@ -146,7 +139,6 @@ void ScDPResultFilterSet::add(
     }
 
     pMemNode->maValues.push_back(fVal);
-    printf("\n");
 }
 
 void ScDPResultFilterSet::swap(ScDPResultFilterSet& rOther)
