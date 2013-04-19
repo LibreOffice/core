@@ -19,8 +19,9 @@ OPENSSL_PLATFORM := $(if $(filter LINUX FREEBSD ANDROID,$(OS)),\
 	$(if $(filter I,$(CPU)),\
 	  $(if $(filter GNU/kFreeBSD,$(shell uname)),debian-kfreebsd-i386,linux-elf),\
 	  $(if $(filter X,$(CPU)),\
-	    $(if $(filter GNU/kFreeBSD,$(shell uname)),debian-kfreebsd-amd64,linux-generic64),\
-	    linux-generic32)),\
+	    $(if $(filter GNU/kFreeBSD,$(shell uname)),debian-kfreebsd-amd64,\
+		$(if $(filter TRUE, $(ENABLE_DBGUTIL)), debug-linux-generic64, linux-generic64)),\
+	    $(if $(filter TRUE, $(ENABLE_DBGUTIL)), debug-linux-generic32, linux-generic32))),\
 	$(if $(filter SOLARIS,$(OS)),\
 	$(if $(filter INTEL,$(CPUNAME)),\
 	$(if $(filter X,$(CPU)),\
