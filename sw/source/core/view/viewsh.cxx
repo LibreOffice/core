@@ -1211,7 +1211,7 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
         lMult = 12;
     }
 
-#ifndef MACOSX
+#if !defined(MACOSX) && !defined(ANDROID) && !defined(IOS)
     // #i98766# - disable smooth scrolling for Mac
 
     // #i75172# isolated static conditions
