@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//+uM\u003d",
+        "filename": "tools/source/datetime/ttime.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-04-19T12:32:07Z",
+      "side": 1,
+      "message": "OK, fair enough for \"not to 16-bit values\". But still, we should use either sal_uInt32 or sal_uInt64 everywhere. In the spirit of \"allow to call with any amount and normalise later\", IMO we should use:\n - definitely sal_uInt64 for nNanoSec (else the limit is about 4s...)\n - sal_uInt16 for nHour: this class does not support more (see the return type of getHour(); else we have to change getHour() also)\n - nMin: 2^16-1 minutes is approx 45.5 days; if the intention is to go up to 65535 hours, then we need sal_uInt32; if the intention is to go up to one day, sal_uInt16 is sufficient.\n - nSec: 2^16-1 seconds is short of a day, so need sal_uInt32\n\nIMHO, it does not make sense that 32-bit platforms can pass only 2^32-1 nanoseconds, but 64 bit platforms can pass 2^35 nanoseconds",
+      "parentUuid": "AAAAXH//+u0\u003d",
+      "revId": "9830fd36dbdb72c79703b0c61efc027fba793c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//+wc\u003d",
         "filename": "tools/source/datetime/ttime.cxx",
         "patchSetId": 24
