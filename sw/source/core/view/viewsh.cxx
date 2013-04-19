@@ -1211,28 +1211,15 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
         lMult = 12;
     }
 
+#ifndef MACOSX
+    // #i98766# - disable smooth scrolling for Mac
+
     // #i75172# isolated static conditions
     const bool bOnlyYScroll(!lXDiff && Abs(lYDiff) != 0 && Abs(lYDiff) < lMax);
     const bool bAllowedWithChildWindows(GetWin()->GetWindowClipRegionPixel(WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL).IsNull());
-// --> OD 2009-08-12 #i98766# - disable smooth scrolling for Mac port builds
-#ifdef MACOSX
-    const bool bSmoothScrollAllowed(false);
-    (void) bOnlyYScroll;
-    (void) bAllowedWithChildWindows;
-#else
     const bool bSmoothScrollAllowed(bOnlyYScroll && mbEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
-#endif
-// <-
-    const bool bIAmCursorShell(ISA(SwCrsrShell));
-    (void) bIAmCursorShell;
 
-    // #i75172# with selection on overlay, smooth scroll should be allowed with it
-    const bool bAllowedForSelection(true || (bIAmCursorShell && !((SwCrsrShell*)this)->HasSelection()));
-
-    // #i75172# with cursors on overlay, smooth scroll should be allowed with it
-    const bool bAllowedForMultipleCursors(true || (bIAmCursorShell && ((SwCrsrShell*)this)->GetCrsrCnt() < 2));
-
-    if(bSmoothScrollAllowed  && bAllowedForSelection && bAllowedForMultipleCursors)
+    if(bSmoothScrollAllowed)
     {
         Imp()->bStopSmooth = sal_False;
 
@@ -1426,6 +1413,7 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
         }
         delete pVout;
     }
+#endif
 
     maVisArea.Pos().X() -= lXDiff;
     maVisArea.Pos().Y() -= lYDiff;
