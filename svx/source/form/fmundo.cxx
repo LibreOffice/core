@@ -565,7 +565,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             "FmXUndoEnvironment::propertyChange: inconsistence!");
         for (sal_Int32 i=0; i<nDefaultValueProps; ++i)
         {
-            if (0 == evt.PropertyName.compareTo(pDefaultValueProperties[i]))
+            if (evt.PropertyName == pDefaultValueProperties[i])
             {
                 try
                 {
