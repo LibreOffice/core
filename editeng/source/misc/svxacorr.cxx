@@ -904,6 +904,15 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             case 0x3002 :
             case 0xFF0E :
                 {
+                    if (pStr >= pStart + 2 && *(pStr-2) == '.')
+                    {
+                        //e.g. text "f.o.o. word": Now currently considering
+                        //capitalizing word but second last character of
+                        //previous word is a .  So probably last word is an
+                        //anagram that ends in . and not truly the end of a
+                        //previous sentence, so don't autocapitalize this word
+                        return sal_False;
+                    }
                     if( nFlag & C_FULL_STOP )
                         return sal_False;  // no valid separator -> no replacement
                     nFlag |= C_FULL_STOP;
