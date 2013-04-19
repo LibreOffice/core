@@ -125,6 +125,7 @@ public:
     void testFdo59273();
     void testTableWidth();
     void testConditionalstylesTbllook();
+    void testFdo63685();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -201,6 +202,7 @@ void Test::run()
         {"fdo59273.docx", &Test::testFdo59273},
         {"table_width.docx", &Test::testTableWidth},
         {"conditionalstyles-tbllook.docx", &Test::testConditionalstylesTbllook},
+        {"fdo63685.docx", &Test::testFdo63685},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1322,6 +1324,14 @@ void Test::testConditionalstylesTbllook()
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // Background was -1.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x7F7F7F), getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor"));
+}
+
+void Test::testFdo63685()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // Was 85697, i.e. original 114120 was converted to mm100 from twips, not from EMUs.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xDraws->getByIndex(0), "TopMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

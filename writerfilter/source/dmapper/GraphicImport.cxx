@@ -991,16 +991,16 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_Inline_distT:
-            m_pImpl->nTopMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nTopMargin = ConversionHelper::convertEMUToMM100(nIntValue);
         break;
         case NS_ooxml::LN_CT_Inline_distB:
-            m_pImpl->nBottomMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nBottomMargin = ConversionHelper::convertEMUToMM100(nIntValue);
         break;
         case NS_ooxml::LN_CT_Inline_distL:
-            m_pImpl->nLeftMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nLeftMargin = ConversionHelper::convertEMUToMM100(nIntValue);
         break;
         case NS_ooxml::LN_CT_Inline_distR:
-            m_pImpl->nRightMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nRightMargin = ConversionHelper::convertEMUToMM100(nIntValue);
         break;
         case NS_ooxml::LN_CT_GraphicalObjectData_uri:
             val.getString();
