@@ -30,9 +30,6 @@ $(eval $(call gb_Library_Library,svl))
 
 $(eval $(call gb_Library_use_external,svl,boost_headers))
 
-$(eval $(call gb_Library_use_packages,svl,\
-))
-
 $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
 
 $(eval $(call gb_Library_set_include,svl,\

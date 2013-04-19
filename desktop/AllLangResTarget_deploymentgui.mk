@@ -17,9 +17,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,deploymentgui,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,deploymentgui/res))
 
-$(eval $(call gb_SrsTarget_use_packages,deploymentgui/res,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,deploymentgui/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \

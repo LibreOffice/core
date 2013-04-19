@@ -26,9 +26,6 @@
 
 $(eval $(call gb_Library_Library,vclplug_tde))
 
-$(eval $(call gb_Library_use_packages,vclplug_tde,\
-))
-
 $(eval $(call gb_Library_set_include,vclplug_tde,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \

@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Library_Library,jvmfwk))
 
-$(eval $(call gb_Library_use_package,jvmfwk,\
-))
-
 $(eval $(call gb_Library_add_defs,jvmfwk,\
     -DJVMFWK_DLLIMPLEMENTATION \
 ))

@@ -19,9 +19,6 @@
 
 $(eval $(call gb_Library_Library,textconversiondlgs))
 
-$(eval $(call gb_Library_use_packages,textconversiondlgs,\
-))
-
 $(eval $(call gb_Library_set_componentfile,textconversiondlgs,svx/util/textconversiondlgs))
 
 $(eval $(call gb_Library_set_include,textconversiondlgs,\

@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Executable_Executable,xpdfimport))
 
-$(eval $(call gb_Executable_use_packages,xpdfimport,\
-))
-
 $(eval $(call gb_Executable_use_externals,xpdfimport,\
     boost_headers \
     poppler \

@@ -9,9 +9,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,cosv))
 
-$(eval $(call gb_StaticLibrary_use_packages,cosv,\
-))
-
 $(eval $(call gb_StaticLibrary_add_exception_objects,cosv,\
 	cosv/source/comphelp/badcast \
 	cosv/source/service/comdline \

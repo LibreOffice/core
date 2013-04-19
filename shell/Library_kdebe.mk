@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Library_Library,kdebe1))
 
-$(eval $(call gb_Library_use_packages,kdebe1,\
-))
-
 $(eval $(call gb_Library_add_libs,kdebe1,\
 	-lkio \
 ))

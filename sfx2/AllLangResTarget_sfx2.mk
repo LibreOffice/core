@@ -27,9 +27,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,sfx,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,sfx/res))
 
-$(eval $(call gb_SrsTarget_use_packages,sfx/res,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,sfx/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sfx2/source/dialog \

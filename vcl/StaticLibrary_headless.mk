@@ -28,9 +28,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,headless))
 
-$(eval $(call gb_StaticLibrary_use_packages,headless,\
-))
-
 $(eval $(call gb_StaticLibrary_use_external,headless,boost_headers))
 
 $(eval $(call gb_StaticLibrary_use_api,headless,\

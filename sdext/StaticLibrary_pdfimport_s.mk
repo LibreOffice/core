@@ -9,9 +9,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,pdfimport_s))
 
-$(eval $(call gb_StaticLibrary_use_packages,pdfimport_s,\
-))
-
 $(eval $(call gb_StaticLibrary_use_api,pdfimport_s,\
     offapi \
     udkapi \

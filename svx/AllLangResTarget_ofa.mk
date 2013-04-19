@@ -25,9 +25,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,ofa,svx/ofa))
 
 $(eval $(call gb_SrsTarget_SrsTarget,svx/ofa))
 
-$(eval $(call gb_SrsTarget_use_packages,svx/ofa,\
-))
-
 $(eval $(call gb_SrsTarget_add_files,svx/ofa,\
     svx/source/src/errtxt.src \
     svx/source/src/app.src \

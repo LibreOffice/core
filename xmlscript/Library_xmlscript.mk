@@ -11,9 +11,6 @@ $(eval $(call gb_Library_Library,xmlscript))
 
 $(eval $(call gb_Library_use_external,xmlscript,boost_headers))
 
-$(eval $(call gb_Library_use_packages,xmlscript,\
-))
-
 $(eval $(call gb_Library_set_componentfile,xmlscript,xmlscript/util/xmlscript))
 
 $(eval $(call gb_Library_use_sdk_api,xmlscript))

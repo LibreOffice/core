@@ -30,9 +30,6 @@
 
 $(eval $(call gb_Executable_Executable,nsplugin))
 
-$(eval $(call gb_Executable_use_packages,nsplugin,\
-))
-
 $(eval $(call gb_Executable_use_external,nsplugin,boost_headers))
 
 $(eval $(call gb_Executable_use_sdk_api,nsplugin))

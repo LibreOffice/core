@@ -344,9 +344,6 @@ $(eval $(call gb_Library_use_external,vcl,graphite))
 
 endif
 
-$(eval $(call gb_Library_use_packages,vcl,\
-))
-
 vcl_quartz_code= \
     vcl/quartz/salbmp \
     vcl/quartz/utils \

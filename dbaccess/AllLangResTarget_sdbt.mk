@@ -17,9 +17,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,sdbt,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/sdbt))
 
-$(eval $(call gb_SrsTarget_use_packages,dbaccess/sdbt,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,dbaccess/sdbt,\
     $$(INCLUDE) \
     -I$(SRCDIR)/dbaccess/source/sdbtools/inc \

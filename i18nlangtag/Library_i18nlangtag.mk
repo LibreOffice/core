@@ -28,9 +28,6 @@
 
 $(eval $(call gb_Library_Library,i18nlangtag))
 
-$(eval $(call gb_Library_use_packages,i18nlangtag,\
-))
-
 $(eval $(call gb_Library_set_include,i18nlangtag,\
 	-I$(SRCDIR)/i18nlangtag/inc \
 	$$(INCLUDE) \
