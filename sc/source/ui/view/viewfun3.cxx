@@ -29,7 +29,7 @@
 #include <svl/stritem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/urlbmk.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sot/formats.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>

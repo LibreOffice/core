@@ -28,7 +28,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/maptype.hxx>

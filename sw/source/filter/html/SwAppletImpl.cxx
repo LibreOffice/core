@@ -24,7 +24,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <svtools/embedhlp.hxx>
 

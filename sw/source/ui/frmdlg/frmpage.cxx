@@ -36,7 +36,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/swframevalidation.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <fmturl.hxx>

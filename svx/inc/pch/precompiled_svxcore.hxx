@@ -479,7 +479,7 @@
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/factory.hxx>
 #include <sot/filelist.hxx>

@@ -55,7 +55,7 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <wdocsh.hxx>
 #include <fmtinfmt.hxx>

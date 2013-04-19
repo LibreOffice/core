@@ -70,7 +70,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
 #include <tools/diagnose_ex.h>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>

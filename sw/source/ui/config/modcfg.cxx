@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/mailenum.hxx>

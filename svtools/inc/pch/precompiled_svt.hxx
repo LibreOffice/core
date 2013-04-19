@@ -329,7 +329,7 @@
 #include <salhelper/thread.hxx>
 #include <salhelper/timer.hxx>
 #include <set>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/filelist.hxx>
 #include <sot/formats.hxx>

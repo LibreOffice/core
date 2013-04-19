@@ -66,7 +66,7 @@
 #include <cppuhelper/proptypehlp.hxx>
 #include <toolkit/unohlp.hxx>
 #include <rtl/crc.h>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <editeng/frmdiritem.hxx>

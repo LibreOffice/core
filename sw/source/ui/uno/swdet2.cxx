@@ -25,7 +25,7 @@
 #include <svtools/sfxecode.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <iodetect.hxx>
 
 #include <swdetect.hxx>

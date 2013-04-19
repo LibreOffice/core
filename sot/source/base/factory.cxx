@@ -22,7 +22,7 @@
 #include <tools/string.hxx>
 #include <sot/object.hxx>
 #include <sot/sotdata.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 

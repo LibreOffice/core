@@ -24,7 +24,7 @@
 #include <vcl/wrkwin.hxx>
 #include "vcl/image.hxx"
 #include <sot/storage.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

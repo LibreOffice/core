@@ -30,7 +30,7 @@
 #include <unotools/streamwrap.hxx>
 
 #include <tools/globname.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

@@ -68,7 +68,7 @@
 #include <unotools/tempfile.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/salctype.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sot/storinfo.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

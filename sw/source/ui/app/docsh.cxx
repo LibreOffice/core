@@ -45,7 +45,7 @@
 #include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svtools/soerr.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <swevent.hxx>

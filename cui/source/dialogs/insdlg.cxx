@@ -47,7 +47,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/filedlghelper.hxx>

@@ -31,7 +31,7 @@
 #include <svx/svdundo.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include "chartuno.hxx"

@@ -22,7 +22,7 @@
 #include <svtools/svtresid.hxx>
 
 #include <unotools/configmgr.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sot/stg.hxx>
 #include <sal/macros.h>
 

@@ -41,7 +41,7 @@
 #include <svx/svdundo.hxx>
 #include <sfx2/app.hxx>
 #include <svl/itempool.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <svx/fmmodel.hxx>
 #include <sot/formats.hxx>
 #include <editeng/outliner.hxx>
