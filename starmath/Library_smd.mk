@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Library_Library,smd))
 
-$(eval $(call gb_Library_use_packages,smd,\
-))
-
 $(eval $(call gb_Library_set_componentfile,smd,starmath/util/smd))
 
 $(eval $(call gb_Library_set_include,smd,\

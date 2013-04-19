@@ -17,9 +17,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,dba,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dba))
 
-$(eval $(call gb_SrsTarget_use_packages,dbaccess/dba,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dba,\
     $$(INCLUDE) \
 	-I$(SRCDIR)/dbaccess/source/core/inc \

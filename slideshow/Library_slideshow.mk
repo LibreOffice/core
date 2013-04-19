@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Library_Library,slideshow))
 
-$(eval $(call gb_Library_use_packages,slideshow,\
-))
-
 $(eval $(call gb_Library_set_include,slideshow,\
     $$(INCLUDE) \
     -I$(SRCDIR)/slideshow/source/inc \

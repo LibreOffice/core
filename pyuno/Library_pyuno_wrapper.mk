@@ -26,9 +26,6 @@
 
 $(eval $(call gb_Library_Library,pyuno_wrapper))
 
-$(eval $(call gb_Library_use_packages,pyuno_wrapper,\
-))
-
 $(eval $(call gb_Library_set_include,pyuno_wrapper,\
     -I$(SRCDIR)/pyuno/source/module \
     -I$(SRCDIR)/pyuno/inc \

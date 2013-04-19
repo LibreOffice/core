@@ -28,9 +28,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,dtobj))
 
-$(eval $(call gb_StaticLibrary_use_packages,dtobj,\
-))
-
 $(eval $(call gb_StaticLibrary_use_sdk_api,dtobj))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,dtobj,\

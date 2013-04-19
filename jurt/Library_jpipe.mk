@@ -21,9 +21,6 @@ $(eval $(call gb_Library_add_cobjects,jpipe,\
     jurt/source/pipe/wrapper/wrapper \
 ))
 
-$(eval $(call gb_Library_use_packages,jpipe,\
-))
-
 else
 
 $(eval $(call gb_Library_use_libraries,jpipe,\

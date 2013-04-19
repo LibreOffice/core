@@ -27,9 +27,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,nputils))
 
-$(eval $(call gb_StaticLibrary_use_packages,nputils,\
-))
-
 $(eval $(call gb_StaticLibrary_use_externals,nputils,\
 	npapi_headers \
 ))

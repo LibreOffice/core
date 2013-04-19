@@ -19,9 +19,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,ooopathutils))
 
-$(eval $(call gb_StaticLibrary_use_packages,ooopathutils,\
-))
-
 $(eval $(call gb_StaticLibrary_add_exception_objects,ooopathutils,\
     tools/source/misc/pathutils \
 ))

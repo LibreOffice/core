@@ -74,9 +74,6 @@ $(eval $(call gb_Library_use_libraries,sw,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_packages,sw,\
-))
-
 $(eval $(call gb_Library_use_externals,sw,\
 	boost_headers \
 	icuuc \

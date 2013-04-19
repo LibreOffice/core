@@ -27,9 +27,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,textconversiondlgs,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,svx/textconversiondlgs))
 
-$(eval $(call gb_SrsTarget_use_packages,svx/textconversiondlgs,\
-))
-
 $(eval $(call gb_SrsTarget_add_files,svx/textconversiondlgs,\
     svx/source/unodialogs/textconversiondlgs/chinese_dialogs.src \
 ))

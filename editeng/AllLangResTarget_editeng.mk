@@ -24,9 +24,6 @@ $(eval $(call gb_AllLangResTarget_set_reslocation,editeng,svx))
 $(eval $(call gb_AllLangResTarget_add_srs,editeng, editeng/res))
 $(eval $(call gb_SrsTarget_SrsTarget,editeng/res))
 
-$(eval $(call gb_SrsTarget_use_packages,editeng/res,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,editeng/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/editeng/inc \
