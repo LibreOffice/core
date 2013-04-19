@@ -904,6 +904,8 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             case 0x3002 :
             case 0xFF0E :
                 {
+                    if(*(pStr-2) == '.')
+                        return sal_False;
                     if( nFlag & C_FULL_STOP )
                         return sal_False;  // no valid separator -> no replacement
                     nFlag |= C_FULL_STOP;
