@@ -443,10 +443,10 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     sal_uInt16 nCurrScript = 0;
 
     if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
-         pBreakIt->GetBreakIter().is() )
+         g_pBreakIt->GetBreakIter().is() )
     {
         pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
-        nSearchScript = pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
+        nSearchScript = g_pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
     }
 
     xub_StrLen nStringEnd = nEnd;
@@ -471,7 +471,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 if ( eCurrLang != eLastLang )
                 {
                     const lang::Locale aLocale(
-                            pBreakIt->GetLocale( eCurrLang ) );
+                            g_pBreakIt->GetLocale( eCurrLang ) );
                     rSTxt.SetLocale( rSearchOpt, aLocale );
                     eLastLang = eCurrLang;
                 }

@@ -2882,8 +2882,8 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         font size of that script as our default.
         */
         sal_uInt16 nScript;
-        if( pBreakIt->GetBreakIter().is() )
-            nScript = pBreakIt->GetBreakIter()->getScriptType( pFld->GetPar1(), 0);
+        if( g_pBreakIt->GetBreakIter().is() )
+            nScript = g_pBreakIt->GetBreakIter()->getScriptType( pFld->GetPar1(), 0);
         else
             nScript = i18n::ScriptType::ASIAN;
 
@@ -4528,9 +4528,9 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                     {
                         const SwTxtNode* pNd = (const SwTxtNode*)GetExport().pOutFmtNode;
                         pSet = &pNd->GetSwAttrSet();
-                        if ( pBreakIt->GetBreakIter().is() )
+                        if ( g_pBreakIt->GetBreakIter().is() )
                         {
-                            nScript = pBreakIt->GetBreakIter()->
+                            nScript = g_pBreakIt->GetBreakIter()->
                                 getScriptType(pNd->GetTxt(), 0);
                         }
                     }

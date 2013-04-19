@@ -623,13 +623,13 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
     sal_Bool bRet = sal_False;
 
     // now ask the Break-Iterator for the word
-    OSL_ENSURE( pBreakIt != NULL, "We always need a break." );
-    OSL_ENSURE( pBreakIt->GetBreakIter().is(), "No break-iterator." );
-    if( pBreakIt->GetBreakIter().is() )
+    OSL_ENSURE( g_pBreakIt != NULL, "We always need a break." );
+    OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
+    if( g_pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
         sal_uInt16 nModelPos = GetPortionData().GetModelPosition( nPos );
-        lang::Locale aLocale = pBreakIt->GetLocale(
+        lang::Locale aLocale = g_pBreakIt->GetLocale(
                               GetTxtNode()->GetLang( nModelPos ) );
 
         // which type of word are we interested in?
@@ -637,7 +637,7 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
         const sal_uInt16 nWordType = i18n::WordType::ANY_WORD;
 
         // get word boundary, as the Break-Iterator sees fit.
-        rBound = pBreakIt->GetBreakIter()->getWordBoundary(
+        rBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
             rText, nPos, aLocale, nWordType, sal_True );
 
         // It's a word if the first character is an alpha-numeric character.
@@ -703,21 +703,21 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
 
     // ask the Break-Iterator for the glyph by moving one cell
     // forward, and then one cell back
-    OSL_ENSURE( pBreakIt != NULL, "We always need a break." );
-    OSL_ENSURE( pBreakIt->GetBreakIter().is(), "No break-iterator." );
-    if( pBreakIt->GetBreakIter().is() )
+    OSL_ENSURE( g_pBreakIt != NULL, "We always need a break." );
+    OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
+    if( g_pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
         sal_uInt16 nModelPos = GetPortionData().GetModelPosition( nPos );
-        lang::Locale aLocale = pBreakIt->GetLocale(
+        lang::Locale aLocale = g_pBreakIt->GetLocale(
                               GetTxtNode()->GetLang( nModelPos ) );
 
         // get word boundary, as the Break-Iterator sees fit.
         const sal_uInt16 nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
         sal_Int32 nDone = 0;
-        rBound.endPos = pBreakIt->GetBreakIter()->nextCharacters(
+        rBound.endPos = g_pBreakIt->GetBreakIter()->nextCharacters(
              rText, nPos, aLocale, nIterMode, 1, nDone );
-        rBound.startPos = pBreakIt->GetBreakIter()->previousCharacters(
+        rBound.startPos = g_pBreakIt->GetBreakIter()->previousCharacters(
              rText, rBound.endPos, aLocale, nIterMode, 1, nDone );
         bRet = ((rBound.startPos <= nPos) && (nPos <= rBound.endPos));
         OSL_ENSURE( rBound.startPos <= nPos, "start pos too high" );
@@ -815,7 +815,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
     }
 
     const SwTxtNode *pTxtNd = pTxtFrm->GetTxtNode();
-    lang::Locale aLoc( pBreakIt->GetLocale( pTxtNd->GetLang( 0 ) ) );
+    lang::Locale aLoc( g_pBreakIt->GetLocale( pTxtNd->GetLang( 0 ) ) );
 
     return aLoc;
 }

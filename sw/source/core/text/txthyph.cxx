@@ -50,7 +50,7 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 
     if( xHyph.is() )
         xHyphWord = xHyph->hyphenate( OUString(rTxt),
-                            pBreakIt->GetLocale( pFnt->GetLanguage() ),
+                            g_pBreakIt->GetLocale( pFnt->GetLanguage() ),
                             rTxt.Len() - nMinTrail, GetHyphValues() );
     return xHyphWord;
 
@@ -66,7 +66,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
 
-    if( !pBreakIt->GetBreakIter().is() )
+    if( !g_pBreakIt->GetBreakIter().is() )
         return sal_False;
     // Wir machen den Laden erstmal dicht:
     OSL_ENSURE( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
@@ -230,8 +230,8 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         Reference< XHyphenatedWord > xHyphWord;
 
         Boundary aBound =
-            pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nWrdStart,
-            pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
+            g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nWrdStart,
+            g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
         nWrdStart = static_cast<xub_StrLen>(aBound.startPos);
         nLen = static_cast<xub_StrLen>(aBound.endPos - nWrdStart);
         bRet = 0 != nLen;

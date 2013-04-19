@@ -193,25 +193,25 @@ SwFldSlot::~SwFldSlot()
 void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
 {
     OUString aTxt;
-    if( GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty() && pBreakIt->GetBreakIter().is() )
+    if( GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty() && g_pBreakIt->GetBreakIter().is() )
     {
         sal_uInt8 nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
         sal_uInt16 nScript;
         {
-            nScript = pBreakIt->GetBreakIter()->getScriptType( aTxt, 0 );
+            nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, 0 );
             xub_StrLen nChg = 0;
             if( i18n::ScriptType::WEAK == nScript )
             {
-                nChg =(xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
+                nChg =(xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
                 if( nChg < aTxt.getLength() )
-                    nScript = pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
+                    nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
             }
 
             //
             // nNextScriptChg will be evaluated during SwFldPortion::Format()
             //
             if ( nChg < aTxt.getLength() )
-                nNextScriptChg = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
+                nNextScriptChg = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
             else
                 nNextScriptChg = aTxt.getLength();
 
@@ -1097,12 +1097,12 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
         aExpand = aExpand.copy( 0, 6 );
     // Initialization of the scripttype array,
     // the arrays of width and position are filled by the format function
-    if( pBreakIt->GetBreakIter().is() )
+    if( g_pBreakIt->GetBreakIter().is() )
     {
         sal_uInt8 nScr = SW_SCRIPTS;
         for( sal_uInt16 i = 0; i < rTxt.Len(); ++i )
         {
-            sal_uInt16 nScript = pBreakIt->GetBreakIter()->getScriptType( rTxt, i );
+            sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( rTxt, i );
             switch ( nScript ) {
                 case i18n::ScriptType::LATIN : nScr = SW_LATIN; break;
                 case i18n::ScriptType::ASIAN : nScr = SW_CJK; break;

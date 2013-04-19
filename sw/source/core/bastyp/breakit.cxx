@@ -32,21 +32,21 @@
 
 using namespace com::sun::star;
 
-SwBreakIt* pBreakIt = 0;
+SwBreakIt* g_pBreakIt = 0;
 
 void SwBreakIt::_Create( const uno::Reference<uno::XComponentContext> & rxContext )
 {
-    delete pBreakIt, pBreakIt = new SwBreakIt( rxContext );
+    delete g_pBreakIt, g_pBreakIt = new SwBreakIt( rxContext );
 }
 
 void SwBreakIt::_Delete()
 {
-    delete pBreakIt, pBreakIt = 0;
+    delete g_pBreakIt, g_pBreakIt = 0;
 }
 
 SwBreakIt * SwBreakIt::Get()
 {
-    return pBreakIt;
+    return g_pBreakIt;
 }
 
 SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )

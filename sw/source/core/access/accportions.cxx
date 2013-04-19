@@ -457,9 +457,9 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
     if( pSentences == NULL )
     {
-         OSL_ENSURE( pBreakIt != NULL, "We always need a break." );
-         OSL_ENSURE( pBreakIt->GetBreakIter().is(), "No break-iterator." );
-         if( pBreakIt->GetBreakIter().is() )
+         OSL_ENSURE( g_pBreakIt != NULL, "We always need a break." );
+         OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
+         if( g_pBreakIt->GetBreakIter().is() )
          {
              pSentences = new Positions_t();
              pSentences->reserve(10);
@@ -474,9 +474,9 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
                  sal_uInt16 nModelPos = GetModelPosition( nCurrent );
 
-                 sal_Int32 nNew = pBreakIt->GetBreakIter()->endOfSentence(
+                 sal_Int32 nNew = g_pBreakIt->GetBreakIter()->endOfSentence(
                      sAccessibleString, nCurrent,
-                     pBreakIt->GetLocale(pTxtNode->GetLang(nModelPos)) ) + 1;
+                     g_pBreakIt->GetLocale(pTxtNode->GetLang(nModelPos)) ) + 1;
 
                  if( (nNew < 0) && (nNew > nLength) )
                      nNew = nLength;

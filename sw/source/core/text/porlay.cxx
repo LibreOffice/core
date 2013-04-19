@@ -638,7 +638,7 @@ sal_uInt8 SwScriptInfo::WhichFont( xub_StrLen nIdx, const OUString* pTxt, const 
         nScript = pSI->ScriptType( nIdx );
     else
         // Ok, we have to ask the break iterator
-        nScript = pBreakIt->GetRealScriptOfText( *pTxt, nIdx );
+        nScript = g_pBreakIt->GetRealScriptOfText( *pTxt, nIdx );
 
     switch ( nScript ) {
         case i18n::ScriptType::LATIN : return SW_LATIN;
@@ -663,7 +663,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
 
 void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 {
-    if( !pBreakIt->GetBreakIter().is() )
+    if( !g_pBreakIt->GetBreakIter().is() )
         return;
 
     const String& rTxt = rNode.GetTxt();
@@ -771,13 +771,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // we go back in our group until we reach the first character of
     // type nScript
     while ( nChg > nGrpStart &&
-            nScript != pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
+            nScript != g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
         --nChg;
 
     // If we are at the start of a group, we do not trust nScript,
     // we better get nScript from the breakiterator:
     if ( nChg == nGrpStart )
-        nScript = (sal_uInt8)pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
+        nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
 
     //
     // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
@@ -818,14 +818,14 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // SCRIPT FOR WEAK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
     //
 
-    if( WEAK == pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
+    if( WEAK == g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
     {
         // If the beginning of the current group is weak, this means that
         // all of the characters in this grounp are weak. We have to assign
         // the scripts to these characters depending on the fonts which are
         // set for these characters to display them.
         xub_StrLen nEnd =
-                (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rTxt, nChg, WEAK );
+                (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nChg, WEAK );
 
         if( nEnd > rTxt.Len() )
             nEnd = rTxt.Len();
@@ -840,7 +840,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
         // Get next script type or set to weak in order to exit
         sal_uInt8 nNextScript = ( nEnd < rTxt.Len() ) ?
-           (sal_uInt8)pBreakIt->GetBreakIter()->getScriptType( rTxt, nEnd ) :
+           (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nEnd ) :
            (sal_uInt8)WEAK;
 
         if ( nScript != nNextScript )
@@ -862,7 +862,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         SAL_WARN_IF( STRING_LEN == nChg, "sw.core", "65K? Strange length of script section" );
 
         xub_StrLen nSearchStt = nChg;
-        nChg = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );
+        nChg = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );
 
         if ( nChg > rTxt.Len() )
             nChg = rTxt.Len();
@@ -889,7 +889,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script
         if (nChg < rTxt.Len() && nChg > 0 && (i18n::ScriptType::WEAK ==
-            pBreakIt->GetBreakIter()->getScriptType(rTxt,nChg - 1)))
+            g_pBreakIt->GetBreakIter()->getScriptType(rTxt,nChg - 1)))
         {
             int8_t nType = u_charType(rTxt.GetChar(nChg) );
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
@@ -1142,7 +1142,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         }
 
         if ( nChg < rTxt.Len() )
-            nScript = (sal_uInt8)pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
+            nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
 
         nLastCompression = nChg;
         nLastKashida = nChg;

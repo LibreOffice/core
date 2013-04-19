@@ -833,7 +833,7 @@ CollatorWrapper& GetAppCollator()
 {
     if( !pCollator )
     {
-        const lang::Locale& rLcl = pBreakIt->GetLocale( GetAppLanguage() );
+        const lang::Locale& rLcl = g_pBreakIt->GetLocale( GetAppLanguage() );
 
         pCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
         pCollator->loadDefaultCollator( rLcl, SW_COLLATOR_IGNORES );
@@ -844,7 +844,7 @@ CollatorWrapper& GetAppCaseCollator()
 {
     if( !pCaseCollator )
     {
-        const lang::Locale& rLcl = pBreakIt->GetLocale( GetAppLanguage() );
+        const lang::Locale& rLcl = g_pBreakIt->GetLocale( GetAppLanguage() );
 
         pCaseCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
         pCaseCollator->loadDefaultCollator( rLcl, 0 );

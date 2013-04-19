@@ -1632,7 +1632,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );
-        sal_uInt16 nScriptBreak = pBreakIt->GetAllScriptsOfText( sSym );
+        sal_uInt16 nScriptBreak = g_pBreakIt->GetAllScriptsOfText( sSym );
         if( SCRIPTTYPE_LATIN & nScriptBreak )
             aSetFont.Put( aFontItem, EE_CHAR_FONTINFO );
         if( SCRIPTTYPE_ASIAN & nScriptBreak )

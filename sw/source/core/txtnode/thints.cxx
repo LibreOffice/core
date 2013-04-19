@@ -3031,7 +3031,7 @@ sal_uInt16 SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen,
 
     if ( ! nScript )
     {
-        nScript = pBreakIt->GetRealScriptOfText( m_Text, nBegin );
+        nScript = g_pBreakIt->GetRealScriptOfText( m_Text, nBegin );
     }
 
     // #i91465# Consider nScript if pSwpHints == 0

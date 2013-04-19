@@ -76,15 +76,15 @@ xub_StrLen sw_CalcCaseMap( const SwFont& rFnt,
 
     // special case for title case:
     const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
-                        pBreakIt->GetBreakIter().is();
+                        g_pBreakIt->GetBreakIter().is();
     for ( xub_StrLen i = nOfst; i < nEnd; ++i )
     {
         XubString aTmp( rOrigString, i, 1 );
 
         if ( !bTitle ||
-             pBreakIt->GetBreakIter()->isBeginWord(
+             g_pBreakIt->GetBreakIter()->isBeginWord(
                  rOrigString, i,
-                 pBreakIt->GetLocale( rFnt.GetLanguage() ),
+                 g_pBreakIt->GetLocale( rFnt.GetLanguage() ),
                  WordType::ANYWORD_IGNOREWHITESPACES ) )
             aTmp = rFnt.GetActualFont().CalcCaseMap( aTmp );
 
@@ -646,8 +646,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     if( nPos < nMaxPos )
     {
-        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfCharBlock( rOldText, nPos,
-            pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
+        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfCharBlock( rOldText, nPos,
+            g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN )
             nPos = nOldPos;
         else if( nPos > nMaxPos )
@@ -694,8 +694,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             rDo.Do();
             nOldPos = nPos;
         }
-        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->nextCharBlock( rOldText, nPos,
-               pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
+        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->nextCharBlock( rOldText, nPos,
+               g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
         OSL_ENSURE( nPos, "nextCharBlock not implemented?" );
@@ -808,8 +808,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 }
             } while( nOldPos != nPos );
         }
-        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfCharBlock( rOldText, nPos,
-               pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
+        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfCharBlock( rOldText, nPos,
+               g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
         OSL_ENSURE( nPos, "endOfCharBlock not implemented?" );

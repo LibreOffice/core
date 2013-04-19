@@ -1652,8 +1652,8 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
     xub_StrLen nPos = 0;
     while( nPos < nEndPos )
     {
-        sal_uInt16 nScript = pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
-        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
+        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
+        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
         aScriptChgLst.push_back( nPos );
         aScriptLst.push_back( nScript );
     }

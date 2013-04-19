@@ -491,10 +491,10 @@ void SwASCIIParser::InsertText( const String& rStr )
     pDoc->UpdateRsid( *pPam, rStr.Len() );
     pDoc->UpdateParRsid( pPam->GetPoint()->nNode.GetNode().GetTxtNode() );
 
-    if( pItemSet && pBreakIt && nScript != ( SCRIPTTYPE_LATIN |
+    if( pItemSet && g_pBreakIt && nScript != ( SCRIPTTYPE_LATIN |
                                              SCRIPTTYPE_ASIAN |
                                              SCRIPTTYPE_COMPLEX ) )
-        nScript |= pBreakIt->GetAllScriptsOfText( rStr );
+        nScript |= g_pBreakIt->GetAllScriptsOfText( rStr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

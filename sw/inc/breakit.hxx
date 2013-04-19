@@ -127,7 +127,7 @@ public:
 #define SW_BREAKITER()  SwBreakIt::Get()
 
 // @@@ backward compatibility @@@
-SW_DLLPUBLIC extern SwBreakIt* pBreakIt;
+SW_DLLPUBLIC extern SwBreakIt* g_pBreakIt;
 
 #endif
 

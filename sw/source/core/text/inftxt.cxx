@@ -1322,7 +1322,7 @@ sal_Bool SwTxtFormatInfo::IsHyphenate() const
     if (bInterHyph && xHyph.is())
         SvxSpellWrapper::CheckHyphLang( xHyph, eTmp );
 
-    if( !xHyph.is() || !xHyph->hasLocale( pBreakIt->GetLocale(eTmp) ) )
+    if( !xHyph.is() || !xHyph->hasLocale( g_pBreakIt->GetLocale(eTmp) ) )
         return sal_False;
     return sal_True;
 }

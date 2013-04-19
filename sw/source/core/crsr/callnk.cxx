@@ -201,12 +201,12 @@ SwCallLink::~SwCallLink()
                 }
             }
 
-            if( pBreakIt->GetBreakIter().is() )
+            if( g_pBreakIt->GetBreakIter().is() )
             {
                 const String& rTxt = ((SwTxtNode*)pCNd)->GetTxt();
                 if( !nCmp ||
-                    pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp )
-                     != pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp - 1 ))
+                    g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp )
+                     != g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp - 1 ))
                 {
                     rShell.CallChgLnk();
                     return;

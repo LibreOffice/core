@@ -150,11 +150,11 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
     if( nWishLen && nWishLen < nEnd )
         nEnd = nWishLen;
 
-    if ( ! nWishLen && pBreakIt->GetBreakIter().is() )
+    if ( ! nWishLen && g_pBreakIt->GetBreakIter().is() )
     {
         // find first word
         const SwAttrSet& rAttrSet = GetSwAttrSet();
-        const sal_uInt16 nTxtScript = pBreakIt->GetRealScriptOfText( GetTxt(), 0 );
+        const sal_uInt16 nTxtScript = g_pBreakIt->GetRealScriptOfText( GetTxt(), 0 );
 
         LanguageType eLanguage;
 
@@ -172,8 +172,8 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
         }
 
         Boundary aBound =
-            pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), 0,
-            pBreakIt->GetLocale( eLanguage ), WordType::DICTIONARY_WORD, sal_True );
+            g_pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), 0,
+            g_pBreakIt->GetLocale( eLanguage ), WordType::DICTIONARY_WORD, sal_True );
 
         nEnd = (xub_StrLen)aBound.endPos;
     }

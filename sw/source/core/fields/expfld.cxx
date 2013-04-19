@@ -897,7 +897,7 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
     if(sNodeText.Len())
     {
         // now check if sNodeText starts with a non-alphanumeric character plus blanks
-        sal_uInt16 nSrcpt = pBreakIt->GetRealScriptOfText( sNodeText, 0 );
+        sal_uInt16 nSrcpt = g_pBreakIt->GetRealScriptOfText( sNodeText, 0 );
 
         static sal_uInt16 nIds[] =
         {

@@ -231,9 +231,9 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
     if( !bHasMark && nStart && ( !pAttr || nStart != *pAttr->GetStart()) )
     {
         // skip to the word begin!
-        long nWordStt = pBreakIt->GetBreakIter()->getWordBoundary(
+        long nWordStt = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             rTxt, nStart,
-                            pBreakIt->GetLocale( pTNd->GetLang( nStart )),
+                            g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             sal_True ).startPos;
         if( nWordStt < nStart && -1 != nWordStt )
@@ -299,12 +299,12 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
         {
             rPam.SetMark();
             bAlphaNum = bIsAlphaNum;
-            if( bChkNxtWrd && pBreakIt->GetBreakIter().is() )
+            if( bChkNxtWrd && g_pBreakIt->GetBreakIter().is() )
             {
                 // search the end of this word
-                nWordEnd = pBreakIt->GetBreakIter()->getWordBoundary(
+                nWordEnd = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             rTxt, nStart,
-                            pBreakIt->GetLocale( pTNd->GetLang( nStart )),
+                            g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             sal_True ).endPos;
                 if( 0 > nWordEnd || nWordEnd > nEnd || nWordEnd == nStart )

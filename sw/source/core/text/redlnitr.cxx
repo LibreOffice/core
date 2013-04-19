@@ -91,7 +91,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
     if ( pScriptInfo->GetInvalidity() != STRING_LEN )
          pScriptInfo->InitScriptInfo( rTxtNode, bRTL );
 
-    if ( pBreakIt->GetBreakIter().is() )
+    if ( g_pBreakIt->GetBreakIter().is() )
     {
         pFnt->SetActual( SwScriptInfo::WhichFont( 0, 0, pScriptInfo ) );
 

@@ -78,8 +78,8 @@ static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
     // first we get the script type
     if ( pSI )
         nScript = pSI->ScriptType( nPos );
-    else if ( pBreakIt->GetBreakIter().is() )
-        nScript = (sal_uInt8)pBreakIt->GetBreakIter()->getScriptType( *pStr, nPos );
+    else if ( g_pBreakIt->GetBreakIter().is() )
+        nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( *pStr, nPos );
 
     // Note: rInf.GetIdx() can differ from nPos,
     // e.g., when rPor is a field portion. nPos referes to the string passed
@@ -179,7 +179,7 @@ static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
         if ( pPor && pPor->IsKernPortion() )
             pPor = pPor->GetPortion();
 
-        if ( ! pBreakIt->GetBreakIter().is() || ! pPor || pPor->InFixMargGrp() )
+        if ( ! g_pBreakIt->GetBreakIter().is() || ! pPor || pPor->InFixMargGrp() )
             return nCnt;
 
         // next character is inside a field?
@@ -192,10 +192,10 @@ static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
             pPor->GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
-            nNextScript = (sal_uInt8)pBreakIt->GetBreakIter()->getScriptType( aStr, 0 );
+            nNextScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( aStr, 0 );
         }
         else
-            nNextScript = (sal_uInt8)pBreakIt->GetBreakIter()->getScriptType( rInf.GetTxt(), nPos );
+            nNextScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rInf.GetTxt(), nPos );
 
         if( ASIAN == nNextScript )
         {

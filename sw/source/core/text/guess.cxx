@@ -239,7 +239,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         nBreakStart = nCutPos;
     }
-    else if( pBreakIt->GetBreakIter().is() )
+    else if( g_pBreakIt->GetBreakIter().is() )
     {
         // New: We should have a look into the last portion, if it was a
         // field portion. For this, we expand the text of the field portion
@@ -325,7 +325,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // we have to check the script type of the last "real" character
             if ( nLangIndex < rInf.GetIdx() )
             {
-                sal_uInt16 nScript = pBreakIt->GetRealScriptOfText( rInf.GetTxt(),
+                sal_uInt16 nScript = g_pBreakIt->GetRealScriptOfText( rInf.GetTxt(),
                                                                 nLangIndex );
                 OSL_ENSURE( nScript, "Script is not between 1 and 4" );
 
@@ -357,11 +357,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // !!! We must have a local copy of the locale, because inside
         // getLineBreak the LinguEventListener can trigger a new formatting,
         // which can corrupt the locale pointer inside pBreakIt.
-        const lang::Locale aLocale = pBreakIt->GetLocale( aLang );
+        const lang::Locale aLocale = g_pBreakIt->GetLocale( aLang );
 
         // determines first possible line break from nRightPos to
         // start index of current line
-        LineBreakResults aResult = pBreakIt->GetBreakIter()->getLineBreak(
+        LineBreakResults aResult = g_pBreakIt->GetBreakIter()->getLineBreak(
             rInf.GetTxt(), nCutPos, aLocale,
             rInf.GetLineStart(), aHyphOpt, aUserOpt );
 
@@ -533,8 +533,8 @@ bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     xub_StrLen nWordLen;
 
     Boundary aBound =
-        pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nPos,
-        pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
+        g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nPos,
+        g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
         WordType::DICTIONARY_WORD, sal_True );
     nBreakStart = (xub_StrLen)aBound.startPos;
     nWordLen = static_cast<xub_StrLen>(aBound.endPos - nBreakStart);
@@ -549,7 +549,7 @@ bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     OSL_ENSURE( xHyph.is(), "Hyphenator is missing");
     //! subtract 1 since the UNO-interface is 0 based
     xHyphWord = xHyph->queryAlternativeSpelling( OUString(aTxt),
-                        pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
+                        g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
                         nPos - nBreakStart, rInf.GetHyphValues() );
     return xHyphWord.is() && xHyphWord->isAlternativeSpelling();
 }

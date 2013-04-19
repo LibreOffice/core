@@ -794,7 +794,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );
-        nScript = pBreakIt->GetAllScriptsOfText( sSym );
+        nScript = g_pBreakIt->GetAllScriptsOfText( sSym );
         if( SCRIPTTYPE_LATIN & nScript )
             aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO );
         if( SCRIPTTYPE_ASIAN & nScript )

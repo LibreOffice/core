@@ -36,50 +36,50 @@ SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, bool bF
       nCurScript( i18n::ScriptType::WEAK ),
       bForward( bFrwrd )
 {
-    if( pBreakIt->GetBreakIter().is() )
+    if( g_pBreakIt->GetBreakIter().is() )
     {
         if ( ! bFrwrd && nStt )
             --nStt;
 
         xub_StrLen nPos = nStt;
-        nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
+        nCurScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
         if( i18n::ScriptType::WEAK == nCurScript )
         {
             if( nPos )
             {
-                nPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfScript(
+                nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfScript(
                                                 rText, nPos, nCurScript );
                 if( nPos && nPos < rText.Len() )
                 {
                     nStt = --nPos;
-                    nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText,nPos);
+                    nCurScript = g_pBreakIt->GetBreakIter()->getScriptType( rText,nPos);
                 }
             }
         }
 
         nChgPos = bForward ?
-                  (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rText, nStt, nCurScript ) :
-                  (xub_StrLen)pBreakIt->GetBreakIter()->beginOfScript( rText, nStt, nCurScript );
+                  (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rText, nStt, nCurScript ) :
+                  (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfScript( rText, nStt, nCurScript );
     }
 }
 
 bool SwScriptIterator::Next()
 {
     bool bRet = false;
-    if( pBreakIt->GetBreakIter().is() )
+    if( g_pBreakIt->GetBreakIter().is() )
     {
         if ( bForward && nChgPos < rText.Len() )
         {
-            nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
-            nChgPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
+            nCurScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
+            nChgPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript(
                                                 rText, nChgPos, nCurScript );
             bRet = true;
         }
         else if ( ! bForward && nChgPos )
         {
             --nChgPos;
-            nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
-            nChgPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfScript(
+            nCurScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
+            nChgPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfScript(
                                                 rText, nChgPos, nCurScript );
             bRet = true;
         }

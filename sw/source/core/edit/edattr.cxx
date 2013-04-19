@@ -510,14 +510,14 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         {
             sal_uInt16 nScript;
             for( n = 0; n < nEnd; n = (xub_StrLen)
-                    pBreakIt->GetBreakIter()->endOfScript( sExp, n, nScript ))
+                    g_pBreakIt->GetBreakIter()->endOfScript( sExp, n, nScript ))
             {
-                nScript = pBreakIt->GetBreakIter()->getScriptType( sExp, n );
+                nScript = g_pBreakIt->GetBreakIter()->getScriptType( sExp, n );
                 rScrpt |= lcl_SetScriptFlags( nScript );
             }
         }
         else
-            rScrpt |= lcl_SetScriptFlags( pBreakIt->GetBreakIter()->
+            rScrpt |= lcl_SetScriptFlags( g_pBreakIt->GetBreakIter()->
                                         getScriptType( sExp, nEnd-1 ));
     }
 
@@ -561,7 +561,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                     {
                         nScript = pScriptInfo ?
                                   pScriptInfo->ScriptType( nPos ) :
-                                  pBreakIt->GetBreakIter()->getScriptType( pTNd->GetTxt(), nPos );
+                                  g_pBreakIt->GetBreakIter()->getScriptType( pTNd->GetTxt(), nPos );
                     }
                     else
                         nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
@@ -570,7 +570,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
-            else if ( pBreakIt->GetBreakIter().is() )
+            else if ( g_pBreakIt->GetBreakIter().is() )
             {
                 sal_uLong nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
@@ -600,7 +600,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                         {
                             nScript = pScriptInfo ?
                                       pScriptInfo->ScriptType( nChg ) :
-                                      pBreakIt->GetBreakIter()->getScriptType(
+                                      g_pBreakIt->GetBreakIter()->getScriptType(
                                                                 rTxt, nChg );
 
                             if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, true,
@@ -615,7 +615,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
 
                             nChg = pScriptInfo ?
                                    pScriptInfo->NextScriptChg( nChg ) :
-                                   (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
+                                   (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript(
                                                     rTxt, nChg, nScript );
 
                             nFldPos = rTxt.indexOf(

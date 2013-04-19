@@ -2135,7 +2135,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     // #i105901#
     // skip character cells for all script types
-    if ( pBreakIt->GetBreakIter().is() )
+    if ( g_pBreakIt->GetBreakIter().is() )
     {
         aLang = rInf.GetFont()->GetLanguage();
         bSkipCharacterCells = true;
@@ -2151,8 +2151,8 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
         if ( bSkipCharacterCells )
         {
-            nIdx = (xub_StrLen)pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
-                        nIdx, pBreakIt->GetLocale( aLang ), nItrMode, 1, nDone );
+            nIdx = (xub_StrLen)g_pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
+                        nIdx, g_pBreakIt->GetLocale( aLang ), nItrMode, 1, nDone );
             if ( nIdx <= nLastIdx )
                 break;
         }
@@ -2412,15 +2412,15 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             const XubString aSnippet( rInf.GetText(), rInf.GetIdx(), nLn );
             aTmpText = aSub[nActual].CalcCaseMap( aSnippet );
             const bool bTitle = SVX_CASEMAP_TITEL == aSub[nActual].GetCaseMap() &&
-                                pBreakIt->GetBreakIter().is();
+                                g_pBreakIt->GetBreakIter().is();
 
             // Uaaaaahhhh!!! In title case mode, we would get wrong results
             if ( bTitle && nLn )
             {
                 // check if rInf.GetIdx() is begin of word
-                if ( !pBreakIt->GetBreakIter()->isBeginWord(
+                if ( !g_pBreakIt->GetBreakIter()->isBeginWord(
                      rInf.GetText(), rInf.GetIdx(),
-                     pBreakIt->GetLocale( aSub[nActual].GetLanguage() ),
+                     g_pBreakIt->GetLocale( aSub[nActual].GetLanguage() ),
                      i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
                 {
                     // In this case, the beginning of aTmpText is wrong.

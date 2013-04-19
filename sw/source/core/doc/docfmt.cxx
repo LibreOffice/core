@@ -349,10 +349,10 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         else
         {
             Boundary aBndry;
-            if( pBreakIt->GetBreakIter().is() )
-                aBndry = pBreakIt->GetBreakIter()->getWordBoundary(
+            if( g_pBreakIt->GetBreakIter().is() )
+                aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
-                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                            g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
                             sal_True );
 
@@ -796,10 +796,10 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             else
             {
                 Boundary aBndry;
-                if( pBreakIt->GetBreakIter().is() )
-                    aBndry = pBreakIt->GetBreakIter()->getWordBoundary(
+                if( g_pBreakIt->GetBreakIter().is() )
+                    aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
                                 pTxtNd->GetTxt(), nPtPos,
-                                pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                                g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                                 WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
                                 sal_True );
 

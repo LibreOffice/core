@@ -1138,9 +1138,9 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 {
                     // index entry mark
                     lang::Locale aLocale;
-                    if ( pBreakIt->GetBreakIter().is() )
+                    if ( g_pBreakIt->GetBreakIter().is() )
                     {
-                        aLocale = pBreakIt->GetLocale(
+                        aLocale = g_pBreakIt->GetLocale(
                                         pTOXSrc->GetLang( *pTxtMark->GetStart() ) );
                     }
 

@@ -1131,14 +1131,14 @@ sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
         {
             const SwTxtNode& rTNd = *GetTxtNode();
             xub_StrLen nPos = pIdx->GetIndex();
-            if( pBreakIt->GetBreakIter().is() )
+            if( g_pBreakIt->GetBreakIter().is() )
             {
                 sal_Int32 nDone = 0;
                 sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
                                         CharacterIteratorMode::SKIPCELL :
                                         CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = (xub_StrLen)pBreakIt->GetBreakIter()->nextCharacters( rTNd.GetTxt(), nPos,
-                                   pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
+                nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->nextCharacters( rTNd.GetTxt(), nPos,
+                                   g_pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
                                    nItrMode, 1, nDone );
 
                 // Check if nPos is inside hidden text range:
@@ -1179,14 +1179,14 @@ sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
         {
             const SwTxtNode& rTNd = *GetTxtNode();
             xub_StrLen nPos = pIdx->GetIndex();
-            if( pBreakIt->GetBreakIter().is() )
+            if( g_pBreakIt->GetBreakIter().is() )
             {
                 sal_Int32 nDone = 0;
                 sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
                                         CharacterIteratorMode::SKIPCELL :
                                         CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = (xub_StrLen)pBreakIt->GetBreakIter()->previousCharacters( rTNd.GetTxt(), nPos,
-                                   pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
+                nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->previousCharacters( rTNd.GetTxt(), nPos,
+                                   g_pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
                                    nItrMode, 1, nDone );
 
                 // Check if nPos is inside hidden text range:

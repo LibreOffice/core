@@ -2635,10 +2635,10 @@ void SwDoc::TransliterateText(
         // set current word as 'area of effect'
 
         Boundary aBndry;
-        if( pBreakIt->GetBreakIter().is() )
-            aBndry = pBreakIt->GetBreakIter()->getWordBoundary(
+        if( g_pBreakIt->GetBreakIter().is() )
+            aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
                         pTNd->GetTxt(), nSttCnt,
-                        pBreakIt->GetLocale( pTNd->GetLang( nSttCnt ) ),
+                        g_pBreakIt->GetLocale( pTNd->GetLang( nSttCnt ) ),
                         WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
                         sal_True );
 

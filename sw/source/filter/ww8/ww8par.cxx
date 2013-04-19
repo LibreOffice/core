@@ -2846,7 +2846,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
     if (rAddString.isEmpty())
         return;
 
-    uno::Reference<i18n::XBreakIterator> xBI(pBreakIt->GetBreakIter());
+    uno::Reference<i18n::XBreakIterator> xBI(g_pBreakIt->GetBreakIter());
     if (!xBI.is())
     {
         simpleAddTextToParagraph(rAddString);

@@ -1144,12 +1144,12 @@ sal_Bool SwCursor::IsStartWordWT( sal_Int16 nWordType ) const
 {
     sal_Bool bRet = sal_False;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        bRet = pBreakIt->GetBreakIter()->isBeginWord(
+        bRet = g_pBreakIt->GetBreakIter()->isBeginWord(
                             pTxtNd->GetTxt(), nPtPos,
-                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos )),
+                            g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos )),
                             nWordType );
     }
     return bRet;
@@ -1159,12 +1159,12 @@ sal_Bool SwCursor::IsEndWordWT( sal_Int16 nWordType ) const
 {
     sal_Bool bRet = sal_False;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        bRet = pBreakIt->GetBreakIter()->isEndWord(
+        bRet = g_pBreakIt->GetBreakIter()->isEndWord(
                             pTxtNd->GetTxt(), nPtPos,
-                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                            g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             nWordType );
 
     }
@@ -1175,12 +1175,12 @@ sal_Bool SwCursor::IsInWordWT( sal_Int16 nWordType ) const
 {
     sal_Bool bRet = sal_False;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        Boundary aBoundary = pBreakIt->GetBreakIter()->getWordBoundary(
+        Boundary aBoundary = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
-                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                            g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             nWordType,
                             sal_True );
 
@@ -1217,13 +1217,13 @@ sal_Bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
 {
     sal_Bool bRet = sal_False;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->getWordBoundary(
+        nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
-                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                            g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             nWordType,
                             sal_False ).startPos;
 
@@ -1241,13 +1241,13 @@ sal_Bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
 {
     sal_Bool bRet = sal_False;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->getWordBoundary(
+        nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
-                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                            g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             nWordType,
                             sal_True ).endPos;
 
@@ -1266,14 +1266,14 @@ sal_Bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
 {
     sal_Bool bRet = sal_False;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
 
-        nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->nextWord(
+        nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->nextWord(
                                 pTxtNd->GetTxt(), nPtPos,
-            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
+            g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     nWordType ).startPos;
 
         if (nPtPos < pTxtNd->GetTxt().getLength())
@@ -1290,7 +1290,7 @@ sal_Bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
 {
     sal_Bool bRet = sal_False;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
@@ -1298,9 +1298,9 @@ sal_Bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
 
         if( nPtPos )
             --nPtPos;
-        nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->previousWord(
+        nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->previousWord(
                                 pTxtNd->GetTxt(), nPtStart,
-            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
+            g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     nWordType ).startPos;
 
         if (nPtPos < pTxtNd->GetTxt().getLength())
@@ -1329,7 +1329,7 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
     }   //swmod 071107 //swmod 071225
 
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         // Should we select the whole fieldmark?
         const IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
@@ -1355,9 +1355,9 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
         else
         {
             xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-            Boundary aBndry( pBreakIt->GetBreakIter()->getWordBoundary(
+            Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary(
                                 pTxtNd->GetTxt(), nPtPos,
-                                pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                                g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                                 nWordType,
                                 bForward ));
 
@@ -1421,7 +1421,7 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
 {
     sal_Bool bRet = sal_False;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-    if( pTxtNd && pBreakIt->GetBreakIter().is() )
+    if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         String sNodeText( lcl_MaskDeletedRedlines( pTxtNd ) );
 
@@ -1430,22 +1430,22 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
         switch ( eMoveType )
         {
         case START_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
-            nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
+            nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfSentence(
                                     sNodeText,
-                                    nPtPos, pBreakIt->GetLocale(
+                                    nPtPos, g_pBreakIt->GetLocale(
                                             pTxtNd->GetLang( nPtPos ) ));
             break;
         case END_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
-            nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfSentence(
+            nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfSentence(
                                     sNodeText,
-                                    nPtPos, pBreakIt->GetLocale(
+                                    nPtPos, g_pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             break;
         case NEXT_SENT:
             {
-                nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfSentence(
+                nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfSentence(
                                         sNodeText,
-                                        nPtPos, pBreakIt->GetLocale(
+                                        nPtPos, g_pBreakIt->GetLocale(
                                                     pTxtNd->GetLang( nPtPos ) ));
                 while (nPtPos != (sal_uInt16) -1 && ++nPtPos < sNodeText.Len()
                        && sNodeText.GetChar(nPtPos)== ' ' /*isWhiteSpace( aTxt.GetChar(nPtPos)*/ )
@@ -1453,16 +1453,16 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
                 break;
             }
         case PREV_SENT:
-            nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
+            nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfSentence(
                                     sNodeText,
-                                    nPtPos, pBreakIt->GetLocale(
+                                    nPtPos, g_pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             if (nPtPos == 0)
                 return sal_False;   // the previous sentence is not in this paragraph
             if (nPtPos > 0)
-                nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
+                nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfSentence(
                                     sNodeText,
-                                    nPtPos - 1, pBreakIt->GetLocale(
+                                    nPtPos - 1, g_pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             break;
         }
@@ -1485,7 +1485,7 @@ sal_Bool SwCursor::ExpandToSentenceBorders()
     sal_Bool bRes = sal_False;
     const SwTxtNode* pStartNd = Start()->nNode.GetNode().GetTxtNode();
     const SwTxtNode* pEndNd   = End()->nNode.GetNode().GetTxtNode();
-    if (pStartNd && pEndNd && pBreakIt->GetBreakIter().is())
+    if (pStartNd && pEndNd && g_pBreakIt->GetBreakIter().is())
     {
         if (!HasMark())
             SetMark();
@@ -1497,12 +1497,12 @@ sal_Bool SwCursor::ExpandToSentenceBorders()
         xub_StrLen nStartPos = Start()->nContent.GetIndex();
         xub_StrLen nEndPos   = End()->nContent.GetIndex();
 
-        nStartPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
+        nStartPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfSentence(
                                 sStartText, nStartPos,
-                                pBreakIt->GetLocale( pStartNd->GetLang( nStartPos ) ) );
-        nEndPos   = (xub_StrLen)pBreakIt->GetBreakIter()->endOfSentence(
+                                g_pBreakIt->GetLocale( pStartNd->GetLang( nStartPos ) ) );
+        nEndPos   = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfSentence(
                                 sEndText, nEndPos,
-                                pBreakIt->GetLocale( pEndNd->GetLang( nEndPos ) ) );
+                                g_pBreakIt->GetLocale( pEndNd->GetLang( nEndPos ) ) );
 
         // it is allowed to place the PaM just behind the last
         // character in the text thus <= ...Len

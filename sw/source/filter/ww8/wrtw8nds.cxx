@@ -662,8 +662,8 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
      defaulting to asian.
      */
     sal_uInt16 nRubyScript;
-    if( pBreakIt->GetBreakIter().is() )
-        nRubyScript = pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
+    if( g_pBreakIt->GetBreakIter().is() )
+        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
     else
         nRubyScript = i18n::ScriptType::ASIAN;
 
@@ -711,8 +711,8 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
     aStr.AppendAscii( "(\\s\\up " );
 
 
-    if ( pBreakIt->GetBreakIter().is() )
-        nRubyScript = pBreakIt->GetBreakIter()->getScriptType( rNode.GetTxt(),
+    if ( g_pBreakIt->GetBreakIter().is() )
+        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rNode.GetTxt(),
                 *( pRubyTxt->GetStart() ) );
     else
         nRubyScript = i18n::ScriptType::ASIAN;
@@ -1414,8 +1414,8 @@ String SwWW8AttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
     if (SVX_CASEMAP_TITEL == ((const SvxCaseMapItem&)rItem).GetValue())
     {
         sal_uInt16 nScriptType = i18n::ScriptType::LATIN;
-        if (pBreakIt->GetBreakIter().is())
-            nScriptType = pBreakIt->GetBreakIter()->getScriptType(aSnippet, 0);
+        if (g_pBreakIt->GetBreakIter().is())
+            nScriptType = g_pBreakIt->GetBreakIter()->getScriptType(aSnippet, 0);
 
         LanguageType nLanguage;
         switch (nScriptType)
@@ -1440,8 +1440,8 @@ String SwWW8AttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
         //If we weren't at the begin of a word undo the case change.
         //not done before doing the casemap because the sequence might start
         //with whitespace
-        if (pBreakIt->GetBreakIter().is() && !pBreakIt->GetBreakIter()->isBeginWord(
-            rStr, nAktPos, pBreakIt->GetLocale(nLanguage),
+        if (g_pBreakIt->GetBreakIter().is() && !g_pBreakIt->GetBreakIter()->isBeginWord(
+            rStr, nAktPos, g_pBreakIt->GetLocale(nLanguage),
             i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
         {
             aSnippet.SetChar(0, rStr.GetChar(nAktPos));

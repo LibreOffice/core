@@ -2742,8 +2742,8 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
         const SwCharFmt *pCharFmt=0;
         //Make a guess at which of asian of western we should be setting
         sal_uInt16 nScript;
-        if (pBreakIt->GetBreakIter().is())
-            nScript = pBreakIt->GetBreakIter()->getScriptType(sRuby, 0);
+        if (g_pBreakIt->GetBreakIter().is())
+            nScript = g_pBreakIt->GetBreakIter()->getScriptType(sRuby, 0);
         else
             nScript = i18n::ScriptType::ASIAN;
 

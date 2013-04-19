@@ -612,11 +612,11 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
         return m_Text;
 
     Boundary aBndry;
-    const uno::Reference< XBreakIterator > &rxBreak = pBreakIt->GetBreakIter();
+    const uno::Reference< XBreakIterator > &rxBreak = g_pBreakIt->GetBreakIter();
     if (rxBreak.is())
     {
         sal_Int16 nWordType = WordType::DICTIONARY_WORD;
-        lang::Locale aLocale( pBreakIt->GetLocale( GetLang( nPos ) ) );
+        lang::Locale aLocale( g_pBreakIt->GetLocale( GetLang( nPos ) ) );
 #if OSL_DEBUG_LEVEL > 1
         sal_Bool bBegin = rxBreak->isBeginWord( m_Text, nPos, aLocale, nWordType );
         sal_Bool bEnd   = rxBreak->isEndWord  ( m_Text, nPos, aLocale, nWordType );
@@ -702,7 +702,7 @@ namespace
     {
         if (nLen > 1)
         {
-            const uno::Reference< XBreakIterator > &rxBreak = pBreakIt->GetBreakIter();
+            const uno::Reference< XBreakIterator > &rxBreak = g_pBreakIt->GetBreakIter();
 
             sal_uInt16 nCurrScript = rxBreak->getScriptType( rText, nBegin );
 
@@ -750,7 +750,7 @@ sal_Bool SwScanner::NextWord()
             {
                 if ( !pLanguage )
                 {
-                    const sal_uInt16 nNextScriptType = pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
+                    const sal_uInt16 nNextScriptType = g_pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
                     ModelToViewHelper::ModelPosition aModelBeginPos = rConversionMap.ConvertToModelPosition( nBegin );
                     const sal_Int32 nBeginModelPos = aModelBeginPos.mnPos;
                     aCurrLang = rNode.GetLang( nBeginModelPos, 1, nNextScriptType );
@@ -758,7 +758,7 @@ sal_Bool SwScanner::NextWord()
 
                 if ( nWordType != i18n::WordType::WORD_COUNT )
                 {
-                    rCC.setLanguageTag( LanguageTag( pBreakIt->GetLocale( aCurrLang )) );
+                    rCC.setLanguageTag( LanguageTag( g_pBreakIt->GetLocale( aCurrLang )) );
                     if ( rCC.isLetterNumeric(OUString(aText[nBegin])) )
                         break;
                 }
@@ -772,8 +772,8 @@ sal_Bool SwScanner::NextWord()
             return sal_False;
 
         // get the word boundaries
-        aBound = pBreakIt->GetBreakIter()->getWordBoundary( aText, nBegin,
-                pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
+        aBound = g_pBreakIt->GetBreakIter()->getWordBoundary( aText, nBegin,
+                g_pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
         OSL_ENSURE( aBound.endPos >= aBound.startPos, "broken aBound result" );
 
         // we don't want to include preceeding text
@@ -812,10 +812,10 @@ sal_Bool SwScanner::NextWord()
             OSL_ENSURE( aBound.endPos >= nBegin, "Unexpected aBound result" );
 
             // restrict boundaries to script boundaries and nEndPos
-            const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
+            const sal_uInt16 nCurrScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
             OUString aTmpWord = aText.copy( nBegin, aBound.endPos - nBegin );
             const sal_Int32 nScriptEnd = nBegin +
-                pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
+                g_pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
             const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
 
             // restrict word start to last script change position
@@ -826,7 +826,7 @@ sal_Bool SwScanner::NextWord()
                 aTmpWord = aText.copy( aBound.startPos,
                                        nBegin - aBound.startPos + 1 );
                 nScriptBegin = aBound.startPos +
-                    pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, nBegin - aBound.startPos,
+                    g_pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, nBegin - aBound.startPos,
                                                     nCurrScript );
             }
 
@@ -835,11 +835,11 @@ sal_Bool SwScanner::NextWord()
         }
         else
         {
-            const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( aText, aBound.startPos );
+            const sal_uInt16 nCurrScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, aBound.startPos );
             OUString aTmpWord = aText.copy( aBound.startPos,
                                              aBound.endPos - aBound.startPos );
             const sal_Int32 nScriptEnd = aBound.startPos +
-                pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
+                g_pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
             const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
             nBegin = aBound.startPos;
             nLen = nEnd - nBegin;
@@ -1239,8 +1239,8 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
             LanguageType eActLang = pNode->GetLang( nBegin );
             Boundary aBound =
-                pBreakIt->GetBreakIter()->getWordBoundary( pNode->GetTxt(), nBegin,
-                    pBreakIt->GetLocale( eActLang ),
+                g_pBreakIt->GetBreakIter()->getWordBoundary( pNode->GetTxt(), nBegin,
+                    g_pBreakIt->GetLocale( eActLang ),
                     WordType::DICTIONARY_WORD, sal_True );
             nBegin = xub_StrLen(aBound.startPos);
         }
@@ -1393,9 +1393,9 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
             if ( nBegin < nEnd )
             {
                 const LanguageType aCurrLang = pNode->GetLang( nBegin );
-                const com::sun::star::lang::Locale aCurrLocale = pBreakIt->GetLocale( aCurrLang );
-                nBegin = static_cast< xub_StrLen >(pBreakIt->GetBreakIter()->beginOfSentence( rText, nBegin, aCurrLocale ));
-                nEnd = static_cast< xub_StrLen >(Min( rText.getLength(), pBreakIt->GetBreakIter()->endOfSentence( rText, nEnd, aCurrLocale ) ));
+                const com::sun::star::lang::Locale aCurrLocale = g_pBreakIt->GetLocale( aCurrLang );
+                nBegin = static_cast< xub_StrLen >(g_pBreakIt->GetBreakIter()->beginOfSentence( rText, nBegin, aCurrLocale ));
+                nEnd = static_cast< xub_StrLen >(Min( rText.getLength(), g_pBreakIt->GetBreakIter()->endOfSentence( rText, nEnd, aCurrLocale ) ));
             }
         }
     }
@@ -1435,7 +1435,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
         do
         {
             const LanguageType nLang = aIter.GetLanguage();
-            const com::sun::star::lang::Locale aLocale = pBreakIt->GetLocale( nLang );
+            const com::sun::star::lang::Locale aLocale = g_pBreakIt->GetLocale( nLang );
             nLangEnd = Min( nEnd, aIter.GetChgPos() );
 
             const sal_uInt32 nExpandBegin = aConversionMap.ConvertToViewPosition( nLangBegin );
@@ -1603,7 +1603,7 @@ void SwTxtNode::TransliterateText(
     xub_StrLen nStt, xub_StrLen nEnd,
     SwUndoTransliterate* pUndo )
 {
-    if (nStt < nEnd && pBreakIt->GetBreakIter().is())
+    if (nStt < nEnd && g_pBreakIt->GetBreakIter().is())
     {
         // since we don't use Hiragana/Katakana or half-width/full-width transliterations here
         // it is fine to use ANYWORD_IGNOREWHITESPACES. (ANY_WORD btw is broken and will
@@ -1627,31 +1627,31 @@ void SwTxtNode::TransliterateText(
 
             Boundary aSttBndry;
             Boundary aEndBndry;
-            aSttBndry = pBreakIt->GetBreakIter()->getWordBoundary(
+            aSttBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
                         GetTxt(), nStt,
-                        pBreakIt->GetLocale( GetLang( nStt ) ),
+                        g_pBreakIt->GetLocale( GetLang( nStt ) ),
                         nWordType,
                         sal_True /*prefer forward direction*/);
-            aEndBndry = pBreakIt->GetBreakIter()->getWordBoundary(
+            aEndBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
                         GetTxt(), nEnd,
-                        pBreakIt->GetLocale( GetLang( nEnd ) ),
+                        g_pBreakIt->GetLocale( GetLang( nEnd ) ),
                         nWordType,
                         sal_False /*prefer backward direction*/);
 
             // prevent backtracking to the previous word if selection is at word boundary
             if (aSttBndry.endPos <= nStt)
             {
-                aSttBndry = pBreakIt->GetBreakIter()->nextWord(
+                aSttBndry = g_pBreakIt->GetBreakIter()->nextWord(
                         GetTxt(), aSttBndry.endPos,
-                        pBreakIt->GetLocale( GetLang( aSttBndry.endPos ) ),
+                        g_pBreakIt->GetLocale( GetLang( aSttBndry.endPos ) ),
                         nWordType);
             }
             // prevent advancing to the next word if selection is at word boundary
             if (aEndBndry.startPos >= nEnd)
             {
-                aEndBndry = pBreakIt->GetBreakIter()->previousWord(
+                aEndBndry = g_pBreakIt->GetBreakIter()->previousWord(
                         GetTxt(), aEndBndry.startPos,
-                        pBreakIt->GetLocale( GetLang( aEndBndry.startPos ) ),
+                        g_pBreakIt->GetLocale( GetLang( aEndBndry.startPos ) ),
                         nWordType);
             }
 
@@ -1679,9 +1679,9 @@ void SwTxtNode::TransliterateText(
                     aChanges.push_back( aChgData );
                 }
 
-                aCurWordBndry = pBreakIt->GetBreakIter()->nextWord(
+                aCurWordBndry = g_pBreakIt->GetBreakIter()->nextWord(
                         GetTxt(), nEnd,
-                        pBreakIt->GetLocale( GetLang( nEnd ) ),
+                        g_pBreakIt->GetLocale( GetLang( nEnd ) ),
                         nWordType);
             }
         }
@@ -1689,20 +1689,20 @@ void SwTxtNode::TransliterateText(
         {
             // for 'sentence case' we need to iterate sentence by sentence
 
-            sal_Int32 nLastStart = pBreakIt->GetBreakIter()->beginOfSentence(
+            sal_Int32 nLastStart = g_pBreakIt->GetBreakIter()->beginOfSentence(
                     GetTxt(), nEnd,
-                    pBreakIt->GetLocale( GetLang( nEnd ) ) );
-            sal_Int32 nLastEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                    g_pBreakIt->GetLocale( GetLang( nEnd ) ) );
+            sal_Int32 nLastEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
                     GetTxt(), nLastStart,
-                    pBreakIt->GetLocale( GetLang( nLastStart ) ) );
+                    g_pBreakIt->GetLocale( GetLang( nLastStart ) ) );
 
             // extend nStt, nEnd to the current sentence boundaries
-            sal_Int32 nCurrentStart = pBreakIt->GetBreakIter()->beginOfSentence(
+            sal_Int32 nCurrentStart = g_pBreakIt->GetBreakIter()->beginOfSentence(
                     GetTxt(), nStt,
-                    pBreakIt->GetLocale( GetLang( nStt ) ) );
-            sal_Int32 nCurrentEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                    g_pBreakIt->GetLocale( GetLang( nStt ) ) );
+            sal_Int32 nCurrentEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
                     GetTxt(), nCurrentStart,
-                    pBreakIt->GetLocale( GetLang( nCurrentStart ) ) );
+                    g_pBreakIt->GetLocale( GetLang( nCurrentStart ) ) );
 
             // prevent backtracking to the previous sentence if selection starts at end of a sentence
             if (nCurrentEnd <= nStt)
@@ -1711,18 +1711,18 @@ void SwTxtNode::TransliterateText(
                 // are in Asian text with no spaces...)
                 // Thus to get the real sentence start we should locate the next real word,
                 // that is one found by DICTIONARY_WORD
-                i18n::Boundary aBndry = pBreakIt->GetBreakIter()->nextWord(
+                i18n::Boundary aBndry = g_pBreakIt->GetBreakIter()->nextWord(
                         GetTxt(), nCurrentEnd,
-                        pBreakIt->GetLocale( GetLang( nCurrentEnd ) ),
+                        g_pBreakIt->GetLocale( GetLang( nCurrentEnd ) ),
                         i18n::WordType::DICTIONARY_WORD);
 
                 // now get new current sentence boundaries
-                nCurrentStart = pBreakIt->GetBreakIter()->beginOfSentence(
+                nCurrentStart = g_pBreakIt->GetBreakIter()->beginOfSentence(
                         GetTxt(), aBndry.startPos,
-                        pBreakIt->GetLocale( GetLang( aBndry.startPos) ) );
-                nCurrentEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                        g_pBreakIt->GetLocale( GetLang( aBndry.startPos) ) );
+                nCurrentEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
                         GetTxt(), nCurrentStart,
-                        pBreakIt->GetLocale( GetLang( nCurrentStart) ) );
+                        g_pBreakIt->GetLocale( GetLang( nCurrentStart) ) );
             }
             // prevent advancing to the next sentence if selection ends at start of a sentence
             if (nLastStart >= nEnd)
@@ -1731,13 +1731,13 @@ void SwTxtNode::TransliterateText(
                 // are in Asian text with no spaces...)
                 // Thus to get the real sentence start we should locate the previous real word,
                 // that is one found by DICTIONARY_WORD
-                i18n::Boundary aBndry = pBreakIt->GetBreakIter()->previousWord(
+                i18n::Boundary aBndry = g_pBreakIt->GetBreakIter()->previousWord(
                         GetTxt(), nLastStart,
-                        pBreakIt->GetLocale( GetLang( nLastStart) ),
+                        g_pBreakIt->GetLocale( GetLang( nLastStart) ),
                         i18n::WordType::DICTIONARY_WORD);
-                nLastEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                nLastEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
                         GetTxt(), aBndry.startPos,
-                        pBreakIt->GetLocale( GetLang( aBndry.startPos) ) );
+                        g_pBreakIt->GetLocale( GetLang( aBndry.startPos) ) );
                 if (nCurrentEnd > nLastEnd)
                     nCurrentEnd = nLastEnd;
             }
@@ -1764,14 +1764,14 @@ void SwTxtNode::TransliterateText(
                 }
 
                 Boundary aFirstWordBndry;
-                aFirstWordBndry = pBreakIt->GetBreakIter()->nextWord(
+                aFirstWordBndry = g_pBreakIt->GetBreakIter()->nextWord(
                         GetTxt(), nCurrentEnd,
-                        pBreakIt->GetLocale( GetLang( nCurrentEnd ) ),
+                        g_pBreakIt->GetLocale( GetLang( nCurrentEnd ) ),
                         nWordType);
                 nCurrentStart = aFirstWordBndry.startPos;
-                nCurrentEnd = pBreakIt->GetBreakIter()->endOfSentence(
+                nCurrentEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
                         GetTxt(), nCurrentStart,
-                        pBreakIt->GetLocale( GetLang( nCurrentStart ) ) );
+                        g_pBreakIt->GetLocale( GetLang( nCurrentStart ) ) );
             }
         }
         else
@@ -1970,7 +1970,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
     // count words in masked and expanded text:
     if (!aExpandText.isEmpty())
     {
-        if (pBreakIt->GetBreakIter().is())
+        if (g_pBreakIt->GetBreakIter().is())
         {
             // zero is NULL for pLanguage -----------v               last param = true for clipping
             SwScanner aScanner( *this, aExpandText, 0, aConversionMap, i18n::WordType::WORD_COUNT,
@@ -1986,16 +1986,16 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
                 {
                     ++nTmpWords;
                     const OUString &rWord = aScanner.GetWord();
-                    if (pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
+                    if (g_pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
                         ++nTmpAsianWords;
-                    nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
+                    nTmpCharsExcludingSpaces += g_pBreakIt->getGraphemeCount(rWord);
                 }
             }
 
             nTmpCharsExcludingSpaces += aScanner.getOverriddenDashCount();
         }
 
-        nTmpChars = pBreakIt->getGraphemeCount(aExpandText, nExpandBegin, nExpandEnd);
+        nTmpChars = g_pBreakIt->getGraphemeCount(aExpandText, nExpandBegin, nExpandEnd);
     }
 
     // no nTmpCharsExcludingSpaces adjust needed neither for blanked out MaskedChars
@@ -2014,13 +2014,13 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
         {
             ++nTmpWords;
             const OUString &rWord = aScanner.GetWord();
-            if (pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
+            if (g_pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
                 ++nTmpAsianWords;
-            nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
+            nTmpCharsExcludingSpaces += g_pBreakIt->getGraphemeCount(rWord);
         }
 
         nTmpCharsExcludingSpaces += aScanner.getOverriddenDashCount();
-        nTmpChars += pBreakIt->getGraphemeCount(sNumString);
+        nTmpChars += g_pBreakIt->getGraphemeCount(sNumString);
     }
     else if ( bHasBullet )
     {
