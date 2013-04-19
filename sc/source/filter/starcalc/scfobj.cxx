@@ -30,7 +30,7 @@ using namespace com::sun::star;
 #include <sfx2/objsh.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include "address.hxx"
 
 #include "scfobj.hxx"

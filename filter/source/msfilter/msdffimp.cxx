@@ -26,7 +26,7 @@
 #include <tools/solar.h>
 #include <rtl/math.hxx>
 
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>

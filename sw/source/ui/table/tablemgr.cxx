@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 
 #include <sot/storage.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 
 #include "edtwin.hxx"
 #include "wrtsh.hxx"

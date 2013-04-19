@@ -25,7 +25,7 @@
 #include <sot/sotdata.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/documentconstants.hxx>

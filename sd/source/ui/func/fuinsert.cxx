@@ -47,7 +47,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/printer.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/transfer.hxx>
 #include <svl/urlbmk.hxx>

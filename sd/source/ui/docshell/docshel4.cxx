@@ -38,7 +38,7 @@
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/sfxecode.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/request.hxx>
 #include <unotools/fltrcfg.hxx>

@@ -39,7 +39,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/hatch.hxx>
 #include <sot/formats.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sal/macros.h>
 
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)

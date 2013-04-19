@@ -40,7 +40,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <map>
 #include "svx/xmleohlp.hxx"
 

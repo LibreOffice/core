@@ -643,7 +643,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <signal.h>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/filelist.hxx>
 #include <sot/formats.hxx>

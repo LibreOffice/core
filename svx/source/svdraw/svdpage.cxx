@@ -23,7 +23,7 @@
 
 // HACK
 #include <sot/storage.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <svx/svdview.hxx>
 #include <string.h>
 #include <vcl/svapp.hxx>

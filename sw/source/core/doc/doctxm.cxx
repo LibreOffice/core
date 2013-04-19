@@ -24,7 +24,7 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <docsh.hxx>
 #include <ndole.hxx>
 #include <txttxmrk.hxx>

@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>

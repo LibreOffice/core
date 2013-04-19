@@ -43,7 +43,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svx/dialogs.hrc>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 
 #include "strings.hrc"
 #include "app.hrc"

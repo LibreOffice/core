@@ -32,7 +32,7 @@
 #include <rtl/logfile.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/globname.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"

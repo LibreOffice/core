@@ -60,7 +60,7 @@
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include "sot/clsids.hxx"
+#include <comphelper/classids.hxx>
 
 #include <vector>
 

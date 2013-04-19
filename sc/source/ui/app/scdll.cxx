@@ -24,7 +24,7 @@
 #include <svx/objfac3d.hxx>
 #include <svx/tbxcolor.hxx>
 
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sfx2/taskpane.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>

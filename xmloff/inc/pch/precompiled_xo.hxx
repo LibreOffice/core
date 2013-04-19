@@ -524,7 +524,7 @@
 #include <sal/types.h>
 #include <sax/tools/converter.hxx>
 #include <set>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

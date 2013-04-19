@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <unomid.h>

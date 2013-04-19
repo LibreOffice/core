@@ -25,7 +25,7 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
 #include <sot/storage.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>

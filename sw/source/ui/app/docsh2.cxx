@@ -61,7 +61,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <sot/storage.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <fmtcol.hxx>
 #include <swevent.hxx>
 #include <view.hxx>         // for the current view

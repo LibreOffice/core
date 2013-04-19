@@ -44,7 +44,7 @@
 #include <chartins.hrc>
 #include <anchoredobject.hxx>
 
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>

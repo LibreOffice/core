@@ -46,7 +46,7 @@
 
 #include <svtools/insdlg.hxx>
 #include "svtools/treelistentry.hxx"
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <unotools/configmgr.hxx>
 #include <docsh.hxx>
 #include <config.hrc>

@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <sfx2/objsh.hxx>

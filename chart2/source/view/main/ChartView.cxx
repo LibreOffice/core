@@ -101,7 +101,7 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svl/languageoptions.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include "servicenames_charttypes.hxx"
 
 #include <rtl/strbuf.hxx>

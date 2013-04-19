@@ -23,7 +23,7 @@
 
 #include "scitems.hxx"
 #include <editeng/justifyitem.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>

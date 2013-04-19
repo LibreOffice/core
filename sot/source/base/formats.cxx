@@ -24,7 +24,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include "sot/filelist.hxx"
-#include "sot/clsids.hxx"
+#include <comphelper/classids.hxx>
 
 #include <tools/globname.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>

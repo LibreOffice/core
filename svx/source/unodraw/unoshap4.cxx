@@ -27,7 +27,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpool.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

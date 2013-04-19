@@ -55,7 +55,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 
 using namespace com::sun::star;
 

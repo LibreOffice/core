@@ -38,7 +38,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>

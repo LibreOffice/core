@@ -38,7 +38,7 @@
 #include <svtools/insdlg.hxx>
 #include <svtools/soerr.hxx>
 #include <svx/svxdlg.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>

@@ -53,7 +53,7 @@
 #include <svx/svdpagv.hxx>
 #include <tools/globname.hxx>
 #include <vcl/jobset.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 
 #include <sot/formats.hxx>
 #include <sfx2/linkmgr.hxx>

@@ -38,7 +38,7 @@
 #include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>
 

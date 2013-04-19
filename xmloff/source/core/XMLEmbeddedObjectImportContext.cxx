@@ -22,7 +22,7 @@
 #include <com/sun/star/util/XModifiable2.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <tools/globname.hxx>
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/xmlnmspe.hxx"

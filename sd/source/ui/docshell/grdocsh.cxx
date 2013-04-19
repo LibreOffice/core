@@ -23,7 +23,7 @@
 #include <svl/srchitem.hxx>
 #include <tools/globname.hxx>
 
-#include <sot/clsids.hxx>
+#include <comphelper/classids.hxx>
 
 #include <sfx2/objface.hxx>
 
