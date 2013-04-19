@@ -40,7 +40,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::io;
-using namespace com::sun::star::util;
+namespace cssu = com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(KabResultSet, "com.sun.star.sdbc.drivers.KabResultSet", "com.sun.star.sdbc.ResultSet");
 // -------------------------------------------------------------------------
@@ -298,34 +298,34 @@ Sequence< sal_Int8 > SAL_CALL KabResultSet::getBytes(sal_Int32) throw(SQLExcepti
     return Sequence< sal_Int8 >();
 }
 // -------------------------------------------------------------------------
-Date SAL_CALL KabResultSet::getDate(sal_Int32) throw(SQLException, RuntimeException)
+cssu::Date SAL_CALL KabResultSet::getDate(sal_Int32) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
 ::dbtools::throwFunctionNotSupportedException("getDate", NULL);
 
-    Date aRet;
+    cssu::Date aRet;
     return aRet;
 }
 // -------------------------------------------------------------------------
-Time SAL_CALL KabResultSet::getTime(sal_Int32) throw(SQLException, RuntimeException)
+cssu::Time SAL_CALL KabResultSet::getTime(sal_Int32) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
 ::dbtools::throwFunctionNotSupportedException("getTime", NULL);
 
-    Time nRet;
+    cssu::Time nRet;
     return nRet;
 }
 // -------------------------------------------------------------------------
-DateTime SAL_CALL KabResultSet::getTimestamp(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
+cssu::DateTime SAL_CALL KabResultSet::getTimestamp(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-    DateTime nRet;
+    cssu::DateTime nRet;
     sal_Int32 nAddressees = m_aKabAddressees.size();
 
     if (m_nRowPos != -1 && m_nRowPos != nAddressees && m_xMetaData.is())
@@ -745,19 +745,19 @@ void SAL_CALL KabResultSet::updateBytes(sal_Int32, const Sequence< sal_Int8 >&) 
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabResultSet::updateDate(sal_Int32, const Date&) throw(SQLException, RuntimeException)
+void SAL_CALL KabResultSet::updateDate(sal_Int32, const cssu::Date&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabResultSet::updateTime(sal_Int32, const Time&) throw(SQLException, RuntimeException)
+void SAL_CALL KabResultSet::updateTime(sal_Int32, const cssu::Time&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabResultSet::updateTimestamp(sal_Int32, const DateTime&) throw(SQLException, RuntimeException)
+void SAL_CALL KabResultSet::updateTimestamp(sal_Int32, const cssu::DateTime&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
