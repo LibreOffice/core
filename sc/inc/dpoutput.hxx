@@ -143,12 +143,6 @@ public:
         field region. */
     bool            GetDataResultPositionData(::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
 
-    /**
-     * @return true on success and stores the result in rTarget, or false if
-     *         rFilters or rTarget describe something that is not visible.
-     */
-    bool GetPivotData( ScDPGetPivotDataField& rTarget,
-                       const std::vector< ScDPGetPivotDataField >& rFilters );
     long            GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient );
     bool GetHeaderDrag(
         const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, long nDragDim,

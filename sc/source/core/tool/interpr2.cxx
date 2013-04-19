@@ -3082,7 +3082,6 @@ void ScInterpreter::ScGetPivotData()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetPivotData" );
     sal_uInt8 nParamCount = GetByte();
 
-#if 1
     if (!MustHaveParamCount(nParamCount, 2, 30) || (nParamCount % 2) == 1)
     {
         PushError(errNoRef);
@@ -3155,95 +3154,6 @@ void ScInterpreter::ScGetPivotData()
         return;
     }
     PushDouble(fVal);
-
-#else
-    if ( MustHaveParamCount( nParamCount, 2, 30 ) )
-    {
-        // there must be an even number of args
-        //      target, ref, then field/item pairs
-        if( (nParamCount % 2) == 1)
-            goto failed;
-
-        bool bOldSyntax = false;
-        if ( nParamCount == 2 )
-        {
-            // if the first parameter is a ref, assume old syntax
-            StackVar eFirstType = GetStackType( 2 );
-            if ( eFirstType == svSingleRef || eFirstType == svDoubleRef )
-                bOldSyntax = true;
-        }
-
-        ScDPGetPivotDataField aTarget;                  // target field, and returns result
-        std::vector< ScDPGetPivotDataField > aFilters;
-        String aFilterList;
-        if ( bOldSyntax )
-            aFilterList = GetString();      // old syntax: second parameter is list of constraints
-        else
-        {
-            // new syntax: separate name/value pairs
-
-            sal_uInt16 nFilterCount = nParamCount / 2 - 1;
-            aFilters.resize( nFilterCount );
-
-            sal_uInt16 i = nFilterCount;
-            while( i-- > 0 )
-            {
-                //! should allow numeric constraint values
-                aFilters[i].mbValIsStr = true;
-                aFilters[i].maValStr = GetString();
-
-                aFilters[i].maFieldName = GetString();
-            }
-        }
-
-        // common to both syntaxes: a reference to the data pilot table
-
-        ScRange aBlock;
-        switch ( GetStackType() )
-        {
-            case svDoubleRef :
-                PopDoubleRef( aBlock );
-                break;
-
-            case svSingleRef :
-                {
-                    ScAddress aAddr;
-                    PopSingleRef( aAddr );
-                    aBlock = aAddr;
-                    break;
-                }
-            default:
-                goto failed;
-        }
-        // NOTE : MS Excel docs claim to use the 'most recent' which is not
-        // exactly the same as what we do in ScDocument::GetDPAtBlock
-        // However we do need to use GetDPABlock
-        ScDPObject* pDPObj = pDok->GetDPAtBlock ( aBlock );
-        if( NULL == pDPObj)
-            goto failed;
-
-        if ( bOldSyntax )
-        {
-            // fill aFilters / aTarget from aFilterList string
-            if ( !pDPObj->ParseFilters( aTarget, aFilters, aFilterList ) )
-                goto failed;
-        }
-        else
-            aTarget.maFieldName = GetString();      // new syntax: first parameter is data field name
-
-        if( pDPObj->GetPivotData( aTarget, aFilters ) )
-        {
-            if( aTarget.mbValIsStr )
-                PushString( aTarget.maValStr );
-            else
-                PushDouble( aTarget.mnValNum );
-            return;
-        }
-    }
-
-failed :
-    PushError( errNoRef );
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

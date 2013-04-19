@@ -183,8 +183,6 @@ public:
         const OUString& rDataFieldName,
         std::vector<com::sun::star::sheet::DataPilotFieldFilter>& rFilters);
 
-    bool                GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
-                                      const std::vector< ScDPGetPivotDataField >& rFilters );
     bool                ParseFilters( ScDPGetPivotDataField& rTarget,
                                       std::vector< ScDPGetPivotDataField >& rFilters,
                                       const OUString& rFilterList );

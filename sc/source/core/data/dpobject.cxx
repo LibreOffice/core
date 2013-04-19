@@ -1363,17 +1363,6 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
     return aRes[nDataIndex];
 }
 
-// Returns sal_True on success and stores the result in rTarget
-bool ScDPObject::GetPivotData( ScDPGetPivotDataField& rTarget,
-                               const std::vector< ScDPGetPivotDataField >& rFilters )
-{
-    if (!mbEnableGetPivotData)
-        return false;
-
-    CreateOutput();             // create xSource and pOutput if not already done
-    return pOutput->GetPivotData( rTarget, rFilters );
-}
-
 bool ScDPObject::IsFilterButton( const ScAddress& rPos )
 {
     CreateOutput();             // create xSource and pOutput if not already done
