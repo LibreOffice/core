@@ -10,7 +10,7 @@
 # PythonTest class
 
 ifeq ($(SYSTEM_PYTHON),NO)
-gb_Python_EXE := $(OUTDIR)/installation/opt/program/python.bin
+gb_Python_EXE := /bin/sh $(DEVINSTALLDIR)/opt/program/python
 else
 gb_Python_EXE := $(PYTHON_FOR_BUILD)
 endif
