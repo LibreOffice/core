@@ -650,12 +650,12 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl)
     if (pImagesLst->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND
         && pImagesLst->GetSelectEntryPos() != 0)
     {
-        OUString sActEntry( pImagesLst->GetEntry(pImagesLst->GetSelectEntryPos()) );
+        sal_uInt16 nActPos = pImagesLst->GetSelectEntryPos();
+        OUString sActEntry( pImagesLst->GetEntry(nActPos) );
         // actual data
-        OUString* pActData = (OUString*) pImagesLst->GetEntryData(pImagesLst->GetSelectEntryPos());
+        OUString* pActData = (OUString*) pImagesLst->GetEntryData(nActPos);
         OUString sAct(*pActData);
 
-        sal_uInt16 nActPos = pImagesLst->GetSelectEntryPos();
         OUString sUpperEntry( pImagesLst->GetEntry(nActPos - 1) );
         // upper data
         OUString* pUpperData = (OUString*) pImagesLst->GetEntryData(nActPos - 1);
@@ -701,10 +701,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl)
         pImagesLst->RemoveEntry( sDownEntry );
 
         pImagesLst->InsertEntry( sDownEntry, nActPos );
-        pImagesLst->SetEntryData( nActPos, (void*) new OUString(sAct));
+        pImagesLst->SetEntryData( nActPos, (void*) new OUString(sDown));
 
         pImagesLst->InsertEntry( sActEntry, nActPos + 1 );
-        pImagesLst->SetEntryData( nActPos + 1, (void*) new OUString(sDown));
+        pImagesLst->SetEntryData( nActPos + 1, (void*) new OUString(sAct));
 
         pImagesLst->SelectEntryPos(nActPos + 1);
 
