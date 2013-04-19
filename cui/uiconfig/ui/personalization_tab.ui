@@ -134,7 +134,7 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkRadioButton" id="no_persona">
-                    <property name="label" translatable="yes">Plain look, do not use Personas</property>
+                    <property name="label" translatable="yes">Plain look, do not use Themes</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -150,7 +150,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="default_persona">
-                    <property name="label" translatable="yes">Pre-installed Persona (if available)</property>
+                    <property name="label" translatable="yes">Pre-installed Theme (if available)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -171,7 +171,7 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkRadioButton" id="own_persona">
-                        <property name="label" translatable="yes">Own Persona</property>
+                        <property name="label" translatable="yes">Own Theme</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -187,7 +187,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="select_persona">
-                        <property name="label" translatable="yes">Select Persona</property>
+                        <property name="label" translatable="yes">Select Theme</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -213,7 +213,7 @@
           <object class="GtkLabel" id="personas_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Firefox Personas</property>
+            <property name="label" translatable="yes">Firefox Themes</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -79,7 +79,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">First visit Firefox Personas (http://www.getpersonas.com). Find a Persona you like, and want to choose for LibreOffice.</property>
+                <property name="label" translatable="yes">First visit Firefox Themes (https://addons.mozilla.org/firefox/themes). Find the Theme you like, and want to choose for LibreOffice.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">54</property>
               </object>
@@ -99,7 +99,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="visit_personas">
-                    <property name="label" translatable="yes">Visit Firefox Personas</property>
+                    <property name="label" translatable="yes">Visit Firefox Themes</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -126,7 +126,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Then, in your web browser's location bar, copy the address of the page that contains the Persona to clipboard, and paste it to the input field below.</property>
+                <property name="label" translatable="yes">Then, in your web browser's location bar, copy the address of the page that contains the Theme to clipboard, and paste it to the input field below.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">54</property>
               </object>
@@ -141,7 +141,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Persona address:</property>
+                <property name="label" translatable="yes">Theme address:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">persona_url</property>
               </object>
