@@ -25,7 +25,7 @@
 
 #include "xmlfilterdialogstrings.hrc"
 #include "xmlfiltertabdialog.hxx"
-#include "xmlfiltertabdialog.hrc"
+#include "xmlfiltercommon.hrc"
 #include "xmlfiltertabpagebasic.hrc"
 #include "xmlfiltertabpagexslt.hrc"
 #include "xmlfiltertabpagebasic.hxx"

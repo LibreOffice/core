@@ -23,10 +23,10 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
-#include <vcl/symbol.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <rsc/rsc-vcl-shared-types.hxx>
 
 #include <vector>
 
