@@ -19,9 +19,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,writerperfect))
 
-$(eval $(call gb_StaticLibrary_use_packages,writerperfect,\
-))
-
 $(eval $(call gb_StaticLibrary_set_include,writerperfect,\
 	$$(INCLUDE) \
     -I$(SRCDIR)/writerperfect/source \

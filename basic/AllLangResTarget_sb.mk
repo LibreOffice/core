@@ -26,9 +26,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,sb,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,sb/res))
 
-$(eval $(call gb_SrsTarget_use_packages,sb/res,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,sb/res,\
 	$$(INCLUDE) \
     -I$(SRCDIR)/basic/inc \

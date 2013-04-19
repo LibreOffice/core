@@ -30,9 +30,6 @@ $(eval $(call gb_Library_Library,updatecheckui))
 
 $(eval $(call gb_Library_set_componentfile,updatecheckui,extensions/source/update/ui/updchk))
 
-$(eval $(call gb_Library_use_packages,updatecheckui,\
-))
-
 $(eval $(call gb_Library_use_external,updatecheckui,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,updatecheckui))

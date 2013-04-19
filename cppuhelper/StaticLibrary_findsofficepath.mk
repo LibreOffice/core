@@ -9,9 +9,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,findsofficepath))
 
-$(eval $(call gb_StaticLibrary_use_packages,findsofficepath,\
-))
-
 $(eval $(call gb_StaticLibrary_add_cobjects,findsofficepath,\
 	cppuhelper/source/findsofficepath \
 ))

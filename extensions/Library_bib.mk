@@ -30,9 +30,6 @@
 
 $(eval $(call gb_Library_Library,bib))
 
-$(eval $(call gb_Library_use_packages,bib,\
-))
-
 $(eval $(call gb_Library_set_componentfile,bib,extensions/source/bibliography/bib))
 
 $(eval $(call gb_Library_set_include,bib,\

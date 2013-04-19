@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Library_Library,sax))
 
-$(eval $(call gb_Library_use_package,sax,\
-))
-
 $(eval $(call gb_Library_set_include,sax,\
     -I$(SRCDIR)/sax/inc \
     $$(INCLUDE) \

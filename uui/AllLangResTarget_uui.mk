@@ -34,9 +34,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,uui,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,uui/res))
 
-$(eval $(call gb_SrsTarget_use_packages,uui/res,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,uui/res,\
 	-I$(SRCDIR)/uui/source \
 	$$(INCLUDE) \

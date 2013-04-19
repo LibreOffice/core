@@ -26,9 +26,6 @@
 
 $(eval $(call gb_Library_Library,reg))
 
-$(eval $(call gb_Library_use_packages,reg,\
-))
-
 $(eval $(call gb_Library_add_defs,reg,\
 	$(LFS_CFLAGS) \
 	-DREG_DLLIMPLEMENTATION \

@@ -28,9 +28,6 @@
 
 $(eval $(call gb_Library_Library,canvasfactory))
 
-$(eval $(call gb_Library_use_package,canvasfactory,\
-))
-
 $(eval $(call gb_Library_set_componentfile,canvasfactory,canvas/source/factory/canvasfactory))
 
 $(eval $(call gb_Library_set_include,canvasfactory,\

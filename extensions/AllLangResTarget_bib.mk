@@ -34,9 +34,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,bib,bib/res))
 
 $(eval $(call gb_SrsTarget_SrsTarget,bib/res))
 
-$(eval $(call gb_SrsTarget_use_packages,bib/res,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,bib/res,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/extensions/inc \
