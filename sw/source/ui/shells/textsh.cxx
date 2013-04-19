@@ -48,7 +48,7 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>

@@ -46,7 +46,7 @@
 #include <svx/zoomslideritem.hxx>
 #include <svtools/xwindowitem.hxx>
 #include <svx/linkwarn.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/app.hxx>

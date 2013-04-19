@@ -19,7 +19,7 @@
 
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/opaqitem.hxx>

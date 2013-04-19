@@ -49,7 +49,7 @@
 #include <vcl/mnemonic.hxx>
 #include <svl/style.hxx>
 #include <svl/zformat.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>

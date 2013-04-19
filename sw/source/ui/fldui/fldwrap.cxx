@@ -22,7 +22,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
 #include <docsh.hxx>
 #include <fldwrap.hxx>

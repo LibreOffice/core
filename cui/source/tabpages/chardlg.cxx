@@ -56,7 +56,7 @@
 #include "svx/drawitem.hxx"
 #include "svx/dlgutil.hxx"
 #include <dialmgr.hxx>
-#include "svx/htmlmode.hxx"
+#include <sfx2/htmlmode.hxx>
 #include "cuicharmap.hxx"
 #include "chardlg.h"
 #include <editeng/emphasismarkitem.hxx>

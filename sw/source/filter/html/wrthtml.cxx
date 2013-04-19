@@ -30,7 +30,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>

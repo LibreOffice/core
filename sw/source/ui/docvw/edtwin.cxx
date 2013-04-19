@@ -48,7 +48,7 @@
 #include <svl/ptitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/langitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>

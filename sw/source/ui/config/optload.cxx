@@ -37,7 +37,7 @@
 #include "optload.hrc"
 #include "optload.hxx"
 #include <svx/dlgutil.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <fldmgr.hxx>
 #include <poolfmt.hxx>
 #include <expfld.hxx>

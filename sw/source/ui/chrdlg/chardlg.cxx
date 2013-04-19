@@ -23,7 +23,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/flstitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svl/cjkoptions.hxx>
 
 #include <cmdid.h>

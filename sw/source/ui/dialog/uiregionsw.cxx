@@ -58,7 +58,7 @@
 #include <comcore.hrc>
 #include <globals.hrc>
 #include <sfx2/bindings.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>

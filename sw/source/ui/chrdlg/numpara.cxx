@@ -23,7 +23,7 @@
 #include "globals.hrc"
 #include "helpid.h"
 #include <sfx2/objsh.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

@@ -28,7 +28,7 @@
 #include <vcl/metric.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/svxfont.hxx>
 #include <vcl/print.hxx>

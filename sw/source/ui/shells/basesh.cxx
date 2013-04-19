@@ -25,7 +25,7 @@
 
 #include <svx/svxids.hrc>
 #include <sfx2/linkmgr.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>

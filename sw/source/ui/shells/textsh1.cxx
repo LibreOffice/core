@@ -33,7 +33,7 @@
 #include <svl/slstitm.hxx>
 #include <string.h>
 #include <svl/stritem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

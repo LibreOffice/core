@@ -27,7 +27,7 @@
 #include <vcl/mnemonic.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/protitem.hxx>

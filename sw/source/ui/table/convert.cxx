@@ -21,7 +21,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <modcfg.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
 #include "swmodule.hxx"
 #include "cmdid.h"

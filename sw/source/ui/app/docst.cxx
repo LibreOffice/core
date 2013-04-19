@@ -38,7 +38,7 @@
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/eeitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <swmodule.hxx>
 #include <wdocsh.hxx>
 #include <fmtfsize.hxx>

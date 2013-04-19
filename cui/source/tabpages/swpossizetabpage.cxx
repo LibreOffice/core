@@ -26,7 +26,7 @@
 #include <svx/swframevalidation.hxx>
 #include <cuires.hrc>
 #include <swpossizetabpage.hrc>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/rectenum.hxx>

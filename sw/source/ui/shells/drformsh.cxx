@@ -30,7 +30,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <tools/urlobj.hxx>
 
 #include "viewopt.hxx"

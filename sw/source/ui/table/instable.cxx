@@ -27,7 +27,7 @@
 #include "tblafmt.hxx"
 #include "modcfg.hxx"
 #include "swmodule.hxx"
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
 
 #include "table.hrc"

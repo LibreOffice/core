@@ -26,7 +26,7 @@
 #include <svl/languageoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
-#include "svx/htmlmode.hxx"
+#include <sfx2/htmlmode.hxx>
 #include <sal/macros.h>
 
 #define _SVX_PAGE_CXX

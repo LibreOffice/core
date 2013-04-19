@@ -23,7 +23,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft.hxx>
 #include <editeng/flstitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svl/cjkoptions.hxx>
 #include <numpara.hxx>

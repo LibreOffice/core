@@ -50,7 +50,7 @@
 #include <comcore.hrc>
 #include <globals.hrc>
 #include <sfx2/bindings.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
 #include "swabstdlg.hxx"
 #include <boost/scoped_ptr.hpp>

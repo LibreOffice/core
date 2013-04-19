@@ -20,7 +20,7 @@
 #include <svx/dialogs.hrc>
 #include <hintids.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <fmtfsize.hxx>
 #include <wrtsh.hxx>
 #include <doc.hxx>

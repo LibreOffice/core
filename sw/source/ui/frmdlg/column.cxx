@@ -22,7 +22,7 @@
 #include "hintids.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/borderline.hxx>

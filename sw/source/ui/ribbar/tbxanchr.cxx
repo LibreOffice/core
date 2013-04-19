@@ -20,7 +20,7 @@
 #include <string>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
