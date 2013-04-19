@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+wY\u003d",
+        "filename": "tools/source/datetime/ttime.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2013-04-19T06:24:50Z",
+      "side": 1,
+      "message": "Perhaps we should be using sal_uInt32 here?\nOr is there something magic I\u0027m missing?",
+      "revId": "9830fd36dbdb72c79703b0c61efc027fba793c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+wc\u003d",
+        "filename": "tools/source/datetime/ttime.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2013-04-19T06:24:50Z",
+      "side": 1,
+      "message": "shouldn\u0027t this, and the other similar lines of code, be something like\nassert(nNewMin \u003e\u003d 0 \u0026\u0026 nNewin \u003c minInHour)\nto prevent coding errors being ignored?",
+      "revId": "9830fd36dbdb72c79703b0c61efc027fba793c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
