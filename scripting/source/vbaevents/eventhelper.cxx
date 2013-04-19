@@ -58,8 +58,6 @@
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 
-#include <ooo/vba/msforms/ReturnInteger.hpp>
-
 #include <sfx2/objsh.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
@@ -67,6 +65,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
+#include <vbahelper/vbareturntypes.hxx>
 
 // for debug
 #include <comphelper/anytostring.hxx>
@@ -160,9 +159,8 @@ Sequence< Any > ooKeyPressedToVBAKeyPressed( const Sequence< Any >& params )
 
     translatedParams.realloc(1);
 
-    msforms::ReturnInteger keyCode;
-    keyCode.Value = evt.KeyCode;
-    translatedParams[0] <<= keyCode;
+    Reference< msforms::XReturnInteger> xKeyCode = new ReturnInteger(  sal_Int32( evt.KeyCode ) );
+    translatedParams[0] <<= xKeyCode;
     return  translatedParams;
 }
 
@@ -176,12 +174,11 @@ Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
 
     translatedParams.realloc(2);
 
-    msforms::ReturnInteger keyCode;
+    Reference< msforms::XReturnInteger> xKeyCode = new ReturnInteger(  evt.KeyCode );
     sal_Int8 shift = sal::static_int_cast<sal_Int8>( evt.Modifiers );
 
     // #TODO check whether values from OOO conform to values generated from vba
-    keyCode.Value = evt.KeyCode;
-    translatedParams[0] <<= keyCode;
+    translatedParams[0] <<= xKeyCode;
     translatedParams[1] <<= shift;
     return  translatedParams;
 }
