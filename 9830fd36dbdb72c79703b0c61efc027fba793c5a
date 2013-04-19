@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//+wQ\u003d",
+        "filename": "tools/source/datetime/ttime.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-04-19T06:55:35Z",
+      "side": 1,
+      "message": "I more or less agree. We should be using:\n sal_uInt16 nHour, sal_uInt16 nMin, sal_uInt16 nSec, sal_uInt32 nNanoSec\n\nI did not do that since \"it was like that before\", to not make this patch more disruptive than necessary. Feel free to do it.",
+      "parentUuid": "AAAAXH//+wY\u003d",
+      "revId": "9830fd36dbdb72c79703b0c61efc027fba793c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//+wc\u003d",
         "filename": "tools/source/datetime/ttime.cxx",
         "patchSetId": 24
@@ -30,6 +48,24 @@
       "writtenOn": "2013-04-19T06:24:50Z",
       "side": 1,
       "message": "shouldn\u0027t this, and the other similar lines of code, be something like\nassert(nNewMin \u003e\u003d 0 \u0026\u0026 nNewin \u003c minInHour)\nto prevent coding errors being ignored?",
+      "revId": "9830fd36dbdb72c79703b0c61efc027fba793c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+wM\u003d",
+        "filename": "tools/source/datetime/ttime.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-04-19T06:55:35Z",
+      "side": 1,
+      "message": "nNewMin \u003e\u003d 0 will break WaE since nNewMin is an unsigned int.\nnNewMin \u003c minInHour: OK, fair enough. You can add it.\n\nPay attention that (nSec \u003d\u003d 60) is valid (for leap seconds).",
+      "parentUuid": "AAAAXH//+wc\u003d",
       "revId": "9830fd36dbdb72c79703b0c61efc027fba793c5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
