@@ -157,12 +157,10 @@ public:
     explicit SvxNumberFormat( sal_Int16 nNumberingType,
                      SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
     SvxNumberFormat(const SvxNumberFormat& rFormat);
-    SvxNumberFormat( SvStream & rStream );
 
     virtual ~SvxNumberFormat();
 
     SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
-    SvxNumberFormat* Create(SvStream& rStream );
 
     SvxNumberFormat& operator=( const SvxNumberFormat&  );
     sal_Bool            operator==( const SvxNumberFormat&  ) const;
@@ -254,7 +252,6 @@ public:
                         eDefaultNumberFormatPositionAndSpaceMode
                                 = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     SvxNumRule(const SvxNumRule& rCopy);
-    SvxNumRule(SvStream &rStream);
     virtual ~SvxNumRule();
 
     int                     operator==( const SvxNumRule& ) const;
@@ -263,7 +260,7 @@ public:
     SvxNumRule&             operator=( const SvxNumRule&  );
 
     SvStream&               Store(SvStream &rStream);
-    SvxNumRule*             Create(SvStream &rStream);
+
     const SvxNumberFormat*  Get(sal_uInt16 nLevel)const;
     const SvxNumberFormat&  GetLevel(sal_uInt16 nLevel)const;
     void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat& rFmt, sal_Bool bIsValid = sal_True);
@@ -297,9 +294,9 @@ public:
     virtual ~SvxNumBulletItem();
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &rStream, sal_uInt16 nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     sal_uInt16  GetVersion( sal_uInt16 nFileVersion ) const;
-    virtual SvStream&        Store(SvStream &rStream, sal_uInt16 nItemVersion ) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual int              operator==( const SfxPoolItem& ) const;
 
     SvxNumRule*             GetNumRule() const {return pNumRule;}

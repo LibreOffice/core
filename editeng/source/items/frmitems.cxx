@@ -3475,7 +3475,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
     if ( nVersion >= BRUSH_GRAPHIC_VERSION )
     {
         sal_uInt16 nDoLoad = 0;
-        sal_uInt16 nPos;
+        sal_Int8 nPos;
 
         rStream >> nDoLoad;
 
@@ -3892,8 +3892,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
         // UNICODE: rStream << *pStrFilter;
         rStream.WriteUniOrByteString(*pStrFilter, rStream.GetStreamCharSet());
     }
-    // SvStream doesn't support sal_Int8
-    rStream << (sal_uInt16)eGraphicPos;
+    rStream << (sal_Int8)eGraphicPos;
     return rStream;
 }
 
