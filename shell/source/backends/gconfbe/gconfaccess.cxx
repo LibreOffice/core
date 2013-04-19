@@ -51,7 +51,7 @@ GConfClient* getGconfClient()
     static GConfClient* mClient= 0;
     if (mClient == NULL)
     {
-#if !defined(GLIB_VERSION_2_36)
+#if !GLIB_CHECK_VERSION(2,36,0)
         /* initialize glib object type library */
         g_type_init();
 #endif
