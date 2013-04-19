@@ -25,20 +25,29 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,cppuhelper/allheaders))
+$(eval $(call gb_CppunitTest_CppunitTest,odk_checkapi))
 
-cppuhelper_allheaders_DIR := $(call gb_CustomTarget_get_workdir,cppuhelper/allheaders)
+$(eval $(call gb_CppunitTest_use_custom_headers,odk_checkapi,\
+	odk/allheaders \
+))
 
-$(call gb_CustomTarget_get_target,cppuhelper/allheaders) : \
-	$(cppuhelper_allheaders_DIR)/cppuhelper_allheaders.hxx
+$(eval $(call gb_CppunitTest_add_exception_objects,odk_checkapi,\
+    odk/qa/checkapi/strings \
+))
 
-$(cppuhelper_allheaders_DIR)/cppuhelper_allheaders.hxx : \
-			$(call gb_Package_get_target,cppuhelper_odk_headers) \
-            | $(cppuhelper_allheaders_DIR)/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	printf '// Generated list of cppuhelper includes\n' > $@ \
-	$(foreach file,$(shell cat $<),\
-	    && printf '#include <%s>\n' $(subst $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,,$(file)) >> $@ \
-	)
+$(eval $(call gb_CppunitTest_use_external,odk_checkapi,boost_headers))
+
+$(eval $(call gb_CppunitTest_use_internal_comprehensive_api,odk_checkapi,\
+	cppu \
+	udkapi \
+))
+
+$(eval $(call gb_CppunitTest_use_libraries,odk_checkapi,\
+	cppu \
+	cppuhelper \
+    sal \
+    salhelper \
+	$(gb_UWINAPI) \
+))
 
 # vim: set noet sw=4 ts=4:

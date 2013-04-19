@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,sal))
 
 $(eval $(call gb_Module_add_targets,sal,\
-	CustomTarget_sal_allheaders \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
 		Executable_cppunittester) \
 	$(if $(filter $(OS),ANDROID), \
@@ -22,8 +21,6 @@ $(eval $(call gb_Module_add_targets,sal,\
 		Library_uwinapi) \
 	Package_inc \
 	StaticLibrary_salcpprt \
-	Package_sal_generated \
-	Package_sal_odk_headers \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
@@ -39,7 +36,6 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 $(eval $(call gb_Module_add_check_targets,sal,\
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_Module_DLL) \
 	CppunitTest_sal_bytesequence \
-	CppunitTest_sal_checkapi \
 	CppunitTest_sal_osl_condition \
 	$(if $(filter $(OS),WNT),, \
 		CppunitTest_sal_osl_file) \

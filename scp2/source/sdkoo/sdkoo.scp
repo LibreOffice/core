@@ -236,38 +236,10 @@ File gid_File_Zip_OdkIdl_offapi
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
-File gid_File_Zip_Odkheaders_sal_generated
+File gid_File_Zip_Odkheaders
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;
-    Name = "sal_generated.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-
-File gid_File_Zip_Odkheaders_sal
-    TXT_FILE_BODY;
-    Dir = FILELIST_SDK_DIR;
-    Name = "sal_odk_headers.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-
-File gid_File_Zip_Odkheaders_salhelper
-    TXT_FILE_BODY;
-    Dir = FILELIST_SDK_DIR;
-    Name = "salhelper_odk_headers.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-
-File gid_File_Zip_Odkheaders_cppu
-    TXT_FILE_BODY;
-    Dir = FILELIST_SDK_DIR;
-    Name = "cppu_odk_headers.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-
-File gid_File_Zip_Odkheaders_cppuhelper
-    TXT_FILE_BODY;
-    Dir = FILELIST_SDK_DIR;
-    Name = "cppuhelper_odk_headers.filelist";
+    Name = "odk_headers.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 

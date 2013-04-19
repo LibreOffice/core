@@ -28,8 +28,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,registry_helper))
 
 $(eval $(call gb_StaticLibrary_use_packages,registry_helper,\
-	sal_generated \
-	sal_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,registry_helper,\

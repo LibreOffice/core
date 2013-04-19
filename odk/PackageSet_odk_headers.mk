@@ -7,21 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,udm))
+$(eval $(call gb_PackageSet_PackageSet,odk_headers))
 
-$(eval $(call gb_StaticLibrary_use_packages,udm,\
-	cosv_inc \
-	udm_inc \
-))
-
-$(eval $(call gb_StaticLibrary_set_include,udm,\
-    -I$(SRCDIR)/udm/source/inc \
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_StaticLibrary_add_exception_objects,udm,\
-	udm/source/html/htmlitem \
-	udm/source/xml/xmlitem \
+$(eval $(call gb_PackageSet_add_packages,odk_headers,\
+    odk_headers \
+    odk_headers_generated \
 ))
 
 # vim: set noet sw=4 ts=4:

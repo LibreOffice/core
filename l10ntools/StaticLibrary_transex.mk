@@ -28,8 +28,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,transex))
 
 $(eval $(call gb_StaticLibrary_use_packages,transex,\
-	sal_generated \
-	sal_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,transex,\

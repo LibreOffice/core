@@ -28,19 +28,15 @@ odk_INCFILELIST := com/sun/star/uno/Any.h \
 	com/sun/star/uno/Type.hxx
 
 # Cygwin Doxygen needs unix paths
-DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(SRCDIR)/sal/inc/sal/log-areas.dox \
+DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(SRCDIR)/include/sal/log-areas.dox \
 	$(addprefix $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,$(odk_INCDIRLIST) $(odk_INCFILELIST))
 DOXY_INPUT := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(DOXY_INPUT)),$(DOXY_INPUT))
 DOXY_WORKDIR := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(odk_WORKDIR)/docs/cpp/ref),$(odk_WORKDIR)/docs/cpp/ref)
 DOXY_STRIP_PATH := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(OUTDIR)/inc),$(OUTDIR)/inc)
 DOXY_DEPS := $(SRCDIR)/odk/pack/gendocu/Doxyfile \
 	$(SRCDIR)/odk/pack/gendocu/main.dox \
-	$(SRCDIR)/sal/inc/sal/log-areas.dox \
-	$(call gb_Package_get_target,sal_odk_headers) \
-	$(call gb_Package_get_target,sal_generated) \
-	$(call gb_Package_get_target,salhelper_odk_headers) \
-	$(call gb_Package_get_target,cppu_odk_headers) \
-	$(call gb_Package_get_target,cppuhelper_odk_headers) \
+	$(SRCDIR)/include/sal/log-areas.dox \
+	$(call gb_PackageSet_get_target,odk_headers)
 
 
 $(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/cpp/ref,index.html))

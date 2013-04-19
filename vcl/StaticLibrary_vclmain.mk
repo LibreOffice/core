@@ -21,10 +21,6 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,vclmain))
 
 $(eval $(call gb_StaticLibrary_use_packages,vclmain,\
 	comphelper_inc \
-	cppu_odk_headers \
-	cppuhelper_odk_headers \
-	sal_generated \
-	sal_odk_headers \
 	tools_inc \
 ))
 
