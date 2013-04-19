@@ -723,7 +723,8 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown ),
     mbDimensionMembersBuilt(r.mbDimensionMembersBuilt),
-    mpGrandTotalName(NULL)
+    mpGrandTotalName(NULL),
+    mpDimOrder(NULL)
 {
     if ( r.pDimensionData )
         pDimensionData = new ScDPDimensionSaveData( *r.pDimensionData );
@@ -800,6 +801,39 @@ const ScDPSaveData::DimsType& ScDPSaveData::GetDimensions() const
     return aDimList;
 }
 
+namespace {
+
+class DimOrderInserter : std::unary_function<const ScDPSaveDimension*, void>
+{
+    ScDPSaveData::DimOrderType& mrNames;
+public:
+    DimOrderInserter(ScDPSaveData::DimOrderType& rNames) : mrNames(rNames) {}
+
+    void operator() (const ScDPSaveDimension* pDim)
+    {
+        size_t nRank = mrNames.size();
+        mrNames.insert(
+            ScDPSaveData::DimOrderType::value_type(pDim->GetName(), nRank));
+    }
+};
+
+}
+
+const ScDPSaveData::DimOrderType& ScDPSaveData::GetDimensionSortOrder() const
+{
+    if (!mpDimOrder)
+    {
+        mpDimOrder.reset(new DimOrderType);
+        std::vector<const ScDPSaveDimension*> aRowDims, aColDims;
+        GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aRowDims);
+        GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aColDims);
+
+        std::for_each(aRowDims.begin(), aRowDims.end(), DimOrderInserter(*mpDimOrder));
+        std::for_each(aColDims.begin(), aColDims.end(), DimOrderInserter(*mpDimOrder));
+    }
+    return *mpDimOrder;
+}
+
 void ScDPSaveData::GetAllDimensionsByOrientation(
     sheet::DataPilotFieldOrientation eOrientation, std::vector<const ScDPSaveDimension*>& rDims) const
 {
@@ -824,6 +858,8 @@ void ScDPSaveData::AddDimension(ScDPSaveDimension* pDim)
 
     CheckDuplicateName(*pDim);
     aDimList.push_back(pDim);
+
+    DimensionChanged();
 }
 
 ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const OUString& rName)
@@ -904,6 +940,7 @@ void ScDPSaveData::RemoveDimensionByName(const OUString& rName)
 
         aDimList.erase(iter);
         RemoveDuplicateNameCount(rName);
+        DimensionChanged();
         return;
     }
 }
@@ -984,6 +1021,7 @@ void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
     }
 
     aDimList.insert(iterInsert,pDim);
+    DimensionChanged();
 }
 
 void ScDPSaveData::SetColumnGrand(bool bSet)
@@ -1361,7 +1399,13 @@ ScDPSaveDimension* ScDPSaveData::AppendNewDimension(const OUString& rName, bool 
     if (!maDupNameCounts.count(rName))
         maDupNameCounts.insert(DupNameCountType::value_type(rName, 0));
 
+    DimensionChanged();
     return pNew;
+}
+
+void ScDPSaveData::DimensionChanged()
+{
+    mpDimOrder.reset();
 }
 
 bool operator == (const ::com::sun::star::sheet::DataPilotFieldSortInfo &l, const ::com::sun::star::sheet::DataPilotFieldSortInfo &r )

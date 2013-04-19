@@ -229,6 +229,7 @@ class ScDPSaveData
 {
     typedef boost::unordered_map<OUString, size_t, OUStringHash> DupNameCountType;
 public:
+    typedef boost::unordered_map<OUString, size_t, OUStringHash> DimOrderType;
     typedef boost::ptr_vector<ScDPSaveDimension> DimsType;
 
 private:
@@ -247,6 +248,7 @@ private:
     bool mbDimensionMembersBuilt;
 
     boost::scoped_ptr<OUString> mpGrandTotalName;
+    mutable boost::scoped_ptr<DimOrderType> mpDimOrder; // dimension order for row and column dimensions, to traverse result tree.
 
 public:
     SC_DLLPUBLIC ScDPSaveData();
@@ -261,6 +263,8 @@ public:
     SC_DLLPUBLIC const OUString* GetGrandTotalName() const;
 
     SC_DLLPUBLIC const DimsType& GetDimensions() const;
+
+    const DimOrderType& GetDimensionSortOrder() const;
 
     /**
      * Get all dimensions in a given orientation.  The order represents the
@@ -363,6 +367,8 @@ private:
      * @return pointer to the new dimension just inserted.
      */
     ScDPSaveDimension* AppendNewDimension(const OUString& rName, bool bDataLayout);
+
+    void DimensionChanged();
 };
 
 #endif

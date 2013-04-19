@@ -1297,38 +1297,22 @@ public:
     }
 };
 
-typedef boost::unordered_map<OUString, size_t, OUStringHash> DimOrderType;
-
-class DimOrderInserter : std::unary_function<const ScDPSaveDimension*, void>
-{
-    DimOrderType& mrNames;
-public:
-    DimOrderInserter(DimOrderType& rNames) : mrNames(rNames) {}
-
-    void operator() (const ScDPSaveDimension* pDim)
-    {
-        size_t nRank = mrNames.size();
-        mrNames.insert(
-            DimOrderType::value_type(pDim->GetName(), nRank));
-    }
-};
-
 class LessByDimOrder : std::binary_function<sheet::DataPilotFieldFilter, sheet::DataPilotFieldFilter, bool>
 {
-    const DimOrderType& mrDimOrder;
+    const ScDPSaveData::DimOrderType& mrDimOrder;
 
 public:
-    LessByDimOrder(const DimOrderType& rDimOrder) : mrDimOrder(rDimOrder) {}
+    LessByDimOrder(const ScDPSaveData::DimOrderType& rDimOrder) : mrDimOrder(rDimOrder) {}
 
     bool operator() (const sheet::DataPilotFieldFilter& r1, const sheet::DataPilotFieldFilter& r2) const
     {
         size_t nRank1 = mrDimOrder.size();
         size_t nRank2 = mrDimOrder.size();
-        DimOrderType::const_iterator it1 = mrDimOrder.find(r1.FieldName);
+        ScDPSaveData::DimOrderType::const_iterator it1 = mrDimOrder.find(r1.FieldName);
         if (it1 != mrDimOrder.end())
             nRank1 = it1->second;
 
-        DimOrderType::const_iterator it2 = mrDimOrder.find(r2.FieldName);
+        ScDPSaveData::DimOrderType::const_iterator it2 = mrDimOrder.find(r2.FieldName);
         if (it2 != mrDimOrder.end())
             nRank2 = it2->second;
 
@@ -1363,19 +1347,9 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
     if (!xDPResults.is())
         return fRet;
 
-    std::vector<const ScDPSaveDimension*> aRowDims, aColDims;
-    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aRowDims);
-    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aColDims);
-
     // Dimensions must be sorted in order of appearance, and row dimensions
     // must come before column dimensions.
-    // TODO: dimension order should be generated only once in ScDPSaveData.
-    DimOrderType aDimOrder;
-    std::for_each(aRowDims.begin(), aRowDims.end(), DimOrderInserter(aDimOrder));
-    std::for_each(aColDims.begin(), aColDims.end(), DimOrderInserter(aDimOrder));
-
-    // Sort filters by this dimension order...
-    std::sort(rFilters.begin(), rFilters.end(), LessByDimOrder(aDimOrder));
+    std::sort(rFilters.begin(), rFilters.end(), LessByDimOrder(pSaveData->GetDimensionSortOrder()));
 
     size_t n = rFilters.size();
     uno::Sequence<sheet::DataPilotFieldFilter> aFilters(n);
