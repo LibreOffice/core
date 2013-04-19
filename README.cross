@@ -80,7 +80,7 @@ For example, you can install it like this:
 
 zypper ar http://download.opensuse.org/repositories/windows:/mingw:/win32/<your_os>/windows:mingw:win32.repo
 
-where <your_os> is one of SLE_11, SLE_11_SP1, openSUSE_11.3, openSUSE_11.4 or
+where <your_os> is one of SLE_11, SLE_11_SP1, openSUSE_XX.Y, or
 openSUSE_Factory.
 
 zypper in mingw32-cross-gcc mingw32-cross-gcc-c++ mingw32-python-devel \
