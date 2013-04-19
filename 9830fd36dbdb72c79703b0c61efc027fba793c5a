@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//+u0\u003d",
+        "filename": "tools/source/datetime/ttime.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-19T10:21:59Z",
+      "side": 1,
+      "message": "Don\u0027t change that to 16-bit values, it is perfectly legal to call this with 86000 seconds to create a time, or even a million seconds.. ;-)",
+      "parentUuid": "AAAAXH//+wQ\u003d",
+      "revId": "9830fd36dbdb72c79703b0c61efc027fba793c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//+wc\u003d",
         "filename": "tools/source/datetime/ttime.cxx",
         "patchSetId": 24
