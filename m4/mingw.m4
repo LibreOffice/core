@@ -1,28 +1,10 @@
-dnl Version: MPL 1.1 / GPLv3+ / LGPLv3+
 dnl
-dnl The contents of this file are subject to the Mozilla Public License Version
-dnl 1.1 (the "License"); you may not use this file except in compliance with
-dnl the License or as specified alternatively below. You may obtain a copy of
-dnl the License at http://www.mozilla.org/MPL/
+dnl This file is part of the LibreOffice project.
 dnl
-dnl Software distributed under the License is distributed on an "AS IS" basis,
-dnl WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
-dnl for the specific language governing rights and limitations under the
-dnl License.
+dnl This Source Code Form is subject to the terms of the Mozilla Public
+dnl License, v. 2.0. If a copy of the MPL was not distributed with this
+dnl file, You can obtain one at http://mozilla.org/MPL/2.0/.
 dnl
-dnl Major Contributor(s):
-dnl Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
-dnl  (initial developer)
-dnl
-dnl All Rights Reserved.
-dnl
-dnl For minor contributions see the git repository.
-dnl
-dnl Alternatively, the contents of this file may be used under the terms of
-dnl either the GNU General Public License Version 3 or later (the "GPLv3+"), or
-dnl the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
-dnl in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
-dnl instead of those above.
 
 # libo_MINGW_CHECK_DLL(dll-name-stem,[action-if-found],[action-if-not-found])
 #
