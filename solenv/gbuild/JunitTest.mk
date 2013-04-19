@@ -57,7 +57,7 @@ $(call gb_JunitTest_get_target,%) :
 		&& echo "to rerun just this failed test without all others, run:" \
 		&& echo && echo "    make JunitTest_$*" && echo \
 		&& echo "cd into the module dir to run the tests faster" \
-		&& echo "Or to do interactive debugging, run two shells with (Linux only):" \
+		&& echo "Or to do interactive debugging (non-Windows), run two shells with:" \
 		&& echo \
 		&& echo "    make debugrun" \
 		&& echo "    make gb_JunitTest_DEBUGRUN=T JunitTest_$*" \

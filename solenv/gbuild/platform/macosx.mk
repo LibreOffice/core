@@ -313,13 +313,32 @@ endef
 
 # JunitTest class
 
+ifneq ($(OOO_TEST_SOFFICE),)
+gb_JunitTest_SOFFICEARG:=$(OOO_TEST_SOFFICE)
+else
+ifneq ($(gb_JunitTest_DEBUGRUN),)
+gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
+else
+gb_JunitTest_SOFFICEARG:=path:$(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/soffice
+endif
+endif
+
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/soffice}" \
+	-Dorg.openoffice.test.arg.soffice="$(gb_JunitTest_SOFFICEARG)" \
 	-Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH"$$$${DYLD_LIBRARY_PATH+=$$$$DYLD_LIBRARY_PATH}" \
 	-Dorg.openoffice.test.arg.user=$(call gb_Helper_make_url,$(call gb_JunitTest_get_userdir,$(1))) \
 	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
 
+endef
+
+# Module class
+
+define gb_Module_DEBUGRUNCOMMAND
+OFFICESCRIPT=$$($(gb_MKTEMP)) && \
+printf '%s\n' "set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(call gb_Helper_make_url,$(DEVINSTALLDIR)/)" > $${OFFICESCRIPT} && \
+gdb -x $${OFFICESCRIPT} $(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/soffice && \
+rm $${OFFICESCRIPT}
 endef
 
 # InstallModuleTarget class
