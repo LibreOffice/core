@@ -3388,20 +3388,11 @@ AC_SUBST(x_OBJCFLAGS)
 AC_SUBST(x_OBJCXXFLAGS)
 AC_SUBST(x_LDFLAGS)
 
-dnl ===================================================================
-dnl Product version
-dnl ===================================================================
-AC_MSG_CHECKING([for product version])
-PRODUCTVERSION=AC_PACKAGE_VERSION
-AC_MSG_RESULT([$PRODUCTVERSION])
-AC_SUBST(PRODUCTVERSION)
-
 #
 # determine CPU, CPUNAME, GUI, GUIBASE, ...
 #
 LIB64="lib"
 SOLARINC="-I${SRC_ROOT}/include"
-SDKDIR="sdk"
 
 case "$host_os" in
 
@@ -3460,7 +3451,6 @@ darwin*)
     OS=MACOSX
     RTL_OS=MacOSX
     P_SEP=:
-    SDKDIR="LibreOffice${PRODUCTVERSION}_SDK"
 
     case "$host_cpu" in
     arm*)
@@ -3945,7 +3935,7 @@ else
     INSTDIR=${BUILDDIR}/instdir/${INPATH}
 fi
 OUTDIR="${SOLARVER}/${INPATH}"
-SOLARINC="-I. -I$SRC_ROOT/include -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I${INSTDIR}/${SDKDIR}/include $SOLARINC"
+SOLARINC="-I. -I$SRC_ROOT/include -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc $SOLARINC"
 AC_SUBST(COM)
 AC_SUBST(CPU)
 AC_SUBST(CPUNAME)
@@ -11336,6 +11326,14 @@ fi
 AC_SUBST(WGET)
 AC_SUBST(CURL)
 AC_SUBST(MD5SUM)
+
+dnl ===================================================================
+dnl Product version
+dnl ===================================================================
+AC_MSG_CHECKING([for product version])
+PRODUCTVERSION=AC_PACKAGE_VERSION
+AC_MSG_RESULT([$PRODUCTVERSION])
+AC_SUBST(PRODUCTVERSION)
 
 dnl ===================================================================
 dnl Dealing with l10n options
