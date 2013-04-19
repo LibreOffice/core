@@ -46,7 +46,7 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "GraphicDocShell.hxx"
 #include "fudraw.hxx"
 #include "ViewShell.hxx"

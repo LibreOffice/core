@@ -48,7 +48,7 @@
 #include "Outliner.hxx"
 #include "app.hrc"
 
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "stlsheet.hxx"
 #include "drawview.hxx"
 #include "drawdoc.hxx"

@@ -29,7 +29,7 @@
 #include "Window.hxx"
 #include "drawdoc.hxx"
 #include "app.hrc"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "View.hxx"
 #include "Outliner.hxx"
 #include "DrawViewShell.hxx"

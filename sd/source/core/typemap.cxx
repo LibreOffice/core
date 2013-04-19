@@ -18,7 +18,7 @@
  */
 
 
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fhgtitem.hxx>

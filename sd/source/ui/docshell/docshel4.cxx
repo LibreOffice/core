@@ -59,7 +59,7 @@
 #include "sdattr.hxx"
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "View.hxx"
 #include "sdpage.hxx"
 #include "sdresid.hxx"

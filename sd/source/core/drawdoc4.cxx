@@ -30,7 +30,6 @@
 #include "../ui/inc/DrawDocShell.hxx"
 #include <editeng/eeitem.hxx>
 #include <vcl/svapp.hxx>
-#include <eetext.hxx>
 
 #include <editeng/autokernitem.hxx>
 

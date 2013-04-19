@@ -47,7 +47,7 @@
 #include <sfx2/fcontnr.hxx>
 
 #include "app.hrc"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "strmname.h"
 #include "stlpool.hxx"
 #include "strings.hrc"

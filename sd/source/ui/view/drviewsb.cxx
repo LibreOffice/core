@@ -45,7 +45,7 @@
 #include "glob.hrc"
 #include "Outliner.hxx"
 #include "Window.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "sdattr.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"

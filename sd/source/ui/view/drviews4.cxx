@@ -50,7 +50,7 @@
 #include "Window.hxx"
 #include "fupoor.hxx"
 #include "fusnapln.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "Ruler.hxx"
 #include "sdresid.hxx"
 #include "GraphicViewShell.hxx"

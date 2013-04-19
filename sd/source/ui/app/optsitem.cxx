@@ -23,7 +23,7 @@
 #include <tools/helpers.hxx>
 #include <unotools/syslocale.hxx>
 
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "optsitem.hxx"
 #include "cfgids.hxx"
 #include "FrameView.hxx"

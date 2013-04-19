@@ -57,7 +57,7 @@
 #include "sdundogr.hxx"
 #include "undopage.hxx"
 #include "glob.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "fupoor.hxx"
 #include "slideshow.hxx"
 #ifndef SD_FRAME_VIEW

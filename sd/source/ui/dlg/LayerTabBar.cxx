@@ -26,7 +26,7 @@
 
 
 #include "sdattr.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "helpids.h"
 #include "app.hrc"
 #include "glob.hrc"
