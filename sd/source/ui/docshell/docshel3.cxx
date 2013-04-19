@@ -44,7 +44,7 @@
 #include "glob.hrc"
 #include "res_bmp.hrc"
 
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "sdattr.hxx"

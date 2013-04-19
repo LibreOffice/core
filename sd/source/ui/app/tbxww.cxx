@@ -31,7 +31,7 @@
 
 #include <vcl/toolbox.hxx>
 
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "app.hrc"
 #include "res_bmp.hrc"
 #include "sdresid.hxx"

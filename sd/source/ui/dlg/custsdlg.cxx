@@ -26,7 +26,7 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "cusshow.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "customshowlist.hxx"
 #include <vcl/msgbox.hxx>
 #include "svtools/treelistentry.hxx"

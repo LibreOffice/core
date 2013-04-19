@@ -67,7 +67,7 @@
 #include "app.hrc"
 #include "sdresid.hxx"
 #include "View.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "DrawViewShell.hxx"

@@ -54,7 +54,7 @@
 #include "strings.hrc"
 #include "helpids.h"
 
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "fupoor.hxx"
 #include "sdresid.hxx"
 #include "fusel.hxx"

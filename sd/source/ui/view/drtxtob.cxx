@@ -54,7 +54,7 @@
 #include "glob.hrc"
 #include "res_bmp.hrc"
 
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 
 #include "drawdoc.hxx"
 #include "DrawViewShell.hxx"

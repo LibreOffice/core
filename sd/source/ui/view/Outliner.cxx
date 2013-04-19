@@ -49,9 +49,9 @@
 
 #include "strings.hrc"
 #include "sdstring.hrc"
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include "sdpage.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "Window.hxx"
 #include "sdresid.hxx"
 #include "DrawViewShell.hxx"

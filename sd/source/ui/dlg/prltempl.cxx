@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 
 #include <svx/dialogs.hrc>
 #include <editeng/flstitem.hxx>

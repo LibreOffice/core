@@ -19,7 +19,7 @@
 
 #include <basic/sbx.hxx>
 
-#include <app.hxx>
+#include "sdmod.hxx"
 #include "sdpage.hxx"
 #include "sdobjfac.hxx"
 #include "glob.hxx"

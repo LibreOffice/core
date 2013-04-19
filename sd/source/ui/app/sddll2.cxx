@@ -18,7 +18,7 @@
  */
 
 #include <editeng/editdata.hxx>
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/eeitem.hxx>
 
