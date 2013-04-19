@@ -559,10 +559,20 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    basprov \
     cairocanvas \
+    dlgprov \
+    expwrap \
+    fastsax \
+    i18nsearch \
+    ldapbe2 \
+    migrationoo2 \
+    migrationoo3 \
     msforms \
     mtfrenderer \
     OGLTrans \
+    slideshow \
+    stringresource \
     vbaevents \
     vbaobj \
     vbaswobj \
@@ -578,27 +588,19 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
 ))
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     PresenterScreen \
-    basprov \
     canvasfactory \
     cmdmail \
     directx5canvas \
     directx9canvas \
-    dlgprov \
-    expwrap \
-    fastsax \
     fpicker \
     fps_office \
     gconfbe1 \
     gdipluscanvas \
     hatchwindowfactory \
-    i18nsearch \
     kdebe1 \
     kde4be1 \
-    ldapbe2 \
     losessioninstall \
     macbe1 \
-    migrationoo2 \
-    migrationoo3 \
     nullcanvas \
     passwordcontainer \
     pdfimport \
@@ -606,8 +608,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     postgresql-sdbc \
     postgresql-sdbc-impl \
     simplecanvas \
-    slideshow \
-    stringresource \
     syssh \
     tdebe1 \
     ucpcmis1 \
