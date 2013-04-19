@@ -3097,42 +3097,64 @@ void ScInterpreter::ScGetPivotData()
             bOldSyntax = true;
     }
 
+    std::vector<sheet::DataPilotFieldFilter> aFilters;
+    OUString aDataFieldName;
+    ScRange aBlock;
+
     if (bOldSyntax)
     {
-        // TODO: I'll handle this later.
-        PushError(errNoRef);
-        return;
-    }
+        aDataFieldName = GetString();
 
-    // Standard syntax: separate name/value pairs
-
-    sal_uInt16 nFilterCount = nParamCount / 2 - 1;
-    std::vector<sheet::DataPilotFieldFilter> aFilters(nFilterCount);
-
-    sal_uInt16 i = nFilterCount;
-    while (i-- > 0)
-    {
-        //! should allow numeric constraint values
-        aFilters[i].MatchValue = GetString();
-        aFilters[i].FieldName = GetString();
-    }
-
-    ScRange aBlock;
-    switch (GetStackType())
-    {
-        case svDoubleRef :
-            PopDoubleRef(aBlock);
-        break;
-        case svSingleRef :
+        switch (GetStackType())
         {
-            ScAddress aAddr;
-            PopSingleRef(aAddr);
-            aBlock = aAddr;
+            case svDoubleRef :
+                PopDoubleRef(aBlock);
+            break;
+            case svSingleRef :
+            {
+                ScAddress aAddr;
+                PopSingleRef(aAddr);
+                aBlock = aAddr;
+            }
+            break;
+            default:
+                PushError(errNoRef);
+                return;
         }
-        break;
-        default:
-            PushError(errNoRef);
-            return;
+    }
+    else
+    {
+        // Standard syntax: separate name/value pairs
+
+        sal_uInt16 nFilterCount = nParamCount / 2 - 1;
+        aFilters.resize(nFilterCount);
+
+        sal_uInt16 i = nFilterCount;
+        while (i-- > 0)
+        {
+            //! should allow numeric constraint values
+            aFilters[i].MatchValue = GetString();
+            aFilters[i].FieldName = GetString();
+        }
+
+        switch (GetStackType())
+        {
+            case svDoubleRef :
+                PopDoubleRef(aBlock);
+            break;
+            case svSingleRef :
+            {
+                ScAddress aAddr;
+                PopSingleRef(aAddr);
+                aBlock = aAddr;
+            }
+            break;
+            default:
+                PushError(errNoRef);
+                return;
+        }
+
+        aDataFieldName = GetString(); // First parameter is data field name.
     }
 
     // NOTE : MS Excel docs claim to use the 'most recent' which is not
@@ -3144,8 +3166,6 @@ void ScInterpreter::ScGetPivotData()
         PushError(errNoRef);
         return;
     }
-
-    OUString aDataFieldName = GetString(); // First parameter is data field name.
 
     double fVal = pDPObj->GetPivotData(aDataFieldName, aFilters);
     if (rtl::math::isNan(fVal))
