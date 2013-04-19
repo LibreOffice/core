@@ -353,10 +353,6 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
                 SAL_INFO("vcl.unity", "preparing submenu  " << pSubMenuModel << " to menu model " << G_MENU_MODEL(pSubMenuModel) << " and action group " << G_ACTION_GROUP(pActionGroup));
                 pSubmenu->SetMenuModel( G_MENU_MODEL( pSubMenuModel ) );
                 pSubmenu->SetActionGroup( G_ACTION_GROUP( pActionGroup ) );
-
-                pSubmenu->GetMenu()->Activate();
-                pSubmenu->GetMenu()->Deactivate();
-
                 pSubmenu->ImplUpdate( bRecurse );
             }
         }
@@ -658,7 +654,6 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
 {
     SolarMutexGuard aGuard;
     GtkSalMenu* pMenu = NULL;
-
     for ( sal_uInt16 nPos = 0; nPos < maItems.size(); nPos++ )
     {
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
@@ -695,23 +690,30 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
     Menu* pSubMenu = ( pSalSubMenu != NULL ) ? pSalSubMenu->GetMenu() : NULL;
 
     MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
-
     pMenuBar->HandleMenuCommandEvent( pSubMenu, itemId );
 }
 
-void GtkSalMenu::Activate( const gchar* aMenuCommand )
+void GtkSalMenu::ActivateAllSubmenus(MenuBar* pMenuBar)
+{
+    pMenuBar->HandleMenuActivateEvent(mpVCLMenu);
+    for ( sal_uInt16 nPos = 0; nPos < maItems.size(); nPos++ )
+    {
+        GtkSalMenuItem *pSalItem = maItems[ nPos ];
+        if ( pSalItem->mpSubMenu != NULL )
+        {
+            pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
+            pSalItem->mpSubMenu->Update();
+        }
+    }
+}
+
+void GtkSalMenu::Activate()
 {
     if ( mbMenuBar != TRUE )
         return;
-
-    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( (gchar*) aMenuCommand, TRUE );
-
-    if ( pSalSubMenu != NULL ) {
-        MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
-        pMenuBar->HandleMenuActivateEvent( pSalSubMenu->mpVCLMenu );
-        pSalSubMenu->Update();
-    }
+    ActivateAllSubmenus(static_cast<MenuBar*>(mpVCLMenu));
 }
+
 
 void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
 {

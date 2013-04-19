@@ -167,20 +167,22 @@ g_lo_action_group_perform_submenu_action (GLOActionGroup *group,
                                           const gchar    *action_name,
                                           GVariant       *state)
 {
-    SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group);
 
     GtkSalFrame* pFrame = group->priv->frame;
+    SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " for frame " << pFrame);
 
     if (pFrame == NULL)
         return;
 
     GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*> (pFrame->GetMenu());
+    SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " for menu " << pSalMenu);
 
     if (pSalMenu != NULL) {
         gboolean bState = g_variant_get_boolean (state);
+        SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " to " << bState);
 
         if (bState)
-            pSalMenu->Activate (action_name);
+            pSalMenu->Activate();
         else
             pSalMenu->Deactivate (action_name);
     }
@@ -191,7 +193,6 @@ g_lo_action_group_change_state (GActionGroup *group,
                                 const gchar  *action_name,
                                 GVariant     *value)
 {
-    SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group);
     g_return_if_fail (value != NULL);
 
     g_variant_ref_sink (value);

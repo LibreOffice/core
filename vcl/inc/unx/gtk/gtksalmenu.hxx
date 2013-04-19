@@ -52,6 +52,7 @@ private:
 
     GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu );
     void                        ImplUpdate( gboolean bRecurse );
+    void                        ActivateAllSubmenus(MenuBar* pMenuBar);
 
 public:
     GtkSalMenu( sal_Bool bMenuBar );
@@ -97,7 +98,7 @@ public:
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const OUString& rKeyName );
 
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
-    void                        Activate( const gchar* aMenuCommand );
+    void                        Activate();
     void                        Deactivate( const gchar* aMenuCommand );
     void                        Display( sal_Bool bVisible );
     bool                        PrepUpdate();
