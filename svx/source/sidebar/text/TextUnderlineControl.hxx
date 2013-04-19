@@ -18,6 +18,7 @@
  * under the License.
  *
  *************************************************************/
+
 #ifndef _SVX_SIDEBAR_UNDERLINE_CONTROL_HXX_
 #define _SVX_SIDEBAR_UNDERLINE_CONTROL_HXX_
 
@@ -37,7 +38,10 @@ namespace svx{ namespace sidebar {
 class TextUnderlineControl:public svx::sidebar::PopupControl
 {
 public:
-    TextUnderlineControl(Window* pParent, svx::sidebar::TextPropertyPanel& rPanel);
+    TextUnderlineControl (
+        Window* pParent,
+        svx::sidebar::TextPropertyPanel& rPanel,
+        SfxBindings* pBindings);
     void GetFocus();
     void Rearrange(FontUnderline eLine);
     ValueSet& GetValueSet();

@@ -47,6 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     cppu \
     drawinglayer \
     editeng \
+    fwk \
     i18nisolang1 \
     icuuc \
     sal \

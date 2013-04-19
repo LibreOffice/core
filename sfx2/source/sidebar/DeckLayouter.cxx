@@ -353,7 +353,6 @@ void DeckLayouter::DistributeHeights (
     // (either its minimum or preferred height) and the container height.
     sal_Int32 nTotalWeight (0);
     sal_Int32 nNoMaximumCount (0);
-    sal_Int32 nIndex (0);
     IterateLayoutItems(iItem,rLayoutItems)
     {
         if (iItem->maLayoutSize.Maximum == 0)
@@ -376,7 +375,6 @@ void DeckLayouter::DistributeHeights (
         return;
 
     // First pass of height distribution.
-    nIndex = 0;
     IterateLayoutItems(iItem,rLayoutItems)
     {
         const sal_Int32 nBaseHeight (
@@ -410,7 +408,6 @@ void DeckLayouter::DistributeHeights (
     // Handle rounding error.
     sal_Int32 nAdditionalHeightForFirstPanel (nRemainingHeightToDistribute
         - nNoMaximumCount*nAdditionalHeightPerPanel);
-    nIndex = 0;
     IterateLayoutItems(iItem,rLayoutItems)
     {
         if (iItem->maLayoutSize.Maximum < 0)

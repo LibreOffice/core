@@ -47,11 +47,12 @@ namespace
         if (rPanel.HasFocus())
             return PC_Content;
         else if (rPanel.GetTitleBar() != NULL)
+        {
             if (rPanel.GetTitleBar()->HasFocus())
                 return PC_TitleBar;
             else if (rPanel.GetTitleBar()->GetToolBox().HasFocus())
                 return PC_ToolBox;
-
+        }
     return PC_None;
     }
 }

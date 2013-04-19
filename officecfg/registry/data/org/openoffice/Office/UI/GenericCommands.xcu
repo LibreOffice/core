@@ -1004,6 +1004,14 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:CharacterBackgroundPattern" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Highlight Color</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
             <node oor:name=".uno:CharFontName" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Font Name</value>
@@ -4830,6 +4838,14 @@
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>15</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Spacing" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Character Spacing</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SpellDialog" oor:op="replace">

@@ -40,31 +40,6 @@
 #define TB_SCRIPT               10
 
 
-#define IMG_INCREASE            11
-#define IMG_INCREASE_H          12
-#define IMG_DECREASE            13
-#define IMG_DECREASE_H          14
-#define IMG_BOLD                15
-#define IMG_BOLD_H              16
-#define IMG_ITALIC              17
-#define IMG_ITALIC_H            18
-#define IMG_UNDERLINE           19
-#define IMG_UNDERLINE_H         20
-#define IMG_STRIKEOUT           21
-#define IMG_STRIKEOUT_H         22
-#define IMG_SHADOWED            23
-#define IMG_SHADOWED_H          24
-#define IMG_FONTCOLOR           25
-#define IMG_FONTCOLOR_H         26
-#define IMG_SUPSCRIPT           27
-#define IMG_SUPSCRIPT_H         28
-#define IMG_SUBSCRIPT           29
-#define IMG_SUBSCRIPT_H         30
-//#define IMG_SPACING               31
-//#define IMG_SPACING_H         32
-#define IMG_HIGHLIGHT           33
-#define IMG_HIGHLIGHT_H         34
-
 #define TBI_FONTCOLOR           50
 #define TBI_BOLD                51
 #define TBI_ITALIC              52
@@ -177,9 +152,6 @@
 #define STR_CUSTOM_C_TIP            72
 #define STR_CUSTOM_E_TIP            73
 #define STR_PT                      74
-#define STR_QH_BOLD             75
-#define STR_QH_ITALIC           76
-#define STR_QH_UNDERLINE        77
 
 //help ids
 #define HID_COMBO_FONT_NAME             "SVX_HID_COMBO_FONT_NAME"

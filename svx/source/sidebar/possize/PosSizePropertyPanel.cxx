@@ -633,7 +633,8 @@ IMPL_LINK( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox )
 void PosSizePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState)
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
 {
     mpFtAngle->Enable();
     mpMtrAngle->Enable();
@@ -953,6 +954,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
         sUserData = String( aTemp );
     mpCbxScale->Check( (bool)sUserData.ToInt32() );
 }
+
 
 
 

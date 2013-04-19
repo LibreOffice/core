@@ -282,7 +282,7 @@ const char* GetWindowClassification (const Window* pWindow)
 
 void Deck::PrintWindowSubTree (Window* pRoot, int nIndentation)
 {
-    static char* sIndentation = "                                                                  ";
+    static const char* sIndentation = "                                                                  ";
     const Point aLocation (pRoot->GetPosPixel());
     const Size aSize (pRoot->GetSizePixel());
     const char* sClassification = GetWindowClassification(pRoot);
