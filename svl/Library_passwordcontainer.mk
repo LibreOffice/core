@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,passwordcontainer))
 
-$(eval $(call gb_Library_use_package,passwordcontainer,svl_inc))
-
 $(eval $(call gb_Library_set_componentfile,passwordcontainer,svl/source/passwordcontainer/passwordcontainer))
 
 $(eval $(call gb_Library_set_include,passwordcontainer,\

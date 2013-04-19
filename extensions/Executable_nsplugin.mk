@@ -31,9 +31,6 @@
 $(eval $(call gb_Executable_Executable,nsplugin))
 
 $(eval $(call gb_Executable_use_packages,nsplugin,\
-    basegfx_inc \
-    comphelper_inc \
-    tools_inc \
 ))
 
 $(eval $(call gb_Executable_use_external,nsplugin,boost_headers))

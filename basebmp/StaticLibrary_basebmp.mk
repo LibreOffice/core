@@ -9,8 +9,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,basebmp))
 
-$(eval $(call gb_StaticLibrary_use_package,basebmp,basebmp_inc))
-
 $(eval $(call gb_StaticLibrary_use_sdk_api,basebmp))
 
 $(eval $(call gb_StaticLibrary_use_externals,basebmp,\

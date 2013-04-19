@@ -11,8 +11,7 @@
 
 $(eval $(call gb_Library_Library,AppleRemote))
 
-$(eval $(call gb_Library_use_packages,AppleRemote,\
-    apple_remote_inc \
+$(eval $(call gb_Library_use_package,AppleRemote,\
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,AppleRemote,\

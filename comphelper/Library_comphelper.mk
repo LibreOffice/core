@@ -20,7 +20,6 @@
 $(eval $(call gb_Library_Library,comphelper))
 
 $(eval $(call gb_Library_use_packages,comphelper,\
-	comphelper_inc \
 	officecfg_cppheader \
 ))
 

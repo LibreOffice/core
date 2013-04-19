@@ -18,8 +18,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,for,\
 $(eval $(call gb_SrsTarget_SrsTarget,formula/res))
 
 $(eval $(call gb_SrsTarget_use_packages,formula/res,\
-	formula_inc \
-	svl_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,formula/res,\

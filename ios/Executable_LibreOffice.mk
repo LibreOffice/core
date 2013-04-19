@@ -32,8 +32,6 @@ $(eval $(call gb_Executable_add_objcobjects,LibreOffice,\
     ios/experimental/LibreOffice/LibreOffice/ViewController \
 ))
 
-$(call gb_Executable_use_package,LibreOffice,touch_inc)
-
 # Mark the executable as depending on all libraries so that it gets
 # rebuilt if any library has been rebuilt. Avoids need for "make
 # ios.clean".

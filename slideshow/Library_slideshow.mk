@@ -10,7 +10,6 @@
 $(eval $(call gb_Library_Library,slideshow))
 
 $(eval $(call gb_Library_use_packages,slideshow,\
-	animations_inc \
 ))
 
 $(eval $(call gb_Library_set_include,slideshow,\

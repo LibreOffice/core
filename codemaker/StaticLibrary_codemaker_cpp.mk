@@ -30,8 +30,6 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,codemaker_cpp))
 $(eval $(call gb_StaticLibrary_use_external,codemaker_cpp,boost_headers))
 
 $(eval $(call gb_StaticLibrary_use_packages,codemaker_cpp,\
-	codemaker_inc \
-	registry_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,codemaker_cpp,\

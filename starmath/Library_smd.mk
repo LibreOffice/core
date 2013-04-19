@@ -10,8 +10,6 @@
 $(eval $(call gb_Library_Library,smd))
 
 $(eval $(call gb_Library_use_packages,smd,\
-	editeng_inc \
-	oox_inc \
 ))
 
 $(eval $(call gb_Library_set_componentfile,smd,starmath/util/smd))

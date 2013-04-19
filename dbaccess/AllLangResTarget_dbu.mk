@@ -18,11 +18,7 @@ $(eval $(call gb_AllLangResTarget_add_srs,dbu,\
 $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dbu))
 
 $(eval $(call gb_SrsTarget_use_packages,dbaccess/dbu,\
-	editeng_inc \
-	sfx2_inc \
-	svl_inc \
 	svx_globlmn_hrc \
-	svx_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dbu,\

@@ -28,7 +28,6 @@
 $(eval $(call gb_Library_Library,dbtools))
 
 $(eval $(call gb_Library_use_packages,dbtools,\
-	connectivity_inc \
 ))
 
 $(eval $(call gb_Library_add_defs,dbtools,\

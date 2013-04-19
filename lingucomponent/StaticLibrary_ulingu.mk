@@ -28,11 +28,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,ulingu))
 
 $(eval $(call gb_StaticLibrary_use_packages,ulingu,\
-	comphelper_inc \
-	i18nlangtag_inc \
-	linguistic_inc \
-	tools_inc \
-	unotools_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_use_api,ulingu,\

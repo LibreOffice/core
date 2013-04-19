@@ -31,7 +31,6 @@
 $(eval $(call gb_Library_Library,npsoplugin))
 
 $(eval $(call gb_Library_use_packages,npsoplugin,\
-	comphelper_inc \
 	np_sdk_inc \
 ))
 

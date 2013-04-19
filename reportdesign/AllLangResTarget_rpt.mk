@@ -18,7 +18,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,rpt,\
 $(eval $(call gb_SrsTarget_SrsTarget,reportdesign/res))
 
 $(eval $(call gb_SrsTarget_use_packages,reportdesign/res,\
-	svl_inc \
 	svx_globlmn_hrc \
 ))
 

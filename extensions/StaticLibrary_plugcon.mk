@@ -15,15 +15,7 @@ endif
 $(eval $(call gb_StaticLibrary_StaticLibrary,plugcon))
 
 $(eval $(call gb_StaticLibrary_use_packages,plugcon,\
-    basegfx_inc \
-    comphelper_inc \
-    i18nlangtag_inc \
     np_sdk_inc \
-	o3tl_inc \
-	rsc_inc \
-    tools_inc \
-    unotools_inc \
-    vcl_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,plugcon,\

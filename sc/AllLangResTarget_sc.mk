@@ -17,13 +17,7 @@ $(eval $(call gb_AllLangResTarget_add_srs,sc,\
 $(eval $(call gb_SrsTarget_SrsTarget,sc/res))
 
 $(eval $(call gb_SrsTarget_use_packages,sc/res,\
-	editeng_inc \
-	formula_inc \
-	sfx2_inc \
-	svl_inc \
 	svx_globlmn_hrc \
-	svx_inc \
-	tools_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,sc/res,\

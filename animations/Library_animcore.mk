@@ -31,8 +31,6 @@ $(eval $(call gb_Library_Library,animcore))
 $(eval $(call gb_Library_use_external,animcore,boost_headers))
 
 $(eval $(call gb_Library_use_packages,animcore,\
-	animations_inc \
-	comphelper_inc \
 ))
 
 $(eval $(call gb_Library_set_componentfile,animcore,animations/source/animcore/animcore))

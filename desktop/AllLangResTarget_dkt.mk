@@ -18,7 +18,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,dkt,\
 $(eval $(call gb_SrsTarget_SrsTarget,dkt/res))
 
 $(eval $(call gb_SrsTarget_use_packages,dkt/res,\
-    svl_inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,dkt/res,\

@@ -32,8 +32,6 @@ $(eval $(call gb_Library_set_componentfile,tk,toolkit/util/tk))
 
 $(eval $(call gb_Library_use_external,tk,boost_headers))
 
-$(eval $(call gb_Library_use_package,tk,toolkit_inc))
-
 $(eval $(call gb_Library_set_include,tk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/toolkit/inc \

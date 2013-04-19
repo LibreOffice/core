@@ -11,7 +11,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,winextendloaderenv))
 
 $(eval $(call gb_StaticLibrary_use_packages,winextendloaderenv,\
-	tools_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_add_noexception_objects,winextendloaderenv,\

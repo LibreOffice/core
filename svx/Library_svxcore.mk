@@ -24,7 +24,6 @@ $(eval $(call gb_Library_set_componentfile,svxcore,svx/util/svxcore))
 $(eval $(call gb_Library_add_sdi_headers,svxcore,svx/sdi/svxslots))
 
 $(eval $(call gb_Library_use_packages,svxcore,\
-    svx_inc \
     svx_sdi \
 ))
 
@@ -378,7 +377,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Library_use_packages,svxcore,\
-	connectivity_inc \
 	connectivity_generated \
 ))
 

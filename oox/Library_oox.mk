@@ -10,7 +10,6 @@
 $(eval $(call gb_Library_Library,oox))
 
 $(eval $(call gb_Library_use_packages,oox,\
-    oox_inc \
     oox_generated \
     oox_tokens \
 ))

@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,unobootstrapprotector))
 
-$(eval $(call gb_Library_use_package,unobootstrapprotector,unotest_inc))
-
 $(eval $(call gb_Library_use_sdk_api,unobootstrapprotector))
 
 $(eval $(call gb_Library_use_libraries,unobootstrapprotector,\

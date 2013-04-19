@@ -12,9 +12,6 @@ $(eval $(call gb_Library_Library,basegfx))
 $(eval $(call gb_Library_use_external,basegfx,boost_headers))
 
 $(eval $(call gb_Library_use_packages,basegfx,\
-    basegfx_inc \
-    comphelper_inc \
-    o3tl_inc \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,basegfx))
