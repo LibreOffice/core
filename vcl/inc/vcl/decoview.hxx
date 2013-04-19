@@ -22,7 +22,7 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/symbol.hxx>
+#include <rsc/rsc-vcl-shared-types.hxx>
 
 class Rectangle;
 class Point;
