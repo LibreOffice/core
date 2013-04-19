@@ -40,4 +40,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 ))
 endif
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)
+$(eval $(call gb_UnpackedTarball_add_patches,python3,\
+	python3/python-3.3.0-elf-rpath.patch.1 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

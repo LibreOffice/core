@@ -47,7 +47,6 @@ $(call gb_CustomTarget_get_workdir,pyuno/python_shell)/os.sh : \
 		$(SRCDIR)/pyuno/zipcore/$(if $(filter MACOSX,$(OS)),mac,nonmac).sh
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	sed -e "s/%%PYVERSION%%/$(pyuno_PYTHON_SHELL_VERSION)/g" \
-		-e "s/%%OOO_LIBRARY_PATH_VAR%%/$(gb_Helper_LIBRARY_PATH_VAR)/g" \
 		$< > $@
 
 # vim: set noet sw=4 ts=4:
