@@ -658,7 +658,13 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
             {
                 mbJobActive             = sal_True;
                 i_pController->createProgressDialog();
-                int nPages = i_pController->getFilteredPageCount();
+                const int nPages = i_pController->getFilteredPageCount();
+                // abort job, if no pages will be printed.
+                if ( nPages == 0 )
+                {
+                    i_pController->abortJob();
+                    bAborted = true;
+                }
                 for( int nOuterIteration = 0; nOuterIteration < nOuterRepeatCount && ! bAborted; nOuterIteration++ )
                 {
                     for( int nPage = 0; nPage < nPages && ! bAborted; nPage++ )
