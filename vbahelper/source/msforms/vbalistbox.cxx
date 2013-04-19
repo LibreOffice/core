@@ -22,6 +22,7 @@
 #include <comphelper/anytostring.hxx>
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
+#include <ooo/vba/msforms/fmMultiSelect.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -120,18 +121,33 @@ ScVbaListBox::setText( const OUString& _text ) throw (uno::RuntimeException)
     setValue( uno::makeAny( _text ) ); // seems the same
 }
 
-sal_Bool SAL_CALL
+sal_Int32 SAL_CALL
 ScVbaListBox::getMultiSelect() throw (css::uno::RuntimeException)
 {
     sal_Bool bMultiSelect = sal_False;
     m_xProps->getPropertyValue( "MultiSelection" ) >>= bMultiSelect;
-    return bMultiSelect;
+
+    return bMultiSelect ? msforms::fmMultiSelect::fmMultiSelectMulti : msforms::fmMultiSelect::fmMultiSelectSingle;
 }
 
 void SAL_CALL
-ScVbaListBox::setMultiSelect( sal_Bool _multiselect ) throw (css::uno::RuntimeException)
+ScVbaListBox::setMultiSelect( sal_Int32 _multiselect ) throw (css::uno::RuntimeException)
 {
-    m_xProps->setPropertyValue( "MultiSelection" , uno::makeAny( _multiselect ) );
+    sal_Bool bBoolVal = false;
+    switch ( _multiselect )
+    {
+        case  msforms::fmMultiSelect::fmMultiSelectMulti:
+        case  msforms::fmMultiSelect::fmMultiSelectExtended:
+            bBoolVal = sal_True;
+            break;
+        case msforms::fmMultiSelect::fmMultiSelectSingle:
+            bBoolVal = sal_True;
+            break;
+        default:
+            throw lang::IllegalArgumentException();
+            break;
+    }
+    m_xProps->setPropertyValue( "MultiSelection" , uno::makeAny( bBoolVal ) );
 }
 
 
