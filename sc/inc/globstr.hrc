@@ -679,7 +679,9 @@
 #define STR_UNDO_L2R                544
 #define STR_UNDO_R2L                545
 
-#define STR_COUNT                   546
+#define STR_FUN_TEXT_SELECTION_COUNT    546
+
+#define STR_COUNT                   547
 
 #endif
 
