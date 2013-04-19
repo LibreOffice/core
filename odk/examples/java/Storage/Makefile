@@ -23,7 +23,6 @@ SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
-include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 COMPONENT_NAME=JavaStorageTestExample

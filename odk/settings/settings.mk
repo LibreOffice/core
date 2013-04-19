@@ -19,6 +19,8 @@
 # Global settings file for the minimal build environment of the SDK
 # This file have to updated/extended for other platforms.
 
+include $(OO_SDK_HOME)/settings/dk.mk
+
 # test for the platform
 PLATFORM := $(shell $(PRJ)/config.guess | cut -d"-" -f3,4)
 
@@ -93,12 +95,20 @@ BLANK=
 EMPTYSTRING=
 PATH_SEPARATOR=;
 
+ifeq "$(LIBO_SDK_ENABLE_DBGUTIL)" "TRUE"
+LIBO_SDK_DETAIL_CFLAGS_MSVCRT = -MDd
+LIBO_SDK_DETAIL_LDFLAGS_MSVCRT = msvcrtd.lib
+else
+LIBO_SDK_DETAIL_CFLAGS_MSVCRT = -MD
+LIBO_SDK_DETAIL_LDFLAGS_MSVCRT = msvcrt.lib
+endif
+
 # use this for release version
 ifeq "$(DEBUG)" "yes"
 OPT_FLAGS=-Zi
 endif
-CC_FLAGS_JNI=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa $(OPT_FLAGS)
-CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa $(OPT_FLAGS)
+CC_FLAGS_JNI=-c $(LIBO_SDK_DETAIL_CFLAGS_MSVCRT) -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa $(OPT_FLAGS)
+CC_FLAGS=-c $(LIBO_SDK_DETAIL_CFLAGS_MSVCRT) -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa $(OPT_FLAGS)
 ifeq "$(CPP_MANIFEST)" "true"
 LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
 else
@@ -115,9 +125,11 @@ CC_DEFINES_JNI=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
 CC_DEFINES=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
 CC_OUTPUT_SWITCH=-Fo
 
-LIBRARY_LINK_FLAGS=/MD /DLL /DEBUGTYPE:cv
+LIBO_SDK_LDFLAGS_STDLIBS = $(LIBO_SDK_DETAIL_LDFLAGS_MSVCRT) kernel32.lib
+
+LIBRARY_LINK_FLAGS=/DLL /DEBUGTYPE:cv
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) /DEF:$(PRJ)/settings/component.uno.def
-EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1b000000 /DEBUGTYPE:cv /MD  msvcrt.lib kernel32.lib
+EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1b000000 /DEBUGTYPE:cv $(LIBO_SDK_LDFLAGS_STDLIBS)
 ifeq "$(DEBUG)" "yes"
 LIBRARY_LINK_FLAGS+=/DEBUG
 EXE_LINK_FLAGS+=/DEBUG
@@ -131,7 +143,7 @@ endif
 
 # use this for release version
 #EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1100000
-#LIBRARY_LINK_FLAGS=/MD /DLL
+#LIBRARY_LINK_FLAGS=/DLL
 endif	
 
 
@@ -223,6 +235,8 @@ CC_DEFINES_JNI=-DUNX -DSOLARIS -DCPPU_ENV=$(CPPU_ENV) -DGCC
 #CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=sunpro5  -DHAVE_GCC_VISIBILITY_FEATURE
 CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=$(CPPU_ENV)  -DHAVE_GCC_VISIBILITY_FEATURE -DGCC
 CC_OUTPUT_SWITCH=-o 
+
+LIBO_SDK_LDFLAGS_STDLIBS =
 
 #LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R$$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
 LIBRARY_LINK_FLAGS=-w -mt -z combreloc -fPIC -PIC -temp=/tmp '-R$$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
@@ -348,6 +362,8 @@ CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DHAVE_GCC_VISIBILITY_FEAT
 
 CC_OUTPUT_SWITCH=-o
 
+LIBO_SDK_LDFLAGS_STDLIBS =
+
 LIBRARY_LINK_FLAGS=-shared -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
 
 ifeq "$(PROCTYPE)" "ppc"
@@ -452,6 +468,8 @@ CC_DEFINES_JNI=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV)
 CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DHAVE_GCC_VISIBILITY_FEATURE
 
 CC_OUTPUT_SWITCH=-o
+
+LIBO_SDK_LDFLAGS_STDLIBS =
 
 LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress $(GCC_ARCH_OPTION)
 
@@ -560,6 +578,8 @@ CC_DEFINES_JNI=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV)
 CC_DEFINES=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV) -DHAVE_GCC_VISIBILITY_FEATURE
 
 CC_OUTPUT_SWITCH=-o
+
+LIBO_SDK_LDFLAGS_STDLIBS =
 
 LIBRARY_LINK_FLAGS=-shared -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)

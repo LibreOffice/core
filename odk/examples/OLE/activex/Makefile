@@ -39,7 +39,6 @@ SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
-include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 COMPONENT_NAME=so_activex
@@ -96,7 +95,7 @@ $(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN
 	@echo .
 	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) \
 	/DEF:so_activex.def /IMPLIB:$(OUT_LIB)/iso_activex.lib $(SLOFILES) \
-	msvcrt.lib kernel32.lib user32.lib uuid.lib advapi32.lib ole32.lib oleaut32.lib gdi32.lib \
+	$(LIBO_SDK_LDFLAGS_STDLIBS) user32.lib uuid.lib advapi32.lib ole32.lib oleaut32.lib gdi32.lib \
 	urlmon.lib Shlwapi.lib oldnames.lib $(CL_NEW_LIB) $(OUT_COMP_GEN)/so_activex.res
 	$(LINK_MANIFEST)
 

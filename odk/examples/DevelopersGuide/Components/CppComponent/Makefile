@@ -39,7 +39,6 @@ SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
-include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 SAMPLE_NAME=CppComponentSample
@@ -109,7 +108,7 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
 	$(LINK) $(COMP_LINK_FLAGS) /OUT:$@ \
 	/MAP:$(SAMPLE_GEN_OUT)/$(subst $(SHAREDLIB_EXT),map,$(@F)) $(SLOFILES) \
-	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) msvcprt.lib msvcrt.lib kernel32.lib
+	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) msvcprt.lib $(LIBO_SDK_LDFLAGS_STDLIBS)
 	$(LINK_MANIFEST)
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)

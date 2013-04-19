@@ -33,7 +33,6 @@ qt = "
 qt2 =
 cwd = $(subst \,/,$(shell cd))
 link_output_switch = -out:
-link_std_libs = kernel32.lib msvcrt.lib
 ure_java_url = $(subst $(subst .,., ),%%20,$(subst \,/,$(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)))
 ure_unorc_url = $(subst $(subst .,., ),%%20,$(subst \,/,$(URLPREFIX)$(OO_SDK_URE_LIB_DIR)/uno.ini))
 else
@@ -41,7 +40,6 @@ qt = '
 qt2 = '
 cwd = $(PWD)
 link_output_switch = $(subst .,.,-o )
-link_std_libs =
 ure_java_url = $(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)
 ure_unorc_url = $(URLPREFIX)$(OO_SDK_URE_LIB_DIR)/unorc
 endif
@@ -114,7 +112,7 @@ clean:
 out.sdk/cppmain.uno.$(SHAREDLIB_EXT): out.sdk/cppmain.$(OBJ_EXT) | out.sdk
 	$(LINK) $(COMP_LINK_FLAGS) $(link_output_switch)$@ $< $(LINK_LIBS) \
             $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) \
-            $(link_std_libs)
+            $(LIBO_SDK_LDFLAGS_STDLIBS)
 
 out.sdk/cppmain.$(OBJ_EXT): cppmain.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk
@@ -124,7 +122,7 @@ out.sdk/cppmain.$(OBJ_EXT): cppmain.cc out.sdk/cpputypes.cppumaker.flag \
 
 out.sdk/cpptest.uno.$(SHAREDLIB_EXT): out.sdk/cpptest.$(OBJ_EXT) | out.sdk
 	$(LINK) $(COMP_LINK_FLAGS) $(link_output_switch)$@ $< $(LINK_LIBS) \
-            $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(link_std_libs)
+            $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(LIBO_SDK_LDFLAGS_STDLIBS)
 
 out.sdk/cpptest.$(OBJ_EXT): cpptest.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk
@@ -134,7 +132,7 @@ out.sdk/cpptest.$(OBJ_EXT): cpptest.cc out.sdk/cpputypes.cppumaker.flag \
 
 out.sdk/cppserver.uno.$(SHAREDLIB_EXT): out.sdk/cppserver.$(OBJ_EXT) | out.sdk
 	$(LINK) $(COMP_LINK_FLAGS) $(link_output_switch)$@ $< $(LINK_LIBS) \
-            $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(link_std_libs)
+            $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(LIBO_SDK_LDFLAGS_STDLIBS)
 
 out.sdk/cppserver.$(OBJ_EXT): cppserver.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk

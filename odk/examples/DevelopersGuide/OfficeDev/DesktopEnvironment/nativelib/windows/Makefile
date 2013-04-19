@@ -39,7 +39,6 @@ SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
-include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 SHL_NAME=nativeview
@@ -68,7 +67,7 @@ $(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(SHL_NAME).$(SHAREDLIB_EXT) : $(SLOFILES) $(SH
 	-$(MKDIR) $(subst /,$(PS),$(OUT_SHL_MISC))
 	$(LINK) $(LIBRARY_LINK_FLAGS) /DEF:$(SHL_NAME).def /OUT:$@ \
 	/MAP:$(OUT_SHL_MISC)/$(SHL_NAME).map $(LINK_JAVA_LIBS) \
-	$(SLOFILES) jawt.lib msvcrt.lib kernel32.lib user32.lib
+	$(SLOFILES) jawt.lib $(LIBO_SDK_LDFLAGS_STDLIBS) user32.lib
 	$(LINK_MANIFEST)
 
 .PHONY: clean

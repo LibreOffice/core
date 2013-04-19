@@ -23,7 +23,6 @@ SETTINGS = $(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
-include $(SETTINGS)/dk.mk
 
 CSC_FLAGS = -warnaserror+ -incremental- -noconfig
 VBC_FLAGS = -warnaserror+

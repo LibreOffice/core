@@ -39,7 +39,6 @@ SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
-include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 SAMPLE_NAME=ProfUnoCppBinding

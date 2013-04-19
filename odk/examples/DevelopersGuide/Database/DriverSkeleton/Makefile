@@ -39,7 +39,6 @@ SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
-include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 COMP_NAME=DatabaseSDBCDriverSkeleton
@@ -84,7 +83,7 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_MISC))
 	$(LINK) $(COMP_LINK_FLAGS) /OUT:$@ \
 	/MAP:$(OUT_COMP_MISC)/$(COMP_NAME).map $(SLOFILES) \
-	 $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) msvcprt.lib msvcrt.lib kernel32.lib
+	 $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) msvcprt.lib $(LIBO_SDK_LDFLAGS_STDLIBS)
 	$(LINK_MANIFEST)
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)

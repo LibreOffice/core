@@ -31,7 +31,6 @@ SETTINGS = $(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
-include $(SETTINGS)/dk.mk
 
 FILES = \
     CalcWindowState.xcu \
