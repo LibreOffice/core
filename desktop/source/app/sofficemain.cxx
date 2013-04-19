@@ -93,8 +93,8 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 
 #ifdef ANDROID
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_experimental_desktop_Desktop_runMain(JNIEnv* /* env */,
-                                                          jobject /* clazz */)
+Java_org_libreoffice_android_AppSupport_runMain(JNIEnv* /* env */,
+                                                jobject /* clazz */)
 #else
 extern "C"
 void

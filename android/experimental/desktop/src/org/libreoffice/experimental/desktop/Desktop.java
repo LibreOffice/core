@@ -34,23 +34,13 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.sun.star.awt.Key;
 
+import org.libreoffice.android.AppSupport;
 import org.libreoffice.android.Bootstrap;
 
 public class Desktop
     extends Activity
 {
     private static final String TAG = "LODesktop";
-
-    /* In desktop */
-    private static native void runMain();
-
-    /* In vcl */
-    public static native void renderVCL(Bitmap bitmap);
-    public static native void setViewSize(int width, int height);
-    public static native void key(char c);
-    public static native void touch(int action, int x, int y);
-    public static native void zoom(float scale, int x, int y);
-    public static native void scroll(int x, int y);
 
     /**
      * This class contains the state that is initialized once and never changes
@@ -142,6 +132,8 @@ public class Desktop
             theView = new BitmapView();
             setContentView(theView);
 
+            AppSupport.registerForDamageCallback(getClass());
+
             // Start a Java thread to run soffice_main(). We don't
             // want to start the thread from native code becauce
             // native threads apparently have no Java class loaders in
@@ -152,7 +144,7 @@ public class Desktop
 
             new Thread(new Runnable() {
                     @Override public void run() {
-                        runMain();
+                        AppSupport.runMain();
                     }
                 }).start();
         }
@@ -223,7 +215,7 @@ public class Desktop
                                              @Override public void onScaleEnd(ScaleGestureDetector detector)
                                              {
                                                  accumulatedScale *= detector.getScaleFactor();
-                                                 Desktop.zoom(accumulatedScale, (int) pivotX, (int) pivotY);
+                                                 AppSupport.zoom(accumulatedScale, (int) pivotX, (int) pivotY);
                                                  accumulatedScale = 1;
                                                  pivotX = pivotY = 0;
                                                  scalingInProgress = false;
@@ -237,9 +229,9 @@ public class Desktop
             if (mBitmap == null) {
                 Log.i(TAG, "calling Bitmap.createBitmap(" + getWidth() + ", " + getHeight() + ", Bitmap.Config.ARGB_8888)");
                 mBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-                setViewSize(getWidth(), getHeight());
+                AppSupport.setViewSize(getWidth(), getHeight());
             }
-            renderVCL(mBitmap);
+            AppSupport.renderVCL(mBitmap);
             if (scrollInProgress) {
                 canvas.save();
                 canvas.translate(translateX, translateY);
@@ -269,16 +261,16 @@ public class Desktop
             case KeyEvent.KEYCODE_7:
             case KeyEvent.KEYCODE_8:
             case KeyEvent.KEYCODE_9:
-                Desktop.key((char) ('0' + keyCode - KeyEvent.KEYCODE_0));
+                AppSupport.key((char) ('0' + keyCode - KeyEvent.KEYCODE_0));
                 return true;
             case KeyEvent.KEYCODE_DEL:
-                Desktop.key((char) Key.BACKSPACE);
+                AppSupport.key((char) Key.BACKSPACE);
                 return true;
             case KeyEvent.KEYCODE_ENTER:
-                Desktop.key((char) Key.RETURN);
+                AppSupport.key((char) Key.RETURN);
                 return true;
             case KeyEvent.KEYCODE_TAB:
-                Desktop.key((char) Key.TAB);
+                AppSupport.key((char) Key.TAB);
                 return true;
             default:
                 return false;
@@ -301,7 +293,7 @@ public class Desktop
             // the scroll must have ended.
 
             if (scrollInProgress) {
-                Desktop.scroll((int) translateX, (int) translateY);
+                AppSupport.scroll((int) translateX, (int) translateY);
                 translateX = translateY = 0;
                 scrollInProgress = false;
                 scrollJustEnded = true;
@@ -339,7 +331,7 @@ public class Desktop
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_MOVE:
-                    Desktop.touch(event.getActionMasked(), (int) event.getX(), (int) event.getY());
+                    AppSupport.touch(event.getActionMasked(), (int) event.getX(), (int) event.getY());
                     break;
                 }
             }
@@ -370,7 +362,7 @@ public class Desktop
 
         @Override public boolean commitText(CharSequence text, int newCursorPosition) {
             for (int i = 0; i < text.length(); i++) {
-                Desktop.key(text.charAt(i));
+                AppSupport.key(text.charAt(i));
             }
             return true;
         }

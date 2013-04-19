@@ -46,6 +46,8 @@
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, LOGTAG, __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, LOGTAG, __VA_ARGS__))
 
+static jclass appClass = 0;
+
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
 
@@ -144,29 +146,21 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow_Buffer *pBuffer)
 void AndroidSalInstance::damaged(AndroidSalFrame */* frame */)
 {
     static bool beenHere = false;
-    static jclass nDesktopClass = 0;
     static jmethodID nCallbackDamaged = 0;
 
-    // Check if we are running in the experimental Desktop app
-    if (!beenHere) {
-        nDesktopClass = m_pJNIEnv->FindClass("org/libreoffice/experimental/desktop/Desktop");
-        if (nDesktopClass == 0) {
-            LOGI("Could not find Desktop class (this is normal if this isn't the \"desktop\" app)");
-            // We don't want the exception to kill the app
-            m_pJNIEnv->ExceptionClear();
-        } else {
-            nCallbackDamaged = m_pJNIEnv->GetStaticMethodID(nDesktopClass, "callbackDamaged", "()V");
-            if (nCallbackDamaged == 0)
-                LOGE("Could not find the callbackDamaged method");
-        }
+    // Check if we are running in an app that has registered for damage callbacks
+    // static public void callbackDamaged();
+    // Call the Java layer to post an invalidate if necessary
+
+    if (appClass != 0 && !beenHere) {
+        nCallbackDamaged = m_pJNIEnv->GetStaticMethodID(appClass, "callbackDamaged", "()V");
+        if (nCallbackDamaged == 0)
+            LOGE("Could not find the callbackDamaged method");
         beenHere = true;
     }
 
-    // Call the Java layer to post an invalidate if necessary
-    // static public void org.libreoffice.experimental.desktop.Desktop.callbackDamaged();
-
-    if (nDesktopClass != 0 && nCallbackDamaged != 0)
-        m_pJNIEnv->CallStaticVoidMethod(nDesktopClass, nCallbackDamaged);
+    if (appClass != 0 && nCallbackDamaged != 0)
+        m_pJNIEnv->CallStaticVoidMethod(appClass, nCallbackDamaged);
 }
 
 void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
@@ -408,9 +402,9 @@ int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
 
 // public static native void renderVCL(Bitmap bitmap);
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_experimental_desktop_Desktop_renderVCL(JNIEnv *env,
-                                                            jobject /* clazz */,
-                                                            jobject bitmap)
+Java_org_libreoffice_android_AppSupport_renderVCL(JNIEnv *env,
+                                                  jobject /* clazz */,
+                                                  jobject bitmap)
 {
     AndroidBitmapInfo  info;
     void*              pixels;
@@ -459,12 +453,21 @@ typedef struct ANativeWindow_Buffer {
     AndroidBitmap_unlockPixels(env, bitmap);
 }
 
+// public static native void registerForDamageCallback(Class destinationClass);
+extern "C" SAL_JNI_EXPORT void JNICALL
+Java_org_libreoffice_android_AppSupport_registerForDamageCallback(JNIEnv * env,
+                                                                  jobject /* clazz */,
+                                                                  jclass destinationClass)
+{
+    appClass = (jclass) env->NewGlobalRef(destinationClass);
+}
+
 // public static native void setViewSize(int width, int height);
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_experimental_desktop_Desktop_setViewSize(JNIEnv * /* env */,
-                                                              jobject /* clazz */,
-                                                              jint width,
-                                                              jint height)
+Java_org_libreoffice_android_AppSupport_setViewSize(JNIEnv * /* env */,
+                                                    jobject /* clazz */,
+                                                    jint width,
+                                                    jint height)
 {
     // Horrible
     viewWidth = width;
@@ -473,9 +476,9 @@ Java_org_libreoffice_experimental_desktop_Desktop_setViewSize(JNIEnv * /* env */
 
 // public static native void key(char c);
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_experimental_desktop_Desktop_key(JNIEnv * /* env */,
-                                                      jobject /* clazz */,
-                                                      jchar c)
+Java_org_libreoffice_android_AppSupport_key(JNIEnv * /* env */,
+                                            jobject /* clazz */,
+                                            jchar c)
 {
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
@@ -489,11 +492,11 @@ Java_org_libreoffice_experimental_desktop_Desktop_key(JNIEnv * /* env */,
 
 // public static native void touch(int action, int x, int y);
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
-                                                        jobject /* clazz */,
-                                                        jint action,
-                                                        jint x,
-                                                        jint y)
+Java_org_libreoffice_android_AppSupport_touch(JNIEnv * /* env */,
+                                              jobject /* clazz */,
+                                              jint action,
+                                              jint x,
+                                              jint y)
 {
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
@@ -514,7 +517,7 @@ Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
             nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
             break;
         default:
-            LOGE("Java_org_libreoffice_experimental_desktop_Desktop_touch: Invalid action %d", action);
+            LOGE("AppSupport.touch: Invalid action %d", action);
             return;
         }
         Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
@@ -525,11 +528,11 @@ Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
 
 // public static native void zoom(float scale, int x, int y);
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_experimental_desktop_Desktop_zoom(JNIEnv * /* env */,
-                                                       jobject /* clazz */,
-                                                       jfloat scale,
-                                                       jint x,
-                                                       jint y)
+Java_org_libreoffice_android_AppSupport_zoom(JNIEnv * /* env */,
+                                             jobject /* clazz */,
+                                             jfloat scale,
+                                             jint x,
+                                             jint y)
 {
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
@@ -543,10 +546,10 @@ Java_org_libreoffice_experimental_desktop_Desktop_zoom(JNIEnv * /* env */,
 
 // public static native void scroll(int x, int y);
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_experimental_desktop_Desktop_scroll(JNIEnv * /* env */,
-                                                         jobject /* clazz */,
-                                                         jint x,
-                                                         jint y)
+Java_org_libreoffice_android_AppSupport_scroll(JNIEnv * /* env */,
+                                               jobject /* clazz */,
+                                               jint x,
+                                               jint y)
 {
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
