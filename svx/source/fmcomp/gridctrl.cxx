@@ -2770,7 +2770,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
     SolarMutexGuard aGuard;
     // prop "IsModified" changed ?
     // during update don't care about the modified state
-    if (!IsUpdating() && evt.PropertyName.compareTo(FM_PROP_ISMODIFIED) == COMPARE_EQUAL)
+    if (!IsUpdating() && evt.PropertyName == FM_PROP_ISMODIFIED )
     {
         Reference< XPropertySet > xSource(evt.Source, UNO_QUERY);
         DBG_ASSERT( xSource.is(), "DbGridControl::DataSourcePropertyChanged: invalid event source!" );

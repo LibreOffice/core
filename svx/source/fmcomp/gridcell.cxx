@@ -1485,7 +1485,7 @@ CellControllerRef DbFormattedField::CreateController() const
 //------------------------------------------------------------------------------
 void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent ) throw( RuntimeException )
 {
-    if (_rEvent.PropertyName.compareTo(FM_PROP_FORMATKEY) == COMPARE_EQUAL)
+    if (_rEvent.PropertyName == FM_PROP_FORMATKEY )
     {
         sal_Int32 nNewKey = _rEvent.NewValue.hasValue() ? ::comphelper::getINT32(_rEvent.NewValue) : 0;
         m_nKeyType = comphelper::getNumberFormatType(m_xSupplier->getNumberFormats(), nNewKey);
