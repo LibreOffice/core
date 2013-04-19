@@ -138,7 +138,7 @@ Time::Time( const Time& rTime )
     nTime = rTime.nTime;
 }
 
-Time::Time( sal_uIntPtr nHour, sal_uIntPtr nMin, sal_uIntPtr nSec, sal_uIntPtr nNanoSec )
+Time::Time( sal_uInt32 nHour, sal_uInt32 nMin, sal_uInt32 nSec, sal_uInt64 nNanoSec )
 {
     // normalize time
     nSec     += nNanoSec / nanoSecInSec;

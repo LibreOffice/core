@@ -66,8 +66,8 @@ public:
                     Time( const ResId & rResId );
                     Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const Time& rTime );
-                    Time( sal_uIntPtr nHour, sal_uIntPtr nMin,
-                          sal_uIntPtr nSec = 0, sal_uIntPtr nNanoSec = 0 );
+                    Time( sal_uInt32 nHour, sal_uInt32 nMin,
+                          sal_uInt32 nSec = 0, sal_uInt64 nNanoSec = 0 );
 
     void            SetTime( sal_Int64 nNewTime ) { nTime = nNewTime; }
     sal_Int64       GetTime() const { return nTime; }
