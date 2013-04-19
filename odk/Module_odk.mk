@@ -20,6 +20,9 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_autodoc \
 	Executable_unoapploader \
 	Package_examples \
+	Package_odk_headers \
+	Package_odk_headers_generated \
+	PackageSet_odk_headers \
 ))
 
 ifneq ($(SOLAR_JAVA),)
@@ -38,5 +41,9 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Zip_odkcommon \
 ))
 
+$(eval $(call gb_Module_add_check_targets,odk,\
+	CppunitTest_checkapi \
+	CustomTarget_allheaders \
+))
 
 # vim: set noet sw=4 ts=4:

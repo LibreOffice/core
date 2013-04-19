@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,salhelper))
 
-$(eval $(call gb_Library_use_package,salhelper,salhelper_odk_headers))
-
 $(eval $(call gb_Library_add_defs,salhelper,\
 	-DSALHELPER_DLLIMPLEMENTATION \
 ))

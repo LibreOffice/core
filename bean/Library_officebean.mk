@@ -36,8 +36,6 @@ $(eval $(call gb_Library_use_externals,officebean,\
 
 ifneq ($(OS),WNT)
 $(eval $(call gb_Library_use_packages,officebean,\
-	sal_generated \
-	sal_odk_headers \
 ))
 
 $(eval $(call gb_Library_add_cobjects,officebean,\

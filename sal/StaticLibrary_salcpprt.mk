@@ -28,8 +28,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,salcpprt))
 
 $(eval $(call gb_StaticLibrary_use_packages,salcpprt,\
-	sal_generated \
-	sal_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,salcpprt, \

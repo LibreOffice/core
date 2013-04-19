@@ -10,7 +10,6 @@
 $(eval $(call gb_Executable_Executable,unoapploader))
 
 $(eval $(call gb_Executable_use_packages,unoapploader,\
-    sal_generated \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,unoapploader,\

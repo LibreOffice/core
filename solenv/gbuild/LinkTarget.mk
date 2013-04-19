@@ -371,7 +371,7 @@ endif
 gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 
 define gb_LinkTarget_rtl_defs
-$(if $(filter-out sal salhelper cppu cppuhelper, $(gb_Module_CURRENTMODULE_NAME)), -DRTL_USING)
+$(if $(filter-out sal salhelper cppu cppuhelper odk, $(gb_Module_CURRENTMODULE_NAME)), -DRTL_USING)
 endef
 
 # defined by platform

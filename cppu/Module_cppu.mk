@@ -28,18 +28,15 @@
 $(eval $(call gb_Module_Module,cppu))
 
 $(eval $(call gb_Module_add_targets,cppu,\
-	CustomTarget_cppu_allheaders \
 	InternalUnoApi_cppu \
 	Library_affine_uno \
 	Library_cppu \
 	Library_log_uno \
 	Library_purpenvhelper \
 	Library_unsafe_uno \
-	Package_cppu_odk_headers \
 ))
 
 $(eval $(call gb_Module_add_check_targets,cppu,\
-	CppunitTest_cppu_checkapi \
 	CppunitTest_cppu_qa_any \
 	CppunitTest_cppu_qa_recursion \
 	CppunitTest_cppu_qa_reference \
