@@ -1748,6 +1748,9 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     sal_Bool bHangingPunctuation = sal_False;
     sal_Unicode cAlternateReplChar = 0;
     sal_Unicode cAlternateExtraChar = 0;
+    sal_Bool bAltFullLeft = sal_False;
+    sal_Bool bAltFullRight = sal_False;
+    sal_uInt32 nAltDelChar = 0;
 
     if ( ( nMaxBreakPos < ( nMax + pLine->GetStart() ) ) && ( pNode->GetChar( nMaxBreakPos ) == ' ' ) )
     {
@@ -1852,29 +1855,38 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                         }
                         else
                         {
-                            String aAlt( xHyphWord->getHyphenatedWord() );
+                            // TODO: handle all alternative hyphenations (see hyphen-1.2.8/tests/unicode.*)
+                            OUString aAlt( xHyphWord->getHyphenatedWord() );
+                            OUString aWord2(aWord);
+                            OUString aAltLeft(aAlt.copy(0, _nWordLen));
+                            OUString aAltRight(aAlt.copy(_nWordLen));
+                            bAltFullLeft = aWord2.startsWith(aAltLeft);
+                            bAltFullRight = aWord2.endsWith(aAltRight);
+                            nAltDelChar = aWord2.getLength() - aAlt.getLength() + (1 - bAltFullLeft) + (1 - bAltFullRight);
 
-                            // We expect the two cases, which might exist now:
+                            // NOTE: improved for other cases, see fdo#63711
+
+                            // We expect[ed] the two cases:
                             // 1) packen becomes pak-ken
                             // 2) Schiffahrt becomes Schiff-fahrt
                             // In case 1, a character has to be replaced
                             // in case 2 a character is added.
                             // The identification is complicated by long
                             // compound words because the Hyphenator separates
-                            // all position of the word.
+                            // all position of the word. [This is not true for libhyphen.]
                             // "Schiffahrtsbrennesseln" -> "Schifffahrtsbrennnesseln"
                  // We can thus actually not directly connect the index of the
                             // AlternativeWord to aWord. The whole issue will be simplified
                             // by a function in the  Hyphenator as soon as AMA builds this in...
                             sal_uInt16 nAltStart = _nWordLen - 1;
-                            sal_uInt16 nTxtStart = nAltStart - (aAlt.Len() - aWord.Len());
+                            sal_uInt16 nTxtStart = nAltStart - (aAlt.getLength() - aWord.Len());
                             sal_uInt16 nTxtEnd = nTxtStart;
                             sal_uInt16 nAltEnd = nAltStart;
 
                             // The regions between the nStart and nEnd is the
                             // difference between alternative and original string.
-                            while( nTxtEnd < aWord.Len() && nAltEnd < aAlt.Len() &&
-                                   aWord.GetChar(nTxtEnd) != aAlt.GetChar(nAltEnd) )
+                            while( nTxtEnd < aWord.Len() && nAltEnd < aAlt.getLength() &&
+                                   aWord.GetChar(nTxtEnd) != aAlt[nAltEnd] )
                             {
                                 ++nTxtEnd;
                                 ++nAltEnd;
@@ -1882,7 +1894,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
                             // If a character is added, then we notice it now:
                             if( nAltEnd > nTxtEnd && nAltStart == nAltEnd &&
-                                aWord.GetChar( nTxtEnd ) == aAlt.GetChar(nAltEnd) )
+                                aWord.GetChar( nTxtEnd ) == aAlt[nAltEnd] )
                             {
                                 ++nAltEnd;
                                 ++nTxtStart;
@@ -1892,13 +1904,13 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                             DBG_ASSERT( ( nAltEnd - nAltStart ) == 1, "Alternate: Wrong assumption!" );
 
                             if ( nTxtEnd > nTxtStart )
-                                cAlternateReplChar = aAlt.GetChar( nAltStart );
+                                cAlternateReplChar = aAlt[nAltStart];
                             else
-                                cAlternateExtraChar = aAlt.GetChar( nAltStart );
+                                cAlternateExtraChar = aAlt[nAltStart];
 
                             bHyphenated = sal_True;
                             nBreakPos = nWordStart + nTxtStart;
-                            if ( cAlternateReplChar )
+                            if ( cAlternateReplChar || aAlt.getLength() < aWord2.getLength() || !bAltFullRight) // also for "oma-tje", "re-eel"
                                 nBreakPos++;
                         }
                     }
@@ -1946,21 +1958,16 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         TextPortion* pHyphPortion = new TextPortion( 0 );
         pHyphPortion->GetKind() = PORTIONKIND_HYPHENATOR;
         String aHyphText(OUString(CH_HYPH));
-        if ( cAlternateReplChar )
+        if ( (cAlternateReplChar || cAlternateExtraChar) && bAltFullRight ) // alternation after the break doesn't supported
         {
             TextPortion* pPrev = pParaPortion->GetTextPortions()[nEndPortion];
             DBG_ASSERT( pPrev && pPrev->GetLen(), "Hyphenate: Prev portion?!" );
-            pPrev->SetLen( pPrev->GetLen() - 1 );
-            pHyphPortion->SetLen( 1 );
-            pHyphPortion->SetExtraValue( cAlternateReplChar );
+            pPrev->SetLen( pPrev->GetLen() - nAltDelChar );
+            pHyphPortion->SetLen( nAltDelChar );
+            if (cAlternateReplChar && !bAltFullLeft) pHyphPortion->SetExtraValue( cAlternateReplChar );
             // Correct width of the portion above:
             pPrev->GetSize().Width() =
-                pLine->GetCharPosArray()[ nBreakPos-1 - pLine->GetStart() - 1 ];
-        }
-        else if ( cAlternateExtraChar )
-        {
-            pHyphPortion->SetExtraValue( cAlternateExtraChar );
-            aHyphText.Insert( OUString(cAlternateExtraChar), 0 );
+                pLine->GetCharPosArray()[ nBreakPos-1 - pLine->GetStart() - nAltDelChar ];
         }
 
         // Determine the width of the Hyph-Portion:
