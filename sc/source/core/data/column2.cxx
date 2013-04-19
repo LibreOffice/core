@@ -1972,15 +1972,58 @@ void ScColumn::UpdateSelectionFunction(
     const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows,
     bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow) const
 {
-    SCSIZE nIndex;
-    ScMarkedDataIter aDataIter(this, &rMark, false);
-    while (aDataIter.Next( nIndex ))
+    if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
     {
-        SCROW nRow = maItems[nIndex].nRow;
-        bool bRowHidden = rHiddenRows.getValue(nRow);
-        if ( !bRowHidden )
-            if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
-                lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+        SCSIZE nIndex;
+        ScMarkedDataIter aDataIter(this, &rMark, false);
+        while (aDataIter.Next( nIndex ))
+        {
+            SCROW nRow = maItems[nIndex].nRow;
+            bool bRowHidden = rHiddenRows.getValue(nRow);
+            if ( !bRowHidden )
+                if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
+                    lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+        }
+    }
+    else
+    {
+        SCROW nTop, nBottom;
+
+        // ScMarkData::GetArray() returns a valid array only if
+        // 'rMark.IsMultiMarked()' returns true.
+        // Since ScTable::UpdateSelectionFunction() already checked that first
+        // before calling this method it does not need to be repeated here.
+
+        ScMarkArrayIter aIter(rMark.GetArray() + nCol);
+        ScFlatBoolRowSegments::RangeData aData;
+
+        while (aIter.Next( nTop, nBottom ))
+        {
+            sal_Int32 nCellCount = 0;    // to get the count of selected visible cells
+            SCROW nRow = nTop;
+
+            while ( nRow <= nBottom )
+            {
+                if (!rHiddenRows.getRangeData(nRow, aData))     // failed to get range data
+                    break;
+
+                if (aData.mnRow2 > nBottom)
+                    aData.mnRow2 = nBottom;
+
+                if (!aData.mbValue)
+                {
+                    nCellCount += aData.mnRow2 - nRow + 1;
+
+                    // Till this point, nCellCount also includes count of those cells which are excluded
+                    // So, they should be decremented now.
+
+                    if ( bDoExclude && nExStartRow >= nRow && nExEndRow <= aData.mnRow2 )
+                        nCellCount -= nExEndRow - nExStartRow + 1;
+                }
+                nRow = aData.mnRow2 + 1;
+            }
+            rData.nCount += nCellCount;
+        }
     }
 }
 
@@ -1988,15 +2031,37 @@ void ScColumn::UpdateSelectionFunction(
 void ScColumn::UpdateAreaFunction(
     ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows, SCROW nStartRow, SCROW nEndRow) const
 {
-    SCSIZE nIndex;
-    Search( nStartRow, nIndex );
-    while ( nIndex<maItems.size() && maItems[nIndex].nRow<=nEndRow )
+    if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
     {
-        SCROW nRow = maItems[nIndex].nRow;
-        bool bRowHidden = rHiddenRows.getValue(nRow);
-        if ( !bRowHidden )
-            lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
-        ++nIndex;
+        SCSIZE nIndex;
+        Search( nStartRow, nIndex );
+        while ( nIndex<maItems.size() && maItems[nIndex].nRow<=nEndRow )
+        {
+            SCROW nRow = maItems[nIndex].nRow;
+            bool bRowHidden = rHiddenRows.getValue(nRow);
+            if ( !bRowHidden )
+                if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
+                    lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+            ++nIndex;
+        }
+    }
+    else
+    {
+        sal_Int32 nCellCount = 0;    // to get the count of selected visible cells
+        SCROW nRow = nStartRow;
+        ScFlatBoolRowSegments::RangeData aData;
+
+        while (nRow <= nEndRow)
+        {
+            if (!rHiddenRows.getRangeData(nRow, aData))
+               break;
+
+            if (!aData.mbValue)
+                nCellCount += (aData.mnRow2 <= nEndRow ? aData.mnRow2 : nEndRow) - nRow + 1;
+
+            nRow = aData.mnRow2 + 1;
+        }
+        rData.nCount += nCellCount;
     }
 }
 

@@ -486,6 +486,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
 
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+
     for (; itr != itrEnd && *itr < nMax && !aData.bError; ++itr)
         if (maTabs[*itr])
             maTabs[*itr]->UpdateSelectionFunction( aData,
@@ -498,6 +499,9 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
         {
             case SUBTOTAL_FUNC_SUM:
                 rResult = aData.nVal;
+                break;
+            case SUBTOTAL_FUNC_SELECTION_COUNT:
+                rResult = aData.nCount;
                 break;
             case SUBTOTAL_FUNC_CNT:
             case SUBTOTAL_FUNC_CNT2:
