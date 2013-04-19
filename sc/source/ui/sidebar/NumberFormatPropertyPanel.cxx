@@ -262,8 +262,11 @@ void NumberFormatPropertyPanel::HandleContextChange(
 void NumberFormatPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState)
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
 {
+    (void)bIsEnabled;
+
     switch(nSID)
     {
     case SID_NUMBER_TYPE_FORMAT:

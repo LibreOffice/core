@@ -181,8 +181,11 @@ IMPL_LINK(WrapPropertyPanel, WrapTypeHdl, void *, EMPTYARG)
 void WrapPropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
     const SfxItemState eState,
-    const SfxPoolItem* pState )
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
 {
+    (void)bIsEnabled;
+
     if ( eState == SFX_ITEM_AVAILABLE &&
         pState->ISA(SfxBoolItem) )
     {

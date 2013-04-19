@@ -1022,8 +1022,14 @@ IMPL_LINK(ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl, ToolBox *, pControl)
 }
 
 //==================================for Paragraph State change=====================
-void ParaPropertyPanel::NotifyItemUpdate( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void ParaPropertyPanel::NotifyItemUpdate(
+    sal_uInt16 nSID,
+    SfxItemState eState,
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
 {
+    (void)bIsEnabled;
+
     if( nSID == SID_ATTR_METRIC )
     {
         m_eMetricUnit = GetCurrentUnit(eState,pState);
@@ -1072,6 +1078,9 @@ void ParaPropertyPanel::NotifyItemUpdate( sal_uInt16 nSID, SfxItemState eState, 
         ParaBKGStateChanged(nSID, eState, pState);
     }
 }
+
+
+
 
 void ParaPropertyPanel::StateChangedAlignmentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {

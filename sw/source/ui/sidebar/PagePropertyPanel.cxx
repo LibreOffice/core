@@ -490,8 +490,11 @@ void PagePropertyPanel::ClosePageColumnPopup()
 void PagePropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
     const SfxItemState eState,
-    const SfxPoolItem* pState)
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
 {
+    (void)bIsEnabled;
+
     switch( nSId )
     {
     case SID_ATTR_PAGE_COLUMN:

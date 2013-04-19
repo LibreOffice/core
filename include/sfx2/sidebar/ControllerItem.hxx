@@ -20,11 +20,33 @@
 
 #include <sfx2/ctrlitem.hxx>
 
+#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <unotools/cmdoptions.hxx>
+#include <vcl/image.hxx>
+
+#include <com/sun/star/frame/XFrame.hpp>
+
 #include <boost/function.hpp>
+
+
+namespace css = ::com::sun::star;
+namespace cssu = ::com::sun::star::uno;
+
+class SfxViewFrame;
+class ToolBox;
 
 
 namespace sfx2 { namespace sidebar {
 
+/** The sfx2::sidebar::ControllerItem is a wrapper around the
+    SfxControllerItem that becomes necessary to allow objects (think
+    sidebar panels) to receive state changes without having one
+    SfxControllerItem per supported item as base class (which is not
+    possible in C++ anyway).
+
+    It also gives access to the label and icon of a slot/command.
+*/
 class SFX2_DLLPUBLIC ControllerItem
     : public SfxControllerItem
 {
@@ -35,19 +57,79 @@ public:
         virtual void NotifyItemUpdate(
             const sal_uInt16 nSId,
             const SfxItemState eState,
-            const SfxPoolItem* pState) = 0;
+            const SfxPoolItem* pState,
+            const bool bIsEnabled) = 0;
         virtual ~ItemUpdateReceiverInterface();
     };
+
+    /** This is the preferred constructor that allows the created
+        controller item to return non-empty values for GetLable() and
+        GetIcon() calls.
+    */
+    ControllerItem (
+        const sal_uInt16 nSlotId,
+        SfxBindings &rBindings,
+        ItemUpdateReceiverInterface& rItemUpdateReceiver,
+        const ::rtl::OUString& rsCommandName,
+        const cssu::Reference<css::frame::XFrame>& rxFrame);
+
+    /** This is the simpler constructor variant that still exists for
+        compatibility resons.  Note that GetLabel() and GetIcon() will
+        return empty strings/images.
+    */
     ControllerItem (
         const sal_uInt16 nId,
         SfxBindings &rBindings,
         ItemUpdateReceiverInterface& rItemUpdateReceiver);
+
     virtual ~ControllerItem();
+
+    /** Returns </TRUE> when the slot/command has not been disabled.
+        Changes of this state are notified via the
+        ItemUpdateReceiverInterface::NotifyContextChang() method.
+    */
+    bool IsEnabled (void) const;
+
+    /** Force the controller item to call its NotifyItemUpdate
+        callback with up-to-date data.
+    */
+    void RequestUpdate (void);
+
+    /** Return the label for the command.  It contains the keyboard
+        accelerator when one exists.
+    */
+    ::rtl::OUString GetLabel (void) const;
+
+    /** Return the icon for the command.
+    */
+    Image GetIcon (void) const;
+
+    /** Convenience method for setting all relevant properties for the
+        slot/command represented by the called object at the given tool
+        box.
+    */
+    void SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nIndex);
+
+    /** Do not call.  Used by local class only.  Should be a member of
+        a local and hidden interface.
+    */
+    void NotifyFrameContextChange (void);
+    /** Do not call.  Used by local class only.  Should be a member of
+        a local and hidden interface.
+    */
+    void ResetFrame (void);
+
+protected:
 
     virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState);
 
 private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;
+    cssu::Reference<css::frame::XFrame> mxFrame;
+    cssu::Reference<css::lang::XComponent> mxFrameActionListener;
+    const ::rtl::OUString msCommandName;
+
+    void SetupCommandURL (const sal_Char* sCommandName);
 };
 
 } } // end of namespace sfx2::sidebar

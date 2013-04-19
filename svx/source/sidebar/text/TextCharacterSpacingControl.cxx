@@ -27,10 +27,14 @@
 #include <sfx2/sidebar/Theme.hxx>
 
 namespace svx { namespace sidebar {
-TextCharacterSpacingControl::TextCharacterSpacingControl(Window* pParent, svx::sidebar::TextPropertyPanel& rPanel)
+
+TextCharacterSpacingControl::TextCharacterSpacingControl (
+    Window* pParent,
+    svx::sidebar::TextPropertyPanel& rPanel,
+    SfxBindings* pBindings)
 :   PopupControl( pParent,SVX_RES(RID_POPUPPANEL_TEXTPAGE_SPACING))
 ,   mrTextPropertyPanel(rPanel)
-,   mpBindings(NULL)
+,   mpBindings(pBindings)
 ,   maVSSpacing     (ValueSetWithTextControl::IMAGE_TEXT,this, SVX_RES(VS_SPACING))
 ,   maLastCus       (this, SVX_RES(FT_LASTCUSTOM))
 //, maBorder        (this, SVX_RES(CT_BORDER))
@@ -59,7 +63,6 @@ TextCharacterSpacingControl::TextCharacterSpacingControl(Window* pParent, svx::s
 {
     initial();
     FreeResource();
-    mpBindings = mrTextPropertyPanel.GetBindings();
     Link aLink = LINK(this, TextCharacterSpacingControl, KerningSelectHdl);
     maLBKerning.SetSelectHdl(aLink);
     aLink =LINK(this, TextCharacterSpacingControl, KerningModifyHdl);

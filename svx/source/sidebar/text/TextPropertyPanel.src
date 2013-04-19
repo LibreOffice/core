@@ -68,7 +68,6 @@ Control RID_SIDEBAR_TEXT_PANEL
         Pos = MAP_APPFONT ( PROPERTYPAGE_WIDTH - SECTIONPAGE_MARGIN_HORIZONTAL - TOOLBOX_ITEM_WIDTH * 2, SECTIONPAGE_MARGIN_VERTICAL_TOP) ;
         Size = MAP_APPFONT ( TOOLBOX_ITEM_WIDTH * 2 ,TOOLBOX_ITEM_HEIGHT ) ;
         TabStop = TRUE ;
-//      HelpID = HID_TB_INCREASE_DECREASE;
         HelpID = HID_PPROPERTYPANEL_TEXT_TBX_FONTSIZE_INDE;
         Text = "Font Size Adjusting" ;
         ItemList =
@@ -76,15 +75,11 @@ Control RID_SIDEBAR_TEXT_PANEL
             ToolBoxItem
             {
                 Identifier = TBI_INCREASE;
-                Text [ en-US ] = "Increase Font Size" ;
-//              HelpID = HID_TBI_INCREASE;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_INCREASE;
             };
             ToolBoxItem
             {
                 Identifier = TBI_DECREASE;
-                Text [ en-US ] = "Decrease Font Size" ;
-//              HelpID = HID_TBI_DECREASE;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_DECREASE;
             };
         };
@@ -95,7 +90,6 @@ Control RID_SIDEBAR_TEXT_PANEL
         Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + 1, SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL  + 1) ;
         Size = MAP_APPFONT ( TOOLBOX_ITEM_WIDTH * 4 + TOOLBOX_ITEM_DD_WIDTH, TOOLBOX_ITEM_HEIGHT ) ;
         TabStop = TRUE ;
-//      HelpID = HID_TB_FONT;
         HelpID = HID_PPROPERTYPANEL_TEXT_TBX_FONT;
         Text = "Font Effects" ;
         ItemList =
@@ -103,59 +97,34 @@ Control RID_SIDEBAR_TEXT_PANEL
             ToolBoxItem
             {
                 Identifier = TBI_BOLD;
-                Text [ en-US ] = "Bold" ;
-//              HelpID = HID_TBI_FONT_BOLD;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_BOLD;
             };
             ToolBoxItem
             {
                 Identifier = TBI_ITALIC;
-                Text [ en-US ] = "Italic" ;
-//              HelpID = HID_TBI_FONT_ITALIC;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_ITALIC;
             };
             ToolBoxItem
             {
                 Identifier = TBI_UNDERLINE;
                 DropDown = TRUE ;
-                Text [ en-US ] = "Underline" ;
-//              HelpID = HID_TBI_FONT_UNDERLINE;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_UNDERLINE;
             };
             ToolBoxItem
             {
                 Identifier = TBI_STRIKEOUT;
-                Text [ en-US ] = "Strikethrough" ;
-//              HelpID = HID_TBI_FONT_STRIKEOUT;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_STRIKEOUT;
             };
             ToolBoxItem
             {
                 Identifier = TBI_SHADOWED;
-                Text [ en-US ] = "Shadow" ;
-//              HelpID = HID_TBI_FONT_SHADOWED;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SHADOWED;
             };
         };
     };
 
-    String STR_QH_BOLD
-    {
-        Text [ en-US ] = "Bold (Ctrl+B)";
-    };
-    String STR_QH_ITALIC
-    {
-        Text [ en-US ] = "Italic (Ctrl+I)";
-    };
-    String STR_QH_UNDERLINE
-    {
-        Text [ en-US ] = "Underline (Ctrl+U)";
-    };
-
-
     ToolBox TB_FONTCOLOR
     {
-//      HelpID = HID_TB_COLOR;
         HelpID = HID_PPROPERTYPANEL_TEXT_TBX_FONT_COLOR;
         SVLook = TRUE ;
         Pos = MAP_APPFONT (PROPERTYPAGE_WIDTH - SECTIONPAGE_MARGIN_HORIZONTAL - TOOLBOX_ITEM_WIDTH * 2, SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL  + 1) ;
@@ -167,10 +136,8 @@ Control RID_SIDEBAR_TEXT_PANEL
             ToolBoxItem
             {
                 Identifier = TBI_FONTCOLOR ;
-//              HelpID =  HID_TBI_COLOR;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_FONT_COLOR;
                 DropDown = TRUE ;
-                Text [ en-US ] = "Font Color" ;
             };
         };
     };
@@ -181,7 +148,6 @@ Control RID_SIDEBAR_TEXT_PANEL
         Pos = MAP_APPFONT (PROPERTYPAGE_WIDTH - SECTIONPAGE_MARGIN_HORIZONTAL  - TOOLBOX_ITEM_WIDTH * 2 , SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + (TOOLBOX_ITEM_HEIGHT + 2) + CONTROL_SPACING_VERTICAL * 2 + 1) ;
         Size = MAP_APPFONT (TOOLBOX_ITEM_DD_WIDTH ,TOOLBOX_ITEM_HEIGHT ) ;
         TabStop = TRUE ;
-//      HelpID = HID_TB_HIGHLIGHT;
         HelpID = HID_PPROPERTYPANEL_TEXT_TBX_HIGHLIGHT_COLOR;
         Text = "Highlight Color" ;
         ItemList =
@@ -189,10 +155,8 @@ Control RID_SIDEBAR_TEXT_PANEL
             ToolBoxItem
             {
                 Identifier = TBI_HIGHLIGHT ;
-//              HelpID =  HID_TBI_HIGHLIGHT;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_HIGHLIGHT_COLOR;
                 DropDown = TRUE ;
-                Text [ en-US ] = "Highlight Color" ;
             };
         };
     };
@@ -203,7 +167,6 @@ Control RID_SIDEBAR_TEXT_PANEL
         Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + 1 , SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL * 2 + (TOOLBOX_ITEM_HEIGHT + 2) + 1) ;
         Size = MAP_APPFONT (TOOLBOX_ITEM_WIDTH * 2 ,TOOLBOX_ITEM_HEIGHT ) ;
         TabStop = TRUE ;
-//      HelpID = HID_TB_SCRIPT_SW;
         HelpID = HID_PPROPERTYPANEL_TEXT_TBX_SCRIPT_SW;
         Text = "Font Position" ;
         ItemList =
@@ -211,15 +174,11 @@ Control RID_SIDEBAR_TEXT_PANEL
             ToolBoxItem
             {
                 Identifier = TBI_SUPER_SW;
-                Text [ en-US ] = "Superscript" ;
-//              HelpID = HID_TBI_SCRIPT_SW_SUPER;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUPER_SW;
             };
             ToolBoxItem
             {
                 Identifier = TBI_SUB_SW;
-                Text [ en-US ] = "Subscript" ;
-//              HelpID = HID_TBI_SCRIPT_SW_SUB;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUB_SW;
             };
         };
@@ -230,7 +189,6 @@ Control RID_SIDEBAR_TEXT_PANEL
         Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + 1 , SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL * 2 + (TOOLBOX_ITEM_HEIGHT + 2) + 1) ;
         Size = MAP_APPFONT (TOOLBOX_ITEM_WIDTH * 2 ,TOOLBOX_ITEM_HEIGHT ) ;
         TabStop = TRUE ;
-//      HelpID = HID_TB_SCRIPT;
         HelpID = HID_PPROPERTYPANEL_TEXT_TBX_SCRIPT;
         Text = "Font Position" ;
         ItemList =
@@ -238,15 +196,11 @@ Control RID_SIDEBAR_TEXT_PANEL
             ToolBoxItem
             {
                 Identifier = TBI_SUPER;
-                Text [ en-US ] = "Superscript" ;
-//              HelpID = HID_TBI_SCRIPT_SUPER;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUPER;
             };
             ToolBoxItem
             {
                 Identifier = TBI_SUB;
-                Text [ en-US ] = "Subscript" ;
-//              HelpID = HID_TBI_SCRIPT_SUB;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUB;
             };
         };
@@ -266,66 +220,9 @@ Control RID_SIDEBAR_TEXT_PANEL
             {
                 Identifier = TBI_SPACING;
                 DropDown = TRUE ;
-                Text [ en-US ] = "Character Spacing" ;
                 HelpID = HID_TBI_SPACING;
             };
         };
-    };
-
-    Image IMG_INCREASE
-    {
-        ImageBitmap = Bitmap{File = "symphony/enlarge font.png";};
-    //  MaskColor = IMAGE_MASK_COLOR;
-    };
-    Image IMG_DECREASE
-    {
-        ImageBitmap = Bitmap{File = "symphony/decrease font.png";};
-    };
-    Image IMG_BOLD
-    {
-        ImageBitmap = Bitmap{File = "symphony/sc_bold.png";};//sc_bold.bmp
-    };
-    Image IMG_ITALIC
-    {
-        ImageBitmap = Bitmap{File = "symphony/sc_italic.png";};//sc_italic.bmp
-    };
-    Image IMG_UNDERLINE
-    {
-        ImageBitmap = Bitmap{File = "symphony/sc_underline.png";};//sc_underline.png
-    };
-    Image IMG_STRIKEOUT
-    {
-        ImageBitmap = Bitmap{File = "symphony/sc_strikeout.png";};//sc_strikeout.png
-    };
-    Image IMG_SHADOWED
-    {
-        ImageBitmap = Bitmap{File = "symphony/sc_shadowed.png";};//sc_shadowed.png
-    };
-    Image IMG_FONTCOLOR
-    {
-        ImageBitmap = Bitmap{File = "symphony/sc_color.png";};
-    };
-    Image IMG_SUPSCRIPT
-    {
-        ImageBitmap = Bitmap{File = "symphony/sc_superscript.png";};
-    };
-    Image IMG_SUBSCRIPT
-    {
-        ImageBitmap = Bitmap{File = "symphony/sc_subscript.png";};
-    };
-//  Image IMG_SPACING
-//  {
-//      ImageBitmap = Bitmap{File = "symphony/icon_normal.png";};
-//  };
-    Image IMG_HIGHLIGHT
-    {
-        ImageBitmap = Bitmap{File = "symphony/Highlight.png";};//sc_backcolor
-    };
-
-    //small icon for spacing
-    Image IMG_SPACING_D
-    {
-        ImageBitmap = Bitmap{File = "symphony/icon_normal.png";};
     };
 };
 
@@ -338,7 +235,6 @@ Control RID_POPUPPANEL_TEXTPAGE_UNDERLINE
     Size = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH + VS_UNDERLINE_WIDTH,  13+ VS_UNDERLINE_HEIGHT + POPUP_BORDER_HEIGHT + POPUPPANEL_MARGIN_SMALL * 2 + POPUPPANEL_MARGIN_LARGE);
     Control VS_UNDERLINE
     {
-//      HelpID = HID_UNDERLINE_VS ;
         HelpID = HID_PPROPERTYPANEL_TEXT_UNDERLINE_VS;
         Hide = TRUE ;
         Pos = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL + OFFSET_X , POPUPPANEL_MARGIN_SMALL + OFFSET_Y );
@@ -440,12 +336,6 @@ Control RID_POPUPPANEL_TEXTPAGE_UNDERLINE
         ImageBitmap = Bitmap{File = "symphony/selected-line10.bmp";};
     };
 
-//  //more button bmps
-//  Bitmap  BMP_UNDERLINE_MORE
-//  {
-//      File = "symphony/morebutton.bmp";
-//  };
-
     //tips
     String STR_SINGLE
     {
@@ -539,12 +429,6 @@ Control RID_POPUPPANEL_TEXTPAGE_SPACING
         Text [ en-US ] = "Custom:" ;
     };
     //custom area
-//  Control CT_BORDER
-//  {
-//      Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_LARGE + OFFSET_X + 1 , OFFSET_Y + POPUPPANEL_MARGIN_SMALL * 3 + 15 * 6 + TEXT_HEIGHT) ;
-//      Size = MAP_APPFONT (CUSTOM_WIDTH ,  CUSTOM_HEIGHT ) ;// TOOLBOX_42_42_ITEM_DD_WIDTH * 2 +  TB_SPACE * 2 - 5 + TEXT_WIDTH - 2
-//        DialogControl = TRUE;
-//  };
     FixedText   FT_SPACING
     {
         Pos = MAP_APPFONT ( CUSTOM_X + POPUPPANEL_MARGIN_LARGE, CUSTOM_Y + POPUPPANEL_MARGIN_LARGE);

@@ -76,7 +76,8 @@ public:
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
         const SfxItemState eState,
-        const SfxPoolItem* pState);
+        const SfxPoolItem* pState,
+        const bool bIsEnabled);
 
     void ShowMenu (void);
     sal_uInt16 GetBulletTypeIndex(){ return mnBulletTypeIndex; }

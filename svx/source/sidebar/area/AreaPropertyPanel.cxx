@@ -735,8 +735,11 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
 void AreaPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState)
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
 {
+    (void)bIsEnabled;
+
     XFillStyle eXFS;
     SfxObjectShell* pSh = SfxObjectShell::Current();
     bool bFillTransparenceChanged(false);
@@ -1039,6 +1042,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         }
     }
 }
+
 
 
 

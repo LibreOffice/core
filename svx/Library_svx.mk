@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,svx,\
     cppu \
     drawinglayer \
     editeng \
+    fwk \
     i18nlangtag \
     sal \
     sfx \

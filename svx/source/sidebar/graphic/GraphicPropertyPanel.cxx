@@ -272,8 +272,11 @@ void GraphicPropertyPanel::DataChanged(
 void GraphicPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
-    const SfxPoolItem* pState)
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
 {
+    (void)bIsEnabled;
+
     switch( nSID )
     {
     case SID_ATTR_GRAF_LUMINANCE:
@@ -438,6 +441,9 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         break;
     }
 }
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 

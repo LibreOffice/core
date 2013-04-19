@@ -29,10 +29,13 @@
 
 namespace svx { namespace sidebar {
 
-TextUnderlineControl::TextUnderlineControl(Window* pParent, svx::sidebar::TextPropertyPanel& rPanel)
+TextUnderlineControl::TextUnderlineControl (
+    Window* pParent,
+    svx::sidebar::TextPropertyPanel& rPanel,
+    SfxBindings* pBindings)
 :   svx::sidebar::PopupControl( pParent,SVX_RES(RID_POPUPPANEL_TEXTPAGE_UNDERLINE))
 ,   mrTextPropertyPanel(rPanel)
-,   mpBindings(NULL)
+,   mpBindings(pBindings)
 ,   maVSUnderline( this, SVX_RES(VS_UNDERLINE))
 ,   maPBOptions (this, SVX_RES(PB_OPTIONS) )
 
@@ -61,7 +64,6 @@ TextUnderlineControl::TextUnderlineControl(Window* pParent, svx::sidebar::TextPr
 {
     initial();
     FreeResource();
-    mpBindings = mrTextPropertyPanel.GetBindings();
 }
 
 void TextUnderlineControl::initial()

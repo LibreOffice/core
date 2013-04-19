@@ -37,11 +37,15 @@ namespace svx { namespace sidebar {
 #define SIDEBAR_SPACE_NORMAL    0
 #define SIDEBAR_SPACE_EXPAND    1
 #define SIDEBAR_SPACE_CONDENSED 2
+
 class TextCharacterSpacingControl:public svx::sidebar::PopupControl
 {
 public:
-    TextCharacterSpacingControl(Window* pParent, svx::sidebar::TextPropertyPanel& rPanel);
-    ~TextCharacterSpacingControl();
+    TextCharacterSpacingControl (
+        Window* pParent,
+        svx::sidebar::TextPropertyPanel& rPanel,
+        SfxBindings* pBindings);
+    virtual ~TextCharacterSpacingControl();
     void ToGetFocus();
     void Rearrange(bool bLBAvailable,bool bAvailable, long nKerning);
     //virtual void Paint(const Rectangle& rect);
