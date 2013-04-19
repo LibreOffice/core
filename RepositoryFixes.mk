@@ -66,7 +66,7 @@ gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst rdf:rdf%,rdf:librdf%,$(gb_Library_DLLFILENAMES))
 
 # libpyuno_wrapper.dll => pyuno.pyd
-gb_Library_DLLFILENAMES := $(patsubst pyuno:pyuno.dll,pyuno:pyuno.pyd,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst pyuno:pyuno.dll,pyuno:pyuno$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd,$(gb_Library_DLLFILENAMES))
 
 gb_StaticLibrary_FILENAMES := $(patsubst png:png%,png:libpng%,$(gb_StaticLibrary_FILENAMES))
 gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))

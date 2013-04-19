@@ -48,7 +48,11 @@ File gid_File_Lib_Pyuno
   #ifdef UNX
     Name = STRING(CONCAT2(libpyuno,UNXSUFFIX));
   #else
+  #ifdef MSVC_PKG_DEBUG_RUNTIME
+    Name = "pyuno_d.pyd";
+  #else
     Name = "pyuno.pyd";
+  #endif // MSVC_PKG_DEBUG_RUNTIME
   #endif
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
