@@ -104,7 +104,6 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
     m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nSelectedIndices ) );
     if ( nSelectedIndices != nOldSelectedIndices )
         fireClickEvent();
-    m_xProps->setPropertyValue( TEXT, uno::makeAny( sValue ) );
 }
 
 OUString SAL_CALL
@@ -141,7 +140,7 @@ ScVbaListBox::setMultiSelect( sal_Int32 _multiselect ) throw (css::uno::RuntimeE
             bBoolVal = sal_True;
             break;
         case msforms::fmMultiSelect::fmMultiSelectSingle:
-            bBoolVal = sal_True;
+            bBoolVal = sal_False;
             break;
         default:
             throw lang::IllegalArgumentException();
