@@ -7215,9 +7215,7 @@ AC_SUBST(FREETYPE_LIBS)
 dnl ===================================================================
 dnl Check for system libwps
 dnl ===================================================================
-if test $_os != iOS; then
-    libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpslib"])
-fi
+libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpslib"])
 
 dnl ===================================================================
 dnl Check for system libwpg
