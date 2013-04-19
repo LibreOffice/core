@@ -1193,6 +1193,9 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
 sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 {
+#if !defined(MACOSX) && !defined(ANDROID) && !defined(IOS)
+    // #i98766# - disable smooth scrolling for Mac
+
     const sal_uLong nColCnt = mpOut->GetColorCount();
     long lMult = 1, lMax = LONG_MAX;
     if ( nColCnt == 65536 )
@@ -1210,9 +1213,6 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
         lMax = 3000;
         lMult = 12;
     }
-
-#if !defined(MACOSX) && !defined(ANDROID) && !defined(IOS)
-    // #i98766# - disable smooth scrolling for Mac
 
     // #i75172# isolated static conditions
     const bool bOnlyYScroll(!lXDiff && Abs(lYDiff) != 0 && Abs(lYDiff) < lMax);
