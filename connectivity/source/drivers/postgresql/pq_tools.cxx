@@ -140,7 +140,7 @@ OUString time2String( const com::sun::star::util::Time & x )
     // TODO FIXME: replace by DBTypeConversion::toTimeString
     const size_t buflen = 19;
     char buffer[buflen];
-    snprintf( buffer, buflen, "%02d:%02d:%02d.%09d", x.Hours, x.Minutes, x.Seconds, x.NanoSeconds );
+    snprintf( buffer, buflen, "%02d:%02d:%02d.%09" SAL_PRIuUINT32, x.Hours, x.Minutes, x.Seconds, x.NanoSeconds );
     return OUString::createFromAscii( buffer );
 }
 
@@ -180,7 +180,7 @@ OUString dateTime2String( const com::sun::star::util::DateTime & x )
 {
     // TODO FIXME: replace by DBTypeConversion::toDateTimeString
     char buffer[128];
-    sprintf( buffer, "%d-%02d-%02d %02d:%02d:%02d.%09d",
+    sprintf( buffer, "%d-%02d-%02d %02d:%02d:%02d.%09" SAL_PRIuUINT32,
              x.Year, x.Month, x.Day,
              x.Hours, x.Minutes, x.Seconds, x.NanoSeconds );
     return OUString::createFromAscii( buffer );
