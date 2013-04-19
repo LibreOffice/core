@@ -11,6 +11,11 @@ $(eval $(call gb_ExternalProject_ExternalProject,curl))
 
 $(eval $(call gb_ExternalProject_use_unpacked,curl,curl))
 
+$(eval $(call gb_ExternalProject_use_externals,curl,\
+	nss3 \
+	zlib \
+))
+
 $(eval $(call gb_ExternalProject_register_targets,curl,\
 	build \
 ))
