@@ -35,7 +35,7 @@
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/undo.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/saveopt.hxx>

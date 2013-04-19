@@ -100,7 +100,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/printer.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <xmloff/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>

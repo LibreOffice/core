@@ -965,7 +965,7 @@
 #include <xmloff/txtparae.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlaustp.hxx>
-#include <xmloff/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimppr.hxx>

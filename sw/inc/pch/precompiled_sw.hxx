@@ -776,7 +776,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/templdlg.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/xwindowitem.hxx>
@@ -1095,7 +1095,7 @@
 #include <xmloff/xformsexport.hxx>
 #include <xmloff/xformsimport.hxx>
 #include <xmloff/xmlaustp.hxx>
-#include <xmloff/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>

@@ -67,7 +67,7 @@
 #include <xmloff/families.hxx>
 #include <xmloff/numehelp.hxx>
 #include <xmloff/txtparae.hxx>
-#include <xmloff/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLEventExport.hxx>
 

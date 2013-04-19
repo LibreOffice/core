@@ -353,7 +353,7 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/stdmenu.hxx>
 #include <svtools/svlbitm.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include <svtools/valueset.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/externallock.hxx>

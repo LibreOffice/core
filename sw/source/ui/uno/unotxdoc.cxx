@@ -56,7 +56,7 @@
 #include <unodraw.hxx>
 #include <svl/eitem.hxx>
 #include <pagedesc.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include <unocrsr.hxx>
 #include <unofieldcoll.hxx>
 #include <unoidxcoll.hxx>
