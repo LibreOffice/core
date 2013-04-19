@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Library_Library,for))
 
-$(eval $(call gb_Library_use_package,for,\
-))
-
 $(eval $(call gb_Library_set_include,for,\
     $$(INCLUDE) \
     -I$(SRCDIR)/formula/source/core/inc \

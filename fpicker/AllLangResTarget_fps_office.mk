@@ -35,9 +35,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,fps_office,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,fps_office/res))
 
-$(eval $(call gb_SrsTarget_use_packages,fps_office/res,\
-))
-
 $(eval $(call gb_SrsTarget_add_files,fps_office/res,\
 	fpicker/source/office/OfficeFilePicker.src \
 	fpicker/source/office/iodlg.src \

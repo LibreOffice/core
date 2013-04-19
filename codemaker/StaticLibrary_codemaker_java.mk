@@ -29,9 +29,6 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,codemaker_java))
 
 $(eval $(call gb_StaticLibrary_use_external,codemaker_java,boost_headers))
 
-$(eval $(call gb_StaticLibrary_use_packages,codemaker_java,\
-))
-
 $(eval $(call gb_StaticLibrary_add_exception_objects,codemaker_java,\
 	codemaker/source/commonjava/commonjava \
 ))

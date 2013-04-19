@@ -17,9 +17,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,for,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,formula/res))
 
-$(eval $(call gb_SrsTarget_use_packages,formula/res,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,formula/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/formula/source/core/inc \

@@ -30,9 +30,6 @@
 
 $(eval $(call gb_Library_Library,log))
 
-$(eval $(call gb_Library_use_packages,log,\
-))
-
 $(eval $(call gb_Library_set_componentfile,log,extensions/source/logging/log))
 
 $(eval $(call gb_Library_use_external,log,boost_headers))

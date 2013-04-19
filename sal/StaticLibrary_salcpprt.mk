@@ -27,9 +27,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,salcpprt))
 
-$(eval $(call gb_StaticLibrary_use_packages,salcpprt,\
-))
-
 $(eval $(call gb_StaticLibrary_add_defs,salcpprt, \
 	$(LFS_CFLAGS) \
 ))

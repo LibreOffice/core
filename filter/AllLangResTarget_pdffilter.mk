@@ -27,9 +27,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,pdffilter,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,filter/pdffilter))
 
-$(eval $(call gb_SrsTarget_use_packages,filter/pdffilter,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,filter/pdffilter,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/filter/inc \

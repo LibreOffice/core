@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Library_Library,jvmaccess))
 
-$(eval $(call gb_Library_use_package,jvmaccess,\
-))
-
 $(eval $(call gb_Library_add_defs,jvmaccess,\
     -DJVMACCESS_DLLIMPLEMENTATION \
 ))

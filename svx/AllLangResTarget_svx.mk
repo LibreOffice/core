@@ -27,9 +27,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,svx,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,svx/res))
 
-$(eval $(call gb_SrsTarget_use_packages,svx/res,\
-))
-
 $(eval $(call gb_SrsTarget_set_include,svx/res,\
     $$(INCLUDE) \
     -I$(call gb_SrsTemplateTarget_get_include_dir,svx) \

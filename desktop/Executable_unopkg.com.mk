@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Executable_Executable,unopkg_com))
 
-$(eval $(call gb_Executable_use_packages,unopkg_com,\
-))
-
 $(eval $(call gb_Executable_set_targettype_gui,unopkg_com,NO))
 
 $(eval $(call gb_Executable_add_defs,unopkg_com,\
