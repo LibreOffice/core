@@ -1,23 +1,23 @@
 import unittest
-from org.libreoffice.unotest import UnoNotConnection as UnoConnection
+from org.libreoffice.unotest import UnoInProcess
 
 #@unittest.skip("that seems to work")
 class TestSetExpresion(unittest.TestCase):
-    _unoCon = None
+    _uno = None
     _xDoc = None
 
     @classmethod
     def setUpClass(cls):
-        cls._unoCon = UnoConnection({})
-        cls._unoCon.setUp()
-        cls._xDoc = cls._unoCon.openEmptyWriterDoc()
+        cls._uno = UnoInProcess()
+        cls._uno.setUp()
+        cls._xDoc = cls._uno.openEmptyWriterDoc()
 
     @classmethod
     def tearDownClass(cls):
-        cls._unoCon.tearDown()
+        cls._uno.tearDown()
 
     def test_set_expression(self):
-        self.__class__._unoCon.checkProperties(
+        self.__class__._uno.checkProperties(
             self.__class__._xDoc.createInstance("com.sun.star.text.textfield.SetExpression"),
             {"NumberingType": 0,
              "Content": "foo",
