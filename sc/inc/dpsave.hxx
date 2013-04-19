@@ -264,6 +264,12 @@ public:
 
     SC_DLLPUBLIC const DimsType& GetDimensions() const;
 
+    /**
+     * Get sort order map to sort row and column dimensions in order of
+     * appearance. Row dimensions get sorted before column dimensions.  This
+     * is used to traverse result tree, which is structured following this
+     * order.
+     */
     const DimOrderType& GetDimensionSortOrder() const;
 
     /**
