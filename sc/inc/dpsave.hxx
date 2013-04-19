@@ -282,7 +282,7 @@ public:
 
     /**
      * Get a dimension object by its name.  <i>If one doesn't exist for the
-     * given name, it creats a new one.</i>
+     * given name, it creates a new one.</i>
      *
      * @param rName dimension name
      *
