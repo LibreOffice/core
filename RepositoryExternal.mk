@@ -1471,18 +1471,20 @@ gb_ExternalProject__use_wps :=
 else # !SYSTEM_WPS
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	wpslib \
+	wps-0.2 \
 ))
 
 define gb_LinkTarget__use_wps
+$(call gb_LinkTarget_use_package,$(1),\
+	libwps \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	wpslib \
+	wps-0.2 \
 )
 
 endef
 define gb_ExternalProject__use_wps
-$(call gb_ExternalProject_use_package,$(1),libwps_inc)
-$(call gb_ExternalProject_use_static_libraries,$(1),wpslib)
+$(call gb_ExternalProject_use_package,$(1),libwps)
 
 endef
 
