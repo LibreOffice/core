@@ -154,6 +154,9 @@ void ScXMLConverter::GetStringFromFunction(
         case SUBTOTAL_FUNC_STD:     sFuncStr = GetXMLToken( XML_STDEV );        break;
         case SUBTOTAL_FUNC_STDP:    sFuncStr = GetXMLToken( XML_STDEVP );       break;
         case SUBTOTAL_FUNC_SUM:     sFuncStr = GetXMLToken( XML_SUM );          break;
+        case SUBTOTAL_FUNC_SELECTION_COUNT:                                     break;
+        // it is not needed as it is only a UI value and not document content
+
         case SUBTOTAL_FUNC_VAR:     sFuncStr = GetXMLToken( XML_VAR );          break;
         case SUBTOTAL_FUNC_VARP:    sFuncStr = GetXMLToken( XML_VARP );         break;
     }

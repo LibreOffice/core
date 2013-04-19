@@ -686,6 +686,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Sum" ;
     };
+    String STR_FUN_TEXT_SELECTION_COUNT
+    {
+        Text [ en-US ] = "Selection count" ;
+    };
     String STR_FUN_TEXT_COUNT
     {
         Text [ en-US ] = "Count" ;
