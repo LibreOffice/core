@@ -36,7 +36,10 @@
 #include "globstr.hrc"
 #include "document.hxx"
 
-//------------------------------------------------------------------------
+/*
+ * XXX: BIG RED NOTICE! Changes MUST be binary file format compatible and MUST
+ * be synchronized with Writer's SwTableAutoFmtTbl sw/source/core/doc/tblafmt.cxx
+ */
 
 const sal_Char *linker_dummy = "";
 

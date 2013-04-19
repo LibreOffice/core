@@ -42,6 +42,11 @@
 #include <fmtornt.hxx>
 #include <editsh.hxx>
 
+/*
+ * XXX: BIG RED NOTICE! Changes MUST be binary file format compatible and MUST
+ * be synchronized with Calc's ScAutoFormat sc/source/core/tool/autoform.cxx
+ */
+
 using ::editeng::SvxBorderLine;
 
 // until SO5PF
