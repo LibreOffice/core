@@ -144,7 +144,7 @@ void ScDPResultFilterSet::add(
 void ScDPResultFilterSet::swap(ScDPResultFilterSet& rOther)
 {
     std::swap(maPrimaryDimName, rOther.maPrimaryDimName);
-    std::swap<MemberNode*>(mpRoot, rOther.mpRoot);
+    std::swap(mpRoot, rOther.mpRoot);
 }
 
 bool ScDPResultFilterSet::empty() const
