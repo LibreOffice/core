@@ -20,6 +20,8 @@
 #ifndef _SV_SVAPP_HXX
 #define _SV_SVAPP_HXX
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <stdexcept>
@@ -211,8 +213,10 @@ public:
 
     static sal_uLong                PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
     static sal_uLong                PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
+#if !HAVE_FEATURE_DESKTOP
     static sal_uLong            PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent );
     static sal_uLong            PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent );
+#endif
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
 
     static sal_uLong                PostUserEvent( const Link& rLink, void* pCaller = NULL );

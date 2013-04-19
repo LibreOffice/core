@@ -880,6 +880,8 @@ sal_uLong Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEven
     return nEventId;
 }
 
+#if !HAVE_FEATURE_DESKTOP
+
 sal_uLong Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent )
 {
     const SolarMutexGuard aGuard;
@@ -937,7 +939,7 @@ sal_uLong Application::PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEv
     return nEventId;
 }
 
-// -----------------------------------------------------------------------------
+#endif // !HAVE_FEATURE_DESKTOP
 
 IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
 {
