@@ -51,8 +51,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 
-extern rtl_StandardModuleCount g_moduleCount;
-
 namespace stoc_bootstrap
 {
 uno::Sequence< OUString > rdbtdp_getSupportedServiceNames()
@@ -166,14 +164,9 @@ ProviderImpl::ProviderImpl( const com::sun::star::uno::Reference< XComponentCont
         XServiceInfo, XHierarchicalNameAccess,
         XTypeDescriptionEnumerationAccess, XInitialization >( _aComponentMutex )
     , _xContext( xContext )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
-ProviderImpl::~ProviderImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+ProviderImpl::~ProviderImpl() {}
 
 //______________________________________________________________________________
 Any ProviderImpl::TypeDescriptionManagerWrapper::getByHierarchicalName(

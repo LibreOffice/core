@@ -25,10 +25,7 @@ namespace stoc_rdbtdp
 
 //__________________________________________________________________________________________________
 // virtual
-ConstantTypeDescriptionImpl::~ConstantTypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+ConstantTypeDescriptionImpl::~ConstantTypeDescriptionImpl() {}
 
 // XTypeDescription
 //__________________________________________________________________________________________________

@@ -47,7 +47,6 @@ using namespace com::sun::star::registry;
 
 namespace stoc_namingservice
 {
-static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 static Sequence< OUString > ns_getSupportedServiceNames()
 {
@@ -117,16 +116,10 @@ static Reference<XInterface> SAL_CALL NamingService_Impl_create(
 }
 
 //==================================================================================================
-NamingService_Impl::NamingService_Impl()
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+NamingService_Impl::NamingService_Impl() {}
 
 //==================================================================================================
-NamingService_Impl::~NamingService_Impl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+NamingService_Impl::~NamingService_Impl() {}
 
 // XServiceInfo
 OUString NamingService_Impl::getImplementationName()
@@ -189,7 +182,7 @@ static struct ImplementationEntry g_entries[] =
     {
         NamingService_Impl_create, ns_getImplementationName,
         ns_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

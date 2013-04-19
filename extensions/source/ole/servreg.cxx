@@ -31,9 +31,6 @@ using namespace cppu;
 
 namespace ole_adapter
 {
-rtl_StandardModuleCount globalModuleCount= MODULE_COUNT_INIT;
-
-
 
 Reference<XInterface> SAL_CALL ConverterProvider_CreateInstance2(   const Reference<XMultiServiceFactory> & xSMgr)
                             throw(Exception)
@@ -76,29 +73,25 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL oleautobridge_component_getFacto
     {
         xFactory=  createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
                                          OUString("com.sun.star.comp.ole.OleConverter2"),
-                                         ConverterProvider_CreateInstance2, seqServiceNames,
-                                         &globalModuleCount.modCnt );
+                                         ConverterProvider_CreateInstance2, seqServiceNames );
     }
     else if (pServiceManager && aImplName.equals(  reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleConverterVar1")  ))
     {
         xFactory= createSingleFactory( reinterpret_cast<XMultiServiceFactory*>(pServiceManager),
                                        OUString("com.sun.star.comp.ole.OleConverterVar1"),
-                                       ConverterProvider_CreateInstanceVar1, seqServiceNames,
-                                       &globalModuleCount.modCnt );
+                                       ConverterProvider_CreateInstanceVar1, seqServiceNames );
     }
     else if(pServiceManager && aImplName.equals(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleClient")))
     {
         xFactory= createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
                                        OUString("com.sun.star.comp.ole.OleClient"),
-                                       OleClient_CreateInstance, seqServiceNames,
-                                       &globalModuleCount.modCnt);
+                                       OleClient_CreateInstance, seqServiceNames );
     }
     else if(pServiceManager && aImplName.equals(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleServer")))
     {
         xFactory= createOneInstanceFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
                                             OUString("com.sun.star.comp.ole.OleServer"),
-                                            OleServer_CreateInstance, seqServiceNames,
-                                            &globalModuleCount.modCnt);
+                                            OleServer_CreateInstance, seqServiceNames );
     }
 
     if (xFactory.is())

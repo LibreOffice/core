@@ -30,15 +30,13 @@ using namespace osl;
 
 namespace sdext { namespace presenter {
 
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
 static struct ImplementationEntry gServiceEntries[] =
 {
     {
         PresenterProtocolHandler::Create,
         PresenterProtocolHandler::getImplementationName_static,
         PresenterProtocolHandler::getSupportedServiceNames_static,
-        createSingleComponentFactory, &g_moduleCount.modCnt, 0
+        createSingleComponentFactory, 0, 0
     },
     {
         PresenterScreenJob::Create,

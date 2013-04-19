@@ -48,8 +48,6 @@ using namespace osl;
 #define SERVICENAME "com.sun.star.registry.NestedRegistry"
 #define IMPLNAME       "com.sun.star.comp.stoc.NestedRegistry"
 
-extern rtl_StandardModuleCount g_moduleCount;
-
 namespace stoc_bootstrap
 {
 Sequence< OUString > defreg_getSupportedServiceNames()
@@ -1139,16 +1137,10 @@ OUString SAL_CALL NestedKeyImpl::getResolvedName( const OUString& aKeyName )
 //*************************************************************************
 NestedRegistryImpl::NestedRegistryImpl( )
     : m_state(0)
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 
 //*************************************************************************
-NestedRegistryImpl::~NestedRegistryImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
-
+NestedRegistryImpl::~NestedRegistryImpl() {}
 
 class RegistryEnumueration : public WeakImplHelper1< XEnumeration >
 {

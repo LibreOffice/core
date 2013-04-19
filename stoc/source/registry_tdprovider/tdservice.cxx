@@ -87,9 +87,7 @@ public:
                                  const Reference< XTypeDescription > & xTD,
                                  sal_Int16 nFlags )
     : _aName( rName ), _xTD( xTD ), _nFlags( nFlags )
-    {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    }
+    {}
     virtual ~PropertyTypeDescriptionImpl();
 
     // XTypeDescription
@@ -107,10 +105,7 @@ public:
 
 //__________________________________________________________________________________________________
 // virtual
-PropertyTypeDescriptionImpl::~PropertyTypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+PropertyTypeDescriptionImpl::~PropertyTypeDescriptionImpl() {}
 
 // XTypeDescription
 //__________________________________________________________________________________________________
@@ -154,10 +149,7 @@ PropertyTypeDescriptionImpl::getPropertyTypeDescription()
 
 //__________________________________________________________________________________________________
 // virtual
-ServiceTypeDescriptionImpl::~ServiceTypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+ServiceTypeDescriptionImpl::~ServiceTypeDescriptionImpl() {}
 
 // XTypeDescription
 //__________________________________________________________________________________________________

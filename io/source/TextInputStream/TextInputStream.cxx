@@ -46,8 +46,6 @@ using namespace ::com::sun::star::registry;
 
 namespace io_TextInputStream
 {
-    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
 //===========================================================================
 // Implementation XTextInputStream
 
@@ -120,7 +118,6 @@ OTextInputStream::OTextInputStream()
     : mSeqSource( READ_BYTE_COUNT ), mpBuffer( NULL ), mnBufferSize( 0 )
     , mnCharsInBuffer( 0 ), mbReachedEOF( sal_False )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     mbEncodingInitialized = false;
 }
 
@@ -131,7 +128,6 @@ OTextInputStream::~OTextInputStream()
         rtl_destroyUnicodeToTextContext( mConvText2Unicode, mContextText2Unicode );
         rtl_destroyUnicodeToTextConverter( mConvText2Unicode );
     }
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void OTextInputStream::implResizeBuffer( void )
@@ -477,7 +473,7 @@ static struct ImplementationEntry g_entries[] =
     {
         TextInputStream_CreateInstance, TextInputStream_getImplementationName ,
         TextInputStream_getSupportedServiceNames, createSingleComponentFactory ,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

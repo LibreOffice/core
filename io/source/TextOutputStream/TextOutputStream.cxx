@@ -46,7 +46,6 @@ using namespace ::com::sun::star::registry;
 
 namespace io_TextOutputStream
 {
-    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 //===========================================================================
 // Implementation XTextOutputStream
 
@@ -277,7 +276,7 @@ static struct ImplementationEntry g_entries[] =
     {
         TextOutputStream_CreateInstance, TextOutputStream_getImplementationName ,
         TextOutputStream_getSupportedServiceNames, createSingleComponentFactory ,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

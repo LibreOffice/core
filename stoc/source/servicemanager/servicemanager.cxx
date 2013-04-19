@@ -68,9 +68,6 @@ using namespace cppu;
 using namespace osl;
 using namespace std;
 
-
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
 namespace stoc_bootstrap
 {
 Sequence< OUString > smgr_wrapper_getSupportedServiceNames()
@@ -204,9 +201,8 @@ public:
     ServiceEnumeration_Impl( const Sequence< Reference<XInterface > > & rFactories )
         : aFactories( rFactories )
         , nIt( 0 )
-        { g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt ); }
-    virtual ~ServiceEnumeration_Impl()
-        { g_moduleCount.modCnt.release( &g_moduleCount.modCnt ); }
+        {}
+    virtual ~ServiceEnumeration_Impl() {}
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements()
@@ -297,9 +293,7 @@ public:
     ImplementationEnumeration_Impl( const HashSet_Ref & rImplementationMap )
         : aImplementationMap( rImplementationMap )
         , aIt( aImplementationMap.begin() )
-        {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        }
+        {}
     virtual ~ImplementationEnumeration_Impl();
 
     // XEnumeration
@@ -315,10 +309,7 @@ private:
     Reference<XInterface >          xNext;
 };
 
-ImplementationEnumeration_Impl::~ImplementationEnumeration_Impl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+ImplementationEnumeration_Impl::~ImplementationEnumeration_Impl() {}
 
 // XEnumeration
 sal_Bool ImplementationEnumeration_Impl::hasMoreElements()
@@ -718,10 +709,7 @@ void OServiceManagerWrapper::disposing()
     m_root.clear();
 }
 //__________________________________________________________________________________________________
-OServiceManagerWrapper::~OServiceManagerWrapper() SAL_THROW(())
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+OServiceManagerWrapper::~OServiceManagerWrapper() SAL_THROW(()) {}
 //__________________________________________________________________________________________________
 OServiceManagerWrapper::OServiceManagerWrapper(
     Reference< XComponentContext > const & xContext )
@@ -730,8 +718,6 @@ OServiceManagerWrapper::OServiceManagerWrapper(
     , m_xContext( xContext )
     , m_root( xContext->getServiceManager() )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-
     if (! m_root.is())
     {
         throw RuntimeException(
@@ -751,17 +737,12 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
     : t_OServiceManager_impl( m_mutex )
     , m_xContext( xContext )
     , m_bInDisposing( false )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 
 /**
  * Destroy the ServiceManager
  */
-OServiceManager::~OServiceManager()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+OServiceManager::~OServiceManager() {}
 
 // XComponent
 void OServiceManager::dispose()

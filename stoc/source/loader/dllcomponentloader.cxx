@@ -53,7 +53,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
-extern rtl_StandardModuleCount g_moduleCount;
 
 namespace stoc_bootstrap
 {
@@ -106,15 +105,11 @@ private:
 //*************************************************************************
 DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCtx )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_xSMgr.set( xCtx->getServiceManager(), UNO_QUERY );
 }
 
 //*************************************************************************
-DllComponentLoader::~DllComponentLoader()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+DllComponentLoader::~DllComponentLoader() {}
 
 //*************************************************************************
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )

@@ -31,18 +31,13 @@ using namespace ::com::sun::star::registry;
 
 #include "factreg.hxx"
 
-namespace animcore
-{
-    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-}
-
 using namespace animcore;
 
 #define IMPLEMENTATION_ENTRY(N)\
 {\
     createInstance_##N, getImplementationName_##N ,\
     getSupportedServiceNames_##N, createSingleComponentFactory ,\
-    &g_moduleCount.modCnt , 0\
+    0, 0\
 }\
 
 static struct ImplementationEntry g_entries[] =

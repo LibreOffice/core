@@ -30,8 +30,6 @@ namespace stoc_rdbtdp
 ModuleTypeDescriptionImpl::~ModuleTypeDescriptionImpl()
 {
     delete _pMembers;
-
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XTypeDescription

@@ -62,8 +62,6 @@ using namespace com::sun::star::reflection;
 
 //--------------------------------------------------------------------------------------------------
 
-extern rtl_StandardModuleCount g_moduleCount;
-
 namespace stoc_rdbtdp
 {
 
@@ -174,9 +172,7 @@ public:
     TypeDescriptionImpl( TypeClass eTypeClass, const OUString & rName )
         : _eTypeClass( eTypeClass )
         , _aName( rName )
-        {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        }
+        {}
     virtual ~TypeDescriptionImpl();
 
     // XTypeDescription
@@ -276,9 +272,7 @@ public:
         , _pMembers( 0 )
         , _pMemberNames( 0 )
         , _published( published )
-        {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        }
+        {}
     virtual ~CompoundTypeDescriptionImpl();
 
     // XTypeDescription
@@ -325,9 +319,7 @@ public:
         , _pEnumNames( 0 )
         , _pEnumValues( 0 )
         , _published( published )
-        {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        }
+        {}
     virtual ~EnumTypeDescriptionImpl();
 
     // XTypeDescription
@@ -365,9 +357,7 @@ public:
         , _aName( rName )
         , _aRefName( rRefName )
         , _published( published )
-        {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        }
+        {}
     virtual ~TypedefTypeDescriptionImpl();
 
     // XTypeDescription
@@ -419,9 +409,7 @@ public:
         bool published)
     : _aName( rName ), _aBytes( rBytes ), _xTDMgr( xTDMgr ),
       _bInitReferences( false ), _published( published )
-    {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    }
+    {}
     virtual ~ServiceTypeDescriptionImpl();
 
     // XTypeDescription
@@ -493,9 +481,7 @@ public:
         XTypeDescriptionEnumerationAccess > & xTDMgr,
         const OUString & rName )
     : _aName( rName ), _xTDMgr( xTDMgr ), _pMembers( 0 )
-    {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    }
+    {}
     virtual ~ModuleTypeDescriptionImpl();
 
     // XTypeDescription
@@ -524,9 +510,7 @@ public:
     ConstantTypeDescriptionImpl( const OUString & rName,
                                  const Any & rValue )
     : _aName( rName ), _aValue( rValue )
-    {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    }
+    {}
     virtual ~ConstantTypeDescriptionImpl();
 
     // XTypeDescription
@@ -559,9 +543,7 @@ public:
                                   const Sequence< sal_Int8 > & rBytes,
                                   bool published )
     : _aName( rName ), _aBytes( rBytes), _pMembers( 0 ), _published( published )
-    {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    }
+    {}
     virtual ~ConstantsTypeDescriptionImpl();
 
     // XTypeDescription
@@ -603,9 +585,7 @@ public:
         const OUString & rName, const OUString & rBaseName, bool published )
     : _aName( rName ), _aBaseName( rBaseName), _xTDMgr( xTDMgr ),
       _published( published )
-    {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    }
+    {}
     virtual ~SingletonTypeDescriptionImpl();
 
     // XTypeDescription

@@ -46,8 +46,6 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector
 {
-    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
     class OConnector : public WeakImplHelper2< XConnector, XServiceInfo >
     {
         Reference< XMultiComponentFactory > _xSMgr;
@@ -69,14 +67,9 @@ namespace stoc_connector
     OConnector::OConnector(const Reference< XComponentContext > &xCtx)
         : _xSMgr( xCtx->getServiceManager() )
         , _xCtx( xCtx )
-    {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    }
+    {}
 
-    OConnector::~OConnector()
-    {
-        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-    }
+    OConnector::~OConnector() {}
 
     Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnectionDescription )
         throw( NoConnectException, ConnectionSetupException, RuntimeException)
@@ -228,7 +221,7 @@ static struct ImplementationEntry g_entries[] =
     {
         connector_CreateInstance, connector_getImplementationName ,
         connector_getSupportedServiceNames, createSingleComponentFactory ,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

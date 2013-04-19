@@ -45,8 +45,6 @@ using namespace ::com::sun::star::connection;
 
 namespace io_acceptor
 {
-    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
     class OAcceptor : public WeakImplHelper2< XAcceptor, XServiceInfo >
     {
     public:
@@ -85,9 +83,7 @@ namespace io_acceptor
         , m_bInAccept( sal_False )
         , _xSMgr( xCtx->getServiceManager() )
         , _xCtx( xCtx )
-    {
-        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    }
+    {}
 
     OAcceptor::~OAcceptor()
     {
@@ -99,7 +95,6 @@ namespace io_acceptor
         {
             delete m_pSocket;
         }
-        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     struct BeingInAccept
@@ -321,7 +316,7 @@ static struct ImplementationEntry g_entries[] =
     {
         acceptor_CreateInstance, acceptor_getImplementationName ,
         acceptor_getSupportedServiceNames, createSingleComponentFactory ,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

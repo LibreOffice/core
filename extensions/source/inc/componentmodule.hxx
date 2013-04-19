@@ -50,7 +50,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             const OUString & _rComponentName,
             ::cppu::ComponentInstantiation _pCreateFunction,
             const ::com::sun::star::uno::Sequence< OUString > & _rServiceNames,
-            rtl_ModuleCount* _pModuleCounter
+            rtl_ModuleCount*
         );
 
     //=========================================================================

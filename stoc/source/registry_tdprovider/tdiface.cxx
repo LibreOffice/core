@@ -68,9 +68,7 @@ public:
         , _aReturnType( rReturnType )
         , _bIsOneWay( bIsOneWay )
         , _nPosition( nPosition )
-        {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        }
+        {}
     virtual ~InterfaceMethodImpl();
 
     // XTypeDescription
@@ -89,10 +87,7 @@ public:
     virtual Sequence< Reference< XTypeDescription > > SAL_CALL getExceptions() throw(::com::sun::star::uno::RuntimeException);
 };
 //__________________________________________________________________________________________________
-InterfaceMethodImpl::~InterfaceMethodImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+InterfaceMethodImpl::~InterfaceMethodImpl() {}
 
 // XTypeDescription
 //__________________________________________________________________________________________________
@@ -221,9 +216,7 @@ public:
         , _nPosition( nPosition )
         , _getter( getter )
         , _setter( setter )
-        {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        }
+        {}
     SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~InterfaceAttributeImpl();
 
@@ -263,10 +256,7 @@ public:
     }
 };
 
-InterfaceAttributeImpl::~InterfaceAttributeImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+InterfaceAttributeImpl::~InterfaceAttributeImpl() {}
 // XTypeDescription
 //__________________________________________________________________________________________________
 TypeClass InterfaceAttributeImpl::getTypeClass()
@@ -400,14 +390,9 @@ InterfaceTypeDescriptionImpl::InterfaceTypeDescriptionImpl(
     , _aOptionalBaseTypes( rOptionalBaseTypes )
     , _membersInit( false )
     , _published( published )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
-InterfaceTypeDescriptionImpl::~InterfaceTypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+InterfaceTypeDescriptionImpl::~InterfaceTypeDescriptionImpl() {}
 
 // XTypeDescription
 //__________________________________________________________________________________________________

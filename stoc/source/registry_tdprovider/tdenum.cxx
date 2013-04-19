@@ -30,7 +30,6 @@ EnumTypeDescriptionImpl::~EnumTypeDescriptionImpl()
 {
     delete _pEnumNames;
     delete _pEnumValues;
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XTypeDescription

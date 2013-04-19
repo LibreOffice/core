@@ -21,10 +21,7 @@
 
 namespace stoc_rdbtdp
 {
-TypedefTypeDescriptionImpl::~TypedefTypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+TypedefTypeDescriptionImpl::~TypedefTypeDescriptionImpl() {}
 
 // XTypeDescription
 //__________________________________________________________________________________________________

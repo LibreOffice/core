@@ -64,10 +64,7 @@ void SingletonTypeDescriptionImpl::init() {
 
 //__________________________________________________________________________________________________
 // virtual
-SingletonTypeDescriptionImpl::~SingletonTypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+SingletonTypeDescriptionImpl::~SingletonTypeDescriptionImpl() {}
 
 // XTypeDescription
 //__________________________________________________________________________________________________

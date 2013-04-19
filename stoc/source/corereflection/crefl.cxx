@@ -43,10 +43,6 @@ static const sal_Int32 CACHE_SIZE = 256;
 #define SERVICENAME "com.sun.star.reflection.CoreReflection"
 #define IMPLNAME    "com.sun.star.comp.stoc.CoreReflection"
 
-// can be static, as every client of the core reflection keeps a reference to the
-// core reflection, so refcounting can be done here.
-static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
 static Sequence< OUString > core_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
@@ -65,16 +61,12 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     , _xMgr( xContext->getServiceManager(), UNO_QUERY )
     , _aElements( CACHE_SIZE )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     xContext->getValueByName( OUString(
         "/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
 }
 //__________________________________________________________________________________________________
-IdlReflectionServiceImpl::~IdlReflectionServiceImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+IdlReflectionServiceImpl::~IdlReflectionServiceImpl() {}
 
 // XInterface
 //__________________________________________________________________________________________________
@@ -458,7 +450,7 @@ static struct ImplementationEntry g_entries[] =
     {
         IdlReflectionServiceImpl_create, core_getImplementationName,
         core_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

@@ -48,8 +48,6 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
 static OUString proxyfac_getImplementationName()
 {
     return OUString(IMPL_NAME);
@@ -420,15 +418,10 @@ FactoryImpl::FactoryImpl()
         reinterpret_cast< uno_Mapping ** >( &m_cpp2uno ),
         m_cpp_env.get(), m_uno_env.get(), 0 );
     OSL_ENSURE( m_cpp2uno.is(), "### cannot get bridge C++ <-> uno!" );
-
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 //______________________________________________________________________________
-FactoryImpl::~FactoryImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+FactoryImpl::~FactoryImpl() {}
 
 // XProxyFactory
 //______________________________________________________________________________
@@ -493,7 +486,7 @@ static ::cppu::ImplementationEntry g_entries [] =
     {
         proxyfac_create, proxyfac_getImplementationName,
         proxyfac_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

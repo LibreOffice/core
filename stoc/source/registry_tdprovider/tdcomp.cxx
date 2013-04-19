@@ -30,7 +30,6 @@ CompoundTypeDescriptionImpl::~CompoundTypeDescriptionImpl()
 {
     delete _pMembers;
     delete _pMemberNames;
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XTypeDescription

@@ -33,7 +33,7 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             const OUString & rComponentName,
             ::cppu::ComponentInstantiation pCreateFunction,
             const Sequence< OUString > & rServiceNames,
-            rtl_ModuleCount* _pT
+            rtl_ModuleCount*
         );
 
 //---------------------------------------------------------------------------------------

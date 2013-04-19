@@ -119,8 +119,6 @@ const StringPool &spool()
 }
 }
 
-extern rtl_StandardModuleCount g_moduleCount;
-
 namespace stoc_bootstrap
 {
 Sequence< OUString > impreg_getSupportedServiceNames()
@@ -1319,18 +1317,12 @@ private: // members
 ImplementationRegistration::ImplementationRegistration( const Reference < XComponentContext > & xCtx )
     : m_xSMgr( xCtx->getServiceManager() )
     , m_xCtx( xCtx )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 
 //*************************************************************************
 // ~ImplementationRegistration()
 //
-ImplementationRegistration::~ImplementationRegistration()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
-
+ImplementationRegistration::~ImplementationRegistration() {}
 
 // XServiceInfo
 OUString ImplementationRegistration::getImplementationName() throw(RuntimeException)

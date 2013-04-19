@@ -31,8 +31,6 @@ namespace stoc_rdbtdp
 ConstantsTypeDescriptionImpl::~ConstantsTypeDescriptionImpl()
 {
     delete _pMembers;
-
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XTypeDescription

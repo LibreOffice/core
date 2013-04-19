@@ -47,7 +47,6 @@ using namespace com::sun::star::registry;
 
 namespace unourl_resolver
 {
-    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 //--------------------------------------------------------------------------------------------------
 Sequence< OUString > resolver_getSupportedServiceNames()
 {
@@ -87,14 +86,9 @@ public:
 ResolverImpl::ResolverImpl( const Reference< XComponentContext > & xCtx )
     : _xSMgr( xCtx->getServiceManager() )
     , _xCtx( xCtx )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
-ResolverImpl::~ResolverImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+ResolverImpl::~ResolverImpl() {}
 
 // XServiceInfo
 //__________________________________________________________________________________________________
@@ -183,7 +177,7 @@ static struct ImplementationEntry g_entries[] =
     {
         ResolverImpl_create, resolver_getImplementationName,
         resolver_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

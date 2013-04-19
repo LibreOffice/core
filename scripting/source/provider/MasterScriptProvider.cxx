@@ -75,7 +75,6 @@ bool endsWith( const OUString& target,
     }
     return false;
 }
-//::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 
 /* should be available in some central location. */
 //*************************************************************************
@@ -95,7 +94,6 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
 //*************************************************************************
 MasterScriptProvider::~MasterScriptProvider()
 {
-    //s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
     if ( m_pPCache )
     {
         delete m_pPCache;

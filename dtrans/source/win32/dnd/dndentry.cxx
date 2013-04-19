@@ -31,8 +31,6 @@ using namespace ::com::sun::star::registry  ;
 using namespace ::cppu                      ;
 using namespace ::com::sun::star::lang;
 
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
 Reference< XInterface > SAL_CALL createDragSource( const Reference< XMultiServiceFactory >& rServiceManager )
 {
     DragSource* pSource= new DragSource( comphelper::getComponentContext(rServiceManager) );
@@ -63,8 +61,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL dnd_component_getFactory( const sal_Char* pI
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
             createDragSource,
-            aSNS,
-            &g_moduleCount.modCnt);
+            aSNS);
 
     }
     else if( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDTARGET_IMPL_NAME ) ) )

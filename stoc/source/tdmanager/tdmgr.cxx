@@ -65,10 +65,6 @@ static const sal_Int32 CACHE_SIZE = 512;
 #define SERVICENAME "com.sun.star.reflection.TypeDescriptionManager"
 #define IMPLNAME    "com.sun.star.comp.stoc.TypeDescriptionManager"
 
-//--------------------------------------------------------------------------------------------------
-// exported via tdmgr_common.hxx
-extern rtl_StandardModuleCount g_moduleCount;
-
 namespace stoc_bootstrap
 {
 Sequence< OUString > SAL_CALL tdmgr_getSupportedServiceNames()
@@ -99,9 +95,7 @@ class EventListenerImpl : public ImplHelper1< XEventListener >
 public:
     EventListenerImpl( ManagerImpl * pMgr )
         : _pMgr( pMgr )
-        {
-            ::g_moduleCount.modCnt.acquire( &::g_moduleCount.modCnt );
-        }
+        {}
     virtual ~EventListenerImpl();
 
     // lifetime delegated to manager
@@ -112,10 +106,7 @@ public:
     virtual void SAL_CALL disposing( const EventObject & rEvt ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-EventListenerImpl::~EventListenerImpl()
-{
-    ::g_moduleCount.modCnt.release( &::g_moduleCount.modCnt );
-}
+EventListenerImpl::~EventListenerImpl() {}
 
 //==================================================================================================
 class ManagerImpl
@@ -273,15 +264,12 @@ ManagerImpl::ManagerImpl(
     , _aEventListener( this )
     , _bCaching( sal_True )
     , _aElements( nCacheSize )
-{
-    ::g_moduleCount.modCnt.acquire( &::g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
 ManagerImpl::~ManagerImpl()
 {
     OSL_ENSURE( _aProviders.empty(), "### still providers left!" );
     OSL_TRACE( "> TypeDescriptionManager shut down. <" );
-    ::g_moduleCount.modCnt.release( &::g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void ManagerImpl::disposing()

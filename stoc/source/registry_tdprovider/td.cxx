@@ -45,11 +45,7 @@ namespace stoc_rdbtdp
     return *s_pmutex;
 }
 
-
-TypeDescriptionImpl::~TypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+TypeDescriptionImpl::~TypeDescriptionImpl() {}
 
 // XTypeDescription
 //__________________________________________________________________________________________________

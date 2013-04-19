@@ -61,8 +61,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-extern ::rtl_StandardModuleCount g_moduleCount;
-
 namespace stoc_sec
 {
 // static stuff initialized when loading lib
@@ -104,15 +102,11 @@ inline acc_Intersection::acc_Intersection(
     SAL_THROW(())
     : m_x1( x1 )
     , m_x2( x2 )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
 acc_Intersection::~acc_Intersection()
     SAL_THROW(())
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+{}
 //--------------------------------------------------------------------------------------------------
 inline Reference< security::XAccessControlContext > acc_Intersection::create(
     Reference< security::XAccessControlContext > const & x1,
@@ -167,15 +161,11 @@ inline acc_Union::acc_Union(
     SAL_THROW(())
     : m_x1( x1 )
     , m_x2( x2 )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
 acc_Union::~acc_Union()
     SAL_THROW(())
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+{}
 //--------------------------------------------------------------------------------------------------
 inline Reference< security::XAccessControlContext > acc_Union::create(
     Reference< security::XAccessControlContext > const & x1,
@@ -227,15 +217,11 @@ inline acc_Policy::acc_Policy(
     PermissionCollection const & permissions )
     SAL_THROW(())
     : m_permissions( permissions )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
 acc_Policy::~acc_Policy()
     SAL_THROW(())
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
 void acc_Policy::checkPermission(
     Any const & perm )
@@ -279,8 +265,6 @@ inline acc_CurrentContext::acc_CurrentContext(
     : m_refcount( 0 )
     , m_xDelegate( xDelegate )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-
     if (xRestriction.is())
     {
         m_restriction = makeAny( xRestriction );
@@ -290,9 +274,7 @@ inline acc_CurrentContext::acc_CurrentContext(
 //__________________________________________________________________________________________________
 acc_CurrentContext::~acc_CurrentContext()
     SAL_THROW(())
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
 void acc_CurrentContext::acquire()
     throw ()
@@ -466,8 +448,6 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     , m_singleUser_init( false )
     , m_rec( 0 )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-
     // The .../mode value had originally been set in
     // cppu::add_access_control_entries (cppuhelper/source/servicefactory.cxx)
     // to something other than "off" depending on various UNO_AC* bootstrap
@@ -524,9 +504,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
 //__________________________________________________________________________________________________
 AccessController::~AccessController()
     SAL_THROW(())
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
 void AccessController::disposing()
 {

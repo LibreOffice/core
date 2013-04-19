@@ -281,8 +281,6 @@ inline cppu_Bridge::cppu_Bridge(
     , pUnoEnv( pUnoEnv_ )
     , bExportCpp2Uno( bExportCpp2Uno_ )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-
     aCpp2Uno.pBridge = this;
     aCpp2Uno.acquire = cppu_Mapping_acquire;
     aCpp2Uno.release = cppu_Mapping_release;
@@ -301,7 +299,6 @@ inline cppu_Bridge::~cppu_Bridge() SAL_THROW(())
 {
     (*((uno_Environment *)pUnoEnv)->release)( (uno_Environment *)pUnoEnv );
     (*((uno_Environment *)pCppEnv)->release)( (uno_Environment *)pCppEnv );
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 inline void SAL_CALL cppu_Bridge_free( uno_Mapping * pMapping ) SAL_THROW(())
@@ -472,16 +469,12 @@ inline void SAL_CALL cppu_cppenv_releaseInterface( uno_ExtEnvironment *, void * 
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
 }
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_cppenv_environmentDisposing( uno_Environment * ) SAL_THROW(())
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+inline void SAL_CALL cppu_cppenv_environmentDisposing( uno_Environment * ) SAL_THROW(()) {}
 //--------------------------------------------------------------------------------------------------
 inline void SAL_CALL cppu_cppenv_initEnvironment( uno_Environment * pCppEnv ) SAL_THROW(())
 {
     OSL_ENSURE( pCppEnv->pExtEnv, "### expected extended environment!" );
     OSL_ENSURE( ::rtl_ustr_ascii_compare( pCppEnv->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0, "### wrong environment type!" );
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     ((uno_ExtEnvironment *)pCppEnv)->computeObjectIdentifier = cppu_cppenv_computeObjectIdentifier;
     ((uno_ExtEnvironment *)pCppEnv)->acquireInterface = cppu_cppenv_acquireInterface;
     ((uno_ExtEnvironment *)pCppEnv)->releaseInterface = cppu_cppenv_releaseInterface;

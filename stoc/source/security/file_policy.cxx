@@ -49,8 +49,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-extern ::rtl_StandardModuleCount g_moduleCount;
-
 namespace stoc_sec
 {
 //--------------------------------------------------------------------------------------------------
@@ -118,15 +116,11 @@ FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext
     , m_xComponentContext( xComponentContext )
     , m_ac( xComponentContext )
     , m_init( false )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
 FilePolicy::~FilePolicy()
     SAL_THROW(())
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+{}
 //__________________________________________________________________________________________________
 void FilePolicy::disposing()
 {

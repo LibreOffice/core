@@ -33,8 +33,6 @@ using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
 
-extern rtl_StandardModuleCount g_moduleCount;
-
 using namespace stoc_bootstrap;
 
 static struct ImplementationEntry g_entries[] =
@@ -43,64 +41,64 @@ static struct ImplementationEntry g_entries[] =
     {
     OServiceManager_CreateInstance, smgr_getImplementationName,
     smgr_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt , 0
+    0, 0
     },
     {
     ORegistryServiceManager_CreateInstance, regsmgr_getImplementationName,
     regsmgr_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt , 0
+    0, 0
     },
     {
     OServiceManagerWrapper_CreateInstance, smgr_wrapper_getImplementationName,
     smgr_wrapper_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt , 0
+    0, 0
     },
     //security
     {
     ac_create, ac_getImplementationName,
     ac_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt, 0
+    0, 0
     },
     {
     filepolicy_create, filepolicy_getImplementationName,
     filepolicy_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt, 0
+    0, 0
     },
     //simpleregistry
     {
     SimpleRegistry_CreateInstance, simreg_getImplementationName,
     simreg_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt , 0
+    0, 0
     },
     //defaultregistry
     {
     NestedRegistry_CreateInstance, defreg_getImplementationName,
     defreg_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt , 0
+    0, 0
     },
     //implementationregistry
     {
     ImplementationRegistration_CreateInstance, impreg_getImplementationName,
     impreg_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt , 0
+    0, 0
     },
     //loader
     {
     DllComponentLoader_CreateInstance, loader_getImplementationName,
     loader_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt , 0
+    0, 0
     },
     //registry_tdprovider
     {
     ProviderImpl_create, rdbtdp_getImplementationName,
     rdbtdp_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt , 0
+    0, 0
     },
     //tdmanager
     {
     ManagerImpl_create, tdmgr_getImplementationName,
     tdmgr_getSupportedServiceNames, createSingleComponentFactory,
-    &g_moduleCount.modCnt , 0
+    0, 0
     },
     //end
     { 0, 0, 0, 0, 0, 0 }

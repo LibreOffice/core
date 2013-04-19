@@ -59,8 +59,6 @@ using namespace ::com::sun::star::uno;
 namespace stoc_invadp
 {
 
-static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
 static Sequence< OUString > invadp_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
@@ -762,8 +760,6 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
         throw RuntimeException(
             "missing type descriptions!", Reference< XInterface >() );
     }
-
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 //______________________________________________________________________________
 FactoryImpl::~FactoryImpl() SAL_THROW(())
@@ -780,7 +776,6 @@ FactoryImpl::~FactoryImpl() SAL_THROW(())
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( m_receiver2adapters.empty(), "### still adapters out there!?" );
 #endif
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 //------------------------------------------------------------------------------
@@ -949,7 +944,7 @@ static struct ::cppu::ImplementationEntry g_entries[] =
         ::stoc_invadp::invadp_getImplementationName,
         ::stoc_invadp::invadp_getSupportedServiceNames,
         ::cppu::createOneInstanceComponentFactory,
-        &::stoc_invadp::g_moduleCount.modCnt , 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

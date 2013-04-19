@@ -177,9 +177,7 @@ TypeDescriptionEnumerationImpl::TypeDescriptionEnumerationImpl(
   m_aTypes( rTypes ),
   m_eDepth( eDepth ),
   m_xTDMgr( xTDMgr )
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+{}
 
 //=========================================================================
 // virtual
@@ -227,8 +225,6 @@ TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl()
 
         ++it;
     }
-
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 //=========================================================================

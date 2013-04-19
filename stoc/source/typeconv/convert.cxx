@@ -49,9 +49,6 @@ using namespace osl;
 #define SERVICENAME "com.sun.star.script.Converter"
 #define IMPLNAME    "com.sun.star.comp.stoc.TypeConverter"
 
-
-extern rtl_StandardModuleCount g_moduleCount;
-
 namespace stoc_services
 {
 Sequence< OUString > tcv_getSupportedServiceNames()
@@ -282,15 +279,9 @@ public:
         throw( IllegalArgumentException, CannotConvertException, RuntimeException);
 };
 
-TypeConverter_Impl::TypeConverter_Impl()
-{
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}
+TypeConverter_Impl::TypeConverter_Impl() {}
 
-TypeConverter_Impl::~TypeConverter_Impl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+TypeConverter_Impl::~TypeConverter_Impl() {}
 
 // XServiceInfo
 OUString TypeConverter_Impl::getImplementationName() throw( RuntimeException )

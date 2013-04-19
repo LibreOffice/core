@@ -66,8 +66,6 @@ using namespace osl;
 
 namespace stoc_inv
 {
-static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
 static Sequence< OUString > inv_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
@@ -249,14 +247,10 @@ Invocation_Impl::Invocation_Impl
     , xIntrospection( rI )
     , xCoreReflection( rCR )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     setMaterial( rAdapted );
 }
 
-Invocation_Impl::~Invocation_Impl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+Invocation_Impl::~Invocation_Impl() {}
 
 //##################################################################################################
 //### INTERFACE IMPLEMENTATIONS ####################################################################
@@ -1099,7 +1093,6 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
     : mxCtx( xCtx )
     , mxSMgr( xCtx->getServiceManager() )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     xTypeConverter = Reference<XTypeConverter>(
         mxSMgr->createInstanceWithContext(
             OUString("com.sun.star.script.Converter"),
@@ -1123,10 +1116,7 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
 //      UNO_QUERY);
 }
 
-InvocationService::~InvocationService()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+InvocationService::~InvocationService() {}
 
 // XServiceInfo
 OUString InvocationService::getImplementationName() throw( RuntimeException )
@@ -1192,7 +1182,7 @@ static struct ImplementationEntry g_entries[] =
     {
         InvocationService_CreateInstance, inv_getImplementationName,
         inv_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };

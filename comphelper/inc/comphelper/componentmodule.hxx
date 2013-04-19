@@ -43,7 +43,7 @@ namespace comphelper
         ::cppu::ComponentFactoryFunc _pFactoryFunc,
         OUString const& _rComponentName,
         ::com::sun::star::uno::Sequence< OUString > const & _rServiceNames,
-        rtl_ModuleCount* _pModuleCounter
+        rtl_ModuleCount*
     ) SAL_THROW(());
 
     //=========================================================================

@@ -32,11 +32,6 @@ using namespace ::com::sun::star::registry;
 
 #include "factreg.hxx"
 
-namespace io_stm
-{
-    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-}
-
 using namespace io_stm;
 
 static struct ImplementationEntry g_entries[] =
@@ -44,42 +39,42 @@ static struct ImplementationEntry g_entries[] =
     {
         OPipeImpl_CreateInstance, OPipeImpl_getImplementationName ,
         OPipeImpl_getSupportedServiceNames, createSingleComponentFactory ,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     {
         OPumpImpl_CreateInstance, OPumpImpl_getImplementationName ,
         OPumpImpl_getSupportedServiceNames, createSingleComponentFactory ,
-        &g_moduleCount.modCnt , 0
+        0, 0
     },
     {
         ODataInputStream_CreateInstance, ODataInputStream_getImplementationName,
         ODataInputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        0, 0
     },
     {
         ODataOutputStream_CreateInstance, ODataOutputStream_getImplementationName,
         ODataOutputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        0, 0
     },
     {
         OObjectInputStream_CreateInstance, OObjectInputStream_getImplementationName,
         OObjectInputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        0, 0
     },
     {
         OObjectOutputStream_CreateInstance, OObjectOutputStream_getImplementationName,
         OObjectOutputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        0, 0
     },
     {
         OMarkableInputStream_CreateInstance, OMarkableInputStream_getImplementationName,
         OMarkableInputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        0, 0
     },
     {
         OMarkableOutputStream_CreateInstance, OMarkableOutputStream_getImplementationName,
         OMarkableOutputStream_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt, 0
+        0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 
