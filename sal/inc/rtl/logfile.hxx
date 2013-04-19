@@ -163,7 +163,7 @@ namespace rtl
         rtl_logfile_trace( "\n" )
 
 #else
-#if OSL_DEBUG_LEVEL > 0
+#ifdef SAL_LOG_INFO
 #define RTL_LOGFILE_FORWARD_VIA_SAL_LOG(area, message) \
     do { \
         OStringBuffer full_area; \
