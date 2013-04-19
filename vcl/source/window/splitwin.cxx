@@ -22,15 +22,17 @@
 
 #include <tools/debug.hxx>
 #include <tools/rcid.h>
+#include <tools/solar.h>
 
 #include <vcl/event.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/symbol.hxx>
 #include <vcl/image.hxx>
 #include <vcl/help.hxx>
 #include <vcl/splitwin.hxx>
+
+#include <rsc/rsc-vcl-shared-types.hxx>
 
 #include <svdata.hxx>
 #include <svids.hrc>

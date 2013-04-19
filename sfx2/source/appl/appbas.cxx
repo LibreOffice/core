@@ -66,7 +66,8 @@
 #include "appdata.hxx"
 #include "appbas.hxx"
 #include "sfx2/sfxhelp.hxx"
-#include "sfx2/basmgr.hxx"
+#include <basic/basmgr.hxx>
+#include <svtools/svtools.hrc>
 #include "sorgitm.hxx"
 #include "appbaslib.hxx"
 #include <basic/basicmanagerrepository.hxx>

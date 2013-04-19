@@ -90,7 +90,8 @@
 #include "appdata.hxx"
 #include <sfx2/appuno.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "sfx2/basmgr.hxx"
+#include <basic/basmgr.hxx>
+#include <svtools/svtools.hrc>
 #include "sfx2/QuerySaveDocument.hxx"
 #include "helpid.hrc"
 #include <sfx2/msg.hxx>

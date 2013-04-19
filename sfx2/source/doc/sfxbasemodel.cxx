@@ -96,7 +96,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/basmgr.hxx>
+#include <basic/basmgr.hxx>
+#include <svtools/svtools.hrc>
 #include <sfx2/event.hxx>
 #include <eventsupplier.hxx>
 #include <sfx2/evntconf.hxx>
