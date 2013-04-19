@@ -201,7 +201,7 @@ public:
                             ::com::sun::star::sheet::DataResult > > SAL_CALL getResults(  )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Sequence<com::sun::star::uno::Any> SAL_CALL
+    virtual com::sun::star::uno::Sequence<double> SAL_CALL
         getFilteredResults(
             const com::sun::star::uno::Sequence<com::sun::star::sheet::DataPilotFieldFilter>& aFilters )
                 throw (com::sun::star::uno::RuntimeException);

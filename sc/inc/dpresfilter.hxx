@@ -21,6 +21,10 @@
 
 #include <boost/unordered_map.hpp>
 
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldFilter;
+}}}}
+
 struct ScDPResultFilter
 {
     OUString maDimName;
@@ -50,7 +54,6 @@ class ScDPResultFilterSet : boost::noncopyable
 {
 public:
     typedef std::vector<double> ValuesType;
-    typedef boost::unordered_map<OUString, OUString, OUStringHash> FilterSetType;
 
 private:
 
@@ -81,7 +84,6 @@ private:
     struct MemberNode : boost::noncopyable
     {
         const DimensionNode* mpParent;
-        double mfValue;
         ValuesType maValues;
         DimensionsType maChildDimensions;
 
@@ -117,8 +119,11 @@ public:
     void swap(ScDPResultFilterSet& rOther);
 
     bool empty() const;
+    void clear();
 
-    bool getValues(FilterSetType& rFilters, ValuesType& rValues) const;
+    const ValuesType* getResults(
+        const com::sun::star::uno::Sequence<
+            com::sun::star::sheet::DataPilotFieldFilter>& rFilters) const;
 
 #if DEBUG_PIVOT_TABLE
     void dump() const;

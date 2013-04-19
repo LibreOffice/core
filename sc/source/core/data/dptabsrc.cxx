@@ -458,28 +458,24 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
     return aSeq;
 }
 
-namespace {
-
-struct OUStringPrinter
-{
-    void operator() (const OUString& r) const
-    {
-        std::cout << r << " ";
-    }
-};
-
-}
-
-uno::Sequence<uno::Any> ScDPSource::getFilteredResults(
+uno::Sequence<double> ScDPSource::getFilteredResults(
             const uno::Sequence<sheet::DataPilotFieldFilter>& aFilters )
                 throw (uno::RuntimeException)
 {
     if (maResFilterSet.empty())
         getResults(); // Build result tree first.
 
-    // TODO: Traverse the tree.
+    // Get result values from the tree.
+    const ScDPResultFilterSet::ValuesType* pVals = maResFilterSet.getResults(aFilters);
+    if (!pVals)
+        return uno::Sequence<double>();
 
-    return uno::Sequence<uno::Any>();
+    size_t n = pVals->size();
+    uno::Sequence<double> aRet(n);
+    for (size_t i = 0; i < n; ++i)
+        aRet[i] = (*pVals)[i];
+
+    return aRet;
 }
 
 void SAL_CALL ScDPSource::refresh() throw(uno::RuntimeException)
@@ -574,6 +570,8 @@ void ScDPSource::setRepeatIfEmpty(bool bSet)
 
 void ScDPSource::disposeData()
 {
+    maResFilterSet.clear();
+
     if ( pResData )
     {
         //  reset all data...

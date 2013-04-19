@@ -1357,7 +1357,7 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
     if (it == aDataDims.end())
         return fRet;
 
-    sal_Int32 nDataIndex = std::distance(aDataDims.begin(), it);
+    size_t nDataIndex = std::distance(aDataDims.begin(), it);
 
     uno::Reference<sheet::XDataPilotResults> xDPResults(xSource, uno::UNO_QUERY);
     if (!xDPResults.is())
@@ -1382,11 +1382,11 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
     for (size_t i = 0; i < n; ++i)
         aFilters[i] = rFilters[i];
 
-    uno::Sequence<uno::Any> aRes = xDPResults->getFilteredResults(aFilters);
+    uno::Sequence<double> aRes = xDPResults->getFilteredResults(aFilters);
+    if (static_cast<sal_Int32>(nDataIndex) >= aRes.getLength())
+        return fRet;
 
-    fRet = 54.0;
-
-    return fRet;
+    return aRes[nDataIndex];
 }
 
 // Returns sal_True on success and stores the result in rTarget

@@ -8,7 +8,11 @@
  */
 
 #include "dpresfilter.hxx"
+#include "global.hxx"
 
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
+
+using namespace com::sun::star;
 using namespace std;
 
 ScDPResultFilter::ScDPResultFilter(const OUString& rDimName, bool bDataLayout) :
@@ -156,9 +160,36 @@ bool ScDPResultFilterSet::empty() const
     return mpRoot->maChildDimensions.empty();
 }
 
-bool ScDPResultFilterSet::getValues(FilterSetType& rFilters, ValuesType& rValues) const
+void ScDPResultFilterSet::clear()
 {
-    return false;
+    maPrimaryDimName = EMPTY_OUSTRING;
+    delete mpRoot;
+    mpRoot = new MemberNode(NULL);
+}
+
+const ScDPResultFilterSet::ValuesType* ScDPResultFilterSet::getResults(
+    const uno::Sequence<sheet::DataPilotFieldFilter>& rFilters) const
+{
+    const sheet::DataPilotFieldFilter* p = rFilters.getConstArray();
+    const sheet::DataPilotFieldFilter* pEnd = p + static_cast<size_t>(rFilters.getLength());
+    const MemberNode* pMember = mpRoot;
+    for (; p != pEnd; ++p)
+    {
+        DimensionsType::const_iterator itDim = pMember->maChildDimensions.find(p->FieldName);
+        if (itDim == pMember->maChildDimensions.end())
+            // Specified dimension not found.
+            return NULL;
+
+        const DimensionNode* pDim = itDim->second;
+        MembersType::const_iterator itMem = pDim->maChildMembers.find(p->MatchValue);
+        if (itMem == pDim->maChildMembers.end())
+            // Specified member not found.
+            return NULL;
+
+        pMember = itMem->second;
+    }
+
+    return &pMember->maValues;
 }
 
 #if DEBUG_PIVOT_TABLE
