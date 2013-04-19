@@ -27,7 +27,7 @@
 #include <comphelper/serviceinfohelper.hxx>
 #include <boost/bind.hpp>
 
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdoattr.hxx>

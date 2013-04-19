@@ -27,7 +27,7 @@
 
 
 #include "sdattr.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "app.hrc"
 #include "glob.hrc"
 #include "res_bmp.hrc"

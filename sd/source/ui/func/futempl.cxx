@@ -47,7 +47,7 @@
 #include "stlsheet.hxx"
 #include "sdpage.hxx"
 #include "stlpool.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "View.hxx"
 #include "Window.hxx"
 #include "drawview.hxx"

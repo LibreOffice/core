@@ -48,7 +48,7 @@
 #include "sdattr.hxx"
 #include "sdresid.hxx"
 #include "drawview.hxx"
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include <editeng/editdata.hxx>
 #include "sdabstdlg.hxx"
 

@@ -23,7 +23,7 @@
 #include <comphelper/classids.hxx>
 
 #include <vcl/svapp.hxx>
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/editdata.hxx>

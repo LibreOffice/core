@@ -28,7 +28,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/flagsdef.hxx>
 
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include "paragr.hxx"
 #include "sdresid.hxx"
 #include "glob.hrc"

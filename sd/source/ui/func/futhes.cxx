@@ -33,7 +33,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "drawdoc.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "View.hxx"
 #include "Outliner.hxx"
 #include "DrawViewShell.hxx"

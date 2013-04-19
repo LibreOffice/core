@@ -36,7 +36,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "Outliner.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include <editeng/editstat.hxx>
 #include <editeng/fontitem.hxx>
 #include <svl/flagitem.hxx>
@@ -63,7 +63,7 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "pglink.hxx"

@@ -41,7 +41,7 @@
 #include "app.hrc"
 #include "helpids.h"
 #include "optsitem.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "FrameView.hxx"
 #include "sdattr.hxx"
 #include "futext.hxx"

@@ -34,7 +34,7 @@
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "sdresid.hxx"
 #include "pres.hxx"
 #include "glob.hrc"

@@ -24,7 +24,7 @@
 #include <sfx2/progress.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/lrspitem.hxx>

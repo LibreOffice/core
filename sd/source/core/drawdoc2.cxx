@@ -41,7 +41,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>                  // SVX_RESSTR
 
-#include "eetext.hxx"
+#include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>
 #include <svtools/imapobj.hxx>
 

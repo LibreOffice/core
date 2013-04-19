@@ -42,7 +42,7 @@
 #include "strings.hrc"
 #include "glob.hrc"
 
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "animobjs.hxx"
 #include "AnimationChildWindow.hxx"
 #include "NavigatorChildWindow.hxx"

@@ -56,7 +56,7 @@
 #include "Client.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
-#include "app.hxx"
+#include "sdmod.hxx"
 #include "sdpage.hxx"
 #include "glob.hrc"
 #include "sdresid.hxx"
