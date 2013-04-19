@@ -368,7 +368,7 @@ private:
      */
     ScDPSaveDimension* AppendNewDimension(const OUString& rName, bool bDataLayout);
 
-    void DimensionChanged();
+    void DimensionsChanged();
 };
 
 #endif

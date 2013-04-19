@@ -859,7 +859,7 @@ void ScDPSaveData::AddDimension(ScDPSaveDimension* pDim)
     CheckDuplicateName(*pDim);
     aDimList.push_back(pDim);
 
-    DimensionChanged();
+    DimensionsChanged();
 }
 
 ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const OUString& rName)
@@ -940,7 +940,7 @@ void ScDPSaveData::RemoveDimensionByName(const OUString& rName)
 
         aDimList.erase(iter);
         RemoveDuplicateNameCount(rName);
-        DimensionChanged();
+        DimensionsChanged();
         return;
     }
 }
@@ -1021,7 +1021,7 @@ void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
     }
 
     aDimList.insert(iterInsert,pDim);
-    DimensionChanged();
+    DimensionsChanged();
 }
 
 void ScDPSaveData::SetColumnGrand(bool bSet)
@@ -1399,11 +1399,11 @@ ScDPSaveDimension* ScDPSaveData::AppendNewDimension(const OUString& rName, bool 
     if (!maDupNameCounts.count(rName))
         maDupNameCounts.insert(DupNameCountType::value_type(rName, 0));
 
-    DimensionChanged();
+    DimensionsChanged();
     return pNew;
 }
 
-void ScDPSaveData::DimensionChanged()
+void ScDPSaveData::DimensionsChanged()
 {
     mpDimOrder.reset();
 }
