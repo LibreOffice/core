@@ -19,8 +19,6 @@
 
 $(eval $(call gb_Library_Library,cppcanvas))
 
-$(eval $(call gb_Library_use_package,cppcanvas,cppcanvas_inc))
-
 $(eval $(call gb_Library_set_include,cppcanvas,\
 	-I$(SRCDIR)/cppcanvas/inc \
 	-I$(SRCDIR)/cppcanvas/source/inc \

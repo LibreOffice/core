@@ -37,8 +37,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,xmlsec,\
 $(eval $(call gb_SrsTarget_SrsTarget,xmlsec/res))
 
 $(eval $(call gb_SrsTarget_use_packages,xmlsec/res,\
-	svl_inc \
-	svtools_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,xmlsec/res,\

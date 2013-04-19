@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,vbahelper))
 
-$(eval $(call gb_Library_use_package,vbahelper,vbahelper_inc))
-
 # in case UNO services are exported: declare location of component file
 #$(eval $(call gb_Library_set_componentfile,vbahelper,vbahelper/COMPONENT_FILE))
 

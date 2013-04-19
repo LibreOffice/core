@@ -31,7 +31,6 @@
 $(eval $(call gb_Library_Library,log))
 
 $(eval $(call gb_Library_use_packages,log,\
-    tools_inc \
 ))
 
 $(eval $(call gb_Library_set_componentfile,log,extensions/source/logging/log))

@@ -31,9 +31,6 @@
 $(eval $(call gb_Library_Library,bib))
 
 $(eval $(call gb_Library_use_packages,bib,\
-    editeng_inc \
-    sfx2_inc \
-    svx_inc \
 ))
 
 $(eval $(call gb_Library_set_componentfile,bib,extensions/source/bibliography/bib))

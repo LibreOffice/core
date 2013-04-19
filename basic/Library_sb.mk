@@ -19,8 +19,6 @@
 
 $(eval $(call gb_Library_Library,sb))
 
-$(eval $(call gb_Library_use_package,sb,basic_inc))
-
 $(eval $(call gb_Library_set_componentfile,sb,basic/util/sb))
 
 $(eval $(call gb_Library_set_include,sb,\

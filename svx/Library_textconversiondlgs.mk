@@ -20,7 +20,6 @@
 $(eval $(call gb_Library_Library,textconversiondlgs))
 
 $(eval $(call gb_Library_use_packages,textconversiondlgs,\
-	sfx2_inc \
 ))
 
 $(eval $(call gb_Library_set_componentfile,textconversiondlgs,svx/util/textconversiondlgs))

@@ -10,8 +10,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,udm))
 
 $(eval $(call gb_StaticLibrary_use_packages,udm,\
-	cosv_inc \
-	udm_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,udm,\

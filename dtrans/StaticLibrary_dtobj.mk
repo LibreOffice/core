@@ -29,8 +29,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,dtobj))
 
 $(eval $(call gb_StaticLibrary_use_packages,dtobj,\
-	comphelper_inc \
-	sal_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_use_sdk_api,dtobj))

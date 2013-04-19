@@ -28,10 +28,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,sfx,\
 $(eval $(call gb_SrsTarget_SrsTarget,sfx/res))
 
 $(eval $(call gb_SrsTarget_use_packages,sfx/res,\
-    sfx2_inc \
-    svl_inc \
-    svtools_inc \
-    tools_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,sfx/res,\

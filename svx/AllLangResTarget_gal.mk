@@ -26,10 +26,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,gal,svx/gal))
 $(eval $(call gb_SrsTarget_SrsTarget,svx/gal))
 
 $(eval $(call gb_SrsTarget_use_packages,svx/gal,\
-	editeng_inc \
-	sfx2_inc \
-	svl_inc \
-	svx_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,svx/gal,\

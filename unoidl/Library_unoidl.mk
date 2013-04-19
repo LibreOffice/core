@@ -23,6 +23,4 @@ $(eval $(call gb_Library_use_libraries,unoidl, \
     salhelper \
 ))
 
-$(eval $(call gb_Library_use_package,unoidl,unoidl_inc))
-
 # vim: set noet sw=4 ts=4:

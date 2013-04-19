@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_api,sunjavaplugin,\
 ))
 
 $(eval $(call gb_Library_use_package,sunjavaplugin,\
-    jvmfwk_inc \
 ))
 
 $(eval $(call gb_Library_use_libraries,sunjavaplugin,\
