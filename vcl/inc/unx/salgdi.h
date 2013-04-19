@@ -38,8 +38,8 @@
 #include <deque>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct  ImplFontMetricData;
-struct  ImplFontSelectData;
+class   ImplFontMetricData;
+class   ImplFontSelectData;
 class   SalBitmap;
 class   SalColormap;
 class   SalDisplay;
