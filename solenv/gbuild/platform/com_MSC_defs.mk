@@ -126,6 +126,9 @@ gb_AFLAGS := $(AFLAGS)
 # C4800: 'type' : forcing value to bool 'true' or 'false' (performance
 #   warning)
 
+# C4996: 'function': was declared deprecated
+#   Also generated for C++ library functions that "may be unsafe"
+
 gb_CFLAGS := \
 	-Gd \
 	-GR \
@@ -176,6 +179,12 @@ gb_CXXFLAGS := \
 	-wd4800 \
 	-Zc:forScope,wchar_t- \
 	-Zm500 \
+
+ifneq ($(MSVC_USE_DEBUG_RUNTIME),)
+gb_CXXFLAGS += \
+	-wd4996 \
+
+endif
 
 # New warning(s) in Visual Studio 2010, let's try disabling these only
 # for that specific compiler version, in case a later one will not
