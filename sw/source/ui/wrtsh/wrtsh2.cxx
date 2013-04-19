@@ -235,6 +235,15 @@ sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet
 
 void SwWrtShell::ClickToField( const SwField& rFld )
 {
+    // cross reference field must not be selected because it moves the cursor
+    if (RES_GETREFFLD != rFld.GetTyp()->Which())
+    {
+        StartAllAction();
+        Right( CRSR_SKIP_CHARS, true, 1, false ); // Select the field.
+        NormalizePam();
+        EndAllAction();
+    }
+
     bIsInClickToEdit = sal_True;
     switch( rFld.GetTyp()->Which() )
     {
@@ -255,8 +264,6 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             case JE_FMT_OLE:        nSlotId = SID_INSERT_OBJECT;        break;
 
             }
-
-            Right( CRSR_SKIP_CHARS, sal_True, 1, sal_False );       // Feld selektieren
 
             if( nSlotId )
             {
