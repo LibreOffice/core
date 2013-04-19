@@ -92,7 +92,6 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xformsexport.hxx,xmloff/
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xformsimport.hxx,xmloff/xformsimport.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmlaustp.hxx,xmloff/xmlaustp.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmlcnimp.hxx,xmloff/xmlcnimp.hxx))
-$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmlcnitm.hxx,xmloff/xmlcnitm.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmlement.hxx,xmloff/xmlement.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmlerror.hxx,xmloff/xmlerror.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmlevent.hxx,xmloff/xmlevent.hxx))

@@ -23,7 +23,7 @@
 #include <tools/shl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include <svtools/svlbitm.hxx>
 #include "svtools/viewdataentry.hxx"
 #include <unotools/charclass.hxx>

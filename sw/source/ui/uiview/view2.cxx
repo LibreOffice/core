@@ -53,7 +53,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <editeng/lrspitem.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include "editeng/unolingu.hxx"
 #include <vcl/msgbox.hxx>
 #include <editeng/tstpitem.hxx>

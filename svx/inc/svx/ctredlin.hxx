@@ -35,7 +35,7 @@
 #endif
 #include <vcl/tabctrl.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include "svtools/treelistentry.hxx"
 #include "svx/svxdllapi.h"
 

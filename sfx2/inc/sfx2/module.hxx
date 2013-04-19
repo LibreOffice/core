@@ -23,7 +23,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include <sfx2/shell.hxx>
-#include <sfx2/imgdef.hxx>
+#include <svtools/imgdef.hxx>
 #include <sal/types.h>
 #include <tools/fldunit.hxx>
 #include <com/sun/star/uno/Reference.hxx>

@@ -30,7 +30,7 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/langitem.hxx>

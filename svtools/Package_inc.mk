@@ -161,7 +161,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/toolpanel.hx
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/toolpaneldeck.hxx,svtools/toolpanel/toolpaneldeck.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/transfer.hxx,svtools/transfer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/treelist.hxx,svtools/treelist.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/txtcmp.hxx,svtools/txtcmp.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/unitconv.hxx,svtools/unitconv.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/unoevent.hxx,svtools/unoevent.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/unoimap.hxx,svtools/unoimap.hxx))

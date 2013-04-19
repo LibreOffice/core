@@ -24,7 +24,7 @@
 #include <comphelper/string.hxx>
 #include <svl/fstathelper.hxx>
 
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 
 #include <sfx2/docfile.hxx>
 
