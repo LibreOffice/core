@@ -29,7 +29,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <sfx2/bindings.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/tstpitem.hxx>

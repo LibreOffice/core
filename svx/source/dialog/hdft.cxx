@@ -38,7 +38,7 @@
 
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
-#include "svx/htmlmode.hxx"
+#include <sfx2/htmlmode.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>

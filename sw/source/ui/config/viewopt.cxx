@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 
 #include <svx/svxids.hrc>

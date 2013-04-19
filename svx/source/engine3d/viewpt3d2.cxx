@@ -18,7 +18,7 @@
  */
 
 #include <svx/viewpt3d.hxx>
-#include <svx/volume3d.hxx>
+#include <basegfx/range/b3drange.hxx>
 
 Viewport3D::Viewport3D() :
     aVRP(0, 0, 5),

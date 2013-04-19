@@ -32,7 +32,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/escapementitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include "paratr.hxx"

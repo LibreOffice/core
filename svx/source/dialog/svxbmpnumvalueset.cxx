@@ -39,7 +39,7 @@
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/numvset.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <editeng/unolingu.hxx>

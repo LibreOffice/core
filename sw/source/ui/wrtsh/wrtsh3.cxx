@@ -27,7 +27,7 @@
 #include <svx/svdouno.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include "wrtsh.hxx"
 #include "view.hxx"
 #include "IMark.hxx"

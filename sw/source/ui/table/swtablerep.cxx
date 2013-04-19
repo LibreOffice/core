@@ -34,7 +34,7 @@
 
 #include <svtools/htmlcfg.hxx>
 #include <fmtrowsplt.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 
 #include <docsh.hxx>
 #include <wrtsh.hxx>

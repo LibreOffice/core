@@ -32,7 +32,7 @@
 #include <editeng/protitem.hxx>
 #include <sfx2/request.hxx>
 #include <svl/srchitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgcoitm.hxx>
 #include <svx/sdggaitm.hxx>

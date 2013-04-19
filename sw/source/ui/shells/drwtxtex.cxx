@@ -57,7 +57,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svl/slstitm.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/unolingu.hxx>

@@ -31,7 +31,7 @@
 #include <svl/whiter.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/anchorid.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <uitool.hxx>
 #include <fmtornt.hxx>
 #include <cmdid.h>

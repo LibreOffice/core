@@ -50,7 +50,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>

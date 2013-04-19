@@ -18,7 +18,7 @@
  */
 
 #include "hintids.hxx"
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svl/style.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svl/cjkoptions.hxx>

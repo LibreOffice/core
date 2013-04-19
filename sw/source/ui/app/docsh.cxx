@@ -43,7 +43,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/flstitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svtools/soerr.hxx>
 #include <comphelper/classids.hxx>
 #include <basic/basmgr.hxx>

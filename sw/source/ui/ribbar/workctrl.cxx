@@ -20,7 +20,7 @@
 #include <string>
 #include <comphelper/string.hxx>
 #include <svl/eitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/imagemgr.hxx>

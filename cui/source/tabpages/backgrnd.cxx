@@ -46,7 +46,7 @@
 #include <svx/svxerr.hxx>
 #include <svx/drawitem.hxx>
 #include <dialmgr.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svtools/controldims.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/xfillit0.hxx>

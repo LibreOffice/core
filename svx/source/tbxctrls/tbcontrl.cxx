@@ -56,7 +56,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
 #include "helpid.hrc"
-#include "svx/htmlmode.hxx"
+#include <sfx2/htmlmode.hxx>
 #include <svx/xtable.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>

@@ -27,7 +27,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <svl/whiter.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/boxitem.hxx>

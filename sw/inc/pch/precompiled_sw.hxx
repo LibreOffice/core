@@ -823,7 +823,7 @@
 #include <svx/grfflt.hxx>
 #include <svx/hdft.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/insctrl.hxx>

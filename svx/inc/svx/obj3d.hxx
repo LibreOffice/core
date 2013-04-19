@@ -22,7 +22,6 @@
 
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/volume3d.hxx>
 #include <svx/def3d.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/deflt3d.hxx>
@@ -30,6 +29,7 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/xflclit.hxx>
 #include <svl/itemset.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

@@ -27,7 +27,7 @@
 #include <shells.hrc>
 #include <caption.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <frmfmt.hxx>

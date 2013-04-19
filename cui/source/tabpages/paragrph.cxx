@@ -47,7 +47,7 @@
 #include <editeng/keepitem.hxx>
 #include "svx/dlgutil.hxx"
 #include <dialmgr.hxx>
-#include "svx/htmlmode.hxx"
+#include <sfx2/htmlmode.hxx>
 #include <editeng/paravertalignitem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>

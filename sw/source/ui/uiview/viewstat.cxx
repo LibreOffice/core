@@ -33,7 +33,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/brushitem.hxx>
-#include <svx/htmlmode.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/msgpool.hxx>
 #include <swmodule.hxx>
