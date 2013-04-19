@@ -139,12 +139,14 @@ class Desktop(object):
         try:
             print ("DEBUG !!! getDispatchURL -- s_URL: ", _sURL)
             oTransformer = xMSF.createInstance("com.sun.star.util.URLTransformer")
-            oURL = list(range(1))
-            oURL[0] = URL()
-            oURL[0].Complete = _sURL
-            oTransformer.parseStrict(oURL[0])
+            oURL = URL()
+            oURL.Complete = _sURL
+            ok, oURL = oTransformer.parseStrict(oURL)
+            if (not ok):
+                print ("DEBUG !!! getDispatchURL --  parsing failed.")
+                return None
             print ("DEBUG !!! getDispatchURL --  oURL: ", oURL)
-            return oURL[0];
+            return oURL
         except Exception:
             traceback.print_exc()
         return None
