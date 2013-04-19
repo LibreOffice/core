@@ -41,9 +41,9 @@ extern long altzone;
 
 namespace {
 
-    const sal_Int64 secMask  = 1000000000;
-    const sal_Int64 minMask  = 100000000000;
-    const sal_Int64 hourMask = 10000000000000;
+    const sal_Int64 secMask  = SAL_CONST_INT64(1000000000);
+    const sal_Int64 minMask  = SAL_CONST_INT64(100000000000);
+    const sal_Int64 hourMask = SAL_CONST_INT64(10000000000000);
 
     const sal_Int64 nanoSecInSec = 1000000000;
     const sal_Int16 secInMin     = 60;
