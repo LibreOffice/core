@@ -520,10 +520,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/msforms,\
     fmTransitionEffect \
     fmVerticalScrollBarSide \
     fmZOrder \
-	ReturnBoolean \
-	ReturnEffect \
-	ReturnInteger \
-	ReturnSingle \
 	XButton \
 	XCheckBox \
 	XColorFormat \
@@ -544,6 +540,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/msforms,\
 	XPictureFormat \
 	XProgressBar \
 	XRadioButton \
+	XReturnBoolean \
+	XReturnEffect \
+	XReturnInteger \
+	XReturnSingle \
 	XScrollBar \
 	XShape \
 	XShapeRange \

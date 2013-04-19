@@ -34,6 +34,7 @@ $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbahelper.hxx,vbah
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbahelperinterface.hxx,vbahelper/vbahelperinterface.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbapagesetupbase.hxx,vbahelper/vbapagesetupbase.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbapropvalue.hxx,vbahelper/vbapropvalue.hxx))
+$(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbareturntypes.hxx,vbahelper/vbareturntypes.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbashape.hxx,vbahelper/vbashape.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbashaperange.hxx,vbahelper/vbashaperange.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbashapes.hxx,vbahelper/vbashapes.hxx))

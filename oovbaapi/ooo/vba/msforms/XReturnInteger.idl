@@ -16,9 +16,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/uno/XInterface.idl>
+
 module ooo { module vba { module msforms {
-    struct ReturnBoolean
+    interface XReturnInteger
     {
-        boolean Value;
+        [attribute] long Value;
     };
 }; }; };
