@@ -34,7 +34,7 @@ using namespace com::sun::star;
 /** Dialog that will allow the user to choose a Persona to use.
 
 So far there is no better possibility than just to paste the URL from
-http://www.getpersona.com ...
+https://addons.mozilla.org/firefox/themes ...
 */
 class SelectPersonaDialog : public ModalDialog
 {
@@ -60,34 +60,24 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     pButton->SetClickHdl( LINK( this, SelectPersonaDialog, VisitPersonas ) );
 
     get( m_pEdit, "persona_url" );
-    m_pEdit->SetPlaceholderText( "http://www.getpersonas.com/persona/" );
+    m_pEdit->SetPlaceholderText( "https://addons.mozilla.org/firefox/themes/" );
 }
 
 OUString SelectPersonaDialog::GetPersonaURL() const
 {
     OUString aText( m_pEdit->GetText() );
 
-    if ( !aText.startsWith( "http://www.getpersonas.com/" ) &&
-         !aText.startsWith( "https://www.getpersonas.com/" ) )
-    {
-        return OUString();
-    }
+    if ( aText.startsWith( "https://addons.mozilla.org/" ) )
+        return aText;
 
-    // canonicalize the URL
-    OUString aPersona( "persona/" );
-    sal_Int32 nPersona = aText.lastIndexOf( aPersona );
-
-    if ( nPersona < 0 )
-        return OUString();
-
-    return "http://www.getpersonas.com/persona/" + aText.copy( nPersona + aPersona.getLength() );
+    return OUString();
 }
 
 IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 {
     uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell( com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
 
-    xSystemShell->execute( "http://www.getpersonas.com", OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+    xSystemShell->execute( "https://addons.mozilla.org/firefox/themes/", OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
 
     return 0;
 }
@@ -277,7 +267,7 @@ static OUString searchValue( const OString &rBuffer, sal_Int32 from, const OStri
 
     where += rIdentifier.getLength();
 
-    sal_Int32 end = rBuffer.indexOf( "&quot;", where );
+    sal_Int32 end = rBuffer.indexOf( "&#34;", where );
     if ( end < 0 )
         return OUString();
 
@@ -291,24 +281,24 @@ static OUString searchValue( const OString &rBuffer, sal_Int32 from, const OStri
 static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUString *pFooterURL, OUString *pTextColor, OUString *pAccentColor )
 {
     // it is the first attribute that contains "persona="
-    sal_Int32 persona = rBuffer.indexOf( "persona=\"{" );
+    sal_Int32 persona = rBuffer.indexOf( "data-browsertheme=\"{" );
     if ( persona < 0 )
         return false;
 
     // now search inside
-    *pHeaderURL = searchValue( rBuffer, persona, "&quot;headerURL&quot;:&quot;" );
+    *pHeaderURL = searchValue( rBuffer, persona, "&#34;headerURL&#34;:&#34;" );
     if ( pHeaderURL->isEmpty() )
         return false;
 
-    *pFooterURL = searchValue( rBuffer, persona, "&quot;footerURL&quot;:&quot;" );
+    *pFooterURL = searchValue( rBuffer, persona, "&#34;footerURL&#34;:&#34;" );
     if ( pFooterURL->isEmpty() )
         return false;
 
-    *pTextColor = searchValue( rBuffer, persona, "&quot;textcolor&quot;:&quot;" );
+    *pTextColor = searchValue( rBuffer, persona, "&#34;textcolor&#34;:&#34;" );
     if ( pTextColor->isEmpty() )
         return false;
 
-    *pAccentColor = searchValue( rBuffer, persona, "&quot;accentcolor&quot;:&quot;" );
+    *pAccentColor = searchValue( rBuffer, persona, "&#34;accentcolor&#34;:&#34;" );
     if ( pAccentColor->isEmpty() )
         return false;
 
