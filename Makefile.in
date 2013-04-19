@@ -224,6 +224,9 @@ bootstrap: compilerplugins
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild
+ifeq ($(OS),IOS)
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
+endif
 
 build-nocheck: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build

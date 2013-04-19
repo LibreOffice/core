@@ -34,14 +34,10 @@ $(eval $(call gb_Executable_add_objcobjects,LibreOffice,\
 
 $(call gb_Executable_use_package,LibreOffice,touch_inc)
 
-# Mark the executable as dependingf on AllModulesButInstsetNative so
-# that it is built only after all libraries that it links to (which
-# might be any of them) have been built.
-
 # Mark the executable as depending on all libraries so that it gets
 # rebuilt if any library has been rebuilt. Avoids need for "make
 # ios.clean".
 
-$(call gb_LinkTarget_get_target,Executable/LibreOffice) : $(call gb_Postprocess_get_target,AllModulesButInstsetNative) $(wildcard $(OUTDIR)/lib/lib*.a)
+$(call gb_LinkTarget_get_target,Executable/LibreOffice) : $(wildcard $(OUTDIR)/lib/lib*.a)
 
 # vim: set ts=4 sw=4 et:

@@ -99,7 +99,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,DESKTOP,idlc) \
 	instsetoo_native \
 	io \
-	ios \
 	javaunohelper \
 	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
 	$(call gb_Helper_optional,JPEG,jpeg) \
