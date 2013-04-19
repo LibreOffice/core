@@ -25,20 +25,25 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,salhelper/allheaders))
+$(eval $(call gb_CustomTarget_CustomTarget,odk/allheaders))
 
-salhelper_allheaders_DIR := $(call gb_CustomTarget_get_workdir,salhelper/allheaders)
+odk_allheaders_DIR := $(call gb_CustomTarget_get_workdir,odk/allheaders)
 
-$(call gb_CustomTarget_get_target,salhelper/allheaders) : \
-	$(salhelper_allheaders_DIR)/salhelper_allheaders.hxx
+$(call gb_CustomTarget_get_target,odk/allheaders) : \
+	$(odk_allheaders_DIR)/allheaders.hxx
 
-$(salhelper_allheaders_DIR)/salhelper_allheaders.hxx : \
-            $(call gb_Package_get_target,salhelper_odk_headers) \
-            | $(salhelper_allheaders_DIR)/.dir
+$(odk_allheaders_DIR)/allheaders.hxx : \
+			  $(call gb_PackageSet_get_target,odk_headers) \
+            | $(odk_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	printf '// Generated list of salhelper includes\n' > $@ \
-	$(foreach file,$(shell cat $<),\
+	printf '// Generated list of sal includes\n' > $@ && \
+	printf '#ifdef WNT\n' >> $@ && \
+	printf '#include <windows.h>\n' >> $@ && \
+	printf '#endif\n' >> $@ \
+	$(foreach file,$(shell cat $^),\
+		$(if $(findstring /win32/,$(file)),&& printf '#ifdef WNT\n' >> $@) \
 	    && printf '#include <%s>\n' $(subst $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,,$(file)) >> $@ \
+		$(if $(findstring /win32/,$(file)),&& printf '#endif // WNT\n' >> $@) \
 	)
 
 # vim: set noet sw=4 ts=4:

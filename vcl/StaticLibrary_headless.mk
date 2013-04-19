@@ -32,8 +32,6 @@ $(eval $(call gb_StaticLibrary_use_packages,headless,\
 	basebmp_inc \
 	basegfx_inc \
 	comphelper_inc \
-	cppu_odk_headers \
-	cppuhelper_odk_headers \
 	i18nlangtag_inc \
 	i18nutil_inc \
 	o3tl_inc \

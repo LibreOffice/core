@@ -11,7 +11,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,npsoenv))
 
 $(eval $(call gb_StaticLibrary_use_packages,npsoenv,\
-    sal_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,npsoenv,\

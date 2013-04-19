@@ -23,8 +23,11 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Package_html \
 	Package_examples \
 	Package_lib \
+	Package_odk_headers \
+	Package_odk_headers_generated \
 	Package_settings \
 	Package_settings_generated \
+	PackageSet_odk_headers \
 ))
 
 ifeq ($(OS),WNT)
@@ -62,6 +65,8 @@ $(eval $(call gb_Module_add_targets,odk,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,odk,\
+	CppunitTest_checkapi \
+	CustomTarget_allheaders \
 	CustomTarget_check \
 ))
 

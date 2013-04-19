@@ -11,8 +11,6 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,winextendloaderenv))
 
 $(eval $(call gb_StaticLibrary_use_packages,winextendloaderenv,\
-	sal_generated \
-	sal_odk_headers \
 	tools_inc \
 ))
 

@@ -12,13 +12,9 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,pdfimport_s))
 $(eval $(call gb_StaticLibrary_use_packages,pdfimport_s,\
     basegfx_inc \
     comphelper_inc \
-    cppu_odk_headers \
-    cppuhelper_odk_headers \
 	i18nlangtag_inc \
     o3tl_inc \
 	rsc_inc \
-	sal_generated \
-	sal_odk_headers \
     tools_inc \
 	unotools_inc \
 	vcl_inc \

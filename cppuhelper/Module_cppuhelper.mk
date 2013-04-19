@@ -28,16 +28,13 @@
 $(eval $(call gb_Module_Module,cppuhelper))
 
 $(eval $(call gb_Module_add_targets,cppuhelper,\
-	CustomTarget_cppuhelper_allheaders \
 	InternalUnoApi_cppuhelper \
 	Library_cppuhelper \
-	Package_cppuhelper_odk_headers \
 	Package_unorc \
 	StaticLibrary_findsofficepath \
 ))
 
 $(eval $(call gb_Module_add_check_targets,cppuhelper,\
-	CppunitTest_cppuhelper_checkapi \
 	CppunitTest_cppuhelper_cppu_ifcontainer \
 	CppunitTest_cppuhelper_cppu_unourl \
 ))

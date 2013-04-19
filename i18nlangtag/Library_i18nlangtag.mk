@@ -29,7 +29,6 @@
 $(eval $(call gb_Library_Library,i18nlangtag))
 
 $(eval $(call gb_Library_use_packages,i18nlangtag,\
-	cppu_odk_headers \
 	i18nlangtag_inc \
 ))
 

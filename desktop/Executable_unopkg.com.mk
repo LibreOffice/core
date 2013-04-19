@@ -11,7 +11,6 @@ $(eval $(call gb_Executable_Executable,unopkg_com))
 
 $(eval $(call gb_Executable_use_packages,unopkg_com,\
     sal_inc \
-    sal_odk_headers \
 ))
 
 $(eval $(call gb_Executable_set_targettype_gui,unopkg_com,NO))
