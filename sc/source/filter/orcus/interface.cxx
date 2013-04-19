@@ -224,17 +224,17 @@ void ScOrcusSheet::set_date_time(
     SvNumberFormatter* pFormatter = mrDoc.getDoc().GetFormatTable();
 
     Date aDate(day, month, year);
-    sal_uIntPtr nSec = floor(second);
-    sal_uIntPtr nSec100 = (second - nSec) * 100;
-    Time aTime(hour, minute, nSec, nSec100);
+    sal_uInt32 nSec = floor(second);
+    sal_uInt32 nNanoSec = (second - nSec) * ::Time::nanoSecPerSec;
+    Time aTime(hour, minute, nSec, nNanoSec);
     Date aNullDate(*pFormatter->GetNullDate());
     long nDateDiff = aDate - aNullDate;
 
     double fTime =
-        static_cast<double>(aTime.GetNanoSec()) / 1e9 +
+        static_cast<double>(aTime.GetNanoSec()) / ::Time::nanoSecPerSec +
         aTime.GetSec() +
-        aTime.GetMin() * 60.0 +
-        aTime.GetHour() * 3600.0;
+        aTime.GetMin() * ::Time::secondPerMinute +
+        aTime.GetHour() * ::Time::secondPerHour;
 
     fTime /= DATE_TIME_FACTOR;
 
