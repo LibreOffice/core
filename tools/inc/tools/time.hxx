@@ -78,16 +78,16 @@ public:
     void            SetNanoSec( sal_uInt32 nNewNanoSec );
     sal_uInt16      GetHour() const
                     { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
-                      return static_cast<sal_uInt16>(nTempTime / 10000000000000); }
+                      return static_cast<sal_uInt16>(nTempTime / SAL_CONST_UINT64(10000000000000)); }
     sal_uInt16      GetMin() const
                     { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
-                      return static_cast<sal_uInt16>((nTempTime / 100000000000) % 100); }
+                      return static_cast<sal_uInt16>((nTempTime / SAL_CONST_UINT64(100000000000)) % 100); }
     sal_uInt16      GetSec() const
                     { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
-                      return static_cast<sal_uInt16>((nTempTime / 1000000000) % 100); }
+                      return static_cast<sal_uInt16>((nTempTime / SAL_CONST_UINT64(1000000000)) % 100); }
     sal_uInt32      GetNanoSec() const
                     { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
-                      return static_cast<sal_uInt32>( nTempTime % 1000000000); }
+                      return static_cast<sal_uInt32>( nTempTime % SAL_CONST_UINT64(1000000000)); }
 
     // TODO: consider removing GetMSFromTime and MakeTimeFromMS?
     sal_Int32       GetMSFromTime() const;
