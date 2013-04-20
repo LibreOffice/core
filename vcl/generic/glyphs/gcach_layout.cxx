@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_harfbuzz.h>
 #include <gcach_ftyp.hxx>
 #include <sallayout.hxx>
 #include <salgdi.hxx>
@@ -30,6 +31,10 @@
 #include <sal/alloca.h>
 #include <rtl/instance.hxx>
 
+#if ENABLE_HARFBUZZ
+#include <harfbuzz/hb-icu.h>
+#include <harfbuzz/hb-ot.h>
+#endif
 #include <layout/LayoutEngine.h>
 #include <layout/LEFontInstance.h>
 #include <layout/LELanguages.h>
@@ -85,6 +90,371 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
     }
 }
+
+// =======================================================================
+
+static bool lcl_CharIsJoiner(sal_Unicode cChar)
+{
+    return ((cChar == 0x200C) || (cChar == 0x200D));
+}
+
+static bool needPreviousCode(sal_Unicode cChar)
+{
+    return lcl_CharIsJoiner(cChar) || U16_IS_LEAD(cChar);
+}
+
+static bool needNextCode(sal_Unicode cChar)
+{
+    return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
+}
+
+#if ENABLE_HARFBUZZ
+static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* userData)
+{
+    char pTagName[5];
+    pTagName[0] = (char)(nTableTag >> 24);
+    pTagName[1] = (char)(nTableTag >> 16);
+    pTagName[2] = (char)(nTableTag >>  8);
+    pTagName[3] = (char)(nTableTag);
+    pTagName[4] = 0;
+
+    ServerFont* rFont = (ServerFont*) userData;
+    sal_uLong nLength;
+    const unsigned char* pBuffer = rFont->GetTable(pTagName, &nLength);
+
+    hb_blob_t* pBlob = NULL;
+    if (pBuffer != NULL)
+        pBlob = hb_blob_create((const char*) pBuffer, nLength, HB_MEMORY_MODE_WRITABLE, (void*) pBuffer, free);
+
+    return pBlob;
+}
+
+static hb_bool_t getFontGlyph(hb_font_t* /*font*/, void* fontData,
+        hb_codepoint_t ch, hb_codepoint_t vs,
+        hb_codepoint_t* nGlyphIndex,
+        void* /*userData*/)
+{
+    ServerFont* rFont = (ServerFont*) fontData;
+    *nGlyphIndex = 0;
+
+    if (vs)
+        *nGlyphIndex = rFont->GetRawGlyphIndex(ch /*, vs*/); // XXX handle variation selectors
+
+    if (*nGlyphIndex == 0)
+        *nGlyphIndex = rFont->GetRawGlyphIndex(ch);
+
+    return *nGlyphIndex != 0;
+}
+
+static hb_position_t getGlyphAdvanceH(hb_font_t* /*font*/, void* fontData,
+        hb_codepoint_t nGlyphIndex,
+        void* /*userData*/)
+{
+    ServerFont* rFont = (ServerFont*) fontData;
+    const GlyphMetric& rGM = rFont->GetGlyphMetric(nGlyphIndex);
+    return rGM.GetCharWidth();
+}
+
+static hb_position_t getGlyphAdvanceV(hb_font_t* /*font*/, void* /*fontData*/,
+        hb_codepoint_t /*nGlyphIndex*/,
+        void* /*userData*/)
+{
+    // XXX: vertical metrics
+    return 0;
+}
+
+static hb_bool_t getGlyphOriginH(hb_font_t* /*font*/, void* /*fontData*/,
+        hb_codepoint_t /*nGlyphIndex*/,
+        hb_position_t* /*x*/, hb_position_t* /*y*/,
+        void* /*userData*/)
+{
+    // the horizontal origin is always (0, 0)
+    return true;
+}
+
+static hb_bool_t getGlyphOriginV(hb_font_t* /*font*/, void* /*fontData*/,
+        hb_codepoint_t /*nGlyphIndex*/,
+        hb_position_t* /*x*/, hb_position_t* /*y*/,
+        void* /*userData*/)
+{
+    // XXX: vertical origin
+    return true;
+}
+
+static hb_position_t getGlyphKerningH(hb_font_t* /*font*/, void* fontData,
+        hb_codepoint_t nGlyphIndex1, hb_codepoint_t nGlyphIndex2,
+        void* /*userData*/)
+{
+    // This callback is for old style 'kern' table, GPOS kerning is handled by HarfBuzz directly
+
+    // XXX: there is ServerFont::GetKernPairs() but it does many "smart" things
+    // that I'm not sure about, so I'm using FreeType directly
+    // P.S. if we decided not to use ServerFont::GetKernPairs() then it and all
+    // other implementattions should be removed, don't seem to be used
+    // anywhere.
+
+    ServerFont* rFont = (ServerFont*) fontData;
+    FT_Face aFace = rFont->GetFtFace();
+
+    FT_Error error;
+    FT_Vector kerning;
+    hb_position_t ret;
+
+    error = FT_Get_Kerning(aFace, nGlyphIndex1, nGlyphIndex2, FT_KERNING_DEFAULT, &kerning);
+    if (error)
+        ret = 0;
+    else
+        ret = kerning.x;
+
+    return ret;
+}
+
+static hb_position_t getGlyphKerningV(hb_font_t* /*font*/, void* /*fontData*/,
+        hb_codepoint_t /*nGlyphIndex1*/, hb_codepoint_t /*nGlyphIndex2*/,
+        void* /*userData*/)
+{
+    // XXX vertical kerning
+    return 0;
+}
+
+static hb_bool_t getGlyphExtents(hb_font_t* /*font*/, void* fontData,
+        hb_codepoint_t nGlyphIndex,
+        hb_glyph_extents_t* extents,
+        void* /*userData*/)
+{
+    ServerFont* rFont = (ServerFont*) fontData;
+    FT_Face aFace = rFont->GetFtFace();
+    FT_Error error;
+
+    error = FT_Load_Glyph(aFace, nGlyphIndex, FT_LOAD_DEFAULT);
+    if (!error) {
+        extents->x_bearing = aFace->glyph->metrics.horiBearingX;
+        extents->y_bearing = aFace->glyph->metrics.horiBearingY;
+        extents->width  =  aFace->glyph->metrics.width;
+        extents->height = -aFace->glyph->metrics.height;
+    }
+
+    return !error;
+}
+
+static hb_bool_t getGlyphContourPoint(hb_font_t* /*font*/, void* fontData,
+        hb_codepoint_t nGlyphIndex, unsigned int nPointIndex,
+        hb_position_t *x, hb_position_t *y,
+        void* /*userData*/)
+{
+    ServerFont* rFont = (ServerFont*) fontData;
+    FT_Face aFace = rFont->GetFtFace();
+    FT_Error error;
+    bool ret = false;
+
+    error = FT_Load_Glyph(aFace, nGlyphIndex, FT_LOAD_DEFAULT);
+    if (!error) {
+        if (aFace->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
+            if (nPointIndex < (unsigned int) aFace->glyph->outline.n_points) {
+                *x = aFace->glyph->outline.points[nPointIndex].x;
+                *y = aFace->glyph->outline.points[nPointIndex].y;
+                ret = true;
+            }
+        }
+    }
+
+    return ret;
+}
+
+static hb_font_funcs_t* getFontFuncs(void)
+{
+    static hb_font_funcs_t* funcs = hb_font_funcs_create();
+
+    hb_font_funcs_set_glyph_func                (funcs, getFontGlyph, NULL, NULL);
+    hb_font_funcs_set_glyph_h_advance_func      (funcs, getGlyphAdvanceH, NULL, NULL);
+    hb_font_funcs_set_glyph_v_advance_func      (funcs, getGlyphAdvanceV, NULL, NULL);
+    hb_font_funcs_set_glyph_h_origin_func       (funcs, getGlyphOriginH, NULL, NULL);
+    hb_font_funcs_set_glyph_v_origin_func       (funcs, getGlyphOriginV, NULL, NULL);
+    hb_font_funcs_set_glyph_h_kerning_func      (funcs, getGlyphKerningH, NULL, NULL);
+    hb_font_funcs_set_glyph_v_kerning_func      (funcs, getGlyphKerningV, NULL, NULL);
+    hb_font_funcs_set_glyph_extents_func        (funcs, getGlyphExtents, NULL, NULL);
+    hb_font_funcs_set_glyph_contour_point_func  (funcs, getGlyphContourPoint, NULL, NULL);
+
+    return funcs;
+}
+
+class HbLayoutEngine : public ServerFontLayoutEngine
+{
+private:
+    UScriptCode             meScriptCode;
+    hb_face_t*              maHbFace;
+    int                     fUnitsPerEM;
+
+public:
+                            HbLayoutEngine(ServerFont&);
+    virtual                 ~HbLayoutEngine();
+
+    virtual bool            layout(ServerFontLayout&, ImplLayoutArgs&);
+};
+
+HbLayoutEngine::HbLayoutEngine(ServerFont& rServerFont)
+:   meScriptCode(USCRIPT_INVALID_CODE),
+    maHbFace(NULL),
+    fUnitsPerEM(0)
+{
+    FT_Face aFtFace = rServerFont.GetFtFace();
+    fUnitsPerEM = rServerFont.GetEmUnits();
+
+    maHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, NULL);
+    hb_face_set_index(maHbFace, aFtFace->face_index);
+    hb_face_set_upem(maHbFace, fUnitsPerEM);
+}
+
+HbLayoutEngine::~HbLayoutEngine()
+{
+    hb_face_destroy(maHbFace);
+}
+
+bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
+{
+    ServerFont& rFont = rLayout.GetServerFont();
+    FT_Face aFtFace = rFont.GetFtFace();
+
+    hb_font_t *aHbFont = hb_font_create(maHbFace);
+    hb_font_set_funcs(aHbFont, getFontFuncs(), &rFont, NULL);
+    hb_font_set_scale(aHbFont,
+            ((uint64_t) aFtFace->size->metrics.x_scale * (uint64_t) fUnitsPerEM) >> 16,
+            ((uint64_t) aFtFace->size->metrics.y_scale * (uint64_t) fUnitsPerEM) >> 16);
+    hb_font_set_ppem(aHbFont, aFtFace->size->metrics.x_ppem, aFtFace->size->metrics.y_ppem);
+
+    // allocate temporary arrays, note: round to even
+    int nGlyphCapacity = (3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos) | 15) + 1;
+
+    rLayout.Reserve(nGlyphCapacity);
+
+    Point aNewPos(0, 0);
+    while (true)
+    {
+        int nMinRunPos, nEndRunPos;
+        bool bRightToLeft;
+        if (!rArgs.GetNextRun(&nMinRunPos, &nEndRunPos, &bRightToLeft))
+            break;
+
+        int nRunLen = nEndRunPos - nMinRunPos;
+
+        // find matching script
+        // TODO: use ICU's UScriptRun API to properly resolves "common" and
+        // "inherited" script codes, probably use it in GetNextRun() and return
+        // the script there
+        UScriptCode eScriptCode = USCRIPT_INVALID_CODE;
+        for (int i = nMinRunPos; i < nEndRunPos; ++i)
+        {
+            UErrorCode rcI18n = U_ZERO_ERROR;
+            UScriptCode eNextScriptCode = uscript_getScript(rArgs.mpStr[i], &rcI18n);
+            if ((eNextScriptCode > USCRIPT_INHERITED))
+            {
+                eScriptCode = eNextScriptCode;
+                if (eNextScriptCode != USCRIPT_LATIN)
+                    break;
+            }
+        }
+        if (eScriptCode < 0)   // TODO: handle errors better
+            eScriptCode = USCRIPT_LATIN;
+
+        meScriptCode = eScriptCode;
+
+        LanguageTag aLangTag(rArgs.meLanguage);
+        OString sLanguage = OUStringToOString(aLangTag.getLanguage(), RTL_TEXTENCODING_UTF8);
+
+        hb_buffer_t *aHbBuffer = hb_buffer_create();
+        hb_buffer_set_direction(aHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
+        hb_buffer_set_script(aHbBuffer, hb_icu_script_to_script(eScriptCode));
+        hb_buffer_set_language(aHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
+        hb_buffer_add_utf16(aHbBuffer, rArgs.mpStr, nRunLen, nMinRunPos, nRunLen);
+        hb_shape(aHbFont, aHbBuffer, NULL, 0);
+
+        int nRunGlyphCount = hb_buffer_get_length(aHbBuffer);
+        hb_glyph_info_t *aHbGlyphInfos = hb_buffer_get_glyph_infos(aHbBuffer, NULL);
+        hb_glyph_position_t *aHbPositions = hb_buffer_get_glyph_positions(aHbBuffer, NULL);
+
+        int32_t nLastCluster = -1;
+        for (int i = 0; i < nRunGlyphCount; ++i) {
+            int32_t nGlyphIndex = aHbGlyphInfos[i].codepoint;
+            int32_t nCluster = aHbGlyphInfos[i].cluster;
+            int32_t nCharPos = nCluster;
+
+            // if needed request glyph fallback by updating LayoutArgs
+            if (!nGlyphIndex)
+            {
+                if (nCharPos >= 0)
+                {
+                    rArgs.NeedFallback(nCharPos, bRightToLeft);
+                    // XXX: do we need this? HarfBuzz can take context into
+                    // account when shaping
+                    if  ((nCharPos > 0) && needPreviousCode(rArgs.mpStr[nCharPos-1]))
+                        rArgs.NeedFallback(nCharPos-1, bRightToLeft);
+                    else if  ((nCharPos + 1 < nEndRunPos) && needNextCode(rArgs.mpStr[nCharPos+1]))
+                        rArgs.NeedFallback(nCharPos+1, bRightToLeft);
+                }
+
+                if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
+                    continue;
+            }
+
+            const GlyphMetric& rGM = rFont.GetGlyphMetric(nGlyphIndex);
+            int nGlyphWidth = rGM.GetCharWidth();
+
+            long nGlyphFlags = 0;
+            if (bRightToLeft)
+                nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+
+            // what is this for?
+            // XXX: rtl clusters
+            bool bInCluster = false;
+            if (nCluster == nLastCluster)
+                bInCluster = true;
+            nLastCluster = nCluster;
+            if (bInCluster)
+                nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
+
+            if (hb_ot_layout_get_glyph_class(maHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK)
+                nGlyphFlags |= GlyphItem::IS_DIACRITIC;
+
+            aHbPositions[i].x_offset /= 64;
+            aHbPositions[i].y_offset /= 64;
+            aHbPositions[i].x_advance /= 64;
+            aHbPositions[i].y_advance /= 64;
+
+            aNewPos = Point(aNewPos.X() + aHbPositions[i].x_offset, aNewPos.Y() - aHbPositions[i].y_offset);
+
+            GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth);
+
+            // This is a hack to compensate for assumptions made elsewhere in
+            // the codebase, the right way is to use aHbPositions[i].x_advance
+            // instead of nGlyphWidth above, and leave mnNewWidth alone
+            // (whatever it is meant for)
+            if (i + 1 < nRunGlyphCount)
+                aGI.mnNewWidth = nGlyphWidth + (aHbPositions[i + 1].x_offset / 64);
+
+            rLayout.AppendGlyph(aGI);
+
+            aNewPos.X() += aHbPositions[i].x_advance;
+            aNewPos.Y() += aHbPositions[i].y_advance;
+        }
+
+        hb_buffer_destroy(aHbBuffer);
+    }
+
+    hb_font_destroy(aHbFont);
+
+    // sort glyphs in visual order
+    // and then in logical order (e.g. diacritics after cluster start)
+    // XXX: why?
+    rLayout.SortGlyphItems();
+
+    // determine need for kashida justification
+    if((rArgs.mpDXArray || rArgs.mnLayoutWidth)
+    && ((meScriptCode == USCRIPT_ARABIC) || (meScriptCode == USCRIPT_SYRIAC)))
+        rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
+
+    return true;
+}
+#endif // ENABLE_HARFBUZZ
 
 // =======================================================================
 // bridge to ICU LayoutEngine
@@ -301,21 +671,6 @@ IcuLayoutEngine::~IcuLayoutEngine()
 }
 
 // -----------------------------------------------------------------------
-
-static bool lcl_CharIsJoiner(sal_Unicode cChar)
-{
-    return ((cChar == 0x200C) || (cChar == 0x200D));
-}
-
-static bool needPreviousCode(sal_Unicode cChar)
-{
-    return lcl_CharIsJoiner(cChar) || U16_IS_LEAD(cChar);
-}
-
-static bool needNextCode(sal_Unicode cChar)
-{
-    return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
-}
 
 namespace
 {
@@ -742,6 +1097,7 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 #ifdef ARABIC_BANDAID
             aGI.mnNewWidth = nNewWidth;
 #endif
+
             rLayout.AppendGlyph( aGI );
             ++nFilteredRunGlyphCount;
             nLastCharPos = nCharPos;
@@ -768,8 +1124,15 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
 {
     // find best layout engine for font, platform, script and language
-    if (!mpLayoutEngine)
+    if (!mpLayoutEngine) {
+#if ENABLE_HARFBUZZ
+        const char* pUseHarfBuzz = getenv("SAL_USE_HARFBUZZ");
+        if (pUseHarfBuzz)
+            mpLayoutEngine = new HbLayoutEngine(*this);
+        else
+#endif
         mpLayoutEngine = new IcuLayoutEngine(*this);
+    }
     return mpLayoutEngine;
 }
 
