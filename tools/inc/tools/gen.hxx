@@ -24,6 +24,7 @@
 
 #include <limits.h>
 #include <ostream>
+#include <cmath>
 
 class SvStream;
 
