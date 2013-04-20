@@ -1186,6 +1186,39 @@ endef
 
 endif # SYSTEM_ICU
 
+ifeq ($(SYSTEM_HARFBUZZ),YES)
+
+define gb_LinkTarget__use_harfbuzz
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(HARFBUZZ_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(HARFBUZZ_LIBS))
+
+endef
+
+else ifeq ($(SYSTEM_HARFBUZZ),NO)
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	harfbuzz \
+))
+define gb_LinkTarget__use_harfbuzz
+$(call gb_LinkTarget_use_unpacked,$(1),harfbuzz)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,harfbuzz/include) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+    harfbuzz \
+)
+
+endef
+
+else # DISABLED HARFBUZZ
+
+gb_LinkTarget__use_harfbuzz :=
+
+endif # SYSTEM_HARFBUZZ
 
 ifeq ($(DISABLE_OPENSSL),YES)
 
