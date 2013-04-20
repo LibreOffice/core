@@ -51,7 +51,7 @@
     <TimePM>م</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$ر.ع-2001]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$ ر.ع-2001]">
     <DateAcceptancePattern>D/M</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>General</FormatCode>
@@ -332,7 +332,7 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>OMR</CurrencyID>
-      <CurrencySymbol>ر.ع</CurrencySymbol>
+      <CurrencySymbol> ر.ع</CurrencySymbol>
       <BankSymbol>OMR</BankSymbol>
       <CurrencyName>ريال عماني</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>

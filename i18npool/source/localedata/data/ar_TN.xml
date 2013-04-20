@@ -51,7 +51,7 @@
     <TimePM>م</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT ref="ar_EG" replaceFrom="[CURRENCY]" replaceTo="[$د.ت.‏-1C01]"/>
+  <LC_FORMAT ref="ar_EG" replaceFrom="[CURRENCY]" replaceTo="[$ د.ت.-1C01]"/>
   <LC_COLLATION ref="en_US" />
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="ar_EG"/>
@@ -294,7 +294,7 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>TND</CurrencyID>
-      <CurrencySymbol>د.ت.‏</CurrencySymbol>
+      <CurrencySymbol> د.ت.</CurrencySymbol>
       <BankSymbol>TND</BankSymbol>
       <CurrencyName>TND</CurrencyName>
       <DecimalPlaces>3</DecimalPlaces>

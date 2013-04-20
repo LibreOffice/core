@@ -51,7 +51,7 @@
     <TimePM>م</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT ref="ar_EG" replaceFrom="[CURRENCY]" replaceTo="[$ر.س.‏-401]"/>
+  <LC_FORMAT ref="ar_EG" replaceFrom="[CURRENCY]" replaceTo="[$ ر.س.-401]"/>
   <LC_COLLATION ref="en_US" />
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="ar_EG"/>
@@ -294,7 +294,7 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>SAR</CurrencyID>
-      <CurrencySymbol>ر.س.‏</CurrencySymbol>
+      <CurrencySymbol> ر.س.</CurrencySymbol>
       <BankSymbol>SAR</BankSymbol>
       <CurrencyName>SAR</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
