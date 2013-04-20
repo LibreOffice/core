@@ -26,12 +26,17 @@ $(call gb_PythonTest_get_clean_target,%) :
 
 ifneq ($(DISABLE_PYTHON),TRUE)
 
+# pass a hard-coded 139 to the gdb postprocess script to match soffice.bin
+# signal exit values (assumption: non-0 exit value here means it crashed)
 .PHONY : $(call gb_PythonTest_get_target,%)
 $(call gb_PythonTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PYT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $(call gb_PythonTest_get_target,$*)) && \
-		(PYTHONPATH=$(SRCDIR)/unotest/source/python:$(DEVINSTALLDIR)/opt/program \
+		$(if $(gb_CppunitTest__interactive),, \
+			$(if $(value gb_CppunitTest_postprocess), \
+				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
+		(PYTHONPATH=$(PYPATH):$(DEVINSTALLDIR)/opt/program \
 		UserInstallation="$(call gb_Helper_make_url,$(OUTDIR)/unittest)" \
 		BRAND_BASE_DIR="$(call gb_Helper_make_url,$(OUTDIR)/unittest/install)" \
 		CONFIGURATION_LAYERS="$(strip $(CONFIGURATION_LAYERS))" \
@@ -40,18 +45,18 @@ $(call gb_PythonTest_get_target,%) :
 		$(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
 			$(dir)="$(call gb_Helper_make_url,$(gb_CppunitTest_LIBDIR))") \
 		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_PythonTest_COMMAND) \
-			$(CLASSES) \
+			$(MODULES) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
 			|| (cat $@.log && $(UNIT_FAILED_MSG) \
 				$(if $(value gb_CppunitTest_postprocess), \
-					&& $(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core)) \
+					&& $(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core,139)) \
 				&& false))))
 
 # always use udkapi and URE services
 define gb_PythonTest_PythonTest
-$(call gb_PythonTest_get_target,$(1)) : T_CP :=
-$(call gb_PythonTest_get_target,$(1)) : CLASSES :=
+$(call gb_PythonTest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python
+$(call gb_PythonTest_get_target,$(1)) : MODULES :=
 $(call gb_PythonTest_get_target,$(1)) : CONFIGURATION_LAYERS :=
 $(call gb_PythonTest_get_target,$(1)) : UNO_TYPES :=
 $(call gb_PythonTest_get_target,$(1)) : UNO_SERVICES :=
@@ -107,13 +112,15 @@ $(foreach component,$(call gb_CppunitTest__filter_not_built_components,$(2)),$(c
 
 endef
 
-define gb_PythonTest_add_classes
-$(call gb_PythonTest_get_target,$(1)) : CLASSES += $(2)
-
-endef
-
-define gb_PythonTest_add_class
-$(call gb_PythonTest_add_classes,$(1),$(2))
+# put the directory on the PYTHONPATH because the "unittest" loader
+# mysteriously fails to load modules given as absolute path unless the $PWD is
+# a prefix of the absolute path, which it is not when we go into a certain
+# dir to get a core dump there
+#
+# gb_PythonTest_add_modules directory module(s)
+define gb_PythonTest_add_modules
+$(call gb_PythonTest_get_target,$(1)) : PYPATH := $$(PYPATH):$(2)
+$(call gb_PythonTest_get_target,$(1)) : MODULES += $(3)
 
 endef
 
