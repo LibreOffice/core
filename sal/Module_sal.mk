@@ -19,7 +19,6 @@ $(eval $(call gb_Module_add_targets,sal,\
 		Library_sal_textenc) \
 	$(if $(filter $(OS),WNT), \
 		Library_uwinapi) \
-	Package_inc \
 	StaticLibrary_salcpprt \
 ))
 
