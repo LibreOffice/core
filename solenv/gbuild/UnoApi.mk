@@ -25,6 +25,15 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+# NOTE: This is needed temporarily to force rebuild with API files from
+# $(WORKDIR), thus fixing generated deps. Otherwise, a change of an .idl
+# file would not rebuild a .cxx if it still depended on the $(OUTDIR)
+# version of the header.
+define gb_UnoApi__make_outdir_headers_rule
+$(OUTDIR)/inc/$(1)/%.hdl $(OUTDIR)/inc/$(1)/%.hpp :
+	@true
+endef
+
 .PHONY : $(call gb_UnoApi_get_clean_target,%)
 $(call gb_UnoApi_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
@@ -45,6 +54,8 @@ $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_targe
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 
 $(call gb_UnoApiTarget_get_headers_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
+
+$(call gb_UnoApi__make_outdir_headers_rule,$(1))
 
 $(call gb_Deliver_add_deliverable,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
 
