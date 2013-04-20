@@ -33,11 +33,6 @@ $(eval $(call gb_Library_use_external,fps_office,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,fps_office))
 
-$(eval $(call gb_Library_set_include,fps_office,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/fpicker/inc \
-))
-
 $(eval $(call gb_Library_use_libraries,fps_office,\
 	comphelper \
 	cppu \
