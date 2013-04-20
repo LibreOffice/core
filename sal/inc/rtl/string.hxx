@@ -782,25 +782,25 @@ public:
     template< typename T >
     friend typename internal::CharPtrDetector< T, bool >::Type operator==( const OString& rStr1, const T& value ) SAL_THROW(())
     {
-        return rStr1.compareTo( value ) == 0;
+        return (rStr1 == value);
     }
 
     template< typename T >
     friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr1, T& value ) SAL_THROW(())
     {
-        return rStr1.compareTo( value ) == 0;
+        return (rStr1 == value);
     }
 
     template< typename T >
     friend typename internal::CharPtrDetector< T, bool >::Type operator==( const T& value, const OString& rStr2 ) SAL_THROW(())
     {
-        return rStr2.compareTo( value ) == 0;
+        return (rStr2 == value);
     }
 
     template< typename T >
     friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( T& value, const OString& rStr2 ) SAL_THROW(())
     {
-        return rStr2.compareTo( value ) == 0;
+        return (rStr2 == value);
     }
 
     /**
