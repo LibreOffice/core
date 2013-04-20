@@ -524,10 +524,8 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
 
-    const sal_Char *pTag = pCol ? OOO_STRING_SVTOOLS_HTML_multicol : OOO_STRING_SVTOOLS_HTML_division;
-
     OStringBuffer sOut;
-    sOut.append('<').append(pTag);
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division);
 
     const String& rName = rSection.GetSectionName();
     if( rName.Len() && !bContinued )
@@ -593,9 +591,6 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     }
     else if( pCol )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
-            append('=').append(static_cast<sal_Int32>(pCol->GetNumCols()));
-
         // minumum gutter width
         sal_uInt16 nGutter = pCol->GetGutterWidth( sal_True );
         if( nGutter!=USHRT_MAX )
@@ -624,15 +619,12 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     rHTMLWrt.IncIndentLevel();
 }
 
-static void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt,
-                                const SwFmtCol *pCol )
+static void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt )
 {
-    const sal_Char *pTag = pCol ? OOO_STRING_SVTOOLS_HTML_multicol : OOO_STRING_SVTOOLS_HTML_division;
-
     rHTMLWrt.DecIndentLevel();
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), pTag, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
     rHTMLWrt.bLFPossible = sal_True;
 }
 
@@ -696,7 +688,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     // another end immediately before the current one
     if( pSurrCol && nSectSttIdx - pSurrSectNd->GetIndex() > 1 &&
         !lcl_html_IsMultiColEnd( rHTMLWrt, nSectSttIdx-1 ) )
-        lcl_html_OutSectionEndTag( rHTMLWrt, pSurrCol );
+        lcl_html_OutSectionEndTag( rHTMLWrt );
 
     if( bStartTag )
         lcl_html_OutSectionStartTag( rHTMLWrt, rSection, *pFmt, pCol );
@@ -712,7 +704,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     rHTMLWrt.pCurPam->GetPoint()->nNode = *rSectNd.EndOfSectionNode();
 
     if( bEndTag )
-        lcl_html_OutSectionEndTag( rHTMLWrt, pCol );
+        lcl_html_OutSectionEndTag( rHTMLWrt );
 
     // The surrounding section must be started again, except that it ends
     // immeditaly behind the current one.

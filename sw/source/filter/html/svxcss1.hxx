@@ -119,6 +119,8 @@ public:
     sal_uInt16 nLeftBorderDistance;
     sal_uInt16 nRightBorderDistance;
 
+    sal_uInt16 nColumnCount;
+
     long nLeft, nTop;
     long nWidth, nHeight;
     long nLeftMargin, nRightMargin;

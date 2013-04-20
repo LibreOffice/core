@@ -601,7 +601,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_Bool EndSections( sal_Bool bLFStripped );
 
     // <MULTICOL>
-    void NewMultiCol();
+    void NewMultiCol( sal_uInt16 columnsFromCss=0 );
     void EndMultiCol();
 
     // <MARQUEE>
