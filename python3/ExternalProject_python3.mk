@@ -72,9 +72,9 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		--with-system-expat \
 		$(if $(filter TRUE,$(ENABLE_VALGRIND)),--with-valgrind) \
 		--prefix=/python-inst \
+		$(if $(filter MACOSX,$(OS)),,--with-system-expat) \
 		$(if $(filter AIX,$(OS)),--disable-ipv6 --with-threads \
 			OPT="-g0 -fwrapv -O3 -Wall") \
 		$(if $(filter WNT-GCC,$(OS)-$(COM)),--with-threads ac_cv_printf_zd_format=no) \
