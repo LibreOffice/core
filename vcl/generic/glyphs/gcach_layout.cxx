@@ -34,6 +34,7 @@
 #if ENABLE_HARFBUZZ
 #include <hb-ft.h>
 #include <hb-icu.h>
+#include <hb-ot.h>
 #else
 #include <layout/LayoutEngine.h>
 #include <layout/LEFontInstance.h>
@@ -166,6 +167,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         meScriptCode = eScriptCode;
 
         hb_font_t *aHbFont = hb_ft_font_create(aFace, NULL);
+        hb_face_t *aHbFace = hb_font_get_face(aHbFont);
 
         LanguageTag aLangTag(rArgs.meLanguage);
         OString sLanguage = OUStringToOString(aLangTag.getLanguage(), RTL_TEXTENCODING_UTF8);
@@ -220,8 +222,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             if (bInCluster)
                 nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
 
-            // XXX: query GDEF glyph class? Do we even need this?
-            if (aHbPositions[i].x_advance == 0)
+            if (hb_ot_layout_get_glyph_class(aHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK)
                 nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
             aHbPositions[i].x_offset /= 64;
