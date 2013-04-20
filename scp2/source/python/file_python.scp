@@ -54,16 +54,7 @@ File gid_File_Lib_Pyuno
     Styles = (PACKED);
 End
 
-File gid_File_Lib_Pythonloader
-    LIB_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(pythonloader.uno,UNXSUFFIX));
-  #else
-    Name = "pythonloader.uno.dll";
-  #endif
-    Styles = (PACKED);
-End
+STD_LIB_FILE( gid_File_Lib_Pythonloader, pythonloader )
 
 File gid_File_Py_Unohelper
     TXT_FILE_BODY;
