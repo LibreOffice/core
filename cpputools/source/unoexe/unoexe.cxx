@@ -20,13 +20,9 @@
 #include <stdio.h>
 
 #include "sal/main.h"
-#include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
 #include <rtl/process.h>
-#include <rtl/string.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
@@ -38,15 +34,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/connection/XAcceptor.hpp>
-#include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
-#include <com/sun/star/bridge/XBridge.hpp>
 
 using namespace std;
 using namespace osl;

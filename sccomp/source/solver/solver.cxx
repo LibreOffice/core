@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
 
 #undef LANGUAGE_NONE
 #if defined SAL_W32
@@ -44,20 +43,11 @@
 #include "solver.hxx"
 #include "solver.hrc"
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 
 #include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/factory.hxx>
-#include <vector>
 #include <boost/unordered_map.hpp>
 
 #include <tools/resmgr.hxx>
