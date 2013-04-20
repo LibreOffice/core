@@ -32,7 +32,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#include "protectorfactory.hxx"
+#include "cppunittester/protectorfactory.hxx"
 
 namespace {
 
