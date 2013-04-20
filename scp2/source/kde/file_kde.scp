@@ -27,19 +27,9 @@
 #include "macros.inc"
 
 #ifdef ENABLE_KDE
-File gid_File_Lib_Kdebe
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(kdebe1.uno,UNXSUFFIX));
-End
+STD_LIB_FILE( gid_File_Lib_Kdebe, kdebe1 )
 #endif
 
 #ifdef ENABLE_KDE4
-File gid_File_Lib_Kde4be
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(kde4be1.uno,UNXSUFFIX));
-End
+STD_LIB_FILE( gid_File_Lib_Kde4be, kde4be1 )
 #endif

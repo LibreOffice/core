@@ -27,23 +27,13 @@
 #include "macros.inc"
 
 #ifdef ENABLE_GIO
-File gid_File_Lib_GIO
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(ucpgio1.uno,UNXSUFFIX));
-End
+STD_LIB_FILE( gid_File_Lib_GIO, ucpgio1 )
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Losessioninstall, losessioninstall.uno)
 #endif
 
 #ifdef ENABLE_GNOMEVFS
-File gid_File_Lib_Gnomevfs
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(ucpgvfs1.uno,UNXSUFFIX));
-End
+STD_LIB_FILE( gid_File_Lib_Gnomevfs, ucpgvfs1 )
 #endif
 
 #if (defined ENABLE_GCONF && defined ENABLE_LOCKDOWN) || defined ENABLE_GIO
@@ -56,12 +46,7 @@ End
 #endif
 
 #ifdef ENABLE_GCONF
-File gid_File_Lib_Gconfbe
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(gconfbe1.uno,UNXSUFFIX));
-End
+STD_LIB_FILE( gid_File_Lib_Gconfbe, gconfbe1 )
 #endif
 
 #ifdef ENABLE_SYSTRAY_GTK

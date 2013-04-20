@@ -559,20 +559,28 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    PresenterScreen \
     basprov \
     cairocanvas \
     dlgprov \
     expwrap \
     fastsax \
+    gconfbe1 \
     i18nsearch \
+    kdebe1 \
+    kde4be1 \
     ldapbe2 \
     migrationoo2 \
     migrationoo3 \
     msforms \
     mtfrenderer \
     OGLTrans \
+    pythonloader \
     slideshow \
     stringresource \
+    tdebe1 \
+    ucpgio1 \
+    ucpgvfs1 \
     vbaevents \
     vbaobj \
     vbaswobj \
@@ -587,33 +595,25 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
 	ucpexpand1 \
 ))
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
-    PresenterScreen \
     canvasfactory \
     cmdmail \
     directx5canvas \
     directx9canvas \
     fpicker \
     fps_office \
-    gconfbe1 \
     gdipluscanvas \
     hatchwindowfactory \
-    kdebe1 \
-    kde4be1 \
     losessioninstall \
     macbe1 \
     nullcanvas \
     passwordcontainer \
     pdfimport \
-    pythonloader \
     postgresql-sdbc \
     postgresql-sdbc-impl \
     simplecanvas \
     syssh \
-    tdebe1 \
     ucpcmis1 \
     ucpext \
-    ucpgio1 \
-    ucpgvfs1 \
     ucptdoc1 \
     updatefeed \
     vclcanvas \

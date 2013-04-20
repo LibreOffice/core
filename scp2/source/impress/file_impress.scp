@@ -37,16 +37,7 @@ File gid_File_Lib_Animcore
 	PACKED_LIB_FILE_BODY;
 End
 
-File gid_File_Lib_PresenterScreen
-    LIB_FILE_BODY;
-    Dir = SCP2_OOO_BIN_DIR;
-#if defined UNX
-    Name = STRING(CONCAT2(PresenterScreen.uno,UNXSUFFIX));
-#else
-    Name = "PresenterScreen.uno.dll";
-#endif
-    Styles = (PACKED);
-End
+STD_LIB_FILE( gid_File_Lib_PresenterScreen, PresenterScreen )
 
 File gid_File_Share_Registry_Impress_Xcd
     TXT_FILE_BODY;

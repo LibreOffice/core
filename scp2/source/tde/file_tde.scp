@@ -24,10 +24,5 @@
 #include "macros.inc"
 
 #ifdef ENABLE_TDE
-File gid_File_Lib_Tdebe
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(tdebe1.uno,UNXSUFFIX));
-End
+STD_LIB_FILE( gid_File_Lib_Tdebe, tdebe1 )
 #endif
