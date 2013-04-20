@@ -765,9 +765,8 @@ $(call gb_LinkTarget_get_target,$(1)) : LIBS := $$(filter-out $$(gb_STDLIBS),$$(
 endef
 
 define gb_LinkTarget__use_api
-$(call gb_LinkTarget_get_target,$(1)) :| $(call gb_UnoApi_get_target,$(2))
-$(call gb_LinkTarget_use_package,$(1),$(2)_inc)
-$(call gb_LinkTarget__add_include,$(1),$(OUTDIR)/inc/$(2))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(2))
+$(call gb_LinkTarget__add_include,$(1),$(call gb_UnoApiHeadersTarget_get_dir,$(2)))
 
 endef
 
