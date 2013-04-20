@@ -39,8 +39,8 @@ namespace
     const sal_Int16 minInHour = 60;
 
     const sal_Int64 secMask  = 1000000000;
-    const sal_Int64 minMask  = 100000000000;
-    const sal_Int64 hourMask = 10000000000000;
+    const sal_Int64 minMask  = 100000000000LL;
+    const sal_Int64 hourMask = 10000000000000LL;
 
     const double fNanoSecondsPerDay = nanoSecInSec * secInMin * minInHour * 24.0;
 }
