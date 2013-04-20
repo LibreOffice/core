@@ -2586,12 +2586,12 @@ if test "$_os" = "Darwin"; then
         identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Developer ID Application:' | awk '{print $2}' |head -1`
         if test -n "$identity"; then
             MACOSX_CODESIGNING_IDENTITY=$identity
-            pretty_name=`security find-identity -p codesigning -v | grep $MACOSX_CODESIGNING_IDENTITY | sed -e 's/^[[^"]]*"//' -e 's/"//'`
+            pretty_name=`security find-identity -p codesigning -v | grep "$MACOSX_CODESIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
             AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
         fi
     elif test -n "$enable_macosx_code_signing"; then
         MACOSX_CODESIGNING_IDENTITY=$enable_macosx_code_signing
-        pretty_name=`security find-identity -p codesigning -v | grep $MACOSX_CODESIGNING_IDENTITY | sed -e 's/^[[^"]]*"//' -e 's/"//'`
+        pretty_name=`security find-identity -p codesigning -v | grep "$MACOSX_CODESIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
         AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
     else
         AC_MSG_RESULT([no])
