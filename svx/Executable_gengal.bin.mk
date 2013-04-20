@@ -30,12 +30,11 @@ $(eval $(call gb_Executable_set_include,$(svx_GENGALBIN),\
     $$(INCLUDE) \
     -I$(SRCDIR)/svx/inc/ \
     -I$(SRCDIR)/svx/inc/pch \
-    -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/udkapi \
-    -I$(OUTDIR)/inc/offapi \
 ))
 
 $(eval $(call gb_Executable_use_external,$(svx_GENGALBIN),boost_headers))
+
+$(eval $(call gb_Executable_use_sdk_api,$(svx_GENGALBIN)))
 
 $(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
     basegfx \

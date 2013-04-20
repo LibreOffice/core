@@ -17,19 +17,16 @@ $(call gb_UnoApiTarget_UnoApiTarget,$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
 $(call gb_Package_Package_internal,$(1)_idl,$(SRCDIR))
 $(call gb_Package_set_outdir,$(1)_idl,$(INSTDIR))
-$(call gb_Package_Package_internal,$(1)_inc,$(call gb_UnoApiHeadersTarget_get_dir,$(1)))
 
 $(call gb_UnoApiTarget_set_root,$(1),UCR)
 
 $(call gb_UnoApi_get_target,$(1)) :| $(dir $(call gb_UnoApi_get_target,$(1))).dir
 $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
-$(call gb_UnoApi_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_inc)
+$(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
-$(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_inc)
 
 $(call gb_UnoApiTarget_get_headers_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
-$(call gb_Package_get_preparation_target,$(1)_inc) : $(call gb_UnoApiHeadersTarget_get_target,$(1))
 
 $(call gb_Deliver_add_deliverable,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
 
@@ -53,7 +50,6 @@ $(call gb_Package_add_file,$(1)_idl,$(patsubst $(1)/%,$(gb_Package_SDKDIRNAME)/i
 endef
 
 define gb_UnoApi__add_headerfile_impl
-$(call gb_Package_add_file,$(1)_inc,inc/$(2),$(3))
 $(call gb_UnoApiHeadersTarget_add_headerfile,$(1),$(2),$(3))
 
 endef
