@@ -433,7 +433,10 @@ gb_UIMenubarTarget_UIMenubarTarget_platform :=
 gb_Pyuno_PROGRAMDIRNAME := program
 
 # Python
-gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
+gb_Python_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
+gb_Python_INSTALLED_EXECUTABLE := /bin/sh $(DEVINSTALLDIR)/opt/program/python
+# this is passed to gdb as executable when running tests
+gb_Python_INSTALLED_EXECUTABLE_GDB := $(DEVINSTALLDIR)/opt/program/python.bin
 
 include $(GBUILDDIR)/platform/com_GCC_class.mk
 

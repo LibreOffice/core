@@ -10,12 +10,14 @@
 # PythonTest class
 
 ifeq ($(SYSTEM_PYTHON),NO)
-gb_Python_EXE := /bin/sh $(DEVINSTALLDIR)/opt/program/python
+gb_PythonTest_EXECUTABLE := $(gb_Python_INSTALLED_EXECUTABLE)
+gb_PythonTest_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE_GDB)
 else
-gb_Python_EXE := $(PYTHON_FOR_BUILD)
+gb_PythonTest_EXECUTABLE := $(PYTHON_FOR_BUILD)
+gb_PythonTest_EXECUTABLE_GDB := $(PYTHON_FOR_BUILD)
 endif
 
-gb_PythonTest_COMMAND := $(gb_Python_EXE) -m unittest
+gb_PythonTest_COMMAND := $(gb_PythonTest_EXECUTABLE) -m unittest
 
 .PHONY : $(call gb_PythonTest_get_clean_target,%)
 $(call gb_PythonTest_get_clean_target,%) :
@@ -43,7 +45,7 @@ $(call gb_PythonTest_get_target,%) :
 			> $@.log 2>&1 \
 			|| (cat $@.log && $(UNIT_FAILED_MSG) \
 				$(if $(value gb_CppunitTest_postprocess), \
-					&& $(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core)) \
+					&& $(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core)) \
 				&& false))))
 
 # always use udkapi and URE services

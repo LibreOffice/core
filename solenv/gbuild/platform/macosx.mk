@@ -403,6 +403,9 @@ endef
 
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_Python_INSTALLED_EXECUTABLE := $(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
+# this is passed to gdb as executable when running tests
+gb_Python_INSTALLED_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE)
 
 # Pyuno class
 
