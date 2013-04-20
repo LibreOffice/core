@@ -718,7 +718,15 @@ endif
 
 endef
 
+define gb_LinkTarget__check_srcdir_paths
+$(if $(filter-out $(wildcard $(2)),$(2)),\
+    $(call gb_Output_warn,gb_LinkTarget_set_include: include paths $(filter-out $(wildcard $(2)),$(2)) do not exist) \
+)
+endef
+
 define gb_LinkTarget_set_include
+$(call gb_LinkTarget__check_srcdir_paths,$(1),\
+    $(patsubst -I%,%,$(filter -I$(SRCDIR)/%,$(filter-out -I$(OUTDIR)/% -I$(WORKDIR)/%,$(2)))))
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
