@@ -28,7 +28,7 @@ $(1) : $(2) \
 endef
 
 ifneq ($(strip $(gb_WITH_LANG)),)
-librelogo_LANGS := $(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG)))
+librelogo_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 $(eval $(foreach lang,$(librelogo_LANGS),$(call librelogo_Properties_Properties,$(subst -,_,$(lang)),$(lang))))
 endif
 
@@ -37,14 +37,23 @@ $(librelogo_DIR)/LibreLogo_%.properties : \
 		| $(librelogo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRP,1)
 	$(call gb_Helper_abbreviate_dirs, \
-		MERGEINPUT=`$(gb_MKTEMP)` && \
-		echo $(POFILE) > $${MERGEINPUT} && \
-		$(call gb_Executable_get_command,propex) \
-			-i $(SOURCE) \
-			-o $@ \
-			-m $${MERGEINPUT} \
-			-l $(LANG) && \
-		rm -rf $${MERGEINPUT} \
+		$(if $(filter-out qtz,$(LANG)), \
+			MERGEINPUT=`$(gb_MKTEMP)` && \
+			echo $(POFILE) > $${MERGEINPUT} && \
+			$(call gb_Executable_get_command,propex) \
+				-i $(SOURCE) \
+				-o $@ \
+				-m $${MERGEINPUT} \
+				-l $(LANG) && \
+			rm -rf $${MERGEINPUT} \
+			, \
+			$(call gb_Executable_get_command,propex) \
+				-i $(SOURCE) \
+				-o $@ \
+				-m \
+				-l $(LANG) \
+		) \
 	)
+
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

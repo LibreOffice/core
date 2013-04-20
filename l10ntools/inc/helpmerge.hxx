@@ -49,12 +49,12 @@ public:
 /// Method merges the String from the POfile into XMLfile. Both Strings must
 /// point to existing files.
     bool Merge( const OString &rPOFile_in, const OString &rDestinationFile_in ,
-        const OString& sLanguage , MergeDataFile& aMergeDataFile );
+        const OString& sLanguage , MergeDataFile* pMergeDataFile );
 
 private:
-    bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const OString& sLanguage , OString const & sPath );
+    bool MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage , OString const & sPath );
 
-    void ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
+    void ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

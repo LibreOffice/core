@@ -59,14 +59,22 @@ gb_PropertiesTranslateTarget_DEPS := $(call gb_Executable_get_runtime_dependenci
 
 define gb_PropertiesTranslateTarget__command
 $(call gb_Output_announce,$(2),$(true),PRP,1)
-$(call gb_Helper_abbreviate_dirs,\
-	MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILE)) && \
-	$(gb_PropertiesTranslateTarget_COMMAND) \
-		-i $(PROPERTIES_FILE) \
-		-l $(LANG) \
-		-m $${MERGEINPUT} \
-		-o $(1) && \
-	rm -f $${MERGEINPUT} \
+$(call gb_Helper_abbreviate_dirs, \
+	$(if $(filter-out qtz,$(LANG)), \
+		MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILE)) && \
+		$(gb_PropertiesTranslateTarget_COMMAND) \
+			-i $(PROPERTIES_FILE) \
+			-l $(LANG) \
+			-m $${MERGEINPUT} \
+			-o $(1) && \
+		rm -f $${MERGEINPUT} \
+		, \
+		$(gb_PropertiesTranslateTarget_COMMAND) \
+			-i $(PROPERTIES_FILE) \
+			-l $(LANG) \
+			-m \
+			-o $(1) \
+	) \
 )
 endef
 
@@ -156,7 +164,7 @@ endef
 
 # gb_DescriptionTranslateTarget__DescriptionTranslateTarget_onelang target pobase lang
 define gb_DescriptionTranslateTarget__DescriptionTranslateTarget_onelang
-$(call gb_DescriptionTranslateTarget_get_target,$(1)) : POFILES += $(gb_POLOCATION)/$(3)/$(2).po
+$(call gb_DescriptionTranslateTarget_get_target,$(1)) : POFILES += $(if $(filter-out qtz,$(3)),$(gb_POLOCATION)/$(3)/$(2).po)
 $(if $(filter-out qtz,$(3)),\
 	$(call gb_DescriptionTranslateTarget__DescriptionTranslateTarget_onelang_podeps,$(1),$(gb_POLOCATION)/$(3)/$(2).po))
 

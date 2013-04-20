@@ -39,16 +39,26 @@ gb_HelpTranslatePartTarget_COMMAND := $(call gb_Executable_get_command,helpex)
 define gb_HelpTranslatePartTarget__command
 $(call gb_Output_announce,$(2),$(true),HPX,1)
 HELPFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(filter %.xhp,$(3))) && \
-POFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(sort $(POFILES))) && \
-$(call gb_Helper_abbreviate_dirs,\
-	$(gb_HelpTranslatePartTarget_COMMAND) \
-		-l $(HELP_LANG) \
-		-mi $${HELPFILES} \
-		-m $${POFILES} \
-		-o $(call gb_HelpTranslatePartTarget_get_workdir,$(2)) \
+$(call gb_Helper_abbreviate_dirs, \
+	$(if $(filter-out qtz,$(HELP_LANG)), \
+		POFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(sort $(POFILES))) && \
+		$(gb_HelpTranslatePartTarget_COMMAND) \
+			-l $(HELP_LANG) \
+			-mi $${HELPFILES} \
+			-m $${POFILES} \
+			-o $(call gb_HelpTranslatePartTarget_get_workdir,$(2)) && \
+		rm -f $${POFILES} \
+		, \
+		$(gb_HelpTranslatePartTarget_COMMAND) \
+			-l $(HELP_LANG) \
+			-mi $${HELPFILES} \
+			-m \
+			-o $(call gb_HelpTranslatePartTarget_get_workdir,$(2)) \
+	) \
 ) && \
 touch $@ && \
-rm -f $${HELPFILES} $${POFILES}
+rm -f $${HELPFILES}
+
 endef
 
 $(dir $(call gb_HelpTranslatePartTarget_get_target,%)).dir :
@@ -177,16 +187,26 @@ gb_HelpTreeTarget_COMMAND := $(call gb_Executable_get_command,treex)
 
 define gb_HelpTreeTarget__command
 $(call gb_Output_announce,$(2),$(true),TRE,1)
-POFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_HelpTreeTarget_COMMAND) \
-		-i $(HELP_TREE) \
-		-l $(HELP_LANG) \
-		-m $${POFILES} \
-		-o $@ \
-		-r $(HELP_TEXTDIR) \
-) && \
-rm -f $${POFILES}
+	$(if $(filter-out qtz,$(HELP_LANG)), \
+		POFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
+		$(gb_HelpTreeTarget_COMMAND) \
+			-i $(HELP_TREE) \
+			-l $(HELP_LANG) \
+			-m $${POFILES} \
+			-o $@ \
+			-r $(HELP_TEXTDIR) && \
+		rm -f $${POFILES} \
+		, \
+		$(gb_HelpTreeTarget_COMMAND) \
+			-i $(HELP_TREE) \
+			-l $(HELP_LANG) \
+			-m \
+			-o $@ \
+			-r $(HELP_TEXTDIR) \
+	) \
+)
+
 endef
 
 $(dir $(call gb_HelpTreeTarget_get_target,%)).dir :

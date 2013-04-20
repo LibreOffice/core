@@ -94,23 +94,21 @@ void StringParser::Merge(
 {
     assert( m_bIsInitialized );
 
-    if( (m_sLang == "en-US") || (m_sLang == "qtz") )
+    MergeDataFile* pMergeDataFile = 0;
+    if( m_sLang != "qtz" )
     {
-        return;
-    }
-
-    MergeDataFile aMergeDataFile(
-        rMergeSrc, static_cast<OString>( m_pSource->name ), false );
-    const std::vector<OString> vLanguages = aMergeDataFile.GetLanguages();
-    if( vLanguages.size()>=2 &&
-        vLanguages[vLanguages[0]=="qtz" ? 1 : 0] != m_sLang )
-    {
-        std::cerr
-            << "stringex error: given language conflicts with "
-            << "language of Mergedata file: "
-            << m_sLang.getStr() << " - "
-            << vLanguages[vLanguages[0]=="qtz" ? 1 : 0].getStr() << std::endl;
-        return;
+        pMergeDataFile = new MergeDataFile(
+            rMergeSrc, static_cast<OString>( m_pSource->name ), false, false );
+        const std::vector<OString> vLanguages = pMergeDataFile->GetLanguages();
+        if( vLanguages.size()>=1 && vLanguages[0] != m_sLang )
+        {
+            std::cerr
+                << "stringex error: given language conflicts with "
+                << "language of Mergedata file: "
+                << m_sLang.getStr() << " - "
+                << vLanguages[0].getStr() << std::endl;
+            return;
+        }
     }
 
     xmlNodePtr pRootNode = xmlDocGetRootElement( m_pSource ); //<resource>
@@ -126,13 +124,26 @@ void StringParser::Merge(
                 static_cast<OString>(m_pSource->name) );
             xmlFree( pID );
             aResData.sResTyp = "string";
-            MergeEntrys* pEntrys =
-                (&aMergeDataFile)->GetMergeEntrys( &aResData );
-            if( pEntrys )
+            OString sNewText;
+            if( m_sLang == "qtz" )
             {
-                OString sNewText;
-                pEntrys->GetText( sNewText, STRING_TYP_TEXT, m_sLang );
-                sNewText = helper::escapeAll(sNewText, "\n""\t""\'""\"","\\n""\\t""\\\'""\\\"");
+                xmlChar* pText = xmlNodeGetContent(pCurrent);
+                const OString sOriginText =
+                    helper::unEscapeAll(helper::xmlStrToOString( pText ),"\\n""\\t","\n""\t");
+                xmlFree( pText );
+                sNewText = MergeEntrys::GetQTZText(aResData, sOriginText);
+            }
+            else if( pMergeDataFile )
+            {
+                MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrys( &aResData );
+                if( pEntrys )
+                {
+                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, m_sLang );
+                    sNewText = helper::escapeAll(sNewText, "\n""\t""\'""\"","\\n""\\t""\\\'""\\\"");
+                }
+            }
+            if( !sNewText.isEmpty() )
+            {
                 xmlNodeSetContent(
                     pCurrent,
                     xmlEncodeSpecialChars( NULL,
@@ -142,6 +153,7 @@ void StringParser::Merge(
         }
     }
 
+    delete pMergeDataFile;
     xmlSaveFile( rDestinationFile.getStr(), m_pSource );
     xmlFreeDoc( m_pSource );
     xmlCleanupParser();

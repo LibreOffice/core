@@ -187,6 +187,14 @@ sal_Bool MergeEntrys::GetText( OString &rReturn,
 }
 
 
+OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigText)
+{
+    const OString sFilename = rResData.sFilename.copy(rResData.sFilename.lastIndexOf("/")+1);
+    const OString sKey =
+        PoEntry::genKeyId(sFilename + rResData.sGId + rResData.sId + rResData.sResTyp + rOrigText);
+    return sKey + "||" + rOrigText;
+}
+
 //
 // class MergeData
 //
@@ -278,9 +286,6 @@ MergeDataFile::MergeDataFile(
             OString sExText;
             OString sExQHText;
             OString sExTitle;
-            OString sQTZText;
-            OString sQTZQHText;
-            OString sQTZTitle;
             do
             {
                 if( bInSameComp )
@@ -293,17 +298,14 @@ MergeDataFile::MergeDataFile(
                     case PoEntry::TTEXT:
                         sText = sTemp;
                         sExText = aActPo.getMsgId();
-                        sQTZText = aActPo.getKeyId();
                         break;
                     case PoEntry::TQUICKHELPTEXT:
                         sQHText = sTemp;
                         sExQHText = aActPo.getMsgId();
-                        sQTZQHText = aActPo.getKeyId();
                         break;
                     case PoEntry::TTITLE:
                         sTitle = sTemp;
                         sExTitle = aActPo.getMsgId();
-                        sQTZTitle = aActPo.getKeyId();
                         break;
                 }
                 if( !lcl_ReadPoChecked(aNextPo, aPoInput, sPoFileName) )
@@ -325,8 +327,8 @@ MergeDataFile::MergeDataFile(
                 InsertEntry(
                     aActPo.getResourceType(), aActPo.getGroupId(),
                     aActPo.getLocalId(), "qtz",
-                    sQTZText + "||" + sExText, sQTZQHText + "||" + sExQHText,
-                    sQTZTitle + "||" + sExTitle, aActPo.getSourceFile(),
+                    sExText, sExQHText,
+                    sExTitle, aActPo.getSourceFile(),
                     bCaseSensitive );
             }
         }
@@ -374,7 +376,6 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
     return NULL;
 }
 
-
 MergeEntrys *MergeDataFile::GetMergeEntrys( ResData *pResData )
 {
     // search for requested MergeEntrys
@@ -418,7 +419,19 @@ void MergeDataFile::InsertEntry(
 
     // insert the cur string
     MergeEntrys *pMergeEntrys = pData->GetMergeEntries();
-    pMergeEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
+    if( nLANG =="qtz" )
+    {
+        const OString sTemp = rInFilename + rGID + rLID + rTYP;
+        pMergeEntrys->InsertEntry(
+            nLANG,
+            rTEXT.isEmpty()? rTEXT : PoEntry::genKeyId(sTemp + rTEXT) + "||" + rTEXT,
+            rQHTEXT.isEmpty()? rQHTEXT : PoEntry::genKeyId(sTemp + rQHTEXT) + "||" + rQHTEXT,
+            rTITLE.isEmpty()? rTITLE : PoEntry::genKeyId(sTemp + rTITLE) + "||" + rTITLE );
+    }
+    else
+    {
+        pMergeEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
+    }
 }
 
 OString MergeDataFile::CreateKey(const OString& rTYP, const OString& rGID,

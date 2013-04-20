@@ -37,6 +37,7 @@ bool handleArguments(
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-M" )
         {
             nState = STATE_MERGESRC; // next token specifies the merge database
+            o_aHandledArgs.m_bMergeMode = true;
         }
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-L" )
         {
@@ -63,7 +64,6 @@ bool handleArguments(
                 case STATE_MERGESRC:
                 {
                     o_aHandledArgs.m_sMergeSrc = OString( argv[i] );
-                    o_aHandledArgs.m_bMergeMode = true;
                 }
                 break;
                 case STATE_LANGUAGES:

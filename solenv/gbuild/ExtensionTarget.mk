@@ -217,23 +217,20 @@ endef
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_ExtensionTarget_localize_properties
-ifneq ($(gb_TRANS_LANGS),)
-ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
-$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,qtz,$(2)),$(3),qtz,$(firstword $(gb_TRANS_LANGS)))
-endif
-endif
-$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_ALL_LANGS)),\
+$(foreach lang,$(gb_ExtensionTarget_ALL_LANGS),\
 	$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,$(subst -,_,$(lang)),$(2)),$(3),$(lang)))
 endef
 
 define gb_ExtensionTarget_localize_properties_onelang
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(2)
 ifneq ($(filter-out en-US,$(4)),)
+ifneq ($(filter-out qtz,$(4)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
 	POFILE := $(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
 	$(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
 $(gb_POLOCATION)/$(or $(5),$(4))/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po :
+endif
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) \
@@ -243,12 +240,19 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
 	$$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $$(dir $$@) && \
-		cp -f $$< $$@ )
-	$(if $(filter-out en-US,$(4)), \
-		MERGEINPUT=`$(gb_MKTEMP)` && \
-		echo $$(POFILE) > $$$${MERGEINPUT} && \
-		$(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$< -o $$@ -m $$$${MERGEINPUT} -l $(4) && \
-		rm -rf $$$${MERGEINPUT})
+		$(if $(filter qtz,$(4)), \
+			$(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$< -o $$@ -m -l $(4) \
+			, \
+			$(if $(filter-out en-US,$(4)), \
+				MERGEINPUT=`$(gb_MKTEMP)` && \
+				echo $$(POFILE) > $$$${MERGEINPUT} && \
+				$(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$< -o $$@ -m $$$${MERGEINPUT} -l $(4) && \
+				rm -rf $$$${MERGEINPUT} \
+				, \
+				cp -f $$< $$@ \
+			) \
+		) \
+	)
 
 endef
 
@@ -262,7 +266,7 @@ endef
 #     (i.e., if $(4) is empty the en-US source file is $(2)/$(3), otherwise it
 #     is $(2)/$(4))
 define gb_ExtensionTarget_add_helpfile
-$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_ALL_LANGS)), \
+$(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
     $(call gb_ExtensionTarget__localize_helpfile_onelang,$(1),$(2),$(3),$(4),$(lang)) \
     $(call gb_ExtensionTarget__add_compiled_help_dependency_onelang,$(1),$(lang)))
 endef
@@ -276,7 +280,7 @@ endef
 # $(4): relative path of source help.tree file
 # $(5): relative path of localized xhp files (PlatformID included) 
 define gb_ExtensionTarget_add_helptreefile
-$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_ALL_LANGS)), \
+$(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
     $(call gb_ExtensionTarget__localize_helptreefile_onelang,$(1),$(2),$(3),$(4),$(lang),$(5)) \
     $(call gb_ExtensionTarget__add_compiled_help_dependency_onelang,$(1),$(lang)))
 endef
@@ -309,11 +313,13 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done : \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3)
 ifneq ($(filter-out en-US,$(5)),)
+ifneq ($(filter-out qtz,$(5)),)
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
 	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3))))) :
+endif
 endif
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_HELPEXDEPS)) | \
@@ -322,17 +328,25 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(2)/$(or $(4),$(3))
 	$$(call gb_Output_announce,$(1) $(3) $(5),$(true),XHP,3)
 	$$(call gb_Helper_abbreviate_dirs, \
-        mkdir -p $$(dir $$@) && \
-        $(if $(filter-out en-US,$(5)), \
-            MERGEINPUT=`$(gb_MKTEMP)` && \
-            echo $$(POFILE) > $$$${MERGEINPUT} && \
-            $(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) \
-                -m $$$${MERGEINPUT} && \
-            rm -rf $$$${MERGEINPUT}, \
-            cp $$< $$@)) && \
-            touch $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done
+		mkdir -p $$(dir $$@) && \
+		$(if $(filter qtz,$(5)), \
+			$(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) -m \
+			, \
+			$(if $(filter-out en-US,$(5)), \
+				MERGEINPUT=`$(gb_MKTEMP)` && \
+				echo $$(POFILE) > $$$${MERGEINPUT} && \
+				$(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) \
+					-m $$$${MERGEINPUT} && \
+				rm -rf $$$${MERGEINPUT} \
+				, \
+				cp $$< $$@ \
+			) \
+		) && \
+		touch $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done \
+	)
 
 endef
+
 
 # localize one help.tree for one language; the result is stored as
 # help/$(4)/$(3) in the extension's workdir;
@@ -349,11 +363,13 @@ define gb_ExtensionTarget__localize_helptreefile_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3)
 ifneq ($(filter-out en-US,$(5)),)
+ifneq ($(filter-out qtz,$(5)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
 	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
 $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4)))) :
+endif
 endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)-xhp.done
@@ -365,15 +381,23 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
 	$$(call gb_Output_announce,$(1) $(3) $(5),$(true),TRE,3)
 	$$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $$(dir $$@) && \
-		$(if $(filter-out en-US,$(5)), \
-		    MERGEINPUT=`$(gb_MKTEMP)` && \
-			echo $$(POFILE) > $$$${MERGEINPUT} && \
-			$(gb_ExtensionTarget_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
-				-m $$$${MERGEINPUT} \
-				-r $$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(6) && \
-			rm -rf $$$${MERGEINPUT}, \
-			$(gb_ExtensionTarget_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
-				-r $$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(6) ))
+		$(if $(filter qtz,$(5)), \
+			$(gb_ExtensionTarget_TREEXCOMMAND) -i $$< -o $$@ -l $(5) -m \
+				-r $$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(6) \
+			, \
+			$(if $(filter-out en-US,$(5)), \
+				MERGEINPUT=`$(gb_MKTEMP)` && \
+				echo $$(POFILE) > $$$${MERGEINPUT} && \
+				$(gb_ExtensionTarget_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
+					-m $$$${MERGEINPUT} \
+					-r $$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(6) && \
+				rm -rf $$$${MERGEINPUT} \
+				, \
+				$(gb_ExtensionTarget_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
+					-r $$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(6) \
+			) \
+		) \
+	)
 
 endef
 

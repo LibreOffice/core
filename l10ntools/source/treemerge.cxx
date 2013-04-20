@@ -153,25 +153,39 @@ namespace
         {
             if( !xmlStrcmp(pCurrent->name, pNodeName) )
             {
-                if( pMergeDataFile )
+                if( rLang != "en-US" )
                 {
+                    OString sNewText;
                     xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("id"));
                     ResData  aResData(
                         helper::xmlStrToOString( pID ),
                         static_cast<OString>(io_pSource->name) );
                     xmlFree( pID );
                     aResData.sResTyp = helper::xmlStrToOString( pNodeName );
-                    MergeEntrys* pEntrys =
-                        pMergeDataFile->GetMergeEntrys( &aResData );
-                    if( pEntrys )
+                    if( pMergeDataFile )
                     {
-                        OString sNewText;
-                        pEntrys->GetText( sNewText, STRING_TYP_TEXT, rLang );
+                        MergeEntrys* pEntrys =
+                            pMergeDataFile->GetMergeEntrys( &aResData );
+                        if( pEntrys )
+                        {
+                            pEntrys->GetText( sNewText, STRING_TYP_TEXT, rLang );
+                        }
+                    }
+                    else if( rLang == "qtz" )
+                    {
+                        xmlChar* pText = xmlGetProp(pCurrent, (const xmlChar*)("title"));
+                        const OString sOriginText = helper::xmlStrToOString(pText);
+                        xmlFree( pText );
+                        sNewText = MergeEntrys::GetQTZText(aResData, sOriginText);
+                    }
+                    if( !sNewText.isEmpty() )
+                    {
                         xmlSetProp(
                             pCurrent, (const xmlChar*)("title"),
                             (const xmlChar*)(sNewText.getStr()));
                     }
                 }
+
                 lcl_MergeLevel(
                     io_pSource, pCurrent, (const xmlChar *)("node"),
                     pMergeDataFile, rLang, rXhpRoot );
@@ -242,32 +256,27 @@ void TreeParser::Merge(
     assert( m_bIsInitialized );
 
     const xmlNodePtr pRootNode = xmlDocGetRootElement( m_pSource );
-    if( m_sLang == "en-US" )
+    MergeDataFile* pMergeDataFile = 0;
+    if( m_sLang != "qtz" && m_sLang != "en-US" )
     {
-        lcl_MergeLevel(
-            m_pSource, pRootNode, (const xmlChar *)("help_section"),
-            0, m_sLang, rXhpRoot );
-    }
-    else
-    {
-        MergeDataFile aMergeDataFile(
+        pMergeDataFile = new MergeDataFile(
             rMergeSrc, static_cast<OString>( m_pSource->name ), false, false );
-        const std::vector<OString> vLanguages = aMergeDataFile.GetLanguages();
-        if( vLanguages.size()>=2 &&
-            vLanguages[vLanguages[0]=="qtz" ? 1 : 0] != m_sLang )
+        const std::vector<OString> vLanguages = pMergeDataFile->GetLanguages();
+        if( vLanguages.size()>=1 && vLanguages[0] != m_sLang )
         {
             std::cerr
                 << "Treex error: given language conflicts with "
                 << "language of Mergedata file: "
                 << m_sLang.getStr() << " - "
-                << vLanguages[vLanguages[0]=="qtz" ? 1 : 0].getStr() << std::endl;
+                << vLanguages[0].getStr() << std::endl;
             return;
         }
-        lcl_MergeLevel(
-            m_pSource, pRootNode, (const xmlChar *)("help_section"),
-            &aMergeDataFile, m_sLang, rXhpRoot );
     }
+    lcl_MergeLevel(
+        m_pSource, pRootNode, (const xmlChar *)("help_section"),
+        pMergeDataFile, m_sLang, rXhpRoot );
 
+    delete pMergeDataFile;
     xmlSaveFile( rDestinationFile.getStr(), m_pSource );
     xmlFreeDoc( m_pSource );
     xmlCleanupParser();

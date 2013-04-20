@@ -36,8 +36,10 @@ endef
 define android_translation_rules
 $(call android_get_po,$(1)):
 	mkdir -p res/values-$(1)
-	echo $(SRCDIR)/translations/source/$(1)/android/sdremote/res/values.po > translations-$(1).db
-	$(OUTDIR_FOR_BUILD)/bin/stringex -i res/values/strings.xml -o res/values-$(1)/strings.xml -m translations-$(1).db -l $(1)
+	$(if $(filter-out qtz,$(1)), \
+	    echo $(SRCDIR)/translations/source/$(1)/android/sdremote/res/values.po > translations-$(1).db &&\
+	    $(OUTDIR_FOR_BUILD)/bin/stringex -i res/values/strings.xml -o res/values-$(1)/strings.xml -m translations-$(1).db -l $(1), \
+	    $(OUTDIR_FOR_BUILD)/bin/stringex -i res/values/strings.xml -o res/values-$(1)/strings.xml -m -l $(1))
 
 endef
 
@@ -46,7 +48,7 @@ $(foreach lang,$(1),$(call android_translation_rules,$(lang)))
 endef
 
 define android_get_langlist
-$(foreach lang,$(filter-out en-US sat sid mai ast mni brx dgo qtz nso kok,$(WITH_LANG_LIST)),$(subst -,-r,$(lang)))
+$(foreach lang,$(filter-out en-US sat sid mai ast mni brx dgo nso kok,$(WITH_LANG_LIST)),$(subst -,-r,$(lang)))
 endef
 
 $(eval $(call android_translations_rules,$(call android_get_langlist)))

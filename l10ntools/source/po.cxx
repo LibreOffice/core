@@ -222,28 +222,6 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
 
 //Class PoEntry
 
-namespace
-{
-    //Generate KeyId
-    static OString lcl_GenKeyId(const OString& rGenerator)
-    {
-        boost::crc_32_type aCRC32;
-        aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
-        sal_uInt32 nCRC = aCRC32.checksum();
-        ///Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
-        static const OString sSymbols =
-            "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
-        char sKeyId[6];
-        for( short nKeyInd = 0; nKeyInd < 5; ++nKeyInd )
-        {
-            sKeyId[nKeyInd] = sSymbols[(nCRC & 63) % sSymbols.getLength()];
-            nCRC >>= 6;
-        }
-        sKeyId[5] = '\0';
-        return OString(sKeyId);
-    }
-}
-
 //Default constructor
 PoEntry::PoEntry()
     : m_pGenPo( 0 )
@@ -290,8 +268,7 @@ PoEntry::PoEntry(
     m_pGenPo->setMsgId(rText);
     m_pGenPo->setExtractCom(
         ( !rHelpText.isEmpty() ?  rHelpText + "\n" : OString( "" )) +
-        lcl_GenKeyId(
-            m_pGenPo->getReference() + sMsgCtxt + m_pGenPo->getMsgId() ) );
+        genKeyId( m_pGenPo->getReference() + rGroupId + rLocalId + rResType + rText ) );
     m_bIsInitialized = true;
 }
 
@@ -435,6 +412,25 @@ bool PoEntry::IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2)
              rPo1.getResourceType() == rPo2.getResourceType() );
 }
 
+OString PoEntry::genKeyId(const OString& rGenerator)
+{
+    boost::crc_32_type aCRC32;
+    aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
+    sal_uInt32 nCRC = aCRC32.checksum();
+    ///Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
+    static const OString sSymbols =
+        "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+    char sKeyId[6];
+    for( short nKeyInd = 0; nKeyInd < 5; ++nKeyInd )
+    {
+        sKeyId[nKeyInd] = sSymbols[(nCRC & 63) % sSymbols.getLength()];
+        nCRC >>= 6;
+    }
+    sKeyId[5] = '\0';
+    return OString(sKeyId);
+}
+
+
 //Class PoHeader
 
 namespace
@@ -538,6 +534,26 @@ void PoOfstream::writeEntry( const PoEntry& rPoEntry )
 
 //Class PoIfstream
 
+namespace
+{
+
+static bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
+{
+    const OString sMsgCtxt = rEntry.getMsgCtxt();
+    const sal_Int32 nFirstEndLine = sMsgCtxt.indexOf('\n');
+    const sal_Int32 nLastEndLine = sMsgCtxt.lastIndexOf('\n');
+    const sal_Int32 nLastDot = sMsgCtxt.lastIndexOf('.');
+    const OString sType = sMsgCtxt.copy( nLastDot + 1 );
+    return !rEntry.getReference().isEmpty() &&
+            nFirstEndLine > 0 &&
+            (nLastEndLine == nFirstEndLine || nLastEndLine == sMsgCtxt.indexOf('\n',nFirstEndLine+1)) &&
+            nLastDot - nLastEndLine > 1 &&
+            (sType == "text" || sType == "quickhelptext" || sType == "title")&&
+            !rEntry.getMsgId().isEmpty();
+}
+
+}
+
 PoIfstream::PoIfstream()
     : m_aInPut()
     , m_bEof( false )
@@ -592,31 +608,8 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
     }
     else
     {
-        const OString sMsgCtxt = aGenPo.getMsgCtxt();
-        const sal_Int32 nFirstEndLine = sMsgCtxt.indexOf('\n');
-        const sal_Int32 nLastEndLine = sMsgCtxt.lastIndexOf('\n');
-        const sal_Int32 nLastDot = sMsgCtxt.lastIndexOf('.');
-        const OString sType = sMsgCtxt.copy( nLastDot + 1 );
-        if( !aGenPo.getReference().isEmpty() &&
-            nFirstEndLine > 0 &&
-            (nLastEndLine == nFirstEndLine ||
-                nLastEndLine == sMsgCtxt.indexOf('\n',nFirstEndLine+1)) &&
-            nLastDot - nLastEndLine > 1 &&
-            (sType == "text" || sType == "quickhelptext" || sType == "title")&&
-            !aGenPo.getMsgId().isEmpty() )
+        if( lcl_CheckInputEntry(aGenPo) )
         {
-            //Generate keyid if po file not includes it
-            const OString sExtractCom = aGenPo.getExtractCom();
-            if( sExtractCom.isEmpty() ||
-                ( sExtractCom.getLength() != 4 &&
-                    sExtractCom.indexOf("\n") == -1 ) )
-            {
-                aGenPo.setExtractCom(
-                    ( !sExtractCom.isEmpty() ? sExtractCom + "\n" : OString( "" )) +
-                    lcl_GenKeyId(
-                        aGenPo.getReference() + sMsgCtxt +
-                        aGenPo.getMsgId() ) );
-            }
             if( rPoEntry.m_pGenPo )
             {
                 *(rPoEntry.m_pGenPo) = aGenPo;

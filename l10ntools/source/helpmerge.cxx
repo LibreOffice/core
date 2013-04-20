@@ -147,7 +147,7 @@ bool HelpParser::CreatePO(
 }
 
 bool HelpParser::Merge( const OString &rPOFile, const OString &rDestinationFile,
-    const OString& rLanguage , MergeDataFile& aMergeDataFile )
+    const OString& rLanguage , MergeDataFile* pMergeDataFile )
 {
 
     (void) rPOFile;
@@ -159,12 +159,12 @@ bool HelpParser::Merge( const OString &rPOFile, const OString &rDestinationFile,
     //TODO: explicit BOM handling?
 
     XMLFile* xmlfile = ( aParser.Execute( sXmlFile, new XMLFile( OUString('0') ) ) );
-    bool hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
+    bool hasNoError = MergeSingleFile( xmlfile , pMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     return hasNoError;
 }
 
-bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const OString& sLanguage ,
+bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage ,
                                   OString const & sPath )
 {
     file->Extract();
@@ -187,7 +187,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
         pResData.sGId      =  pos->first;
         pResData.sFilename  =  sHelpFile;
 
-        ProcessHelp( aLangHM , sLanguage, &pResData , aMergeDataFile );
+        ProcessHelp( aLangHM , sLanguage, &pResData , pMergeDataFile );
      }
 
     file->Write(sPath);
@@ -195,7 +195,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 }
 
 /* ProcessHelp Methode: search for en-US entry and replace it with the current language*/
-void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){
+void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile ){
 
     XMLElement*   pXMLElement = NULL;
     MergeEntrys   *pEntrys    = NULL;
@@ -215,44 +215,49 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             sLId    = pXMLElement->GetOldref();
             pResData->sId     =  sLId;
 
-            pEntrys = aMergeDataFile.GetMergeEntrys( pResData );
-            if( pEntrys != NULL)
+            OString sNewText;
+            OUString sNewdata;
+            OUString sSourceText(
+            pXMLElement->ToOUString().
+                replaceAll(
+                    OUString("\n"),
+                    OUString()).
+                replaceAll(
+                    OUString("\t"),
+                    OUString()));
+            // re-add spaces to the beginning of translated string,
+            // important for indentation of Basic code examples
+            sal_Int32 nPreSpaces = 0;
+            sal_Int32 nLen = sSourceText.getLength();
+            while ( (nPreSpaces < nLen) && (*(sSourceText.getStr()+nPreSpaces) == ' ') )
+                nPreSpaces++;
+            if( sCur == "qtz" )
             {
-                OString sNewText;
-                OUString sSourceText(
-                    pXMLElement->ToOUString().
-                    replaceAll(
-                        OUString("\n"),
-                        OUString()).
-                    replaceAll(
-                        OUString("\t"),
-                        OUString()));
-                // re-add spaces to the beginning of translated string,
-                // important for indentation of Basic code examples
-                sal_Int32 nPreSpaces = 0;
-                sal_Int32 nLen = sSourceText.getLength();
-                while ( (nPreSpaces < nLen) && (*(sSourceText.getStr()+nPreSpaces) == ' ') )
-                    nPreSpaces++;
-                pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
-                OUString sNewdata;
-                OUString sTemp = OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8);
-                if (helper::isWellFormedXML(OUStringToOString(XMLUtil::QuotHTML(sTemp),RTL_TEXTENCODING_UTF8)))
+                const OString sOriginText = OUStringToOString(sSourceText, RTL_TEXTENCODING_UTF8);
+                sNewText = MergeEntrys::GetQTZText(*pResData, sOriginText);
+                sNewdata = OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8);
+            }
+            else if( pMergeDataFile )
+            {
+                pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
+                if( pEntrys != NULL)
                 {
-                    sNewdata = sSourceText.copy(0,nPreSpaces) + sTemp;
-                }
-                else
-                {
-                    sNewdata = sSourceText;
-                }
-                if (!sNewdata.isEmpty())
-                {
-                    if( pXMLElement != NULL )
+                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
+                    OUString sTemp = OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8);
+                    if (helper::isWellFormedXML(OUStringToOString(XMLUtil::QuotHTML(sTemp),RTL_TEXTENCODING_UTF8)))
                     {
-                        XMLData *data = new XMLData( sNewdata , NULL , true ); // Add new one
-                        pXMLElement->RemoveAndDeleteAllChildren();
-                        pXMLElement->AddChild( data );
-                        aLangHM->erase( sCur );
+                        sNewdata = sSourceText.copy(0,nPreSpaces) + sTemp;
                     }
+                }
+            }
+            if (!sNewdata.isEmpty())
+            {
+                if( pXMLElement != NULL )
+                {
+                    XMLData *data = new XMLData( sNewdata , NULL , true ); // Add new one
+                    pXMLElement->RemoveAndDeleteAllChildren();
+                    pXMLElement->AddChild( data );
+                    aLangHM->erase( sCur );
                 }
             }
             else if( pResData == NULL )

@@ -40,7 +40,7 @@ void WriteUsage()
         << " Syntax: Helpex -[m]i FileIn -o FileOut [-m DataBase] [-l Lang]\n"
         << " FileIn + i:   Source file (*.xhp)\n"
         << " FileIn + -mi: File including paths of source files"
-        << " (only for merge)"
+        << " (only for merge)\n"
         << " FileOut:  Destination file (*.*) or files (in case of -mi)\n"
         << " DataBase: Mergedata (*.po)\n"
         << " Lang: Restrict the handled languages; one element of\n"
@@ -79,8 +79,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
                 std::cerr << "Helpex error: cannot open input file\n";
                 return 1;
             }
-            MergeDataFile aMergeDataFile(
-                aArgs.m_sMergeSrc, OString(), false, false );
+            MergeDataFile* pMergeDataFile = 0;
+            if( aArgs.m_sLanguage != "qtz")
+            {
+                pMergeDataFile = new MergeDataFile(aArgs.m_sMergeSrc, OString(), false, false );
+            }
             std::string sTemp;
             aInput >> sTemp;
             while( !aInput.eof() )
@@ -91,23 +94,28 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
                     aArgs.m_sOutputFile +
                     sXhpFile.copy( sXhpFile.lastIndexOf("/") ));
                 if( !aParser.Merge( aArgs.m_sMergeSrc, sOutput,
-                    aArgs.m_sLanguage, aMergeDataFile ))
+                    aArgs.m_sLanguage, pMergeDataFile ))
                 {
                     hasNoError = false;
                 }
                 aInput >> sTemp;
             }
             aInput.close();
+            delete pMergeDataFile;
         }
         else
         {
             HelpParser aParser( aArgs.m_sInputFile );
-            MergeDataFile aMergeDataFile(
-                aArgs.m_sMergeSrc, aArgs.m_sInputFile, false, false );
+            MergeDataFile* pMergeDataFile = 0;
+            if( aArgs.m_sLanguage != "qtz")
+            {
+                pMergeDataFile = new MergeDataFile(aArgs.m_sMergeSrc, aArgs.m_sInputFile, false, false );
+            }
             hasNoError =
                 aParser.Merge(
                     aArgs.m_sMergeSrc, aArgs.m_sOutputFile,
-                    aArgs.m_sLanguage, aMergeDataFile );
+                    aArgs.m_sLanguage, pMergeDataFile );
+            delete pMergeDataFile;
         }
     }
     else

@@ -63,6 +63,7 @@ public:
     OString         getKeyId() const;
 
     static bool     IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2);
+    static OString  genKeyId(const OString& rGenerator);
 
 };
 

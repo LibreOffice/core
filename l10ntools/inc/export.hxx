@@ -281,6 +281,7 @@ public:
         bTitleFirst[ rId ] = true;
     }
     sal_Bool GetText( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel = sal_False );
+    static OString GetQTZText(const ResData& rResData, const OString& rOrigText);
 
 };
 

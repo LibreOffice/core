@@ -166,19 +166,21 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         return;
     }
 
-    MergeDataFile aMergeDataFile(
-        rMergeSrc, m_sSource, false, m_sLang == "qtz" );
-
-    const std::vector<OString> vLanguages = aMergeDataFile.GetLanguages();
-    if( m_sLang != "qtz" && vLanguages.size()>=2 &&
-        vLanguages[vLanguages[0]!="qtz" ? 0 : 1] != m_sLang )
+    MergeDataFile* pMergeDataFile = 0;
+    if( m_sLang != "qtz" )
     {
-        std::cerr
-            << "Propex error: given language conflicts with "
-            << "language of Mergedata file: "
-            << m_sLang.getStr() << " - "
-            << vLanguages[vLanguages[0]!="qtz" ? 0 : 1].getStr() << std::endl;
-        return;
+        pMergeDataFile = new MergeDataFile( rMergeSrc, m_sSource, false, false );
+
+        const std::vector<OString> vLanguages = pMergeDataFile->GetLanguages();
+        if( vLanguages.size()>=1 && vLanguages[0] != m_sLang )
+        {
+            std::cerr
+                << "Propex error: given language conflicts with "
+                << "language of Mergedata file: "
+                << m_sLang.getStr() << " - "
+                << vLanguages[0].getStr() << std::endl;
+            return;
+        }
     }
 
     for( unsigned nIndex = 0; nIndex < m_vLines.size(); ++nIndex )
@@ -191,11 +193,22 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
             const OString sID( sLine.copy( 0, sLine.indexOf("=") ).trim() );
             ResData  aResData( sID, m_sSource );
             aResData.sResTyp = "property";
-            MergeEntrys* pEntrys = aMergeDataFile.GetMergeEntrys( &aResData );
-            if( pEntrys )
+            OString sNewText;
+            if( m_sLang == "qtz" )
             {
-                OString sNewText;
-                pEntrys->GetText( sNewText, STRING_TYP_TEXT, m_sLang );
+                const OString sOriginText = lcl_ConvertToUTF8(sLine.copy( nEqualSign + 1 ).trim());
+                sNewText = MergeEntrys::GetQTZText(aResData, sOriginText);
+            }
+            else if( pMergeDataFile )
+            {
+                MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrys( &aResData );
+                if( pEntrys )
+                {
+                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, m_sLang );
+                }
+            }
+            if( !sNewText.isEmpty() )
+            {
                 aDestination << OString(sID + "=").getStr();
                 lcl_PrintJavaStyle( sNewText, aDestination );
                 aDestination << std::endl;
@@ -211,6 +224,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         }
     }
     aDestination.close();
+    delete pMergeDataFile;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
