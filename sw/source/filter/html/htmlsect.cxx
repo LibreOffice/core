@@ -128,6 +128,12 @@ void SwHTMLParser::NewDivision( int nToken )
                                           aItemSet, aPropInfo, &aLang, &aDir );
         if( bStyleParsed )
         {
+            if ( aPropInfo.nColumnCount >= 2 )
+            {
+                delete pCntxt;
+                NewMultiCol( aPropInfo.nColumnCount );
+                return;
+            }
             bPositioned = HTML_DIVISION_ON == nToken && aClass.Len() &&
                           CreateContainer( aClass, aItemSet, aPropInfo,
                                            pCntxt );
@@ -532,11 +538,11 @@ sal_Bool SwHTMLParser::EndSections( sal_Bool bLFStripped )
     return bSectionClosed;
 }
 
-void SwHTMLParser::NewMultiCol()
+void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 {
     String aId, aStyle, aClass, aLang, aDir;
     long nWidth = 100;
-    sal_uInt16 nCols = 0, nGutter = 10;
+    sal_uInt16 nCols = columnsFromCss, nGutter = 10;
     sal_Bool bPrcWidth = sal_True;
 
     const HTMLOptions& rHTMLOptions = GetOptions();

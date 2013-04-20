@@ -471,6 +471,8 @@ void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
     if( USHRT_MAX != rProp.nRightBorderDistance )
         nRightBorderDistance = rProp.nRightBorderDistance;
 
+    nColumnCount = rProp.nColumnCount;
+
     if( rProp.eFloat != SVX_ADJUST_END )
         eFloat = rProp.eFloat;
 
@@ -1358,6 +1360,25 @@ static void ParseCSS1_color( const CSS1Expression *pExpr,
         ;
     }
 }
+
+
+static void ParseCSS1_column_count( const CSS1Expression *pExpr,
+                             SfxItemSet& /*rItemSet*/,
+                             SvxCSS1PropertyInfo &rPropInfo,
+                             const SvxCSS1Parser& /*rParser*/ )
+{
+    OSL_ENSURE( pExpr, "no expression" );
+
+    if ( pExpr->GetType() == CSS1_NUMBER )
+    {
+        double columnCount = pExpr->GetNumber();
+        if ( columnCount >= 2 )
+        {
+            rPropInfo.nColumnCount = columnCount;
+        }
+    }
+}
+
 
 static void ParseCSS1_direction( const CSS1Expression *pExpr,
                              SfxItemSet &rItemSet,
@@ -3123,6 +3144,7 @@ static CSS1PropEntry aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(border_left),
     CSS1_PROP_ENTRY(border),
     CSS1_PROP_ENTRY(color),
+    CSS1_PROP_ENTRY(column_count),
     CSS1_PROP_ENTRY(direction),
     CSS1_PROP_ENTRY(float),
     CSS1_PROP_ENTRY(font_size),
