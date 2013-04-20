@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_harfbuzz.h>
 #include <gcach_ftyp.hxx>
 #include <sallayout.hxx>
 #include <salgdi.hxx>
@@ -30,10 +31,15 @@
 #include <sal/alloca.h>
 #include <rtl/instance.hxx>
 
+#if ENABLE_HARFBUZZ
+#include <hb-ft.h>
+#include <hb-icu.h>
+#else
 #include <layout/LayoutEngine.h>
 #include <layout/LEFontInstance.h>
 #include <layout/LELanguages.h>
 #include <layout/LEScripts.h>
+#endif // ENABLE_HARFBUZZ
 
 #include <unicode/uscript.h>
 #include <unicode/ubidi.h>
@@ -86,6 +92,172 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 }
 
+// =======================================================================
+
+static bool lcl_CharIsJoiner(sal_Unicode cChar)
+{
+    return ((cChar == 0x200C) || (cChar == 0x200D));
+}
+
+static bool needPreviousCode(sal_Unicode cChar)
+{
+    return lcl_CharIsJoiner(cChar) || U16_IS_LEAD(cChar);
+}
+
+static bool needNextCode(sal_Unicode cChar)
+{
+    return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
+}
+
+#if ENABLE_HARFBUZZ
+class HbLayoutEngine : public ServerFontLayoutEngine
+{
+private:
+    UScriptCode             meScriptCode;
+
+public:
+                            HbLayoutEngine(ServerFont&);
+    virtual                 ~HbLayoutEngine(){};
+
+    virtual bool            layout(ServerFontLayout&, ImplLayoutArgs&);
+};
+
+HbLayoutEngine::HbLayoutEngine(ServerFont& /*rServerFont*/)
+:   meScriptCode(USCRIPT_INVALID_CODE)
+{}
+
+bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
+{
+    ServerFont& rFont = rLayout.GetServerFont();
+    FT_Face aFace = rFont.GetFtFace();
+
+    // allocate temporary arrays, note: round to even
+    int nGlyphCapacity = (3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos) | 15) + 1;
+
+    rLayout.Reserve(nGlyphCapacity);
+
+    Point aNewPos(0, 0);
+    while (true)
+    {
+        int nMinRunPos, nEndRunPos;
+        bool bRightToLeft;
+        if (!rArgs.GetNextRun(&nMinRunPos, &nEndRunPos, &bRightToLeft))
+            break;
+
+        int nRunLen = nEndRunPos - nMinRunPos;
+
+        // find matching script
+        // TODO: use ICU's UScriptRun API
+        UScriptCode eScriptCode = USCRIPT_INVALID_CODE;
+        for (int i = nMinRunPos; i < nEndRunPos; ++i)
+        {
+            UErrorCode rcI18n = U_ZERO_ERROR;
+            UScriptCode eNextScriptCode = uscript_getScript(rArgs.mpStr[i], &rcI18n);
+            if ((eNextScriptCode > USCRIPT_INHERITED))
+            {
+                eScriptCode = eNextScriptCode;
+                if (eNextScriptCode != USCRIPT_LATIN)
+                    break;
+            }
+        }
+        if (eScriptCode < 0)   // TODO: handle errors better
+            eScriptCode = USCRIPT_LATIN;
+
+        meScriptCode = eScriptCode;
+
+        hb_font_t *aHbFont = hb_ft_font_create(aFace, NULL);
+
+        LanguageTag aLangTag(rArgs.meLanguage);
+        OString sLanguage = OUStringToOString(aLangTag.getLanguage(), RTL_TEXTENCODING_UTF8);
+
+        hb_buffer_t *aHbBuffer = hb_buffer_create();
+        hb_buffer_set_direction(aHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
+        hb_buffer_set_script(aHbBuffer, hb_icu_script_to_script(eScriptCode));
+        hb_buffer_set_language(aHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
+        hb_buffer_add_utf16(aHbBuffer, rArgs.mpStr, nRunLen, nMinRunPos, nRunLen);
+        hb_shape(aHbFont, aHbBuffer, NULL, 0);
+
+        int nRunGlyphCount = hb_buffer_get_length(aHbBuffer);
+        hb_glyph_info_t *aHbGlyphInfos = hb_buffer_get_glyph_infos(aHbBuffer, NULL);
+        hb_glyph_position_t *aHbPositions = hb_buffer_get_glyph_positions(aHbBuffer, NULL);
+
+        int32_t nLastCluster = -1;
+        for (int i = 0; i < nRunGlyphCount; ++i) {
+            int32_t nGlyphIndex = aHbGlyphInfos[i].codepoint;
+            int32_t nCluster = aHbGlyphInfos[i].cluster;
+            int32_t nCharPos = nCluster;
+
+            // if needed request glyph fallback by updating LayoutArgs
+            if (!nGlyphIndex)
+            {
+                if (nCharPos >= 0)
+                {
+                    rArgs.NeedFallback(nCharPos, bRightToLeft);
+                    // XXX: do we need this in harfbuzz?
+                    if  ((nCharPos > 0) && needPreviousCode(rArgs.mpStr[nCharPos-1]))
+                        rArgs.NeedFallback(nCharPos-1, bRightToLeft);
+                    else if  ((nCharPos + 1 < nEndRunPos) && needNextCode(rArgs.mpStr[nCharPos+1]))
+                        rArgs.NeedFallback(nCharPos+1, bRightToLeft);
+                }
+
+                if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
+                    continue;
+            }
+
+            const GlyphMetric& rGM = rFont.GetGlyphMetric(nGlyphIndex);
+            int nGlyphWidth = rGM.GetCharWidth();
+
+            long nGlyphFlags = 0;
+            if (bRightToLeft)
+                nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+
+            // what is this for?
+            // XXX: rtl clusters
+            bool bInCluster = false;
+            if (nCluster == nLastCluster)
+                bInCluster = true;
+            nLastCluster = nCluster;
+            if (bInCluster)
+                nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
+
+            // XXX: query GDEF glyph class? Do we even need this?
+            if (aHbPositions[i].x_advance == 0)
+                nGlyphFlags |= GlyphItem::IS_DIACRITIC;
+
+            aHbPositions[i].x_offset /= 64;
+            aHbPositions[i].y_offset /= 64;
+            aHbPositions[i].x_advance /= 64;
+            aHbPositions[i].y_advance /= 64;
+
+            aNewPos = Point(aNewPos.X() + aHbPositions[i].x_offset, aNewPos.Y() - aHbPositions[i].y_offset);
+
+            GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth);
+
+            if (i + 1 < nRunGlyphCount)
+                aGI.mnNewWidth = nGlyphWidth + (aHbPositions[i + 1].x_offset / 64);
+
+            rLayout.AppendGlyph(aGI);
+
+            aNewPos.X() += aHbPositions[i].x_advance;
+            aNewPos.Y() += aHbPositions[i].y_advance;
+        }
+
+        hb_buffer_destroy(aHbBuffer);
+        hb_font_destroy(aHbFont);
+    }
+
+    // sort glyphs in visual order
+    // and then in logical order (e.g. diacritics after cluster start)
+    rLayout.SortGlyphItems();
+
+    // determine need for kashida justification
+    if((rArgs.mpDXArray || rArgs.mnLayoutWidth)
+    && ((meScriptCode == USCRIPT_ARABIC) || (meScriptCode == USCRIPT_SYRIAC)))
+        rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
+
+    return true;
+}
+#else
 // =======================================================================
 // bridge to ICU LayoutEngine
 // =======================================================================
@@ -301,21 +473,6 @@ IcuLayoutEngine::~IcuLayoutEngine()
 }
 
 // -----------------------------------------------------------------------
-
-static bool lcl_CharIsJoiner(sal_Unicode cChar)
-{
-    return ((cChar == 0x200C) || (cChar == 0x200D));
-}
-
-static bool needPreviousCode(sal_Unicode cChar)
-{
-    return lcl_CharIsJoiner(cChar) || U16_IS_LEAD(cChar);
-}
-
-static bool needNextCode(sal_Unicode cChar)
-{
-    return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
-}
 
 namespace
 {
@@ -742,6 +899,7 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 #ifdef ARABIC_BANDAID
             aGI.mnNewWidth = nNewWidth;
 #endif
+
             rLayout.AppendGlyph( aGI );
             ++nFilteredRunGlyphCount;
             nLastCharPos = nCharPos;
@@ -762,6 +920,7 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     return true;
 }
+#endif // ENABLE_HARFBUZZ
 
 // =======================================================================
 
@@ -769,7 +928,11 @@ ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
 {
     // find best layout engine for font, platform, script and language
     if (!mpLayoutEngine)
+#if ENABLE_HARFBUZZ
+        mpLayoutEngine = new HbLayoutEngine(*this);
+#else
         mpLayoutEngine = new IcuLayoutEngine(*this);
+#endif // ENABLE_HARFBUZZ
     return mpLayoutEngine;
 }
 
