@@ -111,8 +111,6 @@ public:
     ~ResData();
     sal_Bool SetId(const OString &rId, sal_uInt16 nLevel);
 
-    sal_Int32 nWidth;
-    sal_uInt16 nChildIndex;
     sal_uInt16 nIdLevel;
     sal_Bool bChild;
     sal_Bool bChildWithText;
@@ -122,8 +120,6 @@ public:
     sal_Bool bQuickHelpText;
     sal_Bool bTitle;
     sal_Bool bList;
-
-    sal_Bool bRestMerged;
 
     OString sResTyp;
     OString sId;

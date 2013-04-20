@@ -782,23 +782,6 @@ int Export::Execute( int nToken, const char * pToken )
         case APPFONTMAPPING:
         {
             bDontWriteOutput = sal_False;
-            // this is a AppfontMapping, so look if its a definition
-            // of field size
-            sal_Int32 n = 0;
-            OString sKey(
-                sToken.getToken(0, '=', n).replaceAll(" ", OString()).
-                replaceAll("\t", OString()));
-            OString sMapping = sToken.getToken(0, '=', n);
-            sMapping = sMapping.getToken(1, '(');
-            sMapping = sMapping.getToken(0, ')').
-                replaceAll(OString(' '), OString()).
-                replaceAll(OString('\t'), OString()).
-                toAsciiUpperCase();
-            if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("SIZE"))) {
-                pResData->nWidth = sMapping.getToken(0, ',').toInt32();
-            } else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("POSSIZE"))) {
-                pResData->nWidth = sMapping.getToken(2, ',').toInt32();
-            }
         }
         break;
         case RSCDEFINELEND:

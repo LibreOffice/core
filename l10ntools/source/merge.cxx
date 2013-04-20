@@ -65,8 +65,6 @@ namespace
 
 ResData::ResData( const OString &rGId )
     :
-    nWidth( 0 ),
-    nChildIndex( 0 ),
     nIdLevel( ID_LEVEL_NULL ),
     bChild( sal_False ),
     bChildWithText( sal_False ),
@@ -75,7 +73,6 @@ ResData::ResData( const OString &rGId )
     bQuickHelpText( sal_False ),
     bTitle( sal_False ),
     bList( sal_False ),
-    bRestMerged( sal_False ),
     sGId( rGId ),
     nTextRefId( REFID_NONE ),
     nHelpTextRefId( REFID_NONE ),
@@ -93,8 +90,6 @@ ResData::ResData( const OString &rGId )
 
 ResData::ResData( const OString &rGId, const OString &rFilename)
     :
-    nWidth( 0 ),
-    nChildIndex( 0 ),
     nIdLevel( ID_LEVEL_NULL ),
     bChild( sal_False ),
     bChildWithText( sal_False ),
@@ -103,7 +98,6 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
     bQuickHelpText( sal_False ),
     bTitle( sal_False ),
     bList( sal_False ),
-    bRestMerged( sal_False ),
     sGId( rGId ),
     sFilename( rFilename ),
     nTextRefId( REFID_NONE ),
