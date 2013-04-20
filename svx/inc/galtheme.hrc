@@ -21,6 +21,10 @@
 
 #define RID_GALLERYSTR_THEME_START          (6000)
 
+// ATTENTION: This list has to be in sync with
+//  * svx/inc/svx/gallery.hxx
+//  * share/gallery (theme files are identified by id)
+
 #define RID_GALLERYSTR_THEME_3D             (RID_GALLERYSTR_THEME_START + 1)
 #define RID_GALLERYSTR_THEME_ANIMATIONS                 (RID_GALLERYSTR_THEME_START + 2)
 #define RID_GALLERYSTR_THEME_BULLETS                    (RID_GALLERYSTR_THEME_START + 3)

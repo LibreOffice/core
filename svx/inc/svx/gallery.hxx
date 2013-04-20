@@ -37,6 +37,7 @@
 #define SVX_GALLERY() (GalleryExplorer::GetGallery())
 
 // Defines for preinstalled themes
+// Has to be in sync with svx/inc/galtheme.hrc
 #define GALLERY_THEME_3D                1
 #define GALLERY_THEME_BULLETS       3
 #define GALLERY_THEME_HOMEPAGE      10
