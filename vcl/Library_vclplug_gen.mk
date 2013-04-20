@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	boost_headers \
 	cairo \
 	graphite \
+	harfbuzz \
 	icule \
 	icuuc \
 	valgrind \
