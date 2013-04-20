@@ -311,7 +311,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
                 if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
                 {
-                    // Feld selektieren, so dass es beim Insert geloescht wird
+                    // Select the field so that it will be deleted during insert
                     ESelection aSel = pOLV->GetSelection();
                     aSel.nEndPos++;
                     pOLV->SetSelection(aSel);
@@ -425,7 +425,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 */
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
 
-                // util::Language gibts an der EditEngine nicht! Daher nicht im Set.
+                // util::Language does not exist in the EditEngine! Therefore not included in the set.
 
                 aDlgAttr.Put( aEditAttr );
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
@@ -1580,7 +1580,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         else
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aSetDlgFont.GetFamilyName() ) );
 
-        // Wenn Zeichen selektiert ist kann es angezeigt werden
+        // If character is selected then it can be shown.
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
             rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
 
@@ -1610,7 +1610,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
 
     if( sSym.Len() )
     {
-        // nicht flackern
+        // do not flicker
         pOLV->HideCursor();
         Outliner * pOutliner = pOLV->GetOutliner();
         pOutliner->SetUpdateMode(sal_False);
@@ -1623,10 +1623,10 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
                             0 );
         aFontSet.Set( aOldSet );
 
-        // String einfuegen
+        // Insert string
         pOLV->InsertText( sSym);
 
-        // attributieren (Font setzen)
+        // Attributing (set font)
         SfxItemSet aSetFont( *aFontSet.GetPool(), aFontSet.GetRanges() );
         SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
@@ -1641,16 +1641,16 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
             aSetFont.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
         pOLV->SetAttribs(aSetFont);
 
-        // Selektion loeschen
+        // Erase selection
         ESelection aSel(pOLV->GetSelection());
         aSel.nStartPara = aSel.nEndPara;
         aSel.nStartPos = aSel.nEndPos;
         pOLV->SetSelection(aSel);
 
-        // Alten Font restaurieren
+        // Restore old font
         pOLV->SetAttribs( aFontSet );
 
-        // ab jetzt wieder anzeigen
+        // From now on show it again
         pOutliner->SetUpdateMode(sal_True);
         pOLV->ShowCursor();
 

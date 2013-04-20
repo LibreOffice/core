@@ -109,8 +109,9 @@
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
-//Fuer die Erkennung der Id, die variable von Gallery mit SID_GALLERY_BG_BRUSH
-//ankommt.
+// These variables keep the state of Gallery (slot SID_GALLERY_BG_BRUSH)
+// detected by GetGalleryState() for the subsequent ExecuteGallery() call.
+
 static sal_uInt8 nParagraphPos;
 static sal_uInt8 nGraphicPos;
 static sal_uInt8 nOlePos;
@@ -148,9 +149,6 @@ SFX_IMPL_INTERFACE(SwBaseShell, SfxShell, SW_RES(0))
 
 TYPEINIT1(SwBaseShell,SfxShell)
 
-/*--------------------------------------------------------------------
-    Beschreibung:   statics
- --------------------------------------------------------------------*/
 static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {
     Graphic aGrf( rSh.GetIMapGraphic() );
@@ -189,9 +187,6 @@ static bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   loeschen
- --------------------------------------------------------------------*/
 void SwBaseShell::ExecDelete(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -213,16 +208,16 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                     rSh.DelLeft();
                 }
                 else
-                    // JP 15.07.96: wenns nicht mehr nach vorne geht, die
-                    //              Numerierung aufheben. Z.B. am Doc-/
-                    //              Rahmen-/Tabellen-/Bereichs-Anfang
+                    // JP 15.07.96: If it no longer goes forward, cancel
+                    //              the numbering. For example at the beginning
+                    //              of a doc, frame, table or an area.
                     rSh.DelNumRules();
 
                 rSh.EndCrsrMove();
                 break;
             }
 
-            // ansonsten DelLeft rufen
+            // otherwise call DelLeft
         case FN_SHIFT_BACKSPACE:
             rSh.DelLeft();
             break;
@@ -238,9 +233,8 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
 
 void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 {
-    //Achtung: Suizid gefaehrdet! Nach Paste, Paste special kann der die
-    //Shell zerstoert sein.
-
+    // Attention: At risk of suicide!
+    // After paste, paste special the shell can be destroy.
 
     SwWrtShell &rSh = GetShell();
     sal_uInt16 nId = rReq.GetSlot();
@@ -277,8 +271,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                 if( aDataHelper.GetXTransferable().is() &&
                     SwTransferable::IsPaste( rSh, aDataHelper ))
                 {
-                    // temp. Variablen, da die Shell nach dem Paste schon
-                    // zerstoert sein kann
+                    // Temporary variables, because the shell could already be
+                    // destroyed after the paste.
                     SwView* pView = &rView;
                     SwTransferable::Paste( rSh, aDataHelper );
                     if( rSh.IsFrmSelected() || rSh.IsObjSelected() )
@@ -302,8 +296,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     if( aDataHelper.GetXTransferable().is()
                         /*&& SwTransferable::IsPaste( rSh, aDataHelper )*/ )
                     {
-                        // temp. Variablen, da die Shell nach dem Paste schon
-                        // zerstoert sein kann
+                        // Temporary variables, because the shell could already be
+                        // destroyed after the paste.
                         SwView* pView = &rView;
 
                         SwTransferable::PasteFormat( rSh, aDataHelper,
@@ -328,8 +322,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                 if( aDataHelper.GetXTransferable().is() &&
                     SwTransferable::IsPaste( rSh, aDataHelper ))
                 {
-                    // temp. Variablen, da die Shell nach dem Paste schon
-                    // zerstoert sein kann
+                    // Temporary variables, because the shell could already be
+                    // destroyed after the paste.
                     SwView* pView = &rView;
                     rReq.Ignore();
                     bIgnore = true;
@@ -363,8 +357,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                 if( aDataHelper.GetXTransferable().is() &&
                     SwTransferable::IsPaste( rSh, aDataHelper ))
                 {
-                    // temp. Variablen, da die Shell nach dem Paste schon
-                    // zerstoert sein kann
+                    // Temporary variables, because the shell could already be
+                    // destroyed after the paste.
                     SwView* pView = &rView;
                     sal_uLong nFormatId = 0;
                     rReq.Ignore();
@@ -398,9 +392,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
         rReq.Done();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   ClipBoard-Status
- --------------------------------------------------------------------*/
+// ClipBoard state
+
 void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -454,9 +447,8 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Undo ausfuehren
- --------------------------------------------------------------------*/
+// Perform undo
+
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -494,9 +486,8 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(sal_False); }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Zustand Undo
- --------------------------------------------------------------------*/
+// State of undo
+
 void SwBaseShell::StateUndo(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -529,7 +520,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                 break;
             }
             case SID_REPEAT:
-            {   // Repeat nur moeglich wenn kein REDO moeglich - UI-Restriktion
+            {   // Repeat is only possible if no REDO is possible - UI-Restriction
                 if ((!rSh.GetFirstRedoInfo(0)) &&
                     !rSh.IsSelFrmMode() &&
                     (UNDO_EMPTY != rSh.GetRepeatInfo(0)))
@@ -567,9 +558,8 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Slot-Id auswerten bzw. Dispatchen
- --------------------------------------------------------------------*/
+// Evaluate respectively dispatching the slot Id
+
 void SwBaseShell::Execute(SfxRequest &rReq)
 {
     const SfxPoolItem *pItem;
@@ -715,7 +705,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                     if( pGal->IsLinkage() )
                     {
-                        // Verknuepft
+                        // Linked
                         aGrfName = pGal->GetURL().GetMainURL(INetURLObject::NO_DECODE);
                         aFltName = pGal->GetFilterName();
                     }
@@ -739,7 +729,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         {
             if (pArgs)
             {
-                // aktuellen PageDescriptor ermitteln und damit den Set fuellen
+                // Determine the current PageDescriptor and fill the set with that.
                 const sal_uInt16 nCurIdx = rSh.GetCurPageDesc();
                 SwPageDesc aPageDesc(rSh.GetPageDesc(nCurIdx));
 
@@ -782,11 +772,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_1, sal_True, &pItem))
             {
                 aInsTblOpts.mnInsMode = 0;
-                //Delimiter
+                // Delimiter
                 String sDelim = static_cast< const SfxStringItem* >(pItem)->GetValue();
                 if(sDelim.Len())
                     cDelim = sDelim.GetChar(0);
-                //AutoFormat
+                // AutoFormat
                 if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_2, sal_True, &pItem))
                 {
                     String sAutoFmt = static_cast< const SfxStringItem* >(pItem)->GetValue();
@@ -839,11 +829,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
             if( cDelim )
             {
-                //Shellwechsel!
+                //Shell change!
                 SwView& rSaveView = rView;
                 sal_Bool bInserted = sal_False;
                 //recording:
-
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
                 if( SfxRequest::HasMacroRecorder(pViewFrame) )
                 {
@@ -900,7 +889,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.LockView( bLockedView );
                 }
                 else
-                // wird von der DocShell aufgezeichnet
+                // Will be recorded from the DocShell
                     GetView().GetDocShell()->ExecStyleSheet(rReq);
             }
         }
@@ -924,7 +913,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         {
             SvxIMapDlg* pDlg = SWIMAPDLG(GetView());
 
-            // Kontrolle, ob Zuweisung ueberhaupt sinnvoll/erlaubt
+            // Check, if the allocation is useful or allowed at all.
             if ( rSh.IsFrmSelected() &&
                  pDlg->GetEditingObject() == rSh.GetIMapInventor() )
             {
@@ -956,8 +945,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case SID_CONTOUR_EXEC:
         {
             SvxContourDlg *pDlg = SWCONTOURDLG(GetView());
-
-            // Kontrolle, ob Zuweisung ueberhaupt sinnvoll/erlaubt
+            // Check, if the allocation is useful or allowed at all.
             int nSel = rSh.GetSelectionType();
             if ( nSel & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_OLE) )
             {
@@ -1013,15 +1001,14 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 rSh.ChgAnchor( eSet );
             else if( rSh.IsFrmSelected() )
             {
-                // Der Set beinhaltet auch VERT/HORI_ORIENT, da in FEShell::
-                // SetFlyFrmAttr/SetFlyFrmAnchor ggf. als Folge des Umankerns
-                // die Ausrichtungen veraendert werden sollen.
+                // The set also includes VERT/HORI_ORIENT, because the align
+                // shall be changed in FEShell::SetFlyFrmAttr/SetFlyFrmAnchor,
+                // possibly as a result of the anchor change.
                 SfxItemSet aSet( GetPool(), RES_VERT_ORIENT, RES_ANCHOR );
                 SwFmtAnchor aAnc( eSet, rSh.GetPhyPageNum() );
                 aSet.Put( aAnc );
                 rSh.SetFlyFrmAttr(aSet);
             }
-
             // if new anchor is 'as char' and it is a Math object and the usual
             // pre-conditions are met then align the formula to the baseline of the text
             const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
@@ -1047,8 +1034,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                 case FLY_AT_FLY:
                 case FLY_AT_PAGE:
-
-                    //Durchlauf, links oder von links, oben, von oben
+                    //Wrap through, left or from left, top, from top
                     if(eSurround != SURROUND_THROUGHT)
                         aSet.Put(SwFmtSurround(SURROUND_THROUGHT));
 
@@ -1060,7 +1046,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     break;
 
                 case FLY_AT_PARA:
-                    //links, von links, rechts, oben, kein Uml, li+re Umlauf,
+                    // left, from left, right, top, no wrap, wrap left and right
                     if(eSurround != SURROUND_LEFT || eSurround != SURROUND_RIGHT)
                         aSet.Put(SwFmtSurround(SURROUND_LEFT));
 
@@ -1072,7 +1058,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     break;
 
                 case FLY_AT_CHAR:
-                    //links, von links, rechts, oben,  Durchlauf
+                    // left, from left, right, top, wrap through
                     if(eSurround != SURROUND_THROUGHT)
                         aSet.Put(SwFmtSurround(SURROUND_THROUGHT));
 
@@ -1163,7 +1149,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                                 RES_BACKGROUND, RES_BACKGROUND, 0 );
 
             aSet.Put(*pItem);
-            // Tabellenzelle(n) selektiert?
+            // Tabele cell(s) selected?
             if ( rSh.IsTableMode() )
             {
                 SwFrmFmt *pFmt = rSh.GetTableFmt();
@@ -1171,7 +1157,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
             else if ( rSh.IsFrmSelected() )
             {
-                // Umrandungsattribute ueber Frame-Manager setzen
+                // Set border attributes via Frame-Manager.
                 SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
                 aMgr.SetAttrSet( *pArgs );
                 aMgr.UpdateFlyFrm();
@@ -1195,22 +1181,22 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
         case SID_ATTR_BORDER_OUTER:
         {
-            // Tabellenzelle(n) selektiert?
+            // Tabele cell(s) selected?
             if ( rSh.IsTableMode() )
             {
-                // Umrandungattribute Get/SetTabBorders() setzen
+                // Set border attributes Get/SetTabBorders()
                 rSh.SetTabBorders(*pArgs);
             }
             else if ( rSh.IsFrmSelected() )
             {
-                // Umrandungsattribute ueber Frame-Manager setzen
+                // Set border attributes via Frame-Manager.
                 SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
                 aMgr.SetAttrSet(*pArgs);
                 aMgr.UpdateFlyFrm();
             }
             else
             {
-                // Umrandungsattribute ganz normal ueber Shell setzen
+                // Set border attributes via shell quite normally.
                 rSh.SetAttr( *pItem );
             }
         }
@@ -1222,10 +1208,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
     }
 }
 
-/* --------------------------------------------------
- * Hier wird der State fuer SID_IMAP / SID_CONTOUR behandelt,
- * wenn die Grafik ausgeswappt ist
- * --------------------------------------------------*/
+// Here the state fpr SID_IMAP / SID_CONTOUR will be handled
+// until the swapping of the graphic is finished.
+
 IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
 {
     sal_uInt16 nGrfType;
@@ -1379,7 +1364,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 SfxItemSet   aSet( rSh.GetAttrPool(),
                                     RES_SHADOW, RES_SHADOW );
 
-                // Tabellenzelle(n) selektiert?
+                // Table cell(s) selected?
                 if ( rSh.IsTableMode() )
                 {
                     SwFrmFmt *pFmt = rSh.GetTableFmt();
@@ -1400,7 +1385,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case SID_IMAP:
             {
                 // #i59688#
-                // improve efficiency:
+                // Improve efficiency:
                 // If selected object is protected, item has to disabled.
                 const bool bProtect = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT);
                 if ( bProtect )
@@ -1416,11 +1401,11 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                 rSh.GetSelectionType() == nsSelectionType::SEL_GRF;
 
                     // #i59688#
-                    // avoid unnecessary loading of selected graphic.
+                    // Avoid unnecessary loading of selected graphic.
                     // The graphic is only needed, if the dialog is open.
-                    //wenn die Grafik ausgeswappt ist, dann muss der
-                    //Status asynchron ermittelt werden
-                    //bis dahin wird der Slot disabled
+                    // If the swapping of the graphic is finished, the status
+                    // must be determined asynchronously, until this the slot
+                    // will be disabled.
                     if ( bHas && bIsGraphicSelection && rSh.IsGrfSwapOut( sal_True ) )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
@@ -1493,11 +1478,11 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     if( !bHas && !bOk )
                         bDisable = true;
                     // #i59688#
-                    // avoid unnecessary loading of selected graphic.
+                    // Avoid unnecessary loading of selected graphic.
                     // The graphic is only needed, if the dialog is open.
-                    // wenn die Grafik ausgeswappt ist, dann muss der Status
-                    // asynchron ermittelt werden bis dahin wird der Slot
-                    // disabled
+                    // If the swapping of the graphic is finished, the status
+                    // must be determined asynchronously, until this the slot
+                    // will be disabled.
                     else if ( bHas && (nSel & nsSelectionType::SEL_GRF) &&
                               rSh.IsGrfSwapOut(sal_True) )
                     {
@@ -1754,9 +1739,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
     pGetStateSet = 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Slots mit dieser Statusmethode disablen
- --------------------------------------------------------------------*/
+// Disable the slots with this status methode
+
 void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -1769,9 +1753,8 @@ void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Slots mit dieser Statusmethode disablen
- --------------------------------------------------------------------*/
+// Disable the slots with this status methode
+
 void SwBaseShell::StateStyle( SfxItemSet &rSet )
 {
     bool bParentCntProt = GetShell().IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
@@ -1840,7 +1823,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
             case FN_FRAME_WRAPTHRU_TRANSP:
                 if (aWrap.IsContour())
                     aWrap.SetContour(sal_False);
-                // kein break!!!
+                // No break!!!
             case FN_FRAME_WRAPTHRU:
                 nSurround = SURROUND_THROUGHT;
                 break;
@@ -1860,7 +1843,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 
         if (nSlot != FN_FRAME_WRAP_CONTOUR)
         {
-            // Konturumfluss bei Draw-Objekten defaulten
+            // Defaulting the contour wrap on draw objects.
             if (bObj && nOldSurround != nSurround &&
                 (nOldSurround == SURROUND_NONE || nOldSurround == SURROUND_THROUGHT))
             {
@@ -1883,9 +1866,8 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Update der Statuszeile erzwingen
- --------------------------------------------------------------------*/
+//Force update of the status line
+
 void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 {
     eFrameMode = eMode;
@@ -1908,10 +1890,6 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
         rBnd.Invalidate(aInval);
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Ctor
- --------------------------------------------------------------------*/
 
 SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
@@ -2112,7 +2090,7 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                     rSet.Put( *pI, nWhich );
                 else
                     rSet.InvalidateItem( nWhich );
-                //set input context of the SwEditWin according to the selected font and script type
+                // Set input context of the SwEditWin according to the selected font and script type
                 if(RES_CHRATR_FONT == nWhich)
                 {
                     Font aFont;
@@ -2234,8 +2212,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 
     switch (nSlot)
     {
-        // RES_BACKGROUND (=SID_ATTR_BRUSH) muss ueber zwei IDs
-        // gesetzt werden:
+        // RES_BACKGROUND (=SID_ATTR_BRUSH) must be set with two IDs:
         case SID_BACKGROUND_COLOR:
             {
                 aBrushItem.SetGraphicPos(GPOS_NONE);
@@ -2279,7 +2256,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     {
         SfxItemSet aCoreSet(GetPool(), RES_BACKGROUND, RES_BACKGROUND);
         aCoreSet.Put( aBrushItem );
-        // Vorlagen-AutoUpdate
+        // Template autoupdate
         SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
         if(pFmt && pFmt->IsAutoUpdateFmt())
             rSh.AutoUpdateFrame( pFmt, aCoreSet);
@@ -2305,7 +2282,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 void SwBaseShell::GetBorderState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
-    // Tabellenzelle(n) selektiert?
+    // Tabele cell(s) selected?
     bool bPrepare = true;
     sal_Bool bTableMode = rSh.IsTableMode();
     if ( bTableMode )
@@ -2325,11 +2302,11 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
         bPrepare = false;
     }
     else
-        // Umrandungsattribute ganz normal ueber Shell holen
+        // Get border attributes via shell quite normal
         rSh.GetCurAttr( rSet );
     if ( bPrepare )
         ::PrepareBoxInfo( rSet, rSh );
-    // switch the border toolbox controller mode
+    // Switch the border toolbox controller mode
     rSet.Put( SfxBoolItem( SID_BORDER_REDUCED_MODE, !bTableMode ));
 }
 
@@ -2337,7 +2314,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
     Window *pMDI = &GetView().GetViewFrame()->GetWindow();
-    //Damit aus dem Basic keine Dialoge fuer Hintergrund-Views aufgerufen werden:
+    // So that from the basic no dialogues for the background views are called:
     bool bBackground = (&GetView() != GetActiveView());
     const SfxPoolItem* pItem = 0;
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -2365,8 +2342,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             {
                 const sal_uInt16 nCurIdx = rSh.GetCurPageDesc();
                 const SwPageDesc& rPageDesc = rSh.GetPageDesc( nCurIdx );
-                //temp. View, weil die Shell nach dem Dialog nicht mehr gueltig sein muss
-                //z.B. Kopfzeile ausschalten
+                // Temporary view, because the shell does not need to be valid after the dialogue
+                // for example disable header
                 SwView& rTempView = GetView();
                 sal_uInt16 nPageId = 0;
                 if ( nSlot == FN_FORMAT_PAGE_COLUMN_DLG )
@@ -2384,10 +2361,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                0 );
             SfxAbstractDialog * pDlg = 0;
-            // Tabellenzelle(n) selektiert?
+            // Table cell(s) selected?
             if ( rSh.IsTableMode() )
             {
-                // Umrandungattribute Get/SetTabBorders() setzen
+                // Set border attributes Get/SetTabBorders()
                 ::PrepareBoxInfo( aSet, rSh );
                 rSh.GetTabBorders( aSet );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -2403,7 +2380,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             }
             else if ( rSh.IsFrmSelected() )
             {
-                // Umrandungsattribute ueber Frame-Manager setzen
+                // Set border attributes via Frame-Manager
                 SwFlyFrmAttrMgr aMgr( sal_False, &rSh, FRMMGR_TYPE_NONE );
                 aSet.Put( aMgr.GetAttrSet() );
 
@@ -2421,7 +2398,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             }
             else
             {
-                // Umrandungsattribute ganz normal ueber Shell setzen
+                // Set border attributes via Shell quite normal
                 rSh.GetCurAttr( aSet );
                 ::PrepareBoxInfo( aSet, rSh );
 
@@ -2454,10 +2431,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
 
-            // Tabellenzelle(n) selektiert?
+            // Table cell(s) selected?
             if ( rSh.IsTableMode() )
             {
-                //Hintergrundattribute der Tabelle holen und in den Set packen
+                // Get background attributes of the table and put it in the set
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
@@ -2490,7 +2467,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             }
             else
             {
-                // Umrandungsattribute ganz normal ueber Shell setzen
+                // Set border attributes Umrandungsattribute with the shell quite normal.
                 rSh.GetCurAttr( aSet );
 
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
@@ -2535,7 +2512,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
     if ( !( rSh.GetFrmType( 0, sal_True ) & FRMTYPE_FOOTNOTE ) )
     {
-        SwView &rTempView = GetView(); // Da GetView() nach Shellwechsel nicht mehr geht
+        SwView &rTempView = GetView(); // Because GetView() does not work after the shell exchange
         sal_Bool bHTMLMode = 0 != (::GetHtmlMode(rTempView.GetDocShell())&HTMLMODE_ON);
         bool bCallEndUndo = false;
 
@@ -2659,7 +2636,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 aRewriter.AddRule(UndoArg3, SW_RESSTR(STR_END_QUOTE));
 
             }
-            rSh.EndUndo(UNDO_INSTABLE, &aRewriter); // wegen moegl. Shellwechsel
+            rSh.EndUndo(UNDO_INSTABLE, &aRewriter); // If possible change the Shell
         }
     }
 }
