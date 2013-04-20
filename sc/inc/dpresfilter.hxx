@@ -46,7 +46,7 @@ struct ScDPResultFilter
  * <p>If the pivot table layout only consists of either column or row
  * dimensions, the root node only has one child node.</p>
  */
-class ScDPResultFilterSet : boost::noncopyable
+class ScDPResultTree : boost::noncopyable
 {
 public:
     typedef std::vector<double> ValuesType;
@@ -90,8 +90,8 @@ private:
 
 public:
 
-    ScDPResultFilterSet();
-    ~ScDPResultFilterSet();
+    ScDPResultTree();
+    ~ScDPResultTree();
 
     /**
      * Add a single value filter path.  The filters are expected to be sorted
@@ -106,7 +106,7 @@ public:
      */
     void add(const std::vector<ScDPResultFilter>& rFilter, long nCol, long nRow, double fVal);
 
-    void swap(ScDPResultFilterSet& rOther);
+    void swap(ScDPResultTree& rOther);
 
     bool empty() const;
     void clear();
@@ -122,7 +122,7 @@ public:
 
 struct ScDPResultFilterContext
 {
-    ScDPResultFilterSet maFilterSet;
+    ScDPResultTree maFilterSet;
     std::vector<ScDPResultFilter> maFilters;
     long mnCol;
     long mnRow;

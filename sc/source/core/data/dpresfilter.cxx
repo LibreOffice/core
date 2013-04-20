@@ -21,10 +21,10 @@ ScDPResultFilter::ScDPResultFilter(const OUString& rDimName, bool bDataLayout) :
 ScDPResultFilterContext::ScDPResultFilterContext() :
     mnCol(0), mnRow(0) {}
 
-ScDPResultFilterSet::DimensionNode::DimensionNode(const MemberNode* pParent) :
+ScDPResultTree::DimensionNode::DimensionNode(const MemberNode* pParent) :
     mpParent(pParent) {}
 
-ScDPResultFilterSet::DimensionNode::~DimensionNode()
+ScDPResultTree::DimensionNode::~DimensionNode()
 {
     MembersType::iterator it = maChildMembers.begin(), itEnd = maChildMembers.end();
     for (; it != itEnd; ++it)
@@ -32,7 +32,7 @@ ScDPResultFilterSet::DimensionNode::~DimensionNode()
 }
 
 #if DEBUG_PIVOT_TABLE
-void ScDPResultFilterSet::DimensionNode::dump(int nLevel) const
+void ScDPResultTree::DimensionNode::dump(int nLevel) const
 {
     string aIndent(nLevel*2, ' ');
     MembersType::const_iterator it = maChildMembers.begin(), itEnd = maChildMembers.end();
@@ -51,10 +51,10 @@ void ScDPResultFilterSet::DimensionNode::dump(int nLevel) const
 }
 #endif
 
-ScDPResultFilterSet::MemberNode::MemberNode(const DimensionNode* pParent) :
+ScDPResultTree::MemberNode::MemberNode(const DimensionNode* pParent) :
     mpParent(pParent) {}
 
-ScDPResultFilterSet::MemberNode::~MemberNode()
+ScDPResultTree::MemberNode::~MemberNode()
 {
     DimensionsType::iterator it = maChildDimensions.begin(), itEnd = maChildDimensions.end();
     for (; it != itEnd; ++it)
@@ -62,7 +62,7 @@ ScDPResultFilterSet::MemberNode::~MemberNode()
 }
 
 #if DEBUG_PIVOT_TABLE
-void ScDPResultFilterSet::MemberNode::dump(int nLevel) const
+void ScDPResultTree::MemberNode::dump(int nLevel) const
 {
     string aIndent(nLevel*2, ' ');
     ValuesType::const_iterator itVal = maValues.begin(), itValEnd = maValues.end();
@@ -78,13 +78,13 @@ void ScDPResultFilterSet::MemberNode::dump(int nLevel) const
 }
 #endif
 
-ScDPResultFilterSet::ScDPResultFilterSet() : mpRoot(new MemberNode(NULL)) {}
-ScDPResultFilterSet::~ScDPResultFilterSet()
+ScDPResultTree::ScDPResultTree() : mpRoot(new MemberNode(NULL)) {}
+ScDPResultTree::~ScDPResultTree()
 {
     delete mpRoot;
 }
 
-void ScDPResultFilterSet::add(
+void ScDPResultTree::add(
     const std::vector<ScDPResultFilter>& rFilters, long /*nCol*/, long /*nRow*/, double fVal)
 {
     // TODO: I'll work on the col / row to value node mapping later.
@@ -141,25 +141,25 @@ void ScDPResultFilterSet::add(
     pMemNode->maValues.push_back(fVal);
 }
 
-void ScDPResultFilterSet::swap(ScDPResultFilterSet& rOther)
+void ScDPResultTree::swap(ScDPResultTree& rOther)
 {
     std::swap(maPrimaryDimName, rOther.maPrimaryDimName);
     std::swap(mpRoot, rOther.mpRoot);
 }
 
-bool ScDPResultFilterSet::empty() const
+bool ScDPResultTree::empty() const
 {
     return mpRoot->maChildDimensions.empty();
 }
 
-void ScDPResultFilterSet::clear()
+void ScDPResultTree::clear()
 {
     maPrimaryDimName = EMPTY_OUSTRING;
     delete mpRoot;
     mpRoot = new MemberNode(NULL);
 }
 
-const ScDPResultFilterSet::ValuesType* ScDPResultFilterSet::getResults(
+const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
     const uno::Sequence<sheet::DataPilotFieldFilter>& rFilters) const
 {
     const sheet::DataPilotFieldFilter* p = rFilters.getConstArray();
@@ -185,7 +185,7 @@ const ScDPResultFilterSet::ValuesType* ScDPResultFilterSet::getResults(
 }
 
 #if DEBUG_PIVOT_TABLE
-void ScDPResultFilterSet::dump() const
+void ScDPResultTree::dump() const
 {
     cout << "primary dimension name: " << maPrimaryDimName << endl;
     mpRoot->dump(0);

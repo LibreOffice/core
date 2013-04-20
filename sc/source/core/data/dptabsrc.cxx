@@ -422,7 +422,7 @@ uno::Sequence<double> ScDPSource::getFilteredResults(
         getResults(); // Build result tree first.
 
     // Get result values from the tree.
-    const ScDPResultFilterSet::ValuesType* pVals = maResFilterSet.getResults(aFilters);
+    const ScDPResultTree::ValuesType* pVals = maResFilterSet.getResults(aFilters);
     if (!pVals)
         return uno::Sequence<double>();
 

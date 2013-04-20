@@ -104,7 +104,7 @@ private:
     std::vector<long> maRowDims;
     std::vector<long> maDataDims;
     std::vector<long> maPageDims;
-    ScDPResultFilterSet maResFilterSet;
+    ScDPResultTree maResFilterSet;
 
     bool                    bColumnGrand;
     bool                    bRowGrand;
