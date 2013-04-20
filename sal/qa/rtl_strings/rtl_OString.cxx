@@ -1929,7 +1929,7 @@ sal_Bool test_valueOf( const char** resArray, int n, sal_Int16 radix,
         bRes &= c_rtl_tres_state
                 (
                     hRtlTestResult,
-                    aStr2.compareTo(aStr1) == 0,
+                    aStr2 == aStr1,
                     (sal_Char*)resArray[i],
                     createName( pMeth, "valueOf", i )
                 );
@@ -2163,7 +2163,7 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int32_WrongRadix(
     bRes = c_rtl_tres_state
             (
                 hRtlTestResult,
-                aStr2.compareTo( aStr1 ) == 0,
+                aStr2 ==  aStr1,
                 "if radix not valid then radix must be 10",
                 "valueOf(sal_Int32, sal_Int32 radix): radix = -5"
             );
@@ -2411,7 +2411,7 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_WrongRadix(
     bRes = c_rtl_tres_state
             (
                 hRtlTestResult,
-                aStr2.compareTo(aStr1) == 0,
+                aStr2 == aStr1,
                 "if radix not valid then radix must be 10",
                 "valueOf(sal_Int64, sal_Int32 radix): radix = -5"
             );
