@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+oY\u003d",
+        "filename": "framework/source/uiconfiguration/uiconfigurationmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-04-20T12:41:48Z",
+      "side": 1,
+      "message": "why not just set it to ElementModes::READ here?",
+      "revId": "2196a9584293f5c9995bf740b56644a44e3f2077",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
