@@ -17,20 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
-#include <osl/mutex.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include "cppuhelper/unourl.hxx"
 #include "rtl/malformeduriexception.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/bridge/BridgeFactory.hpp>
-#include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 
 using namespace cppu;

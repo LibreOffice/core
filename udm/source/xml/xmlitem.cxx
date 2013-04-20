@@ -21,7 +21,6 @@
 #include <udm/xml/xmlitem.hxx>
 
 // NOT FULLY DECLARED SERVICES
-#include <cosv/file.hxx>
 
 
 namespace csi

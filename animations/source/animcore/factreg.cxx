@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;

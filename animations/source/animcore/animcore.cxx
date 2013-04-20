@@ -18,15 +18,12 @@
  */
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XAnimateSet.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
-#include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/XCommand.hpp>
@@ -41,17 +38,13 @@
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/weakref.hxx>
 
 #include <cppuhelper/implbase1.hxx>
-#include <rtl/uuid.h>
 
-#include <osl/mutex.hxx>
 #include <list>
 #include <algorithm>
 #include <string.h>
