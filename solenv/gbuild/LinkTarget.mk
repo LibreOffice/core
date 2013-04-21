@@ -1230,9 +1230,13 @@ endef
 # Add a file that is built by the LinkTarget command and define
 # a dummy touch rule for it so it can be tracked via dependencies.
 # gb_LinkTarget_add_auxtarget linktarget auxtarget
+# The assumption is that the file is created by linking; in case it does not
+# exist there is some problem.  This can be caused on WNT by re-naming DLL
+# files (which are aux-targets) but not the import .lib files (which
+# are the LinkTargets) and doing an incremental build.
 define gb_LinkTarget_add_auxtarget
 $(2) : $(call gb_LinkTarget_get_target,$(1))
-	touch $$@
+	$$(if $$(wildcard $$@),touch -r $$< $$@,rm -f $$<; echo "ERROR: aux-target missing, library deleted, please try again"; false)
 
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS += $(2)
 
