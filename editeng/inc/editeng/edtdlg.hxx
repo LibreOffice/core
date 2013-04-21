@@ -57,9 +57,9 @@ public:
 class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
 {
  public:
-    virtual void EnableRubySupport( sal_Bool _bVal ) = 0;
-     virtual void SetByCharacter( sal_Bool _bByCharacter ) = 0;
-    virtual void SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;
+    virtual void EnableRubySupport( bool _bVal ) = 0;
+     virtual void SetByCharacter( bool _bByCharacter ) = 0;
+    virtual void SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;
      virtual void SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) = 0;
     virtual void    SetOptionsChangedHdl( const Link& _rHdl ) = 0;
      virtual void   SetIgnoreHdl( const Link& _rHdl ) = 0;
@@ -69,7 +69,7 @@ class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
     virtual void    SetClickByCharacterHdl( const Link& _rHdl ) = 0;
      virtual void   SetConversionFormatChangedHdl( const Link& _rHdl ) = 0;
      virtual void   SetFindHdl( const Link& _rHdl ) = 0;
-    virtual sal_Bool        GetUseBothDirections( ) const= 0;
+    virtual bool    GetUseBothDirections() const= 0;
     virtual editeng::HangulHanjaConversion::ConversionDirection    GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const = 0;
     virtual void    SetCurrentString(
                     const String& _rNewString,

@@ -168,10 +168,10 @@ struct ConvInfo
     EPaM            aConvStart;
     EPaM            aConvTo;
     EPaM            aConvContinue;    // position to start search for next text portion (word) with
-    sal_Bool        bConvToEnd;
-    sal_Bool        bMultipleDoc;
+    bool            bConvToEnd;
+    bool            bMultipleDoc;
 
-    ConvInfo() { bConvToEnd = sal_True; bMultipleDoc = sal_False; }
+    ConvInfo() : bConvToEnd(true), bMultipleDoc(false) {}
 };
 
 struct FormatterFontMetric
@@ -898,9 +898,9 @@ public:
                         ImpSpell( EditView* pEditView );
 
     // text conversion functions
-    void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
+    void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
     void                ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
-                                    sal_Bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const Font *pTargetFont );
+                                    bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const Font *pTargetFont );
     ConvInfo *          GetConvInfo() const { return pConvInfo; }
     sal_Bool            HasConvertibleTextPortion( LanguageType nLang );
     void                SetLanguageAndFont( const ESelection &rESel,

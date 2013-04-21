@@ -168,18 +168,18 @@ namespace svx
         void        SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType );
         editeng::HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const;
 
-        void            SetByCharacter( sal_Bool _bByCharacter );
-        void            SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
+        void            SetByCharacter( bool _bByCharacter );
+        void            SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
 
         /// should text which does not match the primary conversion direction be ignored?
-        sal_Bool        GetUseBothDirections( ) const;
+        bool            GetUseBothDirections( ) const;
 
         /** get current conversion direction to use
             (return argument if GetUseBothDirections is true) */
         editeng::HangulHanjaConversion::ConversionDirection GetDirection( editeng::HangulHanjaConversion::ConversionDirection eDefaultDirection ) const;
 
         /// enables or disbales the checkboxes for ruby formatted replacements
-        void            EnableRubySupport( sal_Bool bVal );
+        void            EnableRubySupport( bool bVal );
 
     private:
         DECL_LINK( OnClose, void* );

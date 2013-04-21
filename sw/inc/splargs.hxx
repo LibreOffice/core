@@ -76,7 +76,7 @@ struct SwConversionArgs : SwArgsBase
     LanguageType    nConvTargetLang;    // target language of text to be changed
     const Font     *pTargetFont;        // target font of text to be changed
     // explicitly enables or disables application of the above two
-    sal_Bool        bAllowImplicitChangesForNotConvertibleText;
+    bool            bAllowImplicitChangesForNotConvertibleText;
 
     SwConversionArgs( LanguageType nLang,
             SwTxtNode* pStart, SwIndex& rStart,
@@ -86,7 +86,7 @@ struct SwConversionArgs : SwArgsBase
           nConvTextLang( LANGUAGE_NONE ),
           nConvTargetLang( LANGUAGE_NONE ),
           pTargetFont( NULL ),
-          bAllowImplicitChangesForNotConvertibleText( sal_False )
+          bAllowImplicitChangesForNotConvertibleText( false )
         {}
 };
 

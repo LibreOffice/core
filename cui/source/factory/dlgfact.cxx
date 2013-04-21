@@ -255,17 +255,17 @@ void AbstractHangulHanjaConversionDialog_Impl::EndDialog(long nResult)
     pDlg->EndDialog(nResult);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::EnableRubySupport( sal_Bool _bVal )
+void AbstractHangulHanjaConversionDialog_Impl::EnableRubySupport( bool _bVal )
 {
     pDlg->EnableRubySupport(_bVal);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetByCharacter( sal_Bool _bByCharacter )
+void AbstractHangulHanjaConversionDialog_Impl::SetByCharacter( bool _bByCharacter )
 {
     pDlg->SetByCharacter(_bByCharacter);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection )
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection )
 {
     pDlg->SetConversionDirectionState(_bTryBothDirections, _ePrimaryConversionDirection);
 }
@@ -314,7 +314,7 @@ void AbstractHangulHanjaConversionDialog_Impl::SetFindHdl( const Link& _rHdl )
      pDlg->SetFindHdl(_rHdl );
 }
 
-sal_Bool AbstractHangulHanjaConversionDialog_Impl::GetUseBothDirections( ) const
+bool AbstractHangulHanjaConversionDialog_Impl::GetUseBothDirections( ) const
 {
     return pDlg->GetUseBothDirections();
 }

@@ -74,12 +74,12 @@ public:
         //!! hack to transport the current conversion direction state settings
         //!! into the next incarnation that iterates over the drawing objets
         //!! ( see SwHHCWrapper::~SwHHCWrapper() )
-        editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_True );
+        editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( true );
     }
 
     ~SwKeepConversionDirectionStateContext()
     {
-        editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_False );
+        editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( false );
     }
 };
 
@@ -92,8 +92,8 @@ SwHHCWrapper::SwHHCWrapper(
         LanguageType nTargetLanguage,
         const Font *pTargetFont,
         sal_Int32 nConvOptions,
-        sal_Bool bIsInteractive,
-        sal_Bool bStart, sal_Bool bOther, sal_Bool bSelection )
+        bool bIsInteractive,
+        bool bStart, bool bOther, bool bSelection )
     : editeng::HangulHanjaConversion( &pSwView->GetEditWin(), rxContext,
                                 LanguageTag( nSourceLanguage ).getLocale(),
                                 LanguageTag( nTargetLanguage ).getLocale(),
@@ -108,12 +108,12 @@ SwHHCWrapper::SwHHCWrapper(
     , m_nUnitOffset( 0 )
     , m_nPageCount( 0 )
     , m_nPageStart( 0 )
-    , m_bIsDrawObj( sal_False )
+    , m_bIsDrawObj( false )
     , m_bIsOtherCntnt( bOther )
     , m_bStartChk( bOther )
     , m_bIsSelection( bSelection )
     , m_bStartDone( bOther || bStart )
-    , m_bEndDone( sal_False )
+    , m_bEndDone( false )
 {
 }
 
@@ -170,7 +170,7 @@ SwHHCWrapper::~SwHHCWrapper()
 void SwHHCWrapper::GetNextPortion(
         OUString&           rNextPortion,
         LanguageType&       rLangOfPortion,
-        sal_Bool bAllowChanges )
+        bool bAllowChanges )
 {
     m_pConvArgs->bAllowImplicitChangesForNotConvertibleText = bAllowChanges;
 
@@ -297,7 +297,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
                     // replace selected sub string with the corresponding
                     // sub string from the new text while keeping as
                     // much from the attributes as possible
-                    ChangeText_impl( aInNew, sal_True );
+                    ChangeText_impl( aInNew, true );
 
                     nCorrectionOffset += nConvChgLen - nChgLen;
 
@@ -327,12 +327,12 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
     }
     else
     {
-        ChangeText_impl( rNewText, sal_False );
+        ChangeText_impl( rNewText, false );
     }
 }
 
 
-void SwHHCWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes )
+void SwHHCWrapper::ChangeText_impl( const String &rNewText, bool bKeepAttributes )
 {
     if (bKeepAttributes)
     {
@@ -401,7 +401,7 @@ void SwHHCWrapper::ReplaceUnit(
     OUString aNewTxt( rReplaceWith );
     OSL_ENSURE( aOrigTxt == rOrigText, "!! text mismatch !!" );
     SwFmtRuby *pRuby = 0;
-    sal_Bool bRubyBelow = sal_False;
+    bool bRubyBelow = false;
     String  aNewOrigText;
     switch (eAction)
     {
@@ -431,14 +431,14 @@ void SwHHCWrapper::ReplaceUnit(
         case eReplacementBelow :
         {
             pRuby = new SwFmtRuby( rReplaceWith );
-            bRubyBelow = sal_True;
+            bRubyBelow = true;
         }
         break;
         case eOriginalBelow :
         {
             pRuby = new SwFmtRuby( aOrigTxt );
             aNewOrigText = rReplaceWith;
-            bRubyBelow = sal_True;
+            bRubyBelow = true;
         }
         break;
         default:
@@ -467,7 +467,7 @@ void SwHHCWrapper::ReplaceUnit(
             m_rWrtShell.Left( 0, sal_True, aNewOrigText.Len(), sal_True, sal_True );
         }
 
-        pRuby->SetPosition( bRubyBelow );
+        pRuby->SetPosition( static_cast<sal_uInt16>(bRubyBelow) );
         pRuby->SetAdjustment( RubyAdjust_CENTER );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -485,7 +485,7 @@ void SwHHCWrapper::ReplaceUnit(
         // according to FT we should currently not bother about keeping
         // attributes in Hangul/Hanja conversion and leave that untouched.
         // Thus we do this only for Chinese translation...
-        sal_Bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
+        const bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
         if (bIsChineseConversion)
             ChangeText( aNewTxt, rOrigText, &rOffsets, m_rWrtShell.GetCrsr() );
         else
@@ -536,9 +536,9 @@ void SwHHCWrapper::ReplaceUnit(
 }
 
 
-sal_Bool SwHHCWrapper::HasRubySupport() const
+bool SwHHCWrapper::HasRubySupport() const
 {
-    return sal_True;
+    return true;
 }
 
 
@@ -586,7 +586,7 @@ void SwHHCWrapper::Convert()
         {
             m_pConvArgs->nConvTargetLang = GetTargetLanguage();
             m_pConvArgs->pTargetFont = GetTargetFont();
-            m_pConvArgs->bAllowImplicitChangesForNotConvertibleText = sal_True;
+            m_pConvArgs->bAllowImplicitChangesForNotConvertibleText = true;
         }
 
         // if it is not just a selection and we are about to begin
@@ -631,7 +631,7 @@ void SwHHCWrapper::Convert()
         ConvStart_impl( m_pConvArgs, SVX_SPELL_OTHER );
     else
     {
-        m_bStartChk = sal_False;
+        m_bStartChk = false;
         ConvStart_impl( m_pConvArgs, SVX_SPELL_BODY_END );
     }
 
@@ -641,28 +641,28 @@ void SwHHCWrapper::Convert()
 }
 
 
-sal_Bool SwHHCWrapper::ConvNext_impl( )
+bool SwHHCWrapper::ConvNext_impl( )
 {
     //! modified version of SvxSpellWrapper::SpellNext
 
     // no change of direction so the desired region is fully processed
     if( m_bStartChk )
-        m_bStartDone = sal_True;
+        m_bStartDone = true;
     else
-        m_bEndDone = sal_True;
+        m_bEndDone = true;
 
     if( m_bIsOtherCntnt && m_bStartDone && m_bEndDone ) // document completely checked?
     {
-        return sal_False;
+        return false;
     }
 
-    sal_Bool bGoOn = sal_False;
+    bool bGoOn = false;
 
     if ( m_bIsOtherCntnt )
     {
-        m_bStartChk = sal_False;
+        m_bStartChk = false;
         ConvStart_impl( m_pConvArgs, SVX_SPELL_BODY );
-        bGoOn = sal_True;
+        bGoOn = true;
     }
     else if ( m_bStartDone && m_bEndDone )
     {
@@ -670,34 +670,34 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
         if( HasOtherCnt_impl() )
         {
             ConvStart_impl( m_pConvArgs, SVX_SPELL_OTHER );
-            m_bIsOtherCntnt = bGoOn = sal_True;
+            m_bIsOtherCntnt = bGoOn = true;
         }
     }
     else
     {
             m_bStartChk = !m_bStartDone;
             ConvStart_impl( m_pConvArgs, m_bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
-            bGoOn = sal_True;
+            bGoOn = true;
     }
     return bGoOn;
 }
 
 
-sal_Bool SwHHCWrapper::FindConvText_impl()
+bool SwHHCWrapper::FindConvText_impl()
 {
     //! modified version of SvxSpellWrapper::FindSpellError
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     m_pWin->EnterWait();
-    sal_Bool bConv = sal_True;
+    bool bConv = true;
 
     while ( bConv )
     {
         bFound = ConvContinue_impl( m_pConvArgs );
         if (bFound)
         {
-            bConv = sal_False;
+            bConv = false;
         }
         else
         {
@@ -710,9 +710,9 @@ sal_Bool SwHHCWrapper::FindConvText_impl()
 }
 
 
-sal_Bool SwHHCWrapper::HasOtherCnt_impl()
+bool SwHHCWrapper::HasOtherCnt_impl()
 {
-    return m_bIsSelection ? sal_False : m_rWrtShell.HasOtherCnt();
+    return m_bIsSelection ? false : m_rWrtShell.HasOtherCnt();
 }
 
 
@@ -729,7 +729,7 @@ void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConversionArgs )
 }
 
 
-sal_Bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
+bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
 {
     bool bProgress = !m_bIsDrawObj && !m_bIsSelection;
     pConversionArgs->aConvText = OUString();
