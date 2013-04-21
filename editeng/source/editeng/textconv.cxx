@@ -52,22 +52,20 @@ TextConvWrapper::TextConvWrapper( Window* pWindow,
         bool bIsStart,
         EditView* pView ) :
     HangulHanjaConversion( pWindow, rxContext, rSourceLocale, rTargetLocale, pTargetFont, nOptions, bIsInteractive )
+    , m_nConvTextLang(LANGUAGE_NONE)
+    , m_nUnitOffset(0)
+    , m_nLastPos(0)
+    , m_aConvSel(pView->GetSelection())
+    , m_pEditView(pView)
+    , m_pWin(pWindow)
+    , m_bStartChk(false)
+    , m_bStartDone(bIsStart)
+    , m_bEndDone(false)
+    , m_bAllowChange(false)
 {
     DBG_ASSERT( pWindow, "TextConvWrapper: window missing" );
 
-    nConvTextLang = LANGUAGE_NONE;
-    nUnitOffset = 0;
-
-    bStartChk   = false;
-    bStartDone  = bIsStart;
-    bEndDone    = false;
-    pWin        = pWindow;
-    pEditView   = pView;
-
-    aConvSel    = pEditView->GetSelection();
-    aConvSel.Adjust();  // make Start <= End
-
-    bAllowChange = false;
+    m_aConvSel.Adjust();  // make Start <= End
 }
 
 
@@ -80,17 +78,17 @@ bool TextConvWrapper::ConvNext_impl()
 {
     // modified version of SvxSpellWrapper::SpellNext
 
-    if( bStartChk )
-        bStartDone = true;
+    if( m_bStartChk )
+        m_bStartDone = true;
     else
-        bEndDone = true;
+        m_bEndDone = true;
 
-    if ( bStartDone && bEndDone )
+    if ( m_bStartDone && m_bEndDone )
     {
         if ( ConvMore_impl() )  // examine another document?
         {
-            bStartDone = true;
-            bEndDone  = false;
+            m_bStartDone = true;
+            m_bEndDone  = false;
             ConvStart_impl( SVX_SPELL_BODY );
             return true;
         }
@@ -100,20 +98,20 @@ bool TextConvWrapper::ConvNext_impl()
 
     bool bGoOn = false;
 
-    if ( bStartDone && bEndDone )
+    if ( m_bStartDone && m_bEndDone )
     {
         if ( ConvMore_impl() )  // examine another document?
         {
-            bStartDone = true;
-            bEndDone  = false;
+            m_bStartDone = true;
+            m_bEndDone  = false;
             ConvStart_impl( SVX_SPELL_BODY );
             return true;
         }
     }
-    else if (!aConvSel.HasRange())
+    else if (!m_aConvSel.HasRange())
     {
-        bStartChk = !bStartDone;
-        ConvStart_impl( bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
+        m_bStartChk = !m_bStartDone;
+        ConvStart_impl( m_bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
         bGoOn = true;
     }
     return bGoOn;
@@ -126,7 +124,7 @@ bool TextConvWrapper::FindConvText_impl()
 
     bool bFound = false;
 
-    pWin->EnterWait();
+    m_pWin->EnterWait();
     bool bConvert = true;
 
     while ( bConvert )
@@ -142,7 +140,7 @@ bool TextConvWrapper::FindConvText_impl()
             bConvert = ConvNext_impl();
         }
     }
-    pWin->LeaveWait();
+    m_pWin->LeaveWait();
     return bFound;
 }
 
@@ -152,8 +150,8 @@ bool TextConvWrapper::ConvMore_impl()
     // modified version of SvxSpellWrapper::SpellMore
 
     bool bMore = false;
-    EditEngine* pEE = pEditView->GetEditEngine();
-    ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
+    EditEngine* pEE = m_pEditView->GetEditEngine();
+    ImpEditEngine* pImpEE = m_pEditView->GetImpEditEngine();
     ConvInfo* pConvInfo = pImpEE->GetConvInfo();
     if ( pConvInfo->bMultipleDoc )
     {
@@ -161,7 +159,7 @@ bool TextConvWrapper::ConvMore_impl()
         if ( bMore )
         {
             // The text has been entered in this engine ...
-            pEditView->GetImpEditView()->SetEditSelection(
+            m_pEditView->GetImpEditView()->SetEditSelection(
                         pEE->GetEditDoc().GetStartPaM() );
         }
     }
@@ -173,19 +171,19 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
 {
     // modified version of EditSpellWrapper::SpellStart
 
-    EditEngine* pEE = pEditView->GetEditEngine();
-    ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
+    EditEngine* pEE = m_pEditView->GetEditEngine();
+    ImpEditEngine* pImpEE = m_pEditView->GetImpEditEngine();
     ConvInfo* pConvInfo = pImpEE->GetConvInfo();
 
     if ( eArea == SVX_SPELL_BODY_START )
     {
         // Is called when Spell-forward has reached the end, and to start over
-        if ( bEndDone )
+        if ( m_bEndDone )
         {
             pConvInfo->bConvToEnd = false;
             pConvInfo->aConvTo = pConvInfo->aConvStart;
             pConvInfo->aConvContinue = EPaM( 0, 0 );
-            pEditView->GetImpEditView()->SetEditSelection(
+            m_pEditView->GetImpEditView()->SetEditSelection(
                     pEE->GetEditDoc().GetStartPaM() );
         }
         else
@@ -199,11 +197,11 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
     {
         // Is called when Spell-forward starts
         pConvInfo->bConvToEnd = true;
-        if (aConvSel.HasRange())
+        if (m_aConvSel.HasRange())
         {
             // user selection: convert to end of selection
-            pConvInfo->aConvTo.nPara    = aConvSel.nEndPara;
-            pConvInfo->aConvTo.nIndex   = aConvSel.nEndPos;
+            pConvInfo->aConvTo.nPara    = m_aConvSel.nEndPara;
+            pConvInfo->aConvTo.nIndex   = m_aConvSel.nEndPos;
             pConvInfo->bConvToEnd       = false;
         }
         else
@@ -237,12 +235,12 @@ bool TextConvWrapper::ConvContinue_impl()
     // modified version of EditSpellWrapper::SpellContinue
 
     // get next convertible text portion and its language
-    aConvText = OUString();
-    nConvTextLang = LANGUAGE_NONE;
-    pEditView->GetImpEditEngine()->ImpConvert( aConvText, nConvTextLang,
-            pEditView, GetSourceLanguage(), aConvSel,
-            bAllowChange, GetTargetLanguage(), GetTargetFont() );
-    return !aConvText.isEmpty();
+    m_aConvText = OUString();
+    m_nConvTextLang = LANGUAGE_NONE;
+    m_pEditView->GetImpEditEngine()->ImpConvert( m_aConvText, m_nConvTextLang,
+            m_pEditView, GetSourceLanguage(), m_aConvSel,
+            m_bAllowChange, GetTargetLanguage(), GetTargetFont() );
+    return !m_aConvText.isEmpty();
 }
 
 
@@ -250,11 +248,11 @@ void TextConvWrapper::SetLanguageAndFont( const ESelection &rESel,
     LanguageType nLang, sal_uInt16 nLangWhichId,
     const Font *pFont,  sal_uInt16 nFontWhichId )
 {
-    ESelection aOldSel = pEditView->GetSelection();
-    pEditView->SetSelection( rESel );
+    ESelection aOldSel = m_pEditView->GetSelection();
+    m_pEditView->SetSelection( rESel );
 
     // set new language attribute
-    SfxItemSet aNewSet( pEditView->GetEmptyItemSet() );
+    SfxItemSet aNewSet( m_pEditView->GetEmptyItemSet() );
     aNewSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );
 
     // new font to be set?
@@ -272,9 +270,9 @@ void TextConvWrapper::SetLanguageAndFont( const ESelection &rESel,
     }
 
     // apply new attributes
-    pEditView->SetAttribs( aNewSet );
+    m_pEditView->SetAttribs( aNewSet );
 
-    pEditView->SetSelection( aOldSel );
+    m_pEditView->SetSelection( aOldSel );
 }
 
 
@@ -287,12 +285,12 @@ void TextConvWrapper::SelectNewUnit_impl(
     if (!bOK)
         return;
 
-    ESelection  aSelection = pEditView->GetSelection();
+    ESelection  aSelection = m_pEditView->GetSelection();
     DBG_ASSERT( aSelection.nStartPara == aSelection.nEndPara,
         "paragraph mismatch in selection" );
-    aSelection.nStartPos = (sal_uInt16) (nLastPos + nUnitOffset + nUnitStart);
-    aSelection.nEndPos   = (sal_uInt16) (nLastPos + nUnitOffset + nUnitEnd);
-    pEditView->SetSelection( aSelection );
+    aSelection.nStartPos = (sal_uInt16) (m_nLastPos + m_nUnitOffset + nUnitStart);
+    aSelection.nEndPos   = (sal_uInt16) (m_nLastPos + m_nUnitOffset + nUnitEnd);
+    m_pEditView->SetSelection( aSelection );
 }
 
 
@@ -301,19 +299,19 @@ void TextConvWrapper::GetNextPortion(
         LanguageType&    /* [out] */ rLangOfPortion,
         bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText )
 {
-    bAllowChange = _bAllowImplicitChangesForNotConvertibleText;
+    m_bAllowChange = _bAllowImplicitChangesForNotConvertibleText;
 
     FindConvText_impl();
-    rNextPortion    = aConvText;
-    rLangOfPortion  = nConvTextLang;
-    nUnitOffset  = 0;
+    rNextPortion    = m_aConvText;
+    rLangOfPortion  = m_nConvTextLang;
+    m_nUnitOffset = 0;
 
-    ESelection  aSelection = pEditView->GetSelection();
+    ESelection  aSelection = m_pEditView->GetSelection();
     DBG_ASSERT( aSelection.nStartPara == aSelection.nEndPara,
             "paragraph mismatch in selection" );
     DBG_ASSERT( aSelection.nStartPos  <= aSelection.nEndPos,
             "start pos > end pos" );
-    nLastPos =  aSelection.nStartPos;
+    m_nLastPos =  aSelection.nStartPos;
 }
 
 
@@ -352,7 +350,7 @@ void TextConvWrapper::ReplaceUnit(
     // select current unit
     SelectNewUnit_impl( nUnitStart, nUnitEnd );
 
-    OUString aOrigTxt( pEditView->GetSelected() );
+    OUString aOrigTxt( m_pEditView->GetSelected() );
     OUString aNewTxt( rReplaceWith );
     switch (eAction)
     {
@@ -373,12 +371,12 @@ void TextConvWrapper::ReplaceUnit(
         default:
             OSL_FAIL( "unexpected case" );
     }
-    nUnitOffset = sal::static_int_cast< sal_uInt16 >(
-        nUnitOffset + nUnitStart + aNewTxt.getLength());
+    m_nUnitOffset = sal::static_int_cast< sal_uInt16 >(
+        m_nUnitOffset + nUnitStart + aNewTxt.getLength());
 
     // remember current original language for kater use
-    ImpEditEngine *pImpEditEng = pEditView->GetImpEditEngine();
-    ESelection _aOldSel     = pEditView->GetSelection();
+    ImpEditEngine *pImpEditEng = m_pEditView->GetImpEditEngine();
+    ESelection _aOldSel     = m_pEditView->GetSelection();
     //EditSelection aOldEditSel = pEditView->GetImpEditView()->GetEditSelection();
 
 #ifdef DBG_UTIL
@@ -402,7 +400,7 @@ void TextConvWrapper::ReplaceUnit(
         DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                 "TextConvWrapper::ReplaceUnit : unexpected target language" );
 
-        ESelection aOldSel = pEditView->GetSelection();
+        ESelection aOldSel = m_pEditView->GetSelection();
         ESelection aNewSel( aOldSel );
         aNewSel.nStartPos = sal::static_int_cast< xub_StrLen >(
             aNewSel.nStartPos - aNewTxt.getLength());
@@ -419,7 +417,7 @@ void TextConvWrapper::ReplaceUnit(
     pImpEditEng->UndoActionEnd( EDITUNDO_INSERT );
 
     // adjust ConvContinue / ConvTo if necessary
-    ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
+    ImpEditEngine* pImpEE = m_pEditView->GetImpEditEngine();
     ConvInfo* pConvInfo = pImpEE->GetConvInfo();
     sal_Int32 nDelta = aNewTxt.getLength() - aOrigTxt.getLength();
     if (nDelta != 0)
@@ -504,9 +502,9 @@ void TextConvWrapper::ChangeText( const String &rNewText,
                     xub_StrLen nChgInNodeStartIndex = static_cast< xub_StrLen >( nStartIndex + nCorrectionOffset + nChgPos );
                     aSel.nStartPos = nChgInNodeStartIndex;
                     aSel.nEndPos   = nChgInNodeStartIndex + nChgLen;
-                    pEditView->SetSelection( aSel );
+                    m_pEditView->SetSelection( aSel );
 #ifdef DEBUG
-                    String aSelTxt1( pEditView->GetSelected() );
+                    String aSelTxt1( m_pEditView->GetSelected() );
 #endif
 
                     // replace selected sub string with the corresponding
@@ -551,15 +549,15 @@ void TextConvWrapper::ChangeText_impl( const String &rNewText, bool bKeepAttribu
     if (bKeepAttributes)
     {
         // save attributes to be restored
-        SfxItemSet aSet( pEditView->GetAttribs() );
+        SfxItemSet aSet( m_pEditView->GetAttribs() );
 
 #ifdef DEBUG
-        String aSelTxt1( pEditView->GetSelected() );
+        String aSelTxt1( m_pEditView->GetSelected() );
 #endif
         // replace old text and select new text
-        pEditView->InsertText( rNewText, sal_True );
+        m_pEditView->InsertText( rNewText, sal_True );
 #ifdef DEBUG
-        String aSelTxt2( pEditView->GetSelected() );
+        String aSelTxt2( m_pEditView->GetSelected() );
 #endif
 
         // since 'SetAttribs' below function like merging with the attributes
@@ -567,20 +565,20 @@ void TextConvWrapper::ChangeText_impl( const String &rNewText, bool bKeepAttribu
         // all attributes now. (Those attributes that may take effect left
         // to the position where the new text gets inserted after the old text
         // was deleted)
-        pEditView->RemoveAttribs();
+        m_pEditView->RemoveAttribs();
         // apply saved attributes to new inserted text
-        pEditView->SetAttribs( aSet );
+        m_pEditView->SetAttribs( aSet );
     }
     else
     {
-        pEditView->InsertText( rNewText );
+        m_pEditView->InsertText( rNewText );
     }
 }
 
 
 void TextConvWrapper::Convert()
 {
-    bStartChk = false;
+    m_bStartChk = false;
     ConvStart_impl( SVX_SPELL_BODY_END );
     ConvertDocument();
     ConvEnd_impl();
