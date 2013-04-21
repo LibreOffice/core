@@ -25,10 +25,14 @@ odk_PLATFORM := $(if $(filter WNT,$(OS)),\
 	$(if $(filter MACOSX,$(OS)),macosx,\
 	$(if $(filter AIX,$(OS)),aix))))))))
 
-$(call gb_CustomTarget_get_workdir,odk/check)/checkbin: $(SRCDIR)/odk/util/check.pl $(call gb_CustomTarget_get_target,odk/odkcommon)
+$(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
+		$(SRCDIR)/odk/util/check.pl \
+		$(call gb_CustomTarget_get_target,odk/odkcommon)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
 	touch $@
-	$(PERL) $< $(call gb_CustomTarget_get_workdir,odk/odkcommon) \
+	$(PERL) $< \
+		$(INSTDIR)/$(gb_Package_SDKDIRNAME) \
+		$(call gb_CustomTarget_get_workdir,odk/odkcommon) \
 		$(odk_PLATFORM) "$(gb_Exectable_EXT)" $@
 	cat $@
 
