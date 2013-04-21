@@ -1197,7 +1197,34 @@ sal_Bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
 // -----------------------------------------------------------------------
 
-// Not that when called for COMMAND_WHEEL above, despite its name,
+static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN )
+{
+    if ( pScrl && nN && pScrl->IsEnabled() && pScrl->IsInputEnabled() && ! pScrl->IsInModalMode() )
+    {
+        long nNewPos = pScrl->GetThumbPos();
+
+        if ( nN == -LONG_MAX )
+            nNewPos += pScrl->GetPageSize();
+        else if ( nN == LONG_MAX )
+            nNewPos -= pScrl->GetPageSize();
+        else
+        {
+            const double fVal = (double)nNewPos - ((double)nN * pScrl->GetLineSize());
+
+            if ( fVal < LONG_MIN )
+                nNewPos = LONG_MIN;
+            else if ( fVal > LONG_MAX )
+                nNewPos = LONG_MAX;
+            else
+                nNewPos = (long)fVal;
+        }
+
+        pScrl->DoScroll( nNewPos );
+    }
+
+}
+
+// Note that when called for COMMAND_WHEEL above, despite its name,
 // pVScrl isn't necessarily the vertical scroll bar. Depending on
 // whether the scroll is horizontal or vertical, it is either the
 // horizontal or vertical scroll bar. nY is correspondingly either
@@ -1206,51 +1233,8 @@ sal_Bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
                                ScrollBar* pVScrl, long nY )
 {
-    if ( pHScrl && nX && pHScrl->IsEnabled() && pHScrl->IsInputEnabled() && ! pHScrl->IsInModalMode() )
-    {
-        long nNewPos = pHScrl->GetThumbPos();
-
-        if ( nX == -LONG_MAX )
-            nNewPos += pHScrl->GetPageSize();
-        else if ( nX == LONG_MAX )
-            nNewPos -= pHScrl->GetPageSize();
-        else
-        {
-            const double fVal = (double)nNewPos - ((double)nX * pHScrl->GetLineSize());
-
-            if ( fVal < LONG_MIN )
-                nNewPos = LONG_MIN;
-            else if ( fVal > LONG_MAX )
-                nNewPos = LONG_MAX;
-            else
-                nNewPos = (long)fVal;
-        }
-
-        pHScrl->DoScroll( nNewPos );
-    }
-
-    if ( pVScrl && nY && pVScrl->IsEnabled() && pVScrl->IsInputEnabled() && ! pVScrl->IsInModalMode() )
-    {
-        long nNewPos = pVScrl->GetThumbPos();
-
-        if ( nY == -LONG_MAX )
-            nNewPos += pVScrl->GetPageSize();
-        else if ( nY == LONG_MAX )
-            nNewPos -= pVScrl->GetPageSize();
-        else
-        {
-            const double fVal = (double)nNewPos - ((double)nY * pVScrl->GetLineSize());
-
-            if ( fVal < LONG_MIN )
-                nNewPos = LONG_MIN;
-            else if ( fVal > LONG_MAX )
-                nNewPos = LONG_MAX;
-            else
-                nNewPos = (long)fVal;
-        }
-
-        pVScrl->DoScroll( nNewPos );
-    }
+    lcl_HandleScrollHelper( pHScrl, nX );
+    lcl_HandleScrollHelper( pVScrl, nY );
 }
 
 DockingManager* Window::GetDockingManager()
