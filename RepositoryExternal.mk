@@ -2888,8 +2888,8 @@ $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Zip_get_outdir_ta
 
 else
 
-$(call gb_ExternalExecutable_set_internal,python)
-$(call gb_ExternalExecutable_set_precommand,python,$(gb_PYTHON_PRECOMMAND))
+$(call gb_ExternalExecutable_set_internal,python,$(INSTDIR)/program/python$(if $(filter WNT,$(OS)),.exe,.bin))
+$(call gb_ExternalExecutable_set_precommand,python,$(gb_Python_PRECOMMAND))
 $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Package_get_target_for_build,python3))
 
 endif
