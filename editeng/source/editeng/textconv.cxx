@@ -96,8 +96,6 @@ bool TextConvWrapper::ConvNext_impl()
 
     }
 
-    bool bGoOn = false;
-
     if ( m_bStartDone && m_bEndDone )
     {
         if ( ConvMore_impl() )  // examine another document?
@@ -112,9 +110,10 @@ bool TextConvWrapper::ConvNext_impl()
     {
         m_bStartChk = !m_bStartDone;
         ConvStart_impl( m_bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
-        bGoOn = true;
+        return true;
     }
-    return bGoOn;
+
+    return false;
 }
 
 
