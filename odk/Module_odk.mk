@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,odk))
 
 $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_odkcommon \
-	$(if $(filter WNT,$(OS)),CustomTarget_cli) \
+	$(if $(filter WNT,$(OS)),Package_cli) \
 	$(if $(DOXYGEN),CustomTarget_doxygen) \
 	CustomTarget_check \
 	CustomTarget_lib \
