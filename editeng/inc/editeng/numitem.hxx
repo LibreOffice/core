@@ -267,6 +267,7 @@ public:
     const SvxNumberFormat*  Get(sal_uInt16 nLevel)const;
     const SvxNumberFormat&  GetLevel(sal_uInt16 nLevel)const;
     void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat& rFmt, sal_Bool bIsValid = sal_True);
+    void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt);
 
     sal_Bool                    IsContinuousNumbering()const
                                             {return bContinuousNumbering;}

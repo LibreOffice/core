@@ -836,6 +836,23 @@ void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, sal_Boo
     }
 }
 
+void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
+{
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
+
+    if( nLevel < SVX_MAX_NUM )
+    {
+        aFmtsSet[nLevel] = 0 != pFmt;
+        if(pFmt)
+            SetLevel(nLevel, *pFmt);
+        else
+        {
+            delete aFmts[nLevel];
+            aFmts[nLevel] = 0;
+        }
+    }
+}
+
 String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings ) const
 {
     String aStr;
