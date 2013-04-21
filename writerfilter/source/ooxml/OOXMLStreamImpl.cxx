@@ -169,8 +169,8 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
             {
                 beans::StringPair aPair = aSeq[i];
 
-                if (aPair.First.compareTo(sType) == 0 &&
-                    aPair.Second.compareTo(sStreamType) == 0)
+                if ((aPair.First == sType) &&
+                    (aPair.Second == sStreamType))
                     bFound = true;
                 else if (aPair.First.compareTo(sId) == 0 &&
                          aPair.Second.compareTo(rId) == 0)
