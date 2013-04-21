@@ -132,6 +132,43 @@ File gid_File_Package_odk_cli
 End
 #endif
 
+File gid_File_Package_odk_config
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_config.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+
+#if defined(WNT)
+File gid_File_Package_odk_config_win
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_config_win.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+#else
+File gid_File_Package_odk_config_notwin
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_config_notwin.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+#endif
+
+File gid_File_Package_odk_docs
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_docs.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+
+File gid_File_Package_odk_html
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_html.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+
 File gid_File_Package_odk_lib
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;

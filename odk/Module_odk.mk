@@ -14,13 +14,28 @@ $(eval $(call gb_Module_add_targets,odk,\
 	$(if $(filter WNT,$(OS)),Package_cli) \
 	$(if $(DOXYGEN),CustomTarget_doxygen) \
 	CustomTarget_check \
+	CustomTarget_html \
 	CustomTarget_settings \
 	CustomTarget_autodoc \
 	Executable_unoapploader \
 	Package_bin \
+	Package_config \
+	Package_docs \
+	Package_html \
 	Package_examples \
 	Package_lib \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,odk,\
+	CustomTarget_config_win \
+	Package_config_win \
+))
+else
+$(eval $(call gb_Module_add_targets,odk,\
+	Package_config_notwin \
+))
+endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,odk,\
