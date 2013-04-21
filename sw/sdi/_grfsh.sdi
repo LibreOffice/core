@@ -60,6 +60,18 @@ interface BaseTextGraphic
         StateMethod = GetAttrState ;
     ]
 
+    SID_ROTATE_GRAPHIC_LEFT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+
+    SID_ROTATE_GRAPHIC_RIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+
     SID_INSERT_GRAPHIC // zeigt auf FN_FORMAT_GRAFIC_DLG
     [
         ExecMethod = Execute ;

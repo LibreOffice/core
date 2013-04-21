@@ -1289,6 +1289,20 @@ Menu MN_GRF_POPUPMENU
         MenuItem { ITEM_SAVE_GRAPHIC };
         MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_EXTERNAL_EDIT };
+
+        MenuItem
+        {
+            Identifier = SID_ROTATE_GRAPHIC_LEFT ;
+            Command = ".uno:RotateGraphicLeft" ;
+            Text [ en-US ] = "Rotate Graphic Left" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_ROTATE_GRAPHIC_RIGHT ;
+            Command = ".uno:RotateGraphicRight" ;
+            Text [ en-US ] = "Rotate Graphic Right" ;
+        };
+
         SEPARATOR;
         MenuItem
         {
