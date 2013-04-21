@@ -111,19 +111,15 @@ void Shell::SetMDITitle()
     if ( !m_aCurLibName.isEmpty() )
     {
         LibraryLocation eLocation = m_aCurDocument.getLibraryLocation( m_aCurLibName );
-        aTitleBuf.append(m_aCurDocument.getTitle(eLocation));
-        aTitleBuf.append('.');
-        aTitleBuf.append(m_aCurLibName);
+        aTitleBuf = m_aCurDocument.getTitle(eLocation) + "." + m_aCurLibName ;
     }
     else
-        aTitleBuf.append(IDE_RESSTR(RID_STR_ALL));
+        aTitleBuf = IDE_RESSTR(RID_STR_ALL) ;
 
     DocumentSignature aCurSignature( m_aCurDocument );
     if ( aCurSignature.getScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
     {
-        aTitleBuf.append(' ');
-        aTitleBuf.append(IDE_RESSTR(RID_STR_SIGNED));
-        aTitleBuf.append(' ');
+        aTitleBuf = aTitleBuf + " " + IDE_RESSTR(RID_STR_SIGNED) + " ";
     }
     OUString aTitle(aTitleBuf.makeStringAndClear());
 
