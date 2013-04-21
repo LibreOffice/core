@@ -28,7 +28,7 @@ class VCL_DLLPUBLIC GraphicNativeTransform
 
     bool rotateJPEG     (sal_uInt16 aRotation);
     bool rotateSVG      (sal_uInt16 aRotation);
-    bool rotateGeneric  (sal_uInt16 aRotation, sal_uInt32 aType);
+    bool rotateGeneric  (sal_uInt16 aRotation, OUString aType);
 
 public:
     GraphicNativeTransform(Graphic& rGraphic);

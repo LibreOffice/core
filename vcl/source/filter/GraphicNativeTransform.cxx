@@ -20,7 +20,9 @@
 #include <vcl/GraphicNativeTransform.hxx>
 
 #include <vcl/gfxlink.hxx>
-#include <vcl/cvtgrf.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 
 #include "jpeg/Exif.hxx"
@@ -33,13 +35,19 @@ GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic) :
 GraphicNativeTransform::~GraphicNativeTransform()
 {}
 
-bool GraphicNativeTransform::rotate(sal_uInt16 aRotation)
+bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
 {
-    if (aRotation == 0)
-        return true;
+    // Rotation can be between 0 and 3600
+    sal_uInt16 aRotation = aInputRotation % 3600;
 
-    if (aRotation != 900 && aRotation != 1800 && aRotation != 2700)
+    if (aRotation == 0)
+    {
+        return true; // No rotation is needed
+    }
+    else if (aRotation != 900 && aRotation != 1800 && aRotation != 2700)
+    {
         return false;
+    }
 
     GfxLink aLink = mrGraphic.GetLink();
     if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_JPG )
@@ -52,44 +60,47 @@ bool GraphicNativeTransform::rotate(sal_uInt16 aRotation)
     }
     else if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_PNG )
     {
-        return rotateGeneric(aRotation, CVT_PNG);
+        return rotateGeneric(aRotation, OUString("png"));
     }
     else if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_GIF )
     {
-        return rotateGeneric(aRotation, CVT_PNG);
+        return rotateGeneric(aRotation, OUString("gif"));
     }
     return false;
 }
 
-bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, sal_uInt32 aType)
+bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, OUString aType)
 {
+    // Can't rotate animations yet
+    if (mrGraphic.IsAnimated())
+    {
+        return false;
+    }
+
+    SvMemoryStream aStream;
+
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+    css::uno::Sequence< css::beans::PropertyValue > aFilterData( 3 );
+    aFilterData[ 0 ].Name = "Interlaced";
+    aFilterData[ 0 ].Value <<= (sal_Int32) 0;
+    aFilterData[ 1 ].Name = "Compression";
+    aFilterData[ 1 ].Value <<= (sal_Int32) 9;
+    aFilterData[ 2 ].Name = "Quality";
+    aFilterData[ 2 ].Value <<= (sal_Int32) 90;
+
+    sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aType );
+
     BitmapEx aBitmap = mrGraphic.GetBitmapEx();
     aBitmap.Rotate(aRotation, COL_BLACK);
+    rFilter.ExportGraphic( aBitmap, OUString( "none" ), aStream, nFilterFormat, &aFilterData );
 
-    SvMemoryStream aStream;
-    GraphicConverter::Export(aStream, aBitmap, aType);
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
 
-    Graphic aNewGraphic;
-    GraphicConverter::Import(aStream, aNewGraphic, aType);
+    Graphic aGraphic;
+    rFilter.ImportGraphic( aGraphic, OUString("import"), aStream );
 
-    mrGraphic = aNewGraphic;
-    return true;
-}
-
-bool GraphicNativeTransform::rotateSVG(sal_uInt16 aRotation)
-{
-    GDIMetaFile aGDIMetafile = mrGraphic.GetGDIMetaFile();
-    //aGDIMetafile.Rotate(aRotation);
-
-    SvMemoryStream aStream;
-    GraphicConverter::Export(aStream, aGDIMetafile, CVT_SVG);
-    aStream.Seek( STREAM_SEEK_TO_BEGIN );
-
-    Graphic aNewGraphic;
-    GraphicConverter::Import(aStream, aNewGraphic, CVT_SVG);
-
-    mrGraphic = aNewGraphic;
+    mrGraphic = aGraphic;
     return true;
 }
 
