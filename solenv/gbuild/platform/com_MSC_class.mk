@@ -623,7 +623,7 @@ gb_UIMenubarTarget_UIMenubarTarget_platform :=
 gb_Pyuno_PROGRAMDIRNAME := program
 
 # Python
-gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(OUTDIR_FOR_BUILD)/lib/python" PYTHONPATH="$(OUTDIR_FOR_BUILD)/lib/python;$(OUTDIR_FOR_BUILD)/lib/python/lib-dynload"
+gb_Python_PRECOMMAND := PATH="$(shell cygpath -w $(INSTDIR)/program);$(shell cygpath -w $(OUTDIR)/bin)" PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib;$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload:$(INSTDIR)/program"
 gb_Python_INSTALLED_EXECUTABLE := $(DEVINSTALLDIR)/opt/program/python.exe
 
 # vim: set noet sw=4:

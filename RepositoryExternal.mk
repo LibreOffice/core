@@ -2300,15 +2300,16 @@ $(call gb_LinkTarget__use_python_headers,$(1))
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
-	python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).lib \
+	$(call gb_UnpackedTarball_get_dir,python3)/$(if $(filter 90,$(VCVER)),PC/VS9.0,PCbuild)$(if $(filter X86_64,$(CPUNAME)),/amd64)/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).lib \
 )
 else ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
 	-F$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO -framework LibreOfficePython \
 )
 else
-$(call gb_LinkTarget_use_libraries,$(1),\
-	python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m \
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,python3) \
+	-lpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m \
 )
 endif
 
@@ -2888,8 +2889,8 @@ $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Zip_get_outdir_ta
 
 else
 
-$(call gb_ExternalExecutable_set_internal,python)
-$(call gb_ExternalExecutable_set_precommand,python,$(gb_PYTHON_PRECOMMAND))
+$(call gb_ExternalExecutable_set_internal,python,$(INSTDIR)/program/$(if $(filter WNT,$(OS)),python-core-$(PYTHON_VERSION)/bin/python.exe,python.bin))
+$(call gb_ExternalExecutable_set_precommand,python,$(gb_Python_PRECOMMAND))
 $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Package_get_target_for_build,python3))
 
 endif
