@@ -213,8 +213,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),user32.lib) \
 		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) \
-	$(if $(filter Library,$(TARGETTYPE)),; if [ -f $(DLLTARGET).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(DLLTARGET).manifest -outputresource:$(DLLTARGET)\;2; fi) \
-	$(if $(filter Executable,$(TARGETTYPE)),; if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(1).manifest -outputresource:$(1)\;1; fi) \
+	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(DLLTARGET).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(DLLTARGET).manifest -outputresource:$(DLLTARGET)\;2 && touch -r $(1) $(DLLTARGET).manifest $(DLLTARGET); fi) \
+	$(if $(filter Executable,$(TARGETTYPE)),&& if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(1).manifest -outputresource:$(1)\;1 && touch -r $(1) $(1).manifest; fi) \
 	; exit $$RC)
 endef
 
