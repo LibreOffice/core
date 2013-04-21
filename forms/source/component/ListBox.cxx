@@ -858,6 +858,8 @@ namespace frm
                             DBG_UNHANDLED_EXCEPTION();
                         }
                     }
+                    else if ( *aBoundColumn == -1)
+                        m_nBoundColumnType = DataType::SMALLINT;
 
                     //  If the LB is bound to a field and empty entries are valid, we remember the position
                     //  for an empty entry
@@ -873,6 +875,9 @@ namespace frm
 
                         if(*aBoundColumn >= 0)
                             aBoundValue.fill( *aBoundColumn + 1, m_nBoundColumnType, xCursorRow );
+                        else
+                            // -1 because getRow() is 1-indexed, but ListBox positions are 0-indexed
+                            aBoundValue = static_cast<sal_uInt16>(xListCursor->getRow()-1);
                         aValueList.push_back( aBoundValue );
 
                         if ( bUseNULL && ( m_nNULLPos == -1 ) && aStr.isEmpty() )

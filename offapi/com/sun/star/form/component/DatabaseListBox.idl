@@ -72,13 +72,15 @@ published service DatabaseListBox
         <member scope="com::sun::star::form">DataAwareControlModel::DataField</member>.
 
         <dl>
-            <dt>0</dt>
-            <dd>The selected (displayed) list box string is stored in
-            the current database field.</dd>
+            <dt>-1</dt>
+            <dd>The index (starting at 0) of the selected list box entry
+            is stored in the current database field.</dd>
 
-            <dt>1 or greater</dt>
-            <dd>The column value of the result set at the position is
-            stored in the current database field.</dd>
+            <dt>0 or greater</dt>
+            <dd>The column value of the result set at the position
+            (0-indexed) is stored in the current database field.
+            In particular, for value 0, the selected (displayed)
+            list box string is stored.</dd>
         </dl></p>
 
         <p>The bound column property is only used if a list source is defined
