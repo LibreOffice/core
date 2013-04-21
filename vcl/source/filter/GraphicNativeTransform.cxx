@@ -128,7 +128,7 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
     aSourceStream.Write(aLink.GetData(), aLink.GetDataSize());
     aSourceStream.Seek( STREAM_SEEK_TO_BEGIN );
 
-    Orientation aOrientation = Orientation::TOP_LEFT;
+    Orientation aOrientation = TOP_LEFT;
 
     Exif exif;
     if ( exif.read(aSourceStream) )
@@ -144,9 +144,9 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
     aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
 
     // Reset orientation in exif if needed
-    if ( exif.hasExif() && aOrientation != Orientation::TOP_LEFT)
+    if ( exif.hasExif() && aOrientation != TOP_LEFT)
     {
-        exif.setOrientation(Orientation::TOP_LEFT);
+        exif.setOrientation(TOP_LEFT);
         exif.write(aTargetStream);
     }
 

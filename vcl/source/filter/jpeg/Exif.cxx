@@ -163,11 +163,11 @@ bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffs
     {
         ifd = (ExifIFD*) &pExifData[aOffset];
 
-        if (ifd->tag == Tag::ORIENTATION)
+        if (ifd->tag == ORIENTATION)
         {
             if(bSetValue)
             {
-                ifd->tag = Tag::ORIENTATION;
+                ifd->tag = ORIENTATION;
                 ifd->type = 3;
                 ifd->count = 1;
                 ifd->offset = maOrientation;
