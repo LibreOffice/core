@@ -35,12 +35,11 @@
 #include <hb-ft.h>
 #include <hb-icu.h>
 #include <hb-ot.h>
-#else
+#endif // ENABLE_HARFBUZZ
 #include <layout/LayoutEngine.h>
 #include <layout/LEFontInstance.h>
 #include <layout/LELanguages.h>
 #include <layout/LEScripts.h>
-#endif // ENABLE_HARFBUZZ
 
 #include <unicode/uscript.h>
 #include <unicode/ubidi.h>
@@ -110,7 +109,6 @@ static bool needNextCode(sal_Unicode cChar)
     return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
 }
 
-#if ENABLE_HARFBUZZ
 class HbLayoutEngine : public ServerFontLayoutEngine
 {
 private:
@@ -132,6 +130,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     ServerFont& rFont = rLayout.GetServerFont();
     FT_Face aFace = rFont.GetFtFace();
 
+#if ENABLE_HARFBUZZ
     // allocate temporary arrays, note: round to even
     int nGlyphCapacity = (3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos) | 15) + 1;
 
@@ -263,10 +262,10 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     if((rArgs.mpDXArray || rArgs.mnLayoutWidth)
     && ((meScriptCode == USCRIPT_ARABIC) || (meScriptCode == USCRIPT_SYRIAC)))
         rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
+#endif // ENABLE_HARFBUZZ
 
     return true;
 }
-#else
 // =======================================================================
 // bridge to ICU LayoutEngine
 // =======================================================================
@@ -929,19 +928,21 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     return true;
 }
-#endif // ENABLE_HARFBUZZ
 
 // =======================================================================
 
 ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
 {
+    const char* pUseHarfBuzz = getenv( "SAL_USE_HARFBUZZ" );
     // find best layout engine for font, platform, script and language
-    if (!mpLayoutEngine)
+    if (!mpLayoutEngine) {
 #if ENABLE_HARFBUZZ
-        mpLayoutEngine = new HbLayoutEngine(*this);
-#else
-        mpLayoutEngine = new IcuLayoutEngine(*this);
+        if (pUseHarfBuzz)
+            mpLayoutEngine = new HbLayoutEngine(*this);
+        else
 #endif // ENABLE_HARFBUZZ
+        mpLayoutEngine = new IcuLayoutEngine(*this);
+    }
     return mpLayoutEngine;
 }
 
