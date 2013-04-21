@@ -74,10 +74,6 @@ bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
     {
         return rotateJPEG(aRotation);
     }
-    else if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_SVG )
-    {
-        return rotateSVG(aRotation);
-    }
     else if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_PNG )
     {
         return rotateGeneric(aRotation, OUString("png"));
