@@ -157,7 +157,7 @@ namespace frm
     //------------------------------------------------------------------
     OListBoxModel::OListBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, sal_True, sal_True, sal_True )
-        // use the old control name for compytibility reasons
+        // use the old control name for compatibility reasons
         ,OEntryListHelper( (OControlModel&)*this )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aListRowSet( getContext() )
