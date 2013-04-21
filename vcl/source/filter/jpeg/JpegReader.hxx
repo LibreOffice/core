@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _JPEG_HXX
-#define _JPEG_HXX
+#ifndef _JPEG_READER_HXX
+#define _JPEG_READER_HXX
 
 #include <vcl/graph.hxx>
 #include <vcl/fltcall.hxx>
@@ -26,13 +26,37 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-sal_Bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
+enum ReadState
+{
+    JPEGREAD_OK,
+    JPEGREAD_ERROR,
+    JPEGREAD_NEED_MORE
+};
 
-sal_Bool ExportJPEG(SvStream& rOutputStream,
-                    const Graphic& rGraphic,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
-                    bool* pExportWasGrey = NULL);
+class JPEGReader : public GraphicReader
+{
+    SvStream&           mrStream;
+    Bitmap              maBmp;
+    Bitmap              maBmp1;
+    BitmapWriteAccess*  mpAcc;
+    BitmapWriteAccess*  mpAcc1;
+    void*               mpBuffer;
+    long                mnLastPos;
+    long                mnFormerPos;
+    long                mnLastLines;
+    sal_Bool            mbSetLogSize;
 
-#endif // _JPEG_HXX
+    Graphic CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines );
+    void    FillBitmap();
+
+public:
+            JPEGReader( SvStream& rStream, void* pCallData, sal_Bool bSetLogSize );
+    virtual ~JPEGReader();
+
+    ReadState   Read( Graphic& rGraphic );
+    void*       CreateBitmap( void* JPEGCreateBitmapParam );
+};
+
+#endif //_JPEG_READER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

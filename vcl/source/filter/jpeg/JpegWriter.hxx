@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _JPEG_HXX
-#define _JPEG_HXX
+#ifndef _JPEG_WRITER_HXX
+#define _JPEG_WRITER_HXX
 
 #include <vcl/graph.hxx>
 #include <vcl/fltcall.hxx>
@@ -26,13 +26,33 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-sal_Bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
+class JPEGWriter
+{
+    SvStream&           mrStream;
+    Bitmap              maBitmap;
+    BitmapReadAccess*   mpReadAccess;
+    sal_uInt8*          mpBuffer;
+    sal_Bool            mbNative;
+    sal_Bool            mbGreys;
+    sal_Int32           mnQuality;
+    sal_Int32           maChromaSubsampling;
 
-sal_Bool ExportJPEG(SvStream& rOutputStream,
-                    const Graphic& rGraphic,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
-                    bool* pExportWasGrey = NULL);
+    bool*               mpExpWasGrey;
 
-#endif // _JPEG_HXX
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
+
+public:
+    JPEGWriter( SvStream& rStream,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
+                bool* pExportWasGrey = NULL );
+
+    virtual ~JPEGWriter() {};
+
+    void*       GetScanline( long nY );
+    sal_Bool    Write( const Graphic& rGraphic );
+
+};
+
+#endif // _JPEG_WRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

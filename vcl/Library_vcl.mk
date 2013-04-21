@@ -178,6 +178,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/ixbm/xbmread \
     vcl/source/filter/ixpm/xpmread \
     vcl/source/filter/jpeg/jpeg \
+    vcl/source/filter/jpeg/JpegReader \
+    vcl/source/filter/jpeg/JpegWriter \
     vcl/source/filter/wmf/emfwr \
     vcl/source/filter/wmf/enhwmf \
     vcl/source/filter/wmf/winmtf \

@@ -41,18 +41,18 @@ struct JPEGCreateBitmapParam
     long     bTopDown;      // CreateBitmap method in svtools
 };
 
-typedef struct my_error_mgr*    my_error_ptr;
-typedef unsigned char*          HPBYTE;
+typedef struct ErrorManagerStruct* ErrorManagerPointer;
+typedef unsigned char* HPBYTE;
 
 void*   JPEGMalloc( size_t size );
 void    JPEGFree( void *ptr );
 long    JPEGCallback( void* pCallbackData, long nPercent );
 
-long    WriteJPEG( void* pJPEGWriter, void* pOStm, long nWidth, long nHeight, long bGreyScale,
+long    WriteJPEG( void* pJPEGWriter, void* pOutputStream, long nWidth, long nHeight, long bGreyScale,
                    long nQualityPercent, long aChromaSubsampling, void* pCallbackData );
 void*   GetScanline( void* pJPEGWriter, long nY );
 
-void    ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines );
+void    ReadJPEG( void* pJPEGReader, void* pInputStream, long* pLines );
 void*   CreateBitmapFromJPEGReader( void* pJPEGReader, void* pJPEGCreateBitmapParam );
 
 /* TODO: when incompatible changes are possible again

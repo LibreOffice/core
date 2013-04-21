@@ -19,14 +19,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "setjmp.h"
+#include <setjmp.h>
 #include <jpeglib.h>
 #include <jerror.h>
-#include "jpeg.h"
-#include "rtl/alloc.h"
-#include "osl/diagnose.h"
+#include <rtl/alloc.h>
+#include <osl/diagnose.h>
 
-struct my_error_mgr
+#include "jpeg.h"
+
+struct ErrorManagerStruct
 {
     struct jpeg_error_mgr pub;
     jmp_buf setjmp_buffer;
@@ -35,15 +36,15 @@ struct my_error_mgr
 void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
 void jpeg_svstream_dest (j_compress_ptr cinfo, void* outfile);
 
-METHODDEF( void ) my_error_exit (j_common_ptr cinfo)
+METHODDEF( void ) errorExit (j_common_ptr cinfo)
 {
-    my_error_ptr myerr = (my_error_ptr) cinfo->err;
+    ErrorManagerPointer error = (ErrorManagerPointer) cinfo->err;
     (*cinfo->err->output_message) (cinfo);
-    longjmp(myerr->setjmp_buffer, 1);
+    longjmp(error->setjmp_buffer, 1);
 }
 
 
-METHODDEF( void ) my_output_message (j_common_ptr cinfo)
+METHODDEF( void ) outputMessage (j_common_ptr cinfo)
 {
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message) (cinfo, buffer);
@@ -59,19 +60,19 @@ void SetJpegPreviewSizeHint( int nWidth, int nHeight )
     nPreviewHeight = nHeight;
 }
 
-void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
+void ReadJPEG( void* pJPEGReader, void* pInputStream, long* pLines )
 {
     struct jpeg_decompress_struct   cinfo;
-    struct my_error_mgr             jerr;
+    struct ErrorManagerStruct       jerr;
     struct JPEGCreateBitmapParam    aCreateBitmapParam;
     HPBYTE                          pDIB;
     HPBYTE                          pTmp;
     long                            nWidth;
     long                            nHeight;
     long                            nAlignedWidth;
-    JSAMPLE * range_limit;
-    HPBYTE pScanLineBuffer = NULL;
-    long nScanLineBufferComponents = 0;
+    JSAMPLE*                        aRangeLimit;
+    HPBYTE                          pScanLineBuffer = NULL;
+    long                            nScanLineBufferComponents = 0;
 
     if ( setjmp( jerr.setjmp_buffer ) )
     {
@@ -80,11 +81,11 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     }
 
     cinfo.err = jpeg_std_error( &jerr.pub );
-    jerr.pub.error_exit = my_error_exit;
-    jerr.pub.output_message = my_output_message;
+    jerr.pub.error_exit = errorExit;
+    jerr.pub.output_message = outputMessage;
 
     jpeg_create_decompress( &cinfo );
-    jpeg_svstream_src( &cinfo, pIStm );
+    jpeg_svstream_src( &cinfo, pInputStream );
     jpeg_read_header( &cinfo, sal_True );
 
     cinfo.scale_num = 1;
@@ -102,14 +103,21 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     /* change scale for preview import */
     if( nPreviewWidth || nPreviewHeight )
     {
-        if( nPreviewWidth == 0 ) {
-            nPreviewWidth = ( cinfo.image_width*nPreviewHeight )/cinfo.image_height;
+        if( nPreviewWidth == 0 )
+        {
+            nPreviewWidth = ( cinfo.image_width * nPreviewHeight ) / cinfo.image_height;
             if( nPreviewWidth <= 0 )
+            {
                 nPreviewWidth = 1;
-        } else if( nPreviewHeight == 0 ) {
-            nPreviewHeight = ( cinfo.image_height*nPreviewWidth )/cinfo.image_width;
+            }
+        }
+        else if( nPreviewHeight == 0 )
+        {
+            nPreviewHeight = ( cinfo.image_height * nPreviewWidth ) / cinfo.image_width;
             if( nPreviewHeight <= 0 )
+            {
                 nPreviewHeight = 1;
+            }
         }
 
         for( cinfo.scale_denom = 1; cinfo.scale_denom < 8; cinfo.scale_denom *= 2 )
@@ -141,7 +149,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     aCreateBitmapParam.bGray = cinfo.output_components == 1;
     pDIB = CreateBitmapFromJPEGReader( pJPEGReader, &aCreateBitmapParam );
     nAlignedWidth = aCreateBitmapParam.nAlignedWidth;
-    range_limit=cinfo.sample_range_limit;
+    aRangeLimit = cinfo.sample_range_limit;
 
     if ( cinfo.out_color_space == JCS_CMYK )
     {
@@ -152,7 +160,9 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     if( pDIB )
     {
         if( aCreateBitmapParam.bTopDown )
+        {
             pTmp = pDIB;
+        }
         else
         {
             pTmp = pDIB + ( nHeight - 1 ) * nAlignedWidth;
@@ -161,24 +171,28 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
 
         for ( *pLines = 0; *pLines < nHeight; (*pLines)++ )
         {
-            if (pScanLineBuffer!=NULL) { // in other words cinfo.out_color_space == JCS_CMYK
-            int i;
-            int j;
-            jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pScanLineBuffer, 1 );
-            // convert CMYK to RGB
-            for( i=0, j=0; i < nScanLineBufferComponents; i+=4, j+=3 )
+            if (pScanLineBuffer != NULL)
+            { // in other words cinfo.out_color_space == JCS_CMYK
+                int i;
+                int j;
+                jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pScanLineBuffer, 1 );
+                // convert CMYK to RGB
+                for( i=0, j=0; i < nScanLineBufferComponents; i+=4, j+=3 )
+                {
+                    int color_C = 255 - pScanLineBuffer[i+0];
+                    int color_M = 255 - pScanLineBuffer[i+1];
+                    int color_Y = 255 - pScanLineBuffer[i+2];
+                    int color_K = 255 - pScanLineBuffer[i+3];
+                    pTmp[j+0] = aRangeLimit[ 255L - ( color_C + color_K ) ];
+                    pTmp[j+1] = aRangeLimit[ 255L - ( color_M + color_K ) ];
+                    pTmp[j+2] = aRangeLimit[ 255L - ( color_Y + color_K ) ];
+                }
+            }
+            else
             {
-                int c_=255-pScanLineBuffer[i+0];
-                int m_=255-pScanLineBuffer[i+1];
-                int y_=255-pScanLineBuffer[i+2];
-                int k_=255-pScanLineBuffer[i+3];
-                pTmp[j+0]=range_limit[ 255L - ( c_ + k_ ) ];
-                pTmp[j+1]=range_limit[ 255L - ( m_ + k_ ) ];
-                pTmp[j+2]=range_limit[ 255L - ( y_ + k_ ) ];
+                jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pTmp, 1 );
             }
-            } else {
-            jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pTmp, 1 );
-            }
+
             /* PENDING ??? */
             if ( cinfo.err->msg_code == 113 )
                 break;
@@ -188,25 +202,29 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     }
 
     if ( pDIB )
+    {
         jpeg_finish_decompress( &cinfo );
+    }
     else
+    {
         jpeg_abort_decompress( &cinfo );
+    }
 
-    if (pScanLineBuffer!=NULL)
+    if (pScanLineBuffer != NULL)
     {
         rtl_freeMemory( pScanLineBuffer );
-        pScanLineBuffer=NULL;
+        pScanLineBuffer = NULL;
     }
 
     jpeg_destroy_decompress( &cinfo );
 }
 
-long WriteJPEG( void* pJPEGWriter, void* pOStm,
+long WriteJPEG( void* pJPEGWriter, void* pOutputStream,
                 long nWidth, long nHeight, long bGreys,
                 long nQualityPercent, long aChromaSubsampling, void* pCallbackData )
 {
     struct jpeg_compress_struct cinfo;
-    struct my_error_mgr         jerr;
+    struct ErrorManagerStruct   jerr;
     void*                       pScanline;
     long                        nY;
 
@@ -217,11 +235,11 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
     }
 
     cinfo.err = jpeg_std_error( &jerr.pub );
-    jerr.pub.error_exit = my_error_exit;
-    jerr.pub.output_message = my_output_message;
+    jerr.pub.error_exit = errorExit;
+    jerr.pub.output_message = outputMessage;
 
     jpeg_create_compress( &cinfo );
-    jpeg_svstream_dest( &cinfo, pOStm );
+    jpeg_svstream_dest( &cinfo, pOutputStream );
 
     cinfo.image_width = (JDIMENSION) nWidth;
     cinfo.image_height = (JDIMENSION) nHeight;
@@ -265,7 +283,9 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
         pScanline = GetScanline( pJPEGWriter, nY );
 
         if( pScanline )
+        {
             jpeg_write_scanlines( &cinfo, (JSAMPARRAY) &pScanline, 1 );
+        }
 
         if( JPEGCallback( pCallbackData, nY * 100L / nHeight ) )
         {
