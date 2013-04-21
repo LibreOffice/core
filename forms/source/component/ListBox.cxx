@@ -808,6 +808,10 @@ namespace frm
         ValueList aDisplayList, aValueList;
         sal_Bool bUseNULL = hasField() && !isRequired();
 
+        // empty BoundColumn is treated as BoundColumn=0,
+        if(!aBoundColumn)
+            aBoundColumn = 0;
+
         try
         {
             OSL_ENSURE( xListCursor.is() || ( ListSourceType_TABLEFIELDS == m_eListSourceType ),
@@ -842,8 +846,8 @@ namespace frm
 
                     // Get the field of BoundColumn of the ResultSet
                     m_nBoundColumnType = DataType::SQLNULL;
-                    if ( !!aBoundColumn && ( *aBoundColumn >= 0 ) && m_xColumn.is() )
-                    {   // don't look for a bound column if we're not connected to a field
+                    if ( *aBoundColumn >= 0 )
+                    {
                         try
                         {
                             Reference< XPropertySet > xBoundField( xColumns->getByIndex( *aBoundColumn ), UNO_QUERY_THROW );
@@ -867,11 +871,9 @@ namespace frm
                         aStr = aValueFormatter.getFormattedValue();
                         aDisplayList.push_back( aStr );
 
-                        if ( impl_hasBoundComponent() )
-                        {
+                        if(*aBoundColumn >= 0)
                             aBoundValue.fill( *aBoundColumn + 1, m_nBoundColumnType, xCursorRow );
-                            aValueList.push_back( aBoundValue );
-                        }
+                        aValueList.push_back( aBoundValue );
 
                         if ( bUseNULL && ( m_nNULLPos == -1 ) && aStr.isEmpty() )
                             m_nNULLPos = sal_Int16( aDisplayList.size() - 1 );
@@ -914,8 +916,7 @@ namespace frm
         // Add NULL entry
         if (bUseNULL && m_nNULLPos == -1)
         {
-            if ( impl_hasBoundComponent() )
-                aValueList.insert( aValueList.begin(), ORowSetValue() );
+            aValueList.insert( aValueList.begin(), ORowSetValue() );
 
             aDisplayList.insert( aDisplayList.begin(), ORowSetValue( OUString() ) );
             m_nNULLPos = 0;
