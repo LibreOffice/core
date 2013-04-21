@@ -23,16 +23,29 @@
 
 $return = 0;
 
-$StartDir = "$ARGV[0]";
-$OperatingSystem = "$ARGV[1]";
-$ExePrefix = "$ARGV[2]";
+$PrimaryDir = "$ARGV[0]";
+$SecondaryDir = "$ARGV[1]";
+$OperatingSystem = "$ARGV[2]";
+$ExePrefix = "$ARGV[3]";
+
+sub check_file
+{
+    my ($file) = @_;
+    return -e "$PrimaryDir/$file" || -e "$SecondaryDir/$file";
+}
+
+sub check_dir
+{
+    my ($dir) = @_;
+    return -d "$PrimaryDir/$dir" || -d "$SecondaryDir/$dir";
+}
 
 print "Check for $OperatingSystem\n";
 
-if (-d "$StartDir") {
+if (-d "$PrimaryDir" || -d "$SecondaryDir") {
     # check binaries
     print "check binaries: ";
-    if (-d "$StartDir/bin") {
+    if (check_dir("bin")) {
 	my @binarylist = ( "idlc","cppumaker","javamaker",
                "regcompare","autodoc",
                "unoapploader", "uno-skeletonmaker" );
@@ -42,7 +55,7 @@ if (-d "$StartDir") {
 
     foreach $i (@binarylist)
     {
-        if (! -e "$StartDir/bin/$i$ExePrefix") {
+        if (!check_file("bin/$i$ExePrefix")) {
         $return++;
         print "\nERROR: \"$StartDir/bin/$i$ExePrefix\" is missing\n";
         } else {
@@ -51,7 +64,7 @@ if (-d "$StartDir") {
     }
 
     if ($OperatingSystem eq "windows" || $OperatingSystem eq "mingw") {
-        if ($OperatingSystem eq "windows" && ! -e "$StartDir/bin/climaker.exe") {
+        if ($OperatingSystem eq "windows" && !check_file("bin/climaker.exe")) {
         $return++;
         print "\nERROR: \"$StartDir/bin/climaker.exe\" is missing\n";
         } else {
@@ -59,7 +72,7 @@ if (-d "$StartDir") {
         }
     }
     if ($OperatingSystem eq "macosx") {
-        if (! -e "$StartDir/bin/addsym-macosx.sh") {
+        if (!check_file("bin/addsym-macosx.sh")) {
         $return++;
         print "\nERROR: \"$StartDir/bin/addsym-macosx.sh\" is missing\n";
         } else {
@@ -73,7 +86,7 @@ if (-d "$StartDir") {
 
     # packaging files
     print "check packaging files: ";
-    if (-d "$StartDir/docs") {
+    if (check_dir("docs")) {
     my @filelist = ( "install.html",
              "notsupported.html","sdk_styles.css","tools.html",
              "images/arrow-1.gif", "images/arrow-3.gif",
@@ -90,7 +103,7 @@ if (-d "$StartDir") {
 
     foreach $i (@filelist)
     {
-        if (! -e "$StartDir/docs/$i") {
+        if (!check_file("docs/$i")) {
         $return++;
         print "\nERROR: \"$StartDir/docs/$i\" is missing\n";
         } else {
@@ -105,36 +118,36 @@ if (-d "$StartDir") {
     #check configure files
     print "check config files: ";
     if ($OperatingSystem eq "windows" || $OperatingSystem eq "mingw") {
-    if (! -e "$StartDir/setsdkenv_windows.bat") {
+    if (!check_file("setsdkenv_windows.bat")) {
         print "\nERROR: \"$StartDir/setsdkenv_windows.bat\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/setsdkenv_windows.template") {
+    if (!check_file("setsdkenv_windows.template")) {
         print "\nERROR: \"$StartDir/setsdkenv_windows.template\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/cfgWin.js") {
+    if (!check_file("cfgWin.js")) {
         print "\nERROR: \"$StartDir/cfgWin.js\" is missing\n";
         $return++;
     }
     } else {
-    if (! -e "$StartDir/configure.pl") {
+    if (!check_file("configure.pl")) {
         print "\nERROR: \"$StartDir/configure.pl\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/config.guess") {
+    if (!check_file("config.guess")) {
         print "\nERROR: \"$StartDir/config.guess\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/config.sub") {
+    if (!check_file("config.sub")) {
         print "\nERROR: \"$StartDir/config.sub\" is missing\n";
         $return++;
        }
-    if (! -e "$StartDir/setsdkenv_unix") {
+    if (!check_file("setsdkenv_unix")) {
         print "\nERROR: \"$StartDir/setsdkenv_unix\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/setsdkenv_unix.sh.in") {
+    if (!check_file("setsdkenv_unix.sh.in")) {
         print "\nERROR: \"$StartDir/setsdkenv_unix.sh.in\" is missing\n";
         $return++;
     }
@@ -143,16 +156,16 @@ if (-d "$StartDir") {
 
     #check setting files
     print "check setting files: ";
-    if (-d "$StartDir/settings") {
-    if (! -e "$StartDir/settings/settings.mk") {
+    if (check_dir("settings")) {
+    if (!check_file("settings/settings.mk")) {
         print "\nERROR: \"$StartDir/settings/settings.mk\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/settings/std.mk") {
+    if (!check_file("settings/std.mk")) {
         print "\nERROR: \"$StartDir/settings/std.mk\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/settings/stdtarget.mk") {
+    if (!check_file("settings/stdtarget.mk")) {
         print "\nERROR: \"$StartDir/settings/stdtarget.mk\" is missing\n";
         $return++;
     }
@@ -165,8 +178,8 @@ if (-d "$StartDir") {
     # improvement required
     if ($ENV{'DOXYGEN'} ne '') {
         print "check cpp docu: ";
-        if (-d "$StartDir/docs/cpp/ref") {
-            if (! -e "$StartDir/docs/cpp/ref/index.html") {
+        if (check_dir("docs/cpp/ref")) {
+            if (!check_file("docs/cpp/ref/index.html")) {
                 print "\nERROR: \"$StartDir/docs/cpp/ref/index.html\" is missing\n";
                 $return++;
             }
@@ -182,8 +195,8 @@ if (-d "$StartDir") {
     my $JDK = $ENV{"JDK"};
     if (defined($solar_java) && $solar_java ne "" && (!defined($JDK) || $JDK ne "gcj")) {
     print "check java docu: ";
-    if (-d "$StartDir/docs/java/ref") {
-        if (! -e "$StartDir/docs/java/ref/index.html") {
+    if (check_dir("docs/java/ref")) {
+        if (!check_file("docs/java/ref/index.html")) {
         print "\nERROR: \"$StartDir/docs/java/ref/index.html\" is missing\n";
         $return++;
         }
@@ -194,7 +207,7 @@ if (-d "$StartDir") {
 
         foreach $i (@dir_list)
         {
-        if (! -d "$StartDir/docs/java/ref/com/sun/star/$i") {
+        if (!check_dir("docs/java/ref/com/sun/star/$i")) {
             $return++;
             print "\nERROR: \"$StartDir/docs/java/ref/com/sun/star/$i\" is missing\n";
         } else {
@@ -210,16 +223,16 @@ if (-d "$StartDir") {
     #check idl docu, it is only a first and simple check
     # improvement required
     print "check idl docu: ";
-    if (-d "$StartDir/docs/common/ref") {
-    if (! -e "$StartDir/docs/common/ref/module-ix.html") {
+    if (check_dir("docs/common/ref")) {
+    if (!check_file("docs/common/ref/module-ix.html")) {
         print "\nERROR: \"$StartDir/docs/common/ref/module-ix.html\" is missing\n";
         $return++;
     }
-    if (! -d "$StartDir/docs/common/ref/index-files") {
+    if (!check_dir("docs/common/ref/index-files")) {
         print "\nERROR: \"$StartDir/docs/common/ref/index-files\" is missing\n";
         $return++;
     }
-    if (! -e "$StartDir/docs/common/ref/index-files/index-10.html") {
+    if (!check_file("docs/common/ref/index-files/index-10.html")) {
         print "\nERROR: \"$StartDir/docs/common/ref/index-files/index-10.html\" is missing\n";
         $return++;
     }
@@ -335,7 +348,7 @@ if (-d "$StartDir") {
 
     foreach $i (@idl_dirlist)
     {
-        if (! -d "$StartDir/docs/common/ref/com/sun/star/$i") {
+        if (!check_dir("docs/common/ref/com/sun/star/$i")) {
         $return++;
         print "\nERROR: \"$StartDir/docs/common/ref/com/sun/star/$i\" is missing\n";
         } else {
