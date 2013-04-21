@@ -36,6 +36,7 @@ Module gid_Module_Optional_Sdkoo
     Files = (
         gid_File_Package_odk_bin,
         gid_File_Package_odk_cli,
+        gid_File_Package_odk_lib,
         gid_File_Package_odk_macosx,
         gid_File_Package_odk_unowinreg,
         gid_File_Zip_Odkexamples,
