@@ -158,6 +158,7 @@ protected:
 
 protected:
     DECLARE_XCLONEABLE();
+    void init();
 
 private:
     void        loadData( bool _bForce );

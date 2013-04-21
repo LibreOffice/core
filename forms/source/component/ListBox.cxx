@@ -147,6 +147,11 @@ namespace frm
         ).getTypes();
     }
 
+    // stuff common to all constructors
+    void OListBoxModel::init()
+    {
+        startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
+    }
 
     DBG_NAME(OListBoxModel);
     //------------------------------------------------------------------
@@ -166,7 +171,7 @@ namespace frm
         m_aBoundColumn <<= (sal_Int16)1;
         initValueProperty( PROPERTY_SELECT_SEQ, PROPERTY_ID_SELECT_SEQ);
 
-        startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
+        init();
     }
 
     //------------------------------------------------------------------
@@ -185,7 +190,7 @@ namespace frm
     {
         DBG_CTOR(OListBoxModel,NULL);
 
-        startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
+        init();
     }
 
     //------------------------------------------------------------------
