@@ -48,8 +48,8 @@ TextConvWrapper::TextConvWrapper( Window* pWindow,
         const Locale& rTargetLocale,
         const Font* pTargetFont,
         sal_Int32 nOptions,
-        sal_Bool bIsInteractive,
-        sal_Bool bIsStart,
+        bool bIsInteractive,
+        bool bIsStart,
         EditView* pView ) :
     HangulHanjaConversion( pWindow, rxContext, rSourceLocale, rTargetLocale, pTargetFont, nOptions, bIsInteractive )
 {
@@ -58,16 +58,16 @@ TextConvWrapper::TextConvWrapper( Window* pWindow,
     nConvTextLang = LANGUAGE_NONE;
     nUnitOffset = 0;
 
-    bStartChk   = sal_False;
+    bStartChk   = false;
     bStartDone  = bIsStart;
-    bEndDone    = sal_False;
+    bEndDone    = false;
     pWin        = pWindow;
     pEditView   = pView;
 
     aConvSel    = pEditView->GetSelection();
     aConvSel.Adjust();  // make Start <= End
 
-    bAllowChange = sal_False;
+    bAllowChange = false;
 }
 
 
@@ -76,65 +76,65 @@ TextConvWrapper::~TextConvWrapper()
 }
 
 
-sal_Bool TextConvWrapper::ConvNext_impl()
+bool TextConvWrapper::ConvNext_impl()
 {
     // modified version of SvxSpellWrapper::SpellNext
 
     if( bStartChk )
-        bStartDone = sal_True;
+        bStartDone = true;
     else
-        bEndDone = sal_True;
+        bEndDone = true;
 
     if ( bStartDone && bEndDone )
     {
         if ( ConvMore_impl() )  // examine another document?
         {
-            bStartDone = sal_True;
-            bEndDone  = sal_False;
+            bStartDone = true;
+            bEndDone  = false;
             ConvStart_impl( SVX_SPELL_BODY );
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
 
     }
 
-    sal_Bool bGoOn = sal_False;
+    bool bGoOn = false;
 
     if ( bStartDone && bEndDone )
     {
         if ( ConvMore_impl() )  // examine another document?
         {
-            bStartDone = sal_True;
-            bEndDone  = sal_False;
+            bStartDone = true;
+            bEndDone  = false;
             ConvStart_impl( SVX_SPELL_BODY );
-            return sal_True;
+            return true;
         }
     }
     else if (!aConvSel.HasRange())
     {
         bStartChk = !bStartDone;
         ConvStart_impl( bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
-        bGoOn = sal_True;
+        bGoOn = true;
     }
     return bGoOn;
 }
 
 
-sal_Bool TextConvWrapper::FindConvText_impl()
+bool TextConvWrapper::FindConvText_impl()
 {
     // modified version of SvxSpellWrapper::FindSpellError
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     pWin->EnterWait();
-    sal_Bool bConvert = sal_True;
+    bool bConvert = true;
 
     while ( bConvert )
     {
         bFound = ConvContinue_impl();
         if (bFound)
         {
-            bConvert = sal_False;
+            bConvert = false;
         }
         else
         {
@@ -147,7 +147,7 @@ sal_Bool TextConvWrapper::FindConvText_impl()
 }
 
 
-sal_Bool TextConvWrapper::ConvMore_impl()
+bool TextConvWrapper::ConvMore_impl()
 {
     // modified version of SvxSpellWrapper::SpellMore
 
@@ -182,7 +182,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
         // Is called when Spell-forward has reached the end, and to start over
         if ( bEndDone )
         {
-            pConvInfo->bConvToEnd = sal_False;
+            pConvInfo->bConvToEnd = false;
             pConvInfo->aConvTo = pConvInfo->aConvStart;
             pConvInfo->aConvContinue = EPaM( 0, 0 );
             pEditView->GetImpEditView()->SetEditSelection(
@@ -190,7 +190,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
         }
         else
         {
-            pConvInfo->bConvToEnd = sal_True;
+            pConvInfo->bConvToEnd = true;
             pConvInfo->aConvTo = pImpEE->CreateEPaM(
                     pEE->GetEditDoc().GetStartPaM() );
         }
@@ -198,13 +198,13 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
     else if ( eArea == SVX_SPELL_BODY_END )
     {
         // Is called when Spell-forward starts
-        pConvInfo->bConvToEnd = sal_True;
+        pConvInfo->bConvToEnd = true;
         if (aConvSel.HasRange())
         {
             // user selection: convert to end of selection
             pConvInfo->aConvTo.nPara    = aConvSel.nEndPara;
             pConvInfo->aConvTo.nIndex   = aConvSel.nEndPos;
-            pConvInfo->bConvToEnd       = sal_False;
+            pConvInfo->bConvToEnd       = false;
         }
         else
         {
@@ -232,7 +232,7 @@ void TextConvWrapper::ConvEnd_impl()
 }
 
 
-sal_Bool TextConvWrapper::ConvContinue_impl()
+bool TextConvWrapper::ConvContinue_impl()
 {
     // modified version of EditSpellWrapper::SpellContinue
 
@@ -282,7 +282,7 @@ void TextConvWrapper::SelectNewUnit_impl(
         const sal_Int32 nUnitStart,
         const sal_Int32 nUnitEnd )
 {
-    sal_Bool bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
+    const bool bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
     DBG_ASSERT( bOK, "invalid arguments" );
     if (!bOK)
         return;
@@ -299,7 +299,7 @@ void TextConvWrapper::SelectNewUnit_impl(
 void TextConvWrapper::GetNextPortion(
         OUString& /* [out] */ rNextPortion,
         LanguageType&    /* [out] */ rLangOfPortion,
-        sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText )
+        bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText )
 {
     bAllowChange = _bAllowImplicitChangesForNotConvertibleText;
 
@@ -327,7 +327,7 @@ void TextConvWrapper::HandleNewUnit(
 #ifdef DBG_UTIL
 namespace
 {
-    sal_Bool IsSimilarChinese( LanguageType nLang1, LanguageType nLang2 )
+    bool IsSimilarChinese( LanguageType nLang1, LanguageType nLang2 )
     {
         using namespace editeng;
         return (HangulHanjaConversion::IsTraditional(nLang1) && HangulHanjaConversion::IsTraditional(nLang2)) ||
@@ -344,7 +344,7 @@ void TextConvWrapper::ReplaceUnit(
         ReplacementAction eAction,
         LanguageType *pNewUnitLanguage )
 {
-    sal_Bool bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
+    const bool bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
     DBG_ASSERT( bOK, "invalid arguments" );
     if (!bOK)
         return;
@@ -390,7 +390,7 @@ void TextConvWrapper::ReplaceUnit(
     // according to FT we should currently not bother about keeping
     // attributes in Hangul/Hanja conversion and leave that untouched.
     // Thus we do this only for Chinese translation...
-    sal_Bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
+    bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
     if (bIsChineseConversion)
         ChangeText( aNewTxt, rOrigText, &rOffsets, &_aOldSel );
     else
@@ -512,7 +512,7 @@ void TextConvWrapper::ChangeText( const String &rNewText,
                     // replace selected sub string with the corresponding
                     // sub string from the new text while keeping as
                     // much from the attributes as possible
-                    ChangeText_impl( aInNew, sal_True );
+                    ChangeText_impl( aInNew, true );
 
                     nCorrectionOffset += nConvChgLen - nChgLen;
 
@@ -541,12 +541,12 @@ void TextConvWrapper::ChangeText( const String &rNewText,
     }
     else
     {
-        ChangeText_impl( rNewText, sal_False );
+        ChangeText_impl( rNewText, false );
     }
 }
 
 
-void TextConvWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes )
+void TextConvWrapper::ChangeText_impl( const String &rNewText, bool bKeepAttributes )
 {
     if (bKeepAttributes)
     {
@@ -580,16 +580,16 @@ void TextConvWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAtt
 
 void TextConvWrapper::Convert()
 {
-    bStartChk = sal_False;
+    bStartChk = false;
     ConvStart_impl( SVX_SPELL_BODY_END );
     ConvertDocument();
     ConvEnd_impl();
 }
 
 
-sal_Bool TextConvWrapper::HasRubySupport() const
+bool TextConvWrapper::HasRubySupport() const
 {
-    return sal_False;
+    return false;
 }
 
 //////////////////////////////////////////////////////////////////////

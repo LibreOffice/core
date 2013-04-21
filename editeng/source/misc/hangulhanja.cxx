@@ -84,7 +84,7 @@ namespace editeng
         LanguageType            m_nTargetLang;      // target language of new replacement text
         const Font*             m_pTargetFont;      // target font of new replacement text
         sal_Int32               m_nConvOptions;     // text conversion options (as used by 'getConversions')
-        sal_Bool                m_bIsInteractive;   // specifies if the conversion requires user interaction
+        bool                    m_bIsInteractive;   // specifies if the conversion requires user interaction
                                                     // (and likeley a specialised dialog) or if it is to run
                                                     // automatically without any user interaction.
                                                     // True for Hangul / Hanja conversion
@@ -93,7 +93,7 @@ namespace editeng
         HangulHanjaConversion*  m_pAntiImpl;            // our "anti-impl" instance
 
         // options
-        sal_Bool                    m_bByCharacter;                 // are we in "by character" mode currently?
+        bool                        m_bByCharacter;                 // are we in "by character" mode currently?
         HHC::ConversionFormat       m_eConversionFormat;            // the current format for the conversion
         HHC::ConversionDirection    m_ePrimaryConversionDirection;  // the primary conversion direction
         HHC::ConversionDirection    m_eCurrentConversionDirection;  // the primary conversion direction
@@ -114,7 +114,7 @@ namespace editeng
         Sequence< OUString >
                                 m_aCurrentSuggestions;  // the suggestions for the current unit
                                                         // (means for the text [m_nCurrentStartIndex, m_nCurrentEndIndex) in m_sCurrentPortion)
-        sal_Bool                m_bTryBothDirections;   // specifies if other conversion directions should be tried when looking for convertible characters
+        bool                    m_bTryBothDirections;   // specifies if other conversion directions should be tried when looking for convertible characters
 
 
     public:
@@ -125,24 +125,24 @@ namespace editeng
             const Locale& _rTargetLocale,
             const Font* _pTargetFont,
             sal_Int32 _nConvOptions,
-            sal_Bool _bIsInteractive,
+            bool _bIsInteractive,
             HangulHanjaConversion* _pAntiImpl );
 
     public:
 
-        static void         SetUseSavedConversionDirectionState( sal_Bool bVal );
+        static void         SetUseSavedConversionDirectionState( bool bVal );
 
                 void        DoDocumentConversion( );
 
-        inline  sal_Bool    IsByCharacter( ) const { return m_bByCharacter; }
+        inline  bool        IsByCharacter( ) const { return m_bByCharacter; }
 
-        inline  sal_Bool    IsValid() const { return m_xConverter.is(); }
+        inline  bool        IsValid() const { return m_xConverter.is(); }
 
         inline LanguageType GetSourceLang() const   { return m_nSourceLang; }
         inline LanguageType GetTargetLang() const   { return m_nTargetLang; }
         inline const Font * GetTargetFont() const   { return m_pTargetFont; }
         inline sal_Int32    GetConvOptions() const  { return m_nConvOptions; }
-        inline sal_Bool     IsInteractive() const   { return m_bIsInteractive; }
+        inline bool         IsInteractive() const   { return m_bIsInteractive; }
 
     protected:
         void    createDialog();
@@ -152,7 +152,7 @@ namespace editeng
                 if <TRUE/>, an implNextConvertible will be called initially to advance to the next convertible.
                 if <FALSE/>, the method will initially work with the current convertible unit
         */
-        sal_Bool ContinueConversion( bool _bRepeatCurrentUnit );
+        bool ContinueConversion( bool _bRepeatCurrentUnit );
 
     private:
         DECL_LINK( OnOptionsChanged, void* );
@@ -181,7 +181,7 @@ namespace editeng
 
             @see HangulHanjaConversion::GetNextPortion
         */
-        sal_Bool    implNextConvertible( bool _bRepeatUnit );
+        bool    implNextConvertible( bool _bRepeatUnit );
 
         /** find the next convertible unit within the current portion
             @param _bRepeatUnit
@@ -238,7 +238,7 @@ namespace editeng
         const Locale& _rTargetLocale,
         const Font* _pTargetFont,
         sal_Int32 _nOptions,
-        sal_Bool _bIsInteractive,
+        bool _bIsInteractive,
         HangulHanjaConversion* _pAntiImpl )
 : m_pConversionDialog( NULL )
 , m_pUIParent( _pUIParent )
@@ -255,7 +255,7 @@ namespace editeng
 , m_nReplacementBaseIndex( 0 )
 , m_nCurrentConversionOption( TextConversionOption::NONE )
 , m_nCurrentConversionType( -1 ) // not yet known
-, m_bTryBothDirections( sal_True )
+, m_bTryBothDirections( true )
     {
         implReadOptionsFromConfiguration();
 
@@ -338,9 +338,9 @@ namespace editeng
 
         // no need to check both directions for chinese conversion (saves time)
         if (m_eConvType == HHC::eConvSimplifiedTraditional)
-            m_bTryBothDirections = sal_False;
+            m_bTryBothDirections = false;
 
-        sal_Bool bFoundAny = sal_True;
+        bool bFoundAny = true;
         try
         {
             TextConversionResult aResult = m_xConverter->getConversions(
@@ -351,7 +351,7 @@ namespace editeng
                 m_nCurrentConversionType,
                 m_nCurrentConversionOption
             );
-            sal_Bool bFoundPrimary = aResult.Boundary.startPos < aResult.Boundary.endPos;
+            const bool bFoundPrimary = aResult.Boundary.startPos < aResult.Boundary.endPos;
             bFoundAny = bFoundPrimary;
 
             if ( m_bTryBothDirections )
@@ -380,7 +380,7 @@ namespace editeng
                         // our current conversion direction changed now
                         m_eCurrentConversionDirection = ( HHC::eHangulToHanja == m_eCurrentConversionDirection )
                             ? HHC::eHanjaToHangul : HHC::eHangulToHanja;
-                        bFoundAny = sal_True;
+                        bFoundAny = true;
                     }
                 }
             }
@@ -473,7 +473,7 @@ namespace editeng
 
     bool HangulHanjaConversion_Impl::implRetrieveNextPortion( )
     {
-        sal_Bool bAllowImplicitChanges = m_eConvType == HHC::eConvSimplifiedTraditional;
+        const bool bAllowImplicitChanges = m_eConvType == HHC::eConvSimplifiedTraditional;
 
         m_sCurrentPortion = OUString();
         m_nCurrentPortionLang = LANGUAGE_NONE;
@@ -489,7 +489,7 @@ namespace editeng
         return bRet;
     }
 
-    sal_Bool HangulHanjaConversion_Impl::implNextConvertible( bool _bRepeatUnit )
+    bool HangulHanjaConversion_Impl::implNextConvertible( bool _bRepeatUnit )
     {
         if ( _bRepeatUnit || ( m_nCurrentEndIndex < m_sCurrentPortion.getLength() ) )
         {
@@ -498,7 +498,7 @@ namespace editeng
                     ?   ( IsByCharacter() ? m_nCurrentStartIndex : m_nCurrentStartIndex )
                     :   m_nCurrentEndIndex
                 ) )
-                return sal_True;
+                return true;
         }
 
         // no convertible text in the current portion anymore
@@ -510,13 +510,13 @@ namespace editeng
             {   // there is a next portion
                 // -> find the next convertible unit in the current portion
                 if ( implNextConvertibleUnit( 0 ) )
-                    return sal_True;
+                    return true;
             }
         }
         while ( !m_sCurrentPortion.isEmpty() );
 
         // no more portions
-        return sal_False;
+        return false;
     }
 
     OUString HangulHanjaConversion_Impl::GetCurrentUnit() const
@@ -532,24 +532,24 @@ namespace editeng
         return sCurrentUnit;
     }
 
-    sal_Bool HangulHanjaConversion_Impl::ContinueConversion( bool _bRepeatCurrentUnit )
+    bool HangulHanjaConversion_Impl::ContinueConversion( bool _bRepeatCurrentUnit )
     {
-        sal_Bool bNeedUserInteraction = sal_False;  // when we leave here, do we need user interaction?
-        sal_Bool bDocumentDone = sal_False;         // did we already check the whole document?
+        bool bNeedUserInteraction = false;  // when we leave here, do we need user interaction?
+        bool bDocumentDone = false;         // did we already check the whole document?
 
         while ( !bDocumentDone && !bNeedUserInteraction && implNextConvertible( _bRepeatCurrentUnit ) )
         {
             OUString sCurrentUnit( GetCurrentUnit() );
 
             // do we need to ignore it?
-            sal_Bool bAlwaysIgnoreThis = m_sIgnoreList.end() != m_sIgnoreList.find( sCurrentUnit );
+            const bool bAlwaysIgnoreThis = m_sIgnoreList.end() != m_sIgnoreList.find( sCurrentUnit );
 
             // do we need to change it?
             StringMap::const_iterator aChangeListPos = m_aChangeList.find( sCurrentUnit );
-            sal_Bool bAlwaysChangeThis = m_aChangeList.end() != aChangeListPos;
+            const bool bAlwaysChangeThis = m_aChangeList.end() != aChangeListPos;
 
             // do we automatically change this?
-            sal_Bool bAutoChange = m_bAutoReplaceUnique && m_aCurrentSuggestions.getLength() == 1;
+            const bool bAutoChange = m_bAutoReplaceUnique && m_aCurrentSuggestions.getLength() == 1;
 
             if (!m_bIsInteractive)
             {
@@ -577,7 +577,7 @@ namespace editeng
 
                 // do not look for the next convertible: We have to wait for the user to interactivly
                 // decide what happens with the current convertible
-                bNeedUserInteraction = sal_True;
+                bNeedUserInteraction = true;
             }
         }
 
@@ -678,7 +678,7 @@ namespace editeng
             //always open dialog if at least having a hangul or hanja text portion
             createDialog();
             if(m_pAntiImpl->IsUseSavedConversionDirectionState())
-                ContinueConversion( sal_False );
+                ContinueConversion( false );
             else
                 implUpdateData();
             m_pConversionDialog->Execute();
@@ -687,9 +687,9 @@ namespace editeng
         else
         {
 #ifdef DBG_UTIL
-            sal_Bool bCompletelyDone =
+            const bool bCompletelyDone =
 #endif
-            ContinueConversion( sal_False );
+            ContinueConversion( false );
             DBG_ASSERT( bCompletelyDone, "HangulHanjaConversion_Impl::DoDocumentConversion: ContinueConversion should have returned true here!" );
         }
     }
@@ -717,7 +717,7 @@ namespace editeng
         if (m_eConvType == HHC::eConvHangulHanja)
         {
             // is the original we're about to change in Hangul?
-            sal_Bool bOriginalIsHangul = HHC::eHangulToHanja == m_eCurrentConversionDirection;
+            const bool bOriginalIsHangul = HHC::eHangulToHanja == m_eCurrentConversionDirection;
 
             switch ( m_eConversionFormat )
             {
@@ -832,7 +832,7 @@ namespace editeng
     IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnIgnore)
     {
         // simply ignore, and proceed
-        implProceed( sal_False );
+        implProceed( false );
         return 0L;
     }
 
@@ -850,7 +850,7 @@ namespace editeng
             m_sIgnoreList.insert( sCurrentUnit );
 
             // and proceed
-            implProceed( sal_False );
+            implProceed( false );
         }
 
         return 0L;
@@ -863,7 +863,7 @@ namespace editeng
         if( m_pConversionDialog )
             implChange( m_pConversionDialog->GetCurrentSuggestion( ) );
         // and proceed
-        implProceed( sal_False );
+        implProceed( false );
 
         return 0L;
     }
@@ -886,7 +886,7 @@ namespace editeng
             }
 
             // and proceed
-            implProceed( sal_False );
+            implProceed( false );
         }
 
         return 0L;
@@ -897,7 +897,7 @@ namespace editeng
         m_bByCharacter = _pBox->IsChecked();
 
         // continue conversion, without advancing to the next unit, but instead continuing with the current unit
-        implProceed( sal_True );
+        implProceed( true );
         return 0L;
     }
 
@@ -968,15 +968,15 @@ namespace editeng
         return 0L;
     }
 
-    sal_Bool    HangulHanjaConversion::m_bUseSavedValues        = sal_False;
-    sal_Bool    HangulHanjaConversion::m_bTryBothDirectionsSave = sal_False;
+    bool    HangulHanjaConversion::m_bUseSavedValues        = false;
+    bool    HangulHanjaConversion::m_bTryBothDirectionsSave = false;
     HHC::ConversionDirection HangulHanjaConversion::m_ePrimaryConversionDirectionSave   = HHC::eHangulToHanja;
 
     HangulHanjaConversion::HangulHanjaConversion( Window* _pUIParent,
         const Reference< XComponentContext >& rxContext,
         const Locale& _rSourceLocale, const Locale& _rTargetLocale,
         const Font* _pTargetFont,
-        sal_Int32 _nOptions, sal_Bool _bIsInteractive)
+        sal_Int32 _nOptions, bool _bIsInteractive)
         :m_pImpl( new HangulHanjaConversion_Impl( _pUIParent, rxContext, _rSourceLocale, _rTargetLocale, _pTargetFont, _nOptions, _bIsInteractive, this ) )
     {
     }
@@ -985,12 +985,12 @@ namespace editeng
     {
     }
 
-    void HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_Bool bVal )
+    void HangulHanjaConversion::SetUseSavedConversionDirectionState( bool bVal )
     {
         m_bUseSavedValues = bVal;
     }
 
-    sal_Bool HangulHanjaConversion::IsUseSavedConversionDirectionState()
+    bool HangulHanjaConversion::IsUseSavedConversionDirectionState()
     {
         return m_bUseSavedValues;
     }
@@ -1015,7 +1015,7 @@ namespace editeng
         return m_pImpl->GetConvOptions();
     }
 
-    sal_Bool HangulHanjaConversion::IsInteractive( ) const
+    bool HangulHanjaConversion::IsInteractive( ) const
     {
         return m_pImpl->IsInteractive();
     }

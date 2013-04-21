@@ -46,22 +46,22 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
     sal_uInt16      m_nPageCount;     ///< page count for progress bar
     sal_uInt16      m_nPageStart;     ///< first checked page
 
-    sal_Bool    m_bIsDrawObj;
-    sal_Bool    m_bIsOtherCntnt;
-    sal_Bool    m_bStartChk;
-    sal_Bool    m_bIsSelection;       ///< true if only the selected text should be converted
-    sal_Bool    m_bStartDone;
-    sal_Bool    m_bEndDone;
+    bool        m_bIsDrawObj;
+    bool        m_bIsOtherCntnt;
+    bool        m_bStartChk;
+    bool        m_bIsSelection;       ///< true if only the selected text should be converted
+    bool        m_bStartDone;
+    bool        m_bEndDone;
 
     /// from SvxSpellWrapper copied and modified
-    sal_Bool    ConvNext_impl();        ///< former SpellNext
-    sal_Bool    FindConvText_impl();    ///< former FindSpellError
+    bool        ConvNext_impl();        ///< former SpellNext
+    bool        FindConvText_impl();    ///< former FindSpellError
 
     /// from SwSpellWrapper copied and modified
-    sal_Bool    HasOtherCnt_impl();
+    bool        HasOtherCnt_impl();
     void        ConvStart_impl( SwConversionArgs *pConvArgs, SvxSpellArea eSpell );   ///< former SpellStart
     void        ConvEnd_impl( SwConversionArgs *pConvArgs );                          ///< former SpellEnd
-    sal_Bool    ConvContinue_impl( SwConversionArgs *pConvArgs );                     ///< former SpellContinue
+    bool        ConvContinue_impl( SwConversionArgs *pConvArgs );                     ///< former SpellContinue
 
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
@@ -69,15 +69,15 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
                             const OUString& rOrigText,
                             const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
                             SwPaM *pCrsr );
-    void        ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes );
+    void        ChangeText_impl( const String &rNewText, bool bKeepAttributes );
 
-    inline sal_Bool IsDrawObj()             { return m_bIsDrawObj; }
-    inline void SetDrawObj( sal_Bool bNew ) { m_bIsDrawObj = bNew; }
+    inline bool IsDrawObj()             { return m_bIsDrawObj; }
+    inline void SetDrawObj( bool bNew ) { m_bIsDrawObj = bNew; }
 
 protected:
     virtual void    GetNextPortion( OUString& rNextPortion,
                             LanguageType& rLangOfPortion,
-                            sal_Bool bAllowImplicitChangesForNotConvertibleText );
+                            bool bAllowImplicitChangesForNotConvertibleText );
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
@@ -88,7 +88,7 @@ protected:
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage );
 
-    virtual sal_Bool    HasRubySupport() const;
+    virtual bool    HasRubySupport() const;
 
 public:
     SwHHCWrapper(
@@ -96,8 +96,8 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage, LanguageType nTargetLanguage,
         const Font *pTargetFont,
-        sal_Int32 nConvOptions, sal_Bool bIsInteractive,
-        sal_Bool bStart, sal_Bool bOther, sal_Bool bSelection );
+        sal_Int32 nConvOptions, bool bIsInteractive,
+        bool bStart, bool bOther, bool bSelection );
 
     virtual ~SwHHCWrapper();
 

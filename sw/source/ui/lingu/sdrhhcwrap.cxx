@@ -50,7 +50,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
        LanguageType nSourceLanguage, LanguageType nTargetLanguage,
        const Font* pTargetFnt,
        sal_Int32 nConvOptions,
-       sal_Bool bInteractive ) :
+       bool bInteractive ) :
     SdrOutliner(pVw->GetDocShell()->GetDoc()->GetDrawModel()->
                              GetDrawOutliner().GetEmptyItemSet().GetPool(),
                 OUTLINERMODE_TEXTOBJECT ),
@@ -104,7 +104,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
 
 void SdrHHCWrapper::StartTextConversion()
 {
-    pOutlView->StartTextConversion( nSourceLang, nTargetLang, pTargetFont, nOptions, bIsInteractive, sal_True );
+    pOutlView->StartTextConversion( nSourceLang, nTargetLang, pTargetFont, nOptions, static_cast<sal_Bool>(bIsInteractive), sal_True );
 }
 
 

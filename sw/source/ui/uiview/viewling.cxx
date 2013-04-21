@@ -243,11 +243,11 @@ void SwView::StartTextConversion(
     sal_Bool bOldIns = m_pWrtShell->IsInsMode();
     m_pWrtShell->SetInsMode( sal_True );
 
-    sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
+    const bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
         m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
 
-    sal_Bool    bStart = bSelection || m_pWrtShell->IsStartOfDoc();
-    sal_Bool    bOther = !bSelection && !(m_pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
+    const bool  bStart = bSelection || m_pWrtShell->IsStartOfDoc();
+    const bool  bOther = !bSelection && !(m_pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
 
     {
         const uno::Reference< uno::XComponentContext > xContext(
@@ -267,7 +267,7 @@ void SwView::StartTextConversion(
      spellcheck and text conversion related stuff
  --------------------------------------------------------------------*/
 void SwView::SpellStart( SvxSpellArea eWhich,
-        sal_Bool bStartDone, sal_Bool bEndDone,
+        bool bStartDone, bool bEndDone,
         SwConversionArgs *pConvArgs )
 {
     Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );

@@ -39,13 +39,13 @@ class SdrHHCWrapper : public SdrOutliner
     LanguageType        nSourceLang;
     LanguageType        nTargetLang;
     const Font*         pTargetFont;
-    sal_Bool            bIsInteractive;
+    bool                bIsInteractive;
 
 public:
     SdrHHCWrapper( SwView* pVw,
                    LanguageType nSourceLanguage, LanguageType nTargetLanguage,
                    const Font* pTargetFnt,
-                   sal_Int32 nConvOptions, sal_Bool bInteractive );
+                   sal_Int32 nConvOptions, bool bInteractive );
 
     virtual ~SdrHHCWrapper();
 

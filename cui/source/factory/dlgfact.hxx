@@ -148,9 +148,9 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
 {
     DECL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl,HangulHanjaConversionDialog)
     virtual void    EndDialog(long nResult = 0);
-    virtual void    EnableRubySupport( sal_Bool _bVal );
-    virtual void    SetByCharacter( sal_Bool _bByCharacter ) ;
-    virtual void    SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
+    virtual void    EnableRubySupport( bool _bVal );
+    virtual void    SetByCharacter( bool _bByCharacter ) ;
+    virtual void    SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
     virtual void    SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType );
     virtual void    SetOptionsChangedHdl( const Link& _rHdl );
     virtual void    SetIgnoreHdl( const Link& _rHdl );
@@ -160,7 +160,7 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void    SetClickByCharacterHdl( const Link& _rHdl ) ;
     virtual void    SetConversionFormatChangedHdl( const Link& _rHdl ) ;
     virtual void    SetFindHdl( const Link& _rHdl );
-    virtual sal_Bool        GetUseBothDirections( ) const;
+    virtual bool    GetUseBothDirections( ) const;
     virtual editeng::HangulHanjaConversion::ConversionDirection    GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const;
     virtual void    SetCurrentString(
                     const String& _rNewString,
