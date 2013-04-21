@@ -43,11 +43,12 @@ $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 		$(if $(SOLAR_JAVA),$(call gb_Package_get_target,odk_unowinreg)) \
 		$(call gb_CustomTarget_get_target,odk/odkcommon)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
-	touch $@
-	$(PERL) $< \
-		$(INSTDIR)/$(gb_Package_SDKDIRNAME) \
-		$(call gb_CustomTarget_get_workdir,odk/odkcommon) \
-		$(odk_PLATFORM) "$(gb_Executable_EXT)" $@
-	cat $@
+	$(call gb_Helper_print_on_error,\
+		$(PERL) $< \
+			$(INSTDIR)/$(gb_Package_SDKDIRNAME) \
+			$(call gb_CustomTarget_get_workdir,odk/odkcommon) \
+			$(odk_PLATFORM) "$(gb_Executable_EXT)" \
+		,$@.log \
+	)
 
 # vim: set noet sw=4 ts=4:

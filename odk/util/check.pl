@@ -367,7 +367,6 @@ if (-d "$PrimaryDir" || -d "$SecondaryDir") {
 if( $return != 0 )
 {
     print "ERROR\n";
-    unlink "$ARGV[3]";
 } else {
     print "OK\n";
 }
