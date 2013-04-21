@@ -198,7 +198,7 @@ protected:
     virtual ::com::sun::star::uno::Any
                             getCurrentFormComponentValue() const;
 
-    // OEntryListHelper overriables
+    // OEntryListHelper overridables
     virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock );
     virtual void    connectedExternalListSource( );
     virtual void    disconnectedExternalListSource( );
