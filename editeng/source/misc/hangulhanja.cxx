@@ -534,9 +534,7 @@ namespace editeng
 
     bool HangulHanjaConversion_Impl::ContinueConversion( bool _bRepeatCurrentUnit )
     {
-        bool bNeedUserInteraction = false;  // when we leave here, do we need user interaction?
-
-        while ( !bNeedUserInteraction && implNextConvertible( _bRepeatCurrentUnit ) )
+        while ( implNextConvertible( _bRepeatCurrentUnit ) )
         {
             OUString sCurrentUnit( GetCurrentUnit() );
 
@@ -576,11 +574,11 @@ namespace editeng
 
                 // do not look for the next convertible: We have to wait for the user to interactivly
                 // decide what happens with the current convertible
-                bNeedUserInteraction = true;
+                return false;
             }
         }
 
-        return !bNeedUserInteraction;
+        return true;
     }
 
     bool HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion( HHC::ConversionDirection& rDirection )
