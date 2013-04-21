@@ -124,11 +124,17 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
 {
     GfxLink aLink = mrGraphic.GetLink();
 
-    sal_uInt32 aDataSize = aLink.GetDataSize();
-    sal_uInt8* aInputBuffer = new sal_uInt8[aDataSize];
+    SvMemoryStream aSourceStream;
+    aSourceStream.Write(aLink.GetData(), aLink.GetDataSize());
+    aSourceStream.Seek( STREAM_SEEK_TO_BEGIN );
 
-    memcpy(aInputBuffer, aLink.GetData(), aDataSize);
-    SvMemoryStream aSourceStream(aInputBuffer, aDataSize, STREAM_READ);
+    Orientation aOrientation = Orientation::TOP_LEFT;
+
+    Exif exif;
+    if ( exif.read(aSourceStream) )
+    {
+        aOrientation = exif.getOrientation();
+    }
 
     SvMemoryStream aTargetStream;
     JpegTransform tranform(aSourceStream, aTargetStream);
@@ -137,9 +143,12 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
 
     aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
 
-    Exif exif;
-    exif.setOrientation(Orientation::TOP_LEFT);
-    exif.write(aTargetStream);
+    // Reset orientation in exif if needed
+    if ( exif.hasExif() && aOrientation != Orientation::TOP_LEFT)
+    {
+        exif.setOrientation(Orientation::TOP_LEFT);
+        exif.write(aTargetStream);
+    }
 
     aTargetStream.Seek( STREAM_SEEK_TO_END );
     sal_uInt32 aBufferSize = aTargetStream.Tell();
@@ -152,6 +161,7 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
     aBitmap.Rotate(aRotation, COL_BLACK);
     mrGraphic = aBitmap;
     mrGraphic.SetLink( GfxLink( pBuffer, aBufferSize, aLink.GetType(), sal_True ) );
+
     return true;
 }
 
