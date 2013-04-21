@@ -154,7 +154,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     }
     else
     {
-        if ( aStr1[0] == '-')
+        if ( !aStr1.isEmpty() && aStr1[0] == '-')
             bNegative = sal_True;
     }
 
