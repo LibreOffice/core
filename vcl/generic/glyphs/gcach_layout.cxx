@@ -148,7 +148,9 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         int nRunLen = nEndRunPos - nMinRunPos;
 
         // find matching script
-        // TODO: use ICU's UScriptRun API
+        // TODO: use ICU's UScriptRun API to properly resolves "common" and
+        // "inherited" script codes, probably use it in GetNextRun() and return
+        // the script there
         UScriptCode eScriptCode = USCRIPT_INVALID_CODE;
         for (int i = nMinRunPos; i < nEndRunPos; ++i)
         {
@@ -195,7 +197,8 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 if (nCharPos >= 0)
                 {
                     rArgs.NeedFallback(nCharPos, bRightToLeft);
-                    // XXX: do we need this in harfbuzz?
+                    // XXX: do we need this? HarfBuzz can take context into
+                    // account when shaping
                     if  ((nCharPos > 0) && needPreviousCode(rArgs.mpStr[nCharPos-1]))
                         rArgs.NeedFallback(nCharPos-1, bRightToLeft);
                     else if  ((nCharPos + 1 < nEndRunPos) && needNextCode(rArgs.mpStr[nCharPos+1]))
@@ -234,6 +237,10 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
             GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth);
 
+            // This is a hack to compensate for assumptions made elsewhere in
+            // the codebase, the right way is to use aHbPositions[i].x_advance
+            // instead of nGlyphWidth above, and leave mnNewWidth alone
+            // (whatever it is meant for)
             if (i + 1 < nRunGlyphCount)
                 aGI.mnNewWidth = nGlyphWidth + (aHbPositions[i + 1].x_offset / 64);
 
@@ -249,6 +256,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     // sort glyphs in visual order
     // and then in logical order (e.g. diacritics after cluster start)
+    // XXX: why?
     rLayout.SortGlyphItems();
 
     // determine need for kashida justification
