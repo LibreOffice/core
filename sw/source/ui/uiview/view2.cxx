@@ -199,44 +199,45 @@ String SwView::GetPageStr( sal_uInt16 nPg, sal_uInt16 nLogPg,
 }
 
 int SwView::InsertGraphic( const String &rPath, const String &rFilter,
-                                sal_Bool bLink, GraphicFilter *pFlt,
+                                sal_Bool bLink, GraphicFilter *pFilter,
                                 Graphic* pPreviewGrf, sal_Bool bRule )
 {
-    SwWait aWait( *GetDocShell(), sal_True );
+    SwWait aWait( *GetDocShell(), true );
 
-    Graphic aGrf;
-    int nRes = GRFILTER_OK;
+    Graphic aGraphic;
+    int aResult = GRFILTER_OK;
     if ( pPreviewGrf )
-        aGrf = *pPreviewGrf;
+        aGraphic = *pPreviewGrf;
     else
     {
-        if( !pFlt )
-            pFlt = &GraphicFilter::GetGraphicFilter();
-        nRes = GraphicFilter::LoadGraphic( rPath, rFilter, aGrf, pFlt );
+        if( !pFilter )
+        {
+            pFilter = &GraphicFilter::GetGraphicFilter();
+        }
+        aResult = GraphicFilter::LoadGraphic( rPath, rFilter, aGraphic, pFilter );
     }
 
-    if( GRFILTER_OK == nRes )
+    if( GRFILTER_OK == aResult )
     {
         GraphicNativeMetadata aMetadata;
-        if (aMetadata.read(aGrf))
+        if ( aMetadata.read(aGraphic) )
         {
             sal_uInt16 aRotation = aMetadata.getRotation();
             if (aRotation != 0)
             {
-                OUString aMessage("This image is rotated. Would you like LibreOffice to rotate it into standard orientation?");
-                QueryBox aQueryBox(GetWindow(), WB_YES_NO | WB_DEF_YES, aMessage);
+                QueryBox aQueryBox(GetWindow(), WB_YES_NO | WB_DEF_YES, SW_RES(STR_ROTATE_TO_STANDARD_ORIENTATION) );
                 if (aQueryBox.Execute() == RET_YES)
                 {
-                    GraphicNativeTransform aTransform(aGrf);
+                    GraphicNativeTransform aTransform( aGraphic );
                     aTransform.rotate( aRotation );
                 }
             }
         }
 
-        SwFlyFrmAttrMgr aFrmMgr( sal_True, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
+        SwFlyFrmAttrMgr aFrameManager( sal_True, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
 
-        SwWrtShell &rSh = GetWrtShell();
-        rSh.StartAction();
+        SwWrtShell& rShell = GetWrtShell();
+        rShell.StartAction();
         if( bLink )
         {
             SwDocShell* pDocSh = GetDocShell();
@@ -245,18 +246,19 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
                     pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) :
                     OUString());
 
-            String sURL = URIHelper::SmartRel2Abs(
-                aTemp, rPath, URIHelper::GetMaybeFileHdl() );
+            String sURL = URIHelper::SmartRel2Abs( aTemp, rPath, URIHelper::GetMaybeFileHdl() );
 
-            rSh.Insert( sURL,
-                        rFilter, aGrf, &aFrmMgr, bRule );
+            rShell.Insert( sURL, rFilter, aGraphic, &aFrameManager, bRule );
         }
         else
-            rSh.Insert( aEmptyStr, aEmptyStr, aGrf, &aFrmMgr );
-        // nach dem EndAction ist es zu spaet, weil die Shell dann schon zerstoert sein kann
-        rSh.EndAction();
+        {
+            rShell.Insert( aEmptyStr, aEmptyStr, aGraphic, &aFrameManager );
+        }
+
+        // it is too late after "EndAction" because the Shell can already be destroyed.
+        rShell.EndAction();
     }
-    return nRes;
+    return aResult;
 }
 
 sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
