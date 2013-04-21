@@ -828,15 +828,15 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversionDialog::SetByCharacter( sal_Bool _bByCharacter )
+    void HangulHanjaConversionDialog::SetByCharacter( bool _bByCharacter )
     {
-        m_aReplaceByChar.Check( _bByCharacter );
+        m_aReplaceByChar.Check( static_cast<sal_Bool>(_bByCharacter) );
         m_aSuggestions.DisplayListBox( !_bByCharacter );
     }
 
     //-------------------------------------------------------------------------
     void HangulHanjaConversionDialog::SetConversionDirectionState(
-            sal_Bool _bTryBothDirections,
+            bool _bTryBothDirections,
             HHC::ConversionDirection _ePrimaryConversionDirection )
     {
         // default state: try both direction
@@ -855,7 +855,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    sal_Bool HangulHanjaConversionDialog::GetUseBothDirections( ) const
+    bool HangulHanjaConversionDialog::GetUseBothDirections( ) const
     {
         return !m_aHangulOnly.IsChecked() && !m_aHanjaOnly.IsChecked();
     }
@@ -912,7 +912,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversionDialog::EnableRubySupport( sal_Bool bVal )
+    void HangulHanjaConversionDialog::EnableRubySupport( bool bVal )
     {
         m_pHanjaAbove->Enable( bVal );
         m_pHanjaBelow->Enable( bVal );

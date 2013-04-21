@@ -41,23 +41,23 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
     EditView *      pEditView;
     Window *        pWin;
 
-    sal_Bool        bStartChk;
-    sal_Bool        bStartDone;
-    sal_Bool        bEndDone;
-    sal_Bool        bAllowChange;   // storage for _bAllowImplicitChangesForNotConvertibleText
+    bool            bStartChk;
+    bool            bStartDone;
+    bool            bEndDone;
+    bool            bAllowChange;   // storage for _bAllowImplicitChangesForNotConvertibleText
                                     // parameters value of function GetNextPortion.
                                     // used to transport the value to where it is needed.
 
 
     // from SvxSpellWrapper copied and modified
-    sal_Bool    ConvNext_impl();        // former SpellNext
-    sal_Bool    FindConvText_impl();    // former FindSpellError
-    sal_Bool    ConvMore_impl();        // former SpellMore
+    bool        ConvNext_impl();        // former SpellNext
+    bool        FindConvText_impl();    // former FindSpellError
+    bool        ConvMore_impl();        // former SpellMore
 
     // from EditSpellWrapper copied and modified
     void        ConvStart_impl( SvxSpellArea eSpell );   // former SpellStart
     void        ConvEnd_impl();                          // former SpellEnd
-    sal_Bool    ConvContinue_impl();                     // former SpellContinue
+    bool        ConvContinue_impl();                     // former SpellContinue
 
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
@@ -66,7 +66,7 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
                             const OUString& rOrigText,
                             const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
                             ESelection *pESelection );
-    void        ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes );
+    void        ChangeText_impl( const String &rNewText, bool bKeepAttributes );
 
     // Forbidden and not implemented.
     TextConvWrapper (const TextConvWrapper &);
@@ -75,7 +75,7 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
 protected:
     virtual void    GetNextPortion( OUString& /* [out] */ rNextPortion,
                         LanguageType& /* [out] */ rLangOfPortion,
-                        sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText );
+                        bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText );
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
@@ -86,7 +86,7 @@ protected:
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage );
 
-    virtual sal_Bool    HasRubySupport() const;
+    virtual bool    HasRubySupport() const;
 
     void SetLanguageAndFont( const ESelection &rESel,
                             LanguageType nLang, sal_uInt16 nLangWhichId,
@@ -100,8 +100,8 @@ public:
             const ::com::sun::star::lang::Locale& rTargetLocale,
             const Font* pTargetFont,
             sal_Int32 nOptions,
-            sal_Bool bIsInteractive,
-            sal_Bool bIsStart, EditView* pView );
+            bool bIsInteractive,
+            bool bIsStart, EditView* pView );
 
     virtual ~TextConvWrapper();
 

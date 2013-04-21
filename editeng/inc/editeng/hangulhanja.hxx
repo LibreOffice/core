@@ -99,8 +99,8 @@ namespace editeng
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
         // used to set initial values of m_pImpl object from saved ones
-        static sal_Bool             m_bUseSavedValues;  // defines if the followng two values should be used for initialization
-        static sal_Bool             m_bTryBothDirectionsSave;
+        static bool                 m_bUseSavedValues;  // defines if the followng two values should be used for initialization
+        static bool                 m_bTryBothDirectionsSave;
         static ConversionDirection  m_ePrimaryConversionDirectionSave;
 
         // Forbidden and not implemented.
@@ -115,7 +115,7 @@ namespace editeng
             const ::com::sun::star::lang::Locale& _rTargetLocale,
             const Font* _pTargetFont,
             sal_Int32 nOptions,
-            sal_Bool _bIsInteractive
+            bool _bIsInteractive
         );
 
         virtual ~HangulHanjaConversion( );
@@ -127,20 +127,20 @@ namespace editeng
         LanguageType    GetTargetLanguage() const;
         const Font *    GetTargetFont() const;
         sal_Int32       GetConversionOptions() const;
-        sal_Bool        IsInteractive() const;
+        bool            IsInteractive() const;
 
         // chinese text conversion
-        static inline sal_Bool IsSimplified( LanguageType nLang );
-        static inline sal_Bool IsTraditional( LanguageType nLang );
-        static inline sal_Bool IsChinese( LanguageType nLang );
+        static inline bool IsSimplified( LanguageType nLang );
+        static inline bool IsTraditional( LanguageType nLang );
+        static inline bool IsChinese( LanguageType nLang );
 
         // used to specify that the conversion direction states from the
         // last incarnation should be used as
         // initial conversion direction for the next incarnation.
         // (A hack used to transport a state information from
         // one incarnation to the next. Used in Writers text conversion...)
-        static void     SetUseSavedConversionDirectionState( sal_Bool bVal );
-        static sal_Bool IsUseSavedConversionDirectionState();
+        static void SetUseSavedConversionDirectionState( bool bVal );
+        static bool IsUseSavedConversionDirectionState();
 
     protected:
         /** retrieves the next text portion which is to be analyzed
@@ -158,7 +158,7 @@ namespace editeng
         virtual void    GetNextPortion(
                 OUString& /* [out] */ _rNextPortion,
                 LanguageType& /* [out] */ _rLangOfPortion,
-                sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText ) = 0;
+                bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText ) = 0;
 
         /** announces a new "current unit"
 
@@ -262,20 +262,20 @@ namespace editeng
             @return
                 <TRUE/> if rubies are supported.
         */
-        virtual sal_Bool    HasRubySupport() const = 0;
+        virtual bool    HasRubySupport() const = 0;
     };
 
-    sal_Bool HangulHanjaConversion::IsSimplified( LanguageType nLang )
+    bool HangulHanjaConversion::IsSimplified( LanguageType nLang )
     {
         return MsLangId::isSimplifiedChinese(nLang);
     }
 
-    sal_Bool HangulHanjaConversion::IsTraditional( LanguageType nLang )
+    bool HangulHanjaConversion::IsTraditional( LanguageType nLang )
     {
         return MsLangId::isTraditionalChinese(nLang);
     }
 
-    sal_Bool HangulHanjaConversion::IsChinese( LanguageType nLang )
+    bool HangulHanjaConversion::IsChinese( LanguageType nLang )
     {
         return MsLangId::isChinese(nLang);
     }

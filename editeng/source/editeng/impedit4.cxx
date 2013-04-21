@@ -1516,7 +1516,7 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
 
 void ImpEditEngine::Convert( EditView* pEditView,
         LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
-        sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc )
+        sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc )
 {
     // modified version of ImpEditEngine::Spell
 
@@ -1555,11 +1555,11 @@ void ImpEditEngine::Convert( EditView* pEditView,
     //
     pConvInfo->aConvContinue = pConvInfo->aConvStart;
 
-    sal_Bool bIsStart = sal_False;
+    bool bIsStart = false;
     if ( bMultipleDoc )
-        bIsStart = sal_True;    // Accessible from the front or from behind ...
+        bIsStart = true;    // Accessible from the front or from behind ...
     else if ( CreateEPaM( aEditDoc.GetStartPaM() ) == pConvInfo->aConvStart )
-        bIsStart = sal_True;
+        bIsStart = true;
 
     bImpConvertFirstCall = true;    // next ImpConvert call is the very first in this conversion turn
 
@@ -1638,7 +1638,7 @@ void ImpEditEngine::SetLanguageAndFont(
 
 void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
-        sal_Bool bAllowImplicitChangesForNotConvertibleText,
+        bool bAllowImplicitChangesForNotConvertibleText,
         LanguageType nTargetLang, const Font *pTargetFont  )
 {
     // modified version of ImpEditEngine::ImpSpell
