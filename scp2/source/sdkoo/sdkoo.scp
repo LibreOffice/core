@@ -116,13 +116,28 @@ File gid_File_Txt_Readme
     Styles = (PACKED, SCPZIP_REPLACE);
 End
 
+File gid_File_Package_odk_bin
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_bin.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+
+#if defined(MACOSX)
+File gid_File_Package_odk_macosx
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_macosx.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+#endif
+
 File gid_File_Zip_Odkexamples
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;
     Name = "odk_examples.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
-
 
 File gid_File_Zip_Odkcommon
     TXT_FILE_BODY;
