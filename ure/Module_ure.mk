@@ -29,9 +29,7 @@ $(eval $(call gb_Module_Module,ure))
 
 $(eval $(call gb_Module_add_targets,ure,\
     Package_distribution \
-    Package_uretest \
     Rdb_ure \
-    Zip_uretest \
 ))
 
 # vim:set noet sw=4 ts=4:
