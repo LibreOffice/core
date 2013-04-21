@@ -155,6 +155,35 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
     return false;
 }
 
+bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue)
+{
+    ExifIFD* ifd = NULL;
+
+    while (aOffset <= aLength - 12 && aNumberOfTags > 0)
+    {
+        ifd = (ExifIFD*) &pExifData[aOffset];
+
+        if (ifd->tag == Tag::ORIENTATION)
+        {
+            if(bSetValue)
+            {
+                ifd->tag = Tag::ORIENTATION;
+                ifd->type = 3;
+                ifd->count = 1;
+                ifd->offset = maOrientation;
+            }
+            else
+            {
+                maOrientation = convertToOrientation(ifd->offset);
+            }
+        }
+
+        aNumberOfTags--;
+        aOffset += 12;
+    }
+    return true;
+}
+
 bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetValue)
 {
     sal_uInt32  aMagic32;
@@ -193,31 +222,7 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
     aNumberOfTags <<= 8;
     aNumberOfTags += aExifData[aOffset];
 
-    aOffset += 2;
-
-    ExifIFD* ifd = NULL;
-
-    while (aOffset <= aLength - 12 && aNumberOfTags > 0) {
-        ifd = (ExifIFD*) &aExifData[aOffset];
-
-        if (ifd->tag == Tag::ORIENTATION)
-        {
-            if(bSetValue)
-            {
-                ifd->tag = Tag::ORIENTATION;
-                ifd->type = 3;
-                ifd->count = 1;
-                ifd->offset = maOrientation;
-            }
-            else
-            {
-                maOrientation = convertToOrientation(ifd->offset);
-            }
-        }
-
-        aNumberOfTags--;
-        aOffset += 12;
-    }
+    processIFD(aExifData, aLength, aOffset+2, aNumberOfTags, bSetValue);
 
     if (bSetValue)
     {
