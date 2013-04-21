@@ -104,6 +104,8 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_LISTSOURCE,               "ListSource" );
     FORMS_CONSTASCII_STRING( PROPERTY_SELECT_SEQ,               "SelectedItems" );
     FORMS_CONSTASCII_STRING( PROPERTY_VALUE_SEQ,                "ValueItemList" );
+    FORMS_CONSTASCII_STRING( PROPERTY_SELECT_VALUE_SEQ,         "SelectedValues" );
+    FORMS_CONSTASCII_STRING( PROPERTY_SELECT_VALUE,             "SelectedValue" );
     FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_SELECT_SEQ,       "DefaultSelection" );
     FORMS_CONSTASCII_STRING( PROPERTY_MULTISELECTION,           "MultiSelection" );
     FORMS_CONSTASCII_STRING( PROPERTY_ALIGN,                    "Align" );

@@ -274,6 +274,14 @@ namespace frm
             _rValue <<= lcl_convertToStringSequence( m_aBoundValues );
             break;
 
+        case PROPERTY_ID_SELECT_VALUE_SEQ:
+            _rValue = getCurrentMultiValue();
+            break;
+
+        case PROPERTY_ID_SELECT_VALUE:
+           _rValue = getCurrentSingleValue();
+            break;
+
         case PROPERTY_ID_DEFAULT_SELECT_SEQ:
             _rValue <<= m_aDefaultSelectSeq;
             break;
@@ -337,6 +345,24 @@ namespace frm
             OSL_FAIL( "ValueItemList is read-only!" );
             throw PropertyVetoException();
 
+        case PROPERTY_ID_SELECT_VALUE_SEQ :
+        {
+            Sequence< const Any > v;
+            _rValue >>= v;
+            Any newSelectSeq(translateBindingValuesToControlValue(v));
+            setPropertyValue( PROPERTY_SELECT_SEQ, newSelectSeq );
+        }
+        break;
+
+        case PROPERTY_ID_SELECT_VALUE :
+        {
+            ORowSetValue v;
+            v.fill(_rValue);
+            Any newSelectSeq(translateDbValueToControlValue(v));
+            setPropertyValue( PROPERTY_SELECT_SEQ, newSelectSeq );
+        }
+        break;
+
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
             DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(static_cast< Sequence<sal_Int16>*>(0))),
                 "OListBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
@@ -387,6 +413,14 @@ namespace frm
         case PROPERTY_ID_VALUE_SEQ :
             OSL_FAIL( "ValueItemList is read-only!" );
             throw PropertyVetoException();
+
+        case PROPERTY_ID_SELECT_VALUE_SEQ :
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, getCurrentMultiValue());
+            break;
+
+        case PROPERTY_ID_SELECT_VALUE :
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, getCurrentSingleValue());
+            break;
 
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aDefaultSelectSeq);
@@ -441,12 +475,14 @@ namespace frm
     //------------------------------------------------------------------------------
     void OListBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
-        BEGIN_DESCRIBE_PROPERTIES( 7, OBoundControlModel )
+        BEGIN_DESCRIBE_PROPERTIES( 9, OBoundControlModel )
             DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
             DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
             DECL_PROP1(LISTSOURCE,          StringSequence,                 BOUND);
             DECL_PROP3(VALUE_SEQ,           StringSequence,                 BOUND, READONLY, TRANSIENT);
+            DECL_PROP2(SELECT_VALUE_SEQ,    Sequence< Any >,                BOUND, TRANSIENT);
+            DECL_PROP2(SELECT_VALUE,        Any,                            BOUND, TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
             DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,    BOUND);
         END_DESCRIBE_PROPERTIES();
@@ -1078,24 +1114,13 @@ namespace frm
         return sal_True;
     }
 
-    // XPropertiesChangeListener
     //------------------------------------------------------------------------------
-    Any OListBoxModel::translateDbColumnToControlValue()
+    Sequence< sal_Int16 > OListBoxModel::translateDbValueToControlValue(const ORowSetValue &i_aValue) const
     {
-        Reference< XPropertySet > xBoundField( getField() );
-        if ( !xBoundField.is() )
-        {
-            OSL_FAIL( "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
-            return Any();
-        }
-
         Sequence< sal_Int16 > aSelectionIndicies;
 
-        ORowSetValue aCurrentValue;
-        aCurrentValue.fill( getValueType(), m_xColumn );
-
         // reset selection for NULL values
-        if ( aCurrentValue.isNull() )
+        if ( i_aValue.isNull() )
         {
             if ( m_nNULLPos != -1 )
             {
@@ -1106,7 +1131,10 @@ namespace frm
         else
         {
             ValueList aValues( impl_getValues() );
-            ValueList::const_iterator curValuePos = ::std::find( aValues.begin(), aValues.end(), aCurrentValue );
+            assert( m_nConvertedBoundValuesType == getValueType());
+            ORowSetValue v(i_aValue);
+            v.setTypeKind( m_nConvertedBoundValuesType );
+            ValueList::const_iterator curValuePos = ::std::find( aValues.begin(), aValues.end(), v );
             if ( curValuePos != aValues.end() )
             {
                 aSelectionIndicies.realloc( 1 );
@@ -1114,9 +1142,64 @@ namespace frm
             }
         }
 
+        return aSelectionIndicies;
+    }
+    //------------------------------------------------------------------------------
+    Sequence< sal_Int16 > OListBoxModel::translateBindingValuesToControlValue(const Sequence< const Any > &i_aValues) const
+    {
+        const ValueList aValues( impl_getValues() );
+        assert( m_nConvertedBoundValuesType == getValueType());
+        Sequence< sal_Int16 > aSelectionIndicies(i_aValues.getLength());
+        sal_Int32 nCount(0);
+
+        sal_Int16 *pIndex = aSelectionIndicies.getArray();
+        const Any *pValue = i_aValues.getConstArray();
+        const Any * const pValueEnd = i_aValues.getConstArray() + i_aValues.getLength();
+        for (;pValue < pValueEnd; ++pValue)
+        {
+            if ( pValue->hasValue() )
+            {
+                ORowSetValue v;
+                v.fill(*pValue);
+                v.setTypeKind( m_nConvertedBoundValuesType );
+                ValueList::const_iterator curValuePos = ::std::find( aValues.begin(), aValues.end(), v );
+                if ( curValuePos != aValues.end() )
+                {
+                    *pIndex = curValuePos - aValues.begin();
+                    ++pIndex;
+                    ++nCount;
+                }
+            }
+            else
+            {
+                if ( m_nNULLPos != -1 )
+                {
+                    *pIndex = m_nNULLPos;
+                    ++pIndex;
+                    ++nCount;
+                }
+            }
+        }
+        assert(aSelectionIndicies.getArray() + nCount == pIndex);
+        aSelectionIndicies.realloc(nCount);
+        return aSelectionIndicies;
+    }
+    //------------------------------------------------------------------------------
+    Any OListBoxModel::translateDbColumnToControlValue()
+    {
+        Reference< XPropertySet > xBoundField( getField() );
+        if ( !xBoundField.is() )
+        {
+            OSL_FAIL( "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
+            return Any();
+        }
+
+        ORowSetValue aCurrentValue;
+        aCurrentValue.fill( getValueType(), m_xColumn );
+
         m_aSaveValue = aCurrentValue;
 
-        return makeAny( aSelectionIndicies );
+        return makeAny( translateDbValueToControlValue(aCurrentValue) );
     }
 
     // XReset
@@ -1431,6 +1514,42 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
+    Any OListBoxModel::getCurrentSingleValue() const
+    {
+        Any aCurrentValue;
+
+        try
+        {
+            Sequence< sal_Int16 > aSelectSequence;
+            OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence );
+            aCurrentValue = lcl_getSingleSelectedEntryAny( aSelectSequence, impl_getValues() );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return aCurrentValue;
+    }
+    //--------------------------------------------------------------------
+    Any OListBoxModel::getCurrentMultiValue() const
+    {
+        Any aCurrentValue;
+
+        try
+        {
+            Sequence< sal_Int16 > aSelectSequence;
+            OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence );
+            aCurrentValue = lcl_getMultiSelectedEntriesAny( aSelectSequence, impl_getValues() );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return aCurrentValue;
+    }
+    //--------------------------------------------------------------------
     Any OListBoxModel::getCurrentFormComponentValue() const
     {
         if ( hasValidator() )
@@ -1440,16 +1559,13 @@ namespace frm
 
         try
         {
-            Sequence< sal_Int16 > aSelectSequence;
-            OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence );
-
             sal_Bool bMultiSelection( sal_False );
             OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
 
             if ( bMultiSelection )
-                aCurrentValue = lcl_getMultiSelectedEntriesAny( aSelectSequence, impl_getValues() );
+                aCurrentValue = getCurrentMultiValue();
             else
-                aCurrentValue = lcl_getSingleSelectedEntryAny( aSelectSequence, impl_getValues() );
+                aCurrentValue = getCurrentSingleValue();
         }
         catch( const Exception& )
         {

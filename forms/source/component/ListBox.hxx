@@ -206,7 +206,17 @@ protected:
 
 protected:
     DECLARE_XCLONEABLE();
+
     void init();
+    ::com::sun::star::uno::Any getCurrentSingleValue() const;
+    ::com::sun::star::uno::Any getCurrentMultiValue() const;
+    ::com::sun::star::uno::Sequence< sal_Int16 > translateBindingValuesToControlValue(
+        const ::com::sun::star::uno::Sequence< const ::com::sun::star::uno::Any > &i_aValues)
+        const;
+    ::com::sun::star::uno::Sequence< sal_Int16 > translateDbValueToControlValue(
+        const ::connectivity::ORowSetValue &aValue)
+        const;
+
 
 private:
     void        loadData( bool _bForce );
