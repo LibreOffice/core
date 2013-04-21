@@ -125,7 +125,7 @@ void lcl_fillRangeMapping(
                 {
                     if( nCol == 0 && rTable.bHasHeaderColumn )
                     {
-                        OSL_ASSERT( static_cast< sal_Int32 >( nRow ) == nRowOffset );
+                        SAL_WARN_IF( static_cast< sal_Int32 >( nRow ) != nRowOffset, "xmloff.chart", "nRow != nRowOffset" );
                         rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
                                                  aRangeId, lcl_aCategoriesRange ));
                     }
@@ -144,7 +144,7 @@ void lcl_fillRangeMapping(
                 {
                     if( nRow == 0 && rTable.bHasHeaderRow )
                     {
-                        OSL_ASSERT( static_cast< sal_Int32 >( nCol ) == nColOffset );
+                        SAL_WARN_IF( static_cast< sal_Int32 >( nCol ) != nColOffset, "xmloff.chart", "nCol != nColOffset" );
                         rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
                                                  aRangeId, lcl_aCategoriesRange ));
                     }
@@ -308,9 +308,9 @@ void SchXMLTableContext::EndElement()
 {
     if( mbHasColumnPermutation )
     {
-        OSL_ASSERT( !mbHasRowPermutation );
+        SAL_WARN_IF( mbHasRowPermutation, "xmloff.chart", "mbHasColumnPermutation is true" );
         ::std::vector< sal_Int32 > aPermutation( lcl_SequenceToVector( maColumnPermutation ));
-        OSL_ASSERT( !aPermutation.empty());
+        SAL_WARN_IF( aPermutation.empty(), "xmloff.chart", "aPermutation is NULL");
         if( aPermutation.empty())
             return;
 
@@ -321,7 +321,7 @@ void SchXMLTableContext::EndElement()
             bool bModified = false;
             ::std::vector< SchXMLCell > aModifiedRow;
             const size_t nPermSize = aPermutation.size();
-            OSL_ASSERT( static_cast< sal_Int32 >( nPermSize ) - 1 == *(::std::max_element( aPermutation.begin(), aPermutation.end())));
+            SAL_WARN_IF( static_cast< sal_Int32 >( nPermSize ) - 1 != *(::std::max_element( aPermutation.begin(), aPermutation.end())), "xmloff.chart", "nPermSize - 1 != *(::std::max_element( aPermutation.begin(), aPermutation.end())");
             const size_t nRowSize = aRowIt->size();
             const size_t nDestSize = ::std::min( nPermSize, nRowSize );
             for( size_t nDestinationIndex = 0; nDestinationIndex < nDestSize; ++nDestinationIndex )
@@ -333,12 +333,12 @@ void SchXMLTableContext::EndElement()
                     // copy original on first real permutation
                     if( !bModified )
                     {
-                        OSL_ASSERT( aModifiedRow.empty());
+                        SAL_WARN_IF( !aModifiedRow.empty(), "xmloff.chart", "aModifiedRow is NOT NULL");
                         aModifiedRow.reserve( aRowIt->size());
                         ::std::copy( aRowIt->begin(), aRowIt->end(), ::std::back_inserter( aModifiedRow ));
-                        OSL_ASSERT( !aModifiedRow.empty());
+                        SAL_WARN_IF( aModifiedRow.empty(), "xmloff.chart", "aModifiedRow is NULL");
                     }
-                    OSL_ASSERT( nDestinationIndex < aModifiedRow.size());
+                    SAL_WARN_IF( nDestinationIndex >= aModifiedRow.size(), "xmloff.chart", "nDestinationIndex >= aModifiedRow.size()");
                     aModifiedRow[ nDestinationIndex ] = (*aRowIt)[ nSourceIndex ];
                     bModified = true;
                 }
@@ -351,13 +351,13 @@ void SchXMLTableContext::EndElement()
     else if( mbHasRowPermutation )
     {
         ::std::vector< sal_Int32 > aPermutation( lcl_SequenceToVector( maRowPermutation ));
-        OSL_ASSERT( !aPermutation.empty());
+        SAL_WARN_IF( aPermutation.empty(), "xmloff.chart", "aPermutation is NULL");
         if( aPermutation.empty())
             return;
 
         bool bModified = false;
         const size_t nPermSize = aPermutation.size();
-        OSL_ASSERT( static_cast< sal_Int32 >( nPermSize ) - 1 == *(::std::max_element( aPermutation.begin(), aPermutation.end())));
+        SAL_WARN_IF( static_cast< sal_Int32 >( nPermSize ) - 1 != *(::std::max_element( aPermutation.begin(), aPermutation.end())), "xmloff.chart", "nPermSize - 1 != *(::std::max_element( aPermutation.begin(), aPermutation.end())");
         const size_t nTableRowCount = mrTable.aData.size();
         const size_t nDestSize = ::std::min( nPermSize, nTableRowCount );
         ::std::vector< ::std::vector< SchXMLCell > > aDestination;
@@ -370,12 +370,12 @@ void SchXMLTableContext::EndElement()
                 // copy original on first real permutation
                 if( !bModified )
                 {
-                    OSL_ASSERT( aDestination.empty());
+                    SAL_WARN_IF( !aDestination.empty(), "xmloff.chart", "aDestination is NOT NULL");
                     aDestination.reserve( mrTable.aData.size());
                     ::std::copy( mrTable.aData.begin(), mrTable.aData.end(), ::std::back_inserter( aDestination ));
-                    OSL_ASSERT( !aDestination.empty());
+                    SAL_WARN_IF( aDestination.empty(), "xmloff.chart", "aDestination is NULL");
                 }
-                OSL_ASSERT( nDestinationIndex < aDestination.size());
+                SAL_WARN_IF( nDestinationIndex >= aDestination.size(), "xmloff.chart", "nDestinationIndex >= aDestination.size()");
                 aDestination[ nDestinationIndex ] = mrTable.aData[ nSourceIndex ];
                 bModified = true;
             }
@@ -816,7 +816,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
             const ::std::vector< SchXMLCell >& rFirstRow = rTable.aData.front();
             const sal_Int32 nColumnLabelsSize = aComplexColumnDescriptions.getLength();
             const sal_Int32 nMax = ::std::min< sal_Int32 >( nColumnLabelsSize, static_cast< sal_Int32 >( rFirstRow.size()) - nColOffset );
-            OSL_ASSERT( nMax == nColumnLabelsSize );
+            SAL_WARN_IF( nMax != nColumnLabelsSize, "xmloff.chart", "nMax != nColumnLabelsSize");
             for( sal_Int32 i=0; i<nMax; ++i )
                 lcl_ApplyCellToComplexLabel( rFirstRow[i+nColOffset], aComplexColumnDescriptions[i] );
         }
@@ -954,7 +954,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
             }
             else // labels
             {
-                OSL_ASSERT( aLSeqIt->first.second == SCH_XML_PART_LABEL );
+                SAL_WARN_IF( aLSeqIt->first.second != SCH_XML_PART_LABEL, "xmloff.chart", "aLSeqIt->first.second != SCH_XML_PART_LABEL" );
                 // labels
                 Reference< chart2::data::XDataSequence > xSeq( aLSeqIt->second->getLabel());
                 OUString aRange;

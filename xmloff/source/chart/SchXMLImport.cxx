@@ -165,7 +165,7 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     }
     else
     {
-        OSL_FAIL( "No valid XChartDocument given as XModel" );
+        SAL_WARN("xmloff.chart", "No valid XChartDocument given as XModel" );
         pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
     }
 
@@ -436,12 +436,7 @@ void SchXMLImportHelper::DeleteDataSeries(
     }
     catch( const uno::Exception & ex )
     {
-        (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
-                        OUString(  "Exception caught. Type: " ) +
-                        OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString(  ", Message: " ) +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+       SAL_WARN("xmloff.chart",  "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
     }
 }
 
@@ -520,12 +515,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
     }
     catch( const uno::Exception & ex )
     {
-        (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
-                        OUString(  "Exception caught. Type: " ) +
-                        OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString(  ", Message: " ) +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
     }
     return xResult;
 }
@@ -678,12 +668,8 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
     }
     catch( const uno::Exception & rEx )
     {
-#ifdef DBG_UTIL
         OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-        OSL_TRACE("SchXMLChartContext::StartElement(): Exception caught: %s", aBStr.getStr());
-#else
-        (void)rEx; // avoid warning for pro build
-#endif
+        SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught: " << aBStr);
     }
 }
 

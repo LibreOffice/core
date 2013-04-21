@@ -309,7 +309,7 @@ XMLTokenEnum getTokenByChartType(
     if( rChartTypeService.match( aPrefix ))
     {
         sal_Int32 nSkip = aPrefix.getLength();
-        OSL_ASSERT( rChartTypeService.getLength() >= nSkip );
+        SAL_WARN_IF( rChartTypeService.getLength() < nSkip, "xmloff.chart", "ChartTypeService.getLength() < nSkip" );
         sal_Int32 nTypeLength = rChartTypeService.getLength() - nSkip - aPostfix.getLength();
         // if postfix matches and leaves a non-empty type
         if( nTypeLength > 0 && rChartTypeService.match( aPostfix, nSkip + nTypeLength ))
@@ -363,14 +363,14 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
 
     if( !xChartDoc.is() )
     {
-        OSL_FAIL( "need a chart document" );
+        SAL_WARN("xmloff.chart", "need a chart document" );
         return xRet;
     }
 
     Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
     if( !xDataProvider.is() )
     {
-        OSL_FAIL( "need a data provider" );
+        SAL_WARN("xmloff.chart", "need a data provider" );
         return xRet;
     }
 
@@ -400,7 +400,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         }
         catch( const lang::IllegalArgumentException & )
         {
-            OSL_FAIL( "could not create data sequence" );
+            SAL_WARN("xmloff.chart", "could not create data sequence" );
         }
     }
 
@@ -416,7 +416,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         }
         catch( const lang::IllegalArgumentException & )
         {
-            OSL_FAIL( "could not create data sequence" );
+            SAL_WARN("xmloff.chart", "could not create data sequence" );
         }
     }
     return xRet;
@@ -446,7 +446,7 @@ void CreateCategories(
                 if( nCooSysIndex < aCooSysSeq.getLength())
                 {
                     uno::Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[nCooSysIndex] );
-                    OSL_ASSERT( xCooSys.is());
+                    SAL_WARN_IF( !xCooSys.is(), "xmloff.chart", "xCooSys is NULL");
                     if( nDimensionIndex < xCooSys->getDimension() )
                     {
                         const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
@@ -479,10 +479,7 @@ void CreateCategories(
                                 }
                                 catch( const lang::IllegalArgumentException & ex )
                                 {
-                                    (void)ex; // avoid warning for pro build
-                                    OSL_FAIL( OUStringToOString(
-                                                    OUString(  "IllegalArgumentException caught, Message: " ) +
-                                                    ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+                                    SAL_WARN("xmloff.chart", "IllegalArgumentException caught, Message: " << ex.Message );
                                 }
                                 aData.Categories.set( xLabeledSeq );
                                 if( pLSequencesPerIndex )
@@ -502,7 +499,7 @@ void CreateCategories(
     }
     catch( uno::Exception & )
     {
-        OSL_FAIL( "Exception caught while creating Categories" );
+        SAL_WARN("xmloff.chart", "Exception caught while creating Categories" );
     }
 }
 
@@ -655,10 +652,7 @@ void setXMLRangePropertyAtDataSequence(
     }
     catch( const uno::Exception & ex )
     {
-        (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
-                        OUString(  "Exception caught, Message: " ) +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        SAL_WARN("xmloff.chart", "Exception caught, Message: " << ex.Message );
     }
 }
 
@@ -685,10 +679,7 @@ bool getXMLRangePropertyFromDataSequence(
         }
         catch( const uno::Exception & ex )
         {
-            (void)ex; // avoid warning for pro build
-            OSL_FAIL( OUStringToOString(
-                            OUString(  "Exception caught, Message: " ) +
-                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+            SAL_WARN("xmloff.chart", "Exception caught, Message: " << ex.Message );
         }
     }
     return bResult;
@@ -721,7 +712,7 @@ void copyProperties(
     }
     catch( const uno::Exception & )
     {
-        OSL_FAIL( "Copying property sets failed!" );
+        SAL_WARN("xmloff.chart", "Copying property sets failed!" );
     }
 }
 

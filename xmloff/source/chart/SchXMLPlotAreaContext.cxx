@@ -121,12 +121,8 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
     }
     catch( const uno::Exception & rEx )
     {
-#ifdef DBG_UTIL
         OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-        OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.getStr());
-#else
-        (void)rEx; // avoid warning for pro build
-#endif
+        SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << aBStr);
     }
 }
 
@@ -184,7 +180,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
 
         maSceneImportHelper.getCameraDefaultFromDiagram( mxDiagram );
     }
-    DBG_ASSERT( mxDiagram.is(), "Couldn't get XDiagram" );
+    SAL_WARN_IF( !mxDiagram.is(),"xmloff.chart", "Couldn't get XDiagram" );
 
     // turn off all axes initially
     uno::Any aFalseBool;
@@ -231,7 +227,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         }
         catch( const beans::UnknownPropertyException & )
         {
-            OSL_FAIL( "Property required by service not supported" );
+            SAL_WARN("xmloff.chart", "Property required by service not supported" );
         }
     }
 }
@@ -315,7 +311,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             }
             catch( const beans::UnknownPropertyException & )
             {
-                SAL_WARN( "xmloff.chart", "Properties missing" );
+                SAL_WARN("xmloff.chart", "Properties missing" );
             }
         }
     }
@@ -415,12 +411,8 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     }
     catch( const uno::Exception & rEx )
     {
-#ifdef DBG_UTIL
         OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-        OSL_TRACE("PlotAreaContext:EndElement(): Exception caught: %s", aBStr.getStr());
-#else
-        (void)rEx; // avoid warning for pro build
-#endif
+        SAL_INFO("xmloff.chart", "PlotAreaContext:EndElement(): Exception caught: " << aBStr);
     }
     } // if
 
@@ -589,12 +581,8 @@ void SchXMLPlotAreaContext::EndElement()
             }
             catch( const uno::Exception & rEx )
             {
-#ifdef DBG_UTIL
                 OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-                OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.getStr());
-#else
-                (void)rEx; // avoid warning for pro build
-#endif
+                SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << aBStr);
             }
         }
 
@@ -609,12 +597,8 @@ void SchXMLPlotAreaContext::EndElement()
             }
             catch( const uno::Exception & rEx )
             {
-#ifdef DBG_UTIL
                 OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-                OSL_TRACE("Exception caught for property Volume: %s", aBStr.getStr());
-#else
-                (void)rEx; // avoid warning for pro build
-#endif
+                SAL_INFO("xmloff.chart", "Exception caught for property Volume: " << aBStr);
             }
         }
     }
@@ -1365,7 +1349,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
                 xEqProp->setPropertyValue( OUString(  "RelativePosition" ),
                                            uno::makeAny( aRelPos ));
             }
-            OSL_ASSERT( mrRegressionStyle.meType == DataRowPointStyle::REGRESSION );
+            SAL_WARN_IF( mrRegressionStyle.meType != DataRowPointStyle::REGRESSION, "xmloff.chart", "mrRegressionStyle.meType != DataRowPointStyle::REGRESSION" );
             mrRegressionStyle.m_xEquationProperties.set( xEqProp );
         }
     }
