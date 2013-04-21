@@ -37,8 +37,8 @@ $(eval $(call gb_Module_add_targets,smoketest,\
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,smoketest,\
+	Extension_TestExtension \
 	Jar_TestExtension \
-	Zip_TestExtension \
 ))
 endif
 
