@@ -1436,7 +1436,7 @@ namespace frm
         if ( hasValidator() )
             return OBoundControlModel::getCurrentFormComponentValue();
 
-        Any aCurretnValue;
+        Any aCurrentValue;
 
         try
         {
@@ -1447,16 +1447,16 @@ namespace frm
             OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
 
             if ( bMultiSelection )
-                aCurretnValue = lcl_getMultiSelectedEntriesAny( aSelectSequence, impl_getValues() );
+                aCurrentValue = lcl_getMultiSelectedEntriesAny( aSelectSequence, impl_getValues() );
             else
-                aCurretnValue = lcl_getSingleSelectedEntryAny( aSelectSequence, impl_getValues() );
+                aCurrentValue = lcl_getSingleSelectedEntryAny( aSelectSequence, impl_getValues() );
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        return aCurretnValue;
+        return aCurrentValue;
     }
 
     //--------------------------------------------------------------------
