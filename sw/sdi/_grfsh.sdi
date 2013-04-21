@@ -62,13 +62,13 @@ interface BaseTextGraphic
 
     SID_ROTATE_GRAPHIC_LEFT
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteRotation ;
         StateMethod = GetAttrState ;
     ]
 
     SID_ROTATE_GRAPHIC_RIGHT
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecuteRotation ;
         StateMethod = GetAttrState ;
     ]
 

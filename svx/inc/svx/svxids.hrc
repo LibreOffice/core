@@ -931,10 +931,10 @@
 #define SID_CHANGE_PICTURE                              (SID_SVX_START+1125)
 #define SID_ROTATE_GRAPHIC_LEFT                         (SID_SVX_START+1126)
 #define SID_ROTATE_GRAPHIC_RIGHT                        (SID_SVX_START+1127)
-
+#define SID_MENU_MANAGE_GRAPHIC                         (SID_SVX_START+1128)
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_ROTATE_GRAPHIC_RIGHT + 1)
+#define SID_SVX_FIRSTFREE                               (SID_MENU_MANAGE_GRAPHIC + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

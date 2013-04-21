@@ -42,6 +42,7 @@
 #include <editeng/brushitem.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/compressgraphicdialog.hxx>
+#include <vcl/GraphicNativeTransform.hxx>
 #include <svx/tbxcolor.hxx>
 #include <fmturl.hxx>
 #include <view.hxx>
@@ -72,20 +73,24 @@
 
 #define TOOLBOX_NAME "colorbar"
 
-class SwExternalToolEdit : public ExternalToolEdit
+namespace
 {
-    SwWrtShell*  m_pShell;
-
-public:
-    SwExternalToolEdit ( SwWrtShell* pShell ) :
-        m_pShell  (pShell)
-    {}
-
-    virtual void Update( Graphic& aGraphic )
+    class SwExternalToolEdit : public ExternalToolEdit
     {
-        m_pShell->ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &aGraphic);
-    }
-};
+        SwWrtShell*  m_pShell;
+
+    public:
+        SwExternalToolEdit ( SwWrtShell* pShell ) :
+            m_pShell  (pShell)
+        {}
+
+        virtual void Update( Graphic& aGraphic )
+        {
+            m_pShell->ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &aGraphic);
+        }
+    };
+}
+
 
 SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 {
@@ -162,9 +167,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         break;
         case SID_EXTERNAL_EDIT:
         {
-            /* When the graphic is selected to be opened via some external tool
-             * for advanced editing
-             */
+            // When the graphic is selected to be opened via some external tool
+            // for advanced editing
             GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
             if(0 != pGraphicObject)
             {
@@ -173,7 +177,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         {
@@ -592,6 +595,22 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = true;
             break;
+        case SID_ROTATE_GRAPHIC_LEFT:
+        case SID_ROTATE_GRAPHIC_RIGHT:
+            if( rSh.GetGraphicType() == GRAPHIC_NONE )
+            {
+                bDisable = true;
+            }
+            else
+            {
+                Graphic aGraphic = *rSh.GetGraphic();
+                GraphicNativeTransform aTransform(aGraphic);
+                if (!aTransform.canBeRotated())
+                {
+                    bDisable = true;
+                }
+            }
+            break;
         case SID_COLOR_SETTINGS:
         {
             if ( bParentCntProt || !bIsGrfCntnt )
@@ -730,6 +749,42 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
     SetGetStateSet( 0 );
+}
+
+void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
+{
+    sal_uInt16 aRotation;
+
+    SwWrtShell& rShell = GetShell();
+
+    if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_LEFT)
+    {
+        aRotation = 900;
+    }
+    else if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RIGHT)
+    {
+        aRotation = 2700;
+    }
+    else
+    {
+        return;
+    }
+
+    rShell.StartAllAction();
+    rShell.StartUndo(UNDO_START);
+
+    Graphic aGraphic = *rShell.GetGraphic();
+    GraphicNativeTransform aTransform(aGraphic);
+    aTransform.rotate(aRotation);
+    rShell.ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &aGraphic);
+
+    SwFlyFrmAttrMgr aManager( false, &rShell, rShell.IsFrmSelected() ? FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
+    Size aSize(aManager.GetSize().Height(), aManager.GetSize().Width());
+    aManager.SetSize(aSize);
+    aManager.UpdateFlyFrm();
+
+    rShell.EndUndo(UNDO_END);
+    rShell.EndAllAction();
 }
 
 

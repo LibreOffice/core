@@ -26,11 +26,13 @@ class SwGrfShell: public SwBaseShell
 public:
     SFX_DECL_INTERFACE(SW_GRFSHELL)
 
-    void    Execute(SfxRequest &);
-    void    ExecAttr(SfxRequest &);
-    void    GetAttrState(SfxItemSet &);
+    void Execute(SfxRequest& rRequest);
+    void ExecuteRotation(SfxRequest &rRequest);
+    void ExecAttr(SfxRequest& rRequest);
 
-            SwGrfShell(SwView &rView);
+    void GetAttrState(SfxItemSet& rRequest);
+
+    SwGrfShell(SwView &rView);
 };
 
 #endif
