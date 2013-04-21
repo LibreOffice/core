@@ -350,7 +350,7 @@ namespace frm
             Sequence< const Any > v;
             _rValue >>= v;
             Any newSelectSeq(translateBindingValuesToControlValue(v));
-            setPropertyValue( PROPERTY_SELECT_SEQ, newSelectSeq );
+            setControlValue( newSelectSeq, eOther );
         }
         break;
 
@@ -359,7 +359,7 @@ namespace frm
             ORowSetValue v;
             v.fill(_rValue);
             Any newSelectSeq(translateDbValueToControlValue(v));
-            setPropertyValue( PROPERTY_SELECT_SEQ, newSelectSeq );
+            setControlValue( newSelectSeq, eOther );
         }
         break;
 
@@ -1470,7 +1470,7 @@ namespace frm
         OSL_PRECOND( hasExternalValueBinding(), "OListBoxModel::translateControlValueToExternalValue: no binding!" );
 
         Sequence< sal_Int16 > aSelectSequence;
-        const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence;
+        OSL_VERIFY( getControlValue() >>= aSelectSequence );
 
         Any aReturn;
         switch ( lcl_getCurrentExchangeType( getExternalValueType() ) )
@@ -1521,7 +1521,7 @@ namespace frm
         try
         {
             Sequence< sal_Int16 > aSelectSequence;
-            OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence );
+            OSL_VERIFY( getControlValue() >>= aSelectSequence );
             aCurrentValue = lcl_getSingleSelectedEntryAny( aSelectSequence, impl_getValues() );
         }
         catch( const Exception& )
@@ -1539,7 +1539,7 @@ namespace frm
         try
         {
             Sequence< sal_Int16 > aSelectSequence;
-            OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence );
+            OSL_VERIFY( getControlValue() >>= aSelectSequence );
             aCurrentValue = lcl_getMultiSelectedEntriesAny( aSelectSequence, impl_getValues() );
         }
         catch( const Exception& )
