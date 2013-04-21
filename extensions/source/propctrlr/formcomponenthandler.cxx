@@ -1331,7 +1331,7 @@ namespace pcr
                 Optional< double > aMinValue( sal_True, 0 );
                 Optional< double > aMaxValue( sal_True, 0x7FFFFFFF );
 
-                if ( nPropId == PROPERTY_ID_MAXTEXTLEN )
+                if ( nPropId == PROPERTY_ID_MAXTEXTLEN ||  nPropId == PROPERTY_ID_BOUNDCOLUMN )
                     aMinValue.Value = -1;
                 else if ( nPropId == PROPERTY_ID_VISIBLESIZE )
                     aMinValue.Value = 1;
@@ -1573,7 +1573,6 @@ namespace pcr
             if ( !_bFirstTimeInit && m_bHaveListSource )
                 // available list source values (tables or queries) might have changed
                 _rxInspectorUI->rebuildPropertyUI( PROPERTY_LISTSOURCE );
-            aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
             aDependentProperties.push_back( PROPERTY_ID_STRINGITEMLIST );
             // NO break!
 
@@ -1837,15 +1836,11 @@ namespace pcr
             // ----- BoundColumn -----
             case PROPERTY_ID_BOUNDCOLUMN:
             {
-                OUString sControlSource;
-                OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_CONTROLSOURCE ) >>= sControlSource );
-
                 ListSourceType eLSType = ListSourceType_VALUELIST;
                 OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_LISTSOURCETYPE ) >>= eLSType );
 
                 _rxInspectorUI->enablePropertyUI( PROPERTY_BOUNDCOLUMN,
-                        ( !sControlSource.isEmpty() )
-                    &&  ( eLSType != ListSourceType_TABLEFIELDS )
+                        ( eLSType != ListSourceType_TABLEFIELDS )
                     &&  ( eLSType != ListSourceType_VALUELIST )
                 );
             }
