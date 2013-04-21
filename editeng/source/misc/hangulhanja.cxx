@@ -535,9 +535,8 @@ namespace editeng
     bool HangulHanjaConversion_Impl::ContinueConversion( bool _bRepeatCurrentUnit )
     {
         bool bNeedUserInteraction = false;  // when we leave here, do we need user interaction?
-        bool bDocumentDone = false;         // did we already check the whole document?
 
-        while ( !bDocumentDone && !bNeedUserInteraction && implNextConvertible( _bRepeatCurrentUnit ) )
+        while ( !bNeedUserInteraction && implNextConvertible( _bRepeatCurrentUnit ) )
         {
             OUString sCurrentUnit( GetCurrentUnit() );
 
@@ -581,7 +580,7 @@ namespace editeng
             }
         }
 
-        return  bDocumentDone || !bNeedUserInteraction;
+        return !bNeedUserInteraction;
     }
 
     bool HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion( HHC::ConversionDirection& rDirection )
