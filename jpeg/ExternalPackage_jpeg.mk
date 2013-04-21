@@ -13,6 +13,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,jpeg_inc,inc/external/jpeg,\
 	jconfig.h \
 	jerror.h \
 	jmorecfg.h \
+	jpegint.h \
 	jpeglib.h \
 ))
 

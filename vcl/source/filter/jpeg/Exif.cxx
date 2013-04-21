@@ -62,7 +62,7 @@ sal_Int32 Exif::getRotation()
         case LEFT_BOTTOM:
             return 900;
         default:
-            return 0;
+            break;
     }
     return 0;
 }
@@ -93,7 +93,6 @@ bool Exif::write(SvStream& rStream)
 bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
 {
     sal_uInt16  aMagic16;
-    sal_uInt8   aMarker;
     sal_uInt16  aLength;
 
     rStream.Seek(STREAM_SEEK_TO_END);
@@ -113,7 +112,9 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
 
     while(true)
     {
+        sal_uInt8 aMarker = 0xD9;
         sal_Int32 aCount;
+
         for (aCount = 0; aCount < 7; aCount++)
         {
             rStream >> aMarker;
