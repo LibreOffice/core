@@ -28,11 +28,4 @@ $(odk_WORKDIR)/classes/java.done: $(call gb_JavaClassSet_get_target,loader)
 	cp -a $(call gb_JavaClassSet_get_classdir,loader)/com $(dir $@)
 	touch $@
 
-odkcommon_ZIPLIST += classes/win/unowinreg.dll
-$(eval $(call gb_CustomTarget_register_target,odk/odkcommon/classes,win/unowinreg.dll))
-$(odk_WORKDIR)/classes/win/unowinreg.dll: $(call gb_CustomTarget_get_workdir,odk/unowinreg)/unowinreg.dll
-	mkdir -p $(dir $@)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CPY,1)
-	cp $< $@
-
 # vim: set noet sw=4 ts=4:

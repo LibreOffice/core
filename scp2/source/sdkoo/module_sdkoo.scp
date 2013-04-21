@@ -37,6 +37,7 @@ Module gid_Module_Optional_Sdkoo
         gid_File_Package_odk_bin,
         gid_File_Package_odk_cli,
         gid_File_Package_odk_macosx,
+        gid_File_Package_odk_unowinreg,
         gid_File_Zip_Odkexamples,
         gid_File_Zip_Odkcommon,
         gid_File_Zip_OdkIdl_udkapi,

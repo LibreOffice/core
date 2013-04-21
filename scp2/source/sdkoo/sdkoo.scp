@@ -141,6 +141,15 @@ File gid_File_Package_odk_macosx
 End
 #endif
 
+#if defined(SOLAR_JAVA)
+File gid_File_Package_odk_unowinreg
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_unowinreg.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+#endif
+
 File gid_File_Zip_Odkexamples
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;
