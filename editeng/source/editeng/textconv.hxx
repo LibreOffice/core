@@ -29,24 +29,24 @@ class EditView;
 
 class TextConvWrapper : public editeng::HangulHanjaConversion
 {
-    OUString   aConvText;      // convertible text part found last time
-    LanguageType    nConvTextLang;  // language of aConvText
-    sal_uInt16          nLastPos;       // starting position of the last found text portion (word)
-    sal_uInt16          nUnitOffset;    // offset of current unit in the current text portion (word)
+    OUString        m_aConvText;      // convertible text part found last time
+    LanguageType    m_nConvTextLang;  // language of aConvText
+    sal_uInt16      m_nUnitOffset;    // offset of current unit in the current text portion (word)
+    sal_uInt16      m_nLastPos;       // starting position of the last found text portion (word)
 
-    ESelection      aConvSel;       // selection to be converted if
-                                    // 'HasRange' is true, other conversion
-                                    // starts from the cursor position
+    ESelection      m_aConvSel;       // selection to be converted if
+                                      // 'HasRange' is true, other conversion
+                                      // starts from the cursor position
 
-    EditView *      pEditView;
-    Window *        pWin;
+    EditView *      m_pEditView;
+    Window *        m_pWin;
 
-    bool            bStartChk;
-    bool            bStartDone;
-    bool            bEndDone;
-    bool            bAllowChange;   // storage for _bAllowImplicitChangesForNotConvertibleText
-                                    // parameters value of function GetNextPortion.
-                                    // used to transport the value to where it is needed.
+    bool            m_bStartChk;
+    bool            m_bStartDone;
+    bool            m_bEndDone;
+    bool            m_bAllowChange;   // storage for _bAllowImplicitChangesForNotConvertibleText
+                                      // parameters value of function GetNextPortion.
+                                      // used to transport the value to where it is needed.
 
 
     // from SvxSpellWrapper copied and modified
