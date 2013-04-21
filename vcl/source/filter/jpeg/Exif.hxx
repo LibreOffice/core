@@ -1,0 +1,82 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef _EXIF_HXX
+#define _EXIF_HXX
+
+#include <vcl/graph.hxx>
+#include <vcl/fltcall.hxx>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+
+enum Orientation {
+    TOP_LEFT        = 1,
+    TOP_RIGHT       = 2,
+    BOTTOM_RIGHT    = 3,
+    BOTTOM_LEFT     = 4,
+    LEFT_TOP        = 5,
+    RIGHT_TOP       = 6,
+    RIGHT_BOTTOM    = 7,
+    LEFT_BOTTOM     = 8
+};
+
+enum Tag {
+    IMAGE_WIDTH     = 0x0100,
+    IMAGE_HEIGHT    = 0x0101,
+    BITS_PER_SAMPLE = 0x0102,
+    COMPRESSION     = 0x0103,
+    ORIENTATION     = 0x0112
+};
+
+class Exif
+{
+private:
+    Orientation maOrientation;
+    sal_Int32  mnStreamPosition;
+
+    bool processJpegStream(SvStream& rStream, bool bSetValue);
+
+    struct ExifIFD {
+        sal_uInt16 tag;
+        sal_uInt16 type;
+        sal_uInt32 count;
+        sal_uInt32 offset;
+    };
+
+    Orientation convertToOrientation(sal_Int32 value);
+
+public :
+    Exif();
+    virtual ~Exif();
+
+    Orientation getOrientation();
+    sal_Int32 getRotation();
+
+    void setOrientation(Orientation orientation);
+
+    bool read(SvStream& rStream);
+    bool write(SvStream& rStream);
+
+};
+
+
+#endif // _EXIF_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

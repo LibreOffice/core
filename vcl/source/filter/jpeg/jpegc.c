@@ -22,9 +22,11 @@
 #include <setjmp.h>
 #include <jpeglib.h>
 #include <jerror.h>
+
 #include <rtl/alloc.h>
 #include <osl/diagnose.h>
 
+#include "transupp.h"
 #include "jpeg.h"
 
 struct ErrorManagerStruct
@@ -42,7 +44,6 @@ METHODDEF( void ) errorExit (j_common_ptr cinfo)
     (*cinfo->err->output_message) (cinfo);
     longjmp(error->setjmp_buffer, 1);
 }
-
 
 METHODDEF( void ) outputMessage (j_common_ptr cinfo)
 {
@@ -86,13 +87,13 @@ void ReadJPEG( void* pJPEGReader, void* pInputStream, long* pLines )
 
     jpeg_create_decompress( &cinfo );
     jpeg_svstream_src( &cinfo, pInputStream );
-    jpeg_read_header( &cinfo, sal_True );
+    jpeg_read_header( &cinfo, TRUE );
 
     cinfo.scale_num = 1;
     cinfo.scale_denom = 1;
     cinfo.output_gamma = 1.0;
-    cinfo.raw_data_out = sal_False;
-    cinfo.quantize_colors = sal_False;
+    cinfo.raw_data_out = FALSE;
+    cinfo.quantize_colors = FALSE;
     if ( cinfo.jpeg_color_space == JCS_YCbCr )
         cinfo.out_color_space = JCS_RGB;
     else if ( cinfo.jpeg_color_space == JCS_YCCK )
@@ -131,8 +132,8 @@ void ReadJPEG( void* pJPEGReader, void* pInputStream, long* pLines )
         if( cinfo.scale_denom > 1 )
         {
             cinfo.dct_method            = JDCT_FASTEST;
-            cinfo.do_fancy_upsampling   = sal_False;
-            cinfo.do_block_smoothing    = sal_False;
+            cinfo.do_fancy_upsampling   = FALSE;
+            cinfo.do_block_smoothing    = FALSE;
         }
     }
 
@@ -221,7 +222,8 @@ void ReadJPEG( void* pJPEGReader, void* pInputStream, long* pLines )
 
 long WriteJPEG( void* pJPEGWriter, void* pOutputStream,
                 long nWidth, long nHeight, long bGreys,
-                long nQualityPercent, long aChromaSubsampling, void* pCallbackData )
+                long nQualityPercent, long aChromaSubsampling,
+                void* pCallbackData )
 {
     struct jpeg_compress_struct cinfo;
     struct ErrorManagerStruct   jerr;
@@ -255,7 +257,7 @@ long WriteJPEG( void* pJPEGWriter, void* pOutputStream,
     }
 
     jpeg_set_defaults( &cinfo );
-    jpeg_set_quality( &cinfo, (int) nQualityPercent, sal_False );
+    jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );
 
     if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
         jpeg_simple_progression( &cinfo );
@@ -276,7 +278,7 @@ long WriteJPEG( void* pJPEGWriter, void* pOutputStream,
         cinfo.comp_info[0].v_samp_factor = 2;
     }
 
-    jpeg_start_compress( &cinfo, sal_True );
+    jpeg_start_compress( &cinfo, TRUE );
 
     for( nY = 0; nY < nHeight; nY++ )
     {
@@ -296,6 +298,90 @@ long WriteJPEG( void* pJPEGWriter, void* pOutputStream,
 
     jpeg_finish_compress(&cinfo);
     jpeg_destroy_compress( &cinfo );
+
+    return 1;
+}
+
+long Transform(void* pInputStream, void* pOutputStream, long nAngle)
+{
+    jpeg_transform_info aTransformOption;
+    JCOPY_OPTION        aCopyOption = JCOPYOPT_ALL;
+
+    struct jpeg_decompress_struct   aSourceInfo;
+    struct jpeg_compress_struct     aDestinationInfo;
+    struct ErrorManagerStruct       aSourceError;
+    struct ErrorManagerStruct       aDestinationError;
+
+    jvirt_barray_ptr* aSourceCoefArrays      = 0;
+    jvirt_barray_ptr* aDestinationCoefArrays = 0;
+
+    aTransformOption.force_grayscale = FALSE;
+    aTransformOption.trim            = FALSE;
+    aTransformOption.perfect         = FALSE;
+    aTransformOption.crop            = FALSE;
+
+    // Angle to transform option
+    // 90 Clockwise = 270 Counterclockwise
+    switch (nAngle)
+    {
+        case 2700:
+            aTransformOption.transform  = JXFORM_ROT_90;
+            break;
+        case 1800:
+            aTransformOption.transform  = JXFORM_ROT_180;
+            break;
+        case 900:
+            aTransformOption.transform  = JXFORM_ROT_270;
+            break;
+        default:
+            aTransformOption.transform  = JXFORM_NONE;
+    }
+
+    // Decompression
+    aSourceInfo.err                 = jpeg_std_error(&aSourceError.pub);
+    aSourceInfo.err->error_exit     = errorExit;
+    aSourceInfo.err->output_message = outputMessage;
+
+    // Compression
+    aDestinationInfo.err                 = jpeg_std_error(&aDestinationError.pub);
+    aDestinationInfo.err->error_exit     = errorExit;
+    aDestinationInfo.err->output_message = outputMessage;
+
+    aDestinationInfo.optimize_coding = TRUE;
+
+    if (setjmp(aSourceError.setjmp_buffer) || setjmp(aDestinationError.setjmp_buffer))
+    {
+        jpeg_destroy_decompress(&aSourceInfo);
+        jpeg_destroy_compress(&aDestinationInfo);
+        return 0;
+    }
+
+    jpeg_create_decompress(&aSourceInfo);
+    jpeg_create_compress(&aDestinationInfo);
+
+    jpeg_svstream_src (&aSourceInfo, pInputStream);
+
+    jcopy_markers_setup(&aSourceInfo, aCopyOption);
+    jpeg_read_header(&aSourceInfo, 1);
+    jtransform_request_workspace(&aSourceInfo, &aTransformOption);
+
+    aSourceCoefArrays = jpeg_read_coefficients(&aSourceInfo);
+    jpeg_copy_critical_parameters(&aSourceInfo, &aDestinationInfo);
+
+    aDestinationCoefArrays = jtransform_adjust_parameters(&aSourceInfo, &aDestinationInfo, aSourceCoefArrays, &aTransformOption);
+    jpeg_svstream_dest (&aDestinationInfo, pOutputStream);
+
+    // Compute optimal Huffman coding tables instead of precomuted tables
+    aDestinationInfo.optimize_coding = 1;
+    jpeg_write_coefficients(&aDestinationInfo, aDestinationCoefArrays);
+    jcopy_markers_execute(&aSourceInfo, &aDestinationInfo, aCopyOption);
+    jtransform_execute_transformation(&aSourceInfo, &aDestinationInfo, aSourceCoefArrays, &aTransformOption);
+
+    jpeg_finish_compress(&aDestinationInfo);
+    jpeg_destroy_compress(&aDestinationInfo);
+
+    jpeg_finish_decompress(&aSourceInfo);
+    jpeg_destroy_decompress(&aSourceInfo);
 
     return 1;
 }

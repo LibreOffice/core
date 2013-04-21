@@ -169,6 +169,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/FilterConfigItem \
     vcl/source/filter/graphicfilter \
     vcl/source/filter/graphicfilter2 \
+    vcl/source/filter/GraphicNativeTransform \
+    vcl/source/filter/GraphicNativeMetadata \
     vcl/source/filter/sgfbram \
     vcl/source/filter/sgvmain \
     vcl/source/filter/sgvspln \
@@ -177,9 +179,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/igif/gifread \
     vcl/source/filter/ixbm/xbmread \
     vcl/source/filter/ixpm/xpmread \
+    vcl/source/filter/jpeg/Exif \
     vcl/source/filter/jpeg/jpeg \
     vcl/source/filter/jpeg/JpegReader \
     vcl/source/filter/jpeg/JpegWriter \
+    vcl/source/filter/jpeg/JpegTransform \
     vcl/source/filter/wmf/emfwr \
     vcl/source/filter/wmf/enhwmf \
     vcl/source/filter/wmf/winmtf \
@@ -317,6 +321,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/jpegc \
+    vcl/source/filter/jpeg/transupp \
 ))
 
 # optional parts

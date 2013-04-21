@@ -59,6 +59,8 @@ void*   CreateBitmapFromJPEGReader( void* pJPEGReader, void* pJPEGCreateBitmapPa
    the preview size hint should be redone */
 void    SetJpegPreviewSizeHint( int nWidth, int nHeight );
 
+long    Transform( void* pInputStream, void* pOutputStream, long nAngle );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
