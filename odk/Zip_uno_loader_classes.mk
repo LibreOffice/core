@@ -13,7 +13,6 @@ $(eval $(call gb_Zip_add_commandoptions,uno_loader_classes,-r))
 
 $(eval $(call gb_Zip_add_files,uno_loader_classes,\
 		com/sun/star/lib/loader \
-		win/unowinreg.dll \
 ))
 
 $(call gb_Zip_get_target,uno_loader_classes) : $(call gb_CustomTarget_get_target,odk/odkcommon/classes)
