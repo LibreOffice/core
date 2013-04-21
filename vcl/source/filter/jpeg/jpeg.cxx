@@ -25,11 +25,12 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 
-sal_Bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags )
+bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags )
 {
-    JPEGReader* pJPEGReader = (JPEGReader*) rGraphic.GetContext();
     ReadState   eReadState;
-    sal_Bool    bReturn = true;
+    bool        bReturn = true;
+
+    JPEGReader* pJPEGReader = (JPEGReader*) rGraphic.GetContext();
 
     if( !pJPEGReader )
     {
@@ -65,7 +66,7 @@ sal_Bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerDat
     return bReturn;
 }
 
-sal_Bool ExportJPEG(SvStream& rOutputStream, const Graphic& rGraphic,
+bool ExportJPEG(SvStream& rOutputStream, const Graphic& rGraphic,
                     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>* pFilterData,
                     bool* pExportWasGrey)
 {

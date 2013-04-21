@@ -26,9 +26,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-sal_Bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
+bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
 
-sal_Bool ExportJPEG(SvStream& rOutputStream,
+bool ExportJPEG(SvStream& rOutputStream,
                     const Graphic& rGraphic,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
                     bool* pExportWasGrey = NULL);
