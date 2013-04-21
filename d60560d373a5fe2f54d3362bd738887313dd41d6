@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+js\u003d",
+        "filename": "sw/source/ui/shells/basesh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-21T06:19:20Z",
+      "side": 1,
+      "message": "From a quick peek at the code, I\u0027d write something like: \"These variables keep the state of Gallery (slot SID_GALLERY_BG_BRUSH) detected by GetGalleryState() for the subsequent ExecuteGallery() call.\"",
+      "revId": "d60560d373a5fe2f54d3362bd738887313dd41d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//+kE\u003d",
+        "filename": "sw/source/ui/shells/basesh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-21T06:19:20Z",
+      "side": 1,
+      "message": "This comment is meaningless and should be dropped.",
+      "revId": "d60560d373a5fe2f54d3362bd738887313dd41d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
