@@ -19,7 +19,7 @@
 
 #include "DataPointProperties.hxx"
 #include "macros.hxx"
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -158,25 +158,25 @@ void DataPointProperties::AddPropertiesToVector(
     // ---------------
     rOutProperties.push_back(
         Property( "LineStyle",
-                  LineProperties::PROP_LINE_STYLE,
+                  LinePropertiesHelper::PROP_LINE_STYLE,
                   ::getCppuType( reinterpret_cast< const drawing::LineStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "LineWidth",
-                  LineProperties::PROP_LINE_WIDTH,
+                  LinePropertiesHelper::PROP_LINE_WIDTH,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
          Property( "LineDash",
-                   LineProperties::PROP_LINE_DASH,
+                   LinePropertiesHelper::PROP_LINE_DASH,
                    ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
                    beans::PropertyAttribute::BOUND
                    | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( "LineDashName",
-                  LineProperties::PROP_LINE_DASH_NAME,
+                  LinePropertiesHelper::PROP_LINE_DASH_NAME,
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -368,10 +368,10 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_BORDER_TRANSPARENCY, 0 );
 
     //line
-    PropertyHelper::setPropertyValueDefault( rOutMap, LineProperties::PROP_LINE_STYLE, drawing::LineStyle_SOLID );
-    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, LineProperties::PROP_LINE_WIDTH, 0 );
-    PropertyHelper::setPropertyValueDefault( rOutMap, LineProperties::PROP_LINE_DASH, drawing::LineDash());
-    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, LineProperties::PROP_LINE_DASH_NAME );
+    PropertyHelper::setPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_SOLID );
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, LinePropertiesHelper::PROP_LINE_WIDTH, 0 );
+    PropertyHelper::setPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_DASH, drawing::LineDash());
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_DASH_NAME );
 
     //fill bitmap
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETX, 0 );

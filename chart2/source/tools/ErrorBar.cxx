@@ -30,13 +30,14 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/util/Color.hpp>
+#include <com/sun/star/drawing/LineJoint.hpp>
+
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;
-
-using ::com::sun::star::beans::Property;
-using ::osl::MutexGuard;
 
 namespace
 {
@@ -59,8 +60,12 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
         {MAP_CHAR_LEN("NegativeError"),3,&getCppuType((const double*)0), 0, 0},
         {MAP_CHAR_LEN("ErrorBarStyle"),4,&getCppuType((sal_Int32*)0),0,0},
         {MAP_CHAR_LEN("Weight"),5,&getCppuType((const double*)0),0,0},
-        {MAP_CHAR_LEN(""),6,&getBooleanCppuType(), 0, 0},
-        {MAP_CHAR_LEN(""),7,&getCppuType((OUString*)0),0,0},
+        {MAP_CHAR_LEN("LineStyle"),7,&getCppuType((com::sun::star::drawing::LineStyle*)0),0,0},
+        {MAP_CHAR_LEN("LineDashName"),7,&getCppuType((OUString*)0),0,0},
+        {MAP_CHAR_LEN("LineWidth"),7,&getCppuType((sal_Int32*)0),0,0},
+        {MAP_CHAR_LEN("LineColor"),7,&getCppuType((com::sun::star::util::Color*)0),0,0},
+        {MAP_CHAR_LEN("LineTransparence"),7,&getCppuType((sal_uInt8*)0),0,0},
+        {MAP_CHAR_LEN("LineJoint"),7,&getCppuType((com::sun::star::drawing::LineJoint*)0),0,0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aPropSet( aErrorBarPropertyMap_Impl );
@@ -79,6 +84,7 @@ uno::Reference< beans::XPropertySet > createErrorBar( const uno::Reference< uno:
 
 ErrorBar::ErrorBar(
     uno::Reference< uno::XComponentContext > const & xContext ) :
+    LineProperties(),
     mbShowPositiveError(true),
     mbShowNegativeError(true),
     mfPositiveError(0),
@@ -91,6 +97,7 @@ ErrorBar::ErrorBar(
 ErrorBar::ErrorBar( const ErrorBar & rOther ) :
     MutexContainer(),
     impl::ErrorBar_Base(),
+    LineProperties(rOther),
     mbShowPositiveError(rOther.mbShowPositiveError),
     mbShowNegativeError(rOther.mbShowNegativeError),
     mfPositiveError(rOther.mfPositiveError),
@@ -143,7 +150,9 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny
     else if(rPropName == "ShowNegativeError")
         rAny >>= mbShowNegativeError;
     else
-        SAL_WARN("chart2", "asked for property value: " << rPropName);
+        LineProperties::setPropertyValue(rPropName, rAny);
+
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
 uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
@@ -161,7 +170,8 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
     else if(rPropName == "ShowNegativeError")
         aRet <<= mbShowNegativeError;
     else
-        SAL_WARN("chart2", "asked for property value: " << rPropName);
+        aRet = LineProperties::getPropertyValue(rPropName);
+    SAL_WARN_IF(!aRet.hasValue(), "chart2", "asked for property value: " << rPropName);
     return aRet;
 }
 

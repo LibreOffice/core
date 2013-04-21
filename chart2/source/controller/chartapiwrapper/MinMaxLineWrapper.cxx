@@ -28,7 +28,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "UserDefinedProperties.hxx"
 
 using namespace ::com::sun::star;
@@ -55,7 +55,7 @@ struct StaticMinMaxLineWrapperDefaults_Initializer
 private:
     void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
     }
 };
 
@@ -76,7 +76,7 @@ private:
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
 
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),

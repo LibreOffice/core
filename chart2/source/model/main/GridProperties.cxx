@@ -19,7 +19,7 @@
 
 
 #include "GridProperties.hxx"
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "UserDefinedProperties.hxx"
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
@@ -70,13 +70,13 @@ struct StaticGridDefaults_Initializer
 private:
     void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_GRID_SHOW, false );
 
         // override other defaults
         ::chart::PropertyHelper::setPropertyValue< sal_Int32 >(
-            rOutMap, ::chart::LineProperties::PROP_LINE_COLOR, 0xb3b3b3 );  // gray30
+            rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_COLOR, 0xb3b3b3 );  // gray30
     }
 };
 
@@ -97,7 +97,7 @@ private:
     {
         ::std::vector< Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),

@@ -21,7 +21,7 @@
 #include "GridProperties.hxx"
 #include "macros.hxx"
 #include "CharacterProperties.hxx"
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "UserDefinedProperties.hxx"
 #include "PropertyHelper.hxx"
 #include "ContainerHelper.hxx"
@@ -194,7 +194,7 @@ private:
     void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_SHOW, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSSOVER_POSITION, ::com::sun::star::chart::ChartAxisPosition_ZERO );
@@ -235,7 +235,7 @@ private:
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -312,7 +312,7 @@ Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
 {
     osl_atomic_increment(&m_refCount);
     setFastPropertyValue_NoBroadcast(
-        ::chart::LineProperties::PROP_LINE_COLOR, uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
+        ::chart::LinePropertiesHelper::PROP_LINE_COLOR, uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
 
     if( m_xGrid.is())
         ModifyListenerHelper::addListener( m_xGrid, m_xModifyEventForwarder );
@@ -405,7 +405,7 @@ void Axis::AllocateSubGrids()
             for( sal_Int32 i = nOldSubIncCount; i < nNewSubIncCount; ++i )
             {
                 m_aSubGridProperties[ i ] = new GridProperties();
-                LineProperties::SetLineInvisible( m_aSubGridProperties[ i ] );
+                LinePropertiesHelper::SetLineInvisible( m_aSubGridProperties[ i ] );
                 aNewBroadcasters.push_back( m_aSubGridProperties[ i ] );
             }
         }

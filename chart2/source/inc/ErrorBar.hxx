@@ -23,6 +23,7 @@
 #include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 #include "charttoolsdllapi.hxx"
+#include "LineProperties.hxx"
 
 #include <cppuhelper/implbase7.hxx>
 #include <comphelper/uno3.hxx>
@@ -59,7 +60,8 @@ typedef ::cppu::WeakImplHelper7<
 
 class ErrorBar :
         public MutexContainer,
-        public impl::ErrorBar_Base
+        public impl::ErrorBar_Base,
+        public LineProperties
 {
 private:
     bool mbShowPositiveError;

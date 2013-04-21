@@ -19,7 +19,7 @@
 
 #include "Legend.hxx"
 #include "macros.hxx"
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
 #include "CharacterProperties.hxx"
 #include "UserDefinedProperties.hxx"
@@ -116,7 +116,7 @@ struct StaticLegendDefaults_Initializer
 private:
     void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
         ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
 
@@ -148,7 +148,7 @@ private:
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );

@@ -27,7 +27,7 @@
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "UserDefinedProperties.hxx"
 #include "WrappedDefaultProperty.hxx"
 
@@ -58,7 +58,7 @@ private:
     Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),

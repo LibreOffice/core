@@ -19,7 +19,7 @@
 
 
 #include "RegressionEquation.hxx"
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
 #include "CharacterProperties.hxx"
@@ -109,7 +109,7 @@ struct StaticRegressionEquationDefaults_Initializer
 private:
     void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
         ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
 
@@ -119,7 +119,7 @@ private:
 
         // override other defaults
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
 
         float fDefaultCharHeight = 10.0;
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
@@ -145,7 +145,7 @@ private:
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );

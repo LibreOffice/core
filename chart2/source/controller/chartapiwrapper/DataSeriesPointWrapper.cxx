@@ -25,7 +25,7 @@
 #include "DiagramHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "ChartModelHelper.hxx"
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
 #include "CharacterProperties.hxx"
 #include "UserDefinedProperties.hxx"
@@ -174,7 +174,7 @@ uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType
     WrappedDataCaptionProperties::addProperties( aProperties ); //for series and  points
 
     ::chart::FillProperties::AddPropertiesToVector( aProperties );
-    ::chart::LineProperties::AddPropertiesToVector( aProperties );
+    ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
     ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
     ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
     ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );

@@ -55,7 +55,7 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
 #include "SceneProperties.hxx"
@@ -430,7 +430,7 @@ private:
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::SceneProperties::AddPropertiesToVector( aProperties );

@@ -23,7 +23,7 @@
 #include "ChartTypeHelper.hxx"
 #include "macros.hxx"
 #include "AxisIndexDefines.hxx"
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "servicenames_coosystems.hxx"
 #include "DataSeriesHelper.hxx"
@@ -463,7 +463,7 @@ void AxisHelper::makeAxisVisible( const Reference< XAxis >& xAxis )
     if( xProps.is() )
     {
         xProps->setPropertyValue( "Show", uno::makeAny( sal_True ) );
-        LineProperties::SetLineVisible( xProps );
+        LinePropertiesHelper::SetLineVisible( xProps );
         xProps->setPropertyValue( "DisplayLabels", uno::makeAny( sal_True ) );
     }
 }
@@ -473,7 +473,7 @@ void AxisHelper::makeGridVisible( const Reference< beans::XPropertySet >& xGridP
     if( xGridProperties.is() )
     {
         xGridProperties->setPropertyValue( "Show", uno::makeAny( sal_True ) );
-        LineProperties::SetLineVisible( xGridProperties );
+        LinePropertiesHelper::SetLineVisible( xGridProperties );
     }
 }
 
@@ -665,7 +665,7 @@ sal_Bool AxisHelper::isAxisVisible( const Reference< XAxis >& xAxis )
     if( xProps.is() )
     {
         xProps->getPropertyValue( "Show" ) >>= bRet;
-        bRet = bRet && ( LineProperties::IsLineVisible( xProps )
+        bRet = bRet && ( LinePropertiesHelper::IsLineVisible( xProps )
             || areAxisLabelsVisible( xProps ) );
     }
 
@@ -689,7 +689,7 @@ sal_Bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGri
     if( xGridProperies.is() )
     {
         xGridProperies->getPropertyValue( "Show" ) >>= bRet;
-        bRet = bRet && LineProperties::IsLineVisible( xGridProperies );
+        bRet = bRet && LinePropertiesHelper::IsLineVisible( xGridProperies );
     }
 
     return bRet;

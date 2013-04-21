@@ -19,7 +19,7 @@
 
 #include "RegressionCurveModel.hxx"
 #include "macros.hxx"
-#include "LineProperties.hxx"
+#include "LinePropertiesHelper.hxx"
 #include "RegressionCurveHelper.hxx"
 #include "RegressionCalculationHelper.hxx"
 #include "RegressionEquation.hxx"
@@ -62,7 +62,7 @@ struct StaticXXXDefaults_Initializer
 private:
     void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
     }
 };
 
@@ -82,7 +82,7 @@ private:
     uno::Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
@@ -126,7 +126,7 @@ RegressionCurveModel::RegressionCurveModel(
     // set 0 line width (default) hard, so that it is always written to XML,
     // because the old implementation uses different defaults
     setFastPropertyValue_NoBroadcast(
-        LineProperties::PROP_LINE_WIDTH, uno::makeAny( sal_Int32( 0 )));
+        LinePropertiesHelper::PROP_LINE_WIDTH, uno::makeAny( sal_Int32( 0 )));
     ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
 }
 
