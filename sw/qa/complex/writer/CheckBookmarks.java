@@ -70,10 +70,7 @@ class BookmarkHashes {
             XTextContent xBookmarkAsContent = UnoRuntime.queryInterface(
                 XTextContent.class,
                 xBookmark);
-            buffer.append(sBookmarkname);
-            buffer.append(":");
-            buffer.append(xBookmarkAsContent.getAnchor().getString());
-            buffer.append(";");
+            buffer = buffer + sBookmarkname + ":" + xBookmarkAsContent.getAnchor().getString() + ";" ;
         }
         java.security.MessageDigest sha1 = java.security.MessageDigest.getInstance("SHA-1");
         sha1.reset();
