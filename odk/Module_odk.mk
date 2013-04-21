@@ -14,12 +14,12 @@ $(eval $(call gb_Module_add_targets,odk,\
 	$(if $(filter WNT,$(OS)),Package_cli) \
 	$(if $(DOXYGEN),CustomTarget_doxygen) \
 	CustomTarget_check \
-	CustomTarget_lib \
 	CustomTarget_settings \
 	CustomTarget_autodoc \
 	Executable_unoapploader \
 	Package_bin \
 	Package_examples \
+	Package_lib \
 ))
 
 ifeq ($(OS),MACOSX)
