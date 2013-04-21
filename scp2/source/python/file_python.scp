@@ -102,15 +102,16 @@ End
 #endif
 
 File gid_File_Py_Python_Core
-    TXT_FILE_BODY;
+//FIXME  the binaries and libs in the package need x bit but USE_INTERNAL_RIGHTS does not work so set BIN_FILE_BODY here as a temporary hack which makes everything executable
+    BIN_FILE_BODY;
   #ifdef MACOSX
     Dir = gid_Brand_Dir_Program;
     Name = "LibreOfficePython.framework.zip";
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
   #else
-    Dir = gid_Dir_Py_PythonCore_Lib;
-    Name = STRING(CONCAT3(python-core-,PYVERSION,.zip));
-    Styles = (ARCHIVE);
+    Dir = FILELIST_DIR;
+    Name = "python3.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
   #endif
 End
 
@@ -121,20 +122,7 @@ Directory gid_Dir_Py_PythonCore_Bin
 End
 #endif
 
-#ifndef MACOSX
-File gid_File_Py_Python_Bin
-    BIN_FILE_BODY;
-#ifdef UNX
-    Dir = gid_Brand_Dir_Program;
-    Name = "python.bin";
-#else
-    Dir = gid_Dir_Py_PythonCore_Bin;
-    Name = EXENAME(python);
-#endif
-    Styles = (PACKED);
-End
-#endif
-#endif
+#endif // SYSTEM_PYTHON
 
 //Scripting Framework Python example scripts
 
@@ -155,26 +143,7 @@ File gid_File_Share_Registry_Pyuno_Xcd
 End
 
 #ifndef SYSTEM_PYTHON
-#ifndef MACOSX
-File gid_File_Lib_Python_So
-    LIB_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = STRING(PY_FULL_DLL_NAME);
-    Styles = (PACKED);
-End
-#ifndef MSVC_PKG_DEBUG_RUNTIME
-File gid_File_Lib_Python3_So
-    LIB_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-#ifdef UNX
-    Name = STRING(CONCAT3(libpython,PYMAJOR,UNXSUFFIX));
-#else // WNT
-    Name = STRING(CONCAT3(python,PYMAJOR,.dll));
-#endif //UNX
-    Styles = (PACKED);
-End
-#endif
-#else //MACOSX
+#ifdef MACOSX
 //directory entries solely to be able to create the symlinks
 Directory gid_Dir_PythonFramework
     ParentID = gid_Brand_Dir_Program;

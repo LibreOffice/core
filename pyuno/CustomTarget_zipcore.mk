@@ -33,7 +33,7 @@ ifeq ($(OS)$(COM),WNTGCC)
 pyuno_PYTHON_LIB_DIR=$(MINGW_SYSROOT)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 endif
 else
-pyuno_PYTHON_LIB_DIR=$(OUTDIR)/lib/python
+$(error SHOULD NOT GET HERE)
 endif
 
 pyuno_PYTHON_ARCHIVE_NAME:=python-core-$(PYTHON_VERSION).zip
