@@ -33,7 +33,7 @@ $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 	$(PERL) $< \
 		$(INSTDIR)/$(gb_Package_SDKDIRNAME) \
 		$(call gb_CustomTarget_get_workdir,odk/odkcommon) \
-		$(odk_PLATFORM) "$(gb_Exectable_EXT)" $@
+		$(odk_PLATFORM) "$(gb_Executable_EXT)" $@
 	cat $@
 
 # vim: set noet sw=4 ts=4:
