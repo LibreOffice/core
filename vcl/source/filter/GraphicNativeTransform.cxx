@@ -35,6 +35,26 @@ GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic) :
 GraphicNativeTransform::~GraphicNativeTransform()
 {}
 
+bool GraphicNativeTransform::canBeRotated()
+{
+    GfxLink aLink = mrGraphic.GetLink();
+
+    // Don't allow rotation on animations for now
+    if (mrGraphic.IsAnimated())
+    {
+        return false;
+    }
+
+    if (   aLink.GetType() == GFX_LINK_TYPE_NATIVE_JPG
+        || aLink.GetType() == GFX_LINK_TYPE_NATIVE_PNG
+        || aLink.GetType() == GFX_LINK_TYPE_NATIVE_GIF)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
 {
     // Rotation can be between 0 and 3600
