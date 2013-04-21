@@ -296,22 +296,14 @@ void SwDocTest::testModelToViewHelper()
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE);
             OUString sViewText = aModelToViewHelper.getViewText();
-            OUStringBuffer aBuffer;
-            aBuffer.append("AAAAA CCCCC ");
-            aBuffer.append(CH_TXTATR_BREAKWORD);
-            aBuffer.append(" DDDDD");
+            OUStringBuffer aBuffer = "AAAAA CCCCC " + CH_TXTATR_BREAKWORD + " DDDDD";
             CPPUNIT_ASSERT(sViewText == aBuffer.makeStringAndClear());
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEREDLINED);
             OUString sViewText = aModelToViewHelper.getViewText();
-            OUStringBuffer aBuffer;
-            aBuffer.append("AAAABB ");
-            aBuffer.append(CH_TXTATR_BREAKWORD);
-            aBuffer.append(" CCCCC ");
-            aBuffer.append(CH_TXTATR_BREAKWORD);
-            aBuffer.append(" DDDDD");
+            OUStringBuffer aBuffer = "AAAABB " + CH_TXTATR_BREAKWORD + " CCCCC " + CH_TXTATR_BREAKWORD + " DDDDD" ;
             CPPUNIT_ASSERT(sViewText == aBuffer.makeStringAndClear());
         }
 
@@ -330,10 +322,7 @@ void SwDocTest::testModelToViewHelper()
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE | HIDEREDLINED);
             OUString sViewText = aModelToViewHelper.getViewText();
-            OUStringBuffer aBuffer;
-            aBuffer.append("AAAACCCCC ");
-            aBuffer.append(CH_TXTATR_BREAKWORD);
-            aBuffer.append(" DDDDD");
+            OUStringBuffer aBuffer = "AAAACCCCC " + CH_TXTATR_BREAKWORD + " DDDDD";
             CPPUNIT_ASSERT(sViewText == aBuffer.makeStringAndClear());
         }
 
