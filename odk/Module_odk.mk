@@ -30,10 +30,11 @@ endif
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,odk,\
-	CustomTarget_unowinreg \
+	$(if $(filter YESGCC,$(BUILD_UNOWINREG)$(COM)),CustomTarget_unowinreg) \
 	CustomTarget_classes \
 	CustomTarget_javadoc \
 	$(if $(filter WNT,$(OS)),Library_unowinreg) \
+	Package_unowinreg \
 	Zip_uno_loader_classes \
 ))
 endif
