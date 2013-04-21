@@ -20,7 +20,8 @@
 #include "Exif.hxx"
 
 Exif::Exif() :
-    maOrientation(TOP_LEFT)
+    maOrientation(TOP_LEFT),
+    mbExifPresent(false)
 {}
 
 Exif::~Exif()
@@ -66,10 +67,15 @@ sal_Int32 Exif::getRotation()
     return 0;
 }
 
+bool Exif::hasExif()
+{
+    return mbExifPresent;
+}
+
 bool Exif::read(SvStream& rStream)
 {
     sal_Int32 nStreamPosition = rStream.Tell();
-    bool result = processJpegStream(rStream, false);
+    bool result = processJpeg(rStream, false);
     rStream.Seek( nStreamPosition );
 
     return result;
@@ -78,33 +84,81 @@ bool Exif::read(SvStream& rStream)
 bool Exif::write(SvStream& rStream)
 {
     sal_Int32 nStreamPosition = rStream.Tell();
-    bool result = processJpegStream(rStream, true);
+    bool result = processJpeg(rStream, true);
     rStream.Seek( nStreamPosition );
 
     return result;
 }
 
-bool Exif::processJpegStream(SvStream& rStream, bool bSetValue)
+bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
+{
+    sal_uInt16  aMagic16;
+    sal_uInt8   aMarker;
+    sal_uInt16  aLength;
+
+    rStream.Seek(STREAM_SEEK_TO_END);
+    sal_uInt32 aSize = rStream.Tell();
+    rStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    rStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    rStream >> aMagic16;
+
+    // Compare JPEG magic bytes
+    if( 0xFFD8 != aMagic16 )
+    {
+        return false;
+    }
+
+    sal_uInt32 aPreviousPosition = STREAM_SEEK_TO_BEGIN;
+
+    while(true)
+    {
+        sal_Int32 aCount;
+        for (aCount = 0; aCount < 7; aCount++)
+        {
+            rStream >> aMarker;
+            if (aMarker != 0xFF)
+            {
+                break;
+            }
+            if (aCount >= 6)
+            {
+                return false;
+            }
+        }
+
+        rStream >> aLength;
+
+        if (aLength < 8)
+        {
+            return false;
+        }
+
+        if (aMarker == 0xE1)
+        {
+            return processExif(rStream, aLength, bSetValue);
+        }
+        else if (aMarker == 0xD9)
+        {
+            return false;
+        }
+        else
+        {
+            sal_uInt32 aCurrentPosition = rStream.SeekRel(aLength-1);
+            if (aCurrentPosition == aPreviousPosition || aCurrentPosition > aSize)
+            {
+                return false;
+            }
+            aPreviousPosition = aCurrentPosition;
+        }
+    }
+    return false;
+}
+
+bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetValue)
 {
     sal_uInt32  aMagic32;
     sal_uInt16  aMagic16;
-    sal_uInt16  aLength;
-
-    rStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    rStream >> aMagic32;
-
-    // Compare JPEG magic bytes
-    if( 0xffd8ff00 != ( aMagic32 & 0xffffff00 ) )
-    {
-        return false;
-    }
-
-    rStream >> aLength;
-    if (aLength < 8)
-    {
-        return false;
-    }
-    aLength -= 8;
 
     rStream >> aMagic32;
     rStream >> aMagic16;
@@ -115,26 +169,36 @@ bool Exif::processJpegStream(SvStream& rStream, bool bSetValue)
         return false;
     }
 
-    sal_uInt8* exifData = new sal_uInt8[aLength];
+    sal_uInt16 aLength = aSectionLength - 6; // Length = Section - Header
+
+    sal_uInt8* aExifData = new sal_uInt8[aLength];
     sal_uInt32 aExifDataBeginPosition = rStream.Tell();
-    rStream.Read(exifData, aLength);
 
-    sal_uInt16 offset;
-    offset = exifData[5];
-    offset <<= 8;
-    offset += exifData[4];
+    rStream.Read(aExifData, aLength);
 
-    sal_uInt16 numberOfTags;
-    numberOfTags = exifData[offset+1];
-    numberOfTags <<= 8;
-    numberOfTags += exifData[offset];
+    // Exif detected
+    mbExifPresent = true;
 
-    offset += 2;
+    TiffHeader* aTiffHeader = (TiffHeader*) &aExifData[0];
+
+    if( 0x4949 != aTiffHeader->byteOrder || 0x002A != aTiffHeader->tagAlign )
+    {
+        return false;
+    }
+
+    sal_uInt16 aOffset = aTiffHeader->offset;
+
+    sal_uInt16 aNumberOfTags = aExifData[aOffset];
+    aNumberOfTags = aExifData[aOffset + 1];
+    aNumberOfTags <<= 8;
+    aNumberOfTags += aExifData[aOffset];
+
+    aOffset += 2;
 
     ExifIFD* ifd = NULL;
 
-    while (offset <= aLength - 12 && numberOfTags > 0) {
-        ifd = (ExifIFD*) &exifData[offset];
+    while (aOffset <= aLength - 12 && aNumberOfTags > 0) {
+        ifd = (ExifIFD*) &aExifData[aOffset];
 
         if (ifd->tag == Tag::ORIENTATION)
         {
@@ -151,14 +215,14 @@ bool Exif::processJpegStream(SvStream& rStream, bool bSetValue)
             }
         }
 
-        numberOfTags--;
-        offset += 12;
+        aNumberOfTags--;
+        aOffset += 12;
     }
 
     if (bSetValue)
     {
         rStream.Seek(aExifDataBeginPosition);
-        rStream.Write(exifData, aLength);
+        rStream.Write(aExifData, aLength);
     }
 
     return true;

@@ -38,11 +38,11 @@ enum Orientation {
 };
 
 enum Tag {
-    IMAGE_WIDTH     = 0x0100,
-    IMAGE_HEIGHT    = 0x0101,
-    BITS_PER_SAMPLE = 0x0102,
-    COMPRESSION     = 0x0103,
-    ORIENTATION     = 0x0112
+    ORIENTATION         = 0x0112,
+    X_RESOLUTION        = 0x011a,
+    Y_RESOLUTION        = 0x011b,
+    EXIF_OFFSET         = 0x8769,
+    INTEROP_OFFSET      = 0xa005
 };
 
 class Exif
@@ -50,8 +50,10 @@ class Exif
 private:
     Orientation maOrientation;
     sal_Int32  mnStreamPosition;
+    bool mbExifPresent;
 
-    bool processJpegStream(SvStream& rStream, bool bSetValue);
+    bool processJpeg(SvStream& rStream, bool bSetValue);
+    bool processExif(SvStream& rStream, sal_uInt16 aLength, bool bSetValue);
 
     struct ExifIFD {
         sal_uInt16 tag;
@@ -60,11 +62,19 @@ private:
         sal_uInt32 offset;
     };
 
+    struct TiffHeader {
+        sal_uInt16 byteOrder;
+        sal_uInt16 tagAlign;
+        sal_uInt32 offset;
+    };
+
     Orientation convertToOrientation(sal_Int32 value);
 
 public :
     Exif();
     virtual ~Exif();
+
+    bool hasExif();
 
     Orientation getOrientation();
     sal_Int32 getRotation();
