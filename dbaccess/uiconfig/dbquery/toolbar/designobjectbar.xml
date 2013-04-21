@@ -25,4 +25,5 @@
  <toolbar:toolbaritem xlink:href=".uno:DBViewAliases" toolbar:text="" toolbar:style=""/>
  <toolbar:toolbaritem xlink:href=".uno:DBDistinctValues" toolbar:text="" toolbar:style=""/>
  <toolbar:toolbaritem xlink:href=".uno:DBLimit"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBQueryPropertiesDialog"/>
 </toolbar:toolbar>
