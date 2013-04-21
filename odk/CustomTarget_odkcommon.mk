@@ -17,7 +17,6 @@ $(call gb_CustomTarget_get_target,odk/odkcommon): \
 	$(if $(DOXYGEN),$(call gb_CustomTarget_get_target,odk/odkcommon/docs/cpp/ref)) \
 	$(if $(SOLAR_JAVA),$(call gb_CustomTarget_get_target,odk/odkcommon/docs/java/ref)) \
 	$(call gb_CustomTarget_get_target,odk/odkcommon/docs/common/ref) \
-	$(call gb_CustomTarget_get_target,odk/odkcommon/settings) \
 	$(call gb_CustomTarget_get_target,odk/odkcommon/classes) \
 	$(call gb_CustomTarget_get_target,odk/odkcommon/idl) \
 	$(call gb_CustomTarget_get_target,odk/odkcommon/include)
