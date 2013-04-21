@@ -134,6 +134,9 @@
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>
 
+#include <vcl/GraphicNativeTransform.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
+
 const char sStatusDelim[] = " : ";
 const char sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
 
@@ -216,6 +219,21 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
 
     if( GRFILTER_OK == nRes )
     {
+        GraphicNativeMetadata aMetadata;
+        if (aMetadata.Read(aGrf))
+        {
+            if (aMetadata.GetRotation() != 0)
+            {
+                OUString aMessage("This image is rotated. Would you like LibreOffice to rotate it into standard orientation?");
+                QueryBox aQueryBox(GetWindow(), WB_YES_NO | WB_DEF_YES, aMessage);
+                if (aQueryBox.Execute() == RET_YES)
+                {
+                    GraphicNativeTransform aTransform(aGrf);
+                    aTransform.Rotate(aMetadata.GetRotation());
+                }
+            }
+        }
+
         SwFlyFrmAttrMgr aFrmMgr( sal_True, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
 
         SwWrtShell &rSh = GetWrtShell();
