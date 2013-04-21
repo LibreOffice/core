@@ -62,26 +62,12 @@ $(eval $(call gb_Module_add_targets,pyuno,\
     CustomTarget_python_shell \
     Package_python_shell \
 ))
-ifneq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,pyuno,\
-    CustomTarget_python_bin \
-    Package_python_bin \
-))
-endif
-endif
-
-# python-zipcore-$(PYVESION) not on MACOSX
-# (OOoPython.framework.zip is already delivered for MACOSX in python module)
-ifneq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,pyuno,\
-    CustomTarget_zipcore \
-    Package_zipcore \
-))
 endif
 
 else # SYSTEM_PYTHON
 
-# previous two targets has to be executed also with system-python on mingw
+# these two targets have to be executed only with system-python on mingw
+# FIXME remove this
 ifeq ($(OS)$(COM),WNTGCC)
 $(eval $(call gb_Module_add_targets,pyuno,\
     CustomTarget_zipcore \
