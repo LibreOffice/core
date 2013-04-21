@@ -65,11 +65,7 @@ using ::com::sun::star::uno::Sequence;
     }
     catch( const uno::Exception & ex )
     {
-        (void)ex; // avoid warning for pro build
-
-        OSL_FAIL( OUStringToOString( "Exception caught. Type: " +
-                        OUString::createFromAscii( typeid( ex ).name() ) +
-                        ", Message: " + ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name() ) << ", Message: " << ex.Message );
     }
 
     return aResult;
@@ -121,7 +117,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
 
         //iterate through all chart types in the current coordinate system
         uno::Reference< chart2::XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-        OSL_ASSERT( xChartTypeContainer.is());
+        SAL_WARN_IF( !xChartTypeContainer.is(), "xmloff.chart", "xChartTypeContainer is NULL");
         if( !xChartTypeContainer.is() )
             continue;
         uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
@@ -131,7 +127,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
 
             //iterate through all series in this chart type
             uno::Reference< chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-            OSL_ASSERT( xDataSeriesContainer.is());
+            SAL_WARN_IF( !xDataSeriesContainer.is(), "xmloff.chart", "xDataSeriesContainer is NULL");
             if( !xDataSeriesContainer.is() )
                 continue;
 
@@ -201,9 +197,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
         }
         catch( const uno::Exception & rEx )
         {
-            (void)rEx; // avoid warning for pro build
-            OSL_TRACE( "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: %s",
-                        OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            SAL_INFO("xmloff.chart", "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: " << rEx.Message );
         }
     }
 
@@ -239,10 +233,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
         }
         catch( const uno::Exception & rEx )
         {
-            (void)rEx; // avoid warning for pro build
-
-            OSL_TRACE( "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet: %s",
-                        OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            SAL_INFO("xmloff.chart", "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet: " << rEx.Message );
         }
     }
 

@@ -105,7 +105,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         }
         catch(const beans::UnknownPropertyException&)
         {
-            OSL_TRACE( "Property HasLegend not found" );
+            SAL_INFO("xmloff.chart", "Property HasLegend not found" );
         }
     }
 
@@ -113,7 +113,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     uno::Reference< beans::XPropertySet > xLegendProps( xLegendShape, uno::UNO_QUERY );
     if( !xLegendShape.is() || !xLegendProps.is() )
     {
-        OSL_TRACE( "legend could not be created" );
+        SAL_INFO("xmloff.chart", "legend could not be created" );
         return;
     }
 
@@ -151,7 +151,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                     }
                     catch(const beans::UnknownPropertyException&)
                     {
-                        OSL_TRACE( "Property Alignment (legend) not found" );
+                        SAL_INFO("xmloff.chart", "Property Alignment (legend) not found" );
                     }
                 }
                 break;

@@ -282,7 +282,7 @@ SchXMLSeries2Context::SchXMLSeries2Context(
 
 SchXMLSeries2Context::~SchXMLSeries2Context()
 {
-    OSL_ASSERT( maPostponedSequences.empty());
+    SAL_WARN_IF( !maPostponedSequences.empty(), "xmloff.chart", "maPostponedSequences is NULL");
 }
 
 void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
@@ -355,7 +355,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
     try
     {
-        OSL_ASSERT( mxNewDoc.is());
+        SAL_WARN_IF( !mxNewDoc.is(), "xmloff.chart", "mxNewDoc is NULL");
         if( m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable && ! bHasRange )
             m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable = sal_False;
 
@@ -445,12 +445,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     }
     catch( const uno::Exception & ex )
     {
-        (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
-                        OUString(  "Exception caught. Type: " ) +
-                        OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString(  ", Message: " ) +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
     }
 
     //init mbSymbolSizeIsMissingInFile:
@@ -840,9 +835,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
             }
             catch( const uno::Exception & rEx )
             {
-                (void)rEx; // avoid warning for pro build
-                OSL_TRACE( "Exception caught during setting styles to series: %s",
-                                OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx.Message );
             }
         }
     }
@@ -924,7 +917,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                 // not exist here
                 if( iStyle->meType == DataRowPointStyle::REGRESSION && iStyle->m_xEquationProperties.is())
                 {
-                    OSL_ASSERT( iStyle->m_xSeries.is());
+                    SAL_WARN_IF( !iStyle->m_xSeries.is(), "xmloff.chart", "iStyle->m_xSeries is NULL");
                     Reference< chart2::XRegressionCurve > xRegCurve( SchXMLTools::getRegressionCurve( iStyle->m_xSeries ));
                     if( xRegCurve.is())
                         xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );
@@ -932,9 +925,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
             }
             catch( const uno::Exception & rEx )
             {
-                (void)rEx; // avoid warning for pro build
-                OSL_TRACE( "Exception caught during setting styles to series: %s",
-                                OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx.Message );
             }
         }
     }
@@ -1030,9 +1021,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
             }
             catch( const uno::Exception & rEx )
             {
-                (void)rEx; // avoid warning for pro build
-                OSL_TRACE( "Exception caught during setting styles to data points: %s",
-                                    OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                SAL_INFO("xmloff.chart", "Exception caught during setting styles to data points: " << rEx.Message );
             }
         }
     }   // styles iterator

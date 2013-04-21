@@ -80,12 +80,11 @@ SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
         SvXMLImportContext( rImport, nPrefix, rLName ),
         mrImportHelper( rImpHelper )
 {
-    DBG_ASSERT( XML_NAMESPACE_OFFICE == nPrefix &&
-        ( IsXMLToken( rLName, XML_DOCUMENT ) ||
-          IsXMLToken( rLName, XML_DOCUMENT_META) ||
-          IsXMLToken( rLName, XML_DOCUMENT_STYLES) ||
-          IsXMLToken( rLName, XML_DOCUMENT_CONTENT) ),
-                "SchXMLDocContext instanciated with no <office:document> element" );
+    SAL_WARN_IF( (XML_NAMESPACE_OFFICE != nPrefix) ||
+        ( !IsXMLToken( rLName, XML_DOCUMENT ) &&
+          !IsXMLToken( rLName, XML_DOCUMENT_META) &&
+          !IsXMLToken( rLName, XML_DOCUMENT_STYLES) &&
+          !IsXMLToken( rLName, XML_DOCUMENT_CONTENT) ), "xmloff.chart", "SchXMLDocContext instanciated with no <office:document> element" );
 }
 
 SchXMLDocContext::~SchXMLDocContext()
@@ -177,9 +176,8 @@ SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
         SvXMLImportContext( rImport, nPrefix, rLName ),
         mrImportHelper( rImpHelper )
 {
-    DBG_ASSERT( XML_NAMESPACE_OFFICE == nPrefix &&
-                IsXMLToken( rLName, XML_CHART ),
-                "SchXMLBodyContext instanciated with no <office:chart> element" );
+    SAL_WARN_IF( (XML_NAMESPACE_OFFICE != nPrefix) ||
+                !IsXMLToken( rLName, XML_CHART ), "xmloff.chart", "SchXMLBodyContext instanciated with no <office:chart> element" );
 }
 
 SchXMLBodyContext::~SchXMLBodyContext()
