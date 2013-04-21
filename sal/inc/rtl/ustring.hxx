@@ -1113,7 +1113,7 @@ public:
     friend sal_Bool     operator == ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
                         { return rStr1.equals(rStr2); }
     friend sal_Bool     operator == ( const OUString& rStr1,    const sal_Unicode * pStr2 ) SAL_THROW(())
-                        { return rStr1.compareTo( pStr2 ) == 0; }
+                        { return (rStr1 == pStr2); }
     friend sal_Bool     operator == ( const sal_Unicode * pStr1,    const OUString& rStr2 ) SAL_THROW(())
                         { return OUString( pStr1 ).compareTo( rStr2 ) == 0; }
 
