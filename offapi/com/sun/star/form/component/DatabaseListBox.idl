@@ -44,8 +44,8 @@
     to enter invoices for your customers. Probably, you will have a second table (say <em>customer</em>),
     which (among other data) contains a unique key for identifying customers. In your invoice table, you will
     have a foreign key referring to these customers.<br/>
-    Now, besides the result set the form is based on (all your invoices), the list box can be caused
-    to open a second result set, this time for the <em>customer</em> table, and fill it's list with entries
+    Now, besides the result set the form is based on (all your invoices), the list box can be instructed
+    to open a second result set, this time for the <em>customer</em> table, and fill its list with entries
     from this result set.<br/>
     Additionally, it allows to model the relation between the two tables: When the user selects a customer from
     the list, this customer has the unique id we just talked about (which is not necessarily visible to the
