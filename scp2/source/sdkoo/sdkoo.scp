@@ -123,6 +123,15 @@ File gid_File_Package_odk_bin
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
+#if defined(WNT)
+File gid_File_Package_odk_cli
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_cli.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+#endif
+
 #if defined(MACOSX)
 File gid_File_Package_odk_macosx
     TXT_FILE_BODY;
