@@ -13,7 +13,6 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_odkcommon \
 	$(if $(filter WNT,$(OS)),Package_cli) \
 	$(if $(DOXYGEN),CustomTarget_doxygen) \
-	CustomTarget_check \
 	CustomTarget_html \
 	CustomTarget_settings \
 	CustomTarget_autodoc \
@@ -62,5 +61,8 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Zip_odkcommon \
 ))
 
+$(eval $(call gb_Module_add_check_targets,odk,\
+	CustomTarget_check \
+))
 
 # vim: set noet sw=4 ts=4:
