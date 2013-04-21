@@ -156,7 +156,7 @@ namespace chelp {
         {
             bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
             {
-                return rKey1.compareTo( rKey2 ) == 0;
+                return (rKey1 == rKey2);
             }
         };
 
@@ -351,7 +351,7 @@ namespace chelp {
         {
             bool operator()( const OString& rKey1, const OString& rKey2 ) const
             {
-                return rKey1.compareTo( rKey2 ) == 0;
+                return (rKey1 == rKey2);
             }
         };
 
