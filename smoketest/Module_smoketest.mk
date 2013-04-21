@@ -32,6 +32,7 @@ ifeq ($(CROSS_COMPILING),)
 $(eval $(call gb_Module_add_targets,smoketest,\
 	Library_smoketest \
 	Package_losmoketest \
+	Package_smoketestdoc \
 	Zip_smoketestdoc \
 ))
 

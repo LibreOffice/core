@@ -52,14 +52,4 @@ $(eval $(call gb_Zip_add_file,smoketestdoc,Dialogs/dialog-lc.xml))
 $(eval $(call gb_Zip_add_file,smoketestdoc,Dialogs/Standard/dialog-lb.xml))
 $(eval $(call gb_Zip_add_file,smoketestdoc,Dialogs/Standard/OptionsDlg.xml))
 
-$(call gb_Zip_get_final_target,smoketestdoc) : $(OUTDIR)/bin/smoketestdoc.sxw
-$(call gb_Zip_get_clean_target,smoketestdoc) : Clean_smoketestdoc_sxw
-
-$(OUTDIR)/bin/smoketestdoc.sxw : $(call gb_Zip_get_target,smoketestdoc) | $(OUTDIR)/bin/.dir
-	$(call gb_Deliver_deliver,$<,$@)
-
-.PHONY : Clean_smoketestdoc_sxw
-Clean_smoketestdoc_sxw :
-	rm -f $(OUTDIR)/bin/smoketestdoc.sxw
-
 # vim: set noet sw=4 ts=4:
