@@ -1327,6 +1327,53 @@ namespace frm
             );
             return makeAny( aSelectedEntriesTexts );
         }
+
+        //................................................................
+        struct ExtractAnyFromValueList_Safe : public ::std::unary_function< sal_Int16, Any >
+        {
+        protected:
+            const ValueList&  m_rList;
+
+        public:
+            ExtractAnyFromValueList_Safe( const ValueList& _rList ) : m_rList( _rList ) { }
+
+            Any operator ()( sal_Int16 _nIndex )
+            {
+                OSL_ENSURE( static_cast<ValueList::size_type>(_nIndex) < m_rList.size(), "ExtractAnyFromValueList: inconsistence!" );
+                if ( static_cast<ValueList::size_type>(_nIndex) < m_rList.size() )
+                    return m_rList[ _nIndex ].makeAny();
+                return Any();
+            }
+        };
+
+        //................................................................
+        Any lcl_getSingleSelectedEntryAny( const Sequence< sal_Int16 >& _rSelectSequence, const ValueList& _rStringList )
+        {
+            Any aReturn;
+
+            // by definition, multiple selected entries are transfered as NULL if the
+            // binding does not support string lists
+            if ( _rSelectSequence.getLength() <= 1 )
+            {
+                if ( _rSelectSequence.getLength() == 1 )
+                    aReturn = ExtractAnyFromValueList_Safe( _rStringList )( _rSelectSequence[0] );
+            }
+
+            return aReturn;
+        }
+
+        //................................................................
+        Any lcl_getMultiSelectedEntriesAny( const Sequence< sal_Int16 >& _rSelectSequence, const ValueList& _rStringList )
+        {
+            Sequence< Any > aSelectedEntriesValues( _rSelectSequence.getLength() );
+            ::std::transform(
+                _rSelectSequence.getConstArray(),
+                _rSelectSequence.getConstArray() + _rSelectSequence.getLength(),
+                aSelectedEntriesValues.getArray(),
+                ExtractAnyFromValueList_Safe( _rStringList )
+            );
+            return makeAny( aSelectedEntriesValues );
+        }
     }
 
     //--------------------------------------------------------------------
@@ -1395,9 +1442,9 @@ namespace frm
             OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
 
             if ( bMultiSelection )
-                aCurretnValue = lcl_getMultiSelectedEntries( aSelectSequence, getStringItemList() );
+                aCurretnValue = lcl_getMultiSelectedEntriesAny( aSelectSequence, impl_getValues() );
             else
-                aCurretnValue = lcl_getSingleSelectedEntry( aSelectSequence, getStringItemList() );
+                aCurretnValue = lcl_getSingleSelectedEntryAny( aSelectSequence, impl_getValues() );
         }
         catch( const Exception& )
         {
