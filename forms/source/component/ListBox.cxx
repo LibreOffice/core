@@ -710,6 +710,7 @@ namespace frm
                             break;
 
                         Reference<XPropertySet> xFieldAsSet(xFieldsByIndex->getByIndex( *aBoundColumn ),UNO_QUERY);
+                        assert(xFieldAsSet.is());
                         xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aBoundFieldName;
                         aBoundColumn.reset( 1 );
 
