@@ -349,9 +349,6 @@ void TextConvWrapper::ReplaceUnit(
     if (!bOK)
         return;
 
-    static OUString aBracketedStart( "(" );
-    static OUString aBracketedEnd( ")" );
-
     // select current unit
     SelectNewUnit_impl( nUnitStart, nUnitEnd );
 
@@ -362,10 +359,10 @@ void TextConvWrapper::ReplaceUnit(
         case eExchange :
         break;
         case eReplacementBracketed :
-            (((aNewTxt = aOrigTxt) += aBracketedStart) += rReplaceWith) += aBracketedEnd;
+            aNewTxt = aOrigTxt + "(" + rReplaceWith + ")";
         break;
         case eOriginalBracketed :
-            (((aNewTxt = rReplaceWith) += aBracketedStart) += aOrigTxt) += aBracketedEnd;
+            aNewTxt = rReplaceWith + "(" + aOrigTxt + ")";
         break;
         case eReplacementAbove  :
         case eOriginalAbove :
