@@ -128,16 +128,12 @@ public:
     OString sFilename;
 
     OStringHashMap sText;
-    sal_uInt16 nTextRefId;
 
     OStringHashMap sHelpText;
-    sal_uInt16 nHelpTextRefId;
 
     OStringHashMap sQuickHelpText;
-    sal_uInt16 nQuickHelpTextRefId;
 
     OStringHashMap sTitle;
-    sal_uInt16 nTitleRefId;
 
     OString sTextTyp;
 
@@ -322,7 +318,6 @@ public:
 class MergeDataFile
 {
     private:
-        OString sErrorLog;
         MergeDataHashMap aMap;
         std::set<OString> aLanguageSet;
 
