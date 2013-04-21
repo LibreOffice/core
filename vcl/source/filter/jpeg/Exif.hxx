@@ -49,7 +49,6 @@ class Exif
 {
 private:
     Orientation maOrientation;
-    sal_Int32  mnStreamPosition;
     bool mbExifPresent;
 
     bool processJpeg(SvStream& rStream, bool bSetValue);
