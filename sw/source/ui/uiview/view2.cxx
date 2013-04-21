@@ -177,9 +177,7 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
     }
 }
 
-/*---------------------------------------------------------------------------
-    Beschreibung:   String fuer die Seitenanzeige in der Statusbar basteln.
- ----------------------------------------------------------------------------*/
+/* Create string for showing of page in statusbar */
 String SwView::GetPageStr( sal_uInt16 nPg, sal_uInt16 nLogPg,
                             const String& rDisplay )
 {
@@ -220,16 +218,17 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
     if( GRFILTER_OK == nRes )
     {
         GraphicNativeMetadata aMetadata;
-        if (aMetadata.Read(aGrf))
+        if (aMetadata.read(aGrf))
         {
-            if (aMetadata.GetRotation() != 0)
+            sal_uInt16 aRotation = aMetadata.getRotation();
+            if (aRotation != 0)
             {
                 OUString aMessage("This image is rotated. Would you like LibreOffice to rotate it into standard orientation?");
                 QueryBox aQueryBox(GetWindow(), WB_YES_NO | WB_DEF_YES, aMessage);
                 if (aQueryBox.Execute() == RET_YES)
                 {
                     GraphicNativeTransform aTransform(aGrf);
-                    aTransform.Rotate(aMetadata.GetRotation());
+                    aTransform.rotate( aRotation );
                 }
             }
         }

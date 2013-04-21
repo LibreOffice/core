@@ -20,6 +20,8 @@
 #include <vcl/GraphicNativeTransform.hxx>
 
 #include <vcl/gfxlink.hxx>
+#include <vcl/cvtgrf.hxx>
+
 
 #include "jpeg/Exif.hxx"
 #include "jpeg/JpegTransform.hxx"
@@ -31,7 +33,7 @@ GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic) :
 GraphicNativeTransform::~GraphicNativeTransform()
 {}
 
-bool GraphicNativeTransform::Rotate(sal_uInt16 aRotation)
+bool GraphicNativeTransform::rotate(sal_uInt16 aRotation)
 {
     if (aRotation == 0)
         return true;
@@ -40,8 +42,60 @@ bool GraphicNativeTransform::Rotate(sal_uInt16 aRotation)
         return false;
 
     GfxLink aLink = mrGraphic.GetLink();
-    if ( aLink.GetType() != GFX_LINK_TYPE_NATIVE_JPG )
-        return false;
+    if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_JPG )
+    {
+        return rotateJPEG(aRotation);
+    }
+    else if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_SVG )
+    {
+        return rotateSVG(aRotation);
+    }
+    else if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_PNG )
+    {
+        return rotateGeneric(aRotation, CVT_PNG);
+    }
+    else if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_GIF )
+    {
+        return rotateGeneric(aRotation, CVT_PNG);
+    }
+    return false;
+}
+
+bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, sal_uInt32 aType)
+{
+    BitmapEx aBitmap = mrGraphic.GetBitmapEx();
+    aBitmap.Rotate(aRotation, COL_BLACK);
+
+    SvMemoryStream aStream;
+    GraphicConverter::Export(aStream, aBitmap, aType);
+    aStream.Seek( STREAM_SEEK_TO_BEGIN );
+
+    Graphic aNewGraphic;
+    GraphicConverter::Import(aStream, aNewGraphic, aType);
+
+    mrGraphic = aNewGraphic;
+    return true;
+}
+
+bool GraphicNativeTransform::rotateSVG(sal_uInt16 aRotation)
+{
+    GDIMetaFile aGDIMetafile = mrGraphic.GetGDIMetaFile();
+    //aGDIMetafile.Rotate(aRotation);
+
+    SvMemoryStream aStream;
+    GraphicConverter::Export(aStream, aGDIMetafile, CVT_SVG);
+    aStream.Seek( STREAM_SEEK_TO_BEGIN );
+
+    Graphic aNewGraphic;
+    GraphicConverter::Import(aStream, aNewGraphic, CVT_SVG);
+
+    mrGraphic = aNewGraphic;
+    return true;
+}
+
+bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
+{
+    GfxLink aLink = mrGraphic.GetLink();
 
     sal_uInt32 aDataSize = aLink.GetDataSize();
     sal_uInt8* aInputBuffer = new sal_uInt8[aDataSize];

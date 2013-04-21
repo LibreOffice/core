@@ -30,12 +30,12 @@ GraphicNativeMetadata::GraphicNativeMetadata() :
 GraphicNativeMetadata::~GraphicNativeMetadata()
 {}
 
-sal_uInt16 GraphicNativeMetadata::GetRotation()
+sal_uInt16 GraphicNativeMetadata::getRotation()
 {
     return mRotation;
 }
 
-bool GraphicNativeMetadata::Read(Graphic& rGraphic)
+bool GraphicNativeMetadata::read(Graphic& rGraphic)
 {
     GfxLink aLink = rGraphic.GetLink();
     if ( aLink.GetType() != GFX_LINK_TYPE_NATIVE_JPG )
