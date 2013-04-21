@@ -185,6 +185,20 @@ File gid_File_Package_odk_macosx
 End
 #endif
 
+File gid_File_Package_odk_settings
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_settings.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+
+File gid_File_Package_odk_settings_generated
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_settings_generated.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+
 #if defined(SOLAR_JAVA)
 File gid_File_Package_odk_unowinreg
     TXT_FILE_BODY;
