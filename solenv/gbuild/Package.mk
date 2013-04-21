@@ -106,17 +106,27 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Package)
 
 endef
 
+# Ensure that the package is defined.
+#
+# gb_Package__check package
+define gb_Package__check
+$$(if $$(gb_Package_SOURCEDIR_$(1)),,$$(call gb_Output_error,gb_Package__check: Package $(1) has not been defined))
+
+endef
+
 # Set output dir for the package files.
 #
 # Default is $(OUTDIR).
 #
 # gb_Package_set_outdir package outdir
 define gb_Package_set_outdir
+$(call gb_Package__check,$(1))
 gb_Package_OUTDIR_$(1) := $(2)
 
 endef
 
 define gb_Package_add_file
+$(call gb_Package__check,$(1))
 $(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_file requires 3 arguments))
 $(call gb_Package_get_target,$(1)) : $$(gb_Package_OUTDIR_$(1))/$(2)
 $(call gb_Package_get_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
@@ -134,6 +144,7 @@ endef
 # $(eval $(call gb_Package_add_files,foo_inc,inc/foo,foo/bar/foo.hxx))
 # # -> inc/foo/foo.hxx
 define gb_Package_add_files
+$(call gb_Package__check,$(1))
 $(if $(strip $(3)),,$(if $(filter 1,$(words $(2))),,$(call gb_Output_error,gb_Package_add_files: it looks like either pkg name or dest. dir is missing)))
 $(foreach file,$(3),$(call gb_Package_add_file,$(1),$(2)/$(notdir $(file)),$(file)))
 
@@ -148,6 +159,7 @@ endef
 # $(eval $(call gb_Package_add_files,foo_inc,inc,foo/bar/foo.hxx))
 # # -> inc/foo/bar/foo.hxx
 define gb_Package_add_files_with_dir
+$(call gb_Package__check,$(1))
 $(if $(strip $(3)),,$(if $(filter 1,$(words $(2))),,$(call gb_Output_error,gb_Package_add_files: it looks like either pkg name or dest. dir is missing)))
 $(foreach file,$(3),$(call gb_Package_add_file,$(1),$(2)/$(file),$(file)))
 
@@ -155,18 +167,21 @@ endef
 
 # Package files from custom target
 define gb_Package_use_custom_target
+$(call gb_Package__check,$(1))
 $(call gb_Package_get_preparation_target,$(1)) :| $(call gb_CustomTarget_get_target,$(2))
 
 endef
 
 # Package files from unpacked tarball of an external project
 define gb_Package_use_unpacked
+$(call gb_Package__check,$(1))
 $(call gb_Package_get_preparation_target,$(1)) :| $(call gb_UnpackedTarball_get_target,$(2))
 
 endef
 
 # Package files from build of an external project
 define gb_Package_use_external_project
+$(call gb_Package__check,$(1))
 $(call gb_Package_get_preparation_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
 
 endef
