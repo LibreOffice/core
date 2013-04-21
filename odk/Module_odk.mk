@@ -24,6 +24,8 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Package_html \
 	Package_examples \
 	Package_lib \
+	Package_settings \
+	Package_settings_generated \
 ))
 
 ifeq ($(OS),WNT)
