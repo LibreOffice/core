@@ -1085,21 +1085,12 @@ sal_Bool ScViewFunc::MergeCells( sal_Bool bApi, sal_Bool& rDoContents, sal_Bool 
     rMark.GetMarkArea( aMarkRange );
     SCCOL nStartCol = aMarkRange.aStart.Col();
     SCROW nStartRow = aMarkRange.aStart.Row();
-    SCTAB nStartTab = aMarkRange.aStart.Tab();
     SCCOL nEndCol = aMarkRange.aEnd.Col();
     SCROW nEndRow = aMarkRange.aEnd.Row();
-    SCTAB nEndTab = aMarkRange.aEnd.Tab();
     if ( nStartCol == nEndCol && nStartRow == nEndRow )
     {
         // nothing to do
         return true;
-    }
-
-    if ( pDoc->HasAttrib( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
-                            HASATTR_MERGED | HASATTR_OVERLAPPED ) )
-    {       // "Don't nest merging  !"
-        ErrorMessage(STR_MSSG_MERGECELLS_0);
-        return false;
     }
 
     // Check for the contents of all selected tables.

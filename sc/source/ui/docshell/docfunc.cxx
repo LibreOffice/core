@@ -4652,15 +4652,6 @@ sal_Bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, sal_Bool bCont
                 rDocShell.ErrorMessage(aTester.GetMessageId());
             return false;
         }
-
-        if ( pDoc->HasAttrib( nStartCol, nStartRow, *itr, nEndCol, nEndRow, *itr,
-                                HASATTR_MERGED | HASATTR_OVERLAPPED ) )
-        {
-            // "Zusammenfassen nicht verschachteln !"
-            if (!bApi)
-                rDocShell.ErrorMessage(STR_MSSG_MERGECELLS_0);
-            return false;
-        }
     }
 
     ScDocument* pUndoDoc = NULL;
