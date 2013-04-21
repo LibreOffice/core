@@ -42,6 +42,54 @@
 
 #include <vector>
 
+/** ListBox is a bit confusing / different from other form components,
+    so here are a few notes:
+
+    The general design philosophy is that a ListBox is a mechanism
+    to translate back and forth between:
+     1) *display* values (strings that the user sees and chooses)
+     2) *binding* values, which is what the program (for a dialog),
+        the database, ... cares about.
+
+    A non-data aware ListBox exposes this mechanism through
+    com.sun.star.awt.XItemList (get|set)ItemData.
+
+    In a data-aware ListBox, this is naturally embodied by the
+    StringItemList on the one hand, and the ValueList on the other
+    hand (where, depending on ListSourceType, the ValueList is
+    possibly automatically filled from the BoundColumn of the
+    ListSource).
+
+    This source file implements data-aware ListBox, and the rest
+    of this comment applies to data-aware ListBox (only).
+
+    In all public APIs of the *model* (OListBoxModel),
+    the value of the control is the *binding* value.
+    That is what the bound database field gets,
+    that is what a validator validates,
+    that is what an external value binding
+    (com.sun.star.form.binding.XValueBinding)
+    exchanges with the control.
+
+    As an *implementation* choice, we keep the current value of the
+    ListBox as a sequence of *indices* in the value list, and do the
+    lookup on demand:
+
+     - ListBox's content propery (or value property, sorry the
+       terminology is not always consistent) is SelectedItems which is
+       a sequence of *indices* in the value list.
+
+     - That is used to synchronise with our peer (UnoControlListBoxModel).
+
+    In particular, note that getCurrentValue() is a public API (and
+    deals with bound values), but getControlValue and
+    (do)setControlValue are *internal* implementation helpers that
+    deal with *indices*.
+
+    Note that the *view* (OListBoxControl) presents a different story
+    than the model. E.g. the "SelectedItems" property is *display* *values*.
+*/
+
 //.........................................................................
 namespace frm
 {
