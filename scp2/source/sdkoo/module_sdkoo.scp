@@ -33,7 +33,11 @@ Module gid_Module_Optional_Sdkoo
     Sortkey = "630";
     ParentID = gid_Module_Optional;
     Default = NO;
-    Files = (gid_File_Zip_Odkexamples, gid_File_Zip_Odkcommon,
+    Files = (
+        gid_File_Package_odk_bin,
+        gid_File_Package_odk_macosx,
+        gid_File_Zip_Odkexamples,
+        gid_File_Zip_Odkcommon,
         gid_File_Zip_OdkIdl_udkapi,
         gid_File_Zip_OdkIdl_offapi,
         gid_File_Zip_Odkheaders_sal_generated,

@@ -27,6 +27,8 @@ odk_PLATFORM := $(if $(filter WNT,$(OS)),\
 
 $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 		$(SRCDIR)/odk/util/check.pl \
+		$(call gb_Package_get_target,odk_bin) \
+		$(if $(filter MACOSX,$(OS)),$(call gb_Package_get_target,odk_macosx)) \
 		$(call gb_CustomTarget_get_target,odk/odkcommon)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
 	touch $@

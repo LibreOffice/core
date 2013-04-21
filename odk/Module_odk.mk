@@ -14,13 +14,19 @@ $(eval $(call gb_Module_add_targets,odk,\
 	$(if $(filter WNT,$(OS)),CustomTarget_cli) \
 	$(if $(DOXYGEN),CustomTarget_doxygen) \
 	CustomTarget_check \
-	CustomTarget_bin \
 	CustomTarget_lib \
 	CustomTarget_settings \
 	CustomTarget_autodoc \
 	Executable_unoapploader \
+	Package_bin \
 	Package_examples \
 ))
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Module_add_targets,odk,\
+	Package_macosx \
+))
+endif
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,odk,\
