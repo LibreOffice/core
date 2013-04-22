@@ -250,30 +250,33 @@ private:
     long            mnLines;
     long            mnUserItemWidth;
     long            mnUserItemHeight;
-    sal_uInt16          mnOldItemId;
-    sal_uInt16          mnSelItemId;
-    sal_uInt16          mnHighItemId;
-    sal_uInt16          mnDropPos;
-    sal_uInt16          mnCols;
-    sal_uInt16          mnCurCol;
-    sal_uInt16          mnUserCols;
-    sal_uInt16          mnUserVisLines;
-    sal_uInt16          mnFirstLine;
-    sal_uInt16          mnSpacing;
-    sal_uInt16          mnFrameStyle;
-    sal_Bool            mbFormat;
-    sal_Bool            mbHighlight;
-    sal_Bool            mbSelection;
-    sal_Bool            mbNoSelection;
-    sal_Bool            mbDrawSelection;
-    sal_Bool            mbBlackSel;
-    sal_Bool            mbDoubleSel;
-    sal_Bool            mbScroll;
-    sal_Bool            mbDropPos;
-    sal_Bool            mbFullMode;
+    sal_uInt16      mnOldItemId;
+    sal_uInt16      mnSelItemId;
+    sal_uInt16      mnHighItemId;
+    sal_uInt16      mnDropPos;
+    sal_uInt16      mnCols;
+    sal_uInt16      mnCurCol;
+    sal_uInt16      mnUserCols;
+    sal_uInt16      mnUserVisLines;
+    sal_uInt16      mnFirstLine;
+    sal_uInt16      mnSpacing;
+    sal_uInt16      mnFrameStyle;
     Color           maColor;
     Link            maDoubleClickHdl;
     Link            maSelectHdl;
+
+    // bitfield
+    bool            mbFormat : 1;
+    bool            mbHighlight : 1;
+    bool            mbSelection : 1;
+    bool            mbNoSelection : 1;
+    bool            mbDrawSelection : 1;
+    bool            mbBlackSel : 1;
+    bool            mbDoubleSel : 1;
+    bool            mbScroll : 1;
+    bool            mbDropPos : 1;
+    bool            mbFullMode : 1;
+    bool            mbEdgeBlending : 1;
 
 #ifdef _SV_VALUESET_CXX
     friend class ValueSetAcc;
@@ -368,8 +371,8 @@ public:
     sal_uInt16          GetItemId( const Point& rPos ) const;
     Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
 
-    void            EnableFullItemMode( sal_Bool bFullMode = sal_True );
-    sal_Bool            IsFullItemModeEnabled() const { return mbFullMode; }
+    void            EnableFullItemMode( bool bFullMode = true );
+    bool            IsFullItemModeEnabled() const { return mbFullMode; }
     void            SetColCount( sal_uInt16 nNewCols = 1 );
     sal_uInt16          GetColCount() const { return mnUserCols; }
     void            SetLineCount( sal_uInt16 nNewLines = 0 );
@@ -383,10 +386,10 @@ public:
 
     void            SelectItem( sal_uInt16 nItemId );
     sal_uInt16          GetSelectItemId() const { return mnSelItemId; }
-    sal_Bool            IsItemSelected( sal_uInt16 nItemId ) const
-                        { return ((!mbNoSelection && (nItemId == mnSelItemId)) ? sal_True : sal_False); }
+    bool            IsItemSelected( sal_uInt16 nItemId ) const
+                        { return (!mbNoSelection && (nItemId == mnSelItemId)); }
     void            SetNoSelection();
-    sal_Bool            IsNoSelection() const { return mbNoSelection; }
+    bool            IsNoSelection() const { return mbNoSelection; }
 
     void            SetItemBits( sal_uInt16 nItemId, sal_uInt16 nBits );
     sal_uInt16          GetItemBits( sal_uInt16 nItemId ) const;
@@ -401,7 +404,7 @@ public:
     void            SetColor( const Color& rColor );
     void            SetColor() { SetColor( Color( COL_TRANSPARENT ) ); }
     Color           GetColor() const { return maColor; }
-    sal_Bool            IsColor() const { return maColor.GetTransparency() == 0; }
+    bool            IsColor() const { return maColor.GetTransparency() == 0; }
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
     sal_uInt16          GetExtraSpacing() { return mnSpacing; }
@@ -414,7 +417,7 @@ public:
     Size            CalcWindowSizePixel( const Size& rItemSize,
                                          sal_uInt16 nCalcCols = 0,
                                          sal_uInt16 nCalcLines = 0 );
-    Size            CalcItemSizePixel( const Size& rSize, sal_Bool bOut = sal_True ) const;
+    Size            CalcItemSizePixel( const Size& rSize, bool bOut = true ) const;
     long            GetScrollWidth() const;
 
     void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
@@ -424,6 +427,9 @@ public:
 
     void            SetHighlightHdl( const Link& rLink );
     const Link&     GetHighlightHdl() const;
+
+    bool GetEdgeBlending() const { return mbEdgeBlending; }
+    void SetEdgeBlending(bool bNew);
 
 private:
     /** Determine whether RTL (right to left writing) is active.  For this

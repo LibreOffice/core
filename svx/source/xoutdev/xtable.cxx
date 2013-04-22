@@ -210,25 +210,4 @@ void XPropertyList::SetName( const String& rString )
     }
 }
 
-sal_uInt32 XPropertyList::getUiBitmapWidth() const
-{
-    static sal_uInt32 nWidth = 32; // alternative: 42;
-
-    return nWidth;
-}
-
-sal_uInt32 XPropertyList::getUiBitmapHeight() const
-{
-    static sal_uInt32 nHeight = 12; // alternative: 16;
-
-    return nHeight;
-}
-
-sal_uInt32 XPropertyList::getUiBitmapLineWidth() const
-{
-    static sal_uInt32 nLineWidth = 1;
-
-    return nLineWidth;
-}
-
 // eof

@@ -68,10 +68,8 @@ DECLARE_LIST( ImpColorList, ImplColorListData* )
 void ColorListBox::ImplInit()
 {
     pColorList = new ImpColorList( 256, 64 );
-    aImageSize.Width()  = GetTextWidth( XubString( RTL_CONSTASCII_USTRINGPARAM( "xxx" ) ) );
-    aImageSize.Height() = GetTextHeight();
-    aImageSize.Height() -= 2;
-
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    aImageSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
     EnableUserDraw( sal_True );
     SetUserItemSize( aImageSize );
 }
@@ -94,6 +92,7 @@ ColorListBox::ColorListBox( Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle )
 {
     ImplInit();
+    SetEdgeBlending(true);
 }
 
 // -----------------------------------------------------------------------
@@ -102,6 +101,7 @@ ColorListBox::ColorListBox( Window* pParent, const ResId& rResId ) :
     ListBox( pParent, rResId )
 {
     ImplInit();
+    SetEdgeBlending(true);
 }
 
 // -----------------------------------------------------------------------
@@ -215,13 +215,36 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
         if ( pData->bColor )
         {
             Point aPos( rUDEvt.GetRect().TopLeft() );
+
             aPos.X() += 2;
             aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aImageSize.Height() ) / 2;
+
+            const Rectangle aRect(aPos, aImageSize);
+
             rUDEvt.GetDevice()->Push();
             rUDEvt.GetDevice()->SetFillColor( pData->aColor );
             rUDEvt.GetDevice()->SetLineColor( rUDEvt.GetDevice()->GetTextColor() );
-            rUDEvt.GetDevice()->DrawRect( Rectangle( aPos, aImageSize ) );
+            rUDEvt.GetDevice()->DrawRect(aRect);
             rUDEvt.GetDevice()->Pop();
+
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+            const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
+
+            if(nEdgeBlendingPercent)
+            {
+                Bitmap aBitmap(rUDEvt.GetDevice()->GetBitmap(aRect.TopLeft(), aRect.GetSize()));
+
+                if(!aBitmap.IsEmpty())
+                {
+                    const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
+                    const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
+                    const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+
+                    aBitmap.DrawBlendFrame(nAlpha, rTopLeft, rBottomRight);
+                    rUDEvt.GetDevice()->DrawBitmap(aRect.TopLeft(), aBitmap);
+                }
+            }
+
             ListBox::DrawEntry( rUDEvt, sal_False, sal_True, sal_False );
         }
         else

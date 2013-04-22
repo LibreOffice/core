@@ -329,7 +329,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                             mpLbFillAttr->Fill( aItem.GetGradientList() );
                         }
 
-                        mpLbFillAttr->SetDropDownLineCount(std::min(sal_uInt16(20), mpLbFillAttr->GetEntryCount()));
+                        mpLbFillAttr->AdaptDropDownLineCountToMaximum();
 
                         if ( mnLastPosGradient != LISTBOX_ENTRY_NOTFOUND)
                         {
@@ -364,7 +364,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                             mpLbFillAttr->Fill( aItem.GetHatchList() );
                         }
 
-                        mpLbFillAttr->SetDropDownLineCount(std::min(sal_uInt16(20), mpLbFillAttr->GetEntryCount()));
+                        mpLbFillAttr->AdaptDropDownLineCountToMaximum();
 
                         if ( mnLastPosHatch != LISTBOX_ENTRY_NOTFOUND )
                         {
@@ -399,7 +399,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                             mpLbFillAttr->Fill( aItem.GetBitmapList() );
                         }
 
-                        mpLbFillAttr->SetDropDownLineCount(std::min(sal_uInt16(20), mpLbFillAttr->GetEntryCount()));
+                        mpLbFillAttr->AdaptDropDownLineCountToMaximum();
 
                         if ( mnLastPosBitmap != LISTBOX_ENTRY_NOTFOUND )
                         {

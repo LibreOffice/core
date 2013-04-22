@@ -228,10 +228,6 @@ public:
     virtual sal_Bool        Load() = 0;
     virtual sal_Bool        Save() = 0;
     virtual sal_Bool        Create() = 0;
-
-    sal_uInt32 getUiBitmapWidth() const;
-    sal_uInt32 getUiBitmapHeight() const;
-    sal_uInt32 getUiBitmapLineWidth() const;
 };
 
 // -------------------

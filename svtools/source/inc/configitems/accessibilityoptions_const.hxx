@@ -41,11 +41,8 @@ namespace
     static const ::rtl::OUString s_sIsAutomaticFontColor    = ::rtl::OUString::createFromAscii("IsAutomaticFontColor");
     static const ::rtl::OUString s_sIsSystemFont            = ::rtl::OUString::createFromAscii("IsSystemFont");
     static const ::rtl::OUString s_sIsSelectionInReadonly   = ::rtl::OUString::createFromAscii("IsSelectionInReadonly");
-
-    static const ::rtl::OUString s_sColorValueSetMaximumRowCount = ::rtl::OUString::createFromAscii("ColorValueSetMaximumRowCount");
-    static const ::rtl::OUString s_sColorValueSetEntryEdgeLength = ::rtl::OUString::createFromAscii("ColorValueSetEntryEdgeLength");
-    static const ::rtl::OUString s_sColorValueSetColumnCount = ::rtl::OUString::createFromAscii("ColorValueSetColumnCount");
-    static const ::rtl::OUString s_sEdgeBlending = ::rtl::OUString::createFromAscii("EdgeBlending");
+    static const ::rtl::OUString s_sEdgeBlending            = ::rtl::OUString::createFromAscii("EdgeBlending");
+    static const ::rtl::OUString s_sListBoxMaximumLineCount = ::rtl::OUString::createFromAscii("ListBoxMaximumLineCount");
 }
 
 #endif //  INCLUDE_CONFIGITEMS_ACCESSIBILITYOPTIONS_CONST_HXX

@@ -30,6 +30,7 @@
 #include "svx/svxdllapi.h"
 #include <svx/rectenum.hxx>
 #include <vcl/graph.hxx>
+
 #ifndef _XTABLE_HXX
 class XBitmapEntry;
 class XBitmapList;
@@ -274,20 +275,17 @@ class SVX_DLLPUBLIC HatchingLB : public ListBox
 {
 
 public:
-         HatchingLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
-         HatchingLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
+     explicit HatchingLB( Window* pParent, ResId Id);
+     explicit HatchingLB( Window* pParent, WinBits aWB);
 
     virtual void Fill( const XHatchList* pList );
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
     void    Append( XHatchEntry* pEntry, Bitmap* pBmp = NULL );
     void    Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
-    void    SelectEntryByList( const XHatchList* pList, const String& rStr,
-                        const XHatch& rXHatch, sal_uInt16 nDist = 0 );
+    void    SelectEntryByList( const XHatchList* pList, const String& rStr, const XHatch& rXHatch, sal_uInt16 nDist = 0 );
 
 private:
     XHatchList*     mpList;
-    sal_Bool            mbUserDraw;
 };
 
 /*************************************************************************
@@ -298,20 +296,17 @@ private:
 class SVX_DLLPUBLIC GradientLB : public ListBox
 {
 public:
-    GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
-    GradientLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
+    explicit GradientLB( Window* pParent, ResId Id);
+    explicit GradientLB( Window* pParent, WinBits aWB);
 
     virtual void Fill( const XGradientList* pList );
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
     void    Append( XGradientEntry* pEntry, Bitmap* pBmp = NULL );
     void    Modify( XGradientEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
-    void    SelectEntryByList( const XGradientList* pList, const String& rStr,
-                        const XGradient& rXGradient, sal_uInt16 nDist = 0 );
+    void    SelectEntryByList( const XGradientList* pList, const String& rStr, const XGradient& rXGradient, sal_uInt16 nDist = 0 );
 
 private:
     XGradientList* mpList;
-    sal_Bool            mbUserDraw;
 };
 
 /*************************************************************************
@@ -322,23 +317,18 @@ private:
 class SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
-    BitmapLB(Window* pParent, ResId Id, bool bUserDraw = true);
+    explicit BitmapLB(Window* pParent, ResId Id);
 
     virtual void Fill(const XBitmapList* pList);
-    virtual void UserDraw(const UserDrawEvent& rUDEvt);
 
     void Append(const Size& rSize, const XBitmapEntry& rEntry, BitmapEx* pBmpEx = 0);
     void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos, BitmapEx* pBmpEx = 0);
     void SelectEntryByList(const XBitmapList* pList, const String& rStr);
 
 private:
-    VirtualDevice   maVD;
     BitmapEx        maBitmapEx;
 
     XBitmapList*    mpList;
-    bool            mbUserDraw;
-
-    SVX_DLLPRIVATE void SetVirtualDevice(const Size& rSize);
 };
 
 /*************************************************************************
@@ -349,10 +339,7 @@ private:
 class FillAttrLB : public ColorListBox
 {
 private:
-    VirtualDevice   maVD;
     BitmapEx        maBitmapEx;
-
-    void SetVirtualDevice(const Size& rSize);
 
 public:
     FillAttrLB( Window* pParent, ResId Id );

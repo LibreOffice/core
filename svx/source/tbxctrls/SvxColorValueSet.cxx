@@ -24,39 +24,41 @@
 
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>
-#include <svtools/accessibilityoptions.hxx>
+#include <vcl/svapp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
 SvxColorValueSet::SvxColorValueSet(Window* _pParent, WinBits nWinStyle)
 :   ValueSet(_pParent, nWinStyle)
 {
+    SetEdgeBlending(true);
 }
 
 SvxColorValueSet::SvxColorValueSet(Window* _pParent, const ResId& rResId)
 :   ValueSet(_pParent, rResId)
 {
+    SetEdgeBlending(true);
 }
 
 sal_uInt32 SvxColorValueSet::getMaxRowCount() const
 {
-    const SvtAccessibilityOptions aOptions;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    return aOptions.GetColorValueSetMaximumRowCount();
+    return rStyleSettings.GetColorValueSetMaximumRowCount();
 }
 
 sal_uInt32 SvxColorValueSet::getEntryEdgeLength() const
 {
-    const SvtAccessibilityOptions aOptions;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    return aOptions.GetColorValueSetEntryEdgeLength();
+    return rStyleSettings.GetListBoxPreviewDefaultPixelSize().Height() + 1;
 }
 
 sal_uInt32 SvxColorValueSet::getColumnCount() const
 {
-    const SvtAccessibilityOptions aOptions;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    return aOptions.GetColorValueSetColumnCount();
+    return rStyleSettings.GetColorValueSetColumnCount();
 }
 
 void SvxColorValueSet::addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex)

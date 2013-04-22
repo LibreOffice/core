@@ -408,28 +408,38 @@ private:
     long                            mnIconHorzSpace;
     long                            mnIconVertSpace;
     long                            mnAntialiasedMin;
-    sal_uLong                           mnCursorBlinkTime;
-    sal_uLong                           mnDragFullOptions;
-    sal_uLong                           mnAnimationOptions;
-    sal_uLong                           mnSelectionOptions;
-    sal_uLong                           mnLogoDisplayTime;
-    sal_uLong                           mnDisplayOptions;
-    sal_uLong                           mnToolbarIconSize;
-    sal_uLong                           mnUseFlatMenues;
-    sal_uLong                           mnOptions;
-    sal_uInt16                          mnScreenZoom;
-    sal_uInt16                          mnScreenFontZoom;
-    sal_uInt16                          mnHighContrast;
-    sal_uInt16                          mnUseSystemUIFonts;
-    sal_uInt16                          mnAutoMnemonic;
-    sal_uInt16                          mnUseImagesInMenus;
-    sal_uLong                           mnUseFlatBorders;
+    sal_uLong                       mnCursorBlinkTime;
+    sal_uLong                       mnDragFullOptions;
+    sal_uLong                       mnAnimationOptions;
+    sal_uLong                       mnSelectionOptions;
+    sal_uLong                       mnLogoDisplayTime;
+    sal_uLong                       mnDisplayOptions;
+    sal_uLong                       mnToolbarIconSize;
+    sal_uLong                       mnUseFlatMenues;
+    sal_uLong                       mnOptions;
+    sal_uInt16                      mnScreenZoom;
+    sal_uInt16                      mnScreenFontZoom;
+    sal_uInt16                      mnHighContrast;
+    sal_uInt16                      mnUseSystemUIFonts;
+    sal_uInt16                      mnAutoMnemonic;
+    sal_uInt16                      mnUseImagesInMenus;
+    sal_uLong                       mnUseFlatBorders;
     long                            mnMinThumbSize;
-    sal_uLong                           mnSymbolsStyle;
-    sal_uLong                           mnPreferredSymbolsStyle;
-    sal_uInt16                          mnSkipDisabledInMenus;
+    sal_uLong                       mnSymbolsStyle;
+    sal_uLong                       mnPreferredSymbolsStyle;
+    sal_uInt16                      mnSkipDisabledInMenus;
     Wallpaper                       maWorkspaceGradient;
     const void*                     mpFontOptions;
+
+    sal_uInt16                      mnEdgeBlending;
+    Color                           maEdgeBlendingTopLeftColor;
+    Color                           maEdgeBlendingBottomRightColor;
+    sal_uInt16                      mnListBoxMaximumLineCount;
+    sal_uInt16                      mnColorValueSetColumnCount;
+    sal_uInt16                      mnColorValueSetMaximumRowCount;
+    Size                            maListBoxPreviewDefaultLogicSize;
+    Size                            maListBoxPreviewDefaultPixelSize;
+    sal_uInt16                      mnListBoxPreviewDefaultLineWidth;
 };
 
 #define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
@@ -915,6 +925,49 @@ public:
                                         { return mpData->maWorkspaceGradient; }
     void                            SetWorkspaceGradient( const Wallpaper& rWall )
                                         { CopyData(); mpData->maWorkspaceGradient = rWall; }
+
+    // global switch to allow EdgeBlenging; currently possible for ValueSet and ListBox
+    // when activated there using Get/SetEdgeBlending; default is true
+    void SetEdgeBlending(sal_uInt16 nCount) { CopyData(); mpData->mnEdgeBlending = nCount; }
+    sal_uInt16 GetEdgeBlending() const { return mpData->mnEdgeBlending; }
+
+    // TopLeft (default RGB_COLORDATA(0xC0, 0xC0, 0xC0)) and BottomRight (default RGB_COLORDATA(0x40, 0x40, 0x40))
+    // default colors for EdgeBlending
+    void SetEdgeBlendingTopLeftColor(const Color& rTopLeft) { CopyData(); mpData->maEdgeBlendingTopLeftColor = rTopLeft; }
+    const Color& GetEdgeBlendingTopLeftColor() const { return mpData->maEdgeBlendingTopLeftColor; }
+    void SetEdgeBlendingBottomRightColor(const Color& rBottomRight) { CopyData(); mpData->maEdgeBlendingBottomRightColor = rBottomRight; }
+    const Color& GetEdgeBlendingBottomRightColor() const { return mpData->maEdgeBlendingBottomRightColor; }
+
+    // maximum line count for ListBox control; to use this, call AdaptDropDownLineCountToMaximum() at the
+    // ListBox after it's ItemCount has changed/got filled. Default is 25. If more Items exist, a scrollbar
+    // will be used
+    void SetListBoxMaximumLineCount(sal_uInt16 nCount) { CopyData(); mpData->mnListBoxMaximumLineCount = nCount; }
+    sal_uInt16 GetListBoxMaximumLineCount() const { return mpData->mnListBoxMaximumLineCount; }
+
+    // maximum column count for the ColorValueSet control. Default is 12 and this is optimized for the
+    // color scheme which has 12-color alogned layout for the part taken over from Symphony. Do
+    // only change this if you know what you are doing.
+    void SetColorValueSetColumnCount(sal_uInt16 nCount) { CopyData(); mpData->mnColorValueSetColumnCount = nCount; }
+    sal_uInt16 GetColorValueSetColumnCount() const { return mpData->mnColorValueSetColumnCount; }
+
+    // maximum row/line count for the ColorValueSet control. If more lines would be needed, a scrollbar will
+    // be used. Default is 40.
+    void SetColorValueSetMaximumRowCount(sal_uInt16 nCount) { CopyData(); mpData->mnColorValueSetMaximumRowCount = nCount; }
+    sal_uInt16 GetColorValueSetMaximumRowCount() const { return mpData->mnColorValueSetMaximumRowCount; }
+
+    // the logical size for preview graphics in the ListBoxes (e.g. FillColor, FillGradient, FillHatch, FillGraphic, ..). The
+    // default defines a UI-Scale independent setting which will be scaled using MAP_APPFONT. This ensures that the size will
+    // fit independent from the used SystemFont (as all the ressources for UI elements). The default is Size(15, 7) which gives
+    // the correct height and a decent width. Do not change the height, but you may adapt the width to change the preview width.
+    // GetListBoxPreviewDefaultPixelSize() is for convenience so that not everyone has to do the scaling itself and contains
+    // the logical size scaled by MAP_APPFONT.
+    void SetListBoxPreviewDefaultLogicSize(const Size& rSize) { CopyData(); mpData->maListBoxPreviewDefaultLogicSize = rSize; mpData->maListBoxPreviewDefaultPixelSize = Size(0, 0);}
+    const Size& GetListBoxPreviewDefaultLogicSize() const { return mpData->maListBoxPreviewDefaultLogicSize; }
+    const Size& GetListBoxPreviewDefaultPixelSize() const;
+
+    // the default LineWidth for ListBox UI previews (LineStyle, LineDash, LineStartEnd). Default is 1.
+    void SetListBoxPreviewDefaultLineWidth(sal_uInt16 nWidth) { CopyData(); mpData->mnListBoxPreviewDefaultLineWidth = nWidth; }
+    sal_uInt16 GetListBoxPreviewDefaultLineWidth() const { return mpData->mnListBoxPreviewDefaultLineWidth; }
 
     void                            SetStandardStyles();
 

@@ -593,8 +593,8 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         if( pEntry )
         {
             pBitmapList->Insert( pEntry );
-            const Size aUiSize(pBitmapList->getUiBitmapWidth(), pBitmapList->getUiBitmapHeight());
-            aLbBitmaps.Append(aUiSize, *pEntry );
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+            aLbBitmaps.Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
             aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
 
 #ifdef WNT
@@ -701,8 +701,8 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
                 XBitmapEntry* pEntry = new XBitmapEntry( aGraphic, aName );
                 pBitmapList->Insert( pEntry );
 
-                const Size aUiSize(pBitmapList->getUiBitmapWidth(), pBitmapList->getUiBitmapHeight());
-                aLbBitmaps.Append(aUiSize, *pEntry );
+                const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                aLbBitmaps.Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
                 aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
 
 #ifdef WNT
@@ -757,7 +757,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         long nCount = pBitmapList->Count();
         sal_Bool bDifferent = sal_False;
         sal_Bool bLoop = sal_True;
-        const Size aUiSize(pBitmapList->getUiBitmapWidth(), pBitmapList->getUiBitmapHeight());
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
         while( bLoop && pDlg->Execute() == RET_OK )
         {
@@ -782,7 +782,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
                 pEntry->SetGraphicObject(Graphic(aBitmapEx));
 
-                aLbBitmaps.Modify( aUiSize, *pEntry, nPos );
+                aLbBitmaps.Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry, nPos );
                 aLbBitmaps.SelectEntryPos( nPos );
 
                 // Flag fuer modifiziert setzen

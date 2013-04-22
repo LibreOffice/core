@@ -117,9 +117,10 @@ void XDashList::impCreate()
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XDashList: no VirtualDevice created!" );
         pVirDev->SetMapMode(MAP_100TH_MM);
+        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
         const Size aSize(pVirDev->PixelToLogic(Size(
-            bUseDoubleSize ? getUiBitmapWidth() * 5 : getUiBitmapWidth() * 5 / 2,
-            bUseDoubleSize ? getUiBitmapHeight() * 2 : getUiBitmapHeight())));
+            bUseDoubleSize ? rSize.Width() * 5 : rSize.Width() * 5 / 2,
+            bUseDoubleSize ? rSize.Height() * 2 : rSize.Height())));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
@@ -149,7 +150,7 @@ void XDashList::impCreate()
         pLineObject->SetModel(pSdrModel);
         pLineObject->SetMergedItem(XLineStyleItem(XLINE_DASH));
         pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
-        const Size aLineWidth(pVirDev->PixelToLogic(Size(getUiBitmapLineWidth(), 0)));
+        const Size aLineWidth(pVirDev->PixelToLogic(Size(rStyleSettings.GetListBoxPreviewDefaultLineWidth(), 0)));
         pLineObject->SetMergedItem(XLineWidthItem(bUseDoubleSize ? aLineWidth.getWidth() * 2 : aLineWidth.getWidth()));
         mpData = new impXDashList(pVirDev, pSdrModel, pBackgroundObject, pLineObject);
         OSL_ENSURE(0 != mpData, "XDashList: data creation went wrong!" );
