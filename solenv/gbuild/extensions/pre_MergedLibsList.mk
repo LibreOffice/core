@@ -181,14 +181,18 @@ gb_MERGEDLIBS := \
 
 ifneq (,$(URELIBS))
 gb_URELIBS := \
+	bootstrap \
 	cppu \
 	cppuhelper \
+	introspection \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmaccess) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmfwk) \
 	purpenvhelper \
+	reflection \
 	reg \
 	sal \
 	salhelper \
+	stocservices \
 	store \
 	unoidl \
 	xmlreader
