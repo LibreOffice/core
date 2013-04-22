@@ -18,9 +18,6 @@ $(eval $(call gb_Package_add_files,extras_gallsystem,share/gallery,\
 	sg24.sdg \
 	sg24.sdv \
 	sg24.thm \
-	sg25.sdg \
-	sg25.sdv \
-	sg25.thm \
 	sg36.sdg \
 	sg36.sdv \
 	sg36.thm \
