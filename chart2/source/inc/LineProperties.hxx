@@ -13,12 +13,14 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
 class LineProperties
 {
 private:
     OUString maDashName;
+    com::sun::star::drawing::LineDash maLineDash;
     sal_Int32 mnLineWidth;
     com::sun::star::drawing::LineStyle meLineStyle;
     com::sun::star::util::Color maLineColor;

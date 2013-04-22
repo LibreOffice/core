@@ -58,14 +58,18 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
         {MAP_CHAR_LEN("ShowNegativeError"),1,&getBooleanCppuType(), 0, 0},
         {MAP_CHAR_LEN("PositiveError"),2,&getCppuType((const double*)0),0,0},
         {MAP_CHAR_LEN("NegativeError"),3,&getCppuType((const double*)0), 0, 0},
-        {MAP_CHAR_LEN("ErrorBarStyle"),4,&getCppuType((sal_Int32*)0),0,0},
-        {MAP_CHAR_LEN("Weight"),5,&getCppuType((const double*)0),0,0},
-        {MAP_CHAR_LEN("LineStyle"),7,&getCppuType((com::sun::star::drawing::LineStyle*)0),0,0},
-        {MAP_CHAR_LEN("LineDashName"),7,&getCppuType((OUString*)0),0,0},
-        {MAP_CHAR_LEN("LineWidth"),7,&getCppuType((sal_Int32*)0),0,0},
-        {MAP_CHAR_LEN("LineColor"),7,&getCppuType((com::sun::star::util::Color*)0),0,0},
-        {MAP_CHAR_LEN("LineTransparence"),7,&getCppuType((sal_uInt8*)0),0,0},
-        {MAP_CHAR_LEN("LineJoint"),7,&getCppuType((com::sun::star::drawing::LineJoint*)0),0,0},
+        {MAP_CHAR_LEN("PercentageError"),4,&getCppuType((const double*)0), 0, 0},
+        {MAP_CHAR_LEN("ErrorBarStyle"),5,&getCppuType((sal_Int32*)0),0,0},
+        {MAP_CHAR_LEN("ErrorBarRangePositive"),6,&getCppuType((OUString*)0),0,0}, // read-only for export
+        {MAP_CHAR_LEN("ErrorBarRangeNegative"),7,&getCppuType((OUString*)0),0,0}, // read-only for export
+        {MAP_CHAR_LEN("Weight"),8,&getCppuType((const double*)0),0,0},
+        {MAP_CHAR_LEN("LineStyle"),9,&getCppuType((com::sun::star::drawing::LineStyle*)0),0,0},
+        {MAP_CHAR_LEN("LineDashName"),10,&getCppuType((OUString*)0),0,0},
+        {MAP_CHAR_LEN("LineDash"),10,&getCppuType((drawing::LineDash*)0),0,0},
+        {MAP_CHAR_LEN("LineWidth"),11,&getCppuType((sal_Int32*)0),0,0},
+        {MAP_CHAR_LEN("LineColor"),12,&getCppuType((com::sun::star::util::Color*)0),0,0},
+        {MAP_CHAR_LEN("LineTransparence"),13,&getCppuType((sal_uInt8*)0),0,0},
+        {MAP_CHAR_LEN("LineJoint"),14,&getCppuType((com::sun::star::drawing::LineJoint*)0),0,0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aPropSet( aErrorBarPropertyMap_Impl );
@@ -143,16 +147,64 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny
         rAny >>= meStyle;
     else if(rPropName == "PositiveError")
         rAny >>= mfPositiveError;
+    else if(rPropName == "PercentageError")
+    {
+        rAny >>= mfPositiveError;
+        rAny >>= mfNegativeError;
+    }
     else if(rPropName == "NegativeError")
         rAny >>= mfNegativeError;
     else if(rPropName == "ShowPositiveError")
         rAny >>= mbShowPositiveError;
     else if(rPropName == "ShowNegativeError")
         rAny >>= mbShowNegativeError;
+    else if(rPropName == "ErrorBarRangePositive" || rPropName == "ErrorBarRangeNegative")
+        throw uno::RuntimeException("read-only property", static_cast< uno::XWeak*>(this));
     else
         LineProperties::setPropertyValue(rPropName, rAny);
 
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
+namespace {
+
+OUString getSourceRangeStrFromLabeledSequences( uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences, bool bPositive )
+{
+    const OUString aRolePrefix( "error-bars" );
+    OUString aDirection;
+    if(bPositive)
+        aDirection = "positive";
+    else
+        aDirection = "negative";
+
+    for( sal_Int32 nI=0; nI< aSequences.getLength(); ++nI )
+    {
+        try
+        {
+            if( aSequences[nI].is())
+            {
+                uno::Reference< chart2::data::XDataSequence > xSequence( aSequences[nI]->getValues());
+                uno::Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
+                OUString aRole;
+                if( ( xSeqProp->getPropertyValue(
+                                OUString( "Role" )) >>= aRole ) &&
+                        aRole.match( aRolePrefix ) && aRole.indexOf(aDirection) >= 0 )
+                {
+                    return xSequence->getSourceRangeRepresentation();
+                }
+            }
+        }
+        catch (...)
+        {
+            // we can't be sure that this is 100% safe and we don't want to kill the export
+            // we should at least check why the exception is thrown
+            SAL_WARN("chart2", "unexpected exception!");
+        }
+    }
+
+    return OUString();
+}
+
 }
 
 uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
@@ -165,14 +217,138 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
         aRet <<= mfPositiveError;
     else if(rPropName == "NegativeError")
         aRet <<= mfNegativeError;
+    else if(rPropName == "PercentageError")
+        aRet <<= mfPositiveError;
     else if(rPropName == "ShowPositiveError")
         aRet <<= mbShowPositiveError;
     else if(rPropName == "ShowNegativeError")
         aRet <<= mbShowNegativeError;
+    else if(rPropName == "ErrorBarRangePositive")
+    {
+        OUString aRange;
+        if(meStyle == com::sun::star::chart::ErrorBarStyle::FROM_DATA)
+        {
+            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
+                getDataSequences();
+
+            aRange = getSourceRangeStrFromLabeledSequences( aSequences, true );
+        }
+
+        aRet <<= aRange;
+    }
+    else if(rPropName == "ErrorBarRangeNegative")
+    {
+        OUString aRange;
+        if(meStyle == com::sun::star::chart::ErrorBarStyle::FROM_DATA)
+        {
+            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
+                getDataSequences();
+
+            aRange = getSourceRangeStrFromLabeledSequences( aSequences, true );
+        }
+
+        aRet <<= aRange;
+    }
     else
         aRet = LineProperties::getPropertyValue(rPropName);
+
     SAL_WARN_IF(!aRet.hasValue(), "chart2", "asked for property value: " << rPropName);
     return aRet;
+}
+
+beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
+        throw (com::sun::star::beans::UnknownPropertyException)
+{
+    if(rPropName == "ErrorBarStyle")
+    {
+        if(meStyle == com::sun::star::chart::ErrorBarStyle::NONE)
+            return beans::PropertyState_DEFAULT_VALUE;
+        return beans::PropertyState_DIRECT_VALUE;
+    }
+    else if(rPropName == "PositiveError")
+    {
+        if(mbShowPositiveError)
+        {
+            switch(meStyle)
+            {
+                case com::sun::star::chart::ErrorBarStyle::ABSOLUTE:
+                case com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
+                    return beans::PropertyState_DIRECT_VALUE;
+                default:
+                    break;
+            }
+        }
+        return beans::PropertyState_DEFAULT_VALUE;
+    }
+    else if(rPropName == "NegativeError")
+    {
+        if(mbShowNegativeError)
+        {
+            switch(meStyle)
+            {
+                case com::sun::star::chart::ErrorBarStyle::ABSOLUTE:
+                case com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
+                    return beans::PropertyState_DIRECT_VALUE;
+                default:
+                    break;
+            }
+        }
+        return beans::PropertyState_DEFAULT_VALUE;
+    }
+    else if(rPropName == "PercentageError")
+    {
+        if(meStyle != com::sun::star::chart::ErrorBarStyle::RELATIVE)
+            return beans::PropertyState_DEFAULT_VALUE;
+        return beans::PropertyState_DIRECT_VALUE;
+    }
+    else if(rPropName == "ShowPositiveError")
+    {
+        // this value should be never default
+        return beans::PropertyState_DIRECT_VALUE;
+    }
+    else if(rPropName == "ShowNegativeError")
+    {
+        // this value should be never default
+        return beans::PropertyState_DIRECT_VALUE;
+    }
+    else if(rPropName == "ErrorBarRangePositive")
+    {
+        if(meStyle == com::sun::star::chart::ErrorBarStyle::FROM_DATA && mbShowPositiveError)
+            return beans::PropertyState_DIRECT_VALUE;
+        return beans::PropertyState_DEFAULT_VALUE;
+    }
+    else if(rPropName == "ErrorBarRangeNegative")
+    {
+        if(meStyle == com::sun::star::chart::ErrorBarStyle::FROM_DATA && mbShowNegativeError)
+            return beans::PropertyState_DIRECT_VALUE;
+        return beans::PropertyState_DEFAULT_VALUE;
+    }
+    else
+        return beans::PropertyState_DIRECT_VALUE;
+}
+
+uno::Sequence< beans::PropertyState > ErrorBar::getPropertyStates( const uno::Sequence< OUString >& rPropNames )
+        throw (com::sun::star::beans::UnknownPropertyException)
+{
+    uno::Sequence< beans::PropertyState > aRet( rPropNames.getLength() );
+    for(sal_Int32 i = 0; i < rPropNames.getLength(); ++i)
+    {
+        aRet[i] = getPropertyState(rPropNames[i]);
+    }
+    return aRet;
+}
+
+void ErrorBar::setPropertyToDefault( const OUString& )
+        throw (beans::UnknownPropertyException)
+{
+    //keep them unimplemented for now
+}
+
+uno::Any ErrorBar::getPropertyDefault( const OUString& )
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException)
+{
+    //keep them unimplemented for now
+    return uno::Any();
 }
 
 void ErrorBar::addPropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )

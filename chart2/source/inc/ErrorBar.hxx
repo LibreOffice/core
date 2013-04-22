@@ -25,7 +25,7 @@
 #include "charttoolsdllapi.hxx"
 #include "LineProperties.hxx"
 
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 namespace chart
@@ -47,14 +48,15 @@ OOO_DLLPUBLIC_CHARTTOOLS    ::com::sun::star::uno::Reference< ::com::sun::star::
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper7<
+typedef ::cppu::WeakImplHelper8<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,
         ::com::sun::star::util::XModifyListener,
         ::com::sun::star::chart2::data::XDataSource,
         ::com::sun::star::chart2::data::XDataSink,
-        ::com::sun::star::beans::XPropertySet >
+        ::com::sun::star::beans::XPropertySet,
+        ::com::sun::star::beans::XPropertyState >
     ErrorBar_Base;
 }
 
@@ -87,17 +89,28 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
-                                throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName )
-                                throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
-                                throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )
-                                throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XPropertyState
+    virtual com::sun::star::beans::PropertyState SAL_CALL getPropertyState( const OUString& rPropName )
+        throw (com::sun::star::beans::UnknownPropertyException);
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates(
+            const com::sun::star::uno::Sequence< OUString >& rPropNames )
+        throw (com::sun::star::beans::UnknownPropertyException);
+    virtual void SAL_CALL setPropertyToDefault( const OUString& rPropName )
+        throw (com::sun::star::beans::UnknownPropertyException);
+    virtual com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& rPropName )
+        throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException);
 
 protected:
     ErrorBar( const ErrorBar & rOther );

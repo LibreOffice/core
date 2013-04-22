@@ -22,6 +22,7 @@ LineProperties::LineProperties():
 
 LineProperties::LineProperties(const LineProperties& r):
     maDashName(r.maDashName),
+    maLineDash(r.maLineDash),
     mnLineWidth(r.mnLineWidth),
     meLineStyle(r.meLineStyle),
     maLineColor(r.maLineColor),
@@ -33,9 +34,13 @@ LineProperties::LineProperties(const LineProperties& r):
 uno::Any LineProperties::getPropertyValue(const OUString& rName)
 {
     uno::Any aRet;
-    if(rName == "DashName")
+    if(rName == "LineDashName")
     {
         aRet <<= maDashName;
+    }
+    else if(rName == "LineDash")
+    {
+        aRet <<= maLineDash;
     }
     else if(rName == "LineWidth")
     {
@@ -62,9 +67,13 @@ uno::Any LineProperties::getPropertyValue(const OUString& rName)
 
 void LineProperties::setPropertyValue(const OUString& rName, const uno::Any& rAny)
 {
-    if(rName == "DashName")
+    if(rName == "LineDashName")
     {
         rAny >>= maDashName;
+    }
+    else if(rName == "LineDash")
+    {
+        rAny >>= maLineDash;
     }
     else if(rName == "LineWidth")
     {
