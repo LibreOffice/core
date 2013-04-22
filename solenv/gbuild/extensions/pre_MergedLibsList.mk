@@ -187,7 +187,6 @@ gb_URELIBS := \
 	introspection \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmaccess) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmfwk) \
-	purpenvhelper \
 	reflection \
 	reg \
 	sal \
@@ -195,7 +194,10 @@ gb_URELIBS := \
 	stocservices \
 	store \
 	unoidl \
-	xmlreader
+	xmlreader \
+	$(if $(filter ALL,$(MERGELIBS)), \
+		purpenvhelper \
+	)
 
 endif
 
