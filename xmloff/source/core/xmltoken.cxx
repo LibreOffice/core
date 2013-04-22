@@ -3197,17 +3197,23 @@ namespace xmloff { namespace token {
     const OUString& GetXMLToken( enum XMLTokenEnum eToken )
     {
 #if OSL_DEBUG_LEVEL > 0
-        // check the consistency of the token list. Below, we use the ordinal value of
-        // the token as index into the token list, so we should make sure that every
-        // entry is at the proper position
-        const XMLTokenEntry* pEntry = aTokenList;
-        const XMLTokenEntry* pEntryEnd = pEntry + sizeof ( aTokenList ) / sizeof ( XMLTokenEntry );
-        sal_uInt16 nPos = 0;
-        while ( pEntry < pEntryEnd )
+        static bool s_bChecked = false;
+        if (!s_bChecked)
         {
-            assert(nPos == static_cast<sal_uInt16>(pEntry->eToken));
-                // "xmloff::GetXMLToken: inconsistency in the token list!"
-            ++pEntry, ++nPos;
+            // check the consistency of the token list. Below, we use the
+            // ordinal value of the token as index into the token list, so we
+            // should make sure that every entry is at the proper position
+            const XMLTokenEntry* pEntry = aTokenList;
+            const XMLTokenEntry* pEntryEnd =
+                pEntry + SAL_N_ELEMENTS(aTokenList);
+            sal_uInt16 nPos = 0;
+            while (pEntry < pEntryEnd)
+            {
+                assert(nPos == static_cast<sal_uInt16>(pEntry->eToken));
+                    // "xmloff::GetXMLToken: inconsistency in the token list!"
+                ++pEntry, ++nPos;
+            }
+            s_bChecked = true; // it's all static, checking once is enough
         }
 #endif
         DBG_ASSERT( eToken > XML_TOKEN_INVALID, "token value too low!" );
