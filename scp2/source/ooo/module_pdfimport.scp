@@ -56,12 +56,7 @@ File gid_File_Exe_Xpdfimport
     Styles = (PACKED);
 End
 
-File gid_File_Lib_PdfimportUno
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = SCP2_URE_DL_BARE("pdfimport.uno");
-    Styles = (PACKED);
-End
+STD_LIB_FILE( gid_File_Lib_PdfimportUno, pdfimport )
 
 File gid_File_Xcd_Pdfimport
     TXT_FILE_BODY;

@@ -138,7 +138,7 @@ End
 
 
 #if ! defined WNT // no longer supported on Windows
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail.uno )
+STD_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail )
 #endif
 
 #ifndef SYSTEM_CURL
@@ -380,12 +380,7 @@ End
 #endif
 
 #ifdef MACOSX
-File gid_File_Lib_Fps_Aqua
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = SPECIAL_COMPONENT_LIB_NAME(fps_aqua.uno);
-End
+STD_LIB_FILE( gid_File_Lib_Fps_Aqua, fps_aqua )
 
 File gid_File_Lib_MacOSXSpell
 	LIB_FILE_BODY;
@@ -404,9 +399,8 @@ End
 #endif
 #endif
 
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
-
+STD_LIB_FILE( gid_File_Lib_Fps_Office, fps_office )
+STD_LIB_FILE( gid_File_Lib_Fpicker, fpicker )
 
 #ifndef SYSTEM_LCMS2
 
@@ -482,7 +476,7 @@ End
 
 #endif
 
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
+STD_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory )
 
 STD_LIB_FILE( gid_File_Lib_I18nsearch, i18nsearch )
 
@@ -676,17 +670,10 @@ End
 #endif
 
 #if defined(WNT) && !defined(DISABLE_ATL)
-
-File gid_File_Lib_Ole
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "oleautobridge.uno.dll";
-End
-
+STD_LIB_FILE( gid_File_Lib_Ole, oleautobridge )
 #endif
 
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontainer.uno )
+STD_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontainer )
 
 STD_LIB_FILE( gid_File_Lib_Pcr, pcr)
 
@@ -865,14 +852,7 @@ End
 #endif
 
 #ifdef WNT
-
-File gid_File_Lib_Smplmail
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "smplmail.uno.dll";
-End
-
+STD_LIB_FILE( gid_File_Lib_Smplmail, smplmail )
 #endif
 
 #if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
@@ -912,14 +892,14 @@ File gid_File_Lib_Sysdtrans
 End
 #endif
 
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Syssh, syssh.uno )
+STD_LIB_FILE( gid_File_Lib_Syssh, syssh )
 
 #ifdef WNT
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1.uno )
+STD_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1 )
 #endif
 
 #ifdef MACOSX
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Macbe, macbe1.uno )
+STD_LIB_FILE( gid_File_Lib_Macbe, macbe1 )
 #endif
 
 STD_LIB_FILE( gid_File_Lib_Acc, acc )
@@ -991,11 +971,11 @@ SPECIAL_LIB_FILE(gid_File_Lib_Ucphier1,ucphier1)
 
 SPECIAL_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
 
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
+STD_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1)
 
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
+STD_LIB_FILE(gid_File_Ucpext, ucpext)
 
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpcmis, ucpcmis1.uno)
+STD_LIB_FILE(gid_File_Ucpcmis, ucpcmis1)
 
 File gid_File_Lib_Lnth
     LIB_FILE_BODY;
@@ -1136,7 +1116,7 @@ STD_LIB_FILE( gid_File_Lib_Migrationoo3, migrationoo3 )
 
 STD_LIB_FILE( gid_File_Lib_Guesslang, guesslang )
 
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Updatefeed , updatefeed.uno )
+STD_LIB_FILE( gid_File_Lib_Updatefeed , updatefeed )
 
 #ifndef SYSTEM_OPENSSL
 File gid_File_Lib_Openssl

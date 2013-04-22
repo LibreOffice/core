@@ -579,28 +579,56 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     PresenterScreen \
     basprov \
     cairocanvas \
+    canvasfactory \
+    cmdmail \
+    directx9canvas \
     dlgprov \
     expwrap \
     fastsax \
+    fpicker \
+    fps_office \
     gconfbe1 \
+    gdipluscanvas \
+    hatchwindowfactory \
     i18nsearch \
     kdebe1 \
     kde4be1 \
     ldapbe2 \
+    losessioninstall \
+    macbe1 \
     migrationoo2 \
     migrationoo3 \
     msforms \
     mtfrenderer \
     OGLTrans \
+    passwordcontainer \
+    pdfimport \
+    postgresql-sdbc \
+    postgresql-sdbc-impl \
     pythonloader \
+    simplecanvas \
     slideshow \
     stringresource \
+    syssh \
     tdebe1 \
+    ucpcmis1 \
+    ucpext \
     ucpgio1 \
     ucpgvfs1 \
+    ucptdoc1 \
+    updatefeed \
     vbaevents \
     vbaobj \
     vbaswobj \
+    vclcanvas \
+    $(if $(filter $(OS),MACOSX), \
+        fps_aqua \
+    ) \
+    $(if $(filter $(OS),WNT), \
+        oleautobridge \
+        smplmail \
+        wininetbe1 \
+    ) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
@@ -612,36 +640,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
 	ucpexpand1 \
 ))
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
-    canvasfactory \
-    cmdmail \
     directx5canvas \
-    directx9canvas \
-    fpicker \
-    fps_office \
-    gdipluscanvas \
-    hatchwindowfactory \
-    losessioninstall \
-    macbe1 \
     nullcanvas \
-    passwordcontainer \
-    pdfimport \
-    postgresql-sdbc \
-    postgresql-sdbc-impl \
-    simplecanvas \
-    syssh \
-    ucpcmis1 \
-    ucpext \
-    ucptdoc1 \
-    updatefeed \
-    vclcanvas \
-    $(if $(filter $(OS),MACOSX), \
-        fps_aqua \
-    ) \
-	$(if $(filter $(OS),WNT), \
-		oleautobridge \
-		smplmail \
-		wininetbe1 \
-	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
