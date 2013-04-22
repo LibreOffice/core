@@ -848,123 +848,127 @@ String RID_SVXSTR_NUMBULLET_NONE
     Text [en-US] = "None";
 };
 
+//i122118, Seems the bullets graphic order and count is changed in the gallary,
+//Following descriptions should be changed accordingly.
+
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_0
 {
-    Text [en-US] = "Dark Red Circle";
+    Text [en-US] = "Black Pearl";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_1
 {
-    Text [en-US] = "Blue Ball";
+    Text [en-US] = "Blue Arrow 1";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_2
 {
-    Text [en-US] = "Green Ball";
+    Text [en-US] = "Blue Ball";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_3
 {
-    Text [en-US] = "Black Square";
+    Text [en-US] = "Blue Diamond";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_4
 {
-    Text [en-US] = "Orange";
+    Text [en-US] = "Blue Red";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_5
 {
-    Text [en-US] = "Purple Square";
+    Text [en-US] = "Blue Square";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_6
 {
-    Text [en-US] = "Diamond Blue";
+    Text [en-US] = "Blue Star";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_7
 {
-    Text [en-US] = "Light Blue Diamond";
+    Text [en-US] = "Dark Red Circle";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_8
 {
-    Text [en-US] = "Red Diamond";
+    Text [en-US] = "Blue Circle";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_9
 {
-    Text [en-US] = "Yellow Star";
+    Text [en-US] = "Green Circle";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_10
 {
-    Text [en-US] = "Blue Star";
+    Text [en-US] = "Black Square";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_11
 {
-    Text [en-US] = "Blue Triangle";
+    Text [en-US] = "Orange Square";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_12
 {
-    Text [en-US] = "Dark Green Triangle";
+    Text [en-US] = "Purple Square";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_13
 {
-    Text [en-US] = "Red Arrow";
+    Text [en-US] = "Blue Diamond";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_14
 {
-    Text [en-US] = "Blue Arrow";
+    Text [en-US] = "Light Blue Diamond";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_15
 {
-    Text [en-US] = "Blue Box";
+    Text [en-US] = "Red Diamond";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_16
 {
-    Text [en-US] = "Red Box";
+    Text [en-US] = "Yellow Star";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_17
 {
-    Text [en-US] = "Light Blue Asterisk";
+    Text [en-US] = "Blue Star";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_18
 {
-    Text [en-US] = "Red Leaves";
+    Text [en-US] = "Blue Triangle";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_19
 {
-    Text [en-US] = "Blue Target";
+    Text [en-US] = "Dark Green Triangle";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_20
 {
-    Text [en-US] = "Blue Arrow";
+    Text [en-US] = "Red Arrow";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_21
 {
-    Text [en-US] = "Dark Blue Arrow";
+    Text [en-US] = "Blue Arrow 2";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_22
 {
-    Text [en-US] = "Brown Arrow";
+    Text [en-US] = "Blue Box";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_23
 {
-    Text [en-US] = "Red Flag";
+    Text [en-US] = "Red Box";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_24
 {
-    Text [en-US] = "Green Flag";
+    Text [en-US] = "Light Blue Asterisk";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_25
 {
-    Text [en-US] = "Red X";
+    Text [en-US] = "Red Leaves";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_26
 {
-    Text [en-US] = "Black X";
+    Text [en-US] = "Blue Target";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_27
 {
-    Text [en-US] = "Green Checkmark";
+    Text [en-US] = "Blue Arrow 3";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_28
 {
-    Text [en-US] = "Blue Checkmark";
+    Text [en-US] = "Dark Blue Arrow";
 };
 String RID_SVXSTR_GRAPHICS_DESCRIPTION_29
 {
-    Text [en-US] = "Dark Red Square";
+    Text [en-US] = "Brown Arrow";
 };
+//i122118
