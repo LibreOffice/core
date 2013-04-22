@@ -91,7 +91,7 @@ public:
                                     SvXMLGraphicInputStream( const OUString& rGraphicId );
     virtual                         ~SvXMLGraphicInputStream();
 
-    sal_Bool                        Exists() const { return mxStmWrapper.is(); }
+    bool                            Exists() const { return mxStmWrapper.is(); }
 };
 
 SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
@@ -222,7 +222,7 @@ public:
                                     SvXMLGraphicOutputStream();
     virtual                         ~SvXMLGraphicOutputStream();
 
-    sal_Bool                        Exists() const { return mxStmWrapper.is(); }
+    bool                            Exists() const { return mxStmWrapper.is(); }
     const GraphicObject&            GetGraphicObject();
 };
 

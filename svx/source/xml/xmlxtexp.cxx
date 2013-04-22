@@ -220,7 +220,7 @@ bool SvxXMLXTableExportComponent::save(
     INetURLObject aURLObj( rURL );
     bool bToStorage = aURLObj.GetProtocol() == INET_PROT_NOT_VALID; // a relative path
 
-    sal_Bool bSaveAsStorage = xTable->getElementType() == ::getCppuType((const OUString*)0);
+    bool bSaveAsStorage = xTable->getElementType() == ::getCppuType((const OUString*)0);
 
     if( pOptName )
         *pOptName = rURL;

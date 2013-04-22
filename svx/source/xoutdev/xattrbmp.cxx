@@ -189,7 +189,7 @@ const GraphicObject& XOBitmap::GetGraphicObject() const
 void XOBitmap::Bitmap2Array()
 {
     VirtualDevice   aVD;
-    sal_Bool            bPixelColor = sal_False;
+    bool            bPixelColor = false;
     const Bitmap    aBitmap( GetBitmap() );
     const sal_uInt16    nLines = 8; // von Type abhaengig
 
@@ -214,7 +214,7 @@ void XOBitmap::Bitmap2Array()
                 if( !bPixelColor )
                 {
                     aPixelColor = aVD.GetPixel( Point( j, i ) );
-                    bPixelColor = sal_True;
+                    bPixelColor = true;
                 }
             }
         }

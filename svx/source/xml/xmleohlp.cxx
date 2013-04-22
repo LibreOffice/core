@@ -66,7 +66,7 @@ class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper1<XOutputStream>
     ::osl::Mutex    maMutex;
     Reference < XOutputStream > xOut;
     TempFile aTempFile;
-    sal_Bool bStreamClosed : 1;
+    bool bStreamClosed : 1;
     SvStream* pStream;
 
 public:
@@ -82,7 +82,7 @@ public:
 };
 
 OutputStorageWrapper_Impl::OutputStorageWrapper_Impl()
-    : bStreamClosed( sal_False )
+    : bStreamClosed( false )
     , pStream(0)
 {
     aTempFile.EnableKillingFile();
@@ -121,7 +121,7 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
 {
     MutexGuard          aGuard( maMutex );
     xOut->closeOutput();
-    bStreamClosed = sal_True;
+    bStreamClosed = true;
 }
 
 struct OUStringLess
@@ -283,7 +283,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         if( -1 == nPos )
             return sal_False;
         sal_Bool bObjUrl = aURLNoPar.startsWith( XML_EMBEDDEDOBJECT_URL_BASE );
-        sal_Bool bGrUrl = !bObjUrl &&
+        bool bGrUrl = !bObjUrl &&
               aURLNoPar.startsWith( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE );
         if( !(bObjUrl || bGrUrl) )
             return sal_False;
@@ -305,7 +305,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
 
         if( bGrUrl )
         {
-            sal_Bool bOASIS = mxRootStorage.is() &&
+            bool bOASIS = mxRootStorage.is() &&
                 ( SotStorage::GetVersion( mxRootStorage ) > SOFFICE_FILEFORMAT_60 );
             rContainerStorageName = bOASIS
                     ? maReplacementGraphicsContainerStorageName
@@ -515,7 +515,7 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
     {
         try
         {
-            sal_Bool bSwitchBackToLoaded = sal_False;
+            bool bSwitchBackToLoaded = false;
             sal_Int32 nCurState = xObj->getCurrentState();
             if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
             {
@@ -530,7 +530,7 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
                 // the image must be regenerated
                 // TODO/LATER: another aspect could be used
                 if ( nCurState == embed::EmbedStates::LOADED )
-                    bSwitchBackToLoaded = sal_True;
+                    bSwitchBackToLoaded = true;
 
                 OUString aMediaType;
                 xStream = svt::EmbeddedObjectRef::GetGraphicReplacementStream(

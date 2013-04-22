@@ -84,7 +84,7 @@ class SvxXMLTableImportContext : public SvXMLImportContext
 {
 public:
     SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
-        sal_Bool bOOoFormat );
+        bool bOOoFormat );
     virtual ~SvxXMLTableImportContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
@@ -102,12 +102,12 @@ protected:
 private:
     uno::Reference< XNameContainer > mxTable;
     SvxXMLTableImportContextEnum meContext;
-    sal_Bool mbOOoFormat;
+    bool mbOOoFormat;
 };
 
 ///////////////////////////////////////////////////////////////////////
 
-SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, sal_Bool bOOoFormat )
+SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, bool bOOoFormat )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxTable( xTable ), meContext( eContext ),
     mbOOoFormat( bOOoFormat )
 {
@@ -467,7 +467,7 @@ SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const
     if( XML_NAMESPACE_OOO == nPrefix ||
         XML_NAMESPACE_OFFICE == nPrefix )
     {
-        sal_Bool bOOoFormat = (XML_NAMESPACE_OFFICE == nPrefix);
+        bool bOOoFormat = (XML_NAMESPACE_OFFICE == nPrefix);
         Type aType = mrTable->getElementType();
 
         if ( rLocalName == "color-table" )

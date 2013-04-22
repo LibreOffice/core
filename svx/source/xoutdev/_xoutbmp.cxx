@@ -182,7 +182,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
         if( GRFILTER_OK != nErr )
         {
             String  aFilter( rFilterName );
-            sal_Bool    bWriteTransGrf = ( aFilter.EqualsIgnoreCaseAscii( "transgrf" ) ) ||
+            bool    bWriteTransGrf = ( aFilter.EqualsIgnoreCaseAscii( "transgrf" ) ) ||
                                      ( aFilter.EqualsIgnoreCaseAscii( "gif" ) ) ||
                                      ( nFlags & XOUTBMP_USE_GIF_IF_POSSIBLE ) ||
                                      ( ( nFlags & XOUTBMP_USE_GIF_IF_SENSIBLE ) && ( bAnimated || bTransparent ) );
@@ -313,7 +313,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 {
     const Size  aSize( rBmp.GetSizePixel() );
     Bitmap      aRetBmp;
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if( ( aSize.Width() > 2L ) && ( aSize.Height() > 2L ) )
     {
@@ -372,7 +372,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                     }
                 }
 
-                bRet = sal_True;
+                bRet = true;
             }
 
             aWorkBmp.ReleaseAccess( pReadAcc );

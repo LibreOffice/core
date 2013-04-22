@@ -187,7 +187,7 @@ SvStream& NameOrIndex::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 */
 String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* /*pPool2*/, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults )
 {
-    sal_Bool bForceNew = sal_False;
+    bool bForceNew = false;
 
     OUString aUniqueName = SvxUnogetInternalNameForItem(nWhich, pCheckItem->GetName());
 
@@ -211,7 +211,7 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
                 {
                     // same name but different value, we need a new name for this item
                     aUniqueName = String();
-                    bForceNew = sal_True;
+                    bForceNew = true;
                 }
                 break;
             }
@@ -1092,7 +1092,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
             uno::Sequence< beans::PropertyValue >   aPropSeq;
             ::com::sun::star::drawing::LineDash     aLineDash;
             OUString                           aName;
-            sal_Bool                                bLineDash( sal_False );
+            bool                               bLineDash( false );
 
             if ( rVal >>= aPropSeq )
             {
@@ -1782,7 +1782,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             }
         }
 
-        sal_Bool bForceNew = sal_False;
+        bool bForceNew = false;
 
         // 2. if we have a name check if there is already an item with the
         // same name in the documents pool with a different line end or start
@@ -1806,7 +1806,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                     {
                         // same name but different value, we need a new name for this item
                         aUniqueName = String();
-                        bForceNew = sal_True;
+                        bForceNew = true;
                     }
                     break;
                 }
@@ -1828,7 +1828,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                         {
                             // same name but different value, we need a new name for this item
                             aUniqueName = String();
-                            bForceNew = sal_True;
+                            bForceNew = true;
                         }
                         break;
                     }
@@ -1852,7 +1852,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                     {
                         // same name but different value, we need a new name for this item
                         aUniqueName = String();
-                        bForceNew = sal_True;
+                        bForceNew = true;
                     }
                     break;
                 }
@@ -1873,7 +1873,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                         {
                             // same name but different value, we need a new name for this item
                             aUniqueName = String();
-                            bForceNew = sal_True;
+                            bForceNew = true;
                         }
                         break;
                     }
@@ -1885,7 +1885,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
         // create a unique name
         if( aUniqueName.Len() == 0 )
         {
-            sal_Bool bFoundExisting = sal_False;
+            bool bFoundExisting = false;
 
             sal_Int32 nUserIndex = 1;
             const ResId aRes(SVX_RES(RID_SVXSTR_LINEEND));
@@ -1905,7 +1905,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                         if( !bForceNew && pItem->GetLineStartValue() == pLineStartItem->GetLineStartValue() )
                         {
                             aUniqueName = pItem->GetName();
-                            bFoundExisting = sal_True;
+                            bFoundExisting = true;
                             break;
                         }
 
@@ -1928,7 +1928,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                         if( !bForceNew && pItem->GetLineEndValue() == pLineStartItem->GetLineStartValue() )
                         {
                             aUniqueName = pItem->GetName();
-                            bFoundExisting = sal_True;
+                            bFoundExisting = true;
                             break;
                         }
 
@@ -2134,7 +2134,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             }
         }
 
-        sal_Bool bForceNew = sal_False;
+        bool bForceNew = false;
 
         // 2. if we have a name check if there is already an item with the
         // same name in the documents pool with a different line end or start
@@ -2158,7 +2158,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                     {
                         // same name but different value, we need a new name for this item
                         aUniqueName = String();
-                        bForceNew = sal_True;
+                        bForceNew = true;
                     }
                     break;
                 }
@@ -2180,7 +2180,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                         {
                             // same name but different value, we need a new name for this item
                             aUniqueName = String();
-                            bForceNew = sal_True;
+                            bForceNew = true;
                         }
                         break;
                     }
@@ -2204,7 +2204,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                     {
                         // same name but different value, we need a new name for this item
                         aUniqueName = String();
-                        bForceNew = sal_True;
+                        bForceNew = true;
                     }
                     break;
                 }
@@ -2225,7 +2225,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                         {
                             // same name but different value, we need a new name for this item
                             aUniqueName = String();
-                            bForceNew = sal_True;
+                            bForceNew = true;
                         }
                         break;
                     }
@@ -2237,7 +2237,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
         // create a unique name
         if( aUniqueName.Len() == 0 )
         {
-            sal_Bool bFoundExisting = sal_False;
+            bool bFoundExisting = false;
 
             sal_Int32 nUserIndex = 1;
             const ResId aRes(SVX_RES(RID_SVXSTR_LINEEND));
@@ -2257,7 +2257,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                         if( !bForceNew && pItem->GetLineStartValue() == pLineEndItem->GetLineEndValue() )
                         {
                             aUniqueName = pItem->GetName();
-                            bFoundExisting = sal_True;
+                            bFoundExisting = true;
                             break;
                         }
 
@@ -2280,7 +2280,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                         if( !bForceNew && pItem->GetLineEndValue() == pLineEndItem->GetLineEndValue() )
                         {
                             aUniqueName = pItem->GetName();
-                            bFoundExisting = sal_True;
+                            bFoundExisting = true;
                             break;
                         }
 

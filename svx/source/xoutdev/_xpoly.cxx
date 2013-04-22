@@ -344,7 +344,7 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
 
     nStartAngle %= 3600;
     if ( nEndAngle > 3600 ) nEndAngle %= 3600;
-    sal_Bool bFull = (nStartAngle == 0 && nEndAngle == 3600);
+    bool bFull = (nStartAngle == 0 && nEndAngle == 3600);
 
     // Faktor fuer Kontrollpunkte der Bezierkurven: 8/3 * (sin(45g) - 0.5)
     long    nXHdl = (long)(0.552284749 * nRx);
