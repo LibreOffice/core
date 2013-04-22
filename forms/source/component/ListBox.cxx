@@ -1513,6 +1513,13 @@ namespace frm
         return aReturn;
     }
 
+    //------------------------------------------------------------------------------
+    Any OListBoxModel::translateControlValueToValidatableValue( ) const
+    {
+        OSL_PRECOND( hasValidator(), "OListBoxModel::translateControlValueToValidatableValue: no validator, so why should I?" );
+        return getCurrentFormComponentValue();
+    }
+
     //--------------------------------------------------------------------
     Any OListBoxModel::getCurrentSingleValue() const
     {
@@ -1552,8 +1559,12 @@ namespace frm
     //--------------------------------------------------------------------
     Any OListBoxModel::getCurrentFormComponentValue() const
     {
-        if ( hasValidator() )
-            return OBoundControlModel::getCurrentFormComponentValue();
+        {
+            Reference< com::sun::star::form::validation::XValidator > vtor (const_cast<OListBoxModel*>(this)->getValidator());
+            Reference< XValueBinding > extBinding (const_cast<OListBoxModel*>(this)->getValueBinding());
+            if ( vtor.is() && vtor == extBinding )
+                return translateControlValueToExternalValue();
+        }
 
         Any aCurrentValue;
 

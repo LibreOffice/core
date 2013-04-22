@@ -186,6 +186,8 @@ protected:
                             translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
     virtual ::com::sun::star::uno::Any
                             translateControlValueToExternalValue( ) const;
+    virtual ::com::sun::star::uno::Any
+                            translateControlValueToValidatableValue( ) const;
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
 
     virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );

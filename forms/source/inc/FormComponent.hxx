@@ -1081,7 +1081,7 @@ public:
     virtual void SAL_CALL reloading( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL reloaded( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
 
-private:
+protected:
     // XBindableValue
     virtual void SAL_CALL setValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding ) throw (::com::sun::star::form::binding::IncompatibleTypesException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding > SAL_CALL getValueBinding(  ) throw (::com::sun::star::uno::RuntimeException);
