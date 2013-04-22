@@ -148,10 +148,9 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
     {
         aTablePageBreakData = aTablePageBreakDataList[i];
         sal_Int32 nPos = aTablePageBreakData.Position;
-        if( nPos >= nUsedStart )
-            index++;
-        if( nPos > nUsedEnd )
+        if( nPos > nUsedEnd + 1 )
             DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        index++;
         if( index == nAPIItemIndex )
             return aTablePageBreakData;
     }
