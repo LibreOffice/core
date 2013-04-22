@@ -27,11 +27,21 @@
 #include <vcl/solarmutex.hxx>
 #include "generic/geninst.h"
 
+#include <tools/prex.h>
+#include <X11/Xlib.h>
+#include <tools/postx.h>
+
+namespace com { namespace sun { namespace star { namespace datatransfer {
+    namespace clipboard { class XClipboard; }
+} } } }
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalXLib;
 class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
 {
+private:
+    boost::unordered_map< OUString, boost::unordered_map< Atom, com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboard > >, OUStringHash > m_aInstances;
+
 protected:
     SalXLib *mpXLib;
 public:
