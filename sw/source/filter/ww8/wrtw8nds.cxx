@@ -1777,11 +1777,14 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if( !aIdx.GetNode().IsTxtNode() )
         {
             const SwSectionNode* pTOXSectNd = rNode.FindSectionNode();
-            pTOXSect = &pTOXSectNd->GetSection();
+            if ( pTOXSectNd )
+            {
+                pTOXSect = &pTOXSectNd->GetSection();
 
-            const SwNode* pNxt = rNode.GetNodes().GoNext( &aIdx );
-            if( pNxt && pNxt->FindSectionNode() == pTOXSectNd )
-                pTOXSect = 0;
+                const SwNode* pNxt = rNode.GetNodes().GoNext( &aIdx );
+                if( pNxt && pNxt->FindSectionNode() == pTOXSectNd )
+                    pTOXSect = 0;
+            }
         }
     }
 
