@@ -584,6 +584,10 @@ void DomainMapperTableManager::endOfRowAction()
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nSum = 0;
         sal_uInt32 nPos = 0;
+        // Avoid divide by zero (if there's no grid, position using cell widths).
+        if( nFullWidthRelative == 0 )
+            for (sal_uInt32 i = 0; i < pCellWidths->size(); ++i)
+                nFullWidthRelative += (*pCellWidths.get())[i];
 
         for (sal_uInt32 i = 0; i < pCellWidths->size() - 1; ++i)
         {
