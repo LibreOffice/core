@@ -454,10 +454,12 @@ librdf_node* librdf_GraphResult::getContext() const
 {
     if (!m_pStream.get() || librdf_stream_end(m_pStream.get()))
         return NULL;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH;
     librdf_node *pCtxt( static_cast<librdf_node *>
+#if LIBRDF_VERSION >= 10012
+        (librdf_stream_get_context2(m_pStream.get())) );
+#else
         (librdf_stream_get_context(m_pStream.get())) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP;
+#endif
     if (pCtxt)
         return pCtxt;
     return m_pContext.get();
@@ -1585,10 +1587,12 @@ librdf_statement *rdfa_context_stream_map_handler(
 {
     OSL_ENSURE(i_pStream, "rdfa_context_stream_map_handler: stream null");
     if (i_pStream) {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH;
         librdf_node *pCtxt( static_cast<librdf_node *>
+#if LIBRDF_VERSION >= 10012
+            (librdf_stream_get_context2(i_pStream)) );
+#else
             (librdf_stream_get_context(i_pStream)) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP;
+#endif
         OSL_ENSURE(pCtxt, "rdfa_context_stream_map_handler: context null");
         if (pCtxt && isInternalContext(pCtxt)) {
             return i_pStatement;
