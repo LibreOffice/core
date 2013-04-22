@@ -52,6 +52,8 @@
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 
 // header for any2enum
 #include <comphelper/extract.hxx>
@@ -344,6 +346,22 @@ void XMLChartExportPropertyMapper::handleElementItem(
     }
 }
 
+namespace {
+
+OUString convertRange( const OUString & rRange, const uno::Reference< chart2::XChartDocument > & xDoc )
+{
+    OUString aResult = rRange;
+    if( !xDoc.is() )
+        return aResult;
+    uno::Reference< chart2::data::XRangeXMLConversion > xConversion(
+        xDoc->getDataProvider(), uno::UNO_QUERY );
+    if( xConversion.is())
+        aResult = xConversion->convertRangeToXML( rRange );
+    return aResult;
+}
+
+}
+
 void XMLChartExportPropertyMapper::handleSpecialItem(
     SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
     const SvXMLUnitConverter& rUnitConverter,
@@ -440,6 +458,14 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     break;
                 }
 
+            case XML_SCH_CONTEXT_SPECIAL_ERRORBAR_RANGE:
+                {
+                    OUString aRangeStr;
+                    rProperty.maValue >>= aRangeStr;
+                    sValueBuffer.append(convertRange(aRangeStr, mxChartDoc));
+                }
+                break;
+
             default:
                 bHandled = sal_False;
                 break;
@@ -458,6 +484,11 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
         // call parent
         SvXMLExportPropertyMapper::handleSpecialItem( rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
     }
+}
+
+void XMLChartExportPropertyMapper::setChartDoc( uno::Reference< chart2::XChartDocument > xChartDoc )
+{
+    mxChartDoc = xChartDoc;
 }
 
 // ----------------------------------------
@@ -579,6 +610,12 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                                                    : aSize.Height,
                                                    rValue );
                     rProperty.maValue <<= aSize;
+                }
+                break;
+
+            case XML_SCH_CONTEXT_SPECIAL_ERRORBAR_RANGE:
+                {
+                    rProperty.maValue <<= rValue;
                 }
                 break;
 

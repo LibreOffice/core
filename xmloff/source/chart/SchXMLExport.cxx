@@ -1145,6 +1145,8 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         return;
     }
 
+    mxExpPropMapper->setChartDoc(xNewDoc);
+
     awt::Size aPageSize( getPageSize( xNewDoc ));
     if( bExportContent )
         addSize( aPageSize );
@@ -3069,26 +3071,6 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                 for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
                          aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
                 {
-                    if ( nCurrentVersion > SvtSaveOptions::ODFVER_012 )
-                    {
-                        OUString aRole, aRange;
-                        Reference< beans::XPropertySet > xSeqProp( *aIt, uno::UNO_QUERY_THROW );
-                        xSeqProp->getPropertyValue("Role") >>= aRole;
-
-                        aRange = lcl_ConvertRange((*aIt)->getSourceRangeRepresentation(), xNewDoc );
-
-                        if ( aRole.indexOf("positive") != -1 )
-                        {
-                            if ( bPositive )
-                                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ERROR_UPPER_RANGE, aRange );
-                        }
-                        else
-                        {
-                            if ( bNegative )
-                                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ERROR_LOWER_RANGE, aRange );
-                        }
-                    }
-
                     m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
                         (uno::Reference< chart2::data::XDataSequence >)0, *aIt ));
                 }

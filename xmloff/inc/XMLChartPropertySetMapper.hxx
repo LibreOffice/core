@@ -61,6 +61,7 @@ private:
     bool mbAdaptPercentage;
 
     SvXMLExport& mrExport;
+    com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > mxChartDoc;
 
 protected:
     virtual void ContextFilter(
@@ -89,6 +90,9 @@ public:
     virtual ~XMLChartExportPropertyMapper();
 
     void setAdaptPercentage( bool bNewValue );
+
+    void setChartDoc( com::sun::star::uno::Reference<
+            com::sun::star::chart2::XChartDocument > xChartDoc );
 };
 
 // ----------------------------------------
