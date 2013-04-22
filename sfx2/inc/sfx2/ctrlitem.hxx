@@ -71,6 +71,8 @@ public:
                                       const SfxPoolItem* pState );
     virtual void        DeleteFloatingWindow();
 
+    SfxMapUnit          GetCoreMetric() const;
+
     static SfxItemState GetItemState( const SfxPoolItem* pState );
 
     SAL_DLLPRIVATE sal_Bool IsBindable_Impl() const

@@ -353,4 +353,43 @@ SfxItemState SfxControllerItem::GetItemState
                         : SFX_ITEM_AVAILABLE;
 }
 
+//--------------------------------------------------------------------
+
+SfxMapUnit SfxControllerItem::GetCoreMetric() const
+
+/*  [Description]
+
+    Gets the measurement unit from the competent pool, in which the Status
+    item exist.
+*/
+
+{
+    SfxStateCache *pCache = pBindings->GetStateCache( nId );
+    SfxDispatcher *pDispat = pBindings->GetDispatcher_Impl();
+
+    if ( !pDispat )
+    {
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        if ( !pViewFrame )
+            SfxViewFrame::GetFirst();
+        if ( pViewFrame )
+            pDispat = pViewFrame->GetDispatcher();
+    }
+
+    if ( pDispat && pCache )
+    {
+        const SfxSlotServer *pServer = pCache->GetSlotServer( *pDispat );
+        if ( pServer )
+        {
+            SfxShell *pSh = pDispat->GetShell( pServer->GetShellLevel() );
+            SfxItemPool &rPool = pSh->GetPool();
+            sal_uInt16 nWhich = rPool.GetWhich( nId );
+            return rPool.GetMetric( nWhich );
+        }
+    }
+
+    DBG_WARNING( "W1: Can not find ItemPool!" );
+    return SFX_MAPUNIT_100TH_MM;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
