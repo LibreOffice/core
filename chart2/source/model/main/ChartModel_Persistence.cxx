@@ -172,7 +172,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                     xFilter.set(
                         m_xContext->getServiceManager()->createInstanceWithContext(
                             aFilterServiceName, m_xContext ), uno::UNO_QUERY_THROW );
-                    SAL_WARN("chart2", "Filter found for service " << aFilterServiceName );
+                    SAL_INFO("chart2", "Filter found for service " << aFilterServiceName );
                 }
             }
         }
