@@ -1619,11 +1619,13 @@ namespace frm
     //--------------------------------------------------------------------
     Sequence< Type > OListBoxModel::getSupportedBindingTypes()
     {
-        Sequence< Type > aTypes(4);
-        aTypes[0] = ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) );
-        aTypes[1] = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
-        aTypes[2] = ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
-        aTypes[3] = ::getCppuType( static_cast< OUString* >( NULL ) );
+        Sequence< Type > aTypes(6);
+        aTypes[0] = ::getCppuType( static_cast< Sequence< Any >* >( NULL ) );
+        aTypes[1] = ::getCppuType( static_cast< Any* >( NULL ) );
+        aTypes[2] = ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) );
+        aTypes[3] = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
+        aTypes[4] = ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
+        aTypes[5] = ::getCppuType( static_cast< OUString* >( NULL ) );
         return aTypes;
     }
 
