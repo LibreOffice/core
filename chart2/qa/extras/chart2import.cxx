@@ -41,6 +41,7 @@ class Chart2ImportTest : public test::BootstrapFixture, public unotest::MacrosTe
 public:
     void Fdo60083();
     void testSteppedLines();
+    void testErrorBarRange();
 
     virtual void setUp();
     virtual void tearDown();
@@ -48,6 +49,7 @@ public:
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
     CPPUNIT_TEST(testSteppedLines);
+    CPPUNIT_TEST(testErrorBarRange);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -66,7 +68,7 @@ private:
 // split method up into smaller chunks for more detailed tests
 void Chart2ImportTest::Fdo60083()
 {
-    load("/chart2/qa/extras/data/ods/", "error_bar_simple.ods");
+    load("/chart2/qa/extras/data/ods/", "fdo60083.ods");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
     CPPUNIT_ASSERT(xChartDoc.is());
 
@@ -112,6 +114,36 @@ void Chart2ImportTest::Fdo60083()
     Reference< beans::XPropertySet > xErrorBarXProps;
     xPropSet->getPropertyValue("ErrorBarX") >>= xErrorBarXProps;
     CPPUNIT_ASSERT(!xErrorBarXProps.is());
+}
+
+void Chart2ImportTest::testErrorBarRange()
+{
+    load("/chart2/qa/extras/data/ods/", "error_bar_range.ods");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT( xDataSeries.is() );
+
+    Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
+    CPPUNIT_ASSERT( xPropSet.is() );
+
+    // test that y error bars are there
+    Reference< beans::XPropertySet > xErrorBarYProps;
+    xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+    CPPUNIT_ASSERT(xErrorBarYProps.is());
+
+    sal_Int32 nErrorBarStyle;
+    CPPUNIT_ASSERT(
+            xErrorBarYProps->getPropertyValue("ErrorBarStyle")
+            >>= nErrorBarStyle);
+    CPPUNIT_ASSERT_EQUAL(
+            static_cast<sal_Int32>(chart::ErrorBarStyle::FROM_DATA),
+            nErrorBarStyle);
+
+    OUString aRangePos;
+    CPPUNIT_ASSERT(xErrorBarYProps->getPropertyValue("ErrorBarRangePositive") >>= aRangePos);
+    CPPUNIT_ASSERT_EQUAL(aRangePos, OUString("$Sheet1.$C$2:$C$4"));
 }
 
 
