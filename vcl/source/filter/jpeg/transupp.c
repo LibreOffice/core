@@ -1594,6 +1594,8 @@ jcopy_markers_setup (j_decompress_ptr srcinfo, JCOPY_OPTION option)
     for (m = 0; m < 16; m++)
       jpeg_save_markers(srcinfo, JPEG_APP0 + m, 0xFFFF);
   }
+#else
+  (void) srcinfo; (void) option;
 #endif /* SAVE_MARKERS_SUPPORTED */
 }
 
