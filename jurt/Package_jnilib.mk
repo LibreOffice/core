@@ -27,6 +27,6 @@
 
 $(eval $(call gb_Package_Package,jurt_jnilib,$(call gb_CustomTarget_get_workdir,jurt/util)))
 
-$(eval $(call gb_Package_add_files,jurt_jnilib,lib/$(patsubst %.dylib,%.jnilib,$(call gb_Library_get_filename,jpipe)),libjpipe.jnilib))
+$(eval $(call gb_Package_add_file,jurt_jnilib,lib/$(basename $(call gb_Library_get_filename,jpipe)).jnilib,libjpipe.jnilib))
 
 # vim:set noet sw=4 ts=4:
