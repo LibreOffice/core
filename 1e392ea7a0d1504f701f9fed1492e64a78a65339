@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+O8\u003d",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-04-22T18:57:20Z",
+      "side": 0,
+      "message": "I didn\u0027t find nullcanvas and directx5canvas...\n\nThey can be removed?",
+      "revId": "1e392ea7a0d1504f701f9fed1492e64a78a65339",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
