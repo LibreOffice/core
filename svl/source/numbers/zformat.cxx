@@ -1416,6 +1416,21 @@ SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(const OUString& rStr
     return (cToken == ']' || nPos == nLen) ? LocaleType(nNum) : LocaleType();
 }
 
+static bool lcl_matchKeywordAndGetNumber( const OUString & rString, const sal_Int32 nPos,
+        const OUString & rKeyword, sal_Int32 & nNumber )
+{
+    if (0 <= nPos && nPos + rKeyword.getLength() < rString.getLength() && rString.matchIgnoreAsciiCase( rKeyword, nPos))
+    {
+        nNumber = rString.copy( nPos + rKeyword.getLength()).toInt32();
+        return true;
+    }
+    else
+    {
+        nNumber = 0;
+        return false;
+    }
+}
+
 short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                                     sal_Int32& nPos,
                                     OUString& sSymbol)
@@ -1518,45 +1533,47 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
             {
                 const OUString aNatNum("NATNUM");
                 const OUString aDBNum("DBNUM");
-                OUString aUpperNatNum( rChrCls().uppercase( rString.toString(), nPos-1, aNatNum.getLength() ) );
-                OUString aUpperDBNum( rChrCls().uppercase( rString.toString(), nPos-1, aDBNum.getLength() ) );
-                sal_Unicode cUpper = aUpperNatNum[0];
-                sal_Int32 nNatNumNum = rString.toString().copy( nPos - 1 + aNatNum.getLength() ).toInt32();
-                sal_Unicode cDBNum =
-                    nPos - 1 + aDBNum.getLength() < rString.getLength()
-                    ? rString[nPos - 1 + aDBNum.getLength()] : 0;
-                if ( aUpperNatNum == aNatNum && 0 <= nNatNumNum && nNatNumNum <= 19 )
+                const OUString aBufStr( rString.toString());
+                sal_Int32 nNatNumNum;
+                sal_Int32 nDBNum;
+                if ( lcl_matchKeywordAndGetNumber( aBufStr, nPos-1, aNatNum, nNatNumNum) &&
+                        0 <= nNatNumNum && nNatNumNum <= 19 )
                 {
                     sBuffSymbol.stripStart((sal_Unicode)'[');
-                    sBuffSymbol.append( rString.toString().copy( --nPos, aNatNum.getLength()+1 ));
+                    sBuffSymbol.append( aBufStr.copy( --nPos, aNatNum.getLength()+1 ));
                     nPos += aNatNum.getLength()+1;
                     //! SymbolType is negative
                     eSymbolType = (short) (BRACKET_SYMBOLTYPE_NATNUM0 - nNatNumNum);
                     eState = SsGetPrefix;
                 }
-                else if ( aUpperDBNum == aDBNum && '1' <= cDBNum && cDBNum <= '9' )
+                else if ( lcl_matchKeywordAndGetNumber( aBufStr, nPos-1, aDBNum, nDBNum) &&
+                        '1' <= nDBNum && nDBNum <= '9' )
                 {
                     sBuffSymbol.stripStart((sal_Unicode)'[');
                     sBuffSymbol.append(rString.toString().copy( --nPos, aDBNum.getLength()+1 ));
                     nPos += aDBNum.getLength()+1;
                     //! SymbolType is negative
-                    eSymbolType = sal::static_int_cast< short >( BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1'));
+                    eSymbolType = sal::static_int_cast< short >( BRACKET_SYMBOLTYPE_DBNUM1 - (nDBNum - '1'));
                     eState = SsGetPrefix;
-                }
-                else if (cUpper == rKeywords[NF_KEY_H][0] ||  // H
-                         cUpper == rKeywords[NF_KEY_MI][0] ||  // M
-                         cUpper == rKeywords[NF_KEY_S][0] )   // S
-                {
-                    sBuffSymbol.append(cToken);
-                    eState = SsGetTime;
-                    cLetter = cToken;
                 }
                 else
                 {
-                    sBuffSymbol.stripStart((sal_Unicode)'[');
-                    sBuffSymbol.append(cToken);
-                    eSymbolType = BRACKET_SYMBOLTYPE_COLOR;
-                    eState = SsGetPrefix;
+                    sal_Unicode cUpper = rChrCls().uppercase( aBufStr, nPos-1, 1)[0];
+                    if (    cUpper == rKeywords[NF_KEY_H][0] ||     // H
+                            cUpper == rKeywords[NF_KEY_MI][0] ||    // M
+                            cUpper == rKeywords[NF_KEY_S][0] )      // S
+                    {
+                        sBuffSymbol.append(cToken);
+                        eState = SsGetTime;
+                        cLetter = cToken;
+                    }
+                    else
+                    {
+                        sBuffSymbol.stripStart((sal_Unicode)'[');
+                        sBuffSymbol.append(cToken);
+                        eSymbolType = BRACKET_SYMBOLTYPE_COLOR;
+                        eState = SsGetPrefix;
+                    }
                 }
             }
             }
