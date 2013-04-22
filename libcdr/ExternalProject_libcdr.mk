@@ -18,6 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,libcdr,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libcdr,\
+	boost_headers \
 	icu \
 	lcms2 \
 	wpd \
@@ -39,6 +40,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 			--without-docs \
 			--disable-debug \
 			--disable-werror \
+			CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS))" \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	)
