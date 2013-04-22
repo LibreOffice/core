@@ -859,12 +859,15 @@ $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
 endef
 
 gb_BUILD_HELPER_LIBS := basegfx \
+	cppu \
+	cppuhelper \
 	reg \
 	sal \
 	salhelper \
 	store \
 	tl \
-	unoidl
+	unoidl \
+	xmlreader \
 
 gb_BUILD_HELPER_TOOLS := cppumaker \
 	idlc \
