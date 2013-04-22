@@ -26,6 +26,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
@@ -36,6 +37,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
@@ -46,6 +48,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 else
 $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
@@ -62,7 +65,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	&& export PKG_CONFIG="" \
 	&& export ICU_LIBS=" " \
 	$(if $(filter NO,$(SYSTEM_ICU)),&& export ICU_CFLAGS="-I$(OUTDIR)/inc/external") \
-	$(if $(filter YES,$(SYSTEM_ICU)),&& ICU_CFLAGS=" ") \
+	$(if $(filter YES,$(SYSTEM_ICU)),&& export ICU_CFLAGS=" ") \
 	&& ./configure \
 		--with-pic \
 		--enable-static \
@@ -70,6 +73,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 		--without-docs \
 		--disable-debug \
 		--disable-werror \
+		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	&& touch $@
