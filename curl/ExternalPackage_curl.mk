@@ -21,6 +21,8 @@ ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,lib/.libs/libcurl.a))
 else ifeq ($(OS),ANDROID)
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so))
+else ifeq ($(OS),AIX)
+$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so.4))
 else
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so.4.2.0))
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so.4,lib/.libs/libcurl.so.4.2.0))
