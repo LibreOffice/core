@@ -14,11 +14,7 @@
  * interfaces.
  */
 
-/* Although this file really shouldn't have access to the library internals,
- * it's helpful to let it call jround_up() and jcopy_block_row().
- */
-#define JPEG_INTERNALS
-
+#include "jerror.h"
 #include "jinclude.h"
 #include "jpeglib.h"
 #include "transupp.h"       /* My own external interface */
@@ -86,6 +82,22 @@
  *    source buffer it is an undocumented property of jdcoefct.c.
  */
 
+static void lcl_jcopy_block_row (JBLOCKROW input_row, JBLOCKROW output_row, JDIMENSION num_blocks)
+/* Copy a row of coefficient blocks from one place to another. */
+{
+#ifdef FMEMCOPY
+  FMEMCOPY(output_row, input_row, num_blocks * (DCTSIZE2 * SIZEOF(JCOEF)));
+#else
+  register JCOEFPTR inptr, outptr;
+  register long count;
+
+  inptr = (JCOEFPTR) input_row;
+  outptr = (JCOEFPTR) output_row;
+  for (count = (long) num_blocks * DCTSIZE2; count > 0; count--) {
+    *outptr++ = *inptr++;
+  }
+#endif
+}
 
 LOCAL(void)
 do_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
@@ -116,7 +128,7 @@ do_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
      dst_blk_y + y_crop_blocks,
      (JDIMENSION) compptr->v_samp_factor, FALSE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
-    jcopy_block_row(src_buffer[offset_y] + x_crop_blocks,
+    lcl_jcopy_block_row(src_buffer[offset_y] + x_crop_blocks,
             dst_buffer[offset_y],
             compptr->width_in_blocks);
       }
@@ -176,12 +188,12 @@ do_flip_h_no_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
     }
     if (x_crop_blocks > 0) {
       /* Now left-justify the portion of the data to be kept.
-       * We can't use a single jcopy_block_row() call because that routine
+       * We can't use a single lcl_jcopy_block_row() call because that routine
        * depends on memcpy(), whose behavior is unspecified for overlapping
        * source and destination areas.  Sigh.
        */
       for (blk_x = 0; blk_x < compptr->width_in_blocks; blk_x++) {
-        jcopy_block_row(buffer[offset_y] + blk_x + x_crop_blocks,
+        lcl_jcopy_block_row(buffer[offset_y] + blk_x + x_crop_blocks,
                 buffer[offset_y] + blk_x,
                 (JDIMENSION) 1);
       }
@@ -243,7 +255,7 @@ do_flip_h (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
         }
       } else {
         /* Copy last partial block(s) verbatim */
-        jcopy_block_row(src_row_ptr + dst_blk_x + x_crop_blocks,
+        lcl_jcopy_block_row(src_row_ptr + dst_blk_x + x_crop_blocks,
                 dst_row_ptr + dst_blk_x,
                 (JDIMENSION) 1);
       }
@@ -324,7 +336,7 @@ do_flip_v (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
       }
     } else {
       /* Just copy row verbatim. */
-      jcopy_block_row(src_buffer[offset_y] + x_crop_blocks,
+      lcl_jcopy_block_row(src_buffer[offset_y] + x_crop_blocks,
               dst_buffer[offset_y],
               compptr->width_in_blocks);
     }
@@ -630,7 +642,7 @@ do_rot_180 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
           }
         } else {
           /* Any remaining right-edge blocks are only copied. */
-          jcopy_block_row(src_row_ptr + dst_blk_x + x_crop_blocks,
+          lcl_jcopy_block_row(src_row_ptr + dst_blk_x + x_crop_blocks,
                   dst_row_ptr + dst_blk_x,
                   (JDIMENSION) 1);
         }
