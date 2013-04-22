@@ -587,8 +587,11 @@ SwXMLTableCellContext_Impl::~SwXMLTableCellContext_Impl()
 
 inline void SwXMLTableCellContext_Impl::_InsertContent()
 {
+    SwStartNode const*const pStartNode( GetTable()->InsertTableSection(0,
+            (m_bHasStringValue && m_bValueTypeIsString &&
+             !aStyleName.isEmpty()) ? & aStyleName : 0) );
     GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan,
-                            GetTable()->InsertTableSection(),
+                            pStartNode,
                             mXmlId,
                             NULL, bProtect, &sFormula, bHasValue, fValue,
             (m_bHasStringValue && m_bValueTypeIsString) ? &m_StringValue : 0);
@@ -2881,12 +2884,14 @@ void SwXMLTableContext::MakeTable( SwTableBox *pBox, sal_Int32 nW )
 }
 
 const SwStartNode *SwXMLTableContext::InsertTableSection(
-                                            const SwStartNode *pPrevSttNd )
+        const SwStartNode *const pPrevSttNd,
+        OUString const*const pStringValueStyleName)
 {
     // The topmost table is the only table that maintains the two members
     // pBox1 and bFirstSection.
     if( xParentTable.Is() )
-        return ((SwXMLTableContext *)&xParentTable)->InsertTableSection( pPrevSttNd );
+        return static_cast<SwXMLTableContext *>(&xParentTable)
+                    ->InsertTableSection(pPrevSttNd, pStringValueStyleName);
 
     const SwStartNode *pStNd;
     Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
@@ -2939,6 +2944,13 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
                 xText->createTextCursorByRange( xTextRange );
             GetImport().GetTextImport()->SetCursor( xTextCursor );
         }
+    }
+
+    if (pStringValueStyleName)
+    {   // fdo#62147: apply style to paragraph on string-value cell
+        GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
+            GetImport().GetTextImport()->GetCursor(), *pStringValueStyleName,
+            true, false, -1, false); // parameters same as sCellParaStyleName
     }
 
     return pStNd;
