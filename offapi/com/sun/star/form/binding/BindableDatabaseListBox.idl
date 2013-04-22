@@ -26,17 +26,28 @@
 
 module com {  module sun {  module star {  module form {  module binding {
 
-
 /** This service specifies a list box model which is data-aware and thus can be bound to a
     database field, and additionally supports binding to arbitrary external values.
 
-    <p>There are four possible ways how a <type>BindableDatabaseListBox</type> exchanges
-    values with an external binding, the following lists explains all of them. If a new binding
+    <p>There are six possible ways that a <type>BindableDatabaseListBox</type> exchanges
+    values with an external binding. If a new binding
     is set at a <type>BindableDatabaseListBox</type>, the types from the following list are
     tried in descending order: The first type supported by the binding is used for data exchange.
-    <ol><li><em>sequences of integers</em>: When used, the integers in the sequence will represent
+    <ol>
+        <li><em>sequences of <atom>any</atom>s</em>:
+            The elements in the sequence will represent
+            the values the selected entries of the list box
+            (taken from ValueList or read from BoundColumn).
+            In other words, the SelectedValues property.</li>
+        <li><em><atom>any</atom> value</em>:
+            The value will represent the value of the selected entry
+            (taken from ValueList or read from BoundColumn).
+            If more than one entry is selected,
+            <NULL/> will be transfered.
+            In other words, the SelectedValue property.</li>
+        <li><em>sequences of long integers</em>: When used, the integers in the sequence will represent
             the indexes of the selected entries of the list box.</li>
-        <li><em>integer values</em>: When used, the value will represent the index of the selected entry.
+        <li><em>long integer value</em>: When used, the value will represent the index of the selected entry.
             If no entry is selected, -1 will be transfered. If more than one entry is selected, <NULL/>
             will be transfered.</li>
         <li><em>sequences of strings</em>: When used, the strings in the sequence present the texts

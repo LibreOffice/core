@@ -1246,8 +1246,10 @@ namespace frm
         {
             eIndexList,     /// as list of indexes of selected entries
             eIndex,         /// as index of the selected entry
-            eEntryList,     /// as list of string representations of selected entries
-            eEntry          /// as string representation of the selected entry
+            eEntryList,     /// as list of string representations of selected *display* entries
+            eEntry,         /// as string representation of the selected *display* entry
+            eValueList,     /// as list of string representations of selected values
+            eValue          /// as string representation of the selected value
         };
 
         //--------------------------------------------------------------------
@@ -1255,6 +1257,8 @@ namespace frm
         {
             switch ( _rExchangeType.getTypeClass() )
             {
+            case TypeClass_ANY:
+                return eValue;
             case TypeClass_STRING:
                 return eEntry;
             case TypeClass_LONG:
@@ -1264,6 +1268,8 @@ namespace frm
                 Type aElementType = ::comphelper::getSequenceElementType( _rExchangeType );
                 switch ( aElementType.getTypeClass() )
                 {
+                case TypeClass_ANY:
+                    return eValueList;
                 case TypeClass_STRING:
                     return eEntryList;
                 case TypeClass_LONG:
@@ -1287,6 +1293,22 @@ namespace frm
 
         switch ( lcl_getCurrentExchangeType( getExternalValueType() ) )
         {
+        case eValueList:
+        {
+            Sequence< const Any > aExternalValues;
+            OSL_VERIFY( _rExternalValue >>= aExternalValues );
+            aSelectIndexes = translateBindingValuesToControlValue( aExternalValues );
+        }
+        break;
+
+        case eValue:
+        {
+            ORowSetValue v;
+            v.fill(_rExternalValue);
+            aSelectIndexes = translateDbValueToControlValue(v);
+        }
+        break;
+
         case eIndexList:
         {
             // unfortunately, our select sequence is a sequence<short>, while the external binding
@@ -1475,6 +1497,14 @@ namespace frm
         Any aReturn;
         switch ( lcl_getCurrentExchangeType( getExternalValueType() ) )
         {
+        case eValueList:
+            aReturn = getCurrentMultiValue();
+            break;
+
+        case eValue:
+            aReturn = getCurrentSingleValue();
+            break;
+
         case eIndexList:
         {
             // unfortunately, the select sequence is a sequence<short>, but our binding
