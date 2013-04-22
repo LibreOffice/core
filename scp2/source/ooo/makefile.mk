@@ -350,7 +350,6 @@ PARFILES=                          \
         ure_into_ooo.par           \
         ure_standalone.par	   \
         common_brand.par           \
-        common_brand.par           \
         common_brand_readme.par    \
     ooo_brand.par
 

@@ -30,7 +30,8 @@ FolderItem gid_Folderitem_Soffice
     FileID = gid_Brand_File_Bin_Soffice;
     IconFile = gid_Brand_File_Bin_Soffice;
     IconID = 0;
-    WkDir = gid_Dir_Program;
+    WkDir = gid_Brand_Dir_Program;
+//   WkDir = gid_Dir_Program;
     Parameter = "";
     Styles = (NOWEB, NON_ADVERTISED);
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
@@ -44,7 +45,8 @@ FolderItem gid_Folderitem_Soffice_Desktop
     IconFile = gid_Brand_File_Bin_Soffice;
     IconID = 0;
     ComponentIDFile = "gid_Brand_File_Desktophelper_Txt";
-    WkDir = gid_Dir_Program;
+    WkDir = gid_Brand_Dir_Program;
+//    WkDir = gid_Dir_Program;
     Parameter = "";
 	Styles = (NOWEB,NON_ADVERTISED,USE_HELPER_FILENAME);
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);

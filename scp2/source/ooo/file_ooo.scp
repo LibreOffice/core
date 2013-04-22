@@ -108,7 +108,8 @@ End
 
 File gid_File_Bin_Pagein
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein";
 End
@@ -119,7 +120,8 @@ End
 
 File gid_File_Bin_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "open-url";
     Styles = (PACKED);
 End
@@ -130,28 +132,32 @@ End
 
 File gid_File_Bin_Gnome_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "gnome-open-url";
     Styles = (PACKED);
 End
 
 File gid_File_Bin_Gnome_Open_Url_Bin
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "gnome-open-url.bin";
     Styles = (PACKED);
 End
 
 File gid_File_Bin_Kde_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "kde-open-url";
     Styles = (PACKED);
 End
 
 File gid_File_Bin_Cde_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "cde-open-url";
     Styles = (PACKED);
 End
@@ -162,7 +168,8 @@ End
 
 File gid_File_Bin_Uri_Encode
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "uri-encode";
     Styles = (PACKED);
 End
@@ -171,7 +178,8 @@ End
 
 File gid_File_Bin_Senddoc
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
   #ifdef UNX
     Name = "senddoc";
     Styles = (PACKED);
@@ -185,7 +193,8 @@ End
 
 File gid_File_Bin_Spadmin_Bin
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "spadmin.bin";
 End
@@ -1127,7 +1136,8 @@ End
 
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "types.rdb";
 //    Name = "offapi.rdb";
@@ -1135,7 +1145,8 @@ End
 
 File gid_File_Rdb_TypesVba
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED, OVERWRITE);
     Name = "oovbaapi.rdb";
 End
@@ -1241,7 +1252,8 @@ STD_SHELLNEW_FILE(gid_File_Shellnew_Odt_Soffice, soffice.odt)
 
 File gid_File_Txt_Pagein_Calc
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein-calc";
 End
@@ -1252,7 +1264,8 @@ End
 
 File gid_File_Txt_Pagein_Common
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein-common";
 End
@@ -1263,7 +1276,8 @@ End
 
 File gid_File_Txt_Pagein_Draw
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein-draw";
 End
@@ -1274,7 +1288,8 @@ End
 
 File gid_File_Txt_Pagein_Impress
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein-impress";
 End
@@ -1285,7 +1300,8 @@ End
 
 File gid_File_Txt_Pagein_Writer
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein-writer";
 End
@@ -1628,7 +1644,8 @@ End
 File gid_File_Txt_Patchfiles
     TXT_FILE_BODY;
     Name = "patchlist.txt";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH,PATCH_ONLY,DONTRENAMEINPATCH);
 End
 #endif
@@ -1636,14 +1653,16 @@ End
 File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
 
 #ifdef LINUX
 File gid_File_Dat_Root3
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "root3.dat";
     Styles = (PACKED);
 End
@@ -1652,7 +1671,8 @@ End
 #ifdef LINUX
 File gid_File_Dat_Root4
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "root4.dat";
     Styles = (PACKED);
 End
@@ -1661,7 +1681,8 @@ End
 #ifdef LINUX
 File gid_File_Dat_Root5
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "root5.dat";
     Styles = (PACKED);
 End
@@ -1734,7 +1755,8 @@ End
 #if defined( BUILD_SPECIAL )
 #if !defined( MACOSX )
 File gid_File_Stclient_Wrapper
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     BIN_FILE_BODY;
 #if defined ( WNT )
     Name = "stclient_wrapper.exe";

@@ -38,7 +38,7 @@ End
 #if defined WNT
 File gid_File_Exe_Odbcconfig
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = EXENAME(odbcconfig);
     Styles = (PACKED);
 End

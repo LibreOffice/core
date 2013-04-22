@@ -24,7 +24,13 @@
 #include "macros.inc"
 
 Directory gid_Dir_Shlxthdl
-    ParentID = gid_Dir_Program;
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_Program;
+#else
+    ParentID = gid_Dir_Common_Ure;
+#endif
+//    ParentID = gid_Brand_Dir_Program;
+//    ParentID = Gid_Dir_Program;
     DosName = "shlxthdl";
 End
 

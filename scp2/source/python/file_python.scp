@@ -32,13 +32,23 @@ File gid_File_Lib_Pyuno
   #else
     Name = "pyuno.pyd";
   #endif
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
 
 File gid_File_Lib_Pythonloader
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
   #ifdef UNX
     Name = STRING(CONCAT2(pythonloader.uno,UNXSUFFIX));
   #elif defined(OS2)
@@ -51,28 +61,44 @@ End
 
 File gid_File_Py_Unohelper
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
     Name = "unohelper.py";
     Styles = (PACKED);
 End
 
 File gid_File_Py_Officehelper
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
     Name = "officehelper.py";
     Styles = (PACKED);
 End
 
 File gid_File_Py_Uno
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
     Name = "uno.py";
     Styles = (PACKED);
 End
 
 File gid_File_Py_Pythonloader
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "pythonloader.py";
     Styles = (PACKED);
 End
@@ -80,7 +106,12 @@ End
 #ifndef SYSTEM_PYTHON
 File gid_File_Py_Python_Core
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
   #ifdef MACOSX
     Name = "OOoPython.framework.zip";
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
@@ -94,7 +125,8 @@ End
 #ifndef MACOSX
 File gid_File_Py_Python_Bin
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
     Name = "python.bin";
     Styles = (PACKED);
 End
@@ -106,7 +138,12 @@ End
 
 File gid_File_Py_Pythonscript
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
     Name = "pythonscript.py";
     Styles = (PACKED);
 End
@@ -133,14 +170,20 @@ End
 #ifndef MACOSX
 File gid_File_Lib_Python_So
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
 End
 #else //MACOSX
 //directory entries solely to be able to create the symlinks
 Directory gid_Dir_PythonFramework
-    ParentID = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    ParentID = gid_Dir_Program;
     HostName = "OOoPython.framework";
 End
 
@@ -287,14 +330,14 @@ Unixlink gid_Unixlink_Python_libpython
 End
 #endif //MACOSX
 
-#ifdef WNT
-File gid_File_Lib_Python_So_Brand // Fix for system-python-problem on windows
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = STRING(PY_FULL_DLL_NAME);
-    Styles = (PACKED);
-End
-#endif
+//#ifdef WNT
+//File gid_File_Lib_Python_So_Brand // Fix for system-python-problem on windows
+//    TXT_FILE_BODY;
+//    Dir = gid_Brand_Dir_Program;
+//    Name = STRING(PY_FULL_DLL_NAME);
+//    Styles = (PACKED);
+//End
+//#endif
 #endif
 
 #ifdef UNX
@@ -303,7 +346,12 @@ End
 File gid_File_Pyuno
     TXT_FILE_BODY;
     Name = "pyuno.so";
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
 

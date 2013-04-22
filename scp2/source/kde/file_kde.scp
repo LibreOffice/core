@@ -35,7 +35,8 @@ End
 File gid_File_Lib_Kde4be
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(kde4be1.uno,UNXSUFFIX));
 End
 #endif

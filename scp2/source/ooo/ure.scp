@@ -62,7 +62,8 @@ End
 #if defined WNT
 File gid_File_Exe_Uno
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Ure_Bin;
     Name = EXENAME(uno);
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "C66A9E2B-B16D-46A9-B9EC-772D9D3837F5";
@@ -72,7 +73,12 @@ End
 #if !defined(WNT) && !defined(OS2)
 Shortcut gid_Shortcut_Exe_Uno
     FileID = gid_File_Exe_StartupSh;
-    Dir = gid_Dir_Ure_Bin;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Ure_Bin;
     Name = EXENAME(uno);
     Styles = (RELATIVE);
 End
@@ -81,7 +87,8 @@ End
 #if defined WNT
 File gid_File_Exe_Regcomp
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Ure_Bin;
     Name = EXENAME(regcomp);
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "D51FA672-7C24-4E24-A282-872C4BF690A1";
@@ -91,7 +98,12 @@ End
 #ifndef WNT
 Shortcut gid_Shortcut_Exe_Regcomp
     FileID = gid_File_Exe_StartupSh;
-    Dir = gid_Dir_Ure_Bin;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Ure_Bin;
     Name = EXENAME(regcomp);
     Styles = (RELATIVE);
 End
@@ -99,7 +111,12 @@ End
 
 File gid_File_Exe_Regmerge
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Ure_Bin;
     Name = EXENAME(regmerge);
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "881BCC1D-BA4A-4527-9C7D-D89157C2D03B";
@@ -107,7 +124,12 @@ End
 
 File gid_File_Exe_Regview
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Ure_Bin;
     Name = EXENAME(regview);
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "DAB09DCD-8491-4DC8-B153-2BA81A830AC2";
@@ -116,7 +138,8 @@ End
 #if !defined MACOSX && !defined WNT && defined SOLAR_JAVA && !defined OS2
 File gid_File_Exe_Javaldx
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Ure_Bin;
     Name = EXENAME(javaldx);
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "291B5981-3E41-40E2-9C3F-115A7DF1C6A1";
@@ -128,7 +151,12 @@ End
 #if !defined(WNT) && !defined(OS2)
 File gid_File_Exe_StartupSh
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Ure_Bin;
     Name = "/ure/startup.sh";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "C86E816A-4EAE-47E9-BD1F-3E23C80F4EAE";
@@ -138,7 +166,12 @@ End
 #if !defined(WNT) && !defined(OS2)
 File gid_File_Exe_UnoBin
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Ure_Bin;
     Name = "uno.bin";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "4AE33B3E-B33E-4BA4-AADC-8D7ED303FDE9";
@@ -148,7 +181,12 @@ End
 #if !defined(WNT) && !defined(OS2)
 File gid_File_Exe_RegcompBin
     BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Ure_Bin;
     Name = "regcomp.bin";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "70FBE546-A228-455F-BCBB-716BF03AD5C6";
@@ -1105,21 +1143,24 @@ End
 #if defined SOLAR_JAVA
 File gid_File_Misc_JavavendorsXml
     TXT_FILE_BODY;
-    //Dir = gid_Dir_Ure_Misc;
-    Dir = gid_Dir_Ure_Bin;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
     Name = "javavendors.xml";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "403FCCFE-545B-44F6-91D1-5C75F846E587";
 End
 #endif
 
-#if defined MACOSX
-Unixlink gid_Unixlink_Ure_Bin_Urelibs
-    Dir = gid_Dir_Ure_Bin;
-    Name = "urelibs";
-    Target = "../lib";
-End
-#endif
+//#if defined MACOSX
+//Unixlink gid_Unixlink_Ure_Bin_Urelibs
+//    Dir = gid_Dir_Ure_Bin;
+//    Name = "urelibs";
+//    Target = "../lib";
+//End
+//#endif
 
 //Module
 

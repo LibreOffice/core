@@ -114,11 +114,11 @@
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
 #define CONFIGLANGFILENAME(name,lang,ext)     STRING(CONCAT4(name,lang,.,ext))
 
-#if defined(WNT) || defined(OS2)
+//#if defined(WNT) || defined(OS2)
 #define SCP2_OOO_BIN_DIR gid_Brand_Dir_Program
-#else
-#define SCP2_OOO_BIN_DIR gid_Dir_Program
-#endif
+//#else
+//#define SCP2_OOO_BIN_DIR gid_Dir_Program
+//#endif
 
 #define BIN_FILE_BODY \
         UnixRights   = 555
@@ -532,7 +532,8 @@ End
 // ---------------------------------------
 
 #if defined(WNT) || defined(OS2)
-#define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
+#define SCP2_URE_DL_DIR gid_Dir_Common_Ure
+//#define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
 #define SCP2_URE_DL_NORMAL(n) n ".dll"
 #define SCP2_URE_DL_BARE(n) n ".dll"
 #define SCP2_URE_DL_VER(n, v) n v ".dll"

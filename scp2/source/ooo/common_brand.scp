@@ -58,7 +58,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkgexe,
              gid_Brand_File_Bin_Unopkg,
              gid_Brand_File_Bin_Msvcr71,
-             gid_Brand_File_Bin_Libxml2,
+ //            gid_Brand_File_Bin_Libxml2,
              gid_Brand_File_Bmp_IntroAbout,
              gid_Brand_File_Desktophelper_Txt,
              gid_Brand_File_Images_Brand_Zip,
@@ -442,18 +442,18 @@ End
 // problems, as a HACK, for now a copy of the URE libxml2 DLL is placed next to
 // the OOo executables (where it takes precedence even over DLLs from the
 // Windows system directory):
-#if defined WNT && !defined SYSTEM_LIBXML
-File gid_Brand_File_Bin_Libxml2
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-#if defined _gcc3
-    Name = SCP2_URE_DL_NORMAL("libxml2-2");
-#else
-    Name = SCP2_URE_DL_NORMAL("libxml2");
-#endif
-    Styles = (PACKED);
-End
-#endif
+//#if defined WNT && !defined SYSTEM_LIBXML
+//File gid_Brand_File_Bin_Libxml2
+//    TXT_FILE_BODY;
+//    Dir = gid_Brand_Dir_Program;
+//#if defined _gcc3
+//    Name = SCP2_URE_DL_NORMAL("libxml2-2");
+//#else
+//    Name = SCP2_URE_DL_NORMAL("libxml2");
+//#endif
+//    Styles = (PACKED);
+//End
+//#endif
 
 File gid_Brand_File_Bmp_IntroAbout
     TXT_FILE_BODY;

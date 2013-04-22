@@ -101,16 +101,16 @@ Directory gid_Dir_Ooo_Basis
 End
 #endif
 
-Directory gid_Dir_Program
-#if defined MACOSX
-    ParentID = gid_Brand_Dir_Program;
-//    ParentID = gid_Brand_Dir_BasisLink;
-#else
-    ParentID = gid_Brand_Dir_Program;
-//    ParentID = gid_Dir_Ooo_Basis;
-#endif
-    DosName = "";
-End
+//Directory gid_Dir_Program
+//#if defined MACOSX
+//    ParentID = gid_Brand_Dir_Program;
+////    ParentID = gid_Brand_Dir_BasisLink;
+//#else
+//    ParentID = gid_Brand_Dir_Program;
+////    ParentID = gid_Dir_Ooo_Basis;
+//#endif
+//    DosName = "";
+//End
 
 #if defined MACOSX
 Unixlink gid_Unixlink_Applications
@@ -123,18 +123,21 @@ End
 #endif
 
 Directory gid_Dir_Program_Remote
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "remote";
 End
 
 Directory gid_Dir_Program_Local
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "local";
 End
 
 Directory gid_Dir_Addin
     Styles = (CREATE);
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "addin";
 End
 
@@ -144,29 +147,34 @@ Directory gid_Dir_Addin_Source
 End
 
 Directory gid_Dir_Filter
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "filter";
 End
 
 Directory gid_Dir_Resource
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "resource";
 End
 
 Directory gid_Dir_Httphome
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "httphome";
 End
 
 Directory gid_Dir_Classes
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "classes";
 End
 
 #ifdef WNT
 
 Directory gid_Dir_Shellnew
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "shellnew";
 End
 
@@ -176,7 +184,8 @@ Directory gid_Dir_User
 #if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents;
 #else
-    ParentID = gid_Dir_Ooo_Basis;
+    ParentID = gid_Dir_Brand_Root;
+//    ParentID = gid_Dir_Ooo_Basis;
 #endif
     DosName = "presets";
 End
@@ -345,17 +354,18 @@ Directory gid_Dir_Work
     Styles = (WORKSTATION);
 End
 
-Directory gid_Dir_Plugin
-    ParentID = gid_Dir_Program;
-    DosName = "plugin";
-    Styles = (WORKSTATION, CREATE);
-End
+//Directory gid_Dir_Plugin
+//    ParentID = gid_Dir_Program;
+//    DosName = "plugin";
+//    Styles = (WORKSTATION, CREATE);
+//End
 
 Directory gid_Dir_Share
 #if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents;
 #else
-    ParentID = gid_Dir_Ooo_Basis;
+    ParentID = gid_Dir_Brand_Root;
+//    ParentID = gid_Dir_Ooo_Basis;
 #endif
     DosName = "share";
 End
@@ -1250,7 +1260,8 @@ End
 
 #ifndef MACOSX
 Directory gid_Dir_Basis_Sdk
-    ParentID = gid_Dir_Ooo_Basis;
+    ParentID = gid_Dir_Brand_Root;
+//    ParentID = gid_Dir_Ooo_Basis;
     DosName = "sdk";
 End
 #endif
@@ -1268,7 +1279,8 @@ Directory gid_Dir_Help
 #if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents;
 #else
-    ParentID = gid_Dir_Ooo_Basis;
+    ParentID = gid_Dir_Brand_Root;
+//    ParentID = gid_Dir_Ooo_Basis;
 #endif
     DosName = "help";
 End

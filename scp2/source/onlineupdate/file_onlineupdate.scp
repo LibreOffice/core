@@ -39,7 +39,8 @@ End
 #if defined LINUX || defined SOLARIS
 File gid_File_Bin_UnpackUpdate
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Name = "unpack_update";
     Styles = (PACKED);
 End

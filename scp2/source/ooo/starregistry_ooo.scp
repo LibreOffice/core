@@ -25,6 +25,11 @@
 
 StarRegistry gid_Starregistry_Services_Rdb
     Name = "services.rdb";
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
 End
 
