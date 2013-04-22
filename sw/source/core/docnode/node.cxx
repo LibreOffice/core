@@ -63,6 +63,7 @@
 #include <IDocumentListItems.hxx>
 #include <switerator.hxx>
 #include "ndole.hxx"
+#include <docRecurseThroughLinkedRedline.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -937,7 +938,8 @@ SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
     : SwModify( pColl ),     // CrsrsShell, FrameFmt,
     SwNode( rWhere, nNdType ),
     pCondColl( 0 ),
-    mbSetModifyAtAttr( false )
+    mbSetModifyAtAttr( false ),
+    m_eHandleRedlineDirection(SwCntntNode::REDLINE_DIRECTION_BOTH)
 {
 }
 
@@ -1081,15 +1083,17 @@ SwRect SwCntntNode::FindPageFrmRect( const sal_Bool bPrtArea, const Point* pPoin
 
 xub_StrLen SwCntntNode::Len() const { return 0; }
 
-
-
 SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
     OSL_ENSURE( pNewColl, "Collectionpointer is 0." );
-    SwFmtColl *pOldColl = GetFmtColl();
 
+    SwFmtColl *pOldColl = GetFmtColl();
     if( pNewColl != pOldColl )
     {
+        // call ChgFmtColl on previews and nexts nodes, in case they are linked
+        // by deletion redlines, in order to transmit them the formats modifications
+        RecurseThroughLinkedRedline(&SwCntntNode::ChgFmtColl, pNewColl);
+
         pNewColl->Add( this );
 
         // Set the Parent of out AutoAttributes to the new Collection
@@ -1111,14 +1115,15 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
             SwCntntNode::Modify( &aTmp1, &aTmp2 );
         }
     }
+
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
         SetInCache( sal_False );
     }
+
     return pOldColl;
 }
-
 
 sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
 {
@@ -1338,6 +1343,10 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 
     OSL_ENSURE( GetpSwAttrSet(), "Why did't we create an AttrSet?");
 
+    // call ChgFmtColl on previews and nexts nodes, in case they are linked
+    // by deletion redlines, in order to transmit them the formats modifications
+    RecurseThroughLinkedRedline< sal_Bool (SwCntntNode::*)(const SfxPoolItem& ), const SfxPoolItem& >(&SwCntntNode::SetAttr, rAttr);
+
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
@@ -1368,6 +1377,10 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 
 sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
 {
+    // call ChgFmtColl on previews and nexts nodes, in case they are linked
+    // by deletion redlines, in order to transmit them the formats modifications
+    RecurseThroughLinkedRedline< sal_Bool (SwCntntNode::*)( const SfxItemSet& ), const SfxItemSet& >(&SwCntntNode::SetAttr, rSet);
+
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
@@ -1447,6 +1460,10 @@ sal_Bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     if( !GetpSwAttrSet() )
         return sal_False;
 
+    // call ChgFmtColl on previews and nexts nodes, in case they are linked
+    // by deletion redlines, in order to transmit them the formats modifications
+    RecurseThroughLinkedRedline< sal_Bool (SwCntntNode::*)( sal_uInt16, sal_uInt16 ), sal_uInt16, sal_uInt16 >(&SwCntntNode::ResetAttr, nWhich1, nWhich2);
+
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
@@ -1495,6 +1512,10 @@ sal_Bool SwCntntNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
     if( !GetpSwAttrSet() )
         return sal_False;
 
+    // call ChgFmtColl on previews and nexts nodes, in case they are linked
+    // by deletion redlines, in order to transmit them the formats modifications
+    RecurseThroughLinkedRedline<sal_Bool (SwCntntNode::*)( const std::vector<sal_uInt16>& ), const std::vector<sal_uInt16>& >(&SwCntntNode::ResetAttr, rWhichArr);
+
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
@@ -1535,6 +1556,10 @@ sal_uInt16 SwCntntNode::ResetAllAttr()
 {
     if( !GetpSwAttrSet() )
         return 0;
+
+    // call ChgFmtColl on previews and nexts nodes, in case they are linked
+    // by deletion redlines, in order to transmit them the formats modifications
+    RecurseThroughLinkedRedline(&SwCntntNode::ResetAllAttr);
 
     if ( IsInCache() )
     {

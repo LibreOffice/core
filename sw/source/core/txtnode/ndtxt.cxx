@@ -3636,6 +3636,9 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
     OSL_ENSURE( HAS_BASE( SwTxtFmtColl, pNewColl ),
                 "ChgFmtColl: is not a Text Collection pointer." );
 
+    // no need to explicitly call RecurseThroughLinkedRedline it will be call by
+    // SwCntntNode::ChgFmtColl
+
     SwTxtFmtColl *pOldColl = GetTxtColl();
     if( pNewColl != pOldColl )
     {
@@ -3763,6 +3766,9 @@ void SwTxtNode::SetAttrListLevel( int nLevel )
         return;
     }
 
+    // no need to explicitly call RecurseThroughLinkedRedline it will be call by
+    // SetAttr
+
     SfxInt16Item aNewListLevelItem( RES_PARATR_LIST_LEVEL,
                                     static_cast<sal_Int16>(nLevel) );
     SetAttr( aNewListLevelItem );
@@ -3843,7 +3849,11 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
 
 void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber )
 {
-//    CreateNum()->SetStart(nNumber);
+    // no need to explicitly call RecurseThroughLinkedRedline it will be call by
+    // ResetAttr
+    // or
+    // SetAttr
+
     const bool bChanged( HasAttrListRestartValue()
                          ? GetAttrListRestartValue() != nNumber
                          : nNumber != USHRT_MAX );
@@ -4545,6 +4555,9 @@ namespace {
 
 sal_Bool SwTxtNode::SetAttr( const SfxPoolItem& pItem )
 {
+    // no need to explicitly call RecurseThroughLinkedRedline it will be call by
+    // SwCntntNode::SetAttr
+
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
@@ -4559,6 +4572,9 @@ sal_Bool SwTxtNode::SetAttr( const SfxPoolItem& pItem )
 
 sal_Bool SwTxtNode::SetAttr( const SfxItemSet& rSet )
 {
+    // no need to explicitly call RecurseThroughLinkedRedline it will be call by
+    // SwCntntNode::SetAttr
+
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
@@ -4847,6 +4863,9 @@ namespace {
 
 sal_Bool SwTxtNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 {
+    // no need to explicitly call RecurseThroughLinkedRedline it will be call by
+    // SwCntntNode::ResetAttr
+
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
@@ -4861,6 +4880,9 @@ sal_Bool SwTxtNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
 sal_Bool SwTxtNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
 {
+    // no need to explicitly call RecurseThroughLinkedRedline it will be call by
+    // SwCntntNode::ResetAttr
+
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
@@ -4875,6 +4897,9 @@ sal_Bool SwTxtNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
 
 sal_uInt16 SwTxtNode::ResetAllAttr()
 {
+    // no need to explicitly call RecurseThroughLinkedRedline it will be call by
+    // SwCntntNode::ResetAllAttr
+
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
