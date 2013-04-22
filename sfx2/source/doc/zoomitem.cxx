@@ -120,6 +120,7 @@ bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberI
             aSeq[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_TYPE ));
             aSeq[2].Value <<= sal_Int16( eType );
             rVal <<= aSeq;
+            break;
         }
 
         case MID_VALUE: rVal <<= (sal_Int32) GetValue(); break;
