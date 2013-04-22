@@ -1,0 +1,12 @@
+--- a/src/lib/CDRParser.cpp
++++ b/src/lib/CDRParser.cpp
+@@ -32,6 +32,9 @@
+ #include <string.h>
+ #include <sstream>
+ #include <set>
++#ifndef BOOST_ALL_NO_LIB
++#define BOOST_ALL_NO_LIB 1
++#endif
+ #include <boost/property_tree/json_parser.hpp>
+ #include <boost/property_tree/ptree.hpp>
+ #include <boost/spirit/include/classic.hpp>
