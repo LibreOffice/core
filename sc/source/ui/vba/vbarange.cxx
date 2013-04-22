@@ -1960,9 +1960,18 @@ ScVbaRange::getFormulaArray() throw (uno::RuntimeException)
 
     uno::Reference< sheet::XCellRangeFormula> xCellRangeFormula( mxRange, uno::UNO_QUERY_THROW );
     uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
-    uno::Any aMatrix;
-    aMatrix = xConverter->convertTo( uno::makeAny( xCellRangeFormula->getFormulaArray() ) , getCppuType((uno::Sequence< uno::Sequence< uno::Any > >*)0)  ) ;
-    return aMatrix;
+    uno::Any aSingleValueOrMatrix;
+    // When dealing with a single element ( embedded in the sequence of sequence ) unwrap and return
+    // that value
+    uno::Sequence< uno::Sequence<rtl::OUString> > aTmpSeq = xCellRangeFormula->getFormulaArray();
+    if ( aTmpSeq.getLength() == 1 )
+    {
+        if ( aTmpSeq[ 0 ].getLength() == 1  )
+            aSingleValueOrMatrix <<= aTmpSeq[ 0 ][ 0 ];
+    }
+    else
+        aSingleValueOrMatrix = xConverter->convertTo( uno::makeAny( aTmpSeq ) , getCppuType((uno::Sequence< uno::Sequence< uno::Any > >*)0)  ) ;
+    return aSingleValueOrMatrix;
 }
 
 void
