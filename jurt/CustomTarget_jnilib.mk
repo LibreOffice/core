@@ -31,8 +31,10 @@ $(eval $(call gb_CustomTarget_register_targets,jurt/util,\
 	libjpipe.jnilib \
 ))
 
+# TODO: could this be replaced by defining library jpipe as gb_Library_Bundle?
 $(call gb_CustomTarget_get_workdir,jurt/util)/libjpipe.jnilib : $(call gb_Library_get_target,jpipe)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MCB,1)
-	cd $(dir $@) && $(SOLARENV)/bin/macosx-create-bundle $<
+	cp $< $(dir $@)$(notdir $<) && \
+	$(SOLARENV)/bin/macosx-create-bundle $(dir $@)$(notdir $<)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
