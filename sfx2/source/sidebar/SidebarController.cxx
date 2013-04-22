@@ -91,6 +91,7 @@ SidebarController::SidebarController (
       maCurrentContext(OUString(), OUString()),
       msCurrentDeckId(A2S("PropertyDeck")),
       maPropertyChangeForwarder(::boost::bind(&SidebarController::BroadcastPropertyChange, this)),
+      maContextChangeUpdate(::boost::bind(&SidebarController::UpdateConfigurations, this)),
       mbIsDeckClosed(false),
       mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width())
 {
@@ -167,10 +168,14 @@ void SAL_CALL SidebarController::disposing (void)
 void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
     throw(cssu::RuntimeException)
 {
-    UpdateConfigurations(
-        Context(
-            rEvent.ApplicationName,
-            rEvent.ContextName));
+    // Update to the requested new context asynchronously to avoid
+    // subtle errors caused by SFX2 which in rare cases can not
+    // properly handle a synchronous update.
+    maRequestedContext = Context(
+        rEvent.ApplicationName,
+        rEvent.ContextName);
+    if (maRequestedContext != maCurrentContext)
+        maContextChangeUpdate.RequestCall();
 }
 
 
@@ -277,17 +282,17 @@ void SidebarController::NotifyResize (void)
 
 
 
-void SidebarController::UpdateConfigurations (const Context& rContext)
+void SidebarController::UpdateConfigurations (void)
 {
-    if (maCurrentContext != rContext)
+    if (maCurrentContext != maRequestedContext)
     {
-        maCurrentContext = rContext;
+        maCurrentContext = maRequestedContext;
 
         // Notify the tab bar about the updated set of decks.
         ResourceManager::IdContainer aDeckIds;
         ResourceManager::Instance().GetMatchingDecks (
             aDeckIds,
-            rContext,
+            maCurrentContext,
             mxFrame);
         mpTabBar->SetDecks(aDeckIds);
 
@@ -308,13 +313,13 @@ void SidebarController::UpdateConfigurations (const Context& rContext)
 
         DeckDescriptor const* pDeckDescriptor = NULL;
         if ( ! bCurrentDeckMatches)
-            pDeckDescriptor = ResourceManager::Instance().GetBestMatchingDeck(rContext, mxFrame);
+            pDeckDescriptor = ResourceManager::Instance().GetBestMatchingDeck(maCurrentContext, mxFrame);
         else
             pDeckDescriptor = ResourceManager::Instance().GetDeckDescriptor(msCurrentDeckId);
         if (pDeckDescriptor != NULL)
         {
             msCurrentDeckId = pDeckDescriptor->msId;
-            SwitchToDeck(*pDeckDescriptor, rContext);
+            SwitchToDeck(*pDeckDescriptor, maCurrentContext);
 
             // Tell the tab bar to highlight the button associated
             // with the deck.
@@ -327,7 +332,7 @@ void SidebarController::UpdateConfigurations (const Context& rContext)
         {
             DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
             if (pTitleBar != NULL)
-                pTitleBar->SetTitle(msCurrentDeckTitle+A2S(" (")+rContext.msContext+A2S(")"));
+                pTitleBar->SetTitle(msCurrentDeckTitle+A2S(" (")+maCurrentContext.msContext+A2S(")"));
         }
 #endif
     }
@@ -861,7 +866,6 @@ bool SidebarController::CanModifyChildWindowWidth (void) const
     SfxSplitWindow* pSplitWindow = dynamic_cast<SfxSplitWindow*>(mpParentWindow->GetParent());
     if (pSplitWindow == NULL)
     {
-        OSL_ASSERT(pSplitWindow!=NULL);
         return 0;
     }
 

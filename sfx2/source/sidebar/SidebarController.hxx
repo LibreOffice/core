@@ -107,9 +107,11 @@ private:
     ::boost::scoped_ptr<TabBar> mpTabBar;
     cssu::Reference<css::frame::XFrame> mxFrame;
     Context maCurrentContext;
+    Context maRequestedContext;
     ::rtl::OUString msCurrentDeckId;
     ::rtl::OUString msCurrentDeckTitle;
     AsynchronousCall maPropertyChangeForwarder;
+    AsynchronousCall maContextChangeUpdate;
     bool mbIsDeckClosed;
     /** Before the deck is closed the sidebar width is saved into this variable,
         so that it can be restored when the deck is reopended.
@@ -118,7 +120,9 @@ private:
     FocusManager maFocusManager;
 
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
-    void UpdateConfigurations (const Context& rContext);
+    /** Make maRequestedContext the current context.
+    */
+    void UpdateConfigurations (void);
     bool ArePanelSetsEqual (
         const SharedPanelContainer& rCurrentPanels,
         const ResourceManager::PanelContextDescriptorContainer& rRequestedPanels);
