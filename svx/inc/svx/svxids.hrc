@@ -522,7 +522,6 @@
 #define SID_COLOR_CONTROL                               ( SID_SVX_START + 417 )
 #define SID_ATTR_3D_INTERN                              ( SID_SVX_START + 422 )
 #define SID_PSZ_FUNCTION                                ( SID_SVX_START + 423 )
-#define SID_OFASLOTS_START                              ( SID_SVX_START + 425 )
 
 #define SID_TABLE_INSERT_COL_DLG                        ( SID_SVX_START + 426 )
 #define SID_TABLE_INSERT_ROW_DLG                        ( SID_SVX_START + 427 )
