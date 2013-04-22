@@ -6209,52 +6209,34 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="ColorValueSetMaximumRowCount" oor:type="xs:short">
-        <info>
-          <author>ALG</author>
-          <desc>
-            Defines the maximum row count for ColorValueSets. If more rows are needed, a Scrollbar will be used.
-          </desc>
-          <label>A Scrollbar will be used when more rows are needed.</label>
-        </info>
-        <value>40</value>
-      </prop>
-      <prop oor:name="ColorValueSetEntryEdgeLength" oor:type="xs:short">
-        <info>
-          <author>ALG</author>
-          <desc>
-            Defines the EdgeLength in Pixels for Entries generated inside of ColorValueSets. The Entries are quadratic for Colors.
-           </desc>
-          <label>Entries in ColorValueSets will have this quadratic size in Pixels.</label>
-        </info>
-        <value>14</value>
-      </prop>
-      <prop oor:name="ColorValueSetColumnCount" oor:type="xs:short">
-        <info>
-          <author>ALG</author>
-          <desc>
-            Defines how many colums are to be used in ColorValueSets. The idea is to use this defined count to have a
-            good visualisation in ColorValueSets which offers the used ColorTable Schema nicely layouted to the User.
-            This Schema is layouted to a width of twelve colums, though this value should not be changed.
-          </desc>
-          <label>The ColumnCount used in ColorValueSets.</label>
-        </info>
-        <value>12</value>
-      </prop>
       <prop oor:name="EdgeBlending" oor:type="xs:short">
         <info>
           <author>ALG</author>
           <desc>
-            Option to use EdgeBlending for previews in the UI (for ColorValueSet, ColorDropDown, FillStyle/LineStyle 
+            Option to use EdgeBlending for previews in the UI (for ColorValueSet, ColorDropDown, FillStyle/LineStyle
             previews, etc...). EdgeBlending will visualize a one pixel border on the preview object with interpolated
-            colors (default: TopLeft White, BottomRight Black) so that a nice 3D effect is shown. It is a percent 
-            value describing how strong the effect shall be. The value 0% switches it off, while the value 100% will 
+            colors (default: TopLeft White, BottomRight Black) so that a nice 3D effect is shown. It is a percent
+            value describing how strong the effect shall be. The value 0% switches it off, while the value 100% will
             cover the preview object's border completely with one pixel. Values in-between vill be alpha-blended with
             the original preview image.
           </desc>
           <label>Defines the EdgeBlending for Previews in Percent.</label>
         </info>
         <value>35</value>
+      </prop>
+      <prop oor:name="ListBoxMaximumLineCount" oor:type="xs:short">
+        <info>
+          <author>ALG</author>
+          <desc>
+            This option controls how many lines of a ListBox will be shown as a maximum. If the ListBox has less lines,
+            all lines will be shown when opening the drop down content. If it has more lines, the visible number of
+            lines will be limited to this number. The value 0 disables this feature, negative values are not allowed.
+            This feature may not be used automatically by all ListBox implementations,
+            but it gives a central hint value to use if an implementation wants to adapt to something useful.
+          </desc>
+          <label>Defines the maximum number of lines visible in a ListBox.</label>
+        </info>
+        <value>25</value>
       </prop>
     </group>
     <group oor:name="ExternalApps" oor:extensible="true">

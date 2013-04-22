@@ -218,12 +218,10 @@ public:
 class SVX_DLLPUBLIC HatchingLB : public ListBox
 {
     XHatchListRef mpList;
-    sal_Bool      mbUserDraw;
 public:
-    HatchingLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
+    explicit HatchingLB(Window* pParent, ResId Id);
 
     virtual void Fill( const XHatchListRef &pList );
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
     void    Append( XHatchEntry* pEntry, Bitmap* pBmp = NULL );
     void    Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
@@ -234,13 +232,11 @@ public:
 class SVX_DLLPUBLIC GradientLB : public ListBox
 {
     XGradientListRef mpList;
-    sal_Bool         mbUserDraw;
 public:
-    GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
-    GradientLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
+    explicit GradientLB(Window* pParent, ResId Id);
+    explicit GradientLB(Window* pParent, WinBits aWB);
 
     virtual void Fill( const XGradientListRef &pList );
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
     void    Append( XGradientEntry* pEntry, Bitmap* pBmp = NULL );
     void    Modify( XGradientEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
@@ -253,23 +249,18 @@ public:
 class SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
-    BitmapLB(Window* pParent, ResId Id, bool bUserDraw = true);
+    explicit BitmapLB(Window* pParent, ResId Id);
 
     virtual void Fill(const XBitmapListRef &pList);
-    virtual void UserDraw(const UserDrawEvent& rUDEvt);
 
     void Append(const Size& rSize, const XBitmapEntry& rEntry, BitmapEx* pBmpEx = 0);
     void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos, BitmapEx* pBmpEx = 0);
     void SelectEntryByList(const XBitmapList* pList, const String& rStr);
 
 private:
-    VirtualDevice   maVD;
     BitmapEx        maBitmapEx;
 
     XBitmapListRef  mpList;
-    bool            mbUserDraw;
-
-    SVX_DLLPRIVATE void SetVirtualDevice(const Size& rSize);
 };
 
 /************************************************************************/
@@ -277,10 +268,7 @@ private:
 class FillAttrLB : public ColorListBox
 {
 private:
-    VirtualDevice   maVD;
     BitmapEx        maBitmapEx;
-
-    void SetVirtualDevice(const Size& rSize);
 
 public:
     FillAttrLB( Window* pParent, WinBits aWB );

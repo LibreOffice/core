@@ -927,6 +927,8 @@ void ColorLB::Fill( const XColorListRef &pColorTab )
         pEntry = pColorTab->GetColor( i );
         InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
+
+    AdaptDropDownLineCountToMaximum();
     SetUpdateMode( sal_True );
 }
 
@@ -935,6 +937,7 @@ void ColorLB::Fill( const XColorListRef &pColorTab )
 void ColorLB::Append( XColorEntry* pEntry, Bitmap* )
 {
     InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+    AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
@@ -958,17 +961,18 @@ void FillAttrLB::Fill( const XColorListRef &pColorTab )
         pEntry = pColorTab->GetColor( i );
         InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
+
+    AdaptDropDownLineCountToMaximum();
     SetUpdateMode( sal_True );
 }
 
 // Fills the listbox (provisional) with strings
 
-HatchingLB::HatchingLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_True*/ )
+HatchingLB::HatchingLB( Window* pParent, ResId Id)
 : ListBox( pParent, Id ),
-  mpList ( NULL ),
-  mbUserDraw( bUserDraw )
+  mpList ( NULL )
 {
-    EnableUserDraw( mbUserDraw );
+    SetEdgeBlending(true);
 }
 
 void HatchingLB::Fill( const XHatchListRef &pList )
@@ -982,63 +986,18 @@ void HatchingLB::Fill( const XHatchListRef &pList )
 
     SetUpdateMode( sal_False );
 
-    if( mbUserDraw )
+    for( long i = 0; i < nCount; i++ )
     {
-        for( long i = 0; i < nCount; i++ )
-            InsertEntry( pList->GetHatch( i )->GetName() );
-    }
-    else
-    {
-        for( long i = 0; i < nCount; i++ )
-        {
-            pEntry = pList->GetHatch( i );
-            const Bitmap aBitmap = pList->GetUiBitmap( i );
-            if( !aBitmap.IsEmpty() )
-                InsertEntry( pEntry->GetName(), aBitmap );
-            else
-                InsertEntry( pEntry->GetName() );
-        }
+        pEntry = pList->GetHatch( i );
+        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
+            InsertEntry( pEntry->GetName(), aBitmap );
+        else
+            InsertEntry( pEntry->GetName() );
     }
 
+    AdaptDropDownLineCountToMaximum();
     SetUpdateMode( sal_True );
-}
-
-void HatchingLB::UserDraw( const UserDrawEvent& rUDEvt )
-{
-    if( mpList != NULL )
-    {
-        // Draw gradient with borderrectangle
-        const Rectangle& rDrawRect = rUDEvt.GetRect();
-        Rectangle aRect( rDrawRect.Left()+1, rDrawRect.Top()+1, rDrawRect.Left()+33, rDrawRect.Bottom()-1 );
-
-        sal_Int32 nId = rUDEvt.GetItemId();
-        if( nId >= 0 && nId <= mpList->Count() )
-        {
-            OutputDevice* pDevice = rUDEvt.GetDevice();
-
-            sal_uIntPtr nOldDrawMode = pDevice->GetDrawMode();
-            pDevice->SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
-
-            const XHatch& rXHatch = mpList->GetHatch( rUDEvt.GetItemId() )->GetHatch();
-            MapMode aMode( MAP_100TH_MM );
-            Hatch aHatch( (HatchStyle) rXHatch.GetHatchStyle(),
-                          rXHatch.GetColor(),
-                          rUDEvt.GetDevice()->LogicToPixel( Point( rXHatch.GetDistance(), 0 ), aMode ).X(),
-                          (sal_uInt16)rXHatch.GetAngle() );
-            const Polygon aPolygon( aRect );
-            const PolyPolygon aPolypoly( aPolygon );
-            pDevice->DrawHatch( aPolypoly, aHatch );
-
-            pDevice->SetLineColor( COL_BLACK );
-            pDevice->SetFillColor();
-            pDevice->DrawRect( aRect );
-
-            pDevice->SetDrawMode( nOldDrawMode );
-
-            // Draw name
-            pDevice->DrawText( Point( aRect.Right()+7, aRect.Top()-1 ), mpList->GetHatch( rUDEvt.GetItemId() )->GetName() );
-        }
-    }
 }
 
 /************************************************************************/
@@ -1049,6 +1008,7 @@ void HatchingLB::Append( XHatchEntry* pEntry, Bitmap* pBmp )
         InsertEntry( pEntry->GetName(), *pBmp );
     else
         InsertEntry( pEntry->GetName() );
+    AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
@@ -1080,25 +1040,25 @@ void FillAttrLB::Fill( const XHatchListRef &pList )
         else
             InsertEntry( pEntry->GetName() );
     }
+
+    AdaptDropDownLineCountToMaximum();
     ListBox::SetUpdateMode( sal_True );
 }
 
 // Fills the listbox (provisional) with strings
 
-GradientLB::GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_True*/ )
+GradientLB::GradientLB( Window* pParent, ResId Id)
 : ListBox( pParent, Id ),
-  mpList(NULL),
-  mbUserDraw( bUserDraw )
+  mpList(NULL)
 {
-    EnableUserDraw( mbUserDraw);
+    SetEdgeBlending(true);
 }
 
-GradientLB::GradientLB( Window* pParent, WinBits nWinStyle, sal_Bool bUserDraw /*= sal_True*/ )
-: ListBox( pParent, nWinStyle ),
-  mpList(NULL),
-  mbUserDraw( bUserDraw )
+GradientLB::GradientLB( Window* pParent, WinBits aWB)
+: ListBox( pParent, aWB ),
+  mpList(NULL)
 {
-    EnableUserDraw( mbUserDraw);
+    SetEdgeBlending(true);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGradientLB(Window *pParent, VclBuilder::stringmap &rMap)
@@ -1123,76 +1083,18 @@ void GradientLB::Fill( const XGradientListRef &pList )
 
     SetUpdateMode( sal_False );
 
-    if( mbUserDraw )
+    for( long i = 0; i < nCount; i++ )
     {
-        for( long i = 0; i < nCount; i++ )
-            InsertEntry( pList->GetGradient( i )->GetName() );
-    }
-    else
-    {
-        for( long i = 0; i < nCount; i++ )
-        {
-            pEntry = pList->GetGradient( i );
-            const Bitmap aBitmap = pList->GetUiBitmap( i );
-            if( !aBitmap.IsEmpty() )
-                InsertEntry( pEntry->GetName(), aBitmap );
-            else
-                InsertEntry( pEntry->GetName() );
-        }
+        pEntry = pList->GetGradient( i );
+        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
+            InsertEntry( pEntry->GetName(), aBitmap );
+        else
+            InsertEntry( pEntry->GetName() );
     }
 
+    AdaptDropDownLineCountToMaximum();
     SetUpdateMode( sal_True );
-}
-
-void GradientLB::UserDraw( const UserDrawEvent& rUDEvt )
-{
-    if( mpList != NULL )
-    {
-        // Draw gradient with borderrectangle
-        const Rectangle& rDrawRect = rUDEvt.GetRect();
-        Rectangle aRect( rDrawRect.Left()+1, rDrawRect.Top()+1, rDrawRect.Left()+33, rDrawRect.Bottom()-1 );
-
-        sal_Int32 nId = rUDEvt.GetItemId();
-        if( nId >= 0 && nId <= mpList->Count() )
-        {
-            OutputDevice* pDevice = rUDEvt.GetDevice();
-
-            const XGradient& rXGrad = mpList->GetGradient( rUDEvt.GetItemId() )->GetGradient();
-            Gradient aGradient( (GradientStyle) rXGrad.GetGradientStyle(), rXGrad.GetStartColor(), rXGrad.GetEndColor() );
-            aGradient.SetAngle( (sal_uInt16)rXGrad.GetAngle() );
-            aGradient.SetBorder( rXGrad.GetBorder() );
-            aGradient.SetOfsX( rXGrad.GetXOffset() );
-            aGradient.SetOfsY( rXGrad.GetYOffset() );
-            aGradient.SetStartIntensity( rXGrad.GetStartIntens() );
-            aGradient.SetEndIntensity( rXGrad.GetEndIntens() );
-            aGradient.SetSteps( 255 );
-
-            // #i76307# always paint the preview in LTR, because this is what the document does
-            Window* pWin = dynamic_cast<Window*>(pDevice);
-            if( pWin && pWin->IsRTLEnabled() && Application::GetSettings().GetLayoutRTL())
-            {
-                long nWidth = pDevice->GetOutputSize().Width();
-
-                pWin->EnableRTL( sal_False );
-
-                Rectangle aMirrorRect( Point( nWidth - aRect.Left() - aRect.GetWidth(), aRect.Top() ),
-                                       aRect.GetSize() );
-
-                pDevice->DrawGradient( aMirrorRect, aGradient );
-
-                pWin->EnableRTL( sal_True );
-            }
-            else
-                pDevice->DrawGradient( aRect, aGradient );
-
-            pDevice->SetLineColor( COL_BLACK );
-            pDevice->SetFillColor();
-            pDevice->DrawRect( aRect );
-
-            // Draw name
-            pDevice->DrawText( Point( aRect.Right()+7, aRect.Top()-1 ), mpList->GetGradient( rUDEvt.GetItemId() )->GetName() );
-        }
-    }
 }
 
 /************************************************************************/
@@ -1203,6 +1105,7 @@ void GradientLB::Append( XGradientEntry* pEntry, Bitmap* pBmp )
         InsertEntry( pEntry->GetName(), *pBmp );
     else
         InsertEntry( pEntry->GetName() );
+    AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
@@ -1258,46 +1161,66 @@ void FillAttrLB::Fill( const XGradientListRef &pList )
         else
             InsertEntry( pEntry->GetName() );
     }
+
+    AdaptDropDownLineCountToMaximum();
     ListBox::SetUpdateMode( sal_True );
 }
 
 // BitmapLB Constructor
 
-BitmapLB::BitmapLB(Window* pParent, ResId Id, bool bUserDraw /*= false*/ )
+BitmapLB::BitmapLB(Window* pParent, ResId Id)
 :   ListBox(pParent, Id),
-    maVD(),
     maBitmapEx(),
-    mpList(NULL),
-    mbUserDraw(bUserDraw)
+    mpList(NULL)
 {
-    EnableUserDraw(mbUserDraw);
+    SetEdgeBlending(true);
 }
 
 /************************************************************************/
 
-void BitmapLB::SetVirtualDevice(const Size& rSize)
+namespace
 {
-    maVD.SetOutputSizePixel(rSize);
-
-    if(maBitmapEx.GetSizePixel().Width() > 8 || maBitmapEx.GetSizePixel().Height() > 8)
+    void formatBitmapExToSize(BitmapEx& rBitmapEx, const Size& rSize)
     {
-        maVD.DrawBitmapEx(Point(0, 0), rSize, maBitmapEx);
-    }
-    else
-    {
-        const Size aBitmapSize(maBitmapEx.GetSizePixel());
-
-        for(sal_uInt32 y(0); y < rSize.Height(); y += aBitmapSize.Height())
+        if(!rBitmapEx.IsEmpty() && rSize.Width() > 0 && rSize.Height() > 0)
         {
-            for(sal_uInt32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
+            VirtualDevice aVirtualDevice;
+            aVirtualDevice.SetOutputSizePixel(rSize);
+
+            if(rBitmapEx.IsTransparent())
             {
-                maVD.DrawBitmapEx(
-                    Point(x, y),
-                    maBitmapEx);
+                const Point aNull(0, 0);
+                static const sal_uInt32 nLen(8);
+                static const Color aW(COL_WHITE);
+                static const Color aG(0xef, 0xef, 0xef);
+
+                aVirtualDevice.DrawCheckered(aNull, rSize, nLen, aW, aG);
             }
+
+            if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
+            {
+                rBitmapEx.Scale(rSize, BMP_SCALE_DEFAULT);
+                aVirtualDevice.DrawBitmapEx(Point(0, 0), rBitmapEx);
+            }
+            else
+            {
+                const Size aBitmapSize(rBitmapEx.GetSizePixel());
+
+                for(sal_Int32 y(0); y < rSize.Height(); y += aBitmapSize.Height())
+                {
+                    for(sal_Int32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
+                    {
+                        aVirtualDevice.DrawBitmapEx(
+                            Point(x, y),
+                            rBitmapEx);
+                    }
+                }
+            }
+
+            rBitmapEx = aVirtualDevice.GetBitmap(Point(0, 0), rSize);
         }
     }
-}
+} // end of anonymous namespace
 
 /************************************************************************/
 
@@ -1309,74 +1232,21 @@ void BitmapLB::Fill( const XBitmapListRef &pList )
     mpList = pList;
     XBitmapEntry* pEntry;
     const long nCount(pList->Count());
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
 
     SetUpdateMode(false);
 
-    if(mbUserDraw)
+    for(long i(0); i < nCount; i++)
     {
-        for(long i(0); i < nCount; i++)
-        {
-            InsertEntry(pList->GetBitmap(i)->GetName());
-        }
-    }
-    else
-    {
-        for(long i(0); i < nCount; i++)
-        {
-            pEntry = pList->GetBitmap(i);
-            maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
-            const Size aSize(pList->getUiBitmapWidth(), pList->getUiBitmapHeight());
-            SetVirtualDevice(aSize);
-            InsertEntry(
-                pEntry->GetName(),
-                maVD.GetBitmap(Point(0, 0),
-                aSize));
-        }
+        pEntry = pList->GetBitmap(i);
+        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
+        formatBitmapExToSize(maBitmapEx, aSize);
+        InsertEntry(pEntry->GetName(), maBitmapEx);
     }
 
+    AdaptDropDownLineCountToMaximum();
     SetUpdateMode(true);
-}
-
-void BitmapLB::UserDraw(const UserDrawEvent& rUDEvt)
-{
-    if (mpList != NULL)
-    {
-        // Draw bitmap
-        const Rectangle& rDrawRect = rUDEvt.GetRect();
-        const Rectangle aRect(rDrawRect.Left() + 1, rDrawRect.Top() + 1, rDrawRect.Left() + 33, rDrawRect.Bottom() - 1);
-        const sal_Int32 nId(rUDEvt.GetItemId());
-
-        if(nId >= 0 && nId <= mpList->Count())
-        {
-            const Rectangle aClipRect(rDrawRect.Left() + 1, rDrawRect.Top() + 1, rDrawRect.Right() - 1, rDrawRect.Bottom() - 1);
-            OutputDevice* pDevice = rUDEvt.GetDevice();
-            pDevice->SetClipRegion(Region(aClipRect));
-            maBitmapEx = mpList->GetBitmap(nId)->GetGraphicObject().GetGraphic().GetBitmapEx();
-            long nPosBaseX = aRect.Left();
-            long nPosBaseY = aRect.Top();
-
-            if(maBitmapEx.GetSizePixel().Width() > 8 || maBitmapEx.GetSizePixel().Height() > 8)
-            {
-                pDevice->DrawBitmapEx(Point(nPosBaseX, nPosBaseY), Size(32, 16), maBitmapEx);
-            }
-            else
-            {
-                pDevice->DrawBitmapEx(Point(nPosBaseX+ 0, nPosBaseY+0 ), maBitmapEx);
-                pDevice->DrawBitmapEx(Point(nPosBaseX+ 8, nPosBaseY+0 ), maBitmapEx);
-                pDevice->DrawBitmapEx(Point(nPosBaseX+16, nPosBaseY+0 ), maBitmapEx);
-                pDevice->DrawBitmapEx(Point(nPosBaseX+24, nPosBaseY+0 ), maBitmapEx);
-                pDevice->DrawBitmapEx(Point(nPosBaseX+ 0, nPosBaseY+8 ), maBitmapEx);
-                pDevice->DrawBitmapEx(Point(nPosBaseX+ 8, nPosBaseY+8 ), maBitmapEx);
-                pDevice->DrawBitmapEx(Point(nPosBaseX+16, nPosBaseY+8 ), maBitmapEx);
-                pDevice->DrawBitmapEx(Point(nPosBaseX+24, nPosBaseY+8 ), maBitmapEx);
-            }
-
-            pDevice->SetClipRegion();
-
-            // Draw name
-            pDevice->DrawText(Point(aRect.Right() + 7, aRect.Top() - 1), mpList->GetBitmap(nId)->GetName());
-        }
-    }
 }
 
 /************************************************************************/
@@ -1386,16 +1256,15 @@ void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry, BitmapEx* p
     if(pBmpEx)
     {
         maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
-        SetVirtualDevice(rSize);
-        InsertEntry(
-            rEntry.GetName(),
-            maVD.GetBitmap(Point(0, 0),
-            rSize));
+        formatBitmapExToSize(maBitmapEx, rSize);
+        InsertEntry(rEntry.GetName(), maBitmapEx);
     }
     else
     {
         InsertEntry(rEntry.GetName());
     }
+
+    AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
@@ -1407,11 +1276,8 @@ void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 
     if(pBmpEx)
     {
         maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
-        SetVirtualDevice(rSize);
-        InsertEntry(
-            rEntry.GetName(),
-            maVD.GetBitmap(Point(0, 0), rSize),
-            nPos);
+        formatBitmapExToSize(maBitmapEx, rSize);
+        InsertEntry(rEntry.GetName(), maBitmapEx, nPos);
     }
     else
     {
@@ -1426,37 +1292,12 @@ FillAttrLB::FillAttrLB(Window* pParent, WinBits aWB)
 
 /************************************************************************/
 
-void FillAttrLB::SetVirtualDevice(const Size& rSize)
-{
-    maVD.SetOutputSizePixel(rSize);
-    maVD.Erase();
-
-    if(maBitmapEx.GetSizePixel().Width() > 8 || maBitmapEx.GetSizePixel().Height() > 8)
-    {
-        maVD.DrawBitmapEx(Point(0, 0), rSize, maBitmapEx);
-    }
-    else
-    {
-        const Size aBitmapSize(maBitmapEx.GetSizePixel());
-
-        for(sal_uInt32 y(0); y < rSize.Height(); y += aBitmapSize.Height())
-        {
-            for(sal_uInt32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
-            {
-                maVD.DrawBitmapEx(
-                    Point(x, y),
-                    maBitmapEx);
-            }
-        }
-    }
-}
-
-/************************************************************************/
-
 void FillAttrLB::Fill( const XBitmapListRef &pList )
 {
     const long nCount(pList->Count());
     XBitmapEntry* pEntry;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
 
     ListBox::SetUpdateMode(false);
 
@@ -1464,25 +1305,25 @@ void FillAttrLB::Fill( const XBitmapListRef &pList )
     {
         pEntry = pList->GetBitmap( i );
         maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
-        const Size aSize(pList->getUiBitmapWidth(), pList->getUiBitmapHeight());
-        SetVirtualDevice(aSize);
-        ListBox::InsertEntry(
-            pEntry->GetName(),
-            maVD.GetBitmap(Point(0, 0),
-            aSize));
+        formatBitmapExToSize(maBitmapEx, aSize);
+        ListBox::InsertEntry(pEntry->GetName(), maBitmapEx);
     }
 
+    AdaptDropDownLineCountToMaximum();
     ListBox::SetUpdateMode(true);
 }
 
 void FillTypeLB::Fill()
 {
     SetUpdateMode( sal_False );
+
     InsertEntry( String( SVX_RES( RID_SVXSTR_INVISIBLE ) ) );
     InsertEntry( String( SVX_RES( RID_SVXSTR_COLOR ) ) );
     InsertEntry( String( SVX_RES( RID_SVXSTR_GRADIENT ) ) );
     InsertEntry( String( SVX_RES( RID_SVXSTR_HATCH ) ) );
     InsertEntry( String( SVX_RES( RID_SVXSTR_BITMAP ) ) );
+
+    AdaptDropDownLineCountToMaximum();
     SetUpdateMode( sal_True );
 }
 
@@ -1490,12 +1331,14 @@ LineLB::LineLB(Window* pParent, ResId Id)
 :   ListBox(pParent, Id),
     mbAddStandardFields(true)
 {
+    // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
 }
 
 LineLB::LineLB(Window* pParent, WinBits aWB)
 :   ListBox(pParent, aWB),
     mbAddStandardFields(true)
 {
+    // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
 }
 
 LineLB::~LineLB()
@@ -1545,6 +1388,8 @@ void LineLB::Fill( const XDashListRef &pList )
         else
             InsertEntry( pEntry->GetName() );
     }
+
+    AdaptDropDownLineCountToMaximum();
     SetUpdateMode( sal_True );
 }
 
@@ -1556,6 +1401,7 @@ void LineLB::Append( XDashEntry* pEntry, const Bitmap* pBmp )
         InsertEntry( pEntry->GetName(), *pBmp );
     else
         InsertEntry( pEntry->GetName() );
+    AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
@@ -1575,11 +1421,13 @@ void LineLB::Modify( XDashEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp )
 LineEndLB::LineEndLB( Window* pParent, ResId Id )
     : ListBox( pParent, Id )
 {
+    // No EdgeBlending for LineEnds SetEdgeBlending(true);
 }
 
 LineEndLB::LineEndLB( Window* pParent, WinBits aWB )
     : ListBox( pParent, aWB )
 {
+    // No EdgeBlending for LineEnds SetEdgeBlending(true);
 }
 
 LineEndLB::~LineEndLB(void)
@@ -1613,6 +1461,8 @@ void LineEndLB::Fill( const XLineEndListRef &pList, sal_Bool bStart )
         else
             InsertEntry( pEntry->GetName() );
     }
+
+    AdaptDropDownLineCountToMaximum();
     SetUpdateMode( sal_True );
 }
 
@@ -1633,6 +1483,7 @@ void LineEndLB::Append( XLineEndEntry* pEntry, const Bitmap* pBmp, sal_Bool bSta
     }
     else
         InsertEntry( pEntry->GetName() );
+    AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/

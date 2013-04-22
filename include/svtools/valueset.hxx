@@ -214,15 +214,21 @@ private:
     long            mnLines;
     long            mnUserItemWidth;
     long            mnUserItemHeight;
-    sal_uInt16          mnSelItemId;
-    sal_uInt16          mnHighItemId;
-    sal_uInt16          mnCols;
-    sal_uInt16          mnCurCol;
-    sal_uInt16          mnUserCols;
-    sal_uInt16          mnUserVisLines;
-    sal_uInt16          mnFirstLine;
-    sal_uInt16          mnSpacing;
-    sal_uInt16          mnFrameStyle;
+    sal_uInt16      mnSelItemId;
+    sal_uInt16      mnHighItemId;
+    sal_uInt16      mnCols;
+    sal_uInt16      mnCurCol;
+    sal_uInt16      mnUserCols;
+    sal_uInt16      mnUserVisLines;
+    sal_uInt16      mnFirstLine;
+    sal_uInt16      mnSpacing;
+    sal_uInt16      mnFrameStyle;
+    Color           maColor;
+    Link            maDoubleClickHdl;
+    Link            maSelectHdl;
+    Link            maHighlightHdl;
+
+    // bitfield
     bool            mbFormat : 1;
     bool            mbHighlight : 1;
     bool            mbSelection : 1;
@@ -232,12 +238,9 @@ private:
     bool            mbDoubleSel : 1;
     bool            mbScroll : 1;
     bool            mbFullMode : 1;
+    bool            mbEdgeBlending : 1;
     bool            mbIsTransientChildrenDisabled : 1;
     bool            mbHasVisibleItems : 1;
-    Color           maColor;
-    Link            maDoubleClickHdl;
-    Link            maSelectHdl;
-    Link            maHighlightHdl;
 
     friend class ValueSetAcc;
     friend class ValueItemAcc;
@@ -380,6 +383,9 @@ public:
     const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
 
     void            SetHighlightHdl( const Link& rLink );
+
+    bool GetEdgeBlending() const { return mbEdgeBlending; }
+    void SetEdgeBlending(bool bNew);
 };
 
 #endif  // _VALUESET_HXX

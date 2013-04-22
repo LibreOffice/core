@@ -88,7 +88,8 @@ void XLineEndList::impCreate()
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XLineEndList: no VirtualDevice created!" );
         pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(Size(getUiBitmapWidth() * 2, getUiBitmapHeight())));
+        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+        const Size aSize(pVirDev->PixelToLogic(Size(rSize.Width() * 2, rSize.Height())));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
@@ -115,7 +116,7 @@ void XLineEndList::impCreate()
         SdrObject* pLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
         OSL_ENSURE(0 != pLineObject, "XLineEndList: no LineObject created!" );
         pLineObject->SetModel(pSdrModel);
-        const Size aLineWidth(pVirDev->PixelToLogic(Size(getUiBitmapLineWidth(), 0)));
+        const Size aLineWidth(pVirDev->PixelToLogic(Size(rStyleSettings.GetListBoxPreviewDefaultLineWidth(), 0)));
         pLineObject->SetMergedItem(XLineWidthItem(aLineWidth.getWidth()));
         const sal_uInt32 nArrowHeight((aSize.Height() * 8) / 10);
         pLineObject->SetMergedItem(XLineStartWidthItem(nArrowHeight));

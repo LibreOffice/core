@@ -41,13 +41,16 @@ private:
     ImplListBoxFloatingWindow*  mpFloatWin;
     ImplWin*                    mpImplWin;
     ImplBtn*                    mpBtn;
-    sal_uInt16                      mnDDHeight;
-    sal_uInt16                      mnSaveValue;
-    sal_Bool                        mbDDAutoSize;
+    sal_uInt16                  mnDDHeight;
+    sal_uInt16                  mnSaveValue;
     sal_Int32 m_nMaxWidthChars;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
-    sal_uInt16 mnLineCount;
+    sal_uInt16                  mnLineCount;
+
+    /// bitfield
+    bool            mbDDAutoSize : 1;
+    bool            mbEdgeBlending : 1;
 
 private:
     SAL_DLLPRIVATE void    ImplInitListBoxData();
@@ -102,11 +105,12 @@ public:
 
     Rectangle           GetDropDownPosSizePixel() const;
 
+    void AdaptDropDownLineCountToMaximum();
     void                SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16          GetDropDownLineCount() const;
 
-    void                EnableAutoSize( sal_Bool bAuto );
-    sal_Bool                IsAutoSizeEnabled() const { return mbDDAutoSize; }
+    void                EnableAutoSize( bool bAuto );
+    bool                IsAutoSizeEnabled() const { return mbDDAutoSize; }
 
     void                EnableDDAutoWidth( sal_Bool b );
 
@@ -198,6 +202,9 @@ public:
     sal_uInt16          GetDisplayLineCount() const;
 
     void            EnableMirroring();
+
+    bool GetEdgeBlending() const { return mbEdgeBlending; }
+    void SetEdgeBlending(bool bNew);
 
     /** checks whether a certain point lies within the bounds of
         a listbox item and returns the item as well as the character position

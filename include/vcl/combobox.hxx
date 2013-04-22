@@ -116,6 +116,7 @@ public:
 
     Rectangle       GetDropDownPosSizePixel() const;
 
+    void AdaptDropDownLineCountToMaximum();
     void            SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16      GetDropDownLineCount() const;
 

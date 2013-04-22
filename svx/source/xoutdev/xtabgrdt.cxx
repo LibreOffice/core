@@ -73,7 +73,8 @@ void XGradientList::impCreate()
         VirtualDevice* pVirDev = new VirtualDevice;
         OSL_ENSURE(0 != pVirDev, "XGradientList: no VirtualDevice created!" );
         pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(Size(getUiBitmapWidth(), getUiBitmapHeight())));
+        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+        const Size aSize(pVirDev->PixelToLogic(rSize));
         pVirDev->SetOutputSize(aSize);
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
@@ -92,7 +93,7 @@ void XGradientList::impCreate()
         pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
         pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
         pBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
-        pBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((getUiBitmapWidth() + getUiBitmapHeight()) / 3)));
+        pBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((rSize.Width() + rSize.Height()) / 3)));
 
         mpData = new impXGradientList(pVirDev, pSdrModel, pBackgroundObject);
         OSL_ENSURE(0 != mpData, "XGradientList: data creation went wrong!" );

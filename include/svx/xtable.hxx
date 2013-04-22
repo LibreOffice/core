@@ -282,10 +282,6 @@ public:
     inline XBitmapListRef AsBitmapList();
     inline XLineEndListRef AsLineEndList();
     inline XGradientListRef AsGradientList();
-
-    sal_uInt32 getUiBitmapWidth() const;
-    sal_uInt32 getUiBitmapHeight() const;
-    sal_uInt32 getUiBitmapLineWidth() const;
 };
 
 // ------------------

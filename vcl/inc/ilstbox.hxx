@@ -64,33 +64,33 @@ struct ImplEntryType
     long        mnFlags;
     long        mnHeight;
 
-                ImplEntryType( const OUString& rStr, const Image& rImage ) :
-                    maStr( rStr ),
-                    maImage( rImage ),
-                    mnFlags( 0 ),
-                    mnHeight( 0 )
-                {
-                    mbIsSelected = sal_False;
-                    mpUserData = NULL;
-                }
+    ImplEntryType( const OUString& rStr, const Image& rImage ) :
+        maStr( rStr ),
+        maImage( rImage ),
+        mnFlags( 0 ),
+        mnHeight( 0 )
+    {
+        mbIsSelected = sal_False;
+        mpUserData = NULL;
+    }
 
-                ImplEntryType( const OUString& rStr ) :
-                    maStr( rStr ),
-                    mnFlags( 0 ),
-                    mnHeight( 0 )
-                {
-                    mbIsSelected = sal_False;
-                    mpUserData = NULL;
-                }
+    ImplEntryType( const OUString& rStr ) :
+        maStr( rStr ),
+        mnFlags( 0 ),
+        mnHeight( 0 )
+    {
+        mbIsSelected = sal_False;
+        mpUserData = NULL;
+    }
 
-                ImplEntryType( const Image& rImage ) :
-                    maImage( rImage ),
-                    mnFlags( 0 ),
-                    mnHeight( 0 )
-                {
-                    mbIsSelected = sal_False;
-                    mpUserData = NULL;
-                }
+    ImplEntryType( const Image& rImage ) :
+        maImage( rImage ),
+        mnFlags( 0 ),
+        mnHeight( 0 )
+    {
+        mbIsSelected = sal_False;
+        mpUserData = NULL;
+    }
 };
 
 // -----------------
@@ -226,24 +226,26 @@ private:
 
     sal_uInt16          mnSelectModifier;   // Modifiers
 
-    sal_Bool            mbHasFocusRect:         1,
-                    mbSort:                 1,  // ListBox sorted
-                    mbTrack:                1,  // Tracking
-                    mbMulti:                1,  // MultiListBox
-                    mbStackMode:            1,  // StackSelection
-                    mbSimpleMode:           1,  // SimpleMode for MultiListBox
-                    mbImgsDiffSz:           1,  // Images have different sizes
-                    mbTravelSelect:         1,  // TravelSelect
-                    mbTrackingSelect:       1,  // Selected at a MouseMove
-                    mbSelectionChanged:     1,  // Do not call Select() too often ...
-                    mbMouseMoveSelect:      1,  // Select at MouseMove
-                    mbGrabFocus:            1,  // Grab focus at MBDown
-                    mbUserDrawEnabled:      1,  // UserDraw possible
-                    mbInUserDraw:           1,  // In UserDraw
-                    mbReadOnly:             1,  // ReadOnly
-                    mbMirroring:            1,  // pb: #106948# explicit mirroring for calc
-                    mbRight:                1,  // right align Text output
-                    mbCenter:               1;  // center Text output
+    /// bitfield
+    bool mbHasFocusRect : 1;
+    bool mbSort : 1;             // ListBox sorted
+    bool mbTrack : 1;            // Tracking
+    bool mbMulti : 1;            // MultiListBox
+    bool mbStackMode : 1;        // StackSelection
+    bool mbSimpleMode : 1;       // SimpleMode for MultiListBox
+    bool mbImgsDiffSz : 1;       // Images have different sizes
+    bool mbTravelSelect : 1;     // TravelSelect
+    bool mbTrackingSelect : 1;   // Selected at a MouseMove
+    bool mbSelectionChanged : 1; // Do not call Select() too often ...
+    bool mbMouseMoveSelect : 1;  // Select at MouseMove
+    bool mbGrabFocus : 1;        // Grab focus at MBDown
+    bool mbUserDrawEnabled : 1;  // UserDraw possible
+    bool mbInUserDraw : 1;       // In UserDraw
+    bool mbReadOnly : 1;         // ReadOnly
+    bool mbMirroring : 1;        // pb: #106948# explicit mirroring for calc
+    bool mbRight : 1;            // right align Text output
+    bool mbCenter : 1;           // center Text output
+    bool mbEdgeBlending : 1;
 
     Link            maScrollHdl;
     Link            maSelectHdl;
@@ -252,8 +254,7 @@ private:
     Link            maUserDrawHdl;
     Link            maMRUChangedHdl;
 
-    ::vcl::QuickSelectionEngine
-                    maQuickSelectionEngine;
+    ::vcl::QuickSelectionEngine maQuickSelectionEngine;
 
 protected:
     virtual void    KeyInput( const KeyEvent& rKEvt );
@@ -318,31 +319,31 @@ public:
     void            SetLeftIndent( long n );
     void            ScrollHorz( long nDiff );
 
-    void            AllowGrabFocus( sal_Bool b )        { mbGrabFocus = b; }
-    sal_Bool            IsGrabFocusAllowed() const      { return mbGrabFocus; }
+    void            AllowGrabFocus( bool b )        { mbGrabFocus = b; }
+    bool            IsGrabFocusAllowed() const      { return mbGrabFocus; }
 
     void            SetSeparatorPos( sal_uInt16 n )     { mnSeparatorPos = n; }
     sal_uInt16          GetSeparatorPos() const         { return mnSeparatorPos; }
 
-    void            SetTravelSelect( sal_Bool bTravelSelect ) { mbTravelSelect = bTravelSelect; }
-    sal_Bool            IsTravelSelect() const          { return mbTravelSelect; }
-    sal_Bool            IsTrackingSelect() const            { return mbTrackingSelect; }
+    void            SetTravelSelect( bool bTravelSelect ) { mbTravelSelect = bTravelSelect; }
+    bool            IsTravelSelect() const          { return mbTravelSelect; }
+    bool            IsTrackingSelect() const        { return mbTrackingSelect; }
 
     void            SetUserItemSize( const Size& rSz );
     const Size&     GetUserItemSize() const             { return maUserItemSize; }
 
-    void            EnableUserDraw( sal_Bool bUserDraw ) { mbUserDrawEnabled = bUserDraw; }
-    sal_Bool            IsUserDrawEnabled() const   { return mbUserDrawEnabled; }
+    void            EnableUserDraw( bool bUserDraw ) { mbUserDrawEnabled = bUserDraw; }
+    bool            IsUserDrawEnabled() const   { return mbUserDrawEnabled; }
 
-    void            EnableMultiSelection( sal_Bool bMulti, sal_Bool bStackMode ) { mbMulti = bMulti; mbStackMode = bStackMode; }
-    sal_Bool            IsMultiSelectionEnabled() const     { return mbMulti; }
+    void            EnableMultiSelection( bool bMulti, bool bStackMode ) { mbMulti = bMulti; mbStackMode = bStackMode; }
+    bool            IsMultiSelectionEnabled() const     { return mbMulti; }
 
-    void            SetMultiSelectionSimpleMode( sal_Bool bSimple ) { mbSimpleMode = bSimple; }
-    sal_Bool            IsMultiSelectionSimpleMode() const          { return mbSimpleMode; }
+    void            SetMultiSelectionSimpleMode( bool bSimple ) { mbSimpleMode = bSimple; }
+    bool            IsMultiSelectionSimpleMode() const          { return mbSimpleMode; }
 
-    void            EnableMouseMoveSelect( sal_Bool bMouseMoveSelect ) { mbMouseMoveSelect = bMouseMoveSelect; }
-    sal_Bool            IsMouseMoveSelectEnabled() const    { return mbMouseMoveSelect; }
-    sal_Bool            IsMouseMoveSelect() const   { return mbMouseMoveSelect||mbStackMode; }
+    void            EnableMouseMoveSelect( bool bMouseMoveSelect ) { mbMouseMoveSelect = bMouseMoveSelect; }
+    bool            IsMouseMoveSelectEnabled() const    { return mbMouseMoveSelect; }
+    bool            IsMouseMoveSelect() const   { return mbMouseMoveSelect||mbStackMode; }
 
     Size            CalcSize( sal_uInt16 nMaxLines ) const;
     Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const;
@@ -363,21 +364,24 @@ public:
     void            SetMRUChangedHdl( const Link& rLink )   { maMRUChangedHdl = rLink; }
     const Link&     GetMRUChangedHdl() const                { return maMRUChangedHdl; }
 
-    sal_Bool            IsSelectionChanged() const { return mbSelectionChanged; }
+    bool            IsSelectionChanged() const { return mbSelectionChanged; }
     sal_uInt16          GetSelectModifier() const { return mnSelectModifier; }
 
-    void            EnableSort( sal_Bool b ) { mbSort = b; }
+    void            EnableSort( bool b ) { mbSort = b; }
 
-    void            SetReadOnly( sal_Bool bReadOnly )   { mbReadOnly = bReadOnly; }
-    sal_Bool            IsReadOnly() const              { return mbReadOnly; }
+    void            SetReadOnly( bool bReadOnly )   { mbReadOnly = bReadOnly; }
+    bool            IsReadOnly() const              { return mbReadOnly; }
 
     using Control::ImplInitSettings;
     void            ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     sal_uInt16          ImplGetTextStyle() const;
 
     // pb: #106948# explicit mirroring for calc
-    inline void     EnableMirroring()       { mbMirroring = sal_True; }
-    inline sal_Bool     IsMirroring() const { return mbMirroring; }
+    inline void     EnableMirroring()       { mbMirroring = true; }
+    inline bool     IsMirroring() const { return mbMirroring; }
+
+    bool GetEdgeBlending() const { return mbEdgeBlending; }
+    void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
 
 protected:
     // ISearchableStringList
@@ -397,9 +401,13 @@ private:
     ScrollBar*          mpHScrollBar;
     ScrollBar*          mpVScrollBar;
     ScrollBarBox*       mpScrollBarBox;
-    sal_Bool                mbVScroll       : 1,    // VScroll an oder aus
-                        mbHScroll       : 1,    // HScroll an oder aus
-                        mbAutoHScroll   : 1;    // AutoHScroll an oder aus
+
+    /// bitfield
+    bool mbVScroll : 1;     // VScroll an oder aus
+    bool mbHScroll : 1;     // HScroll an oder aus
+    bool mbAutoHScroll : 1; // AutoHScroll an oder aus
+    bool mbEdgeBlending : 1;
+
     Link                maScrollHdl;    // Weil der vom ImplListBoxWindow selbst benoetigt wird.
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 
@@ -503,6 +511,9 @@ public:
     sal_uInt16          GetDisplayLineCount() const
     { return maLBWindow.GetDisplayLineCount(); }
 
+    bool GetEdgeBlending() const { return mbEdgeBlending; }
+    void SetEdgeBlending(bool bNew);
+
     // pb: #106948# explicit mirroring for calc
     inline void     EnableMirroring()   { maLBWindow.EnableMirroring(); }
     inline void     SetDropTraget(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_xDNDListenerContainer){ mxDNDListenerContainer= i_xDNDListenerContainer; }
@@ -569,9 +580,10 @@ private:
     Link            maMBDownHdl;
     Link            maUserDrawHdl;
 
-    sal_Bool        mbUserDrawEnabled   : 1,
-                    mbInUserDraw        : 1;
-
+    /// bitfield
+    bool            mbUserDrawEnabled : 1;
+    bool            mbInUserDraw : 1;
+    bool            mbEdgeBlending : 1;
 
     void ImplDraw( bool bLayout = false );
 protected:
@@ -607,10 +619,13 @@ public:
     void            SetUserItemSize( const Size& rSz )  { maUserItemSize = rSz; }
     const Size&     GetUserItemSize() const             { return maUserItemSize; }
 
-    void            EnableUserDraw( sal_Bool bUserDraw )    { mbUserDrawEnabled = bUserDraw; }
-    sal_Bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }
+    void            EnableUserDraw( bool bUserDraw )    { mbUserDrawEnabled = bUserDraw; }
+    bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }
 
     void            DrawEntry( sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False, bool bLayout = false );
+
+    bool GetEdgeBlending() const { return mbEdgeBlending; }
+    void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
 };
 
 // -----------

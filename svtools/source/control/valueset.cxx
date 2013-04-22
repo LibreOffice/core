@@ -28,7 +28,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/ustring.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include "valueimp.hxx"
 
 #include <svtools/valueset.hxx>
@@ -82,6 +81,7 @@ void ValueSet::ImplInit()
     mbDoubleSel         = false;
     mbScroll            = false;
     mbFullMode          = true;
+    mbEdgeBlending      = false;
     mbHasVisibleItems   = false;
 
     // #106446#, #106601# force mirroring of virtual device
@@ -266,9 +266,10 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
 
     if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
     {
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
         if ( pItem == mpNoneItem )
         {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             maVirDev.SetFont( GetFont() );
             maVirDev.SetTextColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor() );
             maVirDev.SetTextFillColor();
@@ -294,29 +295,9 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
         {
             maVirDev.SetFillColor( pItem->maColor );
             maVirDev.DrawRect( aRect );
-
-            const SvtAccessibilityOptions aOptions;
-            const sal_Int16 nEdgeBlendingPercent(aOptions.GetEdgeBlending());
-            static bool bTest(false);
-
-            if(nEdgeBlendingPercent && bTest)
-            {
-                Bitmap aBitmap(maVirDev.GetBitmap(aRect.TopLeft(), aRect.GetSize()));
-
-                if(!aBitmap.IsEmpty())
-                {
-                    const Color aTopLeft(COL_WHITE);
-                    const Color aBottomRight(COL_BLACK);
-                    const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
-
-                    aBitmap.DrawBlendFrame(nAlpha, aTopLeft, aBottomRight);
-                    maVirDev.DrawBitmap(aRect.TopLeft(), aBitmap);
-                }
-            }
         }
         else
         {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             if ( IsColor() )
                 maVirDev.SetFillColor( maColor );
             else if ( nStyle & WB_MENUSTYLEVALUESET )
@@ -353,6 +334,23 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
                 }
                 else
                     maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
+            }
+        }
+
+        const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
+
+        if(nEdgeBlendingPercent)
+        {
+            Bitmap aBitmap(maVirDev.GetBitmap(aRect.TopLeft(), aRect.GetSize()));
+
+            if(!aBitmap.IsEmpty())
+            {
+                const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
+                const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
+                const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+
+                aBitmap.DrawBlendFrame(nAlpha, rTopLeft, rBottomRight);
+                maVirDev.DrawBitmap(aRect.TopLeft(), aBitmap);
             }
         }
     }
@@ -2464,6 +2462,22 @@ Size ValueSet::GetOptimalSize() const
     }
 
     return CalcWindowSizePixel(aLargestItemSize);
+}
+
+// -----------------------------------------------------------------------
+
+void ValueSet::SetEdgeBlending(bool bNew)
+{
+    if(mbEdgeBlending != bNew)
+    {
+        mbEdgeBlending = bNew;
+        mbFormat = true;
+
+        if(IsReallyVisible() && IsUpdateMode())
+        {
+            Invalidate();
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

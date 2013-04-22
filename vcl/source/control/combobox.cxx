@@ -537,9 +537,14 @@ void ComboBox::EnableAutoSize( sal_Bool bAuto )
     if ( mpFloatWin )
     {
         if ( bAuto && !mpFloatWin->GetDropDownLineCount() )
-            mpFloatWin->SetDropDownLineCount( 16 );
+        {
+            // Adapt to GetListBoxMaximumLineCount here; was on fixed number of five before
+            AdaptDropDownLineCountToMaximum();
+        }
         else if ( !bAuto )
+        {
             mpFloatWin->SetDropDownLineCount( 0 );
+        }
     }
 }
 
@@ -557,6 +562,14 @@ void ComboBox::SetDropDownLineCount( sal_uInt16 nLines )
 {
     if ( mpFloatWin )
         mpFloatWin->SetDropDownLineCount( nLines );
+}
+
+// -----------------------------------------------------------------------
+
+void ComboBox::AdaptDropDownLineCountToMaximum()
+{
+    // adapt to maximum allowed number
+    SetDropDownLineCount(std::min(GetEntryCount(), GetSettings().GetStyleSettings().GetListBoxMaximumLineCount()));
 }
 
 // -----------------------------------------------------------------------
