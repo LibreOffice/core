@@ -8,11 +8,6 @@
 
 $(eval $(call gb_Library_Library,libotouch))
 
-$(eval $(call gb_Library_set_include,libotouch,\
-    -I$(SRCDIR)/libotouch/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_sdk_api,libotouch))
 $(eval $(call gb_Library_add_exception_objects,libotouch,\
 	touch/source/generic/libotouch \
