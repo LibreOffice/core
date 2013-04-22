@@ -551,12 +551,9 @@ void DomainMapperTableManager::endOfRowAction()
         ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
         for( sal_uInt32 nBorder = 0; nBorder < m_nCell.back( ) - 1; ++nBorder )
         {
-            sal_Int32 nGridCount = *aSpansIter;
             double fGridWidth = 0.;
-            do
-            {
+            for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
                 fGridWidth += (*pTableGrid.get())[nBorderGridIndex++];
-            }while( --nGridCount );
 
             sal_Int16 nRelPos =
                 sal::static_int_cast< sal_Int16 >((fGridWidth * 10000) / nFullWidthRelative);
