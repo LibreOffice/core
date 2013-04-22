@@ -200,6 +200,15 @@ diff --git src/libcmis/ws-requests.cxx src/libcmis/ws-requests.cxx
 index 2b421b2..e13ae07 100644
 --- src/libcmis/ws-requests.cxx
 +++ src/libcmis/ws-requests.cxx
+@@ -105,7 +105,7 @@
+     string content( buf, size );
+     delete[ ] buf;
+ 
+-    xmlTextWriterWriteFormatElement( writer, BAD_CAST( "cmism:length" ), "%ld", content.size( ) );
++    xmlTextWriterWriteFormatElement( writer, BAD_CAST( "cmism:length" ), "%ld", (long int) content.size( ) );
+     xmlTextWriterWriteElement( writer, BAD_CAST( "cmism:mimeType" ), BAD_CAST( contentType.c_str( ) ) );
+     if ( !filename.empty( ) )
+         xmlTextWriterWriteElement( writer, BAD_CAST( "cmism:filename" ), BAD_CAST( filename.c_str( ) ) );
 @@ -349,7 +349,7 @@ void UpdateProperties::toXml( xmlTextWriterPtr writer )
      xmlTextWriterEndElement( writer );
  }
