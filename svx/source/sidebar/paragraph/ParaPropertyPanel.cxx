@@ -369,12 +369,14 @@ void ParaPropertyPanel::EndSpacingPopupMode (void)
 
 void ParaPropertyPanel::EndBulletsPopupMode (void)
 {
-    //maUnderlinePopup.Hide();
+    //i122054, Missed following line, for collapse the bullets popup
+    maBulletsPopup.Hide();
 }
 
 void ParaPropertyPanel::EndNumberingPopupMode (void)
 {
-    //maUnderlinePopup.Hide();
+    //i122054, Missed following line, for collapse the numbering popup
+    maNumberingPopup.Hide();
 }
 
 
