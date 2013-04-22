@@ -2086,26 +2086,54 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
 
             pTabViewShell->ApplyAttr( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ) );
 
-            const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
             const SfxPoolItem* pItem = NULL;
             const SvxHorJustifyItem* pHorJustify = NULL;
             SvxCellHorJustify eHorJustify = SVX_HOR_JUSTIFY_STANDARD;
-
-            if( rAttrSet.GetItemState(ATTR_HOR_JUSTIFY, sal_True, &pItem) == SFX_ITEM_SET )
+            ScRange aRange;
+            GetViewData()->GetMarkData().GetMarkArea(aRange);
+            ScMarkData  aMark = GetViewData()->GetMarkData();
+            ScDocument * pDoc = GetViewData()->GetDocument();
+            if (aMark.IsMultiMarked())
             {
-                pHorJustify = (const SvxHorJustifyItem*)pItem;
-                eHorJustify = SvxCellHorJustify( pHorJustify->GetValue() );
+                int i = 0, j = 0;
+                for ( ; aRange.aStart.Col()+i <= aRange.aEnd.Col() ; i++ )
+                {
+                    for ( ; aRange.aStart.Row()+j <= aRange.aEnd.Row() ; j++ )
+                    {
+                        pItem = pDoc->GetAttr( aRange.aStart.Col()+i, aRange.aStart.Row()+j, aMark.GetFirstSelected(), ATTR_HOR_JUSTIFY );
+                        pHorJustify = (const SvxHorJustifyItem*)pItem;
+                        eHorJustify = SvxCellHorJustify( pHorJustify->GetValue() );
+
+                        if( eHorJustify != SVX_HOR_JUSTIFY_CENTER && eHorJustify != SVX_HOR_JUSTIFY_BLOCK )
+                        {
+                            if( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT )
+                                pDoc->ApplyAttr( aRange.aStart.Col()+i, aRange.aStart.Row()+j, aMark.GetFirstSelected(), SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY ) );
+                            else
+                                pDoc->ApplyAttr( aRange.aStart.Col()+i, aRange.aStart.Row()+j, aMark.GetFirstSelected(), SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY ) );
+                        }
+                    }
+                    j = 0;
+                }
             }
-
-            if( eHorJustify != SVX_HOR_JUSTIFY_CENTER && eHorJustify != SVX_HOR_JUSTIFY_BLOCK )
+            else
             {
-                if( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT )
-                     rReq.AppendItem( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, SID_H_ALIGNCELL ) );
-                else
-                     rReq.AppendItem( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, SID_H_ALIGNCELL ) );
+                const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
+                if( rAttrSet.GetItemState(ATTR_HOR_JUSTIFY, sal_True, &pItem) == SFX_ITEM_SET )
+                {
+                    pHorJustify = (const SvxHorJustifyItem*)pItem;
+                    eHorJustify = SvxCellHorJustify( pHorJustify->GetValue() );
+                }
 
-                rReq.SetSlot( SID_H_ALIGNCELL );
-                ExecuteSlot( rReq, GetInterface() );
+                if( eHorJustify != SVX_HOR_JUSTIFY_CENTER && eHorJustify != SVX_HOR_JUSTIFY_BLOCK )
+                {
+                    if( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT )
+                         rReq.AppendItem( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, SID_H_ALIGNCELL ) );
+                    else
+                         rReq.AppendItem( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, SID_H_ALIGNCELL ) );
+
+                    rReq.SetSlot( SID_H_ALIGNCELL );
+                    ExecuteSlot( rReq, GetInterface() );
+                }
             }
 
             pDocSh->GetUndoManager()->LeaveListAction();
