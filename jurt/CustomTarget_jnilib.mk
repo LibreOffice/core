@@ -27,12 +27,11 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,jurt/util))
 
-$(call gb_CustomTarget_get_target,jurt/util) : \
-	$(call gb_CustomTarget_get_workdir,jurt/util)/libjpipe.jnilib
+$(eval $(call gb_CustomTarget_register_targets,jurt/util,\
+	libjpipe.jnilib \
+))
 
-$(call gb_CustomTarget_get_workdir,jurt/util)/libjpipe.jnilib : \
-		$(call gb_Library_get_target,jpipe) \
-		| $(call gb_CustomTarget_get_workdir,jurt/util)/.dir
+$(call gb_CustomTarget_get_workdir,jurt/util)/libjpipe.jnilib : $(call gb_Library_get_target,jpipe)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MCB,1)
 	cd $(dir $@) && $(SOLARENV)/bin/macosx-create-bundle $<
 
