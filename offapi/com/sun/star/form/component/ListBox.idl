@@ -55,7 +55,8 @@ published service ListBox
     [property] sequence<short> DefaultSelection;
 
 
-    /** contains the listbox entries.
+    /** contains the values associated to the strings to be displayed
+        (which are specified by <member scope="com::sun::star::awt">UnoControlListBoxModel::StringItemList</member>)
      */
     [property] sequence<string> ListSource;
 

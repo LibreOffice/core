@@ -33,8 +33,11 @@
 /** This service specifies a data-aware list box control model.
 
     <p>The base service for list boxes (<type>ListBox</type>) offers only
-    one possibility to specify the list entries: the <member>ListBox::ListSource</member>
-    property, which contains all the strings to be displayed.</p>
+    one possibility to specify the list entries:
+    The display strings in the
+    <member scope="com::sun::star::awt">UnoControlListBoxModel::StringItemList</member>
+    property and the corresponding values in the <member>ListBox::ListSource</member>
+    property.</p>
 
     <p>This service here extends this mimic. It allows to fill the list from a data source.
     This means that a second result set is opened, which works on the same connection as the
@@ -54,6 +57,8 @@
     pure numbers.<br/>
     Let's call this result set the list is filled from the <em>list result set</em> here ...</p>
 
+    <p>The display strings are always taken from the first column of that result set,
+    and the corresponding value as per the BoundColumn property.</p>
  */
 published service DatabaseListBox
 {
@@ -133,6 +138,14 @@ published service DatabaseListBox
 
      */
     [property] com::sun::star::form::ListSourceType ListSourceType;
+
+    /** The selected values.
+     */
+    [property, transient, optional] sequence< any > SelectedValues;
+
+    /** The selected value, if there is at most one.
+     */
+    [property, transient, optional] any SelectedValue;
 
 };
 
