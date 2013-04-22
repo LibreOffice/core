@@ -107,10 +107,9 @@ sal_Int32 SAL_CALL RangePageBreaks::getCount(  ) throw (uno::RuntimeException)
     for( sal_Int32 i=0; i<nLength; i++ )
     {
         sal_Int32 nPos = aTablePageBreakData[i].Position;
-        if( nPos > nUsedEnd )
+        if( nPos > nUsedEnd + 1 )
             return nCount;
-        if( nPos >= nUsedStart )
-            nCount++;
+        nCount++;
     }
 
     return nCount;
