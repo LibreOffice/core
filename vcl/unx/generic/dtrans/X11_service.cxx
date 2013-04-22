@@ -61,8 +61,6 @@ Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    static boost::unordered_map< OUString, ::boost::unordered_map< Atom, Reference< XClipboard > >, OUStringHash > m_aInstances;
-
     OUString aDisplayName;
     Atom nSelection;
 
