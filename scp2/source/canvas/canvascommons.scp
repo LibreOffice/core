@@ -27,5 +27,5 @@
 
 #include "macros.inc"
 
-SPECIAL_COMPONENT_LIB_FILE(gid_File_CanvasFactory, canvasfactory.uno)
-SPECIAL_COMPONENT_LIB_FILE(gid_File_SimpleCanvas, simplecanvas.uno)
+STD_LIB_FILE(gid_File_CanvasFactory, canvasfactory)
+STD_LIB_FILE(gid_File_SimpleCanvas, simplecanvas)

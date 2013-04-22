@@ -28,6 +28,6 @@
 #include "macros.inc"
 
 #ifdef WNT
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_DirectX9Canvas, directx9canvas.uno)
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_GdiPlusCanvas,  gdipluscanvas.uno)
+STD_LIB_FILE(gid_File_Lib_DirectX9Canvas, directx9canvas)
+STD_LIB_FILE(gid_File_Lib_GdiPlusCanvas,  gdipluscanvas)
 #endif

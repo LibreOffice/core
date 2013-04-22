@@ -45,9 +45,9 @@ Module gid_Module_Optional_PostgresqlSdbc
     Styles = ();
 End
 
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_PostgresqlSdbc, postgresql-sdbc.uno)
+STD_LIB_FILE(gid_File_Lib_PostgresqlSdbc, postgresql-sdbc)
 
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_PostgresqlSdbcImpl, postgresql-sdbc-impl.uno)
+STD_LIB_FILE(gid_File_Lib_PostgresqlSdbcImpl, postgresql-sdbc-impl)
 
 File gid_File_PostgresqlSdbc_Ini
     TXT_FILE_BODY;

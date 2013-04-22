@@ -29,7 +29,7 @@
 #ifdef ENABLE_GIO
 STD_LIB_FILE( gid_File_Lib_GIO, ucpgio1 )
 
-SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Losessioninstall, losessioninstall.uno)
+STD_LIB_FILE(gid_File_Lib_Losessioninstall, losessioninstall)
 #endif
 
 #ifdef ENABLE_GNOMEVFS
