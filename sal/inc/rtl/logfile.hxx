@@ -21,8 +21,7 @@
 
 #include <rtl/logfile.h>
 #include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
+#include <sal/detail/log.h>
 
 namespace rtl
 {
@@ -163,25 +162,13 @@ namespace rtl
         rtl_logfile_trace( "\n" )
 
 #else
-#ifdef SAL_LOG_INFO
+
 #define RTL_LOGFILE_FORWARD_VIA_SAL_LOG(area, message) \
-    do { \
-        OStringBuffer full_area; \
-        full_area.append(OString(area)); \
-        if(full_area.getLength()) \
-            full_area.append("."); \
-        full_area.append(OString("logfile")); \
-        SAL_INFO(full_area.makeStringAndClear().getStr(), message); \
-    } while (false)
+    SAL_DETAIL_INFO_IF_FORMAT(SAL_DETAIL_ENABLE_LOG_INFO, area, "%s", message)
 
-#else
-#define RTL_LOGFILE_FORWARD_VIA_SAL_LOG(area, message) ((void)0)
-
-#endif
-
-#define RTL_LOGFILE_CONTEXT( instance, name )  RTL_LOGFILE_FORWARD_VIA_SAL_LOG("", name)
-#define RTL_LOGFILE_CONTEXT_AUTHOR( instance, project, author, name )  RTL_LOGFILE_FORWARD_VIA_SAL_LOG(project, name)
-#define RTL_LOGFILE_CONTEXT_TRACE( instance, message )  RTL_LOGFILE_FORWARD_VIA_SAL_LOG("", message)
+#define RTL_LOGFILE_CONTEXT( instance, name )  RTL_LOGFILE_FORWARD_VIA_SAL_LOG("logfile", name)
+#define RTL_LOGFILE_CONTEXT_AUTHOR( instance, project, author, name )  RTL_LOGFILE_FORWARD_VIA_SAL_LOG(project ".logfile", name)
+#define RTL_LOGFILE_CONTEXT_TRACE( instance, message )  RTL_LOGFILE_FORWARD_VIA_SAL_LOG("logfile", message)
 #define RTL_LOGFILE_CONTEXT_TRACE1( instance, frmt, arg1 ) ((void)arg1,(void)0)
 #define RTL_LOGFILE_CONTEXT_TRACE2( instance, frmt, arg1, arg2 ) ((void)arg1,(void)arg2,(void)0)
 #define RTL_LOGFILE_CONTEXT_TRACE3( instance, frmt, arg1, arg2 , arg3 ) ((void)arg1,(void)arg2,(void)arg3,(void)0)
