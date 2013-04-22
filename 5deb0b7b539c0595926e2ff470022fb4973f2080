@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+RA\u003d",
+        "filename": "sc/Module_sc.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-04-22T15:11:10Z",
+      "side": 1,
+      "message": "Hmmm, I wonder if instead of sprinkling the whole tree with lots of:\n\nifeq(...,$(DISABLED_APPS)\n\nit would be preferable to map the module to an app as in:\n\n$(eval $(call gb_Module_Module,sc,calc))\n\ndeclaring the sc module part of the calc app, and then have the logic toggling this _once_ in solenv/gbuild/Module.mk instead of all over the tree.",
+      "revId": "5deb0b7b539c0595926e2ff470022fb4973f2080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
