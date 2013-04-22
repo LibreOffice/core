@@ -1236,7 +1236,13 @@ endef
 # are the LinkTargets) and doing an incremental build.
 define gb_LinkTarget_add_auxtarget
 $(2) : $(call gb_LinkTarget_get_target,$(1))
-	$$(if $$(wildcard $$@),touch -r $$< $$@,rm -f $$<; echo "ERROR: aux-target missing, library deleted, please try again"; false)
+	if test -e $$@; then \
+		touch -r $$< $$@; \
+	else \
+		rm -f $$<; \
+		echo "ERROR: aux-target missing, library deleted, please try running make again"; \
+		false; \
+	fi
 
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS += $(2)
 
