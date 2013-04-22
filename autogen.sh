@@ -162,6 +162,7 @@ my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
 $aclocal_flags .= " -I $src_path/m4";
 $aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin');
+$aclocal_flags .= " -I /opt/freeware/share/aclocal" if ($system eq 'AIX');
 
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
