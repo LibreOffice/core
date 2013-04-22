@@ -80,7 +80,7 @@ Sub TestExtensions
     gCurrentTestCase = cEXTUninstall
 
     &apos;Remove the package
-    ext_mgr.removeExtension(&quot;org.openoffice.legacy.&quot; + cExtensionFileName, cExtensionFileName, &quot;user&quot;,obj_null, cmdEnv)
+    ext_mgr.removeExtension(&quot;org.libreoffice.smoketest.TestExtension&quot;, cExtensionFileName, &quot;user&quot;,obj_null, cmdEnv)
 
     &apos;Try to create the service which is contained in the now removed extension.
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)

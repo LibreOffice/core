@@ -18,7 +18,7 @@
  -->
 
 <d:description xmlns:d="http://openoffice.org/extensions/description/2006">
-  <d:identifier value="smoketest.TestExtension"/>
+  <d:identifier value="org.libreoffice.smoketest.TestExtension"/>
   <d:version value="1"/>
   <d:dependencies>
     <d:OpenOffice.org-minimal-version d:name="OpenOffice.org 2.3" value="2.3"/>
