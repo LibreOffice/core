@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+TA\u003d",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-04-22T09:13:08Z",
+      "side": 1,
+      "message": "It would be better to have something like this:\nifeq ($(ENABLE_HARFBUZZ),YES)\nifeq ($(SYSTEM_HARFBUZZ),YES)\n...\nelse # SYSTEM_HARFBUZZ !\u003d YES\n...\nendif # SYSTEM_HARFBUZZ\nelse # ENABLE_HARFBUZZ !\u003d YES\n....\nendif # ENABLE_HARFBUZZ\n\nIt is more in line with the rest of the file",
+      "revId": "85763a56afc2d655cf02750c9a102a769e33792d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
