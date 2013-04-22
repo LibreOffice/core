@@ -24,7 +24,7 @@ private:
     sal_Int32 mnLineWidth;
     com::sun::star::drawing::LineStyle meLineStyle;
     com::sun::star::util::Color maLineColor;
-    sal_uInt8 mnLineTransparence;
+    sal_Int16 mnLineTransparence;
     com::sun::star::drawing::LineJoint meLineJoint;
 
 public:

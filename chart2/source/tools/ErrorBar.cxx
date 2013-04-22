@@ -68,7 +68,7 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
         {MAP_CHAR_LEN("LineDash"),10,&getCppuType((drawing::LineDash*)0),0,0},
         {MAP_CHAR_LEN("LineWidth"),11,&getCppuType((sal_Int32*)0),0,0},
         {MAP_CHAR_LEN("LineColor"),12,&getCppuType((com::sun::star::util::Color*)0),0,0},
-        {MAP_CHAR_LEN("LineTransparence"),13,&getCppuType((sal_uInt8*)0),0,0},
+        {MAP_CHAR_LEN("LineTransparence"),13,&getCppuType((sal_Int16*)0),0,0},
         {MAP_CHAR_LEN("LineJoint"),14,&getCppuType((com::sun::star::drawing::LineJoint*)0),0,0},
         {0,0,0,0,0,0}
     };
