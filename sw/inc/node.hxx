@@ -381,6 +381,52 @@ protected:
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
+   /** used by RecurseThroughLinkedRedline\n
+    *  § == paragraph ; RecurseThroughLinkedRedline is launch on the 2nd §.\n
+    *  1st § begining <begin 1st deletion redline> end of 1st § ¶\n
+    *  2nd § begining <end 1st deletion redline> middle of 2nd § <begin 2nd deletion redline> end of 2nd § ¶\n
+    *  3rd § begining <end 2nd deletion redline> end of 3rd § ¶ */
+    enum HandleRedlineDirection {
+        /// RecurseThroughLinkedRedline handle previous (1st) and next (3rd) deleted §
+        REDLINE_DIRECTION_BOTH,
+        /// RecurseThroughLinkedRedline handle only the previous (1st) deleted § (it's as the 2nd deletion redline doesn't exist)
+        REDLINE_DIRECTION_PREVIOUS,
+        /// RecurseThroughLinkedRedline handle only the next (3rd) deleted § (it's as the 1st deletion redline doesn't exist)
+        REDLINE_DIRECTION_NEXT};
+
+    /// see HandleRedlineDirection
+    enum HandleRedlineDirection m_eHandleRedlineDirection;
+    /** § == paragraph ; RecurseThroughLinkedRedline is launch on the 2nd §.\n
+     *  1st § begining <begin 1st deletion redline> end of 1st § ¶\n
+     *  2nd § begining <end 1st deletion redline> middle of 2nd § <begin 2nd deletion redline> end of 2nd § ¶\n
+     *  3rd § begining <end 2nd deletion redline> end of 3rd § ¶\n
+     *  \n
+     *  The format of 1st, 2nd and 3rd should be the same since ¶ are deleted by the two redlines.
+     *  RecurseThroughLinkedRedline is used in format modification functions to transmit the modifications to
+     *  previous and next § in case they are linked by deletion redlines.
+     *
+     *  @param  methode  the current format modification function where RecurseThroughLinkedRedline is called
+     */
+    template<typename T>
+    void RecurseThroughLinkedRedline(const T methode);
+    /** copy of RecurseThroughLinkedRedline(const T methode)
+     *  wait for c++11 variadic template so we can merge all those functions
+     *
+     *  @param  methode  The current format modification function where RecurseThroughLinkedRedline is called
+     *  @param  arg1     The first argument of the current format modification function where RecurseThroughLinkedRedline is called
+     */
+    template<typename T, typename U>
+    void RecurseThroughLinkedRedline(const T methode, U arg1);
+    /** copy of RecurseThroughLinkedRedline(const T methode)
+     *  wait for c++11 variadic template so we can merge all those functions
+     *
+     *  @param  methode  The current format modification function where RecurseThroughLinkedRedline is called
+     *  @param  arg1     The first argument of the current format modification function where RecurseThroughLinkedRedline is called
+     *  @param  arg2     The second argument of the current format modification function where RecurseThroughLinkedRedline is called
+     */
+    template<typename T, typename U, typename V>
+    void RecurseThroughLinkedRedline(const T methode, U arg1, V arg2);
+
 public:
     TYPEINFO();     /// Already contained in base class Client.
 
