@@ -2516,6 +2516,7 @@ ScVbaRange::Cut(const ::uno::Any& Destination) throw (uno::RuntimeException)
         uno::Reference< sheet::XCellRangeAddressable > xSource( mxRange, uno::UNO_QUERY);
         xMover->moveRange( xDestination->getCellAddress(), xSource->getRangeAddress() );
     }
+    else
     {
         uno::Reference< frame::XModel > xModel = getModelFromRange( mxRange );
         Select();
