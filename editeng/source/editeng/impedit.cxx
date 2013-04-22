@@ -318,11 +318,9 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
         }
         else
         {
-            Window* pWindow = dynamic_cast< Window* >(_pTarget);
-
-            if(pWindow)
+            if(pOutWin)
             {
-                pWindow->Invert( aRect );
+                pOutWin->Invert( aRect );
             }
             else
             {
