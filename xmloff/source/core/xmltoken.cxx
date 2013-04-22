@@ -3205,8 +3205,8 @@ namespace xmloff { namespace token {
         sal_uInt16 nPos = 0;
         while ( pEntry < pEntryEnd )
         {
-            OSL_ENSURE( nPos == (sal_uInt16)(pEntry->eToken),
-                "xmloff::GetXMLToken: inconsistency in the token list!" );
+            assert(nPos == static_cast<sal_uInt16>(pEntry->eToken));
+                // "xmloff::GetXMLToken: inconsistency in the token list!"
             ++pEntry, ++nPos;
         }
 #endif
