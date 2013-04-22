@@ -21,6 +21,16 @@
 #include "jpegcomp.h"
 #include <ctype.h>      /* to declare isdigit() */
 
+/* Definition of jdiv_round_up is copied here from jutils.c in jpeg-8c.tar.gz,
+   just as the rest of this file appears to be copied here from transupp.c in
+   jpeg-8c.tar.gz: */
+static long
+jdiv_round_up (long a, long b)
+/* Compute a/b rounded up to next integer, ie, ceil(a/b) */
+/* Assumes a >= 0, b > 0 */
+{
+  return (a + b - 1L) / b;
+}
 
 #if JPEG_LIB_VERSION >= 70
 #define dstinfo_min_DCT_h_scaled_size dstinfo->min_DCT_h_scaled_size
