@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+Z4\u003d",
+        "filename": "sal/inc/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-22T06:42:22Z",
+      "side": 1,
+      "message": "this is the definition of the \u003d\u003d operator. Did you actually try to compile this?!",
+      "revId": "28b6d77991aa0ae07b07dcac9ec640096b932d3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
