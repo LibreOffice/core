@@ -55,8 +55,6 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_import, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,chart2_import,\
-    -I$(SRCDIR)/sc/source/ui/inc \
-    -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 
