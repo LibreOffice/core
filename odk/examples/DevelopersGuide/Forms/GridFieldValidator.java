@@ -72,7 +72,7 @@ class GridFieldValidator implements XUpdateListener
         if ( bEnable == m_bWatching )
             return;
 
-        XUpdateBroadcaster xUpdate = (XUpdateBroadcaster)UnoRuntime.queryInterface(
+        XUpdateBroadcaster xUpdate = UnoRuntime.queryInterface(
             XUpdateBroadcaster.class, m_xWatchedColumn );
 
         if ( bEnable )
@@ -105,7 +105,7 @@ class GridFieldValidator implements XUpdateListener
             );
 
             // instantiate an interaction handler who can handle SQLExceptions
-            XInteractionHandler xHandler = (XInteractionHandler)UnoRuntime.queryInterface(
+            XInteractionHandler xHandler = UnoRuntime.queryInterface(
                 XInteractionHandler.class,
                 m_xCtx.getServiceManager().createInstanceWithContext(
                     "com.sun.star.task.InteractionHandler", m_xCtx ) );

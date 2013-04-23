@@ -87,9 +87,9 @@ public class FormLayer
         int nYPos, int nWidth, int nHeight, XIndexContainer xParentForm ) throws java.lang.Exception
     {
         // let the document create a shape
-        XMultiServiceFactory xDocAsFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+        XMultiServiceFactory xDocAsFactory = UnoRuntime.queryInterface(
             XMultiServiceFactory.class, m_document.getDocument() );
-        XControlShape xShape = (XControlShape)UnoRuntime.queryInterface( XControlShape.class,
+        XControlShape xShape = UnoRuntime.queryInterface( XControlShape.class,
             xDocAsFactory.createInstance( "com.sun.star.drawing.ControlShape" ) );
 
         // position and size of the shape
@@ -103,7 +103,7 @@ public class FormLayer
 
         // create the form component (the model of a form control)
         String sQualifiedComponentName = "com.sun.star.form.component." + sFormComponentService;
-        XControlModel xModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class,
+        XControlModel xModel = UnoRuntime.queryInterface( XControlModel.class,
             m_document.getOrb().createInstance( sQualifiedComponentName ) );
 
         // insert the model into the form component hierarchy, if the caller gave us a location
@@ -118,7 +118,7 @@ public class FormLayer
         // add the shape to the shapes collection of the document
         XDrawPage pageWhereToInsert = ( m_insertPage != -1 ) ? m_document.getDrawPage( m_insertPage ) : m_document.getMainDrawPage();
 
-        XShapes xDocShapes = (XShapes)UnoRuntime.queryInterface( XShapes.class, pageWhereToInsert );
+        XShapes xDocShapes = UnoRuntime.queryInterface( XShapes.class, pageWhereToInsert );
         xDocShapes.add( xShape );
 
         // some initializations which are the same for all controls
@@ -240,7 +240,7 @@ public class FormLayer
     */
     public XPropertySet getRadioModelByRefValue( XPropertySet form, String name, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        XIndexAccess indexAccess = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
+        XIndexAccess indexAccess = UnoRuntime.queryInterface( XIndexAccess.class,
             form );
 
         for ( int i=0; i<indexAccess.getCount(); ++i )
@@ -265,7 +265,7 @@ public class FormLayer
     */
     public XPropertySet getRadioModelByTag( XPropertySet form, String name, String tag ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        XIndexAccess indexAccess = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
+        XIndexAccess indexAccess = UnoRuntime.queryInterface( XIndexAccess.class,
             form );
 
         for ( int i=0; i<indexAccess.getCount(); ++i )

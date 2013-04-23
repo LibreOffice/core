@@ -78,7 +78,7 @@ public class TDocSupplier {
             XRow xRow = getXRowOfTDocUrl(_sTDocUrl, "DocumentModel");
             if (xRow != null){
                 Object oModel = xRow.getObject(1, null);
-                XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, oModel);
+                XModel xModel = UnoRuntime.queryInterface(XModel.class, oModel);
                 return xModel;
             }
         }catch(Exception exception){
@@ -108,7 +108,7 @@ public class TDocSupplier {
             XUniversalContentBroker xUCB = UniversalContentBroker.create( getXComponentContext() );
             XContentIdentifier xId = xUCB.createContentIdentifier(_sTDocUrl);
             XContent xContent = xUCB.queryContent(xId);
-            XCommandProcessor xCmdProcessor = (XCommandProcessor) UnoRuntime.queryInterface(XCommandProcessor.class, xContent);
+            XCommandProcessor xCmdProcessor = UnoRuntime.queryInterface(XCommandProcessor.class, xContent);
             Property aProperty = new Property();
             aProperty.Name = _sPropertyName; // "DocumentModel";                //DocumentModel
             Command aCommand  = new Command();
@@ -116,7 +116,7 @@ public class TDocSupplier {
             aCommand.Handle = -1; // not available
             aCommand.Argument = new Property[]{aProperty};
             Object oAny = xCmdProcessor.execute(aCommand, 0, null);
-            XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, oAny);
+            XRow xRow = UnoRuntime.queryInterface(XRow.class, oAny);
             return xRow;
         }catch(Exception exception){
             exception.printStackTrace(System.err);
@@ -136,7 +136,7 @@ public class TDocSupplier {
         protected String[] getTDocUrls(){
         try{
             Object oSimpleFileAccess = getXMultiComponentFactory().createInstanceWithContext("com.sun.star.ucb.SimpleFileAccess", getXComponentContext());
-            XSimpleFileAccess xSimpleFileAccess =  (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, oSimpleFileAccess);
+            XSimpleFileAccess xSimpleFileAccess =  UnoRuntime.queryInterface(XSimpleFileAccess.class, oSimpleFileAccess);
             String[] sContent = xSimpleFileAccess.getFolderContents("vnd.sun.star.tdoc:/", false);
             return sContent;
         } catch( Exception e ) {
@@ -152,7 +152,7 @@ public class TDocSupplier {
         aPropertyValues[0].Name = "Hidden";
         aPropertyValues[0].Value = Boolean.TRUE;
         Object oDesktop = getXMultiComponentFactory().createInstanceWithContext("com.sun.star.frame.Desktop", getXComponentContext());
-        XComponentLoader xCL = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
+        XComponentLoader xCL = UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
         return xCL.loadComponentFromURL(_sUrl, "_default", 0, aPropertyValues);
     }
     catch( Exception exception ) {

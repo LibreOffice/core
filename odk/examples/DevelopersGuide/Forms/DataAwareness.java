@@ -76,7 +76,7 @@ class PrintComponentTree extends ComponentTreeTraversal
     public void handle( Object aFormComponent ) throws com.sun.star.uno.Exception
     {
         // the name of the child
-        XNamed xName = (XNamed)UnoRuntime.queryInterface( XNamed.class, aFormComponent );
+        XNamed xName = UnoRuntime.queryInterface( XNamed.class, aFormComponent );
 
         // if it's a form control model, check it's type
         XPropertySet xProps = UNO.queryPropertySet( aFormComponent );
@@ -183,7 +183,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     {
         String sObjectName;
 
-        XNamed xNameAcc = (XNamed)UnoRuntime.queryInterface( XNamed.class, xContainer );
+        XNamed xNameAcc = UnoRuntime.queryInterface( XNamed.class, xContainer );
         if ( null == xNameAcc )
             sObjectName = new String( "<unnamed>" );
         else
@@ -244,12 +244,12 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
 
 
                         // get the columns of our master form
-                        XColumnsSupplier xSuppCols = (XColumnsSupplier)UnoRuntime.queryInterface(
+                        XColumnsSupplier xSuppCols = UnoRuntime.queryInterface(
                             XColumnsSupplier.class, xFormProps );
                         XNameAccess xCols = xSuppCols.getColumns();
 
                         // and update the date column with a NULL value
-                        XColumnUpdate xDateColumn = (XColumnUpdate)UnoRuntime.queryInterface(
+                        XColumnUpdate xDateColumn = UnoRuntime.queryInterface(
                             XColumnUpdate.class, xCols.getByName( "SALEDATE" ) );
                         xDateColumn.updateNull();
 
@@ -644,11 +644,11 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         // the container to insert columns into
         XIndexContainer xColumnContainer = UNO.queryIndexContainer( aGridModel );
         // the factory for creating column models
-        XGridColumnFactory xColumnFactory = (XGridColumnFactory)UnoRuntime.queryInterface(
+        XGridColumnFactory xColumnFactory = UnoRuntime.queryInterface(
             XGridColumnFactory.class, aGridModel );
 
         // (let) create the new col
-        XInterface xNewCol = (XInterface)xColumnFactory.createColumn( sColumnService );
+        XInterface xNewCol = xColumnFactory.createColumn( sColumnService );
         XPropertySet xColProps = UNO.queryPropertySet( xNewCol );
 
         // some props
@@ -913,7 +913,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         m_aSalesNameValidator.enableColumnWatch( false );
 
         // remove our own reset listener from the form
-        XNameAccess xMasterAsNames = (XNameAccess)UnoRuntime.queryInterface(
+        XNameAccess xMasterAsNames = UnoRuntime.queryInterface(
             XNameAccess.class, m_xMasterForm );
         XReset xFormReset = UNO.queryReset( xMasterAsNames.getByName( "Sales" ) );
         xFormReset.removeResetListener( this );

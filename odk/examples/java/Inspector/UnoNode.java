@@ -170,7 +170,7 @@ public class UnoNode{
     private com.sun.star.util.URL getDispatchURL(String _sURL){
         try {
             Object oTransformer = getXMultiComponentFactory().createInstanceWithContext("com.sun.star.util.URLTransformer", getXComponentContext());
-            XURLTransformer xTransformer = (XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
+            XURLTransformer xTransformer = UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
             com.sun.star.util.URL[] oURL = new com.sun.star.util.URL[1];
             oURL[0] = new com.sun.star.util.URL();
             oURL[0].Complete = _sURL;
@@ -186,7 +186,7 @@ public class UnoNode{
     private XFrame getCurrentFrame(){
     try{
         Object oDesktop = getXMultiComponentFactory().createInstanceWithContext("com.sun.star.frame.Desktop", getXComponentContext());
-        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, oDesktop);
+        XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, oDesktop);
         return xDesktop.getCurrentFrame();
     } catch (Exception e) {
         e.printStackTrace(System.err);
@@ -198,7 +198,7 @@ public class UnoNode{
     try {
         com.sun.star.util.URL[] oURLArray = new com.sun.star.util.URL[1];
         oURLArray[0] = oURL;
-        XDispatchProvider xDispatchProvider = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, getCurrentFrame());
+        XDispatchProvider xDispatchProvider = UnoRuntime.queryInterface(XDispatchProvider.class, getCurrentFrame());
         XDispatch xDispatch = xDispatchProvider.queryDispatch(oURLArray[0], "_top", FrameSearchFlag.ALL); // "_self"
         return xDispatch;
     } catch (Exception e) {
@@ -250,7 +250,7 @@ public class UnoNode{
         while (xTDEnumeration.hasMoreElements()) {
             XTypeDescription xTD = xTDEnumeration.nextTypeDescription();
             if (xTD.getName().equals(_sServiceName)){
-                XServiceTypeDescription xServiceTypeDescription = (XServiceTypeDescription) UnoRuntime.queryInterface(XServiceTypeDescription.class, xTD);
+                XServiceTypeDescription xServiceTypeDescription = UnoRuntime.queryInterface(XServiceTypeDescription.class, xTD);
                 XServiceTypeDescription[] xMandatoryServiceTypeDescriptions =  xServiceTypeDescription.getMandatoryServices();
                 int nlength = xMandatoryServiceTypeDescriptions.length;
                 sMandatoryServiceNames  = new String[nlength];
@@ -414,7 +414,7 @@ public class UnoNode{
 
 
     public static String getNodeDescription(Object _oUnoObject){
-        XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );
+        XServiceInfo xServiceInfo = UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );
         if ( xServiceInfo != null ) {
             return xServiceInfo.getImplementationName();
         }

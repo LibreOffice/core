@@ -261,7 +261,7 @@ public class HideableTreeModel implements TreeModel {
             if(parent instanceof TreeNode) {
                 TreeNode p = (TreeNode) parent;
                 for(int i = 0, j = -1; i < p.getChildCount(); i++) {
-                    TreeNode pc = (TreeNode)p.getChildAt(i);
+                    TreeNode pc = p.getChildAt(i);
                     if(isNodeVisible(pc)) {
                         j++;
                     }
@@ -279,7 +279,7 @@ public class HideableTreeModel implements TreeModel {
             if(parent instanceof TreeNode) {
                 TreeNode p = (TreeNode) parent;
                 for(int i = 0; i < p.getChildCount(); i++) {
-                    TreeNode pc = (TreeNode)p.getChildAt(i);
+                    TreeNode pc = p.getChildAt(i);
                     if(isNodeVisible(pc)) {
                         count++;
                     }
@@ -297,7 +297,7 @@ public class HideableTreeModel implements TreeModel {
                 if(isNodeVisible(c)) {
                     index = 0;
                     for(int i = 0; i < p.getChildCount(); i++) {
-                        TreeNode pc = (TreeNode)p.getChildAt(i);
+                        TreeNode pc = p.getChildAt(i);
                         if(pc.equals(c)) {
                             return index;
                         }

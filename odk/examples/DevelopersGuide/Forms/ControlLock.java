@@ -65,7 +65,7 @@ class LockControlModels extends ComponentTreeTraversal
         if ( !super.shouldStepInto( xContainer ) )
             return false;   // don't try to be more clever than our base class
 
-        XForm xForm = (XForm)UnoRuntime.queryInterface( XForm.class, xContainer );
+        XForm xForm = UnoRuntime.queryInterface( XForm.class, xContainer );
         if ( ( null != xForm ) && ( m_nLevel > 1 ) )
             // don't step into sub forms - we only handle the form we were originally
             // applied to
@@ -169,7 +169,7 @@ class ControlLock implements XRowSetListener
         m_bLockingEnabled = bLock;
 
         // add or remove ourself as listener to get notified of cursor moves
-        XRowSet xRowSet = (XRowSet)UnoRuntime.queryInterface(
+        XRowSet xRowSet = UnoRuntime.queryInterface(
             XRowSet.class, m_xForm );
         if ( m_bLockingEnabled )
         {

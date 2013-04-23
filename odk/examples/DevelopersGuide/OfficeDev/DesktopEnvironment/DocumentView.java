@@ -232,7 +232,7 @@ public class DocumentView extends    JFrame
             maCustomizeView.setFrame(mxFrame);
 
             // be listener for closing the remote target view frame
-            com.sun.star.lang.XComponent xBroadcaster = (com.sun.star.lang.XComponent)UnoRuntime.queryInterface(
+            com.sun.star.lang.XComponent xBroadcaster = UnoRuntime.queryInterface(
                 com.sun.star.lang.XComponent.class,
                 mxFrame);
 

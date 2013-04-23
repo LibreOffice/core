@@ -205,7 +205,7 @@ public class ViewContainer extends Thread
             synchronized(mlListener)
             {
                 try{
-                    aListener = (IShutdownListener)mlListener.firstElement();
+                    aListener = mlListener.firstElement();
                 } catch(java.util.NoSuchElementException exEmpty) {}
             }
             if (aListener==null)

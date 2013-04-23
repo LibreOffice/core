@@ -64,19 +64,19 @@ class UniqueColumnValue
         if ( CommandType.COMMAND == aCommandType.intValue() )
         {
             // get the connection from the form
-            XConnection xFormConn = (XConnection)UnoRuntime.queryInterface( XConnection.class,
+            XConnection xFormConn = UnoRuntime.queryInterface( XConnection.class,
                 xForm.getPropertyValue( "ActiveConnection" ) );
             // and let it create a composer for us
             XSQLQueryComposerFactory xComposerFac =
-                (XSQLQueryComposerFactory)UnoRuntime.queryInterface(
-                    XSQLQueryComposerFactory.class, xFormConn );
+                UnoRuntime.queryInterface(
+                XSQLQueryComposerFactory.class, xFormConn );
             XSQLQueryComposer xComposer = xComposerFac.createQueryComposer( );
 
             // let this composer analyze the command
             xComposer.setQuery( sCommand );
 
             // and ask it for the table(s)
-            XTablesSupplier xSuppTables = (XTablesSupplier)UnoRuntime.queryInterface(
+            XTablesSupplier xSuppTables = UnoRuntime.queryInterface(
                 XTablesSupplier.class, xComposer );
             XNameAccess xTables = xSuppTables.getTables();
 
@@ -126,7 +126,7 @@ class UniqueColumnValue
     protected int generatePrimaryKey( XPropertySet xForm, String sFieldName ) throws com.sun.star.uno.Exception
     {
         // get the current connection of the form
-        XConnection xConn = (XConnection)UnoRuntime.queryInterface(
+        XConnection xConn = UnoRuntime.queryInterface(
             XConnection.class, xForm.getPropertyValue( "ActiveConnection" ) );
         // let it create a new statement
         XStatement xStatement = xConn.createStatement();
@@ -141,7 +141,7 @@ class UniqueColumnValue
         xResults.next( );
 
         // get the value
-        XRow xRow = (XRow)UnoRuntime.queryInterface( XRow.class, xResults );
+        XRow xRow = UnoRuntime.queryInterface( XRow.class, xResults );
         int nFreeValue = xRow.getInt( 1 );
 
         // dispose the temporary objects
@@ -165,10 +165,10 @@ class UniqueColumnValue
         if ( ResultSetConcurrency.READ_ONLY != aConcurrency.intValue() )
         {
             // get the column object
-            XColumnsSupplier xSuppCols = (XColumnsSupplier)UnoRuntime.queryInterface(
+            XColumnsSupplier xSuppCols = UnoRuntime.queryInterface(
                 XColumnsSupplier.class, xForm );
             XNameAccess xCols = xSuppCols.getColumns();
-            XColumnUpdate xCol = (XColumnUpdate)UnoRuntime.queryInterface(
+            XColumnUpdate xCol = UnoRuntime.queryInterface(
                 XColumnUpdate.class, xCols.getByName( sFieldName ) );
 
             xCol.updateInt( generatePrimaryKey( xForm, sFieldName ) );
@@ -204,7 +204,7 @@ class KeyGeneratorForReset extends UniqueColumnValue implements XResetListener
     */
     public void defaultNewRecordFocus( XPropertySet xForm ) throws com.sun.star.uno.Exception
     {
-        XIndexAccess xFormAsContainer = (XIndexAccess)UnoRuntime.queryInterface(
+        XIndexAccess xFormAsContainer = UnoRuntime.queryInterface(
             XIndexAccess.class, xForm );
         for ( int i = 0; i<xFormAsContainer.getCount(); ++i )
         {
@@ -390,7 +390,7 @@ public class KeyGenerator
         XReset xFormReset = UNO.queryReset( m_xForm );
         xFormReset.removeResetListener( m_aResetKeyGenerator );
 
-        XRowSetApproveBroadcaster xFormBroadcaster = (XRowSetApproveBroadcaster)UnoRuntime.queryInterface(
+        XRowSetApproveBroadcaster xFormBroadcaster = UnoRuntime.queryInterface(
             XRowSetApproveBroadcaster.class, m_xForm );
         xFormBroadcaster.removeRowSetApproveListener( m_aUpdateKeyGenerator );
 
@@ -405,7 +405,7 @@ public class KeyGenerator
         // for resets
         XReset xFormReset = UNO.queryReset( m_xForm );
         // for approving actions
-        XRowSetApproveBroadcaster xFormBroadcaster = (XRowSetApproveBroadcaster)UnoRuntime.queryInterface(
+        XRowSetApproveBroadcaster xFormBroadcaster = UnoRuntime.queryInterface(
             XRowSetApproveBroadcaster.class, m_xForm );
 
         if ( bGenerateOnReset )

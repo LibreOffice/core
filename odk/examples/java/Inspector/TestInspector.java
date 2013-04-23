@@ -61,14 +61,14 @@ public class TestInspector {
             }
             org.openoffice.XInstanceInspector xInstInspector = null;
             if (obj != null) {
-                xInstInspector = (org.openoffice.XInstanceInspector)UnoRuntime.queryInterface(org.openoffice.XInstanceInspector.class, obj);
+                xInstInspector = UnoRuntime.queryInterface(org.openoffice.XInstanceInspector.class, obj);
             }
 
             /* A desktop environment contains tasks with one or more
                frames in which components can be loaded. Desktop is the
                environment for components which can instanciate within
                frames. */
-            com.sun.star.frame.XComponentLoader xCmpLoader =  (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface( com.sun.star.frame.XComponentLoader.class,
+            com.sun.star.frame.XComponentLoader xCmpLoader =  UnoRuntime.queryInterface( com.sun.star.frame.XComponentLoader.class,
                     xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext));
 
             // Load a new spreadsheet document, which will be automaticly

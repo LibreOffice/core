@@ -74,7 +74,7 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
             listSourceSheet, column, topRow, bottomRow );
 
         // bind it to the list box
-        XListEntrySink consumer = (XListEntrySink)UnoRuntime.queryInterface(
+        XListEntrySink consumer = UnoRuntime.queryInterface(
             XListEntrySink.class, listBox );
         consumer.setListEntrySource( entrySource );
 
@@ -87,7 +87,7 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
         String[] listContent = new String[] { "first", "second", "third", "forth", "fivth" };
         for ( short row = topRow; row <= bottomRow; ++row )
         {
-            XTextRange cellText = (XTextRange)UnoRuntime.queryInterface(
+            XTextRange cellText = UnoRuntime.queryInterface(
                 XTextRange.class, exchangeSheet.getCellByPosition( column, row ) );
             cellText.setString( listContent[row] );
         }
@@ -104,7 +104,7 @@ public class SpreadsheetValueBinding extends DocumentBasedExample
     /* ------------------------------------------------------------------ */
     private void implBind( XPropertySet controlModel, XValueBinding binding ) throws com.sun.star.form.binding.IncompatibleTypesException
     {
-        XBindableValue bindable = (XBindableValue)UnoRuntime.queryInterface(
+        XBindableValue bindable = UnoRuntime.queryInterface(
             XBindableValue.class, controlModel
         );
         bindable.setValueBinding( binding );
