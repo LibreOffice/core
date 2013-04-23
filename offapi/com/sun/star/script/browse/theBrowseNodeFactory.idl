@@ -17,21 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_browse_BrowseNodeFactory_idl__
-#define __com_sun_star_script_browse_BrowseNodeFactory_idl__
+#ifndef __com_sun_star_script_browse_theBrowseNodeFactory_idl__
+#define __com_sun_star_script_browse_theBrowseNodeFactory_idl__
 
-#include <com/sun/star/script/browse/XBrowseNodeFactory.idl>
+#include <com/sun/star/script/browse/BrowseNodeFactory.idl>
 
 module com { module sun { module star { module script { module browse {
 
 /**
-    This service is used to create Root XBrowseNodes.
+    The one and only BrowseNodeFactory.
+
+    To get the singleton call getValueByName on the component context
+    <pre>
+    /singletons/com.sun.star.script.theBrowseNodeFactory
+    </pre>
 
     @since OOo 2.0
 */
-service BrowseNodeFactory
+singleton theBrowseNodeFactory
 {
-    interface XBrowseNodeFactory;
+    service BrowseNodeFactory;
 };
 
 }; }; }; }; };
