@@ -36,6 +36,8 @@ public:
     ::rtl::OUString msId;
     ::rtl::OUString msIconURL;
     ::rtl::OUString msHighContrastIconURL;
+    ::rtl::OUString msTitleBarIconURL;
+    ::rtl::OUString msHighContrastTitleBarIconURL;
     ::rtl::OUString msHelpURL;
     ::rtl::OUString msHelpText;
     ContextList maContextList;

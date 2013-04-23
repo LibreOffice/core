@@ -30,6 +30,11 @@
 
 ToolbarValue::~ToolbarValue (void) {}
 
+namespace
+{
+    const static sal_Int32 gnLeftIconSpace (3);
+    const static sal_Int32 gnRightIconSpace (3);
+}
 
 namespace sfx2 { namespace sidebar {
 
@@ -39,7 +44,8 @@ TitleBar::TitleBar (
     const sidebar::Paint& rInitialBackgroundPaint)
     : Window(pParentWindow),
       maToolBox(this),
-      msTitle(rsTitle)
+      msTitle(rsTitle),
+      maIcon()
 {
     SetBackground(rInitialBackgroundPaint.GetWallpaper());
 
@@ -59,6 +65,15 @@ TitleBar::~TitleBar (void)
 void TitleBar::SetTitle (const ::rtl::OUString& rsTitle)
 {
     msTitle = rsTitle;
+    Invalidate();
+}
+
+
+
+
+void TitleBar::SetIcon (const Image& rIcon)
+{
+    maIcon = rIcon;
     Invalidate();
 }
 
@@ -137,6 +152,20 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
 {
     Push(PUSH_FONT | PUSH_TEXTCOLOR);
 
+    Rectangle aTitleBox (rTitleBox);
+
+    // When there is an icon then paint it at the left of the given
+    // box.
+    if ( !! maIcon)
+    {
+        DrawImage(
+            Point(
+                aTitleBox.Left() + gnLeftIconSpace,
+                aTitleBox.Top() + (aTitleBox.GetHeight()-maIcon.GetSizePixel().Height())/2),
+            maIcon);
+        aTitleBox.Left() += gnLeftIconSpace + maIcon.GetSizePixel().Width() + gnRightIconSpace;
+    }
+
     Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_BOLD);
     SetFont(aFont);
@@ -144,7 +173,7 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
     // Paint title bar text.
     SetTextColor(GetTextColor());
     DrawText(
-        rTitleBox,
+        aTitleBox,
         msTitle,
         TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER);
 

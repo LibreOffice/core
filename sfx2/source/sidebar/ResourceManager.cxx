@@ -279,6 +279,10 @@ void ResourceManager::ReadDeckList (void)
             aDeckNode.getNodeValue("IconURL"));
         rDeckDescriptor.msHighContrastIconURL = ::comphelper::getString(
             aDeckNode.getNodeValue("HighContrastIconURL"));
+        rDeckDescriptor.msTitleBarIconURL = ::comphelper::getString(
+            aDeckNode.getNodeValue("TitleBarIconURL"));
+        rDeckDescriptor.msHighContrastTitleBarIconURL = ::comphelper::getString(
+            aDeckNode.getNodeValue("HighContrastTitleBarIconURL"));
         rDeckDescriptor.msHelpURL = ::comphelper::getString(
             aDeckNode.getNodeValue("HelpURL"));
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
@@ -331,6 +335,10 @@ void ResourceManager::ReadPanelList (void)
             aPanelNode.getNodeValue("Id"));
         rPanelDescriptor.msDeckId = ::comphelper::getString(
             aPanelNode.getNodeValue("DeckId"));
+        rPanelDescriptor.msTitleBarIconURL = ::comphelper::getString(
+            aPanelNode.getNodeValue("TitleBarIconURL"));
+        rPanelDescriptor.msHighContrastTitleBarIconURL = ::comphelper::getString(
+            aPanelNode.getNodeValue("HighContrastTitleBarIconURL"));
         rPanelDescriptor.msHelpURL = ::comphelper::getString(
             aPanelNode.getNodeValue("HelpURL"));
         rPanelDescriptor.msImplementationURL = ::comphelper::getString(
