@@ -81,7 +81,7 @@ public class _XScriptNameResolver extends MultiMethodTest {
 
         log.println(description + ": " + logicalname);
 
-        HashMap map = new HashMap();
+        HashMap<String,Object> map = new HashMap<String,Object>();
         map.put("SCRIPTING_DOC_STORAGE_ID", new Integer(storageId));
         map.put("SCRIPTING_DOC_URI", util.utils.getFullTestURL(location));
 
