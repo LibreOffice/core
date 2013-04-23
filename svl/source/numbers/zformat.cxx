@@ -1550,7 +1550,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                         '1' <= nDBNum && nDBNum <= '9' )
                 {
                     sBuffSymbol.stripStart((sal_Unicode)'[');
-                    sBuffSymbol.append(rString.toString().copy( --nPos, aDBNum.getLength()+1 ));
+                    sBuffSymbol.append( aBufStr.copy( --nPos, aDBNum.getLength()+1 ));
                     nPos += aDBNum.getLength()+1;
                     //! SymbolType is negative
                     eSymbolType = sal::static_int_cast< short >( BRACKET_SYMBOLTYPE_DBNUM1 - (nDBNum - '1'));
