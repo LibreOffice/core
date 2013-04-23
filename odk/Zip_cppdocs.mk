@@ -7,16 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_InstallModule_InstallModule,scp2/sdkoo))
+$(eval $(call gb_Zip_Zip,cppdocs,$(call gb_CustomTarget_get_workdir,odk/odkcommon)))
 
-ifneq ($(DOXYGEN),)
-$(eval $(call gb_InstallModule_add_defs,scp2/sdkoo,\
-	-DDOXYGEN \
-))
-endif
-
-$(eval $(call gb_InstallModule_add_scpfiles,scp2/sdkoo,\
-    scp2/source/sdkoo/sdkoo \
+$(eval $(call gb_Zip_add_files,cppdocs,\
+	docs/cpp/ref \
 ))
 
-# vim: set shiftwidth=4 tabstop=4 noexpandtab:
+$(eval $(call gb_Zip_add_commandoptions,cppdocs,-r))
+
+$(call gb_Zip_get_target,cppdocs) : $(call gb_CustomTarget_get_target,odk/odkcommon/docs/cpp/ref)
+
+# vim: set noet sw=4 ts=4:

@@ -12,7 +12,10 @@ $(eval $(call gb_Module_Module,odk))
 $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_odkcommon \
 	$(if $(filter WNT,$(OS)),Package_cli) \
-	$(if $(DOXYGEN),CustomTarget_doxygen) \
+	$(if $(DOXYGEN),\
+		CustomTarget_doxygen \
+		Zip_cppdocs \
+	) \
 	CustomTarget_html \
 	CustomTarget_settings \
 	CustomTarget_autodoc \
