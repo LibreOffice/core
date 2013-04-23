@@ -1353,7 +1353,7 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
             bool bThere = Search( nRow, nIndex );
             if( bThere && !maItems[nIndex].pCell->IsBlank())
                 return nRow;
-            else if(nIndex >= maItems.size())
+            else if((bThere ? nIndex+1 : nIndex) >= maItems.size())
                 return MAXROW;
             else
             {
