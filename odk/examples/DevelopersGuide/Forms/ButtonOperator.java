@@ -148,7 +148,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
     public void actionPerformed( ActionEvent aEvent ) throws com.sun.star.uno.RuntimeException
     {
         // get the model's name
-        XPropertySet buttonModel = (XPropertySet)FLTools.getModel( aEvent.Source, XPropertySet.class );
+        XPropertySet buttonModel = FLTools.getModel( aEvent.Source, XPropertySet.class );
         try
         {
             short formFeature = getAssociatedFormFeature( buttonModel );
