@@ -23,6 +23,7 @@
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/AnimationRestart.hpp>
+#include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -597,13 +598,8 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
     else
     {
         // no presets? give empty node!
-        Reference< XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
-        Reference< XEnumerationAccess > aEmptyEnumAccess(
-            xServiceFactory->createInstance( "com.sun.star.animations.ParallelTimeContainer" ),
-            UNO_QUERY );
-
-        if( aEmptyEnumAccess.is() )
-            xEnum = aEmptyEnumAccess->createEnumeration();
+        Reference< XParallelTimeContainer > xTimeContainer  = ParallelTimeContainer::create( comphelper::getProcessComponentContext() );
+        xEnum = xTimeContainer->createEnumeration();
     }
 
     return xEnum;

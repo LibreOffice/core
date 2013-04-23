@@ -66,6 +66,7 @@ $(eval $(call gb_CppunitTest_use_api,sd_regression_test,\
 $(eval $(call gb_CppunitTest_use_ure,sd_regression_test))
 
 $(eval $(call gb_CppunitTest_use_components,sd_regression_test,\
+    animations/source/animcore/animcore \
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \

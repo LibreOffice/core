@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/presentation/ParagraphTarget.hpp>
+#include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <editeng/outliner.hxx>
@@ -52,14 +53,11 @@ Reference< XAnimationNode > SdPage::getAnimationNode() throw (RuntimeException)
 {
     if( !mxAnimationNode.is() )
     {
-        mxAnimationNode = Reference< XAnimationNode >::query(::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.ParallelTimeContainer"));
-        if( mxAnimationNode.is() )
-        {
-            Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-            aUserData[0].Name = "node-type";
-            aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT;
-            mxAnimationNode->setUserData( aUserData );
-        }
+        mxAnimationNode.set( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
+        Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
+        aUserData[0].Name = "node-type";
+        aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT;
+        mxAnimationNode->setUserData( aUserData );
     }
 
     return mxAnimationNode;

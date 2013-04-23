@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
+#include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
@@ -1036,11 +1037,14 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
         {
             sal_Int16 nTargetSubItem = mnTargetSubItem;
 
-            Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
-            const char * pServiceName =
-                nIterateType ? "com.sun.star.animations.IterateContainer" : "com.sun.star.animations.ParallelTimeContainer";
-            Reference< XTimeContainer > xNewContainer(
-                xMsf->createInstance( OUString::createFromAscii(pServiceName) ), UNO_QUERY_THROW );
+            Reference< XTimeContainer > xNewContainer;
+            if(nIterateType)
+            {
+                Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
+                xNewContainer.set( xMsf->createInstance( OUString::createFromAscii("com.sun.star.animations.IterateContainer") ), UNO_QUERY_THROW );
+            }
+            else
+                xNewContainer.set( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
 
             Reference< XTimeContainer > xOldContainer( mxNode, UNO_QUERY_THROW );
             Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY_THROW );

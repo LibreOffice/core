@@ -25,6 +25,7 @@
 #include <com/sun/star/animations/XAnimateSet.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
+#include <com/sun/star/animations/XParallelTimeContainer.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
@@ -108,8 +109,8 @@ class AnimationNodeBase :   public XAnimateMotion,
                             public XTransitionFilter,
                             public XAnimateSet,
                             public XAnimateTransform,
+                            public XParallelTimeContainer,
                             public XIterateContainer,
-                            public XEnumerationAccess,
                             public XServiceInfo,
                             public XTypeProvider,
                             public XAudio,
@@ -547,9 +548,9 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType ) throw (RuntimeEx
         aType,
         static_cast< XServiceInfo * >( this ),
         static_cast< XTypeProvider * >( this ),
-        static_cast< XChild * >( static_cast< XTimeContainer * >(this) ),
+        static_cast< XChild * >( static_cast< XTimeContainer * >( static_cast< XIterateContainer * >(this) ) ),
         static_cast< XCloneable* >( this ),
-        static_cast< XAnimationNode* >( static_cast< XTimeContainer * >(this) ),
+        static_cast< XAnimationNode* >( static_cast< XTimeContainer * >( static_cast< XIterateContainer * >(this) ) ),
         static_cast< XInterface* >(static_cast< OWeakObject * >(this)),
         static_cast< XWeak* >(static_cast< OWeakObject * >(this)),
         static_cast< XChangesNotifier* >( this ),
@@ -560,17 +561,24 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType ) throw (RuntimeEx
         switch( mnNodeType )
         {
         case AnimationNodeType::PAR:
+            aRet = ::cppu::queryInterface(
+                aType,
+                static_cast< XParallelTimeContainer * >( this ),
+                static_cast< XTimeContainer * >( static_cast< XIterateContainer * >(this) ),
+                static_cast< XEnumerationAccess * >( this ),
+                static_cast< XElementAccess * >( this ) );
+            break;
         case AnimationNodeType::SEQ:
             aRet = ::cppu::queryInterface(
                 aType,
-                static_cast< XTimeContainer * >( this ),
+                static_cast< XTimeContainer * >( static_cast< XIterateContainer * >(this) ),
                 static_cast< XEnumerationAccess * >( this ),
                 static_cast< XElementAccess * >( this ) );
             break;
         case AnimationNodeType::ITERATE:
             aRet = ::cppu::queryInterface(
                 aType,
-                static_cast< XTimeContainer * >( this ),
+                static_cast< XTimeContainer * >( static_cast< XIterateContainer * >(this) ),
                 static_cast< XIterateContainer * >( this ),
                 static_cast< XEnumerationAccess * >( this ),
                 static_cast< XElementAccess * >( this ) );

@@ -20,6 +20,7 @@
 
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -2364,18 +2365,15 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
 
 void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimationNode )
 {
-    Reference< XTimeContainer > xRoot(::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY);
-    if( xRoot.is() )
-    {
-        Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-        aUserData[0].Name = "node-type";
-        aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT;
-        xRoot->setUserData( aUserData );
-        xRoot->appendChild( xAnimationNode );
+    Reference< XParallelTimeContainer > xRoot = ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() );
+    Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
+    aUserData[0].Name = "node-type";
+    aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT;
+    xRoot->setUserData( aUserData );
+    xRoot->appendChild( xAnimationNode );
 
-        Reference< XAnimationNode > xNode( xRoot, UNO_QUERY );
-        SlideShow::StartPreview( mrBase, mxCurrentPage, xNode );
-    }
+    Reference< XAnimationNode > xNode( xRoot, UNO_QUERY );
+    SlideShow::StartPreview( mrBase, mxCurrentPage, xNode );
 }
 
 

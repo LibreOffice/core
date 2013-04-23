@@ -36,6 +36,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/accessibil
 	AccessBridge \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/animations,\
+	ParallelTimeContainer \
 	SequenceTimeContainer \
 	TargetPropertiesCreator \
 ))
@@ -1647,6 +1648,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/animations,\
 	XAudio \
 	XCommand \
 	XIterateContainer \
+    XParallelTimeContainer \
 	XTargetPropertiesCreator \
 	XTimeContainer \
 	XTransitionFilter \
