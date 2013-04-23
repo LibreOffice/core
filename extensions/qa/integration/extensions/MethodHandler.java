@@ -31,13 +31,13 @@ public class MethodHandler implements XPropertyHandler
     private XIntrospectionAccess    m_introspectionAccess;
     private XIdlClass               m_idlClass;
     private XIdlMethod[]            m_methods;
-    private java.util.HashMap       m_methodsHash;
+    private java.util.HashMap<String,XIdlMethod>       m_methodsHash;
 
     /** Creates a new instance of MethodHandler */
     public MethodHandler( XComponentContext _context )
     {
         m_context = _context;
-        m_methodsHash = new java.util.HashMap();
+        m_methodsHash = new java.util.HashMap<String,XIdlMethod>();
 
         try
         {
@@ -169,7 +169,7 @@ public class MethodHandler implements XPropertyHandler
 
         m_introspectionAccess = null;
         m_methods = null;
-        m_methodsHash = new java.util.HashMap();
+        m_methodsHash = new java.util.HashMap<String,XIdlMethod>();
 
         m_introspectionAccess = m_introspection.inspect( _component );
         if ( m_introspectionAccess == null )
@@ -217,7 +217,7 @@ public class MethodHandler implements XPropertyHandler
      */
     private XIdlMethod impl_getMethod( String _methodName ) throws UnknownPropertyException
     {
-        XIdlMethod method = (XIdlMethod)m_methodsHash.get( _methodName );
+        XIdlMethod method = m_methodsHash.get( _methodName );
         if ( method == null )
             throw new com.sun.star.beans.UnknownPropertyException();
 

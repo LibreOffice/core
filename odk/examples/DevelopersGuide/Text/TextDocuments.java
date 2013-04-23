@@ -32,47 +32,49 @@
  *
  *************************************************************************/
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Random;
+
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XIndexReplace;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XIndexReplace;
-import com.sun.star.container.XEnumeration;
-import com.sun.star.container.XEnumerationAccess;
-
+import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
-import com.sun.star.drawing.XDrawPageSupplier;
-
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XModel;
 import com.sun.star.frame.XController;
-
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XModel;
+import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
-
 import com.sun.star.style.NumberingType;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
-
 import com.sun.star.text.ControlCharacter;
-import com.sun.star.text.ReferenceFieldSource;
 import com.sun.star.text.ReferenceFieldPart;
+import com.sun.star.text.ReferenceFieldSource;
 import com.sun.star.text.TextColumn;
 import com.sun.star.text.TextContentAnchorType;
-import com.sun.star.text.XAutoTextGroup;
 import com.sun.star.text.XAutoTextEntry;
+import com.sun.star.text.XAutoTextGroup;
+import com.sun.star.text.XBookmarksSupplier;
 import com.sun.star.text.XDependentTextField;
 import com.sun.star.text.XDocumentIndex;
 import com.sun.star.text.XFootnote;
 import com.sun.star.text.XFootnotesSupplier;
+import com.sun.star.text.XPageCursor;
 import com.sun.star.text.XParagraphCursor;
 import com.sun.star.text.XReferenceMarksSupplier;
 import com.sun.star.text.XRelativeTextContentInsert;
@@ -84,29 +86,19 @@ import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextField;
+import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.text.XTextFrame;
 import com.sun.star.text.XTextRange;
 import com.sun.star.text.XTextTable;
 import com.sun.star.text.XTextTableCursor;
 import com.sun.star.text.XTextTablesSupplier;
-import com.sun.star.text.XTextFieldsSupplier;
-import com.sun.star.text.XBookmarksSupplier;
-import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.text.XTextViewCursor;
-import com.sun.star.text.XPageCursor;
-
+import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.text.XWordCursor;
-
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XRefreshable;
-
-import com.sun.star.frame.XStorable;
 import com.sun.star.view.XPrintable;
-
-import java.lang.Math;
-import java.util.Random;
-import java.util.Hashtable;
 
 /*
  * TextDocuments.java
@@ -170,7 +162,7 @@ public class TextDocuments {
      */
     protected void templateExample() throws java.lang.Exception {
         // create a small hashtable that simulates a rowset
-        Hashtable recipient = new Hashtable();
+        HashMap<String,String> recipient = new HashMap<String,String>();
         recipient.put("Company", "Manatee Books");
         recipient.put("Contact", "Rod Martin");
         recipient.put("ZIP", "34567");
@@ -195,10 +187,9 @@ public class TextDocuments {
         XEnumerationAccess xEnumeratedFields = xTextFieldsSupplier.getTextFields();
 
         // iterate over hashtable and insert values into field masters
-        java.util.Enumeration keys = recipient.keys();
-        while(keys.hasMoreElements()) {
+        for(Iterator<String> iter = recipient.keySet().iterator(); iter.hasNext(); ) {
             // get column name
-            String key = (String)keys.nextElement();
+            String key = iter.next();
 
             // access corresponding field master
             Object fieldMaster = xNamedFieldMasters.getByName(

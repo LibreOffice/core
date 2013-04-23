@@ -115,7 +115,7 @@ public final class TestEquals {
                 }
             }
 
-            private final HashMap map = new HashMap();
+            private final HashMap<String,Object> map = new HashMap<String,Object>();
         }
 
         private final class Done implements XDone {
@@ -160,7 +160,7 @@ public final class TestEquals {
                                         UnoRuntime.queryInterface(
                                             XDerived.class, test2Aa);
 
-                                    Hashtable params = new Hashtable();
+                                    Hashtable<String,String> params = new Hashtable<String,String>();
                                     params.put("UNO_TYPES", unoTypes);
                                     params.put("UNO_SERVICES", unoServices);
                                     XComponentContext context = Bootstrap.

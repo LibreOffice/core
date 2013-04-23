@@ -84,7 +84,7 @@ public class TestDataLoader {
 
     private static Parameters getParameters(StringTokenizer st) {
         String separator = "=";
-        HashMap map = new HashMap(5);
+        HashMap<String,Object> map = new HashMap<String,Object>(5);
 
         while (st.hasMoreTokens()) {
             String pair = st.nextToken();

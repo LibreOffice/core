@@ -103,14 +103,13 @@ public class GlobalString {
    public static String[] getMeaningfulLines(String srcStr, String neglectFirstChars) throws Exception {
     StringReader outStringReader = new StringReader(srcStr);
     BufferedReader outReader = new BufferedReader(outStringReader);
-    Vector origData = new Vector();
-    String str = null;
+    ArrayList<String> origData = new ArrayList<String>();
     while(true) {
-      str = getMeaningfulLine(outReader, neglectFirstChars);
-      if (str==null) {
-        break;
-      }
-      origData.add(str);
+        String str = getMeaningfulLine(outReader, neglectFirstChars);
+        if (str==null) {
+            break;
+        }
+        origData.add(str);
     }
     return convert1DVectorToStringArray(origData);
   }
@@ -118,11 +117,11 @@ public class GlobalString {
   /**
    * convert vector to 1D String array
    */
-  public static String[] convert1DVectorToStringArray(Vector toToConvert) {
+  public static String[] convert1DVectorToStringArray(ArrayList<String> toToConvert) {
     if (toToConvert==null) return null;
     String[] objs = new String[toToConvert.size()];
     for (int i=0; i<toToConvert.size(); i++) {
-      objs[i] =getObjString(toToConvert.elementAt(i));
+        objs[i] = getObjString(toToConvert.get(i));
     }
     return(objs);
   }
