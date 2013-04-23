@@ -1076,23 +1076,26 @@ void CustomAnimationPane::DataChanged (const DataChangedEvent& rEvent)
 
 void CustomAnimationPane::UpdateLook (void)
 {
-    SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
+    const Wallpaper aBackground (
+        ::sfx2::sidebar::Theme::GetWallpaper(
+            ::sfx2::sidebar::Theme::Paint_PanelBackground));
+    SetBackground(aBackground);
     if (mpFLModify != NULL)
-        mpFLModify->SetBackground(Wallpaper());
+        mpFLModify->SetBackground(aBackground);
     if (mpFLEffect != NULL)
-        mpFLEffect->SetBackground(Wallpaper());
+        mpFLEffect->SetBackground(aBackground);
     if (mpFTStart != NULL)
-        mpFTStart->SetBackground(Wallpaper());
+        mpFTStart->SetBackground(aBackground);
     if (mpFTProperty != NULL)
-        mpFTProperty->SetBackground(Wallpaper());
+        mpFTProperty->SetBackground(aBackground);
     if (mpFTSpeed != NULL)
-        mpFTSpeed->SetBackground(Wallpaper());
+        mpFTSpeed->SetBackground(aBackground);
     if (mpFTChangeOrder != NULL)
-        mpFTChangeOrder->SetBackground(Wallpaper());
+        mpFTChangeOrder->SetBackground(aBackground);
     if (mpFLSeperator1 != NULL)
-        mpFLSeperator1->SetBackground(Wallpaper());
+        mpFLSeperator1->SetBackground(aBackground);
     if (mpFLSeperator2 != NULL)
-        mpFLSeperator2->SetBackground(Wallpaper());
+        mpFLSeperator2->SetBackground(aBackground);
 }
 
 
