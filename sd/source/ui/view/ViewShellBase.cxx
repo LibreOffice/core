@@ -1121,7 +1121,6 @@ OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const 
 
     if ( !aCmdURL.isEmpty() ) try
     {
-        Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_QUERY_THROW );
 
         Reference< XModuleManager2 > xModuleManager( ModuleManager::create(xContext) );
