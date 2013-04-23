@@ -48,7 +48,7 @@ public class TableCellTextBinding
     private String      m_newCellText;
     private String      m_lastKnownCellText;
     private boolean     m_haveNewCellText;
-    private java.util.List  m_listeners;
+    private java.util.List<com.sun.star.util.XModifyListener>  m_listeners;
 
     /** Creates a new instance of TableCellTextBinding */
     public TableCellTextBinding( XCell cell )
@@ -56,7 +56,7 @@ public class TableCellTextBinding
         m_cellText = UnoRuntime.queryInterface( XTextRange.class, cell );
 
         m_newCellText = new String();
-        m_listeners = new java.util.LinkedList();
+        m_listeners = new java.util.LinkedList<com.sun.star.util.XModifyListener>();
 
         start();
     }
