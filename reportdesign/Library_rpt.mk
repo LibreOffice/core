@@ -83,7 +83,6 @@ $(eval $(call gb_Library_add_exception_objects,rpt,\
     reportdesign/source/core/sdr/RptPage \
     reportdesign/source/core/sdr/UndoActions \
     reportdesign/source/core/sdr/UndoEnv \
-    reportdesign/source/shared/corestrings \
 ))
 
 # vim: set noet sw=4 ts=4:

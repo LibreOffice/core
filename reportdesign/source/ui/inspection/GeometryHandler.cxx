@@ -1280,39 +1280,39 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
 
     const OUString pIncludeProperties[] =
     {
-         PROPERTY_FORCENEWPAGE
-        ,PROPERTY_KEEPTOGETHER
-        ,PROPERTY_CANGROW
-        ,PROPERTY_CANSHRINK
-        ,PROPERTY_REPEATSECTION
-        ,PROPERTY_PRINTREPEATEDVALUES
-        ,PROPERTY_CONDITIONALPRINTEXPRESSION
-        ,PROPERTY_STARTNEWCOLUMN
-        ,PROPERTY_RESETPAGENUMBER
-        ,PROPERTY_PRINTWHENGROUPCHANGE
-        ,PROPERTY_VISIBLE
-        ,PROPERTY_PAGEHEADEROPTION
-        ,PROPERTY_PAGEFOOTEROPTION
+         OUString(PROPERTY_FORCENEWPAGE)
+        ,OUString(PROPERTY_KEEPTOGETHER)
+        ,OUString(PROPERTY_CANGROW)
+        ,OUString(PROPERTY_CANSHRINK)
+        ,OUString(PROPERTY_REPEATSECTION)
+        ,OUString(PROPERTY_PRINTREPEATEDVALUES)
+        ,OUString(PROPERTY_CONDITIONALPRINTEXPRESSION)
+        ,OUString(PROPERTY_STARTNEWCOLUMN)
+        ,OUString(PROPERTY_RESETPAGENUMBER)
+        ,OUString(PROPERTY_PRINTWHENGROUPCHANGE)
+        ,OUString(PROPERTY_VISIBLE)
+        ,OUString(PROPERTY_PAGEHEADEROPTION)
+        ,OUString(PROPERTY_PAGEFOOTEROPTION)
         ,OUString("ControlLabel")
-        ,PROPERTY_POSITIONX
-        ,PROPERTY_POSITIONY
-        ,PROPERTY_WIDTH
-        ,PROPERTY_HEIGHT
-        ,PROPERTY_PREEVALUATED
-        ,PROPERTY_DEEPTRAVERSING
-        ,PROPERTY_FORMULA
-        ,PROPERTY_INITIALFORMULA
-        ,PROPERTY_PRESERVEIRI
-        ,PROPERTY_DATAFIELD
-        ,PROPERTY_FONT
-        ,PROPERTY_BACKCOLOR
-        ,PROPERTY_BACKTRANSPARENT
-        ,PROPERTY_CONTROLBACKGROUND
-        ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
-        ,PROPERTY_LABEL
-        ,PROPERTY_MIMETYPE
-        ,PROPERTY_VERTICALALIGN
-        ,PROPERTY_PARAADJUST
+        ,OUString(PROPERTY_POSITIONX)
+        ,OUString(PROPERTY_POSITIONY)
+        ,OUString(PROPERTY_WIDTH)
+        ,OUString(PROPERTY_HEIGHT)
+        ,OUString(PROPERTY_PREEVALUATED)
+        ,OUString(PROPERTY_DEEPTRAVERSING)
+        ,OUString(PROPERTY_FORMULA)
+        ,OUString(PROPERTY_INITIALFORMULA)
+        ,OUString(PROPERTY_PRESERVEIRI)
+        ,OUString(PROPERTY_DATAFIELD)
+        ,OUString(PROPERTY_FONT)
+        ,OUString(PROPERTY_BACKCOLOR)
+        ,OUString(PROPERTY_BACKTRANSPARENT)
+        ,OUString(PROPERTY_CONTROLBACKGROUND)
+        ,OUString(PROPERTY_CONTROLBACKGROUNDTRANSPARENT)
+        ,OUString(PROPERTY_LABEL)
+        ,OUString(PROPERTY_MIMETYPE)
+        ,OUString(PROPERTY_VERTICALALIGN)
+        ,OUString(PROPERTY_PARAADJUST)
     };
     const uno::Reference < beans::XPropertySetInfo > xInfo = m_xReportComponent->getPropertySetInfo();
     const uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
@@ -1390,7 +1390,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
 {
     if ( !_rxInspectorUI.is() )
         throw lang::NullPointerException();
-    if (PropertyName.equalsAsciiL(PROPERTY_FILTER.ascii, PROPERTY_FILTER.length))
+    if (PropertyName == PROPERTY_FILTER)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1403,7 +1403,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         }
         return eResult;
     }
-    else if (PropertyName.equalsAsciiL(PROPERTY_FONT.ascii, PROPERTY_FONT.length))
+    else if (PropertyName == PROPERTY_FONT)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1420,10 +1420,10 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         }
         return eResult;
     }
-    else if (      PropertyName.equalsAsciiL(PROPERTY_FORMULA.ascii, PROPERTY_FORMULA.length)
-                || PropertyName.equalsAsciiL(PROPERTY_INITIALFORMULA.ascii, PROPERTY_INITIALFORMULA.length)
-                || PropertyName.equalsAsciiL(PROPERTY_DATAFIELD.ascii, PROPERTY_DATAFIELD.length)
-                || PropertyName.equalsAsciiL(PROPERTY_CONDITIONALPRINTEXPRESSION.ascii, PROPERTY_CONDITIONALPRINTEXPRESSION.length))
+    else if (      PropertyName == PROPERTY_FORMULA
+                || PropertyName == PROPERTY_INITIALFORMULA
+                || PropertyName == PROPERTY_DATAFIELD
+                || PropertyName == PROPERTY_CONDITIONALPRINTEXPRESSION)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1443,7 +1443,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         }
         return eResult;
     }
-    else if (PropertyName.equalsAsciiL(PROPERTY_AREA.ascii, PROPERTY_AREA.length))
+    else if (PropertyName == PROPERTY_AREA)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 

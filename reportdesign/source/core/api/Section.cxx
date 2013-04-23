@@ -48,8 +48,8 @@ DBG_NAME( rpt_OSection )
 uno::Sequence< OUString> lcl_getGroupAbsent()
 {
     OUString pProps[] = {
-                PROPERTY_CANGROW
-                ,PROPERTY_CANSHRINK
+                OUString(PROPERTY_CANGROW)
+                ,OUString(PROPERTY_CANSHRINK)
         };
 
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
@@ -61,20 +61,20 @@ uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
     if ( _bPageSection )
     {
         OUString pProps[] = {
-                PROPERTY_FORCENEWPAGE
-                ,PROPERTY_NEWROWORCOL
-                ,PROPERTY_KEEPTOGETHER
-                ,PROPERTY_CANGROW
-                ,PROPERTY_CANSHRINK
-                ,PROPERTY_REPEATSECTION
+                OUString(PROPERTY_FORCENEWPAGE)
+                ,OUString(PROPERTY_NEWROWORCOL)
+                ,OUString(PROPERTY_KEEPTOGETHER)
+                ,OUString(PROPERTY_CANGROW)
+                ,OUString(PROPERTY_CANSHRINK)
+                ,OUString(PROPERTY_REPEATSECTION)
         };
         return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
     }
 
     OUString pProps[] = {
-                PROPERTY_CANGROW
-                ,PROPERTY_CANSHRINK
-                ,PROPERTY_REPEATSECTION
+                OUString(PROPERTY_CANGROW)
+                ,OUString(PROPERTY_CANSHRINK)
+                ,OUString(PROPERTY_REPEATSECTION)
         };
 
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));

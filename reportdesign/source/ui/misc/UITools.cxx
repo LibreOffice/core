@@ -537,9 +537,9 @@ namespace
                 sal_uInt16 nWhich;
                 OUString sPropertyName;
         };
-        const Items pItems[] = { {ITEMID_LANGUAGE,PROPERTY_CHARLOCALE}
-                                ,{ITEMID_LANGUAGE_ASIAN,PROPERTY_CHARLOCALEASIAN}
-                                ,{ITEMID_LANGUAGE_COMPLEX,PROPERTY_CHARLOCALECOMPLEX}
+        const Items pItems[] = { {ITEMID_LANGUAGE,OUString(PROPERTY_CHARLOCALE)}
+                                ,{ITEMID_LANGUAGE_ASIAN,OUString(PROPERTY_CHARLOCALEASIAN)}
+                                ,{ITEMID_LANGUAGE_COMPLEX,OUString(PROPERTY_CHARLOCALECOMPLEX)}
         };
         for(size_t k = 0; k < sizeof(pItems)/sizeof(pItems[0]);++k)
         {
@@ -807,28 +807,28 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
             _rxReportControlFormat->setCharFontNameComplex( sTemp );
         }
 
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARSHADOWED.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharShadowed );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCONTOURED.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharContoured );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARUNDERLINECOLOR.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharUnderlineColor );
-        lcl_applyFontAttribute( aSettings, PROPERTY_PARAADJUST.ascii, _rxReportControlFormat, &report::XReportControlFormat::setParaAdjust );
-        lcl_applyFontAttribute( aSettings, PROPERTY_VERTICALALIGN.ascii, _rxReportControlFormat, &report::XReportControlFormat::setVerticalAlign );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARRELIEF.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharRelief );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARHIDDEN.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharHidden );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARAUTOKERNING.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharAutoKerning );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CONTROLBACKGROUND.ascii, _rxReportControlFormat, &report::XReportControlFormat::setControlBackground );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARFLASH.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharFlash );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHAREMPHASIS.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharEmphasis );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOMBINEISON.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharCombineIsOn );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOMBINEPREFIX.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharCombinePrefix );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOMBINESUFFIX.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharCombineSuffix );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOLOR.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharColor );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARKERNING.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharKerning );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCASEMAP.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharCaseMap );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARLOCALE.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharLocale );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARESCAPEMENT.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharEscapement );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARESCAPEMENTHEIGHT.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharEscapementHeight );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARLOCALEASIAN.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharLocaleAsian );
-        lcl_applyFontAttribute( aSettings, PROPERTY_CHARLOCALECOMPLEX.ascii, _rxReportControlFormat, &report::XReportControlFormat::setCharLocaleComplex );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARSHADOWED, _rxReportControlFormat, &report::XReportControlFormat::setCharShadowed );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCONTOURED, _rxReportControlFormat, &report::XReportControlFormat::setCharContoured );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARUNDERLINECOLOR, _rxReportControlFormat, &report::XReportControlFormat::setCharUnderlineColor );
+        lcl_applyFontAttribute( aSettings, PROPERTY_PARAADJUST, _rxReportControlFormat, &report::XReportControlFormat::setParaAdjust );
+        lcl_applyFontAttribute( aSettings, PROPERTY_VERTICALALIGN, _rxReportControlFormat, &report::XReportControlFormat::setVerticalAlign );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARRELIEF, _rxReportControlFormat, &report::XReportControlFormat::setCharRelief );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARHIDDEN, _rxReportControlFormat, &report::XReportControlFormat::setCharHidden );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARAUTOKERNING, _rxReportControlFormat, &report::XReportControlFormat::setCharAutoKerning );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CONTROLBACKGROUND, _rxReportControlFormat, &report::XReportControlFormat::setControlBackground );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARFLASH, _rxReportControlFormat, &report::XReportControlFormat::setCharFlash );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHAREMPHASIS, _rxReportControlFormat, &report::XReportControlFormat::setCharEmphasis );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOMBINEISON, _rxReportControlFormat, &report::XReportControlFormat::setCharCombineIsOn );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOMBINEPREFIX, _rxReportControlFormat, &report::XReportControlFormat::setCharCombinePrefix );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOMBINESUFFIX, _rxReportControlFormat, &report::XReportControlFormat::setCharCombineSuffix );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOLOR, _rxReportControlFormat, &report::XReportControlFormat::setCharColor );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARKERNING, _rxReportControlFormat, &report::XReportControlFormat::setCharKerning );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCASEMAP, _rxReportControlFormat, &report::XReportControlFormat::setCharCaseMap );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARLOCALE, _rxReportControlFormat, &report::XReportControlFormat::setCharLocale );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARESCAPEMENT, _rxReportControlFormat, &report::XReportControlFormat::setCharEscapement );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARESCAPEMENTHEIGHT, _rxReportControlFormat, &report::XReportControlFormat::setCharEscapementHeight );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARLOCALEASIAN, _rxReportControlFormat, &report::XReportControlFormat::setCharLocaleAsian );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARLOCALECOMPLEX, _rxReportControlFormat, &report::XReportControlFormat::setCharLocaleComplex );
     }
     catch( const uno::Exception& )
     {

@@ -72,7 +72,6 @@ $(eval $(call gb_Library_add_exception_objects,rptxml,\
     reportdesign/source/filter/xml/xmlStyleImport \
     reportdesign/source/filter/xml/xmlSubDocument \
     reportdesign/source/filter/xml/xmlTable \
-    reportdesign/source/shared/xmlstrings \
 ))
 
 # vim: set noet sw=4 ts=4:

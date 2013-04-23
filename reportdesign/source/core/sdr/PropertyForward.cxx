@@ -32,7 +32,6 @@ namespace rptui
 //........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
-    using namespace reportdesign;
 
 DBG_NAME( rpt_OPropertyMediator )
 OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource

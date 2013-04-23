@@ -20,30 +20,23 @@
 #define REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 
 #include <rtl/ustring.hxx>
-#include <comphelper/string.hxx>
-using comphelper::string::ConstAsciiString;
 
-namespace rptxml
-{
 #define STRINGCONSTANTS_INCLUDED_INDIRECT
 #include "stringconstants.hrc"
 #undef STRINGCONSTANTS_INCLUDED_INDIRECT
 
-    //============================================================
-    //= XML
-    //============================================================
-    DECLARE_CONSTASCII_USTRING(SERVICE_SETTINGSIMPORTER);
-    DECLARE_CONSTASCII_USTRING(SERVICE_STYLESIMPORTER);
-    DECLARE_CONSTASCII_USTRING(SERVICE_CONTENTIMPORTER);
-    DECLARE_CONSTASCII_USTRING(SERVICE_IMPORTFILTER);
-    DECLARE_CONSTASCII_USTRING(SERVICE_METAIMPORTER);
-
-    DECLARE_CONSTASCII_USTRING(PROPERTY_BORDERLEFT);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_BORDERRIGHT);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_BORDERTOP);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_BORDERBOTTOM);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_OLDFORMAT);
-}
+//============================================================
+//= XML
+//============================================================
+#define SERVICE_SETTINGSIMPORTER "com.sun.star.comp.Report.XMLOasisSettingsImporter"
+#define SERVICE_STYLESIMPORTER "com.sun.star.comp.Report.XMLOasisStylesImporter"
+#define SERVICE_CONTENTIMPORTER "com.sun.star.comp.Report.XMLOasisContentImporter"
+#define SERVICE_IMPORTFILTER "com.sun.star.document.ImportFilter"
+#define SERVICE_METAIMPORTER "com.sun.star.comp.Report.XMLOasisMetaImporter"
+#define PROPERTY_BORDERLEFT "BorderLeft"
+#define PROPERTY_BORDERRIGHT "BorderRight"
+#define PROPERTY_BORDERTOP "BorderTop"
+#define PROPERTY_BORDERBOTTOM "BorderBottom"
 
 #endif // REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 

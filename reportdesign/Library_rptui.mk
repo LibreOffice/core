@@ -50,7 +50,6 @@ $(eval $(call gb_Library_use_libraries,rptui,\
 $(eval $(call gb_Library_set_componentfile,rptui,reportdesign/util/rptui))
 
 $(eval $(call gb_Library_add_exception_objects,rptui,\
-    reportdesign/source/shared/uistrings \
     reportdesign/source/ui/dlg/AddField \
     reportdesign/source/ui/dlg/CondFormat \
     reportdesign/source/ui/dlg/Condition \

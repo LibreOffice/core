@@ -375,10 +375,10 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
         beans::Property aValue;
         static const OUString s_pProperties[] =
         {
-             PROPERTY_CHARTTYPE
-            ,PROPERTY_MASTERFIELDS
-            ,PROPERTY_DETAILFIELDS
-            ,PROPERTY_PREVIEW_COUNT
+             OUString(PROPERTY_CHARTTYPE)
+            ,OUString(PROPERTY_MASTERFIELDS)
+            ,OUString(PROPERTY_DETAILFIELDS)
+            ,OUString(PROPERTY_PREVIEW_COUNT)
         };
 
         for (size_t nPos = 0; nPos < sizeof(s_pProperties)/sizeof(s_pProperties[0]) ;++nPos )

@@ -44,9 +44,9 @@ namespace reportdesign
 uno::Sequence< OUString > lcl_getShapeOptionals()
 {
     OUString pProps[] = {
-        PROPERTY_DATAFIELD
-        ,PROPERTY_CONTROLBACKGROUND
-        ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
+        OUString(PROPERTY_DATAFIELD)
+        ,OUString(PROPERTY_CONTROLBACKGROUND)
+        ,OUString(PROPERTY_CONTROLBACKGROUNDTRANSPARENT)
     };
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }

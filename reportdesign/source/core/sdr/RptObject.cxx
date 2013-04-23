@@ -179,7 +179,7 @@ namespace
         virtual ::com::sun::star::uno::Any operator() (const OUString& _sPropertyName,const ::com::sun::star::uno::Any& lhs) const
         {
             uno::Any aRet;
-            if (_sPropertyName.equalsAsciiL(PROPERTY_PARAADJUST.ascii, PROPERTY_PARAADJUST.length))
+            if (_sPropertyName == PROPERTY_PARAADJUST)
             {
                 sal_Int16 nTextAlign = 0;
                 lhs >>= nTextAlign;

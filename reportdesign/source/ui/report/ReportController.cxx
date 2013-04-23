@@ -3177,14 +3177,14 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
         uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
 
-        const OUString sProps[] = {   PROPERTY_NAME
-                                            ,PROPERTY_FONTDESCRIPTOR
-                                            ,PROPERTY_FONTDESCRIPTORASIAN
-                                            ,PROPERTY_FONTDESCRIPTORCOMPLEX
-                                            ,PROPERTY_ORIENTATION
-                                            ,PROPERTY_BORDER
-                                            ,PROPERTY_FORMATSSUPPLIER
-                                            ,PROPERTY_BACKGROUNDCOLOR
+        const OUString sProps[] = {   OUString(PROPERTY_NAME)
+                                            ,OUString(PROPERTY_FONTDESCRIPTOR)
+                                            ,OUString(PROPERTY_FONTDESCRIPTORASIAN)
+                                            ,OUString(PROPERTY_FONTDESCRIPTORCOMPLEX)
+                                            ,OUString(PROPERTY_ORIENTATION)
+                                            ,OUString(PROPERTY_BORDER)
+                                            ,OUString(PROPERTY_FORMATSSUPPLIER)
+                                            ,OUString(PROPERTY_BACKGROUNDCOLOR)
         };
         for(size_t i = 0; i < sizeof (sProps) / sizeof (sProps[0]); ++i)
         {
@@ -3480,11 +3480,11 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                         uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
                         uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
-                        const OUString sProps[] = {   PROPERTY_FONTDESCRIPTOR
-                                                            ,PROPERTY_FONTDESCRIPTORASIAN
-                                                            ,PROPERTY_FONTDESCRIPTORCOMPLEX
-                                                            ,PROPERTY_BORDER
-                                                            ,PROPERTY_BACKGROUNDCOLOR
+                        const OUString sProps[] = {   OUString(PROPERTY_FONTDESCRIPTOR)
+                                                            ,OUString(PROPERTY_FONTDESCRIPTORASIAN)
+                                                            ,OUString(PROPERTY_FONTDESCRIPTORCOMPLEX)
+                                                            ,OUString(PROPERTY_BORDER)
+                                                            ,OUString(PROPERTY_BACKGROUNDCOLOR)
                         };
                         for(size_t k = 0; k < sizeof(sProps)/sizeof(sProps[0]);++k)
                         {
@@ -3650,9 +3650,9 @@ void OReportController::changeZOrder(sal_Int32 _nId)
 // -----------------------------------------------------------------------------
 void OReportController::listen(const bool _bAdd)
 {
-    const OUString aProps [] = {    PROPERTY_REPORTHEADERON,PROPERTY_REPORTFOOTERON
-                                            ,PROPERTY_PAGEHEADERON,PROPERTY_PAGEFOOTERON
-                                            ,PROPERTY_COMMAND, PROPERTY_COMMANDTYPE,PROPERTY_CAPTION
+    const OUString aProps [] = {    OUString(PROPERTY_REPORTHEADERON),OUString(PROPERTY_REPORTFOOTERON)
+                                            ,OUString(PROPERTY_PAGEHEADERON),OUString(PROPERTY_PAGEFOOTERON)
+                                            ,OUString(PROPERTY_COMMAND), OUString(PROPERTY_COMMANDTYPE),OUString(PROPERTY_CAPTION)
     };
 
     void (SAL_CALL XPropertySet::*pPropertyListenerAction)( const OUString&, const uno::Reference< XPropertyChangeListener >& ) =
@@ -3703,8 +3703,8 @@ void OReportController::listen(const bool _bAdd)
     for (sal_Int32 i=0;i<nCount ; ++i)
     {
         uno::Reference< report::XGroup > xGroup(xGroups->getByIndex(i),uno::UNO_QUERY);
-        (xGroup.get()->*pPropertyListenerAction)( PROPERTY_HEADERON, static_cast< XPropertyChangeListener* >( this ) );
-        (xGroup.get()->*pPropertyListenerAction)( PROPERTY_FOOTERON, static_cast< XPropertyChangeListener* >( this ) );
+        (xGroup.get()->*pPropertyListenerAction)( OUString(PROPERTY_HEADERON), static_cast< XPropertyChangeListener* >( this ) );
+        (xGroup.get()->*pPropertyListenerAction)( OUString(PROPERTY_FOOTERON), static_cast< XPropertyChangeListener* >( this ) );
 
         (rUndoEnv.*pElementUndoFunction)( xGroup );
         (rUndoEnv.*pElementUndoFunction)( xGroup->getFunctions() );

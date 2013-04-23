@@ -20,15 +20,10 @@
 #define REPORTDESIGN_SHARED_CORESTRINGS_HRC
 
 #include <rtl/ustring.hxx>
-#include <comphelper/string.hxx>
-using comphelper::string::ConstAsciiString;
 
-namespace reportdesign
-{
 #define STRINGCONSTANTS_INCLUDED_INDIRECT
 #include "stringconstants.hrc"
 #undef STRINGCONSTANTS_INCLUDED_INDIRECT
-}
 
 #endif // REPORTDESIGN_SHARED_CORESTRINGS_HRC
 
