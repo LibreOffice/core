@@ -91,3 +91,12 @@ diff -ur harfbuzz.org/configure harfbuzz/configure
  fi
  if $have_freetype; then
  
+@@ -17825,7 +17897,7 @@
+ ac_fn_c_check_type "$LINENO" "CTFontRef" "ac_cv_type_CTFontRef" "#include <ApplicationServices/ApplicationServices.h>
+ "
+ if test "x$ac_cv_type_CTFontRef" = xyes; then :
+-  have_coretext=true
++  have_coretext=false
+ else
+   have_coretext=false
+ fi
