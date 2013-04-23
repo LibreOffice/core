@@ -411,7 +411,15 @@ public:
     bool isVBAConstantType( const OUString& rName );
 };
 
-#endif
+SbxVariable* getDefaultProp( SbxVariable* pRef );
 
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComListener( const ::com::sun::star::uno::Any& aControlAny,
+                                                                                         const OUString& aVBAType,
+                                                                                         const OUString& aPrefix,
+                                                                                         SbxObjectRef xScopeObj );
+
+bool checkUnoObjectType( SbUnoObject* refVal, const OUString& aClass );
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
