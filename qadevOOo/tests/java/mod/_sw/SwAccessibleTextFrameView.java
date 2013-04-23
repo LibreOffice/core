@@ -106,9 +106,7 @@ public class SwAccessibleTextFrameView extends TestCase {
         XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT_FRAME);
-
-        oObj = at.SearchedContext;
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT_FRAME);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));

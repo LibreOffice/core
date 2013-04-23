@@ -74,9 +74,7 @@ public class SwAccessibleParagraphView extends TestCase {
         XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.PARAGRAPH);
-
-        oObj = at.SearchedContext;
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PARAGRAPH);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
