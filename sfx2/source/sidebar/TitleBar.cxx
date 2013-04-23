@@ -133,6 +133,7 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
     Push(PUSH_FONT | PUSH_TEXTCOLOR);
 
     Font aFont(GetFont());
+    aFont.SetWeight(WEIGHT_BOLD);
     SetFont(aFont);
 
     // Paint title bar text.
