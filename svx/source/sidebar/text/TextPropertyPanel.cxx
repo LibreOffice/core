@@ -580,7 +580,7 @@ void TextPropertyPanel::SetupToolboxItems (void)
     maSuperScriptControl.SetupToolBoxItem(*mpToolBoxScriptSw, TBI_SUPER_SW);
     maSubScriptControl.SetupToolBoxItem(*mpToolBoxScriptSw, TBI_SUB_SW);
     //for sc and sd
-    maSubScriptControl.SetupToolBoxItem(*mpToolBoxScript, TBI_SUPER);
+    maSuperScriptControl.SetupToolBoxItem(*mpToolBoxScript, TBI_SUPER);
     maSubScriptControl.SetupToolBoxItem(*mpToolBoxScript, TBI_SUB);
     maSpacingControl.SetupToolBoxItem(*mpToolBoxSpacing, TBI_SPACING);
     maHighlightControl.SetupToolBoxItem(*mpToolBoxHighlight, TBI_HIGHLIGHT);
