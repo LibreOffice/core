@@ -69,7 +69,7 @@ class DocumentViewHelper
         @param aInterfaceClass
                 the class of the interface which shall be returned
     */
-    public Object get( Class aInterfaceClass )
+    public <T> T get( Class<T> aInterfaceClass )
     {
         return UnoRuntime.queryInterface( aInterfaceClass, m_controller );
     }
@@ -88,7 +88,7 @@ class DocumentViewHelper
         XDispatch xReturn = null;
 
         // go get the current view
-        XController xController = (XController)get( XController.class );
+        XController xController = get( XController.class );
         // go get the dispatch provider of it's frame
         XDispatchProvider xProvider = UnoRuntime.queryInterface(
             XDispatchProvider.class, xController.getFrame() );
@@ -119,7 +119,7 @@ class DocumentViewHelper
      */
     public XFormController getFormController( Object _form )
     {
-        XFormLayerAccess formLayer = (XFormLayerAccess)get( XFormLayerAccess.class );
+        XFormLayerAccess formLayer = get( XFormLayerAccess.class );
         return formLayer.getFormController( UnoRuntime.queryInterface( XForm.class, _form ) );
     }
 
@@ -133,7 +133,7 @@ class DocumentViewHelper
     public XControl getFormControl( XControlModel xModel ) throws com.sun.star.uno.Exception
     {
         // the current view of the document
-        XControlAccess xCtrlAcc = (XControlAccess)get( XControlAccess.class );
+        XControlAccess xCtrlAcc = get( XControlAccess.class );
         // delegate the task of looking for the control
         return xCtrlAcc.getControl( xModel );
     }
@@ -146,7 +146,7 @@ class DocumentViewHelper
     }
 
     /* ------------------------------------------------------------------ */
-    public Object getFormControl( Object aModel, Class aInterfaceClass ) throws com.sun.star.uno.Exception
+    public <T> T getFormControl( Object aModel, Class<T> aInterfaceClass ) throws com.sun.star.uno.Exception
     {
         XControlModel xModel = UnoRuntime.queryInterface( XControlModel.class, aModel );
         return UnoRuntime.queryInterface( aInterfaceClass, getFormControl( xModel ) );
