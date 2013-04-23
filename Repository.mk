@@ -276,7 +276,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,WRITER, \
 	hwp \
-	lwpft \
+	$(if $(ENABLE_LWP),lwpft) \
 	msword \
 	swd \
 	swui \

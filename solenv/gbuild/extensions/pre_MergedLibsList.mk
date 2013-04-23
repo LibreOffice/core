@@ -81,7 +81,7 @@ gb_EXTRAMERGEDLIBS := \
 	$(if $(filter-out ANDROID IOS,$(OS)),ldapbe2) \
 	lnth \
 	$(if $(filter-out ANDROID IOS,$(OS)),log) \
-	lwpft \
+	$(if $(ENABLE_LWP),lwpft) \
 	$(call gb_Helper_optional,DESKTOP,migrationoo2) \
 	$(call gb_Helper_optional,DESKTOP,migrationoo3) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mork) \

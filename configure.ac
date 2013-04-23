@@ -747,7 +747,7 @@ AC_ARG_ENABLE(pch,
 
 AC_ARG_ENABLE(win-mozab-driver,
     AS_HELP_STRING([--enable-win-mozab-driver],
-        [LibreOffice includes a driver to connect to Mozilla 
+        [LibreOffice includes a driver to connect to Mozilla
          address books under Windows, to build with this version, use this option.])
 )
 
@@ -761,6 +761,11 @@ AC_ARG_ENABLE(odk,
     AS_HELP_STRING([--disable-odk],
         [LibreOffice includes an ODK, office development kit which some packagers may
          wish to build without.])
+)
+
+AC_ARG_ENABLE(mpl-subset,
+    AS_HELP_STRING([--enable-mpl-subset],
+        [Don't compile any pieces which are not MPL or more liberrally licensed])
 )
 
 AC_ARG_ENABLE(mathmldtd,
@@ -1151,6 +1156,11 @@ AC_ARG_ENABLE(postgresql-sdbc,
     AS_HELP_STRING([--disable-postgresql-sdbc],
         [Disable the build of the PostgreSQL-SDBC driver.])
 )
+
+AC_ARG_ENABLE(lotuswordpro,
+    AS_HELP_STRING([--disable-lotuswordpro],
+        [Disable the build of the Lotus Word Pro filter.]),
+,enable_lotuswordpro=yes)
 
 AC_ARG_ENABLE(coretext,
     AS_HELP_STRING([--enable-coretext],
@@ -6922,6 +6932,29 @@ printf ("hello world\n");
     ac_exeext="$ac_exeext_save"
 fi
 AC_SUBST(WINEGCC)
+
+ENABLE_LWP=
+if test "$enable_lotuswordpro" = "yes"; then
+   ENABLE_LWP="TRUE"
+   SCPDEFS="$SCPDEFS -DDISABLE_LWP"
+fi
+AC_SUBST(ENABLE_LWP)
+
+AC_MSG_CHECKING([MPL subset])
+MPL_SUBSET=
+if test "$enable_mpl_subset" = "yes"; then
+   if test "x$enable_postgresql_sdbc" != "xno"; then
+        AC_MSG_ERROR([need to --disable-postgresql-sdbc.])
+   fi
+   if test "$enable_lotuswordpro" = "yes"; then
+        AC_MSG_ERROR([need to --disable-lotuswordpro.])
+   fi
+   MPL_SUBSET="TRUE"
+   AC_MSG_RESULT([only])
+else
+   AC_MSG_RESULT([no restrictions])
+fi
+AC_SUBST(MPL_SUBSET)
 
 dnl ===================================================================
 dnl Check for gperf

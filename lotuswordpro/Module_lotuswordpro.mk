@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Module_Module,lotuswordpro))
 
+ifeq ($(ENABLE_LWP),TRUE)
+
 $(eval $(call gb_Module_add_targets,lotuswordpro,\
     Library_lwpft \
 ))
@@ -16,5 +18,7 @@ $(eval $(call gb_Module_add_targets,lotuswordpro,\
 $(eval $(call gb_Module_add_check_targets,lotuswordpro,\
     CppunitTest_lotuswordpro_test_lotuswordpro \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:

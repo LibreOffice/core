@@ -55,7 +55,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	lingucomponent/source/spellcheck/spell/spell \
 	lingucomponent/source/thesaurus/libnth/lnth \
 	linguistic/source/lng \
-	lotuswordpro/util/lwpfilter \
+	$(if $(ENABLE_LWP), \
+	    lotuswordpro/util/lwpfilter \
+	) \
 	oox/util/oox \
 	package/source/xstor/xstor \
 	package/util/package2 \
