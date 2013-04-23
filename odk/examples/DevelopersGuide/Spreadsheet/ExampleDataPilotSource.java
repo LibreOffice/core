@@ -1,3 +1,5 @@
+import com.sun.star.sheet.DataPilotFieldFilter;
+
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -862,6 +864,11 @@ public class ExampleDataPilotSource
                 }
             }
             return aResults;
+        }
+
+        public double[] getFilteredResults(DataPilotFieldFilter[] aFilters) {
+            // FIXME
+            return new double[0];
         }
 
         //  XDimensionsSupplier
