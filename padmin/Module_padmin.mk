@@ -26,7 +26,7 @@ $(eval $(call gb_Module_add_targets,padmin,\
     Executable_spadmin.bin \
     Library_spa \
     AllLangResTarget_spa \
-    Package_inc \
+    Package_padmin \
     UIConfig_spa \
 ))
 endif

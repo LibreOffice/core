@@ -500,9 +500,9 @@ End
 #if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
 File gid_Brand_File_Bin_Spadmin
     BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "spadmin";
-    Styles = (PACKED);
+    Dir = FILELIST_DIR;
+    Name = "padmin.filelist";
+    Styles = (PACKED, FILELIST);
 End
 #endif
 

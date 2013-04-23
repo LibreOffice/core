@@ -17,7 +17,10 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Package_Package,padmin_src,$(SRCDIR)/padmin/source))
-$(eval $(call gb_Package_add_file,padmin_src,bin/spadmin,spadmin.sh))
+$(eval $(call gb_Package_Package,padmin,$(SRCDIR)/padmin/source))
+
+$(eval $(call gb_Package_set_outdir,padmin,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,padmin,program/spadmin,spadmin.sh))
 
 # vim: set noet sw=4 ts=4:
