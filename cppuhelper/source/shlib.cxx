@@ -536,6 +536,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         // The .uno ones seems to consistently have a "lib" prefix now for Android,
         // but not iOS, hmm.
 #ifdef ANDROID
+        { "libcomphelper.a", comphelp_component_getFactory },
         { "libconfigmgr.uno.a", configmgr_component_getFactory },
         { "libexpwrap.uno.a", expwrap_component_getFactory },
         { "libfastsax.uno.a", fastsax_component_getFactory },
@@ -556,7 +557,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "stocservices.uno.a", stocservices_component_getFactory },
         { "ucpexpand1.uno.a", ucpexpand1_component_getFactory },
 #endif
-        { "libcomphelp" CPPU_STRINGIFY(CPPU_ENV) ".a", comphelp_component_getFactory },
+        { "libcomphelper.a", comphelp_component_getFactory },
         { "libdeployment.a", deployment_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
