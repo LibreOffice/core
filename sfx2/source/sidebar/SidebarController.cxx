@@ -487,6 +487,7 @@ void SidebarController::SwitchToDeck (
     // buttons.
     maFocusManager.SetPanels(aNewPanels);
     mpTabBar->UpdateFocusManager(maFocusManager);
+    UpdateTitleBarIcons();
 }
 
 
@@ -642,6 +643,7 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
                 // Force an update of deck and tab bar to reflect
                 // changes in theme (high contrast mode).
                 Theme::HandleDataChange();
+                UpdateTitleBarIcons();
                 mpParentWindow->Invalidate();
                 break;
 
@@ -927,6 +929,50 @@ void SidebarController::RestrictWidth (void)
             Range(nMinimumWidth, nMaximumWidth));
         if (nMinimumWidth == nMaximumWidth)
             pSplitWindow->SetItemSize(nSetId, nMinimumWidth);
+    }
+}
+
+
+
+
+void SidebarController::UpdateTitleBarIcons (void)
+{
+    if ( ! mpCurrentDeck)
+        return;
+
+    const bool bIsHighContrastModeActive (Theme::IsHighContrastMode());
+    const ResourceManager& rResourceManager (ResourceManager::Instance());
+
+    // Update the deck icon.
+    const DeckDescriptor* pDeckDescriptor = rResourceManager.GetDeckDescriptor(mpCurrentDeck->GetId());
+    if (pDeckDescriptor != NULL && mpCurrentDeck->GetTitleBar())
+    {
+        const OUString sIconURL(
+            bIsHighContrastModeActive
+                ? pDeckDescriptor->msHighContrastTitleBarIconURL
+                : pDeckDescriptor->msTitleBarIconURL);
+        mpCurrentDeck->GetTitleBar()->SetIcon(Tools::GetImage(sIconURL, mxFrame));
+    }
+
+    // Update the panel icons.
+    const SharedPanelContainer& rPanels (mpCurrentDeck->GetPanels());
+    for (SharedPanelContainer::const_iterator
+             iPanel(rPanels.begin()), iEnd(rPanels.end());
+             iPanel!=iEnd;
+             ++iPanel)
+    {
+        if ( ! *iPanel)
+            continue;
+        if ((*iPanel)->GetTitleBar() == NULL)
+            continue;
+        const PanelDescriptor* pPanelDescriptor = rResourceManager.GetPanelDescriptor((*iPanel)->GetId());
+        if (pPanelDescriptor == NULL)
+            continue;
+        const OUString sIconURL (
+            bIsHighContrastModeActive
+               ? pPanelDescriptor->msHighContrastTitleBarIconURL
+               : pPanelDescriptor->msTitleBarIconURL);
+        (*iPanel)->GetTitleBar()->SetIcon(Tools::GetImage(sIconURL, mxFrame));
     }
 }
 

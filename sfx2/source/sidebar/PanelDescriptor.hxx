@@ -32,6 +32,8 @@ public:
     sal_Bool mbIsTitleBarOptional;
     ::rtl::OUString msId;
     ::rtl::OUString msDeckId;
+    ::rtl::OUString msTitleBarIconURL;
+    ::rtl::OUString msHighContrastTitleBarIconURL;
     ::rtl::OUString msHelpURL;
     ContextList maContextList;
     ::rtl::OUString msImplementationURL;

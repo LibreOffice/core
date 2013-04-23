@@ -53,6 +53,20 @@
         </info>
         <value></value>
       </prop>
+      <prop oor:name="TitleBarIconURL" oor:type="xs:string">
+        <info>
+          <desc>This icon is displayed in the title bar of the deck.
+          Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service is suitable here.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="HighContrastTitleBarIconURL" oor:type="xs:string">
+        <info>
+          <desc>This icon is displayed in the title bar of the deck when high contrast mode is active.
+          Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service is suitable here.</desc>
+        </info>
+        <value></value>
+      </prop>
       <prop oor:name="HelpURL" oor:type="xs:string">
         <info>
           <desc>Help about the sidebar deck.</desc>
@@ -139,6 +153,20 @@
       <prop oor:name="DeckId" oor:type="xs:string" oor:localized="false">
         <info>
           <desc>Id of the deck to which the panel belongs.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="TitleBarIconURL" oor:type="xs:string">
+        <info>
+          <desc>This icon is displayed in the title bar of the panel.
+          Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service is suitable here.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="HighContrastTitleBarIconURL" oor:type="xs:string">
+        <info>
+          <desc>This icon is displayed in the title bar of the panel when high contrast mode is active.
+          Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service is suitable here.</desc>
         </info>
         <value></value>
       </prop>

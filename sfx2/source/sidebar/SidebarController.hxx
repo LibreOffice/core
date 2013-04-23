@@ -161,6 +161,12 @@ private:
 
     void RestrictWidth (void);
 
+    /** Update the icons displayed in the title bars of the deck and
+        the panels.  This is called once when a deck is created and
+        every time when a data change event is processed.
+    */
+    void UpdateTitleBarIcons (void);
+
     virtual void SAL_CALL disposing (void);
 };
 

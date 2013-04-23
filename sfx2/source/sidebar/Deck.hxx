@@ -93,6 +93,8 @@ private:
     ::boost::scoped_ptr<ScrollBar> mpVerticalScrollBar;
 
     DECL_LINK(HandleVerticalScrollBarChange,void*);
+
+
 };
 
 
