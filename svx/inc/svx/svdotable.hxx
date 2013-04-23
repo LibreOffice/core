@@ -146,6 +146,8 @@ public:
 
     void setActiveCell( const sdr::table::CellPos& rPos );
     void getActiveCellPos( sdr::table::CellPos& rPos ) const;
+    sal_Int32 getRowCount() const;
+    sal_Int32 getColumnCount() const;
     void getCellBounds( const sdr::table::CellPos& rPos, ::Rectangle& rCellRect );
 
     const SfxItemSet& GetActiveCellItemSet() const;
