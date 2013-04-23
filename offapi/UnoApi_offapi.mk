@@ -928,6 +928,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/graphic
 	GraphicRasterizer \
 	GraphicRendererVCL \
 	MediaProperties \
+	Primitive2DTools \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
 	ChapterCollator \
@@ -2198,6 +2199,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	XUndoManager \
 	XUndoManagerListener \
 	XUndoManagerSupplier \
+	XVbaMethodParameter \
 	XViewDataSupplier \
 	XXMLBasicExporter \
 	XXMLOasisBasicImporter \
