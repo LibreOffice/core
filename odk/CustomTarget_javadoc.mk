@@ -7,10 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/java/ref))
-
-odkcommon_ZIPLIST += docs/java/ref
-odkcommon_ZIPDEPS += $(odk_WORKDIR)/docs/java/ref/index.html
+$(eval $(call gb_CustomTarget_CustomTarget,odk/docs/java/ref))
 
 odk_JAVAPACKAGES := com.sun.star.comp.helper \
 	com.sun.star.lib.uno.helper \
@@ -18,9 +15,20 @@ odk_JAVAPACKAGES := com.sun.star.comp.helper \
 	com.sun.star.uno \
 	$(SRCDIR)/jurt/com/sun/star/lib/util/UrlToFileMapper.java
 
-$(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/java/ref,index.html))
+$(eval $(call gb_CustomTarget_register_targets,odk/docs/java/ref,\
+	javadoc_log.txt \
+))
 
-$(odk_WORKDIR)/docs/java/ref/index.html: $(call gb_Jar_get_outdir_target,ridl)
+$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/package-list : $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt
+	touch $@
+
+$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.css \
+$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.gif \
+$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.html : \
+		$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt
+	touch $@
+
+$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : $(call gb_Jar_get_outdir_target,ridl)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
 	$(JAVADOC) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
@@ -33,6 +41,6 @@ $(odk_WORKDIR)/docs/java/ref/index.html: $(call gb_Jar_get_outdir_target,ridl)
 		-linkoffline http://java.sun.com/j2se/1.5/docs/api $(SRCDIR)/odk/pack/gendocu/java \
 		$(odk_JAVAPACKAGES) \
 		$(if $(JAVADOCISGJDOC),,-notimestamp) \
-		> $(odk_WORKDIR)/javadoc_log.txt
+		> $@
 
 # vim: set noet sw=4 ts=4:
