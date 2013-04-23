@@ -471,10 +471,12 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             if (rParam.xField.is() && SQL_ISRULE(pSubTree,subquery))
                 aNewParam.xField = NULL;
 
-            // Special case: if there is a field given we are building
-            // a criterion inside a query view (and rString is supposed
-            // to be initially empty). In order to simplify criterion text
-            // inside view, omit fieldname if it appears as 1st token.
+            // When we are building a criterion inside a query view,
+            // simplify criterion display by removing:
+            //   "currentFieldName"
+            //   "currentFieldName" =
+            // but only at the very beginning of the criterion
+            // (not embedded deep in the expression).
             if (rString.isEmpty() && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
             {
                 sal_Bool bFilter = sal_False;
