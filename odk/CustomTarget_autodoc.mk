@@ -7,21 +7,28 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/common/ref))
+$(eval $(call gb_CustomTarget_CustomTarget,odk/docs/common/ref))
 
-odkcommon_ZIPLIST += docs/common/ref
-odkcommon_ZIPDEPS += $(odk_WORKDIR)/docs/common/ref/module-ix.html
+$(eval $(call gb_CustomTarget_register_targets,odk/docs/common/ref,\
+	autodoc_log.txt \
+))
 
-$(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/common/ref,module-ix.html))
-$(odk_WORKDIR)/docs/common/ref/module-ix.html: $(SRCDIR)/odk/pack/copying/idl_chapter_refs.txt \
-	$(SRCDIR)/odk/docs/common/ref/idl.css $(call gb_UnoApi_get_target,offapi) \
-	$(call gb_Executable_get_runtime_dependencies,autodoc)
+$(call gb_CustomTarget_get_workdir,odk/docs/common/ref)/%.html : $(call gb_CustomTarget_get_workdir,odk/docs/common/ref)/autodoc_log.txt
+	touch $@
+
+$(call gb_CustomTarget_get_workdir,odk/docs/common/ref)/autodoc_log.txt : \
+		$(SRCDIR)/odk/pack/copying/idl_chapter_refs.txt \
+		$(SRCDIR)/odk/docs/common/ref/idl.css \
+		$(call gb_Executable_get_runtime_dependencies,autodoc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AUD,1)
-	$(call gb_Helper_execute,autodoc) -html $(dir $@) \
+	$(call gb_Executable_get_command,autodoc) \
+		-html $(dir $@) \
 		-dvgroot "http://wiki.services.openoffice.org/wiki" \
 		-name "LibreOffice $(PRODUCTVERSION) API" \
-		-lg idl -dvgfile $< -t $(SRCDIR)/udkapi $(SRCDIR)/offapi \
-		> $(odk_WORKDIR)/autodoc_log.txt
+		-lg idl \
+		-dvgfile $< \
+		-t $(SRCDIR)/udkapi $(SRCDIR)/offapi \
+		> $@
 
 
 # vim: set noet sw=4 ts=4:
