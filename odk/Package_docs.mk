@@ -12,6 +12,7 @@ $(eval $(call gb_Package_Package,odk_docs,$(SRCDIR)/odk))
 $(eval $(call gb_Package_set_outdir,odk_docs,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files_with_dir,odk_docs,$(gb_Package_SDKDIRNAME),\
+	docs/common/ref/idl.css \
 	docs/images/arrow-1.gif \
 	docs/images/arrow-2.gif \
 	docs/images/arrow-3.gif \
@@ -33,8 +34,5 @@ $(eval $(call gb_Package_add_files_with_dir,odk_docs,$(gb_Package_SDKDIRNAME),\
 	docs/images/sdk_line-2.gif \
 	docs/sdk_styles.css \
 ))
-
-# This is installed by CustomTarget_autodoc for now
-#	docs/common/ref/idl.css \
 
 # vim: set noet sw=4 ts=4:

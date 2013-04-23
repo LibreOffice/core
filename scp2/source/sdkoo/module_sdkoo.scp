@@ -34,6 +34,7 @@ Module gid_Module_Optional_Sdkoo
     ParentID = gid_Module_Optional;
     Default = NO;
     Files = (
+        gid_File_Package_odk_autodoc,
         gid_File_Package_odk_bin,
         gid_File_Package_odk_cli,
         gid_File_Package_odk_config,
