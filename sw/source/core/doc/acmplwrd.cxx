@@ -346,48 +346,16 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
     nMinWrdLen = n;
 }
 
-/// Reset the current position within the tree to its root node.
-void SwAutoCompleteWord::returnToRoot()
-{
-    m_LookupTree->returnToRoot();
-}
-
-/// Advance to a given node within the AutoComplete tree.
-void SwAutoCompleteWord::gotoNode(OUString sNode)
-{
-    m_LookupTree->gotoNode( sNode );
-}
-
-/// Advance from the current position towards the node keyed with cKey.
-void SwAutoCompleteWord::advance(const sal_Unicode cKey)
-{
-    m_LookupTree->advance( cKey );
-}
-
-/// Go back one char within the tree, except if the current node is already the root node.
-void SwAutoCompleteWord::goBack()
-{
-    m_LookupTree->goBack();
-}
-
 /** Return all words matching a given prefix
  *
  *  @param aMatch the prefix to search for
  *  @param aWords the words to search in
- *  @param bIgnoreCurrentPos if set, the current position within the tree is ignored and replaced by aMatch
  */
-bool SwAutoCompleteWord::GetWordsMatching(String aMatch, std::vector<String>& aWords, bool bIgnoreCurrentPos) const
+bool SwAutoCompleteWord::GetWordsMatching(String aMatch, std::vector<String>& aWords) const
 {
     OUString aStringRoot = OUString( aMatch );
 
-    // The lookup tree already contains the information about the root keyword in most cases. Only if we don't trust that
-    // information (e.g. if we need some autocompletion for a place other than the main writing area), the location within
-    // the tree needs to be refreshed.
-    if (bIgnoreCurrentPos)
-    {
-        m_LookupTree->gotoNode( aStringRoot );
-    }
-
+    m_LookupTree->gotoNode( aStringRoot );
     OUString aAutocompleteWord = m_LookupTree->suggestAutoCompletion();
     if (aAutocompleteWord.isEmpty())
     {
