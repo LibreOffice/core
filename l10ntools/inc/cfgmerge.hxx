@@ -122,7 +122,6 @@ protected:
 
 private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
-    std::vector<OString> aLanguages;
     void AddText(
         OString &rText,
         const OString &rIsoLang,
@@ -145,8 +144,6 @@ class CfgExport : public CfgParser
 {
 private:
     OString sPath;
-    std::vector<OString> aLanguages;
-
     PoOfstream pOutputStream;
 
 protected:

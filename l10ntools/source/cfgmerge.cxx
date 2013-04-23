@@ -221,11 +221,6 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     case CFG_TEXT_START: {
                         if ( sCurrentResTyp != sTokenName ) {
                             WorkOnResourceEnd();
-                            OString sCur;
-                            for( unsigned int i = 0; i < aLanguages.size(); ++i ){
-                                sCur = aLanguages[ i ];
-                                pStackData->sText[ sCur ] = OString();
-                            }
                          }
                         sCurrentResTyp = sTokenName;
 
@@ -257,11 +252,6 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             else if ( sTokenName == "label" ) {
                 if ( sCurrentResTyp != sTokenName ) {
                     WorkOnResourceEnd();
-                    OString sCur;
-                    for( unsigned int i = 0; i < aLanguages.size(); ++i ){
-                        sCur = aLanguages[ i ];
-                        pStackData->sText[ sCur ] = OString();
-                    }
                 }
                 sCurrentResTyp = sTokenName;
             }

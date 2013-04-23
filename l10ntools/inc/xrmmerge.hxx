@@ -38,7 +38,6 @@ private:
     OString sCurrentCloseTag;
     OString sCurrentText;
 protected:
-    std::vector<OString> aLanguages;
     OString GetAttribute( const OString &rToken, const OString &rAttribute );
     void Error( const OString &rError );
 
@@ -113,6 +112,7 @@ private:
     OString sFilename;
     ResData *pResData;
     std::ofstream pOutputStream;
+    std::vector<OString> aLanguages;
 
 protected:
     void WorkOnDesc(
