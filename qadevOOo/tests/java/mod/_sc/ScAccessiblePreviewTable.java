@@ -172,9 +172,7 @@ public class ScAccessiblePreviewTable extends TestCase {
 
         at.printAccessibleTree(log,xRoot, Param.getBool(PropertyName.DEBUG_IS_ACTIVE));
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
-
-        oObj = AccessibilityTools.SearchedContext;
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 

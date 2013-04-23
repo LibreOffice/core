@@ -54,15 +54,12 @@ public class AccessibleDocumentView extends TestCase {
         XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
-
-        oObj = AccessibilityTools.SearchedContext;
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
         if (oObj == null) {
             log.println("DocumentView hasn't the role 'Document'");
             log.println("trying the role 'Shape'");
-            at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);
-            oObj = AccessibilityTools.SearchedContext;
+            oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);
         }
 
         log.println("ImplementationName " + utils.getImplName(oObj));

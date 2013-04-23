@@ -30,6 +30,7 @@ import util.utils;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
@@ -37,7 +38,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextTable;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 
 
 /**
@@ -65,7 +65,7 @@ public class SwAccessibleTableCellView extends TestCase {
     */
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
-        XInterface oObj = null;
+        XAccessibleContext oObj = null;
         XTextTable oTable = null;
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
@@ -94,9 +94,7 @@ public class SwAccessibleTableCellView extends TestCase {
         XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL);
-
-        oObj = at.SearchedContext;
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
@@ -105,7 +103,7 @@ public class SwAccessibleTableCellView extends TestCase {
 
         final XAccessibleSelection accSel = UnoRuntime.queryInterface(
                                                     XAccessibleSelection.class,
-                                                    at.SearchedContext.getAccessibleParent());
+                                                    oObj.getAccessibleParent());
 
         tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {

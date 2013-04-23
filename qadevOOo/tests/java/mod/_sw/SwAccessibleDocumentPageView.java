@@ -121,9 +121,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
         XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT );
-
-        oObj = AccessibilityTools.SearchedContext;
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT );
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
