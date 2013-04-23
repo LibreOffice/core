@@ -31,6 +31,7 @@
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/textinputstream.hxx"
+#include <tools/time.hxx>
 
 #if OOX_INCLUDE_DUMPER
 
@@ -2260,10 +2261,10 @@ util::DateTime InputObjectBase::dumpFileTime( const String& rName )
 
     ItemGuard aItem( mxOut, rName( "file-time" ) );
     sal_Int64 nFileTime = dumpDec< sal_Int64 >( EMPTY_STRING );
-    // file time is in 10^-7 seconds (100 nanoseconds), convert to 1/100 seconds
-    nFileTime /= 100000;
+    // file time is in 10^-7 seconds (100 nanoseconds), convert to nanoseconds
+    nFileTime *= 100;
     // entire days
-    sal_Int64 nDays = nFileTime / sal_Int64( 360000 * 24 );
+    sal_Int64 nDays = nFileTime / sal_Int64( ::Time::nanoSecPerDay );
     // number of entire years
     sal_Int64 nYears = (nDays - (nDays / (4 * 365)) + (nDays / (100 * 365)) - (nDays / (400 * 365))) / 365;
     // remaining days in the year
@@ -2286,16 +2287,16 @@ util::DateTime InputObjectBase::dumpFileTime( const String& rName )
     // the day
     aDateTime.Day = static_cast< sal_uInt16 >( nDaysInYear + 1 );
     // number of nanoseconds in the day
-    sal_Int64 nTimeInDay = nFileTime % sal_Int64( 86400000000000 );
+    sal_Int64 nTimeInDay = nFileTime % sal_Int64( ::Time::nanoSecPerDay );
     // nanoseconds
-    aDateTime.NanoSeconds = static_cast< sal_uInt32 >( nTimeInDay % 1000000000 );
-    nTimeInDay /= 1000000000;
+    aDateTime.NanoSeconds = static_cast< sal_uInt32 >( nTimeInDay % ::Time::nanoSecPerSec );
+    nTimeInDay /= ::Time::nanoSecPerSec;
     // seconds
-    aDateTime.Seconds = static_cast< sal_uInt16 >( nTimeInDay % 60 );
-    nTimeInDay /= 60;
+    aDateTime.Seconds = static_cast< sal_uInt16 >( nTimeInDay % ::Time::secondPerMinute );
+    nTimeInDay /= ::Time::secondPerMinute;
     // minutes
-    aDateTime.Minutes = static_cast< sal_uInt16 >( nTimeInDay % 60 );
-    nTimeInDay /= 60;
+    aDateTime.Minutes = static_cast< sal_uInt16 >( nTimeInDay ::Time::minutePerHour );
+    nTimeInDay /= ::Time::minutePerHour;
     // hours
     aDateTime.Hours = static_cast< sal_uInt16 >( nTimeInDay );
 
