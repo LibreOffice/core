@@ -59,6 +59,7 @@ ScVbaTextBox::getText() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaTextBox::setText( const OUString& _text ) throw (css::uno::RuntimeException)
 {
+    OUString oldText( getText() );
     if ( !mbDialog )
     {
         uno::Reference< text::XTextRange > xTextRange( m_xProps, uno::UNO_QUERY_THROW );
@@ -66,6 +67,8 @@ ScVbaTextBox::setText( const OUString& _text ) throw (css::uno::RuntimeException
     }
     else
         m_xProps->setPropertyValue( "Text" , uno::makeAny( _text ) );
+    if ( oldText != _text )
+        fireChangeEvent();
 }
 
 sal_Int32 SAL_CALL
