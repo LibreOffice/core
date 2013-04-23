@@ -32,7 +32,8 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest_climaker) : \
 	$(testtools_CLIDIR)/cli_types_bridgetest.dll
 
 $(testtools_CLIDIR)/cli_types_bridgetest.dll : \
-		$(OUTDIR)/bin/types.rdb $(OUTDIR)/bin/cli_uretypes.dll \
+		$(call gb_UnoApiTarget_get_target,udkapi) \
+		$(OUTDIR)/bin/cli_uretypes.dll \
 		$(call gb_Executable_get_runtime_dependencies,climaker) \
 		| $(testtools_CLIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
@@ -40,7 +41,7 @@ $(testtools_CLIDIR)/cli_types_bridgetest.dll : \
 	$(call gb_Helper_execute,climaker) \
 		$(if $(filter -s,$(MAKEFLAGS)),,--verbose) \
 		--out $@ \
-		-X $(OUTDIR)/bin/types.rdb \
+		-X $(call gb_UnoApiTarget_get_target,udkapi) \
 		-r $(OUTDIR)/bin/cli_uretypes.dll \
 		$< > /dev/null)
 
