@@ -870,7 +870,7 @@ void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxO
 //------------------------------------------------------------------------------
 OUString SAL_CALL OGridControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_GRID;  // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_GRID);  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

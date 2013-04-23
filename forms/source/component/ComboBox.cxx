@@ -324,7 +324,7 @@ void OComboBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
 //------------------------------------------------------------------------------
 OUString SAL_CALL OComboBoxModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_COMBOBOX;  // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_COMBOBOX);  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

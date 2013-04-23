@@ -97,7 +97,7 @@ void OGroupBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
 //------------------------------------------------------------------------------
 OUString SAL_CALL OGroupBoxModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_GROUPBOX;  // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_GROUPBOX);  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

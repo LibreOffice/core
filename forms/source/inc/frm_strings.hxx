@@ -27,288 +27,270 @@
 //..............................................................................
 namespace frm
 {
-    using comphelper::string::ConstAsciiString;
-
-    #ifndef FORMS_IMPLEMENT_STRINGS
-        #define FORMS_CONSTASCII_STRING( ident, string )    \
-            extern const ConstAsciiString ident
-    #else
-        #define FORMS_CONSTASCII_STRING( ident, string )    \
-            extern const ConstAsciiString ident = {RTL_CONSTASCII_STRINGPARAM(string)}
-    #endif
-
-//..............................................................................
-}   // namespace frm
-//..............................................................................
-
-//..............................................................................
-namespace frm
-{
 //..............................................................................
 
     //--------------------------------------------------------------------------
     //- properties
     //--------------------------------------------------------------------------
-    FORMS_CONSTASCII_STRING( PROPERTY_TABINDEX,                 "TabIndex" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TAG,                      "Tag" );
-    FORMS_CONSTASCII_STRING( PROPERTY_NAME,                     "Name" );
-    FORMS_CONSTASCII_STRING( PROPERTY_GROUP_NAME,               "GroupName" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CLASSID,                  "ClassId" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FETCHSIZE,                "FetchSize" );
-    FORMS_CONSTASCII_STRING( PROPERTY_VALUE,                    "Value" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TEXT,                     "Text" );
-    FORMS_CONSTASCII_STRING( PROPERTY_LABEL,                    "Label" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CANINSERT,                "CanInsert" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CANUPDATE,                "CanUpdate" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CANDELETE,                "CanDelete" );
-    FORMS_CONSTASCII_STRING( PROPERTY_NAVIGATION,               "NavigationBarMode" );
-    FORMS_CONSTASCII_STRING( PROPERTY_HASNAVIGATION,            "HasNavigationBar" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CYCLE,                    "Cycle" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CONTROLSOURCE,            "DataField" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ENABLED,                  "Enabled" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ENABLEVISIBLE,                  "EnableVisible" );
-    FORMS_CONSTASCII_STRING( PROPERTY_READONLY,                 "ReadOnly" );
-    FORMS_CONSTASCII_STRING( PROPERTY_RELEVANT,                 "Relevant" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ISREADONLY,               "IsReadOnly" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FILTER,                   "Filter" );
-    FORMS_CONSTASCII_STRING( PROPERTY_WIDTH,                    "Width" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SEARCHABLE,               "IsSearchable" );
-    FORMS_CONSTASCII_STRING( PROPERTY_MULTILINE,                "MultiLine" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TARGET_URL,               "TargetURL" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TARGET_FRAME,             "TargetFrame" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULTCONTROL,           "DefaultControl" );
-    FORMS_CONSTASCII_STRING( PROPERTY_MAXTEXTLEN,               "MaxTextLen" );
-    FORMS_CONSTASCII_STRING( PROPERTY_EDITMASK,                 "EditMask" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SIZE,                     "Size" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SPIN,                     "Spin" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DATE,                     "Date" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TIME,                     "Time" );
-    FORMS_CONSTASCII_STRING( PROPERTY_STATE,                    "State" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TRISTATE,                 "TriState" );
-    FORMS_CONSTASCII_STRING( PROPERTY_HIDDEN_VALUE,             "HiddenValue" );
-    FORMS_CONSTASCII_STRING( PROPERTY_BUTTONTYPE,               "ButtonType" );
-    FORMS_CONSTASCII_STRING( PROPERTY_STRINGITEMLIST,           "StringItemList" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_TEXT,             "DefaultText" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_STATE,             "DefaultState" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FORMATKEY,                "FormatKey" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FORMATSSUPPLIER,          "FormatsSupplier" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SUBMIT_ACTION,            "SubmitAction" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SUBMIT_TARGET,            "SubmitTarget" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SUBMIT_METHOD,            "SubmitMethod" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SUBMIT_ENCODING,          "SubmitEncoding" );
-    FORMS_CONSTASCII_STRING( PROPERTY_IMAGE_URL,                "ImageURL" );
-    FORMS_CONSTASCII_STRING( PROPERTY_GRAPHIC,                  "Graphic" );
-    FORMS_CONSTASCII_STRING( PROPERTY_IMAGE_POSITION,           "ImagePosition" );
-    FORMS_CONSTASCII_STRING( PROPERTY_EMPTY_IS_NULL,            "ConvertEmptyToNull" );
-    FORMS_CONSTASCII_STRING( PROPERTY_LISTSOURCETYPE,           "ListSourceType" );
-    FORMS_CONSTASCII_STRING( PROPERTY_LISTSOURCE,               "ListSource" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SELECT_SEQ,               "SelectedItems" );
-    FORMS_CONSTASCII_STRING( PROPERTY_VALUE_SEQ,                "ValueItemList" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SELECT_VALUE_SEQ,         "SelectedValues" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SELECT_VALUE,             "SelectedValue" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_SELECT_SEQ,       "DefaultSelection" );
-    FORMS_CONSTASCII_STRING( PROPERTY_MULTISELECTION,           "MultiSelection" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ALIGN,                    "Align" );
-    FORMS_CONSTASCII_STRING( PROPERTY_VERTICAL_ALIGN,           "VerticalAlign" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_DATE,             "DefaultDate" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_TIME,             "DefaultTime" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_VALUE,            "DefaultValue" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DECIMAL_ACCURACY,         "DecimalAccuracy" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CURSORSOURCE,             "DataSelection" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CURSORSOURCETYPE,         "DataSelectionType" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FIELDTYPE,                "Type" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DECIMALS,                 "Decimals" );
-    FORMS_CONSTASCII_STRING( PROPERTY_REFVALUE,                 "RefValue" );
-    FORMS_CONSTASCII_STRING( PROPERTY_UNCHECKED_REFVALUE,       "SecondaryRefValue" );
-    FORMS_CONSTASCII_STRING( PROPERTY_VALUEMIN,                 "ValueMin" );
-    FORMS_CONSTASCII_STRING( PROPERTY_VALUEMAX,                 "ValueMax" );
-    FORMS_CONSTASCII_STRING( PROPERTY_STRICTFORMAT,             "StrictFormat" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ALLOWADDITIONS,           "AllowInserts" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ALLOWEDITS,               "AllowUpdates" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ALLOWDELETIONS,           "AllowDeletes" );
-    FORMS_CONSTASCII_STRING( PROPERTY_MASTERFIELDS,             "MasterFields" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ISPASSTHROUGH,            "IsPassThrough" );
-    FORMS_CONSTASCII_STRING( PROPERTY_QUERY,                    "Query" );
-    FORMS_CONSTASCII_STRING( PROPERTY_LITERALMASK,              "LiteralMask" );
-    FORMS_CONSTASCII_STRING( PROPERTY_VALUESTEP,                "ValueStep" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SHOWTHOUSANDSEP,          "ShowThousandsSeparator" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CURRENCYSYMBOL,           "CurrencySymbol" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DATEFORMAT,               "DateFormat" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DATEMIN,                  "DateMin" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DATEMAX,                  "DateMax" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DATE_SHOW_CENTURY,        "DateShowCentury" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TIMEFORMAT,               "TimeFormat" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TIMEMIN,                  "TimeMin" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TIMEMAX,                  "TimeMax" );
-    FORMS_CONSTASCII_STRING( PROPERTY_LINECOUNT,                "LineCount" );
-    FORMS_CONSTASCII_STRING( PROPERTY_BOUNDCOLUMN,              "BoundColumn" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT,                     "FontDescriptor" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FILLCOLOR,                "FillColor" );
-    FORMS_CONSTASCII_STRING( PROPERTY_LINECOLOR,                "LineColor" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DROPDOWN,                 "Dropdown" );
-    FORMS_CONSTASCII_STRING( PROPERTY_HSCROLL,                  "HScroll" );
-    FORMS_CONSTASCII_STRING( PROPERTY_VSCROLL,                  "VScroll" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TABSTOP,                  "Tabstop" );
-    FORMS_CONSTASCII_STRING( PROPERTY_AUTOCOMPLETE,             "Autocomplete" );
-    FORMS_CONSTASCII_STRING( PROPERTY_HARDLINEBREAKS,           "HardLineBreaks" );
-    FORMS_CONSTASCII_STRING( PROPERTY_PRINTABLE,                "Printable" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ECHO_CHAR,                "EchoChar" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ROWHEIGHT,                "RowHeight" );
-    FORMS_CONSTASCII_STRING( PROPERTY_HELPTEXT,                 "HelpText" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_NAME,                "FontName" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_STYLENAME,           "FontStyleName" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_FAMILY,              "FontFamily" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_CHARSET,             "FontCharset" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_HEIGHT,              "FontHeight" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_WEIGHT,              "FontWeight" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_SLANT,               "FontSlant" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_UNDERLINE,           "FontUnderline" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_WORDLINEMODE,        "FontWordLineMode" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_STRIKEOUT,           "FontStrikeout" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONTEMPHASISMARK,         "FontEmphasisMark" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONTRELIEF,               "FontRelief" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_CHARWIDTH,           "FontCharWidth");
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_KERNING,             "FontKerning");
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_ORIENTATION,         "FontOrientation");
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_PITCH,               "FontPitch");
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_TYPE,                "FontType");
-    FORMS_CONSTASCII_STRING( PROPERTY_FONT_WIDTH,               "FontWidth");
-    FORMS_CONSTASCII_STRING( PROPERTY_HELPURL,                  "HelpURL" );
-    FORMS_CONSTASCII_STRING( PROPERTY_RECORDMARKER,             "HasRecordMarker" );
-    FORMS_CONSTASCII_STRING( PROPERTY_BOUNDFIELD,               "BoundField" );
-    FORMS_CONSTASCII_STRING( PROPERTY_INPUT_REQUIRED,           "InputRequired" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TREATASNUMERIC,           "TreatAsNumber" );
-    FORMS_CONSTASCII_STRING( PROPERTY_EFFECTIVE_VALUE,          "EffectiveValue" );
-    FORMS_CONSTASCII_STRING( PROPERTY_EFFECTIVE_DEFAULT,        "EffectiveDefault" );
-    FORMS_CONSTASCII_STRING( PROPERTY_EFFECTIVE_MIN,            "EffectiveMin" );
-    FORMS_CONSTASCII_STRING( PROPERTY_EFFECTIVE_MAX,            "EffectiveMax" );
-    FORMS_CONSTASCII_STRING( PROPERTY_HIDDEN,                   "Hidden" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FILTERPROPOSAL,           "UseFilterValueProposal" );
-    FORMS_CONSTASCII_STRING( PROPERTY_FIELDSOURCE,              "FieldSource" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TABLENAME,                "TableName" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ISFILTERAPPLIED,          "IsFilterApplied" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CONTROLLABEL,             "LabelControl" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CURRSYM_POSITION,         "PrependCurrencySymbol" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CURSORCOLOR,              "CursorColor" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ALWAYSSHOWCURSOR,         "AlwaysShowCursor" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DISPLAYSYNCHRON,          "DisplayIsSynchron" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TEXTCOLOR,                "TextColor" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DELAY,                    "RepeatDelay" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_SCROLL_VALUE,     "DefaultScrollValue" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SCROLL_VALUE,             "ScrollValue"        );
-    FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_SPIN_VALUE,       "DefaultSpinValue"   );
-    FORMS_CONSTASCII_STRING( PROPERTY_SPIN_VALUE,               "SpinValue"          );
-    FORMS_CONSTASCII_STRING( PROPERTY_REFERENCE_DEVICE,         "ReferenceDevice"    );
-    FORMS_CONSTASCII_STRING( PROPERTY_ISMODIFIED,               "IsModified" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ISNEW,                    "IsNew" );
-    FORMS_CONSTASCII_STRING( PROPERTY_PRIVILEGES,               "Privileges" );
-    FORMS_CONSTASCII_STRING( PROPERTY_COMMAND,                  "Command" );
-    FORMS_CONSTASCII_STRING( PROPERTY_COMMANDTYPE,              "CommandType" );
-    FORMS_CONSTASCII_STRING( PROPERTY_RESULTSET_CONCURRENCY,    "ResultSetConcurrency" );
-    FORMS_CONSTASCII_STRING( PROPERTY_INSERTONLY,               "IgnoreResult" );
-    FORMS_CONSTASCII_STRING( PROPERTY_RESULTSET_TYPE,           "ResultSetType" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ESCAPE_PROCESSING,        "EscapeProcessing" );
-    FORMS_CONSTASCII_STRING( PROPERTY_APPLYFILTER,              "ApplyFilter" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ROWCOUNT,                 "RowCount" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ROWCOUNTFINAL,            "IsRowCountFinal" );
+    #define PROPERTY_TABINDEX                 "TabIndex"
+    #define PROPERTY_TAG                      "Tag"
+    #define PROPERTY_NAME                     "Name"
+    #define PROPERTY_GROUP_NAME               "GroupName"
+    #define PROPERTY_CLASSID                  "ClassId"
+    #define PROPERTY_FETCHSIZE                "FetchSize"
+    #define PROPERTY_VALUE                    "Value"
+    #define PROPERTY_TEXT                     "Text"
+    #define PROPERTY_LABEL                    "Label"
+    #define PROPERTY_CANINSERT                "CanInsert"
+    #define PROPERTY_CANUPDATE                "CanUpdate"
+    #define PROPERTY_CANDELETE                "CanDelete"
+    #define PROPERTY_NAVIGATION               "NavigationBarMode"
+    #define PROPERTY_HASNAVIGATION            "HasNavigationBar"
+    #define PROPERTY_CYCLE                    "Cycle"
+    #define PROPERTY_CONTROLSOURCE            "DataField"
+    #define PROPERTY_ENABLED                  "Enabled"
+    #define PROPERTY_ENABLEVISIBLE                  "EnableVisible"
+    #define PROPERTY_READONLY                 "ReadOnly"
+    #define PROPERTY_RELEVANT                 "Relevant"
+    #define PROPERTY_ISREADONLY               "IsReadOnly"
+    #define PROPERTY_FILTER                   "Filter"
+    #define PROPERTY_WIDTH                    "Width"
+    #define PROPERTY_SEARCHABLE               "IsSearchable"
+    #define PROPERTY_MULTILINE                "MultiLine"
+    #define PROPERTY_TARGET_URL               "TargetURL"
+    #define PROPERTY_TARGET_FRAME             "TargetFrame"
+    #define PROPERTY_DEFAULTCONTROL           "DefaultControl"
+    #define PROPERTY_MAXTEXTLEN               "MaxTextLen"
+    #define PROPERTY_EDITMASK                 "EditMask"
+    #define PROPERTY_SIZE                     "Size"
+    #define PROPERTY_SPIN                     "Spin"
+    #define PROPERTY_DATE                     "Date"
+    #define PROPERTY_TIME                     "Time"
+    #define PROPERTY_STATE                    "State"
+    #define PROPERTY_TRISTATE                 "TriState"
+    #define PROPERTY_HIDDEN_VALUE             "HiddenValue"
+    #define PROPERTY_BUTTONTYPE               "ButtonType"
+    #define PROPERTY_STRINGITEMLIST           "StringItemList"
+    #define PROPERTY_DEFAULT_TEXT             "DefaultText"
+    #define PROPERTY_DEFAULT_STATE             "DefaultState"
+    #define PROPERTY_FORMATKEY                "FormatKey"
+    #define PROPERTY_FORMATSSUPPLIER          "FormatsSupplier"
+    #define PROPERTY_SUBMIT_ACTION            "SubmitAction"
+    #define PROPERTY_SUBMIT_TARGET            "SubmitTarget"
+    #define PROPERTY_SUBMIT_METHOD            "SubmitMethod"
+    #define PROPERTY_SUBMIT_ENCODING          "SubmitEncoding"
+    #define PROPERTY_IMAGE_URL                "ImageURL"
+    #define PROPERTY_GRAPHIC                  "Graphic"
+    #define PROPERTY_IMAGE_POSITION           "ImagePosition"
+    #define PROPERTY_EMPTY_IS_NULL            "ConvertEmptyToNull"
+    #define PROPERTY_LISTSOURCETYPE           "ListSourceType"
+    #define PROPERTY_LISTSOURCE               "ListSource"
+    #define PROPERTY_SELECT_SEQ               "SelectedItems"
+    #define PROPERTY_VALUE_SEQ                "ValueItemList"
+    #define PROPERTY_SELECT_VALUE_SEQ         "SelectedValues"
+    #define PROPERTY_SELECT_VALUE             "SelectedValue"
+    #define PROPERTY_DEFAULT_SELECT_SEQ       "DefaultSelection"
+    #define PROPERTY_MULTISELECTION           "MultiSelection"
+    #define PROPERTY_ALIGN                    "Align"
+    #define PROPERTY_VERTICAL_ALIGN           "VerticalAlign"
+    #define PROPERTY_DEFAULT_DATE             "DefaultDate"
+    #define PROPERTY_DEFAULT_TIME             "DefaultTime"
+    #define PROPERTY_DEFAULT_VALUE            "DefaultValue"
+    #define PROPERTY_DECIMAL_ACCURACY         "DecimalAccuracy"
+    #define PROPERTY_CURSORSOURCE             "DataSelection"
+    #define PROPERTY_CURSORSOURCETYPE         "DataSelectionType"
+    #define PROPERTY_FIELDTYPE                "Type"
+    #define PROPERTY_DECIMALS                 "Decimals"
+    #define PROPERTY_REFVALUE                 "RefValue"
+    #define PROPERTY_UNCHECKED_REFVALUE       "SecondaryRefValue"
+    #define PROPERTY_VALUEMIN                 "ValueMin"
+    #define PROPERTY_VALUEMAX                 "ValueMax"
+    #define PROPERTY_STRICTFORMAT             "StrictFormat"
+    #define PROPERTY_ALLOWADDITIONS           "AllowInserts"
+    #define PROPERTY_ALLOWEDITS               "AllowUpdates"
+    #define PROPERTY_ALLOWDELETIONS           "AllowDeletes"
+    #define PROPERTY_MASTERFIELDS             "MasterFields"
+    #define PROPERTY_ISPASSTHROUGH            "IsPassThrough"
+    #define PROPERTY_QUERY                    "Query"
+    #define PROPERTY_LITERALMASK              "LiteralMask"
+    #define PROPERTY_VALUESTEP                "ValueStep"
+    #define PROPERTY_SHOWTHOUSANDSEP          "ShowThousandsSeparator"
+    #define PROPERTY_CURRENCYSYMBOL           "CurrencySymbol"
+    #define PROPERTY_DATEFORMAT               "DateFormat"
+    #define PROPERTY_DATEMIN                  "DateMin"
+    #define PROPERTY_DATEMAX                  "DateMax"
+    #define PROPERTY_DATE_SHOW_CENTURY        "DateShowCentury"
+    #define PROPERTY_TIMEFORMAT               "TimeFormat"
+    #define PROPERTY_TIMEMIN                  "TimeMin"
+    #define PROPERTY_TIMEMAX                  "TimeMax"
+    #define PROPERTY_LINECOUNT                "LineCount"
+    #define PROPERTY_BOUNDCOLUMN              "BoundColumn"
+    #define PROPERTY_FONT                     "FontDescriptor"
+    #define PROPERTY_FILLCOLOR                "FillColor"
+    #define PROPERTY_LINECOLOR                "LineColor"
+    #define PROPERTY_DROPDOWN                 "Dropdown"
+    #define PROPERTY_HSCROLL                  "HScroll"
+    #define PROPERTY_VSCROLL                  "VScroll"
+    #define PROPERTY_TABSTOP                  "Tabstop"
+    #define PROPERTY_AUTOCOMPLETE             "Autocomplete"
+    #define PROPERTY_HARDLINEBREAKS           "HardLineBreaks"
+    #define PROPERTY_PRINTABLE                "Printable"
+    #define PROPERTY_ECHO_CHAR                "EchoChar"
+    #define PROPERTY_ROWHEIGHT                "RowHeight"
+    #define PROPERTY_HELPTEXT                 "HelpText"
+    #define PROPERTY_FONT_NAME                "FontName"
+    #define PROPERTY_FONT_STYLENAME           "FontStyleName"
+    #define PROPERTY_FONT_FAMILY              "FontFamily"
+    #define PROPERTY_FONT_CHARSET             "FontCharset"
+    #define PROPERTY_FONT_HEIGHT              "FontHeight"
+    #define PROPERTY_FONT_WEIGHT              "FontWeight"
+    #define PROPERTY_FONT_SLANT               "FontSlant"
+    #define PROPERTY_FONT_UNDERLINE           "FontUnderline"
+    #define PROPERTY_FONT_WORDLINEMODE        "FontWordLineMode"
+    #define PROPERTY_FONT_STRIKEOUT           "FontStrikeout"
+    #define PROPERTY_FONTEMPHASISMARK         "FontEmphasisMark"
+    #define PROPERTY_FONTRELIEF               "FontRelief"
+    #define PROPERTY_FONT_CHARWIDTH           "FontCharWidth"
+    #define PROPERTY_FONT_KERNING             "FontKerning"
+    #define PROPERTY_FONT_ORIENTATION         "FontOrientation"
+    #define PROPERTY_FONT_PITCH               "FontPitch"
+    #define PROPERTY_FONT_TYPE                "FontType"
+    #define PROPERTY_FONT_WIDTH               "FontWidth"
+    #define PROPERTY_HELPURL                  "HelpURL"
+    #define PROPERTY_RECORDMARKER             "HasRecordMarker"
+    #define PROPERTY_BOUNDFIELD               "BoundField"
+    #define PROPERTY_INPUT_REQUIRED           "InputRequired"
+    #define PROPERTY_TREATASNUMERIC           "TreatAsNumber"
+    #define PROPERTY_EFFECTIVE_VALUE          "EffectiveValue"
+    #define PROPERTY_EFFECTIVE_DEFAULT        "EffectiveDefault"
+    #define PROPERTY_EFFECTIVE_MIN            "EffectiveMin"
+    #define PROPERTY_EFFECTIVE_MAX            "EffectiveMax"
+    #define PROPERTY_HIDDEN                   "Hidden"
+    #define PROPERTY_FILTERPROPOSAL           "UseFilterValueProposal"
+    #define PROPERTY_FIELDSOURCE              "FieldSource"
+    #define PROPERTY_TABLENAME                "TableName"
+    #define PROPERTY_ISFILTERAPPLIED          "IsFilterApplied"
+    #define PROPERTY_CONTROLLABEL             "LabelControl"
+    #define PROPERTY_CURRSYM_POSITION         "PrependCurrencySymbol"
+    #define PROPERTY_CURSORCOLOR              "CursorColor"
+    #define PROPERTY_ALWAYSSHOWCURSOR         "AlwaysShowCursor"
+    #define PROPERTY_DISPLAYSYNCHRON          "DisplayIsSynchron"
+    #define PROPERTY_TEXTCOLOR                "TextColor"
+    #define PROPERTY_DELAY                    "RepeatDelay"
+    #define PROPERTY_DEFAULT_SCROLL_VALUE     "DefaultScrollValue"
+    #define PROPERTY_SCROLL_VALUE             "ScrollValue"
+    #define PROPERTY_DEFAULT_SPIN_VALUE       "DefaultSpinValue"
+    #define PROPERTY_SPIN_VALUE               "SpinValue"
+    #define PROPERTY_REFERENCE_DEVICE         "ReferenceDevice"
+    #define PROPERTY_ISMODIFIED               "IsModified"
+    #define PROPERTY_ISNEW                    "IsNew"
+    #define PROPERTY_PRIVILEGES               "Privileges"
+    #define PROPERTY_COMMAND                  "Command"
+    #define PROPERTY_COMMANDTYPE              "CommandType"
+    #define PROPERTY_RESULTSET_CONCURRENCY    "ResultSetConcurrency"
+    #define PROPERTY_INSERTONLY               "IgnoreResult"
+    #define PROPERTY_RESULTSET_TYPE           "ResultSetType"
+    #define PROPERTY_ESCAPE_PROCESSING        "EscapeProcessing"
+    #define PROPERTY_APPLYFILTER              "ApplyFilter"
+    #define PROPERTY_ROWCOUNT                 "RowCount"
+    #define PROPERTY_ROWCOUNTFINAL            "IsRowCountFinal"
 
-    FORMS_CONSTASCII_STRING( PROPERTY_ISNULLABLE,               "IsNullable" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ACTIVECOMMAND,            "ActiveCommand" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ISCURRENCY,               "IsCurrency" );
-    FORMS_CONSTASCII_STRING( PROPERTY_URL,                      "URL" );
-    FORMS_CONSTASCII_STRING( PROPERTY_TITLE,                    "Title" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ACTIVE_CONNECTION,        "ActiveConnection" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SCALE,                    "Scale" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SORT,                     "Order" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DATASOURCE,               "DataSourceName" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DETAILFIELDS,             "DetailFields" );
+    #define PROPERTY_ISNULLABLE               "IsNullable"
+    #define PROPERTY_ACTIVECOMMAND            "ActiveCommand"
+    #define PROPERTY_ISCURRENCY               "IsCurrency"
+    #define PROPERTY_URL                      "URL"
+    #define PROPERTY_TITLE                    "Title"
+    #define PROPERTY_ACTIVE_CONNECTION        "ActiveConnection"
+    #define PROPERTY_SCALE                    "Scale"
+    #define PROPERTY_SORT                     "Order"
+    #define PROPERTY_DATASOURCE               "DataSourceName"
+    #define PROPERTY_DETAILFIELDS             "DetailFields"
 
-    FORMS_CONSTASCII_STRING( PROPERTY_COLUMNSERVICENAME,        "ColumnServiceName" );
-    FORMS_CONSTASCII_STRING( PROPERTY_REALNAME,                 "RealName" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CONTROLSOURCEPROPERTY,    "DataFieldProperty" );
-    FORMS_CONSTASCII_STRING( PROPERTY_USER,                     "User" );
-    FORMS_CONSTASCII_STRING( PROPERTY_PASSWORD,                 "Password" );
-    FORMS_CONSTASCII_STRING( PROPERTY_DISPATCHURLINTERNAL,      "DispatchURLInternal" );
-    FORMS_CONSTASCII_STRING( PROPERTY_PERSISTENCE_MAXTEXTLENGTH,"PersistenceMaxTextLength" );
-    FORMS_CONSTASCII_STRING( PROPERTY_RICH_TEXT,                "RichText" );
-    FORMS_CONSTASCII_STRING( PROPERTY_ENFORCE_FORMAT,           "EnforceFormat" );
-    FORMS_CONSTASCII_STRING( PROPERTY_LINEEND_FORMAT,           "LineEndFormat" );
-    FORMS_CONSTASCII_STRING( PROPERTY_WRITING_MODE,             "WritingMode" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CONTEXT_WRITING_MODE,     "ContextWritingMode" );
+    #define PROPERTY_COLUMNSERVICENAME        "ColumnServiceName"
+    #define PROPERTY_REALNAME                 "RealName"
+    #define PROPERTY_CONTROLSOURCEPROPERTY    "DataFieldProperty"
+    #define PROPERTY_USER                     "User"
+    #define PROPERTY_PASSWORD                 "Password"
+    #define PROPERTY_DISPATCHURLINTERNAL      "DispatchURLInternal"
+    #define PROPERTY_PERSISTENCE_MAXTEXTLENGTH "PersistenceMaxTextLength"
+    #define PROPERTY_RICH_TEXT                "RichText"
+    #define PROPERTY_ENFORCE_FORMAT           "EnforceFormat"
+    #define PROPERTY_LINEEND_FORMAT           "LineEndFormat"
+    #define PROPERTY_WRITING_MODE             "WritingMode"
+    #define PROPERTY_CONTEXT_WRITING_MODE     "ContextWritingMode"
 
-    FORMS_CONSTASCII_STRING( PROPERTY_NATIVE_LOOK,              "NativeWidgetLook" );
-    FORMS_CONSTASCII_STRING( PROPERTY_BORDER,                   "Border" );
-    FORMS_CONSTASCII_STRING( PROPERTY_BORDERCOLOR,              "BorderColor" );
-    FORMS_CONSTASCII_STRING( PROPERTY_BACKGROUNDCOLOR,          "BackgroundColor"   );
-    FORMS_CONSTASCII_STRING( PROPERTY_ICONSIZE,                 "IconSize"        );
-    FORMS_CONSTASCII_STRING( PROPERTY_TEXTLINECOLOR,            "TextLineColor" );
-    FORMS_CONSTASCII_STRING( PROPERTY_HIDEINACTIVESELECTION,    "HideInactiveSelection" );
+    #define PROPERTY_NATIVE_LOOK              "NativeWidgetLook"
+    #define PROPERTY_BORDER                   "Border"
+    #define PROPERTY_BORDERCOLOR              "BorderColor"
+    #define PROPERTY_BACKGROUNDCOLOR          "BackgroundColor"
+    #define PROPERTY_ICONSIZE                 "IconSize"
+    #define PROPERTY_TEXTLINECOLOR            "TextLineColor"
+    #define PROPERTY_HIDEINACTIVESELECTION    "HideInactiveSelection"
 
-    FORMS_CONSTASCII_STRING( PROPERTY_SHOW_POSITION,            "ShowPosition" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SHOW_NAVIGATION,          "ShowNavigation" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SHOW_RECORDACTIONS,       "ShowRecordActions" );
-    FORMS_CONSTASCII_STRING( PROPERTY_SHOW_FILTERSORT,          "ShowFilterSort" );
+    #define PROPERTY_SHOW_POSITION            "ShowPosition"
+    #define PROPERTY_SHOW_NAVIGATION          "ShowNavigation"
+    #define PROPERTY_SHOW_RECORDACTIONS       "ShowRecordActions"
+    #define PROPERTY_SHOW_FILTERSORT          "ShowFilterSort"
 
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_WHITESPACE,           "WhiteSpace" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_PATTERN,              "Pattern" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_LENGTH,               "Length" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_LENGTH,           "MinLength" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_LENGTH,           "MaxLength" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_TOTAL_DIGITS,         "TotalDigits" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_FRACTION_DIGITS,      "FractionDigits" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_INT,    "MaxInclusiveInt" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_INT,    "MaxExclusiveInt" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_INT,    "MinInclusiveInt" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_INT,    "MinExclusiveInt" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE, "MaxInclusiveDouble" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE, "MaxExclusiveDouble" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE, "MinInclusiveDouble" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE, "MinExclusiveDouble" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_DATE,   "MaxInclusiveDate" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_DATE,   "MaxExclusiveDate" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_DATE,   "MinInclusiveDate" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_DATE,   "MinExclusiveDate" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_TIME,   "MaxInclusiveTime" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_TIME,   "MaxExclusiveTime" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_TIME,   "MinInclusiveTime" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_TIME,   "MinExclusiveTime" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME, "MaxInclusiveDateTime" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME, "MaxExclusiveDateTime" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME, "MinInclusiveDateTime" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME, "MinExclusiveDateTime" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_IS_BASIC,             "IsBasic" );
-    FORMS_CONSTASCII_STRING( PROPERTY_XSD_TYPE_CLASS,           "TypeClass" );
+    #define PROPERTY_XSD_WHITESPACE           "WhiteSpace"
+    #define PROPERTY_XSD_PATTERN              "Pattern"
+    #define PROPERTY_XSD_LENGTH               "Length"
+    #define PROPERTY_XSD_MIN_LENGTH           "MinLength"
+    #define PROPERTY_XSD_MAX_LENGTH           "MaxLength"
+    #define PROPERTY_XSD_TOTAL_DIGITS         "TotalDigits"
+    #define PROPERTY_XSD_FRACTION_DIGITS      "FractionDigits"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_INT    "MaxInclusiveInt"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_INT    "MaxExclusiveInt"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_INT    "MinInclusiveInt"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_INT    "MinExclusiveInt"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE "MaxInclusiveDouble"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE "MaxExclusiveDouble"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE "MinInclusiveDouble"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE "MinExclusiveDouble"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_DATE   "MaxInclusiveDate"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_DATE   "MaxExclusiveDate"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_DATE   "MinInclusiveDate"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_DATE   "MinExclusiveDate"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_TIME   "MaxInclusiveTime"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_TIME   "MaxExclusiveTime"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_TIME   "MinInclusiveTime"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_TIME   "MinExclusiveTime"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME "MaxInclusiveDateTime"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME "MaxExclusiveDateTime"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME "MinInclusiveDateTime"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME "MinExclusiveDateTime"
+    #define PROPERTY_XSD_IS_BASIC             "IsBasic"
+    #define PROPERTY_XSD_TYPE_CLASS           "TypeClass"
 
-    FORMS_CONSTASCII_STRING( PROPERTY_DYNAMIC_CONTROL_BORDER,      "DynamicControlBorder"        );
-    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_FOCUS,  "ControlBorderColorOnFocus"   );
-    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_MOUSE,  "ControlBorderColorOnHover"   );
-    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_INVALID,"ControlBorderColorOnInvalid" );
-    FORMS_CONSTASCII_STRING( PROPERTY_GENERATEVBAEVENTS,  "GenerateVbaEvents" );
+    #define PROPERTY_DYNAMIC_CONTROL_BORDER      "DynamicControlBorder"
+    #define PROPERTY_CONTROL_BORDER_COLOR_FOCUS  "ControlBorderColorOnFocus"
+    #define PROPERTY_CONTROL_BORDER_COLOR_MOUSE  "ControlBorderColorOnHover"
+    #define PROPERTY_CONTROL_BORDER_COLOR_INVALID "ControlBorderColorOnInvalid"
+    #define PROPERTY_GENERATEVBAEVENTS  "GenerateVbaEvents"
 
     //--------------------------------------------------------------------------
     //- URLs
     //--------------------------------------------------------------------------
-    FORMS_CONSTASCII_STRING( URL_FORM_POSITION,     ".uno:FormController/positionForm"  );
-    FORMS_CONSTASCII_STRING( URL_FORM_RECORDCOUNT,  ".uno:FormController/RecordCount"  );
-    FORMS_CONSTASCII_STRING( URL_RECORD_FIRST,      ".uno:FormController/moveToFirst"   );
-    FORMS_CONSTASCII_STRING( URL_RECORD_PREV,       ".uno:FormController/moveToPrev"    );
-    FORMS_CONSTASCII_STRING( URL_RECORD_NEXT,       ".uno:FormController/moveToNext"    );
-    FORMS_CONSTASCII_STRING( URL_RECORD_LAST,       ".uno:FormController/moveToLast"    );
-    FORMS_CONSTASCII_STRING( URL_RECORD_SAVE,       ".uno:FormController/saveRecord"    );
-    FORMS_CONSTASCII_STRING( URL_RECORD_UNDO,       ".uno:FormController/undoRecord"    );
-    FORMS_CONSTASCII_STRING( URL_RECORD_NEW,        ".uno:FormController/moveToNew"     );
-    FORMS_CONSTASCII_STRING( URL_RECORD_DELETE,     ".uno:FormController/deleteRecord"  );
-    FORMS_CONSTASCII_STRING( URL_FORM_REFRESH,      ".uno:FormController/refreshForm"   );
-    FORMS_CONSTASCII_STRING( URL_FORM_REFRESH_CURRENT_CONTROL,
-                                                    ".uno:FormController/refreshCurrentControl"   );
+    #define URL_FORM_POSITION     ".uno:FormController/positionForm"
+    #define URL_FORM_RECORDCOUNT  ".uno:FormController/RecordCount"
+    #define URL_RECORD_FIRST      ".uno:FormController/moveToFirst"
+    #define URL_RECORD_PREV       ".uno:FormController/moveToPrev"
+    #define URL_RECORD_NEXT       ".uno:FormController/moveToNext"
+    #define URL_RECORD_LAST       ".uno:FormController/moveToLast"
+    #define URL_RECORD_SAVE       ".uno:FormController/saveRecord"
+    #define URL_RECORD_UNDO       ".uno:FormController/undoRecord"
+    #define URL_RECORD_NEW        ".uno:FormController/moveToNew"
+    #define URL_RECORD_DELETE     ".uno:FormController/deleteRecord"
+    #define URL_FORM_REFRESH      ".uno:FormController/refreshForm"
+    #define URL_FORM_REFRESH_CURRENT_CONTROL ".uno:FormController/refreshCurrentControl"
 
-    FORMS_CONSTASCII_STRING( URL_FORM_SORT_UP,      ".uno:FormController/sortUp"   );
-    FORMS_CONSTASCII_STRING( URL_FORM_SORT_DOWN,    ".uno:FormController/sortDown"   );
-    FORMS_CONSTASCII_STRING( URL_FORM_SORT,         ".uno:FormController/sort"   );
-    FORMS_CONSTASCII_STRING( URL_FORM_AUTO_FILTER,  ".uno:FormController/autoFilter"   );
-    FORMS_CONSTASCII_STRING( URL_FORM_FILTER,       ".uno:FormController/filter"   );
-    FORMS_CONSTASCII_STRING( URL_FORM_APPLY_FILTER, ".uno:FormController/applyFilter"   );
-    FORMS_CONSTASCII_STRING( URL_FORM_REMOVE_FILTER,".uno:FormController/removeFilterOrder"   );
+    #define URL_FORM_SORT_UP      ".uno:FormController/sortUp"
+    #define URL_FORM_SORT_DOWN    ".uno:FormController/sortDown"
+    #define URL_FORM_SORT         ".uno:FormController/sort"
+    #define URL_FORM_AUTO_FILTER  ".uno:FormController/autoFilter"
+    #define URL_FORM_FILTER       ".uno:FormController/filter"
+    #define URL_FORM_APPLY_FILTER ".uno:FormController/applyFilter"
+    #define URL_FORM_REMOVE_FILTER ".uno:FormController/removeFilterOrder"
 
 //..............................................................................
 }   // namespace frm

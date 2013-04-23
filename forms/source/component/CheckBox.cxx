@@ -141,7 +141,7 @@ void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
 //------------------------------------------------------------------------------
 OUString SAL_CALL OCheckBoxModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_CHECKBOX;  // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_CHECKBOX);  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

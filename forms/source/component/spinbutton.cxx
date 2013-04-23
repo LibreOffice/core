@@ -196,7 +196,7 @@ namespace frm
     //--------------------------------------------------------------------
     OUString SAL_CALL OSpinButtonModel::getServiceName() throw( RuntimeException )
     {
-        return FRM_SUN_COMPONENT_SPINBUTTON;
+        return OUString(FRM_SUN_COMPONENT_SPINBUTTON);
     }
 
     //--------------------------------------------------------------------

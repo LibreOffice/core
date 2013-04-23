@@ -139,7 +139,7 @@ StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::su
 //------------------------------------------------------------------------------
 OUString SAL_CALL OHiddenModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_HIDDEN;    // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_HIDDEN);    // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

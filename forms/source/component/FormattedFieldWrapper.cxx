@@ -189,7 +189,7 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
 OUString SAL_CALL OFormattedFieldWrapper::getServiceName() throw(RuntimeException)
 {
     // return the old compatibility name for an EditModel
-    return FRM_COMPONENT_EDIT;
+    return OUString(FRM_COMPONENT_EDIT);
 }
 
 //------------------------------------------------------------------

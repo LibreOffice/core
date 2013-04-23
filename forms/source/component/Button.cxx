@@ -137,7 +137,7 @@ StringSequence  OButtonModel::getSupportedServiceNames() throw()
 //------------------------------------------------------------------------------
 OUString OButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_COMMANDBUTTON; // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_COMMANDBUTTON); // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

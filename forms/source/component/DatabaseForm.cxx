@@ -2357,7 +2357,7 @@ void ODatabaseForm::invlidateParameters()
 //------------------------------------------------------------------------------
 void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
-    if ((evt.PropertyName.equalsAsciiL(PROPERTY_ACTIVE_CONNECTION.ascii, PROPERTY_ACTIVE_CONNECTION.length)) && !m_bForwardingConnection)
+    if (evt.PropertyName == PROPERTY_ACTIVE_CONNECTION && !m_bForwardingConnection)
     {
         // the rowset changed its active connection itself (without interaction from our side), so
         // we need to fire this event, too
@@ -3862,7 +3862,7 @@ const sal_uInt16 DONTAPPLYFILTER    = 0x0002;
 //------------------------------------------------------------------------------
 OUString ODatabaseForm::getServiceName() throw( RuntimeException )
 {
-    return FRM_COMPONENT_FORM;  // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_FORM);  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

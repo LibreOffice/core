@@ -46,7 +46,7 @@ InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServ
 //------------------------------------------------------------------------------
 OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException)
 {
-    return FRM_SUN_FORMS_COLLECTION;
+    return OUString(FRM_SUN_FORMS_COLLECTION);
 }
 
 //------------------------------------------------------------------------------

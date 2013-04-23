@@ -203,7 +203,7 @@ namespace frm
     //------------------------------------------------------------------
     OUString SAL_CALL ONavigationBarModel::getServiceName() throw ( RuntimeException )
     {
-        return FRM_SUN_COMPONENT_NAVTOOLBAR;
+        return OUString(FRM_SUN_COMPONENT_NAVTOOLBAR);
     }
 
     //------------------------------------------------------------------

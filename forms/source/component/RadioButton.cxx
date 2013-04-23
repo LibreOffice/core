@@ -289,7 +289,7 @@ void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
 //------------------------------------------------------------------------------
 OUString SAL_CALL ORadioButtonModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_RADIOBUTTON;   // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_RADIOBUTTON);   // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

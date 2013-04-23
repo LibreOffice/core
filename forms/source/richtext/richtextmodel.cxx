@@ -504,7 +504,7 @@ namespace frm
     //--------------------------------------------------------------------
     OUString SAL_CALL ORichTextModel::getServiceName() throw ( RuntimeException)
     {
-        return FRM_SUN_COMPONENT_RICHTEXTCONTROL;
+        return OUString(FRM_SUN_COMPONENT_RICHTEXTCONTROL);
     }
 
     //--------------------------------------------------------------------

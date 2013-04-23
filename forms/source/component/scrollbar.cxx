@@ -240,7 +240,7 @@ namespace frm
     //--------------------------------------------------------------------
     OUString SAL_CALL OScrollBarModel::getServiceName() throw( RuntimeException )
     {
-        return FRM_SUN_COMPONENT_SCROLLBAR;
+        return OUString(FRM_SUN_COMPONENT_SCROLLBAR);
     }
 
     //--------------------------------------------------------------------

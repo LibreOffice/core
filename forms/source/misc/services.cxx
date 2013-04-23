@@ -130,31 +130,31 @@ void registerClassInfo(
 //.......................................................................................
 #define REGISTER_CLASS1(classImplName, service1) \
     aServices.realloc(1); \
-    aServices.getArray()[0] = frm::service1; \
+    aServices.getArray()[0] = service1; \
     REGISTER_CLASS_CORE(classImplName)
 
 //.......................................................................................
 #define REGISTER_CLASS2(classImplName, service1, service2) \
     aServices.realloc(2); \
-    aServices.getArray()[0] = frm::service1; \
-    aServices.getArray()[1] = frm::service2; \
+    aServices.getArray()[0] = service1; \
+    aServices.getArray()[1] = service2; \
     REGISTER_CLASS_CORE(classImplName)
 
 //.......................................................................................
 #define REGISTER_CLASS3(classImplName, service1, service2, service3) \
     aServices.realloc(3); \
-    aServices.getArray()[0] = frm::service1; \
-    aServices.getArray()[1] = frm::service2; \
-    aServices.getArray()[2] = frm::service3; \
+    aServices.getArray()[0] = service1; \
+    aServices.getArray()[1] = service2; \
+    aServices.getArray()[2] = service3; \
     REGISTER_CLASS_CORE(classImplName)
 
 //.......................................................................................
 #define REGISTER_CLASS4(classImplName, service1, service2, service3, service4) \
     aServices.realloc(4); \
-    aServices.getArray()[0] = frm::service1; \
-    aServices.getArray()[1] = frm::service2; \
-    aServices.getArray()[2] = frm::service3; \
-    aServices.getArray()[3] = frm::service4; \
+    aServices.getArray()[0] = service1; \
+    aServices.getArray()[1] = service2; \
+    aServices.getArray()[2] = service3; \
+    aServices.getArray()[3] = service4; \
     REGISTER_CLASS_CORE(classImplName)
 
 //---------------------------------------------------------------------------------------
@@ -213,10 +213,10 @@ void ensureClassInfos()
     // register the wrapper for the FormattedField, as it handles the XPersistObject::write
     // so that version <= 5.1 are able to read it
     aServices.realloc(4);
-    aServices.getArray()[0] = frm::FRM_COMPONENT_FORMATTEDFIELD;
-    aServices.getArray()[1] = frm::FRM_SUN_COMPONENT_FORMATTEDFIELD;
-    aServices.getArray()[2] = frm::FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD;
-    aServices.getArray()[3] = frm::BINDABLE_DATABASE_FORMATTED_FIELD;
+    aServices.getArray()[0] = FRM_COMPONENT_FORMATTEDFIELD;
+    aServices.getArray()[1] = FRM_SUN_COMPONENT_FORMATTEDFIELD;
+    aServices.getArray()[2] = FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD;
+    aServices.getArray()[3] = BINDABLE_DATABASE_FORMATTED_FIELD;
 
     registerClassInfo(OUString("com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"),
         aServices,
