@@ -124,7 +124,15 @@ ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
     m_xProps->setPropertyValue( sSourceName, uno::Any( extractStringFromAny( _value, OUString(), true ) ) );
     OUString newValue = extractStringFromAny( getValue(), OUString(), true );
     if ( oldValue != newValue )
-        fireChangeEvent();
+    {
+        sal_Int32 index = 0;
+        uno::Any aIndex = getListIndex();
+        aIndex >>= index;
+        if ( index < 0 )
+            fireChangeEvent();
+        else
+            fireClickEvent();
+    }
 }
 
 // see Value
