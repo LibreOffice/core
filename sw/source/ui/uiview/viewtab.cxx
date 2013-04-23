@@ -1139,9 +1139,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         // provide left and right margins of current page style
         case SID_ATTR_PAGE_LRSPACE:
         {
-            SvxLongLRSpaceItem aLongLR(
-                (long)aPageLRSpace.GetLeft(),
-                (long)aPageLRSpace.GetRight(),
+            const SvxLRSpaceItem aTmpPageLRSpace( rDesc.GetMaster().GetLRSpace() );
+            const SvxLongLRSpaceItem aLongLR(
+                (long)aTmpPageLRSpace.GetLeft(),
+                (long)aTmpPageLRSpace.GetRight(),
                 SID_ATTR_PAGE_LRSPACE );
             rSet.Put( aLongLR );
         }

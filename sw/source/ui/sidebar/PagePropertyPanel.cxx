@@ -45,26 +45,58 @@
 
 #include <boost/bind.hpp>
 
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
+
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+
+namespace {
+    const cssu::Reference< css::document::XUndoManager > getUndoManager( const cssu::Reference< css::frame::XFrame >& rxFrame )
+    {
+        const cssu::Reference< css::frame::XController >& xController = rxFrame->getController();
+        if ( xController.is() )
+        {
+            const cssu::Reference< css::frame::XModel >& xModel = xController->getModel();
+            if ( xModel.is() )
+            {
+                const cssu::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, cssu::UNO_QUERY_THROW );
+                if ( xSuppUndo.is() )
+                {
+                    const cssu::Reference< css::document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), cssu::UNO_QUERY_THROW );
+                    return xUndoManager;
+                }
+            }
+        }
+
+        return cssu::Reference< css::document::XUndoManager > ();
+    }
+}
+
 
 namespace sw { namespace sidebar {
 
 PagePropertyPanel* PagePropertyPanel::Create (
     Window* pParent,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
         throw ::com::sun::star::lang::IllegalArgumentException(A2S("no parent Window given to PagePropertyPanel::Create"), NULL, 0);
+    if ( ! rxFrame.is())
+        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no XFrame given to PagePropertyPanel::Create"), NULL, 1);
     if (pBindings == NULL)
         throw ::com::sun::star::lang::IllegalArgumentException(A2S("no SfxBindings given to PagePropertyPanel::Create"), NULL, 2);
 
     return new PagePropertyPanel(
         pParent,
+        rxFrame,
         pBindings);
 }
 
 PagePropertyPanel::PagePropertyPanel(
             Window* pParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings)
     : Control(pParent, SW_RES(RID_PROPERTYPANEL_SWPAGE))
     , mpBindings(pBindings)
@@ -144,10 +176,20 @@ PagePropertyPanel::PagePropertyPanel(
     , m_aSwPageColControl(SID_ATTR_PAGE_COLUMN, *pBindings, *this)
     , m_aSwPagePgMetricControl(SID_ATTR_METRIC, *pBindings, *this)
 
-    , mpOrientationPopup()
-    , mpMarginPopup()
-    , mpSizePopup()
-    , mpColumnPopup()
+    , maOrientationPopup( this,
+                          ::boost::bind( &PagePropertyPanel::CreatePageOrientationControl, this, _1 ),
+                          A2S("Page orientation") )
+    , maMarginPopup( this,
+                     ::boost::bind( &PagePropertyPanel::CreatePageMarginControl, this, _1 ),
+                     A2S("Page margins") )
+    , maSizePopup( this,
+                   ::boost::bind( &PagePropertyPanel::CreatePageSizeControl, this, _1 ),
+                   A2S("Page size") )
+    , maColumnPopup( this,
+                     ::boost::bind( &PagePropertyPanel::CreatePageColumnControl, this, _1 ),
+                     A2S("Page columns") )
+
+    , mxUndoManager( getUndoManager( rxFrame ) )
 
     , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false )
 {
@@ -262,15 +304,7 @@ void PagePropertyPanel::Initialize()
 
 IMPL_LINK( PagePropertyPanel, ClickOrientationHdl, ToolBox*, pToolBox )
 {
-    if ( ! mpOrientationPopup)
-    {
-        mpOrientationPopup.reset(
-            new ::svx::sidebar::Popup(
-                this,
-                ::boost::bind(&PagePropertyPanel::CreatePageOrientationControl, this, _1),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Page orientation")) ) );
-    }
-    mpOrientationPopup->Show( *pToolBox );
+    maOrientationPopup.Show( *pToolBox );
 
     return 0L;
 }
@@ -278,6 +312,8 @@ IMPL_LINK( PagePropertyPanel, ClickOrientationHdl, ToolBox*, pToolBox )
 
 void PagePropertyPanel::ExecuteOrientationChange( const sal_Bool bLandscape )
 {
+    StartUndo();
+
     {
         // set new page orientation
         mpPageItem->SetLandscape( bLandscape );
@@ -328,12 +364,14 @@ void PagePropertyPanel::ExecuteOrientationChange( const sal_Bool bLandscape )
             }
         }
     }
+
+    EndUndo();
 }
 
 
 void PagePropertyPanel::ClosePageOrientationPopup()
 {
-    mpOrientationPopup->Hide();
+    maOrientationPopup.Hide();
 }
 
 
@@ -382,13 +420,7 @@ void PagePropertyPanel::ExecutePageLayoutChange( const bool bMirrored )
 
 IMPL_LINK( PagePropertyPanel, ClickMarginHdl, ToolBox*, pToolBox )
 {
-    if ( ! mpMarginPopup)
-        mpMarginPopup.reset(
-            new ::svx::sidebar::Popup(
-                this,
-                ::boost::bind(&PagePropertyPanel::CreatePageMarginControl, this, _1),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Page margins")) ) );
-    mpMarginPopup->Show( *pToolBox );
+    maMarginPopup.Show( *pToolBox );
 
     return 0L;
 }
@@ -396,7 +428,7 @@ IMPL_LINK( PagePropertyPanel, ClickMarginHdl, ToolBox*, pToolBox )
 
 void PagePropertyPanel::ClosePageMarginPopup()
 {
-    mpMarginPopup->Hide();
+    maMarginPopup.Hide();
 }
 
 
@@ -428,13 +460,7 @@ void PagePropertyPanel::ExecuteSizeChange( const Paper ePaper )
 
 IMPL_LINK( PagePropertyPanel, ClickSizeHdl, ToolBox*, pToolBox )
 {
-    if ( ! mpSizePopup)
-        mpSizePopup.reset(
-            new ::svx::sidebar::Popup(
-                this,
-                ::boost::bind(&PagePropertyPanel::CreatePageSizeControl, this, _1),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Page size")) ) );
-    mpSizePopup->Show( *pToolBox );
+    maSizePopup.Show( *pToolBox );
 
     return 0L;
 }
@@ -442,7 +468,7 @@ IMPL_LINK( PagePropertyPanel, ClickSizeHdl, ToolBox*, pToolBox )
 
 void PagePropertyPanel::ClosePageSizePopup()
 {
-    mpSizePopup->Hide();
+    maSizePopup.Hide();
 }
 
 
@@ -467,13 +493,7 @@ void PagePropertyPanel::ExecuteColumnChange( const sal_uInt16 nColumnType )
 
 IMPL_LINK( PagePropertyPanel, ClickColumnHdl, ToolBox*, pToolBox )
 {
-    if ( ! mpColumnPopup)
-        mpColumnPopup.reset(
-            new ::svx::sidebar::Popup(
-                this,
-                ::boost::bind(&PagePropertyPanel::CreatePageColumnControl, this, _1),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Page columns")) ) );
-    mpColumnPopup->Show( *pToolBox );
+    maColumnPopup.Show( *pToolBox );
 
     return 0L;
 }
@@ -481,7 +501,7 @@ IMPL_LINK( PagePropertyPanel, ClickColumnHdl, ToolBox*, pToolBox )
 
 void PagePropertyPanel::ClosePageColumnPopup()
 {
-    mpColumnPopup->Hide();
+    maColumnPopup.Hide();
 }
 
 
@@ -754,6 +774,24 @@ void PagePropertyPanel::ChangeColumnImage( const sal_uInt16 nColumnType )
         default:
             mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumnNone_L);
         }
+    }
+}
+
+
+void PagePropertyPanel::StartUndo()
+{
+    if ( mxUndoManager.is() )
+    {
+        mxUndoManager->enterUndoContext( A2S("") );
+    }
+}
+
+
+void PagePropertyPanel::EndUndo()
+{
+    if ( mxUndoManager.is() )
+    {
+        mxUndoManager->leaveUndoContext();
     }
 }
 

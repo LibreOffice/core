@@ -122,8 +122,7 @@ void Popup::CreateContainerAndControl (void)
 {
     mpContainer.reset(new PopupContainer(mpParent));
     mpContainer->SetAccessibleName(msAccessibleName);
-    if (maPopupModeEndCallback)
-        mpContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
+    mpContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
     mpContainer->SetBorderStyle(mpContainer->GetBorderStyle() | WINDOW_BORDER_MENU);
 
     mpControl.reset(maControlCreator(mpContainer.get()));
@@ -136,6 +135,11 @@ IMPL_LINK(Popup, PopupModeEndHandler, void*, EMPTYARG)
 {
     if (maPopupModeEndCallback)
         maPopupModeEndCallback();
+
+    // Popup control is no longer needed and can be destroyed.
+    mpControl.reset();
+    mpContainer.reset();
+
     return 0;
 }
 

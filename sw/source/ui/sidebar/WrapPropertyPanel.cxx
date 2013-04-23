@@ -43,11 +43,11 @@ WrapPropertyPanel* WrapPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no parent Window given to PagePropertyPanel::Create"), NULL, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no parent Window given to WrapPropertyPanel::Create"), NULL, 0);
     if ( ! rxFrame.is())
-        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no XFrame given to PagePropertyPanel::Create"), NULL, 1);
+        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no XFrame given to WrapPropertyPanel::Create"), NULL, 1);
     if (pBindings == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no SfxBindings given to PagePropertyPanel::Create"), NULL, 2);
+        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no SfxBindings given to WrapPropertyPanel::Create"), NULL, 2);
 
     return new WrapPropertyPanel(
         pParent,

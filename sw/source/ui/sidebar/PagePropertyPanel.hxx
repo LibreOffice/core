@@ -18,6 +18,9 @@
 #ifndef SW_SIDEBAR_PAGE_PROPERTY_PANEL_HXX
 #define SW_SIDEBAR_PAGE_PROPERTY_PANEL_HXX
 
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/document/XUndoManager.hpp>
+
 #include <svx/sidebar/Popup.hxx>
 
 #include <sfx2/sidebar/ControllerItem.hxx>
@@ -55,6 +58,7 @@ namespace sw { namespace sidebar {
     public:
         static PagePropertyPanel* Create(
             Window* pParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
 
         // interface of ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
@@ -92,9 +96,13 @@ namespace sw { namespace sidebar {
         void ExecuteColumnChange( const sal_uInt16 nColumnType );
         void ClosePageColumnPopup();
 
+        void StartUndo();
+        void EndUndo();
+
     private:
         PagePropertyPanel(
             Window* pParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
         virtual ~PagePropertyPanel(void);
 
@@ -191,10 +199,12 @@ namespace sw { namespace sidebar {
         ::sfx2::sidebar::ControllerItem m_aSwPagePgMetricControl;
 
         // popups
-        ::boost::scoped_ptr< ::svx::sidebar::Popup > mpOrientationPopup;
-        ::boost::scoped_ptr< ::svx::sidebar::Popup > mpMarginPopup;
-        ::boost::scoped_ptr< ::svx::sidebar::Popup > mpSizePopup;
-        ::boost::scoped_ptr< ::svx::sidebar::Popup > mpColumnPopup;
+        ::svx::sidebar::Popup maOrientationPopup;
+        ::svx::sidebar::Popup maMarginPopup;
+        ::svx::sidebar::Popup maSizePopup;
+        ::svx::sidebar::Popup maColumnPopup;
+
+        const cssu::Reference< css::document::XUndoManager > mxUndoManager;
 
         bool mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify;
 

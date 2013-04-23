@@ -359,6 +359,7 @@ IMPL_LINK(PageMarginControl, ImplMarginHdl, void *, pControl)
 
         if ( bApplyNewPageMargins )
         {
+            mrPagePropPanel.StartUndo();
             mpMarginValueSet->SetNoSelection();
             mrPagePropPanel.ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
             mrPagePropPanel.ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
@@ -367,6 +368,7 @@ IMPL_LINK(PageMarginControl, ImplMarginHdl, void *, pControl)
                 mbMirrored = bMirrored;
                 mrPagePropPanel.ExecutePageLayoutChange( mbMirrored );
             }
+            mrPagePropPanel.EndUndo();
 
             mbCustomValuesUsed = false;
             mrPagePropPanel.ClosePageMarginPopup();
