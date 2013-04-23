@@ -4295,7 +4295,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
 }
 
 void SAL_CALL
-ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const uno::Any& Operator, const uno::Any& Criteria2, const uno::Any& VisibleDropDown ) throw (uno::RuntimeException)
+ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const uno::Any& Operator, const uno::Any& Criteria2, const uno::Any& VisibleDropDown ) throw (uno::RuntimeException)
 {
     // Is there an existing autofilter
     RangeHelper thisRange( mxRange );
@@ -4391,12 +4391,24 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
     if ( bHasCritValue )
         bCritHasNumericValue = ( Criteria1 >>= nCriteria1 );
 
-    if (  !Field.hasValue() && ( Criteria1.hasValue() || Operator.hasValue() || Criteria2.hasValue() ) )
+    if (  !aField.hasValue() && ( Criteria1.hasValue() || Operator.hasValue() || Criteria2.hasValue() ) )
         throw uno::RuntimeException();
+    bool bAll = false;
+    uno::Any Field( aField );
+    if ( !( Field >>= nField ) )
+    {
+        uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
+        try
+        {
+            Field = xConverter->convertTo( aField, getCppuType( (sal_Int32*)0 ) );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
     // Use the normal uno api, sometimes e.g. when you want to use ALL as the filter
     // we can't use refresh as the uno interface doesn't have a concept of ALL
     // in this case we just call the core calc functionality -
-    bool bAll = false;
     if ( ( Field >>= nField )  )
     {
         uno::Reference< sheet::XSheetFilterDescriptor2 > xDesc(
