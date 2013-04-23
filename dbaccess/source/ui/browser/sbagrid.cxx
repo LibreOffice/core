@@ -30,6 +30,7 @@
 #include "dlgattr.hxx"
 #include "dlgsize.hxx"
 #include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/form/ControlFontDialog.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
@@ -952,24 +953,9 @@ void SbaGridControl::SetBrowserAttrs()
 
     try
     {
-        PropertyValue aArg;
-        aArg.Name = OUString("IntrospectedObject");
-        aArg.Value <<= xGridModel;
-        Sequence< Any > aDialogArgs(1);
-        aDialogArgs[0] <<= aArg;
-
         Reference< XComponentContext > xContext = getContext();
-        Reference< XInterface > xDialog = xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.form.ControlFontDialog", aDialogArgs, xContext);
-        if (!xDialog.is())
-        {
-            ShowServiceNotAvailableError(this, OUString("com.sun.star.form.ControlFontDialog"), sal_True);
-            return;
-        }
-
-        Reference< XExecutableDialog > xExecute(xDialog, UNO_QUERY);
-        OSL_ENSURE(xExecute.is(), "SbaGridControl::SetBrowserAttrs: missing an interface on the dialog!");
-        if (xExecute.is())
-            xExecute->execute();
+        Reference< XExecutableDialog > xExecute = ControlFontDialog::createWithGridModel( xContext, xGridModel);
+        xExecute->execute();
     }
     catch( const Exception& )
     {

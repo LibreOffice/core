@@ -103,6 +103,22 @@ namespace pcr
         return aSupported;
     }
 
+    void OControlFontDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+    {
+        Reference<XPropertySet> xGridModel;
+        if (aArguments.getLength() == 1 && (aArguments[0] >>= xGridModel))
+        {
+            PropertyValue aArg;
+            aArg.Name = OUString("IntrospectedObject");
+            aArg.Value <<= xGridModel;
+            Sequence< Any > aNewArguments(1);
+            aNewArguments[0] <<= aArg;
+            OControlFontDialog_DBase::initialize(aNewArguments);
+        }
+        else
+            OControlFontDialog_DBase::initialize(aArguments);
+    }
+
     //---------------------------------------------------------------------
     Reference<XPropertySetInfo>  SAL_CALL OControlFontDialog::getPropertySetInfo() throw(RuntimeException)
     {
