@@ -2295,7 +2295,7 @@ util::DateTime InputObjectBase::dumpFileTime( const String& rName )
     aDateTime.Seconds = static_cast< sal_uInt16 >( nTimeInDay % ::Time::secondPerMinute );
     nTimeInDay /= ::Time::secondPerMinute;
     // minutes
-    aDateTime.Minutes = static_cast< sal_uInt16 >( nTimeInDay ::Time::minutePerHour );
+    aDateTime.Minutes = static_cast< sal_uInt16 >( nTimeInDay % ::Time::minutePerHour );
     nTimeInDay /= ::Time::minutePerHour;
     // hours
     aDateTime.Hours = static_cast< sal_uInt16 >( nTimeInDay );
