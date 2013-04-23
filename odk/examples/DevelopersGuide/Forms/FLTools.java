@@ -64,7 +64,7 @@ public class FLTools
         URL[] aURL = new URL[] { new URL() };
         aURL[0].Complete = sURL;
         // need an URLTransformer
-        XURLTransformer xTransformer = (XURLTransformer)UnoRuntime.queryInterface(
+        XURLTransformer xTransformer = UnoRuntime.queryInterface(
             XURLTransformer.class,
             xCtx.getServiceManager().createInstanceWithContext(
                 "com.sun.star.util.URLTransformer", xCtx ) );
@@ -78,7 +78,7 @@ public class FLTools
     */
     public static String getName( Object aFormComponent ) throws com.sun.star.uno.Exception
     {
-        XNamed xNamed = (XNamed)UnoRuntime.queryInterface( XNamed.class,
+        XNamed xNamed = UnoRuntime.queryInterface( XNamed.class,
             aFormComponent );
         String sName = "";
         if ( null != xNamed )
@@ -130,7 +130,7 @@ public class FLTools
         int nIndex = -1;
 
         // norm the element
-        XInterface xElement = (XInterface)UnoRuntime.queryInterface(
+        XInterface xElement = UnoRuntime.queryInterface(
             XInterface.class, aElement );
 
         // get the container
@@ -142,7 +142,7 @@ public class FLTools
             for ( int i = 0; i < nCount; ++i )
             {
                 // compare with the element
-                XInterface xCurrent = (XInterface)UnoRuntime.queryInterface(
+                XInterface xCurrent = UnoRuntime.queryInterface(
                     XInterface.class, xIndexCont.getByIndex( 0 ) );
                 if ( xCurrent.equals( xElement ) )
                 {   // found
@@ -161,7 +161,7 @@ public class FLTools
     */
     static Object getParent( Object aComponent, Class aInterfaceClass )
     {
-        XChild xAsChild = (XChild)UnoRuntime.queryInterface( XChild.class, aComponent );
+        XChild xAsChild = UnoRuntime.queryInterface( XChild.class, aComponent );
 
         return UnoRuntime.queryInterface( aInterfaceClass, xAsChild.getParent() );
     }
@@ -179,7 +179,7 @@ public class FLTools
     */
     static public void disposeComponent( Object xComp ) throws java.lang.RuntimeException
     {
-        XComponent xComponent = (XComponent)UnoRuntime.queryInterface( XComponent.class,
+        XComponent xComponent = UnoRuntime.queryInterface( XComponent.class,
             xComp );
         if ( null != xComponent )
             xComponent.dispose();
@@ -190,7 +190,7 @@ public class FLTools
     */
     static public Object getModel( Object aControl, Class aInterfaceClass )
     {
-        XControl xControl = (XControl)UnoRuntime.queryInterface(
+        XControl xControl = UnoRuntime.queryInterface(
             XControl.class, aControl );
         XControlModel xModel = null;
         if ( null != xControl )

@@ -45,37 +45,37 @@ public class UNO
 {
     public static XPropertySet queryPropertySet( Object aObject )
     {
-        return (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, aObject );
+        return UnoRuntime.queryInterface( XPropertySet.class, aObject );
     }
     public static XControlModel queryControlModel( Object aObject )
     {
-        return (XControlModel)UnoRuntime.queryInterface( XControlModel.class, aObject );
+        return UnoRuntime.queryInterface( XControlModel.class, aObject );
     }
     public static XIndexContainer queryIndexContainer( Object aObject )
     {
-        return (XIndexContainer)UnoRuntime.queryInterface( XIndexContainer.class, aObject );
+        return UnoRuntime.queryInterface( XIndexContainer.class, aObject );
     }
     public static XReset queryReset( Object aObject )
     {
-        return (XReset)UnoRuntime.queryInterface( XReset.class, aObject );
+        return UnoRuntime.queryInterface( XReset.class, aObject );
     }
     public static XServiceInfo queryServiceInfo( Object aObject )
     {
-        return (XServiceInfo)UnoRuntime.queryInterface( XServiceInfo.class, aObject );
+        return UnoRuntime.queryInterface( XServiceInfo.class, aObject );
     }
     public static XColumn queryColumn( Object aObject )
     {
-        return (XColumn)UnoRuntime.queryInterface( XColumn.class, aObject );
+        return UnoRuntime.queryInterface( XColumn.class, aObject );
     }
 
     public static XComponent queryComponent( Object aObject )
     {
-        return (XComponent)UnoRuntime.queryInterface( XComponent.class, aObject );
+        return UnoRuntime.queryInterface( XComponent.class, aObject );
     }
 
     public static XTablesSupplier queryTablesSupplier( Object aObject )
     {
-        return (XTablesSupplier)UnoRuntime.queryInterface( XTablesSupplier.class, aObject );
+        return UnoRuntime.queryInterface( XTablesSupplier.class, aObject );
     }
 
 /*  replace Foo with the identifier of your choice.

@@ -397,7 +397,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
     public XUnoPropertyNode addUnoPropertyNodeWithAttributesDescription(Property _aProperty){
         SwingUnoPropertyNode oUnoPropertyNode = new SwingUnoPropertyNode(_aProperty);
         XConstantTypeDescription[] xPropertyAttributesTypeDescriptions = Introspector.getIntrospector().getFieldsOfConstantGroup("com.sun.star.beans.PropertyAttribute");
-        String sDisplay = Introspector.getIntrospector().getConstantDisplayString((int) _aProperty.Attributes, xPropertyAttributesTypeDescriptions, "Attributes: ");
+        String sDisplay = Introspector.getIntrospector().getConstantDisplayString(_aProperty.Attributes, xPropertyAttributesTypeDescriptions, "Attributes: ");
         oUnoPropertyNode.setLabel(sDisplay);
         return oUnoPropertyNode;
     }

@@ -138,7 +138,7 @@ public class ChildrenRetriever {
             // Execute command "open".
             set = UnoRuntime.queryInterface(
                 XDynamicResultSet.class, m_helper.executeCommand( m_content, "open", arg ));
-            XResultSet resultSet = ( XResultSet )set.getStaticResultSet();
+            XResultSet resultSet = set.getStaticResultSet();
 
             result = new Vector<Vector<Object>>();
 

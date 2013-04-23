@@ -433,7 +433,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
             m_xSalesForm.setPropertyValue( "ApplyFilter", new Boolean( true ) );
 
             // and reload the form
-            XLoadable xLoad = (XLoadable)UnoRuntime.queryInterface(
+            XLoadable xLoad = UnoRuntime.queryInterface(
                 XLoadable.class, m_xSalesForm );
             xLoad.reload();
 
