@@ -847,7 +847,7 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, sal_Bool bCh
 {
 #ifndef DISABLE_DYNLOADING
     // get basctl dllname
-    static OUString aLibName( SVLIBRARY( "basctl"  ) );
+    static OUString aLibName( SAL_MODULENAME( "basctl" "lo" ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
@@ -875,7 +875,7 @@ void MacroOrganizer( sal_Int16 nTabId )
 {
 #ifndef DISABLE_DYNLOADING
     // get basctl dllname
-    static OUString aLibName( SVLIBRARY( "basctl"  ) );
+    static OUString aLibName( SAL_MODULENAME( "basctl" "lo" ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(

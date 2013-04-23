@@ -153,7 +153,7 @@ oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
 {
     if (!msword_.is())
     {
-        bool ok = msword_.loadRelative( &thisModule, SVLIBRARY( "msword" ), SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+        bool ok = msword_.loadRelative( &thisModule, SAL_MODULENAME( "msword" "lo" ), SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
         SAL_WARN_IF(!ok, "sw", "failed to load msword library");
     }
     if (msword_.is())

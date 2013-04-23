@@ -24,7 +24,6 @@
 #include "resource/mozab_res.hrc"
 #include "resource/common_res.hrc"
 
-#include <tools/solar.h>
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -148,7 +147,7 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const OUString& url, con
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceStringWithSubstitution(
                 STR_COULD_NOT_LOAD_LIB,
-                "$libname$", OUString( SVLIBRARY( "mozabdrv" ) )
+                "$libname$", OUString( SAL_MODULENAME( "mozabdrv" "lo" ) )
              ) );
 
         ::dbtools::throwGenericSQLException(sError,*this);
@@ -293,7 +292,7 @@ bool MozabDriver::ensureInit()
 
     OSL_ENSURE(NULL == m_pCreationFunc, "MozabDriver::ensureInit: inconsistence: already have a factory function!");
 
-    const OUString sModuleName(SVLIBRARY( "mozabdrv" ));
+    const OUString sModuleName(SAL_MODULENAME( "mozabdrv" "lo" ));
 
     // load the mozabdrv library
     m_hModule = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);

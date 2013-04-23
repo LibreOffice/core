@@ -279,7 +279,7 @@ namespace svt
             if ( !s_pFactory.get() )
             {
 #ifndef DISABLE_DYNLOADING
-                const OUString sModuleName( SVLIBRARY( "acc" ));
+                const OUString sModuleName( SAL_MODULENAME( "acc" "lo" ));
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
                 {

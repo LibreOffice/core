@@ -42,10 +42,9 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
     ScFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
 
-    OUStringBuffer aStrBuf;
-    aStrBuf.appendAscii( SVLIBRARY("scui") );
+    OUString aStrBuf( SAL_MODULENAME("scui" "lo") );
 
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear(),
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf,
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( ScAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") );

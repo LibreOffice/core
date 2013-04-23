@@ -67,7 +67,7 @@ SdFilter::~SdFilter()
 
 OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName ) const
 {
-    String aTemp(OUString(SVLIBRARY("?")));
+    String aTemp(OUString(SAL_MODULENAME("?" "lo")));
     xub_StrLen nIndex = aTemp.Search( (sal_Unicode)'?' );
     aTemp.Replace( nIndex, 1, rLibraryName );
     OUString aLibraryName( aTemp );

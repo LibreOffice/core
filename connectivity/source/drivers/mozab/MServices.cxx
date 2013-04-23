@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include "bootstrap/MMozillaBootstrap.hxx"
-#include <tools/solar.h>
 
 using namespace connectivity::mozab;
 using ::com::sun::star::uno::Reference;
@@ -83,7 +82,7 @@ struct ProviderRequest
 typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Reference< XMultiServiceFactory >& _rxFactory );
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createMozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-        const OUString sModuleName(SVLIBRARY( "mozabdrv" ));
+        const OUString sModuleName(SAL_MODULENAME( "mozabdrv" "lo" ));
 
         // load the dbtools library
         oslModule s_hModule = osl_loadModuleRelative(

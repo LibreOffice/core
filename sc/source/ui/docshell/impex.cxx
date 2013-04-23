@@ -2260,7 +2260,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
         return *plugin;
 
 #ifndef DISABLE_DYNLOADING
-    OUString sFilterLib(SVLIBRARY("scfilt"));
+    OUString sFilterLib(SAL_MODULENAME("scfilt" "lo"));
     static ::osl::Module aModule;
     bool bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
     if (!bLoaded)

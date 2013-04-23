@@ -116,7 +116,7 @@ namespace svxform
             OSL_ENSURE(NULL == s_pFactoryCreationFunc, "ODbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
 #ifndef DISABLE_DYNLOADING
-            const OUString sModuleName( SVLIBRARY( "dbtools" )
+            const OUString sModuleName( SAL_MODULENAME( "dbtools" "lo" )
             );
 
             // load the dbtools library

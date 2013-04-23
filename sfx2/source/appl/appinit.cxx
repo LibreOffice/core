@@ -186,7 +186,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
         bDetermineFunction = true;
 
 #ifndef DISABLE_DYNLOADING
-        static OUString aLibName( SVLIBRARY( "cui" ) );
+        static OUString aLibName( SAL_MODULENAME( "cui" "lo" ) );
         oslModule handleMod = osl_loadModuleRelative(
             &thisModule, aLibName.pData, 0 );
 

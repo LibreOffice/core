@@ -21,7 +21,6 @@
 #include <toolkit/helper/accessiblefactory.hxx>
 #include <osl/module.h>
 #include <osl/diagnose.h>
-#include <tools/solar.h>
 
 // #define UNLOAD_ON_LAST_CLIENT_DYING
     // this is not recommended currently. If enabled, the implementation will log
@@ -201,7 +200,7 @@ namespace toolkit
             if ( !s_pFactory.get() )
             {
 #ifndef DISABLE_DYNLOADING
-                const OUString sModuleName( SVLIBRARY( "acc" ) );
+                const OUString sModuleName( SAL_MODULENAME( "acc" "lo" ) );
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
                 {

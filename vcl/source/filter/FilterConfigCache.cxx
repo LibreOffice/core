@@ -19,6 +19,7 @@
 
 #include "FilterConfigCache.hxx"
 
+#include <osl/module.h>
 #include <vcl/graphicfilter.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <comphelper/processfactory.hxx>
@@ -87,7 +88,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
             if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
                 bIsPixelFormat = sal_True;
         }
-        OUString sTemp(SVLIBRARY("?"));
+        OUString sTemp(SAL_MODULENAME("?" "lo"));
         sal_Int32 nIndex = sTemp.indexOf(static_cast<sal_Unicode>('?'));
         sFilterName = sTemp.replaceAt(nIndex, 1, sFilterName);
     }

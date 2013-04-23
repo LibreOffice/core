@@ -154,7 +154,7 @@ static const char * const components[] =
     , "sdbc2" SAL_DLLEXTENSION
     , "dbpool2" SAL_DLLEXTENSION
 #ifdef SAL_UNX
-    , SVLIBRARY( "dtransX11" )        // OBR
+    , SAL_MODULENAME( "dtransX11" "lo" )        // OBR
 #endif
 #ifdef SAL_W32
     , SAL_MODULENAME( "sysdtrans" )
