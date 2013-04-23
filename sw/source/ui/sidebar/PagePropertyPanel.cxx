@@ -197,9 +197,9 @@ PagePropertyPanel::PagePropertyPanel(
                      ::boost::bind( &PagePropertyPanel::CreatePageColumnControl, this, _1 ),
                      A2S("Page columns") )
 
-    , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false )
-
     , mxUndoManager( getUndoManager( rxFrame ) )
+
+    , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false )
 {
     Initialize();
     mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify = true;
