@@ -20,6 +20,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_settings \
 	CustomTarget_autodoc \
 	Executable_unoapploader \
+	Package_autodoc \
 	Package_bin \
 	Package_config \
 	Package_docs \
@@ -30,6 +31,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Package_odk_headers_generated \
 	Package_settings \
 	Package_settings_generated \
+	PackageSet_autodoc \
 	PackageSet_odk_headers \
 ))
 
