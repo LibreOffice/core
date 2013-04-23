@@ -27,6 +27,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/imagemgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/virdev.hxx>
@@ -95,8 +96,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     maAutoWidthControl(SID_ATTR_TRANSFORM_AUTOWIDTH, *pBindings, *this),
     maAutoHeightControl(SID_ATTR_TRANSFORM_AUTOHEIGHT, *pBindings, *this),
     m_aMetricCtl(SID_ATTR_METRIC, *pBindings, *this),
-    maImgFlipHori(SVX_RES(IMG_HORI_FLIP)),
-    maImgFlipVert(SVX_RES(IMG_VERT_FLIP)),
     mxFrame(rxFrame),
     maContext(),
     mpBindings(pBindings),
@@ -178,10 +177,14 @@ void PosSizePropertyPanel::Initialize()
 
     //flip:
     mpFlipTbx->SetSelectHdl( LINK( this, PosSizePropertyPanel, FlipHdl) );
-    mpFlipTbx->SetItemImage(FLIP_HORIZONTAL,maImgFlipHori);
-    mpFlipTbx->SetItemImage(FLIP_VERTICAL,maImgFlipVert);
-    mpFlipTbx->SetQuickHelpText(FLIP_HORIZONTAL,String(SVX_RES(STR_QH_HORI_FLIP))); //Add
-    mpFlipTbx->SetQuickHelpText(FLIP_VERTICAL,String(SVX_RES(STR_QH_VERT_FLIP))); //Add
+    mpFlipTbx->SetItemImage(
+        FLIP_HORIZONTAL,
+        GetImage(mxFrame, A2S(".uno:FlipHorizontal"), sal_False));
+    mpFlipTbx->SetItemImage(
+        FLIP_VERTICAL,
+        GetImage(mxFrame, A2S(".uno:FlipVertical"), sal_False));
+    mpFlipTbx->SetQuickHelpText(FLIP_HORIZONTAL, SVX_RESSTR(STR_QH_HORI_FLIP)); //Add
+    mpFlipTbx->SetQuickHelpText(FLIP_VERTICAL, SVX_RESSTR(STR_QH_VERT_FLIP)); //Add
 
     mpMtrPosX->SetAccessibleRelationLabeledBy(mpFtPosX.get());
     mpMtrPosY->SetAccessibleRelationLabeledBy(mpFtPosY.get());

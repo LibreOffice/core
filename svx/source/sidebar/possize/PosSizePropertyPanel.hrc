@@ -33,8 +33,6 @@
 #define DIAL_CONTROL                                        17
 #define FLIP_HORIZONTAL                                     18
 #define FLIP_VERTICAL                                       19
-#define IMG_HORI_FLIP                                       20
-#define IMG_VERT_FLIP                                       21
 #define FT_FLIP                                             22
 #define STR_QH_HORI_FLIP                                    23
 #define STR_QH_VERT_FLIP                                    24

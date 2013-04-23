@@ -176,20 +176,12 @@ Control RID_SIDEBAR_POSSIZE_PANEL
                 Identifier = FLIP_VERTICAL ;
                 Text [ en-US ] = "Flip Vertically" ;
                 HelpID = HID_PROPERTY_PANEL_POSIZE_FLIP_VERTICAL;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/FlipVertically_16x16.png";
-                };
             };
             ToolBoxItem
             {
                 Identifier = FLIP_HORIZONTAL ;
                 Text [ en-US ] = "Flip Horizontally" ;
                 HelpID = HID_PROPERTY_PANEL_POSIZE_FLIP_HORIZONTAL;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/FlipHorizontally_16x16.png";
-                };
             };
         };
     };
@@ -201,15 +193,6 @@ Control RID_SIDEBAR_POSSIZE_PANEL
     String STR_QH_VERT_FLIP
     {
         Text [ en-US ] = "Flip the selected object vertically.";
-    };
-
-    Image IMG_HORI_FLIP
-    {
-        ImageBitmap = Bitmap{File = "symphony/FlipHorizontally_16x16.png";};
-    };
-    Image IMG_VERT_FLIP
-    {
-        ImageBitmap = Bitmap{File = "symphony/FlipVertically_16x16.png";};
     };
 
     Control DIAL_CONTROL

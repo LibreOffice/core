@@ -121,10 +121,6 @@ private:
     ::sfx2::sidebar::ControllerItem         maAutoHeightControl;
     ::sfx2::sidebar::ControllerItem         m_aMetricCtl;
 
-    // images from ressource
-    Image                                   maImgFlipHori;
-    Image                                   maImgFlipVert;
-
     cssu::Reference< css::frame::XFrame >   mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
