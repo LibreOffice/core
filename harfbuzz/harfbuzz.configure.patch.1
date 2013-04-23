@@ -64,16 +64,7 @@ diff -ur harfbuzz.org/configure harfbuzz/configure
  fi
  if test "$have_icu_le" != "true"; then
  	if test -n "$ac_tool_prefix"; then
-@@ -17555,7 +17555,7 @@
- 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ICU_LE by using icu-config fallback" >&5
- $as_echo_n "checking for ICU_LE by using icu-config fallback... " >&6; }
- 	if test "$ICU_CONFIG" != "no" && "$ICU_CONFIG" --version >/dev/null; then
--		have_icu_le=true
-+		have_icu_le=false
- 		# We don't use --cflags as this gives us a lot of things that we don't
- 		# necessarily want, like debugging and optimization flags
- 		# See man (1) icu-config for more info.
-@@ -17654,7 +17654,7 @@
+@@ -17654,7 +17726,7 @@
  	GRAPHITE2_LIBS=$pkg_cv_GRAPHITE2_LIBS
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
  $as_echo "yes" >&6; }
@@ -91,3 +82,12 @@ diff -ur harfbuzz.org/configure harfbuzz/configure
  fi
  if $have_freetype; then
  
+@@ -17825,7 +17897,7 @@
+ ac_fn_c_check_type "$LINENO" "CTFontRef" "ac_cv_type_CTFontRef" "#include <ApplicationServices/ApplicationServices.h>
+ "
+ if test "x$ac_cv_type_CTFontRef" = xyes; then :
+-  have_coretext=true
++  have_coretext=false
+ else
+   have_coretext=false
+ fi
