@@ -1469,8 +1469,9 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     if (pDest->GetDoc()->IsClipBoard() && this->GetNum())
     {
         // #i111677# cache expansion of source (for clipboard)
-        pDest->m_pNumStringCache.reset(
-            new OUString(this->GetNumString()));
+        pDest->m_pNumStringCache.reset( (nTxtStartIdx != 0)
+            ? new OUString // fdo#49076: numbering only if copy from para start
+            : new OUString(this->GetNumString()));
     }
 
     if( !nLen )
