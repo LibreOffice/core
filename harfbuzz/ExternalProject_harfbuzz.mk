@@ -30,6 +30,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 		&& ./configure \
 			--enable-static \
 			--disable-shared \
+			--with-pic \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) libharfbuzz.la) \
 	)

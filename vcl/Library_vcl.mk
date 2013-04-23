@@ -110,6 +110,12 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
+ifeq ($(ENABLE_HARFBUZZ),TRUE)
+$(eval $(call gb_Library_use_externals,vcl,\
+	harfbuzz \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/brand \
     vcl/source/app/dbggui \
@@ -347,7 +353,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 endif
 
 $(eval $(call gb_Library_use_external,vcl,graphite))
-$(eval $(call gb_Library_use_external,vcl,harfbuzz))
 
 endif
 

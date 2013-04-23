@@ -1186,7 +1186,7 @@ endef
 
 endif # SYSTEM_ICU
 
-ifeq ($(ENABLE_HARFBUZZ),YES)
+ifeq ($(ENABLE_HARFBUZZ),TRUE)
 ifeq ($(SYSTEM_HARFBUZZ),YES)
 
 define gb_LinkTarget__use_harfbuzz
