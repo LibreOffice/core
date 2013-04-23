@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_settings \
 	CustomTarget_autodoc \
 	Executable_unoapploader \
+	Package_autodoc \
 	Package_bin \
 	Package_config \
 	Package_docs \
@@ -25,6 +26,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Package_lib \
 	Package_settings \
 	Package_settings_generated \
+	PackageSet_autodoc \
 ))
 
 ifeq ($(OS),WNT)
