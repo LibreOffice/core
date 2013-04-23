@@ -1143,8 +1143,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         }
 
         // see #i99665#
-        if ( pOLENd->IsChart() &&
-                pShell->Imp()->GetDrawView()->IsAntiAliasing() )
+        if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
         {
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
         }
