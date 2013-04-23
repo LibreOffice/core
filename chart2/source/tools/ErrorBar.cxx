@@ -26,6 +26,7 @@
 #include "CloneHelper.hxx"
 
 #include <svl/itemprop.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -143,6 +144,8 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny
     throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    SolarMutexGuard aGuard;
+
     if(rPropName == "ErrorBarStyle")
         rAny >>= meStyle;
     else if(rPropName == "PositiveError")
@@ -210,6 +213,8 @@ OUString getSourceRangeStrFromLabeledSequences( uno::Sequence< uno::Reference< c
 uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    SolarMutexGuard aGuard;
+
     uno::Any aRet;
     if(rPropName == "ErrorBarStyle")
         aRet <<= meStyle;
