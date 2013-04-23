@@ -299,15 +299,15 @@ void PosSizePropertyPanel::HandleContextChange(
     sal_Int32 nLayoutMode (0);
     switch (maContext.GetCombinedContext_DI())
     {
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Draw):
+        case CombinedEnumContext(Application_WriterVariants, Context_Draw):
             nLayoutMode = 0;
             break;
 
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Graphic):
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Media):
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Frame):
-        case CombinedEnumContext(Application_WriterAndWeb, Context_OLE):
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Form):
+        case CombinedEnumContext(Application_WriterVariants, Context_Graphic):
+        case CombinedEnumContext(Application_WriterVariants, Context_Media):
+        case CombinedEnumContext(Application_WriterVariants, Context_Frame):
+        case CombinedEnumContext(Application_WriterVariants, Context_OLE):
+        case CombinedEnumContext(Application_WriterVariants, Context_Form):
             nLayoutMode = 1;
             break;
 

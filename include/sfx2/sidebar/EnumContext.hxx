@@ -33,7 +33,9 @@ public:
     enum Application
     {
         Application_Writer,
+        Application_WriterGlobal,
         Application_WriterWeb,
+        Application_WriterXML,
         Application_Calc,
         Application_Draw,
         Application_Impress,
@@ -42,8 +44,8 @@ public:
         // case that Draw and Impress use identical context configurations.
         Application_DrawImpress,
 
-        // Also for your convenience for either Writer or WriterWeb.
-        Application_WriterAndWeb,
+        // Also for your convenience for the different variants of Writer documents.
+        Application_WriterVariants,
 
         // Used only by deck or panel descriptors.  Matches any
         // application.

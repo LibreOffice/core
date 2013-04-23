@@ -212,11 +212,11 @@
             DrawImpress,      OutlineText,        visible                    ;
             DrawImpress,      Table,              visible                    ;
             DrawImpress,      TextObject,         visible                    ;
-            WriterAndWeb,     Annotation,         visible                    ;
-            WriterAndWeb,     DrawText,           visible                    ;
-            WriterAndWeb,     Table,              visible                    ;
-            WriterAndWeb,     Text,               visible                    ;
-            WriterAndWeb,     default,            visible                    ;
+            WriterVariants,   Annotation,         visible                    ;
+            WriterVariants,   DrawText,           visible                    ;
+            WriterVariants,   Table,              visible                    ;
+            WriterVariants,   Text,               visible                    ;
+            WriterVariants,   default,            visible                    ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -316,11 +316,11 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Calc,         Draw,       visible ;
-            DrawImpress,  3DObject,   visible ;
-            DrawImpress,  Draw,       visible ;
-            DrawImpress,  TextObject, hidden  ;
-            WriterAndWeb, Draw,       visible ;
+            Calc,           Draw,       visible ;
+            DrawImpress,    3DObject,   visible ;
+            DrawImpress,    Draw,       visible ;
+            DrawImpress,    TextObject, hidden  ;
+            WriterVariants, Draw,       visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -346,13 +346,13 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Calc,         Draw,       visible ;
-            Calc,         Graphic,    visible ;
-            DrawImpress,  3DObject,   visible ;
-            DrawImpress,  Draw,       visible ;
-            DrawImpress,  Graphic,    visible ;
-            DrawImpress,  TextObject, hidden  ;
-            WriterAndWeb, Draw,       visible ;
+            Calc,           Draw,       visible ;
+            Calc,           Graphic,    visible ;
+            DrawImpress,    3DObject,   visible ;
+            DrawImpress,    Draw,       visible ;
+            DrawImpress,    Graphic,    visible ;
+            DrawImpress,    TextObject, hidden  ;
+            WriterVariants, Draw,       visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -404,26 +404,26 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Calc,         Chart,       visible                       ;
-            Calc,         Draw,        hidden                        ;
-            Calc,         Form,        visible                       ;
-            Calc,         Graphic,     hidden                        ;
-            Calc,         Media,       visible                       ;
-            Calc,         MultiObject, visible                       ;
-            Calc,         OLE,         visible                       ;
-            DrawImpress,  3DObject,    visible                       ;
-            DrawImpress,  Draw,        hidden                        ;
-            DrawImpress,  Form,        visible                       ;
-            DrawImpress,  Graphic,     hidden                        ;
-            DrawImpress,  Media,       visible                       ;
-            DrawImpress,  MultiObject, visible                       ;
-            DrawImpress,  OLE,         visible                       ;
-            DrawImpress,  TextObject,  hidden                        ;
-            WriterAndWeb, Draw,        hidden                        ;
-            WriterAndWeb, Form,        visible                       ;
-            WriterAndWeb, Graphic,     visible, .uno:GraphicDialog   ;
-            WriterAndWeb, Media,       visible                       ;
-            WriterAndWeb, OLE,         visible, .uno:FrameDialog     ;
+            Calc,           Chart,       visible                       ;
+            Calc,           Draw,        hidden                        ;
+            Calc,           Form,        visible                       ;
+            Calc,           Graphic,     hidden                        ;
+            Calc,           Media,       visible                       ;
+            Calc,           MultiObject, visible                       ;
+            Calc,           OLE,         visible                       ;
+            DrawImpress,    3DObject,    visible                       ;
+            DrawImpress,    Draw,        hidden                        ;
+            DrawImpress,    Form,        visible                       ;
+            DrawImpress,    Graphic,     hidden                        ;
+            DrawImpress,    Media,       visible                       ;
+            DrawImpress,    MultiObject, visible                       ;
+            DrawImpress,    OLE,         visible                       ;
+            DrawImpress,    TextObject,  hidden                        ;
+            WriterVariants, Draw,        hidden                        ;
+            WriterVariants, Form,        visible                       ;
+            WriterVariants, Graphic,     visible, .uno:GraphicDialog   ;
+            WriterVariants, Media,       visible                       ;
+            WriterVariants, OLE,         visible, .uno:FrameDialog     ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -448,7 +448,7 @@
           <value oor:separator=";">
             Calc,         Graphic,     visible   ;
             DrawImpress,  Graphic,     visible   ;
-            WriterAndWeb, Graphic,     visible   ;
+            WriterVariants, Graphic,     visible   ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -774,18 +774,18 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Calc,         DrawText,   visible ;
-            DrawImpress,  3DObject,   hidden  ;
-            DrawImpress,  Draw,       hidden  ;
-            DrawImpress,  DrawText,   visible ;
-            DrawImpress,  Graphic,    hidden  ;
-            DrawImpress,  Table,      visible ;
-            DrawImpress,  TextObject, visible ;
-            WriterAndWeb, Annotation, visible ;
-            WriterAndWeb, DrawText,   visible ;
-            WriterAndWeb, Table,      visible ;
-            WriterAndWeb, Text,       visible ;
-            WriterAndWeb, default,    visible ;
+            Calc,           DrawText,   visible ;
+            DrawImpress,    3DObject,   hidden  ;
+            DrawImpress,    Draw,       hidden  ;
+            DrawImpress,    DrawText,   visible ;
+            DrawImpress,    Graphic,    hidden  ;
+            DrawImpress,    Table,      visible ;
+            DrawImpress,    TextObject, visible ;
+            WriterVariants, Annotation, visible ;
+            WriterVariants, DrawText,   visible ;
+            WriterVariants, Table,      visible ;
+            WriterVariants, Text,       visible ;
+            WriterVariants, default,    visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -839,7 +839,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            WriterAndWeb, any, visible ;
+            WriterVariants, any, visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">

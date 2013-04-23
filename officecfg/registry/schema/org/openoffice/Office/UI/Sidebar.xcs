@@ -65,6 +65,9 @@
           separated values (note that values are case sensitive):
           1  Application name. Valid values are
                  com.sun.star.text.TextDocument
+                 com.sun.star.text.GlobalDocument
+                 com.sun.star.text.WebDocument
+                 com.sun.star.xforms.XMLFormDocument
                  com.sun.star.sheet.SpreadsheetDocument
                  com.sun.star.presentation.PresentationDocument
                  com.sun.star.drawing.DrawingDocument
@@ -77,9 +80,10 @@
 
              Shortcuts for multiple applications:
                  DrawImpress
-                 WriterAndWeb
+                 WriterVariants
              These shortcuts exist for even more convenience and handle the frequent case of Draw
-	     and Impress as well as Writer and WriterWeb having otherwise identical context descriptions.
+	     and Impress as well as different variants of the Writer where they have otherwise 
+	     identical context descriptions.
              
              Special values:
                  any

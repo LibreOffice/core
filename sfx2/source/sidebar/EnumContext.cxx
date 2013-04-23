@@ -89,8 +89,10 @@ sal_Int32 EnumContext::GetCombinedContext_DI (void) const
             return CombinedEnumContext(Application_DrawImpress, meContext);
 
         case Application_Writer:
+        case Application_WriterGlobal:
         case Application_WriterWeb:
-            return CombinedEnumContext(Application_WriterAndWeb, meContext);
+        case Application_WriterXML:
+            return CombinedEnumContext(Application_WriterVariants, meContext);
 
         default:
             return CombinedEnumContext(meApplication, meContext);
@@ -152,7 +154,9 @@ void EnumContext::ProvideApplicationContainers (void)
     {
         maApplicationVector.resize(static_cast<size_t>(EnumContext::__LastApplicationEnum)+1);
         AddEntry(A2S("com.sun.star.text.TextDocument"), EnumContext::Application_Writer);
+        AddEntry(A2S("com.sun.star.text.GlobalDocument"), EnumContext::Application_WriterGlobal);
         AddEntry(A2S("com.sun.star.text.WebDocument"), EnumContext::Application_WriterWeb);
+        AddEntry(A2S("com.sun.star.xforms.XMLFormDocument"), EnumContext::Application_WriterXML);
         AddEntry(A2S("com.sun.star.sheet.SpreadsheetDocument"), EnumContext::Application_Calc);
         AddEntry(A2S("com.sun.star.drawing.DrawingDocument"), EnumContext::Application_Draw);
         AddEntry(A2S("com.sun.star.presentation.PresentationDocument"), EnumContext::Application_Impress);
