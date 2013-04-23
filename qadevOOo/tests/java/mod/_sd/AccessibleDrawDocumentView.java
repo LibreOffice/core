@@ -105,9 +105,7 @@ public class AccessibleDrawDocumentView extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         //com.sun.star.accessibility.AccessibleRole
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
-
-        oObj = AccessibilityTools.SearchedContext;
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
         log.println("ImplementationName "+utils.getImplName(oObj));
 

@@ -167,9 +167,7 @@ public class ScAccessiblePreviewCell extends TestCase {
         XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), xModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL, true);
-
-        oObj = AccessibilityTools.SearchedContext;
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL, true);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 

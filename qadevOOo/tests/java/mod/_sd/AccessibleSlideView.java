@@ -79,9 +79,7 @@ public class AccessibleSlideView extends TestCase {
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
-
-        oObj = AccessibilityTools.SearchedContext;
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
         System.out.println("ImplementationName "+utils.getImplName(oObj));
 

@@ -32,13 +32,11 @@ import java.io.PrintWriter;
 
 
 public class AccessibilityTools {
-    public static XAccessibleContext SearchedContext = null;
     public static XAccessible SearchedAccessible = null;
     private static boolean debug = false;
 
     public AccessibilityTools() {
         //done = false;
-        SearchedContext = null;
     }
 
     public static XAccessible getAccessibleObject(XInterface xObject) {
@@ -93,35 +91,29 @@ public class AccessibilityTools {
 
     public static XAccessibleContext getAccessibleObjectForRole(XAccessible xacc,
         short role) {
-        SearchedContext = null;
         SearchedAccessible = null;
-        getAccessibleObjectForRole_(xacc, role);
-
-        return SearchedContext;
+        return getAccessibleObjectForRole_(xacc, role);
     }
 
     public static XAccessibleContext getAccessibleObjectForRole(XAccessible xacc,
         short role,
         boolean ignoreShowing) {
-        SearchedContext = null;
         SearchedAccessible = null;
 
         if (ignoreShowing) {
-            getAccessibleObjectForRoleIgnoreShowing_(xacc, role);
+            return getAccessibleObjectForRoleIgnoreShowing_(xacc, role);
         } else {
-            getAccessibleObjectForRole_(xacc, role);
+            return getAccessibleObjectForRole_(xacc, role);
         }
-
-        return SearchedContext;
     }
 
-    public static void getAccessibleObjectForRoleIgnoreShowing_(XAccessible xacc,
+    public static XAccessibleContext getAccessibleObjectForRoleIgnoreShowing_(XAccessible xacc,
         short role) {
         XAccessibleContext ac = xacc.getAccessibleContext();
 
         if (ac.getAccessibleRole() == role) {
-            SearchedContext = ac;
             SearchedAccessible = xacc;
+            return ac;
         } else {
             int k = ac.getAccessibleChildCount();
 
@@ -131,28 +123,29 @@ public class AccessibilityTools {
 
             for (int i = 0; i < k; i++) {
                 try {
-                    getAccessibleObjectForRoleIgnoreShowing_(
+                    XAccessibleContext ac2 = getAccessibleObjectForRoleIgnoreShowing_(
                         ac.getAccessibleChild(i), role);
 
-                    if (SearchedContext != null) {
-                        return;
+                    if (ac2 != null) {
+                        return ac2;
                     }
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                     System.out.println("Couldn't get Child");
                 }
             }
+            return null;
         }
     }
 
-    public static void getAccessibleObjectForRole_(XAccessible xacc,
+    public static XAccessibleContext getAccessibleObjectForRole_(XAccessible xacc,
         short role) {
         XAccessibleContext ac = xacc.getAccessibleContext();
         boolean isShowing = ac.getAccessibleStateSet()
         .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
 
         if ((ac.getAccessibleRole() == role) && isShowing) {
-            SearchedContext = ac;
             SearchedAccessible = xacc;
+            return ac;
         } else {
             int k = ac.getAccessibleChildCount();
 
@@ -162,15 +155,16 @@ public class AccessibilityTools {
 
             for (int i = 0; i < k; i++) {
                 try {
-                    getAccessibleObjectForRole_(ac.getAccessibleChild(i), role);
+                    XAccessibleContext ac2 = getAccessibleObjectForRole_(ac.getAccessibleChild(i), role);
 
-                    if (SearchedContext != null) {
-                        return;
+                    if (ac2 != null) {
+                        return ac2;
                     }
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                     System.out.println("Couldn't get Child");
                 }
             }
+            return null;
         }
     }
 
@@ -238,7 +232,7 @@ public class AccessibilityTools {
         .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
 
         // hotfix for i91828:
-        // if role to serach is 0 then ignore the role.
+        // if role to search is 0 then ignore the role.
         if ( (role == 0 || ac.getAccessibleRole() == role) &&
             (ac.getAccessibleName().indexOf(name) > -1) &&
             (utils.getImplName(ac).indexOf(implName) > -1) &&
@@ -297,7 +291,7 @@ public class AccessibilityTools {
                 cellIndex= cellIndex+ (bytes[0]-65);
             } else {
                 String sNumb = cellName.substring(n, cellName.length());
-                int iNumb = new Integer(0).valueOf(sNumb).intValue();
+                int iNumb = Integer.valueOf(sNumb).intValue();
                 cellIndex += (iNumb-1) * 256;
                 System.out.println("numb:" + (iNumb-1) * 256);
             }
