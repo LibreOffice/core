@@ -152,7 +152,7 @@ static hb_position_t getGlyphAdvanceH(hb_font_t* /*font*/, void* fontData,
 {
     ServerFont* rFont = (ServerFont*) fontData;
     const GlyphMetric& rGM = rFont->GetGlyphMetric(nGlyphIndex);
-    return rGM.GetCharWidth();
+    return rGM.GetCharWidth() << 6;
 }
 
 static hb_position_t getGlyphAdvanceV(hb_font_t* /*font*/, void* /*fontData*/,
@@ -415,10 +415,10 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             if (hb_ot_layout_get_glyph_class(maHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK)
                 nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
-            aHbPositions[i].x_offset /= 64;
-            aHbPositions[i].y_offset /= 64;
-            aHbPositions[i].x_advance /= 64;
-            aHbPositions[i].y_advance /= 64;
+            aHbPositions[i].x_offset =  aHbPositions[i].x_offset >> 6;
+            aHbPositions[i].y_offset =  aHbPositions[i].y_offset >> 6;
+            aHbPositions[i].x_advance = aHbPositions[i].x_advance >> 6;
+            aHbPositions[i].y_advance = aHbPositions[i].y_advance >> 6;
 
             aNewPos = Point(aNewPos.X() + aHbPositions[i].x_offset, aNewPos.Y() - aHbPositions[i].y_offset);
 
@@ -429,7 +429,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             // instead of nGlyphWidth above, and leave mnNewWidth alone
             // (whatever it is meant for)
             if (i + 1 < nRunGlyphCount)
-                aGI.mnNewWidth = nGlyphWidth + (aHbPositions[i + 1].x_offset / 64);
+                aGI.mnNewWidth = nGlyphWidth + (aHbPositions[i + 1].x_offset >> 6);
 
             rLayout.AppendGlyph(aGI);
 
