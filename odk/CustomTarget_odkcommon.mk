@@ -14,7 +14,6 @@ odkcommon_ZIPDEPS :=
 $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon))
 
 $(call gb_CustomTarget_get_target,odk/odkcommon): \
-	$(call gb_CustomTarget_get_target,odk/odkcommon/classes) \
 	$(call gb_CustomTarget_get_target,odk/odkcommon/idl) \
 	$(call gb_CustomTarget_get_target,odk/odkcommon/include)
 
