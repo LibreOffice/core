@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+M8\u003d",
+        "filename": "editeng/source/misc/svxacorr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-04-23T08:11:00Z",
+      "side": 1,
+      "message": "Are you sure that this won\u0027t access outside the bounds of the string?",
+      "revId": "f30eb7e97dba380fdc0256a61196436fb033f588",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
