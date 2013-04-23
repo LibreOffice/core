@@ -1009,6 +1009,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/report/
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/browse,\
 	BrowseNode \
 	BrowseNodeFactory \
+	theBrowseNodeFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/provider,\
 	LanguageScriptProvider \
