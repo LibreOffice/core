@@ -111,7 +111,7 @@ public:
         { return OInterfaceContainer::replaceByIndex(p1, p2); }
     virtual void SAL_CALL insertByIndex(sal_Int32 p1, const com::sun::star::uno::Any& p2) throw (css::uno::RuntimeException)
         { return OInterfaceContainer::insertByIndex(p1, p2); }
-    virtual void removeByIndex(sal_Int32 p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeByIndex(sal_Int32 p1) throw (css::uno::RuntimeException)
         { return OInterfaceContainer::removeByIndex(p1); }
     virtual com::sun::star::uno::Reference<com::sun::star::container::XEnumeration> SAL_CALL createEnumeration() throw (css::uno::RuntimeException)
         { return OInterfaceContainer::createEnumeration(); }
@@ -137,15 +137,15 @@ public:
         { OInterfaceContainer::addScriptListener(p1); }
     virtual void SAL_CALL removeScriptListener(const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>& p1) throw (css::uno::RuntimeException)
         { OInterfaceContainer::removeScriptListener(p1); }
-    virtual void dispose() throw (css::uno::RuntimeException)
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException)
         { FormsCollectionComponentBase::dispose(); }
-    virtual void addEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
         { FormsCollectionComponentBase::addEventListener(p1); }
-    virtual void removeEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw (css::uno::RuntimeException)
         { FormsCollectionComponentBase::removeEventListener(p1); }
-    virtual void addContainerListener(const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addContainerListener(const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener>& p1) throw (css::uno::RuntimeException)
         { OInterfaceContainer::addContainerListener(p1); }
-    virtual void removeContainerListener(const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeContainerListener(const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener>& p1) throw (css::uno::RuntimeException)
         { OInterfaceContainer::removeContainerListener(p1); }
 };
 
