@@ -50,6 +50,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_classes \
 	CustomTarget_javadoc \
 	$(if $(filter WNT,$(OS)),Library_unowinreg) \
+	Package_javadoc \
 	Package_unowinreg \
 	Zip_uno_loader_classes \
 ))

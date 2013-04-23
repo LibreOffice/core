@@ -169,6 +169,15 @@ File gid_File_Package_odk_html
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
+#if defined(SOLAR_JAVA)
+File gid_File_Package_odk_javadoc
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_javadoc.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+#endif
+
 File gid_File_Package_odk_lib
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;
