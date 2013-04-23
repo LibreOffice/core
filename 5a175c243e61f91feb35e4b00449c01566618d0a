@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//+Js\u003d",
+        "filename": "connectivity/source/parse/sqlnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-04-23T15:09:12Z",
+      "side": 1,
+      "message": "Actually for 4.0 we still need getLength() \u003d\u003d 0, only 4.1 has OUStringBuffer::isEmpty().",
+      "revId": "5a175c243e61f91feb35e4b00449c01566618d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
