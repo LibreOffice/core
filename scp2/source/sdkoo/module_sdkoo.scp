@@ -41,6 +41,7 @@ Module gid_Module_Optional_Sdkoo
         gid_File_Package_odk_config_notwin,
         gid_File_Package_odk_docs,
         gid_File_Package_odk_html,
+        gid_File_Package_odk_javadoc,
         gid_File_Package_odk_lib,
         gid_File_Package_odk_macosx,
         gid_File_Package_odk_settings,
