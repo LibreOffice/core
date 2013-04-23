@@ -475,7 +475,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             // a criterion inside a query view (and rString is supposed
             // to be initially empty). In order to simplify criterion text
             // inside view, omit fieldname if it appears as 1st token.
-            if ((rString.getLength() == 0) && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
+            if (rString.isEmpty() && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
             {
                 sal_Bool bFilter = sal_False;
                 // retrieve the fields name
