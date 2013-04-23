@@ -286,7 +286,7 @@ void TextPropertyPanel::HandleContextChange (
     }
 
     maContext = aContext;
-    switch (maContext.GetCombinedContext_DI())
+    switch (maContext.GetCombinedContext_DI()) //
     {
         case CombinedEnumContext(Application_Calc, Context_Cell):
         case CombinedEnumContext(Application_Calc, Context_Pivot):
@@ -305,8 +305,8 @@ void TextPropertyPanel::HandleContextChange (
             break;
         }
 
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Text):
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Table):
+        case CombinedEnumContext(Application_WriterVariants, Context_Text):
+        case CombinedEnumContext(Application_WriterVariants, Context_Table):
         {
             mpToolBoxScriptSw->Show();
             mpToolBoxScript->Hide();
@@ -322,8 +322,8 @@ void TextPropertyPanel::HandleContextChange (
             break;
         }
 
-        case CombinedEnumContext(Application_Writer, Context_DrawText):
-        case CombinedEnumContext(Application_Writer, Context_Annotation):
+        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
+        case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
         {
             mpToolBoxScriptSw->Show();
             mpToolBoxScript->Hide();

@@ -205,8 +205,8 @@ void ParaPropertyPanel::HandleContextChange (
             maTbxProDemoteBackground->Show();
             break;
 
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Default):
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Text):
+        case CombinedEnumContext(Application_WriterVariants, Context_Default):
+        case CombinedEnumContext(Application_WriterVariants, Context_Text):
             maTBxVertAlign->Hide();
             maTBxVertAlignBackground->Hide();
             maTBxBackColor->Show();
@@ -221,7 +221,7 @@ void ParaPropertyPanel::HandleContextChange (
             maTbxProDemoteBackground->Hide();
             break;
 
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Table):
+        case CombinedEnumContext(Application_WriterVariants, Context_Table):
             maTBxVertAlign->Show();
             maTBxVertAlignBackground->Show();
             maTBxBackColor->Show();
@@ -235,7 +235,7 @@ void ParaPropertyPanel::HandleContextChange (
             maTbxProDemoteBackground->Hide();
             break;
 
-        case CombinedEnumContext(Application_WriterAndWeb, Context_DrawText):
+        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
             maTBxVertAlign->Show();
             maTBxVertAlignBackground->Show();
             maTBxBackColor->Hide();
@@ -249,7 +249,7 @@ void ParaPropertyPanel::HandleContextChange (
             maTbxProDemoteBackground->Hide();
             break;
 
-        case CombinedEnumContext(Application_WriterAndWeb, Context_Annotation):
+        case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
             maTBxVertAlign->Hide();
             maTBxVertAlignBackground->Hide();
             maTBxBackColor->Hide();
