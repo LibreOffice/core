@@ -224,12 +224,7 @@ LinePropertyPanel::LinePropertyPanel(
     mxFrame(rxFrame),
     mpBindings(pBindings),
     mbColorAvailable(true),
-    mbStyleAvailable(false),
-    mbDashAvailable(false),
-    mbTransAvailable(true),
-    mbWidthValuable(true),
-    mbStartAvailable(true),
-    mbEndAvailable(true)
+    mbWidthValuable(true)
 {
     Initialize();
     FreeResource();
@@ -387,42 +382,43 @@ void LinePropertyPanel::NotifyItemUpdate(
     const bool bIsEnabled)
 {
     (void)bIsEnabled;
+    const bool bDisabled(SFX_ITEM_DISABLED == eState);
 
     switch(nSID)
     {
         case SID_ATTR_LINE_COLOR:
         {
-            if( eState == SFX_ITEM_DISABLED)
+            if(bDisabled)
             {
                 mpFTColor->Disable();
                 mpTBColor->Disable();
-                mbColorAvailable = false;
-                mpColorUpdater->Update(COL_WHITE);
             }
             else
             {
                 mpFTColor->Enable();
                 mpTBColor->Enable();
-                const XLineColorItem* pItem = dynamic_cast< const XLineColorItem* >(pState);
+            }
 
-                if(eState >= SFX_ITEM_DEFAULT && pItem)
+            if(eState >= SFX_ITEM_DEFAULT)
+            {
+                const XLineColorItem* pItem = dynamic_cast< const XLineColorItem* >(pState);
+                if(pItem)
                 {
                     maColor = pItem->GetColorValue();
                     mbColorAvailable = true;
                     mpColorUpdater->Update(maColor);
-                }
-                else
-                {
-                    mbColorAvailable = false;
-                    mpColorUpdater->Update(COL_WHITE);
+                    break;
                 }
             }
+
+            mbColorAvailable = false;
+            mpColorUpdater->Update(COL_WHITE);
             break;
         }
         case SID_ATTR_LINE_DASH:
         case SID_ATTR_LINE_STYLE:
         {
-            if( eState == SFX_ITEM_DISABLED)
+            if(bDisabled)
             {
                 mpFTStyle->Disable();
                 mpLBStyle->Disable();
@@ -431,140 +427,159 @@ void LinePropertyPanel::NotifyItemUpdate(
             {
                 mpFTStyle->Enable();
                 mpLBStyle->Enable();
-                if( eState  >= SFX_ITEM_DEFAULT )
+            }
+
+            if(eState  >= SFX_ITEM_DEFAULT)
+            {
+                if(nSID == SID_ATTR_LINE_STYLE)
                 {
-                    if(nSID == SID_ATTR_LINE_STYLE)
-                    {
-                        const XLineStyleItem* pItem = dynamic_cast< const XLineStyleItem* >(pState);
+                    const XLineStyleItem* pItem = dynamic_cast< const XLineStyleItem* >(pState);
 
-                        if(pItem)
-                        {
-                            mbStyleAvailable =true;
-                            mpStyleItem.reset(pState ? (XLineStyleItem*)pItem->Clone() : 0);
-                        }
-                    }
-                    else if(nSID == SID_ATTR_LINE_DASH)
+                    if(pItem)
                     {
-                        const XLineDashItem* pItem = dynamic_cast< const XLineDashItem* >(pState);
-
-                        if(pItem)
-                        {
-                            mbDashAvailable = true;
-                            mpDashItem.reset(pState ? (XLineDashItem*)pItem->Clone() : 0);
-                        }
+                        mpStyleItem.reset(pState ? (XLineStyleItem*)pItem->Clone() : 0);
                     }
+                }
+                else // if(nSID == SID_ATTR_LINE_DASH)
+                {
+                    const XLineDashItem* pItem = dynamic_cast< const XLineDashItem* >(pState);
+
+                    if(pItem)
+                    {
+                        mpDashItem.reset(pState ? (XLineDashItem*)pItem->Clone() : 0);
+                    }
+                }
+            }
+            else
+            {
+                if(nSID == SID_ATTR_LINE_STYLE)
+                {
+                    mpStyleItem.reset(0);
                 }
                 else
                 {
-                    if(nSID == SID_ATTR_LINE_STYLE)
-                        mbStyleAvailable = false;
-                    else
-                        mbDashAvailable = false;
+                    mpDashItem.reset(0);
                 }
-
-                SelectLineStyle();
             }
+
+            SelectLineStyle();
             break;
         }
         case SID_ATTR_LINE_TRANSPARENCE:
         {
-            if( eState == SFX_ITEM_DISABLED )
+            if(bDisabled)
             {
                 mpFTTrancparency->Disable();
                 mpMFTransparent->Disable();
-                mpMFTransparent->SetValue(0);//add
-                mpMFTransparent->SetText(String());
-                mbTransAvailable = false;
             }
             else
             {
                 mpFTTrancparency->Enable();
                 mpMFTransparent->Enable();
-                mbTransAvailable = true;
+            }
+
+            if(eState >= SFX_ITEM_DEFAULT)
+            {
                 const XLineTransparenceItem* pItem = dynamic_cast< const XLineTransparenceItem* >(pState);
 
-                if(eState != SFX_ITEM_DONTCARE && pItem)
+                if(pItem)
                 {
                     mnTrans = pItem->GetValue();
                     mpMFTransparent->SetValue(mnTrans);
-                }
-                else
-                {
-                    mpMFTransparent->SetValue(0);//add
-                    mpMFTransparent->SetText(String());
+                    break;
                 }
             }
+
+            mpMFTransparent->SetValue(0);//add
+            mpMFTransparent->SetText(String());
             break;
         }
         case SID_ATTR_LINE_WIDTH:
         {
-            if(eState == SFX_ITEM_DISABLED)
+            if(bDisabled)
             {
                 mpTBWidth->Disable();
                 mpFTWidth->Disable();
             }
             else
             {
-                //enable
                 mpTBWidth->Enable();
                 mpFTWidth->Enable();
+            }
+
+            if(eState >= SFX_ITEM_DEFAULT)
+            {
                 const XLineWidthItem* pItem = dynamic_cast< const XLineWidthItem* >(pState);
 
-                if(eState >= SFX_ITEM_AVAILABLE && pItem)
+                if(pItem)
                 {
                     mnWidthCoreValue = pItem->GetValue();
                     mbWidthValuable = true;
-                }
-                else
-                {
-                    mbWidthValuable = false;
+                    SetWidthIcon();
+                    break;
                 }
             }
+
+            mbWidthValuable = false;
             SetWidthIcon();
             break;
         }
         case SID_ATTR_LINE_START:
         {
-            mpFTArrow->Enable();
-            mpLBStart->Enable();
+            if(bDisabled)
+            {
+                mpFTArrow->Disable();
+                mpLBStart->Disable();
+            }
+            else
+            {
+                mpFTArrow->Enable();
+                mpLBStart->Enable();
+            }
 
-            if(eState != SFX_ITEM_DONTCARE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 const XLineStartItem* pItem = dynamic_cast< const XLineStartItem* >(pState);
 
                 if(pItem)
                 {
-                    mbStartAvailable = true;    //add
                     mpStartItem.reset(pItem ? (XLineStartItem*)pItem->Clone() : 0);
                     SelectEndStyle(true);
                     break;
                 }
             }
 
-            mpLBStart->SetNoSelection();
-            mbStartAvailable = false;   //add
+            mpStartItem.reset(0);
+            SelectEndStyle(true);
             break;
         }
         case SID_ATTR_LINE_END:
         {
-            mpFTArrow->Enable();
-            mpLBEnd->Enable();
+            if(bDisabled)
+            {
+                mpFTArrow->Disable();
+                mpLBEnd->Disable();
+            }
+            else
+            {
+                mpFTArrow->Enable();
+                mpLBEnd->Enable();
+            }
 
-            if(eState != SFX_ITEM_DONTCARE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 const XLineEndItem* pItem = dynamic_cast< const XLineEndItem* >(pState);
 
                 if(pItem)
                 {
-                    mbEndAvailable = true;      //add
                     mpEndItem.reset(pItem ? (XLineEndItem*)pItem->Clone() : 0);
                     SelectEndStyle(false);
                     break;
                 }
             }
 
-            mpLBEnd->SetNoSelection();
-            mbEndAvailable = false;     //add
+            mpEndItem.reset(0);
+            SelectEndStyle(false);
             break;
         }
         case SID_LINEEND_LIST:
@@ -582,18 +597,23 @@ void LinePropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_LINE_JOINT:
         {
-            if(eState == SFX_ITEM_DISABLED)
+            if(bDisabled)
             {
                 mpLBEdgeStyle->Disable();
             }
             else
             {
                 mpLBEdgeStyle->Enable();
-                const XLineJointItem* pItem = dynamic_cast< const XLineJointItem* >(pState);
-                sal_uInt16 nEntryPos(0);
+            }
 
-                if(eState >= SFX_ITEM_AVAILABLE && pItem)
+            if(eState >= SFX_ITEM_DEFAULT)
+            {
+                const XLineJointItem* pItem = dynamic_cast< const XLineJointItem* >(pState);
+
+                if(pItem)
                 {
+                    sal_uInt16 nEntryPos(0);
+
                     switch(pItem->GetValue())
                     {
                         case com::sun::star::drawing::LineJoint_MIDDLE:
@@ -621,33 +641,37 @@ void LinePropertyPanel::NotifyItemUpdate(
                         default:
                             break;
                     }
-                }
 
-                if(nEntryPos)
-                {
-                    mpLBEdgeStyle->SelectEntryPos(nEntryPos - 1);
-                }
-                else
-                {
-                    mpLBEdgeStyle->SetNoSelection();
+                    if(nEntryPos)
+                    {
+                        mpLBEdgeStyle->SelectEntryPos(nEntryPos - 1);
+                        break;
+                    }
                 }
             }
+
+            mpLBEdgeStyle->SetNoSelection();
             break;
         }
         case SID_ATTR_LINE_CAP:
         {
-            if(eState == SFX_ITEM_DISABLED)
+            if(bDisabled)
             {
                 mpLBCapStyle->Disable();
             }
             else
             {
                 mpLBCapStyle->Enable();
-                const XLineCapItem* pItem = dynamic_cast< const XLineCapItem* >(pState);
-                sal_uInt16 nEntryPos(0);
+            }
 
-                if(eState >= SFX_ITEM_AVAILABLE && pItem)
+            if(eState >= SFX_ITEM_DEFAULT)
+            {
+                const XLineCapItem* pItem = dynamic_cast< const XLineCapItem* >(pState);
+
+                if(pItem)
                 {
+                    sal_uInt16 nEntryPos(0);
+
                     switch(pItem->GetValue())
                     {
                         case com::sun::star::drawing::LineCap_BUTT:
@@ -669,16 +693,15 @@ void LinePropertyPanel::NotifyItemUpdate(
                         default:
                             break;
                     }
+
+                    if(nEntryPos)
+                    {
+                        mpLBCapStyle->SelectEntryPos(nEntryPos - 1);
+                        break;
+                    }
                 }
 
-                if(nEntryPos)
-                {
-                    mpLBCapStyle->SelectEntryPos(nEntryPos - 1);
-                }
-                else
-                {
-                    mpLBCapStyle->SetNoSelection();
-                }
+                mpLBCapStyle->SetNoSelection();
             }
             break;
         }
@@ -1049,7 +1072,7 @@ void  LinePropertyPanel::FillLineStyleList()
 
 void LinePropertyPanel::SelectLineStyle()
 {
-    if( !mbStyleAvailable || !mbDashAvailable )
+    if( !mpStyleItem.get() || !mpDashItem.get() )
     {
         mpLBStyle->SetNoSelection();
         return;
@@ -1094,13 +1117,12 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
 
     if(bStart)
     {
-        //<<add
-        if( !mbStartAvailable )
+        if( !mpStartItem.get() )
         {
             mpLBStart->SetNoSelection();
             return;
         }
-        //add end>>
+
         if (mpStartItem && mxLineEndList.is())
         {
             const basegfx::B2DPolyPolygon& rItemPolygon = mpStartItem->GetLineStartValue();
@@ -1115,18 +1137,20 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
                 }
             }
         }
+
         if(!bSelected)
+        {
             mpLBStart->SelectEntryPos( 0 );
+        }
     }
     else
     {
-        //<<add
-        if( !mbEndAvailable )
+        if( !mpEndItem.get() )
         {
             mpLBEnd->SetNoSelection();
             return;
         }
-        //add end>>
+
         if (mpEndItem && mxLineEndList.is())
         {
             const basegfx::B2DPolyPolygon& rItemPolygon = mpEndItem->GetLineEndValue();
@@ -1141,8 +1165,11 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
                 }
             }
         }
+
         if(!bSelected)
+        {
             mpLBEnd->SelectEntryPos( 0 );
+        }
     }
 }
 
