@@ -9,9 +9,6 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/cpp/ref))
 
-odkcommon_ZIPLIST += docs/cpp/ref
-odkcommon_ZIPDEPS += $(odk_WORKDIR)/docs/cpp/ref/index.html
-
 CPPDOCREFNAME := "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"
 
 odk_INCDIRLIST := sal salhelper rtl osl typelib uno cppu cppuhelper \
@@ -49,7 +46,7 @@ $(odk_WORKDIR)/docs/cpp/ref/index.html: $(DOXY_DEPS)
 		-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
 		-e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
 		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(DOXY_STRIP_PATH)!' \
-		$< > $(odk_WORKDIR)/Doxyfile
+		$< > $(odk_WORKDIR)/Doxyfile && \
 	$(DOXYGEN) $(odk_WORKDIR)/Doxyfile > $(odk_WORKDIR)/doxygen.log
 
 # vim: set noet sw=4 ts=4:
