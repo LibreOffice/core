@@ -120,7 +120,11 @@ void SAL_CALL
 ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     // booleans are converted to uppercase strings
+    OUString oldValue = extractStringFromAny( getValue(), ::rtl::OUString(), true );
     m_xProps->setPropertyValue( sSourceName, uno::Any( extractStringFromAny( _value, ::rtl::OUString(), true ) ) );
+    OUString newValue = extractStringFromAny( getValue(), ::rtl::OUString(), true );
+    if ( oldValue != newValue )
+        fireChangeEvent();
 }
 
 // see Value
