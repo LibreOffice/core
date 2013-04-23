@@ -96,7 +96,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
                 if ( controls[ i ].getPropertySetInfo().hasPropertyByName( "Border" ) )
                     controls[ i ].setPropertyValue( "Border", new Short( (short)2 ) );
 
-                XValidatableFormComponent xComp = (XValidatableFormComponent)UnoRuntime.queryInterface( XValidatableFormComponent.class,
+                XValidatableFormComponent xComp = UnoRuntime.queryInterface( XValidatableFormComponent.class,
                     controls[ i ] );
                 xComp.addFormComponentValidityListener( this );
             }
@@ -118,7 +118,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
             m_explanationField = m_formLayer.createControlAndShape( "FixedText", columnPos, controlPos, 70, 4, null );
             m_explanationField.setPropertyValue( "Label", new String( "" ) );
 
-            XValidatable xValidatable = (XValidatable)UnoRuntime.queryInterface( XValidatable.class, m_inputField );
+            XValidatable xValidatable = UnoRuntime.queryInterface( XValidatable.class, m_inputField );
             xValidatable.setValidator( m_validator );
         }
         catch( java.lang.Exception e  )
@@ -144,7 +144,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
         {
             if ( m_inputField.equals( eventObject.Source ) )
             {
-                XValidatableFormComponent xComp = (XValidatableFormComponent)UnoRuntime.queryInterface( XValidatableFormComponent.class,
+                XValidatableFormComponent xComp = UnoRuntime.queryInterface( XValidatableFormComponent.class,
                     eventObject.Source );
                 // the current value
                 Object value = xComp.getCurrentValue();

@@ -237,7 +237,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         Vector<Object> lOutParams = new Vector<Object>();
         lOutParams.add(aEvent);
 
-        OnewayExecutor aExecutor = new OnewayExecutor( (IOnewayLink)this                  ,
+        OnewayExecutor aExecutor = new OnewayExecutor( this                  ,
                                                        OnewayExecutor.REQUEST_FRAMEACTION ,
                                                        lOutParams                      );
         aExecutor.start();
@@ -275,7 +275,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         Vector<Object> lOutParams = OnewayExecutor.encodeDispatch(
                                      lInURL                       ,
                                      lInArguments                 );
-        OnewayExecutor aExecutor = new OnewayExecutor( (IOnewayLink)this               ,
+        OnewayExecutor aExecutor = new OnewayExecutor( this               ,
                                                        OnewayExecutor.REQUEST_DISPATCH ,
                                                        lOutParams                   );
         aExecutor.start();

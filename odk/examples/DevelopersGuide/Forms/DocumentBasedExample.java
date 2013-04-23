@@ -159,9 +159,8 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
             // close our document
             if ( m_document != null )
             {
-                XCloseable closeDoc = (XCloseable)
-                    UnoRuntime.queryInterface( XCloseable.class,
-                                               m_document.getDocument() );
+                XCloseable closeDoc = UnoRuntime.queryInterface( XCloseable.class,
+                                           m_document.getDocument() );
                 if (closeDoc != null)
                     closeDoc.close( true );
                 else

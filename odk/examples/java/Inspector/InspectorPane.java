@@ -294,7 +294,7 @@ import org.openoffice.XInstanceInspector;
         //  add all services for the given object to the tree under the node parent
         private void addServicesToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoObject) {
         try{
-            XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );
+            XServiceInfo xServiceInfo = UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject );
             if ( xServiceInfo != null ){
                 String[] sSupportedServiceNames = xServiceInfo.getSupportedServiceNames();
                 for ( int m = 0; m < sSupportedServiceNames.length; m++ ) {
@@ -325,7 +325,7 @@ import org.openoffice.XInstanceInspector;
             for ( int n = 0; n < _aProperties.length; n++ ){
                 Property aProperty = _aProperties[n];
                 XIntrospectionAccess xIntrospectionAccess = m_oIntrospector.getXIntrospectionAccess(_oUnoParentObject);
-                XPropertySet xPropertySet = ( XPropertySet ) UnoRuntime.queryInterface( XPropertySet.class, xIntrospectionAccess.queryAdapter(new Type( XPropertySet.class)));
+                XPropertySet xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, xIntrospectionAccess.queryAdapter(new Type( XPropertySet.class)));
                 if (xPropertySet != null) {
                     if (xPropertySet.getPropertySetInfo().hasPropertyByName(aProperty.Name)){
                         Object objectElement = xPropertySet.getPropertyValue(aProperty.Name);

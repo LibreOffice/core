@@ -364,9 +364,9 @@ public class SourceCodeGenerator {
     private class HeaderStatements extends Vector<String> {
 
         public boolean contains(String _oElement){
-           String sCompName = (String) _oElement;
+           String sCompName = _oElement;
            for (int i = 0; i < this.size(); i++){
-               String sElement = (String) this.get(i);
+               String sElement = this.get(i);
                if (sElement.equals(sCompName)){
                    return true;
                }

@@ -57,7 +57,7 @@ class JavaWindowPeerFake implements com.sun.star.awt.XSystemDependentWindowPeer,
     {
         Object aReturn = null;
         if(aSystem==maView.maSystem)
-                aReturn = (Object)maView.maHandle;
+                aReturn = maView.maHandle;
         return aReturn;
     }
 

@@ -97,7 +97,7 @@ public class UnoPropertyNode extends UnoNode{
     public String getClassName(){
         String sClassName = "";
         if (m_oUnoObject != null){
-            XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, m_oUnoObject);
+            XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, m_oUnoObject);
             if (xServiceInfo != null){
                 String[] sServiceNames = xServiceInfo.getSupportedServiceNames();
                 for (int i = 0; i < sServiceNames.length; i++){

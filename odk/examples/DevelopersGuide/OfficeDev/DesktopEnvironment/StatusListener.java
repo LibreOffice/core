@@ -216,7 +216,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         Vector<Object> lOutParams   = new Vector<Object>();
         lOutParams.add(aEvent);
 
-        OnewayExecutor aExecutor = new OnewayExecutor( (IOnewayLink)this                  ,
+        OnewayExecutor aExecutor = new OnewayExecutor( this                  ,
                                                        OnewayExecutor.REQUEST_FRAMEACTION ,
                                                        lOutParams                      );
         aExecutor.start();
@@ -357,7 +357,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         if (! bRegister)
             return;
 
-        com.sun.star.frame.XDispatchProvider xProvider = (com.sun.star.frame.XDispatchProvider)UnoRuntime.queryInterface(
+        com.sun.star.frame.XDispatchProvider xProvider = UnoRuntime.queryInterface(
             com.sun.star.frame.XDispatchProvider.class,
             xFrame);
 

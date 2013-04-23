@@ -43,16 +43,16 @@ public class SpreadsheetView extends DocumentViewHelper
         try
         {
             // get the sheet to activate
-            XSpreadsheetDocument doc = (XSpreadsheetDocument)UnoRuntime.queryInterface(
+            XSpreadsheetDocument doc = UnoRuntime.queryInterface(
                 XSpreadsheetDocument.class, getDocument().getDocument() );
-            XIndexAccess sheets = (XIndexAccess)UnoRuntime.queryInterface(
+            XIndexAccess sheets = UnoRuntime.queryInterface(
                 XIndexAccess.class, doc.getSheets() );
 
-            XSpreadsheet sheet = (XSpreadsheet)UnoRuntime.queryInterface(
+            XSpreadsheet sheet = UnoRuntime.queryInterface(
                 XSpreadsheet.class, sheets.getByIndex( sheetIndex ) );
 
             // activate
-            XSpreadsheetView view = (XSpreadsheetView)UnoRuntime.queryInterface(
+            XSpreadsheetView view = UnoRuntime.queryInterface(
                 XSpreadsheetView.class, getController() );
             view.setActiveSheet( sheet );
         }

@@ -45,14 +45,14 @@ public class RowSet implements XRowSet, XRow
     {
         try
         {
-            m_rowSetProps = (XPropertySet)UnoRuntime.queryInterface(
+            m_rowSetProps = UnoRuntime.queryInterface(
                 XPropertySet.class, _context.getServiceManager().createInstanceWithContext( "com.sun.star.sdb.RowSet", _context ) );
             m_rowSetProps.setPropertyValue( "DataSourceName", _dataSource );
             m_rowSetProps.setPropertyValue( "CommandType", new Integer( _commandType ) );
             m_rowSetProps.setPropertyValue( "Command", _command );
 
-            m_rowSet = (XRowSet)UnoRuntime.queryInterface( XRowSet.class, m_rowSetProps );
-            m_row = (XRow)UnoRuntime.queryInterface( XRow.class, m_rowSetProps );
+            m_rowSet = UnoRuntime.queryInterface( XRowSet.class, m_rowSetProps );
+            m_row = UnoRuntime.queryInterface( XRow.class, m_rowSetProps );
         }
         catch ( Exception e )
         {
@@ -64,9 +64,9 @@ public class RowSet implements XRowSet, XRow
     // misc
     public int getColumnCount()
     {
-        XColumnsSupplier suppCols = (XColumnsSupplier)UnoRuntime.queryInterface(
+        XColumnsSupplier suppCols = UnoRuntime.queryInterface(
             XColumnsSupplier.class, m_rowSet );
-        XIndexAccess columns = (XIndexAccess)UnoRuntime.queryInterface(
+        XIndexAccess columns = UnoRuntime.queryInterface(
             XIndexAccess.class, suppCols.getColumns() );
         return columns.getCount();
     }

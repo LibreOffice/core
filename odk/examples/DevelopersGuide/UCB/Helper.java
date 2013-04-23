@@ -76,7 +76,7 @@ public class Helper {
             System.out.println("Connected to a running office ...");
         }
 
-        m_ucb = (XInterface)UnoRuntime.queryInterface(
+        m_ucb = UnoRuntime.queryInterface(
             XInterface.class, UniversalContentBroker.create(m_xContext));
     }
 
@@ -103,11 +103,11 @@ public class Helper {
 
             // Obtain required UCB interfaces...
             XContentIdentifierFactory idFactory
-                = ( XContentIdentifierFactory )UnoRuntime.queryInterface(
-                    XContentIdentifierFactory.class, m_ucb );
+                = UnoRuntime.queryInterface(
+                XContentIdentifierFactory.class, m_ucb );
             XContentProvider provider
-                = ( XContentProvider )UnoRuntime.queryInterface(
-                    XContentProvider.class, m_ucb );
+                = UnoRuntime.queryInterface(
+                XContentProvider.class, m_ucb );
 
             // Create identifier object for given URL.
             XContentIdentifier id = idFactory.createContentIdentifier( connectURL );
@@ -152,8 +152,8 @@ public class Helper {
         /////////////////////////////////////////////////////////////////////
 
         XCommandProcessor cmdProcessor
-            = (XCommandProcessor)UnoRuntime.queryInterface(
-                XCommandProcessor.class, ifc );
+            = UnoRuntime.queryInterface(
+            XCommandProcessor.class, ifc );
 
         /////////////////////////////////////////////////////////////////////
         // Assemble command to execute.

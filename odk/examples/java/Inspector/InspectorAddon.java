@@ -93,7 +93,7 @@ public class InspectorAddon {
 
         public void initialize( Object[] object ) throws com.sun.star.uno.Exception {
             if ( object.length > 0 ){
-                m_xFrame = ( XFrame ) UnoRuntime.queryInterface(XFrame.class, object[ 0 ] );
+                m_xFrame = UnoRuntime.queryInterface(XFrame.class, object[ 0 ] );
             }
         }
 
@@ -120,14 +120,14 @@ public class InspectorAddon {
                         com.sun.star.lang.XMultiComponentFactory xMCF = m_xContext.getServiceManager();
                         if (xInstInspector == null){
                             Object obj= xMCF.createInstanceWithContext("org.openoffice.InstanceInspector", m_xContext);
-                            xInstInspector = (org.openoffice.XInstanceInspector)UnoRuntime.queryInterface(org.openoffice.XInstanceInspector.class, obj);
+                            xInstInspector = UnoRuntime.queryInterface(org.openoffice.XInstanceInspector.class, obj);
                         }
                         if ((m_xFrame == null) || (xModel == null)){
                             Object oDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
-                            m_xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, oDesktop);
+                            m_xFrame = UnoRuntime.queryInterface(XFrame.class, oDesktop);
                             oUnoInspectObject = m_xFrame;
                         }
-                        XPropertySet xFramePropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, m_xFrame);
+                        XPropertySet xFramePropertySet = UnoRuntime.queryInterface(XPropertySet.class, m_xFrame);
                         String sTitle = (String) xFramePropertySet.getPropertyValue("Title");
                         String[] sTitleList = sTitle.split(" - ");
                         if (sTitleList.length > 0){
