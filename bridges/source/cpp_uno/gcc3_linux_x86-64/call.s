@@ -73,6 +73,9 @@ privateSnippetExecutor:
 	ret
 .LFE3:
 	.size	privateSnippetExecutor, .-privateSnippetExecutor
+	# see http://refspecs.linuxfoundation.org/LSB_3.0.0/LSB-Core-generic/LSB-Core-generic/ehframechpt.html
+	# for details of the .eh_frame, the "Common Information Entry" and "Frame Description Entry" formats
+	# and http://mentorembedded.github.io/cxx-abi/exceptions.pdf for more info
 	.section	.eh_frame,"a",@progbits
 .Lframe1:
 	.long	.LECIE1-.LSCIE1
