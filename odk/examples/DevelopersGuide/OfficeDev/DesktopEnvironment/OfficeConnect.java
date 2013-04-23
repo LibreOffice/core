@@ -126,10 +126,10 @@ public class OfficeConnect
      * @param  sServiceSpecifier  name of service which should be created
      * @return  the new created service object
      */
-    public static synchronized Object createRemoteInstance(
-        Class aType, String sServiceSpecifier)
+    public static synchronized <T> T createRemoteInstance(
+        Class<T> aType, String sServiceSpecifier)
     {
-        Object aResult = null;
+        T aResult = null;
         try
         {
             aResult = UnoRuntime.queryInterface(aType,
@@ -157,10 +157,10 @@ public class OfficeConnect
      * @param  sServiceSpecifier  Description of Parameter
      * @return                    the new create service object
      */
-    public static synchronized Object createRemoteInstanceWithArguments(
-        Class aType, String sServiceSpecifier, Any[] lArguments)
+    public static synchronized <T> T createRemoteInstanceWithArguments(
+        Class<T> aType, String sServiceSpecifier, Any[] lArguments)
     {
-        Object aResult = null;
+        T aResult = null;
         try
         {
             aResult = UnoRuntime.queryInterface(aType,

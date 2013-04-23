@@ -159,7 +159,7 @@ public class FLTools
     /* ------------------------------------------------------------------ */
     /** retrieves the parent of the given object
     */
-    static Object getParent( Object aComponent, Class aInterfaceClass )
+    static <T> T getParent( Object aComponent, Class<T> aInterfaceClass )
     {
         XChild xAsChild = UnoRuntime.queryInterface( XChild.class, aComponent );
 
@@ -171,7 +171,7 @@ public class FLTools
     */
     static XPropertySet getParent( Object aComponent )
     {
-        return (XPropertySet)getParent( aComponent, XPropertySet.class );
+        return getParent( aComponent, XPropertySet.class );
     }
 
     /* ------------------------------------------------------------------ */
@@ -188,7 +188,7 @@ public class FLTools
     /* ------------------------------------------------------------------ */
     /** get's the XControlModel for a control
     */
-    static public Object getModel( Object aControl, Class aInterfaceClass )
+    static public <T> T getModel( Object aControl, Class<T> aInterfaceClass )
     {
         XControl xControl = UnoRuntime.queryInterface(
             XControl.class, aControl );
