@@ -44,12 +44,12 @@ $(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/cpp/ref,index.h
 $(odk_WORKDIR)/docs/cpp/ref/index.html: $(DOXY_DEPS)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
 	sed -e 's!^INPUT = %$$!INPUT = $(DOXY_INPUT)!' \
-	-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(DOXY_WORKDIR)!' \
-	-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = $(CPPDOCREFNAME)!' \
-	-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
-        -e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
-        -e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(DOXY_STRIP_PATH)!' \
-	$< > $(odk_WORKDIR)/Doxyfile
+		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(DOXY_WORKDIR)!' \
+		-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = $(CPPDOCREFNAME)!' \
+		-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
+		-e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
+		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(DOXY_STRIP_PATH)!' \
+		$< > $(odk_WORKDIR)/Doxyfile
 	$(DOXYGEN) $(odk_WORKDIR)/Doxyfile > $(odk_WORKDIR)/doxygen.log
 
 # vim: set noet sw=4 ts=4:
