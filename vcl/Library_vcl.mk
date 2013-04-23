@@ -98,23 +98,13 @@ endif
 
 $(eval $(call gb_Library_use_externals,vcl,\
 	boost_headers \
+	gio \
+	harfbuzz \
 	icule \
 	icuuc \
 	icu_headers \
 	lcms2 \
 ))
-
-ifneq ($(ENABLE_GIO),)
-$(eval $(call gb_Library_use_externals,vcl,\
-	gio \
-))
-endif
-
-ifeq ($(ENABLE_HARFBUZZ),TRUE)
-$(eval $(call gb_Library_use_externals,vcl,\
-	harfbuzz \
-))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/brand \
