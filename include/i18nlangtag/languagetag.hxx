@@ -393,6 +393,7 @@ private:
                                        OUString& rLanguage,
                                        OUString& rScript,
                                        OUString& rCountry );
+
 };
 
 #endif  // INCLUDED_I18NLANGTAG_LANGUAGETAG_HXX
