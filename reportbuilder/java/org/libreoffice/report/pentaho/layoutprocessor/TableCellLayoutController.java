@@ -73,11 +73,6 @@ public class TableCellLayoutController extends SectionLayoutController
             {
                 FormatValueUtility.applyValueForCell(value.getValue(), attributeMap, valueType);
             }
-            else if ( "float".equals(valueType))
-            {
-                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
-                    FormatValueUtility.VALUE, "NaN");
-            }
             // #i114108#: except on form elements, the only value-type that can
             // occur without an accompanying value attribute is "string"
             else if (!"string".equals(valueType))
