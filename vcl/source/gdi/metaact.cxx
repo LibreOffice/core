@@ -4040,20 +4040,34 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
                 {
                     SvtGraphicStroke aStroke;
                     aMemStm >> aStroke;
+
                     Polygon aPath;
                     aStroke.getPath( aPath );
                     aPath.Move( nXMove, nYMove );
                     aStroke.setPath( aPath );
+
+                    PolyPolygon aStartArrow;
+                    aStroke.getStartArrow(aStartArrow);
+                    aStartArrow.Move(nXMove, nYMove);
+                    aStroke.setStartArrow(aStartArrow);
+
+                    PolyPolygon aEndArrow;
+                    aStroke.getEndArrow(aEndArrow);
+                    aEndArrow.Move(nXMove, nYMove);
+                    aStroke.setEndArrow(aEndArrow);
+
                     aDest << aStroke;
                 }
                 else
                 {
                     SvtGraphicFill aFill;
                     aMemStm >> aFill;
+
                     PolyPolygon aPath;
                     aFill.getPath( aPath );
                     aPath.Move( nXMove, nYMove );
                     aFill.setPath( aPath );
+
                     aDest << aFill;
                 }
                 delete[] mpData;

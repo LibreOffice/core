@@ -402,6 +402,7 @@ namespace drawinglayer
 
             if(rB2DPolygon.count() && !mnSvtGraphicStrokeCount)
             {
+                basegfx::B2DPolygon aLocalPolygon(rB2DPolygon);
                 basegfx::BColor aStrokeColor;
                 basegfx::B2DPolyPolygon aStartArrow;
                 basegfx::B2DPolyPolygon aEndArrow;
@@ -419,29 +420,37 @@ namespace drawinglayer
                 // SvtGraphicStroke has NO entry for stroke color(!)
                 mpOutputDevice->SetLineColor(Color(aStrokeColor));
 
-                if(!rB2DPolygon.isClosed())
+                if(!aLocalPolygon.isClosed())
                 {
                     double fPolyLength(0.0);
+                    double fStart(0.0);
+                    double fEnd(0.0);
 
                     if(pStart && pStart->isActive())
                     {
-                        fPolyLength = basegfx::tools::getLength(rB2DPolygon);
+                        fPolyLength = basegfx::tools::getLength(aLocalPolygon);
 
                         aStartArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
-                            rB2DPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
-                            fPolyLength, pStart->isCentered() ? 0.5 : 0.0, 0);
+                            aLocalPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
+                            fPolyLength, pStart->isCentered() ? 0.5 : 0.0, &fStart);
                     }
 
                     if(pEnd && pEnd->isActive())
                     {
                         if(basegfx::fTools::equalZero(fPolyLength))
                         {
-                            fPolyLength = basegfx::tools::getLength(rB2DPolygon);
+                            fPolyLength = basegfx::tools::getLength(aLocalPolygon);
                         }
 
                         aEndArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
-                            rB2DPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(),
-                            fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, 0);
+                            aLocalPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(),
+                            fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, &fEnd);
+                    }
+
+                    if(0.0 != fStart || 0.0 != fEnd)
+                    {
+                        // build new poly, consume something from old poly
+                        aLocalPolygon = basegfx::tools::getSnippetAbsolute(aLocalPolygon, fStart, fPolyLength - fEnd, fPolyLength);
                     }
                 }
 
@@ -517,14 +526,12 @@ namespace drawinglayer
                 // concept of PDF export and SvtGraphicStroke usage does simply not
                 // allow handling such definitions. The only clean way would be to
                 // add the transformation to SvtGraphicStroke and to handle it there
-                basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
-
-                aB2DPolygon.transform(maCurrentTransformation);
+                aLocalPolygon.transform(maCurrentTransformation);
                 aStartArrow.transform(maCurrentTransformation);
                 aEndArrow.transform(maCurrentTransformation);
 
                 pRetval = new SvtGraphicStroke(
-                    Polygon(aB2DPolygon),
+                    Polygon(aLocalPolygon),
                     PolyPolygon(aStartArrow),
                     PolyPolygon(aEndArrow),
                     mfCurrentUnifiedTransparence,
