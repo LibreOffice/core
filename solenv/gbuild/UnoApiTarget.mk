@@ -101,7 +101,7 @@ define gb_UnoApiTarget__command
 $(call gb_Output_announce,$(2),$(true),UNO,4)
 mkdir -p $(dir $(1)) && \
 rm -f $(1) && \
-$(call gb_UnoApiTarget__command_impl,$(1),$(UNOAPI_ROOT),$(if $(UNOAPI_FILES),$(UNOAPI_FILES),$(UNOAPI_MERGE))) \
+$(call gb_UnoApiTarget__command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_FILES)) \
 $(if $(UNOAPI_REFERENCE), \
 	$(call gb_Output_announce,$(2),$(true),DBc,3) \
 	&& $(gb_UnoApiTarget_REGCOMPARECOMMAND) \
@@ -111,10 +111,7 @@ $(if $(UNOAPI_REFERENCE), \
 endef
 
 define gb_UnoApiTarget__check_mode
-$(if $(and $(UNOAPI_FILES),$(UNOAPI_MERGE)),\
-	$(error Both IDL files and merged RDBs were used: this is not supported))
-$(if $(or $(UNOAPI_FILES),$(UNOAPI_MERGE)),,\
-	$(error Neither IDL files nor merged RDBs were used: nothing will be produced))
+$(if $(UNOAPI_FILES),,$(error No IDL files have been set for the rdb file))
 $(if $(UNOAPI_ROOT),,$(error No root has been set for the rdb file))
 endef
 
@@ -161,7 +158,6 @@ endif
 define gb_UnoApiTarget_UnoApiTarget
 $(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_FILES :=
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_MERGE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT :=
 
@@ -212,26 +208,6 @@ endef
 
 define gb_UnoApiTarget_add_idlfile
 $(call gb_UnoApiTarget__add_idlfile,$(1),$(2),$(3))
-
-endef
-
-define gb_UnoApiTarget_merge_rdbfiles
-$$(call gb_Output_error,gb_UnoApiTarget_merge_rdbfiles: use gb_UnoApiTarget_merge_api instead.)
-endef
-
-define gb_UnoApiTarget_merge_api
-$(foreach rdb,$(2),$(call gb_UnoApiTarget__merge_api,$(1),$(rdb)))
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGEDEPS)
-
-endef
-
-define gb_UnoApiTarget_merge_rdbfile
-$$(call gb_Output_error,gb_UnoApiTarget_merge_rdbfile: use gb_UnoApiTarget_merge_api instead.)
-endef
-
-define gb_UnoApiTarget__merge_api
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_MERGE += $(call gb_UnoApiTarget_get_target,$(2))
-$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
 
 endef
 
