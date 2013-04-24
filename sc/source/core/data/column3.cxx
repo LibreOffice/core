@@ -2119,15 +2119,14 @@ void ScColumn::RebuildFormulaGroups()
         }
 
         ScFormulaCellGroupRef xGroup = pPrev->GetCellGroup();
-        if ( !xGroup.get() )
+        if (!xGroup)
         {
             // create a new group ...
-            ScFormulaCellGroup *pGroup = new ScFormulaCellGroup();
-            pGroup->mpDelta = pDelta;
-            pGroup->mnStart = rPrev.nRow;
-            pGroup->mnLength = 2;
+            xGroup.reset(new ScFormulaCellGroup);
+            xGroup->mpDelta = pDelta;
+            xGroup->mnStart = rPrev.nRow;
+            xGroup->mnLength = 2;
 
-            xGroup.reset( pGroup );
             maFnGroups.push_back( xGroup );
 
             pCur->SetCellGroup( xGroup );
