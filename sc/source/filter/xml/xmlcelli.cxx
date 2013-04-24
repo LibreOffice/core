@@ -149,6 +149,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bIsMatrix(false),
     bIsCovered(bTempIsCovered),
     bIsEmpty(true),
+    mbNewValueType(false),
+    mbErrorValue(false),
     bIsFirstTextImport(false),
     bSolarMutexLocked(false),
     bFormulaTextResult(false),
@@ -206,6 +208,14 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
                 nCellType = GetScImport().GetCellType(sValue);
                 bIsEmpty = false;
+            break;
+            case XML_TOK_TABLE_ROW_CELL_ATTR_NEW_VALUE_TYPE:
+                if(sValue == "error")
+                    mbErrorValue = true;
+                else
+                    nCellType = GetScImport().GetCellType(sValue);
+                bIsEmpty = false;
+                mbNewValueType = true;
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
             {
@@ -968,7 +978,12 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
 {
     if(pFCell)
     {
-        if( bFormulaTextResult && maStringValue )
+        if(mbErrorValue)
+        {
+            // don't do anything here
+            // we need to recalc anyway
+        }
+        else if( bFormulaTextResult && maStringValue )
         {
             if( !IsPossibleErrorString() )
             {
@@ -1008,6 +1023,9 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
                 aCellString = *pOUText;
             else
+                bDoIncrement = false;
+
+            if(mbErrorValue)
                 bDoIncrement = false;
 
             if(!aCellString.isEmpty())
@@ -1422,9 +1440,10 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 // - is blank
 // - has a constant error value beginning with "#" (such as "#VALUE!" or "#N/A")
 // - has an "Err:[###]" (where "[###]" is an error number)
+// Libreoffice 4.1+ with ODF1.2 extended write however calcext:value-type="error" in that case
 void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 {
-    if (!mbEditEngineHasText)
+    if (!mbEditEngineHasText || mbNewValueType)
         return;
 
     OUString aStr = mpEditEngine->GetText(0);
@@ -1436,7 +1455,11 @@ void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
 
 bool ScXMLTableRowCellContext::IsPossibleErrorString() const
 {
-     return mbPossibleErrorCell || ( mbCheckWithCompilerForError && GetScImport().IsFormulaErrorConstant(*maStringValue) );
+    if(mbNewValueType && !mbErrorValue)
+        return false;
+    else if(mbNewValueType && mbErrorValue)
+        return true;
+    return mbPossibleErrorCell || ( mbCheckWithCompilerForError && GetScImport().IsFormulaErrorConstant(*maStringValue) );
 }
 
 

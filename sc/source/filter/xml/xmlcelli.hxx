@@ -84,6 +84,8 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool        bIsMatrix;
     bool        bIsCovered;
     bool        bIsEmpty;
+    bool        mbNewValueType;
+    bool        mbErrorValue;
     bool        bIsFirstTextImport;
     bool        bSolarMutexLocked;
     bool        bFormulaTextResult;
