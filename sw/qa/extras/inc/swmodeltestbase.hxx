@@ -178,7 +178,6 @@ protected:
         return nRet;
     }
 
-    // Get paragraph (counted from 1), optionally check it contains the given text.
     uno::Reference<text::XTextContent> getParagraphOrTable(int number, uno::Reference<text::XText> xText = uno::Reference<text::XText>()) const
     {
         uno::Reference<container::XEnumerationAccess> paraEnumAccess;
@@ -199,6 +198,7 @@ protected:
         return xElem;
     }
 
+    // Get paragraph (counted from 1), optionally check it contains the given text.
     uno::Reference< text::XTextRange > getParagraph( int number, OUString content = OUString() ) const
     {
         uno::Reference<text::XTextRange> const xParagraph(
