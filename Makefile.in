@@ -124,7 +124,6 @@ gbuild_TARGETS := AllLangHelp \
 	StaticLibrary \
 	UIConfig \
 	UnoApi \
-	UnoApiMerge \
 	UnpackedTarball \
 	WinResTarget \
 	Zip \

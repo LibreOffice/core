@@ -56,8 +56,6 @@ gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 gb_ResTarget_get_unittest_target = \
     $(OUTDIR)/unittest/install/program/resource/$(1).res
 gb_UnoApi_get_target = $(OUTDIR)/bin/$(1).rdb
-gb_UnoApiMerge_get_target = $(OUTDIR)/bin/$(1).rdb
-gb_UnoApiMerge_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1).rdb
 gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 gb_Zip_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 gb_Zip_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/pck/$(1).zip
@@ -343,7 +341,6 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Library \
 	StaticLibrary \
 	UnoApi \
-	UnoApiMerge \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\

@@ -322,7 +322,6 @@ include $(foreach class, \
 	UIConfig \
 	UnoApiTarget \
 	UnoApi \
-	UnoApiMerge \
 	UnpackedTarball \
 	InternalUnoApi \
 	CliAssembly \

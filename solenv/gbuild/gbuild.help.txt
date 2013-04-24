@@ -76,7 +76,6 @@ AVAILABLE TARGETS
        o StaticLibrary
        o UI
        o UnoApi
-       o UnoApiMerge
        o UnpackedTarball
        o WinResTarget
        o Zip
