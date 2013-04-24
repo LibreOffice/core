@@ -27,7 +27,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <svtools/svmedit.hxx>
+#include <vcl/vclmedit.hxx>
 #include "sdresid.hxx"
 #include "strings.hrc"
 
@@ -36,25 +36,19 @@ class SfxItemSet;
 class SD_DLLPUBLIC SdInsertLayerDlg : public ModalDialog
 {
 private:
-    FixedText           maFtName;
-    Edit                maEdtName;
-    FixedText           maFtTitle;
-    Edit                maEdtTitle;
-    FixedText           maFtDesc;
-    MultiLineEdit       maEdtDesc;
-    CheckBox            maCbxVisible;
-    CheckBox            maCbxPrintable;
-    CheckBox            maCbxLocked;
-    FixedLine           maFixedLine;
-    HelpButton          maBtnHelp;
-    OKButton            maBtnOK;
-    CancelButton        maBtnCancel;
+    Edit*               m_pEdtName;
+    Edit*               m_pEdtTitle;
+    VclMultiLineEdit*   m_pEdtDesc;
+    CheckBox*           m_pCbxVisible;
+    CheckBox*           m_pCbxPrintable;
+    CheckBox*           m_pCbxLocked;
 
     const SfxItemSet&   mrOutAttrs;
 
 public:
 
-    SdInsertLayerDlg( Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, String aStr );
+    SdInsertLayerDlg( Window* pWindow, const SfxItemSet& rInAttrs,
+        bool bDeletable, const OUString& rStr );
     void                GetAttr( SfxItemSet& rOutAttrs );
 };
 

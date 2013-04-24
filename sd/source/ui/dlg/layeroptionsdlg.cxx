@@ -19,56 +19,46 @@
 
 
 #include <svl/itemset.hxx>
+#include <vcl/layout.hxx>
 
 #include "strings.hrc"
 #include "sdattr.hxx"
 #include "sdresid.hxx"
 #include "layeroptionsdlg.hxx"
-#include "layeroptionsdlg.hrc"
 
-SdInsertLayerDlg::SdInsertLayerDlg( Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, String aStr )
-: ModalDialog( pWindow, SdResId( DLG_INSERT_LAYER ) )
-, maFtName( this, SdResId( FT_NAME ) )
-, maEdtName( this, SdResId( EDT_NAME ) )
-, maFtTitle( this, SdResId( FT_TITLE ) )
-, maEdtTitle( this, SdResId( EDT_TITLE ) )
-, maFtDesc( this, SdResId( FT_DESCRIPTION ) )
-, maEdtDesc( this, SdResId( EDT_DESCRIPTION ) )
-, maCbxVisible( this, SdResId( CBX_VISIBLE ) )
-, maCbxPrintable( this, SdResId( CBX_PRINTABLE ) )
-, maCbxLocked( this, SdResId( CBX_LOCKED ) )
-, maFixedLine( this, SdResId( FL_SEPARATOR_B ) )
-, maBtnHelp( this, SdResId( BTN_HELP ) )
-, maBtnOK( this, SdResId( BTN_OK ) )
-, maBtnCancel( this, SdResId( BTN_CANCEL ) )
-, mrOutAttrs( rInAttrs )
+SdInsertLayerDlg::SdInsertLayerDlg( Window* pWindow, const SfxItemSet& rInAttrs,
+    bool bDeletable, const OUString& rStr )
+    : ModalDialog(pWindow, "InsertLayerDialog", "modules/sdraw/ui/insertlayer.ui")
+    , mrOutAttrs(rInAttrs)
 {
-    FreeResource();
+    SetText(rStr);
 
-    SetText( aStr );
+    get(m_pEdtName, "name");
+    get(m_pEdtTitle, "title");
+    get(m_pEdtDesc, "textview");
+    get(m_pCbxVisible, "visible");
+    get(m_pCbxPrintable, "printable");
+    get(m_pCbxLocked, "locked");
 
-    maEdtName.SetText( ( ( const SdAttrLayerName& ) mrOutAttrs.Get( ATTR_LAYER_NAME ) ).GetValue() );
-    maEdtTitle.SetText( ( ( const SdAttrLayerTitle& ) mrOutAttrs.Get( ATTR_LAYER_TITLE ) ).GetValue() );
-    maEdtDesc.SetText( ( ( const SdAttrLayerDesc& ) mrOutAttrs.Get( ATTR_LAYER_DESC ) ).GetValue() );
-    maCbxVisible.Check( ( ( const SdAttrLayerVisible& ) mrOutAttrs.Get( ATTR_LAYER_VISIBLE ) ).GetValue() );
-    maCbxPrintable.Check( ( ( const SdAttrLayerPrintable& ) mrOutAttrs.Get( ATTR_LAYER_PRINTABLE ) ).GetValue() );
-    maCbxLocked.Check( ( ( const SdAttrLayerLocked& ) mrOutAttrs.Get( ATTR_LAYER_LOCKED ) ).GetValue() );
+    m_pEdtName->SetText( ( ( const SdAttrLayerName& ) mrOutAttrs.Get( ATTR_LAYER_NAME ) ).GetValue() );
+    m_pEdtTitle->SetText( ( ( const SdAttrLayerTitle& ) mrOutAttrs.Get( ATTR_LAYER_TITLE ) ).GetValue() );
+    m_pEdtDesc->SetText( ( ( const SdAttrLayerDesc& ) mrOutAttrs.Get( ATTR_LAYER_DESC ) ).GetValue() );
+    m_pEdtDesc->set_height_request(4 * m_pEdtDesc->GetTextHeight());
+    m_pCbxVisible->Check( ( ( const SdAttrLayerVisible& ) mrOutAttrs.Get( ATTR_LAYER_VISIBLE ) ).GetValue() );
+    m_pCbxPrintable->Check( ( ( const SdAttrLayerPrintable& ) mrOutAttrs.Get( ATTR_LAYER_PRINTABLE ) ).GetValue() );
+    m_pCbxLocked->Check( ( ( const SdAttrLayerLocked& ) mrOutAttrs.Get( ATTR_LAYER_LOCKED ) ).GetValue() );
 
-    if( !bDeletable )
-    {
-        maFtName.Disable();
-        maEdtName.Disable();
-    }
+    get<VclContainer>("nameframe")->Enable(bDeletable);
 }
 
 void SdInsertLayerDlg::GetAttr( SfxItemSet& rAttrs )
 {
-    rAttrs.Put( SdAttrLayerName( maEdtName.GetText() ) );
-    rAttrs.Put( SdAttrLayerTitle( maEdtTitle.GetText() ) );
-    rAttrs.Put( SdAttrLayerDesc( maEdtDesc.GetText() ) );
-    rAttrs.Put( SdAttrLayerVisible( maCbxVisible.IsChecked() ) );
-    rAttrs.Put( SdAttrLayerPrintable( maCbxPrintable.IsChecked() ) );
-    rAttrs.Put( SdAttrLayerLocked( maCbxLocked.IsChecked() ) );
+    rAttrs.Put( SdAttrLayerName( m_pEdtName->GetText() ) );
+    rAttrs.Put( SdAttrLayerTitle( m_pEdtTitle->GetText() ) );
+    rAttrs.Put( SdAttrLayerDesc( m_pEdtDesc->GetText() ) );
+    rAttrs.Put( SdAttrLayerVisible( m_pCbxVisible->IsChecked() ) );
+    rAttrs.Put( SdAttrLayerPrintable( m_pCbxPrintable->IsChecked() ) );
+    rAttrs.Put( SdAttrLayerLocked( m_pCbxLocked->IsChecked() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
