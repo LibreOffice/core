@@ -18,9 +18,6 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-#
-# 2009 Copyright Novell, Inc. & Sun Microsystems, Inc.
-#
 
 use IO::File;
 use Cwd;

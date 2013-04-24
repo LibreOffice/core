@@ -1,32 +1,21 @@
 #!/bin/sh
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
 
-#*****************************************************************************
-#
-#  java-set-classpath - Utility to update the default CLASSPATH for OpenOffice.org
-#
-#  Initial version by: Petr Mladek <pmladek@suse.cz>
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License version 2, as
-#  published by the Free Software Foundation.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-#
-#*****************************************************************************
+#  java-set-classpath - Utility to update the default
+#                       CLASSPATH for LibreOffice
 
 if test "z$1" = "z" ; then
-    echo "Update the default CLASSPATH for OpenOffice.org"
+    echo "Update the default CLASSPATH for LibreOffice"
     echo ""
     echo "Usage: $0 [dir|jar]..."
     echo ""
-    echo "The utility updates the OpenOffice.org system setting. It adds or removes"
+    echo "The utility updates the LibreOffice system setting. It adds or removes"
     echo "the given directories and jar-files to or from the default CLASSPATH"
     echo "depending on if they are available on the system or not."
     echo ""

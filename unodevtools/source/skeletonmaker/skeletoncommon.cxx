@@ -49,7 +49,7 @@ void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
 
     o << "/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */\n"
          "/*\n"
-         " * Copyright 2012 LibreOffice contributors.\n"
+         " * This file is part of the LibreOffice project.\n"
          " *\n"
          " * This Source Code Form is subject to the terms of the Mozilla Public\n"
          " * License, v. 2.0. If a copy of the MPL was not distributed with this\n"

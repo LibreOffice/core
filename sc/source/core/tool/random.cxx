@@ -8,7 +8,6 @@
  *
  * Contributor(s):
  *   Copyright (C) 2012 Tino Kluge <tino.kluge@hrz.tu-chemnitz.de>
- *
  */
 
 #include <boost/random.hpp>

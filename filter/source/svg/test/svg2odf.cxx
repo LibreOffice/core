@@ -1,20 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- *    OpenOffice.org - a multi-platform office productivity suite
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- *    Author:
- *      Fridrich Strba  <fridrich.strba@bluewin.ch>
- *      Thorsten Behrens <tbehrens@novell.com>
+ * This file incorporates work covered by the following license notice:
  *
- *      Copyright (C) 2008, Novell Inc.
- *      Parts copyright 2005 by Sun Microsystems, Inc.
- *
- *   The Contents of this file are made available subject to
- *   the terms of GNU Lesser General Public License Version 3.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "../svgreader.hxx"
 #include "odfserializer.hxx"

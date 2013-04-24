@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * Copyright 2008 by Novell, Inc.
- */
-
 #ifndef _ODFFIELDS_HXX
 #define _ODFFIELDS_HXX
 
