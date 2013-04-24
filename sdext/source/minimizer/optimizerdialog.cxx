@@ -632,11 +632,15 @@ void OptimizerDialog::actionPerformed( const ActionEvent& rEvent )
                 Sequence< Any > aArgs( 1 );
                 aArgs[ 0 ] <<= mxFrame;
 
-                Reference < XDispatch > xDispatch( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    OUString::createFromAscii( "com.sun.star.comp.PPPOptimizer" ), aArgs, mxContext ), UNO_QUERY );
+                Reference < XDispatch > xDispatch(
+                    mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.presentation.PresentationOptimizer" ) ),
+                        aArgs, mxContext ),
+                    UNO_QUERY );
 
                 URL aURL;
-                aURL.Protocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.com.sun.star.comp.PPPOptimizer:" ) );
+                aURL.Protocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.com.sun.star.presentation.PresentationOptimizer:" ) );
                 aURL.Path = OUString( RTL_CONSTASCII_USTRINGPARAM( "optimize" ) );
 
                 Sequence< PropertyValue > lArguments( 3 );

@@ -21,8 +21,8 @@
  ***********************************************************-->
 <component loader="com.sun.star.loader.SharedLibrary"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.PPPOptimizerImp">
-    <service name="com.sun.star.comp.PPPOptimizer"/>
+  <implementation name="com.sun.star.comp.presentation.PresentationOptimizer">
+    <service name="com.sun.star.presentation.PresentationOptimizer"/>
   </implementation>
   <implementation name="com.sun.star.comp.ui.dialogs.PresentationMinimizerDialog">
     <service name="com.sun.star.ui.dialogs.PresentationMinimizerDialog"/>
