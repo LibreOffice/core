@@ -22,6 +22,8 @@
 #include "lrl_include.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/languagetagicu.hxx>
 #include <collator_unicode.hxx>
 #include <localedata.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -213,13 +215,10 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             /** ICU collators are loaded using a locale only.
                 ICU uses Variant as collation algorithm name (like de__PHONEBOOK
                 locale), note the empty territory (Country) designator in this special
-                case here. The icu::Locale contructor changes the algorithm name to
+                case here. The icu::Locale constructor changes the algorithm name to
                 uppercase itself, so we don't have to bother with that.
             */
-            icu::Locale icuLocale(
-                   OUStringToOString(rLocale.Language, RTL_TEXTENCODING_ASCII_US).getStr(),
-                   OUStringToOString(rLocale.Country, RTL_TEXTENCODING_ASCII_US).getStr(),
-                   OUStringToOString(rAlgorithm, RTL_TEXTENCODING_ASCII_US).getStr());
+            icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale), rAlgorithm));
             // load ICU collator
             collator = (RuleBasedCollator*) icu::Collator::createInstance(icuLocale, status);
             if (! U_SUCCESS(status)) throw RuntimeException();
