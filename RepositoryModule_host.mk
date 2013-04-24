@@ -80,6 +80,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	hwpfilter \
 	$(call gb_Helper_optional,HYPHEN,hyphen) \
 	i18nlangtag \
+	i18nlangtagicu \
 	i18npool \
 	i18nutil \
 	$(call gb_Helper_optional,ICU,icu) \
