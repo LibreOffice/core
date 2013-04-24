@@ -20,7 +20,7 @@ namespace loplugin
 /*
 This is a compile check.
 
-Check area used in SAL_INFO/SAL_WARN macros against the list in sal/inc/sal/log-areas.dox and
+Check area used in SAL_INFO/SAL_WARN macros against the list in include/sal/log-areas.dox and
 report if the area is not listed there. The fix is either use a proper area or add it to the list
 if appropriate.
 */
@@ -104,14 +104,14 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
         readLogAreas();
     if( !logAreas.count( area ))
         {
-        report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend sal/inc/sal/log-areas.dox)",
+        report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend include/sal/log-areas.dox)",
             location ) << area;
         }
     }
 
 void SalLogAreas::readLogAreas()
     {
-    ifstream is( SRCDIR "/sal/inc/sal/log-areas.dox" );
+    ifstream is( SRCDIR "/include/sal/log-areas.dox" );
     while( is.good())
         {
         string line;

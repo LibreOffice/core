@@ -163,7 +163,7 @@ gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --scope=$(UPDATE_FIL
 endif
 endif
 # extra EF variable to make the command line shorter (just like is done with $(SRCDIR) etc.)
-gb_COMPILER_PLUGINS_SETUP := EF=$(SRCDIR)/sal/inc/sal/log-areas.dox && ICECC_EXTRAFILES=$$EF CCACHE_EXTRAFILES=$$EF
+gb_COMPILER_PLUGINS_SETUP := EF=$(SRCDIR)/include/sal/log-areas.dox && ICECC_EXTRAFILES=$$EF CCACHE_EXTRAFILES=$$EF
 else
 gb_COMPILER_PLUGINS :=
 gb_COMPILER_PLUGINS_SETUP :=
