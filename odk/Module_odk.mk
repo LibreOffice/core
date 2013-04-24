@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,odk))
 
 $(eval $(call gb_Module_add_targets,odk,\
-	CustomTarget_odkcommon \
 	$(if $(filter WNT,$(OS)),Package_cli) \
 	$(if $(DOXYGEN),\
 		CustomTarget_doxygen \
@@ -63,12 +62,6 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Zip_uno_loader_classes \
 ))
 endif
-
-# This apparently needs to come last, as the various CustomTarget_* add to
-# odkcommon_ZIPLIST that is used here:
-$(eval $(call gb_Module_add_targets,odk,\
-	Zip_odkcommon \
-))
 
 $(eval $(call gb_Module_add_check_targets,odk,\
 	CppunitTest_checkapi \

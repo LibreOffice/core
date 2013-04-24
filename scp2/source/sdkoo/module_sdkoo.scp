@@ -50,7 +50,6 @@ Module gid_Module_Optional_Sdkoo
         gid_File_Package_odk_unowinreg,
         gid_File_Zip_cppdocs,
         gid_File_Zip_Odkexamples,
-        gid_File_Zip_Odkcommon,
         gid_File_Zip_OdkIdl_udkapi,
         gid_File_Zip_OdkIdl_offapi,
         gid_File_Zip_uno_loader_classes

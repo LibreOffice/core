@@ -15,6 +15,6 @@ $(eval $(call gb_Zip_add_files,cppdocs,\
 
 $(eval $(call gb_Zip_add_commandoptions,cppdocs,-r))
 
-$(call gb_Zip_get_target,cppdocs) : $(call gb_CustomTarget_get_target,odk/odkcommon/docs/cpp/ref)
+$(call gb_Zip_get_target,cppdocs) : $(call gb_CustomTarget_get_target,odk/odkcommon/docs/cpp)
 
 # vim: set noet sw=4 ts=4:

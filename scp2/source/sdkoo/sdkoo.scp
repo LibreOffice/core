@@ -240,13 +240,6 @@ File gid_File_Zip_Odkexamples
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
-File gid_File_Zip_Odkcommon
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "odkcommon.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
-End
-
 File gid_File_Zip_OdkIdl_udkapi
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;

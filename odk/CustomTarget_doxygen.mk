@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/cpp/ref))
+$(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/cpp))
 
 CPPDOCREFNAME := "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"
 
@@ -28,25 +28,33 @@ odk_INCFILELIST := com/sun/star/uno/Any.h \
 DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(SRCDIR)/include/sal/log-areas.dox \
 	$(addprefix $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,$(odk_INCDIRLIST) $(odk_INCFILELIST))
 DOXY_INPUT := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(DOXY_INPUT)),$(DOXY_INPUT))
-DOXY_WORKDIR := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(odk_WORKDIR)/docs/cpp/ref),$(odk_WORKDIR)/docs/cpp/ref)
+DOXY_WORKDIR := $(if $(filter WNT,$(OS)),\
+	$(shell cygpath -u $(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/ref),\
+	$(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/ref)
 DOXY_STRIP_PATH := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(OUTDIR)/inc),$(OUTDIR)/inc)
-DOXY_DEPS := $(SRCDIR)/odk/pack/gendocu/Doxyfile \
-	$(SRCDIR)/odk/pack/gendocu/main.dox \
-	$(SRCDIR)/include/sal/log-areas.dox \
-	$(call gb_PackageSet_get_target,odk_headers)
 
 
-$(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/cpp/ref,index.html))
+$(eval $(call gb_CustomTarget_register_targets,odk/odkcommon/docs/cpp,\
+	Doxyfile \
+	doxygen.log \
+))
 
-$(odk_WORKDIR)/docs/cpp/ref/index.html: $(DOXY_DEPS)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
+$(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/Doxyfile : $(SRCDIR)/odk/pack/gendocu/Doxyfile
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	sed -e 's!^INPUT = %$$!INPUT = $(DOXY_INPUT)!' \
 		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(DOXY_WORKDIR)!' \
 		-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = $(CPPDOCREFNAME)!' \
 		-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
 		-e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
 		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(DOXY_STRIP_PATH)!' \
-		$< > $(odk_WORKDIR)/Doxyfile && \
-	$(DOXYGEN) $(odk_WORKDIR)/Doxyfile > $(odk_WORKDIR)/doxygen.log
+		$< > $@
+
+$(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/doxygen.log : \
+		$(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/Doxyfile \
+		$(SRCDIR)/include/sal/log-areas.dox \
+		$(SRCDIR)/odk/pack/gendocu/main.dox \
+		$(call gb_PackageSet_get_target,odk_headers)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
+	$(DOXYGEN) $< > $@
 
 # vim: set noet sw=4 ts=4:
