@@ -56,6 +56,8 @@ public:
     virtual void SAL_CALL Hide(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL UnloadObject(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Controls( const css::uno::Any& index ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getVisible() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setVisible( sal_Bool bVis ) throw (::com::sun::star::uno::RuntimeException);
     // XIntrospection
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);

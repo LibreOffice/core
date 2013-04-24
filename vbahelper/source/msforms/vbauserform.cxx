@@ -20,6 +20,7 @@
 #include "vbauserform.hxx"
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -110,6 +111,23 @@ void
 ScVbaUserForm::setCaption( const OUString& _caption ) throw (uno::RuntimeException)
 {
     m_xProps->setPropertyValue( "Title", uno::makeAny( _caption ) );
+}
+
+sal_Bool SAL_CALL
+ScVbaUserForm::getVisible() throw (uno::RuntimeException)
+{
+    uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
+    uno::Reference< awt::XWindow2 > xControlWindow( xControl->getPeer(), uno::UNO_QUERY_THROW );
+    return xControlWindow->isVisible();
+}
+
+void SAL_CALL
+ScVbaUserForm::setVisible( sal_Bool bVis ) throw (uno::RuntimeException)
+{
+    if ( bVis )
+        Show();
+    else
+        Hide();
 }
 
 double SAL_CALL ScVbaUserForm::getInnerWidth() throw (uno::RuntimeException)
