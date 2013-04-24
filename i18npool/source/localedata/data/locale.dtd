@@ -159,7 +159,7 @@
      Note: The brackets and the leading $ character are mandatory, the
      hyphen-minus separates the currency symbol from the hexagesimal MS-LCID,
      letters contained in the LCID have to be in upper case, leading zeros are
-     to be omitted. LCIDs are defined in i18nlangtag/inc/i18nlangtag/lang.h
+     to be omitted. LCIDs are defined in include/i18nlangtag/lang.h
 -->
 
 <!ELEMENT DateAcceptancePattern (#PCDATA)>
