@@ -52,6 +52,7 @@ $(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
 endef
 
 define gb_InternalUnoApi__use_api
+$(call gb_UnoApiTarget_use_api,$(1),$(2))
 $(call gb_UnoApiHeadersTarget_use_api,$(1),$(2))
 $(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
 $(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarget_get_headers_target,$(2))

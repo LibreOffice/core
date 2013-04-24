@@ -85,15 +85,19 @@ endif
 
 gb_UnoApiTarget_REGCOMPAREDEPS := $(call gb_Executable_get_runtime_dependencies,regcompare)
 gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,regcompare)
-gb_UnoApiTarget_REGMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,regmerge)
+gb_UnoApiTarget_REGMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,regmerge) $(call gb_Executable_get_runtime_dependencies,reg2unoidl)
 gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,regmerge)
 
 gb_UnoApiTarget_TYPESRDB := $(call gb_UnoApiTarget_get_target,types)
 
 define gb_UnoApiTarget__command_impl
-RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(1) $(2) $(3)) && \
+RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(1).oldformat $(2) $(3)) && \
 $(gb_UnoApiTarget_REGMERGECOMMAND) @$${RESPONSEFILE} && \
-rm -f $${RESPONSEFILE}
+rm -f $${RESPONSEFILE} && \
+SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin \
+	$(call gb_Executable_get_command,reg2unoidl) \
+	$(foreach rdb,$(4),$(call gb_UnoApiTarget_get_target,$(rdb))) \
+	$(1).oldformat $(1)
 endef
 
 # first delete target rdb file to detect problems when removing IDL files
@@ -101,13 +105,13 @@ define gb_UnoApiTarget__command
 $(call gb_Output_announce,$(2),$(true),UNO,4)
 mkdir -p $(dir $(1)) && \
 rm -f $(1) && \
-$(call gb_UnoApiTarget__command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_FILES)) \
+$(call gb_UnoApiTarget__command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_FILES),$(UNOAPI_DEPRDBS)) \
 $(if $(UNOAPI_REFERENCE), \
 	$(call gb_Output_announce,$(2),$(true),DBc,3) \
 	&& $(gb_UnoApiTarget_REGCOMPARECOMMAND) \
 		-f -t \
 		-r1 $(UNOAPI_REFERENCE) \
-		-r2 $(1))
+		-r2 $(1).oldformat)
 endef
 
 define gb_UnoApiTarget__check_mode
@@ -130,6 +134,7 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UNO,4)
 	-$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UnoApiTarget_get_target,$*) \
+			$(call gb_UnoApiTarget_get_target,$*).oldformat \
 			$(call gb_UnoApiTarget_get_external_headers_target,$*) \
 			$(call gb_UnoApiTarget_get_headers_target,$*))
 		-rm -rf $(call gb_UnoApiTarget_get_dep_target,$*) \
@@ -160,6 +165,7 @@ $(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_FILES :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT :=
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPRDBS :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES :=
@@ -228,6 +234,12 @@ endef
 
 define gb_UnoApiTarget_set_root
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT := $(2)
+
+endef
+
+define gb_UnoApiTarget_use_api
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPRDBS += $(2)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
 
 endef
 

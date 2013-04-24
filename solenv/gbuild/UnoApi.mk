@@ -190,6 +190,7 @@ $(call gb_UnoApi__add_docfiles,$(1),$(2),$(3))
 endef
 
 define gb_UnoApi__use_api
+$(call gb_UnoApiTarget_use_api,$(1),$(2))
 $(call gb_UnoApiHeadersTarget_use_api,$(1),$(2))
 $(call gb_UnoApi_get_target,$(1)) :| $(call gb_UnoApi_get_target,$(2))
 $(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarget_get_headers_target,$(2))
