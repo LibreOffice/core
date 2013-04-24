@@ -10,11 +10,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,directxcanvas))
 
-$(eval $(call gb_StaticLibrary_set_include,directxcanvas,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/canvas/inc \
-))
-
 $(eval $(call gb_StaticLibrary_use_external,directxcanvas,boost_headers))
 
 $(eval $(call gb_StaticLibrary_use_api,directxcanvas,\
