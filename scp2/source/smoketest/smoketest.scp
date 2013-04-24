@@ -155,8 +155,9 @@ End
 File gid_Test_File_Misc_TypesRdb
     TXT_FILE_BODY;
     Dir = gid_Test_Dir_Ure_Misc_Test;
-    Name = "types.rdb";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Name = "udkapi.rdb";
+    InstallName = "types.rdb";
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID, SUBST_FILENAME);
 End
 
 File gid_Test_File_Bin_LOSmoketest
