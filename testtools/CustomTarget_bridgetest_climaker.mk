@@ -40,9 +40,7 @@ $(testtools_CLIDIR)/cli_types_bridgetest.dll : \
 	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_Helper_execute,climaker) \
 		$(if $(filter -s,$(MAKEFLAGS)),,--verbose) \
-		--out $@ \
-		-X $(call gb_UnoApiTarget_get_target,udkapi) \
-		-r $(OUTDIR)/bin/cli_uretypes.dll \
-		$< > /dev/null)
+		--out $@ -r $(OUTDIR)/bin/cli_uretypes.dll \
+		$(call gb_UnoApiTarget_get_target,udkapi).oldformat > /dev/null)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

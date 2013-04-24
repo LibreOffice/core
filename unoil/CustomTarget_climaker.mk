@@ -19,7 +19,8 @@ $(call gb_CustomTarget_get_target,unoil/climaker) : \
 	$(unoil_CLIDIR)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll
 
 $(unoil_CLIDIR)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
-		$(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
+		$(call gb_UnoApiTarget_get_target,offapi) \
+		$(call gb_UnoApiTarget_get_target,udkapi) \
 		$(OUTDIR)/bin/cliuno.snk $(OUTDIR)/bin/cli_uretypes.dll \
 		$(call gb_Executable_get_runtime_dependencies,climaker) \
 		| $(unoil_CLIDIR)/.dir
@@ -31,10 +32,10 @@ $(unoil_CLIDIR)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
 		--assembly-version $(CLI_OOOTYPES_NEW_VERSION) \
 		--assembly-company "LibreOffice" \
 		--assembly-description "This assembly contains metadata for the LibreOffice API." \
-		-X $(OUTDIR)/bin/udkapi.rdb \
+		-X $(call gb_UnoApiTarget_get_target,udkapi).oldformat \
 		-r $(OUTDIR)/bin/cli_uretypes.dll \
 		--keyfile $(OUTDIR)/bin/cliuno.snk \
-		$(OUTDIR)/bin/offapi.rdb) > /dev/null)
+		$(call gb_UnoApiTarget_get_target,offapi).oldformat) > /dev/null)
 
 $(unoil_CLIDIR)/cli_oootypes.config : \
 		$(SRCDIR)/unoil/climaker/cli_oootypes_config \
