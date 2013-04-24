@@ -844,12 +844,27 @@ struct WriteDep
     }
 };
 
+// write a dummy target for one included file, so the incremental build does
+// not break with "No rule to make target" if the included file is removed
+struct WriteDummy
+{
+    SvFileStream & m_rStream;
+    explicit WriteDummy(SvFileStream & rStream) : m_rStream(rStream) { }
+    void operator() (OUString const& rItem)
+    {
+        m_rStream << OUStringToOString(rItem, RTL_TEXTENCODING_UTF8).getStr();
+        m_rStream << " :\n\n";
+    }
+};
+
 bool SvIdlDataBase::WriteDepFile(
         SvFileStream & rStream, OUString const& rTarget)
 {
     rStream << OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8).getStr();
     rStream << " :";
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
+    rStream << "\n\n";
+    ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDummy(rStream));
     return rStream.GetError() == SVSTREAM_OK;
 }
 
