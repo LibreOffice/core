@@ -37,7 +37,6 @@ Module gid_Module_Optional_Smoketest
     Files = (gid_Test_File_Txt_License,
              gid_Test_File_Txt_Readme,
              gid_Test_File_Misc_Smoketestdoc,
-             gid_Test_File_Misc_TypesRdb,
              gid_Test_File_Bin_LOSmoketest,
              gid_Test_File_Exe_Cppunittester,
              gid_Test_File_Lib_Cppunit,

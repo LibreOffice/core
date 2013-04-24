@@ -52,7 +52,7 @@ esac
 
 exec $sd_prog/cppunittester \
 	-env:UNO_SERVICES=file://$sd_prog/../ure/share/misc/services.rdb \
-	-env:UNO_TYPES=file://$sd_prog/../ure/share/misc/test/types.rdb \
+	-env:UNO_TYPES=file://$sd_prog/../ure/share/misc/types.rdb\ file://$sd_prog/types/offapi.rdb \
 	-env:arg-soffice=path:$sd_prog/soffice \
 	-env:arg-user=$user_conf_dir \
 	-env:arg-env=$LD_LIBRARY_PATH \

@@ -95,31 +95,6 @@ Directory gid_Test_Brand_Dir_Share_Test
     DosName = "test";
 End
 
-Directory gid_Test_Dir_Common_Ure
-#if defined MACOSX
-    ParentID = gid_Test_Dir_Bundle_Contents;
-#else
-    ParentID = gid_Test_Dir_Brand_Root;
-#endif
-    HostName = "ure";
-    Styles = (UREDIRECTORY);
-End
-
-Directory gid_Test_Dir_Ure_Share
-    ParentID = gid_Test_Dir_Common_Ure;
-    DosName = "share";
-End
-
-Directory gid_Test_Dir_Ure_Misc
-    ParentID = gid_Test_Dir_Ure_Share;
-    DosName = "misc";
-End
-
-Directory gid_Test_Dir_Ure_Misc_Test
-    ParentID = gid_Test_Dir_Ure_Misc;
-    DosName = "test";
-End
-
 
 File gid_Test_File_Txt_License
     TXT_FILE_BODY;
@@ -150,14 +125,6 @@ File gid_Test_File_Misc_Smoketestdoc
     Dir = gid_Test_Brand_Dir_Share_Test;
     Name = "smoketestdoc.sxw";
     Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_Test_File_Misc_TypesRdb
-    TXT_FILE_BODY;
-    Dir = gid_Test_Dir_Ure_Misc_Test;
-    Name = "udkapi.rdb";
-    InstallName = "types.rdb";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID, SUBST_FILENAME);
 End
 
 File gid_Test_File_Bin_LOSmoketest
