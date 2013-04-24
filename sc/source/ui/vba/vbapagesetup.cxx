@@ -509,8 +509,6 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getFirstPageNumber() throw (css::uno::Runtime
 
 void SAL_CALL ScVbaPageSetup::setFirstPageNumber( sal_Int32 firstPageNumber) throw (css::uno::RuntimeException)
 {
-    if( firstPageNumber < 0 )
-        DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
     if( firstPageNumber == excel::Constants::xlAutomatic )
         firstPageNumber = 0;
 
