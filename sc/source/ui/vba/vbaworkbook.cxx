@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XlFileFormat.hpp>
+#include <ooo/vba/excel/XApplication.hpp>
 
 #include "scextopt.hxx"
 #include "vbaworksheet.hxx"
@@ -91,6 +92,48 @@ ScVbaWorkbook::Colors( const ::uno::Any& Index ) throw (::script::BasicErrorExce
     else
         aRet = uno::makeAny( ColorData );
     return aRet;
+}
+
+bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< beans::PropertyValue >& rProps )
+{
+    bool bRes = false;
+    for ( sal_Int32 index = 0; index < rProps.getLength(); ++index )
+    {
+        if ( rProps[ index ].Name == "FilterName" )
+        {
+            switch( nFormat )
+            {
+                case excel::XlFileFormat::xlCSV:
+                    rProps[ index ].Value = uno::Any( OUString("Text - txt - csv (StarCalc)") );
+                    break;
+                case excel::XlFileFormat::xlDBF4:
+                    rProps[ index ].Value = uno::Any( OUString("DBF") );
+                    break;
+                case excel::XlFileFormat::xlDIF:
+                    rProps[ index ].Value = uno::Any( OUString("DIF") );
+                    break;
+                case excel::XlFileFormat::xlWK3:
+                    rProps[ index ].Value = uno::Any( OUString("Lotus") );
+                    break;
+                case excel::XlFileFormat::xlExcel4Workbook:
+                    rProps[ index ].Value = uno::Any( OUString("MS Excel 4.0") );
+                    break;
+                case excel::XlFileFormat::xlExcel5:
+                    rProps[ index ].Value = uno::Any( OUString("MS Excel 5.0/95") );
+                    break;
+                case excel::XlFileFormat::xlHtml:
+                    rProps[ index ].Value = uno::Any( OUString("HTML (StarCalc)") );
+                    break;
+                case excel::XlFileFormat::xlExcel9795:
+                default:
+                    rProps[ index ].Value = uno::Any( OUString("MS Excel 97") );
+                    break;
+            }
+            bRes = true;
+            break;
+        }
+    }
+    return bRes;
 }
 
 ::sal_Int32 SAL_CALL
@@ -260,6 +303,55 @@ ScVbaWorkbook::SaveCopyAs( const OUString& sFileName ) throw ( uno::RuntimeExcep
     storeProps[0].Name = OUString( "FilterName" );
     storeProps[0].Value <<= OUString( "MS Excel 97" );
     xStor->storeToURL( aURL, storeProps );
+}
+
+void SAL_CALL
+ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, const uno::Any& /*Password*/, const uno::Any& /*WriteResPassword*/, const uno::Any& /*ReadOnlyRecommended*/, const uno::Any& /*CreateBackup*/, const uno::Any& /*AccessMode*/, const uno::Any& /*ConflictResolution*/, const uno::Any& /*AddToMru*/, const uno::Any& /*TextCodepage*/, const uno::Any& /*TextVisualLayout*/, const uno::Any& /*Local*/ )
+{
+    OUString sFileName;
+    FileName >>= sFileName;
+    OUString sURL;
+    osl::FileBase::getFileURLFromSystemPath( sFileName, sURL );
+    // detect if there is no path if there is no path then we need
+    // to use the current current folder
+    INetURLObject aURL( sURL );
+    sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    if( sURL.isEmpty() )
+    {
+        // need to add cur dir ( of this workbook ) or else the 'Work' dir
+        sURL = getModel()->getURL();
+
+        if ( sURL.isEmpty() )
+        {
+            // not path available from 'this' document
+            // need to add the 'document'/work directory then
+            uno::Reference< excel::XApplication > xApplication ( Application(),uno::UNO_QUERY_THROW );
+            OUString sWorkPath = xApplication->getDefaultFilePath();
+            OUString sWorkURL;
+            osl::FileBase::getFileURLFromSystemPath( sWorkPath, sWorkURL );
+            aURL.SetURL( sWorkURL );
+        }
+        else
+        {
+            aURL.SetURL( sURL );
+            aURL.Append( sFileName );
+        }
+        sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+
+    }
+
+    sal_Int32 nFileFormat = excel::XlFileFormat::xlExcel9795;
+    FileFormat >>= nFileFormat;
+
+    uno::Sequence<  beans::PropertyValue > storeProps(1);
+    storeProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+
+    setFilterPropsFromFormat( nFileFormat, storeProps );
+
+    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
+    OUString sFilterName;
+    storeProps[0].Value >>= sFilterName;
+    xStor->storeAsURL( sURL, storeProps );
 }
 
 css::uno::Any SAL_CALL
