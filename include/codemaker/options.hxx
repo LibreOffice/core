@@ -59,8 +59,6 @@ public:
 
     const StringVector& getInputFiles();
 
-    inline sal_uInt16 getNumberOfExtraInputFiles() const
-        { return (sal_uInt16)m_extra_input_files.size(); }
     inline const StringVector& getExtraInputFiles() const
         { return m_extra_input_files; }
 protected:
