@@ -2051,6 +2051,23 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
     return nStringLen;
 }
 
+namespace {
+
+struct CellGroupSetter : std::unary_function<ColEntry, void>
+{
+    ScFormulaCellGroupRef mxGroup;
+public:
+    CellGroupSetter(const ScFormulaCellGroupRef& xGroup) : mxGroup(xGroup) {}
+
+    void operator() (ColEntry& rEntry)
+    {
+        if (rEntry.pCell && rEntry.pCell->GetCellType() == CELLTYPE_FORMULA)
+            static_cast<ScFormulaCell*>(rEntry.pCell)->SetCellGroup(mxGroup);
+    }
+};
+
+}
+
 // Very[!] slow way to look for and merge contiguous runs
 // of similar formulae into a formulagroup
 void ScColumn::RebuildFormulaGroups()
@@ -2064,12 +2081,7 @@ void ScColumn::RebuildFormulaGroups()
 
     // clear previous groups
     ScFormulaCellGroupRef xNone;
-    for (size_t i = 0; i < maItems.size(); i++)
-    {
-        ColEntry &rCur = maItems[ i ];
-        if ( rCur.pCell && rCur.pCell->GetCellType() == CELLTYPE_FORMULA )
-            static_cast<ScFormulaCell *>( rCur.pCell )->SetCellGroup( xNone );
-    }
+    std::for_each(maItems.begin(), maItems.end(), CellGroupSetter(xNone));
     maFnGroups.clear();
 
     // re-build groups
