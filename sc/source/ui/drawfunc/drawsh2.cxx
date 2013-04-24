@@ -295,23 +295,12 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 
     if( bHasMarked )
     {
-        rSet.Put( pDrView->GetAttrFromMarked(false) );
-
-        // Wenn die View selektierte Objekte besitzt, muessen entspr. Items
-        // von SFX_ITEM_DEFAULT (_ON) auf SFX_ITEM_DISABLED geaendert werden
-
-        SfxWhichIter aIter( rSet, XATTR_LINE_FIRST, XATTR_FILL_LAST );
-        sal_uInt16 nWhich = aIter.FirstWhich();
-        while( nWhich )
-        {
-            if( SFX_ITEM_DEFAULT == rSet.GetItemState( nWhich ) )
-                rSet.DisableItem( nWhich );
-
-            nWhich = aIter.NextWhich();
-        }
+        rSet.Put( pDrView->GetAttrFromMarked(false), false );
     }
     else
+    {
         rSet.Put( pDrView->GetDefaultAttr() );
+    }
 
     SdrPageView* pPV = pDrView->GetSdrPageView();
     if ( pPV )
