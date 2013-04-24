@@ -167,6 +167,22 @@ ScVbaShape::setName( const OUString& _name ) throw (uno::RuntimeException)
     xNamed->setName( _name );
 }
 
+OUString SAL_CALL
+ScVbaShape::getAlternativeText() throw (uno::RuntimeException)
+{
+    OUString sAltText;
+    uno::Reference< beans::XPropertySet > xProps( m_xShape, uno::UNO_QUERY_THROW );
+    xProps->getPropertyValue( OUString( "Title" ) ) >>= sAltText;
+    return sAltText;
+}
+
+void SAL_CALL
+ScVbaShape::setAlternativeText( const OUString& sAltText ) throw (uno::RuntimeException)
+{
+    uno::Reference< beans::XPropertySet > xProps( m_xShape, uno::UNO_QUERY_THROW );
+    xProps->setPropertyValue( OUString( "Title" ), uno::Any( sAltText ) );
+}
+
 double SAL_CALL
 ScVbaShape::getHeight() throw (uno::RuntimeException)
 {

@@ -62,6 +62,8 @@ public:
     // Attributes
     virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setName( const rtl::OUString& _name ) throw (css::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL getAlternativeText() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setAlternativeText( const rtl::OUString& _name ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException);
