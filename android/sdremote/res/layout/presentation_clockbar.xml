@@ -73,15 +73,20 @@
         android:background="#DD4D4D4D"
         android:orientation="horizontal" >
 
-        <EditText
-            android:id="@+id/clockbar_countdown_time"
+        <AutoCompleteTextView android:id="@+id/countdown_time"
+            android:layout_width="wrap_content"
+	    android:layout_height="match_parent"
+	    android:layout_weight="1"
+	    android:completionThreshold="1" />
+
+	<Button
+            android:id="@+id/clockbar_countdown_reset"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:ems="10"
-            android:inputType="time"
-            android:text="03:00" >
-        </EditText>
+            android:background="#00000000"
+            android:text="@string/clock_timer_reset"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/clockbar_countdown_button"

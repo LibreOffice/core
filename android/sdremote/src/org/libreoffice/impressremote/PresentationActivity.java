@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -37,10 +38,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -205,8 +207,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
     }
 
     private class ActionBarManager implements OnClickListener,
-                    FragmentManager.OnBackStackChangedListener,
-                    TextView.OnEditorActionListener {
+                    FragmentManager.OnBackStackChangedListener {
 
         private Handler timerHandler = new Handler();
 
@@ -226,8 +227,12 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
         // ------- COUNTDOWN BAR
         private View mCountdownBar;
-        private EditText mCountdownEntry;
         private Button mCountdownButton;
+        private Button mCountdownButtonReset;
+        private AutoCompleteTextView mCountDownTime;
+
+        private SharedPreferences prefs;
+        private static final String COUNTDOWN_KEY = "countdownTime";
 
         private String aTimeFormat = getResources().getString(
                         R.string.actionbar_timeformat);
@@ -305,13 +310,22 @@ public class PresentationActivity extends SherlockFragmentActivity {
             // Countdown bar
             mCountdownBar = mOuterLayout
                             .findViewById(R.id.clockbar_countdownbar);
-
-            mCountdownEntry = (EditText) mCountdownBar
-                            .findViewById(R.id.clockbar_countdown_time);
             mCountdownButton = (Button) mCountdownBar
                             .findViewById(R.id.clockbar_countdown_button);
+            mCountdownButton.setTag(Boolean.valueOf(false));
+            mCountdownButtonReset = (Button) mCountdownBar.findViewById(R.id.clockbar_countdown_reset);
+            mCountdownButtonReset.setTag(Boolean.valueOf(false));
+
+            prefs = PreferenceManager.getDefaultSharedPreferences(mCountdownBar.getContext());
+
+            String[] entries = getResources().getStringArray(R.array.countdown_values);
+            String savedTime = prefs.getString(COUNTDOWN_KEY, entries[0]);
+            mCountDownTime = (AutoCompleteTextView) mCountdownBar.findViewById(R.id.countdown_time);
+            mCountDownTime.setAdapter(new ArrayAdapter<String>(mCountdownBar.getContext(), android.R.layout.simple_dropdown_item_1line, entries));
+            mCountDownTime.setText(savedTime);
+
             mCountdownButton.setOnClickListener(this);
-            mCountdownEntry.setOnEditorActionListener(this);
+            mCountdownButtonReset.setOnClickListener(this);
 
             updateClockBar();
             hidePopups();
@@ -323,23 +337,6 @@ public class PresentationActivity extends SherlockFragmentActivity {
                 return;
             }
             mClockBar_clockButton.setChecked(!mTimerOn);
-
-            //            FrameLayout.LayoutParams aParams = (LayoutParams) mCountdownBar
-            //                            .getLayoutParams();
-            //            aParams.topMargin = mClockBar.getBottom();
-            //            //            aParams.height = mClockBar.getHeight();
-            //            //            aParams.bottomMargin = aParams.topMargin + aParams.height;
-            //            //            aParams.leftMargin = 100;
-            //            mCountdownBar.setLayoutParams(aParams);
-            //            mCountdownBar.setPadding(0, mClockBar.getBottom(), 0, 0);
-            //            mStopwatchBar.setPadding(0, mClockBar.getBottom(), 0, 0);
-            //            //            mCountdownBar.requestLayout();
-            //            //            mOuterLayout.requestLayout();
-            //            //            mOuterLayout.invalidate();
-            //            //            aParams = (LayoutParams) mStopwatchBar.getLayoutParams();
-            //            //            aParams.topMargin = mClockBar.getHeight();
-            //            //            mOuterLayout.invalidate();
-            //            //            mStopwatchBar.setY(mClockBar.getHeight());
 
             boolean aIsCountdown = mCommunicationService.getSlideShow()
                             .getTimer().isCountdown();
@@ -368,12 +365,22 @@ public class PresentationActivity extends SherlockFragmentActivity {
             mCountdownBar.bringToFront();
             if (aCountdownMode) {
                 Timer aTimer = mCommunicationService.getSlideShow().getTimer();
-                if (aTimer.isRunning()) {
+                boolean resetClicked = (Boolean) mCountdownButtonReset.getTag();
+                boolean countdownButtonClicked = (Boolean) mCountdownButton.getTag();
+                if (aTimer.isRunning() && countdownButtonClicked) {//start or resume clicked
                     mCountdownButton.setText(R.string.clock_timer_pause);
-                } else {
+                    mCountdownButton.setTag(Boolean.valueOf(false));
+                }else if(resetClicked){//reset clicked
+                    mCountdownButton.setText(R.string.clock_timer_start);
+                    mCountdownButtonReset.setTag(Boolean.valueOf(false));
+                } else if(!aTimer.isRunning() && countdownButtonClicked){//pause clicked
                     mCountdownButton.setText(R.string.clock_timer_resume);
+                    mCountdownButton.setTag(Boolean.valueOf(false));
+                }else if(!aTimer.isRunning()){
+                    mCountdownButton.setText(R.string.clock_timer_start);
                 }
             }
+
 
         }
 
@@ -468,12 +475,51 @@ public class PresentationActivity extends SherlockFragmentActivity {
             } else if (aSource == mCountdownButton) {
                 if (aTimer.isRunning()) {
                     aTimer.stopTimer();
+                    mCountdownButton.setTag(Boolean.valueOf(true));
+                    updateClockBar();
                 } else {
-                    aTimer.startTimer();
+                    try {
+                        String time = mCountDownTime.getText().toString();
+                        long aTime = this.validateDate(time);
+                        Editor editor = prefs.edit();
+                        editor.putString(COUNTDOWN_KEY, time);
+                        editor.commit();
+                        aTimer.setCountdownTime(aTime);
+                        aTimer.startTimer();
+                        mCountdownButton.setTag(Boolean.valueOf(true));
+                        updateClockBar();
+                    } catch (ParseException e) {
+                        Toast.makeText(mCountDownTime.getContext(), R.string.wrong_time_format, Toast.LENGTH_LONG).show();
+                    }
                 }
+            }else if(aSource == mCountdownButtonReset){
+                aTimer.reset();
+                mCountdownButtonReset.setTag(Boolean.valueOf(true));
                 updateClockBar();
             }
 
+        }
+
+        /*
+         *
+         * @param timeText
+         * @return timeText in millis, or throws ParseException
+         * @throws ParseException - if timeText is not valid time
+         */
+        private long validateDate(String timeText) throws ParseException {
+            long aTime = 0;
+            try {
+                SimpleDateFormat aFormat = new SimpleDateFormat("HH:mm:ss");
+                aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                aTime = aFormat.parse(timeText).getTime();
+            } catch (ParseException e) {
+            }
+            if (aTime == 0) {
+                SimpleDateFormat aFormat = new SimpleDateFormat("mm:ss");
+                aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                aTime = aFormat.parse(timeText).getTime();
+            }
+            return aTime;
         }
 
         @Override
@@ -482,41 +528,11 @@ public class PresentationActivity extends SherlockFragmentActivity {
                 mThumbnailButton.setChecked(false);
             }
         }
-
-        @Override
-        public boolean onEditorAction(TextView tv, int aID, KeyEvent aEvent) {
-            if (aEvent != null && aEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-
-                long aTime = 0;
-                try {
-                    SimpleDateFormat aFormat = new SimpleDateFormat("HH:mm:ss");
-                    aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    aTime = aFormat.parse(mCountdownEntry.getText().toString())
-                                    .getTime();
-                } catch (ParseException e) {
-                }
-                if (aTime == 0) {
-                    try {
-                        SimpleDateFormat aFormat = new SimpleDateFormat("mm:ss");
-                        aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                        aTime = aFormat.parse(
-                                        mCountdownEntry.getText().toString())
-                                        .getTime();
-                    } catch (ParseException e) {
-                    }
-                }
-                mCommunicationService.getSlideShow().getTimer()
-                                .setCountdownTime(aTime);
-                return true;
-            }
-            return false;
-        }
     }
 
-    /**
+    /*
      * Intermediate layout that catches all touches, used in order to hide
      * the clock menu as appropriate.
-     *
      */
     public static class InterceptorLayout extends FrameLayout {
 

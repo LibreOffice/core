@@ -13,7 +13,7 @@ endif
 all: properties translations.done
 	mkdir -p ../abs-lib/libs
 	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar ../abs-lib/libs
-	$(ANT) -quiet debug
+	$(ANT) debug
 
 properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties

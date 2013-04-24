@@ -54,5 +54,13 @@
     <string name="reconnect_description1">Your connection has been dropped.</string>
     <string name="reconnect_description2">Please try to reconnect</string>
     <string name="wifiAlertMsg">This is still an experimental feature. You need to \"enable experimental features\" in \"Preference\"-\"LibreOffice\"-\"Advanced\" on your computer. \nThe use over Bluetooth is recommanded.</string>
-
+    <string-array name="countdown_values">
+        <item >5:00</item>
+        <item >10:00</item>
+        <item >15:00</item>
+        <item >20:00</item>
+        <item >30:00</item>
+        <item >45:00</item>
+    </string-array>
+    <string name="wrong_time_format">You have entered wrong time format</string>
 </resources>
