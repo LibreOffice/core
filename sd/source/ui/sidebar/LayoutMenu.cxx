@@ -334,65 +334,6 @@ sal_Int32 LayoutMenu::GetMinimumWidth (void)
 
 
 
-void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
-{
-    bool bIsEnabled (false);
-
-    ::boost::shared_ptr<ViewShell> pMainViewShell (mrBase.GetMainViewShell());
-    if (pMainViewShell)
-    {
-        switch (pMainViewShell->GetShellType())
-        {
-            case ViewShell::ST_NONE:
-            case ViewShell::ST_OUTLINE:
-            case ViewShell::ST_PRESENTATION:
-            case ViewShell::ST_SIDEBAR:
-                // The complete task pane is disabled for these values or
-                // not even visible.  Disabling the LayoutMenu would be
-                // logical but unnecessary.  The main disadvantage is that
-                // after re-enabling it (typically) another panel is
-                // expanded.
-                bIsEnabled = true;
-                break;
-
-            case ViewShell::ST_DRAW:
-            case ViewShell::ST_IMPRESS:
-            {
-                switch (eMode)
-                {
-                    case MM_UNKNOWN:
-                    {
-                        ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
-                            ::boost::dynamic_pointer_cast<DrawViewShell>(pMainViewShell));
-                        if (pDrawViewShell)
-                            bIsEnabled = pDrawViewShell->GetEditMode() != EM_MASTERPAGE;
-                        break;
-                    }
-                    case MM_NORMAL:
-                        bIsEnabled = true;
-                        break;
-
-                    case MM_MASTER:
-                        bIsEnabled = false;
-                        break;
-                }
-                break;
-            }
-
-            case ViewShell::ST_HANDOUT:
-            case ViewShell::ST_NOTES:
-            case ViewShell::ST_SLIDE_SORTER:
-            default:
-                bIsEnabled = true;
-                break;
-        }
-    }
-    (void)bIsEnabled; //FIXME either this method is a no-op or this should do something
-}
-
-
-
-
 void LayoutMenu::Paint (const Rectangle& rRect)
 {
     if (mbSelectionUpdatePending)
@@ -899,7 +840,6 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
 
         case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
             mbIsMainViewChangePending = true;
-            UpdateEnabledState(MM_UNKNOWN);
             break;
 
         case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
@@ -912,14 +852,6 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
                 mbIsMainViewChangePending = false;
                 InvalidateContent();
             }
-            break;
-
-        case ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL:
-            UpdateEnabledState(MM_NORMAL);
-            break;
-
-        case ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER:
-            UpdateEnabledState(MM_MASTER);
             break;
 
         default:

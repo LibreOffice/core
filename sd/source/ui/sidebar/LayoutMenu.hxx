@@ -104,18 +104,6 @@ public:
     */
     virtual void MouseButtonDown (const MouseEvent& rEvent);
 
-    /** The LayoutMenu does not support some main views.  In this case the
-        LayoutMenu is disabled.  This state is updated in this method.
-        @param eMode
-            On some occasions the edit mode is being switched when this
-            method is called can not (yet) be reliably detected.  Luckily,
-            in these cases the new value is provided by some broadcaster.
-            On other occasions the edit mode is not modified and is also not
-            provided.  Therefore the Unknown value.
-    */
-    enum MasterMode { MM_NORMAL, MM_MASTER, MM_UNKNOWN };
-    void UpdateEnabledState (const MasterMode eMode);
-
     /** Call this method when the set of displayed layouts is not up-to-date
         anymore.  It will re-assemple this set according to the current
         settings.

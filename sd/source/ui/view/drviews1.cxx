@@ -343,6 +343,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             eEMode = EM_MASTERPAGE;
         }
 
+        GetViewShellBase().GetDrawController().BroadcastContextChange();
+
         meEditMode = eEMode;
         mbIsLayerModeActive = bIsLayerModeActive;
 

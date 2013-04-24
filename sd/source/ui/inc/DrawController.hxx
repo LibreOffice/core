@@ -133,6 +133,11 @@ public:
     */
     void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
 
+    /** Broadcast a sidebar context change that is caused by a view
+        switch.
+    */
+    void BroadcastContextChange (void) const;
+
     /** Return a pointer to the ViewShellBase object that the DrawController
         is connected to.
         @return
