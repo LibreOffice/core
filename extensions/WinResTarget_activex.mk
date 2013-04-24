@@ -28,21 +28,21 @@
 # instead of those above.
 #
 
-$(eval $(call gb_WinResTarget_WinResTarget,activex_res))
+$(eval $(call gb_WinResTarget_WinResTarget,so_activex))
 
-$(eval $(call gb_WinResTarget_use_custom_headers,activex_res,\
+$(eval $(call gb_WinResTarget_use_custom_headers,so_activex,\
     extensions/source/activex/idl \
 ))
 
 ifneq ($(ENABLE_DBGUTIL),TRUE)
-$(eval $(call gb_WinResTarget_add_defs,activex_res,\
+$(eval $(call gb_WinResTarget_add_defs,so_activex,\
 	-DPRODUCT \
 ))
 endif
 
-$(eval $(call gb_WinResTarget_set_rcfile,activex_res,extensions/source/activex/so_activex))
+$(eval $(call gb_WinResTarget_set_rcfile,so_activex,extensions/source/activex/so_activex))
 
-$(eval $(call gb_WinResTarget_add_defs,activex_res,\
+$(eval $(call gb_WinResTarget_add_defs,so_activex,\
 	$$(DEFS) \
 	-DSO_ACTIVEX_TLB=\"$(subst /,\\\\,$(WORKDIR)/CustomTarget/extensions/source/activex/idl/so_activex.tlb\") \
 ))
