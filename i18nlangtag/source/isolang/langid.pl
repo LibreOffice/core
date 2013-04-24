@@ -103,7 +103,7 @@ sub grepFile($$$$@)
     # Try module under current working directory first to catch local
     # modifications. A Not yet delivered lang.h is a special case.
     if ("$path/$module/$name" eq "$SOLENVINC/i18nlangtag/lang.h") {
-        $file = "./$module/inc/i18nlangtag/lang.h"; }
+        $file = "./include/$module/lang.h"; }
     else {
         $file = "./$module/$name"; }
     if (!($found = open( IN, $file)))
