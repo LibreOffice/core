@@ -253,7 +253,8 @@ $(call gb_SrsTarget_get_target,%) :
 		cat $^ > $@)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_SrsTarget_get_dep_target,%) :
+$(call gb_SrsTarget_get_dep_target,%) : \
+		$(call gb_Executable_get_runtime_dependencies,concat-deps)
 	$(call gb_SrsTarget__command_dep,$@,$*,$^)
 endif
 
