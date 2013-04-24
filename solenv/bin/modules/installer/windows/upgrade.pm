@@ -55,15 +55,10 @@ sub create_upgrade_table
 
     installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");
 
-    # Setting also $installer::globals::msimajorproductversion, that is for example "3.0.0", to differ between old products for OOo 2.x and
-    # older products from OOo 3.x. The latter must be removed always, the removal of the first is controlled with a checkbox.
-    my $newline = $installer::globals::upgradecode . "\t" . "\t" . $installer::globals::msimajorproductversion . "\t" . "\t" . "0" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
+    # Setting all products, that must be removed.
+    my $newline = $installer::globals::upgradecode . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "513" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
     push(@upgradetable, $newline);
 
-    # Setting all products, that must be removed.
-    # $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msimajorproductversion . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "257" . "\t" . "\t" . "OLDPRODUCTSSAMEMAJOR" . "\n";
-    $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msimajorproductversion . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "769" . "\t" . "\t" . "OLDPRODUCTSSAMEMAJOR" . "\n";
-    push(@upgradetable, $newline);
 
     if ( ! $installer::globals::patch )
     {
