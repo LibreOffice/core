@@ -536,4 +536,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/util,\
 	XVeto \
 ))
 
+$(eval $(call gb_UnoApi_set_reference_rdbfile,udkapi,udkapi/type_reference/udkapi))
+
 # vim: set noet sw=4 ts=4:

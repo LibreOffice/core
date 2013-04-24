@@ -10,28 +10,30 @@
 set -e
 
 # Basic argument checks
-if [ $# -lt 1 ]
+if [ $# -lt 2 ]
 then
   echo "usage:"
-  echo "    make cmd cmd='$0 <idl file list>'"
+  echo "    make cmd cmd='$0 <rdb file> <idl file list>'"
   echo ""
   echo "example:"
   echo "    make cmd cmd='$0"
+  echo "      offapi/type_reference/offapi.rdb"
   echo "      offapi/com/sun/star/auth/SSOManagerFactory.idl"
   echo "      offapi/com/sun/star/auth/SSOPasswordCache.idl'"
   exit 1
 fi
 
+rdb=${1?}
+shift
 mkdir tmp
 for i in "$@"; do
   "${OUTDIR_FOR_BUILD?}"/bin/regmerge -v tmp/out1.rdb /UCR \
     "${WORKDIR_FOR_BUILD?}"/UnoApiPartTarget/"${i%.idl}".urd
 done
-"${OUTDIR_FOR_BUILD?}"/bin/regmerge -v tmp/out2.rdb / \
-  "${SRC_ROOT?}"/offapi/type_reference/types.rdb tmp/out1.rdb
+"${OUTDIR_FOR_BUILD?}"/bin/regmerge -v tmp/out2.rdb / "${SRC_ROOT?}"/"${rdb?}" \
+  tmp/out1.rdb
 echo "sanity check diff:"
-diff <("${OUTDIR_FOR_BUILD?}"/bin/regview \
-  "${SRC_ROOT?}"/offapi/type_reference/types.rdb) \
+diff <("${OUTDIR_FOR_BUILD?}"/bin/regview "${SRC_ROOT?}"/"${rdb?}") \
   <("${OUTDIR_FOR_BUILD?}"/bin/regview tmp/out2.rdb) && $? -le 1
-mv tmp/out2.rdb "${SRC_ROOT?}"/offapi/type_reference/types.rdb
+mv tmp/out2.rdb "${SRC_ROOT?}"/"${rdb?}"
 rm -r tmp

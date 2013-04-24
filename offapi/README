@@ -3,9 +3,12 @@ Contains all of the IDL files except those in [[udkapi]]
 i.e. the interfaces that are specific to the OppenOffice.org application.
 An artificial (?) separation.
 
-The reference offapi/type_reference/types.rdb, used to detect inadvertent
-incompatible changes, is maintained via offapi/type_reference/update-rdb.sh (see
-its usage message for details) for cases where we deliberately /do/ become
-incompatible.  Old such cases are listed in
-offapi/type_reference/typelibrary_history.txt, new such cases are recorded in
-the git log of offapi/type_reference/types.rdb.
+The reference offapi/type_reference/offapi.rdb and
+udkapi/type_reference/udkapi.rdb (formerly combined into a single
+offapi/type_reference/types.rdb), used to detect inadvertent incompatible
+changes, are maintained via offapi/type_reference/update-rdb.sh (see its usage
+message for details) for cases where we deliberately /do/ become incompatible.
+Old such cases are listed in offapi/type_reference/typelibrary_history.txt,
+newer such cases are recorded in the git log of (now removed)
+offapi/type_reference/types.rdb, new such cases are recorded in the git logs of
+offapi/type_reference/offapi.rdb and udkapi/type_reference/udkapi.rdb.
