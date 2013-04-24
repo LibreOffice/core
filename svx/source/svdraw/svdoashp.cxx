@@ -3217,6 +3217,7 @@ bool SdrObjCustomShape::doConstructOrthogonal(const OUString& rName)
 void SdrObjCustomShape::InvalidateRenderGeometry()
 {
     mXRenderedCustomShape = 0L;
+    mxCustomShapeEngine = 0L;
     SdrObject::Free( mpLastShadowGeometry );
     mpLastShadowGeometry = 0L;
 }
