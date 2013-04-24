@@ -2094,6 +2094,7 @@ void ScColumn::RebuildFormulaGroups()
              !rCur.pCell || !rPrev.pCell ||                            // paranoia
              rCur.pCell->GetCellType() != rPrev.pCell->GetCellType() ) // same type
         {
+            // Non-contiguous cell detected. Break the series.
             pLastDouble = NULL;
             continue;
         }
