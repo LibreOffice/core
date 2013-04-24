@@ -17,7 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
+#include <cstdlib>
+#include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include <stack>
@@ -296,52 +299,46 @@ public:
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
+    try {
+        if( argc < 4) {
+            printf( "usage : %s <locaLe> <XML inputfile> <destination file>\n", argv[0] );
+            exit( 1 );
+        }
 
+        Reference< XComponentContext > xContext(
+            defaultBootstrap_InitialComponentContext());
 
-    if( argc < 4) {
-        printf( "usage : %s <locaLe> <XML inputfile> <destination file>\n", argv[0] );
-        exit( 1 );
-    }
+        //--------------------------------
+        // parser demo
+        // read xml from a file and count elements
+        //--------------------------------
+        Reference< XParser > rParser = Parser::create(xContext);
 
-    Reference< XComponentContext > xContext(
-        defaultBootstrap_InitialComponentContext());
+        int nError = 0;
+        // create and connect the document handler to the parser
+        TestDocumentHandler *pDocHandler = new TestDocumentHandler( argv[1], argv[3]);
 
-    //--------------------------------
-    // parser demo
-    // read xml from a file and count elements
-    //--------------------------------
-    Reference< XParser > rParser = Parser::create(xContext);
+        Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
+        Reference< XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler );
 
-    int nError = 0;
-    // create and connect the document handler to the parser
-    TestDocumentHandler *pDocHandler = new TestDocumentHandler( argv[1], argv[3]);
+        rParser->setDocumentHandler( rDocHandler );
+        rParser->setEntityResolver( rEntityResolver );
 
-    Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
-    Reference< XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler );
+        // create the input stream
+        InputSource source;
+        source.aInputStream = createStreamFromFile( argv[2] );
+        source.sSystemId    = OUString::createFromAscii( argv[2] );
 
-    rParser->setDocumentHandler( rDocHandler );
-    rParser->setEntityResolver( rEntityResolver );
-
-    // create the input stream
-    InputSource source;
-    source.aInputStream = createStreamFromFile( argv[2] );
-    source.sSystemId    = OUString::createFromAscii( argv[2] );
-
-    try
-    {
         // start parsing
         rParser->parseStream( source );
-    }
 
-    catch( const Exception & e )
-    {
-        OString o1 = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8 );
-        printf( "Exception during parsing : %s\n" ,  o1.getStr() );
-        exit(1);
-    }
-    nError = pDocHandler->nError;
+        nError = pDocHandler->nError;
 
-    return nError;
+        return nError;
+    } catch (css::uno::Exception & e) {
+        std::cerr << "ERROR: " << e.Message << '\n';
+        return EXIT_FAILURE;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
