@@ -71,6 +71,7 @@
 #include <vcl/settings.hxx>
 #include <unicode/datefmt.h>
 #include <unicode/udat.h>
+#include <i18nlangtag/languagetagicu.hxx>
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'
@@ -284,15 +285,10 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
         udat_toPattern(fmt,true,pattern,nLength,&status);
     }
 */
-    /* FIXME-BCP47: handle language tags! */
     //1 get locale for system
-    ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLanguageTag().getLocale();
-    OUString strLang = aLocale.Language;
-    OUString strCountry = aLocale.Country;
-    icu::Locale bLocale((char*)(OUStringToOString(strLang,RTL_TEXTENCODING_MS_1252).getStr()),
-        (char*)(OUStringToOString(strCountry,RTL_TEXTENCODING_MS_1252).getStr()));
+    icu::Locale aLocale( LanguageTagIcu::getIcuLocale( Application::GetSettings().GetLanguageTag()));
     //2 get icu format pattern by locale
-    icu::DateFormat* fmt = icu::DateFormat::createDateInstance(style,bLocale);
+    icu::DateFormat* fmt = icu::DateFormat::createDateInstance(style,aLocale);
 
     int32_t nLength = 0;
     int32_t nLengthNeed;
@@ -698,16 +694,11 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
         udat_toPattern(fmt,true,pattern,nLength,&status);
     }
 */
-    /* FIXME-BCP47: handle language tags! */
     //1 get locale for system
-    ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLanguageTag().getLocale();
-    OUString strLang = aLocale.Language;
-    OUString strCountry = aLocale.Country;
-    icu::Locale bLocale((char*)(OUStringToOString(strLang,RTL_TEXTENCODING_MS_1252).getStr()),
-        (char*)(OUStringToOString(strCountry,RTL_TEXTENCODING_MS_1252).getStr()));
-
-    icu::DateFormat* fmt = icu::DateFormat::createTimeInstance(icu::DateFormat::DEFAULT,bLocale);
+    icu::Locale aLocale( LanguageTagIcu::getIcuLocale( Application::GetSettings().GetLanguageTag()));
     //2 get icu format pattern by locale
+    icu::DateFormat* fmt = icu::DateFormat::createTimeInstance(icu::DateFormat::DEFAULT,aLocale);
+
     int32_t nLength = 0;
     int32_t nLengthNeed;
     UErrorCode status = U_ZERO_ERROR;
