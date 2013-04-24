@@ -19,7 +19,6 @@
 
 
 #include "protectiondlg.hxx"
-#include "protectiondlg.hrc"
 #include "scresid.hxx"
 #include "tabprotection.hxx"
 
@@ -35,27 +34,21 @@ static const ScTableProtection::Option aOptions[] = {
 static const sal_uInt16 nOptionCount = sizeof(aOptions) / sizeof (aOptions[0]);
 
 
-ScTableProtectionDlg::ScTableProtectionDlg(Window* pParent) :
-    ModalDialog(pParent, ScResId(RID_SCDLG_TABPROTECTION)),
-
-    maBtnProtect    (this, ScResId(BTN_PROTECT)),
-    maPassword1Text (this, ScResId(FT_PASSWORD1)),
-    maPassword1Edit (this, ScResId(ED_PASSWORD1)),
-    maPassword2Text (this, ScResId(FT_PASSWORD2)),
-    maPassword2Edit (this, ScResId(ED_PASSWORD2)),
-    maOptionsLine   (this, ScResId(FL_OPTIONS)),
-    maOptionsText   (this, ScResId(FT_OPTIONS)),
-    maOptionsListBox(this, ScResId(CLB_OPTIONS)),
-
-    maBtnOk     (this, ScResId(BTN_OK)),
-    maBtnCancel (this, ScResId(BTN_CANCEL)),
-    maBtnHelp   (this, ScResId(BTN_HELP)),
-
-    maSelectLockedCells(ScResId(ST_SELECT_PROTECTED_CELLS)),
-    maSelectUnlockedCells(ScResId(ST_SELECT_UNPROTECTED_CELLS))
+ScTableProtectionDlg::ScTableProtectionDlg(Window* pParent)
+    : ModalDialog( pParent, "ProtectSheetDialog", "modules/scalc/ui/protectsheetdlg.ui" )
 {
+    get(m_pPasswords, "passwords");
+    get(m_pOptions, "options");
+    get(m_pBtnProtect, "protect");
+    get(m_pOptionsListBox, "checklist");
+    get(m_pPassword1Edit, "password1");
+    get(m_pPassword2Edit, "password2");
+    get(m_pBtnOk, "ok");
+
+    m_aSelectLockedCells = get<FixedText>("protected")->GetText();
+    m_aSelectUnlockedCells = get<FixedText>("unprotected")->GetText();
+
     Init();
-    FreeResource();
 }
 
 ScTableProtectionDlg::~ScTableProtectionDlg()
@@ -70,68 +63,62 @@ short ScTableProtectionDlg::Execute()
 void ScTableProtectionDlg::SetDialogData(const ScTableProtection& rData)
 {
     for (sal_uInt16 i = 0; i < nOptionCount; ++i)
-        maOptionsListBox.CheckEntryPos(i, rData.isOptionEnabled(aOptions[i]));
+        m_pOptionsListBox->CheckEntryPos(i, rData.isOptionEnabled(aOptions[i]));
 }
 
 void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
 {
-    rData.setProtected(maBtnProtect.IsChecked());
+    rData.setProtected(m_pBtnProtect->IsChecked());
 
     // We assume that the two password texts match.
-    rData.setPassword(maPassword1Edit.GetText());
+    rData.setPassword(m_pPassword1Edit->GetText());
 
     for (sal_uInt16 i = 0; i < nOptionCount; ++i)
-        rData.setOption(aOptions[i], maOptionsListBox.IsChecked(i));
+        rData.setOption(aOptions[i], m_pOptionsListBox->IsChecked(i));
 }
 
 void ScTableProtectionDlg::Init()
 {
     Link aLink = LINK( this, ScTableProtectionDlg, CheckBoxHdl );
-    maBtnProtect.SetClickHdl(aLink);
+    m_pBtnProtect->SetClickHdl(aLink);
 
     aLink = LINK( this, ScTableProtectionDlg, OKHdl );
-    maBtnOk.SetClickHdl(aLink);
+    m_pBtnOk->SetClickHdl(aLink);
 
     aLink = LINK( this, ScTableProtectionDlg, PasswordModifyHdl );
-    maPassword1Edit.SetModifyHdl(aLink);
-    maPassword2Edit.SetModifyHdl(aLink);
+    m_pPassword1Edit->SetModifyHdl(aLink);
+    m_pPassword2Edit->SetModifyHdl(aLink);
 
-    maOptionsListBox.SetUpdateMode(false);
-    maOptionsListBox.Clear();
+    m_pOptionsListBox->SetUpdateMode(false);
+    m_pOptionsListBox->Clear();
 
-    maOptionsListBox.InsertEntry(maSelectLockedCells);
-    maOptionsListBox.InsertEntry(maSelectUnlockedCells);
+    m_pOptionsListBox->InsertEntry(m_aSelectLockedCells);
+    m_pOptionsListBox->InsertEntry(m_aSelectUnlockedCells);
 
-    maOptionsListBox.CheckEntryPos(0, true);
-    maOptionsListBox.CheckEntryPos(1, true);
+    m_pOptionsListBox->CheckEntryPos(0, true);
+    m_pOptionsListBox->CheckEntryPos(1, true);
 
-    maOptionsListBox.SetUpdateMode(true);
+    m_pOptionsListBox->SetUpdateMode(true);
 
     // Set the default state of the dialog.
-    maBtnProtect.Check(true);
-    maPassword1Edit.GrabFocus();
+    m_pBtnProtect->Check(true);
+    m_pPassword1Edit->GrabFocus();
 }
 
 void ScTableProtectionDlg::EnableOptionalWidgets(bool bEnable)
 {
-    maPassword1Text.Enable(bEnable);
-    maPassword1Edit.Enable(bEnable);
-    maPassword2Text.Enable(bEnable);
-    maPassword2Edit.Enable(bEnable);
-    maOptionsLine.Enable(bEnable);
-    maOptionsText.Enable(bEnable);
-
-    maOptionsListBox.Enable(bEnable);
-    maOptionsListBox.Invalidate();
+    m_pPasswords->Enable(bEnable);
+    m_pOptions->Enable(bEnable);
+    m_pOptionsListBox->Invalidate();
 }
 
 IMPL_LINK( ScTableProtectionDlg, CheckBoxHdl, CheckBox*, pBtn )
 {
-    if (pBtn == &maBtnProtect)
+    if (pBtn == m_pBtnProtect)
     {
-        bool bChecked = maBtnProtect.IsChecked();
+        bool bChecked = m_pBtnProtect->IsChecked();
         EnableOptionalWidgets(bChecked);
-        maBtnOk.Enable(bChecked);
+        m_pBtnOk->Enable(bChecked);
     }
 
     return 0;
@@ -145,9 +132,9 @@ IMPL_LINK_NOARG(ScTableProtectionDlg, OKHdl)
 
 IMPL_LINK_NOARG(ScTableProtectionDlg, PasswordModifyHdl)
 {
-    String aPass1 = maPassword1Edit.GetText();
-    String aPass2 = maPassword2Edit.GetText();
-    maBtnOk.Enable(aPass1.Equals(aPass2));
+    OUString aPass1 = m_pPassword1Edit->GetText();
+    OUString aPass2 = m_pPassword2Edit->GetText();
+    m_pBtnOk->Enable(aPass1 == aPass2);
     return 0;
 }
 

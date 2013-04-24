@@ -19,6 +19,8 @@
 
 #include <tools/shl.hxx>
 
+#include <svtools/treelistentry.hxx>
+
 #define _SVX_CHECKLBX_CXX
 
 #include <svx/checklbx.hxx>
@@ -26,7 +28,7 @@
 
 #include <svx/dialogs.hrc>
 
-#include "svtools/treelistentry.hxx"
+#include <vcl/builder.hxx>
 
 // class SvxCheckListBox -------------------------------------------------
 
@@ -36,6 +38,15 @@ SvxCheckListBox::SvxCheckListBox( Window* pParent, WinBits nWinStyle ) :
 
 {
     Init_Impl();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxCheckListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SvxCheckListBox(pParent, nWinStyle);
 }
 
 // -----------------------------------------------------------------------

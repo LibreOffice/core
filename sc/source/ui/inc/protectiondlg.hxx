@@ -24,6 +24,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/layout.hxx>
 #include <svx/checklbx.hxx>
 
 class Window;
@@ -48,23 +49,19 @@ private:
 
     void EnableOptionalWidgets(bool bEnable = true);
 
-    CheckBox        maBtnProtect;
+    CheckBox*        m_pBtnProtect;
 
-    FixedText       maPassword1Text;
-    Edit            maPassword1Edit;
-    FixedText       maPassword2Text;
-    Edit            maPassword2Edit;
+    VclContainer*    m_pPasswords;
+    VclContainer*    m_pOptions;
+    Edit*            m_pPassword1Edit;
+    Edit*            m_pPassword2Edit;
 
-    FixedLine       maOptionsLine;
-    FixedText       maOptionsText;
-    SvxCheckListBox maOptionsListBox;
+    SvxCheckListBox* m_pOptionsListBox;
 
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
+    OKButton*        m_pBtnOk;
 
-    String          maSelectLockedCells;
-    String          maSelectUnlockedCells;
+    OUString         m_aSelectLockedCells;
+    OUString         m_aSelectUnlockedCells;
 
     DECL_LINK( OKHdl, void* );
     DECL_LINK( CheckBoxHdl, CheckBox* );
