@@ -99,6 +99,16 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxFrame(rxFrame),
     maContext(),
     mpBindings(pBindings),
+    maFtWidthOrigPos(mpFtWidth->GetPosPixel()),
+    maMtrWidthOrigPos(mpMtrWidth->GetPosPixel()),
+    maFtHeightOrigPos(mpFtHeight->GetPosPixel()),
+    maMtrHeightOrigPos(mpMtrHeight->GetPosPixel()),
+    maCbxScaleOrigPos(mpCbxScale->GetPosPixel()),
+    maFtAngleOrigPos(mpFtAngle->GetPosPixel()),
+    maMtrAnglOrigPos(mpMtrAngle->GetPosPixel()),
+    maFlipTbxOrigPos(mpFlipTbx->GetPosPixel()),
+    maDialOrigPos(mpDial->GetPosPixel()),
+    maFtFlipOrigPos(mpFtFlip->GetPosPixel()),
     mbMtrPosXMirror(false),
     mbSizeProtected(false),
     mbPositionProtected(false),
@@ -106,7 +116,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mbAutoHeight(false),
     mbAdjustEnabled(false),
     mbIsFlip(false),
-    mbInDestructor(false),
     mxSidebar(rxSidebar)
 {
     Initialize();
@@ -122,8 +131,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
 
 PosSizePropertyPanel::~PosSizePropertyPanel()
 {
-    mbInDestructor = true;
-
     // Destroy the background windows of the toolboxes.
     mpFlipTbx.reset();
     mpFlipTbxBackground.reset();
@@ -285,6 +292,46 @@ void PosSizePropertyPanel::DataChanged(
 
 
 
+void PosSizePropertyPanel::AdaptWidthHeightScalePosition(bool bOriginal)
+{
+    if(bOriginal)
+    {
+        mpFtWidth->SetPosPixel(maFtWidthOrigPos);
+        mpMtrWidth->SetPosPixel(maMtrWidthOrigPos);
+        mpFtHeight->SetPosPixel(maFtHeightOrigPos);
+        mpMtrHeight->SetPosPixel(maMtrHeightOrigPos);
+        mpCbxScale->SetPosPixel(maCbxScaleOrigPos);
+    }
+    else
+    {
+        mpFtWidth->SetPosPixel(Point(LogicToPixel(Point(FT_POSITION_X_X,FT_POSITION_X_Y), MAP_APPFONT)));
+        mpMtrWidth->SetPosPixel(Point(LogicToPixel(Point(MF_POSITION_X_X,MF_POSITION_X_Y), MAP_APPFONT)));
+        mpFtHeight->SetPosPixel(Point(LogicToPixel(Point(FT_POSITION_Y_X,FT_POSITION_Y_Y), MAP_APPFONT)));
+        mpMtrHeight->SetPosPixel(Point(LogicToPixel(Point(MF_POSITION_Y_X,MF_POSITION_Y_Y), MAP_APPFONT)));
+        mpCbxScale->SetPosPixel(Point(LogicToPixel(Point(FT_WIDTH_X,FT_WIDTH_Y), MAP_APPFONT)));
+    }
+}
+
+void PosSizePropertyPanel::AdaptAngleFlipDialPosition(bool bOriginal)
+{
+    if(bOriginal)
+    {
+        mpFtAngle->SetPosPixel(maFtAngleOrigPos);
+        mpMtrAngle->SetPosPixel(maMtrAnglOrigPos);
+        mpFlipTbx->SetPosPixel(maFlipTbxOrigPos);
+        mpDial->SetPosPixel(maDialOrigPos);
+        mpFtFlip->SetPosPixel(maFtFlipOrigPos);
+    }
+    else
+    {
+        mpFtAngle->SetPosPixel(Point(LogicToPixel(Point(FT_ANGLE_X,FT_ANGLE_Y), MAP_APPFONT)));
+        mpMtrAngle->SetPosPixel(Point(LogicToPixel(Point(MF_ANGLE_X2,MF_ANGLE_Y2), MAP_APPFONT)));
+        mpFlipTbx->SetPosPixel(Point(LogicToPixel(Point(FLIP_HORI_X2,FLIP_HORI_Y2), MAP_APPFONT)));
+        mpDial->SetPosPixel(Point(LogicToPixel(Point(ROTATE_CONTROL_X2,ROTATE_CONTROL_Y2), MAP_APPFONT)));
+        mpFtFlip->SetPosPixel(Point(LogicToPixel(Point(FT_FLIP_X2,FT_FLIP_Y2), MAP_APPFONT)));
+    }
+}
+
 void PosSizePropertyPanel::HandleContextChange(
     const ::sfx2::sidebar::EnumContext aContext)
 {
@@ -332,6 +379,7 @@ void PosSizePropertyPanel::HandleContextChange(
             nLayoutMode = 3;
             break;
     }
+
     switch (nLayoutMode)
     {
         case 0:
@@ -355,11 +403,8 @@ void PosSizePropertyPanel::HandleContextChange(
             mpFlipTbx->SetOutputSizePixel( aTbxSize );
             mbIsFlip = true;
 
-            mpFtWidth->SetPosPixel(Point(LogicToPixel(Point(FT_POSITION_X_X,FT_POSITION_X_Y), MAP_APPFONT)));
-            mpMtrWidth->SetPosPixel(Point(LogicToPixel(Point(MF_POSITION_X_X,MF_POSITION_X_Y), MAP_APPFONT)));
-            mpFtHeight->SetPosPixel(Point(LogicToPixel(Point(FT_POSITION_Y_X,FT_POSITION_Y_Y), MAP_APPFONT)));
-            mpMtrHeight->SetPosPixel(Point(LogicToPixel(Point(MF_POSITION_Y_X,MF_POSITION_Y_Y), MAP_APPFONT)));
-            mpCbxScale->SetPosPixel(Point(LogicToPixel(Point(FT_WIDTH_X,FT_WIDTH_Y), MAP_APPFONT)));
+            AdaptWidthHeightScalePosition(false);
+            AdaptAngleFlipDialPosition(false);
 
             mpFtAngle->SetPosPixel(Point(LogicToPixel(Point(FT_ANGLE_X,FT_ANGLE_Y), MAP_APPFONT)));
             mpMtrAngle->SetPosPixel(Point(LogicToPixel(Point(MF_ANGLE_X2,MF_ANGLE_Y2), MAP_APPFONT)));
@@ -394,11 +439,8 @@ void PosSizePropertyPanel::HandleContextChange(
             mpFtFlip->Hide();
             mbIsFlip = false;
 
-            mpFtWidth->SetPosPixel(Point(LogicToPixel(Point(FT_POSITION_X_X,FT_POSITION_X_Y), MAP_APPFONT)));
-            mpMtrWidth->SetPosPixel(Point(LogicToPixel(Point(MF_POSITION_X_X,MF_POSITION_X_Y), MAP_APPFONT)));
-            mpFtHeight->SetPosPixel(Point(LogicToPixel(Point(FT_POSITION_Y_X,FT_POSITION_Y_Y), MAP_APPFONT)));
-            mpMtrHeight->SetPosPixel(Point(LogicToPixel(Point(MF_POSITION_Y_X,MF_POSITION_Y_Y), MAP_APPFONT)));
-            mpCbxScale->SetPosPixel(Point(LogicToPixel(Point(FT_WIDTH_X,FT_WIDTH_Y), MAP_APPFONT)));
+            AdaptWidthHeightScalePosition(false);
+            AdaptAngleFlipDialPosition(true);
 
             Size aSize(GetOutputSizePixel().Width(),PS_SECTIONPAGE_HEIGHT3);
             aSize = LogicToPixel( aSize, MapMode(MAP_APPFONT) );
@@ -429,6 +471,9 @@ void PosSizePropertyPanel::HandleContextChange(
             mpFlipTbx->SetOutputSizePixel( aTbxSize );
             mbIsFlip = true;
 
+            AdaptWidthHeightScalePosition(true);
+            AdaptAngleFlipDialPosition(true);
+
             Size aSize(GetOutputSizePixel().Width(),PS_SECTIONPAGE_HEIGHT);
             aSize = LogicToPixel( aSize, MapMode(MAP_APPFONT) );
             SetSizePixel(aSize);
@@ -455,6 +500,9 @@ void PosSizePropertyPanel::HandleContextChange(
             mpFlipTbx->Hide();
             mpFtFlip->Hide();
             mbIsFlip = false;
+
+            AdaptWidthHeightScalePosition(true);
+            AdaptAngleFlipDialPosition(true);
 
             Size aSize(GetOutputSizePixel().Width(),PS_SECTIONPAGE_HEIGHT4);
             aSize = LogicToPixel( aSize, MapMode(MAP_APPFONT) );
@@ -909,7 +957,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
         {
             sal_uInt16 nMarkObj = 0;
             bool isNoEdge = true;
-            while(rMarkList.GetMark(nMarkObj))
+
+            while(isNoEdge && rMarkList.GetMark(nMarkObj))
             {
                 const SdrObject* pObj = rMarkList.GetMark(nMarkObj)->GetMarkedSdrObj();
                 const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
@@ -924,6 +973,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
                 nMarkObj++;
             }
+
             if(!isNoEdge)
             {
                 mpFtAngle->Disable();

@@ -700,9 +700,9 @@ void LinePropertyPanel::NotifyItemUpdate(
                         break;
                     }
                 }
-
-                mpLBCapStyle->SetNoSelection();
             }
+
+            mpLBCapStyle->SetNoSelection();
             break;
         }
     }

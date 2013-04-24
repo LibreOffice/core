@@ -93,10 +93,6 @@ AreaPropertyPanel::AreaPropertyPanel(
       mpFillGradientItem(),
       mpHatchItem(),
       mpBitmapItem(),
-      mpColorListItem(),
-      mpGradientListItem(),
-      mpHatchListItem(),
-      mpBitmapListItem(),
       maStyleControl(SID_ATTR_FILL_STYLE, *pBindings, *this),
       maColorControl(SID_ATTR_FILL_COLOR, *pBindings, *this),
       maGradientControl(SID_ATTR_FILL_GRADIENT, *pBindings, *this),
@@ -123,7 +119,6 @@ AreaPropertyPanel::AreaPropertyPanel(
       mpTransparanceItem(),
       mxFrame(rxFrame),
       mpBindings(pBindings),
-      mbTBShow(true),
       mbColorAvail(true)
 {
     Initialize();
@@ -269,151 +264,156 @@ void AreaPropertyPanel::Initialize()
 
 IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 {
-    XFillStyle  eXFS = (XFillStyle)mpLbFillType->GetSelectEntryPos();
+    const XFillStyle eXFS = (XFillStyle)mpLbFillType->GetSelectEntryPos();
 
-    if( (XFillStyle) meLastXFS != eXFS )
+    if((XFillStyle)meLastXFS != eXFS)
     {
-            mpLbFillAttr->Clear();
-            SfxObjectShell* pSh = SfxObjectShell::Current();
-            XFillStyleItem aXFillStyleItem( eXFS );
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L);
+        mpLbFillAttr->Clear();
+        SfxObjectShell* pSh = SfxObjectShell::Current();
+        const XFillStyleItem aXFillStyleItem(eXFS);
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L);
 
-            switch( eXFS )
-            {
+        switch( eXFS )
+        {
             case XFILL_NONE:
+            {
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+                mpLbFillType->Selected();
+                mpLbFillAttr->Disable();
+                break;
+            }
+            case XFILL_SOLID:
+            {
+                mpLbFillAttr->Hide();
+                mpToolBoxColor->Show();
+                const String aTmpStr;
+                const Color aColor = maLastColor;
+                const XFillColorItem aXFillColorItem( aTmpStr, aColor );
+                GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, 0L);
+                break;
+            }
+            case XFILL_GRADIENT:
+            {
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+
+                if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
                 {
-                    mpLbFillAttr->Show();
-                    mpToolBoxColor->Hide();
-                    mbTBShow = false;
-                    mpLbFillType->Selected();
+                    if(!mpLbFillAttr->GetEntryCount())
+                    {
+                        const SvxGradientListItem aItem(*(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
+                        mpLbFillAttr->Enable();
+                        mpLbFillAttr->Clear();
+                        mpLbFillAttr->Fill(aItem.GetGradientList());
+                    }
+
+                    mpLbFillAttr->AdaptDropDownLineCountToMaximum();
+
+                    if(LISTBOX_ENTRY_NOTFOUND != mnLastPosGradient)
+                    {
+                        const SvxGradientListItem aItem(*(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
+
+                        if(mnLastPosGradient < aItem.GetGradientList()->Count())
+                        {
+                            const XGradient aGradient = aItem.GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
+                            const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetEntry(mnLastPosGradient), aGradient);
+                            GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_GRADIENT, SFX_CALLMODE_RECORD, &aXFillGradientItem, 0L);
+                            mpLbFillAttr->SelectEntryPos(mnLastPosGradient);
+                        }
+                    }
+                }
+                else
+                {
                     mpLbFillAttr->Disable();
                 }
                 break;
-
-            case XFILL_SOLID:
-                {
-                    mpLbFillAttr->Hide();
-                    mpToolBoxColor->Show();
-                    mbTBShow = true;
-                    String aTmpStr;
-                    Color aColor = maLastColor;
-                    XFillColorItem aXFillColorItem( aTmpStr, aColor );
-                    GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, 0L);
-                }
-                break;
-
-            case XFILL_GRADIENT:
-                {
-                    mpLbFillAttr->Show();
-                    mpToolBoxColor->Hide();
-                    mbTBShow = false;
-                    if ( pSh && pSh->GetItem( SID_GRADIENT_LIST ) )
-                    {
-                        if(mpLbFillAttr->GetEntryCount() == 0)
-                        {
-                            SvxGradientListItem aItem( *(const SvxGradientListItem*)(
-                            pSh->GetItem( SID_GRADIENT_LIST ) ) );
-                            mpLbFillAttr->Enable();
-                            mpLbFillAttr->Clear();
-                            mpLbFillAttr->Fill( aItem.GetGradientList() );
-                        }
-
-                        mpLbFillAttr->AdaptDropDownLineCountToMaximum();
-
-                        if ( mnLastPosGradient != LISTBOX_ENTRY_NOTFOUND)
-                        {
-                            SvxGradientListItem aItem( *(const SvxGradientListItem*)( pSh->GetItem( SID_GRADIENT_LIST ) ) );
-                            if ( mnLastPosGradient < aItem.GetGradientList()->Count() )
-                            {
-                                XGradient aGradient = aItem.GetGradientList()->GetGradient( mnLastPosGradient )->GetGradient();
-                                XFillGradientItem aXFillGradientItem( mpLbFillAttr->GetEntry(mnLastPosGradient), aGradient );
-                                GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_GRADIENT, SFX_CALLMODE_RECORD, &aXFillGradientItem, 0L);
-                                mpLbFillAttr->SelectEntryPos(mnLastPosGradient);    //add
-                            }
-                        }
-                    }
-                    else
-                        mpLbFillAttr->Disable();
-                }
-                break;
-
+            }
             case XFILL_HATCH:
-                {
-                    mpLbFillAttr->Show();
-                    mpToolBoxColor->Hide();
-                    mbTBShow = false;
-                    if ( pSh && pSh->GetItem( SID_HATCH_LIST ) )
-                    {
-                        if(mpLbFillAttr->GetEntryCount() == 0)
-                        {
-                            SvxHatchListItem aItem( *(const SvxHatchListItem*)(
-                                pSh->GetItem( SID_HATCH_LIST ) ) );
-                            mpLbFillAttr->Enable();
-                            mpLbFillAttr->Clear();
-                            mpLbFillAttr->Fill( aItem.GetHatchList() );
-                        }
-
-                        mpLbFillAttr->AdaptDropDownLineCountToMaximum();
-
-                        if ( mnLastPosHatch != LISTBOX_ENTRY_NOTFOUND )
-                        {
-                            SvxHatchListItem aItem( *(const SvxHatchListItem*)( pSh->GetItem( SID_HATCH_LIST ) ) );
-                            if ( mnLastPosHatch < aItem.GetHatchList()->Count() )
-                            {
-                                XHatch aHatch = aItem.GetHatchList()->GetHatch( mnLastPosHatch )->GetHatch();
-                                XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch );
-                                GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_HATCH, SFX_CALLMODE_RECORD, &aXFillHatchItem, 0L);
-                                mpLbFillAttr->SelectEntryPos(mnLastPosHatch); //add
-                            }
-                        }
-                    }
-                    else
-                        mpLbFillAttr->Disable();
-                }
-                break;
-
-            case XFILL_BITMAP:
-                {
-                    mpLbFillAttr->Show();
-                    mpToolBoxColor->Hide();
-                    mbTBShow = false;
-                    if ( pSh && pSh->GetItem( SID_BITMAP_LIST ) )
-                    {
-                        if(mpLbFillAttr->GetEntryCount() == 0)
-                        {
-                            SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(
-                                pSh->GetItem( SID_BITMAP_LIST ) ) );
-                            mpLbFillAttr->Enable();
-                            mpLbFillAttr->Clear();
-                            mpLbFillAttr->Fill( aItem.GetBitmapList() );
-                        }
-
-                        mpLbFillAttr->AdaptDropDownLineCountToMaximum();
-
-                        if ( mnLastPosBitmap != LISTBOX_ENTRY_NOTFOUND )
-                        {
-                            SvxBitmapListItem aItem( *(const SvxBitmapListItem*)( pSh->GetItem( SID_BITMAP_LIST ) ) );
-                            if ( mnLastPosBitmap < aItem.GetBitmapList()->Count() )
-                            {
-                                const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(mnLastPosBitmap);
-                                XFillBitmapItem aXFillBitmapItem( mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject() );
-                                GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_BITMAP, SFX_CALLMODE_RECORD, &aXFillBitmapItem, 0L);
-                                mpLbFillAttr->SelectEntryPos(mnLastPosBitmap); //add
-                            }
-                        }
-                    }
-                    else
-                        mpLbFillAttr->Disable();
-                }
-                break;
-            }
-            meLastXFS = (sal_uInt16)eXFS;
-            if( eXFS != XFILL_NONE )
             {
-                if ( pToolBox )
-                    mpLbFillType->Selected();
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+
+                if(pSh && pSh->GetItem(SID_HATCH_LIST))
+                {
+                    if(!mpLbFillAttr->GetEntryCount())
+                    {
+                        const SvxHatchListItem aItem( *(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
+                        mpLbFillAttr->Enable();
+                        mpLbFillAttr->Clear();
+                        mpLbFillAttr->Fill(aItem.GetHatchList());
+                    }
+
+                    mpLbFillAttr->AdaptDropDownLineCountToMaximum();
+
+                    if(LISTBOX_ENTRY_NOTFOUND != mnLastPosHatch)
+                    {
+                        const SvxHatchListItem aItem(*(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
+
+                        if(mnLastPosHatch < aItem.GetHatchList()->Count())
+                        {
+                            const XHatch aHatch = aItem.GetHatchList()->GetHatch(mnLastPosHatch)->GetHatch();
+                            const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectEntry(), aHatch);
+                            GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_HATCH, SFX_CALLMODE_RECORD, &aXFillHatchItem, 0L);
+                            mpLbFillAttr->SelectEntryPos(mnLastPosHatch);
+                        }
+                    }
+                }
+                else
+                {
+                    mpLbFillAttr->Disable();
+                }
+                break;
             }
+            case XFILL_BITMAP:
+            {
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+
+                if(pSh && pSh->GetItem(SID_BITMAP_LIST))
+                {
+                    if(!mpLbFillAttr->GetEntryCount())
+                    {
+                        const SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
+                        mpLbFillAttr->Enable();
+                        mpLbFillAttr->Clear();
+                        mpLbFillAttr->Fill(aItem.GetBitmapList());
+                    }
+
+                    mpLbFillAttr->AdaptDropDownLineCountToMaximum();
+
+                    if(LISTBOX_ENTRY_NOTFOUND != mnLastPosBitmap)
+                    {
+                        const SvxBitmapListItem aItem(*(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
+
+                        if(mnLastPosBitmap < aItem.GetBitmapList()->Count())
+                        {
+                            const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(mnLastPosBitmap);
+                            const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
+                            GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_BITMAP, SFX_CALLMODE_RECORD, &aXFillBitmapItem, 0L);
+                            mpLbFillAttr->SelectEntryPos(mnLastPosBitmap);
+                        }
+                    }
+                }
+                else
+                {
+                    mpLbFillAttr->Disable();
+                }
+                break;
+            }
+        }
+
+        meLastXFS = (sal_uInt16)eXFS;
+
+        if(XFILL_NONE != eXFS)
+        {
+            if(pToolBox)
+            {
+                mpLbFillType->Selected();
+            }
+        }
     }
+
     return 0;
 }
 
@@ -421,20 +421,20 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
 IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 {
-    XFillStyle eXFS = (XFillStyle)mpLbFillType->GetSelectEntryPos();
-    XFillStyleItem aXFillStyleItem( eXFS );
+    const XFillStyle eXFS = (XFillStyle)mpLbFillType->GetSelectEntryPos();
+    const XFillStyleItem aXFillStyleItem(eXFS);
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
     if(pToolBox)
     {
-        if( (XFillStyle) meLastXFS != eXFS )
+        if((XFillStyle) meLastXFS != eXFS)
         {
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L); //Added  20090909
+            GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L);
         }
 
-        switch( eXFS )
+        switch(eXFS)
         {
-        case XFILL_SOLID:
+            case XFILL_SOLID:
             //{
             //  //String aTmpStr = mpLbFillAttr->GetSelectEntry();
             //  //Color aColor = mpLbFillAttr->GetSelectEntryColor();
@@ -447,88 +447,111 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
             //}
             break;
 
-        case XFILL_GRADIENT:
+            case XFILL_GRADIENT:
             {
                 sal_uInt16 nPos = mpLbFillAttr->GetSelectEntryPos();
-                if( nPos == LISTBOX_ENTRY_NOTFOUND )
-                    nPos = mnLastPosGradient;
 
-                if ( nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem( SID_GRADIENT_LIST ) )
+                if(LISTBOX_ENTRY_NOTFOUND == nPos)
                 {
-                    SvxGradientListItem aItem( *(const SvxGradientListItem*)( pSh->GetItem( SID_GRADIENT_LIST ) ) );
-                    if ( nPos < aItem.GetGradientList()->Count() )
+                    nPos = mnLastPosGradient;
+                }
+
+                if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_GRADIENT_LIST))
+                {
+                    const SvxGradientListItem aItem(*(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
+
+                    if(nPos < aItem.GetGradientList()->Count())
                     {
-                        XGradient aGradient = aItem.GetGradientList()->GetGradient( nPos )->GetGradient();
-                        XFillGradientItem aXFillGradientItem( mpLbFillAttr->GetSelectEntry(), aGradient );
+                        const XGradient aGradient = aItem.GetGradientList()->GetGradient(nPos)->GetGradient();
+                        const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
                         GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_GRADIENT, SFX_CALLMODE_RECORD, &aXFillGradientItem, 0L);
                     }
                 }
-                if(nPos != LISTBOX_ENTRY_NOTFOUND)
-                    mnLastPosGradient = nPos;
-            }
-            break;
 
-        case XFILL_HATCH:
+                if(LISTBOX_ENTRY_NOTFOUND != nPos)
+                {
+                    mnLastPosGradient = nPos;
+                }
+                break;
+            }
+            case XFILL_HATCH:
             {
                 sal_uInt16 nPos = mpLbFillAttr->GetSelectEntryPos();
-                if( nPos == LISTBOX_ENTRY_NOTFOUND )
-                    nPos = mnLastPosHatch;
-                if ( nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem( SID_HATCH_LIST ) )
+
+                if(LISTBOX_ENTRY_NOTFOUND == nPos)
                 {
-                    SvxHatchListItem aItem( *(const SvxHatchListItem*)( pSh->GetItem( SID_HATCH_LIST ) ) );
-                    if ( nPos < aItem.GetHatchList()->Count() )
+                    nPos = mnLastPosHatch;
+                }
+
+                if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_HATCH_LIST))
+                {
+                    const SvxHatchListItem aItem(*(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
+
+                    if(nPos < aItem.GetHatchList()->Count())
                     {
-                        XHatch aHatch = aItem.GetHatchList()->GetHatch( nPos )->GetHatch();
-                        XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch );
+                        const XHatch aHatch = aItem.GetHatchList()->GetHatch(nPos)->GetHatch();
+                        const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch);
                         GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_HATCH, SFX_CALLMODE_RECORD, &aXFillHatchItem, 0L);
                     }
                 }
-                if(nPos != LISTBOX_ENTRY_NOTFOUND)
-                    mnLastPosHatch = nPos;
-            }
-            break;
 
-        case XFILL_BITMAP:
+                if(LISTBOX_ENTRY_NOTFOUND != nPos)
+                {
+                    mnLastPosHatch = nPos;
+                }
+                break;
+            }
+            case XFILL_BITMAP:
             {
                 sal_uInt16 nPos = mpLbFillAttr->GetSelectEntryPos();
-                if( nPos == LISTBOX_ENTRY_NOTFOUND )
-                    nPos = mnLastPosBitmap;
-                if ( nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem( SID_BITMAP_LIST ) )
+
+                if(LISTBOX_ENTRY_NOTFOUND == nPos)
                 {
-                    SvxBitmapListItem aItem( *(const SvxBitmapListItem*)( pSh->GetItem( SID_BITMAP_LIST ) ) );
-                    if ( nPos < aItem.GetBitmapList()->Count() )
+                    nPos = mnLastPosBitmap;
+                }
+
+                if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_BITMAP_LIST))
+                {
+                    const SvxBitmapListItem aItem(*(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
+
+                    if(nPos < aItem.GetBitmapList()->Count())
                     {
                         const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
-                        XFillBitmapItem aXFillBitmapItem( mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject() );
+                        const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
                         GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_BITMAP, SFX_CALLMODE_RECORD, &aXFillBitmapItem, 0L);
                     }
                 }
-                if(nPos != LISTBOX_ENTRY_NOTFOUND)
-                    mnLastPosBitmap = nPos;
-            }
-            break;
 
-                    default:
-                        break;
+                if(LISTBOX_ENTRY_NOTFOUND != nPos)
+                {
+                    mnLastPosBitmap = nPos;
+                }
+                break;
+            }
+            default: break;
         }
     }
+
     return 0;
 }
 
 
-//add  for color picker
-
 IMPL_LINK(AreaPropertyPanel, ToolBoxColorDropHdl, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
+    const sal_uInt16 nId = pToolBox->GetCurItemId();
 
-    if(nId == TBI_COLOR)
+    if(TBI_COLOR == nId)
     {
         maColorPopup.Show(*pToolBox);
+
         if (mpColorItem)
+        {
             maColorPopup.SetCurrentColor(mpColorItem->GetColorValue(), mbColorAvail);
+        }
         else
+        {
             maColorPopup.SetCurrentColor(COL_WHITE, false);
+        }
     }
 
     return 0;
@@ -540,7 +563,7 @@ void AreaPropertyPanel::SetColor (
     const String& rsColorName,
     const Color aColor)
 {
-    XFillColorItem aXFillColorItem (rsColorName, aColor);
+    const XFillColorItem aXFillColorItem(rsColorName, aColor);
     mpBindings->GetDispatcher()->Execute(SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, 0L);
     maLastColor = aColor;
 }
@@ -618,7 +641,7 @@ void AreaPropertyPanel::DataChanged(
 
 void AreaPropertyPanel::ImpUpdateTransparencies()
 {
-    if(mpTransparanceItem.get() || mpFloatTransparenceItem.get())
+    if(mpTransparanceItem.get() && mpFloatTransparenceItem.get())
     {
         bool bZeroValue(false);
 
@@ -739,310 +762,335 @@ void AreaPropertyPanel::NotifyItemUpdate(
     const bool bIsEnabled)
 {
     (void)bIsEnabled;
+    const bool bDisabled(SFX_ITEM_DISABLED == eState);
 
-    XFillStyle eXFS;
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-    bool bFillTransparenceChanged(false);
-
-    if(SID_ATTR_FILL_TRANSPARENCE == nSID)
+    switch(nSID)
     {
-        bFillTransparenceChanged = true;
-
-        if(eState >= SFX_ITEM_AVAILABLE)
+        case SID_ATTR_FILL_TRANSPARENCE:
+        case SID_ATTR_FILL_FLOATTRANSPARENCE:
         {
-            const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >(pState);
+            bool bFillTransparenceChanged(false);
 
-            if(pItem && (!mpTransparanceItem || *pItem != *mpTransparanceItem))
+            if(SID_ATTR_FILL_TRANSPARENCE == nSID)
             {
-                mpTransparanceItem.reset((SfxUInt16Item*)pItem->Clone());
+                bFillTransparenceChanged = true;
+
+                if(eState >= SFX_ITEM_AVAILABLE)
+                {
+                    const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >(pState);
+
+                    if(pItem && (!mpTransparanceItem || *pItem != *mpTransparanceItem))
+                    {
+                        mpTransparanceItem.reset((SfxUInt16Item*)pItem->Clone());
+                    }
+                    else
+                    {
+                        mpTransparanceItem.reset();
+                    }
+                }
+                else
+                {
+                    mpTransparanceItem.reset();
+                }
             }
-            else
+            else // if(SID_ATTR_FILL_FLOATTRANSPARENCE == nSID)
             {
-                mpTransparanceItem.reset();
+                bFillTransparenceChanged = true;
+
+                if(eState >= SFX_ITEM_AVAILABLE)
+                {
+                    const XFillFloatTransparenceItem* pItem = dynamic_cast< const XFillFloatTransparenceItem* >(pState);
+
+                    if(pItem && (!mpFloatTransparenceItem || *pItem != *mpFloatTransparenceItem))
+                    {
+                        mpFloatTransparenceItem.reset((XFillFloatTransparenceItem*)pItem->Clone());
+                    }
+                    else
+                    {
+                        mpFloatTransparenceItem.reset();
+                    }
+                }
+                else
+                {
+                    mpFloatTransparenceItem.reset();
+                }
             }
-        }
-        else
-        {
-            mpTransparanceItem.reset();
-        }
-    }
-    else if(SID_ATTR_FILL_FLOATTRANSPARENCE == nSID)
-    {
-        bFillTransparenceChanged = true;
 
-        if(eState >= SFX_ITEM_AVAILABLE)
-        {
-            const XFillFloatTransparenceItem* pItem = dynamic_cast< const XFillFloatTransparenceItem* >(pState);
-
-            if(pItem && (!mpFloatTransparenceItem || *pItem != *mpFloatTransparenceItem))
+            if(bFillTransparenceChanged)
             {
-                mpFloatTransparenceItem.reset((XFillFloatTransparenceItem*)pItem->Clone());
+                // update transparency settings dependent of mpTransparanceItem and mpFloatTransparenceItem
+                ImpUpdateTransparencies();
             }
-            else
+            break;
+        }
+        case SID_ATTR_FILL_STYLE:
+        {
+            if(bDisabled)
             {
-                mpFloatTransparenceItem.reset();
+                mpLbFillType->Disable();
+                mpLbFillType->SetNoSelection();
+                mpLbFillAttr->Show();
+                mpLbFillAttr->Disable();
+                mpLbFillAttr->SetNoSelection();
+                mpToolBoxColor->Hide();
+                meLastXFS = -1;
+                mpStyleItem.reset();
             }
-        }
-        else
-        {
-            mpFloatTransparenceItem.reset();
-        }
-    }
 
-    if(bFillTransparenceChanged)
-    {
-        // update transparency settings dependent of mpTransparanceItem and mpFloatTransparenceItem
-        ImpUpdateTransparencies();
-    }
+            if(eState >= SFX_ITEM_AVAILABLE)
+            {
+                const XFillStyleItem* pItem = dynamic_cast< const XFillStyleItem* >(pState);
 
-    if  (nSID == SID_ATTR_FILL_STYLE )
-    {
-        if( eState == SFX_ITEM_DISABLED )
-        {
-            mpLbFillType->Disable();
+                if(pItem)
+                {
+                    mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
+                    mpLbFillType->Enable();
+                    XFillStyle eXFS = (XFillStyle)mpStyleItem->GetValue();
+                    meLastXFS = eXFS;
+                    mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_uInt16 >(eXFS));
+
+                    if(XFILL_NONE == eXFS)
+                    {
+                        mpLbFillAttr->SetNoSelection();
+                        mpLbFillAttr->Disable();
+                    }
+
+                    Update();
+                    break;
+                }
+            }
+
             mpLbFillType->SetNoSelection();
             mpLbFillAttr->Show();
             mpLbFillAttr->Disable();
             mpLbFillAttr->SetNoSelection();
             mpToolBoxColor->Hide();
-            mbTBShow = false;
             meLastXFS = -1;
             mpStyleItem.reset();
+            break;
         }
-        else if( SFX_ITEM_AVAILABLE == eState )
+        case SID_ATTR_FILL_COLOR:
         {
-            mpStyleItem.reset(pState ? (XFillStyleItem*)pState->Clone() : 0);
-            mpLbFillType->Enable();
-
-            eXFS = (XFillStyle)mpStyleItem->GetValue();
-            meLastXFS = eXFS;
-            mpLbFillType->SelectEntryPos(
-                sal::static_int_cast< sal_uInt16 >( eXFS ) );
-            //Added for select invisable
-            if(eXFS == XFILL_NONE)
+            if(SFX_ITEM_AVAILABLE == eState)
             {
-                mpLbFillAttr->SetNoSelection();
-                mpLbFillAttr->Disable();
-            }
-            //else
-            //  mpLbFillAttr->Enable();
-            Update();
-            //SelectFillTypeHdl( NULL );
-        }
-        else
-        {
-            mpLbFillType->SetNoSelection();
-            mpLbFillAttr->Show();
-            mpLbFillAttr->Disable();
-            mpLbFillAttr->SetNoSelection();
-            mpToolBoxColor->Hide();
-            mbTBShow = false;
-            meLastXFS = -1;  //Added
-            mpStyleItem.reset();
-        }
-    }
-    else if(nSID == SID_ATTR_FILL_COLOR)
-    {
-        if( SFX_ITEM_AVAILABLE == eState)
-        {
-            mpColorItem.reset(pState ? (XFillColorItem*)pState->Clone() : 0);
-        }
-        if( mpStyleItem && (XFillStyle)mpStyleItem->GetValue() == XFILL_SOLID)
-        {
-            mpLbFillAttr->Hide();
-            mpToolBoxColor->Show();
-            mbTBShow = true;
-            if( SFX_ITEM_AVAILABLE == eState)
-            {
-                mpToolBoxColor->Enable();
-                mbColorAvail = true;    //
-                // maLastColor = mpColorItem->GetColorValue();
-                Update();
-            }
-            else if(SFX_ITEM_DISABLED == eState )
-            {
-                mpToolBoxColor->Disable();
-                mbColorAvail = false;   //
-                mpColorUpdater->Update(COL_WHITE);
-            }
-            else
-            {
-                mbColorAvail = false;   //
-                mpColorUpdater->Update(COL_WHITE);
-            }
-        }
-    }
-    else if(nSID == SID_ATTR_FILL_GRADIENT)
-    {
-        if( SFX_ITEM_AVAILABLE == eState)
-        {
-            mpFillGradientItem.reset(pState ? (XFillGradientItem*)pState->Clone() : 0);
-        }
-        if( mpStyleItem && (XFillStyle)mpStyleItem->GetValue() == XFILL_GRADIENT )
-        {
-            mpLbFillAttr->Show();
-            mpToolBoxColor->Hide();
-            mbTBShow = false;
-            if( SFX_ITEM_AVAILABLE == eState)
-            {
-                mpLbFillAttr->Enable();
-                Update();
+                mpColorItem.reset(pState ? (XFillColorItem*)pState->Clone() : 0);
             }
 
-            else if(SFX_ITEM_DISABLED == eState )
+            if(mpStyleItem && XFILL_SOLID == (XFillStyle)mpStyleItem->GetValue())
             {
-                mpLbFillAttr->Disable();
-                mpLbFillAttr->SetNoSelection();
-            }
-            else
-                mpLbFillAttr->SetNoSelection();
-        }
-    }
-    else if(nSID == SID_ATTR_FILL_HATCH)
-    {
-        if( SFX_ITEM_AVAILABLE == eState)
-        {
-            mpHatchItem.reset(pState ? (XFillHatchItem*)pState->Clone() : 0);
-        }
-        if( mpStyleItem && (XFillStyle)mpStyleItem->GetValue() == XFILL_HATCH )
-        {
-            mpLbFillAttr->Show();
-            mpToolBoxColor->Hide();
-            mbTBShow = false;
-            if( SFX_ITEM_AVAILABLE == eState)
-            {
-                mpLbFillAttr->Enable();
-                Update();
-            }
-            else if(SFX_ITEM_DISABLED == eState )
-            {
-                mpLbFillAttr->Disable();
-                mpLbFillAttr->SetNoSelection();
-            }
-            else
-                mpLbFillAttr->SetNoSelection();
-        }
-    }
-    else if(nSID == SID_ATTR_FILL_BITMAP)
-    {
-        if( SFX_ITEM_AVAILABLE == eState)
-        {
-            mpBitmapItem.reset(pState ? (XFillBitmapItem*)pState->Clone() : 0);
-        }
-        if( mpStyleItem && (XFillStyle)mpStyleItem->GetValue() == XFILL_BITMAP )
-        {
-            mpLbFillAttr->Show();
-            mpToolBoxColor->Hide();
-            mbTBShow = false;
-            if( SFX_ITEM_AVAILABLE == eState)
-            {
-                mpLbFillAttr->Enable();
-                Update();
-            }
-            else if(SFX_ITEM_DISABLED == eState )
-            {
-                mpLbFillAttr->Disable();
-                mpLbFillAttr->SetNoSelection();
-            }
-            else
-                mpLbFillAttr->SetNoSelection();
-        }
-    }
-    else if(nSID == SID_COLOR_TABLE)
-    {
-        if( SFX_ITEM_AVAILABLE == eState)
-        {
-            mpColorListItem.reset(pState ? (SvxColorListItem*)pState->Clone() : 0);
+                mpLbFillAttr->Hide();
+                mpToolBoxColor->Show();
 
-            if( mpStyleItem && (XFillStyle)mpStyleItem->GetValue()== XFILL_SOLID)
-            {
-                if ( mpColorItem )
+                if(SFX_ITEM_AVAILABLE == eState)
                 {
-                    String aString( mpColorItem->GetName() );
-                    Color aColor = mpColorItem->GetColorValue();
-                    mpLbFillAttr->Clear();
-                    SvxColorListItem aItem( *(const SvxColorListItem*)(
-                        pSh->GetItem( SID_COLOR_TABLE ) ) );
-                    mpLbFillAttr->Enable();
-                    mpLbFillAttr->Fill( aItem.GetColorList() );
-                    mpLbFillAttr->SelectEntry( aColor );
+                    mpToolBoxColor->Enable();
+                    mbColorAvail = true;
+                    // maLastColor = mpColorItem->GetColorValue();
+                    Update();
+                }
+                else if(SFX_ITEM_DISABLED == eState)
+                {
+                    mpToolBoxColor->Disable();
+                    mbColorAvail = false;
+                    mpColorUpdater->Update(COL_WHITE);
                 }
                 else
-                    mpLbFillAttr->SetNoSelection();
-            }
-        }
-    }
-    else if(nSID == SID_GRADIENT_LIST)
-    {
-        if( SFX_ITEM_AVAILABLE == eState)
-        {
-            mpGradientListItem.reset(pState ? (SvxGradientListItem*)pState->Clone() : 0);
-
-            if( mpStyleItem && (XFillStyle)mpStyleItem->GetValue() == XFILL_GRADIENT)
-            {
-                if ( mpFillGradientItem )
                 {
-                    String aString( mpFillGradientItem->GetName() );
-                    mpLbFillAttr->Clear();
-                    SvxGradientListItem aItem( *(const SvxGradientListItem*)(
-                        pSh->GetItem( SID_GRADIENT_LIST ) ) );
+                    mbColorAvail = false;
+                    mpColorUpdater->Update(COL_WHITE);
+                }
+            }
+            break;
+        }
+        case SID_ATTR_FILL_GRADIENT:
+        {
+            if(SFX_ITEM_AVAILABLE == eState)
+            {
+                mpFillGradientItem.reset(pState ? (XFillGradientItem*)pState->Clone() : 0);
+            }
+
+            if(mpStyleItem && XFILL_GRADIENT == (XFillStyle)mpStyleItem->GetValue())
+            {
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+
+                if(SFX_ITEM_AVAILABLE == eState)
+                {
                     mpLbFillAttr->Enable();
-                    mpLbFillAttr->Fill( aItem.GetGradientList() );
-                    mpLbFillAttr->SelectEntry( aString );
+                    Update();
+                }
+                else if(SFX_ITEM_DISABLED == eState )
+                {
+                    mpLbFillAttr->Disable();
+                    mpLbFillAttr->SetNoSelection();
                 }
                 else
-                    mpLbFillAttr->SetNoSelection();
-            }
-        }
-    }
-    else if(nSID == SID_HATCH_LIST)
-    {
-        if( SFX_ITEM_AVAILABLE == eState)
-        {
-            mpHatchListItem.reset(pState ? (SvxHatchListItem*)pState->Clone() : 0);
-
-            if( mpStyleItem && (XFillStyle)mpStyleItem->GetValue() == XFILL_HATCH )
-            {
-                if ( mpHatchItem)
                 {
-                    String aString( mpHatchItem->GetName() );
-                    mpLbFillAttr->Clear();
-                    SvxHatchListItem aItem( *(const SvxHatchListItem*)(
-                        pSh->GetItem( SID_HATCH_LIST ) ) );
+                    mpLbFillAttr->SetNoSelection();
+                }
+            }
+            break;
+        }
+        case SID_ATTR_FILL_HATCH:
+        {
+            if(SFX_ITEM_AVAILABLE == eState)
+            {
+                mpHatchItem.reset(pState ? (XFillHatchItem*)pState->Clone() : 0);
+            }
+
+            if(mpStyleItem && XFILL_HATCH == (XFillStyle)mpStyleItem->GetValue())
+            {
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+
+                if(SFX_ITEM_AVAILABLE == eState)
+                {
                     mpLbFillAttr->Enable();
-                    mpLbFillAttr->Fill( aItem.GetHatchList() );
-                    mpLbFillAttr->SelectEntry( aString );
+                    Update();
+                }
+                else if(SFX_ITEM_DISABLED == eState )
+                {
+                    mpLbFillAttr->Disable();
+                    mpLbFillAttr->SetNoSelection();
                 }
                 else
-                    mpLbFillAttr->SetNoSelection();
-            }
-        }
-    }
-    else if(nSID == SID_BITMAP_LIST)
-    {
-        if( SFX_ITEM_AVAILABLE == eState)
-        {
-            mpBitmapListItem.reset(pState ? (SvxBitmapListItem*)pState->Clone() : 0);
-
-            if( mpStyleItem && (XFillStyle)mpStyleItem->GetValue() == XFILL_BITMAP )
-            {
-                if ( mpBitmapItem )
                 {
-                    String aString( mpBitmapItem->GetName() );
-                    mpLbFillAttr->Clear();
-                    SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(
-                        pSh->GetItem( SID_BITMAP_LIST ) ) );
+                    mpLbFillAttr->SetNoSelection();
+                }
+            }
+            break;
+        }
+        case SID_ATTR_FILL_BITMAP:
+        {
+            if(SFX_ITEM_AVAILABLE == eState)
+            {
+                mpBitmapItem.reset(pState ? (XFillBitmapItem*)pState->Clone() : 0);
+            }
+
+            if(mpStyleItem && XFILL_BITMAP == (XFillStyle)mpStyleItem->GetValue())
+            {
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+
+                if(SFX_ITEM_AVAILABLE == eState)
+                {
                     mpLbFillAttr->Enable();
-                    mpLbFillAttr->Fill( aItem.GetBitmapList() );
-                    mpLbFillAttr->SelectEntry( aString );
+                    Update();
+                }
+                else if(SFX_ITEM_DISABLED == eState )
+                {
+                    mpLbFillAttr->Disable();
+                    mpLbFillAttr->SetNoSelection();
                 }
                 else
+                {
                     mpLbFillAttr->SetNoSelection();
+                }
             }
+            break;
+        }
+        case SID_COLOR_TABLE:
+        {
+            if(SFX_ITEM_AVAILABLE == eState)
+            {
+                if(mpStyleItem && XFILL_SOLID == (XFillStyle)mpStyleItem->GetValue())
+                {
+                    if(mpColorItem)
+                    {
+                        const Color aColor = mpColorItem->GetColorValue();
+                        const SfxObjectShell* pSh = SfxObjectShell::Current();
+                        const SvxColorListItem aItem(*(const SvxColorListItem*)(pSh->GetItem(SID_COLOR_TABLE)));
+
+                        mpLbFillAttr->Clear();
+                        mpLbFillAttr->Enable();
+                        mpLbFillAttr->Fill(aItem.GetColorList());
+                        mpLbFillAttr->SelectEntry(aColor);
+                    }
+                    else
+                    {
+                        mpLbFillAttr->SetNoSelection();
+                    }
+                }
+            }
+            break;
+        }
+        case SID_GRADIENT_LIST:
+        {
+            if(SFX_ITEM_AVAILABLE == eState)
+            {
+                if(mpStyleItem && XFILL_GRADIENT == (XFillStyle)mpStyleItem->GetValue())
+                {
+                    if(mpFillGradientItem)
+                    {
+                        const String aString( mpFillGradientItem->GetName() );
+                        const SfxObjectShell* pSh = SfxObjectShell::Current();
+                        const SvxGradientListItem aItem( *(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
+
+                        mpLbFillAttr->Clear();
+                        mpLbFillAttr->Enable();
+                        mpLbFillAttr->Fill(aItem.GetGradientList());
+                        mpLbFillAttr->SelectEntry(aString);
+                    }
+                    else
+                    {
+                        mpLbFillAttr->SetNoSelection();
+                    }
+                }
+            }
+            break;
+        }
+        case SID_HATCH_LIST:
+        {
+            if(SFX_ITEM_AVAILABLE == eState)
+            {
+                if(mpStyleItem && XFILL_HATCH == (XFillStyle)mpStyleItem->GetValue())
+                {
+                    if(mpHatchItem)
+                    {
+                        const String aString( mpHatchItem->GetName() );
+                        const SfxObjectShell* pSh = SfxObjectShell::Current();
+                        const SvxHatchListItem aItem(*(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
+
+                        mpLbFillAttr->Clear();
+                        mpLbFillAttr->Enable();
+                        mpLbFillAttr->Fill(aItem.GetHatchList());
+                        mpLbFillAttr->SelectEntry(aString);
+                    }
+                    else
+                    {
+                        mpLbFillAttr->SetNoSelection();
+                    }
+                }
+            }
+            break;
+        }
+        case SID_BITMAP_LIST:
+        {
+            if(SFX_ITEM_AVAILABLE == eState)
+            {
+                if(mpStyleItem && XFILL_BITMAP == (XFillStyle)mpStyleItem->GetValue())
+                {
+                    if(mpBitmapItem)
+                    {
+                        const String aString( mpBitmapItem->GetName() );
+                        const SfxObjectShell* pSh = SfxObjectShell::Current();
+                        const SvxBitmapListItem aItem(*(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
+
+                        mpLbFillAttr->Clear();
+                        mpLbFillAttr->Enable();
+                        mpLbFillAttr->Fill(aItem.GetBitmapList());
+                        mpLbFillAttr->SelectEntry(aString);
+                    }
+                    else
+                    {
+                        mpLbFillAttr->SetNoSelection();
+                    }
+                }
+            }
+            break;
         }
     }
 }
-
 
 
 
@@ -1055,113 +1103,122 @@ SfxBindings* AreaPropertyPanel::GetBindings()
 
 void AreaPropertyPanel::Update()
 {
-    if ( mpStyleItem )
+    if(mpStyleItem)
     {
-        XFillStyle eXFS = (XFillStyle)mpStyleItem->GetValue();
+        const XFillStyle eXFS = (XFillStyle)mpStyleItem->GetValue();
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         switch( eXFS )
         {
             case XFILL_NONE:
             {
-                mpLbFillAttr->Show();   //wj for new color picker
-                mpToolBoxColor->Hide(); //wj for new color picker
-                mbTBShow = false;
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+                break;
             }
-            break;
-
             case XFILL_SOLID:
             {
-                if ( mpColorItem )
+                if(mpColorItem)
                 {
-                    mpLbFillAttr->Hide();   //wj for new color picker
-                    mpToolBoxColor->Show(); //wj for new color picker
-                    mbTBShow = true;
+                    mpLbFillAttr->Hide();
+                    mpToolBoxColor->Show();
                     mpColorUpdater->Update(mpColorItem->GetColorValue());
                 }
                 else
+                {
                     mpColorUpdater->Update(COL_WHITE);
+                }
+                break;
             }
-            break;
-
             case XFILL_GRADIENT:
             {
-                mpLbFillAttr->Show();   //wj for new color picker
-                mpToolBoxColor->Hide(); //wj for new color picker
-                mbTBShow = false;
-                if ( pSh && pSh->GetItem( SID_GRADIENT_LIST ) )
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+
+                if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
                 {
-                    SvxGradientListItem aItem( *(const SvxGradientListItem*)(
-                        pSh->GetItem( SID_GRADIENT_LIST ) ) );
+                    const SvxGradientListItem aItem(*(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
-                    mpLbFillAttr->Fill( aItem.GetGradientList() );
-                    if ( mpFillGradientItem )
+                    mpLbFillAttr->Fill(aItem.GetGradientList());
+
+                    if(mpFillGradientItem)
                     {
-                        String aString( mpFillGradientItem->GetName() );
-                        mpLbFillAttr->SelectEntry( aString );
+                        const String aString(mpFillGradientItem->GetName());
+
+                        mpLbFillAttr->SelectEntry(aString);
                     }
                     else
+                    {
                         mpLbFillAttr->SetNoSelection();
+                    }
                 }
                 else
+                {
                     mpLbFillAttr->SetNoSelection();
+                }
+                break;
             }
-            break;
-
             case XFILL_HATCH:
             {
-                mpLbFillAttr->Show();   //wj for new color picker
-                mpToolBoxColor->Hide(); //wj for new color picker
-                mbTBShow = false;
-                if ( pSh && pSh->GetItem( SID_HATCH_LIST ) )
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+
+                if(pSh && pSh->GetItem(SID_HATCH_LIST))
                 {
-                    SvxHatchListItem aItem( *(const SvxHatchListItem*)(
-                        pSh->GetItem( SID_HATCH_LIST ) ) );
+                    const SvxHatchListItem aItem(*(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
-                    mpLbFillAttr->Fill( aItem.GetHatchList() );
-                    if ( mpHatchItem )
+                    mpLbFillAttr->Fill(aItem.GetHatchList());
+
+                    if(mpHatchItem)
                     {
-                        String aString( mpHatchItem->GetName() );
+                        const String aString(mpHatchItem->GetName());
+
                         mpLbFillAttr->SelectEntry( aString );
                     }
                     else
+                    {
                         mpLbFillAttr->SetNoSelection();
+                    }
                 }
                 else
+                {
                     mpLbFillAttr->SetNoSelection();
+                }
+                break;
             }
-            break;
-
             case XFILL_BITMAP:
             {
-                mpLbFillAttr->Show();   //wj for new color picker
-                mpToolBoxColor->Hide(); //wj for new color picker
-                mbTBShow = false;
-                //mpLbFillAttr->Fill( mpBitmapListItem->GetBitmapList() );
-                if ( pSh && pSh->GetItem( SID_BITMAP_LIST ) )
+                mpLbFillAttr->Show();
+                mpToolBoxColor->Hide();
+
+                if(pSh && pSh->GetItem(SID_BITMAP_LIST))
                 {
-                    SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(
-                        pSh->GetItem( SID_BITMAP_LIST ) ) );
+                    const SvxBitmapListItem aItem(*(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
-                    mpLbFillAttr->Fill( aItem.GetBitmapList() );
-                    if ( mpBitmapItem )
+                    mpLbFillAttr->Fill(aItem.GetBitmapList());
+
+                    if(mpBitmapItem)
                     {
-                        String aString( mpBitmapItem->GetName() );
-                        mpLbFillAttr->SelectEntry( aString );
+                        const String aString(mpBitmapItem->GetName());
+
+                        mpLbFillAttr->SelectEntry(aString);
                     }
                     else
+                    {
                         mpLbFillAttr->SetNoSelection();
+                    }
                 }
                 else
+                {
                     mpLbFillAttr->SetNoSelection();
+                }
+                break;
             }
-            break;
-
             default:
-                OSL_ENSURE(false, "Nicht unterstuetzter Flaechentyp");
+                OSL_ENSURE(false, "Non supported FillType (!)");
             break;
         }
     }
@@ -1179,9 +1236,7 @@ IMPL_LINK( AreaPropertyPanel, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
 IMPL_LINK( AreaPropertyPanel, ClickTrGrHdl_Impl, ToolBox*, pToolBox )
 {
     maTrGrPopup.Rearrange(mpFloatTransparenceItem.get());
-
     OSL_ASSERT(pToolBox->GetCurItemId() == TBI_BTX_GRADIENT);
-
     maTrGrPopup.Show(*pToolBox);
 
     return (0L);
@@ -1195,86 +1250,87 @@ IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
     bool bGradient = false;
     sal_uInt16 nTrans = 0;
 
-    if (nSelectType == 0)
+    if(!nSelectType)
     {
         mpBTNGradient->Hide();
         mpMTRTransparent->Show();
         mpMTRTransparent->Enable();
         mpMTRTransparent->SetValue(0);
     }
-    else if (nSelectType == 1)
+    else if(1 == nSelectType)
     {
         mpBTNGradient->Hide();
         mpMTRTransparent->Show();
         nTrans = mnLastTransSolid;
         mpMTRTransparent->SetValue(nTrans);
-        mpLBTransType->SelectEntryPos(1);// for multi-selected, choose solid no selection
+        mpLBTransType->SelectEntryPos(1);
         mpMTRTransparent->Enable();
     }
     else
     {
         mpBTNGradient->Show();
-        //for beta1
-        switch ( nSelectType )
+
+        switch (nSelectType)
         {
-        case 2:
-            mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgLinear); // high contrast
-            break;
-        case 3:
-            mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgAxial);
-            break;
-        case 4:
-            mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgRadial);
-            break;
-        case 5:
-            mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgElli );
-            break;
-        case 6:
-            mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgQuad );
-            break;
-        case 7:
-            mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgSquare);
-            break;
+            case 2:
+                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgLinear);
+                break;
+            case 3:
+                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgAxial);
+                break;
+            case 4:
+                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgRadial);
+                break;
+            case 5:
+                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgElli );
+                break;
+            case 6:
+                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgQuad );
+                break;
+            case 7:
+                mpBTNGradient->SetItemImage(TBI_BTX_GRADIENT, maImgSquare);
+                break;
         }
-        //end of new code
+
         mpMTRTransparent->Hide();
         mpBTNGradient->Enable();
         bGradient = true;
     }
 
-    XFillTransparenceItem aLinearItem(nTrans);
+    const XFillTransparenceItem aLinearItem(nTrans);
     GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_TRANSPARENCE, SFX_CALLMODE_RECORD, &aLinearItem, 0L );
 
-    if (nSelectType > 1) nSelectType = nSelectType-2;
+    if(nSelectType > 1)
+    {
+        nSelectType -= 2;
+    }
 
     XGradient aTmpGradient;
 
     switch(nSelectType)
     {
-    case XGRAD_LINEAR:
-        aTmpGradient = maGradientLinear;
-        break;
-    case XGRAD_AXIAL:
-        aTmpGradient = maGradientAxial;
-        break;
-    case XGRAD_RADIAL:
-        aTmpGradient = maGradientRadial;
-        break;
-    case XGRAD_ELLIPTICAL:
-        aTmpGradient = maGradientElliptical;
-        break;
-    case XGRAD_SQUARE:
-        aTmpGradient = maGradientSquare;
-        break;
-    case XGRAD_RECT:
-        aTmpGradient = maGradientRect;
-        break;
+        case XGRAD_LINEAR:
+            aTmpGradient = maGradientLinear;
+            break;
+        case XGRAD_AXIAL:
+            aTmpGradient = maGradientAxial;
+            break;
+        case XGRAD_RADIAL:
+            aTmpGradient = maGradientRadial;
+            break;
+        case XGRAD_ELLIPTICAL:
+            aTmpGradient = maGradientElliptical;
+            break;
+        case XGRAD_SQUARE:
+            aTmpGradient = maGradientSquare;
+            break;
+        case XGRAD_RECT:
+            aTmpGradient = maGradientRect;
+            break;
     }
-    SfxItemPool* pPool = NULL;
-    bool bEnable = false;
-    if (bGradient) bEnable = true;
-    XFillFloatTransparenceItem aGradientItem(pPool,aTmpGradient, bEnable );
 
+    SfxItemPool* pPool = 0;
+    const XFillFloatTransparenceItem aGradientItem(pPool, aTmpGradient, sal_Bool(bGradient));
     GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SFX_CALLMODE_RECORD, &aGradientItem, 0L );
 
     return( 0L );
@@ -1284,12 +1340,16 @@ IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
 
 IMPL_LINK(AreaPropertyPanel, ModifyTransparentHdl_Impl, void*, EMPTYARG)
 {
-    sal_uInt16 nTrans = (sal_uInt16)mpMTRTransparent->GetValue();
+    const sal_uInt16 nTrans = (sal_uInt16)mpMTRTransparent->GetValue();
     mnLastTransSolid = nTrans;
-    sal_uInt16 nSelectType = mpLBTransType->GetSelectEntryPos();
-    if (nTrans != 0 && nSelectType == 0)
+    const sal_uInt16 nSelectType = mpLBTransType->GetSelectEntryPos();
+
+    if(nTrans && !nSelectType)
+    {
         mpLBTransType->SelectEntryPos(1);
-    XFillTransparenceItem aLinearItem(nTrans);
+    }
+
+    const XFillTransparenceItem aLinearItem(nTrans);
     GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_TRANSPARENCE, SFX_CALLMODE_RECORD, &aLinearItem, 0L );
 
     return 0L;
