@@ -614,6 +614,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaFloatTransparentAction( rMtf, rPos, rSize, rTransparenceGradient ) );
 
+    if ( !IsDeviceOutputNecessary() )
+        return;
+
     if( ( rTransparenceGradient.GetStartColor() == aBlack && rTransparenceGradient.GetEndColor() == aBlack ) ||
         ( mnDrawMode & ( DRAWMODE_NOTRANSPARENCY ) ) )
     {
