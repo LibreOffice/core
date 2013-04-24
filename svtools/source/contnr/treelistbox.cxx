@@ -3418,6 +3418,12 @@ Size SvTreeListBox::GetOptimalSize() const
     Size aRet(0, getPreferredDimensions(aWidths));
     for (size_t i = 0; i < aWidths.size(); ++i)
         aRet.Width() += aWidths[i];
+    if (GetStyle() & WB_BORDER)
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        aRet.Width() += rStyleSettings.GetBorderSize() * 2;
+        aRet.Height() += rStyleSettings.GetBorderSize() * 2;
+    }
     return aRet;
 }
 
