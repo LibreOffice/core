@@ -833,49 +833,6 @@ void SvIdlDataBase::AddDepFile(String const& rFileName)
     m_DepFiles.insert(rFileName);
 }
 
-#ifdef WNT
-static OString
-lcl_ConvertToCygwin(OString const& rString)
-{
-    sal_Int32 i = 0;
-    sal_Int32 const len = rString.getLength();
-    OStringBuffer buf(len + 16);
-    if ((2 <= len) && (':' == rString[1]))
-    {
-        buf.append("/cygdrive/");
-        buf.append(static_cast<sal_Char>(tolower(rString[0])));
-        i = 2;
-    }
-    for (; i < len; ++i)
-    {
-        sal_Char const c(rString[i]);
-        switch (c)
-        {
-            case '\\':
-                buf.append('/');
-            break;
-            case ' ':
-                buf.append("\\ ");
-            break;
-            default:
-                buf.append(c);
-            break;
-        }
-    }
-    return buf.makeStringAndClear();
-}
-#endif
-
-static OString
-lcl_Convert(OUString const& rString)
-{
-    return
-#ifdef WNT
-        lcl_ConvertToCygwin
-#endif
-            (OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
-}
-
 struct WriteDep
 {
     SvFileStream & m_rStream;
@@ -883,14 +840,14 @@ struct WriteDep
     void operator() (OUString const& rItem)
     {
         m_rStream << " \\\n ";
-        m_rStream << lcl_Convert(rItem).getStr();
+        m_rStream << OUStringToOString(rItem, RTL_TEXTENCODING_UTF8).getStr();
     }
 };
 
 bool SvIdlDataBase::WriteDepFile(
         SvFileStream & rStream, OUString const& rTarget)
 {
-    rStream << lcl_Convert(rTarget).getStr();
+    rStream << OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8).getStr();
     rStream << " :";
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
     return rStream.GetError() == SVSTREAM_OK;
