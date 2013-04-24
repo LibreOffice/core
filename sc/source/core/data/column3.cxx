@@ -48,6 +48,7 @@
 #include "globalnames.hxx"
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
+#include "stlalgorithm.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
@@ -2058,9 +2059,7 @@ void ScColumn::RebuildFormulaGroups()
         return;
 
     // clear double groups
-    for (std::vector< ColDoubleEntry *>::iterator it = maDoubles.begin();
-         it != maDoubles.end(); ++it )
-        delete *it;
+    std::for_each(maDoubles.begin(), maDoubles.end(), ScDeleteObjectByPtr<ColDoubleEntry>());
     maDoubles.clear();
 
     // clear previous groups
@@ -2185,7 +2184,6 @@ void ScColumn::RebuildFormulaGroups()
         fprintf( stderr, "\n" );
     }
 #endif
-
 
     bDirtyGroups = false;
 }
