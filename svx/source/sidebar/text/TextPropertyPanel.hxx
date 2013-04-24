@@ -52,7 +52,7 @@ class PopupContainer;
 
 class TextPropertyPanel
     : public Control,
-       public ::sfx2::sidebar::IContextChangeReceiver,
+      public ::sfx2::sidebar::IContextChangeReceiver,
       public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:

@@ -51,6 +51,9 @@
 #include <svx/fmshell.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
+
 #include <boost/shared_ptr.hpp>
 
 using namespace ::std;
@@ -60,6 +63,7 @@ using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+using ::sfx2::sidebar::EnumContext;
 
 namespace {
 static const ::com::sun::star::uno::Type saComponentTypeIdentifier (
@@ -556,6 +560,51 @@ void DrawController::FirePropertyChange (
         // exception.
     }
 
+}
+
+
+
+
+void DrawController::BroadcastContextChange (void) const
+{
+    ::boost::shared_ptr<ViewShell> pViewShell (mpBase->GetMainViewShell());
+    if ( ! pViewShell)
+        return;
+
+    EnumContext::Context eContext (EnumContext::Context_Unknown);
+    switch (pViewShell->GetShellType())
+    {
+        case ViewShell::ST_IMPRESS:
+        case ViewShell::ST_DRAW:
+            if (mbMasterPageMode)
+                eContext = EnumContext::Context_MasterPage;
+            else
+                eContext = EnumContext::Context_DrawPage;
+            break;
+
+        case ViewShell::ST_NOTES:
+            eContext = EnumContext::Context_NotesPage;
+            break;
+
+        case ViewShell::ST_HANDOUT:
+            eContext = EnumContext::Context_HandoutPage;
+            break;
+
+        case ViewShell::ST_OUTLINE:
+            eContext = EnumContext::Context_OutlineText;
+            break;
+
+        case ViewShell::ST_SLIDE_SORTER:
+            eContext = EnumContext::Context_SlidesorterPage;
+            break;
+
+        case ViewShell::ST_PRESENTATION:
+        case ViewShell::ST_NONE:
+            eContext = EnumContext::Context_Empty;
+            break;
+    }
+
+    ContextChangeEventMultiplexer::NotifyContextChange(mpBase, eContext);
 }
 
 

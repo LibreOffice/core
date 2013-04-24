@@ -286,7 +286,7 @@ void TextPropertyPanel::HandleContextChange (
     }
 
     maContext = aContext;
-    switch (maContext.GetCombinedContext_DI()) //
+    switch (maContext.GetCombinedContext_DI())
     {
         case CombinedEnumContext(Application_Calc, Context_Cell):
         case CombinedEnumContext(Application_Calc, Context_Pivot):
