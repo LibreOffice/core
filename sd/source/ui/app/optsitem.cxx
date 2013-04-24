@@ -498,6 +498,7 @@ SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, sal_Bool bUseConfig ) :
     bDoubleClickTextEdit( sal_True ),
     bClickChangeRotation( sal_False ),
     bStartWithActualPage( sal_False ),
+    bStartWithPresenterScreen( sal_True ), // default: Enable the Presenter Screen
     bSolidDragging( sal_True ),
     bSolidMarkHdl( sal_True ),  // default: Use nice handles
     bSummationOfParagraphs( sal_False ),
@@ -535,6 +536,7 @@ sal_Bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsDoubleClickTextEdit() == rOpt.IsDoubleClickTextEdit() &&
             IsClickChangeRotation() == rOpt.IsClickChangeRotation() &&
             IsStartWithActualPage() == rOpt.IsStartWithActualPage() &&
+            IsStartWithPresenterScreen() == rOpt.IsStartWithPresenterScreen() &&
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
             IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() &&
@@ -597,10 +599,12 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "Display",
 
         "PenColor",
-        "PenWidth"
+        "PenWidth",
+
+        "Start/PresenterScreen"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 27 : 16 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 28 : 16 );
     ppNames = aPropNames;
 }
 
@@ -661,6 +665,9 @@ sal_Bool SdOptionsMisc::ReadData( const Any* pValues )
 
         if( pValues[26].hasValue() )
             SetPresentationPenWidth( getSafeValue< double >( pValues[ 26 ] ) );
+
+        if( pValues[27].hasValue() )
+            SetStartWithPresenterScreen( *(sal_Bool*) pValues[ 27 ].getValue() );
     }
 
     return sal_True;
@@ -707,6 +714,8 @@ sal_Bool SdOptionsMisc::WriteData( Any* pValues ) const
 
         pValues[ 25 ] <<= GetPresentationPenColor();
         pValues[ 26 ] <<= GetPresentationPenWidth();
+
+        pValues[ 27 ] <<= IsStartWithPresenterScreen();
     }
 
     return sal_True;
@@ -734,6 +743,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
     {
         maOptionsMisc.SetStartWithTemplate( pOpts->IsStartWithTemplate() );
         maOptionsMisc.SetStartWithActualPage( pOpts->IsStartWithActualPage() );
+        maOptionsMisc.SetStartWithPresenterScreen( pOpts->IsStartWithPresenterScreen() );
         maOptionsMisc.SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
         // #90356#
         maOptionsMisc.SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
@@ -823,6 +833,7 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
         pOpts->SetDoubleClickTextEdit( maOptionsMisc.IsDoubleClickTextEdit() );
         pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
         pOpts->SetStartWithActualPage( maOptionsMisc.IsStartWithActualPage() );
+        pOpts->SetStartWithPresenterScreen( maOptionsMisc.IsStartWithPresenterScreen() );
         pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
         pOpts->SetSolidDragging( maOptionsMisc.IsSolidDragging() );
         pOpts->SetSolidMarkHdl( maOptionsMisc.IsSolidMarkHdl() );

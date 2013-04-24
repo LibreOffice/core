@@ -260,6 +260,7 @@ private:
     sal_Bool    bDoubleClickTextEdit    : 1;    // Misc/DclickTextedit
     sal_Bool    bClickChangeRotation    : 1;    // Misc/RotateClick
     sal_Bool    bStartWithActualPage    : 1;    // Misc/Start/CurrentPage
+    sal_Bool    bStartWithPresenterScreen : 1;  // Misc/Start/PresenterScreen
     sal_Bool    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
     sal_Bool    bSolidMarkHdl           : 1;    // /Misc/SimpleHandles
     sal_Bool    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
@@ -311,6 +312,7 @@ public:
     sal_Bool    IsDoubleClickTextEdit() const { Init(); return (sal_Bool) bDoubleClickTextEdit; }
     sal_Bool    IsClickChangeRotation() const { Init(); return (sal_Bool) bClickChangeRotation; }
     sal_Bool    IsStartWithActualPage() const { Init(); return (sal_Bool) bStartWithActualPage; }
+    sal_Bool    IsStartWithPresenterScreen() const { Init(); return (sal_Bool) bStartWithPresenterScreen; }
     sal_Bool    IsSolidDragging() const { Init(); return (sal_Bool) bSolidDragging; }
     sal_Bool    IsSolidMarkHdl() const { Init(); return (sal_Bool) bSolidMarkHdl; }
     sal_Bool    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
@@ -353,6 +355,7 @@ public:
     void    SetDoubleClickTextEdit( sal_Bool bOn = sal_True ) { if( bDoubleClickTextEdit != bOn ) { OptionsChanged(); bDoubleClickTextEdit = bOn; } }
     void    SetClickChangeRotation( sal_Bool bOn = sal_True ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
     void    SetStartWithActualPage( sal_Bool bOn = sal_True ) { if( bStartWithActualPage != bOn ) { OptionsChanged(); bStartWithActualPage = bOn; } }
+    void    SetStartWithPresenterScreen( sal_Bool bOn = sal_True ) { if( bStartWithPresenterScreen != bOn ) { OptionsChanged(); bStartWithPresenterScreen = bOn; } }
     void    SetSummationOfParagraphs( sal_Bool bOn = sal_True ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
     /** Set the printer independent layout mode.
         @param nOn

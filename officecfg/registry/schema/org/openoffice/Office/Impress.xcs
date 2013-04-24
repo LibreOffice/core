@@ -728,6 +728,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="PresenterScreen" oor:type="xs:boolean">
+          <info>
+            <desc>Indicates whether to start the Presenter Screen together with the presentation, in a multiple monitor configuration.</desc>
+            <label>With Presenter Screen</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="Compatibility">
         <info>
