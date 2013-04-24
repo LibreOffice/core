@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//998\u003d",
+        "filename": "wizards/source/importwizard/DialogModul.xba",
+        "patchSetId": 2
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-04-24T17:03:50Z",
+      "side": 1,
+      "message": "that\u0027s still 6 entries in this line, and only 3 in the one before?",
+      "revId": "60e40dd69e26535671701f0aa0d6827e7a5f1341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
