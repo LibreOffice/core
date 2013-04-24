@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//99A\u003d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2223,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-04-24T21:10:03Z",
+      "side": 1,
+      "message": "But fdo#62097 talks about Writer specifically, and \"Text file ...\" ?",
+      "revId": "ac5292e03d2b65e4068eadc98135fd879479cc5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//99E\u003d",
+        "filename": "scripting/workben/bindings/drawmenubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-04-24T21:10:03Z",
+      "side": 1,
+      "message": "This is a demo file, not used in the actual product - just leave this change out",
+      "revId": "ac5292e03d2b65e4068eadc98135fd879479cc5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
