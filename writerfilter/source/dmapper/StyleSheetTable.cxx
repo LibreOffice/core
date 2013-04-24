@@ -63,9 +63,6 @@ StyleSheetEntry::StyleSheetEntry() :
         ,sNextStyleIdentifier()
         ,pProperties(new StyleSheetPropertyMap)
 {
-#if OSL_DEBUG_LEVEL > 1
-            nStyleTypeCode = STYLE_TYPE_PARA;
-#endif
 }
 
 StyleSheetEntry::~StyleSheetEntry()
@@ -370,6 +367,14 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
     (void)nIntValue;
     OUString sValue = val.getString();
 
+    // The default type is paragraph, and it needs to be processed first,
+    // because the NS_ooxml::LN_CT_Style_type handling may set m_pImpl->m_pCurrentEntry
+    // to point to a different object.
+    if( m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_UNKNOWN )
+    {
+        if( Name != NS_rtf::LN_SGC && Name != NS_ooxml::LN_CT_Style_type )
+            m_pImpl->m_pCurrentEntry->nStyleTypeCode = STYLE_TYPE_PARA;
+    }
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
@@ -385,6 +390,8 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         }
         break;
         case NS_rtf::LN_SGC:
+            SAL_WARN_IF( m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN,
+                "writerfilter", "Style type needs to be processed first" );
             m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
         break;
         case NS_rtf::LN_ISTDBASE:
@@ -421,6 +428,8 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         case NS_ooxml::LN_CT_Style_type:
         {
+            SAL_WARN_IF( m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN,
+                "writerfilter", "Style type needs to be processed first" );
             StyleType nType = ( StyleType ) nIntValue;
             if ( nType == STYLE_TYPE_TABLE )
             {
