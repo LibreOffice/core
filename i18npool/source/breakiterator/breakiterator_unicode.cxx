@@ -19,6 +19,8 @@
 
 #include <breakiterator_unicode.hxx>
 #include <localedata.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/languagetagicu.hxx>
 #include <unicode/uchar.h>
 #include <unicode/locid.h>
 #include <unicode/rbbi.h>
@@ -148,10 +150,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
         }
 
         if (!icuBI->aBreakIterator) {
-            icu::Locale icuLocale(
-                    OUStringToOString(rLocale.Language, RTL_TEXTENCODING_ASCII_US).getStr(),
-                    OUStringToOString(rLocale.Country, RTL_TEXTENCODING_ASCII_US).getStr(),
-                    OUStringToOString(rLocale.Variant, RTL_TEXTENCODING_ASCII_US).getStr());
+            icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale)));
 
             status = U_ZERO_ERROR;
             switch (rBreakType) {
