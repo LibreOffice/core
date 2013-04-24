@@ -150,10 +150,10 @@ void write64(osl::File & file, sal_uInt64 value) {
     buf[1] = (value >> 8) & 0xFF;
     buf[2] = (value >> 16) & 0xFF;
     buf[3] = (value >> 24) & 0xFF;
-    buf[3] = (value >> 32) & 0xFF;
-    buf[3] = (value >> 40) & 0xFF;
-    buf[3] = (value >> 48) & 0xFF;
-    buf[3] = (value >> 56) & 0xFF;
+    buf[4] = (value >> 32) & 0xFF;
+    buf[5] = (value >> 40) & 0xFF;
+    buf[6] = (value >> 48) & 0xFF;
+    buf[7] = (value >> 56) & 0xFF;
     write(file, buf, SAL_N_ELEMENTS(buf));
 }
 
