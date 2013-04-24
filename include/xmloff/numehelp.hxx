@@ -21,6 +21,7 @@
 #define XMLOFF_NUMEHELP_HXX
 
 #include "sal/config.h"
+#include "xmloff/xmlnmspe.hxx"
 #include "xmloff/dllapi.h"
 #include <sal/types.h>
 #include <com/sun/star/frame/XModel.hpp>
@@ -59,7 +60,6 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
     const OUString sEmpty;
     const OUString sStandardFormat;
     const OUString sType;
-    const OUString sAttrValueType;
     const OUString sAttrValue;
     const OUString sAttrDateValue;
     const OUString sAttrTimeValue;
@@ -101,14 +101,15 @@ public :
     void WriteAttributes(const sal_Int16 nTypeKey,
                                           const double& rValue,
                                           const OUString& rCurrencySymbol,
-                                          sal_Bool bExportValue = sal_True);
+                                          sal_Bool bExportValue = sal_True, sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
     void SetNumberFormatAttributes(const sal_Int32 nNumberFormat,
                                           const double& rValue,
-                                          sal_Bool bExportValue = sal_True);
+                                          sal_Bool bExportValue = sal_True, sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
     void SetNumberFormatAttributes(const OUString& rValue,
                                           const OUString& rCharacters,
                                           sal_Bool bExportValue = sal_True,
-                                          sal_Bool bExportTypeAttribute = sal_True);
+                                          sal_Bool bExportTypeAttribute = sal_True,
+                                          sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
 };
 
 #endif

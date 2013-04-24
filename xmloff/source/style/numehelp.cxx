@@ -60,7 +60,6 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
     pExport(&rTempExport),
     sStandardFormat(XML_STANDARDFORMAT),
     sType(XML_TYPE),
-    sAttrValueType(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_VALUE_TYPE))),
     sAttrValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_VALUE))),
     sAttrDateValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_DATE_VALUE))),
     sAttrTimeValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_TIME_VALUE))),
@@ -384,12 +383,13 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                                 const sal_Int16 nTypeKey,
                                 const double& rValue,
                                 const OUString& rCurrency,
-                                sal_Bool bExportValue)
+                                sal_Bool bExportValue, sal_uInt16 nNamespace)
 {
     if (!pExport)
         return;
 
     sal_Bool bWasSetTypeAttribute = sal_False;
+    OUString sAttrValType = pExport->GetNamespaceMap().GetQNameByKey( nNamespace, GetXMLToken(XML_VALUE_TYPE));
     switch(nTypeKey & ~util::NumberFormat::DEFINED)
     {
     case 0:
@@ -399,7 +399,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
         {
             if (!bWasSetTypeAttribute)
             {
-                pExport->AddAttribute(sAttrValueType, XML_FLOAT);
+                pExport->AddAttribute(sAttrValType, XML_FLOAT);
                 bWasSetTypeAttribute = sal_True;
             }
         }       // No Break
@@ -407,7 +407,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
         {
             if (!bWasSetTypeAttribute)
             {
-                pExport->AddAttribute(sAttrValueType, XML_PERCENTAGE);
+                pExport->AddAttribute(sAttrValType, XML_PERCENTAGE);
                 bWasSetTypeAttribute = sal_True;
             }
         }       // No Break
@@ -415,7 +415,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
         {
             if (!bWasSetTypeAttribute)
             {
-                pExport->AddAttribute(sAttrValueType, XML_CURRENCY);
+                pExport->AddAttribute(sAttrValType, XML_CURRENCY);
                 if (!rCurrency.isEmpty())
                     pExport->AddAttribute(sAttrCurrency, rCurrency);
                 bWasSetTypeAttribute = sal_True;
@@ -435,7 +435,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
         {
             if (!bWasSetTypeAttribute)
             {
-                pExport->AddAttribute(sAttrValueType, XML_DATE);
+                pExport->AddAttribute(sAttrValType, XML_DATE);
                 bWasSetTypeAttribute = sal_True;
             }
             if (bExportValue)
@@ -453,7 +453,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
         {
             if (!bWasSetTypeAttribute)
             {
-                pExport->AddAttribute(sAttrValueType, XML_TIME);
+                pExport->AddAttribute(sAttrValType, XML_TIME);
                 bWasSetTypeAttribute = sal_True;
             }
             if (bExportValue)
@@ -468,7 +468,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
         {
             if (!bWasSetTypeAttribute)
             {
-                pExport->AddAttribute(sAttrValueType, XML_BOOLEAN);
+                pExport->AddAttribute(sAttrValType, XML_BOOLEAN);
                 bWasSetTypeAttribute = sal_True;
             }
             if (bExportValue)
@@ -501,7 +501,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
         {
             if (!bWasSetTypeAttribute)
             {
-                pExport->AddAttribute(sAttrValueType, XML_FLOAT);
+                pExport->AddAttribute(sAttrValType, XML_FLOAT);
                 bWasSetTypeAttribute = sal_True;
                 if (bExportValue)
                 {
@@ -517,14 +517,14 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
 }
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-    const sal_Int32 nNumberFormat, const double& rValue, sal_Bool bExportValue)
+    const sal_Int32 nNumberFormat, const double& rValue, sal_Bool bExportValue, sal_uInt16 nNamespace)
 {
     if (pExport)
     {
         bool bIsStandard;
         OUString sCurrency;
         sal_Int16 nTypeKey = GetCellType(nNumberFormat, sCurrency, bIsStandard);
-        WriteAttributes(nTypeKey, rValue, sCurrency, bExportValue);
+        WriteAttributes(nTypeKey, rValue, sCurrency, bExportValue, nNamespace);
     }
     else {
         OSL_FAIL("no SvXMLExport given");
@@ -533,12 +533,13 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
     const OUString& rValue, const OUString& rCharacters,
-    sal_Bool bExportValue, sal_Bool bExportTypeAttribute)
+    sal_Bool bExportValue, sal_Bool bExportTypeAttribute,
+    sal_uInt16 nNamespace)
 {
     if (pExport)
     {
         if (bExportTypeAttribute)
-            pExport->AddAttribute(sAttrValueType, XML_STRING);
+            pExport->AddAttribute(nNamespace, XML_VALUE_TYPE, XML_STRING);
         if (bExportValue && !rValue.isEmpty() && (rValue != rCharacters))
             pExport->AddAttribute(sAttrStringValue, rValue);
     }

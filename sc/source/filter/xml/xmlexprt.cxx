@@ -2884,6 +2884,9 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 }
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                     aCell.nNumberFormat, aCell.fValue);
+                if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                    GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                            aCell.nNumberFormat, aCell.fValue, false, XML_NAMESPACE_CALC_EXT);
             }
             break;
         case table::CellContentType_TEXT :
@@ -2893,6 +2896,9 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                     OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                         sFormula, aCell.sStringValue, true, true);
+                    if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                        GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                                sFormula, aCell.sStringValue, false, true, XML_NAMESPACE_CALC_EXT);
                 }
             }
             break;
@@ -2919,7 +2925,18 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                             AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sOUFormula.copy(1, sOUFormula.getLength() - 2), false ));
                         }
                     }
-                    if (pFormulaCell->IsValue())
+                    if (pFormulaCell->GetErrCode())
+                    {
+                        GetCellText(aCell, aCellPos);
+                        AddAttribute(sAttrValueType, XML_STRING);
+                        AddAttribute(sAttrStringValue, aCell.sStringValue);
+                        if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                        {
+                            //export calcext:value-type="error"
+                            AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, OUString("error"));
+                        }
+                    }
+                    else if (pFormulaCell->IsValue())
                     {
                         bool bIsStandard;
                         OUString sCurrency;
@@ -2927,15 +2944,31 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         if (bIsStandard)
                         {
                             if (pDoc)
+                            {
                                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                     pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
                                     pDoc->GetValue( aCellPos ));
+                                if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                                {
+                                    GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                                            pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
+                                            pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT);
+                                }
+                            }
                         }
                         else
                         {
                             if (pDoc)
-                              GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                aCell.nNumberFormat, pDoc->GetValue( aCellPos ));
+                            {
+                                GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                                        aCell.nNumberFormat, pDoc->GetValue( aCellPos ));
+                                if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                                {
+                                    GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                                            aCell.nNumberFormat, pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT );
+
+                                }
+                            }
                         }
                     }
                     else
@@ -2945,6 +2978,10 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                             {
                                 AddAttribute(sAttrValueType, XML_STRING);
                                 AddAttribute(sAttrStringValue, aCell.sStringValue);
+                                if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                                {
+                                    AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, XML_STRING);
+                                }
                             }
                     }
                 }
