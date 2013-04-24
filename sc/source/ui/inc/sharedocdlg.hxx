@@ -36,22 +36,13 @@ class ScDocShell;
 class ScShareDocumentDlg : public ModalDialog
 {
 private:
-    CheckBox            maCbShare;
-    FixedText           maFtWarning;
-    FixedLine           maFlUsers;
-    FixedText           maFtUsers;
-    SvxSimpleTableContainer m_aLbUsersContainer;
-    SvxSimpleTable      maLbUsers;
-    FixedLine           maFlEnd;
-    HelpButton          maBtnHelp;
-    OKButton            maBtnOK;
-    CancelButton        maBtnCancel;
+    CheckBox*           m_pCbShare;
+    FixedText*          m_pFtWarning;
+    SvxSimpleTable*     m_pLbUsers;
 
-    String              maStrTitleName;
-    String              maStrTitleAccessed;
-    String              maStrNoUserData;
-    String              maStrUnkownUser;
-    String              maStrExclusiveAccess;
+    OUString            m_aStrNoUserData;
+    OUString            m_aStrUnknownUser;
+    OUString            m_aStrExclusiveAccess;
 
     ScViewData*         mpViewData;
     ScDocShell*         mpDocShell;

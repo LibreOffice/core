@@ -28,7 +28,6 @@
 
 
 #include "sharedocdlg.hxx"
-#include "sharedocdlg.hrc"
 #include "scresid.hxx"
 #include "docsh.hxx"
 #include "viewdata.hxx"
@@ -36,68 +35,101 @@
 
 using namespace ::com::sun::star;
 
+class ScShareTable : public SvxSimpleTable
+{
+private:
+    OUString m_sWidestAccessString;
+public:
+    ScShareTable(SvxSimpleTableContainer& rParent)
+        : SvxSimpleTable(rParent)
+    {
+        Date aDate(22, 12, 2000);
+        Time aTime(22, 59);
+        DateTime aDateTime(aDate, aTime);
+        m_sWidestAccessString += ScGlobal::pLocaleData->getDate(aDateTime);
+        m_sWidestAccessString += OUString(' ');
+        m_sWidestAccessString += ScGlobal::pLocaleData->getTime(aDateTime, false);
+    }
+    virtual void Resize()
+    {
+        SvxSimpleTable::Resize();
+        if (isInitialLayout(this))
+            setColWidths();
+    }
+    void setColWidths()
+    {
+        HeaderBar &rBar = GetTheHeaderBar();
+        if (rBar.GetItemCount() < 2)
+            return;
+
+        long nAccessedWidth = 12 +
+            std::max(rBar.GetTextWidth(rBar.GetItemText(2)),
+            GetTextWidth(m_sWidestAccessString));
+        long nWebSiteWidth = std::max(
+            12 + rBar.GetTextWidth(rBar.GetItemText(1)),
+            GetSizePixel().Width() - nAccessedWidth);
+        long aStaticTabs[]= { 2, 0, 0 };
+        aStaticTabs[2] = nWebSiteWidth;
+        SvxSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+    }
+};
 
 //=============================================================================
 // class ScShareDocumentDlg
 //=============================================================================
 
 ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
-    :ModalDialog( pParent, ScResId( RID_SCDLG_SHAREDOCUMENT ) )
-    ,maCbShare            ( this, ScResId( CB_SHARE ) )
-    ,maFtWarning          ( this, ScResId( FT_WARNING ) )
-    ,maFlUsers            ( this, ScResId( FL_USERS ) )
-    ,maFtUsers            ( this, ScResId( FT_USERS ) )
-    ,m_aLbUsersContainer(this, ScResId(LB_USERS))
-    ,maLbUsers(m_aLbUsersContainer)
-    ,maFlEnd              ( this, ScResId( FL_END ) )
-    ,maBtnHelp            ( this, ScResId( BTN_HELP ) )
-    ,maBtnOK              ( this, ScResId( BTN_OK ) )
-    ,maBtnCancel          ( this, ScResId( BTN_CANCEL ) )
-    ,maStrTitleName       ( ScResId( STR_TITLE_NAME ) )
-    ,maStrTitleAccessed   ( ScResId( STR_TITLE_ACCESSED ) )
-    ,maStrNoUserData      ( ScResId( STR_NO_USER_DATA ) )
-    ,maStrUnkownUser      ( ScResId( STR_UNKNOWN_USER ) )
-    ,maStrExclusiveAccess ( ScResId( STR_EXCLUSIVE_ACCESS ) )
-    ,mpViewData           ( pViewData )
-    ,mpDocShell           ( NULL )
+    : ModalDialog(pParent, "ShareDocumentDialog", "modules/scalc/ui/sharedocumentdlg.ui")
+    , mpViewData(pViewData)
+    , mpDocShell(NULL)
 {
     OSL_ENSURE( mpViewData, "ScShareDocumentDlg CTOR: mpViewData is null!" );
     mpDocShell = ( mpViewData ? mpViewData->GetDocShell() : NULL );
     OSL_ENSURE( mpDocShell, "ScShareDocumentDlg CTOR: mpDocShell is null!" );
 
-    FreeResource();
+    get(m_pCbShare, "share");
+    get(m_pFtWarning, "warning");
+
+    SvxSimpleTableContainer *pCtrl = get<SvxSimpleTableContainer>("users");
+    pCtrl->set_height_request(pCtrl->GetTextHeight()*9);
+    m_pLbUsers = new ScShareTable(*pCtrl);
+
+    m_aStrNoUserData = get<FixedText>("nouserdata")->GetText();
+    m_aStrUnknownUser = get<FixedText>("unknownuser")->GetText();
+    m_aStrExclusiveAccess = get<FixedText>("exclusive")->GetText();
 
     bool bIsDocShared = ( mpDocShell ? mpDocShell->IsDocShared() : false );
-    maCbShare.Check( bIsDocShared );
-    maCbShare.SetToggleHdl( LINK( this, ScShareDocumentDlg, ToggleHandle ) );
-    maFtWarning.Enable( bIsDocShared );
+    m_pCbShare->Check( bIsDocShared );
+    m_pCbShare->SetToggleHdl( LINK( this, ScShareDocumentDlg, ToggleHandle ) );
+    m_pFtWarning->Enable( bIsDocShared );
 
-    long nTabs[] = { 2, 10, 128 };
-    maLbUsers.SetTabs( nTabs );
+    long nTabs[] = { 2, 0, 0 };
+    m_pLbUsers->SetTabs( nTabs );
 
-    String aHeader( maStrTitleName );
+    String aHeader(get<FixedText>("name")->GetText());
     aHeader += '\t';
-    aHeader += maStrTitleAccessed;
-    maLbUsers.InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER );
-    maLbUsers.SetSelectionMode( NO_SELECTION );
+    aHeader += get<FixedText>("accessed")->GetText();
+    m_pLbUsers->InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER );
+    m_pLbUsers->SetSelectionMode( NO_SELECTION );
 
     UpdateView();
 }
 
 ScShareDocumentDlg::~ScShareDocumentDlg()
 {
+    delete m_pLbUsers;
 }
 
 IMPL_LINK_NOARG(ScShareDocumentDlg, ToggleHandle)
 {
-    maFtWarning.Enable( maCbShare.IsChecked() );
+    m_pFtWarning->Enable( m_pCbShare->IsChecked() );
 
     return 0;
 }
 
 bool ScShareDocumentDlg::IsShareDocumentChecked() const
 {
-    return maCbShare.IsChecked();
+    return m_pCbShare->IsChecked();
 }
 
 void ScShareDocumentDlg::UpdateView()
@@ -135,7 +167,7 @@ void ScShareDocumentDlg::UpdateView()
                         }
                         else
                         {
-                            aUser = OUString(maStrUnkownUser) + " " + OUString::number( nUnknownUser++ );
+                            aUser = OUString(m_aStrUnknownUser) + " " + OUString::number( nUnknownUser++ );
                         }
 
                         // parse the edit time string of the format "DD.MM.YYYY hh:mm"
@@ -160,20 +192,20 @@ void ScShareDocumentDlg::UpdateView()
                         aString += ' ';
                         aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
 
-                        maLbUsers.InsertEntry( aString, NULL );
+                        m_pLbUsers->InsertEntry( aString, NULL );
                     }
                 }
             }
             else
             {
-                maLbUsers.InsertEntry( maStrNoUserData, NULL );
+                m_pLbUsers->InsertEntry( m_aStrNoUserData, NULL );
             }
         }
         catch ( uno::Exception& )
         {
             OSL_FAIL( "ScShareDocumentDlg::UpdateView(): caught exception\n" );
-            maLbUsers.Clear();
-            maLbUsers.InsertEntry( maStrNoUserData, NULL );
+            m_pLbUsers->Clear();
+            m_pLbUsers->InsertEntry( m_aStrNoUserData, NULL );
         }
     }
     else
@@ -197,10 +229,10 @@ void ScShareDocumentDlg::UpdateView()
         if ( aUser.Len() == 0 )
         {
             // unknown user name
-            aUser = maStrUnkownUser;
+            aUser = m_aStrUnknownUser;
         }
         aUser += ' ';
-        aUser += maStrExclusiveAccess;
+        aUser += m_aStrExclusiveAccess;
         String aString( aUser );
         aString += '\t';
 
@@ -216,7 +248,7 @@ void ScShareDocumentDlg::UpdateView()
         aString += ' ';
         aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
 
-        maLbUsers.InsertEntry( aString, NULL );
+        m_pLbUsers->InsertEntry( aString, NULL );
     }
 }
 

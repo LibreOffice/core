@@ -84,7 +84,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/miscdlgs/conflictsdlg.src \
     sc/source/ui/miscdlgs/protectiondlg.src \
     sc/source/ui/miscdlgs/acredlin.src \
-    sc/source/ui/miscdlgs/sharedocdlg.src \
     sc/source/ui/formdlg/formdlgs.src \
     sc/source/ui/formdlg/dwfunctr.src \
     sc/source/core/src/compiler.src \
