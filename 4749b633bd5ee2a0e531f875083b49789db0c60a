@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//99Q\u003d",
+        "filename": "svx/source/table/svdotable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-04-24T20:55:13Z",
+      "side": 1,
+      "message": "This line here crashes if xCell became NULL in the loop above.",
+      "revId": "4749b633bd5ee2a0e531f875083b49789db0c60a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
