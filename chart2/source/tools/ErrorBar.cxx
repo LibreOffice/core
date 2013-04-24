@@ -155,6 +155,10 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny
         rAny >>= mfPositiveError;
         rAny >>= mfNegativeError;
     }
+    else if(rPropName == "Weight")
+    {
+        rAny >>= mfWeight;
+    }
     else if(rPropName == "NegativeError")
         rAny >>= mfNegativeError;
     else if(rPropName == "ShowPositiveError")
@@ -228,6 +232,8 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
         aRet <<= mbShowPositiveError;
     else if(rPropName == "ShowNegativeError")
         aRet <<= mbShowNegativeError;
+    else if(rPropName == "Weight")
+        aRet <<= mfWeight;
     else if(rPropName == "ErrorBarRangePositive")
     {
         OUString aRange;
