@@ -114,7 +114,7 @@ endef
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_Object__command_dep
 mkdir -p $(dir $(1)) && \
-	echo "$(2) : $$(gb_Helper_PHONY)" > $(1)
+	echo "$(2) : $(gb_Helper_PHONY)" > $(1)
 
 endef
 else
