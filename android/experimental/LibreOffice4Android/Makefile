@@ -26,8 +26,7 @@ copy-stuff:
 	mkdir -p assets/gz.unpack/program/ure assets/lib assets/program assets/xml/ure assets/ComponentTarget/i18npool/util
 	gzip -9 <$(OUTDIR)/bin/offapi.rdb >assets/gz.unpack/program/offapi.rdb
 	gzip -9 <$(OUTDIR)/bin/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
-	gzip -9 <$(OUTDIR)/bin/types.rdb >assets/gz.unpack/program/types.rdb
-	gzip -9 <$(OUTDIR)/bin/ure/types.rdb >assets/gz.unpack/program/ure/types.rdb
+	gzip -9 <$(OUTDIR)/bin/udkapi.rdb >assets/gz.unpack/program/udkapi.rdb
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
 	for F in xml/services xml/ure/services; do \
 		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$$APP_DATA_DIR/lib/!g' <$(OUTDIR)/$$F.rdb >assets/$$F.rdb; \
@@ -69,7 +68,7 @@ copy-stuff:
 # Set up unorc
 	echo '[Bootstrap]' > assets/program/unorc
 	echo 'URE_INTERNAL_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/unorc
-	echo 'UNO_TYPES=file://$$APP_DATA_DIR/program/ure/types.rdb file://$$APP_DATA_DIR/program/types.rdb file://$$APP_DATA_DIR/program/offapi.rdb file://$$APP_DATA_DIR/program/oovbaapi.rdb' >> assets/program/unorc
+	echo 'UNO_TYPES=file://$$APP_DATA_DIR/program/udkapi.rdb file://$$APP_DATA_DIR/program/offapi.rdb file://$$APP_DATA_DIR/program/oovbaapi.rdb' >> assets/program/unorc
 	echo 'UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/unorc
 #
 # Set up bootstraprc
