@@ -1,7 +1,7 @@
-diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
---- harfbuzz-0.9.16/configure	2013-04-19 22:24:01.000000000 +0200
-+++ harfbuzz-0.9.16/configure	2013-04-24 13:06:21.949971349 +0200
-@@ -16813,7 +16813,7 @@
+diff -ur harfbuzz.org/configure harfbuzz/configure
+--- harfbuzz.org/configure	2013-04-22 20:45:32.738213297 +0200
++++ harfbuzz/configure	2013-04-22 20:46:56.334209801 +0200
+@@ -16813,7 +16885,7 @@
  
  
  
@@ -10,7 +10,7 @@ diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
  if $have_hb_old; then
  
  $as_echo "#define HAVE_HB_OLD 1" >>confdefs.h
-@@ -16829,7 +16829,7 @@
+@@ -16829,7 +16901,7 @@
  
  
  
@@ -19,7 +19,7 @@ diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
  if $have_ucdn; then
  
  $as_echo "#define HAVE_UCDN 1" >>confdefs.h
-@@ -16914,7 +16914,7 @@
+@@ -16914,7 +16986,7 @@
  	GLIB_LIBS=$pkg_cv_GLIB_LIBS
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
  $as_echo "yes" >&6; }
@@ -28,7 +28,7 @@ diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
  fi
  if $have_glib; then
  
-@@ -16999,7 +16999,7 @@
+@@ -16999,7 +17071,7 @@
  	GOBJECT_LIBS=$pkg_cv_GOBJECT_LIBS
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
  $as_echo "yes" >&6; }
@@ -37,7 +37,7 @@ diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
  fi
  if $have_gobject; then
  
-@@ -17087,7 +17087,7 @@
+@@ -17087,7 +17159,7 @@
  	CAIRO_LIBS=$pkg_cv_CAIRO_LIBS
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
  $as_echo "yes" >&6; }
@@ -46,7 +46,7 @@ diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
  fi
  if $have_cairo; then
  
-@@ -17172,7 +17172,7 @@
+@@ -17172,7 +17244,7 @@
  	CAIRO_FT_LIBS=$pkg_cv_CAIRO_FT_LIBS
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
  $as_echo "yes" >&6; }
@@ -55,31 +55,7 @@ diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
  fi
  if $have_cairo_ft; then
  
-@@ -17353,23 +17353,6 @@
-   ICU_CONFIG="$ac_cv_prog_ICU_CONFIG"
- fi
- 
--	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ICU by using icu-config fallback" >&5
--$as_echo_n "checking for ICU by using icu-config fallback... " >&6; }
--	if test "$ICU_CONFIG" != "no" && "$ICU_CONFIG" --version >/dev/null; then
--		have_icu=true
--		# We don't use --cflags as this gives us a lot of things that we don't
--		# necessarily want, like debugging and optimization flags
--		# See man (1) icu-config for more info.
--		ICU_CFLAGS=`$ICU_CONFIG --cppflags`
--		ICU_LIBS=`$ICU_CONFIG --ldflags-libsonly`
--
--
--		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
--$as_echo "yes" >&6; }
--	else
--		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
--$as_echo "no" >&6; }
--	fi
- fi
- 
- if $have_icu; then
-@@ -17457,7 +17440,7 @@
+@@ -17457,7 +17529,7 @@
  	ICU_LE_LIBS=$pkg_cv_ICU_LE_LIBS
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
  $as_echo "yes" >&6; }
@@ -88,31 +64,16 @@ diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
  fi
  if test "$have_icu_le" != "true"; then
  	if test -n "$ac_tool_prefix"; then
-@@ -17552,23 +17535,6 @@
-   ICU_CONFIG="$ac_cv_prog_ICU_CONFIG"
- fi
- 
--	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ICU_LE by using icu-config fallback" >&5
--$as_echo_n "checking for ICU_LE by using icu-config fallback... " >&6; }
--	if test "$ICU_CONFIG" != "no" && "$ICU_CONFIG" --version >/dev/null; then
+@@ -17555,7 +17555,7 @@
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ICU_LE by using icu-config fallback" >&5
+ $as_echo_n "checking for ICU_LE by using icu-config fallback... " >&6; }
+ 	if test "$ICU_CONFIG" != "no" && "$ICU_CONFIG" --version >/dev/null; then
 -		have_icu_le=true
--		# We don't use --cflags as this gives us a lot of things that we don't
--		# necessarily want, like debugging and optimization flags
--		# See man (1) icu-config for more info.
--		ICU_LE_CFLAGS=`$ICU_CONFIG --cppflags`
--		ICU_LE_LIBS=`$ICU_CONFIG --ldflags-libsonly --ldflags-layout`
--
--
--		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
--$as_echo "yes" >&6; }
--	else
--		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
--$as_echo "no" >&6; }
--	fi
- fi
- if $have_icu_le; then
- 
-@@ -17654,7 +17620,7 @@
++		have_icu_le=false
+ 		# We don't use --cflags as this gives us a lot of things that we don't
+ 		# necessarily want, like debugging and optimization flags
+ 		# See man (1) icu-config for more info.
+@@ -17654,7 +17654,7 @@
  	GRAPHITE2_LIBS=$pkg_cv_GRAPHITE2_LIBS
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
  $as_echo "yes" >&6; }
@@ -121,7 +82,7 @@ diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
  fi
  if $have_graphite; then
  
-@@ -17740,7 +17706,7 @@
+@@ -17740,7 +17812,7 @@
  	FREETYPE_LIBS=$pkg_cv_FREETYPE_LIBS
          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
  $as_echo "yes" >&6; }
@@ -130,7 +91,7 @@ diff -urEbwB harfbuzz-0.9.16/configure harfbuzz-0.9.16/configure
  fi
  if $have_freetype; then
  
-@@ -17825,7 +17791,7 @@
+@@ -17825,7 +17897,7 @@
  ac_fn_c_check_type "$LINENO" "CTFontRef" "ac_cv_type_CTFontRef" "#include <ApplicationServices/ApplicationServices.h>
  "
  if test "x$ac_cv_type_CTFontRef" = xyes; then :
