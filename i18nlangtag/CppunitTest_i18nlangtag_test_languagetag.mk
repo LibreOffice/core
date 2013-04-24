@@ -37,11 +37,6 @@ $(eval $(call gb_CppunitTest_use_package,i18nlangtag_test_languagetag,langtag_da
 endif
 endif
 
-$(eval $(call gb_CppunitTest_set_include,i18nlangtag_test_languagetag,\
-	-I$(SRCDIR)/i18nlangtag/inc \
-	$$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,i18nlangtag_test_languagetag,\
 	i18nlangtag/qa/cppunit/test_languagetag \
 ))

@@ -26,9 +26,4 @@ $(eval $(call gb_CppunitTest_use_libraries,comphelper_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,comphelper_test,\
-    -I$(SRCDIR)/comphelper/inc \
-    $$(INCLUDE) \
-))
-
 # vim: set noet sw=4 ts=4:

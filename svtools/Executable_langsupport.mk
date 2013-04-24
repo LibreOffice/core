@@ -14,7 +14,6 @@ $(eval $(call gb_Executable_set_targettype_gui,langsupport,YES))
 $(eval $(call gb_Executable_set_include,langsupport,\
     $$(INCLUDE) \
     -I$(SRCDIR)/svtools/inc \
-    -I$(SRCDIR)/svtools/inc/svtools \
     -I$(SRCDIR)/svtools/source/inc \
 ))
 

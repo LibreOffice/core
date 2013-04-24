@@ -9,11 +9,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,basebmp_cpputest))
 
-$(eval $(call gb_CppunitTest_set_include,basebmp_cpputest,\
-    -I$(SRCDIR)/basebmp/inc/ \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_CppunitTest_use_external,basebmp_cpputest,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,basebmp_cpputest,\

@@ -50,7 +50,6 @@ endif
 
 $(eval $(call gb_CppunitTest_set_include,svl_lngmisc,\
 	-I$(SRCDIR)/svl/source/inc \
-	-I$(SRCDIR)/svl/inc \
 	$$(INCLUDE) \
 ))
 # vim: set noet sw=4 ts=4:
