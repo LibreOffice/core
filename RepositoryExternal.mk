@@ -2810,7 +2810,7 @@ $(call gb_Executable_add_runtime_dependencies,climaker,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
-	$(call gb_UnoApi_get_target_for_build,udkapi) \
+	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
 
@@ -2847,7 +2847,7 @@ $(call gb_Executable_add_runtime_dependencies,saxparser,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
-	$(call gb_UnoApi_get_target_for_build,udkapi) \
+	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
 
@@ -2860,7 +2860,7 @@ $(call gb_Executable_add_runtime_dependencies,uno,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
-	$(call gb_UnoApi_get_target_for_build,udkapi) \
+	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
 
