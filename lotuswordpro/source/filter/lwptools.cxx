@@ -262,29 +262,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
         style = icu::DateFormat::FULL;//system full date format
     else
         style = icu::DateFormat::SHORT;//system short date format
-/*  ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
-    OUString strLang = aLocale.Language;
-    OUString strCountry = aLocale.Country;
-    strLang = strLang + A2OUSTR("_");
-    OUString strLocale = strLang + strCountry;
 
-    int32_t nLength = 0;
-    int32_t nLengthNeed;
-    UErrorCode status = U_ZERO_ERROR;
-    UChar* pattern = NULL;
-
-    UDateFormat* fmt= udat_open(UDAT_FULL, UDAT_FULL,
-        (char*)(OUStringToOString(strLocale,RTL_TEXTENCODING_MS_1252).getStr()), NULL, 0, NULL, 0, &status);
-
-    nLengthNeed = udat_toPattern(fmt,true,NULL,nLength,&status);
-    if (status == U_BUFFER_OVERFLOW_ERROR)
-    {
-        status = U_ZERO_ERROR;
-        nLength = nLengthNeed +1;
-        pattern = (UChar*)malloc(sizeof(UChar)*nLength);
-        udat_toPattern(fmt,true,pattern,nLength,&status);
-    }
-*/
     //1 get locale for system
     icu::Locale aLocale( LanguageTagIcu::getIcuLocale( Application::GetSettings().GetLanguageTag()));
     //2 get icu format pattern by locale
@@ -671,29 +649,6 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
 */
 XFTimeStyle* LwpTools::GetSystemTimeStyle()
 {
-/*  ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
-    OUString strLang = aLocale.Language;
-    OUString strCountry = aLocale.Country;
-    strLang = strLang + A2OUSTR("_");
-    OUString strLocale = strLang + strCountry;
-
-    int32_t nLength = 0;
-    int32_t nLengthNeed;
-    UErrorCode status = U_ZERO_ERROR;
-    UChar* pattern = NULL;
-
-    UDateFormat* fmt= udat_open(UDAT_FULL, UDAT_FULL,
-        (char*)(OUStringToOString(strLocale,RTL_TEXTENCODING_MS_1252).getStr()), NULL, 0, NULL, 0, &status);
-
-    nLengthNeed = udat_toPattern(fmt,true,NULL,nLength,&status);
-    if (status == U_BUFFER_OVERFLOW_ERROR)
-    {
-        status = U_ZERO_ERROR;
-        nLength = nLengthNeed +1;
-        pattern = (UChar*)malloc(sizeof(UChar)*nLength);
-        udat_toPattern(fmt,true,pattern,nLength,&status);
-    }
-*/
     //1 get locale for system
     icu::Locale aLocale( LanguageTagIcu::getIcuLocale( Application::GetSettings().GetLanguageTag()));
     //2 get icu format pattern by locale
