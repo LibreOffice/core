@@ -66,6 +66,9 @@ def ret_strdata_info( v, refvar, lenvar, aryvar):
 	r = v.GetChildMemberWithName( refvar).GetValueAsSigned()
 	l = v.GetChildMemberWithName( lenvar).GetValueAsSigned()
 	c = v.GetChildMemberWithName( aryvar)
+	if (r < 0) or (l < 0):
+		info += 'CORRUPT_STR={refs=%d, len=%d}' % (r,l)
+		return info
 	L = min(l,128)
 	d = c.AddressOf().GetPointeeData( 0, L)
 	if c.GetByteSize() == 1: # assume UTF-8
