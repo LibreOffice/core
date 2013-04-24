@@ -66,19 +66,19 @@ namespace
  * than english ones, ICU 4.2+ has to be used.
  */
 uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nNumber,
-        const lang::Locale &aLocale ) throw( RuntimeException )
+        const lang::Locale &rLocale ) throw( RuntimeException )
 {
     uno::Sequence< OUString > retValue;
 
     // Get the value from ICU
     UErrorCode nCode = U_ZERO_ERROR;
-    const icu::Locale rIcuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( aLocale)));
+    const icu::Locale aIcuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale)));
 
-    icu::RuleBasedNumberFormat formatter(icu::URBNF_ORDINAL, rIcuLocale, nCode);
+    icu::RuleBasedNumberFormat formatter(icu::URBNF_ORDINAL, aIcuLocale, nCode);
     if (!U_SUCCESS(nCode))
         return retValue;
 
-    boost::scoped_ptr<NumberFormat> xNumberFormat(icu::NumberFormat::createInstance(rIcuLocale, nCode));
+    boost::scoped_ptr<NumberFormat> xNumberFormat(icu::NumberFormat::createInstance(aIcuLocale, nCode));
     if (!U_SUCCESS(nCode))
         return retValue;
 
