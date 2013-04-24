@@ -59,6 +59,8 @@ public:
     // XHelperInterface
     virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+
+    static OUString getNameFromModel( const css::uno::Reference< css::frame::XModel >& xModel );
 };
 
 #endif /* VBA_DOCUMENTBASE_HXX */
