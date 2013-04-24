@@ -18,14 +18,14 @@
  */
 
 #include <boost/scoped_ptr.hpp>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/languagetagicu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <string.h>
 #include "ordinalsuffix.hxx"
 
 #include <unicode/rbnf.h>
 #include <unicode/normlzr.h>
-
-#define CSTR( ouStr ) OUStringToOString( ouStr, RTL_TEXTENCODING_UTF8 ).getStr( )
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
@@ -72,10 +72,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
 
     // Get the value from ICU
     UErrorCode nCode = U_ZERO_ERROR;
-    const icu::Locale rIcuLocale(
-            CSTR( aLocale.Language ),
-            CSTR( aLocale.Country ),
-            CSTR( aLocale.Variant ) );
+    const icu::Locale rIcuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( aLocale)));
 
     icu::RuleBasedNumberFormat formatter(icu::URBNF_ORDINAL, rIcuLocale, nCode);
     if (!U_SUCCESS(nCode))
