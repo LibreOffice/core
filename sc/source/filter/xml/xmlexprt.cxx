@@ -2870,90 +2870,88 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     bool bIsEmpty(false);
     switch (aCell.nType)
     {
-    case table::CellContentType_EMPTY :
-        {
-            bIsEmpty = true;
-        }
-        break;
-    case table::CellContentType_VALUE :
-        {
-            if (!aCell.bHasDoubleValue)
+        case table::CellContentType_EMPTY :
             {
-                aCell.fValue = pDoc->GetValue( aCellPos );
-                aCell.bHasDoubleValue = true;
+                bIsEmpty = true;
             }
-            GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                aCell.nNumberFormat, aCell.fValue);
-        }
-        break;
-    case table::CellContentType_TEXT :
-        {
-            if (GetCellText(aCell, aCellPos))
+            break;
+        case table::CellContentType_VALUE :
             {
-                OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
+                if (!aCell.bHasDoubleValue)
+                {
+                    aCell.fValue = pDoc->GetValue( aCellPos );
+                    aCell.bHasDoubleValue = true;
+                }
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                    sFormula, aCell.sStringValue, true, true);
+                    aCell.nNumberFormat, aCell.fValue);
             }
-        }
-        break;
-    case table::CellContentType_FORMULA :
-        {
-            ScRefCellValue aCellVal;
-            aCellVal.assign(*pDoc, aCellPos);
-            if (aCellVal.meType == CELLTYPE_FORMULA)
+            break;
+        case table::CellContentType_TEXT :
             {
-                OUStringBuffer sFormula;
-                ScFormulaCell* pFormulaCell = aCellVal.mpFormula;
-                if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
+                if (GetCellText(aCell, aCellPos))
                 {
-                    const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
-                    sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
-                    pFormulaCell->GetFormula(sFormula, eGrammar);
-                    OUString sOUFormula(sFormula.makeStringAndClear());
-                    if (!bIsMatrix)
-                    {
-                        AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sOUFormula, false ));
-                    }
-                    else
-                    {
-                        AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sOUFormula.copy(1, sOUFormula.getLength() - 2), false ));
-                    }
-                }
-                if (pFormulaCell->IsValue())
-                {
-                    bool bIsStandard;
-                    OUString sCurrency;
-                    GetNumberFormatAttributesExportHelper()->GetCellType(aCell.nNumberFormat, sCurrency, bIsStandard);
-                    if (bIsStandard)
-                    {
-                        if (pDoc)
-                            GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
-                                pDoc->GetValue( aCellPos ));
-                    }
-                    else
-                    {
-                        if (pDoc)
-                          GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                            aCell.nNumberFormat, pDoc->GetValue( aCellPos ));
-                    }
-                }
-                else
-                {
-                    if (GetCellText(aCell, aCellPos))
-                        if (!aCell.sStringValue.isEmpty())
-                        {
-                            AddAttribute(sAttrValueType, XML_STRING);
-                            AddAttribute(sAttrStringValue, aCell.sStringValue);
-                        }
+                    OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
+                    GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                        sFormula, aCell.sStringValue, true, true);
                 }
             }
-        }
-        break;
+            break;
+        case table::CellContentType_FORMULA :
+            {
+                ScRefCellValue aCellVal;
+                aCellVal.assign(*pDoc, aCellPos);
+                if (aCellVal.meType == CELLTYPE_FORMULA)
+                {
+                    OUStringBuffer sFormula;
+                    ScFormulaCell* pFormulaCell = aCellVal.mpFormula;
+                    if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
+                    {
+                        const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
+                        sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
+                        pFormulaCell->GetFormula(sFormula, eGrammar);
+                        OUString sOUFormula(sFormula.makeStringAndClear());
+                        if (!bIsMatrix)
+                        {
+                            AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sOUFormula, false ));
+                        }
+                        else
+                        {
+                            AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sOUFormula.copy(1, sOUFormula.getLength() - 2), false ));
+                        }
+                    }
+                    if (pFormulaCell->IsValue())
+                    {
+                        bool bIsStandard;
+                        OUString sCurrency;
+                        GetNumberFormatAttributesExportHelper()->GetCellType(aCell.nNumberFormat, sCurrency, bIsStandard);
+                        if (bIsStandard)
+                        {
+                            if (pDoc)
+                                GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                                    pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
+                                    pDoc->GetValue( aCellPos ));
+                        }
+                        else
+                        {
+                            if (pDoc)
+                              GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                                aCell.nNumberFormat, pDoc->GetValue( aCellPos ));
+                        }
+                    }
+                    else
+                    {
+                        if (GetCellText(aCell, aCellPos))
+                            if (!aCell.sStringValue.isEmpty())
+                            {
+                                AddAttribute(sAttrValueType, XML_STRING);
+                                AddAttribute(sAttrStringValue, aCell.sStringValue);
+                            }
+                    }
+                }
+            }
+            break;
         default:
-        {
-            // added to avoid warnings
-        }
+            break;
     }
     OUString* pCellString(&sElemCell);
     if (aCell.bIsCovered)
