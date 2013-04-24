@@ -2028,12 +2028,14 @@ void ScTabView::FreezeSplitters( bool bFreeze )
     if ( eOldV != SC_SPLIT_NONE )
         ePos = SC_SPLIT_TOPLEFT;
     Window* pWin = pGridWin[ePos];
+    ScDocShell* pDocSh = NULL;
 
     bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
 
     if ( bFreeze )
     {
         Point aWinStart = pWin->GetPosPixel();
+        pDocSh->SetDocumentModified();
 
         Point aSplit;
         SCsCOL nPosX;
