@@ -781,9 +781,9 @@ public:
 
     void SetEmptyCell( const ScAddress& rPos );
 
-    SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
+    SC_DLLPUBLIC void SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     SC_DLLPUBLIC void SetValue( const ScAddress& rPos, double fVal );
-    void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError);
+    void SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError);
 
     SC_DLLPUBLIC void SetFormula(
         const ScAddress& rPos, const ScTokenArray& rArray,
@@ -795,14 +795,14 @@ public:
 
     SC_DLLPUBLIC void SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
 
-    SC_DLLPUBLIC void           InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
+    SC_DLLPUBLIC void InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark,
                                         const OUString& rFormula,
                                         const ScTokenArray* p = NULL,
                                         const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                                         bool bDirtyFlag=true );
-    SC_DLLPUBLIC void           InsertTableOp(const ScTabOpParam& rParam,   // multi-operation
+    SC_DLLPUBLIC void InsertTableOp(const ScTabOpParam& rParam,   // multi-operation
                                   SCCOL nCol1, SCROW nRow1,
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
@@ -830,19 +830,19 @@ public:
      */
     double* GetValueCell( const ScAddress& rPos );
 
-    SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
-    SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
-    sal_uInt16                  GetStringForFormula( const ScAddress& rPos, OUString& rString );
+    SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
+    SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
+    sal_uInt16 GetStringForFormula( const ScAddress& rPos, OUString& rString );
     SC_DLLPUBLIC double GetValue( const ScAddress& rPos ) const;
     SC_DLLPUBLIC double GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const { ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);}
     SC_DLLPUBLIC void GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const;
     SC_DLLPUBLIC const EditTextObject* GetEditText( const ScAddress& rPos ) const;
     void RemoveEditTextCharAttribs( const ScAddress& rPos, const ScPatternAttr& rAttr );
     SC_DLLPUBLIC double RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const;
-    SC_DLLPUBLIC void           GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    SC_DLLPUBLIC void GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      sal_uInt32& rFormat ) const;
     sal_uInt32      GetNumberFormat( const ScRange& rRange ) const;
-    SC_DLLPUBLIC sal_uInt32     GetNumberFormat( const ScAddress& ) const;
+    SC_DLLPUBLIC sal_uInt32 GetNumberFormat( const ScAddress& ) const;
     void SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
 
     /**
