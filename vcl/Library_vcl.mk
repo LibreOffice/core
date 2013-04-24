@@ -654,7 +654,8 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 	winspool \
 ))
 
-$(eval $(call gb_Library_add_nativeres,vcl,vcl/src))
+$(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
+
 ifeq ($(COM),MSC)
 ifeq ($(USE_MINGW),)
 $(eval $(call gb_Library_add_ldflags,vcl,\

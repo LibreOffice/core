@@ -17,17 +17,17 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_WinResTarget_WinResTarget,vcl/src))
+$(eval $(call gb_WinResTarget_WinResTarget,vcl/salsrc))
 
-$(eval $(call gb_WinResTarget_set_include,vcl/src,\
+$(eval $(call gb_WinResTarget_set_include,vcl/salsrc,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
 ))
 
-$(eval $(call gb_WinResTarget_set_rcfile,vcl/src,\
+$(eval $(call gb_WinResTarget_set_rcfile,vcl/salsrc,\
     vcl/win/source/src/salsrc \
 ))
-$(eval $(call gb_WinResTarget_add_dependencies,vcl/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,vcl/salsrc,\
     vcl/win/source/src/dtext.cur \
     vcl/win/source/src/50.bmp \
     vcl/win/source/src/copydata.cur \
