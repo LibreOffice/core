@@ -182,7 +182,7 @@ void Test::run()
         {"fdo60922.docx", &Test::testFdo60922},
         {"fdo59273.docx", &Test::testFdo59273},
         {"table_width.docx", &Test::testTableWidth},
-        {"conditionalstyles-tbllook.docx", &Test::testConditionalstylesTbllook},
+//        {"conditionalstyles-tbllook.docx", &Test::testConditionalstylesTbllook},
         {"fdo63685.docx", &Test::testFdo63685},
     };
     header();
