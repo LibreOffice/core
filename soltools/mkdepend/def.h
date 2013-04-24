@@ -181,6 +181,7 @@ void add_include(struct filepointer *filep, struct inclist *file,
 int match(register char *str, register char **list);
 void recursive_pr_include(register struct inclist *head, register char *file,
     register char *base);
+void recursive_pr_dummy(register struct inclist *head, register char *file);
 void inc_clean();
 
 void fatalerr(char *, ...);

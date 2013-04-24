@@ -461,6 +461,9 @@ int main(argc, argv)
 
         freefile(filecontent);
         recursive_pr_include(ip, ip->i_file, base_name(*fp));
+        if (printed)
+            fwrite("\n\n", 2, 1, stdout);
+        recursive_pr_dummy(ip, ip->i_file);
         inc_clean();
     }
     if (printed)
@@ -660,6 +663,14 @@ void redirect(line, makefile)
     char    *line,
         *makefile;
 {
+    FILE    *fdout;
+    fdout = freopen(makefile, "wb", stdout); // binary mode please
+    if (fdout == NULL)
+        fatalerr("cannot open \"%s\"\n", makefile);
+    (void) line;
+
+    // don't need any of that nonsense
+#if 0
     struct stat st;
     FILE    *fdin, *fdout;
     char    backup[ BUFSIZ ],
@@ -724,6 +735,7 @@ void redirect(line, makefile)
     fchmod(fileno(fdout), st.st_mode);
 #endif /* USGISH */
     fclose(fdin);
+#endif
 }
 
 void fatalerr(char *msg, ...)

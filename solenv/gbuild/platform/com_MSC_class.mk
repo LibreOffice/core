@@ -484,13 +484,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE) \
 		$(DEFS) \
 		$(2) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(call gb_SrsPartTarget_get_target,$(1)) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-	> $(call gb_SrsPartTarget_get_dep_target,$(1)))
+		-o .src \
+		-p $(dir $(call gb_SrsPartTarget_get_target,$(1))) \
+		-f $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 else
 gb_SrsPartTarget__command_target =
@@ -532,13 +528,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE) \
 		$(DEFS) \
 		$(RCFILE) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(3) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-	> $(1))
+		-o .res \
+		-p $(dir $(3)) \
+		-f $(1))
 endef
 else
 gb_WinResTarget__command_target =

@@ -79,6 +79,29 @@ void add_include(struct filepointer *filep, struct inclist *file, struct inclist
     }
 }
 
+void pr_dummy(ip)
+    register struct inclist  *ip;
+{
+    fwrite(ip->i_file, strlen(ip->i_file), 1, stdout);
+    fwrite(" :\n\n", 4, 1, stdout);
+}
+
+void recursive_pr_dummy(head, file)
+    register struct inclist *head;
+    register char   *file;
+{
+    register int    i;
+
+    if (head->i_marked == 2)
+        return;
+    head->i_marked = 2; // it's a large boolean...
+    if (head->i_file != file)
+        pr_dummy(head, file);
+    for (i=0; i<head->i_listlen; i++)
+        recursive_pr_dummy(head->i_list[ i ], file);
+}
+
+
 void recursive_pr_include(head, file, base)
     register struct inclist *head;
     register char   *file, *base;
@@ -105,16 +128,19 @@ size_t pr(ip, file, base)
     char    buf[ BUFSIZ ];
 
     printed = TRUE;
-    len = (int)strlen(ip->i_file)+1;
-    if (current_len + len > width || file != lastfile) {
+    len = (int)strlen(ip->i_file)+4;
+    if (file != lastfile) {
         lastfile = file;
-        sprintf(buf, "\n%s%s%s: %s", objprefix, base, objsuffix,
+        sprintf(buf, "\n%s%s%s: \\\n %s", objprefix, base, objsuffix,
             ip->i_file);
         len = current_len = (int)strlen(buf);
     }
     else {
         buf[0] = ' ';
-        strcpy(buf+1, ip->i_file);
+        buf[1] = '\\';
+        buf[2] = '\n';
+        buf[3] = ' ';
+        strcpy(buf+4, ip->i_file);
         current_len += len;
     }
     ret = fwrite(buf, len, 1, stdout);

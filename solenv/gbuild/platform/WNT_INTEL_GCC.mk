@@ -362,13 +362,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE) \
 		$(DEFS) \
 		$(RCFILE) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(3) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-	> $(1))
+		-o .res \
+		-p $(dir $(3)) \
+		-f $(1))
 endef
 else
 gb_WinResTarget__command_target =
