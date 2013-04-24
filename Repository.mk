@@ -345,6 +345,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lnth \
     log \
 	MacOSXSpell \
+    mariadb \
     mork \
     mozab2 \
     mozabdrv \

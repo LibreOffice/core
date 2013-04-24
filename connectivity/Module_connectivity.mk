@@ -113,6 +113,10 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Library_mariadb \
+))
+
 ifeq ($(OS),WNT)
 
 ifeq ($(WITH_MOZAB4WIN),YES)
