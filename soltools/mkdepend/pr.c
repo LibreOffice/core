@@ -96,7 +96,7 @@ void recursive_pr_dummy(head, file)
         return;
     head->i_marked = 2; // it's a large boolean...
     if (head->i_file != file)
-        pr_dummy(head, file);
+        pr_dummy(head);
     for (i=0; i<head->i_listlen; i++)
         recursive_pr_dummy(head->i_list[ i ], file);
 }
