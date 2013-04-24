@@ -30,11 +30,6 @@ $(eval $(call gb_Library_Library,nullcanvas))
 
 $(eval $(call gb_Library_set_componentfile,nullcanvas,canvas/source/null/nullcanvas))
 
-$(eval $(call gb_Library_set_include,nullcanvas,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/canvas/inc \
-))
-
 $(eval $(call gb_Library_use_external,nullcanvas,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,nullcanvas))

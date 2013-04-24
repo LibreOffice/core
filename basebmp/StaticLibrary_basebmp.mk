@@ -22,11 +22,6 @@ $(eval $(call gb_StaticLibrary_use_libraries,basebmp,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_StaticLibrary_set_include,basebmp,\
-    -I$(SRCDIR)/basebmp/inc/ \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_StaticLibrary_add_defs,basebmp,\
 	-DBASEBMP_DLLIMPLEMENTATION \
 ))

@@ -9,11 +9,6 @@
 
 $(eval $(call gb_Library_Library,drawinglayer))
 
-$(eval $(call gb_Library_set_include,drawinglayer,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/drawinglayer/inc \
-))
-
 $(eval $(call gb_Library_add_defs,drawinglayer,\
     -DDRAWINGLAYER_DLLIMPLEMENTATION \
 ))

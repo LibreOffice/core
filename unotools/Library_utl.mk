@@ -16,12 +16,6 @@ $(eval $(call gb_Library_use_external,utl,boost_headers))
 # in case UNO services are exported: declare location of component file
 $(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl))
 
-# add any additional include paths for this library here
-$(eval $(call gb_Library_set_include,utl,\
-    -I$(SRCDIR)/unotools/inc \
-    $$(INCLUDE) \
-))
-
 # add any additional definitions to be set for compilation here
 # (e.g. -DLIB_DLLIMPLEMENTATION)
 $(eval $(call gb_Library_add_defs,utl,\

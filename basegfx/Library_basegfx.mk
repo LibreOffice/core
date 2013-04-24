@@ -21,7 +21,6 @@ $(eval $(call gb_Library_use_libraries,basegfx,\
 ))
 
 $(eval $(call gb_Library_set_include,basegfx,\
-    -I$(SRCDIR)/basegfx/inc \
     -I$(SRCDIR)/basegfx/source/inc \
     $$(INCLUDE) \
 ))

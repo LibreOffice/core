@@ -28,11 +28,6 @@
 
 $(eval $(call gb_Library_Library,canvastools))
 
-$(eval $(call gb_Library_set_include,canvastools,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/canvas/inc \
-))
-
 $(eval $(call gb_Library_use_sdk_api,canvastools))
 
 $(eval $(call gb_Library_add_defs,canvastools,\
