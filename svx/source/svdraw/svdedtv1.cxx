@@ -49,6 +49,9 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/AffineMatrixItem.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1033,6 +1036,16 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         // #i38135#
         bool bResetAnimationTimer(false);
 
+        // check if LineWidth is part of the change
+        const bool bLineWidthChange(SFX_ITEM_SET == aAttr.GetItemState(XATTR_LINEWIDTH));
+        sal_Int32 nNewLineWidth(0);
+        sal_Int32 nOldLineWidth(0);
+
+        if(bLineWidthChange)
+        {
+            nNewLineWidth = ((const XLineWidthItem&)aAttr.Get(XATTR_LINEWIDTH)).GetValue();
+        }
+
         for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
         {
             SdrMark* pM=GetSdrMarkByIndex(nm);
@@ -1077,8 +1090,37 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
                 aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
             }
 
+            if(bLineWidthChange)
+            {
+                nOldLineWidth = ((const XLineWidthItem&)pObj->GetMergedItem(XATTR_LINEWIDTH)).GetValue();
+            }
+
             // set attributes at object
             pObj->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
+
+            if(bLineWidthChange)
+            {
+                const SfxItemSet& rSet = pObj->GetMergedItemSet();
+
+                if(nOldLineWidth != nNewLineWidth)
+                {
+                    if(SFX_ITEM_DONTCARE != rSet.GetItemState(XATTR_LINESTARTWIDTH))
+                    {
+                        const sal_Int32 nValAct(((const XLineStartWidthItem&)rSet.Get(XATTR_LINESTARTWIDTH)).GetValue());
+                        const sal_Int32 nValNewStart(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
+
+                        pObj->SetMergedItem(XLineStartWidthItem(nValNewStart));
+                    }
+
+                    if(SFX_ITEM_DONTCARE != rSet.GetItemState(XATTR_LINEENDWIDTH))
+                    {
+                        const sal_Int32 nValAct(((const XLineEndWidthItem&)rSet.Get(XATTR_LINEENDWIDTH)).GetValue());
+                        const sal_Int32 nValNewEnd(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
+
+                        pObj->SetMergedItem(XLineEndWidthItem(nValNewEnd));
+                    }
+                }
+            }
 
             if(pObj->ISA(SdrTextObj))
             {
