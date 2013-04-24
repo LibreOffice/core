@@ -2064,8 +2064,8 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
 
 void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly)
 {
-    // AW: Do NOT paint empty PolyPolygons
-    if(!rB2DPolyPoly.count())
+    // Do not paint empty PolyPolygons
+    if(!rB2DPolyPoly.count() || !IsDeviceOutputNecessary())
         return;
 
     // we need a graphics
@@ -2192,9 +2192,8 @@ void OutputDevice::DrawPolyLine(
         mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
     }
 
-
-    // AW: Do NOT paint empty PolyPolygons
-    if(!rB2DPolygon.count())
+    // Do not paint empty PolyPolygons
+    if(!rB2DPolygon.count() || !IsDeviceOutputNecessary())
         return;
 
     // we need a graphics
