@@ -7,8 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_WinResTarget_WinResTarget,fps/src))
+$(eval $(call gb_WinResTarget_WinResTarget,fps/Fps))
 
-$(eval $(call gb_WinResTarget_set_rcfile,fps/src,fpicker/source/win32/filepicker/Fps))
+$(eval $(call gb_WinResTarget_set_rcfile,fps/Fps,fpicker/source/win32/filepicker/Fps))
 
 # vim: set ts=4 sw=4 et:
