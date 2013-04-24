@@ -33,7 +33,7 @@
 #define HID_SDEXT_MINIMIZER_WIZ_STEP2_LB_CUSTOMSHOW     "sdext:Minimizer:Wizard:Step2:LBCustomShow"
 #define HID_SDEXT_MINIMIZER_WIZ_STEP3                   "sdext:Minimizer:Wizard:Step3"
 #define HID_SDEXT_MINIMIZER_WIZ_STEP3_CB_CROP           "sdext:Minimizer:Wizard:Step3:CBCrop"
-#define HID_SDEXT_MINIMIZER_WIZ_STEP3_LB_DPI            "sdext:Minimizer:Wizard:Step3:LBDPI"   // TODO change in help
+#define HID_SDEXT_MINIMIZER_WIZ_STEP3_LB_DPI            "sdext:Minimizer:Wizard:Step3:LBDPI"
 #define HID_SDEXT_MINIMIZER_WIZ_STEP3_CB_LINKS          "sdext:Minimizer:Wizard:Step3:CBLinks"
 #define HID_SDEXT_MINIMIZER_WIZ_STEP3_MF_QUALITY        "sdext:Minimizer:Wizard:Step3:MFQuality"
 #define HID_SDEXT_MINIMIZER_WIZ_STEP3_RB_JPEG           "sdext:Minimizer:Wizard:Step3:RBJPEG"
@@ -45,9 +45,9 @@
 #define HID_SDEXT_MINIMIZER_WIZ_STEP5                   "sdext:Minimizer:Wizard:Step5"
 #define HID_SDEXT_MINIMIZER_WIZ_STEP5_RB_CURDOC         "sdext:Minimizer:Wizard:Step5:RBCurDoc"
 #define HID_SDEXT_MINIMIZER_WIZ_STEP5_RB_NEWDOC         "sdext:Minimizer:Wizard:Step5:RBNewDoc"
-#define HID_SDEXT_MINIMIZER_WIZ_STEP5_CB_SAVESETTINGS   "sdext:Minimizer:Wizard:Step5:CBSaveSetts"  // TODO ADD to help
-#define HID_SDEXT_MINIMIZER_WIZ_STEP5_LB_SETTINGSNAME   "sdext:Minimizer:Wizard:Step5:LBSettsName"  // TODO ADD to help
-#define HID_SDEXT_MINIMIZER_WIZ_PB_HELP                 "sdext:Minimizer:Wizard:PBHelp"             // TODO ADD to help
+#define HID_SDEXT_MINIMIZER_WIZ_STEP5_CB_SAVESETTINGS   "sdext:Minimizer:Wizard:Step5:CBSaveSetts"
+#define HID_SDEXT_MINIMIZER_WIZ_STEP5_LB_SETTINGSNAME   "sdext:Minimizer:Wizard:Step5:LBSettsName"
+#define HID_SDEXT_MINIMIZER_WIZ_PB_HELP                 "sdext:Minimizer:Wizard:PBHelp"
 #define HID_SDEXT_MINIMIZER_WIZ_PB_BACK                 "sdext:Minimizer:Wizard:PBBack"
 #define HID_SDEXT_MINIMIZER_WIZ_PB_NEXT                 "sdext:Minimizer:Wizard:PBNext"
 #define HID_SDEXT_MINIMIZER_WIZ_PB_FINISH               "sdext:Minimizer:Wizard:PBFinish"
