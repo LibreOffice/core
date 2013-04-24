@@ -449,7 +449,7 @@ endef
 # Put this pattern rule here so it overrides the one below.
 # (this is rather ugly: because of % the functions cannot be used)
 $(call gb_LinkTarget_get_target,Library/%.exports) : $(gb_Library_OUTDIRLOCATION)/%
-	$(if $(wildcard $@),true,touch $@)
+	$(if $(wildcard $@),true,mkdir -p $(dir $@) && touch $@)
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
 	$(if $(filter $*,$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))),\
