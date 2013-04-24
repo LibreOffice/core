@@ -22,9 +22,9 @@
 
 <oor:component-data oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="Jobs">
-        <node oor:name="onDocumentOpenedJob" oor:op="replace">
+        <node oor:name="com.sun.star.presentation.PresenterScreenJob" oor:op="replace">
             <prop oor:name="Service">
-                <value>com.sun.star.comp.Draw.framework.PresenterScreenJob</value>
+                <value>com.sun.star.comp.presentation.PresenterScreenJob</value>
             </prop>
             <prop oor:name="Context">
                 <value>com.sun.star.presentation.PresentationDocument</value>
@@ -34,7 +34,7 @@
     <node oor:name="Events">
         <node oor:name="onDocumentOpened" oor:op="fuse">
             <node oor:name="JobList">
-                <node oor:name="onDocumentOpenedJob" oor:op="replace"/>
+                <node oor:name="com.sun.star.presentation.PresenterScreenJob" oor:op="replace"/>
             </node>
         </node>
     </node>

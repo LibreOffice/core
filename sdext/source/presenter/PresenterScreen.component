@@ -21,10 +21,10 @@
  ***********************************************************-->
 <component loader="com.sun.star.loader.SharedLibrary"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Draw.framework.PresenterScreenJob">
-    <service name="com.sun.star.drawing.framework.PresenterScreenJob"/>
+  <implementation name="com.sun.star.comp.presentation.PresenterScreenJob">
+    <service name="com.sun.star.presentation.PresenterScreenJob"/>
   </implementation>
-  <implementation name="vnd.sun.star.sdext.presenter.PresenterProtocolHandler">
+  <implementation name="com.sun.star.comp.presentation.PresenterProtocolHandler">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
 </component>

@@ -22,9 +22,9 @@
 
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="ProtocolHandler" oor:package="org.openoffice.Office">
   <node oor:name="HandlerSet">
-    <node oor:name="vnd.sun.star.sdext.presenter.PresenterProtocolHandler" oor:op="replace">
+    <node oor:name="com.sun.star.comp.presentation.PresenterProtocolHandler" oor:op="replace">
       <prop oor:name="Protocols">
-        <value>vnd.com.sun.star.comp.PresenterScreen:*</value>
+        <value>vnd.com.sun.star.presentation.PresenterScreen:*</value>
       </prop>
     </node>
   </node>

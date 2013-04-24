@@ -104,7 +104,7 @@ namespace {
 
 OUString PresenterScreenJob::getImplementationName_static (void)
 {
-    return A2S("com.sun.star.comp.Draw.framework.PresenterScreenJob");
+    return A2S("com.sun.star.comp.presentation.PresenterScreenJob");
 }
 
 
@@ -113,7 +113,7 @@ OUString PresenterScreenJob::getImplementationName_static (void)
 Sequence<OUString> PresenterScreenJob::getSupportedServiceNames_static (void)
 {
     static const ::rtl::OUString sServiceName(
-        A2S("com.sun.star.drawing.framework.PresenterScreenJob"));
+        A2S("com.sun.star.presentation.PresenterScreenJob"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
