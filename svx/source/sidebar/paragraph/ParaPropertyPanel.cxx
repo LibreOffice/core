@@ -1280,9 +1280,9 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
 
         maTbxIndent_IncDec->Enable();
         maTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_True);
-        if(maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Text)
-            && maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Default)
-            && maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Table))
+        if ( maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Text)
+             && maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Default)
+             && maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Table) )
         {
             maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_INC, sal_True);
             maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_DEC, sal_True);
@@ -1407,27 +1407,20 @@ void ParaPropertyPanel::StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eS
 
 void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if (nSID==SID_INC_INDENT)
+    if ( ( maContext.GetCombinedContext() == CombinedEnumContext(Application_Writer, Context_Text)
+           || maContext.GetCombinedContext() == CombinedEnumContext(Application_Writer, Context_Default)
+           || maContext.GetCombinedContext() ==  CombinedEnumContext(Application_Writer, Context_Table) )
+         && ( nSID == SID_INC_INDENT || nSID == SID_DEC_INDENT ) )
     {
-        if( pState && eState == SFX_ITEM_UNKNOWN )
-            maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_INC, sal_True);
-        else
-            if( maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Text)  &&
-                maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Default) &&
-            maContext.GetCombinedContext() !=  CombinedEnumContext(Application_Writer, Context_Table) )
-                maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_INC, sal_False);
-    }
-    if (nSID==SID_DEC_INDENT)
-    {
-        if( pState && eState == SFX_ITEM_UNKNOWN )
-            maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_DEC, sal_True);
-        else
-            if( maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Text)  &&
-                maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Default) &&
-            maContext.GetCombinedContext() !=  CombinedEnumContext(Application_Writer, Context_Table) )
-                maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_DEC, sal_False);
+        // Writer's text shell is the only one which provides reasonable states for Slots SID_INC_INDENT and SID_DEC_INDENT
+        // - namely SFX_ITEM_UNKNOWN and SFX_ITEM_DISABLED
+        maTbxIndent_IncDec->EnableItem(
+            nSID == SID_INC_INDENT ? BT_TBX_INDENT_INC : BT_TBX_INDENT_DEC,
+            ( pState && eState == SFX_ITEM_UNKNOWN ) ? sal_True : sal_False );
     }
 }
+
+
 // Add toggle state for numbering and bullet icons
 void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
