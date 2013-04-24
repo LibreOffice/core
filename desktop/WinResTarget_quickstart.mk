@@ -7,18 +7,18 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_WinResTarget_WinResTarget,quickstart/src))
+$(eval $(call gb_WinResTarget_WinResTarget,quickstart/QuickStart))
 
-$(eval $(call gb_WinResTarget_set_include,quickstart/src,\
+$(eval $(call gb_WinResTarget_set_include,quickstart/QuickStart,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/win32/source/QuickStart \
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependencies,quickstart/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,quickstart/QuickStart,\
     sysui/desktop/icons/main_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_set_rcfile,quickstart/src,desktop/win32/source/QuickStart/QuickStart))
+$(eval $(call gb_WinResTarget_set_rcfile,quickstart/QuickStart,desktop/win32/source/QuickStart/QuickStart))
 
 # vim: set ts=4 sw=4 et:

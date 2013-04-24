@@ -7,14 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_WinResTarget_WinResTarget,soffice/src))
+$(eval $(call gb_WinResTarget_WinResTarget,soffice/launcher))
 
-$(eval $(call gb_WinResTarget_set_include,soffice/src,\
+$(eval $(call gb_WinResTarget_set_include,soffice/launcher,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_add_defs,soffice/src,\
+$(eval $(call gb_WinResTarget_add_defs,soffice/launcher,\
     -DRES_APP_NAME=soffice \
     -DRES_APP_FILEDESC="$(PRODUCTNAME)" \
     -DRES_APP_ICON=icons/main_app.ico \
@@ -22,10 +22,10 @@ $(eval $(call gb_WinResTarget_add_defs,soffice/src,\
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependencies,soffice/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,soffice/launcher,\
     sysui/desktop/icons/main_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_set_rcfile,soffice/src,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_set_rcfile,soffice/launcher,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

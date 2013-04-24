@@ -30,6 +30,6 @@ $(eval $(call gb_Executable_add_noexception_objects,simpress,\
     desktop/win32/source/applauncher/simpress \
 ))
 
-$(eval $(call gb_Executable_add_nativeres,simpress,simpress/src))
+$(eval $(call gb_Executable_add_nativeres,simpress,simpress/launcher))
 
 # vim: set ts=4 sw=4 et:

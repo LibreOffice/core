@@ -30,6 +30,6 @@ $(eval $(call gb_Executable_add_noexception_objects,sdraw,\
     desktop/win32/source/applauncher/sdraw \
 ))
 
-$(eval $(call gb_Executable_add_nativeres,sdraw,sdraw/src))
+$(eval $(call gb_Executable_add_nativeres,sdraw,sdraw/launcher))
 
 # vim: set ts=4 sw=4 et:

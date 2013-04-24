@@ -7,14 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_WinResTarget_WinResTarget,smath/src))
+$(eval $(call gb_WinResTarget_WinResTarget,smath/launcher))
 
-$(eval $(call gb_WinResTarget_set_include,smath/src,\
+$(eval $(call gb_WinResTarget_set_include,smath/launcher,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_add_defs,smath/src,\
+$(eval $(call gb_WinResTarget_add_defs,smath/launcher,\
     -DRES_APP_NAME=smath \
     -DRES_APP_FILEDESC="$(PRODUCTNAME) Math" \
     -DRES_APP_ICON=icons/math_app.ico \
@@ -22,10 +22,10 @@ $(eval $(call gb_WinResTarget_add_defs,smath/src,\
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependencies,smath/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,smath/launcher,\
     sysui/desktop/icons/math_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_set_rcfile,smath/src,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_set_rcfile,smath/launcher,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

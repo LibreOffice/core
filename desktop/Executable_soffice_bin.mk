@@ -54,6 +54,6 @@ $(WORKDIR)/Clean/OutDir/bin/soffice.bin.manifest :
 
 endif
 
-$(eval $(call gb_Executable_add_nativeres,soffice_bin,sofficebin/src))
+$(eval $(call gb_Executable_add_nativeres,soffice_bin,sofficebin/officeloader))
 
 # vim: set ts=4 sw=4 et:

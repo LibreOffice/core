@@ -7,14 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_WinResTarget_WinResTarget,sofficebin/src))
+$(eval $(call gb_WinResTarget_WinResTarget,sofficebin/officeloader))
 
-$(eval $(call gb_WinResTarget_set_include,sofficebin/src,\
+$(eval $(call gb_WinResTarget_set_include,sofficebin/officeloader,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_add_defs,sofficebin/src,\
+$(eval $(call gb_WinResTarget_add_defs,sofficebin/officeloader,\
     -DRES_APP_NAME=soffice \
     -DRES_APP_FILEDESC="$(PRODUCTNAME)" \
     -DRES_APP_ICON=icons/main_app.ico \
@@ -22,10 +22,10 @@ $(eval $(call gb_WinResTarget_add_defs,sofficebin/src,\
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependencies,sofficebin/src,\
+$(eval $(call gb_WinResTarget_add_dependencies,sofficebin/officeloader,\
     sysui/desktop/icons/main_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_set_rcfile,sofficebin/src,desktop/util/officeloader))
+$(eval $(call gb_WinResTarget_set_rcfile,sofficebin/officeloader,desktop/util/officeloader))
 
 # vim: set ts=4 sw=4 et:
