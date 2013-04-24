@@ -19,8 +19,8 @@ fi
 
 # --with-outpath includes solver/$INPATH/inc
 if [ "$1" = "--with-outpath" ]; then
-    dirs="`ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|install\)\//d'` solver/$INPATH/inc"
+    dirs="`ls -d */* | sed -e '/\(\/\(cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|instdir\|install\)\//d'` solver/$INPATH/inc"
 else
-    dirs="`ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|install\)\//d'`"
+    dirs="`ls -d */* | sed -e '/\(\/\(cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|instdir\|install\)\//d'`"
 fi
 mkid --lang-map=`dirname $0`/id-lang.map --include='C C++ asm perl java make' --statistics $dirs
