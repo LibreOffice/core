@@ -33,4 +33,15 @@ icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag )
             OUStringToOString( rLanguageTag.getBcp47(), RTL_TEXTENCODING_ASCII_US).getStr());
 }
 
+
+// static
+icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag, const OUString & rVariant )
+{
+    /* FIXME: how should this work with any BCP47? */
+    return icu::Locale(
+            OUStringToOString( rLanguageTag.getLanguage(), RTL_TEXTENCODING_ASCII_US).getStr(),
+            OUStringToOString( rLanguageTag.getCountry(), RTL_TEXTENCODING_ASCII_US).getStr(),
+            OUStringToOString( rVariant, RTL_TEXTENCODING_ASCII_US).getStr());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
