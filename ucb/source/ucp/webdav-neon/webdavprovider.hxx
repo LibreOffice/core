@@ -29,6 +29,7 @@
 #ifndef _WEBDAV_UCP_PROVIDER_HXX
 #define _WEBDAV_UCP_PROVIDER_HXX
 
+#include <config_lgpl.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include "DAVSessionFactory.hxx"

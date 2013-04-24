@@ -57,14 +57,11 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef _LWPHEADERS_HXX
 #define _LWPHEADERS_HXX
 
+#include <config_lgpl.h>
 #include <math.h>
 #include <vector>
 #include <memory>

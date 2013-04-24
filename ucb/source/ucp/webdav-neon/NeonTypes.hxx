@@ -29,6 +29,7 @@
 #ifndef _NEONTYPES_HXX_
 #define _NEONTYPES_HXX_
 
+#include <config_lgpl.h>
 #include <ne_session.h>
 #include <ne_utils.h>
 #include <ne_basic.h>

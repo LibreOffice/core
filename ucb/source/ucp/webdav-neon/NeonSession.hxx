@@ -29,6 +29,7 @@
 #ifndef _NEONSESSION_HXX_
 #define _NEONSESSION_HXX_
 
+#include <config_lgpl.h>
 #include <vector>
 #include <osl/mutex.hxx>
 #include "DAVSession.hxx"

@@ -28,6 +28,7 @@
 #ifndef _DAVAUTHLISTENER_HXX_
 #define _DAVAUTHLISTENER_HXX_
 
+#include <config_lgpl.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
 

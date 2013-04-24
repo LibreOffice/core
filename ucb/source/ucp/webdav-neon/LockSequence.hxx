@@ -29,6 +29,7 @@
 #ifndef _LOCKSEQUENCE_HXX_
 #define _LOCKSEQUENCE_HXX_
 
+#include <config_lgpl.h>
 #include <rtl/string.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ucb/Lock.hpp>

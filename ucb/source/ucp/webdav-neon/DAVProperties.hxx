@@ -28,6 +28,7 @@
 #ifndef _DAVPROPERTIES_HXX_
 #define _DAVPROPERTIES_HXX_
 
+#include <config_lgpl.h>
 #include <rtl/ustring.hxx>
 #include "NeonTypes.hxx"
 

@@ -29,6 +29,7 @@
 #ifndef _DAVAUTHLISTENERIMPL_HXX_
 #define _DAVAUTHLISTENERIMPL_HXX_
 
+#include <config_lgpl.h>
 #include "DAVAuthListener.hxx"
 
 

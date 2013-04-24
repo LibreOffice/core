@@ -28,6 +28,7 @@
 #ifndef INCLUDED_NEONLOCKSTORE_HXX
 #define INCLUDED_NEONLOCKSTORE_HXX
 
+#include <config_lgpl.h>
 #include <map>
 #include "warnings_guard_ne_locks.h"
 #include "osl/mutex.hxx"

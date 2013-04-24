@@ -29,6 +29,7 @@
 #ifndef WEBDAV_UCP_DATASUPPLIER_HXX
 #define WEBDAV_UCP_DATASUPPLIER_HXX
 
+#include <config_lgpl.h>
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 #include <rtl/ref.hxx>

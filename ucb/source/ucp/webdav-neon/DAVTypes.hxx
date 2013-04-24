@@ -29,6 +29,7 @@
 #ifndef _DAVTYPES_HXX_
 #define _DAVTYPES_HXX_
 
+#include <config_lgpl.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 

@@ -1,0 +1,14 @@
+/*
+ * Include this file to ensure that this code is not
+ * compiled into the MPL subset.
+ */
+#ifndef CONFIG_LGPL_H
+#define CONFIG_LGPL_H
+
+#define MPL_HAVE_SUBSET 0
+
+#if MPL_HAVE_SUBSET
+#  error "Attempting to compile LGPL code into MPL subset"
+#endif
+
+#endif

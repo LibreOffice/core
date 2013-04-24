@@ -29,6 +29,7 @@
 #ifndef _WEBDAV_UCP_CONTENT_HXX
 #define _WEBDAV_UCP_CONTENT_HXX
 
+#include <config_lgpl.h>
 #include <memory>
 #include <list>
 #include <rtl/ref.hxx>

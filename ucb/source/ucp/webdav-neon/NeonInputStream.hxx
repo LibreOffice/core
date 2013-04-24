@@ -28,6 +28,7 @@
 #ifndef _NEONINPUTSTREAM_HXX_
 #define _NEONINPUTSTREAM_HXX_
 
+#include <config_lgpl.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>

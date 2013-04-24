@@ -29,6 +29,7 @@
 #ifndef _WEBDAV_UCP_PROPERTYMAP_HXX
 #define _WEBDAV_UCP_PROPERTYMAP_HXX
 
+#include <config_lgpl.h>
 #include <boost/unordered_set.hpp>
 #include <com/sun/star/beans/Property.hpp>
 

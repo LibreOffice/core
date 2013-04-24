@@ -24,6 +24,7 @@
 #ifndef __EMPATHY_FT_HANDLER_H__
 #define __EMPATHY_FT_HANDLER_H__
 
+#include <config_lgpl.h>
 #include <glib-object.h>
 #include <gio/gio.h>
 

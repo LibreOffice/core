@@ -29,6 +29,7 @@
 #ifndef _WEBDAV_DATETIME_HELPER_HXX
 #define _WEBDAV_DATETIME_HELPER_HXX
 
+#include <config_lgpl.h>
 #include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace util {

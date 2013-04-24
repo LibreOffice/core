@@ -6944,12 +6944,17 @@ AC_MSG_CHECKING([MPL subset])
 MPL_SUBSET=
 if test "$enable_mpl_subset" = "yes"; then
    if test "x$enable_postgresql_sdbc" != "xno"; then
-        AC_MSG_ERROR([need to --disable-postgresql-sdbc.])
+        AC_MSG_ERROR([need to --disable-postgresql-sdbc - the postgress database backend.])
    fi
    if test "$enable_lotuswordpro" = "yes"; then
-        AC_MSG_ERROR([need to --disable-lotuswordpro.])
+        AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
    fi
+   if test "$enable_neon" != "no"; then
+        AC_MSG_ERROR([need to --disable-neon - webdav support.])
+   fi
+
    MPL_SUBSET="TRUE"
+   AC_DEFINE(MPL_HAVE_SUBSET)
    AC_MSG_RESULT([only])
 else
    AC_MSG_RESULT([no restrictions])
@@ -11931,6 +11936,7 @@ AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_harfbuzz.h])
+AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_mingw.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])

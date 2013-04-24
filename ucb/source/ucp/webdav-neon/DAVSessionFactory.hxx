@@ -31,6 +31,7 @@
 #ifdef min
 #undef min // GNU libstdc++ <memory> includes <limit> which defines methods called min...
 #endif
+#include <config_lgpl.h>
 #include <map>
 #include <memory>
 #include <osl/mutex.hxx>

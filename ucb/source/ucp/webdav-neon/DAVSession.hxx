@@ -29,6 +29,7 @@
 #ifndef _DAVSESSION_HXX_
 #define _DAVSESSION_HXX_
 
+#include <config_lgpl.h>
 #include <memory>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/io/XInputStream.hpp>

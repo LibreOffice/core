@@ -29,6 +29,7 @@
 #ifndef _NEONPROPFINDREQUEST_HXX_
 #define _NEONPROPFINDREQUEST_HXX_
 
+#include <config_lgpl.h>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include "NeonTypes.hxx"

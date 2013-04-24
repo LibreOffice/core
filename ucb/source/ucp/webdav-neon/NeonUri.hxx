@@ -28,6 +28,7 @@
 #ifndef _NEONURI_HXX_
 #define _NEONURI_HXX_
 
+#include <config_lgpl.h>
 #include <ne_uri.h>
 #include <rtl/ustring.hxx>
 #include <DAVException.hxx>

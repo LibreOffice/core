@@ -29,6 +29,7 @@
 #ifndef _WEBDAV_UCP_CONTENTPROPERTIES_HXX
 #define _WEBDAV_UCP_CONTENTPROPERTIES_HXX
 
+#include <config_lgpl.h>
 #include <memory>
 #include <vector>
 #include <boost/unordered_map.hpp>

@@ -29,6 +29,7 @@
 #ifndef _NEONHEADREQUEST_HXX_
 #define _NEONHEADREQUEST_HXX_
 
+#include <config_lgpl.h>
 #include <vector>
 #include "NeonTypes.hxx"
 #include "DAVResource.hxx"

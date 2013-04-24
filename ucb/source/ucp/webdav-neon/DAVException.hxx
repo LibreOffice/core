@@ -29,6 +29,7 @@
 #ifndef _DAVEXCEPTION_HXX_
 #define _DAVEXCEPTION_HXX_
 
+#include <config_lgpl.h>
 #include <rtl/ustring.hxx>
 
 namespace webdav_ucp

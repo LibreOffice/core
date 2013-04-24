@@ -29,6 +29,7 @@
 #ifndef _WEBDAV_UCP_RESULTSET_HXX
 #define _WEBDAV_UCP_RESULTSET_HXX
 
+#include <config_lgpl.h>
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultsethelper.hxx>
 #include "webdavcontent.hxx"

@@ -29,6 +29,7 @@
 #ifndef _DAVRESOURCE_HXX_
 #define _DAVRESOURCE_HXX_
 
+#include <config_lgpl.h>
 #include <vector>
 
 #include "rtl/ustring.hxx"
