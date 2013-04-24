@@ -31,32 +31,28 @@
 
 namespace svx { namespace sidebar {
 
-ParaBulletsControl::ParaBulletsControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel)
-    : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_BULLETS))
-    , maBulletsVS(this,SVX_RES(VS_VALUES))
-    , maFISep(this,SVX_RES(IMG_SEPERATOR_BULLET))
-    , maMoreButton(this,SVX_RES(CB_BULLET_MORE))
-    , mrParaPropertyPanel(rPanel)
-    , mpBindings(NULL)
+ParaBulletsControl::ParaBulletsControl(
+    Window* pParent,
+    svx::sidebar::ParaPropertyPanel& rPanel )
+    : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_BULLETS) )
+    , maBulletsVS( this,SVX_RES(VS_VALUES) )
+    , maMoreButton( this,SVX_RES(CB_BULLET_MORE) )
+    , mrParaPropertyPanel( rPanel )
+    , mpBindings( mrParaPropertyPanel.GetBindings() )
 {
     FreeResource();
-    mpBindings = mrParaPropertyPanel.GetBindings();
+
     maBulletsVS.SetColCount(3);
     maBulletsVS.SetLineCount(3);
     maBulletsVS.SetStyle( maBulletsVS.GetStyle() | WB_ITEMBORDER |WB_NO_DIRECTSELECT);
     maBulletsVS.SetExtraSpacing(BULLET_IMAGE_SPACING);
-    if(GetSettings().GetStyleSettings().GetHighContrastMode())
-        maBulletsVS.SetBackground(GetSettings().GetStyleSettings().GetMenuColor());
-    else
-        maBulletsVS.SetBackground(Color(244,245,249));
-
     maBulletsVS.SetItemWidth(BULLET_IMAGE_WIDTH);
     maBulletsVS.SetItemHeight(BULLET_IMAGE_HEIGHT);
     maBulletsVS.InsertItem( DEFAULT_NONE );
     for( sal_uInt16 nVSIdx = 1; nVSIdx <= DEFAULT_BULLET_TYPES; ++nVSIdx )
-        {
+    {
         maBulletsVS.InsertItem( nVSIdx );
-        }
+    }
 
     maBulletsVS.SetItemText( DEFAULT_NONE, SVX_RESSTR( RID_SVXSTR_NUMBULLET_NONE ));
     NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(eNBOType::MIXBULLETS);
@@ -71,39 +67,29 @@ ParaBulletsControl::ParaBulletsControl(Window* pParent, svx::sidebar::ParaProper
     maBulletsVS.Show();
     maBulletsVS.SetSelectHdl(LINK(this, ParaBulletsControl, BulletSelectHdl_Impl));
 
-    /*maMoreButton.SetDefBkColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_DropDownBackground ));//Color(244,245,249)//for high contrast
-    maMoreButton.SetHoverBkColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ) );//Color( 93, 120, 163 )
-    maMoreButton.SetHoverTxtColor( sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Color_PanelTitleFont ) );//Color( 255, 255, 255 )
-    maMoreButton.SetIcoPosX( 2);*/
-    maBulletsVS.SetColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-    maBulletsVS.SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+    maBulletsVS.SetColor( GetSettings().GetStyleSettings().GetHighContrastMode()
+                          ? GetSettings().GetStyleSettings().GetMenuColor()
+                          : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ) );
+    maBulletsVS.SetBackground( GetSettings().GetStyleSettings().GetHighContrastMode()
+                               ? GetSettings().GetStyleSettings().GetMenuColor()
+                               : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ) );
 
     maMoreButton.SetClickHdl(LINK(this, ParaBulletsControl, MoreButtonClickHdl_Impl));
 
 }
 
+
 ParaBulletsControl::~ParaBulletsControl()
 {
-
 }
+
 
 void ParaBulletsControl::UpdateValueSet()
 {
     maBulletsVS.StateChanged(STATE_CHANGE_STYLE);
     maBulletsVS.StateChanged(STATE_CHANGE_INITSHOW);
-}
-void ParaBulletsControl::ToGetFocus()
-{
-    sal_uInt16 nTypeIndex = (sal_uInt16)0xFFFF;
-    mrParaPropertyPanel.GetBulletTypeIndex();
+
+    const sal_uInt16 nTypeIndex = mrParaPropertyPanel.GetBulletTypeIndex();
     if ( nTypeIndex != (sal_uInt16)0xFFFF )
         maBulletsVS.SelectItem( nTypeIndex );
     else
@@ -113,10 +99,11 @@ void ParaBulletsControl::ToGetFocus()
     maMoreButton.GrabFocus();
 }
 
+
 IMPL_LINK(ParaBulletsControl, BulletSelectHdl_Impl, ValueSet*, EMPTYARG)
 {
-    sal_uInt16 nIdx = maBulletsVS.GetSelectItemId();
-    SfxUInt16Item aItem(FN_SVX_SET_BULLET, nIdx);
+    const sal_uInt16 nIdx = maBulletsVS.GetSelectItemId();
+    SfxUInt16Item aItem( FN_SVX_SET_BULLET, nIdx );
     if (mpBindings)
         mpBindings->GetDispatcher()->Execute( FN_SVX_SET_BULLET, SFX_CALLMODE_RECORD, &aItem, 0L );
 
@@ -124,6 +111,7 @@ IMPL_LINK(ParaBulletsControl, BulletSelectHdl_Impl, ValueSet*, EMPTYARG)
 
     return 0;
 }
+
 
 IMPL_LINK(ParaBulletsControl, MoreButtonClickHdl_Impl, void*, EMPTYARG)
 {

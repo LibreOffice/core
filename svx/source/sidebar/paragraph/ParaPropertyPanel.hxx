@@ -250,8 +250,6 @@ private:
     void StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     // Add toggle state for numbering and bullet icons
     void StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    //Modified for Numbering&Bullets Dialog UX Enh
-    //Handing the transferred the num rule index data of the current selection
     void StateChangeBulletNumRuleImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 
     void initial();

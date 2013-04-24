@@ -398,16 +398,6 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
 
 //===============================================================================================
 
-static const long aOffsetX[] =
-{
-    -1,//1,
-    3,//4,
-    4,//5,
-    -3,//0,
-    -1,//0,
-    3
-};
-
 SvxNumValueSet3::SvxNumValueSet3( Window* pParent, const ResId& rResId) :
     ValueSet( pParent, rResId )
 {

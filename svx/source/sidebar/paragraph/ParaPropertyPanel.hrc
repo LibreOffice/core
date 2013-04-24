@@ -103,12 +103,10 @@
 #define IL_BULLET_BITMAPS   2
 #define CB_BULLET_MORE      4
 #define BMP_BULLET_MORE     5
-#define IMG_SEPERATOR_BULLET    7
 
 #define VS_NUMBERING        10
 #define CB_NUMBERING_MORE   12
 #define BMP_NUMERING_MORE   13
-#define IMG_SEPERATOR_NUMBERING 15
 #define VS_FONT_COLOR       1
 #define STR_NOFILL          2
 

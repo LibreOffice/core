@@ -48,30 +48,23 @@ Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
     Reference < XInterface > xI = xMSF->createInstance(
         ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
     Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
-//  DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
 
     return xRet;
 }
 
-ParaNumberingControl::ParaNumberingControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel):
-    PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_NUMBERING)),
-    maNumberVS(this,SVX_RES(VS_NUMBERING)),
-    maFISep(this,SVX_RES(IMG_SEPERATOR_NUMBERING)),
-    maMoreButton(this,SVX_RES(CB_NUMBERING_MORE) ),
-    mrParaPropertyPanel(rPanel),
-    mpBindings(NULL)
+ParaNumberingControl::ParaNumberingControl(
+    Window* pParent,
+    svx::sidebar::ParaPropertyPanel& rPanel )
+    : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_NUMBERING) )
+    , maNumberVS( this,SVX_RES(VS_NUMBERING) )
+    , maMoreButton( this,SVX_RES(CB_NUMBERING_MORE) )
+    , mrParaPropertyPanel( rPanel )
+    , mpBindings( mrParaPropertyPanel.GetBindings() )
 {
     FreeResource();
-    mpBindings = mrParaPropertyPanel.GetBindings();
 
-    maNumberVS.SetStyle(maNumberVS.GetStyle() | WB_NO_DIRECTSELECT);
-    maNumberVS.SetExtraSpacing(NUM_IMAGE_SPACING);
-    //add by wj for sym2_7246 high contrast
-    if(GetSettings().GetStyleSettings().GetHighContrastMode())
-        maNumberVS.SetBackground(GetSettings().GetStyleSettings().GetMenuColor());
-    else
-        maNumberVS.SetBackground(Color(244,245,249));
-
+    maNumberVS.SetStyle( maNumberVS.GetStyle() | WB_NO_DIRECTSELECT );
+    maNumberVS.SetExtraSpacing( NUM_IMAGE_SPACING );
     maNumberVS.SetItemWidth(NUM_IMAGE_WIDTH);
     maNumberVS.SetItemHeight(NUM_IMAGE_HEIGHT);
 
@@ -82,8 +75,7 @@ ParaNumberingControl::ParaNumberingControl(Window* pParent, svx::sidebar::ParaPr
         Locale aLocale = GetSettings().GetLanguageTag().getLocale();
         try
         {
-            aNumberings =
-                xDefNum->getDefaultContinuousNumberingLevels( aLocale );
+            aNumberings = xDefNum->getDefaultContinuousNumberingLevels( aLocale );
         }
         catch(Exception&)
         {
@@ -93,26 +85,18 @@ ParaNumberingControl::ParaNumberingControl(Window* pParent, svx::sidebar::ParaPr
     }
 
     maNumberVS.Show();
-    maNumberVS.SetSelectHdl(LINK(this, ParaNumberingControl, NumSelectHdl_Impl));
+    maNumberVS.SetSelectHdl( LINK(this, ParaNumberingControl, NumSelectHdl_Impl) );
 
-    /*maMoreButton.SetDefBkColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_DropDownBackground ));//Color(244,245,249)//for high contrast
-    maMoreButton.SetHoverBkColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ) );//Color( 93, 120, 163 )
-    maMoreButton.SetHoverTxtColor( sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Color_PanelTitleFont ) );//Color( 255, 255, 255 )
-    maMoreButton.SetIcoPosX( 2);*/
-    maNumberVS.SetColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-    maNumberVS.SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+    maNumberVS.SetColor( GetSettings().GetStyleSettings().GetHighContrastMode()
+                         ? GetSettings().GetStyleSettings().GetMenuColor()
+                         : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ) );
+    maNumberVS.SetBackground( GetSettings().GetStyleSettings().GetHighContrastMode()
+                              ? GetSettings().GetStyleSettings().GetMenuColor()
+                              : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ) );
 
     maMoreButton.SetClickHdl(LINK(this, ParaNumberingControl, MoreButtonClickHdl_Impl));
-
 }
+
 
 ParaNumberingControl::~ParaNumberingControl()
 {
@@ -121,8 +105,8 @@ ParaNumberingControl::~ParaNumberingControl()
 
 IMPL_LINK(ParaNumberingControl, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
 {
-    sal_uInt16 nIdx = maNumberVS.GetSelectItemId();
-    SfxUInt16Item aItem(FN_SVX_SET_NUMBER, nIdx);
+    const sal_uInt16 nIdx = maNumberVS.GetSelectItemId();
+    SfxUInt16Item aItem( FN_SVX_SET_NUMBER, nIdx );
     if (mpBindings)
         mpBindings->GetDispatcher()->Execute( FN_SVX_SET_NUMBER, SFX_CALLMODE_RECORD, &aItem, 0L );
 
@@ -130,6 +114,7 @@ IMPL_LINK(ParaNumberingControl, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
 
     return 0;
 }
+
 
 IMPL_LINK(ParaNumberingControl, MoreButtonClickHdl_Impl, void*, EMPTYARG)
 {
@@ -141,15 +126,13 @@ IMPL_LINK(ParaNumberingControl, MoreButtonClickHdl_Impl, void*, EMPTYARG)
     return 0;
 }
 
+
 void ParaNumberingControl::UpdateValueSet()
 {
     maNumberVS.StateChanged(STATE_CHANGE_STYLE);
     maNumberVS.StateChanged(STATE_CHANGE_INITSHOW);
-}
 
-void ParaNumberingControl::ToGetFocus()
-{
-    sal_uInt16 nTypeIndex = mrParaPropertyPanel.GetNumTypeIndex();
+    const sal_uInt16 nTypeIndex = mrParaPropertyPanel.GetNumTypeIndex();
     if ( nTypeIndex != (sal_uInt16)0xFFFF )
         maNumberVS.SelectItem( nTypeIndex );
     else
