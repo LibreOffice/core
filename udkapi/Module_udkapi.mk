@@ -31,7 +31,6 @@ $(eval $(call gb_Module_Module,udkapi))
 
 $(eval $(call gb_Module_add_targets,udkapi,\
 	UnoApi_udkapi \
-	UnoApiMerge_uretypes \
 ))
 
 # vim: set noet sw=4 ts=4:

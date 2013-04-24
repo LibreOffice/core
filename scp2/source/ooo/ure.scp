@@ -603,8 +603,9 @@ End
 File gid_File_Misc_TypesRdb
     TXT_FILE_BODY;
     Dir = gid_Dir_Ure_Misc;
-    Name = "/ure/types.rdb";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Name = "udkapi.rdb";
+    InstallName = "types.rdb";
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID, SUBST_FILENAME);
     // CompID = "E5086F6A-855B-4CAE-AD3A-A85A21C5AE44";
 End
 

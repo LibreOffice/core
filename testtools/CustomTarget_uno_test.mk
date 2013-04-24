@@ -34,7 +34,7 @@ $(call gb_CustomTarget_get_target,testtools/uno_test) : \
 		$(call gb_InternalUnoApi_get_target,bridgetest) \
 		$(call gb_Rdb_get_outdir_target,uno_services) \
 		$(call gb_Rdb_get_outdir_target,ure/services) \
-		$(call gb_UnoApi_get_target,ure/types)
+		$(call gb_UnoApi_get_target,udkapi)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Executable_get_command,uno) \
 		-s com.sun.star.test.bridge.BridgeTest \

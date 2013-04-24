@@ -515,7 +515,7 @@ sub link_rdb_files()
     do_link ($src_prefix . "xml" , $dest_prefix . $brand_program_dir . "/services", "services.rdb", "services.rdb");
     do_link ($src_prefix . "xml/ure" , $dest_prefix . "ure/share/misc", "services.rdb", "services.rdb");
 
-    do_link ($src_prefix . "bin/ure" , $dest_prefix . "ure/share/misc", "types.rdb", "types.rdb");
+    do_link ($src_prefix . "bin" , $dest_prefix . "ure/share/misc", "udkapi.rdb", "types.rdb");
 
     print "\n";
 }
