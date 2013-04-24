@@ -299,7 +299,7 @@ void OGroupSectionUndo::implReInsert( )
 {
     uno::Sequence< beans::PropertyValue > aArgs(2);
 
-    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? PROPERTY_HEADERON : PROPERTY_FOOTERON;
+    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? OUString(PROPERTY_HEADERON) : OUString(PROPERTY_FOOTERON);
     aArgs[0].Value <<= sal_True;
     aArgs[1].Name = PROPERTY_GROUP;
     aArgs[1].Value <<= m_aGroupHelper.getGroup();
@@ -318,7 +318,7 @@ void OGroupSectionUndo::implReRemove( )
 
     uno::Sequence< beans::PropertyValue > aArgs(2);
 
-    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? PROPERTY_HEADERON : PROPERTY_FOOTERON;
+    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? OUString(PROPERTY_HEADERON) : OUString(PROPERTY_FOOTERON);
     aArgs[0].Value <<= sal_False;
     aArgs[1].Name = PROPERTY_GROUP;
     aArgs[1].Value <<= m_aGroupHelper.getGroup();

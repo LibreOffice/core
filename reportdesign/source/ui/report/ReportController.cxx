@@ -3900,7 +3900,7 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
     if ( m_xReportDefinition.is() )
     {
         const SequenceAsHashMap aMap(_aArgs);
-        const sal_Bool bSwitchOn = aMap.getUnpackedValueOrDefault(_bHeader ? PROPERTY_HEADERON : PROPERTY_FOOTERON,sal_False);
+        const sal_Bool bSwitchOn = aMap.getUnpackedValueOrDefault(_bHeader ? OUString(PROPERTY_HEADERON) : OUString(PROPERTY_FOOTERON), sal_False);
         uno::Reference< report::XGroup> xGroup = aMap.getUnpackedValueOrDefault(PROPERTY_GROUP,uno::Reference< report::XGroup>());
         if ( xGroup.is() )
         {
