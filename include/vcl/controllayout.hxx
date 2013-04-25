@@ -55,7 +55,7 @@ struct VCL_DLLPUBLIC ControlLayoutData
     long GetLineCount() const;
     // returns the interval [start,end] of line nLine
     // returns [-1,-1] for an invalid line
-    Pair GetLineStartEnd( long nLine ) const;
+    ::Pair GetLineStartEnd( long nLine ) const;
     /** ToRelativeLineIndex changes a layout data index to a count relative to its line.
 
     <p>This is equivalent to getting the line start/end pairs with
