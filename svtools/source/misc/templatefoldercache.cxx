@@ -29,6 +29,7 @@
 #include <ucbhelper/content.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
@@ -57,7 +58,9 @@ namespace svt
     //---------------------------------------------------------------------
     SvStream& operator << ( SvStream& _rStorage, const util::DateTime& _rDate )
     {
-        _rStorage << _rDate.NanoSeconds;
+        sal_uInt16 hundredthSeconds = static_cast< sal_uInt16 >( _rDate.NanoSeconds / Time::nanoPerCenti );
+        _rStorage << hundredthSeconds;
+
         _rStorage << _rDate.Seconds;
         _rStorage << _rDate.Minutes;
         _rStorage << _rDate.Hours;
@@ -71,7 +74,10 @@ namespace svt
     //---------------------------------------------------------------------
     SvStream& operator >> ( SvStream& _rStorage, util::DateTime& _rDate )
     {
-        _rStorage >> _rDate.NanoSeconds;
+        sal_uInt16 hundredthSeconds;
+        _rStorage >> hundredthSeconds;
+        _rDate.NanoSeconds = static_cast< sal_uInt32 >( hundredthSeconds ) * Time::nanoPerCenti;
+
         _rStorage >> _rDate.Seconds;
         _rStorage >> _rDate.Minutes;
         _rStorage >> _rDate.Hours;
