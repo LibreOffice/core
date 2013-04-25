@@ -360,6 +360,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
             pTabViewShell->ExecuteCellFormatDlg( rReq, TP_ALIGNMENT );
             break;
 
+        case SID_PROPERTY_PANEL_CELLTEXT_DLG:
+            pTabViewShell->ExecuteCellFormatDlg( rReq, TP_FONT );
+            break;
+
         case SID_CELL_FORMAT_BORDER:
             pTabViewShell->ExecuteCellFormatDlg( rReq, TP_BORDER );
             break;
