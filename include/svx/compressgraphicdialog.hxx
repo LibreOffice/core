@@ -33,6 +33,7 @@ class SdrGrafObj;
 class SVX_DLLPUBLIC CompressGraphicsDialog : public ModalDialog
 {
 private:
+    FixedText*       m_pLabelGraphicType;
     FixedText*       m_pFixedText2;
     FixedText*       m_pFixedText3;
     FixedText*       m_pFixedText5;

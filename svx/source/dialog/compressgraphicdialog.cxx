@@ -66,6 +66,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, Graphic& rGraph
 
 void CompressGraphicsDialog::Initialize()
 {
+    get(m_pLabelGraphicType,    "label-graphic-type");
     get(m_pFixedText2,          "label-original-size");
     get(m_pFixedText3,          "label-view-size");
     get(m_pFixedText5,          "label-image-capacity");
@@ -109,6 +110,40 @@ CompressGraphicsDialog::~CompressGraphicsDialog()
 
 void CompressGraphicsDialog::Update()
 {
+    GfxLinkType aLinkType = m_aGraphic.GetLink().GetType();
+    OUString aGraphicTypeString;
+    switch(aLinkType)
+    {
+        case GFX_LINK_TYPE_NATIVE_GIF:
+            aGraphicTypeString = "Gif image";
+            break;
+        case GFX_LINK_TYPE_NATIVE_JPG:
+            aGraphicTypeString = "Jpeg image";
+            break;
+        case GFX_LINK_TYPE_NATIVE_PNG:
+            aGraphicTypeString = "PNG image";
+            break;
+        case GFX_LINK_TYPE_NATIVE_TIF:
+            aGraphicTypeString = "TIFF image";
+            break;
+        case GFX_LINK_TYPE_NATIVE_WMF:
+            aGraphicTypeString = "WMF image";
+            break;
+        case GFX_LINK_TYPE_NATIVE_MET:
+            aGraphicTypeString = "MET image";
+            break;
+        case GFX_LINK_TYPE_NATIVE_PCT:
+            aGraphicTypeString = "PCT image";
+            break;
+        case GFX_LINK_TYPE_NATIVE_SVG:
+            aGraphicTypeString = "SVG image";
+            break;
+        default:
+            aGraphicTypeString = "Unknown";
+            break;
+    }
+    m_pLabelGraphicType->SetText(aGraphicTypeString);
+
     const FieldUnit eFieldUnit = m_rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     sal_Unicode cSeparator = rLocaleWrapper.getNumDecimalSep()[0];
