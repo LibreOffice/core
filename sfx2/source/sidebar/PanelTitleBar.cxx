@@ -41,23 +41,14 @@ static const sal_Int32 gaRightIconPadding (5);
 PanelTitleBar::PanelTitleBar (
     const ::rtl::OUString& rsTitle,
     Window* pParentWindow,
-    Panel* pPanel,
-    const ::boost::function<void(void)>& rMenuAction)
+    Panel* pPanel )
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
       mbIsLeftButtonDown(false),
       mpPanel(pPanel),
       mnMenuItemIndex(1),
-      maMenuAction(rMenuAction)
+      maMenuAction()
 {
     OSL_ASSERT(mpPanel != NULL);
-
-    if (maMenuAction)
-    {
-        maToolBox.InsertItem(
-            mnMenuItemIndex,
-            Theme::GetImage(Theme::Image_PanelMenu));
-        maToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
-    }
 
 #ifdef DEBUG
     SetText(A2S("PanelTitleBar"));
@@ -69,6 +60,25 @@ PanelTitleBar::PanelTitleBar (
 
 PanelTitleBar::~PanelTitleBar (void)
 {
+}
+
+
+
+
+void PanelTitleBar::SetMenuAction ( const ::boost::function<void(void)>& rMenuAction )
+{
+    if ( !maMenuAction && rMenuAction )
+    {
+        maToolBox.InsertItem(
+            mnMenuItemIndex,
+            Theme::GetImage(Theme::Image_PanelMenu));
+        maToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
+    }
+    else if ( maMenuAction && !rMenuAction )
+    {
+        maToolBox.RemoveItem( maToolBox.GetItemPos( mnMenuItemIndex ) );
+    }
+    maMenuAction = rMenuAction;
 }
 
 

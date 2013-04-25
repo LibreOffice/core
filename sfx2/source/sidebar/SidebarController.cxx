@@ -454,14 +454,18 @@ void SidebarController::SwitchToDeck (
             // Panel does not yet exist.  Create it.
             aNewPanels[nWriteIndex] = CreatePanel(
                 rPanelContexDescriptor.msId,
-                mpCurrentDeck->GetPanelParentWindow(),
-                rPanelContexDescriptor.msMenuCommand);
+                mpCurrentDeck->GetPanelParentWindow());
             bHasPanelSetChanged = true;
         }
         if (aNewPanels[nWriteIndex] != NULL)
         {
             // Depending on the context we have to collapse the panel.
             aNewPanels[nWriteIndex]->SetExpanded(rPanelContexDescriptor.mbIsInitiallyVisible);
+            // Depending on the context we have to apply the show menu functor.
+            aNewPanels[nWriteIndex]->SetShowMenuFunctor(
+                rPanelContexDescriptor.msMenuCommand.getLength()>0
+                ? ::boost::bind(&SidebarController::ShowDetailMenu,this,rPanelContexDescriptor.msMenuCommand)
+                : ::boost::function<void(void)>() );
 
             ++nWriteIndex;
         }
@@ -536,8 +540,7 @@ bool SidebarController::ArePanelSetsEqual (
 
 SharedPanel SidebarController::CreatePanel (
     const OUString& rsPanelId,
-    ::Window* pParentWindow,
-    const OUString& rsMenuCommand)
+    ::Window* pParentWindow )
 {
     const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
     if (pPanelDescriptor == NULL)
@@ -547,10 +550,7 @@ SharedPanel SidebarController::CreatePanel (
     SharedPanel pPanel (new Panel(
         *pPanelDescriptor,
         pParentWindow,
-        ::boost::bind(&Deck::RequestLayout, mpCurrentDeck.get()),
-        rsMenuCommand.getLength()>0
-            ? ::boost::bind(&SidebarController::ShowDetailMenu,this,rsMenuCommand)
-            : ::boost::function<void(void)>()));
+        ::boost::bind(&Deck::RequestLayout, mpCurrentDeck.get()) ) );
 
     // Create the XUIElement.
     Reference<ui::XUIElement> xUIElement (CreateUIElement(

@@ -132,8 +132,7 @@ private:
         const bool bWantsCanvas);
     SharedPanel CreatePanel (
         const ::rtl::OUString& rsPanelId,
-        ::Window* pParentWindow,
-        const ::rtl::OUString& rsMenuCommand);
+        ::Window* pParentWindow );
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,
         const Context& rContext);

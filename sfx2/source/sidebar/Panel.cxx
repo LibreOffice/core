@@ -47,15 +47,13 @@ namespace sfx2 { namespace sidebar {
 Panel::Panel (
     const PanelDescriptor& rPanelDescriptor,
     Window* pParentWindow,
-    const ::boost::function<void(void)>& rDeckLayoutTrigger,
-    const ::boost::function<void(void)>& rShowMenuFunctor)
+    const ::boost::function<void(void)>& rDeckLayoutTrigger )
     : Window(pParentWindow),
       msPanelId(rPanelDescriptor.msId),
       mpTitleBar(new PanelTitleBar(
               rPanelDescriptor.msTitle,
               pParentWindow,
-              this,
-              rShowMenuFunctor)),
+              this)),
       mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional),
       mxElement(),
       mxPanelComponent(),
@@ -77,6 +75,17 @@ Panel::~Panel (void)
 {
     OSL_TRACE("destroying Panel at %x", this);
     Dispose();
+}
+
+
+
+
+void Panel::SetShowMenuFunctor( const ::boost::function<void(void)>& rShowMenuFunctor )
+{
+    if ( mpTitleBar.get() )
+    {
+        mpTitleBar->SetMenuAction( rShowMenuFunctor );
+    }
 }
 
 

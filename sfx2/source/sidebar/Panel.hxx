@@ -35,6 +35,7 @@ namespace sfx2 { namespace sidebar {
 
 class PanelDescriptor;
 class TitleBar;
+class PanelTitleBar;
 
 
 class Panel
@@ -44,12 +45,12 @@ public:
     Panel (
         const PanelDescriptor& rPanelDescriptor,
         Window* pParentWindow,
-        const ::boost::function<void(void)>& rDeckLayoutTrigger,
-        const ::boost::function<void(void)>& rShowMenuFunctor);
+        const ::boost::function<void(void)>& rDeckLayoutTrigger );
     virtual ~Panel (void);
 
     void Dispose (void);
 
+    void SetShowMenuFunctor( const ::boost::function<void(void)>& rShowMenuFunctor );
     TitleBar* GetTitleBar (void) const;
     bool IsTitleBarOptional (void) const;
     void SetUIElement (const cssu::Reference<css::ui::XUIElement>& rxElement);
@@ -69,7 +70,7 @@ public:
 
 private:
     const ::rtl::OUString msPanelId;
-    ::boost::scoped_ptr<TitleBar> mpTitleBar;
+    ::boost::scoped_ptr<PanelTitleBar> mpTitleBar;
     const bool mbIsTitleBarOptional;
     cssu::Reference<css::ui::XUIElement> mxElement;
     cssu::Reference<css::ui::XSidebarPanel> mxPanelComponent;

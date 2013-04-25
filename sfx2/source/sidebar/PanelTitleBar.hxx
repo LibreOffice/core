@@ -34,9 +34,10 @@ public:
     PanelTitleBar (
         const ::rtl::OUString& rsTitle,
         Window* pParentWindow,
-        Panel* pPanel,
-        const ::boost::function<void(void)>& rMenuAction);
+        Panel* pPanel );
     virtual ~PanelTitleBar (void);
+
+    void SetMenuAction ( const ::boost::function<void(void)>& rMenuAction );
 
     virtual void DataChanged (const DataChangedEvent& rEvent);
     virtual void MouseButtonDown (const MouseEvent& rMouseEvent);
@@ -53,7 +54,7 @@ private:
     bool mbIsLeftButtonDown;
     Panel* mpPanel;
     const sal_uInt16 mnMenuItemIndex;
-    const ::boost::function<void(void)> maMenuAction;
+    ::boost::function<void(void)> maMenuAction;
 };
 
 
