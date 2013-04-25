@@ -290,7 +290,7 @@ void ScMyTables::AddMatrixRange(
     pDoc->InsertMatrixFormula(
         aScRange.aStart.Col(), aScRange.aStart.Row(),
         aScRange.aEnd.Col(), aScRange.aEnd.Row(),
-        aMark, EMPTY_STRING, pCode, eGrammar, false );
+        aMark, EMPTY_OUSTRING, pCode, eGrammar, false );
     delete pCode;
     pDoc->IncXMLImportedFormulaCount( rFormula.getLength() );
 }
