@@ -121,6 +121,12 @@ $(call gb_CliLibraryTarget_get_target,$(1)) : CLI_CSCFLAGS += $(2)
 
 endef
 
+# Allow to use another compiler, e.g. gmcs instead of mcs
+define gb_CliLibrary_set_csc
+$(call gb_CliLibraryTarget_get_target,$(1)) : CSC := $(2)
+
+endef
+
 # CliLibrary class
 
 gb_CliLibrary_EXT := $(gb_CliLibraryTarget_EXT)
