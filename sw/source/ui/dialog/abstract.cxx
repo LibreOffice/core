@@ -22,41 +22,23 @@
 
 #include "dialog.hrc"
 #include "abstract.hxx"
-#include "abstract.hrc"
 
-
-SwInsertAbstractDlg::SwInsertAbstractDlg( Window* pParent ) :
-    SfxModalDialog(pParent, SW_RES(DLG_INSERT_ABSTRACT)),
-    aFL     (this, SW_RES(FL_1       )),
-    aLevelFT(this, SW_RES(FT_LEVEL   )),
-    aLevelNF(this, SW_RES(NF_LEVEL   )),
-    aParaFT (this, SW_RES(FT_PARA   )),
-    aParaNF (this, SW_RES(NF_PARA   )),
-    aDescFT (this, SW_RES(FT_DESC   )),
-    aOkPB   (this, SW_RES(PB_OK     )),
-    aCancelPB (this, SW_RES(PB_CANCEL   )),
-    aHelpPB (this, SW_RES(PB_HELP   ))
+SwInsertAbstractDlg::SwInsertAbstractDlg(Window* pParent)
+    : SfxModalDialog(pParent, "AbstractDialog",
+        "modules/swriter/ui/abstractdialog.ui")
 {
-    FreeResource();
-}
-
-SwInsertAbstractDlg::~SwInsertAbstractDlg()
-{
+    get(m_pLevelNF, "outlines");
+    get(m_pParaNF, "paras");
 }
 
 sal_uInt8 SwInsertAbstractDlg::GetLevel() const
 {
-    return static_cast< sal_uInt8 >(aLevelNF.GetValue() - 1);
+    return static_cast<sal_uInt8>(m_pLevelNF->GetValue() - 1);
 }
 
 sal_uInt8 SwInsertAbstractDlg::GetPara() const
 {
-    return (sal_uInt8) aParaNF.GetValue();
+    return static_cast<sal_uInt8>(m_pParaNF->GetValue());
 }
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

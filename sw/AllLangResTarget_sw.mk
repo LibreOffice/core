@@ -93,7 +93,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/dbui/mmoutputtypepage.src \
     sw/source/ui/dbui/mmpreparemergepage.src \
     sw/source/ui/dbui/selectdbtabledialog.src \
-    sw/source/ui/dialog/abstract.src \
     sw/source/ui/dialog/dialog.src \
     sw/source/ui/dialog/regionsw.src \
     sw/source/ui/dochdl/dochdl.src \

@@ -21,36 +21,22 @@
 
 #include <sfx2/basedlgs.hxx>
 
-#include <vcl/fixed.hxx>
-
 #include <vcl/field.hxx>
 
-#include <vcl/button.hxx>
-
-class SwInsertAbstractDlg  : public SfxModalDialog
+class SwInsertAbstractDlg : public SfxModalDialog
 {
-    FixedLine       aFL;
-    FixedText       aLevelFT;
-    NumericField    aLevelNF;
-    FixedText       aParaFT;
-    NumericField    aParaNF;
-    FixedText       aDescFT;
-    OKButton        aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    NumericField* m_pLevelNF;
+    NumericField* m_pParaNF;
 
 protected:
 
 public:
     SwInsertAbstractDlg( Window* pParent );
-    ~SwInsertAbstractDlg();
 
     sal_uInt8   GetLevel() const;
     sal_uInt8   GetPara() const;
 };
 
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
