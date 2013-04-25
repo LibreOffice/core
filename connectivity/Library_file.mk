@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,file))
 
+$(eval $(call gb_Library_use_packages,file,\
+	connectivity_generated \
+))
+
 $(eval $(call gb_Library_add_defs,file,\
 	-DOOO_DLLIMPLEMENTATION_FILE \
 ))

@@ -9,7 +9,8 @@
 
 $(eval $(call gb_Library_Library,dba))
 
-$(eval $(call gb_Library_use_package,dba,\
+$(eval $(call gb_Library_use_packages,dba,\
+	connectivity_generated \
 	dbaccess_inc \
 ))
 

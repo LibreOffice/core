@@ -11,6 +11,10 @@ $(eval $(call gb_Library_Library,mork))
 
 $(eval $(call gb_Library_set_componentfile,mork,connectivity/source/drivers/mork/mork))
 
+$(eval $(call gb_Library_use_packages,mork,\
+	connectivity_generated \
+))
+
 $(eval $(call gb_Library_add_defs,mork,\
 	-DLO_DLLIMPLEMENTATION_MORK \
 ))
