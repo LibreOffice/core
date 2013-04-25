@@ -2948,8 +2948,23 @@ bool ScFormulaCell::InterpretFormulaGroup()
     // import / insert / delete etc. and is integral to the data structures
     pDocument->RebuildFormulaGroups();
 
-    if( !xGroup.get() )
+    if (!xGroup || !pCode)
         return false;
+
+    switch (pCode->GetVectorState())
+    {
+        case FormulaVectorEnabled:
+            // Good.
+        break;
+        case FormulaVectorCheckReference:
+            // To support this we would need a real range-based dependency
+            // tracking. We can't support this right now.
+            return false;
+        case FormulaVectorDisabled:
+        case FormulaVectorUnknown:
+        default:
+            return false;
+    }
 
 //    fprintf( stderr, "Interpret cell %d, %d\n", (int)aPos.Col(), (int)aPos.Row() );
 
