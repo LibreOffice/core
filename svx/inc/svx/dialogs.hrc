@@ -31,7 +31,7 @@
 // Resource-Id's ------------------------------------------------------------
 
 // !!! IMPORTANT: consider and update FIRSTFREE when introducing new RIDs !!! (not for RIDs for Strings - they have there own)
-#define RID_SVX_FIRSTFREE                   323
+#define RID_SVX_FIRSTFREE                   324
 
 // some strings also used in CUI
 #define RID_SVXERRCTX                       (RID_SVX_START + 351)
