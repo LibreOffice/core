@@ -30,22 +30,17 @@
 
 #include "svtools/svtdllapi.h"
 
-using namespace css;
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::beans;
-
 class SVT_DLLPUBLIC DocumentToGraphicRenderer
 {
-    const Reference<XComponent>& mxDocument;
+    const css::uno::Reference<css::lang::XComponent>& mxDocument;
 
-    Reference<frame::XModel>        mxModel;
-    Reference<frame::XController>   mxController;
-    Reference<view::XRenderable>    mxRenderable;
-    Reference<awt::XToolkit>        mxToolkit;
+    css::uno::Reference<css::frame::XModel>        mxModel;
+    css::uno::Reference<css::frame::XController>   mxController;
+    css::uno::Reference<css::view::XRenderable>    mxRenderable;
+    css::uno::Reference<css::awt::XToolkit>        mxToolkit;
 
 public:
-    DocumentToGraphicRenderer(const Reference<XComponent>& xDocument);
+    DocumentToGraphicRenderer(const css::uno::Reference<css::lang::XComponent>& xDocument);
     ~DocumentToGraphicRenderer();
 
     sal_Int32 getCurrentPageWriter( );

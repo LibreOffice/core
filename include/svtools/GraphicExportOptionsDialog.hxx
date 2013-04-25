@@ -34,12 +34,6 @@
 
 #include "svtools/svtdllapi.h"
 
-using namespace css;
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::frame;
-using namespace css::beans;
-
 class SVT_DLLPUBLIC GraphicExportOptionsDialog : public ModalDialog
 {
 private:
@@ -67,10 +61,10 @@ private:
     DECL_LINK( resolutionModifiedHandle,    void* );
 
 public:
-    GraphicExportOptionsDialog( Window* pWindow, const Reference<XComponent>& rxSourceDocument );
+    GraphicExportOptionsDialog( Window* pWindow, const css::uno::Reference<css::lang::XComponent>& rxSourceDocument );
     ~GraphicExportOptionsDialog();
 
-    Sequence<PropertyValue> getFilterData();
+    css::uno::Sequence<css::beans::PropertyValue> getFilterData();
 };
 
 #endif
