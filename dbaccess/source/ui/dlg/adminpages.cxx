@@ -33,6 +33,7 @@
 #include "optionalboolitem.hxx"
 #include "sqlmessage.hxx"
 
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <osl/file.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/button.hxx>

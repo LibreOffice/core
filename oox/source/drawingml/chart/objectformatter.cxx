@@ -19,6 +19,7 @@
 
 #include "oox/drawingml/chart/objectformatter.hxx"
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <osl/thread.h>

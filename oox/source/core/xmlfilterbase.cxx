@@ -22,6 +22,7 @@
 #include <cstdio>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>

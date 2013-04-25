@@ -26,6 +26,7 @@
 #include <vcl/window.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

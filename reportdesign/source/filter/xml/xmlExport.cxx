@@ -43,6 +43,7 @@
 #include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/report/XShape.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/report/XFunction.hpp>

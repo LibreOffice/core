@@ -22,6 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 

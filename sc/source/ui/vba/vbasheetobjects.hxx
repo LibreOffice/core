@@ -21,13 +21,13 @@
 #define SC_VBA_SHEETOBJECTS_HXX
 
 #include <ooo/vba/excel/XGraphicObjects.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <rtl/ref.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XEnumeration; }
     namespace frame { class XModel; }
-    namespace sheet { class XSpreadsheet; }
 } } }
 
 // ============================================================================

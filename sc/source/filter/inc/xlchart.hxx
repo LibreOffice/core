@@ -29,12 +29,12 @@
 #include <tools/gen.hxx>
 #include "fapihelper.hxx"
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace lang      { class XMultiServiceFactory; }
     namespace chart     { class XChartDocument; }
-    namespace chart2    { class XChartDocument; }
     namespace drawing   { class XShape; }
 } } }
 

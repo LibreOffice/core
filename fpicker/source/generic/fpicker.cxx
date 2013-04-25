@@ -22,6 +22,8 @@
 
 #include "cppuhelper/implementationentry.hxx"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
+#include "com/sun/star/ui/dialogs/XFolderPicker2.hpp"
+#include "com/sun/star/ui/dialogs/XFilePicker2.hpp"
 
 #include "svtools/miscopt.hxx"
 #include "svl/pickerhistoryaccess.hxx"
@@ -145,7 +147,11 @@ static Reference< css::uno::XInterface > FolderPicker_createInstance (
     Reference< css::lang::XMultiComponentFactory > xFactory (rxContext->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
-        xResult = Reference< css::uno::XInterface >( Application::createFolderPicker( rxContext ) );
+
+
+
+        Reference<css::util::XCancellable> tmp1( Application::createFolderPicker( rxContext ) );
+        xResult.set( tmp1 );
         if (!xResult.is())
         {
             try

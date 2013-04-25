@@ -20,6 +20,7 @@
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>

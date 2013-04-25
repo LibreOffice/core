@@ -24,6 +24,7 @@
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>

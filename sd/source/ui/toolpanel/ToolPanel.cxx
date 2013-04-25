@@ -23,6 +23,7 @@
 #include <taskpane/TaskPaneTreeNode.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 
 #include <vcl/window.hxx>
 
