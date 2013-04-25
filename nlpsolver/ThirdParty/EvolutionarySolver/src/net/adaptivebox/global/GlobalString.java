@@ -38,15 +38,11 @@ public class GlobalString {
   * divided by the tokenKey.
   */
   public static String[] tokenize(String input , String tokenKey) {
-    Vector v = new Vector();
+    ArrayList<String> v = new ArrayList<String>();
     StringTokenizer t = new StringTokenizer(input, tokenKey);
-    String cmd[];
     while (t.hasMoreTokens())
-      v.addElement(t.nextToken());
-    cmd = new String[v.size()];
-    for (int i = 0; i < cmd.length; i++)
-      cmd[i] = (String) v.elementAt(i);
-    return cmd;
+      v.add(t.nextToken());
+    return v.toArray(new String[v.size()]);
   }
 
   public static String[] getMeaningfulLines(String srcStr) throws Exception {

@@ -3,7 +3,7 @@
  *
  * @ Author        Create/Modi     Note
  * Xiaofeng Xie    Jun 15, 2002
- * 
+ *
  * @version 1.0
  * @Since MAOS1.0
  */
@@ -17,7 +17,7 @@ import java.util.*;
 public class GlobalFile {
 
 // used by the createTempDir to give an index of temp number.
-  private static int counter = -1;
+    private static int counter = -1;
 
 /**
   * Create a temp directory in the given directory.
@@ -26,28 +26,30 @@ public class GlobalFile {
   * @return  If a temp directory is created, return a File Object, else
   * return null.
   */
-  public static File createTempDir(String prefix, String directory) throws IOException {
-    File f = null;
-    String tempDir;
-    boolean isCreated = false;
-    do {
-    	if (counter == -1) {
-	      counter = new Random().nextInt() & 0xffff;
-	    }
-    	counter++;
-    	if (prefix == null) throw new NullPointerException();
-  	  if (prefix.length() < 3)
-	      throw new IllegalArgumentException("Prefix string too short");
-      if (directory == null) {
-        tempDir = prefix+counter;
-      } else {
-        tempDir = getFileLocation(directory,prefix+counter);
-      }
-      f = new File(tempDir);
-    	isCreated = f.mkdir();
-    } while (!isCreated);
-    return f;
-  }
+    public static File createTempDir(String prefix, String directory)
+            throws IOException {
+        File f = null;
+        String tempDir;
+        boolean isCreated = false;
+        do {
+            if (counter == -1) {
+                counter = new Random().nextInt() & 0xffff;
+            }
+            counter++;
+            if (prefix == null)
+                throw new NullPointerException();
+            if (prefix.length() < 3)
+                throw new IllegalArgumentException("Prefix string too short");
+            if (directory == null) {
+                tempDir = prefix + counter;
+            } else {
+                tempDir = getFileLocation(directory, prefix + counter);
+            }
+            f = new File(tempDir);
+            isCreated = f.mkdir();
+        } while (!isCreated);
+        return f;
+    }
 
 /**
   * Add the given text string to the end of a given file.
@@ -118,17 +120,17 @@ public class GlobalFile {
 /**
   * Load curve data from a specified file.
   * @param      fileStr     the name of the file to be loaded.
-  * @return  A Vector that include the curve data.
+  * @return  An ArrayList that include the curve data.
   */
-  public static Vector getCurveDataFromFile(String fileName) {
+  public static ArrayList<ArrayList<Double>> getCurveDataFromFile(String fileName) {
     File file = new File(fileName);
     if(!file.exists()){
       //showMessage();
       return null;
     }
     //open data file
-    FileInputStream	inStream = null;
-    BufferedReader 	inReader = null;
+    FileInputStream inStream = null;
+    BufferedReader inReader = null;
     try{
       inStream = new FileInputStream(file);
       inReader = new BufferedReader(new InputStreamReader(inStream));
@@ -136,8 +138,8 @@ public class GlobalFile {
       //showMessage();
       return null;//Data file open error.
     }
-    Vector xaxes = new Vector(1,1);
-    Vector yaxes = new Vector(1,1);
+    ArrayList<Double> xaxes = new ArrayList<Double>(1);
+    ArrayList<Double> yaxes = new ArrayList<Double>(1);
     try{
       StringTokenizer st;
       String s;
@@ -163,8 +165,8 @@ public class GlobalFile {
           Double yaxis = null;
           try{
             xaxis = Double.valueOf(s);
-            xaxes.addElement(xaxis);
-          }catch(Exception e){
+            xaxes.add(xaxis);
+          }catch(NumberFormatException e){
             //showMessage();
             inReader.close();
             inStream.close();
@@ -173,8 +175,8 @@ public class GlobalFile {
           s = st.nextToken();
           try{
             yaxis = Double.valueOf(s);
-            yaxes.addElement(yaxis);
-          }catch(Exception e){
+            yaxes.add(yaxis);
+          }catch(NumberFormatException e){
           //showMessage();
           inReader.close();
           inStream.close();
@@ -186,10 +188,10 @@ public class GlobalFile {
       //showMessage();
       return null;//Uncertain data file error.
     }
-    Vector curveData = new Vector();
-    curveData.addElement(xaxes);
-    curveData.addElement(yaxes);
-    return(curveData);
+    ArrayList<ArrayList<Double>> curveData = new ArrayList<ArrayList<Double>>(2);
+    curveData.add(xaxes);
+    curveData.add(yaxes);
+    return curveData;
   }
 
 /**
