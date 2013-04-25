@@ -112,7 +112,6 @@ private:
         "com.sun.star.reflection.CoreReflection",
         "com.sun.star.reflection.ProxyFactory",
         "com.sun.star.reflection.TypeDescriptionManager",
-        "com.sun.star.reflection.TypeDescriptionProvider",
         "com.sun.star.registry.ImplementationRegistration",
         "com.sun.star.registry.NestedRegistry",
         "com.sun.star.registry.SimpleRegistry",

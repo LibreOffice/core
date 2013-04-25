@@ -52,7 +52,7 @@ public class _XEventAttacherManager extends MultiMethodTest {
      */
     public XEventAttacherManager oObj = null;
 
-    int index;
+    private final int index = 0;
 
     /**
     * Test calls the method and stores index of new entry. <p>
@@ -60,7 +60,6 @@ public class _XEventAttacherManager extends MultiMethodTest {
     * and no exceptions were thrown. <p>
     */
     public void _insertEntry() {
-        index = 0;
         try {
             oObj.insertEntry(index);
             tRes.tested("insertEntry()", true);
@@ -260,7 +259,7 @@ public class _XEventAttacherManager extends MultiMethodTest {
     Object attachedObject;
 
     /**
-    * Test creates instance of <code>TypeDescriptionProvider</code>,
+    * Test creates instance of <code>NamingService</code> (arbitrarily),
     * stores it and attaches it to the entry with index stored in the method
     * <code>insertEntry()</code>. <p>
     * Has <b> OK </b> status if the method successfully returns
@@ -268,7 +267,6 @@ public class _XEventAttacherManager extends MultiMethodTest {
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> insertEntry() </code> : to have entry's index for attach</li>
-    * @see com.sun.star.reflection.TypeDescriptionProvider
     */
     public void _attach() {
         requiredMethod("insertEntry()");
@@ -276,10 +274,15 @@ public class _XEventAttacherManager extends MultiMethodTest {
         try {
             XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
             attachedObject = xMSF.createInstance
-                ( "com.sun.star.reflection.TypeDescriptionProvider" );
+                ( "com.sun.star.uno.NamingService" );
         } catch( com.sun.star.uno.Exception e ) {
-            log.println("Service not available" );
+            log.println("com.sun.star.uno.NamingService not available" );
             e.printStackTrace(log);
+            tRes.tested("attach()", false);
+            return;
+        }
+        if (attachedObject == null) {
+            log.println("com.sun.star.uno.NamingService not available" );
             tRes.tested("attach()", false);
             return;
         }

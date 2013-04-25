@@ -31,6 +31,10 @@
     service implementations read from source like the persistent registry
     database format.<br>
 
+    This old-style service definition mostly serves documentation purposes.  It
+    is not intended that an implementation of this service can be obtained at
+    the global service manager using this service identifier.
+
     @see com::sun::star::reflection::TypeDescriptionManager
     @see com::sun::star::reflection::XTypeDescription
 */
