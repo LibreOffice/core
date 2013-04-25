@@ -23,11 +23,11 @@ package com.sun.star.comp.helper;
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.loader.JavaLoader;
+import com.sun.star.comp.servicemanager.ServiceManager;
 import com.sun.star.container.XSet;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.uno.UnoRuntime;
@@ -98,19 +98,10 @@ public class Bootstrap {
     static public XComponentContext createInitialComponentContext( Hashtable<String, Object> context_entries )
         throws Exception
     {
+        ServiceManager xSMgr = new ServiceManager();
+
         XImplementationLoader xImpLoader = UnoRuntime.queryInterface(
             XImplementationLoader.class, new JavaLoader() );
-
-        // Get the factory of the ServiceManager
-        XSingleComponentFactory smgr_fac = UnoRuntime.queryInterface(
-            XSingleComponentFactory.class, xImpLoader.activate(
-                "com.sun.star.comp.servicemanager.ServiceManager", null, null, null ) );
-
-        // Create an instance of the ServiceManager
-        XMultiComponentFactory xSMgr = UnoRuntime.queryInterface(
-            XMultiComponentFactory.class, smgr_fac.createInstanceWithContext( null ) );
-
-        // post init loader
         XInitialization xInit = UnoRuntime.queryInterface(
             XInitialization.class, xImpLoader );
         Object[] args = new Object [] { xSMgr };
@@ -126,16 +117,10 @@ public class Bootstrap {
         // ... xxx todo: add standard entries
         XComponentContext xContext = new ComponentContext( context_entries, null );
 
-        // post init smgr
-        xInit = UnoRuntime.queryInterface(
-            XInitialization.class, xSMgr );
-        args = new Object [] { null, xContext }; // no registry, default context
-        xInit.initialize( args );
+        xSMgr.setDefaultContext(xContext);
 
         XSet xSet = UnoRuntime.queryInterface( XSet.class, xSMgr );
-        // insert the service manager
-        xSet.insert( smgr_fac );
-        // and basic jurt factories
+        // insert basic jurt factories
         insertBasicFactories( xSet, xImpLoader );
 
         return xContext;

@@ -18,7 +18,6 @@
 
 package com.sun.star.comp.servicemanager;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -27,15 +26,11 @@ import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XSet;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
-import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.loader.XImplementationLoader;
-import com.sun.star.registry.XRegistryKey;
-import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
@@ -52,7 +47,6 @@ import com.sun.star.uno.XComponentContext;
  * @see         com.sun.star.container.XContentEnumerationAccess
  * @see         com.sun.star.lang.XComponent
  * @see         com.sun.star.lang.XServiceInfo
- * @see         com.sun.star.lang.XInitialization
  * @since       UDK1.0
  */
 public class ServiceManager implements XMultiServiceFactory,
@@ -60,8 +54,7 @@ public class ServiceManager implements XMultiServiceFactory,
                                        XSet,
                                        XContentEnumerationAccess,
                                        XComponent,
-                                       XServiceInfo,
-                                       XInitialization
+                                       XServiceInfo
 {
     private static final boolean DEBUG = false;
 
@@ -70,8 +63,6 @@ public class ServiceManager implements XMultiServiceFactory,
     }
 
     private static com.sun.star.uno.Type UNO_TYPE = null;
-
-    XImplementationLoader loader = null;
 
     static String[] supportedServiceNames = {
             "com.sun.star.lang.MultiServiceFactory",
@@ -93,159 +84,9 @@ public class ServiceManager implements XMultiServiceFactory,
         factoriesByServiceNames = new java.util.HashMap<String, ArrayList<Object>>();
         m_xDefaultContext = null;
     }
-    /**
-     * Creates a new instance of the <code>ServiceManager</code>.
-     */
-    public ServiceManager( XComponentContext xContext ) {
-        eventListener           = new ArrayList<XEventListener>();
-        factoriesByImplNames    = new java.util.HashMap<String, Object>();
-        factoriesByServiceNames = new java.util.HashMap<String, ArrayList<Object>>();
-        m_xDefaultContext = xContext;
-    }
 
-    /**
-     * Returns the service factory for the <code>ServiceManager</code>. If the given implementation name
-     * does not equal to the <code>ServiceManagers</code> class name null will be returned.
-     * <p>
-     * @return     the factory for the <code>ServiceManager</code>.
-     * @param      implName     the implementation name of the of the service.
-     *                          Must be equal to <code>com.sun.star.comp.servicemanager.ServicManager</code>
-     * @param      multiFactory refernce of the <code>MultiServiceFactory</code>. This parameter will be ignored.
-     * @param      regKey       the root key of the registry. This parameter will be ignored.
-     */
-      public static XSingleServiceFactory getServiceFactory( String implName,
-                                                           XMultiServiceFactory multiFactory,
-                                                           XRegistryKey regKey)
-    {
-        if ( implName.equals(ServiceManager.class.getName()) )
-            return new ServiceManagerFactory();
-
-        return null;
-    }
-
-
-    /**
-     * Supplies a Java component loader. The loader component must be enlisted at the <code>ServiceManager</code> before.
-     * <p>
-     * @return      a new instance of the Java component loader
-     * @see         com.sun.star.loader.Java
-     */
-    private XImplementationLoader getLoader()
-                throws  com.sun.star.uno.Exception,
-                          com.sun.star.uno.RuntimeException
-    {
-        Object[] param = { this };
-        DEBUG("make loader");
-        Object loaderObj = createInstanceWithArgumentsAndContext(
-            "com.sun.star.loader.Java", param, m_xDefaultContext );
-
-        if (loaderObj == null)
-            throw new com.sun.star.uno.Exception("Can get an instance of com.sun.star.loader.Java");
-
-        return UnoRuntime.queryInterface( XImplementationLoader.class, loaderObj );
-    }
-
-    /**
-     * Registers a list of components given by their class names.
-     * <p>
-     * @param   newImpls    list of the components that should be registered, given by their class names.
-     *                      If any exception occurred during the registration, the process will be canceled.
-     * @see     com.sun.star.container.XSet
-     */
-    private void xaddFactories( String[] newImpls )
-                    throws com.sun.star.uno.Exception
-    {
-        for (int i=0; i<newImpls.length; i++) {
-            DEBUG ("try to add " + newImpls[i] );
-            Object newFactory = null;
-
-            try {
-                if (loader == null)
-                    loader = getLoader();
-
-                newFactory = loader.activate( newImpls[i], null, null, null );
-            }
-            catch (com.sun.star.uno.Exception e) {
-
-//****************************** BEGIN DEPRECATED ******************************************
-
-                try {
-                    // try to get the class of the implementation
-                    Class<?> clazz = Class.forName( newImpls[i] );
-
-                    Class<?>[] methodClassParam = { String.class, XMultiServiceFactory.class, XRegistryKey.class };
-                    java.lang.reflect.Method getFactoryMeth  ;
-                    try {
-                        getFactoryMeth = clazz.getMethod("__getServiceFactory", methodClassParam);
-                    }
-                    catch (NoSuchMethodException noSuchMethodEx) {
-                        getFactoryMeth = null;
-                    }
-                    catch (SecurityException securityExc) {
-                        getFactoryMeth = null;
-                    }
-
-                    if (getFactoryMeth == null)
-                        getFactoryMeth = clazz.getMethod("getServiceFactory", methodClassParam);
-
-                    Object[] methodParams = { newImpls[i], this, null };
-                    newFactory = getFactoryMeth.invoke( clazz, methodParams );
-                }
-                catch (NoSuchMethodException ex) {}
-                catch (SecurityException ex) {}
-                catch (ClassNotFoundException ex) {}
-                catch (IllegalAccessException ex) {}
-                catch (IllegalArgumentException ex) {}
-                catch (InvocationTargetException ex) {}
-
-//****************************** END DEPRECATED ******************************************
-            }
-
-            if ( newFactory == null )
-                throw new com.sun.star.loader.CannotActivateFactoryException("Can not get factory for " +  newImpls[i]);
-
-            insert( newFactory );
-        } // end of for ...
-    }
-
-    /**
-     * The method is used to add components to the <code>ServiceManager</code>. The first argument indicates a <code>SimpleRegistry</code>.
-     * The components which should be added will be searched under the <i>Implementations</i> key in the registry.
-     * <p>
-     * @param   args    the first argument ( args[0] ) specifices the SimpleRegistry object
-     * @see     com.sun.star.lang.XInitialization
-     * @see     com.sun.star.lang.RegistryServiceManager
-     * @see     com.sun.star.registry.XSimpleRegistry
-     */
-    public void initialize( Object args[] )
-                throws  com.sun.star.uno.Exception,
-                        com.sun.star.uno.RuntimeException {
-        XSimpleRegistry xSimpleRegistry  ;
-        try {
-            xSimpleRegistry = (XSimpleRegistry) args[0];
-            if (xSimpleRegistry != null)
-            {
-                XRegistryKey rootkey = xSimpleRegistry.getRootKey();
-
-                XRegistryKey implkey_xRegistryKey = rootkey.openKey("Implementations");
-                if(implkey_xRegistryKey != null) {
-                    XRegistryKey xRegistryKeys[] = implkey_xRegistryKey.openKeys();
-
-                    for(int i = 0; i < xRegistryKeys.length; ++ i) {
-                        xaddFactories(new String[]{xRegistryKeys[i].getStringValue()});
-                    }
-                }
-            }
-
-            if (args.length > 1)
-            {
-                m_xDefaultContext = (XComponentContext)args[ 1 ];
-            }
-        }
-        catch (ArrayIndexOutOfBoundsException e)
-        {
-            throw new com.sun.star.lang.IllegalArgumentException("Argument must not be null.");
-        }
+    public void setDefaultContext(XComponentContext context) {
+        m_xDefaultContext = context;
     }
 
     /**
@@ -803,110 +644,3 @@ public class ServiceManager implements XMultiServiceFactory,
         }
     }
 }
-/**
- * The <code>ServiceManagerFactory</code> is the factory class for the
- * <code>ServiceManager</code>. As all factories it implments the
- * com.sun.star.lang.XSingleServiceFactory and the com.sun.star.lang.XServiceInfo
- * interfaces.
- * <p>
- * @see         com.sun.star.lang.XSingleServiceFactory
- * @see         com.sun.star.lang.XServiceInfo
- * @since       UDK1.0
-*/
-class ServiceManagerFactory implements  XServiceInfo, XSingleComponentFactory, XSingleServiceFactory
-{
-    /**
-     * Creates a new instance of the <code>ServiceManagerFactory</code>.
-     */
-    public ServiceManagerFactory() {
-    }
-
-    /**
-     * Supplies the implementation name of the <code>ServiceManager</code>.
-     * <p>
-     * @return      <code>ServiceManager</code> class name.
-      * @see         com.sun.star.lang.XServiceInfo
-     */
-    public String getImplementationName()
-            throws com.sun.star.uno.RuntimeException
-    {
-        return ServiceManager.class.getName();
-    }
-
-    /**
-     * Checks whether or not a service is supported.
-     * <p>
-     * @return      true - if the service is supported, otherwise false.
-     * @param       serviceName     the name of the service that should be checked.
-      * @see         com.sun.star.lang.XServiceInfo
-     */
-    public boolean supportsService( String serviceName )
-            throws com.sun.star.uno.RuntimeException
-    {
-        for ( int i=0; i<ServiceManager.supportedServiceNames.length; i++ )
-            if ( ServiceManager.supportedServiceNames[i].equals(serviceName) ) return true;
-
-        return getImplementationName().equals(serviceName);
-
-        }
-
-    /**
-     * Returns all service names which are supported by <code>ServiceManager</code>.
-     * <p>
-     * @return      a list aof all supported service names.
-      * @see         com.sun.star.lang.XServiceInfo
-     */
-    public String[] getSupportedServiceNames()
-            throws com.sun.star.uno.RuntimeException
-    {
-        return ServiceManager.supportedServiceNames;
-    }
-
-    /**
-     * Creates a new instance of the <code>ServiceManager</code>.
-     * <p>
-     * @return      newly created <code>ServiceManager</code> object.
-      * @see         com.sun.star.lang.XSingleServiceFactory
-     */
-    public java.lang.Object createInstance()
-            throws com.sun.star.uno.Exception,
-                   com.sun.star.uno.RuntimeException
-    {
-        return new ServiceManager();
-    }
-
-    /**
-     * Creates a new instance of the <code>ServiceManager</code> with arguments.
-     * At this time it always throws a com.sun.star.lang.NoSuchMethodException
-     * because there is no the <code>ServiceManager</code> has no constructor with
-     * arguments.
-     * <p>
-     * @return      null - always throws an exception
-     * @param       aArguments arguments for new instance.
-      * @see         com.sun.star.lang.XSingleServiceFactory
-     */
-    public java.lang.Object createInstanceWithArguments( java.lang.Object[] aArguments )
-            throws com.sun.star.uno.Exception,
-                   com.sun.star.uno.RuntimeException
-    {
-        throw new com.sun.star.lang.NoSuchMethodException("Constructor with arguments is not supported.");
-    }
-
-    // XSingleComponentFactory impl
-    //______________________________________________________________________________________________
-    public Object createInstanceWithContext( XComponentContext xContext )
-        throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException
-    {
-        return new ServiceManager( xContext );
-    }
-    //______________________________________________________________________________________________
-    public Object createInstanceWithArgumentsAndContext(
-        Object aArguments [], XComponentContext xContext )
-        throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException
-    {
-        throw new com.sun.star.lang.NoSuchMethodException(
-            "ServiceManagerFactory.createInstanceWithArgumentsAndContext() not impl!" );
-    }
-}
-
-
