@@ -887,10 +887,14 @@ namespace cppcanvas
             ActionSharedPtr pPolyAction;
 
             if (isColor) {
-                EMFP_DEBUG (printf ("EMF+\t\tcolor fill\n"));
-
+                EMFP_DEBUG (printf ("EMF+\t\tcolor fill:0x%X\n", brushIndexOrColor));
                 rState.isFillColorSet = true;
                 rState.isLineColorSet = false;
+                // n#812793: EMF+ Seems to specify transparent background with Alpha=0xFF !
+                // Workaround for the problem.
+                if(brushIndexOrColor == 0xFFFFFFFF)
+                    brushIndexOrColor = 0xFFFFFF;
+
                 SET_FILL_COLOR(brushIndexOrColor);
 
                 pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
