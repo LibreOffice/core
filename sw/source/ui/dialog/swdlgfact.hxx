@@ -439,7 +439,7 @@ public:
         SfxChildWindow* pChild, Window *pParent, SfxChildWinInfo* pInfo);
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg(Window* pParent);
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
-                                                                SvStream* pStream, int nResId ); //add for SwAsciiFilterDlg
+                                                                SvStream* pStream ); //add for SwAsciiFilterDlg
     virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId );//add for SwInsertBookmarkDlg
     virtual AbstractSwBreakDlg * CreateSwBreakDlg(Window *pParent, SwWrtShell &rSh); // add for SwBreakDlg
     virtual VclAbstractDialog   * CreateSwChangeDBDlg(SwView& rVw); //add for SwChangeDBDlg

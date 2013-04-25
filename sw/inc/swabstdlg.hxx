@@ -334,7 +334,7 @@ public:
 
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg(Window* pParent) = 0; // add for SwInsertAbstractDlg
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
-                                                                SvStream* pStream, int nResId ) = 0;// add for SwAsciiFilterDlg
+                                                                SvStream* pStream ) = 0;// add for SwAsciiFilterDlg
     virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId ) = 0;// add for SwInsertBookmarkDlg
 
     virtual AbstractSwBreakDlg * CreateSwBreakDlg(Window *pParent, SwWrtShell &rSh) = 0; // add for SwBreakDlg

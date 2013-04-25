@@ -665,23 +665,10 @@ SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSfxDialog( Window* pParen
 
 AbstractSwAsciiFilterDlg* SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg( Window* pParent,
                                                                                SwDocShell& rDocSh,
-                                                                                SvStream* pStream,
-                                                                                int nResId )
+                                                                                SvStream* pStream )
 {
-    SwAsciiFilterDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_ASCII_FILTER :
-            pDlg = new SwAsciiFilterDlg( pParent, rDocSh, pStream );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwAsciiFilterDlg_Impl( pDlg );
-    return 0;
+    SwAsciiFilterDlg* pDlg = new SwAsciiFilterDlg( pParent, rDocSh, pStream );
+    return new AbstractSwAsciiFilterDlg_Impl( pDlg );
 }
 
 VclAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg( Window *pParent,

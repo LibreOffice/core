@@ -119,7 +119,8 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg( NULL, *pDocShell,pInStream,  DLG_ASCII_FILTER );
+        AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg(NULL, *pDocShell,
+            pInStream);
         OSL_ENSURE(pAsciiDlg, "Dialogdiet fail!");
         if(RET_OK == pAsciiDlg->Execute())
         {

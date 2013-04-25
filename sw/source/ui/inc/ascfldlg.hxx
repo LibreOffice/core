@@ -32,20 +32,15 @@ class SwDocShell;
 
 class SwAsciiFilterDlg : public SfxModalDialog
 {
-    FixedLine           aFL;
-    FixedText           aCharSetFT;
-    SvxTextEncodingBox  aCharSetLB;
-    FixedText           aFontFT;
-    ListBox             aFontLB;
-    FixedText           aLanguageFT;
-    SvxLanguageBox      aLanguageLB;
-    FixedText           aCRLF_FT;
-    RadioButton         aCRLF_RB, aCR_RB, aLF_RB;
-    OKButton            aOkPB;
-    CancelButton        aCancelPB;
-    HelpButton          aHelpPB;
-    String              sSystemCharSet;
-    bool                bSaveLineStatus;
+    SvxTextEncodingBox* m_pCharSetLB;
+    FixedText*          m_pFontFT;
+    ListBox*            m_pFontLB;
+    FixedText*          m_pLanguageFT;
+    SvxLanguageBox*     m_pLanguageLB;
+    RadioButton*        m_pCRLF_RB;
+    RadioButton*        m_pCR_RB;
+    RadioButton*        m_pLF_RB;
+    bool                m_bSaveLineStatus;
 
     DECL_LINK( CharSetSelHdl, SvxTextEncodingBox* );
     DECL_LINK( LineEndHdl, RadioButton* );

@@ -38,7 +38,6 @@
 #include <doc.hxx>
 
 #include <dialog.hrc>
-#include <ascfldlg.hrc>
 
 #include "vcl/metric.hxx"
 
@@ -52,25 +51,20 @@ const sal_uInt16 nDialogExtraDataLen = 11;      // 12345678901
 
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
-    : SfxModalDialog( pParent, SW_RES( DLG_ASCII_FILTER )),
-    aFL( this, SW_RES( FL_1 )),
-    aCharSetFT( this, SW_RES( FT_CHARSET )),
-    aCharSetLB( this, SW_RES( LB_CHARSET )),
-    aFontFT( this, SW_RES( FT_FONT )),
-    aFontLB( this, SW_RES( LB_FONT )),
-    aLanguageFT( this, SW_RES( FT_LANGUAGE )),
-    aLanguageLB( this, SW_RES( LB_LANGUAGE )),
-    aCRLF_FT( this, SW_RES( FT_CRLF )),
-    aCRLF_RB( this, SW_RES( RB_CRLF )),
-    aCR_RB( this, SW_RES( RB_CR )),
-    aLF_RB( this, SW_RES( RB_LF )),
-    aOkPB( this, SW_RES( PB_OK )),
-    aCancelPB( this, SW_RES( PB_CANCEL )),
-    aHelpPB( this, SW_RES( PB_HELP )),
-    sSystemCharSet( SW_RES( STR_SYS_CHARSET )),
-    bSaveLineStatus( true )
+    : SfxModalDialog(pParent, "AsciiFilterDialog", "modules/swriter/ui/asciifilterdialog.ui")
+    , m_bSaveLineStatus(true)
 {
-    FreeResource();
+    get(m_pCharSetLB, "charset");
+    m_pCharSetLB->SetStyle(m_pCharSetLB->GetStyle() | WB_SORT);
+    get(m_pFontFT, "fontft");
+    get(m_pFontLB, "font");
+    m_pFontLB->SetStyle(m_pFontLB->GetStyle() | WB_SORT);
+    get(m_pLanguageFT, "languageft");
+    get(m_pLanguageLB, "language");
+    m_pLanguageLB->SetStyle(m_pLanguageLB->GetStyle() | WB_SORT);
+    get(m_pCRLF_RB, "crlf");
+    get(m_pCR_RB, "cr");
+    get(m_pLF_RB, "lf");
 
     SwAsciiOptions aOpt;
     {
@@ -169,8 +163,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 }
             }
 
-            aLanguageLB.SetLanguageList( LANG_LIST_ALL, sal_True, sal_False );
-            aLanguageLB.SelectLanguage( aOpt.GetLanguage() );
+            m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, sal_True, sal_False );
+            m_pLanguageLB->SelectLanguage( aOpt.GetLanguage() );
         }
 
         {
@@ -199,7 +193,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             for( std::set< String >::const_iterator it = aFontNames.begin();
                  it != aFontNames.end(); ++it )
             {
-                aFontLB.InsertEntry( *it );
+                m_pFontLB->InsertEntry( *it );
             }
 
             if( !aOpt.GetFontName().Len() )
@@ -209,7 +203,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 aOpt.SetFontName(aTmpFont.GetName());
             }
 
-            aFontLB.SelectEntry( aOpt.GetFontName() );
+            m_pFontLB->SelectEntry( aOpt.GetFontName() );
 
             if( bDelPrinter )
                 delete pPrt;
@@ -219,48 +213,27 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     }
     else
     {
-        // hide the used Control for the Export and move the
-        // other behind the charset controls
-        aFontFT.Hide();
-        aFontLB.Hide();
-        aLanguageFT.Hide();
-        aLanguageLB.Hide();
-
-        long nY = aFontFT.GetPosPixel().Y() + 1;
-        Point aPos( aCRLF_FT.GetPosPixel() );   aPos.Y() = nY;
-        aCRLF_FT.SetPosPixel( aPos );
-
-        aPos = aCRLF_RB.GetPosPixel();  aPos.Y() = nY;
-        aCRLF_RB.SetPosPixel( aPos );
-
-        aPos = aCR_RB.GetPosPixel();    aPos.Y() = nY;
-        aCR_RB.SetPosPixel( aPos );
-
-        aPos = aLF_RB.GetPosPixel();    aPos.Y() = nY;
-        aLF_RB.SetPosPixel( aPos );
-
-        Size aSize = GetSizePixel();
-        Size aTmpSz( 6, 6 );
-        aTmpSz = LogicToPixel(aTmpSz, MAP_APPFONT);
-        aSize.Height() = aHelpPB.GetPosPixel().Y() +
-                         aHelpPB.GetSizePixel().Height() + aTmpSz.Height();
-        SetSizePixel( aSize );
+        // hide the unused Controls for Export
+        m_pFontFT->Hide();
+        m_pFontLB->Hide();
+        m_pLanguageFT->Hide();
+        m_pLanguageLB->Hide();
     }
 
     // initialise character set
-    aCharSetLB.FillFromTextEncodingTable( pStream != NULL );
-    aCharSetLB.SelectTextEncoding( aOpt.GetCharSet()  );
+    m_pCharSetLB->FillFromTextEncodingTable( pStream != NULL );
+    m_pCharSetLB->SelectTextEncoding( aOpt.GetCharSet()  );
 
-    aCharSetLB.SetSelectHdl( LINK( this, SwAsciiFilterDlg, CharSetSelHdl ));
-    aCRLF_RB.SetToggleHdl( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
-    aLF_RB.SetToggleHdl( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
-    aCR_RB.SetToggleHdl( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
+    m_pCharSetLB->SetSelectHdl( LINK( this, SwAsciiFilterDlg, CharSetSelHdl ));
+    m_pCRLF_RB->SetToggleHdl( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
+    m_pLF_RB->SetToggleHdl( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
+    m_pCR_RB->SetToggleHdl( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
 
     SetCRLF( aOpt.GetParaFlags() );
 
-    aCRLF_RB.SaveValue();
-    aLF_RB.SaveValue();
-    aCR_RB.SaveValue();
+    m_pCRLF_RB->SaveValue();
+    m_pLF_RB->SaveValue();
+    m_pCR_RB->SaveValue();
 }
 
 
@@ -271,13 +244,13 @@ SwAsciiFilterDlg::~SwAsciiFilterDlg()
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {
-    sal_uLong nCCode = aCharSetLB.GetSelectTextEncoding();
+    sal_uLong nCCode = m_pCharSetLB->GetSelectTextEncoding();
     String sFont;
     sal_uLong nLng = 0;
-    if( aFontLB.IsVisible() )
+    if( m_pFontLB->IsVisible() )
     {
-        sFont = aFontLB.GetSelectEntry();
-        nLng = (sal_uLong)aLanguageLB.GetSelectLanguage();
+        sFont = m_pFontLB->GetSelectEntry();
+        nLng = (sal_uLong)m_pLanguageLB->GetSelectLanguage();
     }
 
     rOptions.SetFontName( sFont );
@@ -291,7 +264,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     if( sData.Len() )
     {
         const OUString sFindNm = OUString::createFromAscii(
-                                    aFontLB.IsVisible() ? sDialogImpExtraData
+                                    m_pFontLB->IsVisible() ? sDialogImpExtraData
                                               : sDialogExpExtraData);
         sal_uInt16 nEnd, nStt = GetExtraData().Search( sFindNm );
         if( STRING_NOTFOUND != nStt )
@@ -314,18 +287,18 @@ void SwAsciiFilterDlg::SetCRLF( LineEnd eEnd )
 {
     switch( eEnd )
     {
-    case LINEEND_CR:    aCR_RB.Check();     break;
-    case LINEEND_CRLF:  aCRLF_RB.Check();   break;
-    case LINEEND_LF:    aLF_RB.Check();     break;
+    case LINEEND_CR:    m_pCR_RB->Check();     break;
+    case LINEEND_CRLF:  m_pCRLF_RB->Check();   break;
+    case LINEEND_LF:    m_pLF_RB->Check();     break;
     }
 }
 
 LineEnd SwAsciiFilterDlg::GetCRLF() const
 {
     LineEnd eEnd;
-    if( aCR_RB.IsChecked() )
+    if( m_pCR_RB->IsChecked() )
         eEnd = LINEEND_CR;
-    else if( aLF_RB.IsChecked() )
+    else if( m_pLF_RB->IsChecked() )
         eEnd = LINEEND_LF;
     else
         eEnd = LINEEND_CRLF;
@@ -335,8 +308,8 @@ LineEnd SwAsciiFilterDlg::GetCRLF() const
 IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
 {
     LineEnd eOldEnd = GetCRLF(), eEnd = (LineEnd)-1;
-    LanguageType nLng = aFontLB.IsVisible()
-                    ? aLanguageLB.GetSelectLanguage()
+    LanguageType nLng = m_pFontLB->IsVisible()
+                    ? m_pLanguageLB->GetSelectLanguage()
                     : LANGUAGE_SYSTEM,
                 nOldLng = nLng;
 
@@ -387,7 +360,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
         }
     }
 
-    bSaveLineStatus = false;
+    m_bSaveLineStatus = false;
     if( eEnd != (LineEnd)-1 )       // changed?
     {
         if( eOldEnd != eEnd )
@@ -396,21 +369,21 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
     else
     {
         // restore old user choise (not the automatic!)
-        aCRLF_RB.Check( aCRLF_RB.GetSavedValue() );
-        aCR_RB.Check( aCR_RB.GetSavedValue() );
-        aLF_RB.Check( aLF_RB.GetSavedValue() );
+        m_pCRLF_RB->Check( m_pCRLF_RB->GetSavedValue() );
+        m_pCR_RB->Check( m_pCR_RB->GetSavedValue() );
+        m_pLF_RB->Check( m_pLF_RB->GetSavedValue() );
     }
-    bSaveLineStatus = true;
+    m_bSaveLineStatus = true;
 
-    if( nOldLng != nLng && aFontLB.IsVisible() )
-        aLanguageLB.SelectLanguage( nLng );
+    if( nOldLng != nLng && m_pFontLB->IsVisible() )
+        m_pLanguageLB->SelectLanguage( nLng );
 
     return 0;
 }
 
 IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 {
-    if( bSaveLineStatus )
+    if( m_bSaveLineStatus )
         pBtn->SaveValue();
     return 0;
 }
