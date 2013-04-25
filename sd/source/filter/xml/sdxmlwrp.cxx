@@ -199,7 +199,7 @@ sal_Int32 ReadThroughComponent(
     Reference<io::XInputStream> xInputStream,
     Reference<XComponent> xModelComponent,
     const String& rStreamName,
-    Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
     const OUString& rName,
@@ -208,7 +208,7 @@ sal_Int32 ReadThroughComponent(
 {
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
-    DBG_ASSERT(rFactory.is(), "factory missing");
+    DBG_ASSERT(rxContext.is(), "factory missing");
     DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
 
     RTL_LOGFILE_CONTEXT( aLog, "ReadThroughComponent" );
@@ -219,13 +219,13 @@ sal_Int32 ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(rFactory));
+    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
     OUString aFilterName(OUString::createFromAscii(pFilterName));
     Reference< xml::sax::XDocumentHandler > xFilter(
-        rFactory->createInstanceWithArguments(aFilterName, rFilterArguments),
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext),
         UNO_QUERY );
     SAL_WARN_IF(!xFilter.is(), "sd", "Can't instantiate filter component: " << aFilterName);
     if( !xFilter.is() )
@@ -361,7 +361,7 @@ sal_Int32 ReadThroughComponent(
     Reference<XComponent> xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
-    Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
     const OUString& rName,
@@ -433,7 +433,7 @@ sal_Int32 ReadThroughComponent(
 
         // read from the stream
         return ReadThroughComponent(
-            xInputStream, xModelComponent, sStreamName, rFactory,
+            xInputStream, xModelComponent, sStreamName, rxContext,
             pFilterName, rFilterArguments,
             rName, bMustBeSuccessfull, bEncrypted );
     }
@@ -464,12 +464,8 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     sal_uInt32  nRet = 0;
 
     // Get service factory
-    Reference< lang::XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
-    DBG_ASSERT( xServiceFactory.is(),
-            "XMLReader::Read: got no service manager" );
-    if( !xServiceFactory.is() )
-        return sal_False;
+    Reference< uno::XComponentContext > rxContext =
+            comphelper::getProcessComponentContext();
 
     // -------------------------------------
 
@@ -660,26 +656,26 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         // read storage streams
         // #i103539#: always read meta.xml for generator
         nWarn = ReadThroughComponent(
-            xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+            xStorage, xModelComp, "meta.xml", "Meta.xml", rxContext,
             pServices->mpMeta,
             aEmptyArgs, aName, sal_False );
 
         if( meFilterMode != SDXMLMODE_Organizer )
         {
             nWarn2 = ReadThroughComponent(
-                xStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
+                xStorage, xModelComp, "settings.xml", NULL, rxContext,
                 pServices->mpSettings,
                 aFilterArgs, aName, sal_False );
         }
 
         nRet = ReadThroughComponent(
-            xStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
+            xStorage, xModelComp, "styles.xml", NULL, rxContext,
             pServices->mpStyles,
             aFilterArgs, aName, sal_True );
 
         if( !nRet && (meFilterMode != SDXMLMODE_Organizer) )
             nRet = ReadThroughComponent(
-               xStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
+               xStorage, xModelComp, "content.xml", "Content.xml", rxContext,
                pServices->mpContent,
                aFilterArgs, aName, sal_True );
 
@@ -867,14 +863,7 @@ sal_Bool SdXMLFilter::Export()
             return sal_False;
         }
 
-        uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
         uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-
-        if( !xServiceFactory.is() )
-        {
-            OSL_FAIL( "got no service manager" );
-            return sal_False;
-        }
 
         uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 
@@ -1056,7 +1045,7 @@ sal_Bool SdXMLFilter::Export()
 
                 *pArgs   <<= xWriter;
 
-                uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pServices->mpService ), aArgs ), uno::UNO_QUERY );
+                uno::Reference< document::XFilter > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pServices->mpService ), aArgs, xContext ), uno::UNO_QUERY );
                 if( xFilter.is() )
                 {
                     uno::Reference< document::XExporter > xExporter( xFilter, uno::UNO_QUERY );

@@ -655,9 +655,6 @@ void SlideShowView::init()
     mxWindow->addWindowListener( this );
     mxWindow->addMouseListener( this );
 
-    Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(),
-                                                            uno::UNO_QUERY_THROW );
-
     mxPointer = awt::Pointer::create( ::comphelper::getProcessComponentContext() );
 
     getTransformation();

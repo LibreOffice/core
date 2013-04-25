@@ -234,22 +234,20 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
         rValues[0] >>= sServiceName;
 
         // Instantiate service.
-        Reference<lang::XMultiServiceFactory> xGlobalFactory (
-            ::comphelper::getProcessServiceFactory(), UNO_QUERY);
-        if (xGlobalFactory.is())
-        {
-            // Create the startup service.
-            Sequence<Any> aArguments(1);
-            aArguments[0] <<= mxController;
-            // Note that when the new object will be destroyed at the end of
-            // this scope when it does not register itself anywhere.
-            // Typically it will add itself as ConfigurationChangeListener
-            // at the configuration controller.
-            xGlobalFactory->createInstanceWithArguments(sServiceName, aArguments);
+        Reference<uno::XComponentContext> xContext =
+            ::comphelper::getProcessComponentContext();
 
-            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::created startup service " <<
-                OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8).getStr());
-        }
+        // Create the startup service.
+        Sequence<Any> aArguments(1);
+        aArguments[0] <<= mxController;
+        // Note that when the new object will be destroyed at the end of
+        // this scope when it does not register itself anywhere.
+        // Typically it will add itself as ConfigurationChangeListener
+        // at the configuration controller.
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sServiceName, aArguments, xContext);
+
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::created startup service " <<
+            OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8).getStr());
     }
     catch (Exception&)
     {
@@ -278,20 +276,19 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
         if ( ! xFactory.is())
         {
             // Create a new instance of the factory.
-            Reference<lang::XMultiServiceFactory> xGlobalFactory (
-                ::comphelper::getProcessServiceFactory(), UNO_QUERY);
-            if (xGlobalFactory.is())
-            {
-                // Create the factory service.
-                Sequence<Any> aArguments(1);
-                aArguments[0] <<= mxController;
-                xFactory = xGlobalFactory->createInstanceWithArguments(
-                    iFactory->second,
-                    aArguments);
+            Reference<uno::XComponentContext> xContext =
+                ::comphelper::getProcessComponentContext();
 
-                // Remember that this factory has been instanced.
-                (*mpLoadedFactories)[iFactory->second] = xFactory;
-            }
+            // Create the factory service.
+            Sequence<Any> aArguments(1);
+            aArguments[0] <<= mxController;
+            xFactory = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                iFactory->second,
+                aArguments,
+                xContext);
+
+            // Remember that this factory has been instanced.
+            (*mpLoadedFactories)[iFactory->second] = xFactory;
         }
     }
 }

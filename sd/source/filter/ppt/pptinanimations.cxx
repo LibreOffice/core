@@ -66,19 +66,12 @@
 #include <algorithm>
 
 using ::std::map;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::makeAny;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
@@ -328,8 +321,9 @@ Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, co
     Reference< XAnimationNode > xNode;
     if( pServiceName )
     {
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         const OUString aServiceName( OUString::createFromAscii(pServiceName) );
-        Reference< XInterface > xFac( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName) );
+        Reference< XInterface > xFac( xContext->getServiceManager()->createInstanceWithContext(aServiceName, xContext) );
         xNode.set(xFac , UNO_QUERY );
     }
 
@@ -1424,8 +1418,9 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
                 {
                     if( pChildAtom->hasChildAtom( DFF_msofbtAnimCommand ) )
                     {
+                        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         const OUString aServiceName( "com.sun.star.animations.Command" );
-                        Reference< XAnimationNode > xChildNode( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY );
+                        Reference< XAnimationNode > xChildNode( xContext->getServiceManager()->createInstanceWithContext(aServiceName, xContext), UNO_QUERY );
                         nNodes += importAnimationNodeContainer( pChildAtom, xChildNode );
                         Reference< XTimeContainer > xParentContainer( xNode, UNO_QUERY );
                         if( xParentContainer.is() && xChildNode.is() )
