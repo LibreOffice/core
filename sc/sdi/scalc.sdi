@@ -3495,6 +3495,32 @@ SfxVoidItem Hyphenate SID_ENABLE_HYPHENATION
 ]
 
 //--------------------------------------------------------------------------
+
+SfxVoidItem CellTextDlg SID_PROPERTY_PANEL_CELLTEXT_DLG
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem InputLineBlock FID_INPUTLINE_BLOCK
 ()
 [

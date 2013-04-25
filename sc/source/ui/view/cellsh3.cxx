@@ -357,6 +357,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
             pTabViewShell->ExecuteCellFormatDlg(rReq, "alignment");
             break;
 
+        case SID_PROPERTY_PANEL_CELLTEXT_DLG:
+            pTabViewShell->ExecuteCellFormatDlg( rReq, "font" );
+            break;
+
         case SID_CELL_FORMAT_BORDER:
             pTabViewShell->ExecuteCellFormatDlg( rReq, "borders" );
             break;
