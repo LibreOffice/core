@@ -641,6 +641,28 @@ RTLFUNC(MkDir)
     if (rPar.Count() == 2)
     {
         OUString aPath = rPar.Get(1)->GetOUString();
+        if ( SbiRuntime::isVBAEnabled() )
+        {
+            // In vba if the full path is not specified then
+            // folder is created relative to the curdir
+            INetURLObject aURLObj( getFullPath( aPath ) );
+            if ( aURLObj.GetProtocol() != INET_PROT_FILE )
+            {
+                SbxArrayRef pPar = new SbxArray();
+                SbxVariableRef pResult = new SbxVariable();
+                SbxVariableRef pParam = new SbxVariable();
+                pPar->Insert( pResult, pPar->Count() );
+                pPar->Insert( pParam, pPar->Count() );
+                SbRtl_CurDir( pBasic, *pPar, bWrite );
+
+                rtl::OUString sCurPathURL;
+                File::getFileURLFromSystemPath( pPar->Get(0)->GetOUString(), sCurPathURL );
+
+                aURLObj.SetURL( sCurPathURL );
+                aURLObj.Append( aPath );
+                File::getSystemPathFromFileURL(aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI  ),aPath ) ;
+            }
+        }
 
         if( hasUno() )
         {
