@@ -14,9 +14,8 @@ $(eval $(call gb_CppunitTest_use_api,i18nlangtag_test_languagetag,\
 	offapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,i18nlangtag_test_languagetag,i18nlangtag))
-
 $(eval $(call gb_CppunitTest_use_libraries,i18nlangtag_test_languagetag,\
+	i18nlangtag \
 	cppu \
 	cppuhelper \
 	sal \

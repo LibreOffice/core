@@ -469,7 +469,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,OOO, \
 	deployment \
 	fileacc \
 	i18nlangtag \
-	i18nlangtagicu \
 	i18nutil \
 	mcnttype \
 	package2 \

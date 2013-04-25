@@ -20,10 +20,9 @@ class LanguageTag;
 
 /** Interface LanguageTag to ICU's icu::Locale
 
-    Separated from LanguageTag into its own library to not pollute the entire
-    code base with ICU header file inclusion and linkage, only the few code
-    actually using this needs to link against ICU libraries, which it did
-    anyway.
+    Separated from LanguageTag to not pollute the entire code base (and thus
+    makefiles) with ICU header file inclusion, only the few code actually using
+    this needs to know about ICU, which it did anyway.
 */
 class I18NLANGTAG_DLLPUBLIC LanguageTagIcu
 {
