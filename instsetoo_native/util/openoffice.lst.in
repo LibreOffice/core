@@ -68,8 +68,6 @@ LibreOffice
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
             OOODOWNLOADNAME 1
-            BETAUPGRADECODE
-            STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -124,8 +122,6 @@ LibreOffice_Dev
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
             OOODOWNLOADNAME 1
-            BETAUPGRADECODE
-            STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1
             PATCHCODEFILE ooodev_patchcodes.txt
             CODEFILENAME codes_ooodev.txt

@@ -33,7 +33,7 @@ WindowsCustomAction gid_Customaction_RenamePrgFolder
 	Source = "shlxtmsi.dll";
 	Target = "RenamePrgFolder";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTSSAMEMAJOR And Not REMOVE=\"ALL\" And Not PATCH", "ValidateProductID");
+	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTS And Not REMOVE=\"ALL\" And Not PATCH", "ValidateProductID");
 End
 
 WindowsCustomAction gid_Customaction_RemovePrgFolder
@@ -42,7 +42,7 @@ WindowsCustomAction gid_Customaction_RemovePrgFolder
 	Source = "shlxtmsi.dll";
 	Target = "RemovePrgFolder";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTSSAMEMAJOR And Not REMOVE=\"ALL\" And Not PATCH", "end");
+	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTS And Not REMOVE=\"ALL\" And Not PATCH", "end");
 End
 
 WindowsCustomAction gid_Customaction_Regallmsdocdll

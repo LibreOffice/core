@@ -23,18 +23,8 @@
 //----------------------------------------------------------
 // list of own error codes
 
-#define MSI_ERROR_INVALIDDIRECTORY          9001
-#define MSI_ERROR_ISWRONGPRODUCT            9002
-#define MSI_ERROR_PATCHISOLDER              9003
-
 #define MSI_ERROR_NEW_VERSION_FOUND         9010
-#define MSI_ERROR_SAME_VERSION_FOUND        9011
 #define MSI_ERROR_OLD_VERSION_FOUND         9012
-#define MSI_ERROR_NEW_PATCH_FOUND           9013
-#define MSI_ERROR_SAME_PATCH_FOUND          9014
-#define MSI_ERROR_OLD_PATCH_FOUND           9015
-
-#define MSI_ERROR_OFFICE_IS_RUNNING         9020
 
 #define MSI_ERROR_DIRECTORY_NOT_EMPTY       9030
 

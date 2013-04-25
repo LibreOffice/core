@@ -86,14 +86,6 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
         free( pVal );
     }
     pVal = NULL;
-    if ( GetMsiProp( hMSI, L"SAMEPRODUCTS", &pVal ) && pVal )
-    {
-        OutputDebugStringFormat( TEXT("DEBUG: SAMEPRODUCTS found [%s]"), pVal );
-        if ( *pVal != 0 )
-            SetMsiErrorCode( MSI_ERROR_SAME_VERSION_FOUND );
-        free( pVal );
-    }
-    pVal = NULL;
     if ( GetMsiProp( hMSI, L"OLDPRODUCTS", &pVal ) && pVal )
     {
         OutputDebugStringFormat( TEXT("DEBUG: OLDPRODUCTS found [%s]"), pVal );
@@ -102,38 +94,6 @@ extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
         free( pVal );
     }
     pVal = NULL;
-    if ( GetMsiProp( hMSI, L"BETAPRODUCTS", &pVal ) && pVal )
-    {
-        OutputDebugStringFormat( TEXT("DEBUG: BETAPRODUCTS found [%s]"), pVal );
-        if ( *pVal != 0 )
-            SetMsiErrorCode( MSI_ERROR_OLD_VERSION_FOUND );
-        free( pVal );
-    }
-
-    pVal = NULL;
-    if ( GetMsiProp( hMSI, L"NEWPRODUCTSPATCH", &pVal ) && pVal )
-    {
-        OutputDebugStringFormat( TEXT("DEBUG: NEWPRODUCTSPATCH found [%s]"), pVal );
-        if ( *pVal != 0 )
-            SetMsiErrorCode( MSI_ERROR_NEW_PATCH_FOUND );
-        free( pVal );
-    }
-    pVal = NULL;
-    if ( GetMsiProp( hMSI, L"SAMEPRODUCTSPATCH", &pVal ) && pVal )
-    {
-        OutputDebugStringFormat( TEXT("DEBUG: SAMEPRODUCTSPATCH found [%s]"), pVal );
-        if ( *pVal != 0 )
-            SetMsiErrorCode( MSI_ERROR_SAME_PATCH_FOUND );
-        free( pVal );
-    }
-    pVal = NULL;
-    if ( GetMsiProp( hMSI, L"OLDPRODUCTSPATCH", &pVal ) && pVal )
-    {
-        OutputDebugStringFormat( TEXT("DEBUG: OLDPRODUCTSPATCH found [%s]"), pVal );
-        if ( *pVal != 0 )
-            SetMsiErrorCode( MSI_ERROR_OLD_PATCH_FOUND );
-        free( pVal );
-    }
 
     return ERROR_SUCCESS;
 }
