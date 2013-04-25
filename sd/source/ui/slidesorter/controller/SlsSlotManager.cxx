@@ -141,7 +141,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
     switch (rRequest.GetSlot())
     {
         case SID_PRESENTATION:
-        case SID_PRESENTATION_THIS_SLIDE:
+        case SID_PRESENTATION_CURRENT_SLIDE:
         case SID_REHEARSE_TIMINGS:
             ShowSlideShow (rRequest);
             pShell->Cancel();
