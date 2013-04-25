@@ -940,7 +940,7 @@ Menu MN_TAB_POPUPMENU
 
 String MN_DRAW_POPUPMENU
 {
-    Text [ en-US ] = "Graphic" ;
+    Text [ en-US ] = "Image" ;
 };
 #define MN_WRAP_DRAW                                                                                                            \
     MenuItem\
@@ -1192,7 +1192,7 @@ Menu MN_REDCOMMENT_BUTTON
 
 String MN_GRF_POPUPMENU
 {
-    Text [ en-US ] = "Graphic" ;
+    Text [ en-US ] = "Image" ;
 };
 
 #define MN_ALIGN_FRAME \
@@ -1282,7 +1282,7 @@ Menu MN_GRF_POPUPMENU
         {
             Identifier = FN_FORMAT_GRAFIC_DLG ;
             HelpId = CMD_FN_FORMAT_GRAFIC_DLG ;
-            Text [ en-US ] = "~Picture..." ;
+            Text [ en-US ] = "~Image..." ;
         };
         MN_FRM_CAPTION_ITEM
         SEPARATOR;
@@ -1294,7 +1294,7 @@ Menu MN_GRF_POPUPMENU
         {
             Identifier = SID_MENU_MANAGE_GRAPHIC ;
             Command = ".uno:ManageGraphicMenu" ;
-            Text [ en-US ] = "~Manage Graphic" ;
+            Text [ en-US ] = "~Rotate Image" ;
             SubMenu = Menu
             {
                 ItemList =

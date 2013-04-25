@@ -87,7 +87,7 @@ TabDialog DLG_FRM_STD
 TabDialog DLG_FRM_GRF
 {
     SVLook = TRUE ;
-    Text [ en-US ] = "Picture" ;
+    Text [ en-US ] = "Image" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -122,7 +122,7 @@ TabDialog DLG_FRM_GRF
             {
                 Identifier = TP_GRF_EXT ;
                 PageResID = TP_GRF_EXT ;
-                Text [ en-US ] = "Picture" ;
+                Text [ en-US ] = "Image" ;
             };
             PageItem
             {
