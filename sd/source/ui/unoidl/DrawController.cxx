@@ -600,6 +600,7 @@ void DrawController::BroadcastContextChange (void) const
 
         case ViewShell::ST_PRESENTATION:
         case ViewShell::ST_NONE:
+        default:
             eContext = EnumContext::Context_Empty;
             break;
     }
