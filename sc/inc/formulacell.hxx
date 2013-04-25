@@ -34,14 +34,12 @@ struct ScSimilarFormulaDelta;
 struct SC_DLLPUBLIC ScFormulaCellGroup
 {
     sal_Int32              mnRefCount;
-    ScSimilarFormulaDelta *mpDelta;  // difference between items in column
     sal_Int32              mnStart;  // Start offset of that cell
     sal_Int32              mnLength; // How many of these do we have ?
+    bool mbInvariant;
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();
-
-    bool IsCompatible( ScSimilarFormulaDelta *pDelta );
 };
 inline void intrusive_ptr_add_ref(ScFormulaCellGroup *p)
 {
@@ -99,6 +97,8 @@ private:
     ScFormulaCell( const ScFormulaCell& );
 
 public:
+
+    enum CompareState { NotEqual = 0, EqualInvariant, EqualRelativeRef };
 
 #ifdef USE_MEMPOOL
     DECL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell )
@@ -297,8 +297,9 @@ public:
         { return xGroup; }
     void                   SetCellGroup( const ScFormulaCellGroupRef &xRef )
         { xGroup = xRef; }
-    ScSimilarFormulaDelta *BuildDeltaTo( ScFormulaCell *pOther );
-    void                   ReleaseDelta( ScSimilarFormulaDelta *pDelta );
+
+    CompareState CompareByTokenArray( ScFormulaCell *pOther ) const;
+
     bool                   InterpretFormulaGroup();
 
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*

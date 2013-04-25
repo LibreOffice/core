@@ -2118,15 +2118,14 @@ void ScColumn::RebuildFormulaGroups()
         if ( rCur.pCell->GetCellType() != CELLTYPE_FORMULA )
             continue;
 
-        // see if these formulae are similar
+        // see if these formula tokens are identical.
         ScFormulaCell *pCur = static_cast< ScFormulaCell *>( rCur.pCell );
         ScFormulaCell *pPrev = static_cast< ScFormulaCell *>( rPrev.pCell );
 
-        ScSimilarFormulaDelta *pDelta = pPrev->BuildDeltaTo( pCur );
-
-        if ( !pDelta )
+        ScFormulaCell::CompareState eCompState = pPrev->CompareByTokenArray(pCur);
+        if (eCompState == ScFormulaCell::NotEqual)
         {
-            // not similar
+            // different formula tokens.
             pCur->SetCellGroup( xNone );
             continue;
         }
@@ -2136,8 +2135,8 @@ void ScColumn::RebuildFormulaGroups()
         {
             // create a new group ...
             xGroup.reset(new ScFormulaCellGroup);
-            xGroup->mpDelta = pDelta;
             xGroup->mnStart = rPrev.nRow;
+            xGroup->mbInvariant = eCompState == ScFormulaCell::EqualInvariant;
             xGroup->mnLength = 2;
 
             maFnGroups.push_back( xGroup );
@@ -2145,27 +2144,11 @@ void ScColumn::RebuildFormulaGroups()
             pCur->SetCellGroup( xGroup );
             pPrev->SetCellGroup( xGroup );
         }
-        else if ( xGroup->IsCompatible( pDelta ) )
-        {
-            // we are a compatible extension - extend the group
-            pCur->SetCellGroup( xGroup );
-            xGroup->mnLength++;
-            pCur->ReleaseDelta( pDelta );
-        }
         else
         {
-#if OSL_DEBUG_LEVEL > 1
-            OUString aFormula;
-            pCur->GetFormula( aFormula );
-            ScAddress aAddr( nCol, rCur.nRow, nTab );
-            OUString aCellAddr;
-            aAddr.Format( aCellAddr, 0, pDocument );
-
-            fprintf( stderr, "unusual incompatible extension in cell '%s' of formulae '%s'\n" ,
-                     OUStringToOString( aCellAddr, RTL_TEXTENCODING_UTF8 ).getStr(),
-                     OUStringToOString( aFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
-            pCur->ReleaseDelta( pDelta );
+            // existing group. extend its length.
+            pCur->SetCellGroup( xGroup );
+            xGroup->mnLength++;
         }
     }
 

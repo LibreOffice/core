@@ -376,7 +376,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
 }
 
 ScFormulaCellGroup::ScFormulaCellGroup() :
-    mnRefCount(0), mpDelta(NULL), mnStart(0), mnLength(0)
+    mnRefCount(0), mnStart(0), mnLength(0), mbInvariant(false)
 {
 }
 
@@ -2857,123 +2857,89 @@ void ScFormulaCell::CompileColRowNameFormula()
     }
 }
 
-// we really want to be a lot more descriptive than this
-struct ScSimilarFormulaDelta : std::vector< size_t >
-{
-    bool IsCompatible( ScSimilarFormulaDelta *pDelta )
-    {
-        if ( size() != pDelta->size() )
-            return false;
-        for ( size_t i = 0; i < size(); i++ )
-        {
-            if ( (*this)[ i ] != (*pDelta)[ i ] )
-                return false;
-        }
-        return true;
-    }
-
-    void push_delta( const ScSingleRefData& a, const ScSingleRefData& b )
-    {
-        push_back( b.nCol - a.nCol );
-        push_back( b.nRow - a.nRow );
-        push_back( b.nTab - a.nTab );
-    }
-
-    /// if the vector is zero then nothing changes down the column.
-    bool IsInvariant() const
-    {
-        for ( size_t i = 0; i < size(); i++ )
-        {
-            if ( (*this)[ i ] != 0 )
-                return false;
-        }
-        return true;
-    }
-};
-
-bool ScFormulaCellGroup::IsCompatible( ScSimilarFormulaDelta *pDelta )
-{
-    return pDelta && mpDelta && mpDelta->IsCompatible( pDelta );
-}
-
-/// compare formulae tokens and build a series of deltas describing
-/// the difference - ie. the result, when added to this
-/// formulae should produce pOther
-ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
+ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell *pOtherCell ) const
 {
     // no Matrix formulae yet.
     if ( GetMatrixFlag() != MM_NONE )
-        return NULL;
+        return NotEqual;
 
     // are these formule at all similar ?
     if ( GetHash() != pOtherCell->GetHash() )
-        return NULL;
+        return NotEqual;
 
     FormulaToken **pThis = pCode->GetCode();
-    sal_uInt16     pThisLen = pCode->GetCodeLen();
+    sal_uInt16     nThisLen = pCode->GetCodeLen();
     FormulaToken **pOther = pOtherCell->pCode->GetCode();
-    sal_uInt16     pOtherLen = pOtherCell->pCode->GetCodeLen();
+    sal_uInt16     nOtherLen = pOtherCell->pCode->GetCodeLen();
 
     if ( !pThis || !pOther )
     {
-//        fprintf( stderr, "Error: no compiled code for cells !" );
-        return NULL;
+        // Error: no compiled code for cells !"
+        return NotEqual;
     }
 
-    if ( pThisLen != pOtherLen )
-        return NULL;
+    if ( nThisLen != nOtherLen )
+        return NotEqual;
+
+    bool bInvariant = true;
 
     // check we are basically the same function
-    for ( sal_uInt16 i = 0; i < pThisLen; i++ )
+    for ( sal_uInt16 i = 0; i < nThisLen; i++ )
     {
-        if ( pThis[ i ]->GetType() != pOther[ i ]->GetType() ||
-             pThis[ i ]->GetOpCode() != pOther[ i ]->GetOpCode() ||
-             pThis[ i ]->GetParamCount() != pOther[ i ]->GetParamCount() )
+        ScToken *pThisTok = static_cast<ScToken*>( pThis[i] );
+        ScToken *pOtherTok = static_cast<ScToken*>( pOther[i] );
+
+        if ( pThisTok->GetType() != pOtherTok->GetType() ||
+             pThisTok->GetOpCode() != pOtherTok->GetOpCode() ||
+             pThisTok->GetParamCount() != pOtherTok->GetParamCount() )
         {
-//            fprintf( stderr, "Incompatible type, op-code or param counts\n" );
-            return NULL;
+            // Incompatible type, op-code or param counts.
+            return NotEqual;
         }
-        switch( pThis[ i ]->GetType() )
+
+        switch (pThisTok->GetType())
         {
-        case formula::svMatrix:
-        case formula::svExternalSingleRef:
-        case formula::svExternalDoubleRef:
-//            fprintf( stderr, "Ignoring matrix and external references for now\n" );
-            return NULL;
-        default:
+            case formula::svMatrix:
+            case formula::svExternalSingleRef:
+            case formula::svExternalDoubleRef:
+                // Ignoring matrix and external references for now.
+                return NotEqual;
+
+            case formula::svSingleRef:
+            {
+                // Single cell reference.
+                const ScSingleRefData& rRef = pThisTok->GetSingleRef();
+                if (rRef != pOtherTok->GetSingleRef())
+                    return NotEqual;
+
+                if (rRef.IsColRel() || rRef.IsRowRel())
+                    bInvariant = false;
+            }
             break;
+            case formula::svDoubleRef:
+            {
+                // Range reference.
+                const ScSingleRefData& rRef1 = pThisTok->GetSingleRef();
+                const ScSingleRefData& rRef2 = pThisTok->GetSingleRef2();
+                if (rRef1 != pOtherTok->GetSingleRef())
+                    return NotEqual;
+
+                if (rRef2 != pOtherTok->GetSingleRef2())
+                    return NotEqual;
+
+                if (rRef1.IsColRel() || rRef1.IsRowRel())
+                    bInvariant = false;
+
+                if (rRef2.IsColRel() || rRef2.IsRowRel())
+                    bInvariant = false;
+            }
+            break;
+            default:
+                ;
         }
     }
 
-    ScSimilarFormulaDelta *pDelta = new ScSimilarFormulaDelta();
-
-    for ( sal_uInt16 i = 0; i < pThisLen; i++ )
-    {
-        ScToken *pThisTok = static_cast< ScToken * >( pThis[ i ] );
-        ScToken *pOtherTok = static_cast< ScToken * >( pOther[ i ] );
-
-        if ( pThis[i]->GetType() == formula::svSingleRef ||
-             pThis[i]->GetType() == formula::svDoubleRef )
-        {
-            const ScSingleRefData& aThisRef = pThisTok->GetSingleRef();
-            const ScSingleRefData& aOtherRef = pOtherTok->GetSingleRef();
-            pDelta->push_delta( aThisRef, aOtherRef );
-        }
-        if ( pThis[i]->GetType() == formula::svDoubleRef )
-        {
-            const ScSingleRefData& aThisRef2 = pThisTok->GetSingleRef2();
-            const ScSingleRefData& aOtherRef2 = pOtherTok->GetSingleRef2();
-            pDelta->push_delta( aThisRef2, aOtherRef2 );
-        }
-    }
-
-    return pDelta;
-}
-
-/// To avoid exposing impl. details of ScSimilarFormulaDelta publicly
-void ScFormulaCell::ReleaseDelta( ScSimilarFormulaDelta *pDelta )
-{
-    delete pDelta;
+    return bInvariant ? EqualInvariant : EqualRelativeRef;
 }
 
 bool ScFormulaCell::InterpretFormulaGroup()
@@ -2987,7 +2953,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
 //    fprintf( stderr, "Interpret cell %d, %d\n", (int)aPos.Col(), (int)aPos.Row() );
 
-    if ( xGroup->mpDelta->IsInvariant() )
+    if (xGroup->mbInvariant)
     {
 //        fprintf( stderr, "struck gold - completely invariant for %d items !\n",
 //                 (int)xGroup->mnLength );
