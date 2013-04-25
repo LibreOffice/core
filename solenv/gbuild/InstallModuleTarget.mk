@@ -169,9 +169,9 @@ define gb_ScpTarget_ScpTarget
 $(call gb_ScpPreprocessTarget_ScpPreprocessTarget,$(1))
 
 $(call gb_ScpTarget_get_target,$(1)) : $(call gb_ScpPreprocessTarget_get_target,$(1))
-$(call gb_ScpTarget_get_target,$(1)) :| $(call gb_ScpTarget_get_external_target,$(1))
+$(call gb_ScpTarget_get_target,$(1)) : $(call gb_ScpTarget_get_external_target,$(1))
 $(call gb_ScpTarget_get_external_target,$(1)) :| $(dir $(call gb_ScpTarget_get_target,$(1))).dir
-$(call gb_ScpPreprocessTarget_get_target,$(1)) :| $(call gb_ScpTarget_get_external_target,$(1))
+$(call gb_ScpPreprocessTarget_get_target,$(1)) : $(call gb_ScpTarget_get_external_target,$(1))
 $(call gb_ScpTarget_get_clean_target,$(1)) : $(call gb_ScpPreprocessTarget_get_clean_target,$(1))
 $(call gb_ScpTarget_get_target,$(1)) : SCP_SOURCE := $(call gb_ScpPreprocessTarget_get_target,$(1))
 $(call gb_ScpTarget_get_target,$(1)) : SCP_ULF := $(gb_Helper_PHONY)
@@ -221,7 +221,7 @@ $(call gb_InstallModuleTarget_get_clean_target,%) :
 		$(call gb_InstallModuleTarget_get_external_target,$*)
 
 define gb_InstallModuleTarget_InstallModuleTarget
-$(call gb_InstallModuleTarget_get_target,$(1)) :| \
+$(call gb_InstallModuleTarget_get_target,$(1)) : \
 	$(call gb_InstallModuleTarget_get_external_target,$(1))
 $(call gb_InstallModuleTarget_get_external_target,$(1)) :| \
 	$(dir $(call gb_InstallModuleTarget_get_target,$(1))).dir
@@ -261,7 +261,7 @@ $(call gb_InstallModuleTarget_get_external_target,$(1)) : $(call gb_AutoInstallL
 endef
 
 define gb_InstallModuleTarget_use_custom_header
-$(call gb_InstallModuleTarget_get_external_target,$(1)) :| $(call gb_CustomTarget_get_target,$(2))
+$(call gb_InstallModuleTarget_get_external_target,$(1)) : $(call gb_CustomTarget_get_target,$(2))
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2)) \
 
 endef
@@ -276,7 +276,7 @@ $(call gb_ScpTarget_ScpTarget,$(2))
 $(call gb_InstallModuleTarget_get_target,$(1)) : $(call gb_ScpTarget_get_target,$(2))
 $(call gb_InstallModuleTarget_get_clean_target,$(1)) : $(call gb_ScpTarget_get_clean_target,$(2))
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_FILES += $(call gb_ScpTarget_get_target,$(2))
-$(call gb_ScpTarget_get_external_target,$(2)) :| $(call gb_InstallModuleTarget_get_external_target,$(1))
+$(call gb_ScpTarget_get_external_target,$(2)) : $(call gb_InstallModuleTarget_get_external_target,$(1))
 
 endef
 
