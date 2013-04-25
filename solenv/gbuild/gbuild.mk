@@ -326,6 +326,7 @@ include $(foreach class, \
 	UnpackedTarball \
 	InternalUnoApi \
 	CliAssembly \
+	CliExecutable \
 	CliLibrary \
 	CliNativeLibrary \
 	CliUnoApi \

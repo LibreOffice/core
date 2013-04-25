@@ -28,9 +28,10 @@
 
 # outdir target pattern
 
-gb_CliLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliLibrary_EXT)
+gb_CliExecutable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
+gb_CliLibrary_get_target = $(OUTDIR)/bin/$(1)$(gb_CliLibrary_EXT)
 gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLibrary_EXT)
-gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
+gb_CliUnoApi_get_target = $(OUTDIR)/bin/$(1)$(gb_CliUnoApi_EXT)
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
 gb_Dictionary_get_target = $(OUTDIR)/pck/$(1).oxt
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
@@ -87,6 +88,7 @@ gb_CliAssembly_get_target = $(WORKDIR)/CliAssembly/$(1).done
 gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1).done
 gb_CliAssemblyTarget_get_assembly_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 gb_CliConfigTarget_get_target = $(WORKDIR)/CliConfigTarget/$(1).config
+gb_CliExecutableTarget_get_target = $(WORKDIR)/CliExecutableTarget/$(1)$(gb_Executable_EXT)
 gb_CliLibraryTarget_get_target = $(WORKDIR)/CliLibraryTarget/$(1)$(gb_CliLibraryTarget_EXT)
 gb_CliNativeLibraryTarget_get_external_target = $(WORKDIR)/CliNativeLibraryTarget/$(1).external
 gb_CliNativeLibraryTarget_get_target = $(WORKDIR)/CliNativeLibraryTarget/$(1)$(gb_CliNativeLibraryTarget_EXT)
@@ -229,6 +231,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CliAssembly \
 	CliAssemblyTarget \
 	CliConfigTarget \
+	CliExecutableTarget \
 	CliLibraryTarget \
 	CliNativeLibraryTarget \
 	CliUnoApiTarget \
@@ -282,6 +285,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
+	CliExecutable \
 	CliLibrary \
 	CliNativeLibrary \
 	CliUnoApi \
