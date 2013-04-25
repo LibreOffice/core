@@ -41,7 +41,7 @@ String STR_FPICKER_READONLY
 
 String STR_FPICKER_INSERT_AS_LINK
 {
-    Text [ en-US ] = "~Link" ;
+    Text [ en-US ] = "Insert as ~Link" ;
 };
 
 String STR_FPICKER_SHOW_PREVIEW
