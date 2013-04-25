@@ -830,16 +830,15 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // --- Document properties ---
         com.sun.star.beans.XPropertySet xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, getDocument() );
 
-        AnyConverter aAnyConv = new AnyConverter();
         String aText = "Value of property IsIterationEnabled: ";
-        aText += aAnyConv.toBoolean(xPropSet.getPropertyValue( "IsIterationEnabled" ));
+        aText += AnyConverter.toBoolean(xPropSet.getPropertyValue( "IsIterationEnabled" ));
         System.out.println( aText );
         aText = "Value of property IterationCount: ";
-        aText += aAnyConv.toInt(xPropSet.getPropertyValue( "IterationCount" ));
+        aText += AnyConverter.toInt(xPropSet.getPropertyValue( "IterationCount" ));
         System.out.println( aText );
         aText = "Value of property NullDate: ";
         com.sun.star.util.Date aDate = (com.sun.star.util.Date)
-            aAnyConv.toObject(com.sun.star.util.Date.class, xPropSet.getPropertyValue( "NullDate" ));
+                AnyConverter.toObject(com.sun.star.util.Date.class, xPropSet.getPropertyValue( "NullDate" ));
         aText += aDate.Year + "-" + aDate.Month + "-" + aDate.Day;
         System.out.println( aText );
 
@@ -1202,12 +1201,11 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
                 UnoRuntime.queryInterface(
                 com.sun.star.container.XNameAccess.class, aRangesObj );
             String[] aNames = xRanges.getElementNames();
-            AnyConverter aAnyConv = new AnyConverter();
             for ( int i=0; i<aNames.length; i++ )
             {
                 Object aRangeObj = xRanges.getByName( aNames[i] );
                 com.sun.star.beans.XPropertySet xRangeProp = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aRangeObj );
-                boolean bUser = aAnyConv.toBoolean(xRangeProp.getPropertyValue( "IsUserDefined" ));
+                boolean bUser = AnyConverter.toBoolean(xRangeProp.getPropertyValue( "IsUserDefined" ));
                 if ( !bUser )
                 {
                     // this is the temporary database range - get the cell range and format it
@@ -1340,7 +1338,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             com.sun.star.beans.XPropertySet.class, aSettings );
         AnyConverter aAnyConv = new AnyConverter();
         String[] aEntries = (String[])
-            aAnyConv.toObject(String[].class,
+                AnyConverter.toObject(String[].class,
                               xPropSet.getPropertyValue( "UserLists" ));
         System.out.println("User defined sort lists:");
         for ( int i=0; i<aEntries.length; i++ )

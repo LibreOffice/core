@@ -202,7 +202,7 @@ public class StyleInitialization {
                     com.sun.star.beans.XPropertySet.class, xStyle );
 
                 AnyConverter aAnyConv = new AnyConverter();
-                String sFontname = aAnyConv.toString(xPropertySet.getPropertyValue("CharFontName"));
+                String sFontname = AnyConverter.toString(xPropertySet.getPropertyValue("CharFontName"));
                 sFontname = sFontname.toLowerCase();
 
                 // if the style use the font 'Albany', apply it to the current paragraph

@@ -1,3 +1,5 @@
+import com.sun.star.uno.AnyConverter;
+
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -35,20 +37,18 @@
 public class BooleanValidator extends ControlValidator
 {
     private boolean                         m_preventChecked;
-    private com.sun.star.uno.AnyConverter   m_converter;
 
     /** Creates a new instance of BooleanValidator */
     public BooleanValidator( boolean preventChecked )
     {
         m_preventChecked = preventChecked;
-        m_converter = new com.sun.star.uno.AnyConverter();
     }
 
     public String explainInvalid( Object Value )
     {
         try
         {
-            if ( m_converter.isVoid( Value ) )
+            if ( AnyConverter.isVoid( Value ) )
                 return "'indetermined' is not an allowed state";
             boolean value = ((Boolean)Value).booleanValue();
             if ( m_preventChecked && ( value == true ) )
@@ -65,7 +65,7 @@ public class BooleanValidator extends ControlValidator
     {
         try
         {
-            if ( m_converter.isVoid( Value ) )
+            if ( AnyConverter.isVoid( Value ) )
                 return false;
 
             boolean value = ((Boolean)Value).booleanValue();

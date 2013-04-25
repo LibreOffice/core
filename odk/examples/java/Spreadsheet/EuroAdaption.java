@@ -165,9 +165,6 @@ public class EuroAdaption {
 
             XEnumeration xRanges = xEnumerationAccess.createEnumeration();
 
-            // create an AnyConverter for later use
-            AnyConverter aAnyConv = new AnyConverter();
-
             while( xRanges.hasMoreElements() ) {
                 // the enumeration returns a cellrange
                 XCellRange xCellRange = UnoRuntime.queryInterface(
@@ -180,28 +177,28 @@ public class EuroAdaption {
                 // getPropertyValue returns an Object, you have to cast it to
                 // type that you need
                 Object oNumberObject = xCellProp.getPropertyValue( "NumberFormat" );
-                int iNumberFormat = aAnyConv.toInt(oNumberObject);
+                int iNumberFormat = AnyConverter.toInt(oNumberObject);
 
                 // get the properties from the cellrange numberformat
                 XPropertySet xFormat = xNumberFormats.getByKey(iNumberFormat );
 
-                short fType = aAnyConv.toShort(xFormat.getPropertyValue("Type"));
-                String sCurrencySymbol = aAnyConv.toString(
+                short fType = AnyConverter.toShort(xFormat.getPropertyValue("Type"));
+                String sCurrencySymbol = AnyConverter.toString(
                     xFormat.getPropertyValue("CurrencySymbol"));
 
                 // change the numberformat only on cellranges with a
                 // currency numberformat
                 if( ( (fType & com.sun.star.util.NumberFormat.CURRENCY) > 0) &&
                     ( sCurrencySymbol.compareTo( sOldSymbol ) == 0 ) ) {
-                    boolean bThousandSep = aAnyConv.toBoolean(
+                    boolean bThousandSep = AnyConverter.toBoolean(
                         xFormat.getPropertyValue("ThousandsSeparator"));
-                    boolean bNegativeRed = aAnyConv.toBoolean(
+                    boolean bNegativeRed = AnyConverter.toBoolean(
                         xFormat.getPropertyValue("NegativeRed"));
-                    short fDecimals = aAnyConv.toShort(
+                    short fDecimals = AnyConverter.toShort(
                         xFormat.getPropertyValue("Decimals"));
-                    short fLeadingZeros = aAnyConv.toShort(
+                    short fLeadingZeros = AnyConverter.toShort(
                         xFormat.getPropertyValue("LeadingZeros"));
-                    Locale oLocale = (Locale) aAnyConv.toObject(
+                    Locale oLocale = (Locale) AnyConverter.toObject(
                        new com.sun.star.uno.Type(Locale.class),
                        xFormat.getPropertyValue("Locale"));
 

@@ -419,7 +419,7 @@ public class UnoNode{
             return xServiceInfo.getImplementationName();
         }
         String sClassName = _oUnoObject.getClass().getName();
-        if (Introspector.getIntrospector().isObjectPrimitive(_oUnoObject)){         //super.isO{sObjectClassName.equals("java.lang.String"))issClassName.equals("java.lang.String"))
+        if (Introspector.isObjectPrimitive(_oUnoObject)){         //super.isO{sObjectClassName.equals("java.lang.String"))issClassName.equals("java.lang.String"))
             return _oUnoObject.toString();
         }
         else{

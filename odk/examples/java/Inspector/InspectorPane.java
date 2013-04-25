@@ -33,19 +33,21 @@
  *************************************************************************/
 
 
-import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.uno.Any;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.TypeClass;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.beans.XIntrospectionAccess;
+import org.openoffice.XInstanceInspector;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.reflection.XIdlMethod;
-import org.openoffice.XInstanceInspector;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.TypeClass;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
     public class InspectorPane extends WeakBase implements XInstanceInspector{  //, XServiceInfo
         private XIdlMethod[] xIdlMethods;
@@ -111,7 +113,7 @@ import org.openoffice.XInstanceInspector;
 
         private Type[] getTypes(Object _oUnoObject){
             Type[] aTypes = null;
-            if (m_oIntrospector.isArray(_oUnoObject)){
+            if (AnyConverter.isArray(_oUnoObject)){
                 aTypes = (Type[])_oUnoObject;
             }
             else{
@@ -144,17 +146,17 @@ import org.openoffice.XInstanceInspector;
                     }
                     else{
                         Any aReturnObject = Any.complete(oUnoReturnObject);
-                        String sShortClassName = m_oIntrospector.getShortClassName(aReturnObject.getType().getTypeName());
+                        String sShortClassName = Introspector.getShortClassName(aReturnObject.getType().getTypeName());
                         sNodeDescription += m_oSourceCodeGenerator.getVariableNameforUnoObject(sShortClassName);
                     }
-                    if (m_oIntrospector.isArray(oUnoReturnObject)){
-                        if (m_oIntrospector.isUnoTypeObject(oUnoReturnObject)){
+                    if (Introspector.isArray(oUnoReturnObject)){
+                        if (Introspector.isUnoTypeObject(oUnoReturnObject)){
                             oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SINTERFACEDESCRIPTION, _oUnoMethodNode.getUnoObject());
                         }
-                        else if(m_oIntrospector.isUnoPropertyTypeObject(oUnoReturnObject)){
+                        else if(Introspector.isUnoPropertyTypeObject(oUnoReturnObject)){
                             oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SPROPERTYINFODESCRIPTION, oUnoReturnObject);
                         }
-                        else if(m_oIntrospector.isUnoPropertyValueTypeObject(oUnoReturnObject)){
+                        else if(Introspector.isUnoPropertyValueTypeObject(oUnoReturnObject)){
                             oUnoNode = addUnoFacetteNode(_oUnoMethodNode, XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION, oUnoReturnObject);
                         }
                     }
@@ -245,7 +247,7 @@ import org.openoffice.XInstanceInspector;
 
 
         public void addMethodsToTreeNode(XUnoNode _oGrandParentNode, Object _oUnoParentObject, XIdlMethod[] _xIdlMethods){
-            if (this.m_oIntrospector.isValid(_xIdlMethods)){
+            if (Introspector.isValid(_xIdlMethods)){
                 for ( int n = 0; n < _xIdlMethods.length; n++ ) {
                     XIdlMethod xIdlMethod = _xIdlMethods[n];
                     if (!xIdlMethod.getDeclaringClass().getName().equals("com.sun.star.uno.XInterface")){
@@ -347,7 +349,7 @@ import org.openoffice.XInstanceInspector;
 
     public void addContainerElementsToTreeNode(XUnoNode _oParentNode, Object _oUnoParentObject){
         Object[] oUnoContainerElements = m_oIntrospector.getUnoObjectsOfContainer(_oUnoParentObject);
-        if (m_oIntrospector.isValid(oUnoContainerElements)){
+        if (Introspector.isValid(oUnoContainerElements)){
             if (oUnoContainerElements.length > 0){
                 for (int i=0; i< oUnoContainerElements.length; i++){
                     XUnoNode oChildNode = addUnoNode(_oParentNode, oUnoContainerElements[i], UnoNode.getNodeDescription(oUnoContainerElements[i]));
@@ -371,7 +373,7 @@ import org.openoffice.XInstanceInspector;
 
     private void setNodeFoldable(XUnoNode _oUnoNode, Object _oUnoObject){
         if (_oUnoObject != null){
-            if (!m_oIntrospector.isObjectPrimitive(_oUnoObject)){
+            if (!Introspector.isObjectPrimitive(_oUnoObject)){
                 _oUnoNode.setFoldable(true);
             }
         }
@@ -406,7 +408,7 @@ import org.openoffice.XInstanceInspector;
             if (!_oUnoObject.getClass().getComponentType().isPrimitive()){
                 Object[] object = ( Object[] ) _oUnoObject;
                 for ( int i = 0; i < object.length; i++ ) {
-                    if (m_oIntrospector.isObjectPrimitive(object[i])){
+                    if (Introspector.isObjectPrimitive(object[i])){
                         XUnoNode oChildNode = addUnoNode(_oUnoNode, null, UnoNode.getNodeDescription(object[i]));
                     }
                 }
@@ -431,14 +433,14 @@ import org.openoffice.XInstanceInspector;
 
 
     private void addPropertyValueSubNodes(XUnoFacetteNode _oUnoFacetteNode, Object _oUnoObject){
-        if (m_oIntrospector.isUnoPropertyValueTypeObject(_oUnoObject)){
+        if (Introspector.isUnoPropertyValueTypeObject(_oUnoObject)){
             Object[] object = ( Object[] ) _oUnoObject;
             for ( int i = 0; i < object.length; i++ ) {
                 String sObjectClassName = object[i].getClass().getName();
                 if (sObjectClassName.equals("com.sun.star.beans.PropertyValue")){
                     XUnoNode oChildNode = null;
                     PropertyValue aPropertyValue = (PropertyValue) object[i];
-                    if (! m_oIntrospector.isObjectPrimitive(aPropertyValue.Value)){
+                    if (! Introspector.isObjectPrimitive(aPropertyValue.Value)){
                         oChildNode = m_xTreeControlProvider.addUnoPropertyNode(_oUnoObject, aPropertyValue, _oUnoObject);
                     }
                     else{
@@ -491,7 +493,7 @@ import org.openoffice.XInstanceInspector;
                 }
                 if (oUnoFacetteNode.isPropertyNode()){
                     String sNodeDescription = oUnoFacetteNode.getLabel();
-                    // TODO: it's very dangerous to distinguishe the different UnoFacetteNodes only by the nodedescription
+                    // TODO: it's very dangerous to distinguish the different UnoFacetteNodes only by the node description
                     if (sNodeDescription.startsWith(XUnoFacetteNode.SPROPERTYINFODESCRIPTION)){
                         addPropertySetInfoNodesToTreeNode(oUnoFacetteNode, oUnoObject);
                     }
@@ -597,7 +599,7 @@ import org.openoffice.XInstanceInspector;
                     if (oUnoObject instanceof String){
                     }
                     else{
-                        if (!m_oIntrospector.isUnoTypeObject(oUnoObject)){
+                        if (!Introspector.isUnoTypeObject(oUnoObject)){
                             return oUnoObject;
                         }
                     }
@@ -622,4 +624,3 @@ import org.openoffice.XInstanceInspector;
             m_xDialogProvider.showPopUpMenu(_invoker, x, y);
         }
 }
-    

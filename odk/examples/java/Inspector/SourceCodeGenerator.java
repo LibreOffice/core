@@ -394,10 +394,10 @@ public class SourceCodeGenerator {
         bisDeclared = aVariables.containsKey(sVariableStemName);
         if (bisDeclared){
             Object oUnoObject = _oUnoObjectDefinition.getUnoObject();
-            if (m_oIntrospector.isObjectPrimitive(oUnoObject)){
+            if (Introspector.isObjectPrimitive(oUnoObject)){
                 bisDeclared = false;
             }
-            else if (m_oIntrospector.isObjectSequence(oUnoObject)){
+            else if (Introspector.isObjectSequence(oUnoObject)){
                 bisDeclared = false;
             }
             else{
@@ -513,7 +513,7 @@ public class SourceCodeGenerator {
         TypeClass aLocTypeClass = aTypeClass;
         boolean bIsArray = false;
         if (_oUnoObjectDefinition.getUnoObject() != null){
-            bIsArray = m_oIntrospector.isObjectSequence(_oUnoObjectDefinition.getUnoObject());
+            bIsArray = Introspector.isObjectSequence(_oUnoObjectDefinition.getUnoObject());
         }
         else{
             bIsArray = _oUnoObjectDefinition.getTypeClass().getValue() == TypeClass.SEQUENCE_value;
@@ -756,8 +756,8 @@ class UnoObjectDefinition{
                     if (aVariables.containsKey(sVariableName)){
                         String sUnoObjectIdentity = aVariables.get(sVariableName).getUnoObject().toString();
                         if (m_oUnoObject != null){
-                            if ((sUnoObjectIdentity.equals(m_oUnoObject.toString()) && (!m_oIntrospector.isPrimitive(this.getTypeClass())) &&
-                                (! m_oIntrospector.isObjectSequence(m_oUnoObject)))){
+                            if ((sUnoObjectIdentity.equals(m_oUnoObject.toString()) && (!Introspector.isPrimitive(this.getTypeClass())) &&
+                                (! Introspector.isObjectSequence(m_oUnoObject)))){
                                 bleaveloop = true;
                             }
                             else{
@@ -871,11 +871,11 @@ class UnoObjectDefinition{
             String sClassName = _sClassName;
             String sHeaderStatement = "";
             if (_oUnoObject != null){
-                if (!m_oIntrospector.isObjectPrimitive(_oUnoObject)){
-                    if (m_oIntrospector.isObjectSequence(_oUnoObject)){
+                if (!Introspector.isObjectPrimitive(_oUnoObject)){
+                    if (Introspector.isObjectSequence(_oUnoObject)){
                         XTypeDescription xTypeDescription = m_oIntrospector.getReferencedType(sClassName);
                         if (xTypeDescription != null){
-                            if (!m_oIntrospector.isPrimitive(xTypeDescription.getTypeClass())){
+                            if (!Introspector.isPrimitive(xTypeDescription.getTypeClass())){
                                 sClassName = getTypeString(xTypeDescription.getName(), xTypeDescription.getTypeClass(), true);
                             }
                             // primitive Types are not supposed to turn up in the import section...
@@ -1428,11 +1428,11 @@ class UnoObjectDefinition{
             String sClassName = _sClassName;
             String sHeaderStatement = "";
             if (_oUnoObject != null){
-                if (!m_oIntrospector.isObjectPrimitive(_oUnoObject)){
-                    if (m_oIntrospector.isObjectSequence(_oUnoObject)){
+                if (!Introspector.isObjectPrimitive(_oUnoObject)){
+                    if (Introspector.isObjectSequence(_oUnoObject)){
                         XTypeDescription xTypeDescription = m_oIntrospector.getReferencedType(sClassName);
                         if (xTypeDescription != null){
-                            if (!m_oIntrospector.isPrimitive(xTypeDescription.getTypeClass())){
+                            if (!Introspector.isPrimitive(xTypeDescription.getTypeClass())){
                                 sClassName = getTypeString(xTypeDescription.getName(), xTypeDescription.getTypeClass(), true);
                             }
                             // primitive Types are not supposed to turn up in the import section...
@@ -1682,7 +1682,7 @@ class UnoObjectDefinition{
 
 
         public String getVariableDeclaration(String _sTypeString, String _sVariableName, boolean bIsArray, TypeClass _aTypeClass, boolean _bInitialize){
-            boolean bIsPrimitive = m_oIntrospector.isPrimitive(_aTypeClass);
+            boolean bIsPrimitive = Introspector.isPrimitive(_aTypeClass);
 
             // uno::Reference< frame::XDispatch >    m_xDispatch
             String sReturn = "";

@@ -465,9 +465,8 @@ public class ConfigExamples
         for(int i=0; i< aElementNames.length; ++i)
         {
             Object aChild = xChildAccess.getByName( aElementNames[i] );
-            AnyConverter aAnyConv = new AnyConverter();
             // is it a structural element (object) ...
-            if ( aAnyConv.isObject(aChild) && !aAnyConv.isArray(aChild) )
+            if ( AnyConverter.isObject(aChild) && !AnyConverter.isArray(aChild) )
             {
                 // then get an interface
                 XInterface xChildElement = UnoRuntime.queryInterface(XInterface.class, aChild);
@@ -527,7 +526,7 @@ public class ConfigExamples
            new IConfigurationProcessor () {
                /// prints Path and Value of properties
                public void processValueElement( String sPath_, Object aValue_ ) {
-                   if (new AnyConverter().isArray(aValue_))
+                   if (AnyConverter.isArray(aValue_))
                    {
                        final Object [] aArray = (Object [])aValue_;
 
@@ -751,11 +750,10 @@ public class ConfigExamples
             String aItemNames [] = aReplace.getElementNames();
             for (int i=0; i < aItemNames.length; ++i) {
                 Object aItem = aReplace.getByName( aItemNames [i] );
-                AnyConverter aAnyConv = new AnyConverter();
                 // replace integers by a 'complement' value
-                if ( aAnyConv.isInt(aItem) )
+                if ( AnyConverter.isInt(aItem) )
                 {
-                    int nOld = aAnyConv.toInt(aItem);
+                    int nOld = AnyConverter.toInt(aItem);
                     int nNew = 9999 - nOld;
 
                     System.out.println("Replacing integer value: " + aItemNames [i]);
@@ -763,9 +761,9 @@ public class ConfigExamples
                 }
 
                 // and booleans by their negated value
-                else if ( aAnyConv.isBoolean(aItem) )
+                else if ( AnyConverter.isBoolean(aItem) )
                 {
-                    boolean bOld = aAnyConv.toBoolean(aItem);
+                    boolean bOld = AnyConverter.toBoolean(aItem);
                     boolean bNew = ! bOld;
 
                     System.out.println("Replacing boolean value: " + aItemNames [i]);
