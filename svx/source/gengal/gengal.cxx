@@ -163,7 +163,6 @@ void GalApp::Init()
 #endif
         OUString baseBinDir = fileName.copy( 0, lastSlash );
         OUString installPrefix = baseBinDir + OUString::createFromAscii( "/../.." );
-        OUString assignment = OUString( "OOO_INSTALL_PREFIX=" ) + installPrefix;
 
         OUString envVar( "OOO_INSTALL_PREFIX");
         osl_setEnvironment(envVar.pData, installPrefix.pData);
