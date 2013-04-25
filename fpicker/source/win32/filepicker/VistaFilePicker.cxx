@@ -243,7 +243,7 @@ OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
 {
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_GET_DIRECTORY);
-    m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
+    m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
     const OUString sDirectory = rRequest->getArgumentOrDefault(PROP_FILENAME, OUString());
 
     return sDirectory;
