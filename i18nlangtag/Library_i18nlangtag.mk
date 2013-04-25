@@ -39,11 +39,17 @@ $(eval $(call gb_Library_use_libraries,i18nlangtag,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_Library_use_externals,i18nlangtag,\
+	icu_headers \
+	icuuc \
+))
+
 $(eval $(call gb_Library_add_exception_objects,i18nlangtag,\
 	i18nlangtag/source/isolang/insys \
 	i18nlangtag/source/isolang/isolang \
 	i18nlangtag/source/isolang/mslangid \
 	i18nlangtag/source/languagetag/languagetag \
+	i18nlangtag/source/languagetag/languagetagicu \
 ))
 
 

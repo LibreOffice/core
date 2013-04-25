@@ -33,7 +33,6 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	cppu \
 	cppuhelper \
 	i18nlangtag \
-	i18nlangtagicu \
 	$(if $(filter TRUE,$(SOLAR_JAVA)), \
 		jvmaccess \
 		jvmfwk) \
