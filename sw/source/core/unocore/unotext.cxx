@@ -1625,7 +1625,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             SwTableNode * pStartTableNode(pStartStartNode->FindTableNode());
             // Is it the same table start node than the end?
             SwTableNode *const pEndStartTableNode(pEndStartNode->FindTableNode());
-            while (pEndStartTableNode->GetIndex() < pStartTableNode->GetIndex())
+            while (pEndStartTableNode && pStartTableNode &&
+                   pEndStartTableNode->GetIndex() < pStartTableNode->GetIndex())
             {
                 SwStartNode* pStartStartTableNode = pStartTableNode->StartOfSectionNode();
                 pStartTableNode = pStartStartTableNode->FindTableNode();
