@@ -1510,7 +1510,10 @@ void SvTreeListBox::InitTreeView()
 
     mbContextBmpExpanded = true;
     nContextBmpWidthMax = 0;
+
     SetFont( GetFont() );
+    AdjustEntryHeightAndRecalc( GetFont() );
+
     SetSpaceBetweenEntries( 0 );
     SetLineColor();
     InitSettings( sal_True, sal_True, sal_True );
@@ -2575,14 +2578,31 @@ void SvTreeListBox::SetExpandedNodeBmp( const Image& rBmp )
 void SvTreeListBox::SetFont( const Font& rFont )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
+
     Font aTempFont( rFont );
+    Font aOrigFont( GetFont() );
     aTempFont.SetTransparent( sal_True );
+    if (aTempFont == aOrigFont)
+        return;
     Control::SetFont( aTempFont );
-    AdjustEntryHeight( aTempFont );
+
+    aTempFont.SetColor(aOrigFont.GetColor());
+    aTempFont.SetFillColor(aOrigFont.GetFillColor());
+    aTempFont.SetTransparent(aOrigFont.IsTransparent());
+
+    if (aTempFont == aOrigFont)
+        return;
+
+    AdjustEntryHeightAndRecalc( GetFont() );
+}
+
+void SvTreeListBox::AdjustEntryHeightAndRecalc( const Font& rFont )
+{
+    DBG_CHKTHIS(SvTreeListBox,0);
+    AdjustEntryHeight( rFont );
     // always invalidate, else things go wrong in SetEntryHeight
     RecalcViewData();
 }
-
 
 void SvTreeListBox::Paint( const Rectangle& rRect )
 {
@@ -2626,8 +2646,7 @@ void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
         nEntryHeight = nEntryHeight - nEntryHeightOffs;
         nEntryHeightOffs = (short)nOffsLogic;
         nEntryHeight = nEntryHeight + nOffsLogic;
-        AdjustEntryHeight( GetFont() );
-        RecalcViewData();
+        AdjustEntryHeightAndRecalc( GetFont() );
         pImp->SetEntryHeight( nEntryHeight );
     }
 }
@@ -3842,8 +3861,7 @@ void SvTreeListBox::InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bB
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );
-        AdjustEntryHeight( aFont );
-        RecalcViewData();
+        AdjustEntryHeightAndRecalc( aFont );
     }
 
     if( bForeground || bFont )
