@@ -32,6 +32,7 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest_climaker) : \
 	$(testtools_CLIDIR)/cli_types_bridgetest.dll
 
 $(testtools_CLIDIR)/cli_types_bridgetest.dll : \
+		$(call gb_UnoApiTarget_get_target,bridgetest) \
 		$(call gb_UnoApiTarget_get_target,udkapi) \
 		$(OUTDIR)/bin/cli_uretypes.dll \
 		$(call gb_Executable_get_runtime_dependencies,climaker) \
@@ -41,6 +42,7 @@ $(testtools_CLIDIR)/cli_types_bridgetest.dll : \
 	$(call gb_Helper_execute,climaker) \
 		$(if $(filter -s,$(MAKEFLAGS)),,--verbose) \
 		--out $@ -r $(OUTDIR)/bin/cli_uretypes.dll \
-		$(call gb_UnoApiTarget_get_target,udkapi).oldformat > /dev/null)
+		-X $(call gb_UnoApiTarget_get_target,udkapi).oldformat \
+		$(call gb_UnoApiTarget_get_target,bridgetest).oldformat > /dev/null)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
