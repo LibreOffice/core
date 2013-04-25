@@ -350,8 +350,6 @@ protected:
 
     void notify_listeners();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer > createParallelTimeContainer() const;
-
     void updateTextGroups();
 
 protected:

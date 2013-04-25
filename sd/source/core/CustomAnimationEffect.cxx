@@ -1886,7 +1886,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
 
     try
     {
-        Reference< XTimeContainer > xEffectContainer( createParallelTimeContainer() );
+        Reference< XTimeContainer > xEffectContainer( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
         Reference< XAnimationNode > xAnimateMotion( AnimateMotion::create( ::comphelper::getProcessComponentContext() ) );
 
         xAnimateMotion->setDuration( Any( fDuration ) );
@@ -2013,7 +2013,7 @@ void EffectSequenceHelper::implRebuild()
             do
             {
                 // create a par container for the next click node and all following with and after effects
-                Reference< XTimeContainer > xOnClickContainer( createParallelTimeContainer() );
+                Reference< XTimeContainer > xOnClickContainer( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
 
                 Event aEvent;
                 if( mxEventSource.is() )
@@ -2047,7 +2047,7 @@ void EffectSequenceHelper::implRebuild()
                 do
                 {
                     // create a par container for the current click or after effect node and all following with effects
-                    Reference< XTimeContainer > xWithContainer( createParallelTimeContainer() );
+                    Reference< XTimeContainer > xWithContainer( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
                     Reference< XAnimationNode > xWithContainerNode( xWithContainer, UNO_QUERY_THROW );
                     xWithContainer->setBegin( makeAny( fBegin ) );
                     xOnClickContainer->appendChild( xWithContainerNode );
@@ -2101,14 +2101,6 @@ void EffectSequenceHelper::implRebuild()
     {
         OSL_FAIL( "sd::EffectSequenceHelper::rebuild(), exception caught!" );
     }
-}
-
-// --------------------------------------------------------------------
-
-Reference< XTimeContainer > EffectSequenceHelper::createParallelTimeContainer() const
-{
-    const OUString aServiceName( "com.sun.star.animations.ParallelTimeContainer" );
-    return Reference< XTimeContainer >( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY );
 }
 
 // --------------------------------------------------------------------
@@ -2174,7 +2166,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
             }
             else // nextClick
             {
-                Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
+                Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                 // insert the aftereffect in the next group
 
                 Reference< XTimeContainer > xClickContainer( xContainer->getParent(), UNO_QUERY_THROW );
@@ -2199,15 +2191,11 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                         else
                         {
                             // this does not yet have a child container, create one
-                            const OUString aServiceName( "com.sun.star.animations.ParallelTimeContainer" );
-                            xNextContainer = Reference< XTimeContainer >::query( xMsf->createInstance(aServiceName) );
+                            xNextContainer.set( ParallelTimeContainer::create(xContext), UNO_QUERY_THROW );
 
-                            if( xNextContainer.is() )
-                            {
-                                Reference< XAnimationNode > xNode( xNextContainer, UNO_QUERY_THROW );
-                                xNode->setBegin( makeAny( (double)0.0 ) );
-                                xNextClickContainer->appendChild( xNode );
-                            }
+                            Reference< XAnimationNode > xNode( xNextContainer, UNO_QUERY_THROW );
+                            xNode->setBegin( makeAny( (double)0.0 ) );
+                            xNextClickContainer->appendChild( xNode );
                         }
                         DBG_ASSERT( xNextContainer.is(), "ppt::stl_process_after_effect_node_func::operator(), could not find/create container!" );
                     }
@@ -2216,8 +2204,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                 // if we don't have a next container, we add one to the sequence container
                 if( !xNextContainer.is() )
                 {
-                    const OUString aServiceName( "com.sun.star.animations.ParallelTimeContainer" );
-                    Reference< XTimeContainer > xNewClickContainer( xMsf->createInstance(aServiceName), UNO_QUERY_THROW );
+                    Reference< XTimeContainer > xNewClickContainer( ParallelTimeContainer::create( xContext ), UNO_QUERY_THROW );
 
                     Reference< XAnimationNode > xNewClickNode( xNewClickContainer, UNO_QUERY_THROW );
 
@@ -2229,7 +2216,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                     Reference< XAnimationNode > xRefNode( xClickContainer, UNO_QUERY_THROW );
                     xSequenceContainer->insertAfter( xNewClickNode, xRefNode );
 
-                    xNextContainer = Reference< XTimeContainer >::query( xMsf->createInstance(aServiceName) );
+                    xNextContainer.set( ParallelTimeContainer::create( xContext ), UNO_QUERY_THROW );
 
                     DBG_ASSERT( xNextContainer.is(), "ppt::stl_process_after_effect_node_func::operator(), could not create container!" );
                     if( xNextContainer.is() )
