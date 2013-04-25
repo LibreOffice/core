@@ -52,6 +52,14 @@ $(eval $(call gb_StaticLibrary_add_defs,plugcon,\
 ))
 
 $(eval $(call gb_StaticLibrary_use_external,plugcon,gtk))
+
+# Gtk uses cairo, and if we build internal cairo, the linker could
+# pick up our cairo libs before they're fully ready, causing problems
+# (e.g. using our libpixman and system libcairo). Depend on cairo
+# to delay build until cairo is done.
+ifeq ($(SYSTEM_CAIRO),NO)
+$(eval $(call gb_StaticLibrary_use_external,plugcon,cairo))
+endif
 endif # ENABLE_GTK=TRUE
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,plugcon,\
