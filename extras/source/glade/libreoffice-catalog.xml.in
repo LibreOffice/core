@@ -57,6 +57,9 @@
     <glade-widget-class title="Font Preview" name="svxlo-SvxFontPrevWindow"
                         generic-name="Font Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Number Preview" name="cuilo-SvxNumberPreview"
+                        generic-name="Number Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Frame Selector" name="svxlo-SvxFrameSelector"
                         generic-name="Frame Border Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -122,6 +125,9 @@
                         icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="Glossary List" name="swuilo-SwGlossaryGroupTLB"
                         generic-name="Glossary List" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Font List" name="svxlo-SvxFontListBox"
+                        generic-name="Font List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Macro Library" name="basctllo-TreeListBox"
                         generic-name="Macro Library List" parent="GtkTreeView"
