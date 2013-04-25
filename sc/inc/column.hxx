@@ -93,6 +93,11 @@ struct ColEntry
 {
     SCROW       nRow;
     ScBaseCell* pCell;
+
+    struct Less : std::binary_function<ColEntry, ColEntry, bool>
+    {
+        bool operator() (const ColEntry& r1, const ColEntry& r2) const;
+    };
 };
 
 struct ColDoubleEntry
@@ -443,6 +448,7 @@ public:
     size_t GetFormulaHash( SCROW nRow ) const;
 
     ScFormulaVectorState GetFormulaVectorState( SCROW nRow ) const;
+    bool ResolveVectorReference( SCROW nRow1, SCROW nRow2 );
 
     ScRefCellValue GetRefCellValue( SCROW );
 

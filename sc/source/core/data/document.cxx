@@ -1574,6 +1574,15 @@ ScFormulaVectorState ScDocument::GetFormulaVectorState( const ScAddress& rPos ) 
     return maTabs[nTab]->GetFormulaVectorState(rPos.Col(), rPos.Row());
 }
 
+bool ScDocument::ResolveVectorReference( const ScAddress& rPos, SCROW nEndRow )
+{
+    SCTAB nTab = rPos.Tab();
+    if (!TableExists(nTab))
+        return false;
+
+    return maTabs[nTab]->ResolveVectorReference(rPos.Col(), rPos.Row(), nEndRow);
+}
+
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
 {
     if ( rOld == rNew )

@@ -819,6 +819,7 @@ public:
     size_t GetFormulaHash( SCCOL nCol, SCROW nRow ) const;
 
     ScFormulaVectorState GetFormulaVectorState( SCCOL nCol, SCROW nRow ) const;
+    bool ResolveVectorReference( SCCOL nCol, SCROW nRow1, SCROW nRow2 );
 
     ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
 

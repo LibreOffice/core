@@ -1940,7 +1940,16 @@ public:
 
     ScFormulaVectorState GetFormulaVectorState( const ScAddress& rPos ) const;
 
-private:
+    /**
+     * Check if the range contains any "dirty" formula cells.  In the future
+     * we'll use this function to interpret those "dirty" formula cells on
+     * demand.
+     *
+     * @return true if the range is totally clean, false otherwise.
+     */
+    bool ResolveVectorReference( const ScAddress& rPos, SCROW nEndRow );
+
+private: // CLOOK-Impl-methods
 
     /**
      * Use this class as a locale variable to merge number formatter from

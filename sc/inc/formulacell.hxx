@@ -33,9 +33,9 @@ struct ScSimilarFormulaDelta;
 
 struct SC_DLLPUBLIC ScFormulaCellGroup
 {
-    sal_Int32              mnRefCount;
-    sal_Int32              mnStart;  // Start offset of that cell
-    sal_Int32              mnLength; // How many of these do we have ?
+    sal_Int32 mnRefCount;
+    SCROW mnStart;  // Start offset of that cell
+    SCROW mnLength; // How many of these do we have ?
     bool mbInvariant;
 
     ScFormulaCellGroup();

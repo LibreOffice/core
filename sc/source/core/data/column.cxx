@@ -45,6 +45,11 @@
 using ::editeng::SvxBorderLine;
 using namespace formula;
 
+bool ColEntry::Less::operator() (const ColEntry& r1, const ColEntry& r2) const
+{
+    return r1.nRow < r2.nRow;
+}
+
 namespace {
 
 inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )

@@ -1589,6 +1589,33 @@ ScFormulaVectorState ScColumn::GetFormulaVectorState( SCROW nRow ) const
     return pCell ? pCell->GetVectorState() : FormulaVectorUnknown;
 }
 
+bool ScColumn::ResolveVectorReference( SCROW nRow1, SCROW nRow2 )
+{
+    std::vector<ColEntry>::iterator itEnd = maItems.end();
+    // Find first cell whose position is equal or greater than nRow1.
+    ColEntry aBound;
+    aBound.nRow = nRow1;
+    std::vector<ColEntry>::iterator it =
+        std::lower_bound(maItems.begin(), itEnd, aBound, ColEntry::Less());
+
+    if (it == itEnd)
+        return false;
+
+    for (; it != itEnd && it->nRow <= nRow2; ++it)
+    {
+        if (it->pCell->GetCellType() != CELLTYPE_FORMULA)
+            // Non-formula cells are fine.
+            continue;
+
+        ScFormulaCell* pFC = static_cast<ScFormulaCell*>(it->pCell);
+        if (pFC->GetDirty())
+            // Dirty formula cells are not supported yet.
+            return false;
+    }
+
+    return true;
+}
+
 ScRefCellValue ScColumn::GetRefCellValue( SCROW nRow )
 {
     ScRefCellValue aCell; // start empty

@@ -2113,6 +2113,17 @@ ScFormulaVectorState ScTable::GetFormulaVectorState( SCCOL nCol, SCROW nRow ) co
     return aCol[nCol].GetFormulaVectorState(nRow);
 }
 
+bool ScTable::ResolveVectorReference( SCCOL nCol, SCROW nRow1, SCROW nRow2 )
+{
+    if (!ValidCol(nCol) || !ValidRow(nRow1) || !ValidRow(nRow2))
+        return false;
+
+    if (!aCol[nCol].ResolveVectorReference(nRow1, nRow2))
+        return false;
+
+    return true;
+}
+
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
 {
     if (!ValidColRow(nCol, nRow))
