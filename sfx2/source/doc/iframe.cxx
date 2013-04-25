@@ -21,6 +21,7 @@
 #include "iframe.hxx"
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/Frame.hpp>

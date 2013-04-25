@@ -19,6 +19,7 @@
 #include "FormattedField.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #include "corestrings.hrc"
 #include "core_resource.hrc"
 #include "core_resource.hxx"

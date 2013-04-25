@@ -22,6 +22,8 @@
 #include "fmdocumentclassification.hxx"
 #include "fmcontrollayout.hxx"
 
+#include <com/sun/star/form/XForms.hpp>
+
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/svdobj.hxx>

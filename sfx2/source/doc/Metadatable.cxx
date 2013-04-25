@@ -18,6 +18,7 @@
  */
 
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <sfx2/Metadatable.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 

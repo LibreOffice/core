@@ -20,6 +20,8 @@
 #define _COM_SUN_STAR_UNO_REFERENCE_H_
 
 #include <rtl/alloc.h>
+#include "boost/type_traits/is_base_of.hpp"
+#include "boost/utility/enable_if.hpp"
 
 
 namespace com
@@ -248,6 +250,21 @@ public:
         @param rRef another reference
     */
     inline Reference( const Reference< interface_type > & rRef ) SAL_THROW(());
+
+    /** Up-casting conversion constructor: Copies interface reference.
+
+        @param rRef another reference
+    */
+    template< class derived_interface_type >
+    inline Reference( const Reference< derived_interface_type > & rRef,
+                      // SFINAE - use boost type_traits to prevent this template from being used to cast between unrelated types
+                      typename boost::enable_if< boost::is_base_of<interface_type, derived_interface_type> >::type* = 0 ) SAL_THROW(())
+    {
+        BaseReference br = rRef;
+        XInterface* p = br.get();
+        _pInterface = iquery( p );
+    }
+
     /** Constructor: Sets given interface pointer.
 
         @param pInterface an interface pointer
@@ -477,7 +494,7 @@ public:
         @return this reference
     */
     inline Reference< interface_type > & SAL_CALL operator = ( interface_type * pInterface ) SAL_THROW(());
-    /** Assignment operator: Acquires given interface reference and sets reference.
+    /** Assignment operator: Acquires given interface reference and sets reference..
         An interface already set will be released.
 
         @param rRef an interface reference

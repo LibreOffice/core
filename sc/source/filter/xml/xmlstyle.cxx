@@ -45,6 +45,7 @@
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <comphelper/extract.hxx>
 

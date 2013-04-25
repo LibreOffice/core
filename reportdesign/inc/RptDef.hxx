@@ -27,14 +27,12 @@
 #include <comphelper/uno3.hxx>
 #include <svx/fmglob.hxx>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace report {
         class XReportComponent;
         class XReportDefinition;
-    }
-    namespace style {
-        class XStyle;
     }
     namespace beans {
         class XPropertySet;

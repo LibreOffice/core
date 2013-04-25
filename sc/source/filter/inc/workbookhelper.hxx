@@ -25,6 +25,8 @@
 #include "oox/helper/storagebase.hxx"
 #include "biffhelper.hxx"
 #include "rangenam.hxx"
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
@@ -32,8 +34,6 @@ namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
     namespace sheet { class XDatabaseRange; }
     namespace sheet { class XNamedRange; }
-    namespace sheet { class XSpreadsheet; }
-    namespace sheet { class XSpreadsheetDocument; }
     namespace sheet { struct FormulaToken; }
     namespace style { class XStyle; }
     namespace table { struct CellAddress; }

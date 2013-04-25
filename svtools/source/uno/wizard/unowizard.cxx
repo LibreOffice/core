@@ -21,6 +21,7 @@
 #include "../unowizard.hxx"
 #include "wizardshell.hxx"
 
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
