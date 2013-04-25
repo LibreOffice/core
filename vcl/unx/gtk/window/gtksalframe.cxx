@@ -4160,7 +4160,6 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(Windo
     }
     catch(const uno::Exception& e)
     {
-        g_warning( "Exception in getting input method surrounding text" );
         SAL_WARN( "vcl.gtk", "Exception in getting input method surrounding text: " << e.Message);
     }
     return xText;
@@ -4209,10 +4208,10 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
             nDeleteEnd = xText->getCharacterCount();
 
         xText->deleteText(nDeletePos, nDeleteEnd);
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
