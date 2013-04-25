@@ -94,7 +94,7 @@ OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeExcepti
 Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 2 );
-    aSNS[0] = m_bActAsDescriptor ? SERVICE_SDBCX_COLUMNDESCRIPTOR : SERVICE_SDBCX_COLUMN;
+    aSNS[0] = m_bActAsDescriptor ? OUString(SERVICE_SDBCX_COLUMNDESCRIPTOR) : OUString(SERVICE_SDBCX_COLUMN);
     aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
     return aSNS;
 }
@@ -205,10 +205,10 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     };
     PropertyDescriptor aProps[] =
     {
-        { PROPERTY_CATALOGNAME,      PROPERTY_ID_CATALOGNAME },
-        { PROPERTY_SCHEMANAME,       PROPERTY_ID_SCHEMANAME },
-        { PROPERTY_TABLENAME,        PROPERTY_ID_TABLENAME },
-        { PROPERTY_REALNAME,         PROPERTY_ID_REALNAME }
+        { OUString(PROPERTY_CATALOGNAME),      PROPERTY_ID_CATALOGNAME },
+        { OUString(PROPERTY_SCHEMANAME),       PROPERTY_ID_SCHEMANAME },
+        { OUString(PROPERTY_TABLENAME),        PROPERTY_ID_TABLENAME },
+        { OUString(PROPERTY_REALNAME),         PROPERTY_ID_REALNAME }
     };
     for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
     {

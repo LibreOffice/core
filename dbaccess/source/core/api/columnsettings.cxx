@@ -136,14 +136,14 @@ namespace dbaccess
             };
             PropertyDescriptor aProps[] =
             {
-                { PROPERTY_ALIGN,            PROPERTY_ID_ALIGN },
-                { PROPERTY_NUMBERFORMAT,     PROPERTY_ID_NUMBERFORMAT },
-                { PROPERTY_RELATIVEPOSITION, PROPERTY_ID_RELATIVEPOSITION },
-                { PROPERTY_WIDTH,            PROPERTY_ID_WIDTH },
-                { PROPERTY_HELPTEXT,         PROPERTY_ID_HELPTEXT },
-                { PROPERTY_CONTROLDEFAULT,   PROPERTY_ID_CONTROLDEFAULT },
-                { PROPERTY_CONTROLMODEL,     PROPERTY_ID_CONTROLMODEL },
-                { PROPERTY_HIDDEN,           PROPERTY_ID_HIDDEN }
+                { OUString(PROPERTY_ALIGN),            PROPERTY_ID_ALIGN },
+                { OUString(PROPERTY_NUMBERFORMAT),     PROPERTY_ID_NUMBERFORMAT },
+                { OUString(PROPERTY_RELATIVEPOSITION), PROPERTY_ID_RELATIVEPOSITION },
+                { OUString(PROPERTY_WIDTH),            PROPERTY_ID_WIDTH },
+                { OUString(PROPERTY_HELPTEXT),         PROPERTY_ID_HELPTEXT },
+                { OUString(PROPERTY_CONTROLDEFAULT),   PROPERTY_ID_CONTROLDEFAULT },
+                { OUString(PROPERTY_CONTROLMODEL),     PROPERTY_ID_CONTROLMODEL },
+                { OUString(PROPERTY_HIDDEN),           PROPERTY_ID_HIDDEN }
             };
 
             for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )

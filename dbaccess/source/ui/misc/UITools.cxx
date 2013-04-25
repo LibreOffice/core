@@ -1032,18 +1032,18 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 // check if SQL92 name checking is enabled
 sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 {
-    return ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_ENABLESQL92CHECK.ascii );
+    return ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_ENABLESQL92CHECK );
 }
 // -----------------------------------------------------------------------------
 sal_Bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
 {
-    return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_APPEND_TABLE_ALIAS.ascii );
+    return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_APPEND_TABLE_ALIAS );
 }
 
 // -----------------------------------------------------------------------------
 sal_Bool generateAsBeforeTableAlias(const Reference<XConnection>& _xConnection)
 {
-    return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_AS_BEFORE_CORRELATION_NAME.ascii );
+    return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_AS_BEFORE_CORRELATION_NAME );
 }
 
 // -----------------------------------------------------------------------------
@@ -1497,7 +1497,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
         aValue.Value <<= _xContent;
         aArguments[2] <<= aValue;
 
-        OUString sServiceName(_bCollection ? ((_bForm) ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
+        OUString sServiceName(_bCollection ? ((_bForm) ? OUString(SERVICE_NAME_FORM_COLLECTION) : OUString(SERVICE_NAME_REPORT_COLLECTION)) : OUString(SERVICE_SDB_DOCUMENTDEFINITION));
 
         Reference<XContent > xNew( xORB->createInstanceWithArguments( sServiceName, aArguments ), UNO_QUERY_THROW );
         Reference< XNameContainer > xNameContainer( xNameAccess, UNO_QUERY_THROW );

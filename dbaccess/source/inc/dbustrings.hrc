@@ -20,51 +20,47 @@
 #define DBACCESS_SHARED_DBUSTRINGS_HRC
 
 #include <rtl/ustring.hxx>
-#include <comphelper/string.hxx>
-using comphelper::string::ConstAsciiString;
 
-namespace dbaui
-{
 #define STRINGCONSTANTS_INCLUDED_INDIRECT
 #include "stringconstants.hrc"
 #undef STRINGCONSTANTS_INCLUDED_INDIRECT
+#include "stringconstants.inc"
 
     //============================================================
     //= URLs
     //============================================================
-    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_QUERYDESIGN);
-    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_VIEWDESIGN);
-    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_TABLEDESIGN);
-    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_FORMGRIDVIEW);
-    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_DATASOURCEBROWSER);
-    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_RELATIONDESIGN);
-    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_APPLICATION);
-    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_REPORTDESIGN);
+    #define URL_COMPONENT_QUERYDESIGN         ".component:DB/QueryDesign"
+    #define URL_COMPONENT_VIEWDESIGN          ".component:DB/ViewDesign"
+    #define URL_COMPONENT_TABLEDESIGN         ".component:DB/TableDesign"
+    #define URL_COMPONENT_FORMGRIDVIEW        ".component:DB/FormGridView"
+    #define URL_COMPONENT_DATASOURCEBROWSER   ".component:DB/DataSourceBrowser"
+    #define URL_COMPONENT_RELATIONDESIGN      ".component:DB/RelationDesign"
+    #define URL_COMPONENT_APPLICATION         ".component:DB/Application"
+    #define URL_COMPONENT_REPORTDESIGN        ".component:DB/ReportDesign"
 
     //============================================================
     //= service names
     //============================================================
-    DECLARE_CONSTASCII_USTRING(SERVICE_SDB_DIRECTSQLDIALOG);
+    #define SERVICE_SDB_DIRECTSQLDIALOG       "org.openoffice.comp.dbu.DirectSqlDialog"
 
     //============================================================
     //= other DBU relevant strings
     //============================================================
-    DECLARE_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW);
-    DECLARE_CONSTASCII_USTRING(SERVICE_CONTROLDEFAULT);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_QUERYDESIGNVIEW);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_GRAPHICAL_DESIGN);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_HELP_URL);
+    #define FRAME_NAME_QUERY_PREVIEW          "QueryPreview"
+    #define SERVICE_CONTROLDEFAULT            "com.sun.star.comp.dbu.OColumnControl"
+    #define PROPERTY_QUERYDESIGNVIEW          "QueryDesignView"
+    #define PROPERTY_GRAPHICAL_DESIGN         "GraphicalDesign"
+    #define PROPERTY_HELP_URL                 "HelpURL"
 
     //============================================================
     //= other DBU properties
     //============================================================
-    DECLARE_CONSTASCII_USTRING(PROPERTY_TRISTATE);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_ENABLEOUTERJOIN);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_DEFAULTCONTROL);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_TABSTOP);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_ENABLED);
-    DECLARE_CONSTASCII_USTRING(PROPERTY_MOUSE_WHEEL_BEHAVIOR);
-}
+    #define PROPERTY_TRISTATE         "TriState"
+    #define PROPERTY_ENABLEOUTERJOIN  "EnableOuterJoinEscape"
+    #define PROPERTY_TABSTOP "TabStop"
+    #define PROPERTY_DEFAULTCONTROL "DefaultControl"
+    #define PROPERTY_ENABLED "Enabled"
+    #define PROPERTY_MOUSE_WHEEL_BEHAVIOR "MouseWheelBehavior"
 
 #endif // DBACCESS_SHARED_DBUSTRINGS_HRC
 

@@ -156,7 +156,7 @@ bool ObjectCopySource::isView() const
 void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObject ) const
 {
     const OUString aCopyProperties[] = {
-        PROPERTY_FONT, PROPERTY_ROW_HEIGHT, PROPERTY_TEXTCOLOR,PROPERTY_TEXTLINECOLOR,PROPERTY_TEXTEMPHASIS,PROPERTY_TEXTRELIEF
+        OUString(PROPERTY_FONT), OUString(PROPERTY_ROW_HEIGHT), OUString(PROPERTY_TEXTCOLOR),OUString(PROPERTY_TEXTLINECOLOR),OUString(PROPERTY_TEXTEMPHASIS),OUString(PROPERTY_TEXTRELIEF)
     };
     for ( size_t i=0; i < sizeof( aCopyProperties ) / sizeof( aCopyProperties[0] ); ++i )
     {

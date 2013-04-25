@@ -946,14 +946,14 @@ void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,cons
 void ODBExport::exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate)
 {
     OUString sValue;
-    _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_TABLENAME : PROPERTY_NAME) >>= sValue;
+    _xProp->getPropertyValue(_bUpdate ? OUString(PROPERTY_UPDATE_TABLENAME) : OUString(PROPERTY_NAME)) >>= sValue;
     if ( !sValue.isEmpty() )
     {
         AddAttribute(XML_NAMESPACE_DB, XML_NAME,sValue);
-        _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_SCHEMANAME : PROPERTY_SCHEMANAME) >>= sValue;
+        _xProp->getPropertyValue(_bUpdate ? OUString(PROPERTY_UPDATE_SCHEMANAME) : OUString(PROPERTY_SCHEMANAME)) >>= sValue;
         if ( !sValue.isEmpty() )
             AddAttribute(XML_NAMESPACE_DB, XML_SCHEMA_NAME,sValue);
-        _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_CATALOGNAME : PROPERTY_CATALOGNAME) >>= sValue;
+        _xProp->getPropertyValue(_bUpdate ? OUString(PROPERTY_UPDATE_CATALOGNAME) : OUString(PROPERTY_CATALOGNAME)) >>= sValue;
         if ( !sValue.isEmpty() )
             AddAttribute(XML_NAMESPACE_DB, XML_CATALOG_NAME,sValue);
 

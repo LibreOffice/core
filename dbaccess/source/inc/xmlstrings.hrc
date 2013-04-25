@@ -20,19 +20,11 @@
 #define DBACCESS_SHARED_XMLSTRINGS_HRC
 
 #include <rtl/ustring.hxx>
-#include <comphelper/string.hxx>
-using comphelper::string::ConstAsciiString;
 
-namespace dbaxml
-{
 #define STRINGCONSTANTS_INCLUDED_INDIRECT
 #include "stringconstants.hrc"
 #undef STRINGCONSTANTS_INCLUDED_INDIRECT
-
-    //============================================================
-    //= XML
-    //============================================================
-}
+#include "stringconstants.inc"
 
 #endif // DBACCESS_SHARED_XMLSTRINGS_HRC
 

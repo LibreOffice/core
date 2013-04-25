@@ -44,7 +44,7 @@ OColumnControl::OColumnControl(const Reference<XComponentContext>& rxContext)
 {
 }
 // -----------------------------------------------------------------------------
-IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OColumnControl, SERVICE_CONTROLDEFAULT.ascii)
+IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OColumnControl, SERVICE_CONTROLDEFAULT)
 IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControl)
 IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(OColumnControl, "com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl")
 

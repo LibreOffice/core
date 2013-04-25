@@ -743,7 +743,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
     OUString sUnsupportedSetting;
 
     const OUString aSettings[] = {
-        PROPERTY_FILTER, PROPERTY_ORDER, PROPERTY_HAVING_CLAUSE, PROPERTY_GROUP_BY
+        OUString(PROPERTY_FILTER), OUString(PROPERTY_ORDER), OUString(PROPERTY_HAVING_CLAUSE), OUString(PROPERTY_GROUP_BY)
     };
     for ( size_t i=0; i < sizeof( aSettings ) / sizeof( aSettings[0] ); ++i )
     {

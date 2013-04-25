@@ -116,7 +116,6 @@ $(eval $(call gb_Library_add_exception_objects,dba,\
     dbaccess/source/core/misc/ContainerListener \
     dbaccess/source/core/misc/ContainerMediator \
     dbaccess/source/core/misc/DatabaseDataProvider \
-    dbaccess/source/core/misc/dbastrings \
     dbaccess/source/core/misc/dsntypes \
     dbaccess/source/core/misc/module_dba \
     dbaccess/source/core/misc/objectnameapproval \

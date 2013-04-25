@@ -191,12 +191,12 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         {
         }
     } aImplementations[] = {
-        ServiceNameToImplName( URL_COMPONENT_FORMGRIDVIEW.ascii,      "org.openoffice.comp.dbu.OFormGridView"        ),
-        ServiceNameToImplName( URL_COMPONENT_DATASOURCEBROWSER.ascii, "org.openoffice.comp.dbu.ODatasourceBrowser"   ),
-        ServiceNameToImplName( URL_COMPONENT_QUERYDESIGN.ascii,       "org.openoffice.comp.dbu.OQueryDesign"         ),
-        ServiceNameToImplName( URL_COMPONENT_TABLEDESIGN.ascii,       "org.openoffice.comp.dbu.OTableDesign"         ),
-        ServiceNameToImplName( URL_COMPONENT_RELATIONDESIGN.ascii,    "org.openoffice.comp.dbu.ORelationDesign"      ),
-        ServiceNameToImplName( URL_COMPONENT_VIEWDESIGN.ascii,        "org.openoffice.comp.dbu.OViewDesign"          )
+        ServiceNameToImplName( URL_COMPONENT_FORMGRIDVIEW,      "org.openoffice.comp.dbu.OFormGridView"        ),
+        ServiceNameToImplName( URL_COMPONENT_DATASOURCEBROWSER, "org.openoffice.comp.dbu.ODatasourceBrowser"   ),
+        ServiceNameToImplName( URL_COMPONENT_QUERYDESIGN,       "org.openoffice.comp.dbu.OQueryDesign"         ),
+        ServiceNameToImplName( URL_COMPONENT_TABLEDESIGN,       "org.openoffice.comp.dbu.OTableDesign"         ),
+        ServiceNameToImplName( URL_COMPONENT_RELATIONDESIGN,    "org.openoffice.comp.dbu.ORelationDesign"      ),
+        ServiceNameToImplName( URL_COMPONENT_VIEWDESIGN,        "org.openoffice.comp.dbu.OViewDesign"          )
     };
 
     INetURLObject aParser( rURL );

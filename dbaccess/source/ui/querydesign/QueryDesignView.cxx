@@ -1076,7 +1076,7 @@ namespace
                 aMulti.insert(::std::multimap<sal_Int32 , OTableWindow*>::value_type(aCountIter->second,aCountIter->first));
             }
 
-            const sal_Bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE.ascii );
+            const sal_Bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
             ::std::multimap<sal_Int32 , OTableWindow*>::reverse_iterator aRIter = aMulti.rbegin();
             ::std::multimap<sal_Int32 , OTableWindow*>::reverse_iterator aREnd = aMulti.rend();
             for(;aRIter != aREnd;++aRIter)

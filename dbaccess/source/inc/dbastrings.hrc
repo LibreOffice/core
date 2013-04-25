@@ -20,27 +20,23 @@
 #define DBACCESS_SHARED_DBASTRINGS_HRC
 
 #include <rtl/ustring.hxx>
-#include <comphelper/string.hxx>
-using comphelper::string::ConstAsciiString;
 
-namespace dbaccess
-{
 #define STRINGCONSTANTS_INCLUDED_INDIRECT
 #include "stringconstants.hrc"
 #undef STRINGCONSTANTS_INCLUDED_INDIRECT
+#include "stringconstants.inc"
 
     //============================================================
     //= SQLSTATE
     //============================================================
-    DECLARE_CONSTASCII_USTRING(SQLSTATE_GENERAL);
+    #define SQLSTATE_GENERAL "01000"
 
     //============================================================
     //= Properties
     //============================================================
-    DECLARE_CONSTASCII_USTRING( PROPERTY_APPLYFORMDESIGNMODE );
-    DECLARE_CONSTASCII_USTRING( PROPERTY_IS_FORM );
-    DECLARE_CONSTASCII_USTRING( PROPERTY_PERSISTENT_PATH );
-}
+    #define  PROPERTY_APPLYFORMDESIGNMODE "ApplyFormDesignMode"
+    #define  PROPERTY_IS_FORM             "IsForm"
+    #define  PROPERTY_PERSISTENT_PATH     "PersistentPath"
 
 #endif // DBACCESS_SHARED_DBASTRINGS_HRC
 

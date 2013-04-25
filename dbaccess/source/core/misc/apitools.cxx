@@ -29,7 +29,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
 using namespace osl;
-using namespace dbaccess;
 
 //==================================================================================
 //= various helper functions

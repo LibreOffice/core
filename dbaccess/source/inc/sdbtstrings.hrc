@@ -20,15 +20,11 @@
 #define DBACCESS_SHARED_SDBTSTRINGS_HRC
 
 #include <rtl/ustring.hxx>
-#include <comphelper/string.hxx>
-using comphelper::string::ConstAsciiString;
 
-namespace sdbtools
-{
 #define STRINGCONSTANTS_INCLUDED_INDIRECT
 #include "stringconstants.hrc"
 #undef STRINGCONSTANTS_INCLUDED_INDIRECT
-}
+#include "stringconstants.inc"
 
 #endif // DBACCESS_SHARED_SDBTSTRINGS_HRC
 

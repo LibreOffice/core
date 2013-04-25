@@ -139,7 +139,7 @@ void OQueryContainer::disposing()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO2(OQueryContainer, "com.sun.star.sdb.dbaccess.OQueryContainer", SERVICE_SDBCX_CONTAINER.ascii, SERVICE_SDB_QUERIES.ascii)
+IMPLEMENT_SERVICE_INFO2(OQueryContainer, "com.sun.star.sdb.dbaccess.OQueryContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDB_QUERIES)
 
 // XDataDescriptorFactory
 Reference< XPropertySet > SAL_CALL OQueryContainer::createDataDescriptor(  ) throw(RuntimeException)

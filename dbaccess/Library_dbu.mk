@@ -73,7 +73,6 @@ $(eval $(call gb_Library_set_componentfile,dbu,dbaccess/util/dbu))
 
 $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/shared/dbu_reghelper \
-    dbaccess/source/shared/dbustrings \
     dbaccess/source/ui/app/AppController \
     dbaccess/source/ui/app/AppControllerDnD \
     dbaccess/source/ui/app/AppControllerGen \

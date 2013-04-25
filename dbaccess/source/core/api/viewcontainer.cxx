@@ -81,7 +81,7 @@ OViewContainer::~OViewContainer()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO2(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContainer", SERVICE_SDBCX_CONTAINER.ascii, SERVICE_SDBCX_TABLES.ascii)
+IMPLEMENT_SERVICE_INFO2(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
 
 ObjectType OViewContainer::createObject(const OUString& _rName)
 {

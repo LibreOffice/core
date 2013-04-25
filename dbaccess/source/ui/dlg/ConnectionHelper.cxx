@@ -73,6 +73,7 @@
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 
 

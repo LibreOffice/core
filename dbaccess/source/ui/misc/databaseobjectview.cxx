@@ -187,7 +187,7 @@ namespace dbaui
     //----------------------------------------------------------------------
     QueryDesigner::QueryDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
         const Reference< XFrame >& _rxParentFrame, bool _bCreateView )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, _bCreateView ? URL_COMPONENT_VIEWDESIGN : URL_COMPONENT_QUERYDESIGN )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, _bCreateView ? OUString(URL_COMPONENT_VIEWDESIGN) : OUString(URL_COMPONENT_QUERYDESIGN) )
         ,m_nCommandType( _bCreateView ? CommandType::TABLE : CommandType::QUERY )
     {
     }

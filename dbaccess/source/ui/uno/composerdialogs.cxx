@@ -44,8 +44,8 @@ namespace dbaui
 #define PROPERTY_ID_QUERYCOMPOSER       100
 #define PROPERTY_ID_ROWSET              101
 
-    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_QUERYCOMPOSER,   "QueryComposer" );
-    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_ROWSET,          "RowSet" );
+#define  PROPERTY_QUERYCOMPOSER   "QueryComposer"
+#define  PROPERTY_ROWSET          "RowSet"
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;

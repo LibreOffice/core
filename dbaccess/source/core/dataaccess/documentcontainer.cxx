@@ -130,7 +130,7 @@ IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(ODocumentContainer)
 Sequence< OUString > SAL_CALL ODocumentContainer::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
-    aSupported[0] = m_bFormsContainer ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION;
+    aSupported[0] = m_bFormsContainer ? OUString(SERVICE_NAME_FORM_COLLECTION) : OUString(SERVICE_NAME_REPORT_COLLECTION);
     return aSupported;
 }
 
@@ -313,11 +313,11 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         for(;pBegin != pEnd;++pBegin)
         {
             *pBegin >>= aValue;
-            if ( aValue.Name.equalsAsciiL(PROPERTY_NAME.ascii, PROPERTY_NAME.length) )
+            if ( aValue.Name == PROPERTY_NAME)
             {
                 aValue.Value >>= sName;
             }
-            else if ( aValue.Name.equalsAsciiL(PROPERTY_EMBEDDEDOBJECT.ascii, PROPERTY_EMBEDDEDOBJECT.length) )
+            else if ( aValue.Name == PROPERTY_EMBEDDEDOBJECT)
             {
                 xCopyFrom.set(aValue.Value,UNO_QUERY);
             }

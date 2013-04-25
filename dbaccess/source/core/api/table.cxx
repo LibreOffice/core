@@ -256,13 +256,13 @@ void ODBTable::construct()
         Property* pEnd  = pIter + aProps.getLength();
         for(;pIter != pEnd;++pIter)
         {
-            if (pIter->Name.equalsAsciiL(PROPERTY_CATALOGNAME.ascii, PROPERTY_CATALOGNAME.length))
+            if (pIter->Name == PROPERTY_CATALOGNAME)
                 pIter->Attributes = PropertyAttribute::READONLY;
-            else if (pIter->Name.equalsAsciiL(PROPERTY_SCHEMANAME.ascii, PROPERTY_SCHEMANAME.length))
+            else if (pIter->Name == PROPERTY_SCHEMANAME)
                 pIter->Attributes = PropertyAttribute::READONLY;
-            else if (pIter->Name.equalsAsciiL(PROPERTY_DESCRIPTION.ascii, PROPERTY_DESCRIPTION.length))
+            else if (pIter->Name == PROPERTY_DESCRIPTION)
                 pIter->Attributes = PropertyAttribute::READONLY;
-            else if (pIter->Name.equalsAsciiL(PROPERTY_NAME.ascii, PROPERTY_NAME.length))
+            else if (pIter->Name == PROPERTY_NAME)
                 pIter->Attributes = PropertyAttribute::READONLY;
         }
     }
@@ -276,7 +276,7 @@ void ODBTable::construct()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_SDBCX_TABLE.ascii)
+IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_SDBCX_TABLE)
 
 Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {

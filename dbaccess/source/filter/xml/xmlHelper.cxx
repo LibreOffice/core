@@ -85,7 +85,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMappe
 // -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapper()
 {
-#define MAP_CONST_COLUMN( name, prefix, token, type, context )  { name.ascii, name.length,  prefix, token, type|XML_TYPE_PROP_TABLE_COLUMN, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_COLUMN( name, prefix, token, type, context )  { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TABLE_COLUMN, context, SvtSaveOptions::ODFVER_010 }
     static const XMLPropertyMapEntry s_aColumnStylesProperties[] =
     {
         MAP_CONST_COLUMN( PROPERTY_WIDTH,           XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,       XML_TYPE_MEASURE, 0),
@@ -99,9 +99,8 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapp
 // -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper()
 {
-#define MAP_CONST_CELL( name, prefix, token, type, context )  { name.ascii, name.length,    prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFVER_010 }
-#define MAP_CONST_TEXT( name, prefix, token, type, context )  { name.ascii, name.length,    prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010 }
-#define MAP_CONST_TEXT_ASCII( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_CELL( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_TEXT( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010 }
     static const XMLPropertyMapEntry s_aCellStylesProperties[] =
     {
         MAP_CONST_CELL( PROPERTY_ALIGN,             XML_NAMESPACE_FO,       XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, CTF_DB_COLUMN_TEXT_ALIGN),
@@ -120,16 +119,16 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper
         MAP_CONST_TEXT( PROPERTY_FONTORIENTATION,   XML_NAMESPACE_STYLE,    XML_ROTATION_ANGLE,             XML_TYPE_ROTATION_ANGLE, 0 ),
         MAP_CONST_TEXT( PROPERTY_FONTPITCH,         XML_NAMESPACE_STYLE,    XML_FONT_PITCH,                 XML_TYPE_TEXT_FONTPITCH, 0 ),
         MAP_CONST_TEXT( PROPERTY_FONTSLANT,         XML_NAMESPACE_FO,       XML_FONT_STYLE,                 XML_TYPE_TEXT_POSTURE, 0 ),
-        MAP_CONST_TEXT_ASCII( "CharStrikeout",      XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_STYLE,    XML_TYPE_TEXT_CROSSEDOUT_STYLE|MID_FLAG_MERGE_PROPERTY, 0),
-        MAP_CONST_TEXT_ASCII( "CharStrikeout",      XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_TYPE,     XML_TYPE_TEXT_CROSSEDOUT_TYPE|MID_FLAG_MERGE_PROPERTY,  0),
-        MAP_CONST_TEXT_ASCII( "CharStrikeout",      XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_WIDTH,    XML_TYPE_TEXT_CROSSEDOUT_WIDTH|MID_FLAG_MERGE_PROPERTY, 0),
-        MAP_CONST_TEXT_ASCII( "CharStrikeout",      XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_TEXT,     XML_TYPE_TEXT_CROSSEDOUT_TEXT|MID_FLAG_MERGE_PROPERTY,  0),
+        MAP_CONST_TEXT( "CharStrikeout",            XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_STYLE,    XML_TYPE_TEXT_CROSSEDOUT_STYLE|MID_FLAG_MERGE_PROPERTY, 0),
+        MAP_CONST_TEXT( "CharStrikeout",            XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_TYPE,     XML_TYPE_TEXT_CROSSEDOUT_TYPE|MID_FLAG_MERGE_PROPERTY,  0),
+        MAP_CONST_TEXT( "CharStrikeout",            XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_WIDTH,    XML_TYPE_TEXT_CROSSEDOUT_WIDTH|MID_FLAG_MERGE_PROPERTY, 0),
+        MAP_CONST_TEXT( "CharStrikeout",            XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_TEXT,     XML_TYPE_TEXT_CROSSEDOUT_TEXT|MID_FLAG_MERGE_PROPERTY,  0),
         MAP_CONST_TEXT( PROPERTY_FONTSTYLENAME,     XML_NAMESPACE_STYLE,    XML_FONT_STYLE_NAME,            XML_TYPE_STRING, 0 ),
-        MAP_CONST_TEXT_ASCII( "CharUnderline",      XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_STYLE,       XML_TYPE_TEXT_UNDERLINE_STYLE|MID_FLAG_MERGE_PROPERTY, 0 ),
-        MAP_CONST_TEXT_ASCII( "CharUnderline",      XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_TYPE,        XML_TYPE_TEXT_UNDERLINE_TYPE|MID_FLAG_MERGE_PROPERTY, 0 ),
-        MAP_CONST_TEXT_ASCII( "CharUnderline",      XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_WIDTH,       XML_TYPE_TEXT_UNDERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY, 0 ),
-        MAP_CONST_TEXT_ASCII( "CharUnderlineColor", XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_COLOR,       XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0    ),
-        MAP_CONST_TEXT_ASCII( "CharUnderlineHasColor",XML_NAMESPACE_STYLE,  XML_TEXT_UNDERLINE_COLOR,       XML_TYPE_TEXT_UNDERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE, 0    ),
+        MAP_CONST_TEXT( "CharUnderline",            XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_STYLE,       XML_TYPE_TEXT_UNDERLINE_STYLE|MID_FLAG_MERGE_PROPERTY, 0 ),
+        MAP_CONST_TEXT( "CharUnderline",            XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_TYPE,        XML_TYPE_TEXT_UNDERLINE_TYPE|MID_FLAG_MERGE_PROPERTY, 0 ),
+        MAP_CONST_TEXT( "CharUnderline",            XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_WIDTH,       XML_TYPE_TEXT_UNDERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY, 0 ),
+        MAP_CONST_TEXT( "CharUnderlineColor",       XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_COLOR,       XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0    ),
+        MAP_CONST_TEXT( "CharUnderlineHasColor",    XML_NAMESPACE_STYLE,  XML_TEXT_UNDERLINE_COLOR,       XML_TYPE_TEXT_UNDERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE, 0    ),
         MAP_CONST_TEXT( PROPERTY_FONTWEIGHT,        XML_NAMESPACE_FO,       XML_FONT_WEIGHT,                XML_TYPE_TEXT_WEIGHT, 0 ),
         MAP_CONST_TEXT( PROPERTY_FONTWIDTH,         XML_NAMESPACE_STYLE,    XML_FONT_WIDTH,                 XML_TYPE_FONT_WIDTH, 0 ),
         MAP_CONST_TEXT( PROPERTY_FONTWORDLINEMODE,  XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_MODE,        XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
@@ -141,7 +140,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper
 // -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMapper()
 {
-#define MAP_CONST_ROW( name, prefix, token, type, context )  { name.ascii, name.length, prefix, token, type|XML_TYPE_PROP_TABLE_ROW, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_ROW( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TABLE_ROW, context, SvtSaveOptions::ODFVER_010 }
     static const XMLPropertyMapEntry s_aStylesProperties[] =
     {
         MAP_CONST_ROW( PROPERTY_ROW_HEIGHT,         XML_NAMESPACE_STYLE,    XML_ROW_HEIGHT,             XML_TYPE_MEASURE, 0),

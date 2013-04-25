@@ -74,7 +74,7 @@ DBG_NAME(ODirectSQLDialog)
     //---------------------------------------------------------------------
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODirectSQLDialog, "com.sun.star.comp.sdb.DirectSQLDialog")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(ODirectSQLDialog)
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODirectSQLDialog, SERVICE_SDB_DIRECTSQLDIALOG.ascii)
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODirectSQLDialog, SERVICE_SDB_DIRECTSQLDIALOG)
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         SAL_CALL ODirectSQLDialog::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)

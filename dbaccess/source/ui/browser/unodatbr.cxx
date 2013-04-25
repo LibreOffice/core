@@ -570,10 +570,10 @@ sal_Bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > &
 
         const OUString aTransferProperties[] =
         {
-            PROPERTY_APPLYFILTER,
-            PROPERTY_FILTER,
-            PROPERTY_HAVING_CLAUSE,
-            PROPERTY_ORDER
+            OUString(PROPERTY_APPLYFILTER),
+            OUString(PROPERTY_FILTER),
+            OUString(PROPERTY_HAVING_CLAUSE),
+            OUString(PROPERTY_ORDER)
         };
         for (size_t i = 0; i < SAL_N_ELEMENTS(aTransferProperties); ++i)
         {
