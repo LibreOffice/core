@@ -21,6 +21,7 @@
 #include <slideshowimpl.hxx>
 #include <osl/mutex.hxx>
 
+#include <com/sun/star/awt/Pointer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -657,9 +658,7 @@ void SlideShowView::init()
     Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(),
                                                             uno::UNO_QUERY_THROW );
 
-    if( xFactory.is() )
-        mxPointer.set( xFactory->createInstance( "com.sun.star.awt.Pointer" ),
-                        uno::UNO_QUERY );
+    mxPointer = awt::Pointer::create( ::comphelper::getProcessComponentContext() );
 
     getTransformation();
 

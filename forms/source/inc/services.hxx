@@ -206,7 +206,6 @@ namespace frm
     // -----------------------
     // misc
     // -----------------------
-    #define SRV_AWT_POINTER "com.sun.star.awt.Pointer"
     #define SRV_AWT_IMAGEPRODUCER "com.sun.star.awt.ImageProducer"
 
     #define SRV_SDB_ROWSET "com.sun.star.sdb.RowSet"

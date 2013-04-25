@@ -50,6 +50,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt,\
 	DialogProvider \
 	DialogProvider2 \
 	MenuBar \
+	Pointer \
 	PopupMenu \
 	TabController \
 	Toolkit \

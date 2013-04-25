@@ -26,6 +26,7 @@
 #include "PresenterPaneContainer.hxx"
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/Pointer.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -465,12 +466,7 @@ void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
     // Create a pointer when it does not yet exist.
     if ( ! mxPointer.is())
     {
-        Reference<lang::XMultiServiceFactory> xFactory (
-            mxComponentContext, UNO_QUERY);
-        if (xFactory.is())
-            mxPointer = Reference<awt::XPointer>(
-                xFactory->createInstance(OUString("com.sun.star.awt.Pointer")),
-                UNO_QUERY);
+        mxPointer = awt::Pointer::create(mxComponentContext);
     }
 
     // Set the pointer to the given shape and the window(peer) to the

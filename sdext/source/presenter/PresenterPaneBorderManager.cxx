@@ -83,11 +83,7 @@ PresenterPaneBorderManager::PresenterPaneBorderManager (
     Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
     if (xFactory.is())
     {
-        mxPointer = Reference<awt::XPointer>(
-            xFactory->createInstanceWithContext(
-                OUString("com.sun.star.awt.Pointer"),
-                rxContext),
-            UNO_QUERY_THROW);
+        mxPointer = awt::Pointer::create(rxContext);
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
