@@ -62,7 +62,7 @@ inline ::System::Object ^ to_cli(
     intptr_t intptr =
         reinterpret_cast< intptr_t >(
             mapping.mapInterface( x.get(), ::getCppuType( &x ) ) );
-    ::System::Runtime::InteropServices::GCHandle ^ handle = ::System::Runtime::InteropServices::GCHandle::FromIntPtr(gcnew ::System::IntPtr(intptr));
+    ::System::Runtime::InteropServices::GCHandle ^ handle = ::System::Runtime::InteropServices::GCHandle::FromIntPtr(::System::IntPtr(intptr));
     ::System::Object ^ ret = handle->Target;
     handle->Free();
     return ret;
