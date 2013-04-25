@@ -373,15 +373,12 @@ namespace dbaccess
                 const OUString sComponentName( stor->second.sName );
                 if ( !xComponentsStor->hasByName( stor->first ) )
                 {
-                #if OSL_DEBUG_LEVEL > 0
-                    OStringBuffer message;
-                    message.append( "DatabaseDocumentRecovery::recoverSubDocuments: inconsistent recovery storage: storage '" );
-                    message.append( OUStringToOString( stor->first, RTL_TEXTENCODING_ASCII_US ) );
-                    message.append( "' not found in '" );
-                    message.append( OUStringToOString( SubComponentRecovery::getComponentsStorageName( eComponentType ), RTL_TEXTENCODING_ASCII_US ) );
-                    message.append( "', but required per map file!" );
-                    OSL_FAIL( message.getStr() );
-                #endif
+                    SAL_WARN( "dbaccess",
+                              "DatabaseDocumentRecovery::recoverSubDocuments: inconsistent recovery storage: storage '" <<
+                              stor->first <<
+                              "' not found in '" <<
+                              SubComponentRecovery::getComponentsStorageName( eComponentType ) <<
+                              "', but required per map file!" );
                     continue;
                 }
 
