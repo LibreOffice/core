@@ -35,7 +35,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlidePreviousNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:PrevSlide</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:PrevSlide</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -65,7 +65,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonEffectNextNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:NextEffect</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:NextEffect</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -95,7 +95,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonNotesNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShowNotes</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:ShowNotes</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -118,7 +118,7 @@
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseNotes</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:CloseNotes</value></prop>
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
@@ -134,7 +134,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlideSorterNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShowSlideSorter</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:ShowSlideSorter</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -157,7 +157,7 @@
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseSlideSorter</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:CloseSlideSorter</value></prop>
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
@@ -225,7 +225,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonHelpNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShowHelp</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:ShowHelp</value></prop>
               <node oor:name="Font">
                 <prop oor:name="Size"><value>12</value></prop>
                 <prop oor:name="Style"><value>Bold</value></prop>
@@ -248,7 +248,7 @@
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseHelp</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:CloseHelp</value></prop>
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
@@ -279,7 +279,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonPlusNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:GrowNotesFont</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:GrowNotesFont</value></prop>
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
@@ -299,7 +299,7 @@
               <node oor:name="Icon">
                 <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonMinusNormal.png</value></prop>
               </node>
-              <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShrinkNotesFont</value></prop>
+              <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:ShrinkNotesFont</value></prop>
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
@@ -321,21 +321,21 @@
         <prop oor:name="Text">
           <value xml:lang="en-US">Close</value>
         </prop>
-        <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseSlideSorter</value></prop>
+        <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:CloseSlideSorter</value></prop>
       </node>
       <node oor:name="NotesViewCloser" oor:op="replace">
         <prop oor:name="Name"><value>NotesViewCloser</value></prop>
         <prop oor:name="Text">
           <value xml:lang="en-US">Close</value>
         </prop>
-        <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseNotes</value></prop>
+        <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:CloseNotes</value></prop>
       </node>
       <node oor:name="HelpViewCloser" oor:op="replace">
         <prop oor:name="Name"><value>HelpViewCloser</value></prop>
         <prop oor:name="Text">
           <value xml:lang="en-US">Close</value>
         </prop>
-        <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:CloseHelp</value></prop>
+        <prop oor:name="Action"><value>vnd.com.sun.star.presentation.PresenterScreen:CloseHelp</value></prop>
       </node>
     </node>
     <node oor:name="ScrollBar">
