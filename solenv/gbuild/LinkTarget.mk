@@ -722,7 +722,7 @@ endef
 
 define gb_LinkTarget__check_srcdir_paths
 $(if $(filter-out $(wildcard $(2)),$(2)),\
-    $(call gb_Output_warn,gb_LinkTarget_set_include: include paths $(filter-out $(wildcard $(2)),$(2)) do not exist) \
+    $(call gb_Output_error,gb_LinkTarget_set_include: include paths $(filter-out $(wildcard $(2)),$(2)) do not exist) \
 )
 endef
 
