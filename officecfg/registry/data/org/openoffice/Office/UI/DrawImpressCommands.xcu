@@ -31,15 +31,15 @@
       </node>
       <node oor:name=".uno:Presentation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Slide Show</value>
+          <value xml:lang="en-US">Start from ~first Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:PresentationThisSlide" oor:op="replace">
+      <node oor:name=".uno:PresentationCurrentSlide" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Sl~ide Show From This Slide</value>
+          <value xml:lang="en-US">Start from c~urrent Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1534,11 +1534,6 @@
           <value xml:lang="en-US">~Slide Show</value>
         </prop>
       </node>
-      <!--node oor:name=".uno:ReviewMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Review</value>
-        </prop>
-      </node-->
       <node oor:name=".uno:GroupMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Group</value>

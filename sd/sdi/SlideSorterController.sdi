@@ -136,7 +136,7 @@ interface SlideSorterView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_PRESENTATION_THIS_SLIDE // ole : no, status : ?
+    SID_PRESENTATION_CURRENT_SLIDE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;

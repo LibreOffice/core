@@ -684,7 +684,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         break;
 
         case SID_PRESENTATION:
-        case SID_PRESENTATION_THIS_SLIDE:
+        case SID_PRESENTATION_CURRENT_SLIDE:
         case SID_REHEARSE_TIMINGS:
         {
             ShowSlideShow(rReq);
