@@ -383,7 +383,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
                 aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA1_1K;
 
-                if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
+                if ( nVersion >= SOFFICE_FILEFORMAT_8 )
                 {
                     try
                     {
