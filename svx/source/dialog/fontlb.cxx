@@ -97,9 +97,13 @@ SvxFontListBox::SvxFontListBox(Window* pParent, WinBits nStyle)
     maEntryFont = maStdFont;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    return new SvxFontListBox(pParent, WB_TABSTOP);
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SvxFontListBox(pParent, nWinStyle);
 }
 
 void SvxFontListBox::InsertFontEntry( const String& rString, const Font& rFont, const Color* pColor )
