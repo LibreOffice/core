@@ -36,6 +36,8 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/accessibil
 	AccessBridge \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/animations,\
+	AnimateColor \
+	AnimateSet \
 	ParallelTimeContainer \
 	SequenceTimeContainer \
 	TargetPropertiesCreator \

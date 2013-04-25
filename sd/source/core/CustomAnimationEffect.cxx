@@ -19,6 +19,8 @@
 
 #include <tools/debug.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/animations/AnimateColor.hpp>
+#include <com/sun/star/animations/AnimateSet.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/animations/SequenceTimeContainer.hpp>
@@ -72,18 +74,10 @@
 #include "animations.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::animations;
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::makeAny;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::beans::NamedValue;
@@ -978,12 +972,13 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
 {
     DBG_ASSERT( mbHasAfterEffect, "sd::CustomAnimationEffect::createAfterEffectNode(), this node has no after effect!" );
 
-    Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    const char* pServiceName = maDimColor.hasValue() ?
-        "com.sun.star.animations.AnimateColor" : "com.sun.star.animations.AnimateSet";
-
-    Reference< XAnimate > xAnimate( xMsf->createInstance(OUString::createFromAscii(pServiceName) ), UNO_QUERY_THROW );
+    Reference< XAnimate > xAnimate;
+    if( maDimColor.hasValue() )
+        xAnimate = AnimateColor::create( xContext );
+    else
+        xAnimate = AnimateSet::create( xContext );
 
     Any aTo;
     OUString aAttributeName;
