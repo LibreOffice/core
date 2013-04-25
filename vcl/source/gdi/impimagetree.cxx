@@ -235,23 +235,12 @@ bool ImplImageTree::doLoadImage(
     if (localized) {
         sal_Int32 pos = name.lastIndexOf('/');
         if (pos != -1) {
-            /* FIXME-BCP47: this needs to be changed for language tags! */
-            css::lang::Locale const & loc =
-                Application::GetSettings().GetUILanguageTag().getLocale();
-            paths.push_back(createPath(name, pos, loc.Language));
-            if (!loc.Country.isEmpty()) {
-                OUStringBuffer b(loc.Language);
-                b.append(sal_Unicode('-'));
-                b.append(loc.Country);
-                OUString p(createPath(name, pos, b.makeStringAndClear()));
-                paths.push_back(p);
-                if (!loc.Variant.isEmpty()) {
-                    b.append(p);
-                    b.append(sal_Unicode('-'));
-                    b.append(loc.Variant);
-                    paths.push_back(
-                        createPath(name, pos, b.makeStringAndClear()));
-                }
+            // find() uses a reverse iterator, so push in reverse order.
+            std::vector< OUString > aFallbacks( Application::GetSettings().GetUILanguageTag().getFallbackStrings());
+            for (std::vector< OUString >::const_reverse_iterator it( aFallbacks.rbegin());
+                    it != aFallbacks.rend(); ++it)
+            {
+                paths.push_back(createPath(name, pos, *it));
             }
         }
     }
