@@ -26,11 +26,6 @@
 
 $(eval $(call gb_Executable_Executable,liboapprover))
 
-$(eval $(call gb_Executable_set_include,liboapprover,\
-    -I$(SRCDIR)/tubes/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_externals,liboapprover,\
     gtk \
     telepathy \
