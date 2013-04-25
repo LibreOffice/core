@@ -578,6 +578,7 @@ protected:
     sal_Bool        AreChildrenTransient() const;
     void            SetChildrenNotTransient();
 
+    void            AdjustEntryHeightAndRecalc( const Font& rFont );
 public:
 
     void                SetExtendedWinBits( ExtendedWinBits _nBits );
