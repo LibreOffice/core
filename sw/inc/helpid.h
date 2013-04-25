@@ -83,7 +83,6 @@
 #define HID_NAVI_TBX15                                          "SW_HID_NAVI_TBX15"
 #define HID_NAVI_VS                                             "SW_HID_NAVI_VS"
 #define HID_NUM_FORMAT_BTN                                      "SW_HID_NUM_FORMAT_BTN"
-#define HID_PPREV_ZOOM                                          "SW_HID_PPREV_ZOOM"
 #define HID_NAVI_TBX16                                          "SW_HID_NAVI_TBX16"
 #define HID_LTEMPL_TEXT                                         "SW_HID_LTEMPL_TEXT"
 #define HID_LTEMPL_FRAME                                        "SW_HID_LTEMPL_FRAME"

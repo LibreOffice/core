@@ -91,6 +91,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/outlinenumbering \
 	sw/uiconfig/swriter/ui/outlinenumberingpage \
 	sw/uiconfig/swriter/ui/outlinepositionpage \
+	sw/uiconfig/swriter/ui/previewzoomdialog \
 	sw/uiconfig/swriter/ui/printoptionspage \
 	sw/uiconfig/swriter/ui/printeroptions \
 	sw/uiconfig/swriter/ui/rowheight \

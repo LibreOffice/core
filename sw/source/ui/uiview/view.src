@@ -182,6 +182,10 @@ String MN_SRCVIEW_POPUPMENU
 {
     Text [ en-US ] = "HTML source" ;
 };
+String RID_PVIEW_TOOLBOX
+{
+    Text [ en-US ] = "Page Preview" ;
+};
 
 Menu MN_SRCVIEW_POPUPMENU
 {

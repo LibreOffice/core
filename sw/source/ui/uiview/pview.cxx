@@ -66,7 +66,7 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <popup.hrc>
-#include <pview.hrc>
+#include <view.hrc>
 
 #define SwPagePreView
 #include <sfx2/msg.hxx>
@@ -137,47 +137,33 @@ static void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
 // erstmal der Zoom-Dialog
 class SwPreViewZoomDlg : public SvxStandardDialog
 {
-    FixedText       aRowLbl;
-    NumericField    aRowEdit;
-    FixedText       aColLbl;
-    NumericField    aColEdit;
+    NumericField* m_pRowEdit;
+    NumericField* m_pColEdit;
 
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-
-    virtual void    Apply();
+    virtual void  Apply();
 
 public:
     SwPreViewZoomDlg( SwPagePreViewWin& rParent );
-    ~SwPreViewZoomDlg();
 };
 
-SwPreViewZoomDlg::SwPreViewZoomDlg( SwPagePreViewWin& rParent ) :
-    SvxStandardDialog( &rParent, SW_RES(DLG_PAGEPREVIEW_ZOOM) ),
-    aRowLbl(this,SW_RES(FT_ROW)),
-    aRowEdit(this,SW_RES(ED_ROW)),
-    aColLbl(this,SW_RES(FT_COL)),
-    aColEdit(this,SW_RES(ED_COL)),
-    aOkBtn(this,SW_RES(BT_OK)),
-    aCancelBtn(this,SW_RES(BT_CANCEL)),
-    aHelpBtn(this,SW_RES(BT_HELP))
+SwPreViewZoomDlg::SwPreViewZoomDlg( SwPagePreViewWin& rParent )
+    : SvxStandardDialog(&rParent, "PreviewZoomDialog", "modules/swriter/ui/previewzoomdialog.ui")
 {
-    FreeResource();
+    get(m_pRowEdit, "rows");
+    get(m_pColEdit, "cols");
 
-    aRowEdit.SetValue( rParent.GetRow() );
-    aColEdit.SetValue( rParent.GetCol() );
+    m_pRowEdit->SetValue( rParent.GetRow() );
+    m_pColEdit->SetValue( rParent.GetCol() );
 }
 
-SwPreViewZoomDlg::~SwPreViewZoomDlg() {}
 void  SwPreViewZoomDlg::Apply()
 {
     ((SwPagePreViewWin*)GetParent())->CalcWish(
-                sal_uInt8(aRowEdit.GetValue()),
-                sal_uInt8(aColEdit.GetValue()) );
+                sal_uInt8(m_pRowEdit->GetValue()),
+                sal_uInt8(m_pColEdit->GetValue()) );
 }
 
-// alles fuers SwPagePreViewWin
+// all for SwPagePreViewWin
 SwPagePreViewWin::SwPagePreViewWin( Window *pParent, SwPagePreView& rPView )
     : Window( pParent, WinBits( WB_CLIPCHILDREN) ),
     mpViewShell( 0 ),
