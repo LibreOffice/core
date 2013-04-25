@@ -782,7 +782,16 @@ CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< tab
         {
             double nDouble = 0.0;
             if ( aValue >>= nDouble )
+            {
+                uno::Reference< table::XCellRange > xRange( xCell, uno::UNO_QUERY_THROW );
+                NumFormatHelper cellFormat( xRange );
+                // If we are setting a number and the cell types was logical
+                // then we need to reset the logical format. ( see case uno::TypeClass_BOOLEAN:
+                // handling above )
+                if ( cellFormat.isBooleanType() )
+                    cellFormat.setNumberFormat("General");
                 xCell->setValue( nDouble );
+            }
             else
                 isExtracted = false;
             break;
