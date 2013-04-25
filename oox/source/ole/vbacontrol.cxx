@@ -493,6 +493,7 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
             // convert all properties
             PropertyMap aPropMap;
             mxSiteModel->convertProperties( aPropMap, rConv, mxCtrlModel->getControlType(), nCtrlIndex );
+            rConv.bindToSources( rxCtrlModel, mxSiteModel->getControlSource(), mxSiteModel->getRowSource() );
             mxCtrlModel->convertProperties( aPropMap, rConv );
             mxCtrlModel->convertSize( aPropMap, rConv );
             PropertySet aPropSet( rxCtrlModel );

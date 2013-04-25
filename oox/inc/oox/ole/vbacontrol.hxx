@@ -73,7 +73,8 @@ public:
                             const ControlConverter& rConv,
                             ApiControlType eCtrlType,
                             sal_Int32 nCtrlIndex ) const;
-
+    inline ::rtl::OUString getControlSource() { return  maControlSource; }
+    inline ::rtl::OUString getRowSource() { return  maRowSource; }
 protected:
     ::rtl::OUString     maName;             ///< Name of the control.
     ::rtl::OUString     maTag;              ///< User defined tag.
