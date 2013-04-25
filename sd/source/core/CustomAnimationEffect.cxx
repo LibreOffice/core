@@ -18,37 +18,38 @@
  */
 
 #include <tools/debug.hxx>
-#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/AnimateColor.hpp>
+#include <com/sun/star/animations/AnimateMotion.hpp>
 #include <com/sun/star/animations/AnimateSet.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
+#include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/Audio.hpp>
 #include <com/sun/star/animations/Command.hpp>
+#include <com/sun/star/animations/Event.hpp>
+#include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/animations/IterateContainer.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/animations/SequenceTimeContainer.hpp>
+#include <com/sun/star/animations/Timing.hpp>
+#include <com/sun/star/animations/XCommand.hpp>
+#include <com/sun/star/animations/XIterateContainer.hpp>
+#include <com/sun/star/animations/XAnimateTransform.hpp>
+#include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
-#include <com/sun/star/animations/AnimationNodeType.hpp>
-#include <com/sun/star/animations/XCommand.hpp>
-#include <com/sun/star/animations/AnimationTransformType.hpp>
-#include <com/sun/star/animations/XIterateContainer.hpp>
-#include <com/sun/star/animations/XAnimateTransform.hpp>
-#include <com/sun/star/animations/Event.hpp>
-#include <com/sun/star/animations/EventTrigger.hpp>
-#include <com/sun/star/animations/Timing.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/animations/XAnimate.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -1886,8 +1887,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
     try
     {
         Reference< XTimeContainer > xEffectContainer( createParallelTimeContainer() );
-        const OUString aServiceName( "com.sun.star.animations.AnimateMotion" );
-        Reference< XAnimationNode > xAnimateMotion( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY_THROW );
+        Reference< XAnimationNode > xAnimateMotion( AnimateMotion::create( ::comphelper::getProcessComponentContext() ) );
 
         xAnimateMotion->setDuration( Any( fDuration ) );
         xAnimateMotion->setFill( AnimationFill::HOLD );

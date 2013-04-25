@@ -37,6 +37,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/accessibil
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/animations,\
 	AnimateColor \
+	AnimateMotion \
 	AnimateSet \
 	Audio \
 	Command \
