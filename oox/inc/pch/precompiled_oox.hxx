@@ -353,6 +353,7 @@
 #include <sax/tools/converter.hxx>
 #include <set>
 #include <sfx2/app.hxx>
+#include <sfx2/docfile.hxx>
 #include <stdio.h>
 #include <string.h>
 #include <svl/languageoptions.hxx>
@@ -367,6 +368,7 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
+#include <tools/time.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/streamwrap.hxx>

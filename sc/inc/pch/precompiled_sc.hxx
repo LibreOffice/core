@@ -469,6 +469,7 @@
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <comphelper/classids.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -643,7 +644,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <signal.h>
-#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/filelist.hxx>
 #include <sot/formats.hxx>
@@ -965,7 +965,6 @@
 #include <xmloff/txtparae.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlaustp.hxx>
-#include <editeng/xmlcnitm.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimppr.hxx>

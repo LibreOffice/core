@@ -14,6 +14,11 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include "DocumentToGraphicRenderer.hxx"
+#include "GraphicExportOptionsDialog.hxx"
+#include "PlaceEditDialog.hxx"
+#include "ServerDetailsControls.hxx"
+#include "bindablecontrolhelper.hxx"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/document/XDocumentProperties.hpp"
 #include "com/sun/star/script/Converter.hpp"
@@ -28,6 +33,7 @@
 #include "comphelper/servicedecl.hxx"
 #include "comphelper/string.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include "inetimg.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
 #include "sal/config.h"
@@ -259,6 +265,7 @@
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/accimplaccess.hxx>
+#include <comphelper/classids.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
@@ -329,7 +336,6 @@
 #include <salhelper/thread.hxx>
 #include <salhelper/timer.hxx>
 #include <set>
-#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/filelist.hxx>
 #include <sot/formats.hxx>

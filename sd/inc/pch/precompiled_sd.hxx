@@ -87,6 +87,7 @@
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
+#include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
@@ -108,6 +109,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
+#include <com/sun/star/awt/Pointer.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
@@ -518,7 +520,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/filelist.hxx>
 #include <sot/formats.hxx>
@@ -849,6 +850,7 @@
 #include <vcl/group.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/lstbox.hxx>

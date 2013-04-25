@@ -476,6 +476,7 @@
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <com/sun/star/xsd/XDataType.hpp>
 #include <comphelper/InlineContainer.hxx>
+#include <comphelper/classids.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/extract.hxx>
@@ -524,7 +525,6 @@
 #include <sal/types.h>
 #include <sax/tools/converter.hxx>
 #include <set>
-#include <comphelper/classids.hxx>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

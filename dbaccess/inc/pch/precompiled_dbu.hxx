@@ -89,6 +89,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
+#include <com/sun/star/form/ControlFontDialog.hpp>
 #include <com/sun/star/form/DataSelectionType.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>

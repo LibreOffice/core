@@ -466,6 +466,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/frmdescr.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
@@ -479,7 +480,6 @@
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/factory.hxx>
 #include <sot/filelist.hxx>
@@ -529,6 +529,7 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/transfer.hxx>
+#include <svtools/treelistentry.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/valueset.hxx>

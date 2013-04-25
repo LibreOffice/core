@@ -62,6 +62,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accessibletexthelper.hxx>
+#include <comphelper/classids.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
@@ -124,7 +125,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/factory.hxx>
 #include <sot/formats.hxx>

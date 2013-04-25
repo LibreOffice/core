@@ -23,6 +23,7 @@
 #include "boost/unordered_map.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
+#include "com/sun/star/drawing/ColorTable.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -293,6 +294,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
@@ -353,7 +355,6 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/stdmenu.hxx>
 #include <svtools/svlbitm.hxx>
-#include <unotools/textsearch.hxx>
 #include <svtools/valueset.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/externallock.hxx>
@@ -384,6 +385,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/searchopt.hxx>
 #include <unotools/syslocale.hxx>
+#include <unotools/textsearch.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/viewoptions.hxx>
 #include <utility>

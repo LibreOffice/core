@@ -312,6 +312,7 @@
 #include <osl/process.h>
 #include <osl/signal.h>
 #include <osl/thread.h>
+#include <rsc/rsc-vcl-shared-types.hxx>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/crc.h>

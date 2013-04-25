@@ -661,6 +661,7 @@
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
+#include <sfx2/htmlmode.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <sfx2/infobar.hxx>
@@ -695,7 +696,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <comphelper/classids.hxx>
 #include <sot/exchange.hxx>
 #include <sot/factory.hxx>
 #include <sot/filelist.hxx>
@@ -776,7 +776,6 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/templdlg.hxx>
 #include <svtools/transfer.hxx>
-#include <unotools/textsearch.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/xwindowitem.hxx>
@@ -823,7 +822,6 @@
 #include <svx/grfflt.hxx>
 #include <svx/hdft.hxx>
 #include <svx/hlnkitem.hxx>
-#include <sfx2/htmlmode.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/insctrl.hxx>
@@ -1016,11 +1014,14 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/textsearch.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <utility>
 #include <vbahelper/vbaaccesshelper.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
+#include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
@@ -1095,7 +1096,6 @@
 #include <xmloff/xformsexport.hxx>
 #include <xmloff/xformsimport.hxx>
 #include <xmloff/xmlaustp.hxx>
-#include <editeng/xmlcnitm.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
