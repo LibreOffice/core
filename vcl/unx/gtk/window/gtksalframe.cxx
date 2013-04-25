@@ -4177,13 +4177,11 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
         OUString sAllText = xText->getText();
-        if (sAllText.isEmpty())
-            return sal_False;
-    OString sUTF = OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
-    OUString sCursorText(sAllText.copy(0, nPosition));
-    gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
-        OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
-    return sal_True;
+        OString sUTF = OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
+        OUString sCursorText(sAllText.copy(0, nPosition));
+        gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
+            OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
+        return sal_True;
     }
 
     return sal_False;
