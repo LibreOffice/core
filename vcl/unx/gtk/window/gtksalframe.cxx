@@ -4149,13 +4149,9 @@ uno::Reference<accessibility::XAccessibleEditableText>
     return uno::Reference< accessibility::XAccessibleEditableText >();
 }
 
-static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText()
+static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(Window *pFocusWin)
 {
     uno::Reference<accessibility::XAccessibleEditableText> xText;
-    Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
-    if (!pFocusWin)
-        return xText;
-
     try
     {
         uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible( true ) );
@@ -4165,14 +4161,18 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText()
     catch(const uno::Exception& e)
     {
         g_warning( "Exception in getting input method surrounding text" );
+        SAL_WARN( "vcl.gtk", "Exception in getting input method surrounding text: " << e.Message);
     }
     return xText;
 }
 
 gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer /*im_handler*/ )
 {
-    uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText();
+    Window *pFocusWin = Application::GetFocusWindow();
+    if (!pFocusWin)
+        return true;
 
+    uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
     if (xText.is())
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
@@ -4181,17 +4181,20 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
         OUString sCursorText(sAllText.copy(0, nPosition));
         gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
             OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint offset, gint nchars,
     gpointer /*im_handler*/ )
 {
-    uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText();
+    Window *pFocusWin = Application::GetFocusWindow();
+    if (!pFocusWin)
+        return true;
 
+    uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
     if (xText.is())
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
