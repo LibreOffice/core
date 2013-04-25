@@ -36,12 +36,14 @@ void SAL_CALL Transmitter::run()
         {
             OString aMessage( mHighPriority.front() );
             mHighPriority.pop();
+            SAL_INFO( "sdremote.bluetooth", "write high prio line '" << aMessage << "'" );
             pStreamSocket->write( aMessage.getStr(), aMessage.getLength() );
         }
         else if ( !mLowPriority.empty() )
         {
             OString aMessage( mLowPriority.front() );
             mLowPriority.pop();
+            SAL_INFO( "sdremote.bluetooth", "write normal line '" << aMessage << "'" );
             pStreamSocket->write( aMessage.getStr(), aMessage.getLength() );
         }
 
@@ -50,7 +52,6 @@ void SAL_CALL Transmitter::run()
             mQueuesNotEmpty.reset();
         }
     }
-
 }
 
 void Transmitter::notifyFinished()
@@ -61,7 +62,6 @@ void Transmitter::notifyFinished()
 
 Transmitter::~Transmitter()
 {
-
 }
 
 void Transmitter::addMessage( const OString& aMessage, const Priority aPriority )

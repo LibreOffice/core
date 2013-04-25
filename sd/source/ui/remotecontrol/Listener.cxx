@@ -63,12 +63,12 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
 }
 
 //----- XAnimationListener ----------------------------------------------------
+
 void SAL_CALL Listener::beginEvent(const css::uno::Reference<
     css::animations::XAnimationNode >&  rNode ) throw (css::uno::RuntimeException)
 {
     (void) rNode;
 }
-
 
 void SAL_CALL Listener::endEvent( const css::uno::Reference<
     css::animations::XAnimationNode >& rNode ) throw (css::uno::RuntimeException)
@@ -83,7 +83,6 @@ void SAL_CALL Listener::repeat( const css::uno::Reference<
     (void) rNode;
     (void) aRepeat;
 }
-
 
 //----- XSlideShowListener ----------------------------------------------------
 
