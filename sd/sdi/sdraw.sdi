@@ -5196,7 +5196,7 @@ SfxVoidItem Presentation SID_PRESENTATION
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem PresentationThisSlide SID_PRESENTATION_THIS_SLIDE
+SfxVoidItem PresentationCurrentSlide SID_PRESENTATION_CURRENT_SLIDE
 ()
 [
     /* flags: */
