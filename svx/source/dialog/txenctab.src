@@ -70,7 +70,7 @@ StringArray RID_SVXSTR_TEXTENCODING_TABLE
         < "Cyrillic (Apple Macintosh)"                  ; RTL_TEXTENCODING_APPLE_CYRILLIC   ; > ;
         < "Greek (Apple Macintosh)"                 ; RTL_TEXTENCODING_APPLE_GREEK      ; > ;
         < "Western Europe (Apple Macintosh/Icelandic)"          ; RTL_TEXTENCODING_APPLE_ICELAND    ; > ;
-        < "Eastern Europe (Apple Macintosh/Rumanian)"           ; RTL_TEXTENCODING_APPLE_ROMANIAN   ; > ;
+        < "Eastern Europe (Apple Macintosh/Romanian)"           ; RTL_TEXTENCODING_APPLE_ROMANIAN   ; > ;
         < "Turkish (Apple Macintosh)"                       ; RTL_TEXTENCODING_APPLE_TURKISH    ; > ;
         < "Cyrillic (Apple Macintosh/Ukrainian)"            ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
         < "Chinese simplified (Apple Macintosh)"        ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
