@@ -29,7 +29,7 @@ odk_PLATFORM := $(if $(filter WNT,$(OS)),\
 $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 		$(SRCDIR)/odk/util/check.pl \
 		$(call gb_CustomTarget_get_target,odk/odkcommon/classes) \
-		$(if $(DOXYGEN),$(call gb_CustomTarget_get_target,odk/odkcommon/docs/cpp/ref)) \
+		$(if $(DOXYGEN),$(call gb_CustomTarget_get_target,odk/odkcommon/docs/cpp)) \
 		$(call gb_Package_get_target,odk_bin) \
 		$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,odk_cli)) \
 		$(call gb_Package_get_target,odk_config) \
