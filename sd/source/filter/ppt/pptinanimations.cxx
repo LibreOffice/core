@@ -23,9 +23,8 @@
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/AnimationEndSync.hpp>
+#include <com/sun/star/animations/Command.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
-#include <com/sun/star/presentation/EffectNodeType.hpp>
-#include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
@@ -41,6 +40,8 @@
 #include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
+#include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -1419,8 +1420,7 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
                     if( pChildAtom->hasChildAtom( DFF_msofbtAnimCommand ) )
                     {
                         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                        const OUString aServiceName( "com.sun.star.animations.Command" );
-                        Reference< XAnimationNode > xChildNode( xContext->getServiceManager()->createInstanceWithContext(aServiceName, xContext), UNO_QUERY );
+                        Reference< XAnimationNode > xChildNode( Command::create(xContext), UNO_QUERY_THROW );
                         nNodes += importAnimationNodeContainer( pChildAtom, xChildNode );
                         Reference< XTimeContainer > xParentContainer( xNode, UNO_QUERY );
                         if( xParentContainer.is() && xChildNode.is() )

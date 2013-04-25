@@ -39,6 +39,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/animations
 	AnimateColor \
 	AnimateSet \
 	Audio \
+	Command \
 	IterateContainer \
 	ParallelTimeContainer \
 	SequenceTimeContainer \

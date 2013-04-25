@@ -23,6 +23,7 @@
 #include <com/sun/star/animations/AnimateSet.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/Audio.hpp>
+#include <com/sun/star/animations/Command.hpp>
 #include <com/sun/star/animations/IterateContainer.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/animations/SequenceTimeContainer.hpp>
@@ -1651,8 +1652,8 @@ void CustomAnimationEffect::setStopAudio()
         if( mxAudio.is() )
             removeAudio();
 
-        Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
-        Reference< XCommand > xCommand( xMsf->createInstance( "com.sun.star.animations.Command" ), UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        Reference< XCommand > xCommand( Command::create( xContext ) );
 
         xCommand->setCommand( EffectCommands::STOPAUDIO );
 
