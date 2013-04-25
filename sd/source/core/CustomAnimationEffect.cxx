@@ -22,6 +22,8 @@
 #include <com/sun/star/animations/AnimateColor.hpp>
 #include <com/sun/star/animations/AnimateSet.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
+#include <com/sun/star/animations/Audio.hpp>
+#include <com/sun/star/animations/IterateContainer.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -1032,14 +1034,14 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
         {
             sal_Int16 nTargetSubItem = mnTargetSubItem;
 
+            Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             Reference< XTimeContainer > xNewContainer;
             if(nIterateType)
             {
-                Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
-                xNewContainer.set( xMsf->createInstance( OUString::createFromAscii("com.sun.star.animations.IterateContainer") ), UNO_QUERY_THROW );
+                xNewContainer.set( IterateContainer::create( xContext ) );
             }
             else
-                xNewContainer.set( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
+                xNewContainer.set( ParallelTimeContainer::create( xContext ), UNO_QUERY_THROW );
 
             Reference< XTimeContainer > xOldContainer( mxNode, UNO_QUERY_THROW );
             Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY_THROW );
@@ -1553,8 +1555,8 @@ void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSour
 
     if( !mxAudio.is() ) try
     {
-        Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
-        Reference< XAudio > xAudio( xMsf->createInstance( "com.sun.star.animations.Audio" ), UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        Reference< XAudio > xAudio( Audio::create( xContext ) );
         xAudio->setSource( rSource );
         xAudio->setVolume( fVolume );
         setAudio( xAudio );
