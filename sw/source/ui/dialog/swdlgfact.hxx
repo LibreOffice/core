@@ -490,8 +490,7 @@ public:
                                                                 ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess, int nResId );
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(Window *pParent); //add for SwModalRedlineAcceptDlg
 
-    virtual VclAbstractDialog*          CreateSwVclDialog( int nResId,
-                                                Window* pParent, sal_Bool& rWithPrev ); //add for SwMergeTblDlg
+    virtual VclAbstractDialog*          CreateTblMergeDialog(Window* pParent, sal_Bool& rWithPrev); //add for SwMergeTblDlg
     virtual SfxAbstractTabDialog*       CreateFrmTabDialog( int nResId,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,

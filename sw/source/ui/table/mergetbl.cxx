@@ -19,29 +19,18 @@
 
 #include <swtypes.hxx>
 #include <mergetbl.hxx>
-#include <mergetbl.hrc>
-#include <table.hrc>
-
 
 SwMergeTblDlg::SwMergeTblDlg( Window *pParent, sal_Bool& rWithPrev )
-    : SvxStandardDialog(pParent, SW_RES(DLG_MERGE_TABLE)),
-    aOKPB(                  this, SW_RES(PB_OK      )),
-    aCancelPB(              this, SW_RES(PB_CANCEL  )),
-    aHelpPB(                this, SW_RES(PB_HELP        )),
-    aMergeFL(               this, SW_RES(FL_MERGE    )),
-    aMergePrevRB(           this, SW_RES(RB_MERGE_PREV)),
-    aMergeNextRB(           this, SW_RES(RB_MERGE_NEXT)),
-    rMergePrev(             rWithPrev )
+    : SvxStandardDialog(pParent, "MergeTableDialog", "modules/swriter/ui/mergetabledialog.ui")
+    , m_rMergePrev(rWithPrev)
 {
-    FreeResource();
-    aMergePrevRB.Check();
+    get(m_pMergePrevRB, "prev");
+    m_pMergePrevRB->Check();
 }
 
 void SwMergeTblDlg::Apply()
 {
-    rMergePrev = aMergePrevRB.IsChecked();
+    m_rMergePrev = m_pMergePrevRB->IsChecked();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

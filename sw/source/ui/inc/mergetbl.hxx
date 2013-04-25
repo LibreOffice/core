@@ -27,14 +27,9 @@
 
 class SwMergeTblDlg : public SvxStandardDialog
 {
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
-    FixedLine        aMergeFL;
-    RadioButton     aMergePrevRB;
-    RadioButton     aMergeNextRB;
+    RadioButton* m_pMergePrevRB;
 
-    sal_Bool&           rMergePrev;
+    sal_Bool&    m_rMergePrev;
 protected:
     virtual void Apply();
 

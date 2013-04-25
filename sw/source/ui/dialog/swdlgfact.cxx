@@ -1028,21 +1028,10 @@ AbstractSwModalRedlineAcceptDlg * SwAbstractDialogFactory_Impl::CreateSwModalRed
     return new AbstractSwModalRedlineAcceptDlg_Impl( pDlg );
 }
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwVclDialog( int nResId,
-                                                Window* pParent, sal_Bool& rWithPrev ) //add for SwMergeTblDlg
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateTblMergeDialog(Window* pParent, sal_Bool& rWithPrev) //add for SwMergeTblDlg
 {
-    Dialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_MERGE_TABLE :
-            pDlg = new SwMergeTblDlg( pParent, rWithPrev );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    Dialog* pDlg = new SwMergeTblDlg( pParent, rWithPrev );
+    return new VclAbstractDialog_Impl( pDlg );
 }
 
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog( int nResId,

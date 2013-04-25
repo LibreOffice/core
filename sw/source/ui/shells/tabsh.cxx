@@ -983,7 +983,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-                VclAbstractDialog* pDlg = pFact->CreateSwVclDialog( DLG_MERGE_TABLE, GetView().GetWindow(), bPrev );
+                VclAbstractDialog* pDlg = pFact->CreateTblMergeDialog(GetView().GetWindow(), bPrev);
                 OSL_ENSURE(pDlg, "dialogdiet pDlg fail!");
                 if( RET_OK != pDlg->Execute())
                     bPrev = bNext = sal_False;
