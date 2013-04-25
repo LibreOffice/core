@@ -48,11 +48,11 @@ String STR_GRFILTER_FILTERERROR
 };
 String STR_GRFILTER_TOOBIG
 {
-    Text [ en-US ] = "Not enough memory to insert the picture." ;
+    Text [ en-US ] = "Not enough memory to insert the Image." ;
 };
 String STR_INSERT_GRAPHIC
 {
-    Text [ en-US ] = "Insert picture" ;
+    Text [ en-US ] = "Insert Image" ;
 };
 String STR_NO_ADDRESSBOOK
 {
@@ -166,7 +166,7 @@ String STR_SHELLNAME_FRAME
 };
 String STR_SHELLNAME_GRAPHIC
 {
-        Text [ en-US ] = "Graphics" ;
+        Text [ en-US ] = "Images" ;
 };
 String STR_SHELLNAME_OBJECT
 {
@@ -207,7 +207,7 @@ String STR_SWBG_PARAGRAPH
 };
 String STR_SWBG_GRAPHIC
 {
-        Text [ en-US ] = "Graphics" ;
+        Text [ en-US ] = "Images" ;
 };
 String STR_SWBG_OLE
 {

@@ -131,7 +131,7 @@ String STR_POOLFRM_FRAME
 };
 String STR_POOLFRM_GRAPHIC
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Image" ;
 };
 String STR_POOLFRM_OLE
 {

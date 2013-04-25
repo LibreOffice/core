@@ -204,7 +204,7 @@
 		</group>
 		<group oor:name="FileType">
 			<info>
-				<desc>Contains information about a linked file, i.e. a graphic file.</desc>
+				<desc>Contains information about a linked file, i.e. an Image file.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<info>
@@ -1002,8 +1002,8 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
 					<info>
-						<desc>Specifies if graphics and objects are displayed.</desc>
-						<label>Graphics and Objects</label>
+						<desc>Specifies if Images and objects are displayed.</desc>
+						<label>Images and Objects</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1953,7 +1953,7 @@
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
 					<info>
 						<desc>Specifies which document contents will be printed.</desc>
-						<label>Graphics</label>
+						<label>Images</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1962,7 +1962,7 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
 					<info>
-						<desc>Specifies if graphics are printed.</desc>
+						<desc>Specifies if Images are printed.</desc>
 						<label>Tables</label>
 					</info>
 					<value>true</value>
@@ -2958,12 +2958,12 @@
 					<group oor:name="Graphic">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Graphic -->
 						<info>
-							<desc>Settings for insertion of captions for graphics.</desc>
+							<desc>Settings for insertion of captions for Images.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
 							<info>
-								<desc>Determines if the caption settings are valid for a graphic in a text document.</desc>
-								<label>Writer Graphic</label>
+								<desc>Determines if the caption settings are valid for an Image in a text document.</desc>
+								<label>Writer Images</label>
 							</info>
 							<value>false</value>
 						</prop>
@@ -3087,7 +3087,7 @@
                             </prop>
                             <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                                 <info>
-                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <desc>Determines whether the border and shadow attributes of the Image Frame should be applied to the newly inserted Caption Frame surrounding the Image.</desc>
                                     <label>Apply attributes</label>
                                 </info>
                             </prop>
@@ -3230,7 +3230,7 @@
                             </prop>
                             <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                                 <info>
-                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <desc>Determines whether the border and shadow attributes of the Image Frame should be applied to the newly inserted Caption Frame surrounding the Image.</desc>
                                     <label>Apply attributes</label>
                                 </info>
                             </prop>
@@ -3368,7 +3368,7 @@
                             </prop>
                             <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                                 <info>
-                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <desc>Determines whether the border and shadow attributes of the Image Frame should be applied to the newly inserted Caption Frame surrounding the Image.</desc>
                                     <label>Apply attributes</label>
                                 </info>
                             </prop>
@@ -3506,7 +3506,7 @@
                             </prop>
                             <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                                 <info>
-                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <desc>Determines whether the border and shadow attributes of the Image Frame should be applied to the newly inserted Caption Frame surrounding the Image.</desc>
                                     <label>Apply attributes</label>
                                 </info>
                             </prop>
@@ -3644,7 +3644,7 @@
                             </prop>
                             <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                                 <info>
-                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <desc>Determines whether the border and shadow attributes of the Image Frame should be applied to the newly inserted Caption Frame surrounding the Image.</desc>
                                     <label>Apply attributes</label>
                                 </info>
                             </prop>
@@ -3782,7 +3782,7 @@
                             </prop>
                             <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                                 <info>
-                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <desc>Determines whether the border and shadow attributes of the Image Frame should be applied to the newly inserted Caption Frame surrounding the Image.</desc>
                                     <label>Apply attributes</label>
                                 </info>
                             </prop>
@@ -3920,7 +3920,7 @@
                             </prop>
                             <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                                 <info>
-                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <desc>Determines whether the border and shadow attributes of the Image Frame should be applied to the newly inserted Caption Frame surrounding the Image.</desc>
                                     <label>Apply attributes</label>
                                 </info>
                             </prop>
@@ -4058,7 +4058,7 @@
                             </prop>
                             <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                                 <info>
-                                    <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                                    <desc>Determines whether the border and shadow attributes of the Image Frame should be applied to the newly inserted Caption Frame surrounding the Image.</desc>
                                     <label>Apply attributes</label>
                                 </info>
                             </prop>
@@ -6761,17 +6761,17 @@
 				</prop>
 				<prop oor:type="xs:string" oor:name="TemplatePath">
 					<info>
-						<desc> the full url to save to... </desc>
+						<desc>the full url to save to... </desc>
 					</info>
 				</prop>
 				<prop oor:type="xs:int" oor:name="ProceedMethod">
 					<info>
-						<desc> how to proceed? 0 = create document, 1 = edit template  </desc>
+						<desc>how to proceed? 0 = create document, 1 = edit template  </desc>
 					</info>
 				</prop>
 				<set oor:name="Topics" oor:node-type="AgendaWizardTopic">
 					<info>
-						<desc> The topics of the agenda wizard </desc>
+						<desc>The topics of the agenda wizard </desc>
 					</info>
 				</set>
 			</group>
