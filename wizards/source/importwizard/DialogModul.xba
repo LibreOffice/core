@@ -344,9 +344,9 @@ Sub	SetupMSConfiguration()
 	MSFilterName(1,3) = sMSDocumentCheckBox(1)
 	MSFilterName(1,4) = &quot;Excel&quot;
 
-	MSFilterName(2,0) = &quot;ppt|pps|pptx|pptm|ppsx|ppsm&quot;
-	MSFilterName(2,1) = &quot;impress8|impress8|impress8|impress8|impress8|impress8&quot;
-	MSFilterName(2,2) = &quot;odp|odp&quot;
+	MSFilterName(2,0) = &quot;ppt|pptm|pptx&quot;
+	MSFilterName(2,1) = &quot;impress8|impress8|impress8&quot;
+	MSFilterName(2,2) = &quot;odp&quot;
 	MSFilterName(2,3) = sMSDocumentCheckBox(2)
 	MSFilterName(2,4) = &quot;PowerPoint&quot;
 
