@@ -120,7 +120,7 @@ SvStream& SfxPointItem::Store(SvStream &rStream, sal_uInt16 ) const
 bool SfxPointItem::QueryValue( uno::Any& rVal,
                                sal_uInt8 nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     awt::Point aTmp(aVal.X(), aVal.Y());
     if( bConvert )
     {
@@ -144,7 +144,7 @@ bool SfxPointItem::QueryValue( uno::Any& rVal,
 bool SfxPointItem::PutValue( const uno::Any& rVal,
                              sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = false;
     awt::Point aValue;

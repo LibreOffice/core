@@ -134,8 +134,8 @@ uno::Sequence< OUString > LockFileCommon::ParseEntry( const uno::Sequence< sal_I
 OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
     OStringBuffer aResult;
-    sal_Bool bHaveName = sal_False;
-    sal_Bool bEscape = sal_False;
+    bool bHaveName = false;
+    bool bEscape = false;
 
     while( !bHaveName )
     {
@@ -149,15 +149,15 @@ OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sa
             else
                 throw io::WrongFormatException();
 
-            bEscape = sal_False;
+            bEscape = false;
             io_nCurPos++;
         }
         else if ( aBuffer[io_nCurPos] == ',' || aBuffer[io_nCurPos] == ';' )
-            bHaveName = sal_True;
+            bHaveName = true;
         else
         {
             if ( aBuffer[io_nCurPos] == '\\' )
-                bEscape = sal_True;
+                bEscape = true;
             else
                 aResult.append( (sal_Char)aBuffer[io_nCurPos] );
 

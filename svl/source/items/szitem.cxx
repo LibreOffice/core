@@ -115,7 +115,7 @@ SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
 bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                sal_uInt8 nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     Size aTmp(aVal);
@@ -146,7 +146,7 @@ bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
 bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
                             sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     bool bRet = false;

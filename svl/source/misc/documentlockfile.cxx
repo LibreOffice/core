@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 namespace svt {
 
-sal_Bool DocumentLockFile::m_bAllowInteraction = sal_True;
+bool DocumentLockFile::m_bAllowInteraction = true;
 
 // ----------------------------------------------------------------------
 DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
@@ -85,7 +85,7 @@ void DocumentLockFile::WriteEntryToStream( uno::Sequence< OUString > aEntry, uno
 }
 
 // ----------------------------------------------------------------------
-sal_Bool DocumentLockFile::CreateOwnLockFile()
+bool DocumentLockFile::CreateOwnLockFile()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -125,10 +125,10 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
     }
     catch( ucb::NameClashException& )
     {
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // ----------------------------------------------------------------------
@@ -168,7 +168,7 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
 }
 
 // ----------------------------------------------------------------------
-sal_Bool DocumentLockFile::OverwriteOwnLockFile()
+bool DocumentLockFile::OverwriteOwnLockFile()
 {
     // allows to overwrite the lock file with the current data
     try
@@ -188,10 +188,10 @@ sal_Bool DocumentLockFile::OverwriteOwnLockFile()
     }
     catch( uno::Exception& )
     {
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // ----------------------------------------------------------------------

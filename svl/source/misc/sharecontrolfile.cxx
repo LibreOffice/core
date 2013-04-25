@@ -239,7 +239,7 @@ uno::Sequence< OUString > ShareControlFile::InsertOwnEntry()
     uno::Sequence< ::uno::Sequence< OUString > > aNewData( m_aUsersData.getLength() + 1 );
     uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
 
-    sal_Bool bExists = sal_False;
+    bool bExists = false;
     sal_Int32 nNewInd = 0;
     for ( sal_Int32 nInd = 0; nInd < m_aUsersData.getLength(); nInd++ )
     {
@@ -252,7 +252,7 @@ uno::Sequence< OUString > ShareControlFile::InsertOwnEntry()
                 if ( !bExists )
                 {
                     aNewData[nNewInd] = aNewEntry;
-                    bExists = sal_True;
+                    bExists = true;
                 }
             }
             else

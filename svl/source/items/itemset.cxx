@@ -1059,7 +1059,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     }
 
     // teste mal, ob sich die Which-Bereiche unterscheiden.
-    sal_Bool bEqual = sal_True;
+    bool bEqual = true;
     sal_uInt16* pWh1 = _pWhichRanges;
     sal_uInt16* pWh2 = rSet._pWhichRanges;
     sal_uInt16 nSize = 0;
@@ -1068,7 +1068,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     {
         if( *pWh1 != *pWh2 )
         {
-            bEqual = sal_False;
+            bEqual = false;
             break;
         }
         if( n & 1 )
@@ -1130,7 +1130,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
         return;
 
     // teste mal, ob sich die Which-Bereiche unterscheiden.
-    sal_Bool bEqual = sal_True;
+    bool bEqual = true;
     sal_uInt16* pWh1 = _pWhichRanges;
     sal_uInt16* pWh2 = rSet._pWhichRanges;
     sal_uInt16 nSize = 0;
@@ -1139,7 +1139,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
     {
         if( *pWh1 != *pWh2 )
         {
-            bEqual = sal_False;
+            bEqual = false;
             break;
         }
         if( n & 1 )
@@ -1347,7 +1347,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, sal_Bool bIgnoreDefaults )
     DBG_ASSERT( GetPool() == rSet.GetPool(), "MergeValues mit verschiedenen Pools" );
 
     // teste mal, ob sich die Which-Bereiche unterscheiden.
-    sal_Bool bEqual = sal_True;
+    bool bEqual = true;
     sal_uInt16* pWh1 = _pWhichRanges;
     sal_uInt16* pWh2 = rSet._pWhichRanges;
     sal_uInt16 nSize = 0;
@@ -1356,7 +1356,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, sal_Bool bIgnoreDefaults )
     {
         if( *pWh1 != *pWh2 )
         {
-            bEqual = sal_False;
+            bEqual = false;
             break;
         }
         if( n & 1 )
@@ -1964,13 +1964,13 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
     const SfxPoolItem& rNew = _pPool->Put( rItem, nWhich );
 
     // altes Item merken
-    sal_Bool bIncrementCount = sal_False;
+    bool bIncrementCount = false;
     const SfxPoolItem* pOld = *( _aItems + nPos );
     if ( reinterpret_cast< SfxPoolItem* >( -1 ) == pOld )   // state "dontcare"
         pOld = NULL;
     if ( !pOld )
     {
-        bIncrementCount = sal_True;
+        bIncrementCount = true;
         pOld = _pParent ?
                 &_pParent->Get( nWhich, sal_True )
                 : nWhich <= SFX_WHICH_MAX ? &_pPool->GetDefaultItem( nWhich ) : 0;

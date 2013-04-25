@@ -42,8 +42,8 @@ public:
                                 ~SfxUShortRanges()
                                 { delete [] _pRanges; }
 
-    sal_Bool                    operator == ( const SfxUShortRanges & ) const;
-    sal_Bool                    operator != ( const SfxUShortRanges & rRanges ) const
+    bool                        operator == ( const SfxUShortRanges & ) const;
+    bool                        operator != ( const SfxUShortRanges & rRanges ) const
                                 { return !( *this == rRanges ); }
 
     SfxUShortRanges&            operator = ( const SfxUShortRanges & );
@@ -53,7 +53,7 @@ public:
     SfxUShortRanges&            operator /= ( const SfxUShortRanges & );
 
     sal_uInt16                  Count() const;
-    sal_Bool                    IsEmpty() const
+    bool                        IsEmpty() const
                                 { return !_pRanges || 0 == *_pRanges; }
 
                                 operator const sal_uInt16* () const

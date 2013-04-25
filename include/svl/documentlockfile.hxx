@@ -35,7 +35,7 @@ namespace svt {
 class SVL_DLLPUBLIC DocumentLockFile : public LockFileCommon
 {
     // the workaround for automated testing!
-    static sal_Bool m_bAllowInteraction;
+    static bool m_bAllowInteraction;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > OpenStream();
 
@@ -45,15 +45,15 @@ public:
     DocumentLockFile( const OUString& aOrigURL );
     ~DocumentLockFile();
 
-    sal_Bool CreateOwnLockFile();
+    bool CreateOwnLockFile();
     ::com::sun::star::uno::Sequence< OUString > GetLockData();
-    sal_Bool OverwriteOwnLockFile();
+    bool OverwriteOwnLockFile();
     void RemoveFile();
 
     // the methods allow to control whether UI interaction regarding the locked document file is allowed
     // this is a workaround for automated tests
-    static void AllowInteraction( sal_Bool bAllow ) { m_bAllowInteraction = bAllow; }
-    static sal_Bool IsInteractionAllowed() { return m_bAllowInteraction; }
+    static void AllowInteraction( bool bAllow ) { m_bAllowInteraction = bAllow; }
+    static bool IsInteractionAllowed() { return m_bAllowInteraction; }
 };
 
 }

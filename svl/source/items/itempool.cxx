@@ -394,7 +394,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
             if ( !pImp->maPoolItems.empty() && !pImp->mpSecondary->pImp->maPoolItems.empty() )
             {
                 // hat der master SetItems?
-                sal_Bool bHasSetItems = sal_False;
+                bool bHasSetItems = false;
                 for ( sal_uInt16 i = 0; !bHasSetItems && i < pImp->mnEnd - pImp->mnStart; ++i )
                     bHasSetItems = pImp->ppStaticDefaults[i]->ISA(SfxSetItem);
 

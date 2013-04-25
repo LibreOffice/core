@@ -220,7 +220,7 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 // -----------------------------------------------------------------------
 
 //! used below
-static sal_Bool operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
+static bool operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
 {
     return rItem1.algorithmType         == rItem2.algorithmType &&
            rItem1.searchFlag            == rItem2.searchFlag    &&

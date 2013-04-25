@@ -94,20 +94,20 @@ class INetURLHistory_Impl
 
         /** Comparison.
         */
-        sal_Bool operator== (const hash_entry &rOther) const
+        bool operator== (const hash_entry &rOther) const
         {
             return (m_nHash == rOther.m_nHash);
         }
-        sal_Bool operator< (const hash_entry &rOther) const
+        bool operator< (const hash_entry &rOther) const
         {
             return (m_nHash < rOther.m_nHash);
         }
 
-        sal_Bool operator== (sal_uInt32 nHash) const
+        bool operator== (sal_uInt32 nHash) const
         {
             return (m_nHash == nHash);
         }
-        sal_Bool operator< (sal_uInt32 nHash) const
+        bool operator< (sal_uInt32 nHash) const
         {
             return (m_nHash < nHash);
         }

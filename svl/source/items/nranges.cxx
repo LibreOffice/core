@@ -201,20 +201,20 @@ SfxUShortRanges::SfxUShortRanges( const sal_uInt16* pArr )
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxUShortRanges::operator==( const SfxUShortRanges &rOther ) const
+bool SfxUShortRanges::operator==( const SfxUShortRanges &rOther ) const
 {
     // Object pointers equal?
     if ( this == &rOther )
-        return sal_True;
+        return true;
 
     // Ranges pointers equal?
     if ( _pRanges == rOther._pRanges )
-        return sal_True;
+        return true;
 
     // Counts equal?
     sal_uInt16 nCount = Count();
     if ( nCount != rOther.Count() )
-        return sal_False;
+        return false;
 
     // Check arrays.
     sal_uInt16 n = 0;
@@ -222,12 +222,12 @@ sal_Bool SfxUShortRanges::operator==( const SfxUShortRanges &rOther ) const
     {
         // Elements at current position equal?
         if ( _pRanges[ n ] != rOther._pRanges[ n ] )
-            return sal_False;
+            return false;
 
         ++n;
     }
 
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
