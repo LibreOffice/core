@@ -47,32 +47,25 @@ namespace toolkit
     typedef GraphicControlModel UnoControlRoadmapModel_Base;
 
 
-    typedef ::cppu::ImplHelper3 <   ::com::sun::star::lang::XSingleServiceFactory
-                                ,   ::com::sun::star::container::XContainer
-                                ,   ::com::sun::star::container::XIndexContainer
+    typedef ::cppu::ImplHelper3 <   css::lang::XSingleServiceFactory
+                                ,   css::container::XContainer
+                                ,   css::container::XIndexContainer
                                 >   UnoControlRoadmapModel_IBase;
 
 
 
     typedef UnoControlBase  UnoControlRoadmap_Base;
-    typedef ::cppu::ImplHelper4 <   ::com::sun::star::awt::XItemEventBroadcaster
-                                ,   ::com::sun::star::container::XContainerListener
-                                ,   ::com::sun::star::awt::XItemListener
-                                ,   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::ImplHelper4 <   css::awt::XItemEventBroadcaster
+                                ,   css::container::XContainerListener
+                                ,   css::awt::XItemListener
+                                ,   css::beans::XPropertyChangeListener
                                 >   UnoControlRoadmap_IBase;
 
 
 
 
-    typedef ::cppu::ImplHelper2< ::com::sun::star::container::XContainerListener,
-                                 ::com::sun::star::awt::XItemEventBroadcaster>    SVTXRoadmap_Base;
-
-
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::container;
+    typedef ::cppu::ImplHelper2< css::container::XContainerListener,
+                                 css::awt::XItemEventBroadcaster>    SVTXRoadmap_Base;
 
 
     // ===================================================================
@@ -85,24 +78,24 @@ namespace toolkit
     private:
 //        PropertyChangeListenerMultiplexer                 maPropertyListeners;
 
-        typedef ::std::vector< Reference< XInterface > >    RoadmapItemHolderList;
+        typedef ::std::vector< css::uno::Reference< XInterface > >    RoadmapItemHolderList;
 
         ContainerListenerMultiplexer        maContainerListeners;
         RoadmapItemHolderList               maRoadmapItems;
 
-        void                                MakeRMItemValidation( sal_Int32 Index, Reference< XInterface > xRoadmapItem );
-        ContainerEvent                      GetContainerEvent(sal_Int32 Index, Reference< XInterface > );
-        void                                SetRMItemDefaultProperties( const sal_Int32 _Index, Reference< XInterface > );
-        sal_Int16                           GetCurrentItemID( Reference< XPropertySet > xPropertySet );
+        void                                MakeRMItemValidation( sal_Int32 Index, css::uno::Reference< XInterface > xRoadmapItem );
+        css::container::ContainerEvent      GetContainerEvent(sal_Int32 Index, css::uno::Reference< XInterface > );
+        void                                SetRMItemDefaultProperties( const sal_Int32 _Index, css::uno::Reference< XInterface > );
+        sal_Int16                           GetCurrentItemID( css::uno::Reference< css::beans::XPropertySet > xPropertySet );
         sal_Int32                           GetUniqueID();
 
 
     protected:
-        ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+        css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
         ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     public:
-        UnoControlRoadmapModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
+        UnoControlRoadmapModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
         UnoControlRoadmapModel( const UnoControlRoadmapModel& rModel ) :
             UnoControlRoadmapModel_Base( rModel ),
             UnoControlRoadmapModel_IBase( rModel ),
@@ -115,37 +108,37 @@ namespace toolkit
 
 
     // ::com::sun::star::io::XPersistObject
-    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlRoadmapModel, UnoControlRoadmapModel_Base, szServiceName2_UnoControlRoadmapModel )
 
-    sal_Int32 SAL_CALL getCount() throw (RuntimeException);
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
+    sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException );
 
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const Any & _Element) throw    (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
-    virtual void SAL_CALL removeByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any & _Element) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
+    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any & _Element) throw    (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException );
+    virtual void SAL_CALL removeByIndex( sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException );
+    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any & _Element) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException );
 
-    virtual void SAL_CALL addContainerListener( const Reference< XContainerListener >& xListener ) throw (RuntimeException);
-    virtual void SAL_CALL removeContainerListener( const Reference< XContainerListener >& xListener ) throw (RuntimeException);
+    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlRoadmapModel_Base::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { UnoControlRoadmapModel_Base::acquire(); }
-    void                        SAL_CALL release() throw()  { UnoControlRoadmapModel_Base::release(); }
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException) { return UnoControlRoadmapModel_Base::queryInterface(rType); }
+    css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException);
+    void          SAL_CALL acquire() throw()  { UnoControlRoadmapModel_Base::acquire(); }
+    void          SAL_CALL release() throw()  { UnoControlRoadmapModel_Base::release(); }
 
 
     // ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (css::uno::RuntimeException);
 
 
-    virtual Reference< XInterface > SAL_CALL createInstance(  ) throw (Exception, RuntimeException);
-    virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
+    virtual css::uno::Reference< XInterface > SAL_CALL createInstance(  ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual css::uno::Reference< XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
-    virtual Type SAL_CALL getElementType() throw (RuntimeException);
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL hasElements() throw (RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException);
 
     };
 
@@ -162,24 +155,24 @@ namespace toolkit
                             UnoRoadmapControl();
         OUString     GetComponentServiceName();
 
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlBase::disposing( Source ); }
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException) { UnoControlBase::disposing( Source ); }
 
-    void SAL_CALL   dispose(  ) throw(::com::sun::star::uno::RuntimeException);
-
-
-    sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw ( ::com::sun::star::uno::RuntimeException );
-
-    void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& rEvent )throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& rEvent )throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& rEvent )throw(::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL addItemListener( const Reference< XItemListener >& l ) throw (RuntimeException);
-    virtual void SAL_CALL removeItemListener( const Reference< XItemListener >& l ) throw (RuntimeException);
+    void SAL_CALL   dispose(  ) throw (css::uno::RuntimeException);
 
 
-    virtual void SAL_CALL itemStateChanged( const ItemEvent& rEvent ) throw (RuntimeException);
+    sal_Bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) throw ( css::uno::RuntimeException );
 
-    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL elementInserted( const css::container::ContainerEvent& rEvent ) throw (css::uno::RuntimeException);
+    void SAL_CALL elementRemoved( const css::container::ContainerEvent& rEvent ) throw (css::uno::RuntimeException);
+    void SAL_CALL elementReplaced( const css::container::ContainerEvent& rEvent ) throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw (css::uno::RuntimeException);
+
+
+    virtual void SAL_CALL itemStateChanged( const css::awt::ItemEvent& rEvent ) throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException);
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER( )

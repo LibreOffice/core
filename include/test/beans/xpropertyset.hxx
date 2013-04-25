@@ -21,8 +21,6 @@
 
 #include <vector>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XPropertySet
@@ -30,7 +28,7 @@ class OOO_DLLPUBLIC_TEST XPropertySet
 public:
     virtual ~XPropertySet();
 
-    virtual uno::Reference<uno::XInterface> init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testGetPropertySetInfo();
     void testAddPropertyChangeListener();
@@ -44,9 +42,9 @@ protected:
     virtual bool isPropertyValueChangeable(const OUString& rName);
 
 private:
-    void fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>& xPropInfo);
+    void fillPropsToTest(const css::uno::Reference<css::beans::XPropertySetInfo>& xPropInfo);
     static bool getSinglePropertyValue(
-        const uno::Reference<beans::XPropertySet>& xPropSet, const OUString& rName);
+        const css::uno::Reference<css::beans::XPropertySet>& xPropSet, const OUString& rName);
 
     struct OOO_DLLPUBLIC_TEST PropsToTest
     {

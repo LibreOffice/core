@@ -62,7 +62,10 @@
 #include <algorithm>
 #include <functional>
 
-using namespace ::com::sun::star;
+using namespace css;
+using namespace css::awt;
+using namespace css::lang;
+using namespace css::uno;
 using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::uno::Reference;
 using namespace ::toolkit;

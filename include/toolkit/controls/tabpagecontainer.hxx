@@ -33,11 +33,6 @@
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-
 //  ------------------------------------------------------------------
 //  class ::com::sun::star::awt::tab::UnoControlTabPageContainerModel
 //  ------------------------------------------------------------------
