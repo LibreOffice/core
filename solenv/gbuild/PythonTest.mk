@@ -53,58 +53,9 @@ $(call gb_PythonTest_get_target,%) :
 define gb_PythonTest_PythonTest
 $(call gb_PythonTest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python:$(gb_DEVINSTALLROOT)/program
 $(call gb_PythonTest_get_target,$(1)) : MODULES :=
-$(call gb_PythonTest_get_target,$(1)) : CONFIGURATION_LAYERS :=
-$(call gb_PythonTest_get_target,$(1)) : UNO_TYPES :=
-$(call gb_PythonTest_get_target,$(1)) : UNO_SERVICES :=
-
-$(call gb_PythonTest_use_api,$(1),udkapi)
-$(call gb_PythonTest_use_rdb,$(1),ure/services)
 
 $(eval $(call gb_Module_register_target,$(call gb_PythonTest_get_target,$(1)),$(call gb_PythonTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),PythonTest)
-
-endef
-
-define gb_PythonTest_use_configuration
-$(call gb_PythonTest_get_target,$(1)) : \
-	$(call gb_Configuration_get_target,registry) \
-	$(call gb_Configuration_get_target,fcfg_langpack) \
-	$(call gb_Package_get_target,test_unittest)
-$(call gb_PythonTest_get_target,$(1)) : CONFIGURATION_LAYERS += \
-	xcsxcu:$(call gb_Helper_make_url,$(gb_Configuration_registry)) \
-	module:$(call gb_Helper_make_url,$(gb_Configuration_registry)/spool) \
-	xcsxcu:$(call gb_Helper_make_url,$(OUTDIR)/unittest/registry)
-
-endef
-
-define gb_PythonTest__use_api
-$(call gb_PythonTest_get_target,$(1)) : $(call gb_UnoApi_get_target,$(2))
-$(call gb_PythonTest_get_target,$(1)) : \
-	UNO_TYPES += $(call gb_UnoApi_get_target,$(2))
-
-endef
-
-define gb_PythonTest_use_api
-$(foreach api,$(2),$(call gb_PythonTest__use_api,$(1),$(api)))
-endef
-
-define gb_PythonTest_use_rdb
-$(call gb_PythonTest_get_target,$(1)) : $(call gb_Rdb_get_outdir_target,$(2))
-$(call gb_PythonTest_get_target,$(1)) : \
-	UNO_SERVICES += $(call gb_Rdb_get_outdir_target,$(2))
-
-endef
-
-define gb_PythonTest_use_component
-$(call gb_PythonTest_get_target,$(1)) : \
-    $(call gb_ComponentTarget_get_outdir_target,$(2))
-$(call gb_PythonTest_get_target,$(1)) : \
-    UNO_SERVICES += $(call gb_ComponentTarget_get_outdir_target,$(2))
-
-endef
-
-define gb_PythonTest_use_components
-$(foreach component,$(call gb_CppunitTest__filter_not_built_components,$(2)),$(call gb_PythonTest_use_component,$(1),$(component)))
 
 endef
 
@@ -139,12 +90,7 @@ $(call gb_Helper_make_userfriendly_targets,$(1),PythonTest)
 
 endef
 
-gb_PythonTest_use_configuration :=
-gb_PythonTest_use_api :=
-gb_PythonTest_use_rdb :=
-gb_PythonTest_use_components :=
-gb_PythonTest_add_classes :=
-gb_PythonTest_add_class :=
+gb_PythonTest_add_modules :=
 gb_PythonTest_use_customtarget :=
 
 endif # DISABLE_PYTHON
