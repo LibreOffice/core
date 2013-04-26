@@ -19,6 +19,9 @@
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 
+using namespace css;
+using namespace css::uno;
+
 namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 16
