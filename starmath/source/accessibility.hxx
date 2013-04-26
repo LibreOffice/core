@@ -220,7 +220,7 @@ public:
 
     virtual SfxItemPool* GetPool() const;
 
-    virtual XubString    CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor );
+    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor );
     virtual void        FieldClicked(const SvxFieldItem&, sal_uInt16, sal_uInt16);
     virtual sal_Bool         IsValid() const;
 

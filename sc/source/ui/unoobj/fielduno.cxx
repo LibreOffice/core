@@ -182,7 +182,7 @@ public:
                 ~ScUnoEditEngine();
 
                     //! nPos should be xub_StrLen
-    virtual String  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
+    virtual OUString  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
                                     Color*& rTxtColor, Color*& rFldColor );
 
     sal_uInt16 CountFields();
@@ -213,10 +213,10 @@ ScUnoEditEngine::~ScUnoEditEngine()
     delete pFound;
 }
 
-String ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
+OUString ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor )
 {
-    String aRet(EditEngine::CalcFieldValue( rField, nPara, nPos, rTxtColor, rFldColor ));
+    OUString aRet(EditEngine::CalcFieldValue( rField, nPara, nPos, rTxtColor, rFldColor ));
     if (eMode != SC_UNO_COLLECT_NONE)
     {
         const SvxFieldData* pFieldData = rField.GetField();

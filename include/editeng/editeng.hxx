@@ -475,7 +475,7 @@ public:
     virtual sal_Bool    SpellNextDocument();
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
     virtual void    FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
-    virtual String  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
 
     // to be overloaded if access to bullet information needs to be provided
     virtual const SvxNumberFormat * GetNumberFormat( sal_uInt16 nPara ) const;

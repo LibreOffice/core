@@ -663,7 +663,7 @@ SfxItemPool* SvxAccessibleTextAdapter::GetPool() const
     return mrTextForwarder->GetPool();
 }
 
-XubString SvxAccessibleTextAdapter::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString SvxAccessibleTextAdapter::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 

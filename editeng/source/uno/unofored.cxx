@@ -154,7 +154,7 @@ sal_Bool SvxEditEngineForwarder::IsValid() const
     return rEditEngine.GetUpdateMode();
 }
 
-XubString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     return rEditEngine.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }

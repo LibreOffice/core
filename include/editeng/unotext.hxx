@@ -198,7 +198,7 @@ public:
     virtual void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     virtual void            QuickInsertLineBreak( const ESelection& rSel );
 
-    virtual XubString       CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor );
+    virtual OUString        CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor );
     virtual void            FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
 
     virtual sal_Bool        IsValid() const;

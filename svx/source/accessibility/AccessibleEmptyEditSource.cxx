@@ -128,9 +128,9 @@ namespace accessibility
         //XTextCopy
         void        CopyText(const SvxTextForwarder& ){}
 
-        XubString       CalcFieldValue( const SvxFieldItem& /*rField*/, sal_uInt16 /*nPara*/, sal_uInt16 /*nPos*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/ )
+        OUString    CalcFieldValue( const SvxFieldItem& /*rField*/, sal_uInt16 /*nPara*/, sal_uInt16 /*nPos*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/ )
         {
-            return  XubString();
+            return  OUString();
         }
         void            FieldClicked( const SvxFieldItem&, sal_uInt16, xub_StrLen ) {;}
 

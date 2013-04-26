@@ -2712,7 +2712,7 @@ Rectangle EditEngine::GetBulletArea( sal_uInt16 )
     return Rectangle( Point(), Point() );
 }
 
-XubString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_uInt16, sal_uInt16, Color*&, Color*& )
+OUString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_uInt16, sal_uInt16, Color*&, Color*& )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return OUString(' ');

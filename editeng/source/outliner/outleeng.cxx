@@ -182,7 +182,7 @@ void OutlinerEditEng::FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPar
     pOwner->FieldSelected( rField, nPara, nPos );
 }
 
-XubString OutlinerEditEng::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString OutlinerEditEng::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     return pOwner->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }

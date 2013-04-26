@@ -74,7 +74,7 @@ public:
 
     virtual void        FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos );
     virtual void        FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos );
-    virtual XubString   CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     virtual Rectangle   GetBulletArea( sal_uInt16 nPara );
 

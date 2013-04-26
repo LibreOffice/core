@@ -649,7 +649,7 @@ void Outliner::FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPara, sal_
 }
 
 
-XubString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     DBG_CHKTHIS(Outliner,0);
     if ( !aCalcFieldValueHdl.IsSet() )

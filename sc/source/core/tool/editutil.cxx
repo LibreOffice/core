@@ -679,7 +679,7 @@ ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP, sal_Bool bDel
 {
 }
 
-String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
+OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_uInt16 /* nPara */, sal_uInt16 /* nPos */,
                                     Color*& /* rTxtColor */, Color*& /* rFldColor */ )
 {
@@ -749,7 +749,7 @@ ScFieldEditEngine::ScFieldEditEngine(
     SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
 }
 
-String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
+OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_uInt16 /* nPara */, sal_uInt16 /* nPos */,
                                     Color*& rTxtColor, Color*& /* rFldColor */ )
 {

@@ -915,7 +915,7 @@ public:
 
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
     virtual void    FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
-    virtual String  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
 
     void            SetSpeller( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XSpellChecker1 > &xSpeller );

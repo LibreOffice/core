@@ -1111,7 +1111,7 @@ sal_Bool SmTextForwarder::IsValid() const
     return pEditEngine ? pEditEngine->GetUpdateMode() : sal_False;
 }
 
-XubString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     XubString aTxt;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
