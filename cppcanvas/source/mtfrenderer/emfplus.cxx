@@ -890,10 +890,6 @@ namespace cppcanvas
                 EMFP_DEBUG (printf ("EMF+\t\tcolor fill:0x%X\n", brushIndexOrColor));
                 rState.isFillColorSet = true;
                 rState.isLineColorSet = false;
-                // n#812793: EMF+ Seems to specify transparent background with Alpha=0xFF !
-                // Workaround for the problem.
-                if(brushIndexOrColor == 0xFFFFFFFF)
-                    brushIndexOrColor = 0xFFFFFF;
 
                 SET_FILL_COLOR(brushIndexOrColor);
 
@@ -1415,6 +1411,7 @@ namespace cppcanvas
 
                             sal_uInt32 brushIndexOrColor;
                             sal_Int32 rectangles;
+                            bool isColor = (flags & 0x8000);
                             ::basegfx::B2DPolygon polygon;
 
                             rMF >> brushIndexOrColor >> rectangles;
@@ -1450,7 +1447,12 @@ namespace cppcanvas
 
                                 ::basegfx::B2DPolyPolygon polyPolygon (polygon);
 
-                                EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                                // n#812793: EMF+ Seems to specify transparent background with Alpha=0xFF !
+                                // Workaround for the problem.
+                                if( isColor && brushIndexOrColor == 0xFFFFFFFF && rectangles == 1 )
+                                    brushIndexOrColor = 0xFFFFFF;
+
+                                EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, isColor, brushIndexOrColor);
                             }
                             break;
                         }
