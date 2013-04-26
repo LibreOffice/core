@@ -43,6 +43,9 @@
 
 #include "dllmgr.hxx"
 
+using namespace css;
+using namespace css::uno;
+
 /* Open issues:
 
    Missing support for functions returning structs (see TODO in call()).
