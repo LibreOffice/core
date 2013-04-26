@@ -20,7 +20,6 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <osl/mutex.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
@@ -322,8 +321,6 @@ namespace drawinglayer
 
             const basegfx::B2DRange& getDiscreteViewport() const
             {
-                ::osl::Mutex m_mutex;
-
                 if(maDiscreteViewport.isEmpty() && !maViewport.isEmpty())
                 {
                     basegfx::B2DRange aDiscreteViewport(maViewport);
@@ -336,8 +333,6 @@ namespace drawinglayer
 
             const basegfx::B2DHomMatrix& getObjectToViewTransformation() const
             {
-                ::osl::Mutex m_mutex;
-
                 if(maObjectToViewTransformation.isIdentity() &&
                     (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
                 {
@@ -350,8 +345,6 @@ namespace drawinglayer
 
             const basegfx::B2DHomMatrix& getInverseObjectToViewTransformation() const
             {
-                ::osl::Mutex m_mutex;
-
                 if(maInverseObjectToViewTransformation.isIdentity() &&
                     (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
                 {
