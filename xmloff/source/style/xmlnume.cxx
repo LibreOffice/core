@@ -59,31 +59,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-static sal_Char const XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] = "SymbolTextDistance";
-static sal_Char const XML_UNO_NAME_NRULE_PARENT_NUMBERING[] = "ParentNumbering";
-static sal_Char const XML_UNO_NAME_NRULE_CHAR_STYLE_NAME[] = "CharStyleName";
-static sal_Char const XML_UNO_NAME_NRULE_BULLET_CHAR[] = "BulletChar";
-static sal_Char const XML_UNO_NAME_NRULE_BULLET_RELSIZE[] = "BulletRelSize";
-static sal_Char const XML_UNO_NAME_NRULE_BULLET_COLOR[] = "BulletColor";
-static sal_Char const XML_UNO_NAME_NRULE_GRAPHIC_BITMAP[] = "GraphicBitmap";
-static sal_Char const XML_UNO_NAME_NRULE_GRAPHIC_SIZE[] = "GraphicSize";
-static sal_Char const XML_UNO_NAME_NRULE_VERT_ORIENT[] = "VertOrient";
-static sal_Char const XML_UNO_NAME_NRULE_NUMBERINGTYPE[] = "NumberingType";
-static sal_Char const XML_UNO_NAME_NRULE_HEADING_STYLE_NAME[] = "HeadingStyleName";
-static sal_Char const XML_UNO_NAME_NRULE_PREFIX[] = "Prefix";
-static sal_Char const XML_UNO_NAME_NRULE_SUFFIX[] = "Suffix";
-static sal_Char const XML_UNO_NAME_NRULE_ADJUST[] = "Adjust";
-static sal_Char const XML_UNO_NAME_NRULE_LEFT_MARGIN[] = "LeftMargin";
-static sal_Char const XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET[] = "FirstLineOffset";
-static sal_Char const XML_UNO_NAME_NRULE_BULLET_FONT[] = "BulletFont";
-static sal_Char const XML_UNO_NAME_NRULE_GRAPHICURL[] = "GraphicURL";
-static sal_Char const XML_UNO_NAME_NRULE_START_WITH[] = "StartWith";
-static sal_Char const XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE[] = "PositionAndSpaceMode";
-static sal_Char const XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY[] = "LabelFollowedBy";
-static sal_Char const XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION[] = "ListtabStopPosition";
-static sal_Char const XML_UNO_NAME_NRULE_FIRST_LINE_INDENT[] = "FirstLineIndent";
-static sal_Char const XML_UNO_NAME_NRULE_INDENT_AT[] = "IndentAt";
-
 void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< ::com::sun::star::container::XIndexReplace > & xNumRule,
                                              sal_Bool bOutline )
 {
@@ -137,19 +112,19 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     {
         const beans::PropertyValue& rProp = pPropArray[i];
 
-        if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_NUMBERINGTYPE, sizeof(XML_UNO_NAME_NRULE_NUMBERINGTYPE)-1 ) )
+        if( rProp.Name == "NumberingType" )
         {
             rProp.Value >>= eType;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_PREFIX, sizeof(XML_UNO_NAME_NRULE_PREFIX)-1 ) )
+        else if( rProp.Name == "Prefix" )
         {
             rProp.Value >>= sPrefix;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_SUFFIX, sizeof(XML_UNO_NAME_NRULE_SUFFIX)-1 ) )
+        else if( rProp.Name == "Suffix" )
         {
             rProp.Value >>= sSuffix;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_CHAR, sizeof(XML_UNO_NAME_NRULE_BULLET_CHAR)-1 ) )
+        else if( rProp.Name == "BulletChar" )
         {
             OUString sValue;
             rProp.Value >>= sValue;
@@ -158,17 +133,17 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 cBullet = (sal_Unicode)sValue[0];
             }
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_RELSIZE, sizeof(XML_UNO_NAME_NRULE_BULLET_RELSIZE)-1 ) )
+        else if( rProp.Name == "BulletRelSize" )
         {
             rProp.Value >>= nBullRelSize;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_ADJUST, sizeof(XML_UNO_NAME_NRULE_ADJUST)-1 ) )
+        else if( rProp.Name == "Adjust" )
         {
             sal_Int16 nValue = 0;
             rProp.Value >>= nValue;
             eAdjust = nValue;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_FONT, sizeof(XML_UNO_NAME_NRULE_BULLET_FONT)-1 ) )
+        else if( rProp.Name == "BulletFont" )
         {
             awt::FontDescriptor rFDesc;
             if( rProp.Value >>= rFDesc )
@@ -180,46 +155,46 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 eBulletFontEncoding = (rtl_TextEncoding)rFDesc.CharSet;
             }
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_GRAPHICURL, sizeof(XML_UNO_NAME_NRULE_GRAPHICURL)-1 ) )
+        else if( rProp.Name == "GraphicURL" )
         {
             rProp.Value >>= sImageURL;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_GRAPHIC_BITMAP, sizeof(XML_UNO_NAME_NRULE_GRAPHIC_BITMAP)-1 ) )
+        else if( rProp.Name == "GraphicBitmap" )
         {
             rProp.Value >>= xBitmap;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_COLOR, sizeof(XML_UNO_NAME_NRULE_BULLET_COLOR)-1 ) )
+        else if( rProp.Name == "BulletColor" )
         {
             rProp.Value >>= nColor;
             bHasColor = sal_True;
         }
-        else  if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_START_WITH, sizeof(XML_UNO_NAME_NRULE_START_WITH)-1 ) )
+        else  if( rProp.Name == "StartWith" )
         {
             rProp.Value >>= nStartValue;
         }
-        else  if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_LEFT_MARGIN, sizeof(XML_UNO_NAME_NRULE_LEFT_MARGIN)-1 ) )
+        else  if( rProp.Name == "LeftMargin" )
         {
             rProp.Value >>= nSpaceBefore;
         }
-        else  if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET, sizeof(XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET)-1 ) )
+        else  if( rProp.Name == "FirstLineOffset" )
         {
             rProp.Value >>= nMinLabelWidth;
         }
-        else  if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE, sizeof(XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE)-1 ) )
+        else  if( rProp.Name == "SymbolTextDistance" )
         {
             rProp.Value >>= nMinLabelDist;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_PARENT_NUMBERING, sizeof(XML_UNO_NAME_NRULE_PARENT_NUMBERING)-1 ) )
+        else if( rProp.Name == "ParentNumbering" )
         {
             rProp.Value >>= nDisplayLevels;
             if( nDisplayLevels > nLevel+1 )
                 nDisplayLevels = static_cast<sal_Int16>( nLevel )+1;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_CHAR_STYLE_NAME, sizeof(XML_UNO_NAME_NRULE_CHAR_STYLE_NAME)-1 ) )
+        else if( rProp.Name == "CharStyleName" )
         {
             rProp.Value >>= sTextStyleName;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_GRAPHIC_SIZE, sizeof(XML_UNO_NAME_NRULE_GRAPHIC_SIZE)-1 ) )
+        else if( rProp.Name == "GraphicSize" )
         {
             awt::Size aSize;
             if( rProp.Value >>= aSize )
@@ -228,38 +203,33 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 nImageHeight = aSize.Height;
             }
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_VERT_ORIENT, sizeof(XML_UNO_NAME_NRULE_VERT_ORIENT)-1 ) )
+        else if( rProp.Name == "VertOrient" )
         {
             sal_Int16 nValue = 0;
             rProp.Value >>= nValue;
             eImageVertOrient = nValue;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE,
-                                          sizeof(XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE)-1 ) )
+        else if( rProp.Name == "PositionAndSpaceMode" )
         {
             sal_Int16 nValue = 0;
             rProp.Value >>= nValue;
             ePosAndSpaceMode = nValue;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY,
-                                          sizeof(XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY)-1 ) )
+        else if( rProp.Name == "LabelFollowedBy" )
         {
             sal_Int16 nValue = 0;
             rProp.Value >>= nValue;
             eLabelFollowedBy = nValue;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION,
-                                          sizeof(XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION)-1 ) )
+        else if( rProp.Name == "ListtabStopPosition" )
         {
             rProp.Value >>= nListtabStopPosition;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_FIRST_LINE_INDENT,
-                                          sizeof(XML_UNO_NAME_NRULE_FIRST_LINE_INDENT)-1 ) )
+        else if( rProp.Name == "FirstLineIndent" )
         {
             rProp.Value >>= nFirstLineIndent;
         }
-        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_INDENT_AT,
-                                          sizeof(XML_UNO_NAME_NRULE_INDENT_AT)-1 ) )
+        else if( rProp.Name == "IndentAt" )
         {
             rProp.Value >>= nIndentAt;
         }

@@ -65,35 +65,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::io;
 
-static sal_Char const XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] =
-        "SymbolTextDistance";
-static sal_Char const XML_UNO_NAME_NRULE_PARENT_NUMBERING[] =
-        "ParentNumbering";
-static sal_Char const XML_UNO_NAME_NRULE_CHAR_STYLE_NAME[] =
-        "CharStyleName";
-static sal_Char const XML_UNO_NAME_NRULE_BULLET_CHAR[] ="BulletChar";
-static sal_Char const XML_UNO_NAME_NRULE_BULLET_RELSIZE[] = "BulletRelSize";
-static sal_Char const XML_UNO_NAME_NRULE_GRAPHIC_SIZE[] =
-        "GraphicSize";
-static sal_Char const XML_UNO_NAME_NRULE_VERT_ORIENT[] ="VertOrient";
-
-static sal_Char const XML_UNO_NAME_NRULE_NUMBERINGTYPE[] = "NumberingType";
-static sal_Char const XML_UNO_NAME_NRULE_PREFIX[] = "Prefix";
-static sal_Char const XML_UNO_NAME_NRULE_SUFFIX[] = "Suffix";
-static sal_Char const XML_UNO_NAME_NRULE_ADJUST[] = "Adjust";
-static sal_Char const XML_UNO_NAME_NRULE_LEFT_MARGIN[] = "LeftMargin";
-static sal_Char const XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET[] =
-    "FirstLineOffset";
-static sal_Char const XML_UNO_NAME_NRULE_BULLET_FONT[] = "BulletFont";
-static sal_Char const XML_UNO_NAME_NRULE_GRAPHICURL[] = "GraphicURL";
-static sal_Char const XML_UNO_NAME_NRULE_START_WITH[] = "StartWith";
-static sal_Char const XML_UNO_NAME_NRULE_BULLET_COLOR[] = "BulletColor";
-static sal_Char const XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE[] = "PositionAndSpaceMode";
-static sal_Char const XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY[] = "LabelFollowedBy";
-static sal_Char const XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION[] = "ListtabStopPosition";
-static sal_Char const XML_UNO_NAME_NRULE_FIRST_LINE_INDENT[] = "FirstLineIndent";
-static sal_Char const XML_UNO_NAME_NRULE_INDENT_AT[] = "IndentAt";
-
 // ---------------------------------------------------------------------
 
 class SvxXMLListLevelStyleContext_Impl;
@@ -493,48 +464,39 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     {
         beans::PropertyValue *pProps = aPropSeq.getArray();
         sal_Int32 nPos = 0;
-        pProps[nPos].Name =
-                OUString(XML_UNO_NAME_NRULE_NUMBERINGTYPE );
+        pProps[nPos].Name = "NumberingType";
         pProps[nPos++].Value <<= (sal_Int16)eType ;
 
-        pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_PREFIX );
+        pProps[nPos].Name = "Prefix";
         pProps[nPos++].Value <<= sPrefix;
 
-        pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_SUFFIX );
+        pProps[nPos].Name = "Suffix";
         pProps[nPos++].Value <<= sSuffix;
 
-        pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_ADJUST );
+        pProps[nPos].Name = "Adjust";
         pProps[nPos++].Value <<= eAdjust;
 
         sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
-        pProps[nPos].Name =
-            OUString(XML_UNO_NAME_NRULE_LEFT_MARGIN );
+        pProps[nPos].Name = "LeftMargin";
         pProps[nPos++].Value <<= (sal_Int32)nLeftMargin;
 
         sal_Int32 nFirstLineOffset = -nMinLabelWidth;
 
-        pProps[nPos].Name =
-                OUString(XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET );
+        pProps[nPos].Name = "FirstLineOffset";
         pProps[nPos++].Value <<= (sal_Int32)nFirstLineOffset;
 
-        pProps[nPos].Name =
-            OUString(XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE);
+        pProps[nPos].Name = "SymbolTextDistance";
         pProps[nPos++].Value <<= (sal_Int16)nMinLabelDist;
 
-        pProps[nPos].Name =
-            OUString(XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE);
+        pProps[nPos].Name = "PositionAndSpaceMode";
         pProps[nPos++].Value <<= (sal_Int16)ePosAndSpaceMode;
-        pProps[nPos].Name =
-            OUString(XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY);
+        pProps[nPos].Name = "LabelFollowedBy";
         pProps[nPos++].Value <<= (sal_Int16)eLabelFollowedBy;
-        pProps[nPos].Name =
-            OUString(XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION);
+        pProps[nPos].Name = "ListtabStopPosition";
         pProps[nPos++].Value <<= (sal_Int32)nListtabStopPosition;
-        pProps[nPos].Name =
-            OUString(XML_UNO_NAME_NRULE_FIRST_LINE_INDENT);
+        pProps[nPos].Name = "FirstLineIndent";
         pProps[nPos++].Value <<= (sal_Int32)nFirstLineIndent;
-        pProps[nPos].Name =
-            OUString(XML_UNO_NAME_NRULE_INDENT_AT);
+        pProps[nPos].Name = "IndentAt";
         pProps[nPos++].Value <<= (sal_Int32)nIndentAt;
 
         OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
@@ -542,8 +504,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         OUString sStyleName = sDisplayTextStyleName;
         if( !sStyleName.isEmpty() && pI18NMap )
             sStyleName = pI18NMap->Get( SFX_STYLE_FAMILY_CHAR, sStyleName );
-        pProps[nPos].Name =
-                OUString(XML_UNO_NAME_NRULE_CHAR_STYLE_NAME );
+        pProps[nPos].Name = "CharStyleName";
         pProps[nPos++].Value <<= sDisplayTextStyleName;
 
         if( bBullet )
@@ -576,12 +537,11 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
             {
                 OUStringBuffer sTmp(1);
                 sTmp.append( cBullet );
-                pProps[nPos].Name =
-                        OUString(XML_UNO_NAME_NRULE_BULLET_CHAR );
+                pProps[nPos].Name = "BulletChar";
                 pProps[nPos++].Value <<= sTmp.makeStringAndClear();
             }
 
-            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_BULLET_FONT );
+            pProps[nPos].Name = "BulletFont";
             pProps[nPos++].Value <<= aFDesc;
 
         }
@@ -601,36 +561,36 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
 
             if( !sStr.isEmpty() )
             {
-                pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_GRAPHICURL );
+                pProps[nPos].Name = "GraphicURL";
                 pProps[nPos++].Value <<= sStr;
             }
 
             awt::Size aSize( nImageWidth, nImageHeight );
-            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_GRAPHIC_SIZE );
+            pProps[nPos].Name = "GraphicSize";
             pProps[nPos++].Value <<= aSize;
 
-            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_VERT_ORIENT );
+            pProps[nPos].Name = "VertOrient";
             pProps[nPos++].Value <<= (sal_Int16)eImageVertOrient;
         }
 
         if( bNum )
         {
-            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_START_WITH );
+            pProps[nPos].Name = "StartWith";
             pProps[nPos++].Value <<= (sal_Int16)nNumStartValue;
 
-            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_PARENT_NUMBERING);
+            pProps[nPos].Name = "ParentNumbering";
             pProps[nPos++].Value <<= (sal_Int16)nNumDisplayLevels;
         }
 
         if( ( bNum || bBullet ) && nRelSize )
         {
-            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_BULLET_RELSIZE );
+            pProps[nPos].Name = "BulletRelSize";
             pProps[nPos++].Value <<= nRelSize;
         }
 
         if( !bImage && bHasColor )
         {
-            pProps[nPos].Name = OUString(XML_UNO_NAME_NRULE_BULLET_COLOR );
+            pProps[nPos].Name = "BulletColor";
             pProps[nPos++].Value <<= m_nColor;
         }
 
@@ -1330,8 +1290,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
     Sequence<beans::PropertyValue> aPropSeq( bOrdered ? 1 : 4  );
     beans::PropertyValue *pProps = aPropSeq.getArray();
 
-    pProps->Name =
-                OUString(XML_UNO_NAME_NRULE_NUMBERINGTYPE );
+    pProps->Name = "NumberingType";
     (pProps++)->Value <<= (sal_Int16)(bOrdered ? NumberingType::ARABIC
                                                  : NumberingType::CHAR_SPECIAL );
     if( !bOrdered )
@@ -1349,17 +1308,14 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         aFDesc.Pitch = PITCH_DONTKNOW ;
         aFDesc.CharSet = RTL_TEXTENCODING_SYMBOL ;
         aFDesc.Weight = WEIGHT_DONTKNOW;
-        pProps->Name =
-                    OUString(XML_UNO_NAME_NRULE_BULLET_FONT );
+        pProps->Name = "BulletFont";
         (pProps++)->Value <<= aFDesc;
 
         OUStringBuffer sTmp(1);
         sTmp.append( (sal_Unicode)(0xF000 + 149) );
-        pProps->Name =
-                    OUString(XML_UNO_NAME_NRULE_BULLET_CHAR );
+        pProps->Name = "BulletChar";
         (pProps++)->Value <<= sTmp.makeStringAndClear();
-        pProps->Name =
-                OUString(XML_UNO_NAME_NRULE_CHAR_STYLE_NAME );
+        pProps->Name = "CharStyleName";
         (pProps++)->Value <<= OUString( "Numbering Symbols"  );
     }
 
