@@ -207,13 +207,10 @@ void
 SvtInetOptions::Impl::notifyListeners(
     star::uno::Sequence< rtl::OUString > const & rKeys)
 {
-    typedef
-        std::vector< std::pair< star::uno::Reference<
-                                    star::beans::XPropertiesChangeListener >,
-                                star::uno::Sequence<
-                                    star::beans::PropertyChangeEvent > > >
-    List;
-    List aNotifications;
+        typedef std::pair< star::uno::Reference< star::beans::XPropertiesChangeListener >,
+                           star::uno::Sequence< star::beans::PropertyChangeEvent > > Listen2EventPair;
+        typedef std::vector< Listen2EventPair > NotificationList;
+    NotificationList aNotifications;
     {
         osl::MutexGuard aGuard(m_aMutex);
         aNotifications.reserve(m_aListeners.size());
@@ -240,16 +237,10 @@ SvtInetOptions::Impl::notifyListeners(
                 }
             }
             if (nCount > 0)
-            {
-                aEvents.realloc(nCount);
-                aNotifications.
-                    push_back(std::make_pair< List::value_type::first_type,
-                                              List::value_type::second_type >(
-                                  aIt->first, aEvents));
-            }
+                aNotifications.push_back( Listen2EventPair( aIt->first, aEvents));
         }
     }
-    for (List::size_type i = 0; i < aNotifications.size(); ++i)
+    for (NotificationList::size_type i = 0; i < aNotifications.size(); ++i)
         if (aNotifications[i].first.is())
             aNotifications[i].first->
                 propertiesChange(aNotifications[i].second);
