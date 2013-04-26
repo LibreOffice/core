@@ -873,6 +873,7 @@ gb_BUILD_HELPER_LIBS := basegfx \
 gb_BUILD_HELPER_TOOLS := cppumaker \
 	idlc \
 	reg2unoidl \
+	regcompare \
 	regmerge \
 	rsc \
 	svidl
