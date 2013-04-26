@@ -278,7 +278,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     sal_Int16 nNumberFormat = ConversionHelper::ConvertNumberingType(m_nNFC);
     if( m_nNFC >= 0)
     {
-        if (!m_sGraphicURL.isEmpty())
+        if (!m_sGraphicURL.isEmpty() || m_sGraphicBitmap.is())
             nNumberFormat = style::NumberingType::BITMAP;
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_NUMBERING_TYPE, nNumberFormat ));
     }
@@ -293,6 +293,8 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
             aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, m_sBulletChar.copy(0,1)));
         if (!m_sGraphicURL.isEmpty())
             aNumberingProperties.push_back(MAKE_PROPVAL(PROP_GRAPHIC_URL, m_sGraphicURL));
+        if (m_sGraphicBitmap.is())
+            aNumberingProperties.push_back(MAKE_PROPVAL(PROP_GRAPHIC_BITMAP, m_sGraphicBitmap));
     }
 
     aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LISTTAB_STOP_POSITION, m_nTabstop ) );
@@ -931,7 +933,20 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 if (xShape.is())
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    m_pCurrentDefinition->GetCurrentLevel()->SetGraphicURL(xPropertySet->getPropertyValue("GraphicURL").get<OUString>());
+                    uno::Reference<beans::XPropertySetInfo> info = xPropertySet->getPropertySetInfo();
+                    uno::Sequence<beans::Property> properties = info->getProperties();
+                    try
+                    {
+                        m_pCurrentDefinition->GetCurrentLevel()->SetGraphicURL(xPropertySet->getPropertyValue("GraphicURL").get<OUString>());
+                    } catch(const beans::UnknownPropertyException&)
+                    {}
+                    try
+                    {
+                        uno::Reference< graphic::XGraphic > gr;
+                        xPropertySet->getPropertyValue("Bitmap") >>= gr;
+                        m_pCurrentDefinition->GetCurrentLevel()->SetGraphicBitmap( gr );
+                    } catch(const beans::UnknownPropertyException&)
+                    {}
 
                     // Now that we saved the URL of the graphic, remove it from the document.
                     uno::Reference<lang::XComponent> xShapeComponent(xShape, uno::UNO_QUERY);

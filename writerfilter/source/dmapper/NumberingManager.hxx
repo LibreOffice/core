@@ -29,6 +29,7 @@
 #include <editeng/numitem.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 namespace writerfilter {
 namespace dmapper {
@@ -53,6 +54,7 @@ class ListLevel : public PropertyMap
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
     OUString                               m_sGraphicURL;
+    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > m_sGraphicBitmap;
     sal_Int32                                     m_nTabstop;
     boost::shared_ptr< StyleSheetEntry >          m_pParaStyle;
     bool                                          m_outline;
@@ -81,6 +83,8 @@ public:
     void SetValue( Id nId, sal_Int32 nValue );
     void SetBulletChar( OUString sValue ) { m_sBulletChar = sValue; };
     void SetGraphicURL( OUString sValue ) { m_sGraphicURL = sValue; };
+    void SetGraphicBitmap( com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > sValue )
+        { m_sGraphicBitmap = sValue; }
     void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle );
     void AddRGBXchNums( OUString sValue ) { m_sRGBXchNums += sValue; };
 
