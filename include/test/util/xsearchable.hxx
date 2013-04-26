@@ -7,10 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtl/ustring.hxx>
 #include <test/testdllapi.hxx>
-
-using namespace com::sun::star;
 
 namespace apitest {
 
@@ -25,7 +22,7 @@ public:
     void testFindNext();
     void testFindAll();
 
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
 private:
     OUString maSearchString;

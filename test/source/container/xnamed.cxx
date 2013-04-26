@@ -11,7 +11,8 @@
 #include <test/container/xnamed.hxx>
 #include "cppunit/extensions/HelperMacros.h"
 
-using namespace com::sun::star::uno;
+using namespace css;
+using namespace css::uno;
 
 namespace apitest {
 

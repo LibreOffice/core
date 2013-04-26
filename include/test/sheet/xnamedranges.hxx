@@ -26,12 +26,9 @@
  * instead of those above.
  */
 
-#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <test/testdllapi.hxx>
-
-using namespace com::sun::star;
 
 namespace apitest {
 
@@ -45,7 +42,7 @@ public:
 
     virtual ~XNamedRanges();
 
-    virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheets = 0) = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init(sal_Int32 nSheets = 0) = 0;
 
     // XNamedRanges
     void testAddNewByName();
@@ -54,7 +51,7 @@ public:
     void testOutputList();
 
 protected:
-    uno::Reference< sheet::XSpreadsheet > xSheet;
+    css::uno::Reference< css::sheet::XSpreadsheet > xSheet;
 
 private:
     OUString maNameToRemove;

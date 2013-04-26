@@ -7,19 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
-
-using namespace com::sun::star;
 
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XDatabaseRange
 {
 public:
-    virtual uno::Reference< uno::XInterface > init(const OUString& rDBName) = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init(const OUString& rDBName) = 0;
 
     void testDataArea();
     void testGetSortDescriptor();

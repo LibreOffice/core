@@ -9,17 +9,15 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class TableAutoFormatField
 {
 public:
     //don't use virtual init() here
-    uno::Reference< beans::XPropertySet > initTest();
+    css::uno::Reference< beans::XPropertySet > initTest();
 
-    virtual uno::Reference< > getServiceFactory() = 0;
+    virtual css::uno::Reference< > getServiceFactory() = 0;
 
     void testRotateReference();
     void testVertJustify();

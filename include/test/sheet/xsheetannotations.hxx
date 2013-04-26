@@ -26,29 +26,24 @@
  * instead of those above.
  */
 
-#include <rtl/ustring.hxx>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <test/testdllapi.hxx>
-
-using namespace com::sun::star;
 
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XSheetAnnotations
 {
 public:
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     // XSheetAnnotations
     void testInsertNew();
     void testRemoveByIndex();
 
-
 protected:
     ~XSheetAnnotations() {}
 
-    virtual uno::Reference< sheet::XSheetAnnotations> getAnnotations() = 0;
-
+    virtual css::uno::Reference< css::sheet::XSheetAnnotations> getAnnotations() = 0;
 };
 
 }

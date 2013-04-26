@@ -9,8 +9,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class XIndexAccess
@@ -18,7 +16,7 @@ class XIndexAccess
 public:
     XIndexAccess(sal_Int32 nItems);
 
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
     void testGetCount();
     void testGetByIndex();
     // will throw an exception and should fail if not

@@ -12,8 +12,6 @@
 #include <test/testdllapi.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XNameReplace
@@ -21,11 +19,11 @@ class OOO_DLLPUBLIC_TEST XNameReplace
 public:
     XNameReplace(const OUString& rName): maName(rName) {}
 
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     void testReplaceByName();
 
-    virtual uno::Any getAnyElementForNameReplace() = 0;
+    virtual css::uno::Any getAnyElementForNameReplace() = 0;
 
     virtual ~XNameReplace() {}
 

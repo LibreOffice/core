@@ -23,7 +23,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "cppunit/extensions/HelperMacros.h"
 
-using namespace com::sun::star::uno;
+using namespace css;
+using namespace css::uno;
 
 namespace apitest {
 

@@ -41,7 +41,8 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include <rtl/ustring.hxx>
 
-using namespace com::sun::star::uno;
+using namespace css;
+using namespace css::uno;
 
 namespace apitest {
 

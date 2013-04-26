@@ -10,24 +10,22 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class XElementAccess
 {
 public:
-    XElementAccess(uno::Type& rType): maType(rType) {}
+    XElementAccess(css::uno::Type& rType): maType(rType) {}
 
     void testGetElementType();
     void testHasElements();
 
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     virtual ~XElementAccess() {}
 
 private:
-    uno::Type maType;
+    css::uno::Type maType;
 };
 
 }

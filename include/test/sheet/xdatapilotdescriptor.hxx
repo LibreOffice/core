@@ -15,8 +15,6 @@
 
 #include <vector>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XDataPilotDescriptor
@@ -32,16 +30,15 @@ public:
     void testGetDataFields();
     void testGetHiddenFields();
 
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
 protected:
     ~XDataPilotDescriptor() {}
 
 private:
+    void testGetDataPilotFields_Impl( css::uno::Reference< css::sheet::XDataPilotDescriptor > xDescr );
 
-    void testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr );
-
-    void checkName( uno::Reference< container::XIndexAccess > xIndex, sal_Int32 nIndex );
+    void checkName( css::uno::Reference< css::container::XIndexAccess > xIndex, sal_Int32 nIndex );
     static std::vector<OUString> maFieldNames;
 };
 

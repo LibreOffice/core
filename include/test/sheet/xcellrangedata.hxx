@@ -10,15 +10,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XCellRangeData
 {
 public:
-
-    virtual uno::Reference< uno::XInterface > getXCellRangeData() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > getXCellRangeData() = 0;
 
     void testGetDataArray();
     void testSetDataArray();

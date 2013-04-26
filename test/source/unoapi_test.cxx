@@ -13,6 +13,9 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 UnoApiTest::UnoApiTest(const OUString& path)
       : m_aBaseString(path)
 {

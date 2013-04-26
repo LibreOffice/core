@@ -17,8 +17,6 @@
 
 #include <com/sun/star/text/XText.hpp>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XText
@@ -26,8 +24,8 @@ class OOO_DLLPUBLIC_TEST XText
 public:
     virtual ~XText();
 
-    virtual uno::Reference<uno::XInterface> init() = 0;
-    virtual uno::Reference<text::XTextContent> getTextContent() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<css::text::XTextContent> getTextContent() = 0;
 
     void testInsertRemoveTextContent();
 };

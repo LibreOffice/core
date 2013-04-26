@@ -7,11 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
-
-using namespace com::sun::star;
 
 namespace apitest {
 
@@ -20,7 +17,7 @@ class OOO_DLLPUBLIC_TEST XReplaceable
 public:
         XReplaceable( const OUString& rSearchString, const OUString& rReplaceString):
             maSearchString(rSearchString), maReplaceString(rReplaceString) {}
-	virtual uno::Reference< uno::XInterface > init() = 0;
+        virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
 	void testCreateReplaceDescriptor();
 	void testReplaceAll();

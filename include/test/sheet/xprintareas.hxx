@@ -26,17 +26,15 @@
  * instead of those above.
  */
 
- #include <com/sun/star/sheet/XPrintAreas.hpp>
- #include <test/testdllapi.hxx>
-
-using namespace com::sun::star;
+#include <com/sun/star/sheet/XPrintAreas.hpp>
+#include <test/testdllapi.hxx>
 
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XPrintAreas
 {
 public:
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     void testSetAndGetPrintTitleColumns();   //getter and setter in one test case
     void testSetAndGetPrintTitleRows();
@@ -50,8 +48,6 @@ public:
 
 protected:
     ~XPrintAreas() {}
-
-
 };
 
 }

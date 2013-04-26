@@ -11,8 +11,6 @@
 
 #include "test/testdllapi.hxx"
 
-using namespace com::sun::star;
-
 namespace apitest
 {
 
@@ -21,7 +19,7 @@ class OOO_DLLPUBLIC_TEST XTextField
 public:
     virtual ~XTextField() {}
 
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     void testGetPresentation();
 };

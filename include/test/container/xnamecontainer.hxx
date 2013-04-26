@@ -11,8 +11,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XNameContainer
@@ -23,7 +21,7 @@ public:
     // removes given entry
     XNameContainer(const OUString& rName);
 
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     void testRemoveByName();
 

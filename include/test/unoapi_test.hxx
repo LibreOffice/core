@@ -11,11 +11,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 // basic uno api test class
 
@@ -30,11 +26,11 @@ public:
     virtual void tearDown();
 
 protected:
-    void closeDocument( uno::Reference< lang::XComponent > xDocument );
+    void closeDocument( css::uno::Reference< css::lang::XComponent > xDocument );
 
 
 private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
+    css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
     OUString m_aBaseString;
 };
 

@@ -10,17 +10,15 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <test/testdllapi.hxx>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XCellRangeReferrer
 {
 public:
-    XCellRangeReferrer( table::CellRangeAddress aCellRange ):
+    XCellRangeReferrer( css::table::CellRangeAddress aCellRange ):
                 maCellRange( aCellRange ) {}
 
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     void testGetReferredCells();
 
@@ -28,7 +26,7 @@ protected:
     ~XCellRangeReferrer() {}
 
 private:
-    table::CellRangeAddress maCellRange;
+    css::table::CellRangeAddress maCellRange;
 };
 
 }

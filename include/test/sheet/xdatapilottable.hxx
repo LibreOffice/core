@@ -13,22 +13,20 @@
 
 #include "cppunit/extensions/HelperMacros.h"
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XDataPilotTable
 {
 public:
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
     virtual ~XDataPilotTable();
 
     void testGetOutputRange();
     void testRefresh();
 
 protected:
-    uno::Reference< table::XCell > xCellForChange;
-    uno::Reference< table::XCell > xCellForCheck;
+    css::uno::Reference< css::table::XCell > xCellForChange;
+    css::uno::Reference< css::table::XCell > xCellForCheck;
 };
 
 }

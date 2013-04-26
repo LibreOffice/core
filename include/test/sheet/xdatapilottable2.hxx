@@ -18,8 +18,6 @@
 
 #include <vector>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XDataPilotTable2
@@ -31,23 +29,23 @@ public:
     void testInsertDrillDownSheet();
     virtual ~XDataPilotTable2();
 
-    virtual uno::Reference< uno::XInterface > initDP2() = 0;
-    virtual uno::Reference< uno::XInterface > getSheets() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > initDP2() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > getSheets() = 0;
 
 protected:
 
 private:
-    bool checkDrillDownSheetContent(uno::Reference< sheet::XSpreadsheet >, uno::Sequence< uno::Sequence < uno::Any > > aData);
+    bool checkDrillDownSheetContent(css::uno::Reference< css::sheet::XSpreadsheet >, css::uno::Sequence< css::uno::Sequence < css::uno::Any > > aData);
 
-    void getOutputRanges(uno::Reference< sheet::XDataPilotTable2 >);
-    void buildDataFields(uno::Reference< sheet::XDataPilotTable2 >);
-    void buildResultCells(uno::Reference< sheet::XDataPilotTable2 >);
+    void getOutputRanges(css::uno::Reference< css::sheet::XDataPilotTable2 >);
+    void buildDataFields(css::uno::Reference< css::sheet::XDataPilotTable2 >);
+    void buildResultCells(css::uno::Reference< css::sheet::XDataPilotTable2 >);
 
-    std::vector< table::CellAddress > maResultCells;
+    std::vector< css::table::CellAddress > maResultCells;
     std::vector< sal_Int32 > maDataFieldDims;
-    table::CellRangeAddress maRangeWhole;
-    table::CellRangeAddress maRangeTable;
-    table::CellRangeAddress maRangeResult;
+    css::table::CellRangeAddress maRangeWhole;
+    css::table::CellRangeAddress maRangeTable;
+    css::table::CellRangeAddress maRangeResult;
 };
 
 }

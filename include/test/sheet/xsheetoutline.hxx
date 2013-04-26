@@ -30,14 +30,12 @@
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <test/testdllapi.hxx>
 
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XSheetOutline
 {
 public:
-    virtual uno::Reference< uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     // XSheetOutline
     void testHideDetail();

@@ -33,10 +33,6 @@
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <rtl/ustring.hxx>
-
-using namespace com::sun::star;
-
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XSpreadsheets2
@@ -57,23 +53,23 @@ public:
     void testImportNewNamedRange();
     void testImportCellStyle();
 
-    virtual uno::Reference< lang::XComponent > getComponent() = 0;
-    virtual uno::Reference< uno::XInterface > init() = 0;
-    virtual uno::Reference< lang::XComponent > loadFromDesktop(const OUString&) = 0;
+    virtual css::uno::Reference< css::lang::XComponent > getComponent() = 0;
+    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString&) = 0;
     virtual void createFileURL(const OUString&, OUString&) = 0;
 
 protected:
-    uno::Reference< sheet::XSpreadsheetDocument> xDocument;
+    css::uno::Reference< css::sheet::XSpreadsheetDocument> xDocument;
 
 private:
-    uno::Reference< sheet::XSpreadsheetDocument> getDoc(const OUString&, uno::Reference< lang::XComponent >&);
-    uno::Reference< sheet::XNamedRanges> getNamedRanges(uno::Reference< sheet::XSpreadsheetDocument >);
+    css::uno::Reference< css::sheet::XSpreadsheetDocument> getDoc(const OUString&, css::uno::Reference< css::lang::XComponent >&);
+    css::uno::Reference< css::sheet::XNamedRanges> getNamedRanges(css::uno::Reference< css::sheet::XSpreadsheetDocument >);
     void importSheetToCopy();
     bool isExternalReference(const OUString& aDestContent, const OUString& aSrcContent );
 
-    uno::Reference< sheet::XSpreadsheetDocument> xDestDoc;
-    uno::Reference< sheet::XSpreadsheet > xDestSheet;
-    uno::Reference< sheet::XSpreadsheet > xSrcSheet;
+    css::uno::Reference< css::sheet::XSpreadsheetDocument> xDestDoc;
+    css::uno::Reference< css::sheet::XSpreadsheet > xDestSheet;
+    css::uno::Reference< css::sheet::XSpreadsheet > xSrcSheet;
     OUString aSrcSheetName;
     OUString aSrcFileName;
     OUString aDestFileBase;
