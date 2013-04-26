@@ -1734,7 +1734,7 @@ void SfxDispatcher::SetSlotFilter
 }
 
 //--------------------------------------------------------------------
-EXTERN_C
+extern "C"
 #ifdef WNT
 int _cdecl
 #else
