@@ -71,13 +71,6 @@ private:
     ::sfx2::sidebar::ControllerItem         maNumFormatControl;
     ::sfx2::sidebar::ControllerItem         maFormatControl;
 
-    // images
-    Image                                   maImgNumber;
-    Image                                   maImgPercent;
-    Image                                   maImgCurrency;
-    Image                                   maImgDate;
-    Image                                   maImgText;
-
     sal_uInt16                              mnCategorySelected;
 
     cssu::Reference<css::frame::XFrame>     mxFrame;

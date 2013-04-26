@@ -29,11 +29,6 @@
 #define ID_CURRENCY                 12
 #define ID_DATE                     13
 #define ID_TEXT                     14
-#define IMG_NUMBER                  15
-#define IMG_PERCENT                 16
-#define IMG_CURRENCY                17
-#define IMG_DATE                    18
-#define IMG_TEXT                    19
 
 //===============================================================position=============================================
 

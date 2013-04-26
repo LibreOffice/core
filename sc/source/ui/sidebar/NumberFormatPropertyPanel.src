@@ -158,26 +158,6 @@ Control RID_PROPERTYPANEL_SC_NUMBERFORMAT
         QuickHelpText [ en-US ] = "Inserts a separator between thousands.";
         Text [ en-US ] = "~Thousands separator" ;
     };
-    Image IMG_NUMBER
-    {
-        ImageBitmap = Bitmap{File = "sidebar/123.png";};
-    };
-    Image IMG_PERCENT
-    {
-        ImageBitmap = Bitmap{File = "sidebar/percent.png";};
-    };
-    Image IMG_CURRENCY
-    {
-        ImageBitmap = Bitmap{File = "sidebar/money.png";};
-    };
-    Image IMG_DATE
-    {
-        ImageBitmap = Bitmap{File = "sidebar/canlendar.png";};
-    };
-    Image IMG_TEXT
-    {
-        ImageBitmap = Bitmap{File = "sidebar/ABC.png";};
-    };
 };
 
 // eof
