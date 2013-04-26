@@ -870,10 +870,6 @@ namespace cppcanvas
                              (x >> 8) & 0xff, \
                              x & 0xff), \
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
-#define SET_FILL_COLOR(x) \
-    rState.fillColor = COLOR(x);
-#define SET_TEXT_COLOR(x) \
-    rState.textColor = COLOR(x);
 
         void ImplRenderer::EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
                                                 OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor)
@@ -891,7 +887,7 @@ namespace cppcanvas
                 rState.isFillColorSet = true;
                 rState.isLineColorSet = false;
 
-                SET_FILL_COLOR(brushIndexOrColor);
+                rState.fillColor = COLOR(brushIndexOrColor);
 
                 pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
 
@@ -1641,7 +1637,7 @@ namespace cppcanvas
                                 OUString text = read_uInt16s_ToOUString(rMF, stringLength);
 
                                 double cellSize = setFont (flags & 0xff, rFactoryParms, rState);
-                                SET_TEXT_COLOR( brushId );
+                                rState.textColor = COLOR( brushId );
 
                                 ActionSharedPtr pTextAction(
                                     TextActionFactory::createTextAction(
@@ -1881,7 +1877,7 @@ namespace cppcanvas
                             setFont (flags & 0xff, rFactoryParms, rState);
 
                             if( flags & 0x8000 )
-                                SET_TEXT_COLOR(brushIndexOrColor);
+                                rState.textColor = COLOR( brushIndexOrColor );
 
                             ActionSharedPtr pTextAction(
                                     TextActionFactory::createTextAction(
