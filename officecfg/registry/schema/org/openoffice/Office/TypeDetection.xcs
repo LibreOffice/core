@@ -17,125 +17,126 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="TypeDetection" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains common content types, filters, deep detection services, as well as the frame loader and the content handler for Office.</desc>
-	</info>
-	<templates>
-		<group oor:name="Type">
-			<info>
-				<desc>Lists the types that represent common content formats in Office.</desc>
-			</info>
-			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Data" oor:type="xs:string" oor:nillable="false">
-				<info>
-					<desc>Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-		</group>
-		<group oor:name="Filter">
-			<info>
-				<desc>Lists filters that can import or export content.</desc>
-			</info>
-			<prop oor:name="Installed" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Enables or disables filter with the setup utility.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Data" oor:type="xs:string">
-				<info>
-					<desc>Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="DetectService">
-			<info>
-				<desc>Improves the type detection. UNO services access stored content to determine type.</desc>
-			</info>
-			<prop oor:name="Types" oor:type="oor:string-list">
-				<info>
-					<desc>Lists internal type names that can be recognized by this service.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="ContentHandler">
-			<info>
-				<desc>Loads &quot;non visible&quot; content, such as sounds.</desc>
-			</info>
-			<prop oor:name="Types" oor:type="oor:string-list">
-				<info>
-					<desc>Lists internal type names that can be recognized by this service.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="FrameLoader">
-			<info>
-				<desc>Loads &quot;visible content&quot; into a frame.</desc>
-			</info>
-			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Types" oor:type="oor:string-list">
-				<info>
-					<desc>Lists internal type names that can be recognized by this service.</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="Types" oor:node-type="Type">
-			<info>
-				<desc>Lists the registered content types.</desc>
-			</info>
-		</set>
-		<set oor:name="Filters" oor:node-type="Filter">
-			<info>
-				<desc>Lists the registered office filters.</desc>
-			</info>
-		</set>
-		<set oor:name="DetectServices" oor:node-type="DetectService">
-			<info>
-				<desc>Lists the registered deep detection services.</desc>
-			</info>
-		</set>
-		<set oor:name="ContentHandlers" oor:node-type="ContentHandler">
-			<info>
-				<desc>Lists the registered content handler services.</desc>
-			</info>
-		</set>
-		<set oor:name="FrameLoaders" oor:node-type="FrameLoader">
-			<info>
-				<desc>Lists the registered frame loader services.</desc>
-			</info>
-		</set>
-		<group oor:name="Defaults">
-			<info>
-				<desc>Contains default objects that are used if no specialized service was registered.</desc>
-			</info>
-			<prop oor:name="FrameLoader" oor:type="xs:string" oor:nillable="false">
-				<info>
-					<desc>Specifies the default frame loader.</desc>
-				</info>
-				<value>com.sun.star.comp.office.FrameLoader</value>
-			</prop>
-			<prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
-				</info>
-				<value>true</value>
-			</prop>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="TypeDetection" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains common content types, filters, deep detection services, as well as the frame loader and the content handler for Office.</desc>
+  </info>
+  <templates>
+    <group oor:name="Type">
+      <info>
+        <desc>Lists the types that represent common content formats in Office.</desc>
+      </info>
+      <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Data" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Contains configuration items of the type. Items are separated by using ",", list items are separated by";". Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+    <group oor:name="Filter">
+      <info>
+        <desc>Lists filters that can import or export content.</desc>
+      </info>
+      <prop oor:name="Installed" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Enables or disables filter with the setup utility.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Data" oor:type="xs:string">
+        <info>
+          <desc>Contains configuration items of the filter. Items are separated by ",", list items are separated by ";". Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="DetectService">
+      <info>
+        <desc>Improves the type detection. UNO services access stored content to determine type.</desc>
+      </info>
+      <prop oor:name="Types" oor:type="oor:string-list">
+        <info>
+          <desc>Lists internal type names that can be recognized by this service.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="ContentHandler">
+      <info>
+        <desc>Loads "non visible" content, such as sounds.</desc>
+      </info>
+      <prop oor:name="Types" oor:type="oor:string-list">
+        <info>
+          <desc>Lists internal type names that can be recognized by this service.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="FrameLoader">
+      <info>
+        <desc>Loads "visible content" into a frame.</desc>
+      </info>
+      <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Types" oor:type="oor:string-list">
+        <info>
+          <desc>Lists internal type names that can be recognized by this service.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Types" oor:node-type="Type">
+      <info>
+        <desc>Lists the registered content types.</desc>
+      </info>
+    </set>
+    <set oor:name="Filters" oor:node-type="Filter">
+      <info>
+        <desc>Lists the registered office filters.</desc>
+      </info>
+    </set>
+    <set oor:name="DetectServices" oor:node-type="DetectService">
+      <info>
+        <desc>Lists the registered deep detection services.</desc>
+      </info>
+    </set>
+    <set oor:name="ContentHandlers" oor:node-type="ContentHandler">
+      <info>
+        <desc>Lists the registered content handler services.</desc>
+      </info>
+    </set>
+    <set oor:name="FrameLoaders" oor:node-type="FrameLoader">
+      <info>
+        <desc>Lists the registered frame loader services.</desc>
+      </info>
+    </set>
+    <group oor:name="Defaults">
+      <info>
+        <desc>Contains default objects that are used if no specialized service was registered.</desc>
+      </info>
+      <prop oor:name="FrameLoader" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the default frame loader.</desc>
+        </info>
+        <value>com.sun.star.comp.office.FrameLoader</value>
+      </prop>
+      <prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Displays a warning when a user tries to set a third-party filter as the default filter in "Tools - Options".</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>

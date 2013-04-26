@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Chart" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains settings for the Chart application.</desc>
-	</info>
-	<import oor:component="org.openoffice.Office.Common"/>
-	<component>
-		<group oor:name="DefaultColor">
-			<info>
-				<desc>Specifies the colors for creating new charts.</desc>
-			</info>
-			<prop oor:name="Series" oor:type="oor:long-list" oor:nillable="false">
-				<!-- OldPath: Chart/Default_Colors -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Tools - Options  Chart  Default colors  [Section] Chart colors -->
-				<info>
-					<desc>Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list. You should keep the size of the list at 12. Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
-					<label>Chart colors</label>
-				</info>
-				<value>17798 16728590 16765728 5741852 8257569 8637183 3227652 11456256 4923247 16749838 12910603 34001</value>
-                                <!-- 0x004586 0xff420e 0xffd320 0x579d1c 0x7e0021 0x83caff 0x314004 0xaecf00 0x4b1f6f 0xff950e 0xc5000b 0x0084d1 -->
-			</prop>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Chart" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains settings for the Chart application.</desc>
+  </info>
+  <import oor:component="org.openoffice.Office.Common"/>
+  <component>
+    <group oor:name="DefaultColor">
+      <info>
+        <desc>Specifies the colors for creating new charts.</desc>
+      </info>
+      <prop oor:name="Series" oor:type="oor:long-list" oor:nillable="false">
+        <!-- OldPath: Chart/Default_Colors -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Chart  Default colors  [Section] Chart colors -->
+        <info>
+          <desc>Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list. You should keep the size of the list at 12. Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+          <label>Chart colors</label>
+        </info>
+        <value>17798 16728590 16765728 5741852 8257569 8637183 3227652 11456256 4923247 16749838 12910603 34001</value>
+        <!-- 0x004586 0xff420e 0xffd320 0x579d1c 0x7e0021 0x83caff 0x314004 0xaecf00 0x4b1f6f 0xff950e 0xc5000b 0x0084d1 -->
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>
-

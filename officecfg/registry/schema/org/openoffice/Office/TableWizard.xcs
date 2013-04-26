@@ -17,102 +17,102 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="TableWizard" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<info>
-		<desc>Contains the configuration schema for the table wizard</desc>
-	</info>
-	<templates>
-		<group oor:name="TWizField">
-			<info>
-				<desc>Information on the database field properties</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the field  (start at 0, must be field-unique)</desc>
-				</info>
-			</prop>
-			<prop oor:localized="true" oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>the name of the database field. ONLY ASCII CHARACTERS</desc>
-				</info>
-			</prop>
-			<prop oor:localized="true" oor:name="ShortName" oor:type="xs:string">
-				<info>
-					<desc>the name of the database field. ONLY ASCII AND MAXIMUM 10 CHARACTERS</desc>
-				</info>
-			</prop>
-			<prop oor:name="Type" oor:type="xs:int">
-				<info>
-					<desc>the type of the database field.</desc>
-				</info>
-			</prop>
-			<prop oor:name="PrimaryKey" oor:type="xs:boolean">
-				<info>
-					<desc>indicates whether the database field is a primary key or not.</desc>
-				</info>
-			</prop>
-			<prop oor:name="DefaultValue" oor:type="xs:boolean">
-				<info>
-					<desc>defines the default value of the database field.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Precision" oor:type="xs:int">
-				<info>
-					<desc>defines the number of decimal digits of the database field.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Scale" oor:type="xs:int">
-				<info>
-					<desc>defines the number of decimal digits to right of the decimal point of the database field.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="TWizTable">
-			<info>
-				<desc>Information on the tables of the  table wizard</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the table (start at 0, must be table-unique)</desc>
-				</info>
-			</prop>
-			<prop oor:localized="true" oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>the name of the database table. ONLY ASCII CHARACTERS</desc>
-				</info>
-			</prop>
-			<set oor:name="Fields" oor:node-type="TWizField">
-				<info>
-					<desc> the fields in this table </desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="TWizCategory">
-			<info>
-				<desc>Information on the categries of the  table wizard</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the category (start at 0, must be category-unique)</desc>
-				</info>
-			</prop>
-			<prop oor:localized="true" oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>the name of the database field.</desc>
-				</info>
-			</prop>
-			<set oor:name="Tables" oor:node-type="TWizTable">
-				<info>
-					<desc> the tables in this category </desc>
-				</info>
-			</set>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="TableWizard" oor:node-type="TWizCategory">
-			<info>
-				<desc>the set of categories.</desc>
-			</info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="TableWizard" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains the configuration schema for the table wizard</desc>
+  </info>
+  <templates>
+    <group oor:name="TWizField">
+      <info>
+        <desc>Information on the database field properties</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the field  (start at 0, must be field-unique)</desc>
+        </info>
+      </prop>
+      <prop oor:localized="true" oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>the name of the database field. ONLY ASCII CHARACTERS</desc>
+        </info>
+      </prop>
+      <prop oor:localized="true" oor:name="ShortName" oor:type="xs:string">
+        <info>
+          <desc>the name of the database field. ONLY ASCII AND MAXIMUM 10 CHARACTERS</desc>
+        </info>
+      </prop>
+      <prop oor:name="Type" oor:type="xs:int">
+        <info>
+          <desc>the type of the database field.</desc>
+        </info>
+      </prop>
+      <prop oor:name="PrimaryKey" oor:type="xs:boolean">
+        <info>
+          <desc>indicates whether the database field is a primary key or not.</desc>
+        </info>
+      </prop>
+      <prop oor:name="DefaultValue" oor:type="xs:boolean">
+        <info>
+          <desc>defines the default value of the database field.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Precision" oor:type="xs:int">
+        <info>
+          <desc>defines the number of decimal digits of the database field.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Scale" oor:type="xs:int">
+        <info>
+          <desc>defines the number of decimal digits to right of the decimal point of the database field.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="TWizTable">
+      <info>
+        <desc>Information on the tables of the  table wizard</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the table (start at 0, must be table-unique)</desc>
+        </info>
+      </prop>
+      <prop oor:localized="true" oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>the name of the database table. ONLY ASCII CHARACTERS</desc>
+        </info>
+      </prop>
+      <set oor:name="Fields" oor:node-type="TWizField">
+        <info>
+          <desc> the fields in this table </desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="TWizCategory">
+      <info>
+        <desc>Information on the categries of the  table wizard</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the category (start at 0, must be category-unique)</desc>
+        </info>
+      </prop>
+      <prop oor:localized="true" oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>the name of the database field.</desc>
+        </info>
+      </prop>
+      <set oor:name="Tables" oor:node-type="TWizTable">
+        <info>
+          <desc> the tables in this category </desc>
+        </info>
+      </set>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="TableWizard" oor:node-type="TWizCategory">
+      <info>
+        <desc>the set of categories.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

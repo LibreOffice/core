@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema
-    oor:package="org.openoffice.Office" oor:name="Linguistic" xml:lang="en-US"
-    xmlns:oor="http://openoffice.org/2001/registry"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.Office" oor:name="Linguistic" xml:lang="en-US">
   <info>
     <desc>Contains linguistic (spell checking, hyphenation, thesaurus) related
     configurations.</desc>
@@ -87,18 +84,14 @@
           <label>Spell and grammar dialog image</label>
         </info>
       </prop>
-      <prop
-          oor:name="SpellAndGrammarContextMenuSuggestionImage"
-          oor:type="xs:string">
+      <prop oor:name="SpellAndGrammarContextMenuSuggestionImage" oor:type="xs:string">
         <info>
           <desc>The path to the image for the spell and grammar checking
           suggestions in the context menu context menu.</desc>
           <label>Spell and grammar context menu suggestions image</label>
         </info>
       </prop>
-      <prop
-          oor:name="SpellAndGrammarContextMenuDictionaryImage"
-          oor:type="xs:string">
+      <prop oor:name="SpellAndGrammarContextMenuDictionaryImage" oor:type="xs:string">
         <info>
           <desc>The path to the image for the spell and grammar checking context
           menu context menu.</desc>
@@ -153,110 +146,98 @@
     </group>
     <group oor:name="General">
       <info>
-	<desc>Contains general settings for the linguistic
+        <desc>Contains general settings for the linguistic
         configurations.</desc>
       </info>
       <prop oor:name="UILocale" oor:type="xs:string" oor:nillable="false">
-	<!-- OldLocation: NEW -->
-	<!-- UIHints: Tools - Options - General - Language Settings - Languages
+        <!-- OldLocation: NEW -->
+        <!-- UIHints: Tools - Options - General - Language Settings - Languages
         -->
-	<info>
-	  <desc>Specifies the UI language. An empty string means: use the
+        <info>
+          <desc>Specifies the UI language. An empty string means: use the
           desktop's UI language if possible.</desc>
-	</info>
-	<value/>
+        </info>
+        <value/>
       </prop>
-      <prop
-          oor:name="IsIgnoreControlCharacters" oor:type="xs:boolean"
-          oor:nillable="false">
-	<!-- OldLocation: NEW -->
-	<info>
-	  <desc>Ignores the control characters (ASCII characters &lt; 32) for
+      <prop oor:name="IsIgnoreControlCharacters" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldLocation: NEW -->
+        <info>
+          <desc>Ignores the control characters (ASCII characters &lt; 32) for
           spell checking, hyphenation and the thesaurus.</desc>
-	</info>
-	<value>true</value>
+        </info>
+        <value>true</value>
       </prop>
       <prop oor:name="DefaultLocale" oor:type="xs:string" oor:nillable="false">
-	<!-- OldPath: DefaultLanguage -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Specifies the default document language.</desc>
-	  <label>Default language</label>
-	</info>
+        <!-- OldPath: DefaultLanguage -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Specifies the default document language.</desc>
+          <label>Default language</label>
+        </info>
         <value/>
         <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop
-          oor:name="DefaultLocale_CJK" oor:type="xs:string"
-          oor:nillable="false">
-	<!-- OldPath: DefaultLanguage -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Specifies the default document CJK language.</desc>
-	  <label>Default language for CJK linguistics</label>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+      <prop oor:name="DefaultLocale_CJK" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: DefaultLanguage -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Specifies the default document CJK language.</desc>
+          <label>Default language for CJK linguistics</label>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop
-          oor:name="DefaultLocale_CTL" oor:type="xs:string"
-          oor:nillable="false">
-	<!-- OldPath: DefaultLanguage -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Specifies the default document CTL language.</desc>
-	  <label>Default language for CTL linguistics</label>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+      <prop oor:name="DefaultLocale_CTL" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: DefaultLanguage -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Specifies the default document CTL language.</desc>
+          <label>Default language for CTL linguistics</label>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
       <group oor:name="DictionaryList">
-	<info>
-	  <desc>Defines which personal dictionaries are used.</desc>
-	</info>
-	<prop
-            oor:name="ActiveDictionaries" oor:type="oor:string-list"
-            oor:nillable="false">
-	  <!-- OldPath: Active-Dictionaries -->
-	  <!-- OldLocation: soffice.ini -->
-	  <!-- UIHints: Tools - Options - General - Language -->
-	  <info>
-	    <desc>Specifies the custom dictionaries to be used. The Ignore list
+        <info>
+          <desc>Defines which personal dictionaries are used.</desc>
+        </info>
+        <prop oor:name="ActiveDictionaries" oor:type="oor:string-list" oor:nillable="false">
+          <!-- OldPath: Active-Dictionaries -->
+          <!-- OldLocation: soffice.ini -->
+          <!-- UIHints: Tools - Options - General - Language -->
+          <info>
+            <desc>Specifies the custom dictionaries to be used. The Ignore list
             (IgnoreAllList (All)) is administered in the RAM only for the
             current spellcheck.</desc>
-	    <label>Custom dictionaries</label>
-	  </info>
-	  <value>
+            <label>Custom dictionaries</label>
+          </info>
+          <value>
             <it>IgnoreAllList</it>
             <it>en-US.dic</it>
             <it>en-GB.dic</it>
             <it>sl.dic</it>
             <it>technical.dic</it>
           </value>
-	</prop>
-	<prop
-            oor:name="IsUseDictionaryList" oor:type="xs:boolean"
-            oor:nillable="false">
-	  <!-- OldLocation: NEW -->
-	  <info>
-	    <desc>Determines if personal dictionaries should be used for spell
+        </prop>
+        <prop oor:name="IsUseDictionaryList" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldLocation: NEW -->
+          <info>
+            <desc>Determines if personal dictionaries should be used for spell
             checking and hyphenation.</desc>
-	  </info>
-	  <value>true</value>
-	</prop>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
     </group>
     <group oor:name="TextConversion">
       <info>
         <desc>Defines settings used by the text conversion.</desc>
       </info>
-      <prop
-          oor:name="ActiveConversionDictionaries" oor:type="oor:string-list"
-          oor:nillable="false">
+      <prop oor:name="ActiveConversionDictionaries" oor:type="oor:string-list" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies the user dictionaries to be used. </desc>
@@ -264,9 +245,7 @@
         </info>
         <value/>
       </prop>
-      <prop
-          oor:name="IsIgnorePostPositionalWord" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsIgnorePostPositionalWord" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies if post positionals should be ignored when looking for
@@ -275,9 +254,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="IsAutoCloseDialog" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsAutoCloseDialog" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies if the dialog should be closed automatically after the
@@ -286,9 +263,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="IsShowEntriesRecentlyUsedFirst" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsShowEntriesRecentlyUsedFirst" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies if entries that were recently used as replacements
@@ -297,9 +272,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="IsAutoReplaceUniqueEntries" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsAutoReplaceUniqueEntries" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies if entries for which have only one possible
@@ -316,9 +289,7 @@
           <label>Direction to simplified</label>
         </info>
       </prop>
-      <prop
-          oor:name="IsUseCharacterVariants" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsUseCharacterVariants" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies wether Taiwan, Hongkong SAR, and Macao SAR character
@@ -327,9 +298,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="IsTranslateCommonTerms" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsTranslateCommonTerms" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
           <desc>Specifies wether common terms should be detected and translated
@@ -338,9 +307,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="IsReverseMapping" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsReverseMapping" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
           <desc>If Reverse Mapping is active than every dictionary entry added
@@ -353,78 +320,69 @@
     </group>
     <group oor:name="SpellChecking">
       <info>
-	<desc>Contains spell checking-relevant settings.</desc>
+        <desc>Contains spell checking-relevant settings.</desc>
       </info>
-      <prop
-          oor:name="IsSpellUpperCase" oor:type="xs:boolean"
-          oor:nillable="false">
-	<!-- OldPath: MiscOptions / SpellOptions -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Specifies whether to include uppercase words in the spellcheck
+      <prop oor:name="IsSpellUpperCase" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Specifies whether to include uppercase words in the spellcheck
           process.</desc>
-	  <label>Spell uppercase words</label>
-	</info>
-	<value>false</value>
+          <label>Spell uppercase words</label>
+        </info>
+        <value>false</value>
       </prop>
-      <prop
-          oor:name="IsSpellWithDigits" oor:type="xs:boolean"
-          oor:nillable="false">
-	<!-- OldPath: MiscOptions / SpellOptions -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Specifies whether to check the spelling of words which contain
+      <prop oor:name="IsSpellWithDigits" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Specifies whether to check the spelling of words which contain
           numbers as well as letters.</desc>
-	  <label>Spell words with digits</label>
-	</info>
-	<value>false</value>
+          <label>Spell words with digits</label>
+        </info>
+        <value>false</value>
       </prop>
-      <prop
-          oor:name="IsSpellCapitalization" oor:type="xs:boolean"
-          oor:nillable="false">
-	<!-- OldPath: MiscOptions / SpellOptions -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Checks the correct use of capitalization.</desc>
-	  <label>Check capitalization</label>
-	</info>
-	<value>true</value>
+      <prop oor:name="IsSpellCapitalization" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Checks the correct use of capitalization.</desc>
+          <label>Check capitalization</label>
+        </info>
+        <value>true</value>
       </prop>
       <prop oor:name="IsSpellAuto" oor:type="xs:boolean" oor:nillable="false">
-	<!-- OldPath: MiscOptions / SpellOptions -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Checks spelling automatically.</desc>
-	  <label>Automatic spellchecking</label>
-	</info>
-	<value>true</value>
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Checks spelling automatically.</desc>
+          <label>Automatic spellchecking</label>
+        </info>
+        <value>true</value>
       </prop>
-      <prop
-          oor:name="IsSpellSpecial" oor:type="xs:boolean" oor:nillable="false">
-	<!-- OldPath: MiscOptions / SpellOptions -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Allows spellchecking in headers, footers, and frames.</desc>
-	  <label>Check spelljng in special regions</label>
-	</info>
-	<value>true</value>
+      <prop oor:name="IsSpellSpecial" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Allows spellchecking in headers, footers, and frames.</desc>
+          <label>Check spelljng in special regions</label>
+        </info>
+        <value>true</value>
       </prop>
-      <prop
-          oor:name="IsReverseDirection" oor:type="xs:boolean"
-          oor:nillable="false">
-	<!-- OldPath: MiscOptions / SpellOptions -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Advances backwards through the text for spell checking.</desc>
-	  <label>Reverse direction.</label>
-	</info>
-	<value>false</value>
+      <prop oor:name="IsReverseDirection" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: MiscOptions / SpellOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Advances backwards through the text for spell checking.</desc>
+          <label>Reverse direction.</label>
+        </info>
+        <value>false</value>
       </prop>
     </group>
     <group oor:name="GrammarChecking">
@@ -438,9 +396,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="IsInteractiveCheck" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsInteractiveCheck" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>determines if grammar is check in the spelling and grammar
           dialog.</desc>
@@ -451,99 +407,99 @@
     </group>
     <group oor:name="Hyphenation">
       <info>
-	<desc>Contains hyphenation relevant settings.</desc>
+        <desc>Contains hyphenation relevant settings.</desc>
       </info>
       <prop oor:name="MinLeading" oor:type="xs:short" oor:nillable="false">
-	<!-- OldPath: HyphMinLeading -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Specifies the minimum number of characters of the hyphenated
+        <!-- OldPath: HyphMinLeading -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Specifies the minimum number of characters of the hyphenated
           word required at the end of the line.</desc>
-	  <label>Characters per syllable before hyphen</label>
-	</info>
-	<constraints>
-	  <minInclusive oor:value="2">
-	    <info>
-	      <desc>Specifies the minimum value allowed.</desc>
-	    </info>
-	  </minInclusive>
-	  <maxInclusive oor:value="9">
-	    <info>
-	      <desc>Specifies the maximum value allowed.</desc>
-	    </info>
-	  </maxInclusive>
-	</constraints>
-	<value>2</value>
+          <label>Characters per syllable before hyphen</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="2">
+            <info>
+              <desc>Specifies the minimum value allowed.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="9">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>2</value>
       </prop>
       <prop oor:name="MinTrailing" oor:type="xs:short" oor:nillable="false">
-	<!-- OldPath: HyphMinTrailing -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Specifies the minimum number of characters of the hyphenated
+        <!-- OldPath: HyphMinTrailing -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Specifies the minimum number of characters of the hyphenated
           word required at the next line.</desc>
-	  <label>Characters per syllable after hyphen</label>
-	</info>
-	<constraints>
-	  <minInclusive oor:value="2">
-	    <info>
-	      <desc>Specifies the minimum value allowed.</desc>
-	    </info>
-	  </minInclusive>
-	  <maxInclusive oor:value="9">
-	    <info>
-	      <desc>Specifies the maximum value allowed.</desc>
-	    </info>
-	  </maxInclusive>
-	</constraints>
-	<value>2</value>
+          <label>Characters per syllable after hyphen</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="2">
+            <info>
+              <desc>Specifies the minimum value allowed.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="9">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>2</value>
       </prop>
       <prop oor:name="MinWordLength" oor:type="xs:short" oor:nillable="false">
-	<!-- OldPath: HyphMinWordLength -->
-	<!-- OldLocation: soffice.ini -->
-	<info>
-	  <desc>Specifies the minimum word length to allow a hyphenation.</desc>
-	  <label>Minimal word length</label>
-	</info>
-	<constraints>
-	  <minInclusive oor:value="2">
-	    <info>
-	      <desc>Specifies the minimum value allowed.</desc>
-	    </info>
-	  </minInclusive>
-	  <maxInclusive oor:value="9">
-	    <info>
-	      <desc>Specifies the maximum value allowed.</desc>
-	    </info>
-	  </maxInclusive>
-	</constraints>
-	<value>5</value>
+        <!-- OldPath: HyphMinWordLength -->
+        <!-- OldLocation: soffice.ini -->
+        <info>
+          <desc>Specifies the minimum word length to allow a hyphenation.</desc>
+          <label>Minimal word length</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="2">
+            <info>
+              <desc>Specifies the minimum value allowed.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="9">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>5</value>
       </prop>
       <prop oor:name="IsHyphSpecial" oor:type="xs:boolean" oor:nillable="false">
-	<!-- OldPath: MiscOptions -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Allows hyphenation in headers, footers, and frames.</desc>
-	  <label>Hyphenate in special regions.</label>
-	</info>
-	<value>true</value>
+        <!-- OldPath: MiscOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Allows hyphenation in headers, footers, and frames.</desc>
+          <label>Hyphenate in special regions.</label>
+        </info>
+        <value>true</value>
       </prop>
       <prop oor:name="IsHyphAuto" oor:type="xs:boolean" oor:nillable="false">
-	<!-- OldPath: MiscOptions -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Language -->
-	<info>
-	  <desc>Allows for automatic insertion of soft hyphens.</desc>
-	  <label>Automatic hyphention.</label>
-	</info>
-	<value>false</value>
+        <!-- OldPath: MiscOptions -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Language -->
+        <info>
+          <desc>Allows for automatic insertion of soft hyphens.</desc>
+          <label>Automatic hyphention.</label>
+        </info>
+        <value>false</value>
       </prop>
     </group>
     <group oor:name="ServiceManager">
       <info>
-	<desc>Contains settings for the service manager that are used to
+        <desc>Contains settings for the service manager that are used to
         access/configure the usage of the various linguistic service
         implementations.</desc>
       </info>
@@ -584,9 +540,7 @@
           <label>Grammar Checkers</label>
         </info>
       </set>
-      <prop
-          oor:name="DataFilesChangedCheckValue" oor:type="xs:int"
-          oor:nillable="false">
+      <prop oor:name="DataFilesChangedCheckValue" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Value used to check if the data files of the linguistic have
           changed and thus the configuration needs to be updated.</desc>
@@ -595,22 +549,22 @@
         <value>-1</value>
       </prop>
       <group oor:name="SpellCheckerList" oor:extensible="true">
-	<info>
-	  <desc>Contains a list of languages and spell-checking-service entries.
+        <info>
+          <desc>Contains a list of languages and spell-checking-service entries.
           Only languages listed will be supported.</desc>
-	</info>
+        </info>
       </group>
       <group oor:name="ThesaurusList" oor:extensible="true">
-	<info>
-	  <desc>Contains a list of languages and thesaurus-service entries.
+        <info>
+          <desc>Contains a list of languages and thesaurus-service entries.
           Only languages listed will be supported.</desc>
-	</info>
+        </info>
       </group>
       <group oor:name="HyphenatorList" oor:extensible="true">
-	<info>
-	  <desc>Contains a list of languages and hyphenation-service pairs. Only
+        <info>
+          <desc>Contains a list of languages and hyphenation-service pairs. Only
           the languages that are listed are supported.</desc>
-	</info>
+        </info>
       </group>
       <group oor:name="GrammarCheckerList" oor:extensible="true">
         <info>
@@ -619,29 +573,29 @@
         </info>
       </group>
       <group oor:name="LastFoundSpellCheckers" oor:extensible="true">
-	<info>
-	  <desc>Contains a list of languages and spell-checking-service entries.
+        <info>
+          <desc>Contains a list of languages and spell-checking-service entries.
           The entries represent those languages/spellcheckers that were
           available the last time. New languages/spellcheckers (those available
           this time but not the last time) will be activated
           automatically.</desc>
-	</info>
+        </info>
       </group>
       <group oor:name="LastFoundThesauri" oor:extensible="true">
-	<info>
-	  <desc>Contains a list of languages and thesaurus-service entries. The
+        <info>
+          <desc>Contains a list of languages and thesaurus-service entries. The
           entries represent those languages/thesauri that were available the
           last time. New languages/thesauri (those available this time but not
           the last time) will be activated automatically.</desc>
-	</info>
+        </info>
       </group>
       <group oor:name="LastFoundHyphenators" oor:extensible="true">
-	<info>
-	  <desc>Contains a list of languages and hyphenation-service pairs. The
+        <info>
+          <desc>Contains a list of languages and hyphenation-service pairs. The
           entries represent those languages/hyphenators that were available the
           last time. New languages/hyphenators (those available this time but
           not the last time) will be activated automatically.</desc>
-	</info>
+        </info>
       </group>
       <group oor:name="LastFoundGrammarCheckers" oor:extensible="true">
         <info>

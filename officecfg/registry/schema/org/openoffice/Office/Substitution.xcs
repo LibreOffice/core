@@ -17,61 +17,62 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Substitution" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Stores rules for user-defined path variables called SharePoint. These rules are evaluated when a user-defined path variable must be substituted with a real path.</desc>
-	</info>
-	<templates>
-		<group oor:name="SharePointMapping">
-			<info>
-				<desc>Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-			</info>
-			<prop oor:name="Directory" oor:type="xs:string" oor:nillable="false">
-				<info>
-					<desc>Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-				</info>
-			</prop>
-			<group oor:name="Environment">
-				<info>
-					<desc>Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-				</info>
-				<prop oor:name="OS" oor:type="xs:string">
-					<info>
-						<desc>Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-					</info>
-				</prop>
-				<prop oor:name="Host" oor:type="xs:string">
-					<info>
-						<desc>Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-					</info>
-				</prop>
-				<prop oor:name="DNSDomain" oor:type="xs:string">
-					<info>
-						<desc>Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-					</info>
-				</prop>
-				<prop oor:name="YPDomain" oor:type="xs:string">
-					<info>
-						<desc>Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-					</info>
-				</prop>
-				<prop oor:name="NTDomain" oor:type="xs:string">
-					<info>
-						<desc>Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-					</info>
-				</prop>
-			</group>
-		</group>
-		<set oor:name="SharePoint" oor:node-type="SharePointMapping">
-			<info>
-				<desc>Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-			</info>
-		</set>
-	</templates>
-	<component>
-		<set oor:name="SharePoints" oor:node-type="SharePoint">
-			<info>
-				<desc>Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-			</info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Substitution" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Stores rules for user-defined path variables called SharePoint. These rules are evaluated when a user-defined path variable must be substituted with a real path.</desc>
+  </info>
+  <templates>
+    <group oor:name="SharePointMapping">
+      <info>
+        <desc>Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
+      </info>
+      <prop oor:name="Directory" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
+        </info>
+      </prop>
+      <group oor:name="Environment">
+        <info>
+          <desc>Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
+        </info>
+        <prop oor:name="OS" oor:type="xs:string">
+          <info>
+            <desc>Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
+          </info>
+        </prop>
+        <prop oor:name="Host" oor:type="xs:string">
+          <info>
+            <desc>Specifies the name of the host for which the Directory property setting is valid. You can use the '*' wildcard for the name.</desc>
+          </info>
+        </prop>
+        <prop oor:name="DNSDomain" oor:type="xs:string">
+          <info>
+            <desc>Specifies the dns domain for which the Directory property variable is valid. You can use the '*' wildcard for the domain.</desc>
+          </info>
+        </prop>
+        <prop oor:name="YPDomain" oor:type="xs:string">
+          <info>
+            <desc>Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the '*' wildcard for the name.</desc>
+          </info>
+        </prop>
+        <prop oor:name="NTDomain" oor:type="xs:string">
+          <info>
+            <desc>Specifies the NT domain for which the Directory property variable is valid. You can use the '*' wildcard for the domain.</desc>
+          </info>
+        </prop>
+      </group>
+    </group>
+    <set oor:name="SharePoint" oor:node-type="SharePointMapping">
+      <info>
+        <desc>Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
+      </info>
+    </set>
+  </templates>
+  <component>
+    <set oor:name="SharePoints" oor:node-type="SharePoint">
+      <info>
+        <desc>Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

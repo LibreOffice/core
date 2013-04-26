@@ -17,26 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Scripting" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains the various settings needed by the Scripting Framework and its runtimes.</desc>
-	</info>
-	<templates>
-		<group oor:name="RuntimeNode">
-			<info>
-				<desc>Specifies the runtimes available to the Scriptying Framework.</desc>
-			</info>
-			<prop oor:name="SupportedFileExtensions" oor:type="oor:string-list">
-				<info>
-					<desc>Lists the file extensions that are recognized by this runtime.</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="ScriptRuntimes" oor:node-type="RuntimeNode">
-			<info>
-				<desc>Lists the registered Scripting Framework runtimes.</desc>
-			</info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Scripting" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains the various settings needed by the Scripting Framework and its runtimes.</desc>
+  </info>
+  <templates>
+    <group oor:name="RuntimeNode">
+      <info>
+        <desc>Specifies the runtimes available to the Scriptying Framework.</desc>
+      </info>
+      <prop oor:name="SupportedFileExtensions" oor:type="oor:string-list">
+        <info>
+          <desc>Lists the file extensions that are recognized by this runtime.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="ScriptRuntimes" oor:node-type="RuntimeNode">
+      <info>
+        <desc>Lists the registered Scripting Framework runtimes.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

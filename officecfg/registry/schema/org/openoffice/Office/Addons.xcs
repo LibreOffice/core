@@ -17,296 +17,297 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Addons" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains general structures used to integrate external components into the Office user interface.</desc>
-	</info>
-	<templates>
-		<group oor:name="MenuItem">
-			<info>
-				<desc>Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-			</info>
-			<prop oor:name="URL" oor:type="xs:string">
-				<info>
-					<desc>A command URL which represents the function to execute.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>A localized string used to as the menu item title.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ImageIdentifier" oor:type="xs:string">
-				<info>
-					<desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Target" oor:type="xs:string">
-				<info>
-					<desc>This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Context" oor:type="xs:string">
-				<info>
-					<desc>An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
-				</info>
-			</prop>
-			<set oor:name="Submenu" oor:node-type="MenuItem">
-				<info>
-					<desc>An optional set to allow sub menus.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="PopupMenu">
-			<info>
-				<desc>Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-			</info>
-			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>A localized string used to as the menu title.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Context" oor:type="xs:string">
-				<info>
-					<desc>An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
-				</info>
-			</prop>
-			<set oor:name="Submenu" oor:node-type="MenuItem">
-				<info>
-					<desc>An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="MergeMenuInstruction">
-			<info>
-				<desc>Describes a merge menu instruction of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes. A menu instruction describes how the attached menu items should be merged into the Office menubar.</desc>
-			</info>
-			<prop oor:name="MergePoint" oor:type="xs:string">
-				<info>
-					<desc>A command path describe the reference point for the merge command.</desc>
-				</info>
-			</prop>
-			<prop oor:name="MergeCommand" oor:type="xs:string">
-				<info>
-					<desc>A command to be processed for this merge menu instruction.</desc>
-				</info>
-			</prop>
-			<prop oor:name="MergeCommandParameter" oor:type="xs:string">
-			    <info>
-			        <desc>Optional parameters for a merge command. Interpretation depends on the individual command.</desc>
-			    </info>
-			</prop>
-			<prop oor:name="MergeFallback" oor:type="xs:string">
-				<info>
-					<desc>A fallback command to be used if MergeCommand cannot be applied.</desc>
-				</info>
-			</prop>
-			<prop oor:name="MergeContext" oor:type="xs:string">
-				<info>
-					<desc>A property to define the context of this merge instruction. It can be empty or a colon separated list of the supported application modules.</desc>
-				</info>
-			</prop>
-			<set oor:name="MenuItems" oor:node-type="MenuItem">
-				<info>
-					<desc>Defines the menu item(s) to be merged into the menu bar.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="MergeToolBarInstruction">
-			<info>
-				<desc>Describes a merge menu instruction of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes. A menu instruction describes how the attached menu items should be merged into the Office menubar.</desc>
-			</info>
-			<prop oor:name="MergeToolBar" oor:type="xs:string">
-				<info>
-					<desc>Defines the toolbar resource URL.</desc>
-				</info>
-			</prop>
-			<prop oor:name="MergePoint" oor:type="xs:string">
-			    <info>
-			        <desc>Describes the command that should be used as a reference point for the merge command.</desc>
-			    </info>
-			</prop>
-			<prop oor:name="MergeCommand" oor:type="xs:string">
-				<info>
-					<desc>A command to be processed for this merge menu instruction.</desc>
-				</info>
-			</prop>
-			<prop oor:name="MergeCommandParameter" oor:type="xs:string">
-				<info>
-					<desc>Optional parameters for a merge command. Interpretation depends on the individual command.</desc>
-				</info>
-			</prop>
-			<prop oor:name="MergeFallback" oor:type="xs:string">
-				<info>
-					<desc>A fallback command to be used if MergeCommand cannot be applied.</desc>
-				</info>
-			</prop>
-			<prop oor:name="MergeContext" oor:type="xs:string">
-				<info>
-					<desc>A property to define the context of this merge instruction. It can be empty or a colon separated list of the supported application modules.</desc>
-				</info>
-			</prop>
-    		<set oor:name="ToolBarItems" oor:node-type="ToolBarItem">
-    			<info>
-    				<desc>Contains a list of toolbar items used by an Add-On.</desc>
-    			</info>
-    		</set>
-		</group>
-		<group oor:name="ToolBarItem">
-			<info>
-				<desc>Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
-			</info>
-			<prop oor:name="URL" oor:type="xs:string">
-				<info>
-					<desc>A command URL which represents the function to execute.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>A localized string used to as the menu item title.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ImageIdentifier" oor:type="xs:string">
-				<info>
-					<desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Target" oor:type="xs:string">
-				<info>
-					<desc>This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Context" oor:type="xs:string">
-				<info>
-					<desc>A property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ControlType" oor:type="xs:string">
-			    <info>
-					<desc>A property to define the control type of the toolbar item. An will be interpreted as OpenOffice.org default toggle button.</desc>
-			    </info>
-			</prop>
-			<prop oor:name="Width" oor:type="xs:long">
-			    <info>
-					<desc>A property to define the size of a toolbar item. This property works only ControlTypes which can have a dynamic size (e.g. comboboxes, edit fields, spin fields)</desc>
-			    </info>
-			</prop>
-		</group>
-		<group oor:name="UserDefinedImages">
-			<info>
-				<desc>A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
-			</info>
-			<prop oor:name="ImageSmall" oor:type="xs:hexBinary">
-				<info>
-					<desc>Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ImageBig" oor:type="xs:hexBinary">
-				<info>
-					<desc>Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ImageSmallHC" oor:type="xs:hexBinary">
-				<info>
-					<desc>Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ImageBigHC" oor:type="xs:hexBinary">
-				<info>
-					<desc>Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ImageSmallURL" oor:type="xs:string">
-				<info>
-					<desc>A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ImageBigURL" oor:type="xs:string">
-				<info>
-					<desc>A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ImageSmallHCURL" oor:type="xs:string">
-				<info>
-					<desc>A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ImageBigHCURL" oor:type="xs:string">
-				<info>
-					<desc>A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="Images">
-			<info>
-				<desc>A group that associates images to a command URL</desc>
-			</info>
-			<prop oor:name="URL" oor:type="xs:string">
-				<info>
-					<desc>The command URL that is bound to the defined images.</desc>
-				</info>
-			</prop>
-			<node-ref oor:name="UserDefinedImages" oor:node-type="UserDefinedImages">
-				<info>
-					<desc>An user-defined images group.</desc>
-				</info>
-			</node-ref>
-		</group>
-		<set oor:name="ToolBarItems" oor:node-type="ToolBarItem">
-			<info>
-				<desc>Contains a list of toolbar items used by an Add-On.</desc>
-			</info>
-		</set>
-		<set oor:name="MergeMenuItems" oor:node-type="MergeMenuInstruction">
-			<info>
-				<desc>Contains a list of merge menu instructions defined by an Add-On which specify how to merge menu items into the Office menubar.</desc>
-			</info>
-		</set>
-		<set oor:name="MergeToolBarItems" oor:node-type="MergeToolBarInstruction">
-			<info>
-				<desc>Contains a list of merge toolbar instructions defined by an Add-On which specify how to merge toolbar items into an existing toolbar.</desc>
-			</info>
-		</set>
-	</templates>
-	<component>
-		<group oor:name="AddonUI">
-			<info>
-				<desc>Contains information about the structure of addon user interface.</desc>
-			</info>
-			<set oor:name="AddonMenu" oor:node-type="MenuItem">
-				<info>
-					<desc>Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
-				</info>
-			</set>
-			<set oor:name="Images" oor:node-type="Images">
-				<info>
-					<desc>Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
-				</info>
-			</set>
-			<set oor:name="OfficeMenuBar" oor:node-type="PopupMenu">
-				<info>
-					<desc>Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
-				</info>
-			</set>
-			<set oor:name="OfficeMenuBarMerging" oor:node-type="MergeMenuItems">
-				<info>
-					<desc>Contains a list of menu merging instructions of different add-ons.</desc>
-				</info>
-			</set>
-			<set oor:name="OfficeToolBar" oor:node-type="ToolBarItems">
-				<info>
-					<desc>Contains a list of sets of toolbar items that are part of add-on toolbars.</desc>
-				</info>
-			</set>
-			<set oor:name="OfficeToolbarMerging" oor:node-type="MergeToolBarItems">
-			    <info>
-			        <desc>Contains a list of toolbar merging instructions of different add-ons. </desc>
-			    </info>
-			</set>
-			<set oor:name="OfficeHelp" oor:node-type="MenuItem">
-				<info>
-					<desc>Contains a list of functions inserted into the Office help menu. The optional property 'Submeno' will be ignored for this set.</desc>
-				</info>
-			</set>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Addons" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains general structures used to integrate external components into the Office user interface.</desc>
+  </info>
+  <templates>
+    <group oor:name="MenuItem">
+      <info>
+        <desc>Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+      </info>
+      <prop oor:name="URL" oor:type="xs:string">
+        <info>
+          <desc>A command URL which represents the function to execute.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized string used to as the menu item title.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageIdentifier" oor:type="xs:string">
+        <info>
+          <desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Target" oor:type="xs:string">
+        <info>
+          <desc>This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Context" oor:type="xs:string">
+        <info>
+          <desc>An property to define the context of a menu item that has a sub menu. It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <set oor:name="Submenu" oor:node-type="MenuItem">
+        <info>
+          <desc>An optional set to allow sub menus.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="PopupMenu">
+      <info>
+        <desc>Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+      </info>
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized string used to as the menu title.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Context" oor:type="xs:string">
+        <info>
+          <desc>An property to define the context of a top-level popup-menu . It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <set oor:name="Submenu" oor:node-type="MenuItem">
+        <info>
+          <desc>An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="MergeMenuInstruction">
+      <info>
+        <desc>Describes a merge menu instruction of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes. A menu instruction describes how the attached menu items should be merged into the Office menubar.</desc>
+      </info>
+      <prop oor:name="MergePoint" oor:type="xs:string">
+        <info>
+          <desc>A command path describe the reference point for the merge command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeCommand" oor:type="xs:string">
+        <info>
+          <desc>A command to be processed for this merge menu instruction.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeCommandParameter" oor:type="xs:string">
+        <info>
+          <desc>Optional parameters for a merge command. Interpretation depends on the individual command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeFallback" oor:type="xs:string">
+        <info>
+          <desc>A fallback command to be used if MergeCommand cannot be applied.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeContext" oor:type="xs:string">
+        <info>
+          <desc>A property to define the context of this merge instruction. It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <set oor:name="MenuItems" oor:node-type="MenuItem">
+        <info>
+          <desc>Defines the menu item(s) to be merged into the menu bar.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="MergeToolBarInstruction">
+      <info>
+        <desc>Describes a merge menu instruction of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes. A menu instruction describes how the attached menu items should be merged into the Office menubar.</desc>
+      </info>
+      <prop oor:name="MergeToolBar" oor:type="xs:string">
+        <info>
+          <desc>Defines the toolbar resource URL.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergePoint" oor:type="xs:string">
+        <info>
+          <desc>Describes the command that should be used as a reference point for the merge command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeCommand" oor:type="xs:string">
+        <info>
+          <desc>A command to be processed for this merge menu instruction.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeCommandParameter" oor:type="xs:string">
+        <info>
+          <desc>Optional parameters for a merge command. Interpretation depends on the individual command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeFallback" oor:type="xs:string">
+        <info>
+          <desc>A fallback command to be used if MergeCommand cannot be applied.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeContext" oor:type="xs:string">
+        <info>
+          <desc>A property to define the context of this merge instruction. It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <set oor:name="ToolBarItems" oor:node-type="ToolBarItem">
+        <info>
+          <desc>Contains a list of toolbar items used by an Add-On.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="ToolBarItem">
+      <info>
+        <desc>Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+      </info>
+      <prop oor:name="URL" oor:type="xs:string">
+        <info>
+          <desc>A command URL which represents the function to execute.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized string used to as the menu item title.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageIdentifier" oor:type="xs:string">
+        <info>
+          <desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Target" oor:type="xs:string">
+        <info>
+          <desc>This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Context" oor:type="xs:string">
+        <info>
+          <desc>A property to define the context of a toolbar item. It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ControlType" oor:type="xs:string">
+        <info>
+          <desc>A property to define the control type of the toolbar item. An will be interpreted as OpenOffice.org default toggle button.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Width" oor:type="xs:long">
+        <info>
+          <desc>A property to define the size of a toolbar item. This property works only ControlTypes which can have a dynamic size (e.g. comboboxes, edit fields, spin fields)</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="UserDefinedImages">
+      <info>
+        <desc>A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
+      </info>
+      <prop oor:name="ImageSmall" oor:type="xs:hexBinary">
+        <info>
+          <desc>Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageBig" oor:type="xs:hexBinary">
+        <info>
+          <desc>Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageSmallHC" oor:type="xs:hexBinary">
+        <info>
+          <desc>Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageBigHC" oor:type="xs:hexBinary">
+        <info>
+          <desc>Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageSmallURL" oor:type="xs:string">
+        <info>
+          <desc>A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageBigURL" oor:type="xs:string">
+        <info>
+          <desc>A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageSmallHCURL" oor:type="xs:string">
+        <info>
+          <desc>A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageBigHCURL" oor:type="xs:string">
+        <info>
+          <desc>A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Images">
+      <info>
+        <desc>A group that associates images to a command URL</desc>
+      </info>
+      <prop oor:name="URL" oor:type="xs:string">
+        <info>
+          <desc>The command URL that is bound to the defined images.</desc>
+        </info>
+      </prop>
+      <node-ref oor:name="UserDefinedImages" oor:node-type="UserDefinedImages">
+        <info>
+          <desc>An user-defined images group.</desc>
+        </info>
+      </node-ref>
+    </group>
+    <set oor:name="ToolBarItems" oor:node-type="ToolBarItem">
+      <info>
+        <desc>Contains a list of toolbar items used by an Add-On.</desc>
+      </info>
+    </set>
+    <set oor:name="MergeMenuItems" oor:node-type="MergeMenuInstruction">
+      <info>
+        <desc>Contains a list of merge menu instructions defined by an Add-On which specify how to merge menu items into the Office menubar.</desc>
+      </info>
+    </set>
+    <set oor:name="MergeToolBarItems" oor:node-type="MergeToolBarInstruction">
+      <info>
+        <desc>Contains a list of merge toolbar instructions defined by an Add-On which specify how to merge toolbar items into an existing toolbar.</desc>
+      </info>
+    </set>
+  </templates>
+  <component>
+    <group oor:name="AddonUI">
+      <info>
+        <desc>Contains information about the structure of addon user interface.</desc>
+      </info>
+      <set oor:name="AddonMenu" oor:node-type="MenuItem">
+        <info>
+          <desc>Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+        </info>
+      </set>
+      <set oor:name="Images" oor:node-type="Images">
+        <info>
+          <desc>Contains the structure for user-defined images which can be used by menu items and toolbar buttons.</desc>
+        </info>
+      </set>
+      <set oor:name="OfficeMenuBar" oor:node-type="PopupMenu">
+        <info>
+          <desc>Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+        </info>
+      </set>
+      <set oor:name="OfficeMenuBarMerging" oor:node-type="MergeMenuItems">
+        <info>
+          <desc>Contains a list of menu merging instructions of different add-ons.</desc>
+        </info>
+      </set>
+      <set oor:name="OfficeToolBar" oor:node-type="ToolBarItems">
+        <info>
+          <desc>Contains a list of sets of toolbar items that are part of add-on toolbars.</desc>
+        </info>
+      </set>
+      <set oor:name="OfficeToolbarMerging" oor:node-type="MergeToolBarItems">
+        <info>
+          <desc>Contains a list of toolbar merging instructions of different add-ons. </desc>
+        </info>
+      </set>
+      <set oor:name="OfficeHelp" oor:node-type="MenuItem">
+        <info>
+          <desc>Contains a list of functions inserted into the Office help menu. The optional property 'Submeno' will be ignored for this set.</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

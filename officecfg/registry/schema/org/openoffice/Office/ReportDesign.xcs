@@ -16,43 +16,43 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
-<oor:component-schema oor:name="ReportDesign" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <info>
-		<desc>Contains informatation of report design.</desc>
-	</info>
-	<component>
-		<group oor:name="PropertyBrowser">
-            <info>
-                <desc>specifies settings for the property browser used for reports and report controls.</desc>
-            </info>
-            <prop oor:name="DirectHelp" oor:type="xs:boolean">
-                <info>
-                    <desc>Enables or disables a help section at the bottom of the property browser, which shows the help of the currently active property.</desc>
-                </info>
-                <value>false</value>
-            </prop>
-        </group>
-        <group oor:name="Extension">
-            <info>
-                <desc>specifies extension settings for the report designer.</desc>
-            </info>
-            <prop oor:name="DownloadURL" oor:type="xs:string">
-                <info>
-                    <desc>Direct download URL to the Oracle(tm) Report Builder extension.</desc>
-                </info>
-                <value>http://extensions.go-oo.org</value>
-            </prop>
-            <prop oor:name="Name" oor:type="xs:string">
-                <info>
-                    <desc>Name of the extension.</desc>
-                </info>
-                <value>Oracle(tm) Report Builder</value>
-            </prop>
-        </group>
-        <group oor:name="UserData" oor:extensible="true">
-			<info>
-				<desc>Denotes an additional field for arbitrary data.</desc>
-			</info>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ReportDesign" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains informatation of report design.</desc>
+  </info>
+  <component>
+    <group oor:name="PropertyBrowser">
+      <info>
+        <desc>specifies settings for the property browser used for reports and report controls.</desc>
+      </info>
+      <prop oor:name="DirectHelp" oor:type="xs:boolean">
+        <info>
+          <desc>Enables or disables a help section at the bottom of the property browser, which shows the help of the currently active property.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+    <group oor:name="Extension">
+      <info>
+        <desc>specifies extension settings for the report designer.</desc>
+      </info>
+      <prop oor:name="DownloadURL" oor:type="xs:string">
+        <info>
+          <desc>Direct download URL to the Oracle(tm) Report Builder extension.</desc>
+        </info>
+        <value>http://extensions.go-oo.org</value>
+      </prop>
+      <prop oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>Name of the extension.</desc>
+        </info>
+        <value>Oracle(tm) Report Builder</value>
+      </prop>
+    </group>
+    <group oor:name="UserData" oor:extensible="true">
+      <info>
+        <desc>Denotes an additional field for arbitrary data.</desc>
+      </info>
+    </group>
+  </component>
 </oor:component-schema>

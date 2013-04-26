@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -17,73 +17,63 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="Paths" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
-	<info>
-		<desc>Configuration of layered paths replacing the old path configuration org.openoffice.Office.Common/Path.</desc>
-	</info>
-
-	<templates>
-
-	    <group oor:name="MultiPath">
-                <info>
-                <desc>Describe a path in it's details.</desc>
-                </info>
-            <prop oor:name="Unused" oor:type="xs:string">
-                <info>
-                <desc>Because current implementation of configuration sets allow structured types only, these dummy property was inserted.</desc>
-                </info>
-            </prop>
-        </group>
-
-	    <group oor:name="NamedPath">
-                <info>
-                <desc>Bind a list of path values to a "path name" e.g. "Template".</desc>
-                </info>
-            <prop oor:name="IsSinglePath" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Mark a NamedPath as SinglePath (false=MultiPath). Only the property WritePath is used for such single paths then.</desc>
-				</info>
-                <value>false</value>
-            </prop>
-            <set oor:name="InternalPaths" oor:node-type="MultiPath">
-                <info>
-                <desc>Contains path values configured by an administrator or package (not visible for the user).</desc>
-                </info>
-            </set>
-            <prop oor:name="UserPaths" oor:type="oor:string-list">
-                <info>
-                <desc>Contains all path values configured by the user under "Tools->Options->Paths".</desc>
-                </info>
-            </prop>
-            <prop oor:name="WritePath" oor:type="xs:string">
-                <info>
-                <desc>Define one path which is used as the writable path only.</desc>
-                </info>
-            </prop>
-        </group>
-
-	</templates>
-
-	<component>
-
-        <set oor:name="Paths" oor:node-type="NamedPath">
-                <info>
-                <desc>Contains all named paths of the office.</desc>
-                </info>
-        </set>
-
-        <group oor:name="Variables">
-            <info>
-                <desc>Desktop specific defaults for "$" variables used in Paths</desc>
-            </info>
-            <prop oor:name="Work" oor:type="xs:string">
-                <info>
-                    <desc>Expanded value of "$work". Must be a valid URL.</desc>
-                </info>
-            </prop>
-        </group>
-
-	</component>
-
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Paths" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Configuration of layered paths replacing the old path configuration org.openoffice.Office.Common/Path.</desc>
+  </info>
+  <templates>
+    <group oor:name="MultiPath">
+      <info>
+        <desc>Describe a path in it's details.</desc>
+      </info>
+      <prop oor:name="Unused" oor:type="xs:string">
+        <info>
+          <desc>Because current implementation of configuration sets allow structured types only, these dummy property was inserted.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="NamedPath">
+      <info>
+        <desc>Bind a list of path values to a "path name" e.g. "Template".</desc>
+      </info>
+      <prop oor:name="IsSinglePath" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Mark a NamedPath as SinglePath (false=MultiPath). Only the property WritePath is used for such single paths then.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <set oor:name="InternalPaths" oor:node-type="MultiPath">
+        <info>
+          <desc>Contains path values configured by an administrator or package (not visible for the user).</desc>
+        </info>
+      </set>
+      <prop oor:name="UserPaths" oor:type="oor:string-list">
+        <info>
+          <desc>Contains all path values configured by the user under "Tools-&gt;Options-&gt;Paths".</desc>
+        </info>
+      </prop>
+      <prop oor:name="WritePath" oor:type="xs:string">
+        <info>
+          <desc>Define one path which is used as the writable path only.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Paths" oor:node-type="NamedPath">
+      <info>
+        <desc>Contains all named paths of the office.</desc>
+      </info>
+    </set>
+    <group oor:name="Variables">
+      <info>
+        <desc>Desktop specific defaults for "$" variables used in Paths</desc>
+      </info>
+      <prop oor:name="Work" oor:type="xs:string">
+        <info>
+          <desc>Expanded value of "$work". Must be a valid URL.</desc>
+        </info>
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>
