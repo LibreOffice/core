@@ -639,11 +639,11 @@ static sal_Bool performTest(
         sal_Int8 _arByte[] = { 1, 2, -1 };
         sal_Int16 _arShort[] = { -0x8000, 1, 0x7FFF };
         sal_uInt16 _arUShort[] = { 0 , 1, 0xFFFF };
-        sal_Int32 _arLong[] = { 0x80000000, 1, 0x7FFFFFFF };
+        sal_Int32 _arLong[] = { -0x7FFFFFFF, 1, 0x7FFFFFFF };
         sal_uInt32 _arULong[] = { 0, 1, 0xFFFFFFFF };
         sal_Int64 _arHyper[] = {
-            SAL_CONST_INT64(0x8000000000000000), 1,
-            SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF) };
+            SAL_CONST_INT64(-0x7FFFFFFFFFFFFFFF), 1,
+            SAL_CONST_INT64(+0x7FFFFFFFFFFFFFFF) };
         sal_uInt64 _arUHyper[] = { 0, 1, SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF) };
         float _arFloat[] = { 1.1f, 2.2f, 3.3f };
         double _arDouble[] = { 1.11, 2.22, 3.33 };
