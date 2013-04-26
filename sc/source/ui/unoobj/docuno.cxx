@@ -1403,6 +1403,8 @@ void SAL_CALL ScModelObj::enableAutomaticCalculation( sal_Bool bEnabledIn )
         if ( pDoc->GetAutoCalc() != bEnabled )
         {
             pDoc->SetAutoCalc( bEnabled );
+            if(bEnabled)
+                pDocShell->DoHardRecalc(true);
             pDocShell->SetDocumentModified();
         }
     }

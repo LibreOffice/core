@@ -168,7 +168,12 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             else if ( aPropertyName.compareToAscii( SC_UNO_OUTLSYMB ) == 0 )
                 aViewOpt.SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_AUTOCALC ) == 0 )
+            {
+                bool bOldAutoCalc = pDoc->GetAutoCalc();
                 pDoc->SetAutoCalc( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+                if(!bOldAutoCalc && ScUnoHelpFunctions::GetBoolFromAny( aValue ))
+                    pDocShell->DoHardRecalc(true);
+            }
             else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERNAME ) == 0 )
             {
                 OUString sPrinterName;

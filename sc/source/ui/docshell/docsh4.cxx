@@ -393,7 +393,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     bNewVal = ((const SfxBoolItem*)pItem)->GetValue();
                 else
                     bNewVal = !aDocument.GetAutoCalc();     // Toggle fuer Menue
+                bool bOldVal = aDocument.GetAutoCalc();
                 aDocument.SetAutoCalc( bNewVal );
+                if( !bOldVal && bNewVal)
+                    DoHardRecalc(false);
                 SetDocumentModified();
                 if (pBindings)
                 {

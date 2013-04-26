@@ -1569,7 +1569,8 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
 
 void ScFormulaCell::SetDirtyVar()
 {
-    bDirty = true;
+    if(pDocument->GetAutoCalc())
+        bDirty = true;
     // mark the sheet of this cell to be calculated
     //#FIXME do we need to revert this remnant of old fake vba events? pDocument->AddCalculateTable( aPos.Tab() );
 }
@@ -1689,11 +1690,10 @@ bool ScFormulaCell::IsMultilineResult()
 
 void ScFormulaCell::MaybeInterpret()
 {
-    if (!IsDirtyOrInTableOpDirty())
+    if (!IsDirtyOrInTableOpDirty() || pDocument->IsImportingXML())
         return;
 
-    if (pDocument->GetAutoCalc() || (cMatrixFlag != MM_NONE))
-        Interpret();
+    Interpret();
 }
 
 bool ScFormulaCell::IsHyperLinkCell() const
