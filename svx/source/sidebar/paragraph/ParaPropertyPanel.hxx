@@ -212,6 +212,9 @@ private:
     ::sfx2::sidebar::ControllerItem  maBulletNumRuleIndex;
     ::sfx2::sidebar::ControllerItem  maNumNumRuleIndex;
 
+    //i122166, the icons for numbering or bullets toolbox inside toolbar and sidebar should be the same one
+    cssu::Reference<css::frame::XFrame> mxFrame;
+    //End of i122166
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
     ParaLineSpacingPopup maLineSpacePopup;
@@ -250,6 +253,8 @@ private:
     void StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     // Add toggle state for numbering and bullet icons
     void StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    //Modified for Numbering&Bullets Dialog UX Enh
+    //Handing the transferred the num rule index data of the current selection
     void StateChangeBulletNumRuleImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 
     void initial();

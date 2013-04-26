@@ -465,7 +465,11 @@ void ParaPropertyPanel::InitToolBoxBulletsNumbering()
         maTBxNumBullet->SetItemImage( IID_NUMBER, maNumBImageListRTL.GetImage( IID_NUMBER ) );
     }
     else
-        InitImageList(maTBxNumBullet, maNumBImageList, maNumBImageListH);
+    //i122166, the icons for numbering or bullets toolbox inside toolbar and sidebar should be the same one
+    {
+        maBulletOnOff.SetupToolBoxItem(*maTBxNumBullet, IID_BULLET);
+        maNumberOnOff.SetupToolBoxItem(*maTBxNumBullet, IID_NUMBER);
+    }
 
     maTBxNumBullet->SetDropdownClickHdl(LINK(this,ParaPropertyPanel,NumBTbxDDHandler));
     maTBxNumBullet->SetSelectHdl(LINK(this,ParaPropertyPanel,NumBTbxSelectHandler));
@@ -1545,7 +1549,7 @@ PopupControl* ParaPropertyPanel::CreateBGColorPopupControl (PopupContainer* pPar
 
 
 ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& /*rxFrame*/,
+    const cssu::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const cssu::Reference<css::ui::XSidebar>& rxSidebar)
     : Control(pParent, SVX_RES(RID_SIDEBAR_PARA_PANEL)),
@@ -1631,12 +1635,15 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       maVertTop (SID_TABLE_VERT_NONE, *pBindings,*this),
       maVertCenter (SID_TABLE_VERT_CENTER, *pBindings,*this),
       maVertBottom (SID_TABLE_VERT_BOTTOM,*pBindings,*this),
-      maBulletOnOff (FN_NUM_BULLET_ON, *pBindings,*this),
-      maNumberOnOff (FN_NUM_NUMBERING_ON, *pBindings,*this),
+      //i122166, the icons for numbering or bullets toolbox inside toolbar and sidebar should be the same one
+      maBulletOnOff (FN_NUM_BULLET_ON, *pBindings,*this,A2S("DefaultBullet"),rxFrame),
+      maNumberOnOff (FN_NUM_NUMBERING_ON, *pBindings,*this,A2S("DefaultNumbering"),rxFrame),
+      //End i122166
       maBackColorControl (SID_BACKGROUND_COLOR, *pBindings,*this),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
       maBulletNumRuleIndex (FN_BUL_NUM_RULE_INDEX, *pBindings,*this),
       maNumNumRuleIndex (FN_NUM_NUM_RULE_INDEX, *pBindings,*this),
+      mxFrame(rxFrame),
       maContext(),
       mpBindings(pBindings),
       maLineSpacePopup(this, ::boost::bind(&ParaPropertyPanel::CreateLineSpacingControl, this, _1)),
