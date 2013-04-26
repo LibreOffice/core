@@ -86,8 +86,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star;
 
-#define EXTERN_C extern "C"
-
 /**
  * @brief
  * Implements the XFilter interface.

@@ -35,7 +35,7 @@ DBG_NAME(SfxInterface)
 
 //====================================================================
 
-EXTERN_C
+extern "C"
 #ifdef WNT
 int _cdecl
 #else
