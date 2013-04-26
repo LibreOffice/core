@@ -19,14 +19,8 @@
  *
  *************************************************************/
 
-
-
-#ifndef __FRAMEWORK_UIFACTORY_TOOLBARCONTROLLERFACTORY_HXX_
-#define __FRAMEWORK_UIFACTORY_TOOLBARCONTROLLERFACTORY_HXX_
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
+#ifndef __FRAMEWORK_UICONTROLLERFACTORY_HXX_
+#define __FRAMEWORK_UICONTROLLERFACTORY_HXX_
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -35,35 +29,28 @@
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/frame/XUIControllerRegistration.hpp>
+#include <com/sun/star/frame/XUIControllerFactory.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
-#include <cppuhelper/implbase3.hxx>
-#include <rtl/ustring.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 namespace framework
 {
 
 class ConfigurationAccess_ControllerFactory;
-class ToolbarControllerFactory :  protected ThreadHelpBase                                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                  public ::cppu::WeakImplHelper3<   com::sun::star::lang::XServiceInfo,
-                                                                    com::sun::star::lang::XMultiComponentFactory,
-                                                                    com::sun::star::frame::XUIControllerRegistration>
+class UIControllerFactory :  protected ThreadHelpBase, // Struct for right initalization of mutex member! Must be first of baseclasses.
+                             public ::cppu::WeakImplHelper2<
+                                 com::sun::star::lang::XServiceInfo,
+                                 com::sun::star::frame::XUIControllerFactory >
 {
     public:
-        ToolbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-        virtual ~ToolbarControllerFactory();
+        virtual ~UIControllerFactory();
 
-        //  XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XSERVICEINFO
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
         // XMultiComponentFactory
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithContext( const ::rtl::OUString& aServiceSpecifier, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -76,12 +63,39 @@ class ToolbarControllerFactory :  protected ThreadHelpBase                      
         virtual void SAL_CALL deregisterController( const ::rtl::OUString& aCommandURL, const rtl::OUString& aModuleName ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        ToolbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool  );
+        UIControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager, const rtl::OUString &rUINode  );
         sal_Bool                                                                         m_bConfigRead;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         ConfigurationAccess_ControllerFactory*                                           m_pConfigAccess;
 };
 
-} // namespace framework
+class PopupMenuControllerFactory :  public UIControllerFactory
+{
+    public:
+        PopupMenuControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
 
-#endif // __FRAMEWORK_SERVICES_TOOLBARCONTROLLERFACTORY_HXX_
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
+};
+
+class ToolbarControllerFactory :  public UIControllerFactory
+{
+    public:
+        ToolbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
+};
+
+class StatusbarControllerFactory :  public UIControllerFactory
+{
+    public:
+        StatusbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
+};
+
+}
+
+#endif // __FRAMEWORK_UICONTROLLERFACTORY_HXX_

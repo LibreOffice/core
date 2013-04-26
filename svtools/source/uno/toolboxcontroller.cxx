@@ -232,7 +232,7 @@ throw ( Exception, RuntimeException )
                     m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
                 else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ParentWindow") ))
                     m_pImpl->m_xParentWindow.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ModuleName" ) ) )
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ModuleIdentifier" ) ) )
                     aPropValue.Value >>= m_pImpl->m_sModuleName;
             }
         }

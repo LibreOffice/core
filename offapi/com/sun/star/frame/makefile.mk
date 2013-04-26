@@ -51,8 +51,8 @@ IDLFILES=\
     DispatchProvider.idl\
     DispatchRecorder.idl\
     DispatchRecorderSupplier.idl\
-    DispatchResultState.idl\
     DispatchResultEvent.idl\
+    DispatchResultState.idl\
     DispatchStatement.idl\
     DocumentTemplates.idl\
     DoubleInitializationException.idl\
@@ -63,8 +63,8 @@ IDLFILES=\
     FrameControl.idl\
     FrameLoader.idl\
     FrameLoaderFactory.idl\
-    FramesContainer.idl\
     FrameSearchFlag.idl\
+    FramesContainer.idl\
     IllegalArgumentIOException.idl\
     LayoutManager.idl\
     LayoutManagerEvents.idl\
@@ -75,14 +75,15 @@ IDLFILES=\
     ProtocolHandler.idl\
     SessionManager.idl\
     Settings.idl\
-    SynchronousFrameLoader.idl\
     StatusbarController.idl\
     StatusbarControllerFactory.idl\
+    SynchronousFrameLoader.idl\
     Task.idl\
     TemplateAccess.idl\
     TerminationVetoException.idl\
     TitleChangedEvent.idl\
     ToolbarController.idl\
+    ToolbarControllerFactory.idl \
     TransientDocumentsDocumentContentFactory.idl \
     UnknownModuleException.idl\
     WindowArrange.idl\
@@ -91,9 +92,9 @@ IDLFILES=\
     XComponentLoader.idl\
     XComponentRegistry.idl\
     XConfigManager.idl\
+    XControlNotificationListener.idl\
     XController.idl\
     XController2.idl\
-    XControlNotificationListener.idl\
     XControllerBorder.idl\
     XDesktop.idl\
     XDesktopTask.idl\
@@ -113,16 +114,16 @@ IDLFILES=\
     XFrameActionListener.idl\
     XFrameLoader.idl\
     XFrameLoaderQuery.idl\
-    XFrames.idl\
     XFrameSetModel.idl\
+    XFrames.idl\
     XFramesSupplier.idl\
     XInplaceLayout.idl\
     XInterceptorInfo.idl\
     XLayoutManager.idl\
     XLayoutManagerEventBroadcaster.idl\
     XLayoutManagerListener.idl\
-    XLoadable.idl\
     XLoadEventListener.idl\
+    XLoadable.idl\
     XMenuBarAcceptor.idl\
     XMenuBarMergingAcceptor.idl\
     XModel.idl\
@@ -138,8 +139,8 @@ IDLFILES=\
     XStatusListener.idl\
     XStatusbarController.idl\
     XStorable.idl\
-    XSubToolbarController.idl\
     XStorable2.idl\
+    XSubToolbarController.idl\
     XSynchronousDispatch.idl\
     XSynchronousFrameLoader.idl\
     XTask.idl\
@@ -151,10 +152,11 @@ IDLFILES=\
     XTitleChangeListener.idl\
     XToolbarController.idl\
     XTransientDocumentsDocumentContentFactory.idl\
+    XUIControllerFactory.idl\
     XUIControllerRegistration.idl\
     XUntitledNumbers.idl\
     XUrlList.idl\
-    XWindowArranger.idl
+    XWindowArranger.idl \
 
 # ------------------------------------------------------------------
 

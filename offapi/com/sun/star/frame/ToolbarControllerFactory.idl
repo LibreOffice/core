@@ -19,25 +19,23 @@
  *
  *************************************************************/
 
-#ifndef __com_sun_star_frame_StatusbarControllerFactory_idl__
-#define __com_sun_star_frame_StatusbarControllerFactory_idl__
+#ifndef __com_sun_star_frame_ToolbarControllerFactory_idl__
+#define __com_sun_star_frame_ToolbarControllerFactory_idl__
 
 #include <com/sun/star/frame/XUIControllerFactory.idl>
 
 module com { module sun { module star { module frame {
 
-/** specifies a factory that creates instances of registered status bar
-    controller.
+/** specifies a factory that creates instances of registered toolbar controller.
 
     <p>
-    A status bar controller can be registered for a command URL and a model
-    service name. A status bar will automatically create a status bar controller
-    if it contains a registered command URL.
+    A toolbar controller can be registered for a command URL and a model service name.
     </p>
 
     @since OOo 2.0
 */
-service StatusbarControllerFactory : XUIControllerFactory
+
+service ToolbarControllerFactory : XUIControllerFactory
 {
     /** service constructor
      */

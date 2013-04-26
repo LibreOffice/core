@@ -38,7 +38,6 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes

@@ -262,7 +262,6 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     {
     }
 
-    Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
     Reference< XComponentContext > xComponentContext;
     Reference< XPropertySet > xProps( m_xServiceManager, UNO_QUERY );
 
@@ -327,41 +326,38 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 sal_Bool bMustBeInit( sal_True );
 
                 // Support external toolbar controller for add-ons!
-                if ( m_xToolbarControllerRegistration.is() &&
-                     m_xToolbarControllerRegistration->hasController( aURL, m_aModuleIdentifier ))
+                if ( m_xToolbarControllerFactory.is() &&
+                     m_xToolbarControllerFactory->hasController( aURL, m_aModuleIdentifier ))
                 {
-                    if ( xToolbarControllerFactory.is() )
+                    Sequence< Any > aArgs(5);
+                    PropertyValue   aPropValue;
+
+                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
+                    aPropValue.Value    <<= m_aModuleIdentifier;
+                    aArgs[0] <<= aPropValue;
+                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                    aPropValue.Value    <<= m_xFrame;
+                    aArgs[1] <<= aPropValue;
+                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                    aPropValue.Value    <<= m_xServiceManager;
+                    aArgs[2] <<= aPropValue;
+                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+                    aPropValue.Value    <<= xToolbarWindow;
+                    aArgs[3] <<= aPropValue;
+                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ItemId" ));
+                    aPropValue.Value    = makeAny( sal_Int32( nId ));
+                    aArgs[4] <<= aPropValue;
+
+                    try
                     {
-                        Sequence< Any > aArgs(5);
-                        PropertyValue   aPropValue;
-
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
-                        aPropValue.Value    <<= m_aModuleIdentifier;
-                        aArgs[0] <<= aPropValue;
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-                        aPropValue.Value    <<= m_xFrame;
-                        aArgs[1] <<= aPropValue;
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-                        aPropValue.Value    <<= m_xServiceManager;
-                        aArgs[2] <<= aPropValue;
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
-                        aPropValue.Value    <<= xToolbarWindow;
-                        aArgs[3] <<= aPropValue;
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ItemId" ));
-                        aPropValue.Value    = makeAny( sal_Int32( nId ));
-                        aArgs[4] <<= aPropValue;
-
-                        try
-                        {
-                            xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                            aURL, aArgs, xComponentContext ),
-                                                                        UNO_QUERY );
-                        }
-                        catch ( uno::Exception& )
-                        {
-                        }
-                        bMustBeInit = sal_False; // factory called init already!
+                        xController = Reference< XStatusListener >( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
+                                                                        aURL, aArgs, xComponentContext ),
+                                                                    UNO_QUERY );
                     }
+                    catch ( uno::Exception& )
+                    {
+                    }
+                    bMustBeInit = sal_False; // factory called init already!
                 }
                 else
                 {

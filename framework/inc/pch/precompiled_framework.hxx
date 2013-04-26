@@ -176,7 +176,7 @@
 #include "com/sun/star/frame/XTasksSupplier.hpp"
 #include "com/sun/star/frame/XTerminateListener.hpp"
 #include "com/sun/star/frame/XToolbarController.hpp"
-#include "com/sun/star/frame/XUIControllerRegistration.hpp"
+#include "com/sun/star/frame/XUIControllerFactory.hpp"
 #include "com/sun/star/frame/XWindowArranger.hpp"
 #include "com/sun/star/frame/status/FontHeight.hpp"
 #include "com/sun/star/frame/status/ItemState.hpp"

@@ -24,33 +24,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-#include "uifactory/toolbarcontrollerfactory.hxx"
-#include "uifactory/factoryconfiguration.hxx"
+#include <uifactory/uicontrollerfactory.hxx>
+#include <uifactory/factoryconfiguration.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -58,43 +44,28 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
-//
-
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolbarControllerFactory                        ,
-                                            ::cppu::OWeakObject                             ,
-                                            SERVICENAME_TOOLBARCONTROLLERFACTORY            ,
-                                            IMPLEMENTATIONNAME_TOOLBARCONTROLLERFACTORY
-                                        )
-
-DEFINE_INIT_SERVICE                     (   ToolbarControllerFactory, {} )
-
-ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
-    ThreadHelpBase(),
-    m_bConfigRead( sal_False ),
-    m_xServiceManager( xServiceManager )
+UIControllerFactory::UIControllerFactory(
+    const Reference< XMultiServiceFactory >& xServiceManager,
+    const rtl::OUString &rConfigurationNode )
+    : ThreadHelpBase()
+    , m_bConfigRead( sal_False )
+    , m_xServiceManager( xServiceManager )
+    , m_pConfigAccess()
 {
-    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( m_xServiceManager,rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Controller/Registered/ToolBar" )) );
+    rtl::OUStringBuffer aBuffer;
+    aBuffer.appendAscii(
+        RTL_CONSTASCII_STRINGPARAM(
+            "/org.openoffice.Office.UI.Controller/Registered/" ) );
+    aBuffer.append( rConfigurationNode );
+    m_pConfigAccess = new ConfigurationAccess_ControllerFactory(
+        m_xServiceManager, aBuffer.makeStringAndClear() );
     m_pConfigAccess->acquire();
 }
 
-ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager,bool ) :
-    ThreadHelpBase(),
-    m_bConfigRead( sal_False ),
-    m_xServiceManager( xServiceManager )
-{
-    m_pConfigAccess = NULL;
-}
-
-ToolbarControllerFactory::~ToolbarControllerFactory()
+UIControllerFactory::~UIControllerFactory()
 {
     ResetableGuard aLock( m_aLock );
 
@@ -103,7 +74,7 @@ ToolbarControllerFactory::~ToolbarControllerFactory()
 }
 
 // XMultiComponentFactory
-Reference< XInterface > SAL_CALL ToolbarControllerFactory::createInstanceWithContext(
+Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithContext(
     const ::rtl::OUString& aServiceSpecifier,
     const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
@@ -125,13 +96,13 @@ throw (Exception, RuntimeException)
     // SAFE
 }
 
-Reference< XInterface > SAL_CALL ToolbarControllerFactory::createInstanceWithArgumentsAndContext(
+Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgumentsAndContext(
     const ::rtl::OUString&                  ServiceSpecifier,
     const Sequence< Any >&                  Arguments,
     const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
-    const rtl::OUString aPropModuleName( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+    const rtl::OUString aPropModuleName( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
     const rtl::OUString aPropValueName( RTL_CONSTASCII_USTRINGPARAM( "Value" ));
 
     rtl::OUString   aPropName;
@@ -187,7 +158,6 @@ throw (Exception, RuntimeException)
         aLock.unlock();
         // SAFE
 
-
         if ( aServiceName.getLength() > 0 )
             return xServiceManager->createInstanceWithArguments( aServiceName, aNewArgs );
         else
@@ -195,14 +165,14 @@ throw (Exception, RuntimeException)
     }
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ToolbarControllerFactory::getAvailableServiceNames()
+Sequence< ::rtl::OUString > SAL_CALL UIControllerFactory::getAvailableServiceNames()
 throw (RuntimeException)
 {
     return Sequence< ::rtl::OUString >();
 }
 
 // XUIControllerRegistration
-sal_Bool SAL_CALL ToolbarControllerFactory::hasController(
+sal_Bool SAL_CALL UIControllerFactory::hasController(
     const ::rtl::OUString& aCommandURL,
     const rtl::OUString& aModuleName )
 throw (::com::sun::star::uno::RuntimeException)
@@ -218,7 +188,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return ( m_pConfigAccess->getServiceFromCommandModule( aCommandURL, aModuleName ).getLength() > 0 );
 }
 
-void SAL_CALL ToolbarControllerFactory::registerController(
+void SAL_CALL UIControllerFactory::registerController(
     const ::rtl::OUString& aCommandURL,
     const ::rtl::OUString& aModuleName,
     const ::rtl::OUString& aControllerImplementationName )
@@ -237,7 +207,7 @@ throw (RuntimeException)
     // SAFE
 }
 
-void SAL_CALL ToolbarControllerFactory::deregisterController(
+void SAL_CALL UIControllerFactory::deregisterController(
     const ::rtl::OUString& aCommandURL,
     const rtl::OUString& aModuleName )
 throw (RuntimeException)
@@ -253,6 +223,52 @@ throw (RuntimeException)
 
     m_pConfigAccess->removeServiceFromCommandModule( aCommandURL, aModuleName );
     // SAFE
+}
+
+
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   PopupMenuControllerFactory                      ,
+                                            ::cppu::OWeakObject                             ,
+                                            SERVICENAME_POPUPMENUCONTROLLERFACTORY          ,
+                                            IMPLEMENTATIONNAME_POPUPMENUCONTROLLERFACTORY
+                                        )
+
+DEFINE_INIT_SERVICE                     (   PopupMenuControllerFactory, {} )
+
+PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
+    UIControllerFactory(
+        xServiceManager,
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PopupMenu" )) )
+{
+}
+
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolbarControllerFactory                     ,
+                                            ::cppu::OWeakObject                             ,
+                                            SERVICENAME_TOOLBARCONTROLLERFACTORY            ,
+                                            IMPLEMENTATIONNAME_TOOLBARCONTROLLERFACTORY
+                                        )
+
+DEFINE_INIT_SERVICE                     (   ToolbarControllerFactory, {} )
+
+ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
+    UIControllerFactory(
+        xServiceManager,
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToolBar" )))
+{
+}
+
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   StatusbarControllerFactory                      ,
+                                            ::cppu::OWeakObject                             ,
+                                            SERVICENAME_STATUSBARCONTROLLERFACTORY          ,
+                                            IMPLEMENTATIONNAME_STATUSBARCONTROLLERFACTORY
+                                        )
+
+DEFINE_INIT_SERVICE                     (   StatusbarControllerFactory, {} )
+
+StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
+    UIControllerFactory(
+        xServiceManager,
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusBar" )) )
+{
 }
 
 } // namespace framework

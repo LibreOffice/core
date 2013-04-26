@@ -168,7 +168,7 @@ bool PopupMenuController::CreatePopupMenuController() throw (Exception)
     Sequence< Any > aSeq( 2 );
     PropertyValue aPropValue;
 
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
     aPropValue.Value <<= getModuleName();
     aSeq[0] <<= aPropValue;
     aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));

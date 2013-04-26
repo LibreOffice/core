@@ -102,7 +102,7 @@ namespace framework{
 #define SERVICENAME_TEMPFILE                                    DECLARE_ASCII("com.sun.star.io.TempFile"                            )
 #define SERVICENAME_PACKAGESTRUCTURECREATOR                     DECLARE_ASCII("com.sun.star.embed.PackageStructureCreator"          )
 #define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.ToolBarFactory"               )
-#define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolBarControllerFactory"         )
+#define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolbarControllerFactory"         )
 #define SERVICENAME_LICENSE                                     SERVICENAME_JOB
 #define SERVICENAME_AUTORECOVERY                                DECLARE_ASCII("com.sun.star.frame.AutoRecovery"                     )
 #define SERVICENAME_GLOBALEVENTBROADCASTER                      DECLARE_ASCII("com.sun.star.frame.GlobalEventBroadcaster"           )
