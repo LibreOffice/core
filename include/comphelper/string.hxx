@@ -429,37 +429,7 @@ COMPHELPER_DLLPUBLIC inline bool isalnumAscii(sal_Unicode c)
     return isalphaAscii(c) || isdigitAscii(c);
 }
 
-//============================================================
-//= a helper for static ascii pseudo-unicode strings
-//============================================================
-struct COMPHELPER_DLLPUBLIC ConstAsciiString
-{
-    const sal_Char* ascii;
-    sal_Int32       length;
-
-    operator OUString() const
-    {
-        return OUString(ascii, length, RTL_TEXTENCODING_ASCII_US);
-    }
-};
-
 } }
-
-#ifdef RTL_FAST_STRING
-// TODO The whole ConstAsciiString class should probably be dumped
-// and replaced with plain 'const char[]'.
-namespace rtl
-{
-template<>
-struct ToStringHelper< comphelper::string::ConstAsciiString >
-    {
-    static int length( const comphelper::string::ConstAsciiString& str ) { return str.length; }
-    static sal_Unicode* addData( sal_Unicode* buffer, const comphelper::string::ConstAsciiString& str ) { return addDataLiteral( buffer, str.ascii, str.length ); }
-    static const bool allowOStringConcat = false;
-    static const bool allowOUStringConcat = true;
-    };
-}
-#endif
 
 #endif
 
