@@ -1312,6 +1312,15 @@ void SAL_CALL ScVbaApplication::OnKey( const ::rtl::OUString& Key, const uno::An
     }
 }
 
+void SAL_CALL ScVbaApplication::Undo() throw (uno::RuntimeException)
+{
+    uno::Reference< frame::XModel > xModel( getThisExcelDoc( mxContext ), uno::UNO_SET_THROW );
+
+    ScTabViewShell* pViewShell = excel::getBestViewShell( xModel );
+    if ( pViewShell )
+        dispatchExecute( pViewShell, SID_UNDO );
+}
+
 rtl::OUString
 ScVbaApplication::getServiceImplName()
 {
