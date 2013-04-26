@@ -17,46 +17,47 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WindowContentFactories" oor:package="org.openoffice.Office.UI" xml:lang="en-US"> <info>
-		<desc>Contains implementation of user interface element factories.</desc>
-	</info>
-	<templates>
-		<group oor:name="FactoryType">
-			<info>
-				<desc>Describes a factory implementation.</desc>
-			</info>
-			<prop oor:name="Type" oor:type="xs:string">
-				<info>
-					<desc>Specifies the user interface element type which is associated with the factory.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>Specifies a name or prefix for a specific window. An empty entry/string means that it matches for all names.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Module" oor:type="xs:string">
-			    <info>
-			        <desc>Specifies a module that the factory is associated with. An empty entry/string means that the factory can be used for every module.</desc>
-			    </info>
-			</prop>
-			<prop oor:name="FactoryImplementation" oor:type="xs:string">
-			    <info>
-			        <desc>Specifies the UNO service implementation name which creates/provides a com.sun.star.awt.XWindow. See com.sun.star.ui.WindowContentFactory</desc>
-                </info>
-            </prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="Registered">
-			<info>
-				<desc>Contains all registered factories for docking window contents.</desc>
-			</info>
-			<set oor:name="ContentFactories" oor:node-type="FactoryType">
-				<info>
-					<desc>Contains UNO component implementation names that implements .</desc>
-				</info>
-			</set>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WindowContentFactories" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Contains implementation of user interface element factories.</desc>
+  </info>
+  <templates>
+    <group oor:name="FactoryType">
+      <info>
+        <desc>Describes a factory implementation.</desc>
+      </info>
+      <prop oor:name="Type" oor:type="xs:string">
+        <info>
+          <desc>Specifies the user interface element type which is associated with the factory.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>Specifies a name or prefix for a specific window. An empty entry/string means that it matches for all names.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Module" oor:type="xs:string">
+        <info>
+          <desc>Specifies a module that the factory is associated with. An empty entry/string means that the factory can be used for every module.</desc>
+        </info>
+      </prop>
+      <prop oor:name="FactoryImplementation" oor:type="xs:string">
+        <info>
+          <desc>Specifies the UNO service implementation name which creates/provides a com.sun.star.awt.XWindow. See com.sun.star.ui.WindowContentFactory</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Registered">
+      <info>
+        <desc>Contains all registered factories for docking window contents.</desc>
+      </info>
+      <set oor:name="ContentFactories" oor:node-type="FactoryType">
+        <info>
+          <desc>Contains UNO component implementation names that implements .</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

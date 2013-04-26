@@ -18,27 +18,27 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="CalcCommands" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
-    <info>
-		<desc>Contains general information about ~ and rules, and about actions based on office commands.</desc>
-	</info>
-	<import oor:component="org.openoffice.Office.UI.Commands"/>
-	<uses oor:component="org.openoffice.Office.UI.Commands"/>
-	<templates/>
-	<component>
-		<group oor:name="UserInterface">
-		    <info>
-		        <desc>Contains user interface data for Office commands and identifiers that are used by the user interface."</desc>
-		    </info>
-		    <set oor:name="Commands" oor:node-type="LabelType" oor:component="org.openoffice.Office.UI.Commands">
-		        <info>
-		            <desc>Contains label text for Office commands and identifiers that are used by the user interface."</desc>
-		        </info>
-            </set>
-            <set oor:name="Popups" oor:node-type="LabelType" oor:component="org.openoffice.Office.UI.Commands">
-                <info>
-		            <desc>Contains label text for popup menus identifiers that are used by the user interface."</desc>
-                </info>
-            </set>
-		</group>
-	</component>
+  <info>
+    <desc>Contains general information about ~ and rules, and about actions based on office commands.</desc>
+  </info>
+  <import oor:component="org.openoffice.Office.UI.Commands"/>
+  <uses oor:component="org.openoffice.Office.UI.Commands"/>
+  <templates/>
+  <component>
+    <group oor:name="UserInterface">
+      <info>
+        <desc>Contains user interface data for Office commands and identifiers that are used by the user interface."</desc>
+      </info>
+      <set oor:name="Commands" oor:node-type="LabelType" oor:component="org.openoffice.Office.UI.Commands">
+        <info>
+          <desc>Contains label text for Office commands and identifiers that are used by the user interface."</desc>
+        </info>
+      </set>
+      <set oor:name="Popups" oor:node-type="LabelType" oor:component="org.openoffice.Office.UI.Commands">
+        <info>
+          <desc>Contains label text for popup menus identifiers that are used by the user interface."</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

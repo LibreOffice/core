@@ -17,37 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Commands" oor:package="org.openoffice.Office.UI" xml:lang="en-US"> <info>
-		<desc>Contains general information about ~ and rules, and about actions based on office commands.</desc>
-	</info>
-	<templates>
-        <group oor:name="LabelType">
-            <info>
-                <desc>Provides a mapping between commands and their textual representation on the user interface.</desc>
-            </info>
-            <prop oor:name="Label" oor:type="xs:string" oor:localized="true">
-                <info>
-                    <desc>A localized text that describes the command or identifier. Can be used as a label inside a menu or as short tool tip help.</desc>
-                </info>
-            </prop>
-            <prop oor:name="ContextLabel" oor:type="xs:string" oor:localized="true">
-                <info>
-                    <desc>A localized text that describes the identifier of a command in a structured menu.  </desc>
-                </info>
-            </prop>
-            <prop oor:name="Properties" oor:type="xs:int" oor:nillable="false">
-                <info>
-                    <desc>
-                    Additional information about a single command.
-                    Bit 0 = Command has an image.
-                    Bit 1 = Image must be mirrored  (CTL/vertical text).
-                    Bit 2 = Image must be rotated (CTL/vertical text).
-                    Bit 3 = Command supports a toggle state (Accessibility).
-                    </desc>
-                </info>
-                <value>0</value>
-            </prop>
-        </group>
-	</templates>
-	<component/>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Commands" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Contains general information about ~ and rules, and about actions based on office commands.</desc>
+  </info>
+  <templates>
+    <group oor:name="LabelType">
+      <info>
+        <desc>Provides a mapping between commands and their textual representation on the user interface.</desc>
+      </info>
+      <prop oor:name="Label" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized text that describes the command or identifier. Can be used as a label inside a menu or as short tool tip help.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ContextLabel" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized text that describes the identifier of a command in a structured menu.  </desc>
+        </info>
+      </prop>
+      <prop oor:name="Properties" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>
+            Additional information about a single command.
+            Bit 0 = Command has an image.
+            Bit 1 = Image must be mirrored  (CTL/vertical text).
+            Bit 2 = Image must be rotated (CTL/vertical text).
+            Bit 3 = Command supports a toggle state (Accessibility).
+          </desc>
+        </info>
+        <value>0</value>
+      </prop>
+    </group>
+  </templates>
+  <component/>
 </oor:component-schema>

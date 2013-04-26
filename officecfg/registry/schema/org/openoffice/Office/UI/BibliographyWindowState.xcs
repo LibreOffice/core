@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
-<oor:component-schema oor:name="BibliographyWindowState" oor:package="org.openoffice.Office.UI" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <info>
-		<desc>Contains state information of all dockable user interface elements based on a Window class which belongs to the Bibliography module.</desc>
-	</info>
-	<import oor:component="org.openoffice.Office.UI.WindowState"/>
-	<uses oor:component="org.openoffice.Office.UI.WindowState"/>
-	<templates/>
-	<component>
-		<group oor:name="UIElements">
-		    <info>
-		        <desc>Contains user interface element state data specific for the Bibliography module."</desc>
-		    </info>
-			<set oor:name="States" oor:node-type="WindowStateType" oor:component="org.openoffice.Office.UI.WindowState">
-		        <info>
-		            <desc>Contains states of all known dockable user interface elements of the Bibliography module."</desc>
-		        </info>
-			</set>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="BibliographyWindowState" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Contains state information of all dockable user interface elements based on a Window class which belongs to the Bibliography module.</desc>
+  </info>
+  <import oor:component="org.openoffice.Office.UI.WindowState"/>
+  <uses oor:component="org.openoffice.Office.UI.WindowState"/>
+  <templates/>
+  <component>
+    <group oor:name="UIElements">
+      <info>
+        <desc>Contains user interface element state data specific for the Bibliography module."</desc>
+      </info>
+      <set oor:name="States" oor:node-type="WindowStateType" oor:component="org.openoffice.Office.UI.WindowState">
+        <info>
+          <desc>Contains states of all known dockable user interface elements of the Bibliography module."</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

@@ -17,41 +17,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Hierarchy" oor:package="org.openoffice.ucb" xml:lang="en-US"> <info>
-		<desc>Contains components and templates used by UCB's Hierarchy Content Provider (HCP). </desc>
-	</info>
-	<templates>
-		<group oor:name="Entry">
-			<info>
-				<desc>Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-			</info>
-			<prop oor:name="Title" oor:type="xs:string">
-				<info>
-					<desc>Specifies the title of an entry of the hierarchy.</desc>
-				</info>
-			</prop>
-			<prop oor:name="TargetURL" oor:type="xs:string">
-				<info>
-					<desc>Specifies the target URL of the entry of the hierarchy.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Type" oor:type="xs:int">
-				<info>
-					<desc>Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-				</info>
-			</prop>
-			<set oor:name="Children" oor:node-type="Entry">
-				<info>
-					<desc>Specifies the children (other hierarchy entries) of the item.</desc>
-				</info>
-			</set>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="Root" oor:node-type="Entry">
-			<info>
-				<desc>Contains a set of top-level entries of the hierarchy.</desc>
-			</info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Hierarchy" oor:package="org.openoffice.ucb" xml:lang="en-US">
+  <info>
+    <desc>Contains components and templates used by UCB's Hierarchy Content Provider (HCP). </desc>
+  </info>
+  <templates>
+    <group oor:name="Entry">
+      <info>
+        <desc>Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
+      </info>
+      <prop oor:name="Title" oor:type="xs:string">
+        <info>
+          <desc>Specifies the title of an entry of the hierarchy.</desc>
+        </info>
+      </prop>
+      <prop oor:name="TargetURL" oor:type="xs:string">
+        <info>
+          <desc>Specifies the target URL of the entry of the hierarchy.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Type" oor:type="xs:int">
+        <info>
+          <desc>Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
+        </info>
+      </prop>
+      <set oor:name="Children" oor:node-type="Entry">
+        <info>
+          <desc>Specifies the children (other hierarchy entries) of the item.</desc>
+        </info>
+      </set>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Root" oor:node-type="Entry">
+      <info>
+        <desc>Contains a set of top-level entries of the hierarchy.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

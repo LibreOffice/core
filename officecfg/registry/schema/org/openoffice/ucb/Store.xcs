@@ -17,51 +17,52 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Store" oor:package="org.openoffice.ucb" xml:lang="en-US"> <info>
-		<desc>Contains components and templates used for storing UCB related data.</desc>
-	</info>
-	<templates>
-		<group oor:name="PropertyValue">
-			<info>
-				<desc>Specifies a property value.</desc>
-			</info>
-			<prop oor:name="Handle" oor:type="xs:int">
-				<info>
-					<desc>Specifies the numeric property identifier.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Attributes" oor:type="xs:int">
-				<info>
-					<desc>Specifies property attributes.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Value" oor:type="oor:any">
-				<info>
-					<desc>Specifies the Property value.</desc>
-				</info>
-			</prop>
-			<prop oor:name="State" oor:type="xs:int">
-				<info>
-					<desc>Specifies the property state.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="Properties">
-			<info>
-				<desc>Specifies a set of property values.</desc>
-			</info>
-			<set oor:name="Values" oor:node-type="PropertyValue">
-				<info>
-					<desc>Specifies a set of property values.</desc>
-				</info>
-			</set>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="ContentProperties" oor:node-type="Properties">
-			<info>
-				<desc>Specifies the root entry for stored content properties.</desc>
-			</info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Store" oor:package="org.openoffice.ucb" xml:lang="en-US">
+  <info>
+    <desc>Contains components and templates used for storing UCB related data.</desc>
+  </info>
+  <templates>
+    <group oor:name="PropertyValue">
+      <info>
+        <desc>Specifies a property value.</desc>
+      </info>
+      <prop oor:name="Handle" oor:type="xs:int">
+        <info>
+          <desc>Specifies the numeric property identifier.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Attributes" oor:type="xs:int">
+        <info>
+          <desc>Specifies property attributes.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Value" oor:type="oor:any">
+        <info>
+          <desc>Specifies the Property value.</desc>
+        </info>
+      </prop>
+      <prop oor:name="State" oor:type="xs:int">
+        <info>
+          <desc>Specifies the property state.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Properties">
+      <info>
+        <desc>Specifies a set of property values.</desc>
+      </info>
+      <set oor:name="Values" oor:node-type="PropertyValue">
+        <info>
+          <desc>Specifies a set of property values.</desc>
+        </info>
+      </set>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="ContentProperties" oor:node-type="Properties">
+      <info>
+        <desc>Specifies the root entry for stored content properties.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

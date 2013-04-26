@@ -18,22 +18,22 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="GenericCategories" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
-    <info>
-		<desc>Contains general information about generic command categories.</desc>
-	</info>
-	<import oor:component="org.openoffice.Office.UI.Category"/>
-	<uses oor:component="org.openoffice.Office.UI.Category"/>
-	<templates/>
-	<component>
-		<group oor:name="Commands">
-		    <info>
-		        <desc>Contains general information about generic command categories."</desc>
-		    </info>
-		    <set oor:name="Categories" oor:node-type="CategoryType" oor:component="org.openoffice.Office.UI.Category">
-		        <info>
-		            <desc>Contains mappings from IDs to text describing a command category.</desc>
-		        </info>
-            </set>
-		</group>
-	</component>
+  <info>
+    <desc>Contains general information about generic command categories.</desc>
+  </info>
+  <import oor:component="org.openoffice.Office.UI.Category"/>
+  <uses oor:component="org.openoffice.Office.UI.Category"/>
+  <templates/>
+  <component>
+    <group oor:name="Commands">
+      <info>
+        <desc>Contains general information about generic command categories."</desc>
+      </info>
+      <set oor:name="Categories" oor:node-type="CategoryType" oor:component="org.openoffice.Office.UI.Category">
+        <info>
+          <desc>Contains mappings from IDs to text describing a command category.</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

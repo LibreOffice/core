@@ -17,52 +17,52 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
-<oor:component-schema oor:name="GlobalSettings" oor:package="org.openoffice.Office.UI" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <info>
-		<desc>Contains global settings to use for user interface elements of OpenOffice.org.</desc>
-	</info>
-	<templates>
-	    <group oor:name="GlobalWindowState">
-            <info>
-                <desc>Provides window state settings to be set globally for OpenOfficre.org.</desc>
-            </info>
-            <prop oor:name="Locked" oor:type="xs:boolean">
-                <info>
-                    <desc>Specifies that windows should be globally locked by default.</desc>
-                </info>
-                <!-- Attention: This property has three different states:
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="GlobalSettings" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Contains global settings to use for user interface elements of OpenOffice.org.</desc>
+  </info>
+  <templates>
+    <group oor:name="GlobalWindowState">
+      <info>
+        <desc>Provides window state settings to be set globally for OpenOfficre.org.</desc>
+      </info>
+      <prop oor:name="Locked" oor:type="xs:boolean">
+        <info>
+          <desc>Specifies that windows should be globally locked by default.</desc>
+        </info>
+        <!-- Attention: This property has three different states:
                     NIL   = Ignore this property.
                     TRUE  = All toolbars should be locked by default.
                     FALSE = All toolbars should never be locked by default.
-                -->
-            </prop>
-            <prop oor:name="Docked" oor:type="xs:boolean">
-                <info>
-                    <desc>Specifies that windows should be globally docked by default.</desc>
-                </info>
-                <!-- Attention: This property has three different states:
+        -->
+      </prop>
+      <prop oor:name="Docked" oor:type="xs:boolean">
+        <info>
+          <desc>Specifies that windows should be globally docked by default.</desc>
+        </info>
+        <!-- Attention: This property has three different states:
                     NIL   = Ignore this property.
                     TRUE  = All toolbars should be docked by default.
                     FALSE = All toolbars should never be docked by default.
-                -->
-            </prop>
-	    </group>
-	</templates>
-	<component>
-		<group oor:name="Toolbars">
-		    <info>
-		        <desc>Contains global settings for the toolbars."</desc>
-		    </info>
-			<prop oor:name="StatesEnabled" oor:type="xs:boolean">
-		        <info>
-		            <desc>Determines if the global states set should be used or not."</desc>
-		        </info>
-			</prop>
-			<node-ref oor:name="States" oor:node-type="GlobalWindowState">
-		        <info>
-		            <desc>Contains global window states for the OpenOffice.org toolbars."</desc>
-		        </info>
-			</node-ref>
-		</group>
-	</component>
+        -->
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Toolbars">
+      <info>
+        <desc>Contains global settings for the toolbars."</desc>
+      </info>
+      <prop oor:name="StatesEnabled" oor:type="xs:boolean">
+        <info>
+          <desc>Determines if the global states set should be used or not."</desc>
+        </info>
+      </prop>
+      <node-ref oor:name="States" oor:node-type="GlobalWindowState">
+        <info>
+          <desc>Contains global window states for the OpenOffice.org toolbars."</desc>
+        </info>
+      </node-ref>
+    </group>
+  </component>
 </oor:component-schema>

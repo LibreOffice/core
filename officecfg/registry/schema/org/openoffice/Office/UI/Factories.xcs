@@ -17,46 +17,47 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Factories" oor:package="org.openoffice.Office.UI" xml:lang="en-US"> <info>
-		<desc>Contains implementation of user interface element factories.</desc>
-	</info>
-	<templates>
-		<group oor:name="FactoryType">
-			<info>
-				<desc>Describes a factory implementation.</desc>
-			</info>
-			<prop oor:name="Type" oor:type="xs:string">
-				<info>
-					<desc>Specifies a user interface element type that a factory can create.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>Specifies a name of a single user interface element.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Module" oor:type="xs:string">
-			    <info>
-			        <desc>Specifies a module that the factory is associated with. An empty string means that the factory can be used for every module.</desc>
-			    </info>
-			</prop>
-			<prop oor:name="FactoryImplementation" oor:type="xs:string">
-			    <info>
-			        <desc>Specifies the UNO service implementation name to use to create a specified user interface element.</desc>
-                </info>
-            </prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="Registered">
-			<info>
-				<desc>Contains all registered factories for user interface elements.</desc>
-			</info>
-			<set oor:name="UIElementFactories" oor:node-type="FactoryType">
-				<info>
-					<desc>Contains UNO component implementation names that implements a user interface element factory service.</desc>
-				</info>
-			</set>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Factories" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Contains implementation of user interface element factories.</desc>
+  </info>
+  <templates>
+    <group oor:name="FactoryType">
+      <info>
+        <desc>Describes a factory implementation.</desc>
+      </info>
+      <prop oor:name="Type" oor:type="xs:string">
+        <info>
+          <desc>Specifies a user interface element type that a factory can create.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>Specifies a name of a single user interface element.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Module" oor:type="xs:string">
+        <info>
+          <desc>Specifies a module that the factory is associated with. An empty string means that the factory can be used for every module.</desc>
+        </info>
+      </prop>
+      <prop oor:name="FactoryImplementation" oor:type="xs:string">
+        <info>
+          <desc>Specifies the UNO service implementation name to use to create a specified user interface element.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Registered">
+      <info>
+        <desc>Contains all registered factories for user interface elements.</desc>
+      </info>
+      <set oor:name="UIElementFactories" oor:node-type="FactoryType">
+        <info>
+          <desc>Contains UNO component implementation names that implements a user interface element factory service.</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

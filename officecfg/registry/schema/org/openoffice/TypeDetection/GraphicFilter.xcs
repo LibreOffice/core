@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -17,36 +17,52 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="GraphicFilter" oor:package="org.openoffice.TypeDetection" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <info>
-        <desc>Contains specialized data for internal graphic filter.</desc>
-    </info>
-    <templates>
-		<group oor:name="Filter">
-            <info><desc>Lists of all internal graphic filters.</desc></info>
-            <prop oor:name="Type" oor:type="xs:string">
-                <info><desc>Supported content type of this filter. Must be an internal type name.</desc></info>
-            </prop>
-            <prop oor:name="FormatName" oor:type="xs:string">
-                <info><desc>A shortname, which describe the grafik format.</desc></info>
-            </prop>
-            <prop oor:name="RealFilterName" oor:type="xs:string">
-                <info><desc>The internal filter name of a real document filter (mostly draw).</desc></info>
-            </prop>
-            <prop oor:name="UIComponent" oor:type="xs:string">
-                <info><desc>The uno implementation name a dialog, which is used to ask an user for special filter parameter (e.g. for csv).</desc></info>
-            </prop>
-            <prop oor:name="Flags" oor:type="oor:string-list">
-                <info><desc>Specify the filter in some further properties (e.g. import/export/..).</desc></info>
-            </prop>
-            <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
-                <info><desc>Localized name of the filter, whch can be shown at the UI.</desc></info>
-            </prop>
-		</group>
-	</templates>
-	<component>
-        <set oor:name="Filters" oor:node-type="Filter">
-            <info><desc>Lists the registered office filters.</desc></info>
-        </set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="GraphicFilter" oor:package="org.openoffice.TypeDetection" xml:lang="en-US">
+  <info>
+    <desc>Contains specialized data for internal graphic filter.</desc>
+  </info>
+  <templates>
+    <group oor:name="Filter">
+      <info>
+        <desc>Lists of all internal graphic filters.</desc>
+      </info>
+      <prop oor:name="Type" oor:type="xs:string">
+        <info>
+          <desc>Supported content type of this filter. Must be an internal type name.</desc>
+        </info>
+      </prop>
+      <prop oor:name="FormatName" oor:type="xs:string">
+        <info>
+          <desc>A shortname, which describe the grafik format.</desc>
+        </info>
+      </prop>
+      <prop oor:name="RealFilterName" oor:type="xs:string">
+        <info>
+          <desc>The internal filter name of a real document filter (mostly draw).</desc>
+        </info>
+      </prop>
+      <prop oor:name="UIComponent" oor:type="xs:string">
+        <info>
+          <desc>The uno implementation name a dialog, which is used to ask an user for special filter parameter (e.g. for csv).</desc>
+        </info>
+      </prop>
+      <prop oor:name="Flags" oor:type="oor:string-list">
+        <info>
+          <desc>Specify the filter in some further properties (e.g. import/export/..).</desc>
+        </info>
+      </prop>
+      <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
+        <info>
+          <desc>Localized name of the filter, whch can be shown at the UI.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Filters" oor:node-type="Filter">
+      <info>
+        <desc>Lists the registered office filters.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

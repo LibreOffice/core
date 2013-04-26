@@ -17,20 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Category" oor:package="org.openoffice.Office.UI" xml:lang="en-US"> <info>
-		<desc>Contains general information about command categories.</desc>
-	</info>
-	<templates>
-        <group oor:name="CategoryType">
-            <info>
-                <desc>Provides a mapping between a category ID and its textual representation.</desc>
-            </info>
-            <prop oor:name="Name" oor:type="xs:string" oor:localized="true">
-                <info>
-                    <desc>A localized name which describes the command category.</desc>
-                </info>
-            </prop>
-        </group>
-	</templates>
-	<component/>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Category" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Contains general information about command categories.</desc>
+  </info>
+  <templates>
+    <group oor:name="CategoryType">
+      <info>
+        <desc>Provides a mapping between a category ID and its textual representation.</desc>
+      </info>
+      <prop oor:name="Name" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized name which describes the command category.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component/>
 </oor:component-schema>

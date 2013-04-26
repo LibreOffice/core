@@ -18,118 +18,115 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WindowState" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
-    <info>
-		<desc>Contains state information of all dockable user interface elements based on a Window class.</desc>
-	</info>
-	<templates>
-        <group oor:name="WindowStateType">
-            <info>
-                <desc>Provides a mapping between commands and their textual representation on the user interface.</desc>
-            </info>
-            <prop oor:name="Locked" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>A locked user interface element cannot be moved or undocked by the user. This property is only active when the user interface element is in a docked state.</desc>
-                </info>
-                <value>false</value>
-            </prop>
-            <prop oor:name="Docked" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Specifies if the user interface element is currently docked.</desc>
-                </info>
-                <value>true</value>
-            </prop>
-            <prop oor:name="Visible" oor:type="xs:boolean">
-                <info>
-                    <desc>Specifies if the user interface element is visible.</desc>
-                </info>
-            </prop>
-            <prop oor:name="ContextSensitive" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Specifies if the user interface element is context sensitive. This controls if the Office shows the user interface element </desc>
-                </info>
-                <value>false</value>
-            </prop>
-            <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Specifies if a toolbar should not be shown inside the View - Toolbars menu.</desc>
-                </info>
-                <value>false</value>
-            </prop>
-            <prop oor:name="DockingArea" oor:type="xs:int">
-                <info>
-                    <desc>Specifies the docking area to which a user interface element belongs to. Only valid if 'Docked' is true. Top docking area=0, bottom=1, left=2, right=3.</desc>
-                </info>
-            </prop>            
-            <prop oor:name="DockPos" oor:type="xs:string">
-                <info>
-                    <desc>Specifies the position of a docked user interface element. For top/bottom docked elements X describes a pixel position and Y the row number, left/right docked elements uses X for the column and Y for the pixel position. X and Y coordinates must be splitted by an comma.</desc>
-                </info>
-            </prop>
-            <prop oor:name="DockSize" oor:type="xs:string">
-                <info>
-                    <desc>Not used.</desc>
-                </info>
-            </prop>
-            <prop oor:name="Pos" oor:type="xs:string">
-                <info>
-                    <desc>Specifies the position of a floating user interface element in pixel. X and Y coordinates must be splitted by an comma and are relative to the document frame.</desc>
-                </info>
-            </prop>
-            <prop oor:name="Size" oor:type="xs:string">
-                <info>
-                    <desc>Specifies the size of a floating user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumenstances. Width and height must be splitted by an comma.</desc>
-                </info>
-            </prop>            
-            <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
-                <info>
-                    <desc>Specifies the user interface element name. It is used for floating user interface elements to set the title and for the bubble help.</desc>
-                </info>
-            </prop>
-            <prop oor:name="ImageURL" oor:type="xs:string" oor:nillable="false">
-              <info>
-                <desc>Specifies the URL of an image to associate with the user interface element. Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service
-                is suitable here.</desc>
-              </info>
-              <value></value>
-            </prop>
-            <prop oor:name="HelpURL" oor:type="xs:string" oor:nillable="false">
-              <info>
-                <desc>
-                  Specifies the help URL of the tool panel.
-                </desc>
-              </info>
-              <value></value>
-            </prop>
-            <prop oor:name="InternalState" oor:type="xs:int">
-                <info>
-                    <desc>Specifies an internal state for the user interface element. Please don't change this value it describes an internal value.</desc>
-                </info>
-            </prop>
-            <prop oor:name="Style" oor:type="xs:int" oor:nillable="false">
-                <info>
-                    <desc>Specifies the style of a toolbar. This property is only used by toolbar user interface elements. 0 = symbol buttons, 1 = text buttons, 2 = symbols+text buttons</desc>
-                </info>
-                <value>0</value>
-            </prop>
-            <prop oor:name="NoClose" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Specifies that a user interface element shouldn't have a closer. This property is only used by toolbars or floating window user interface elements.</desc>
-                </info>
-                <value>false</value>
-            </prop>
-            <prop oor:name="SoftClose" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Specifies that a user interface element shouldn't be closed forever. This is useful for context sensitive ui elements which must be visible whenever their context is active. This property is only used by toolbars or floating window user interface elements.</desc>
-                </info>
-                <value>false</value>
-            </prop>
-            <prop oor:name="ContextActive" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Specifies if a context sensitive user interface element is currently bound to its context. This property can be used to disable context sensitivity without losing the information that a user interface element is normally context sensitive.</desc>
-                </info>
-                <value>true</value>
-            </prop>
-        </group>
-	</templates>
-	<component/>
+  <info>
+    <desc>Contains state information of all dockable user interface elements based on a Window class.</desc>
+  </info>
+  <templates>
+    <group oor:name="WindowStateType">
+      <info>
+        <desc>Provides a mapping between commands and their textual representation on the user interface.</desc>
+      </info>
+      <prop oor:name="Locked" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>A locked user interface element cannot be moved or undocked by the user. This property is only active when the user interface element is in a docked state.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="Docked" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if the user interface element is currently docked.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Visible" oor:type="xs:boolean">
+        <info>
+          <desc>Specifies if the user interface element is visible.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ContextSensitive" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if the user interface element is context sensitive. This controls if the Office shows the user interface element </desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if a toolbar should not be shown inside the View - Toolbars menu.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="DockingArea" oor:type="xs:int">
+        <info>
+          <desc>Specifies the docking area to which a user interface element belongs to. Only valid if 'Docked' is true. Top docking area=0, bottom=1, left=2, right=3.</desc>
+        </info>
+      </prop>
+      <prop oor:name="DockPos" oor:type="xs:string">
+        <info>
+          <desc>Specifies the position of a docked user interface element. For top/bottom docked elements X describes a pixel position and Y the row number, left/right docked elements uses X for the column and Y for the pixel position. X and Y coordinates must be splitted by an comma.</desc>
+        </info>
+      </prop>
+      <prop oor:name="DockSize" oor:type="xs:string">
+        <info>
+          <desc>Not used.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Pos" oor:type="xs:string">
+        <info>
+          <desc>Specifies the position of a floating user interface element in pixel. X and Y coordinates must be splitted by an comma and are relative to the document frame.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Size" oor:type="xs:string">
+        <info>
+          <desc>Specifies the size of a floating user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumenstances. Width and height must be splitted by an comma.</desc>
+        </info>
+      </prop>
+      <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies the user interface element name. It is used for floating user interface elements to set the title and for the bubble help.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ImageURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL of an image to associate with the user interface element. Any URL scheme supported by the com.sun.star.graphic.GraphicProvider service is suitable here.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="HelpURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the help URL of the tool panel.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="InternalState" oor:type="xs:int">
+        <info>
+          <desc>Specifies an internal state for the user interface element. Please don't change this value it describes an internal value.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Style" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the style of a toolbar. This property is only used by toolbar user interface elements. 0 = symbol buttons, 1 = text buttons, 2 = symbols+text buttons</desc>
+        </info>
+        <value>0</value>
+      </prop>
+      <prop oor:name="NoClose" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that a user interface element shouldn't have a closer. This property is only used by toolbars or floating window user interface elements.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="SoftClose" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that a user interface element shouldn't be closed forever. This is useful for context sensitive ui elements which must be visible whenever their context is active. This property is only used by toolbars or floating window user interface elements.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="ContextActive" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if a context sensitive user interface element is currently bound to its context. This property can be used to disable context sensitivity without losing the information that a user interface element is normally context sensitive.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+  </templates>
+  <component/>
 </oor:component-schema>

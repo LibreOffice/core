@@ -17,57 +17,58 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Controller" oor:package="org.openoffice.Office.UI" xml:lang="en-US"> <info>
-		<desc>Contains implementation of popup menu controllers.</desc>
-	</info>
-	<templates>
-		<group oor:name="ControllerType">
-			<info>
-				<desc>Describes a controller implementation.</desc>
-			</info>
-			<prop oor:name="Command" oor:type="xs:string">
-				<info>
-					<desc>Specifies the command name which the controller is bound to.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Module" oor:type="xs:string">
-			    <info>
-			        <desc>Specifies the model that the controller is associated with. An empty string matches every module.</desc>
-			    </info>
-			</prop>
-			<prop oor:name="Controller" oor:type="xs:string">
-			    <info>
-			        <desc>Specifies the UNO service to use for the specified tuple Command and Module</desc>
-                </info>
-            </prop>
-            <prop oor:name="Value" oor:type="xs:string" oor:nillable="false">
-                <info>
-                    <desc>Specifies a controller specific value which is provided to every controller instance during initialization.</desc>
-                </info>
-                <value/>
-            </prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="Registered">
-			<info>
-				<desc>Contains all registered controllers for user interface elements.</desc>
-			</info>
-			<set oor:name="PopupMenu" oor:node-type="ControllerType">
-				<info>
-					<desc>Contains UNO component implementation names that implement popup menu controller which are bound to a command and module name.</desc>
-				</info>
-			</set>
-			<set oor:name="ToolBar" oor:node-type="ControllerType">
-				<info>
-					<desc>Contains UNO component implementation names that implement toolbar controller which are bound to a command and module name.</desc>
-				</info>
-			</set>
-			<set oor:name="StatusBar" oor:node-type="ControllerType">
-				<info>
-                    <desc>Contains UNO component implementation names that implement status bar controller which are bound to a command and module name.</desc>
-				</info>
-			</set>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Controller" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Contains implementation of popup menu controllers.</desc>
+  </info>
+  <templates>
+    <group oor:name="ControllerType">
+      <info>
+        <desc>Describes a controller implementation.</desc>
+      </info>
+      <prop oor:name="Command" oor:type="xs:string">
+        <info>
+          <desc>Specifies the command name which the controller is bound to.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Module" oor:type="xs:string">
+        <info>
+          <desc>Specifies the model that the controller is associated with. An empty string matches every module.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Controller" oor:type="xs:string">
+        <info>
+          <desc>Specifies the UNO service to use for the specified tuple Command and Module</desc>
+        </info>
+      </prop>
+      <prop oor:name="Value" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies a controller specific value which is provided to every controller instance during initialization.</desc>
+        </info>
+        <value/>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Registered">
+      <info>
+        <desc>Contains all registered controllers for user interface elements.</desc>
+      </info>
+      <set oor:name="PopupMenu" oor:node-type="ControllerType">
+        <info>
+          <desc>Contains UNO component implementation names that implement popup menu controller which are bound to a command and module name.</desc>
+        </info>
+      </set>
+      <set oor:name="ToolBar" oor:node-type="ControllerType">
+        <info>
+          <desc>Contains UNO component implementation names that implement toolbar controller which are bound to a command and module name.</desc>
+        </info>
+      </set>
+      <set oor:name="StatusBar" oor:node-type="ControllerType">
+        <info>
+          <desc>Contains UNO component implementation names that implement status bar controller which are bound to a command and module name.</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>
