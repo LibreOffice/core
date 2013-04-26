@@ -427,24 +427,24 @@ public class InstUtil {
         File f = null;
         try
         {
-            f = inst.buildSversionLocation();
+            f = InstUtil.buildSversionLocation();
         }
         catch (IOException e)
         {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
-        if (!inst.verifySversionExists(f)) {
+        if (!InstUtil.verifySversionExists(f)) {
             System.err.println("Problem with sversion.ini");
         }
         try {
-            Properties vers = inst.getOfficeVersions(f);
+            Properties vers = InstUtil.getOfficeVersions(f);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println(e);
         }
-        System.out.println(inst.getJavaVersion());
-        if (!inst.isCorrectJavaVersion()) {
+        System.out.println(InstUtil.getJavaVersion());
+        if (!InstUtil.isCorrectJavaVersion()) {
             System.err.println("Not correct Java Version");
         }
     }

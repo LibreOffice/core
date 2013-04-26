@@ -157,15 +157,15 @@ public class AccessibleWindow extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                   (XMultiServiceFactory) tParam.getMSF(),
                                   aModel);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 

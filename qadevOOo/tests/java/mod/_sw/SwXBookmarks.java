@@ -87,10 +87,10 @@ public class SwXBookmarks extends TestCase {
 
         log.println( "creating a test environment" );
         try {
-            oObj = SOF.createBookmark( xTextDoc );
-            SOF.insertTextContent( xTextDoc, (XTextContent) oObj );
-            oObj = SOF.createBookmark( xTextDoc );
-            SOF.insertTextContent( xTextDoc, (XTextContent) oObj );
+            oObj = SOfficeFactory.createBookmark( xTextDoc );
+            SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) oObj );
+            oObj = SOfficeFactory.createBookmark( xTextDoc );
+            SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) oObj );
         } catch( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create Bookmark", e );

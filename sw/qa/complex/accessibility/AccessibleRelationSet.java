@@ -171,10 +171,10 @@ public class AccessibleRelationSet {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(factory, aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(factory, aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        XAccessibleContext ctx = at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
+        XAccessibleContext ctx = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
         para1 = ctx.getAccessibleChild(0);
         para2 = ctx.getAccessibleChild(1);

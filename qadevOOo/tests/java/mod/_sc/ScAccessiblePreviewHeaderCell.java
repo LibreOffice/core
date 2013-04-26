@@ -245,14 +245,14 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), xModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), xModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE, "A");
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE, "A");
 
         if (oObj == null) {
             log.println("Version with a fixed #103863#");
-            oObj = at.getAccessibleObjectForRole(xRoot,
+            oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                  AccessibleRole.TABLE_CELL,
                                                  true);
         }

@@ -110,14 +110,14 @@ public class SmEditAccessible extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole
+        oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.PANEL, "", "SmEditAccessible");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("Destroy", new Boolean(true));

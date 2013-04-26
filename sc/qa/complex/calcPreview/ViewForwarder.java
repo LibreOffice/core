@@ -283,12 +283,12 @@ public class ViewForwarder {
         // get the accessible content
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(mXMSF, aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         XAccessible parent = null;
 
         try {
-            parent = at.getAccessibleObjectForRole
+            parent = AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
             oObj = parent.getAccessibleContext().getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
@@ -376,7 +376,7 @@ public class ViewForwarder {
         }
 
         try {
-            parent = at.getAccessibleObjectForRole
+            parent = AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.FOOTER, "").getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
             fail(iabe.getMessage());
@@ -434,7 +434,7 @@ public class ViewForwarder {
         }
 
         try {
-            parent = at.getAccessibleObjectForRole
+            parent = AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.DOCUMENT, "").getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
             fail(iabe.getMessage());
@@ -694,12 +694,12 @@ public class ViewForwarder {
         // get the accessible content
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(mXMSF, aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         XAccessible parent = null;
 
         try {
-            parent = at.getAccessibleObjectForRole
+            parent = AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
             oObj = parent.getAccessibleContext().getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
@@ -750,7 +750,7 @@ public class ViewForwarder {
 
 
         try {
-            parent = at.getAccessibleObjectForRole
+            parent = AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.FOOTER, "").getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
             fail(iabe.getMessage());
@@ -900,8 +900,8 @@ public class ViewForwarder {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(mXMSF, xModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, xModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
 //        System.out.println("ImplementationName " + utils.getImplName(oObj));
 
@@ -917,13 +917,13 @@ public class ViewForwarder {
         XAccessible parent = null;
 
         try {
-            System.out.println("Count: " +at.getAccessibleObjectForRole
+            System.out.println("Count: " +AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.TABLE, "").getAccessibleChildCount());
 //            parent = at.getAccessibleObjectForRole
 //                (xRoot, AccessibleRole.TABLE, "").getAccessibleChild(0);
 //            oObj = parent.getAccessibleContext().getAccessibleChild(1);
             System.out.println("Getting child 2");
-            oObj = at.getAccessibleObjectForRole
+            oObj = AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.TABLE, "").getAccessibleChild(2);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
             fail(iabe.getMessage());
@@ -1056,12 +1056,12 @@ public class ViewForwarder {
         // get the accessible content
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(mXMSF, aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(mXMSF, aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         XAccessible parent = null;
 
         try {
-            XAccessibleContext con = at.getAccessibleObjectForRole
+            XAccessibleContext con = AccessibilityTools.getAccessibleObjectForRole
                                 (xRoot, AccessibleRole.SHAPE, "");
             System.out.println("Name of AccessibleContext: " + con.getAccessibleName());
             oObj = con;

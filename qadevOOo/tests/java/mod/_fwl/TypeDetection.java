@@ -143,8 +143,8 @@ public class TypeDetection extends TestCase {
         String fileURL = null;
         try {
             xTextDoc = SOF.createTextDoc( null );
-            XInterface xBookMark = SOF.createBookmark( xTextDoc );
-            SOF.insertTextContent( xTextDoc, (XTextContent) xBookMark );
+            XInterface xBookMark = SOfficeFactory.createBookmark( xTextDoc );
+            SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) xBookMark );
 
             fileURL = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF() );
             fileURL = fileURL + "bookmarks.oot";

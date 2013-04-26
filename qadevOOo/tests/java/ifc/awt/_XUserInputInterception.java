@@ -463,15 +463,15 @@ public class _XUserInputInterception extends MultiMethodTest {
 
                 util.DesktopTools.bringWindowToFront(xModel);
 
-                XWindow xWindow = at.getCurrentWindow(
+                XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                           (XMultiServiceFactory) tParam.getMSF(),
                                           xModel);
 
-                XAccessible xRoot = at.getAccessibleObject(xWindow);
+                XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
 
 
-                XAccessibleContext xPanel = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
+                XAccessibleContext xPanel = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
                 XAccessibleComponent xPanelCont = UnoRuntime.queryInterface(XAccessibleComponent.class, xPanel);
 
                 // the position of the panel

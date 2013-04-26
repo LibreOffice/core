@@ -605,7 +605,8 @@ public class UnoRuntime {
                     try {
                         b.dispose();
                     } catch (InterruptedException e) {
-                        Thread.currentThread().interrupted();
+                        Thread.currentThread();
+                        Thread.interrupted();
                         throw new RuntimeException(
                             "Unexpected exception in UnoRuntime.reset: " + e);
                     } catch (IOException e) {

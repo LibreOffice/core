@@ -138,11 +138,11 @@ public class ScAccessiblePageHeaderArea extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentContainerWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         try {
-            oObj = at.getAccessibleObjectForRole
+            oObj = AccessibilityTools.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
             XAccessibleContext cont = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
             XAccessibleStateSet StateSet = cont.getAccessibleStateSet();
@@ -154,12 +154,12 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         XAccessibleContext zoomIn =
-            at.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
+            AccessibilityTools.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
 
         final XAccessibleAction pressZoom = UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
         tEnv.addObjRelation("EventProducer",

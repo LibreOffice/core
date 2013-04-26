@@ -108,14 +108,14 @@ public class AccessibleComboBox extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               atw);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Cancel");
         action = UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                              AccessibleRole.PAGE_TAB_LIST);
 
         XAccessibleSelection xAccSel = UnoRuntime.queryInterface(
@@ -129,8 +129,8 @@ public class AccessibleComboBox extends TestCase {
         }
         util.utils.shortWait(Param.getInt("ShortWait"));
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
                                              "AccessibleComboBox");
 
         log.println("ImplementationName " + utils.getImplName(oObj));

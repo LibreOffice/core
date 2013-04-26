@@ -194,11 +194,11 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
             AccessibleRole.ROW_HEADER);
 
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));

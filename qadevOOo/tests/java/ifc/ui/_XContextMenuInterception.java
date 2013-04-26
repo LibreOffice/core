@@ -114,13 +114,13 @@ public class _XContextMenuInterception extends MultiMethodTest {
             xWindow = UnoRuntime.queryInterface(XWindow.class,
                     tk.getTopWindow(0));
 
-            xRoot = at.getAccessibleObject(xWindow);
-            at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+            xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+            AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Couldn't get Window");
         }
 
-        XAccessibleContext oPopMenu = at.getAccessibleObjectForRole(xRoot, AccessibleRole.POPUP_MENU,true);
+        XAccessibleContext oPopMenu = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.POPUP_MENU,true);
 
         log.println("ImplementationName: " + util.utils.getImplName(oPopMenu));
 
@@ -156,11 +156,11 @@ public class _XContextMenuInterception extends MultiMethodTest {
         log.println("try to open contex menu...");
         AccessibilityTools at = new AccessibilityTools();
 
-        xWindow = at.getCurrentWindow(xMSF, xModel);
+        xWindow = AccessibilityTools.getCurrentWindow(xMSF, xModel);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        XInterface oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
+        XInterface oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
         XAccessibleComponent window = UnoRuntime.queryInterface(
                 XAccessibleComponent.class, oObj);

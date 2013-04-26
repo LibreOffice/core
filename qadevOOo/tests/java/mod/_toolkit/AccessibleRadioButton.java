@@ -224,9 +224,9 @@ public class AccessibleRadioButton extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        XAccessibleContext iconChoiceCtrl = at.getAccessibleObjectForRole(
+        XAccessibleContext iconChoiceCtrl = AccessibilityTools.getAccessibleObjectForRole(
                                                     xRoot, AccessibleRole.TREE,
                                                     "IconChoiceControl");
 
@@ -241,17 +241,17 @@ public class AccessibleRadioButton extends TestCase {
             e.printStackTrace(log);
         }
 
-        at.printAccessibleTree(log,xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log,xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                              AccessibleRole.RADIO_BUTTON,
                                              "Web");
 
-        XAccessibleContext anotherButton = at.getAccessibleObjectForRole(xRoot,
+        XAccessibleContext anotherButton = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                          AccessibleRole.RADIO_BUTTON,
                                                                          "FTP");
 
-        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
+        XAccessibleContext closeButton = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                        AccessibleRole.PUSH_BUTTON,
                                                                        "Close");
 

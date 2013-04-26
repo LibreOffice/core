@@ -48,7 +48,7 @@ public class UCBStreamHandler extends URLStreamHandler {
     {
         LogUtils.DEBUG( "UCBStreamHandler ctor, scheme = " + scheme );
         this.m_xContext = ctxt;
-        this.m_ucbscheme = scheme;
+        UCBStreamHandler.m_ucbscheme = scheme;
         this.m_xSimpleFileAccess = xSFA;
     }
 

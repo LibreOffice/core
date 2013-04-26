@@ -28,14 +28,14 @@ public class ExceptParcelFilter implements FileFilter {
 
     public void setParcelToRemove(String parcelName)
     {
-        this.parcelName = parcelName;
+        ExceptParcelFilter.parcelName = parcelName;
     }
 
     public static ExceptParcelFilter getInstance() {
         return filter;
     }
     public boolean validate(String name) {
-        if (name.startsWith(this.parcelName))
+        if (name.startsWith(ExceptParcelFilter.parcelName))
             return true;
         return false;
     }
@@ -43,7 +43,7 @@ public class ExceptParcelFilter implements FileFilter {
     public String toString() {
         StringBuffer buf = new StringBuffer(DESCRIPTION + ": ");
 
-        buf.append("<" + this.parcelName + ">");
+        buf.append("<" + ExceptParcelFilter.parcelName + ">");
 
         return buf.toString();
     }

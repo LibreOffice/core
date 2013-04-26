@@ -140,11 +140,11 @@ public class AccessibleFixedText extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XAccessible xRoot = at.getAccessibleObject(xWinDlg);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWinDlg);
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LABEL);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.LABEL);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 

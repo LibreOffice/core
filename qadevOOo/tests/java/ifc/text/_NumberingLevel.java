@@ -77,9 +77,9 @@ public class _NumberingLevel {
      */
     public _NumberingLevel(LogWriter log, TestParameters tParam, PropertyValue[] propertyValues){
 
-        this.PropertyArray = propertyValues;
+        _NumberingLevel.PropertyArray = propertyValues;
 
-        this.log = log;
+        _NumberingLevel.log = log;
 
         //key = PropertyName, value = Ooptional
         NumberingLevel.put("Adjust", new Boolean(false));

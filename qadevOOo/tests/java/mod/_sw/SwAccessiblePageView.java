@@ -173,14 +173,14 @@ public class SwAccessiblePageView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         System.out.println("Panel: "+AccessibleRole.PANEL);
         System.out.println("ScrollPane: "+AccessibleRole.SCROLL_PANE);
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL,"Page");
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL,"Page");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 

@@ -315,8 +315,9 @@ public class LocalOfficeConnection
                 {
                     try
                     {
+                        Thread.currentThread();
                         // try to connect to soffice
-                        Thread.currentThread().sleep( 500 );
+                        Thread.sleep( 500 );
                         aInitialObject = resolve(xLocalContext, mURL);
                     }
                     catch( com.sun.star.connection.NoConnectException aEx )

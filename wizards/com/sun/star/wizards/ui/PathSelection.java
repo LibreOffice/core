@@ -138,7 +138,7 @@ public class PathSelection
                                 FileAccess myFA = new FileAccess(xMSF);
                                 xSaveTextBox.setText(myFA.getPath(sStorePath, null));
                                 sDefaultDirectory = FileAccess.getParentDir(sStorePath);
-                                sDefaultName = myFA.getFilename(sStorePath);
+                                sDefaultName = FileAccess.getFilename(sStorePath);
                             }
                             break;
                         default:

@@ -144,14 +144,14 @@ public class AccessibleStatusBarItem extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentContainerWindow(
+        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(
                                   (XMultiServiceFactory) tParam.getMSF(),
                                   aModel);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        XAccessibleContext statusbar = at.getAccessibleObjectForRole(xRoot,
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        XAccessibleContext statusbar = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                      AccessibleRole.STATUS_BAR);
 
         try {

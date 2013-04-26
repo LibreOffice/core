@@ -237,7 +237,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
             if (eThread.isAlive()) {
                 log.println("Interrupting Thread");
                 eThread.interrupt();
-                eThread.yield();
+                Thread.yield();
             }
         } catch (Exception e) {
             // who cares ;-)
@@ -264,7 +264,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
         if (eThread.isAlive()) {
             log.println("second interrupt");
             eThread.interrupt();
-            eThread.yield();
+            Thread.yield();
         }
 
         XExecutableDialog exD = UnoRuntime.queryInterface(

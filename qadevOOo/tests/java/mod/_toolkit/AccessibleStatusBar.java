@@ -139,9 +139,9 @@ public class AccessibleStatusBar extends TestCase {
             UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.STATUS_BAR);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.STATUS_BAR);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 

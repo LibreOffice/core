@@ -100,16 +100,16 @@ public class AccessibleDrawDocumentView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow (
+        XWindow xWindow = AccessibilityTools.getCurrentWindow (
                             (XMultiServiceFactory)Param.getMSF(),aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         //com.sun.star.accessibility.AccessibleRole
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
         log.println("ImplementationName "+utils.getImplName(oObj));
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

@@ -123,7 +123,7 @@ public class ScTableSheetsObj extends TestCase {
         XSpreadsheet oSecondSheet = null;
 
         try {
-            oSecondSheet = SOF.createSpreadsheet(xSpreadsheetDoc);
+            oSecondSheet = SOfficeFactory.createSpreadsheet(xSpreadsheetDoc);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create instances", e);
@@ -145,7 +145,7 @@ public class ScTableSheetsObj extends TestCase {
                     "adding INSTANCE" + n +" as mod relation to environment" );
                 tEnv.addObjRelation(
                     "INSTANCE" + n,
-                    SOF.createSpreadsheet(xSpreadsheetDoc) );
+                    SOfficeFactory.createSpreadsheet(xSpreadsheetDoc) );
                 }
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

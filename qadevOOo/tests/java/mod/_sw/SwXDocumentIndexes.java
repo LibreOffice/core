@@ -95,7 +95,7 @@ public class SwXDocumentIndexes extends TestCase {
         XTextContent xTC = null;
 
         try {
-            xTC = SOF.createIndex(xTextDoc,"com.sun.star.text.ContentIndex");
+            xTC = SOfficeFactory.createIndex(xTextDoc,"com.sun.star.text.ContentIndex");
         }
         catch ( com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

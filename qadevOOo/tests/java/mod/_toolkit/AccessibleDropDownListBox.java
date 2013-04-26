@@ -77,15 +77,15 @@ public class AccessibleDropDownListBox extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                   (XMultiServiceFactory) Param.getMSF(),
                                   xTextDoc);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX,
                                              "", "AccessibleDropDownListBox");
 
         log.println("ImplementationName " + utils.getImplName(oObj));

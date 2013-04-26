@@ -89,7 +89,7 @@ public class SwXTableRows extends TestCase {
         log.println( "creating a test environment" );
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
-            oTable = SOF.createTextTable( xTextDoc );
+            oTable = SOfficeFactory.createTextTable( xTextDoc );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create TextTable: "
@@ -97,7 +97,7 @@ public class SwXTableRows extends TestCase {
         }
 
         try {
-            SOF.insertTextContent(xTextDoc, oTable );
+            SOfficeFactory.insertTextContent(xTextDoc, oTable );
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't insert text content: "

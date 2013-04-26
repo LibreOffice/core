@@ -71,7 +71,7 @@ public class SwAccessibleTableCellView extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
 
         try {
-            oTable = SOF.createTextTable(xTextDoc);
+            oTable = SOfficeFactory.createTextTable(xTextDoc);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create TextTable : " +
@@ -79,7 +79,7 @@ public class SwAccessibleTableCellView extends TestCase {
         }
 
         try {
-            SOF.insertTextContent(xTextDoc, oTable);
+            SOfficeFactory.insertTextContent(xTextDoc, oTable);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't insert text content :" +
@@ -91,14 +91,14 @@ public class SwAccessibleTableCellView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleSelection accSel = UnoRuntime.queryInterface(

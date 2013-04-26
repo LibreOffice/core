@@ -112,10 +112,10 @@ public class SmGraphicAccessible extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole
+        oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.DOCUMENT, "Formula");
 
         log.println("ImplementationName " + utils.getImplName(oObj));

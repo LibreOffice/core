@@ -139,7 +139,7 @@ public class SwXTextEmbeddedObject extends TestCase {
 
         tEnv.addObjRelation("NoAttach", "SwXTextEmbeddedObject");
 
-        XTextFrame aFrame = SOF.createTextFrame(xTextDoc, 500, 500);
+        XTextFrame aFrame = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
         XTextContent the_content = UnoRuntime.queryInterface(

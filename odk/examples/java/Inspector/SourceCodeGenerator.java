@@ -613,7 +613,7 @@ class UnoObjectDefinition{
                 case TypeClass.INTERFACE_METHOD_value:
                 case TypeClass.INTERFACE_value:
             case TypeClass.PROPERTY_value:
-                    String sShortClassName = m_oIntrospector.getShortClassName(getTypeName());
+                    String sShortClassName = Introspector.getShortClassName(getTypeName());
                     sCentralVariableStemName = getVariableNameforUnoObject(sShortClassName);
                 default:
                     sCentralVariableStemName = SVARIABLENAME;
@@ -726,7 +726,7 @@ class UnoObjectDefinition{
                 case TypeClass.INTERFACE_METHOD_value:
                 case TypeClass.INTERFACE_value:
                 case TypeClass.PROPERTY_value:
-                    String sShortClassName = m_oIntrospector.getShortClassName(getTypeName());
+                    String sShortClassName = Introspector.getShortClassName(getTypeName());
                     sVariableStemName = getVariableNameforUnoObject(sShortClassName);
                 default:
             }
@@ -999,7 +999,7 @@ class UnoObjectDefinition{
         }
 
         public String getqueryInterfaceSourceCode(String _sClassName, String _sReturnVariableName, String _sIncomingObjectName){
-            String sShortClassName = m_oIntrospector.getShortClassName(_sClassName);
+            String sShortClassName = Introspector.getShortClassName(_sClassName);
             return "\t" + _sReturnVariableName + " =  (" + sShortClassName + ") UnoRuntime.queryInterface(" + sShortClassName + ".class, " + _sIncomingObjectName + ");\n";
         }
 
@@ -1020,7 +1020,7 @@ class UnoObjectDefinition{
                 sReturn = _sClassName;
             }
             else{
-                sReturn = m_oIntrospector.getShortClassName(_sClassName);
+                sReturn = Introspector.getShortClassName(_sClassName);
             }
             return sReturn;
         }
@@ -1562,9 +1562,9 @@ class UnoObjectDefinition{
                 sReturn = _sClassName.replace('.', '/');
             }
             else{
-                String sModuleName = m_oIntrospector.getModuleName(_sClassName);
-                sModuleName = m_oIntrospector.getShortClassName(sModuleName);
-                sReturn = getCSSNameSpaceString() + "::" + sModuleName + "::" + m_oIntrospector.getShortClassName(_sClassName);
+                String sModuleName = Introspector.getModuleName(_sClassName);
+                sModuleName = Introspector.getShortClassName(sModuleName);
+                sReturn = getCSSNameSpaceString() + "::" + sModuleName + "::" + Introspector.getShortClassName(_sClassName);
             }
             return sReturn;
         }

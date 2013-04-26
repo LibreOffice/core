@@ -142,13 +142,13 @@ public class AccessiblePopupMenu extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                   (XMultiServiceFactory) tParam.getMSF(),
                                   aModel);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
         XAccessibleComponent window = UnoRuntime.queryInterface(
                                               XAccessibleComponent.class, oObj);
@@ -176,14 +176,14 @@ public class AccessiblePopupMenu extends TestCase {
             xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                           tk.getTopWindow(0));
 
-            xRoot = at.getAccessibleObject(xWindow);
+            xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Couldn't get Window");
         }
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.POPUP_MENU);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.POPUP_MENU);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 

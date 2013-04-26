@@ -89,8 +89,8 @@ public class SwXBookmark extends TestCase {
         Object instance = null;
         log.println( "creating a test environment" );
         try {
-            oObj = SOF.createBookmark( xTextDoc );
-            SOF.insertTextContent( xTextDoc, (XTextContent) oObj );
+            oObj = SOfficeFactory.createBookmark( xTextDoc );
+            SOfficeFactory.insertTextContent( xTextDoc, (XTextContent) oObj );
             instance = SOF.createInstance(xTextDoc,"com.sun.star.text.Bookmark");
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );

@@ -98,8 +98,8 @@ public class SwXDocumentIndex extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF());
         log.println( "creating a test environment" );
         try {
-            xTC = SOF.createIndex(xTextDoc, "com.sun.star.text.DocumentIndex");
-            instance = SOF.createIndex(xTextDoc, "com.sun.star.text.DocumentIndex");
+            xTC = SOfficeFactory.createIndex(xTextDoc, "com.sun.star.text.DocumentIndex");
+            instance = SOfficeFactory.createIndex(xTextDoc, "com.sun.star.text.DocumentIndex");
         }
         catch ( com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

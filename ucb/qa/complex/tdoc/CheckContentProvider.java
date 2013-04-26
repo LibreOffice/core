@@ -302,14 +302,14 @@ public class CheckContentProvider {
     private void checkInterfaces(boolean hasParent) {
         // check the XTypeProvider interface
         _XTypeProvider xTypeProvider = new _XTypeProvider();
-        xTypeProvider.oObj = UnoRuntime.queryInterface(XTypeProvider.class, xContent);
+        _XTypeProvider.oObj = UnoRuntime.queryInterface(XTypeProvider.class, xContent);
         // xTypeProvider.log = log;
         assertNotNull("getImplementationId()", xTypeProvider._getImplementationId());
         assertNotNull("getTypes()", xTypeProvider._getTypes());
 
         // check the XSewrviceInfo interface
         _XServiceInfo xServiceInfo = new _XServiceInfo();
-        xServiceInfo.oObj = UnoRuntime.queryInterface(XServiceInfo.class, xContent);
+        _XServiceInfo.oObj = UnoRuntime.queryInterface(XServiceInfo.class, xContent);
         // xServiceInfo.log = log;
         assertNotNull("getImplementationName()", xServiceInfo._getImplementationName());
         assertNotNull("getSupportedServiceNames()", xServiceInfo._getSupportedServiceNames());
@@ -372,7 +372,7 @@ public class CheckContentProvider {
 
         // check the XComponent interface
         _XComponent xComponent = new _XComponent();
-        xComponent.oObj = UnoRuntime.queryInterface(XComponent.class, xContent);
+        _XComponent.oObj = UnoRuntime.queryInterface(XComponent.class, xContent);
         // xComponent.log = log;
         assertNotNull("addEventListener()", xComponent._addEventListener());
         assertNotNull("removeEventListener()", xComponent._removeEventListener());

@@ -92,18 +92,18 @@ public class SwXCell extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         log.println( "creating a test environment" );
         try {
-            oTable = SOF.createTextTable(xTextDoc, 3, 4);
+            oTable = SOfficeFactory.createTextTable(xTextDoc, 3, 4);
         } catch ( com.sun.star.uno.Exception e ) {
             log.println("Unable to create TextTable...");
             e.printStackTrace(log);
         }
         try {
-            SOF.insertTextContent( xTextDoc, oTable );
+            SOfficeFactory.insertTextContent( xTextDoc, oTable );
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             log.println("Unable to insert TextContent...");
             e.printStackTrace(log);
         }
-        oObj = SOF.getFirstTableCell( oTable );
+        oObj = SOfficeFactory.getFirstTableCell( oTable );
 
         log.println( "    creating a new environment for bodytext object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

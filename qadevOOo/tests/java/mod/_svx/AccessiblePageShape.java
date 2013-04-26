@@ -82,14 +82,14 @@ public class AccessiblePageShape extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
 //        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE,
 //            "PageShape");
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "PageShape");
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "PageShape");
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment( oObj );

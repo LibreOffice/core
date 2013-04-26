@@ -129,7 +129,7 @@ public class Inspector{
         public String getIDLPath(){
             String sRetPath = getSDKPath();
             if (m_oIntrospector.isValidSDKInstallationPath(sRetPath)){
-                sRetPath = m_oIntrospector.addToPath(sRetPath, sIDLDOCUMENTSUBFOLDER);
+                sRetPath = Introspector.addToPath(sRetPath, sIDLDOCUMENTSUBFOLDER);
             }
             else{
                 sRetPath = "";

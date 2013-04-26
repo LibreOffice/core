@@ -77,7 +77,7 @@ public class SimpleFileSemaphore /* extends *//* implements */
                 // check if resource is available, if not, wait.
                 if ( _aSemaphore.exists() )
                 {
-                    m_aLog.get().println( "Active wait since " + nCount + "sec..");
+                    GlobalLogWriter.get().println( "Active wait since " + nCount + "sec..");
                     nCount ++;
                     sleep( 1 );
                 }
@@ -87,7 +87,7 @@ public class SimpleFileSemaphore /* extends *//* implements */
                     if ( _aSemaphore.exists() )
                     {
                         // ups
-                        m_aLog.get().println( "ups...");
+                        GlobalLogWriter.get().println( "ups...");
                     }
                     else
                     {
@@ -106,11 +106,11 @@ public class SimpleFileSemaphore /* extends *//* implements */
 
             catch (java.io.FileNotFoundException fne)
             {
-                m_aLog.get().println( "caught: FileNotFoundException");
+                GlobalLogWriter.get().println( "caught: FileNotFoundException");
             }
             catch(java.io.IOException ie)
             {
-                m_aLog.get().println( "caught: IOException");
+                GlobalLogWriter.get().println( "caught: IOException");
             }
         }
 
@@ -125,7 +125,7 @@ public class SimpleFileSemaphore /* extends *//* implements */
             }
             else
             {
-                m_aLog.get().println("Could be a problem here? No resource block found.");
+                GlobalLogWriter.get().println("Could be a problem here? No resource block found.");
             }
         }
 

@@ -36,7 +36,7 @@ public class NavPanel extends JPanel implements ActionListener {
 
         gridBagConstraints1 = new java.awt.GridBagConstraints();
         gridBagConstraints1.insets = new java.awt.Insets(1, 1, 1, 1);
-      gridBagConstraints1.anchor = gridBagConstraints1.WEST;
+      gridBagConstraints1.anchor = GridBagConstraints.WEST;
 
         gridBagConstraints2 = new java.awt.GridBagConstraints();
         gridBagConstraints2.gridx = 2;

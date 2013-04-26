@@ -19,7 +19,6 @@ package complex.bean;
 
 
 import java.awt.event.*;
-import java.awt.event.KeyEvent;
 import com.sun.star.comp.beans.OOoBean;
 import com.sun.star.uno.UnoRuntime;
 
@@ -483,7 +482,7 @@ public class OOoBeanTest
                 for (; i < 1; i++)
                 {
                 EventQueue q = Toolkit.getDefaultToolkit().getSystemEventQueue();
-                q.invokeAndWait( new Runnable() {
+                EventQueue.invokeAndWait( new Runnable() {
                         public void run() {
                             try {
 
@@ -499,7 +498,7 @@ public class OOoBeanTest
                         });
                 // #2
                 Thread.sleep(1000);
-                q.invokeAndWait( new Runnable() {
+                EventQueue.invokeAndWait( new Runnable() {
                         public void run() {
                             try {
 

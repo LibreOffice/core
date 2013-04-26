@@ -140,19 +140,19 @@ public class AccessibleListItem extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         // obtaining 'Close' button
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Close");
         action = UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
 
         // Selecting 'New Document' tab
         try {
-            oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
+            oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
 
             XAccessibleSelection xAccSel = UnoRuntime.queryInterface(
                                                    XAccessibleSelection.class,
@@ -163,7 +163,7 @@ public class AccessibleListItem extends TestCase {
             throw new StatusException("Can't switch to required tab", e);
         }
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST_ITEM,"Spr");
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST_ITEM,"Spr");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 

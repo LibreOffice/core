@@ -70,10 +70,10 @@ public class CheckIndeterminateState {
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
-        XWindow xWindow = at.getCurrentContainerWindow(getFactory(), aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(getFactory(), aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
             AccessibleRole.TOGGLE_BUTTON, "Bold");
         assertNotNull("Found a TOGGLE_BUTTON", oObj);
 

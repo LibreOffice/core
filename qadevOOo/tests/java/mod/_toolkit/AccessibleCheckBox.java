@@ -137,17 +137,17 @@ public class AccessibleCheckBox extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Cancel");
 
         action = UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.CHECK_BOX);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.CHECK_BOX);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 

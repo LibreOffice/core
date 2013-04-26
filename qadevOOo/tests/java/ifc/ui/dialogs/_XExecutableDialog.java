@@ -159,7 +159,7 @@ public class _XExecutableDialog extends MultiMethodTest {
             if (eThread.isAlive()) {
                 log.println("Interrupting Thread");
                 eThread.interrupt();
-                eThread.yield();
+                Thread.yield();
             }
         } catch (Exception e) {
             // who cares ;-)

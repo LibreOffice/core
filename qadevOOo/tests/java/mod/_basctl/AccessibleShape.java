@@ -108,11 +108,11 @@ public class AccessibleShape extends TestCase {
 
         final XWindow basicIDE = xFrame.getContainerWindow();
 
-        XAccessible xRoot = at.getAccessibleObject(basicIDE);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(basicIDE);
 
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment( oObj );

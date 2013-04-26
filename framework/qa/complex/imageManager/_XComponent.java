@@ -66,7 +66,7 @@ public class _XComponent {
 
     public _XComponent(TestParameters tEnv, XComponent oObj) {
         this.tEnv = tEnv;
-        this.oObj = oObj;
+        _XComponent.oObj = oObj;
     }
 
     /**

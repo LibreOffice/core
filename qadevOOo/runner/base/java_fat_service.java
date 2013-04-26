@@ -92,7 +92,7 @@ public class java_fat_service implements TestBase {
             }
 
             if (tCase == null) {
-                sumIt.summarizeDown(entry,entry.ErrorMsg);
+                Summarizer.summarizeDown(entry,entry.ErrorMsg);
                 LogWriter sumObj = (LogWriter)dcl.getInstance(
                                         (String)param.get("OutProducer"));
                 sumObj.initialize(entry,true);
@@ -117,7 +117,7 @@ public class java_fat_service implements TestBase {
                 tEnv = null;
             }
             if (tEnv == null) {
-                sumIt.summarizeDown(entry,"Couldn't create "+tCase.getObjectName());
+                Summarizer.summarizeDown(entry,"Couldn't create "+tCase.getObjectName());
                 LogWriter sumObj = (LogWriter)dcl.getInstance(
                                             (String)param.get("OutProducer"));
                 sumObj.initialize(entry,true);

@@ -167,19 +167,19 @@ public class ScAccessiblePreviewTable extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), xModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), xModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log,xRoot, Param.getBool(PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log,xRoot, Param.getBool(PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         XAccessibleContext zoomIn =
-            at.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
+            AccessibilityTools.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
 
         log.println("Getting "+ zoomIn.getAccessibleName());
 

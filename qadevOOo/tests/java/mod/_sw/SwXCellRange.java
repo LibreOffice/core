@@ -93,7 +93,7 @@ public class SwXCellRange extends TestCase {
         XTextTable the_table = null;
         XInterface oObj = null;
         try {
-            the_table = SOF.createTextTable( xTextDoc );
+            the_table = SOfficeFactory.createTextTable( xTextDoc );
             the_table.initialize(5, 5);
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
@@ -101,9 +101,9 @@ public class SwXCellRange extends TestCase {
                 +e.getMessage(),e);
         }
 
-        if( SOF.getTableCollection( xTextDoc ).getCount() == 0 ) {
+        if( SOfficeFactory.getTableCollection( xTextDoc ).getCount() == 0 ) {
             try {
-                SOF.insertTextContent(xTextDoc, the_table );
+                SOfficeFactory.insertTextContent(xTextDoc, the_table );
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 e.printStackTrace( log );
                 throw new StatusException("Couldn't create TextTable : "

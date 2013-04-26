@@ -114,13 +114,13 @@ public class AccessiblePresentationOLEShape extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        XWindow xWindow = AccessibilityTools.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
 //        oObj = at.getAccessibleObjectForRole
 //            (xRoot, AccessibleRole.SHAPE, "ImpressOLE");
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "ImpressOLE");
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.UNKNOWN, "ImpressOLE");
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment( oObj );

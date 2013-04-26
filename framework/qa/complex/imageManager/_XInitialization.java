@@ -46,7 +46,7 @@ public class _XInitialization {
     public _XInitialization(TestParameters tEnv, XInitialization oObj) {
 
         this.tEnv = tEnv;
-        this.oObj = oObj;
+        _XInitialization.oObj = oObj;
     }
 
     /**

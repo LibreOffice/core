@@ -100,7 +100,7 @@ public void run()
         AccessibilityTools at = new AccessibilityTools();
         XWindow xWindow = UnoRuntime.queryInterface(
                                 XWindow.class,tk.getActiveTopWindow());
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         xCon = xRoot.getAccessibleContext();
     }
     catch (Exception e)

@@ -142,14 +142,14 @@ public class AccessibleEdit extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Close");
         action = UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 

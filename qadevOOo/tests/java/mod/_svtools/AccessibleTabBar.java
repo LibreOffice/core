@@ -106,9 +106,9 @@ public class AccessibleTabBar extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xDoc).
             getCurrentController().getFrame().getContainerWindow();
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 

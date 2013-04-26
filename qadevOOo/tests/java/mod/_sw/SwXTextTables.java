@@ -93,8 +93,8 @@ public class SwXTextTables extends TestCase {
         TestEnvironment tEnv = null;
         XTextTable oTable = null;
         try {
-            oTable = SOF.createTextTable( xTextDoc );
-            SOF.insertTextContent(xTextDoc, oTable );
+            oTable = SOfficeFactory.createTextTable( xTextDoc );
+            SOfficeFactory.insertTextContent(xTextDoc, oTable );
         }
         catch( Exception uE ) {
             uE.printStackTrace( log );
@@ -105,8 +105,8 @@ public class SwXTextTables extends TestCase {
         // Number two
         XTextTable oTable2 = null;
         try {
-            oTable2 = SOF.createTextTable( xTextDoc );
-            SOF.insertTextContent(xTextDoc, oTable2 );
+            oTable2 = SOfficeFactory.createTextTable( xTextDoc );
+            SOfficeFactory.insertTextContent(xTextDoc, oTable2 );
         }
         catch( Exception uE ) {
             uE.printStackTrace( log );
@@ -128,7 +128,7 @@ public class SwXTextTables extends TestCase {
         tEnv.addObjRelation( "ROW", new Integer( nRow ) );
         tEnv.addObjRelation( "COL", new Integer( nCol ) );
         try {
-            tEnv.addObjRelation( "INST", SOF.createTextTable( xTextDoc ));
+            tEnv.addObjRelation( "INST", SOfficeFactory.createTextTable( xTextDoc ));
         }
         catch( Exception uE ) {
             uE.printStackTrace( log );

@@ -44,7 +44,7 @@ public class _XTypeProvider {
     public _XTypeProvider(TestParameters tEnv, XTypeProvider oObj) {
 
         this.tEnv = tEnv;
-        this.oObj = oObj;
+        _XTypeProvider.oObj = oObj;
     }
 
     /**

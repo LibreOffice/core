@@ -98,10 +98,10 @@ public class AccessibleMenu extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        XAccessibleContext menubar = at.getAccessibleObjectForRole(xRoot,
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        XAccessibleContext menubar = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                    AccessibleRole.MENU_BAR);
         XInterface oObj = null;
         Object menu2 = null;

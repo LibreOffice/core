@@ -142,9 +142,9 @@ public class AccessibleTabBarPageList extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                              AccessibleRole.PAGE_TAB_LIST);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));

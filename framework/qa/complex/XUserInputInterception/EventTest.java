@@ -517,15 +517,15 @@ public class EventTest {
             try{
                 // get the position and the range of a scroll bar
 
-                XWindow xWindow = at.getCurrentWindow(
+                XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                           getMSF(),
                                           xModel);
 
-                XAccessible xRoot = at.getAccessibleObject(xWindow);
+                XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
 
 
-                XAccessibleContext xPanel = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
+                XAccessibleContext xPanel = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
                 XAccessibleComponent xPanelCont = UnoRuntime.queryInterface(XAccessibleComponent.class, xPanel);
 
                 // the position of the panel

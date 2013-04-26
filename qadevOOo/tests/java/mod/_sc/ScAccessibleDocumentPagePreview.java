@@ -156,11 +156,11 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole
+        oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.DOCUMENT, "");
 
         log.println("ImplementationName " + utils.getImplName(oObj));

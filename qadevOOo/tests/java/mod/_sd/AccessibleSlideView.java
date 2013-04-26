@@ -73,13 +73,13 @@ public class AccessibleSlideView extends TestCase {
 
         shortWait();
 
-        XWindow xWindow = at.getCurrentWindow (
+        XWindow xWindow = AccessibilityTools.getCurrentWindow (
                                 (XMultiServiceFactory)Param.getMSF(),aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
         System.out.println("ImplementationName "+utils.getImplName(oObj));
 

@@ -231,29 +231,29 @@ public class ToDo {
                 new Object[][] { objectSortedHolidays };
 
                 // Row index
-                int intRowTo = this.INT_ROW_FROM - 1;
+                int intRowTo = ToDoImpl.INT_ROW_FROM - 1;
 
                 // Getting the feature of the first cell
                 String sFeature = this.getStringFromCell(xcellrange,
                                                          intRowTo + 1,
-                                                         this.INT_COLUMN_FEATURE);
+                                                         ToDoImpl.INT_COLUMN_FEATURE);
 
                 // Determine the last row with an entry in the first column
                 while ( ( sFeature != null ) &&
                         ( !sFeature.equals( "" ) ) ) {
                     intRowTo++;
                     sFeature = this.getStringFromCell( xcellrange,
-                    intRowTo + 1, this.INT_COLUMN_FEATURE );
+                    intRowTo + 1, ToDoImpl.INT_COLUMN_FEATURE );
                 }
 
                 // Setting the last row to be calculated
                 final int INT_ROW_TO = intRowTo + 1;
 
                 // Deleting cells which will be recalculated
-                for ( int intRow = this.INT_ROW_FROM; intRow < INT_ROW_TO + 5;
+                for ( int intRow = ToDoImpl.INT_ROW_FROM; intRow < INT_ROW_TO + 5;
                       intRow++ ) {
-                    for ( int intColumn = this.INT_COLUMN_STARTDATE;
-                          intColumn <= this.INT_COLUMN_END_DAY_OF_WEEK;
+                    for ( int intColumn = ToDoImpl.INT_COLUMN_STARTDATE;
+                          intColumn <= ToDoImpl.INT_COLUMN_END_DAY_OF_WEEK;
                           intColumn++ ) {
                         this.setStringToCell(xcellrange, intRow, intColumn, "");
                     }
@@ -261,13 +261,13 @@ public class ToDo {
 
                 /* Clearing the background color of the due date cells and setting
                    the hyperlink to the bugtracker */
-                for (int intRow = this.INT_ROW_FROM; intRow < INT_ROW_TO; intRow++)
+                for (int intRow = ToDoImpl.INT_ROW_FROM; intRow < INT_ROW_TO; intRow++)
                 {
                     // Querying for the interface XPropertySet for the cell
                     // providing the due date
                     XPropertySet xpropertyset = UnoRuntime.queryInterface(XPropertySet.class,
                                                   xcellrange.getCellByPosition(
-                                                  this.INT_COLUMN_DUEDATE,
+                                                  ToDoImpl.INT_COLUMN_DUEDATE,
                                                   intRow ));
 
                     // Changing the background color of the cell to white
@@ -276,7 +276,7 @@ public class ToDo {
 
                     // Getting the cell of the bug id
                     XCell xcell = xcellrange.getCellByPosition(
-                    this.INT_COLUMN_FEATURE, intRow );
+                    ToDoImpl.INT_COLUMN_FEATURE, intRow );
 
                     // Querying for the interface XSimpleText
                     XSimpleText xsimpletext = UnoRuntime.queryInterface( XSimpleText.class, xcell );
@@ -333,7 +333,7 @@ public class ToDo {
                 }
 
                 // Processing all features/bugs in the table
-                for (int intRow = this.INT_ROW_FROM; intRow < INT_ROW_TO; intRow++)
+                for (int intRow = ToDoImpl.INT_ROW_FROM; intRow < INT_ROW_TO; intRow++)
                 {
                     // Getting the cell of the column "Needed Days" in the
                     // current row
@@ -345,7 +345,7 @@ public class ToDo {
 
                     // Getting the content of a specified cell
                     String sStatus = this.getStringFromCell( xcellrange,
-                    intRow, this.INT_COLUMN_STATUS );
+                    intRow, ToDoImpl.INT_COLUMN_STATUS );
 
                     /* Testing if the number of needed days is greater than
                        zero and if
@@ -365,13 +365,13 @@ public class ToDo {
 
                         // Set the start date in the specified cell of the table
                         this.setStringToCell(xcellrange, intRow,
-                                             this.INT_COLUMN_STARTDATE, sDate);
+                                             ToDoImpl.INT_COLUMN_STARTDATE, sDate);
 
                         // For the start day set the day of week in the specified
                         // cell of the table
                         this.setDayOfWeek( gregCalStartDate,
                                            xcellrange, intRow,
-                                           this.INT_COLUMN_START_DAY_OF_WEEK );
+                                           ToDoImpl.INT_COLUMN_START_DAY_OF_WEEK );
 
                         // Getting the end date after a specified number of workdays
                         GregorianCalendar gregCalEndDate =
@@ -385,12 +385,12 @@ public class ToDo {
 
                         // Set the end date in the specified cell of the table
                         this.setStringToCell( xcellrange, intRow,
-                                              this.INT_COLUMN_ENDDATE, sDate );
+                                              ToDoImpl.INT_COLUMN_ENDDATE, sDate );
 
                         // For the end day set the day of week in the specified
                         // cell of the table
                         this.setDayOfWeek(gregCalEndDate, xcellrange,
-                                          intRow, this.INT_COLUMN_END_DAY_OF_WEEK);
+                                          intRow, ToDoImpl.INT_COLUMN_END_DAY_OF_WEEK);
 
                         // Set the initial date for the next loop
                         gregCalStartDate = ( GregorianCalendar )
@@ -398,7 +398,7 @@ public class ToDo {
 
                         // Get the due date from the table
                         String sDueDate = this.getStringFromCell(
-                            xcellrange, intRow, this.INT_COLUMN_DUEDATE );
+                            xcellrange, intRow, ToDoImpl.INT_COLUMN_DUEDATE );
 
                         // Testing if the due date is not empty
                         if ( !sDueDate.equals( "" ) ) {
@@ -427,7 +427,7 @@ public class ToDo {
                                     this.getGregorianCalendarFromString(
                                         this.getStringFromCell(
                                             xcellrange, intRowToInsert,
-                                            this.INT_COLUMN_STARTDATE ) );
+                                            ToDoImpl.INT_COLUMN_STARTDATE ) );
 
                                 // Testing if we have to search for an earlier date
                                 // to begin
@@ -441,7 +441,7 @@ public class ToDo {
                                     // the current row
                                     String sStartDate = this.getStringFromCell(
                                         xcellrange, intRowToInsert,
-                                        this.INT_COLUMN_STARTDATE );
+                                        ToDoImpl.INT_COLUMN_STARTDATE );
 
                                     // Search until a valid start date is found
                                     while ( sStartDate.equals( "" ) ) {
@@ -452,7 +452,7 @@ public class ToDo {
                                         // in the current row
                                         sStartDate = this.getStringFromCell(
                                             xcellrange, intRowToInsert,
-                                            this.INT_COLUMN_STARTDATE );
+                                            ToDoImpl.INT_COLUMN_STARTDATE );
                                     }
 
                                     // Get the GregorianCalender format for the
@@ -481,7 +481,7 @@ public class ToDo {
                                                     xfunctionaccess);
                                 String sPreviousDueDate = this.getStringFromCell(
                                     xcellrange, intRowToInsert,
-                                    this.INT_COLUMN_DUEDATE );
+                                    ToDoImpl.INT_COLUMN_DUEDATE );
 
                                 GregorianCalendar gregCalPreviousDueDate = null;
 
@@ -499,7 +499,7 @@ public class ToDo {
                                     XPropertySet xpropertyset = UnoRuntime.queryInterface(
                                             XPropertySet.class,
                                             xcellrange.getCellByPosition(
-                                            this.INT_COLUMN_DUEDATE,
+                                            ToDoImpl.INT_COLUMN_DUEDATE,
                                             intRow ) );
 
                                     // Changing the background color of the cell
@@ -552,12 +552,12 @@ public class ToDo {
                                     intRow = intRowToInsert - 1;
 
                                     // Tests at which line we want to insert
-                                    if ( intRow >= this.INT_ROW_FROM ) {
+                                    if ( intRow >= ToDoImpl.INT_ROW_FROM ) {
                                         // Get the start date
                                         gregCalStartDate =
                                             this.getGregorianCalendarFromString(
                                                 this.getStringFromCell( xcellrange,
-                                                   intRow,this.INT_COLUMN_ENDDATE));
+                                                   intRow,ToDoImpl.INT_COLUMN_ENDDATE));
                                     }
                                     else {
                                         // Set the start date with the absolute s
@@ -845,8 +845,8 @@ public class ToDo {
                                         XCellRange xcellrange,
                                         XFunctionAccess xfunctionaccess ) {
             try {
-                int intRow = this.INT_ROW_HOLIDAYS_START;
-                int intColumn = this.INT_COLUMN_HOLIDAYS_START;
+                int intRow = ToDoImpl.INT_ROW_HOLIDAYS_START;
+                int intColumn = ToDoImpl.INT_COLUMN_HOLIDAYS_START;
 
                 double dHolidayStart = xcellrange.getCellByPosition(
                     intColumn, intRow ).getValue();

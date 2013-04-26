@@ -135,11 +135,11 @@ public class AccessibleToolBox extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TOOL_BAR);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TOOL_BAR);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
@@ -147,7 +147,7 @@ public class AccessibleToolBox extends TestCase {
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
-        XAccessible acc = at.getAccessibleObject(oObj);
+        XAccessible acc = AccessibilityTools.getAccessibleObject(oObj);
         XAccessible child = null;
 
         try {

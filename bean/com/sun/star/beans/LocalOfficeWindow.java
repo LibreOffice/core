@@ -274,7 +274,7 @@ public class LocalOfficeWindow
                         aWatchedThread = null;
                         stop();
 
-                        if ( aThread.interrupted() )
+                        if ( Thread.interrupted() )
                                 throw new InterruptedException();
                 }
 

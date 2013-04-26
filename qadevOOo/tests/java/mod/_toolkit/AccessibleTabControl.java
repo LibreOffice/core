@@ -216,12 +216,12 @@ public class AccessibleTabControl extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                              AccessibleRole.PAGE_TAB_LIST);
 
-        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
+        XAccessibleContext closeButton = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                        AccessibleRole.PUSH_BUTTON,
                                                                        "Close");
 

@@ -208,11 +208,11 @@ public class AccessibleIconChoiceCtrl extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
 
-        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
+        XAccessibleContext closeButton = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                        AccessibleRole.PUSH_BUTTON,
                                                                        "Close");
 

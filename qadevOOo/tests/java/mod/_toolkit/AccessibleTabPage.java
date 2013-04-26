@@ -223,16 +223,16 @@ public class AccessibleTabPage extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
+        XAccessibleContext closeButton = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                        AccessibleRole.PUSH_BUTTON,
                                                                        "Close");
 
         accCloseButton = UnoRuntime.queryInterface(
                                  XAccessibleAction.class, closeButton);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
@@ -248,7 +248,7 @@ public class AccessibleTabPage extends TestCase {
 
         shortWait();
 
-        XInterface xEventInt = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Variables");
+        XInterface xEventInt = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Variables");
         final XAccessibleComponent eventAccComp = UnoRuntime.queryInterface(
                                                XAccessibleComponent.class,
                                                xEventInt);

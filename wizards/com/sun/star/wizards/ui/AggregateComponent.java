@@ -577,8 +577,8 @@ public class AggregateComponent extends ControlScroller
 
         private void settovoid()
         {
-            CurUnoDialog.deselectListBox(xFieldListBox);
-            CurUnoDialog.deselectListBox(xFunctionListBox);
+            UnoDialog.deselectListBox(xFieldListBox);
+            UnoDialog.deselectListBox(xFunctionListBox);
         }
 
         protected class ItemListenerImpl implements com.sun.star.awt.XItemListener

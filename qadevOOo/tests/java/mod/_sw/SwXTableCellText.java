@@ -119,7 +119,7 @@ public class SwXTableCellText extends TestCase {
 
         log.println( "Creating a test environment" );
         try {
-            oTable = SOF.createTextTable( xTextDoc );
+            oTable = SOfficeFactory.createTextTable( xTextDoc );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create TextTable : "
@@ -127,7 +127,7 @@ public class SwXTableCellText extends TestCase {
         }
 
         try {
-            SOF.insertTextContent(xTextDoc, oTable );
+            SOfficeFactory.insertTextContent(xTextDoc, oTable );
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't insert text content : "

@@ -142,13 +142,13 @@ public class AccessibleScrollBar extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(
+        XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                   (XMultiServiceFactory) tParam.getMSF(),
                                   aModel);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLL_BAR);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLL_BAR);
 
         final XAccessibleAction act = UnoRuntime.queryInterface(
                                               XAccessibleAction.class, oObj);

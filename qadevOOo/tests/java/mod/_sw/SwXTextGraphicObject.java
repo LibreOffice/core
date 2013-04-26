@@ -106,7 +106,7 @@ public class SwXTextGraphicObject extends TestCase {
                     (xTextDoc,"com.sun.star.text.GraphicObject");
                 instance = SOF.createInstance
                     (xTextDoc,"com.sun.star.text.GraphicObject");
-                xTextFrame = SOF.createTextFrame(xTextDoc, 500, 500);
+                xTextFrame = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
             }
             catch (Exception ex) {
                 log.println("Couldn't create instance");

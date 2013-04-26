@@ -79,10 +79,10 @@ public class AccessibleMenuSeparator extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot,
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        XAccessibleContext MenuBar = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                    AccessibleRole.MENU_BAR);
         XAccessibleAction act = null;
         XInterface oObj = null;

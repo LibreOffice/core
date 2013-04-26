@@ -191,9 +191,9 @@ public class AccessibleBrowseBoxTable extends TestCase {
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE,
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE,
             "Table");
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));

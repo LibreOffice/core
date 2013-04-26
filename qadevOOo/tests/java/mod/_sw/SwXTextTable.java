@@ -86,8 +86,8 @@ public class SwXTextTable extends TestCase {
         Object instance = null;
 
         try {
-            oObj = SOF.createTextTable(xTextDoc);
-            instance = SOF.createTextTable(xTextDoc);
+            oObj = SOfficeFactory.createTextTable(xTextDoc);
+            instance = SOfficeFactory.createTextTable(xTextDoc);
         } catch (com.sun.star.uno.Exception uE) {
             uE.printStackTrace(log);
             throw new StatusException("Couldn't create testobj : " +
@@ -101,9 +101,9 @@ public class SwXTextTable extends TestCase {
         log.println("Creating instance...");
         tEnv = new TestEnvironment(oObj);
 
-        if (SOF.getTableCollection(xTextDoc).getCount() == 0) {
+        if (SOfficeFactory.getTableCollection(xTextDoc).getCount() == 0) {
             try {
-                SOF.insertTextContent(xTextDoc, oObj);
+                SOfficeFactory.insertTextContent(xTextDoc, oObj);
             } catch (com.sun.star.lang.IllegalArgumentException uE) {
                 uE.printStackTrace(log);
                 throw new StatusException("Couldn't create TextTable : " +

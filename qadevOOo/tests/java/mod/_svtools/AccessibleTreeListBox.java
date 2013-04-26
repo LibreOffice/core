@@ -172,9 +172,9 @@ public class AccessibleTreeListBox extends TestCase {
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
 
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 

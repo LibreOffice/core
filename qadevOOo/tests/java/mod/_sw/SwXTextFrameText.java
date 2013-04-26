@@ -101,7 +101,7 @@ public class SwXTextFrameText extends TestCase {
         ////////////////////////////////////
 
         try {
-            oFrame1 = SOF.createTextFrame(xTextDoc, 500, 500);
+            oFrame1 = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
             oPropSet = UnoRuntime.queryInterface
                 (XPropertySet.class, oFrame1 );
             //AnchorTypes: 0 = paragraph, 1 = as char, 2 = page,

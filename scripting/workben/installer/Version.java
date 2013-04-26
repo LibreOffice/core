@@ -208,12 +208,12 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
 
 
     public void actionPerformed(ActionEvent ev) {
-        wizard.clearLocations();
+        InstallWizard.clearLocations();
         int len = tableModel.data.size();
         for (int i = 0; i < len; i++) {
             ArrayList<?> list = tableModel.data.get(i);
             if (((Boolean)list.get(0)).booleanValue() == true)
-                wizard.storeLocation((String)list.get(2));
+                InstallWizard.storeLocation((String)list.get(2));
         }
 
         //System.out.println(wizard.getLocations());

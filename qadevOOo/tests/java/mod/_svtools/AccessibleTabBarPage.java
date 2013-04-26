@@ -140,10 +140,10 @@ public class AccessibleTabBarPage extends TestCase {
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Sheet1");
-        XAccessibleContext acc = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Sheet2");
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Sheet1");
+        XAccessibleContext acc = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Sheet2");
         XAccessibleComponent accComp = UnoRuntime.queryInterface(
                                                XAccessibleComponent.class,
                                                acc);

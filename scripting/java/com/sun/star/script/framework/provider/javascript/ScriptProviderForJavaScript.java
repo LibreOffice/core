@@ -278,7 +278,7 @@ class ScriptImpl implements XScript
 
                 result = ctxt.evaluateString(scope,
                         source, "<stdin>", 1, null);
-                result = ctxt.toString(result);
+                result = Context.toString(result);
                 return result;
             }
             catch (JavaScriptException jse) {

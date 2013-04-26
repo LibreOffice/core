@@ -103,10 +103,10 @@ public class AccessibleMenuItem extends TestCase {
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               atw);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot,
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        XAccessibleContext MenuBar = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                    AccessibleRole.MENU_BAR);
 
         try {

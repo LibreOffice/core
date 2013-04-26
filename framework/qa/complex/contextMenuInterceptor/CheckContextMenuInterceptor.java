@@ -246,14 +246,14 @@ public class CheckContextMenuInterceptor
         {
             xWindow = UnoRuntime.queryInterface(XWindow.class, tk.getTopWindow(0));
 
-            xRoot = at.getAccessibleObject(xWindow);
+            xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         }
         catch (com.sun.star.lang.IndexOutOfBoundsException e)
         {
             System.out.println("Couldn't get Window");
         }
 
-        XAccessibleContext oPopMenu = at.getAccessibleObjectForRole(xRoot, AccessibleRole.POPUP_MENU);
+        XAccessibleContext oPopMenu = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.POPUP_MENU);
 
         System.out.println("ImplementationName: " + util.utils.getImplName(oPopMenu));
 
@@ -307,11 +307,11 @@ public class CheckContextMenuInterceptor
         System.out.println("try to open contex menu...");
         AccessibilityTools at = new AccessibilityTools();
 
-        xWindow = at.getCurrentWindow(xMSF, aModel);
+        xWindow = AccessibilityTools.getCurrentWindow(xMSF, aModel);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        XInterface oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
+        XInterface oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
         XAccessibleComponent window = UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
 

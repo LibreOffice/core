@@ -83,7 +83,7 @@ public class SwAccessibleTextFrameView extends TestCase {
         // creating Frames
         log.println( "creating Frames" );
         try {
-            oFrame1 = SOF.createTextFrame(xTextDoc, 500, 500);
+            oFrame1 = SOfficeFactory.createTextFrame(xTextDoc, 500, 500);
             oPropSet = UnoRuntime.queryInterface(
                 XPropertySet.class, oFrame1 );
             oPropSet.setPropertyValue("AnchorType",
@@ -103,13 +103,13 @@ public class SwAccessibleTextFrameView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT_FRAME);
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT_FRAME);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

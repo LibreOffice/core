@@ -88,8 +88,8 @@ public class SwXTextTableCursor extends TestCase {
 
         XTextTable oTable = null;
         try {
-            oTable = SOF.createTextTable( xTextDoc );
-            SOF.insertTextContent(xTextDoc, oTable );
+            oTable = SOfficeFactory.createTextTable( xTextDoc );
+            SOfficeFactory.insertTextContent(xTextDoc, oTable );
         }
         catch( com.sun.star.uno.Exception uE ) {
             uE.printStackTrace( log );

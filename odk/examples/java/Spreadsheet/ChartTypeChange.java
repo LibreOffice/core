@@ -250,7 +250,7 @@ public class ChartTypeChange {
                 for ( int intX = 0; intX < stringValues[ intY ].length;
                 intX++ ) {
                     // Insert the value to the cell, specified by intY and intX.
-                    this.insertIntoCell( intY, intX,
+                    ChartTypeChange.insertIntoCell( intY, intX,
                     stringValues[ intY ][ intX ], xspreadsheet, "" );
                 }
             }
