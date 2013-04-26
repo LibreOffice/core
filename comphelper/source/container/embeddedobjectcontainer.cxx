@@ -1421,7 +1421,7 @@ sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Boo
                     {
                         xPersist->storeAsEntry( _xStorage, xPersist->getEntryName(), uno::Sequence< beans::PropertyValue >(), aArgs );
                     }
-                    catch (const embed::WrongStateException& e)
+                    catch (const embed::WrongStateException&)
                     {
                         SAL_WARN("comphelper", "failed to store '" << *pIter << "'");
                     }
