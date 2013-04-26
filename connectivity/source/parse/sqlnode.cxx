@@ -209,8 +209,8 @@ OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, c
 void OSQLParseNode::parseNodeToStr(OUString& rString,
                                    const Reference< XConnection >& _rxConnection,
                                    const IParseContext* pContext,
-                                   sal_Bool _bIntl,
-                                   sal_Bool _bQuote) const
+                                   bool _bIntl,
+                                   bool _bQuote) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseNodeToStr" );
 
