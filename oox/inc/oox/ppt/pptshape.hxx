@@ -27,6 +27,7 @@ namespace oox { namespace ppt {
 
 class PPTShape : public oox::drawingml::Shape
 {
+    OUString                    msModelId;              // fallback dgs smartart shape reference
     ShapeLocation               meShapeLocation;        // placeholdershapes (mnSubType != 0) on Master are never displayed
     sal_Bool                    mbReferenced;           // placeholdershapes on Layout are displayed only, if they are not referenced
                                                         // placeholdershapes on Slide are displayed always
@@ -55,6 +56,7 @@ public:
     sal_Bool isReferenced() const { return mbReferenced; };
     void setReferenced( sal_Bool bReferenced ){ mbReferenced = bReferenced; };
     void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }
+    void setModelId( const OUString& rId ) { msModelId = rId; }
 
     static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly = false );
     static oox::drawingml::ShapePtr findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly = false );
