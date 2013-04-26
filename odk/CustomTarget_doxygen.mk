@@ -9,11 +9,9 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,odk/docs/cpp))
 
-CPPDOCREFNAME := "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"
-
-odk_INCDIRLIST := sal salhelper rtl osl typelib uno cppu cppuhelper \
+odk_cpp_INCDIRLIST := sal salhelper rtl osl typelib uno cppu cppuhelper \
 	$(if $(filter WNT,$(OS)),systools)
-odk_INCFILELIST := com/sun/star/uno/Any.h \
+odk_cpp_INCFILELIST := com/sun/star/uno/Any.h \
 	com/sun/star/uno/Any.hxx \
 	com/sun/star/uno/genfunc.h \
 	com/sun/star/uno/genfunc.hxx \
@@ -25,29 +23,27 @@ odk_INCFILELIST := com/sun/star/uno/Any.h \
 	com/sun/star/uno/Type.hxx
 
 # Cygwin Doxygen needs unix paths
-DOXY_INCLUDEDIR := $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include
-DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(SRCDIR)/include/sal/log-areas.dox \
-	$(addprefix $(DOXY_INCLUDEDIR)/,$(odk_INCDIRLIST) $(odk_INCFILELIST))
-DOXY_INPUT := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(DOXY_INPUT)),$(DOXY_INPUT))
-DOXY_WORKDIR := $(if $(filter WNT,$(OS)),\
-	$(shell cygpath -u $(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref),\
-	$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref)
-DOXY_STRIP_PATH := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(DOXY_INCLUDEDIR)),$(DOXY_INCLUDEDIR))
-
+odk_cygwin_path = $(if $(filter WNT,$(OS)),$(shell cygpath -u $(1)),$(1))
+odk_cpp_PREFIX := $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/
+odk_cpp_DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(SRCDIR)/include/sal/log-areas.dox \
+	$(addprefix $(odk_cpp_PREFIX),$(odk_cpp_INCDIRLIST) $(odk_cpp_INCFILELIST))
+odk_cpp_DOXY_WORKDIR := $(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref
 
 $(eval $(call gb_CustomTarget_register_targets,odk/docs/cpp,\
 	Doxyfile \
 	doxygen.log \
 ))
 
-$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/Doxyfile : $(SRCDIR)/odk/pack/gendocu/Doxyfile
+$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/Doxyfile : \
+		$(SRCDIR)/odk/pack/gendocu/Doxyfile \
+		$(gb_Module_CURRENTMAKEFILE)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
-	sed -e 's!^INPUT = %$$!INPUT = $(DOXY_INPUT)!' \
-		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(DOXY_WORKDIR)!' \
-		-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = $(CPPDOCREFNAME)!' \
+	sed -e 's!^INPUT = %$$!INPUT = $(call odk_cygwin_path,$(odk_cpp_DOXY_INPUT))!' \
+		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(call odk_cygwin_path,$(odk_cpp_DOXY_WORKDIR))!' \
+		-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"!' \
 		-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
 		-e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
-		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(DOXY_STRIP_PATH)!' \
+		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(call odk_cygwin_path,$(odk_cpp_PREFIX))!' \
 		$< > $@
 
 $(call gb_CustomTarget_get_workdir,odk/docs/cpp)/doxygen.log : \
