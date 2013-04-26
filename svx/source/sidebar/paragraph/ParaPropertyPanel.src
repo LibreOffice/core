@@ -264,20 +264,12 @@ Control RID_SIDEBAR_PARA_PANEL
                 Identifier = BT_TBX_INDENT_INC ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENT_INC ;
                 Text [ en-US ] = "Increase Indent" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/Indent_16x16.png";
-                };
             };
             ToolBoxItem
             {
                 Identifier = BT_TBX_INDENT_DEC ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENT_DEC ;
                 Text [ en-US ] = "Decrease Indent" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/Outdent_16x16.png";
-                };
             };
             ToolBoxItem
             {
@@ -306,20 +298,12 @@ Control RID_SIDEBAR_PARA_PANEL
                 Identifier = BT_TBX_INDENT_PROMOTE ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENTP_INC ;
                 Text [ en-US ] = "Increase Indent" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/Indent_16x16.png";
-                };
             };
             ToolBoxItem
             {
                 Identifier = BT_TBX_INDENT_DEMOTE ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENTP_DEC ;
                 Text [ en-US ] = "Decrease Indent" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/Outdent_16x16.png";
-                };
             };
             ToolBoxItem
             {
