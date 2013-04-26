@@ -26,6 +26,8 @@
 #
 #*************************************************************************
 
+gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt
+
 # Convert path to file URL.
 define gb_Helper_make_url
 file:///$(strip $(1))
@@ -476,11 +478,16 @@ endif # OOO_TEST_SOFFICE
 
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/program/soffice.exe}" \
+	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(gb_DEVINSTALLROOT)/program/soffice.exe}" \
 	-Dorg.openoffice.test.arg.env=PATH="$$$$PATH" \
 	-Dorg.openoffice.test.arg.user=$(call gb_Helper_make_url,$(call gb_JunitTest_get_userdir,$(1)))
 
 endef
+
+# PythonTest class
+
+#TODO:
+gb_PythonTest_PRECOMMAND :=
 
 # SrsPartTarget class
 
@@ -622,6 +629,6 @@ gb_Pyuno_PROGRAMDIRNAME := program
 
 # Python
 gb_Python_PRECOMMAND := PATH="$(shell cygpath -w $(INSTDIR)/program);$(shell cygpath -w $(OUTDIR)/bin)" PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib;$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload:$(INSTDIR)/program"
-gb_Python_INSTALLED_EXECUTABLE := $(DEVINSTALLDIR)/opt/program/python.exe
+gb_Python_INSTALLED_EXECUTABLE := $(gb_DEVINSTALLROOT)/program/python.exe
 
 # vim: set noet sw=4:

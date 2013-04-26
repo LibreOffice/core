@@ -27,12 +27,7 @@ $(eval $(call gb_Executable_add_exception_objects,libtest,\
 	smoketest/libtest \
 ))
 
-ifeq ($(OS),MACOSX)
-liblibreoffice_SOFFICE_INST := $(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS
-else
-liblibreoffice_SOFFICE_INST := $(DEVINSTALLDIR)/opt/program
-endif
-liblibreoffice_OWN_LD_PATH_DIR := $(liblibreoffice_SOFFICE_INST)/libolib
+liblibreoffice_OWN_LD_PATH_DIR := $(gb_DEVINSTALLROOT)/program/libolib
 liblibreoffice_OWN_LD_SO := $(liblibreoffice_OWN_LD_PATH_DIR)/$(call gb_Library_get_linktargetname,libreoffice)
 
 $(liblibreoffice_OWN_LD_SO) : $(call gb_Library_get_target,libreoffice)
@@ -42,6 +37,6 @@ $(liblibreoffice_OWN_LD_SO) : $(call gb_Library_get_target,libreoffice)
 run_libtest: $(liblibreoffice_OWN_LD_SO)
 	$(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}":$(liblibreoffice_OWN_LD_PATH_DIR)/Library" \
 	$(call gb_LinkTarget_get_target,Executable/libtest) \
-		$(liblibreoffice_SOFFICE_INST) $(OUTDIR)/bin/smoketestdoc.sxw \
+		$(gb_DEVINSTALLROOT)/program $(OUTDIR)/bin/smoketestdoc.sxw \
 
 # vim: set noet sw=4 ts=4:

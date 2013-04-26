@@ -36,14 +36,10 @@ $(call gb_PythonTest_get_target,%) :
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
-		(PYTHONPATH=$(PYPATH):$(DEVINSTALLDIR)/opt/program \
+		($(gb_PythonTest_PRECOMMAND) \
+		URE_BOOTSTRAP=vnd.sun.star.pathname:$(gb_DEVINSTALLROOT)/program/fundamentalrc \
+		PYTHONPATH=$(PYPATH) \
 		UserInstallation="$(call gb_Helper_make_url,$(OUTDIR)/unittest)" \
-		BRAND_BASE_DIR="$(call gb_Helper_make_url,$(OUTDIR)/unittest/install)" \
-		CONFIGURATION_LAYERS="$(strip $(CONFIGURATION_LAYERS))" \
-		UNO_TYPES="$(foreach item,$(UNO_TYPES),$(call gb_Helper_make_url,$(item)))" \
-		UNO_SERVICES="$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))" \
-		$(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
-			$(dir)="$(call gb_Helper_make_url,$(gb_CppunitTest_LIBDIR))") \
 		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_PythonTest_COMMAND) \
 			$(MODULES) \
 		$(if $(gb_CppunitTest__interactive),, \

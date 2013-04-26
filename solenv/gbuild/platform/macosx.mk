@@ -26,13 +26,14 @@
 #
 #*************************************************************************
 
+gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt/LibreOffice.app/Contents
+
 gb_SDKDIR := $(MACOSX_SDK_PATH)
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 # Darwin mktemp -t expects a prefix, not a pattern
 gb_MKTEMP ?= /usr/bin/mktemp -t gbuild.
-
 
 gb_OSDEFS := \
 	-D$(OS) \
@@ -317,7 +318,7 @@ else
 ifneq ($(gb_JunitTest_DEBUGRUN),)
 gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
 else
-gb_JunitTest_SOFFICEARG:=path:$(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/soffice
+gb_JunitTest_SOFFICEARG:=path:$(gb_DEVINSTALLROOT)/MacOS/soffice
 endif
 endif
 
@@ -330,12 +331,16 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
+# PythonTest class
+
+gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(gb_DEVINSTALLROOT)/ure-link/lib:$(gb_DEVINSTALLROOT)/program:$(OUTDIR)/lib
+
 # Module class
 
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=$$($(gb_MKTEMP)) && \
 printf '%s\n' "set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(call gb_Helper_make_url,$(DEVINSTALLDIR)/)" > $${OFFICESCRIPT} && \
-gdb -x $${OFFICESCRIPT} $(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/soffice && \
+gdb -x $${OFFICESCRIPT} $(gb_DEVINSTALLROOT)/MacOS/soffice && \
 rm $${OFFICESCRIPT}
 endef
 
@@ -401,7 +406,7 @@ endef
 
 # Python
 gb_Python_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
-gb_Python_INSTALLED_EXECUTABLE := $(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
+gb_Python_INSTALLED_EXECUTABLE := $(gb_DEVINSTALLROOT)/program/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
 # this is passed to gdb as executable when running tests
 gb_Python_INSTALLED_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE)
 

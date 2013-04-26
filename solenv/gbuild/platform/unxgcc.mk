@@ -26,6 +26,8 @@
 #
 #*************************************************************************
 
+gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt
+
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
@@ -348,7 +350,7 @@ else
 ifneq ($(gb_JunitTest_DEBUGRUN),)
 gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
 else
-gb_JunitTest_SOFFICEARG:=path:$(DEVINSTALLDIR)/opt/program/soffice
+gb_JunitTest_SOFFICEARG:=path:$(gb_DEVINSTALLROOT)/program/soffice
 endif
 endif
 
@@ -362,12 +364,16 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
+# PythonTest class
+
+gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(gb_DEVINSTALLROOT)/ure-link/lib:$(gb_DEVINSTALLROOT)/program:$(OUTDIR)/lib
+
 # Module class
 
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
-printf 'if [ -e $(DEVINSTALLDIR)/opt/program/ooenv ]; then . $(DEVINSTALLDIR)/opt/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
-printf "gdb $(DEVINSTALLDIR)/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
+printf 'if [ -e $(gb_DEVINSTALLROOT)/program/ooenv ]; then . $(gb_DEVINSTALLROOT)/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
+printf "gdb $(gb_DEVINSTALLROOT)/program/soffice.bin" >> $${OFFICESCRIPT} && \
 printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(call gb_Helper_make_url,$(DEVINSTALLDIR)/)\"" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}
@@ -432,9 +438,9 @@ gb_Pyuno_PROGRAMDIRNAME := program
 
 # Python
 gb_Python_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib:$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload"
-gb_Python_INSTALLED_EXECUTABLE := /bin/sh $(DEVINSTALLDIR)/opt/program/python
+gb_Python_INSTALLED_EXECUTABLE := /bin/sh $(gb_DEVINSTALLROOT)/program/python
 # this is passed to gdb as executable when running tests
-gb_Python_INSTALLED_EXECUTABLE_GDB := $(DEVINSTALLDIR)/opt/program/python.bin
+gb_Python_INSTALLED_EXECUTABLE_GDB := $(gb_DEVINSTALLROOT)/program/python.bin
 
 include $(GBUILDDIR)/platform/com_GCC_class.mk
 
