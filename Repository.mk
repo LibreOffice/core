@@ -417,6 +417,15 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 
 endif
 
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
+    smoketest \
+    subsequenttest \
+    test \
+    unobootstrapprotector \
+    unoexceptionprotector \
+    unotest \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,URE, \
 	affine_uno \
 	$(if $(SOLAR_JAVA),java_uno) \
@@ -508,10 +517,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     recentfile \
     scriptframe \
     sdbc2 \
-    smoketest \
     srtrs1 \
-    subsequenttest \
-    test \
     textconv_dict \
     tvhlp1 \
     ucpdav1 \
@@ -519,10 +525,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucpchelp1 \
     ucphier1 \
     ucppkg1 \
-    unobootstrapprotector \
-    unoexceptionprotector \
     unopkgapp \
-    unotest \
     updchk \
     xmlsecurity \
     xsec_fw \
