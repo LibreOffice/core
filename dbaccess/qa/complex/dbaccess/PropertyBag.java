@@ -28,7 +28,6 @@ import com.sun.star.beans.XPropertyAccess;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
 
 // ---------- junit imports -----------------

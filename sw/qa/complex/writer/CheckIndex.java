@@ -14,7 +14,6 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.util.XCloseable;
 import com.sun.star.util.XRefreshable;
 import com.sun.star.util.XRefreshListener;
 import com.sun.star.text.ControlCharacter;
@@ -23,9 +22,6 @@ import com.sun.star.text.XParagraphCursor;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextRange;
-import com.sun.star.text.XTextCursor;
-
 import org.openoffice.test.OfficeConnection;
 
 import org.junit.After;
@@ -34,9 +30,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
-import java.util.Set;
-import java.util.HashSet;
 
 
 public class CheckIndex

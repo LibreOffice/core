@@ -12,8 +12,6 @@
 
 package net.adaptivebox.global;
 
-import java.util.*;
-
 public class GlobalCompare {
 
 /* compare the data1 and data2, if data1=data2, return 0

@@ -27,7 +27,6 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 import util.XMLTools;
 
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.document.XDocumentPropertiesSupplier;
 import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XExporter;
