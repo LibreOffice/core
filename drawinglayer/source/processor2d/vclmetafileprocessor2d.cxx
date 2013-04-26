@@ -1493,7 +1493,7 @@ namespace drawinglayer
 
                     // #i111954# do NOT use decomposition, but use direct VCL-command
                     // process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    const PolyPolygon aToolsPolyPolygon(aLocalPolyPolygon);
+                    const PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
                     const HatchStyle aHatchStyle(
                         attribute::HATCHSTYLE_SINGLE == rFillHatchAttribute.getStyle() ? HATCH_SINGLE :
                         attribute::HATCHSTYLE_DOUBLE == rFillHatchAttribute.getStyle() ? HATCH_DOUBLE :
