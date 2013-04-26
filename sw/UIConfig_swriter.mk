@@ -89,6 +89,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/linenumbering \
 	sw/uiconfig/swriter/ui/mergetabledialog \
 	sw/uiconfig/swriter/ui/numparapage \
+	sw/uiconfig/swriter/ui/numberingnamedialog \
 	sw/uiconfig/swriter/ui/opttestpage \
 	sw/uiconfig/swriter/ui/outlinenumbering \
 	sw/uiconfig/swriter/ui/outlinenumberingpage \
