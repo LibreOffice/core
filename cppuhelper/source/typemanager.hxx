@@ -136,6 +136,7 @@ private:
         rtl::OUString const & member);
 
     css::uno::Any getConstant(
+        rtl::OUString const & constantGroupName,
         rtl::Reference< unoidl::ConstantGroupEntity > entity,
         rtl::OUString const & member);
 

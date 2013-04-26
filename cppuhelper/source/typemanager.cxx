@@ -64,6 +64,10 @@ using rtl::OUString;
 
 namespace {
 
+rtl::OUString makePrefix(rtl::OUString const & name) {
+    return name.isEmpty() ? name : name + ".";
+}
+
 css::uno::Any resolveTypedefs(css::uno::Any const & type) {
     for (css::uno::Any t(type);;) {
         css::uno::Reference< css::reflection::XIndirectTypeDescription > ind(
@@ -182,7 +186,7 @@ ModuleDescription::getMembers() throw (css::uno::RuntimeException) {
         css::uno::Sequence<
             css::uno::Reference< css::reflection::XTypeDescription > > s(n);
         for (sal_Int32 i = 0; i != n; ++i) {
-            s[i] = manager_->resolve(name_ + "." + names[i]);
+            s[i] = manager_->resolve(makePrefix(name_) + names[i]);
         }
         return s;
     } catch (unoidl::FileFormatException & e) {
@@ -1008,7 +1012,8 @@ class ConstantDescription:
     public cppu::WeakImplHelper1< css::reflection::XConstantTypeDescription >
 {
 public:
-    explicit ConstantDescription(
+    ConstantDescription(
+        rtl::OUString const & constantGroupName,
         unoidl::ConstantGroupEntity::Member const & member);
 
 private:
@@ -1030,8 +1035,9 @@ private:
 };
 
 ConstantDescription::ConstantDescription(
+    rtl::OUString const & constantGroupName,
     unoidl::ConstantGroupEntity::Member const & member):
-    name_(member.name)
+    name_(makePrefix(constantGroupName) + member.name)
 {
     switch (member.value.type) {
     case unoidl::ConstantValue::TYPE_BOOLEAN:
@@ -1109,7 +1115,7 @@ ConstantGroupDescription::getConstants() throw (css::uno::RuntimeException) {
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XConstantTypeDescription > > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = new ConstantDescription(entity_->getMembers()[i]);
+        s[i] = new ConstantDescription(name_, entity_->getMembers()[i]);
     }
     return s;
 }
@@ -1778,7 +1784,7 @@ void Enumeration::findNextMatch() {
                     if (deep_) {
                         positions_.push(
                             Position(
-                                name + ".",
+                                makePrefix(name),
                                 static_cast< unoidl::ModuleEntity * >(
                                     ent.get())->createCursor()));
                     }
@@ -1804,7 +1810,7 @@ void Enumeration::findNextMatch() {
                     if (deep_ && matches(css::uno::TypeClass_CONSTANT)) {
                         positions_.push(
                             Position(
-                                name + ".",
+                                makePrefix(name),
                                 static_cast< unoidl::ConstantGroupEntity * >(
                                     ent.get())));
                     }
@@ -1904,7 +1910,8 @@ css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
     }
     i = name.lastIndexOf('.');
     if (i != -1) {
-        ent = findEntity(name.copy(0, i));
+        rtl::OUString parent(name.copy(0, i));
+        ent = findEntity(parent);
         if (ent.is()) {
             switch (ent->getSort()) {
             case unoidl::Entity::SORT_ENUM_TYPE:
@@ -1913,6 +1920,7 @@ css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
                     name.copy(i + 1));
             case unoidl::Entity::SORT_CONSTANT_GROUP:
                 return getConstant(
+                    parent,
                     static_cast< unoidl::ConstantGroupEntity * >(ent.get()),
                     name.copy(i + 1));
             default:
@@ -2054,29 +2062,23 @@ cppuhelper::TypeManager::createTypeDescriptionEnumeration(
         css::reflection::InvalidTypeNameException,
         css::uno::RuntimeException)
 {
-    //TODO: This fails for modules spread across multiple providers, esp. for
-    // the empty moduleName
-    rtl::Reference< unoidl::Entity > ent(findEntity(moduleName));
-    if (!ent.is()) {
-        throw css::reflection::NoSuchTypeNameException(
-            moduleName, static_cast< cppu::OWeakObject * >(this));
-    }
-    if (ent->getSort() != unoidl::Entity::SORT_MODULE) {
-        throw css::reflection::InvalidTypeNameException(
-            moduleName, static_cast< cppu::OWeakObject * >(this));
-    }
     rtl::Reference< unoidl::MapCursor > cursor;
     try {
-        cursor = static_cast< unoidl::ModuleEntity * >(ent.get())->
-            createCursor();
+        cursor = manager_->createCursor(moduleName);
     } catch (unoidl::FileFormatException & e) {
         throw css::uno::DeploymentException(
             ("unoidl::FileFormatException for <" + e.getUri() + ">: "
              + e.getDetail()),
             static_cast< cppu::OWeakObject * >(this));
     }
+    if (!cursor.is()) {
+        //TODO: css::reflection::InvalidTypeNameException if moduleName names a
+        // non-module
+        throw css::reflection::NoSuchTypeNameException(
+            moduleName, static_cast< cppu::OWeakObject * >(this));
+    }
     return new Enumeration(
-        this, moduleName + ".", cursor, types,
+        this, makePrefix(moduleName), cursor, types,
         depth == css::reflection::TypeDescriptionSearchDepth_INFINITE);
 }
 
@@ -2338,6 +2340,7 @@ css::uno::Any cppuhelper::TypeManager::getEnumMember(
 }
 
 css::uno::Any cppuhelper::TypeManager::getConstant(
+    rtl::OUString const & constantGroupName,
     rtl::Reference< unoidl::ConstantGroupEntity > entity,
     rtl::OUString const & member)
 {
@@ -2348,7 +2351,7 @@ css::uno::Any cppuhelper::TypeManager::getConstant(
         if (i->name == member) {
             return css::uno::makeAny<
                 css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new ConstantDescription(*i));
+                    new ConstantDescription(constantGroupName, *i));
         }
     }
     return css::uno::Any();
