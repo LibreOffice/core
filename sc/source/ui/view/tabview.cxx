@@ -226,6 +226,7 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
     aViewData( &rDocSh, pViewShell ),
     pSelEngine( NULL ),
     aFunctionSet( &aViewData ),
+    pCurDocument ( &rDocSh ),
     pHdrSelEng( NULL ),
     aHdrFunc( &aViewData ),
     pDrawView( NULL ),
@@ -2034,6 +2035,7 @@ void ScTabView::FreezeSplitters( bool bFreeze )
     if ( bFreeze )
     {
         Point aWinStart = pWin->GetPosPixel();
+        pCurDocument->SetDocumentModified();
 
         Point aSplit;
         SCsCOL nPosX;

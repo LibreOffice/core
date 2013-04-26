@@ -91,6 +91,7 @@ private:
     ScViewSelectionEngine*  pSelEngine;
     ScViewFunctionSet       aFunctionSet;
 
+    ScDocShell*              pCurDocument;
     ScHeaderSelectionEngine* pHdrSelEng;
     ScHeaderFunctionSet      aHdrFunc;
 
