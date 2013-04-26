@@ -29,10 +29,6 @@ namespace chart
 {
 //.............................................................................
 
-//-----------------------------------------------------------------------------
-/**
-*/
-
 class VCartesianAxis : public VAxisBase
 {
     //-------------------------------------------------------------------------
@@ -97,7 +93,7 @@ public:
         double fLogicY;
         double fLogicZ;
 
-        B2DVector aScreenPos;
+        ::basegfx::B2DVector aScreenPos;
     };
 
 protected: //methods

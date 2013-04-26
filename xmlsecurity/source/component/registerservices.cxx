@@ -22,11 +22,11 @@
 
 #include <cppuhelper/factory.hxx>
 
-
 #include <documentdigitalsignatures.hxx>
 #include <certificatecontainer.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 extern "C"
 {

@@ -35,10 +35,6 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <unotools/localedatawrapper.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
-
 class SbiInstance;                  // active StarBASIC process
 class SbiRuntime;                   // active StarBASIC procedure instance
 
@@ -70,7 +66,7 @@ struct SbiForStack {                // for/next stack:
     sal_Int32*          pArrayCurIndices;
     sal_Int32*          pArrayLowerBounds;
     sal_Int32*          pArrayUpperBounds;
-    Reference< XEnumeration > xEnumeration;
+    css::uno::Reference< css::container::XEnumeration > xEnumeration;
 
     SbiForStack( void )
         : pArrayCurIndices( NULL )
@@ -115,7 +111,7 @@ public:
     OUString sFullNameToBeChecked;
     WildCard* pWildCard;
 
-    Sequence< OUString > aDirSeq;
+    css::uno::Sequence< OUString > aDirSeq;
 
     SbiRTLData();
     ~SbiRTLData();

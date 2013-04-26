@@ -55,9 +55,10 @@
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 
 using namespace comphelper;
+using namespace com::sun::star::i18n;
+using namespace com::sun::star::lang;
 using namespace com::sun::star::sheet;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::i18n;
 
 void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
 Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, com::sun::star::beans::Property* pUnoProperty = NULL );

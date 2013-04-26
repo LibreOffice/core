@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef ACCESSIBILITY_EXT_ACCESSIBLEGRIDCONTROL_HXX
 #define ACCESSIBILITY_EXT_ACCESSIBLEGRIDCONTROL_HXX
 
@@ -27,8 +26,6 @@
 #include <svtools/accessibletable.hxx>
 
 #include <memory>
-
-using namespace ::svt::table;
 
 // ============================================================================
 

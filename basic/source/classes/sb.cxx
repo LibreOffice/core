@@ -57,6 +57,7 @@ TYPEINIT1(StarBASIC,SbxObject)
 #define RTLNAME "@SBRTL"
 //  i#i68894#
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;

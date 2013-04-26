@@ -57,6 +57,8 @@
 using namespace comphelper;
 using namespace osl;
 using namespace com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::uno;
 
 #include "date.hxx"
 #include "stdobj.hxx"

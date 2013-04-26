@@ -25,11 +25,6 @@
 #include "XMLTextFrameContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::xmloff::token;
-
 // ---------------------------------------------------------------------
 
 #define XML_HINT_STYLE 1
@@ -42,16 +37,16 @@ using namespace ::xmloff::token;
 
 class XMLHint_Impl
 {
-    Reference < XTextRange > xStart;
-    Reference < XTextRange > xEnd;
+    css::uno::Reference < css::text::XTextRange > xStart;
+    css::uno::Reference < css::text::XTextRange > xEnd;
 
     sal_uInt8 nType;
 
 public:
 
     XMLHint_Impl( sal_uInt8 nTyp,
-                  const Reference < XTextRange > & rS,
-                  const Reference < XTextRange > & rE ) :
+                  const css::uno::Reference < css::text::XTextRange > & rS,
+                  const css::uno::Reference < css::text::XTextRange > & rE ) :
         xStart( rS ),
         xEnd( rE ),
         nType( nTyp )
@@ -59,7 +54,7 @@ public:
     }
 
     XMLHint_Impl( sal_uInt8 nTyp,
-                  const Reference < XTextRange > & rS ) :
+                  const css::uno::Reference < css::text::XTextRange > & rS ) :
         xStart( rS ),
         nType( nTyp )
     {
@@ -67,9 +62,9 @@ public:
 
     virtual ~XMLHint_Impl() {}
 
-    const Reference < XTextRange > & GetStart() const { return xStart; }
-    const Reference < XTextRange > & GetEnd() const { return xEnd; }
-    void SetEnd( const Reference < XTextRange > & rPos ) { xEnd = rPos; }
+    const css::uno::Reference < css::text::XTextRange > & GetStart() const { return xStart; }
+    const css::uno::Reference < css::text::XTextRange > & GetEnd() const { return xEnd; }
+    void SetEnd( const css::uno::Reference < css::text::XTextRange > & rPos ) { xEnd = rPos; }
 
     // We don't use virtual methods to differ between the sub classes,
     // because this seems to be to expensive if compared to inline methods.
@@ -87,7 +82,7 @@ class XMLStyleHint_Impl : public XMLHint_Impl
 public:
 
     XMLStyleHint_Impl( const OUString& rStyleName,
-                         const Reference < XTextRange > & rPos ) :
+                         const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_STYLE, rPos, rPos ),
         sStyleName( rStyleName )
     {
@@ -104,7 +99,7 @@ class XMLReferenceHint_Impl : public XMLHint_Impl
 public:
 
     XMLReferenceHint_Impl( const OUString& rRefName,
-                             const Reference < XTextRange > & rPos ) :
+                             const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_REFERENCE, rPos, rPos ),
         sRefName( rRefName )
     {
@@ -126,7 +121,7 @@ class XMLHyperlinkHint_Impl : public XMLHint_Impl
 
 public:
 
-    XMLHyperlinkHint_Impl( const Reference < XTextRange > & rPos ) :
+    XMLHyperlinkHint_Impl( const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_HYPERLINK, rPos, rPos ),
         pEvents( NULL )
     {
@@ -163,22 +158,22 @@ public:
 
 class XMLIndexMarkHint_Impl : public XMLHint_Impl
 {
-    const Reference<beans::XPropertySet> xIndexMarkPropSet;
+    const css::uno::Reference<css::beans::XPropertySet> xIndexMarkPropSet;
 
     const OUString sID;
 
 public:
 
-    XMLIndexMarkHint_Impl( const Reference < beans::XPropertySet > & rPropSet,
-                           const Reference < XTextRange > & rPos ) :
+    XMLIndexMarkHint_Impl( const css::uno::Reference < css::beans::XPropertySet > & rPropSet,
+                           const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_INDEX_MARK, rPos, rPos ),
         xIndexMarkPropSet( rPropSet ),
         sID()
     {
     }
 
-    XMLIndexMarkHint_Impl( const Reference < beans::XPropertySet > & rPropSet,
-                           const Reference < XTextRange > & rPos,
+    XMLIndexMarkHint_Impl( const css::uno::Reference < css::beans::XPropertySet > & rPropSet,
+                           const css::uno::Reference < css::text::XTextRange > & rPos,
                            OUString sIDString) :
         XMLHint_Impl( XML_HINT_INDEX_MARK, rPos, rPos ),
         xIndexMarkPropSet( rPropSet ),
@@ -188,7 +183,7 @@ public:
 
     virtual ~XMLIndexMarkHint_Impl() {}
 
-    const Reference<beans::XPropertySet> & GetMark() const
+    const css::uno::Reference<css::beans::XPropertySet> & GetMark() const
         { return xIndexMarkPropSet; }
     const OUString& GetID() const { return sID; }
 };
@@ -202,7 +197,7 @@ class XMLTextFrameHint_Impl : public XMLHint_Impl
 public:
 
     XMLTextFrameHint_Impl( SvXMLImportContext* pContext,
-                           const Reference < XTextRange > & rPos ) :
+                           const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_TEXT_FRAME, rPos, rPos ),
         xContext( pContext )
     {
@@ -212,9 +207,9 @@ public:
     {
     }
 
-    Reference < XTextContent > GetTextContent() const
+    css::uno::Reference < css::text::XTextContent > GetTextContent() const
     {
-        Reference <XTextContent > xTxt;
+        css::uno::Reference < css::text::XTextContent > xTxt;
         SvXMLImportContext *pContext = &xContext;
         if( pContext->ISA( XMLTextFrameContext ) )
             xTxt = PTR_CAST( XMLTextFrameContext, pContext )->GetTextContent();
@@ -226,9 +221,9 @@ public:
     }
 
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
-    Reference < drawing::XShape > GetShape() const
+    css::uno::Reference < css::drawing::XShape > GetShape() const
     {
-        Reference < drawing::XShape > xShape;
+        css::uno::Reference < css::drawing::XShape > xShape;
         SvXMLImportContext *pContext = &xContext;
         if( pContext->ISA( XMLTextFrameContext ) )
             xShape = PTR_CAST( XMLTextFrameContext, pContext )->GetShape();
@@ -243,11 +238,11 @@ public:
         sal_Bool bRet = sal_False;
         SvXMLImportContext *pContext = &xContext;
         if( pContext->ISA( XMLTextFrameContext ) )
-            bRet = TextContentAnchorType_AT_CHARACTER ==
+            bRet = css::text::TextContentAnchorType_AT_CHARACTER ==
                 PTR_CAST( XMLTextFrameContext, pContext )
                     ->GetAnchorType();
         else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
-            bRet = TextContentAnchorType_AT_CHARACTER ==
+            bRet = css::text::TextContentAnchorType_AT_CHARACTER ==
                 PTR_CAST( XMLTextFrameHyperlinkContext, pContext )
                     ->GetAnchorType();
         return bRet;
@@ -262,7 +257,7 @@ class XMLDrawHint_Impl : public XMLHint_Impl
 public:
 
     XMLDrawHint_Impl( SvXMLShapeContext* pContext,
-                      const Reference < XTextRange > & rPos ) :
+                      const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_DRAW, rPos, rPos ),
         xContext( pContext )
     {
@@ -273,7 +268,7 @@ public:
     }
 
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
-    Reference < drawing::XShape > GetShape() const
+    css::uno::Reference < css::drawing::XShape > GetShape() const
     {
         return static_cast<SvXMLShapeContext*>(&xContext)->getShape();
     }

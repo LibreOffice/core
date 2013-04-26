@@ -21,8 +21,9 @@
 
 #include <sal/config.h>
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
 
 sal_Bool
 CertificateContainer::searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap )

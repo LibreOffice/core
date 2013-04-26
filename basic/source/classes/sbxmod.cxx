@@ -74,7 +74,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
-
+using namespace com::sun::star::uno;
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/awt/DialogProvider.hpp>

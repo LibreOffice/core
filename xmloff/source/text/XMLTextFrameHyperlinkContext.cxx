@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlimp.hxx>
@@ -30,12 +29,13 @@
 // OD 2004-04-21 #i26791#
 #include <txtparaimphint.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
+
+namespace drawing = com::sun::star::drawing;
 
 TYPEINIT1( XMLTextFrameHyperlinkContext, SvXMLImportContext );
 

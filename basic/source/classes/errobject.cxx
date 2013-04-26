@@ -173,7 +173,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
 }
 
 // SbxErrObject
-SbxErrObject::SbxErrObject( const OUString& rName, const Any& rUnoObj )
+SbxErrObject::SbxErrObject( const OUString& rName, const uno::Any& rUnoObj )
     : SbUnoObject( rName, rUnoObj )
     , m_pErrObject( NULL )
 {
