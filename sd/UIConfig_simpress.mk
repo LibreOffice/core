@@ -73,6 +73,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/presentationdialog \
 	sd/uiconfig/simpress/ui/printeroptions \
 	sd/uiconfig/simpress/ui/photoalbum \
+	sd/uiconfig/simpress/ui/customslideshows \
 ))
 
 # vim: set noet sw=4 ts=4:

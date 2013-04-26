@@ -39,34 +39,31 @@
 
 SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
                             SdDrawDocument& rDrawDoc ) :
-    ModalDialog     ( pWindow, SdResId( DLG_CUSTOMSHOW ) ),
-
-    aLbCustomShows  ( this, SdResId( LB_CUSTOMSHOWS ) ),
-    aCbxUseCustomShow( this, SdResId( CBX_USE_CUSTOMSHOW ) ),
-    aBtnNew         ( this, SdResId( BTN_NEW ) ),
-    aBtnEdit        ( this, SdResId( BTN_EDIT ) ),
-    aBtnRemove      ( this, SdResId( BTN_REMOVE ) ),
-    aBtnCopy        ( this, SdResId( BTN_COPY ) ),
-    aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-    aBtnStartShow   ( this, SdResId( BTN_STARTSHOW ) ),
-    aBtnOK          ( this, SdResId( BTN_OK ) ),
-
+    ModalDialog     ( pWindow, "CustomSlideShows", "modules/simpress/ui/customslideshows.ui" ),
     rDoc            ( rDrawDoc ),
     pCustomShowList ( NULL ),
     pCustomShow     ( NULL ),
     bModified       ( sal_False )
 {
-    FreeResource();
+    get( m_pBtnNew, "new" );
+    get( m_pBtnEdit, "edit" );
+    get( m_pBtnRemove, "delete" );
+    get( m_pBtnCopy, "copy" );
+    get( m_pBtnHelp, "help" );
+    get( m_pBtnStartShow, "startshow" );
+    get( m_pBtnOK, "ok" );
+    get( m_pLbCustomShows, "customshowlist");
+    get( m_pCbxUseCustomShow, "usecustomshows" );
 
     Link aLink( LINK( this, SdCustomShowDlg, ClickButtonHdl ) );
-    aBtnNew.SetClickHdl( aLink );
-    aBtnEdit.SetClickHdl( aLink );
-    aBtnRemove.SetClickHdl( aLink );
-    aBtnCopy.SetClickHdl( aLink );
-    aCbxUseCustomShow.SetClickHdl( aLink );
-    aLbCustomShows.SetSelectHdl( aLink );
+    m_pBtnNew->SetClickHdl( aLink );
+    m_pBtnEdit->SetClickHdl( aLink );
+    m_pBtnRemove->SetClickHdl( aLink );
+    m_pBtnCopy->SetClickHdl( aLink );
+    m_pCbxUseCustomShow->SetClickHdl( aLink );
+    m_pLbCustomShows->SetSelectHdl( aLink );
 
-    aBtnStartShow.SetClickHdl( LINK( this, SdCustomShowDlg, StartShowHdl ) ); // for test
+    m_pBtnStartShow->SetClickHdl( LINK( this, SdCustomShowDlg, StartShowHdl ) ); // for test
 
     // get CustomShow list of docs
     pCustomShowList = rDoc.GetCustomShowList();
@@ -78,13 +75,13 @@ SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
              pCustomShow != NULL;
              pCustomShow = pCustomShowList->Next() )
         {
-            aLbCustomShows.InsertEntry( pCustomShow->GetName() );
+            m_pLbCustomShows->InsertEntry( pCustomShow->GetName() );
         }
-        aLbCustomShows.SelectEntryPos( (sal_uInt16)nPosToSelect );
+        m_pLbCustomShows->SelectEntryPos( (sal_uInt16)nPosToSelect );
         pCustomShowList->Seek( nPosToSelect );
     }
 
-    aCbxUseCustomShow.Check( pCustomShowList && rDoc.getPresentationSettings().mbCustomShow );
+    m_pCbxUseCustomShow->Check( pCustomShowList && rDoc.getPresentationSettings().mbCustomShow );
 
     CheckState();
 }
@@ -95,14 +92,14 @@ SdCustomShowDlg::~SdCustomShowDlg()
 
 void SdCustomShowDlg::CheckState()
 {
-    sal_uInt16 nPos = aLbCustomShows.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
 
     sal_Bool bEnable = nPos != LISTBOX_ENTRY_NOTFOUND;
-    aBtnEdit.Enable( bEnable );
-    aBtnRemove.Enable( bEnable );
-    aBtnCopy.Enable( bEnable );
-    aCbxUseCustomShow.Enable( bEnable );
-    aBtnStartShow.Enable( true );
+    m_pBtnEdit->Enable( bEnable );
+    m_pBtnRemove->Enable( bEnable );
+    m_pBtnCopy->Enable( bEnable );
+    m_pCbxUseCustomShow->Enable( bEnable );
+    m_pBtnStartShow->Enable( true );
 
     if( bEnable )
         pCustomShowList->Seek( nPos );
@@ -114,7 +111,7 @@ void SdCustomShowDlg::CheckState()
 IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 {
     // new CustomShow
-    if( p == &aBtnNew )
+    if( p == m_pBtnNew )
     {
         pCustomShow = NULL;
         SdDefineCustomShowDlg aDlg( this, rDoc, pCustomShow );
@@ -127,8 +124,8 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 
                 pCustomShowList->push_back( pCustomShow );
                 pCustomShowList->Last();
-                aLbCustomShows.InsertEntry( pCustomShow->GetName() );
-                aLbCustomShows.SelectEntry( pCustomShow->GetName() );
+                m_pLbCustomShows->InsertEntry( pCustomShow->GetName() );
+                m_pLbCustomShows->SelectEntry( pCustomShow->GetName() );
             }
 
             if( aDlg.IsModified() )
@@ -138,9 +135,9 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             DELETEZ( pCustomShow );
     }
     // edit CustomShow
-    else if( p == &aBtnEdit )
+    else if( p == m_pBtnEdit )
     {
-        sal_uInt16 nPos = aLbCustomShows.GetSelectEntryPos();
+        sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             DBG_ASSERT( pCustomShowList, "pCustomShowList does not exist" );
@@ -153,9 +150,9 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                 {
                     (*pCustomShowList)[nPos] = pCustomShow;
                     pCustomShowList->Seek( nPos );
-                    aLbCustomShows.RemoveEntry( nPos );
-                    aLbCustomShows.InsertEntry( pCustomShow->GetName(), nPos );
-                    aLbCustomShows.SelectEntryPos( nPos );
+                    m_pLbCustomShows->RemoveEntry( nPos );
+                    m_pLbCustomShows->InsertEntry( pCustomShow->GetName(), nPos );
+                    m_pLbCustomShows->SelectEntryPos( nPos );
                 }
                 if( aDlg.IsModified() )
                     bModified = sal_True;
@@ -163,21 +160,21 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         }
     }
     // delete CustomShow
-    else if( p == &aBtnRemove )
+    else if( p == m_pBtnRemove )
     {
-        sal_uInt16 nPos = aLbCustomShows.GetSelectEntryPos();
+        sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             delete *pCustomShowList->erase( pCustomShowList->begin() + nPos );
-            aLbCustomShows.RemoveEntry( nPos );
-            aLbCustomShows.SelectEntryPos( nPos == 0 ? nPos : nPos - 1 );
+            m_pLbCustomShows->RemoveEntry( nPos );
+            m_pLbCustomShows->SelectEntryPos( nPos == 0 ? nPos : nPos - 1 );
             bModified = sal_True;
         }
     }
     // copy CustomShow
-    else if( p == &aBtnCopy )
+    else if( p == m_pBtnCopy )
     {
-        sal_uInt16 nPos = aLbCustomShows.GetSelectEntryPos();
+        sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             SdCustomShow* pShow = new SdCustomShow( *(*pCustomShowList)[nPos] );
@@ -227,22 +224,22 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 
             pCustomShowList->push_back( pShow );
             pCustomShowList->Last();
-            aLbCustomShows.InsertEntry( pShow->GetName() );
-            aLbCustomShows.SelectEntry( pShow->GetName() );
+            m_pLbCustomShows->InsertEntry( pShow->GetName() );
+            m_pLbCustomShows->SelectEntry( pShow->GetName() );
 
 
             bModified = sal_True;
         }
     }
-    else if( p == &aLbCustomShows )
+    else if( p == m_pLbCustomShows )
     {
-        sal_uInt16 nPos = aLbCustomShows.GetSelectEntryPos();
+        sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
             pCustomShowList->Seek( nPos );
 
         bModified = sal_True;
     }
-    else if( p == &aCbxUseCustomShow )
+    else if( p == m_pCbxUseCustomShow )
     {
         bModified = sal_True;
     }
@@ -267,7 +264,7 @@ IMPL_LINK_NOARG(SdCustomShowDlg, StartShowHdl)
  */
 sal_Bool SdCustomShowDlg::IsCustomShow() const
 {
-    return( aCbxUseCustomShow.IsEnabled() && aCbxUseCustomShow.IsChecked() );
+    return( m_pCbxUseCustomShow->IsEnabled() && m_pCbxUseCustomShow->IsChecked() );
 }
 
 

@@ -37,15 +37,15 @@ class SdCustomShowList;
 class SdCustomShowDlg : public ModalDialog
 {
 private:
-    ListBox         aLbCustomShows;
-    CheckBox        aCbxUseCustomShow;
-    PushButton      aBtnNew;
-    PushButton      aBtnEdit;
-    PushButton      aBtnRemove;
-    PushButton      aBtnCopy;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnStartShow;
-    OKButton        aBtnOK;
+    ListBox*         m_pLbCustomShows;
+    CheckBox*        m_pCbxUseCustomShow;
+    PushButton*      m_pBtnNew;
+    PushButton*      m_pBtnEdit;
+    PushButton*      m_pBtnRemove;
+    PushButton*      m_pBtnCopy;
+    HelpButton*      m_pBtnHelp;
+    PushButton*      m_pBtnStartShow;
+    OKButton*        m_pBtnOK;
 
     SdDrawDocument& rDoc;
     SdCustomShowList* pCustomShowList;
