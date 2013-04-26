@@ -212,7 +212,9 @@ void Theme::UpdateTheme (void)
 
 #define Alternatives(n,hc,sys) (mbIsHighContrastMode ? hc : (bUseSystemColors ? sys : n))
 
-        const Color aBaseBackgroundColor (rStyle.GetDialogColor());
+        Color aBaseBackgroundColor (rStyle.GetDialogColor());
+        // UX says this should be a little brighter, but that looks off when compared to the other windows.
+        //aBaseBackgroundColor.IncreaseLuminance(7);
         Color aBorderColor (aBaseBackgroundColor);
         aBorderColor.DecreaseLuminance(15);
         Color aSecondColor (aBaseBackgroundColor);
@@ -220,7 +222,7 @@ void Theme::UpdateTheme (void)
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_DeckBackground],
-            Any(sal_Int32(rStyle.GetMenuColor().GetRGBColor())));
+            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_DeckTitleBarBackground],
@@ -257,9 +259,7 @@ void Theme::UpdateTheme (void)
                         rStyle.GetFloatTitleHeight()))));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_PanelBackground],
-            Any(sal_Int32(rStyle.GetDialogColor().GetRGBColor())));
-        //            Any(sal_Int32(mbIsHighContrastMode ? 0x000000 :
-        //            0xffffff)));
+            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_PanelTitleBarBackground],
