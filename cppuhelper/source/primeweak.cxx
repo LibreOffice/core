@@ -27,7 +27,7 @@
 // the same symbol by design (!) which is quite... unfortunate
 // and can confuse the heck out of dynamic linkers, debuggers, etc.
 //
-// For bootstrapping comprehensive descriptions of some UNO types are needed.
+// For bootstrapping the comprehensive descriptions of some UNO types are needed.
 // The mechanism in this file makes sure that these comprehensive type
 // descriptions are used to prime the so-called "WeakMap".
 //
@@ -42,6 +42,8 @@
 #define cppu_detail_getUnoType cppu_full_getUnoType
 #define InitTypeDesc(T) {(void)cppu_full_getUnoType(static_cast< T * >(NULL));}
 
+// NOTE: the cppuhelper part in the include paths below ensures that the type descriptions
+// are comprehensive descriptions and not some weak descriptions e.g. from solver
 #include "cppuhelper/com/sun/star/lang/XComponent.hpp"
 #include "cppuhelper/com/sun/star/lang/XInitialization.hpp"
 #include "cppuhelper/com/sun/star/lang/XSingleServiceFactory.hpp"
@@ -52,19 +54,23 @@
 #include "cppuhelper/com/sun/star/lang/XEventListener.hpp"
 #include "cppuhelper/com/sun/star/lang/XTypeProvider.hpp"
 #include "cppuhelper/com/sun/star/lang/XUnoTunnel.hpp"
+#include "cppuhelper/com/sun/star/lang/DisposedException.hpp"
 #include "cppuhelper/com/sun/star/uno/DeploymentException.hpp"
 #include "cppuhelper/com/sun/star/uno/XWeak.hpp"
 #include "cppuhelper/com/sun/star/uno/XCurrentContext.hpp"
 #include "cppuhelper/com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/com/sun/star/uno/RuntimeException.hpp"
+#include "cppuhelper/com/sun/star/util/XMacroExpander.hpp"
 #include "cppuhelper/com/sun/star/beans/PropertyValue.hpp"
 #include "cppuhelper/com/sun/star/beans/XPropertySet.hpp"
 #include "cppuhelper/com/sun/star/beans/XMultiPropertySet.hpp"
 #include "cppuhelper/com/sun/star/container/XEnumerationAccess.hpp"
 #include "cppuhelper/com/sun/star/container/XEnumeration.hpp"
+#include "cppuhelper/com/sun/star/container/XNameAccess.hpp"
+#include "cppuhelper/com/sun/star/container/XNameReplace.hpp"
+#include "cppuhelper/com/sun/star/container/XNameContainer.hpp"
 #include "cppuhelper/com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "cppuhelper/com/sun/star/container/XSet.hpp"
-#include "cppuhelper/com/sun/star/bridge/XUnoUrlResolver.hpp"
 #include "cppuhelper/com/sun/star/bridge/XUnoUrlResolver.hpp"
 #include "cppuhelper/com/sun/star/io/IOException.hpp"
 #include "cppuhelper/com/sun/star/io/FilePermission.hpp"
@@ -80,6 +86,9 @@
 #include "cppuhelper/com/sun/star/reflection/XUnionTypeDescription.hpp"
 #include "cppuhelper/com/sun/star/reflection/XCompoundTypeDescription.hpp"
 #include "cppuhelper/com/sun/star/reflection/XIndirectTypeDescription.hpp"
+#include "cppuhelper/com/sun/star/reflection/XInterfaceTypeDescription.hpp"
+#include "cppuhelper/com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
+#include "cppuhelper/com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
 #include "cppuhelper/com/sun/star/reflection/XMethodParameter.hpp"
 
 void primeWeakMap( void)
@@ -94,11 +103,13 @@ void primeWeakMap( void)
     InitTypeDesc( com::sun::star::lang::XEventListener );
     InitTypeDesc( com::sun::star::lang::XTypeProvider );
     InitTypeDesc( com::sun::star::lang::XUnoTunnel );
+    InitTypeDesc( com::sun::star::lang::DisposedException );
     InitTypeDesc( com::sun::star::uno::XWeak );
     InitTypeDesc( com::sun::star::uno::DeploymentException );
     InitTypeDesc( com::sun::star::uno::XCurrentContext );
     InitTypeDesc( com::sun::star::uno::XComponentContext );
     InitTypeDesc( com::sun::star::uno::RuntimeException );
+    InitTypeDesc( com::sun::star::util::XMacroExpander );
     InitTypeDesc( com::sun::star::beans::PropertyState );
     InitTypeDesc( com::sun::star::beans::PropertyValue );
     InitTypeDesc( com::sun::star::beans::XPropertySet );
@@ -107,6 +118,9 @@ void primeWeakMap( void)
     InitTypeDesc( com::sun::star::container::XEnumeration );
     InitTypeDesc( com::sun::star::container::XEnumerationAccess );
     InitTypeDesc( com::sun::star::container::XHierarchicalNameAccess );
+    InitTypeDesc( com::sun::star::container::XNameAccess );
+    InitTypeDesc( com::sun::star::container::XNameReplace );
+    InitTypeDesc( com::sun::star::container::XNameContainer );
     InitTypeDesc( com::sun::star::container::XSet );
     InitTypeDesc( com::sun::star::io::IOException );
     InitTypeDesc( com::sun::star::io::FilePermission );
@@ -123,6 +137,9 @@ void primeWeakMap( void)
     InitTypeDesc( com::sun::star::reflection::XUnionTypeDescription );
     InitTypeDesc( com::sun::star::reflection::XCompoundTypeDescription );
     InitTypeDesc( com::sun::star::reflection::XIndirectTypeDescription );
+    InitTypeDesc( com::sun::star::reflection::XInterfaceTypeDescription );
+    InitTypeDesc( com::sun::star::reflection::XInterfaceMemberTypeDescription );
+    InitTypeDesc( com::sun::star::reflection::XInterfaceMethodTypeDescription );
     InitTypeDesc( com::sun::star::reflection::XMethodParameter );
 }
 

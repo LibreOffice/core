@@ -64,6 +64,7 @@ UNOTYPES= \
         com.sun.star.container.XEnumerationAccess \
         com.sun.star.container.XHierarchicalNameAccess \
         com.sun.star.container.XNameAccess \
+        com.sun.star.container.XNameReplace \
         com.sun.star.container.XNameContainer \
         com.sun.star.container.XSet \
         com.sun.star.io.FilePermission \
