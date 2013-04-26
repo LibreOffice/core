@@ -1099,10 +1099,9 @@
 #define OFA_TP_TABPROPERTIES_TEXT       (RID_OFA_START + 245)
 #define OFA_TP_HELPERPROG               (RID_OFA_START + 249)
 
-// IAccessibility2 implementation 2009. ------
+
 #define STR_COLORTABLE                  (RID_OFA_START + 257)
 #define STR_SWITCH                      (RID_OFA_START + 258)
-// ------ IAccessibility2 implementation 2009.
+#define STR_COLOR_LIGHT_PRE             (RID_OFA_START + 259)
 
 #endif
-
