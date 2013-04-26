@@ -668,6 +668,7 @@ void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
 void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
 {
     OUString sDirectory = rRequest->getArgumentOrDefault(PROP_DIRECTORY, OUString());
+    bool     bForce     = rRequest->getArgumentOrDefault(PROP_FORCE, false);
 
     if( !m_bInExecute)
     {
@@ -694,7 +695,13 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
     if ( FAILED(hResult) )
         return;
 
-    iDialog->SetFolder(pFolder);
+    if ( m_bInExecute || bForce )
+        iDialog->SetFolder(pFolder);
+    else
+    {
+        // Use set default folder as Microsoft recommends in the IFileDialog documentation.
+        iDialog->SetDefaultFolder(pFolder);
+    }
 }
 
 void VistaFilePickerImpl::impl_sta_GetDirectory(const RequestRef& rRequest)
