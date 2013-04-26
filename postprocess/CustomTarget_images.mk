@@ -32,8 +32,7 @@ helpimages_DIR := $(call gb_CustomTarget_get_workdir,helpcontent2/source/auxilia
 
 # Custom sets, at 24x24 & 16x16 fall-back to Tango preferentially
 # (Tango fallbacks to Industrial for the missing icons)
-packimages_CUSTOM_FALLBACK_1 := -c $(SRCDIR)/icon-themes/tango
-packimages_CUSTOM_FALLBACK_2 := -c $(SRCDIR)/icon-themes/industrial
+packimages_CUSTOM_FALLBACKS := -c $(SRCDIR)/icon-themes/tango -c $(SRCDIR)/icon-themes/industrial
 
 $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 	images_brand.zip \
@@ -43,25 +42,10 @@ $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 	sorted.lst \
 ))
 
-$(packimages_DIR)/images.zip : \
-		$(packimages_DIR)/sorted.lst \
-		$(packimages_DIR)/commandimagelist.ilst \
-		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
-		$(call gb_Postprocess_get_target,AllResources) \
-		$(call gb_Postprocess_get_target,AllUIConfigs)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
-	$(call gb_Helper_abbreviate_dirs, \
-		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
-			-m $(SRCDIR)/icon-themes/galaxy -c $(packimages_DIR) \
-			$(call gb_Helper_optional,HELP,-l $(helpimages_DIR) ) \
-			-l $(packimages_DIR) \
-			-l $(dir $(call gb_ResTarget_get_imagelist_target)) \
-			-l $(dir $(call gb_UIConfig_get_imagelist_target)) \
-			-l $(dir $(call gb_UIConfig_get_imagelist_target,modules/)) \
-			-s $< -o $@ \
-			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
+$(packimages_DIR)/images.zip : DEFAULT_THEME := $(true)
+$(packimages_DIR)/images_%.zip : DEFAULT_THEME :=
 
-$(packimages_DIR)/images_%.zip : \
+$(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
@@ -69,9 +53,13 @@ $(packimages_DIR)/images_%.zip : \
 		$(call gb_Postprocess_get_target,AllUIConfigs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
-		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
-			-m $(SRCDIR)/icon-themes/galaxy -c $(SRCDIR)/icon-themes/$* \
-			$(packimages_CUSTOM_FALLBACK_1) $(packimages_CUSTOM_FALLBACK_2) \
+		$(PERL) $(SOLARENV)/bin/packimages.pl \
+			-g $(SRCDIR)/icon-themes/galaxy \
+			-m $(SRCDIR)/icon-themes/galaxy \
+			$(if $(DEFAULT_THEME),\
+				-c $(packimages_DIR),\
+				-c $(SRCDIR)/icon-themes/$(subst images_,,$*) $(packimages_CUSTOM_FALLBACKS) \
+			) \
 			$(call gb_Helper_optional,HELP,-l $(helpimages_DIR) ) \
 			-l $(packimages_DIR) \
 			-l $(dir $(call gb_ResTarget_get_imagelist_target)) \
