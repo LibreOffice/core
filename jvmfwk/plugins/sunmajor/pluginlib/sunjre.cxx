@@ -69,13 +69,14 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/classic/jvm.dll",
         "/bin/client/jvm.dll",
         // TODO add jrockit here
-#elif UNX
+#elif defined(MACOSX)
+        "/lib/server/libjvm.dylib"
+#elif defined(UNX)
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so"
 #endif
-
     };
     *size = sizeof(ar) / sizeof (char*);
     return ar;
