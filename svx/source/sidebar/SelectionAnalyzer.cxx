@@ -19,6 +19,7 @@
 #include "svx/sidebar/SelectionAnalyzer.hxx"
 #include "svx/svdmrkv.hxx"
 #include "svx/svdobj.hxx"
+#include "svx/svdotext.hxx"
 #include "svx/svdpage.hxx"
 #include "svx/fmglob.hxx"
 #include "svx/globl3d.hxx"
@@ -42,12 +43,19 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
         case 1:
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            const sal_uInt32 nInv = pObj->GetObjInventor();
-            const sal_uInt16 nObjId = pObj->GetObjIdentifier();
-            if (nInv == SdrInventor)
-                eContext = GetContextForObjectId_SC(nObjId);
-            else if (nInv == FmFormInventor)
-                eContext = EnumContext::Context_Form;
+            if ( pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsInEditMode() )
+            {
+                eContext = EnumContext::Context_DrawText;
+            }
+            else
+            {
+                const sal_uInt32 nInv = pObj->GetObjInventor();
+                const sal_uInt16 nObjId = pObj->GetObjIdentifier();
+                if (nInv == SdrInventor)
+                    eContext = GetContextForObjectId_SC(nObjId);
+                else if (nInv == FmFormInventor)
+                    eContext = EnumContext::Context_Form;
+            }
             break;
         }
 
@@ -109,25 +117,32 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
         case 1:
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            const sal_uInt32 nInv = pObj->GetObjInventor();
-            sal_uInt16 nObjId = pObj->GetObjIdentifier();
-            if (nInv == SdrInventor)
+            if ( pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsInEditMode() )
             {
-                if (nObjId == OBJ_GRUP)
+                eContext = EnumContext::Context_DrawText;
+            }
+            else
+            {
+                const sal_uInt32 nInv = pObj->GetObjInventor();
+                sal_uInt16 nObjId = pObj->GetObjIdentifier();
+                if (nInv == SdrInventor)
                 {
-                    nObjId = GetObjectTypeFromGroup(pObj);
-                    if (nObjId == 0)
-                        nObjId = OBJ_GRUP;
+                    if (nObjId == OBJ_GRUP)
+                    {
+                        nObjId = GetObjectTypeFromGroup(pObj);
+                        if (nObjId == 0)
+                            nObjId = OBJ_GRUP;
+                    }
+                    eContext = GetContextForObjectId_SD(nObjId, bIsHandoutPage, bIsNotesPage);
                 }
-                eContext = GetContextForObjectId_SD(nObjId, bIsHandoutPage, bIsNotesPage);
-            }
-            else if (nInv == E3dInventor)
-            {
-                eContext = EnumContext::Context_3DObject;
-            }
-            else if (nInv == FmFormInventor)
-            {
-                eContext = EnumContext::Context_Form;
+                else if (nInv == E3dInventor)
+                {
+                    eContext = EnumContext::Context_3DObject;
+                }
+                else if (nInv == FmFormInventor)
+                {
+                    eContext = EnumContext::Context_Form;
+                }
             }
             break;
         }
