@@ -780,10 +780,6 @@ sal_Bool View::SdrBeginTextEdit(
         pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus);
 
-    ContextChangeEventMultiplexer::NotifyContextChange(
-        &GetViewShell()->GetViewShellBase(),
-        ::sfx2::sidebar::EnumContext::Context_DrawText);
-
     if (bReturn)
     {
         ::Outliner* pOL = GetTextEditOutliner();
@@ -850,10 +846,6 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
 
     if( xObj.is() )
     {
-        ContextChangeEventMultiplexer::NotifyContextChange(
-            &GetViewShell()->GetViewShellBase(),
-            ::sfx2::sidebar::EnumContext::Context_Default);
-
         SdPage* pPage = dynamic_cast< SdPage* >( xObj->GetPage() );
         if( pPage )
             pPage->onEndTextEdit( xObj.get() );
