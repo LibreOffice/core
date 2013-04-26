@@ -51,7 +51,7 @@ $(call gb_PythonTest_get_target,%) :
 
 # always use udkapi and URE services
 define gb_PythonTest_PythonTest
-$(call gb_PythonTest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python
+$(call gb_PythonTest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python:$(gb_DEVINSTALLROOT)/program
 $(call gb_PythonTest_get_target,$(1)) : MODULES :=
 $(call gb_PythonTest_get_target,$(1)) : CONFIGURATION_LAYERS :=
 $(call gb_PythonTest_get_target,$(1)) : UNO_TYPES :=
