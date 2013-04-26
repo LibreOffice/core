@@ -231,7 +231,7 @@ throw ( Exception, RuntimeException )
                 }
                 else if ( aPropValue.Name == "ParentWindow" )
                     m_pImpl->m_xParentWindow.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name == "ModuleName" )
+                else if ( aPropValue.Name == "ModuleIdentifier" )
                     aPropValue.Value >>= m_pImpl->m_sModuleName;
             }
         }

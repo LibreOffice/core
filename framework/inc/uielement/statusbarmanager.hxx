@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>
-#include <com/sun/star/frame/XUIControllerRegistration.hpp>
+#include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -118,7 +118,7 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         StatusBarControllerMap                                                                          m_aControllerMap;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                      m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >                  m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration >  m_xStatusbarControllerRegistration;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerFactory >  m_xStatusbarControllerFactory;
 };
 
 }

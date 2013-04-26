@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -16,29 +15,29 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef __com_sun_star_frame_ToolbarControllerFactory_idl__
+#define __com_sun_star_frame_ToolbarControllerFactory_idl__
 
-#ifndef __FRAMEWORK_UIFACTORY_STATUSBARCONTROLLERFACTORY_HXX_
-#define __FRAMEWORK_UIFACTORY_STATUSBARCONTROLLERFACTORY_HXX_
+#include <com/sun/star/frame/XUIControllerFactory.idl>
 
-#include <macros/xserviceinfo.hxx>
-#include <uifactory/toolbarcontrollerfactory.hxx>
-#include <stdtypes.h>
+module com { module sun { module star { module frame {
 
-namespace framework
+/** specifies a factory that creates instances of registered toolbar controller.
+
+    <p>
+    A toolbar controller can be registered for a command URL and a model service name.
+    </p>
+
+    @since OOo 2.0
+*/
+
+service ToolbarControllerFactory : XUIControllerFactory
 {
-
-class ConfigurationAccess_ControllerFactory;
-class StatusbarControllerFactory :  public ToolbarControllerFactory
-{
-    public:
-        StatusbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-
-        //  XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XSERVICEINFO
+    /** service constructor
+     */
+    create();
 };
 
-} // namespace framework
+}; }; }; };
 
-#endif // __FRAMEWORK_SERVICES_STATUSBARCONTROLLERFACTORY_HXX_
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+#endif

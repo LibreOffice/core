@@ -160,10 +160,8 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uifactory/addonstoolboxfactory \
     framework/source/uifactory/factoryconfiguration \
     framework/source/uifactory/menubarfactory \
-    framework/source/uifactory/popupmenucontrollerfactory \
-    framework/source/uifactory/statusbarcontrollerfactory \
     framework/source/uifactory/statusbarfactory \
-    framework/source/uifactory/toolbarcontrollerfactory \
+    framework/source/uifactory/uicontrollerfactory \
     framework/source/uifactory/toolboxfactory \
     framework/source/uifactory/uielementfactorymanager \
     framework/source/uifactory/windowcontentfactorymanager \

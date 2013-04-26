@@ -38,7 +38,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
-#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>

@@ -20,12 +20,9 @@
 #ifndef __com_sun_star_frame_StatusbarControllerFactory_idl__
 #define __com_sun_star_frame_StatusbarControllerFactory_idl__
 
-#include <com/sun/star/lang/XMultiComponentFactory.idl>
-#include <com/sun/star/frame/XUIControllerRegistration.idl>
-
+#include <com/sun/star/frame/XUIControllerFactory.idl>
 
 module com { module sun { module star { module frame {
-
 
 /** specifies a factory that creates instances of registered status bar
     controller.
@@ -38,39 +35,14 @@ module com { module sun { module star { module frame {
 
     @since OOo 2.0
 */
-
-service StatusbarControllerFactory
+service StatusbarControllerFactory : XUIControllerFactory
 {
-    /** this interface provides functions to create new instances of a registered
-        status bar controller.
-
-        <p>
-        Use <member scope="com.sun.star.lang">XMultiComponentFactory::createInstanceWithArguments()</member>
-        to create a new status bar controller instance. Use the CommandURL as the
-        service specifier.
-
-        This call supports the following arguments provided as
-        <type scope="com::sun::star::beans">PropertyValue</type>:
-        <ul>
-            <li><b>Frame</b><br>specifies the <type scope="com::sun::star::frame">XFrame</type>
-                   instance to which the status bar controller belongs to. This
-                   property must be provided to the status bar controller, otherwise it
-                   cannot dispatch its internal commands.</li>
-            <li><b>ModuleIdentifier</b><br>optional string that specifies in which module
-                   context the status bar controller should be created.</li>
-        </ul>
-        </p>
+    /** service constructor
      */
-    interface com::sun::star::lang::XMultiComponentFactory;
-
-    /** provides functions to query for, register and deregister a status bar
-        controller.
-     */
-    interface com::sun::star::frame::XUIControllerRegistration;
+    create();
 };
 
 }; }; }; };
-
 
 #endif
 

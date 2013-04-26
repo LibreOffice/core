@@ -43,7 +43,7 @@
 #include <services/backingcomp.hxx>
 #include <services/layoutmanager.hxx>
 #include <uifactory/uielementfactorymanager.hxx>
-#include <uifactory/popupmenucontrollerfactory.hxx>
+#include <uifactory/uicontrollerfactory.hxx>
 #include <uielement/objectmenucontroller.hxx>
 #include <uielement/controlmenucontroller.hxx>
 #include <uielement/uicommanddescription.hxx>
@@ -57,8 +57,6 @@
 #include <uifactory/toolboxfactory.hxx>
 #include <uifactory/addonstoolboxfactory.hxx>
 #include "uiconfiguration/windowstateconfiguration.hxx"
-#include "uifactory/toolbarcontrollerfactory.hxx"
-#include "uifactory/statusbarcontrollerfactory.hxx"
 #include <services/autorecovery.hxx>
 #include <helper/statusindicatorfactory.hxx>
 #include <uielement/recentfilesmenucontroller.hxx>

@@ -20,14 +20,11 @@
 #ifndef __com_sun_star_frame_PopupMenuControllerFactory_idl__
 #define __com_sun_star_frame_PopupMenuControllerFactory_idl__
 
-#include <com/sun/star/lang/XMultiComponentFactory.idl>
-#include <com/sun/star/frame/XUIControllerRegistration.idl>
-
+#include <com/sun/star/frame/XUIControllerFactory.idl>
 
 module com { module sun { module star { module frame {
 
-
-/** specifies a factory that creates instances of registered pop-up menu controller.
+/** specifies a factory that creates instances of registered popup menu controller.
 
     <p>
     A pop-up menu controller can be registered for a command URL and a model service name.
@@ -37,34 +34,14 @@ module com { module sun { module star { module frame {
 
     @since OOo 2.0
 */
-
-service PopupMenuControllerFactory
+service PopupMenuControllerFactory : XUIControllerFactory
 {
-    /** this interface provides functions to create new instances of a registered pop-up menu controller.
-
-        <p>
-        Use <member scope="com.sun.star.lang">XMultiComponentFactory::createInstanceWithArguments()</member> to create
-        a new pop-up menu controller instance. Use the CommandURL as the service specifier.
-
-        This call supports the following arguments provided as <type scope="com::sun::star::beans">PropertyValue</type>:
-        <ul>
-            <li><b>Frame</b><br>specifies the <type scope="com::sun::star::frame">XFrame</type>
-                   instance to which the pop-up menu controller belongs to. This property must be provided to
-                   the pop-up menu controller, otherwise it cannot dispatch its internal commands.</li>
-            <li><b>ModuleIdentifier</b><br>optional string that specifies in which module context the pop-up menu
-                   controller should be created.</li>
-        </ul>
-        </p>
+    /** service constructor
      */
-    interface com::sun::star::lang::XMultiComponentFactory;
-
-    /** provides functions to query for, register and deregister a pop-up menu controller.
-     */
-    interface com::sun::star::frame::XUIControllerRegistration;
+    create();
 };
 
 }; }; }; };
-
 
 #endif
 
