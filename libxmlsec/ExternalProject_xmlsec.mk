@@ -50,7 +50,9 @@ else
 
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") autoreconf \
+		$(if $(filter MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
+		$(if $(filter AIX,$(OS)),ACLOCAL="aclocal -I /opt/freeware/share/aclocal") \
+		autoreconf \
 		&& ./configure \
 			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls \
 			$(if $(and $(filter ANDROID,$(OS)),$(filter-out YES,$(DISABLE_OPENSSL))),--with-openssl=$(OUTDIR),--without-openssl) \
