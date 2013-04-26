@@ -4467,11 +4467,6 @@ const Locale& OParseContext::getDefaultLocale()
 // sofort nach dem Scanner-Aufruf in eine gleichnamige eigene
 // Member-Variable.
 
-const double fMilliSecondsPerDay = 86400000.0;
-
-//------------------------------------------------------------------------------
-
-
 //------------------------------------------------------------------
 ::rtl::OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational)
 {
