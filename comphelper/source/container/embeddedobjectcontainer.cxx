@@ -1417,10 +1417,14 @@ sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Boo
                         aArgs[2].Value <<= xStream;
                     }
 
-                    xPersist->storeAsEntry( _xStorage,
-                                            xPersist->getEntryName(),
-                                            uno::Sequence< beans::PropertyValue >(),
-                                            aArgs );
+                    try
+                    {
+                        xPersist->storeAsEntry( _xStorage, xPersist->getEntryName(), uno::Sequence< beans::PropertyValue >(), aArgs );
+                    }
+                    catch (const embed::WrongStateException& e)
+                    {
+                        SAL_WARN("comphelper", "failed to store '" << *pIter << "'");
+                    }
                 }
 
                 if ( bSwitchBackToLoaded )
@@ -1432,10 +1436,11 @@ sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Boo
         bResult = aCnt.CommitImageSubStorage();
 
     }
-    catch (const uno::Exception&)
+    catch (const uno::Exception& e)
     {
         // TODO/LATER: error handling
         bResult = sal_False;
+        SAL_WARN("comphelper", "failed. Message: " << e.Message);
     }
 
     // the old SO6 format does not store graphical replacements
