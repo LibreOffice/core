@@ -248,6 +248,17 @@ public:
         @param rRef another reference
     */
     inline Reference( const Reference< interface_type > & rRef ) SAL_THROW(());
+
+    /** Up-casting conversion constructor: Copies interface reference.
+
+        @param rRef another reference
+    */
+    template< class derived_interface_type >
+    inline Reference( const Reference< derived_interface_type > & rRef )
+    {
+        _pInterface = iquery( static_cast< interface_type* >(rRef.get()) );
+    }
+
     /** Constructor: Sets given interface pointer.
 
         @param pInterface an interface pointer
