@@ -14,7 +14,7 @@
 #pragma warning(disable:4273)       // inconsistent dll linkage
 #endif
 
-extern "C" DWORD WINAPI GetShortPathNameW(LPCWSTR lpszLongPath,LPWSTR lpszShortPath,DWORD cchBuffer)
+DWORD WINAPI GetShortPathNameW(LPCWSTR lpszLongPath,LPWSTR lpszShortPath,DWORD cchBuffer)
 {
     typedef DWORD (WINAPI * GetShortPathNameW_t) (LPCWSTR,LPWSTR,DWORD);
 
