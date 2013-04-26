@@ -17,42 +17,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="FormWizard" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<info>
-		<desc>Contains the styles for the form wizard</desc>
-	</info>
-	<templates>
-		<group oor:name="FWizStyle">
-			<info>
-				<desc>Specifies style information (css)</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the style (used by the ui) - starts with 0, must by - style-unique</desc>
-				</info>
-			</prop>
-			<prop oor:localized="true" oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>UI name of the style</desc>
-				</info>
-			</prop>
-			<prop oor:name="CssHref" oor:type="xs:string">
-				<info>
-					<desc>the name of the css file</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="FormWizard">
-			<info>
-				<desc>the form wizard styles</desc>
-			</info>
-			<set oor:name="Styles" oor:node-type="FWizStyle">
-				<info>
-					<desc>the set of available styles</desc>
-				</info>
-			</set>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="FormWizard" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains the styles for the form wizard</desc>
+  </info>
+  <templates>
+    <group oor:name="FWizStyle">
+      <info>
+        <desc>Specifies style information (css)</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the style (used by the ui) - starts with 0, must by - style-unique</desc>
+        </info>
+      </prop>
+      <prop oor:localized="true" oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>UI name of the style</desc>
+        </info>
+      </prop>
+      <prop oor:name="CssHref" oor:type="xs:string">
+        <info>
+          <desc>the name of the css file</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="FormWizard">
+      <info>
+        <desc>the form wizard styles</desc>
+      </info>
+      <set oor:name="Styles" oor:node-type="FWizStyle">
+        <info>
+          <desc>the set of available styles</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

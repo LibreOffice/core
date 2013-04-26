@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -17,77 +17,62 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-schema oor:package="org.openoffice.Office"
-                      oor:name="Histories"
-                      xml:lang="en-US"
-                      xmlns:oor="http://openoffice.org/2001/registry"
-                      xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                      
-	<info>
-		<desc>Contains Picklist, URL-History and Help-Bookmarks data.</desc>
-	</info>
-    
-	<templates>
-    
-		<group oor:name="HistoryItem">
-			<info>
-				<desc>Describe an history item in it's details. Use URL as node name.</desc>
-			</info>
-			<prop oor:name="Filter" oor:type="xs:string">
-				<info>
-					<desc>Specifies the filter name that was chosen to load the document.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Title" oor:type="xs:string">
-				<info>
-					<desc>Indicates the title of the URL that is displayed on the user-interface.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Password" oor:type="xs:string">
-				<info>
-					<desc>Contains an encoded password used to open the document.</desc>
-				</info>
-			</prop>
-		</group>
-        
-		<group oor:name="HistoryOrder">
-			<info>
-				<desc>Map an ordered number to all existing history items.</desc>
-			</info>
-			<prop oor:name="HistoryItemRef" oor:type="xs:string">
-				<info>
-					<desc>Reference to an item of the orginal history list.</desc>
-				</info>
-			</prop>
-        </group>
-        
-		<group oor:name="HistoryInfo">
-            <info>
-                <desc>Combines item and order list to a complete history description.</desc>
-            </info>
-            <set oor:name="ItemList" oor:node-type="HistoryItem">
-                <info>
-                    <desc>Contains all items identified by it's URL.</desc>
-                </info>
-            </set>
-            <set oor:name="OrderList" oor:node-type="HistoryOrder">
-                <info>
-                    <desc>Bring an order to all items of set ItemList.</desc>
-                </info>
-            </set>
-        </group>
-        
-	</templates>
-    
-	<component>
-    
-        <set oor:name="Histories" oor:node-type="HistoryInfo">
-            <info>
-                <desc>Contains all histories of OOo. Can be extended easy to know any history you like.</desc>
-            </info>
-        </set>
-        
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office" oor:name="Histories" xml:lang="en-US">
+  <info>
+    <desc>Contains Picklist, URL-History and Help-Bookmarks data.</desc>
+  </info>
+  <templates>
+    <group oor:name="HistoryItem">
+      <info>
+        <desc>Describe an history item in it's details. Use URL as node name.</desc>
+      </info>
+      <prop oor:name="Filter" oor:type="xs:string">
+        <info>
+          <desc>Specifies the filter name that was chosen to load the document.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Title" oor:type="xs:string">
+        <info>
+          <desc>Indicates the title of the URL that is displayed on the user-interface.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Password" oor:type="xs:string">
+        <info>
+          <desc>Contains an encoded password used to open the document.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="HistoryOrder">
+      <info>
+        <desc>Map an ordered number to all existing history items.</desc>
+      </info>
+      <prop oor:name="HistoryItemRef" oor:type="xs:string">
+        <info>
+          <desc>Reference to an item of the orginal history list.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="HistoryInfo">
+      <info>
+        <desc>Combines item and order list to a complete history description.</desc>
+      </info>
+      <set oor:name="ItemList" oor:node-type="HistoryItem">
+        <info>
+          <desc>Contains all items identified by it's URL.</desc>
+        </info>
+      </set>
+      <set oor:name="OrderList" oor:node-type="HistoryOrder">
+        <info>
+          <desc>Bring an order to all items of set ItemList.</desc>
+        </info>
+      </set>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Histories" oor:node-type="HistoryInfo">
+      <info>
+        <desc>Contains all histories of OOo. Can be extended easy to know any history you like.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>
-

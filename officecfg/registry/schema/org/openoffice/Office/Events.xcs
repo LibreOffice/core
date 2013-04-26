@@ -17,31 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Events" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains the global event bindings.</desc>
-	</info>
-	<templates>
-		<group oor:name="BindingType">
-			<info>
-				<desc>Describes the binding.</desc>
-			</info>
-			<prop oor:name="BindingURL" oor:type="xs:string">
-				<info>
-					<desc>The Macro URL to which the event is bound.</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="ApplicationEvents">
-			<info>
-				<desc>Contains information about the global events.</desc>
-			</info>
-			<set oor:name="Bindings" oor:node-type="BindingType">
-				<info>
-					<desc>Contains event bindings.</desc>
-				</info>
-			</set>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Events" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains the global event bindings.</desc>
+  </info>
+  <templates>
+    <group oor:name="BindingType">
+      <info>
+        <desc>Describes the binding.</desc>
+      </info>
+      <prop oor:name="BindingURL" oor:type="xs:string">
+        <info>
+          <desc>The Macro URL to which the event is bound.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="ApplicationEvents">
+      <info>
+        <desc>Contains information about the global events.</desc>
+      </info>
+      <set oor:name="Bindings" oor:node-type="BindingType">
+        <info>
+          <desc>Contains event bindings.</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

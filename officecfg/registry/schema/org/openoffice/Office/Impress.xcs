@@ -351,7 +351,7 @@
         <!-- UIHints: Tools - Options - Presentation  Other  [Section] Other -->
         <info>
           <desc>Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
-          <label>Don&apos;t distort objects in curve</label>
+          <label>Don't distort objects in curve</label>
         </info>
         <value>false</value>
       </prop>
@@ -529,7 +529,6 @@
         </info>
         <value>150</value>
       </prop>
-
       <group oor:name="TextObject">
         <info>
           <desc>Contains text editing related configuration items.</desc>
@@ -650,9 +649,9 @@
         </prop>
       </group>
       <set oor:name="AuthorisedRemotes" oor:node-type="AuthorisedRemote">
-       <info>
-        <desc>Contains a list of remote control devices that can connect without user confirmation.</desc>
-       </info>
+        <info>
+          <desc>Contains a list of remote control devices that can connect without user confirmation.</desc>
+        </info>
       </set>
     </group>
     <group oor:name="Snap">
@@ -755,7 +754,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
           <info>
-            <desc>Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
+            <desc>Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square's edge length or a new circle's diameter.</desc>
             <label>Extend edges</label>
           </info>
           <value>true</value>
@@ -1057,7 +1056,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
           <info>
-            <desc>Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
+            <desc>Indicates whether to enlarge or shrink a document's page size while printing to fit the physical paper size.</desc>
             <label>Fit to page</label>
           </info>
           <value>false</value>
@@ -1067,7 +1066,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
           <info>
-            <desc>Indicates whether to print the pages&apos; titles at the top of every page.</desc>
+            <desc>Indicates whether to print the pages' titles at the top of every page.</desc>
             <label>Tile pages</label>
           </info>
           <value>false</value>
@@ -1595,20 +1594,18 @@
       </group>
     </group>
     <group oor:name="Pictures">
+      <info>
+        <desc>Contains configuration items form Impress Photo Album function.</desc>
+      </info>
+      <prop oor:name="Path" oor:type="xs:string" oor:nillable="false">
         <info>
-            <desc>
-            Contains configuration items form Impress Photo Album function.
-            </desc>
-        </info>
-        <prop oor:name="Path" oor:type="xs:string" oor:nillable="false">
-        <info>
-        <desc>
+          <desc>
             Access path, where images were loaded last time.
             The default is work directory.
-        </desc>
+          </desc>
         </info>
         <value>$(work)</value>
-        </prop>
+      </prop>
     </group>
   </component>
 </oor:component-schema>

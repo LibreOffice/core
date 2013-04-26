@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
-<oor:component-schema
-    oor:package="org.openoffice" oor:name="Setup" xml:lang="en-US"
-    xmlns:oor="http://openoffice.org/2001/registry"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice" oor:name="Setup" xml:lang="en-US">
   <info>
     <desc>Contains Setup preferences, such as the installed UI locales or the
     available modules.</desc>
@@ -28,7 +25,7 @@
   <templates>
     <group oor:name="InstalledLocale">
       <info>
-	<desc>Describes a language pack that is installed to provide a localized
+        <desc>Describes a language pack that is installed to provide a localized
         office UI.</desc>
       </info>
       <prop oor:name="Origin" oor:type="xs:string">
@@ -92,9 +89,7 @@
       <info>
         <desc>Describes migration steps specific for certain version(s)</desc>
       </info>
-      <prop
-          oor:name="VersionIdentifiers" oor:type="oor:string-list"
-          oor:nillable="false">
+      <prop oor:name="VersionIdentifiers" oor:type="oor:string-list" oor:nillable="false">
         <info>
           <desc>version identifiers, that are supported for migration</desc>
         </info>
@@ -115,130 +110,125 @@
     </group>
     <group oor:name="Factory">
       <info>
-	<desc>Describes an application module (a document factory, such as
+        <desc>Describes an application module (a document factory, such as
         Writer).</desc>
       </info>
       <prop oor:name="ooSetupFactoryActualFilter" oor:type="xs:string">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>It's the "most actual" filter, which is able to import/export
+        <!-- UIHints: setup -->
+        <info>
+          <desc>It's the "most actual" filter, which is able to import/export
           ALL currently implemented features of this office module. It has to be
           the programatic name of the filter.</desc>
-	</info>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:type="xs:string">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>The same meaning as ooSetupFactoryActualFilter ... but regarding
+        <!-- UIHints: setup -->
+        <info>
+          <desc>The same meaning as ooSetupFactoryActualFilter ... but regarding
           to the actual template format.</desc>
-	</info>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryDefaultFilter" oor:type="xs:string">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>Specifies the default file format for saving documents inside
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the default file format for saving documents inside
           this office module.</desc>
         </info>
       </prop>
       <prop oor:name="ooSetupFactoryDocumentService" oor:type="xs:string">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>Its the service name of the document model used by this module.
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Its the service name of the document model used by this module.
           E.g. filter match against those service name.</desc>
-	</info>
+        </info>
       </prop>
       <!--The default must be written by the setup.-->
       <prop oor:name="ooSetupFactoryShortName" oor:type="xs:string">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>Specifies the short name of the factory.</desc>
-	</info>
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the short name of the factory.</desc>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryUIName" oor:type="xs:string">
-	<!-- UIHints: setup -->
-	<info>
+        <!-- UIHints: setup -->
+        <info>
           <desc>Specifies the UI name of the factory.</desc>
-	</info>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryTemplateFile" oor:type="xs:string">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>Specifies the name of the standard template file for the
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the name of the standard template file for the
           factory.</desc>
-	</info>
+        </info>
       </prop>
-      <prop
-          oor:name="ooSetupFactorySystemDefaultTemplateChanged"
-          oor:type="xs:boolean">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>Indicates if the system default template has been
+      <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged" oor:type="xs:boolean">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Indicates if the system default template has been
           changed.</desc>
-	</info>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryWindowAttributes" oor:type="xs:string">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>Specifies the attributes of the factory window</desc>
-	</info>
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the attributes of the factory window</desc>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:type="xs:string">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>Specifies the URL for opening an empty document in the
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the URL for opening an empty document in the
           factory.</desc>
-	</info>
+        </info>
       </prop>
-      <prop
-          oor:name="ooSetupFactoryIcon" oor:type="xs:int" oor:nillable="false">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>Specifies the ID of the icon for the factory</desc>
-	</info>
-	<value>0</value>
+      <prop oor:name="ooSetupFactoryIcon" oor:type="xs:int" oor:nillable="false">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the ID of the icon for the factory</desc>
+        </info>
+        <value>0</value>
       </prop>
-      <prop
-          oor:name="ooSetupFactoryStyleFilter" oor:type="xs:int"
-          oor:nillable="false">
-	<!-- UIHints: setup -->
-	<info>
-	  <desc>Specifies the ID of the style filter (Stylist) for the
+      <prop oor:name="ooSetupFactoryStyleFilter" oor:type="xs:int" oor:nillable="false">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the ID of the style filter (Stylist) for the
           factory</desc>
-	</info>
-	<value>-1</value>
+        </info>
+        <value>-1</value>
       </prop>
       <prop oor:name="ooSetupFactoryCommandConfigRef" oor:type="xs:string">
-	<info>
-	  <desc>Refer to a configuration file, which contains the list of UI
+        <info>
+          <desc>Refer to a configuration file, which contains the list of UI
           commands, suitable for this module.</desc>
-	</info>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryWindowStateConfigRef" oor:type="xs:string">
-	<info>
-	  <desc>Refer to a configuration file, which contains the persistent
+        <info>
+          <desc>Refer to a configuration file, which contains the persistent
           window data, suitable for this module.</desc>
-	</info>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryCmdCategoryConfigRef" oor:type="xs:string">
-	<info>
-	  <desc>Refers to a configuration file which contains category
+        <info>
+          <desc>Refers to a configuration file which contains category
           definitions for user interface commands suitable for this
           module.</desc>
-	</info>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryHelpBaseURL" oor:type="xs:string">
-	<info>
-	  <desc>Describe the base part of a help URL, which can be used to show
+        <info>
+          <desc>Describe the base part of a help URL, which can be used to show
           the start help page according to the used office factory.</desc>
-	</info>
+        </info>
       </prop>
       <prop oor:name="ooSetupFactoryHelpOnOpen" oor:type="xs:boolean">
-	<info>
-	  <desc>Enable/disable automatic showing of the start help page for this
+        <info>
+          <desc>Enable/disable automatic showing of the start help page for this
           office factory, if any document suitable for this factory is
           opened.</desc>
-	</info>
-	<!-- Attention: Because this feature must be enabled explicitly, we
+        </info>
+        <!-- Attention: Because this feature must be enabled explicitly, we
              define the following:
              a) value = NIL        => feature disabled
              b) value = false/true => feature enabled but inactive/active
@@ -250,84 +240,74 @@
   <component>
     <group oor:name="Product">
       <info>
-	<desc>Contains common product and version information</desc>
+        <desc>Contains common product and version information</desc>
       </info>
       <!--The default must be written by the setup.-->
       <prop oor:name="ooName" oor:type="xs:string" oor:nillable="false">
-	<info>
-	  <desc>Specifies the name of a product.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+        <info>
+          <desc>Specifies the name of a product.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop
-          oor:name="ooXMLFileFormatVersion" oor:type="xs:string"
-          oor:nillable="false">
-	<info>
-	  <desc>Specifies the version of the SO 6/7 or OOo 1.0 xml file
+      <prop oor:name="ooXMLFileFormatVersion" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the version of the SO 6/7 or OOo 1.0 xml file
           formats.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop
-          oor:name="ooXMLFileFormatName" oor:type="xs:string"
-          oor:nillable="false">
-	<info>
-	  <desc>Specifies the name of the SO6/7 or OOo1.0 xml file
+      <prop oor:name="ooXMLFileFormatName" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the name of the SO6/7 or OOo1.0 xml file
           formats.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
       <prop oor:name="ooSetupVersion" oor:type="xs:string" oor:nillable="false">
-	<info>
-	  <desc>Specifies the version number of the product that appears on the
+        <info>
+          <desc>Specifies the version number of the product that appears on the
           user interface.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop
-          oor:name="ooSetupVersionAboutBox" oor:type="xs:string"
-          oor:nillable="false">
-	<info>
-	  <desc>Specifies the complete (major.minor.micro) version number of the
+      <prop oor:name="ooSetupVersionAboutBox" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the complete (major.minor.micro) version number of the
           product that appears only on the about box.</desc>
-	</info>
-	<value/>
+        </info>
+        <value/>
       </prop>
-      <prop
-          oor:name="ooSetupVersionAboutBoxSuffix" oor:type="xs:string"
-          oor:nillable="false">
-	<info>
-	  <desc>Specifies the version suffix (beta1, rc2) of the product that
+      <prop oor:name="ooSetupVersionAboutBoxSuffix" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the version suffix (beta1, rc2) of the product that
           appears only on the about box.</desc>
-	</info>
-	<value/>
+        </info>
+        <value/>
       </prop>
       <prop oor:name="ooVendor" oor:type="xs:string" oor:nillable="false">
-	<info>
-	  <desc>Specifies the vendor who build the product.</desc>
-	</info>
-	<value/>
+        <info>
+          <desc>Specifies the vendor who build the product.</desc>
+        </info>
+        <value/>
       </prop>
-      <prop
-          oor:name="ooSetupExtension" oor:type="xs:string" oor:nillable="false">
-	<info>
-	  <desc>Specifies the version number that appears on the user
+      <prop oor:name="ooSetupExtension" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the version number that appears on the user
           interface.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop
-          oor:name="ooOpenSourceContext" oor:type="xs:int" oor:nillable="false">
+      <prop oor:name="ooOpenSourceContext" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Specifies the context of the product. A value greater than 0 is
           specifying an OpenSource context.</desc>
@@ -338,67 +318,57 @@
     <group oor:name="Office">
       <!--The default must be written by the setup.-->
       <info>
-	<desc>Specifies the installation location, locales and the available
+        <desc>Specifies the installation location, locales and the available
         factories for creating documents.</desc>
       </info>
-      <prop
-          oor:name="ooSetupInstCompleted" oor:type="xs:boolean"
-          oor:nillable="false">
-	<!-- OldPath: Service User/[username] -->
-	<!-- OldLocation: userdb.ini -->
-	<info>
-	  <desc>Indicates if the user data is copied successfully.</desc>
-	</info>
+      <prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Service User/[username] -->
+        <!-- OldLocation: userdb.ini -->
+        <info>
+          <desc>Indicates if the user data is copied successfully.</desc>
+        </info>
         <value>false</value>
       </prop>
       <set oor:name="InstalledLocales" oor:node-type="InstalledLocale">
-	<info>
-	  <desc>Enumerates the application languages that are installed, if a
+        <info>
+          <desc>Enumerates the application languages that are installed, if a
           multilingual version is used.</desc>
-	</info>
+        </info>
       </set>
-      <prop
-          oor:name="ooSetupConnectionURL" oor:type="xs:string"
-          oor:nillable="false">
-	<!-- OldPath: Common-->
-	<!-- OldLocation: soffice.ini -->
-	<info>
-	  <desc>Specifies the URL for an UNO connection that can be used to
+      <prop oor:name="ooSetupConnectionURL" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Common-->
+        <!-- OldLocation: soffice.ini -->
+        <info>
+          <desc>Specifies the URL for an UNO connection that can be used to
           script the office from outside.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop
-          oor:name="MigrationCompleted" oor:type="xs:boolean"
-          oor:nillable="false">
-	<info>
-	  <desc>This should be set to true, as soon as settings from nother
+      <prop oor:name="MigrationCompleted" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>This should be set to true, as soon as settings from nother
           version have been imported into this installation in order to prevent
           multiple migrations</desc>
-	</info>
-	<value>false</value>
+        </info>
+        <value>false</value>
       </prop>
-      <prop
-          oor:name="LastCompatibilityCheckID" oor:type="xs:string"
-          oor:nillable="false">
-	<info>
-	  <desc>The build ID of the office. On startup the office will compare
+      <prop oor:name="LastCompatibilityCheckID" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The build ID of the office. On startup the office will compare
           this ID with the current build id to decide if the extensions
           dependencies need to be checked.</desc>
-	</info>
-	<value>not checked</value>
+        </info>
+        <value>not checked</value>
       </prop>
       <set oor:name="Factories" oor:node-type="Factory">
-	<info>
-	  <desc>Contains all of the document factories that were installed
+        <info>
+          <desc>Contains all of the document factories that were installed
           during setup.</desc>
-	</info>
+        </info>
       </set>
-      <prop
-          oor:name="OfficeRestartInProgress" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="OfficeRestartInProgress" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>The entry specifies that we are in restart process</desc>
         </info>
@@ -407,49 +377,44 @@
     </group>
     <group oor:name="L10N">
       <info>
-	<desc>Specifies the installation locales.</desc>
+        <desc>Specifies the installation locales.</desc>
       </info>
       <!--The default must be written by the setup.-->
       <prop oor:name="ooLocale" oor:type="xs:string" oor:nillable="false">
-	<!-- OldPath: User/Language -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - Other -->
-	<!--The initial default should be written by the setup.-->
-	<info>
-	  <desc>Indicates the Office language selected by the user.</desc>
-	  <label>Locale</label>
-	</info>
-	<value/>
+        <!-- OldPath: User/Language -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools - Options - General - Other -->
+        <!--The initial default should be written by the setup.-->
+        <info>
+          <desc>Indicates the Office language selected by the user.</desc>
+          <label>Locale</label>
+        </info>
+        <value/>
       </prop>
-      <prop
-          oor:name="ooSetupSystemLocale" oor:type="xs:string"
-          oor:nillable="false">
-	<!-- UIHints: Tools - Options - Language Settings - Languages - Language
+      <prop oor:name="ooSetupSystemLocale" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Language Settings - Languages - Language
              of - Locale setting -->
-	<info>
-	  <desc>Indicates the locale setting defined by the user. By default,
+        <info>
+          <desc>Indicates the locale setting defined by the user. By default,
           this label is empty and the system locale is used.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop
-          oor:name="ooSetupCurrency" oor:type="xs:string" oor:nillable="false">
-	<!-- UIHints: Tools - Options - Language Settings - Languages - Language
+      <prop oor:name="ooSetupCurrency" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Language Settings - Languages - Language
              of - Default currency -->
-	<info>
-	  <desc>Indicates the currency settings defined by the user. By default,
+        <info>
+          <desc>Indicates the currency settings defined by the user. By default,
           this label is empty and the currency defined in the
           ooSetupSystemLocale is used.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop
-          oor:name="DecimalSeparatorAsLocale" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="DecimalSeparatorAsLocale" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Indicates that the decimal separator (dot or commma) is used as
           appropriate for the selected locale instead of the one related to the
@@ -458,9 +423,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="IgnoreLanguageChange" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IgnoreLanguageChange" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Indicates whether changes to the system input language/keyboard
           will be ignored. If ignored, when new text is typed that text will
@@ -470,17 +433,15 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="DateAcceptancePatterns" oor:type="xs:string"
-          oor:nillable="true">
-	<!-- UIHints: Tools - Options - Language Settings - Languages - Language
+      <prop oor:name="DateAcceptancePatterns" oor:type="xs:string" oor:nillable="true">
+        <!-- UIHints: Tools - Options - Language Settings - Languages - Language
              of - Date acceptance patterns -->
-	<info>
-	  <desc>Indicates the date acceptance patterns defined by the user. By
+        <info>
+          <desc>Indicates the date acceptance patterns defined by the user. By
           default, this label is empty and the patterns defined in the
           ooSetupSystemLocale are used.</desc>
-	</info>
-	<value/>
+        </info>
+        <value/>
       </prop>
     </group>
     <group oor:name="Migration">

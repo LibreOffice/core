@@ -17,42 +17,43 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Labels" oor:package="org.openoffice.Office" xml:lang="en-US"><!-- UIHints: File - New - Labels - Labels -->
-	<info>
-		<desc>Contains settings for Writer documents used as labels.</desc>
-	</info>
-	<templates>
-		<group oor:name="LabelType">
-			<info>
-				<desc>Contains the properties used for a label.</desc>
-			</info>
-			<prop oor:name="Name" oor:type="xs:string">
-				<!--Label: Type Description: Name of the format-->
-				<info>
-					<desc>Contains the descriptive name for the label format.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Measure" oor:type="xs:string">
-				<!--Label: Contains the measurement data of the label contatenated by a colon (;) in the following order: 
-				'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows" while 'C' marks a continuous label and 'S' marks a sheet
-				-->
-				<info>
-					<desc>Contains the measurement data of the label concatenated by a colon (;) in the following order: 'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows" while &apos;C&apos; marks a continuous label and &apos;S&apos; marks a sheet.</desc>
-				</info>
-			</prop>
-		</group>
-		<set oor:name="Labels" oor:node-type="LabelType">
-			<info>
-				<desc>Specifies a set of labels of a manufacturer.</desc>
-			</info>
-		</set>
-	</templates>
-	<component>
-		<set oor:name="Manufacturer" oor:node-type="Labels">
-			<info>
-				<desc>Contains the list of label manufacturers.</desc>
-				<label>Available Manufacturers</label>
-			</info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Labels" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <!-- UIHints: File - New - Labels - Labels -->
+  <info>
+    <desc>Contains settings for Writer documents used as labels.</desc>
+  </info>
+  <templates>
+    <group oor:name="LabelType">
+      <info>
+        <desc>Contains the properties used for a label.</desc>
+      </info>
+      <prop oor:name="Name" oor:type="xs:string">
+        <!--Label: Type Description: Name of the format-->
+        <info>
+          <desc>Contains the descriptive name for the label format.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Measure" oor:type="xs:string">
+        <!--Label: Contains the measurement data of the label contatenated by a colon (;) in the following order:
+		'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows" while 'C' marks a continuous label and 'S' marks a sheet
+        -->
+        <info>
+          <desc>Contains the measurement data of the label concatenated by a colon (;) in the following order: 'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows" while 'C' marks a continuous label and 'S' marks a sheet.</desc>
+        </info>
+      </prop>
+    </group>
+    <set oor:name="Labels" oor:node-type="LabelType">
+      <info>
+        <desc>Specifies a set of labels of a manufacturer.</desc>
+      </info>
+    </set>
+  </templates>
+  <component>
+    <set oor:name="Manufacturer" oor:node-type="Labels">
+      <info>
+        <desc>Contains the list of label manufacturers.</desc>
+        <label>Available Manufacturers</label>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

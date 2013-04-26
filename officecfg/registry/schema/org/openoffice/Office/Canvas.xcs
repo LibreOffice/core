@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -16,123 +16,120 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-
-<oor:component-schema oor:name="Canvas" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<info>
-		<desc>Contains configuration items related to the Impress application.</desc>
-	</info>
-	<import oor:component="org.openoffice.Office.Common"/>
-	<templates>
-        <group oor:name="CanvasService">
-			<info>
-				<label>Implementation names for canvas service.</label>
-				<desc>Contains a list of implementation names for each canvas service. Tried in order of appearance</desc>
-			</info>
-			<prop oor:name="PreferredImplementations" oor:type="oor:string-list">
-                <info>
-	    			<desc>List of implementation names.</desc>
-                </info>
-            </prop>
-			<prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
-                <info>
-	    			<desc>List of implementations that are hardware-accelerated.</desc>
-                </info>
-            </prop>
-			<prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
-                <info>
-	    			<desc>List of implementations that do anti-aliasing.</desc>
-                </info>
-            </prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="DXCanvas">
-			<info>
-				<desc>Contains config entries for the DirectX-based implementation of the XCanvas interface.</desc>
-			</info>
-			<prop oor:name="DeviceBlacklist" oor:type="oor:int-list" oor:nillable="false">
-				<info>
-					<desc>Sequence of 8 integers per device/driver
-					   combination, that uniquely mark them as not being compatible with the
-					   DirectX9 canvas implementation. If you have
-					   trouble with your graphic adapter, and want to
-					   add it to the blacklisting, set
-					   BlacklistCurrentDevice below to false. After
-					   running the Impress slideshow once, your card
-					   identification has been added to the list.
-					</desc>
-					<label>Sequence of blacklisted devices</label>
-				</info>
-				<value>0</value>
-			</prop>
- 			<prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Indicates whether the current DirectX device
-                          ids should get blacklisted. When true, a
-						  running DXCanvas will write a DeviceBlacklist entry, and refuse to run
-						  on that device subsequently.
-					</desc> 
-					<label>Blacklist current DirectX device</label>
-				</info>
-				<value>false</value>
-			</prop>
- 			<prop oor:name="MaxTextureSize" oor:type="xs:int" oor:nillable="false">
-				<info>
-					<desc>If present, limits the size of the textures
-						  that get requested from the DX runtime. If
-						  not present, textures of the maximal size
-						  that is advertised by the driver are
-						  used. This value has absolutely nothing to
-						  do with the size of primitives that can be
-						  rendered, both concepts are independent from
-						  each other. The underlying reason for this
-						  config item is the fact that several
-						  card/driver combinations expose bugs, when
-						  running them with their maximum texture
-						  size.
-					</desc> 
-					<label>Maximum texture size requested from the DirectX runtime</label>
-				</info>
-				<value>2048</value>
-			</prop>
-		</group>
-        <set oor:name="CanvasServiceList" oor:node-type="CanvasService">
-            <info>
-                <desc>List of preferred implementation names, for each given canvas service.</desc>
-            </info>
-		</set>
-		<prop oor:name="ForceSafeServiceImpl" oor:type="xs:boolean" oor:nillable="false">
-			<info>
-				<desc>When true, force canvas factory to use the last
-				      entry of the respective preferred services
-					  lists. This entry should represent a safe,
-					  works-always implementation, ready to serve as a
-					  fallback.
-				</desc>
-				<label>Force fallback canvas impl</label>
-			</info>
-			<value>false</value>
-		</prop>
-		<prop oor:name="UseAcceleratedCanvas" oor:type="xs:boolean" oor:nillable="false">
-			<info>
-				<desc>When true, suggest canvas factory to use a
-				      canvas service listed in the
-				      AcceleratedImplementations lists. 
-				</desc>
-				<label>Use a canvas listed among the AcceleratedImplementations</label>
-			</info>
-			<value>true</value>
-		</prop>
-		<prop oor:name="UseAntialiasingCanvas" oor:type="xs:boolean" oor:nillable="false">
-			<info>
-				<desc>When true, suggest canvas factory to use a
-				      canvas service listed in the
-				      AntialiasingImplementations lists. 
-				</desc>
-				<label>Use a canvas listed among the AntialiasingImplementations</label>
-			</info>
-			<value>true</value>
-		</prop>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Canvas" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains configuration items related to the Impress application.</desc>
+  </info>
+  <import oor:component="org.openoffice.Office.Common"/>
+  <templates>
+    <group oor:name="CanvasService">
+      <info>
+        <label>Implementation names for canvas service.</label>
+        <desc>Contains a list of implementation names for each canvas service. Tried in order of appearance</desc>
+      </info>
+      <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
+        <info>
+          <desc>List of implementation names.</desc>
+        </info>
+      </prop>
+      <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+        <info>
+          <desc>List of implementations that are hardware-accelerated.</desc>
+        </info>
+      </prop>
+      <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+        <info>
+          <desc>List of implementations that do anti-aliasing.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="DXCanvas">
+      <info>
+        <desc>Contains config entries for the DirectX-based implementation of the XCanvas interface.</desc>
+      </info>
+      <prop oor:name="DeviceBlacklist" oor:type="oor:int-list" oor:nillable="false">
+        <info>
+          <desc>Sequence of 8 integers per device/driver
+	    combination, that uniquely mark them as not being compatible with the
+	    DirectX9 canvas implementation. If you have
+	    trouble with your graphic adapter, and want to
+	    add it to the blacklisting, set
+	    BlacklistCurrentDevice below to false. After
+	    running the Impress slideshow once, your card
+	    identification has been added to the list.
+	  </desc>
+          <label>Sequence of blacklisted devices</label>
+        </info>
+        <value>0</value>
+      </prop>
+      <prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Indicates whether the current DirectX device
+            ids should get blacklisted. When true, a
+	    running DXCanvas will write a DeviceBlacklist entry, and refuse to run
+	    on that device subsequently.
+	  </desc>
+          <label>Blacklist current DirectX device</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="MaxTextureSize" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>If present, limits the size of the textures
+	    that get requested from the DX runtime. If
+	    not present, textures of the maximal size
+	    that is advertised by the driver are
+	    used. This value has absolutely nothing to
+	    do with the size of primitives that can be
+	    rendered, both concepts are independent from
+	    each other. The underlying reason for this
+	    config item is the fact that several
+	    card/driver combinations expose bugs, when
+	    running them with their maximum texture size.
+	  </desc>
+          <label>Maximum texture size requested from the DirectX runtime</label>
+        </info>
+        <value>2048</value>
+      </prop>
+    </group>
+    <set oor:name="CanvasServiceList" oor:node-type="CanvasService">
+      <info>
+        <desc>List of preferred implementation names, for each given canvas service.</desc>
+      </info>
+    </set>
+    <prop oor:name="ForceSafeServiceImpl" oor:type="xs:boolean" oor:nillable="false">
+      <info>
+        <desc>When true, force canvas factory to use the last
+	  entry of the respective preferred services
+	  lists. This entry should represent a safe,
+	  works-always implementation, ready to serve as a
+	  fallback.
+	</desc>
+        <label>Force fallback canvas impl</label>
+      </info>
+      <value>false</value>
+    </prop>
+    <prop oor:name="UseAcceleratedCanvas" oor:type="xs:boolean" oor:nillable="false">
+      <info>
+        <desc>When true, suggest canvas factory to use a
+	  canvas service listed in the
+	  AcceleratedImplementations lists.
+	</desc>
+        <label>Use a canvas listed among the AcceleratedImplementations</label>
+      </info>
+      <value>true</value>
+    </prop>
+    <prop oor:name="UseAntialiasingCanvas" oor:type="xs:boolean" oor:nillable="false">
+      <info>
+        <desc>When true, suggest canvas factory to use a
+	  canvas service listed in the
+	  AntialiasingImplementations lists.
+	</desc>
+        <label>Use a canvas listed among the AntialiasingImplementations</label>
+      </info>
+      <value>true</value>
+    </prop>
+  </component>
 </oor:component-schema>
-

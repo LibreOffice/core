@@ -47,7 +47,7 @@
         <prop oor:name="FileURL" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Specifies the file URL for the log handler. The default value here will expand to a file
-            with the same name as the logger for which the handler is used, with extension &quot;.log&quot;.
+            with the same name as the logger for which the handler is used, with extension ".log".
             It will be located in the user's OOo data folder.</desc>
           </info>
           <value>$(userurl)/$(loggername).log</value>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <!--
  * This file is part of the LibreOffice project.
@@ -16,28 +17,37 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<oor:component-schema oor:name="ExtensionDependencies" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <info>
-        <desc>Contains a list of extensions with additonal dependencies to overrule missing dependencies in extensions
-              or to control specific extensions in general.</desc>
-    </info>
-    <templates>
-        <group oor:name="Extension">
-            <info><desc>Describes the additonal meta data for an extension whereas the node name have to be the extension identifier.</desc></info>
-            <prop oor:name="Versions" oor:type="oor:string-list" oor:localized="false">
-                <info><desc>Specifies a list of extension versions for which the extra dependecies should be active.</desc></info>
-            </prop>
-            <prop oor:name="Platforms" oor:type="oor:string-list" oor:localized="false">
-                <info><desc>Specifies a list of platforms for which the extra dependencies mechanism is active.</desc></info>
-            </prop>
-            <prop oor:name="Dependencies" oor:type="xs:string" oor:localized="false">
-                <info><desc>Specifies a list of additonal dependencies.</desc></info>
-            </prop>
-	</group>
-    </templates>
-    <component>
-        <set oor:name="Extensions" oor:node-type="Extension">
-            <info><desc>Specifies the list of extensions with extra dependecies.</desc></info>
-        </set>
-    </component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ExtensionDependencies" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains a list of extensions with additonal dependencies to overrule missing dependencies in extensions or to control specific extensions in general.</desc>
+  </info>
+  <templates>
+    <group oor:name="Extension">
+      <info>
+        <desc>Describes the additonal meta data for an extension whereas the node name have to be the extension identifier.</desc>
+      </info>
+      <prop oor:name="Versions" oor:type="oor:string-list" oor:localized="false">
+        <info>
+          <desc>Specifies a list of extension versions for which the extra dependecies should be active.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Platforms" oor:type="oor:string-list" oor:localized="false">
+        <info>
+          <desc>Specifies a list of platforms for which the extra dependencies mechanism is active.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Dependencies" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>Specifies a list of additonal dependencies.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Extensions" oor:node-type="Extension">
+      <info>
+        <desc>Specifies the list of extensions with extra dependecies.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>
