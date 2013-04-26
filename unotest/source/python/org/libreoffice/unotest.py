@@ -18,15 +18,17 @@ try:
     import uno
 except ImportError:
     print("pyuno not found: try to set PYTHONPATH and URE_BOOTSTRAP variables")
-    print("PYTHONPATH=/installation/opt/program")
-    print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
+    print("to something like:")
+    print("  PYTHONPATH=/installation/opt/program")
+    print("  URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
 try:
     from com.sun.star.document import XDocumentEventListener
 except ImportError:
     print("UNO API class not found: try to set URE_BOOTSTRAP variable")
-    print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
+    print("to something like:")
+    print("  URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
 ### utilities ###
