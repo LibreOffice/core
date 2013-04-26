@@ -392,7 +392,6 @@ namespace drawinglayer
             const basegfx::B3DHomMatrix& getObjectToView() const
             {
                 // on demand WorldToView creation
-                ::osl::Mutex m_mutex;
 
                 if(maObjectToView.isIdentity())
                 {
@@ -404,8 +403,6 @@ namespace drawinglayer
 
             const uno::Sequence< beans::PropertyValue >& getViewInformationSequence() const
             {
-                ::osl::Mutex m_mutex;
-
                 if(!mxViewInformation.hasElements())
                 {
                     const_cast< ImpViewInformation3D* >(this)->impFillViewInformationFromContent();
