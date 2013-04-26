@@ -231,6 +231,7 @@ namespace connectivity
             other_like_predicate_part_2,
             between_predicate_part_2,
             cast_spec,
+            window_function,
             rule_count             // last value
         };
 
@@ -423,8 +424,8 @@ namespace connectivity
                             bool _bSubstitute) const;
 
     private:
-        void impl_parseNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
-        void impl_parseLikeNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
+        void impl_parseNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam, bool bSimple=true ) const;
+        void impl_parseLikeNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam, bool bSimple=true ) const;
         void impl_parseTableRangeNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
 
         /** parses a table_name node into a SQL statement particle.

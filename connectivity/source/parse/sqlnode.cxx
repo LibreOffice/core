@@ -129,6 +129,62 @@ namespace
         rNewValue += rQuot;
         return rNewValue;
     }
+
+    bool columnMatchP(const connectivity::OSQLParseNode* pSubTree, const connectivity::SQLParseNodeParameter& rParam)
+    {
+        using namespace connectivity;
+        assert(SQL_ISRULE(pSubTree,column_ref));
+
+        // retrieve the field's name & table range
+        OUString aFieldName;
+        try
+        {
+            sal_Int32 nNamePropertyId = PROPERTY_ID_NAME;
+            if ( rParam.xField->getPropertySetInfo()->hasPropertyByName( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_REALNAME ) ) )
+                nNamePropertyId = PROPERTY_ID_REALNAME;
+            rParam.xField->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( nNamePropertyId ) ) >>= aFieldName;
+        }
+        catch ( Exception& )
+        {
+        }
+
+        if(pSubTree->count())
+        {
+            const OSQLParseNode* pCol = pSubTree->getChild(pSubTree->count()-1);
+            if (SQL_ISRULE(pCol,column_val))
+            {
+                assert(pCol->count() == 1);
+                pCol = pCol->getChild(0);
+            }
+            const OSQLParseNode* pTable(NULL);
+            switch (pSubTree->count())
+            {
+            case 1:
+                break;
+            case 3:
+                pTable = pSubTree->getChild(0);
+                break;
+            case 5:
+            case 7:
+                SAL_WARN("connectivity.parse", "SQL: catalog and/or schema in column_ref in predicate");
+                break;
+            default:
+                SAL_WARN("connectivity.parse", "columnMatchP: SQL grammar changed; column_ref has " << pSubTree->count() << " children");
+                assert(false);
+                break;
+            }
+            // TODO: not all DBMS match column names case-insensitively...
+            // see XDatabaseMetaData::supportsMixedCaseIdentifiers()
+            // and XDatabaseMetaData::supportsMixedCaseQuotedIdentifiers()
+            if  (   // table name matches (or no table name)?
+                    ( !pTable || pTable->getTokenValue().equalsIgnoreAsciiCase(rParam.sPredicateTableAlias) )
+                 && // column name matches?
+                    pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
+                )
+                return true;
+        }
+        return false;
+    }
 }
 
 namespace connectivity
@@ -342,7 +398,7 @@ namespace
 }
 
 //-----------------------------------------------------------------------------
-void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
+void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const SQLParseNodeParameter& rParam, bool bSimple) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseNodeToString_throw" );
     if ( isToken() )
@@ -360,18 +416,19 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
     // special handling for parameters
     case parameter:
     {
+        bSimple=false;
         if(!rString.isEmpty())
             rString.appendAscii(" ");
         if (nCount == 1)    // ?
-            m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
+            m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam, false );
         else if (nCount == 2)   // :Name
         {
-            m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
+            m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam, false );
             rString.append(m_aChildren[1]->m_aNodeValue);
         }                   // [Name]
         else
         {
-            m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
+            m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam, false );
             rString.append(m_aChildren[1]->m_aNodeValue);
             rString.append(m_aChildren[2]->m_aNodeValue);
         }
@@ -381,6 +438,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
 
     // table refs
     case table_ref:
+        bSimple=false;
         if (  ( nCount == 2 ) || ( nCount == 3 ) || ( nCount == 5 ) )
         {
             impl_parseTableRangeNodeToString_throw( rString, rParam );
@@ -390,16 +448,18 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
 
     // table name - might be a query name
     case table_name:
+        bSimple=false;
         bHandled = impl_parseTableNameNodeToString_throw( rString, rParam );
         break;
 
     case as_clause:
+        bSimple=false;
         assert(nCount == 0 || nCount == 2);
         if (nCount == 2)
         {
             if ( rParam.aMetaData.generateASBeforeCorrelationName() )
                 rString.append(OUString(" AS "));
-            m_aChildren[1]->impl_parseNodeToString_throw( rString, rParam );
+            m_aChildren[1]->impl_parseNodeToString_throw( rString, rParam, false );
         }
         bHandled = true;
         break;
@@ -413,7 +473,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
         // Depending on whether international is given, LIKE is treated differently
         // international: *, ? are placeholders
         // else SQL92 conform: %, _
-        impl_parseLikeNodeToString_throw( rString, rParam );
+        impl_parseLikeNodeToString_throw( rString, rParam, bSimple );
         bHandled = true;
         break;
 
@@ -424,13 +484,14 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
     case length_exp:
     case char_value_fct:
     {
+        bSimple=false;
         if (!addDateValue(rString, rParam))
         {
             // Do not quote function name
             SQLParseNodeParameter aNewParam(rParam);
             aNewParam.bQuote = ( SQL_ISRULE(this,length_exp)    || SQL_ISRULE(this,char_value_fct) );
 
-            m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam );
+            m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam, false );
             aNewParam.bQuote = rParam.bQuote;
             //aNewParam.bPredicate = sal_False; // disable [ ] around names // look at i73215
             OUStringBuffer aStringPara;
@@ -439,7 +500,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                 const OSQLParseNode * pSubTree = m_aChildren[i];
                 if (pSubTree)
                 {
-                    pSubTree->impl_parseNodeToString_throw( aStringPara, aNewParam );
+                    pSubTree->impl_parseNodeToString_throw( aStringPara, aNewParam, false );
 
                     // In the comma lists, put commas in-between all subtrees
                     if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i < (nCount - 1)))
@@ -452,6 +513,15 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
         }
         bHandled = true;
     }
+    case odbc_call_spec:
+    case subquery:
+    case term:
+    case factor:
+    case window_function:
+    case cast_spec:
+    case num_value_exp:
+        bSimple = false;
+
     break;
     default:
         break;
@@ -479,68 +549,16 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             // simplify criterion display by removing:
             //   "currentFieldName"
             //   "currentFieldName" =
-            // but only at the very beginning of the criterion
-            // (not embedded deep in the expression).
-            // TODO: replace "beginning of criterion" by "in simple expression",
-            // that is anything made of:
+            // but only in simple expressions.
+            // This means anything that is made of:
+            // (see the rules conditionalised by inPredicateCheck() in sqlbison.y).
             //  - parentheses
             //  - logical operators (and, or, not)
             //  - comparison operators (IS, =, >, <, BETWEEN, LIKE, ...)
-            //    (see where the parser calls inPredicateCheck for a full list)
             // but *not* e.g. in function arguments
-            if (rParam.bPredicate && rString.isEmpty() && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
+            if (bSimple && rParam.bPredicate && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
             {
-                bool bFilter = false;
-                // retrieve the field's name & table range
-                OUString aFieldName;
-                try
-                {
-                    sal_Int32 nNamePropertyId = PROPERTY_ID_NAME;
-                    if ( rParam.xField->getPropertySetInfo()->hasPropertyByName( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_REALNAME ) ) )
-                        nNamePropertyId = PROPERTY_ID_REALNAME;
-                    rParam.xField->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( nNamePropertyId ) ) >>= aFieldName;
-                }
-                catch ( Exception& )
-                {
-                }
-
-                if(pSubTree->count())
-                {
-                    const OSQLParseNode* pCol = pSubTree->m_aChildren[pSubTree->count()-1];
-                    if (SQL_ISRULE(pCol,column_val))
-                    {
-                        assert(pCol->count() == 1);
-                        pCol = pCol->getChild(0);
-                    }
-                    const OSQLParseNode* pTable(NULL);
-                    switch (pSubTree->count())
-                    {
-                    case 1:
-                        break;
-                    case 3:
-                        pTable = pSubTree->m_aChildren[0];
-                        break;
-                    case 5:
-                    case 7:
-                        SAL_WARN("connectivity.parse", "SQL: catalog and/or schema in column_ref in predicate");
-                        break;
-                    default:
-                        SAL_WARN("connectivity.parse", "impl_parseNodeToString_throw: SQL grammar changed; column_ref has " << pSubTree->count() << " children");
-                        assert(false);
-                        break;
-                    }
-                    // TODO: not all DBMS match column names case-insensitively...
-                    // see XDatabaseMetaData::supportsMixedCaseIdentifiers()
-                    // and XDatabaseMetaData::supportsMixedCaseQuotedIdentifiers()
-                    if  (   // table name matches (or no table name)?
-                            ( !pTable || pTable->getTokenValue().equalsIgnoreAsciiCase(rParam.sPredicateTableAlias) )
-                         && // column name matches?
-                            pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
-                        )
-                        bFilter = true;
-                }
-
-                if (bFilter)
+                if (columnMatchP(pSubTree, rParam))
                 {
                     // skip field
                     ++i;
@@ -558,7 +576,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                 }
                 else
                 {
-                    pSubTree->impl_parseNodeToString_throw( rString, aNewParam );
+                    pSubTree->impl_parseNodeToString_throw( rString, aNewParam, bSimple );
                     ++i;
 
                     // In the comma lists, put commas in-between all subtrees
@@ -568,7 +586,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             }
             else
             {
-                pSubTree->impl_parseNodeToString_throw( rString, aNewParam );
+                pSubTree->impl_parseNodeToString_throw( rString, aNewParam, bSimple );
                 ++i;
 
                 // In the comma lists, put commas in-between all subtrees
@@ -579,6 +597,36 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                     else
                         rString.appendAscii(",");
                 }
+            }
+            // The right hand-side of these operators is not simple
+            switch ( getKnownRuleID() )
+            {
+            case general_set_fct:
+            case set_fct_spec:
+            case position_exp:
+            case extract_exp:
+            case length_exp:
+            case char_value_fct:
+            case odbc_call_spec:
+            case subquery:
+            case comparison_predicate:
+            case between_predicate:
+            case like_predicate:
+            case test_for_null:
+            case in_predicate:
+            case existence_test:
+            case unique_test:
+            case all_or_any_predicate:
+            case join_condition:
+            case boolean_test:
+            case comparison_predicate_part_2:
+            case parenthesized_boolean_value_expression:
+            case other_like_predicate_part_2:
+            case between_predicate_part_2:
+                bSimple=false;
+                break;
+            default:
+                break;
             }
         }
     }
@@ -644,7 +692,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( OUStringBuffer& rStri
             {
                 // parse the sub-select to SDBC level, too
                 OUStringBuffer sSubSelect;
-                pSubQueryNode->impl_parseNodeToString_throw( sSubSelect, rParam );
+                pSubQueryNode->impl_parseNodeToString_throw( sSubSelect, rParam, false );
                 if ( !sSubSelect.isEmpty() )
                     sCommand = sSubSelect.makeStringAndClear();
             }
@@ -690,11 +738,11 @@ void OSQLParseNode::impl_parseTableRangeNodeToString_throw(OUStringBuffer& rStri
 
     // rString += OUString(" ");
     ::std::for_each(m_aChildren.begin(),m_aChildren.end(),
-        boost::bind( &OSQLParseNode::impl_parseNodeToString_throw, _1, boost::ref( rString ), boost::cref( rParam ) ));
+        boost::bind( &OSQLParseNode::impl_parseNodeToString_throw, _1, boost::ref( rString ), boost::cref( rParam ), false ));
 }
 
 //-----------------------------------------------------------------------------
-void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const
+void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam, bool bSimple ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseLikeNodeToString_throw" );
     OSL_ENSURE(count() == 2,"count != 2: Prepare for GPF");
@@ -705,38 +753,12 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
     SQLParseNodeParameter aNewParam(rParam);
     //aNewParam.bQuote = sal_True; // why setting this to true? @see http://www.openoffice.org/issues/show_bug.cgi?id=75557
 
-    // if there is a field given we don't display the fieldname, if there are any
-    sal_Bool bAddName = sal_True;
-    if (rParam.xField.is())
-    {
-        // retrieve the fields name
-        OUString aFieldName;
-        try
-        {
-            // retrieve the fields name
-            OUString aString;
-            rParam.xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aString;
-            aFieldName = aString.getStr();
-        }
-        catch ( Exception& )
-        {
-            OSL_FAIL( "OSQLParseNode::impl_parseLikeNodeToString_throw Exception occurred!" );
-        }
-        if ( !m_aChildren[0]->isLeaf() )
-        {
-            const OSQLParseNode* pCol = m_aChildren[0]->getChild(m_aChildren[0]->count()-1);
-            if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)) ||
-                pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName) )
-                bAddName = sal_False;
-        }
-    }
-
-    if (bAddName)
-        m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam );
+    if (bSimple && !columnMatchP(m_aChildren[0], rParam))
+        m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam, bSimple );
 
     const OSQLParseNode* pPart2 = m_aChildren[1];
-    pPart2->getChild(0)->impl_parseNodeToString_throw( rString, aNewParam );
-    pPart2->getChild(1)->impl_parseNodeToString_throw( rString, aNewParam );
+    pPart2->getChild(0)->impl_parseNodeToString_throw( rString, aNewParam, false );
+    pPart2->getChild(1)->impl_parseNodeToString_throw( rString, aNewParam, false );
     pParaNode = pPart2->getChild(2);
     pEscNode  = pPart2->getChild(3);
 
@@ -747,9 +769,9 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
         rString.append(SetQuotation(aStr,OUString("\'"),OUString("\'\'")));
     }
     else
-        pParaNode->impl_parseNodeToString_throw( rString, aNewParam );
+        pParaNode->impl_parseNodeToString_throw( rString, aNewParam, false );
 
-    pEscNode->impl_parseNodeToString_throw( rString, aNewParam );
+    pEscNode->impl_parseNodeToString_throw( rString, aNewParam, false );
 }
 
 
@@ -1441,7 +1463,8 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::character_string_type, "character_string_type" },
             { OSQLParseNode::other_like_predicate_part_2, "other_like_predicate_part_2" },
             { OSQLParseNode::between_predicate_part_2, "between_predicate_part_2" },
-            { OSQLParseNode::cast_spec, "cast_spec" }
+            { OSQLParseNode::cast_spec, "cast_spec" },
+            { OSQLParseNode::window_function, "window_function" }
         };
         const size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
         // added a new rule? Adjust this map!
