@@ -81,12 +81,18 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/animations/AnimateColor.hpp>
+#include <com/sun/star/animations/AnimateMotion.hpp>
+#include <com/sun/star/animations/AnimateSet.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/AnimationRestart.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
+#include <com/sun/star/animations/Audio.hpp>
+#include <com/sun/star/animations/Command.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
+#include <com/sun/star/animations/IterateContainer.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/animations/Timing.hpp>
@@ -588,6 +594,7 @@
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/DescriptionGenerator.hxx>
 #include <svx/ShapeTypeHandler.hxx>
+#include <svx/SpellDialogChildWindow.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/algitem.hxx>
