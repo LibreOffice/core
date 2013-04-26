@@ -78,6 +78,7 @@
 #define SW_STR_READONLY             (RC_GLOBALS_BEGIN + 46)
 
 #define STR_READONLY_PATH           (RC_GLOBALS_BEGIN + 47)
+#define IL_SECTION_BITMAPS          (RC_GLOBALS_BEGIN + 48)
 
 // DIALOGS -----------------------------------------------------------
 

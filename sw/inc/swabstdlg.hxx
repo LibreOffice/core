@@ -443,8 +443,7 @@ public:
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
                                                 sal_Bool bGlobal = sal_False) = 0; //add for SwMultiTOXTabDialog
-    virtual AbstractEditRegionDlg*      CreateEditRegionDlg( int nResId,
-                                                Window* pParent, SwWrtShell& rWrtSh ) = 0; //add for SwEditRegionDlg
+    virtual AbstractEditRegionDlg*      CreateEditRegionDlg(Window* pParent, SwWrtShell& rWrtSh) = 0; //add for SwEditRegionDlg
     virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog( int nResId,
                                                     Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh ) = 0; //add for SwInsertSectionTabDialog
     virtual AbstractMarkFloatDlg*       CreateIndexMarkFloatDlg(

@@ -298,7 +298,6 @@
 #define HID_LINGU_SPELLING_DLG                                  "SW_HID_LINGU_SPELLING_DLG"
 #define HID_LINGU_AUTOCORR                                      "SW_HID_LINGU_AUTOCORR"
 #define HID_LINGU_REPLACE                                       "SW_HID_LINGU_REPLACE"
-#define HID_REGION_TREE                                         "SW_HID_REGION_TREE"
 #define HID_LINGU_WORD_LANGUAGE                                 "SW_HID_LINGU_WORD_LANGUAGE"
 #define HID_LINGU_PARA_LANGUAGE                                 "SW_HID_LINGU_PARA_LANGUAGE"
 #define HID_MD_GLOS_DEFINE_TEXT                                 "SW_HID_MD_GLOS_DEFINE_TEXT"

@@ -223,8 +223,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractEditRegionDlg* pEditRegionDlg = pFact->CreateEditRegionDlg( MD_EDIT_REGION,
-                                                        pParentWin, rWrtShell);
+                AbstractEditRegionDlg* pEditRegionDlg = pFact->CreateEditRegionDlg(pParentWin, rWrtShell);
                 OSL_ENSURE(pEditRegionDlg, "Dialogdiet fail!");
                 if(pItem && pItem->ISA(SfxStringItem))
                 {

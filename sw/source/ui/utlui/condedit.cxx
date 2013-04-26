@@ -22,16 +22,30 @@
 
 #include <condedit.hxx>
 #include <svx/dbaexchange.hxx>
+#include <vcl/builder.hxx>
+
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
 
-// STATIC DATA
-
-ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
-    : Edit( pParent, rResId ),
-    DropTargetHelper( this ),
-    bBrackets( true ), bEnableDrop( true )
+ConditionEdit::ConditionEdit(Window* pParent, const ResId& rResId)
+    : Edit(pParent, rResId)
+    , DropTargetHelper(this)
+    , bBrackets(true)
+    , bEnableDrop(true)
 {
+}
+
+ConditionEdit::ConditionEdit(Window* pParent, WinBits nStyle)
+    : Edit(pParent, nStyle)
+    , DropTargetHelper(this)
+    , bBrackets(true)
+    , bEnableDrop(true)
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeConditionEdit(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ConditionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
 }
 
 // Drop possible, respectively format known?

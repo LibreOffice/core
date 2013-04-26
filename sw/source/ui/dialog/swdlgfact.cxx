@@ -1259,21 +1259,10 @@ AbstractMultiTOXTabDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialo
     return 0;
 }
 
-AbstractEditRegionDlg * SwAbstractDialogFactory_Impl::CreateEditRegionDlg( int nResId,
-                                                Window* pParent, SwWrtShell& rWrtSh ) //add for SwEditRegionDlg
+AbstractEditRegionDlg * SwAbstractDialogFactory_Impl::CreateEditRegionDlg(Window* pParent, SwWrtShell& rWrtSh) //add for SwEditRegionDlg
 {
-    SwEditRegionDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case MD_EDIT_REGION :
-            pDlg = new SwEditRegionDlg( pParent, rWrtSh );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractEditRegionDlg_Impl( pDlg );
-    return 0;
+    SwEditRegionDlg* pDlg = new SwEditRegionDlg( pParent, rWrtSh );
+    return new AbstractEditRegionDlg_Impl( pDlg );
 }
 
 AbstractInsertSectionTabDialog * SwAbstractDialogFactory_Impl::CreateInsertSectionTabDialog( int nResId,

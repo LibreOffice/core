@@ -318,104 +318,88 @@ String SectRepr::GetSubRegion() const
  Description: dialog edit regions
 ----------------------------------------------------------------------------*/
 SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
-    : SfxModalDialog( pParent, SW_RES(MD_EDIT_REGION) ),
-    aNameFL             ( this, SW_RES( FL_NAME ) ),
-    aCurName            ( this, SW_RES( ED_RANAME ) ),
-    aTree               ( this, SW_RES( TLB_SECTION )),
-    aLinkFL             ( this, SW_RES( FL_LINK ) ),
-    aFileCB             ( this, SW_RES( CB_FILE ) ),
-    aDDECB              ( this, SW_RES( CB_DDE ) ) ,
-    aFileNameFT         ( this, SW_RES( FT_FILE ) ) ,
-    aDDECommandFT       ( this, SW_RES( FT_DDE ) ) ,
-    aFileNameED         ( this, SW_RES( ED_FILE ) ),
-    aFilePB             ( this, SW_RES( PB_FILE ) ),
-    aSubRegionFT        ( this, SW_RES( FT_SUBREG ) ) ,
-    aSubRegionED        ( this, SW_RES( LB_SUBREG ) ) ,
-    bSubRegionsFilled( false ),
-
-    aProtectFL          ( this, SW_RES( FL_PROTECT ) ),
-    aProtectCB          ( this, SW_RES( CB_PROTECT ) ),
-    aPasswdCB           ( this, SW_RES( CB_PASSWD ) ),
-    aPasswdPB           ( this, SW_RES( PB_PASSWD ) ),
-
-    aHideFL             ( this, SW_RES( FL_HIDE ) ),
-    aHideCB             ( this, SW_RES( CB_HIDE ) ),
-    aConditionFT        ( this, SW_RES( FT_CONDITION ) ),
-    aConditionED        ( this, SW_RES( ED_CONDITION ) ),
-
-    // edit in readonly sections
-    aPropertiesFL       ( this, SW_RES( FL_PROPERTIES ) ),
-    aEditInReadonlyCB   ( this, SW_RES( CB_EDIT_IN_READONLY ) ),
-
-    aOK                 ( this, SW_RES( PB_OK ) ),
-    aCancel             ( this, SW_RES( PB_CANCEL ) ),
-    aOptionsPB          ( this, SW_RES( PB_OPTIONS ) ),
-    aDismiss            ( this, SW_RES( CB_DISMISS ) ),
-    aHelp               ( this, SW_RES( PB_HELP ) ),
-
-    aImageIL            (       SW_RES(IL_BITMAPS)),
-
-    rSh( rWrtSh ),
-    m_pDocInserter        ( NULL ),
-    m_pOldDefDlgParent    ( NULL ),
-    bDontCheckPasswd    ( sal_True)
+    : SfxModalDialog(pParent, "EditSectionDialog",
+        "modules/swriter/ui/editsectiondialog.ui")
+    , m_bSubRegionsFilled(false)
+    , aImageIL(SW_RES(IL_SECTION_BITMAPS))
+    , rSh(rWrtSh)
+    , m_pDocInserter(NULL)
+    , m_pOldDefDlgParent(NULL)
+    , bDontCheckPasswd(true)
 {
-    FreeResource();
+    get(m_pCurName, "curname");
+    get(m_pTree, "tree");
+    m_pTree->set_height_request(m_pTree->GetTextHeight() * 16);
+    get(m_pFileCB, "link");
+    m_pFileCB->SetState(STATE_NOCHECK);
+    get(m_pDDECB, "dde");
+    get(m_pDDEFrame, "ddedepend");
+    get(m_pFileNameFT, "filenameft");
+    get(m_pDDECommandFT, "ddeft");
+    get(m_pFileNameED, "filename");
+    get(m_pFilePB, "file");
+    get(m_pSubRegionFT, "sectionft");
+    get(m_pSubRegionED, "section");
+    m_pSubRegionED->SetStyle(m_pSubRegionED->GetStyle() | WB_SORT);
+    get(m_pProtectCB, "protect");
+    m_pProtectCB->SetState(STATE_NOCHECK);
+    get(m_pPasswdCB, "withpassword");
+    get(m_pPasswdPB, "password");
+    get(m_pHideCB, "hide");
+    m_pHideCB->SetState(STATE_NOCHECK);
+    get(m_pConditionFT, "conditionft");
+    get(m_pConditionED, "condition");
+    // edit in readonly sections
+    get(m_pEditInReadonlyCB, "editinro");
+    m_pEditInReadonlyCB->SetState(STATE_NOCHECK);
+    get(m_pOptionsPB, "options");
+    get(m_pDismiss, "remove");
+    get(m_pOK, "ok");
 
     bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
 
-    aTree.SetSelectHdl      ( LINK( this, SwEditRegionDlg, GetFirstEntryHdl));
-    aTree.SetDeselectHdl    ( LINK( this, SwEditRegionDlg, DeselectHdl));
-    aCurName.SetModifyHdl   ( LINK( this, SwEditRegionDlg, NameEditHdl));
-    aConditionED.SetModifyHdl( LINK( this, SwEditRegionDlg, ConditionEditHdl));
-    aOK.SetClickHdl         ( LINK( this, SwEditRegionDlg, OkHdl));
-    aPasswdCB.SetClickHdl   ( LINK( this, SwEditRegionDlg, ChangePasswdHdl));
-    aPasswdPB.SetClickHdl   ( LINK( this, SwEditRegionDlg, ChangePasswdHdl));
-    aHideCB.SetClickHdl     ( LINK( this, SwEditRegionDlg, ChangeHideHdl));
+    m_pTree->SetSelectHdl(LINK(this, SwEditRegionDlg, GetFirstEntryHdl));
+    m_pTree->SetDeselectHdl(LINK(this, SwEditRegionDlg, DeselectHdl));
+    m_pCurName->SetModifyHdl(LINK(this, SwEditRegionDlg, NameEditHdl));
+    m_pConditionED->SetModifyHdl( LINK( this, SwEditRegionDlg, ConditionEditHdl));
+    m_pOK->SetClickHdl         ( LINK( this, SwEditRegionDlg, OkHdl));
+    m_pPasswdCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangePasswdHdl));
+    m_pPasswdPB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangePasswdHdl));
+    m_pHideCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangeHideHdl));
     // edit in readonly sections
-    aEditInReadonlyCB.SetClickHdl ( LINK( this, SwEditRegionDlg, ChangeEditInReadonlyHdl));
+    m_pEditInReadonlyCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangeEditInReadonlyHdl));
 
-    aOptionsPB.Show();
-    aOptionsPB.SetClickHdl  ( LINK( this, SwEditRegionDlg, OptionsHdl));
-    aProtectCB.SetClickHdl  ( LINK( this, SwEditRegionDlg, ChangeProtectHdl));
-    aDismiss.SetClickHdl    ( LINK( this, SwEditRegionDlg, ChangeDismissHdl));
-    aFileCB.SetClickHdl     ( LINK( this, SwEditRegionDlg, UseFileHdl ));
-    aFilePB.SetClickHdl     ( LINK( this, SwEditRegionDlg, FileSearchHdl ));
-    aFileNameED.SetModifyHdl( LINK( this, SwEditRegionDlg, FileNameHdl ));
-    aSubRegionED.SetModifyHdl( LINK( this, SwEditRegionDlg, FileNameHdl ));
-    aSubRegionED.AddEventListener( LINK( this, SwEditRegionDlg, SubRegionEventHdl ));
-    aSubRegionED.EnableAutocomplete( sal_True, sal_True );
+    m_pOptionsPB->SetClickHdl(LINK(this, SwEditRegionDlg, OptionsHdl));
+    m_pProtectCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangeProtectHdl));
+    m_pDismiss->SetClickHdl    ( LINK( this, SwEditRegionDlg, ChangeDismissHdl));
+    m_pFileCB->SetClickHdl(LINK(this, SwEditRegionDlg, UseFileHdl));
+    m_pFilePB->SetClickHdl(LINK(this, SwEditRegionDlg, FileSearchHdl));
+    m_pFileNameED->SetModifyHdl(LINK(this, SwEditRegionDlg, FileNameHdl));
+    m_pSubRegionED->SetModifyHdl(LINK(this, SwEditRegionDlg, FileNameHdl));
+    m_pSubRegionED->AddEventListener(LINK(this, SwEditRegionDlg, SubRegionEventHdl));
+    m_pSubRegionED->EnableAutocomplete(true, true);
 
-    aTree.SetHelpId(HID_REGION_TREE);
-    aTree.SetSelectionMode( MULTIPLE_SELECTION );
-    aTree.SetStyle(aTree.GetStyle()|WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
-    aTree.SetSpaceBetweenEntries(0);
+    m_pTree->SetSelectionMode( MULTIPLE_SELECTION );
+    m_pTree->SetStyle(m_pTree->GetStyle()|WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
+    m_pTree->SetSpaceBetweenEntries(0);
 
     if(bWeb)
     {
-        aConditionFT         .Hide();
-        aConditionED    .Hide();
-        aPasswdCB       .Hide();
-        aHideCB         .Hide();
-
-        aDDECB              .Hide();
-        aDDECommandFT       .Hide();
+        m_pDDECB->Hide();
+        get<VclContainer>("hideframe")->Hide();
+        m_pPasswdCB->Hide();
     }
 
-    aDDECB.SetClickHdl      ( LINK( this, SwEditRegionDlg, DDEHdl ));
+    m_pDDECB->SetClickHdl(LINK(this, SwEditRegionDlg, DDEHdl));
 
     pCurrSect = rSh.GetCurrSection();
     RecurseList( 0, 0 );
     // if the cursor is not in a region
     // the first one will always be selected
-    if( !aTree.FirstSelected() && aTree.First() )
-        aTree.Select( aTree.First() );
-    aTree.Show();
+    if( !m_pTree->FirstSelected() && m_pTree->First() )
+        m_pTree->Select( m_pTree->First() );
+    m_pTree->Show();
     bDontCheckPasswd = sal_False;
-
-    aPasswdPB.SetAccessibleRelationMemberOf(&aProtectFL);
-    aPasswdPB.SetAccessibleRelationLabeledBy(&aPasswdCB);
-    aSubRegionED.SetAccessibleName(aSubRegionFT.GetText());
 }
 
 sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
@@ -423,7 +407,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
     if(bDontCheckPasswd)
         return sal_True;
     sal_Bool bRet = sal_True;
-    SvTreeListEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
@@ -449,7 +433,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
                 }
             }
         }
-        pEntry = aTree.NextSelected(pEntry);
+        pEntry = m_pTree->NextSelected(pEntry);
     }
     if(!bRet && pBox)
     {
@@ -485,13 +469,13 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
                 SectRepr* pSectRepr = new SectRepr( n,
                                             *(pSect=pFmt->GetSection()) );
                 Image aImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden());
-                pEntry = aTree.InsertEntry(pSect->GetSectionName(), aImg, aImg);
+                pEntry = m_pTree->InsertEntry(pSect->GetSectionName(), aImg, aImg);
                 pEntry->SetUserData(pSectRepr);
                 RecurseList( pFmt, pEntry );
                 if (pEntry->HasChildren())
-                    aTree.Expand(pEntry);
+                    m_pTree->Expand(pEntry);
                 if (pCurrSect==pSect)
-                    aTree.Select(pEntry);
+                    m_pTree->Select(pEntry);
             }
         }
     }
@@ -515,12 +499,12 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
                                     FindArrPos( pSect->GetFmt() ), *pSect );
                     Image aImage = BuildBitmap( pSect->IsProtect(),
                                             pSect->IsHidden());
-                    pNEntry = aTree.InsertEntry(
+                    pNEntry = m_pTree->InsertEntry(
                         pSect->GetSectionName(), aImage, aImage, pEntry);
                     pNEntry->SetUserData(pSectRepr);
                     RecurseList( aTmpArr[n]->GetFmt(), pNEntry );
                     if( pNEntry->HasChildren())
-                        aTree.Expand(pNEntry);
+                        m_pTree->Expand(pNEntry);
                     if (pCurrSect==pSect)
                         pSelEntry = pNEntry;
                 }
@@ -529,8 +513,8 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
     }
     if(0 != pSelEntry)
     {
-        aTree.MakeVisible(pSelEntry);
-        aTree.Select(pSelEntry);
+        m_pTree->MakeVisible(pSelEntry);
+        m_pTree->Select(pSelEntry);
     }
 }
 
@@ -547,11 +531,11 @@ sal_uInt16 SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
 
 SwEditRegionDlg::~SwEditRegionDlg( )
 {
-    SvTreeListEntry* pEntry = aTree.First();
+    SvTreeListEntry* pEntry = m_pTree->First();
     while( pEntry )
     {
         delete (SectRepr*)pEntry->GetUserData();
-        pEntry = aTree.Next( pEntry );
+        pEntry = m_pTree->Next( pEntry );
     }
 
     delete m_pDocInserter;
@@ -559,19 +543,19 @@ SwEditRegionDlg::~SwEditRegionDlg( )
 
 void    SwEditRegionDlg::SelectSection(const String& rSectionName)
 {
-    SvTreeListEntry* pEntry = aTree.First();
+    SvTreeListEntry* pEntry = m_pTree->First();
     while(pEntry)
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
         if (pRepr->GetSectionData().GetSectionName() == rSectionName)
             break;
-        pEntry = aTree.Next(pEntry);
+        pEntry = m_pTree->Next(pEntry);
     }
     if(pEntry)
     {
-        aTree.SelectAll( sal_False);
-        aTree.Select(pEntry);
-        aTree.MakeVisible(pEntry);
+        m_pTree->SelectAll(false);
+        m_pTree->Select(pEntry);
+        m_pTree->MakeVisible(pEntry);
     }
 }
 
@@ -582,23 +566,23 @@ void    SwEditRegionDlg::SelectSection(const String& rSectionName)
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
 {
-    bDontCheckPasswd = sal_True;
+    bDontCheckPasswd = true;
     SvTreeListEntry* pEntry=pBox->FirstSelected();
-    aHideCB     .Enable(sal_True);
+    m_pHideCB->Enable(true);
     // edit in readonly sections
-    aEditInReadonlyCB.Enable(sal_True);
+    m_pEditInReadonlyCB->Enable(true);
 
-    aProtectCB  .Enable(sal_True);
-    aFileCB     .Enable(sal_True);
+    m_pProtectCB->Enable(true);
+    m_pFileCB->Enable(true);
     ::com::sun::star::uno::Sequence <sal_Int8> aCurPasswd;
     if( 1 < pBox->GetSelectionCount() )
     {
-        aHideCB.EnableTriState( sal_True );
-        aProtectCB.EnableTriState( sal_True );
+        m_pHideCB->EnableTriState(true);
+        m_pProtectCB->EnableTriState(true);
         // edit in readonly sections
-        aEditInReadonlyCB.EnableTriState ( sal_True );
+        m_pEditInReadonlyCB->EnableTriState(true);
 
-        aFileCB.EnableTriState( sal_True );
+        m_pFileCB->EnableTriState(true);
 
         bool bHiddenValid       = true;
         bool bProtectValid      = true;
@@ -649,37 +633,32 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             bFirst = false;
         }
 
-        aHideCB.SetState( !bHiddenValid ? STATE_DONTKNOW :
+        m_pHideCB->SetState(!bHiddenValid ? STATE_DONTKNOW :
                     bHidden ? STATE_CHECK : STATE_NOCHECK);
-        aProtectCB.SetState( !bProtectValid ? STATE_DONTKNOW :
+        m_pProtectCB->SetState(!bProtectValid ? STATE_DONTKNOW :
                     bProtect ? STATE_CHECK : STATE_NOCHECK);
         // edit in readonly sections
-        aEditInReadonlyCB.SetState( !bEditInReadonlyValid ? STATE_DONTKNOW :
+        m_pEditInReadonlyCB->SetState(!bEditInReadonlyValid ? STATE_DONTKNOW :
                     bEditInReadonly ? STATE_CHECK : STATE_NOCHECK);
 
-        aFileCB.SetState(!bFileValid ? STATE_DONTKNOW :
+        m_pFileCB->SetState(!bFileValid ? STATE_DONTKNOW :
                     bFile ? STATE_CHECK : STATE_NOCHECK);
 
-        if(bConditionValid)
-            aConditionED.SetText(sCondition);
+        if (bConditionValid)
+            m_pConditionED->SetText(sCondition);
         else
         {
-            aConditionFT.Enable(sal_False);
-            aConditionED.Enable(sal_False);
+            m_pConditionFT->Enable(false);
+            m_pConditionED->Enable(false);
         }
 
-        aFilePB.Enable(sal_False);
-        aFileNameFT .Enable(sal_False);
-        aFileNameED .Enable(sal_False);
-        aSubRegionFT.Enable(sal_False);
-        aSubRegionED.Enable(sal_False);
-        aCurName    .Enable(sal_False);
-        aOptionsPB  .Enable(sal_False);
-        aDDECB              .Enable(sal_False);
-        aDDECommandFT       .Enable(sal_False);
-        sal_Bool bPasswdEnabled = aProtectCB.GetState() == STATE_CHECK;
-        aPasswdCB.Enable(bPasswdEnabled);
-        aPasswdPB.Enable(bPasswdEnabled);
+        m_pCurName->Enable(false);
+        m_pDDECB->Enable(false);
+        m_pDDEFrame->Enable(false);
+        m_pOptionsPB->Enable(false);
+        bool bPasswdEnabled = m_pProtectCB->GetState() == STATE_CHECK;
+        m_pPasswdCB->Enable(bPasswdEnabled);
+        m_pPasswdPB->Enable(bPasswdEnabled);
         if(!bPasswdValid)
         {
             pEntry = pBox->FirstSelected();
@@ -689,59 +668,59 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             return 0;
         }
         else
-            aPasswdCB.Check(aCurPasswd.getLength() > 0);
+            m_pPasswdCB->Check(aCurPasswd.getLength() > 0);
     }
     else if (pEntry )
     {
-        aCurName    .Enable(sal_True);
-        aOptionsPB  .Enable(sal_True);
+        m_pCurName->Enable(sal_True);
+        m_pOptionsPB->Enable(true);
         SectRepr* pRepr=(SectRepr*) pEntry->GetUserData();
         SwSectionData const& rData( pRepr->GetSectionData() );
-        aConditionED.SetText(rData.GetCondition());
-        aHideCB.Enable();
-        aHideCB.SetState((rData.IsHidden()) ? STATE_CHECK : STATE_NOCHECK);
-        sal_Bool bHide = STATE_CHECK == aHideCB.GetState();
-        aConditionED.Enable(bHide);
-        aConditionFT.Enable(bHide);
-        aPasswdCB.Check(rData.GetPassword().getLength() > 0);
+        m_pConditionED->SetText(rData.GetCondition());
+        m_pHideCB->Enable();
+        m_pHideCB->SetState((rData.IsHidden()) ? STATE_CHECK : STATE_NOCHECK);
+        bool bHide = STATE_CHECK == m_pHideCB->GetState();
+        m_pConditionED->Enable(bHide);
+        m_pConditionFT->Enable(bHide);
+        m_pPasswdCB->Check(rData.GetPassword().getLength() > 0);
 
-        aOK.Enable();
-        aPasswdCB.Enable();
-        aCurName.SetText(pBox->GetEntryText(pEntry));
-        aCurName.Enable();
-        aDismiss.Enable();
+        m_pOK->Enable();
+        m_pPasswdCB->Enable();
+        m_pCurName->SetText(pBox->GetEntryText(pEntry));
+        m_pCurName->Enable();
+        m_pDismiss->Enable();
         String aFile = pRepr->GetFile();
         String sSub = pRepr->GetSubRegion();
-        bSubRegionsFilled = false;
-        aSubRegionED.Clear();
+        m_bSubRegionsFilled = false;
+        m_pSubRegionED->Clear();
         if(aFile.Len()||sSub.Len())
         {
-            aFileCB.Check(sal_True);
-            aFileNameED.SetText(aFile);
-            aSubRegionED.SetText(sSub);
-            aDDECB.Check(rData.GetType() == DDE_LINK_SECTION);
+            m_pFileCB->Check(true);
+            m_pFileNameED->SetText(aFile);
+            m_pSubRegionED->SetText(sSub);
+            m_pDDECB->Check(rData.GetType() == DDE_LINK_SECTION);
         }
         else
         {
-            aFileCB.Check(sal_False);
-            aFileNameED.SetText(aFile);
-            aDDECB.Enable(sal_False);
-            aDDECB.Check(sal_False);
+            m_pFileCB->Check(false);
+            m_pFileNameED->SetText(aFile);
+            m_pDDECB->Enable(false);
+            m_pDDECB->Check(false);
         }
-        UseFileHdl(&aFileCB);
-        DDEHdl( &aDDECB );
-        aProtectCB.SetState((rData.IsProtectFlag())
+        UseFileHdl(m_pFileCB);
+        DDEHdl(m_pDDECB);
+        m_pProtectCB->SetState((rData.IsProtectFlag())
                 ? STATE_CHECK : STATE_NOCHECK);
-        aProtectCB.Enable();
+        m_pProtectCB->Enable();
 
         // edit in readonly sections
-        aEditInReadonlyCB.SetState((rData.IsEditInReadonlyFlag())
+        m_pEditInReadonlyCB->SetState((rData.IsEditInReadonlyFlag())
                 ? STATE_CHECK : STATE_NOCHECK);
-        aEditInReadonlyCB.Enable();
+        m_pEditInReadonlyCB->Enable();
 
-        sal_Bool bPasswdEnabled = aProtectCB.IsChecked();
-        aPasswdCB.Enable(bPasswdEnabled);
-        aPasswdPB.Enable(bPasswdEnabled);
+        bool bPasswdEnabled = m_pProtectCB->IsChecked();
+        m_pPasswdCB->Enable(bPasswdEnabled);
+        m_pPasswdPB->Enable(bPasswdEnabled);
     }
     bDontCheckPasswd = sal_False;
     return 0;
@@ -751,27 +730,21 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
 {
     if( !pBox->GetSelectionCount() )
     {
-        aHideCB     .Enable(sal_False);
-        aProtectCB  .Enable(sal_False);
+        m_pHideCB->Enable(false);
+        m_pProtectCB->Enable(false);
         // edit in readonly sections
-        aEditInReadonlyCB.Enable(sal_False);
+        m_pEditInReadonlyCB->Enable(false);
 
-        aPasswdCB   .Enable(sal_False);
-        aPasswdCB   .Enable(sal_False);
-        aConditionFT     .Enable(sal_False);
-        aConditionED.Enable(sal_False);
-        aFileCB     .Enable(sal_False);
-        aFilePB     .Enable(sal_False);
-        aFileNameFT  .Enable(sal_False);
-        aFileNameED  .Enable(sal_False);
-        aSubRegionFT .Enable(sal_False);
-        aSubRegionED .Enable(sal_False);
-        aCurName     .Enable(sal_False);
-        aDDECB              .Enable(sal_False);
-        aDDECommandFT       .Enable(sal_False);
+        m_pPasswdCB->Enable(false);
+        m_pConditionFT->Enable(false);
+        m_pConditionED->Enable(false);
+        m_pFileCB->Enable(sal_False);
+        m_pDDEFrame->Enable(false);
+        m_pDDECB->Enable(false);
+        m_pCurName->Enable(false);
 
-        UseFileHdl(&aFileCB);
-        DDEHdl( &aDDECB );
+        UseFileHdl(m_pFileCB);
+        DDEHdl(m_pDDECB);
     }
     return 0;
 }
@@ -795,7 +768,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
     rSh.StartAllAction();
     rSh.StartUndo();
     rSh.ResetSelect( 0,sal_False );
-    SvTreeListEntry* pEntry = aTree.First();
+    SvTreeListEntry* pEntry = m_pTree->First();
 
     while( pEntry )
     {
@@ -834,7 +807,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
                             pSet->Count() ? pSet : 0 );
             delete pSet;
         }
-        pEntry = aTree.Next( pEntry );
+        pEntry = m_pTree->Next( pEntry );
     }
 
     for (SectReprArr::reverse_iterator aI = aSectReprArr.rbegin(), aEnd = aSectReprArr.rend(); aI != aEnd; ++aI)
@@ -864,22 +837,22 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
 {
     if(!CheckPasswd(pBox))
         return 0;
-    pBox->EnableTriState( sal_False );
-    SvTreeListEntry* pEntry=aTree.FirstSelected();
+    pBox->EnableTriState(false);
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     sal_Bool bCheck = STATE_CHECK == pBox->GetState();
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSectionData().SetProtectFlag(bCheck);
-        Image aImage = BuildBitmap( bCheck,
-                                    STATE_CHECK == aHideCB.GetState());
-        aTree.SetExpandedEntryBmp(  pEntry, aImage );
-        aTree.SetCollapsedEntryBmp( pEntry, aImage );
-        pEntry = aTree.NextSelected(pEntry);
+        Image aImage = BuildBitmap(bCheck,
+                                   STATE_CHECK == m_pHideCB->GetState());
+        m_pTree->SetExpandedEntryBmp(  pEntry, aImage );
+        m_pTree->SetCollapsedEntryBmp( pEntry, aImage );
+        pEntry = m_pTree->NextSelected(pEntry);
     }
-    aPasswdCB.Enable(bCheck);
-    aPasswdPB.Enable(bCheck);
+    m_pPasswdCB->Enable(bCheck);
+    m_pPasswdPB->Enable(bCheck);
     return 0;
 }
 
@@ -890,25 +863,25 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
 {
     if(!CheckPasswd(pBox))
         return 0;
-    pBox->EnableTriState( sal_False );
-    SvTreeListEntry* pEntry=aTree.FirstSelected();
+    pBox->EnableTriState(false);
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSectionData().SetHidden(STATE_CHECK == pBox->GetState());
 
-        Image aImage = BuildBitmap(STATE_CHECK == aProtectCB.GetState(),
+        Image aImage = BuildBitmap(STATE_CHECK == m_pProtectCB->GetState(),
                                     STATE_CHECK == pBox->GetState());
-        aTree.SetExpandedEntryBmp(  pEntry, aImage );
-        aTree.SetCollapsedEntryBmp( pEntry, aImage );
+        m_pTree->SetExpandedEntryBmp(  pEntry, aImage );
+        m_pTree->SetCollapsedEntryBmp( pEntry, aImage );
 
-        pEntry = aTree.NextSelected(pEntry);
+        pEntry = m_pTree->NextSelected(pEntry);
     }
 
-    sal_Bool bHide = STATE_CHECK == pBox->GetState();
-    aConditionED.Enable(bHide);
-    aConditionFT.Enable(bHide);
+    bool bHide = STATE_CHECK == pBox->GetState();
+    m_pConditionED->Enable(bHide);
+    m_pConditionFT->Enable(bHide);
     return 0;
 }
 
@@ -919,15 +892,15 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
 {
     if(!CheckPasswd(pBox))
         return 0;
-    pBox->EnableTriState( sal_False );
-    SvTreeListEntry* pEntry=aTree.FirstSelected();
+    pBox->EnableTriState(false);
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSectionData().SetEditInReadonlyFlag(
                 STATE_CHECK == pBox->GetState());
-        pEntry = aTree.NextSelected(pEntry);
+        pEntry = m_pTree->NextSelected(pEntry);
     }
 
     return 0;
@@ -940,7 +913,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
 {
     if(!CheckPasswd())
         return 0;
-    SvTreeListEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     SvTreeListEntry* pChild;
     SvTreeListEntry* pParent;
     // at first mark all selected
@@ -948,9 +921,9 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
     {
         const SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
         pSectRepr->SetSelected();
-        pEntry = aTree.NextSelected(pEntry);
+        pEntry = m_pTree->NextSelected(pEntry);
     }
-    pEntry = aTree.FirstSelected();
+    pEntry = m_pTree->FirstSelected();
     // then delete
     while(pEntry)
     {
@@ -960,42 +933,42 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
         if(pSectRepr->IsSelected())
         {
             aSectReprArr.insert( pSectRepr );
-            while( (pChild = aTree.FirstChild(pEntry) )!= 0 )
+            while( (pChild = m_pTree->FirstChild(pEntry) )!= 0 )
             {
                 // because of the repositioning we have to start at the beginning again
                 bRestart = true;
-                pParent=aTree.GetParent(pEntry);
-                aTree.GetModel()->Move(pChild, pParent, aTree.GetModel()->GetRelPos(pEntry));
+                pParent = m_pTree->GetParent(pEntry);
+                m_pTree->GetModel()->Move(pChild, pParent, m_pTree->GetModel()->GetRelPos(pEntry));
             }
             pRemove = pEntry;
         }
         if(bRestart)
-            pEntry = aTree.First();
+            pEntry = m_pTree->First();
         else
-            pEntry = aTree.Next(pEntry);
+            pEntry = m_pTree->Next(pEntry);
         if(pRemove)
-            aTree.GetModel()->Remove( pRemove );
+            m_pTree->GetModel()->Remove( pRemove );
     }
 
-    if ( aTree.FirstSelected() == 0 )
+    if ( m_pTree->FirstSelected() == 0 )
     {
-        aConditionFT.   Enable(sal_False);
-        aConditionED.   Enable(sal_False);
-        aDismiss.       Enable(sal_False);
-        aCurName.       Enable(sal_False);
-        aProtectCB.     Enable(sal_False);
-        aPasswdCB.      Enable(sal_False);
-        aHideCB.        Enable(sal_False);
+        m_pConditionFT->Enable(false);
+        m_pConditionED->Enable(false);
+        m_pDismiss->       Enable(sal_False);
+        m_pCurName->Enable(false);
+        m_pProtectCB->Enable(false);
+        m_pPasswdCB->Enable(false);
+        m_pHideCB->Enable(false);
         // edit in readonly sections
-        aEditInReadonlyCB.Enable(sal_False);
-        aEditInReadonlyCB.SetState(STATE_NOCHECK);
-        aProtectCB.     SetState(STATE_NOCHECK);
-        aPasswdCB.      Check(sal_False);
-        aHideCB.        SetState(STATE_NOCHECK);
-        aFileCB.        Check(sal_False);
+        m_pEditInReadonlyCB->Enable(false);
+        m_pEditInReadonlyCB->SetState(STATE_NOCHECK);
+        m_pProtectCB->SetState(STATE_NOCHECK);
+        m_pPasswdCB->Check(false);
+        m_pHideCB->SetState(STATE_NOCHECK);
+        m_pFileCB->Check(false);
         // otherwise the focus would be on HelpButton
-        aOK.GrabFocus();
-        UseFileHdl(&aFileCB);
+        m_pOK->GrabFocus();
+        UseFileHdl(m_pFileCB);
     }
     return 0;
 }
@@ -1007,9 +980,9 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
 {
     if(!CheckPasswd(pBox))
         return 0;
-    SvTreeListEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     pBox->EnableTriState(sal_False);
-    sal_Bool bMulti = 1 < aTree.GetSelectionCount();
+    sal_Bool bMulti = 1 < m_pTree->GetSelectionCount();
     sal_Bool bFile = pBox->IsChecked();
     if(pEntry)
     {
@@ -1031,40 +1004,30 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
                 pSectRepr->GetSectionData().SetLinkFilePassword(aEmptyStr);
             }
 
-            pEntry = aTree.NextSelected(pEntry);
+            pEntry = m_pTree->NextSelected(pEntry);
         }
-        aFileNameFT.Enable(bFile && ! bMulti);
-        aFileNameED.Enable(bFile && ! bMulti);
-        aFilePB.Enable(bFile && ! bMulti);
-        aSubRegionED.Enable(bFile && ! bMulti);
-        aSubRegionFT.Enable(bFile && ! bMulti);
-        aDDECommandFT.Enable(bFile && ! bMulti);
-        aDDECB.Enable(bFile && ! bMulti);
+        m_pDDECB->Enable(bFile && ! bMulti);
+        m_pDDEFrame->Enable(bFile && ! bMulti);
         if( bFile )
         {
-            aProtectCB.SetState(STATE_CHECK);
-            aFileNameED.GrabFocus();
+            m_pProtectCB->SetState(STATE_CHECK);
+            m_pFileNameED->GrabFocus();
 
         }
         else
         {
-            aDDECB.Check(sal_False);
-            DDEHdl(&aDDECB);
-            aSubRegionED.SetText(aEmptyStr);
+            m_pDDECB->Check(false);
+            DDEHdl(m_pDDECB);
+            m_pSubRegionED->SetText(OUString());
         }
     }
     else
     {
-        pBox->Check(sal_False);
-        pBox->Enable(sal_False);
-        aFilePB.Enable(sal_False);
-        aFileNameED.Enable(sal_False);
-        aFileNameFT.Enable(sal_False);
-        aSubRegionED.Enable(sal_False);
-        aSubRegionFT.Enable(sal_False);
-        aDDECB.Check(sal_False);
-        aDDECB.Enable(sal_False);
-        aDDECommandFT.Enable(sal_False);
+        pBox->Check(false);
+        pBox->Enable(false);
+        m_pDDECB->Check(false);
+        m_pDDECB->Enable(false);
+        m_pDDEFrame->Enable(false);
     }
     return 0;
 }
@@ -1090,7 +1053,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
 {
     if(!CheckPasswd())
         return 0;
-    SvTreeListEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
 
     if(pEntry)
     {
@@ -1157,7 +1120,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
                     SFX_ITEM_SET == eFrmDirState||
                     SFX_ITEM_SET == eLRState)
                 {
-                    SvTreeListEntry* pSelEntry = aTree.FirstSelected();
+                    SvTreeListEntry* pSelEntry = m_pTree->FirstSelected();
                     while( pSelEntry )
                     {
                         SectReprPtr pRepr = (SectReprPtr)pSelEntry->GetUserData();
@@ -1176,7 +1139,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
                         if( SFX_ITEM_SET == eLRState )
                             pRepr->GetLRSpace() = *(SvxLRSpaceItem*)pLRSpaceItem;
 
-                        pSelEntry = aTree.NextSelected(pSelEntry);
+                        pSelEntry = m_pTree->NextSelected(pSelEntry);
                     }
                 }
             }
@@ -1196,14 +1159,14 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
     if(!CheckPasswd())
         return 0;
     pEdit->SetSelection(aSelect);
-    SvTreeListEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
-    if(pEdit == &aFileNameED)
+    if (pEdit == m_pFileNameED)
     {
-        bSubRegionsFilled = false;
-        aSubRegionED.Clear();
-        if( aDDECB.IsChecked() )
+        m_bSubRegionsFilled = false;
+        m_pSubRegionED->Clear();
+        if (m_pDDECB->IsChecked())
         {
             String sLink( pEdit->GetText() );
             sal_uInt16 nPos = 0;
@@ -1243,64 +1206,62 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
 {
     if(!CheckPasswd(pBox))
         return 0;
-    SvTreeListEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     if(pEntry)
     {
-        sal_Bool bFile = aFileCB.IsChecked();
+        bool bFile = m_pFileCB->IsChecked();
         SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
         SwSectionData & rData( pSectRepr->GetSectionData() );
         sal_Bool bDDE = pBox->IsChecked();
         if(bDDE)
         {
-            aFileNameFT.Hide();
-            aDDECommandFT.Enable();
-            aDDECommandFT.Show();
-            aSubRegionFT.Hide();
-            aSubRegionED.Hide();
+            m_pFileNameFT->Hide();
+            m_pDDECommandFT->Enable();
+            m_pDDECommandFT->Show();
+            m_pSubRegionFT->Hide();
+            m_pSubRegionED->Hide();
             if (FILE_LINK_SECTION == rData.GetType())
             {
-                pSectRepr->SetFile(aEmptyStr);
-                aFileNameED.SetText(aEmptyStr);
-                rData.SetLinkFilePassword( aEmptyStr );
+                pSectRepr->SetFile(OUString());
+                m_pFileNameED->SetText(OUString());
+                rData.SetLinkFilePassword(OUString());
             }
             rData.SetType(DDE_LINK_SECTION);
-            aFileNameED.SetAccessibleName(aDDECommandFT.GetText());
         }
         else
         {
-            aDDECommandFT.Hide();
-            aFileNameFT.Enable(bFile);
-            aFileNameFT.Show();
-            aSubRegionED.Show();
-            aSubRegionFT.Show();
-            aSubRegionED.Enable(bFile);
-            aSubRegionFT.Enable(bFile);
-            aSubRegionED.Enable(bFile);
+            m_pDDECommandFT->Hide();
+            m_pFileNameFT->Enable(bFile);
+            m_pFileNameFT->Show();
+            m_pSubRegionED->Show();
+            m_pSubRegionFT->Show();
+            m_pSubRegionED->Enable(bFile);
+            m_pSubRegionFT->Enable(bFile);
+            m_pSubRegionED->Enable(bFile);
             if (DDE_LINK_SECTION == rData.GetType())
             {
                 rData.SetType(FILE_LINK_SECTION);
-                pSectRepr->SetFile(aEmptyStr);
-                rData.SetLinkFilePassword( aEmptyStr );
-                aFileNameED.SetText(aEmptyStr);
+                pSectRepr->SetFile(OUString());
+                rData.SetLinkFilePassword(OUString());
+                m_pFileNameED->SetText(OUString());
             }
-            aFileNameED.SetAccessibleName(aFileNameFT.GetText());
         }
-        aFilePB.Enable(bFile && !bDDE);
+        m_pFilePB->Enable(bFile && !bDDE);
     }
     return 0;
 }
 
 IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
 {
-    bool bChange = pBox == &aPasswdPB;
+    bool bChange = pBox == m_pPasswdPB;
     if(!CheckPasswd(0))
     {
         if(!bChange)
-            aPasswdCB.Check(!aPasswdCB.IsChecked());
+            m_pPasswdCB->Check(!m_pPasswdCB->IsChecked());
         return 0;
     }
-    SvTreeListEntry* pEntry=aTree.FirstSelected();
-    bool bSet = bChange ? bChange : aPasswdCB.IsChecked();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
+    bool bSet = bChange ? bChange : m_pPasswdCB->IsChecked();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
@@ -1328,7 +1289,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
                 else
                 {
                     if(!bChange)
-                        aPasswdCB.Check(sal_False);
+                        m_pPasswdCB->Check(false);
                     break;
                 }
             }
@@ -1338,7 +1299,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
         {
             pRepr->GetSectionData().SetPassword(uno::Sequence<sal_Int8 >());
         }
-        pEntry = aTree.NextSelected(pEntry);
+        pEntry = m_pTree->NextSelected(pEntry);
     }
     return 0;
 }
@@ -1352,16 +1313,16 @@ IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl)
 {
     if(!CheckPasswd(0))
         return 0;
-    SvTreeListEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     if (pEntry)
     {
-        String  aName = aCurName.GetText();
-        aTree.SetEntryText(pEntry,aName);
+        OUString aName = m_pCurName->GetText();
+        m_pTree->SetEntryText(pEntry,aName);
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSectionData().SetSectionName(aName);
 
-        aOK.Enable(aName.Len() != 0);
+        m_pOK->Enable(!aName.isEmpty());
     }
     return 0;
 }
@@ -1372,13 +1333,13 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
     if(!CheckPasswd(0))
         return 0;
     pEdit->SetSelection(aSelect);
-    SvTreeListEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
         pRepr->GetSectionData().SetCondition(pEdit->GetText());
-        pEntry = aTree.NextSelected(pEntry);
+        pEntry = m_pTree->NextSelected(pEntry);
     }
     return 0;
 }
@@ -1396,12 +1357,12 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
             const SfxPoolItem* pItem;
             if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, sal_False, &pItem ) )
                 sPassword = ( (SfxStringItem*)pItem )->GetValue();
-            ::lcl_ReadSections( *pMedium, aSubRegionED );
+            ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
             delete pMedium;
         }
     }
 
-    SvTreeListEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE( pEntry, "no entry found" );
     if ( pEntry )
     {
@@ -1409,7 +1370,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
         pSectRepr->SetFile( sFileName );
         pSectRepr->SetFilter( sFilterName );
         pSectRepr->GetSectionData().SetLinkFilePassword(sPassword);
-        aFileNameED.SetText( pSectRepr->GetFile() );
+        m_pFileNameED->SetText(pSectRepr->GetFile());
     }
 
     Application::SetDefDialogParent( m_pOldDefDlgParent );
@@ -1418,11 +1379,11 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
 
 IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
 {
-    if( !bSubRegionsFilled && pEvent && pEvent->GetId() == VCLEVENT_DROPDOWN_PRE_OPEN )
+    if( !m_bSubRegionsFilled && pEvent && pEvent->GetId() == VCLEVENT_DROPDOWN_PRE_OPEN )
     {
         //if necessary fill the names bookmarks/sections/tables now
 
-        OUString sFileName = aFileNameED.GetText();
+        OUString sFileName = m_pFileNameED->GetText();
         if(!sFileName.isEmpty())
         {
             SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
@@ -1435,11 +1396,11 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
             //load file and set the shell
             SfxMedium aMedium( sFileName, STREAM_STD_READ );
             sFileName = aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-            ::lcl_ReadSections( aMedium, aSubRegionED );
+            ::lcl_ReadSections(aMedium, *m_pSubRegionED);
         }
         else
-            lcl_FillSubRegionList( rSh, aSubRegionED, 0 );
-        bSubRegionsFilled = true;
+            lcl_FillSubRegionList(rSh, *m_pSubRegionED, 0);
+        m_bSubRegionsFilled = true;
     }
     return 0;
 }

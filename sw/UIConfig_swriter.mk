@@ -74,6 +74,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/converttexttable \
 	sw/uiconfig/swriter/ui/endnotepage \
 	sw/uiconfig/swriter/ui/editcategories \
+	sw/uiconfig/swriter/ui/editsectiondialog \
 	sw/uiconfig/swriter/ui/exchangedatabases \
 	sw/uiconfig/swriter/ui/formattablepage \
 	sw/uiconfig/swriter/ui/footnotepage \

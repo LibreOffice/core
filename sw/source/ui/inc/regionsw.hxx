@@ -27,6 +27,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/group.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/treelistbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -62,40 +63,34 @@ typedef boost::ptr_set<SectRepr> SectReprArr;
 
 class SwEditRegionDlg : public SfxModalDialog
 {
-    FixedLine       aNameFL;
-    Edit            aCurName;
-    SvTreeListBox   aTree;
+    Edit*           m_pCurName;
+    SvTreeListBox*  m_pTree;
 
-    FixedLine       aLinkFL;
-    TriStateBox     aFileCB;
-    CheckBox        aDDECB;
-    FixedText       aFileNameFT;
-    FixedText       aDDECommandFT;
-    Edit            aFileNameED;
-    PushButton      aFilePB;
-    FixedText       aSubRegionFT;
-    ComboBox        aSubRegionED;
-    bool            bSubRegionsFilled;
+    TriStateBox*    m_pFileCB;
+    CheckBox*       m_pDDECB;
+    VclContainer*   m_pDDEFrame;
+    FixedText*      m_pFileNameFT;
+    FixedText*      m_pDDECommandFT;
+    Edit*           m_pFileNameED;
+    PushButton*     m_pFilePB;
+    FixedText*      m_pSubRegionFT;
+    ComboBox*       m_pSubRegionED;
+    bool            m_bSubRegionsFilled;
 
-    FixedLine       aProtectFL;
-    TriStateBox     aProtectCB;
-    CheckBox        aPasswdCB;
-    PushButton      aPasswdPB;
+    TriStateBox*    m_pProtectCB;
+    CheckBox*       m_pPasswdCB;
+    PushButton*     m_pPasswdPB;
 
-    FixedLine       aHideFL;
-    TriStateBox     aHideCB;
-    FixedText       aConditionFT;
-    ConditionEdit   aConditionED;
+    TriStateBox*    m_pHideCB;
+    FixedText*      m_pConditionFT;
+    ConditionEdit*  m_pConditionED;
 
     // #114856# edit in readonly sections
-    FixedLine       aPropertiesFL;
-    TriStateBox     aEditInReadonlyCB;
+    TriStateBox*    m_pEditInReadonlyCB;
 
-    OKButton        aOK;
-    CancelButton    aCancel;
-    PushButton      aOptionsPB;
-    PushButton      aDismiss;
-    HelpButton      aHelp;
+    OKButton*       m_pOK;
+    PushButton*     m_pOptionsPB;
+    PushButton*     m_pDismiss;
     ImageList       aImageIL;
 
     SwWrtShell&             rSh;
