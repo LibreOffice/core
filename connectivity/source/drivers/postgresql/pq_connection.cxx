@@ -496,8 +496,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
     for( int i = 0; i < args.getLength() ; ++i )
     {
         bool append = false;
-//        for( int j = 0; j < (int) ( sizeof( keyword_list ) / sizeof( char * )); j++)
-        for( int j = 0; j < (int) SAL_N_ELEMENTS( keyword_list ); j++)
+        for( size_t j = 0; j < SAL_N_ELEMENTS( keyword_list ); j++)
         {
             if( args[i].Name.equalsIgnoreAsciiCaseAscii( keyword_list[j] ))
             {
@@ -505,7 +504,6 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
                 append = true;
                 break;
             }
-            append = false;
         }
 
         if( append )
