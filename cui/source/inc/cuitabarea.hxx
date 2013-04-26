@@ -63,10 +63,8 @@ private:
 
 protected:
     virtual short       Ok();
-#ifdef _SVX_TABAREA_CXX
     DECL_LINK( CancelHdlImpl, void * );
     void                SavePalettes();
-#endif
 
 public:
     SvxAreaTabDialog( Window* pParent,
@@ -144,14 +142,12 @@ class SvxTransparenceTabPage : public SvxTabPage
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-#ifdef _SVX_TPAREA_CXX
     DECL_LINK(ClickTransOffHdl_Impl, void * );
     DECL_LINK(ClickTransLinearHdl_Impl, void * );
     DECL_LINK(ClickTransGradientHdl_Impl, void * );
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
     DECL_LINK(ChangeTrgrTypeHdl_Impl, void*);
     DECL_LINK(ModifiedTrgrHdl_Impl, void*);
-#endif
 
     void ActivateLinear(sal_Bool bActivate);
     void ActivateGradient(sal_Bool bActivate);
@@ -250,7 +246,6 @@ private:
     SfxMapUnit          ePoolUnit;
     FieldUnit           eFUnit;
 
-#ifdef _SVX_TPAREA_CXX
     DECL_LINK(SelectDialogTypeHdl_Impl, void *);
     DECL_LINK( ModifyColorHdl_Impl, void * );
     DECL_LINK( ModifyHatchBckgrdColorHdl_Impl, void * );
@@ -266,7 +261,6 @@ private:
     void ClickGradientHdl_Impl();
     void ClickColorHdl_Impl();
     void ClickBitmapHdl_Impl();
-#endif
 
 public:
     SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
@@ -335,10 +329,8 @@ private:
     SfxItemSet&         rXFSet;
     SfxMapUnit          ePoolUnit;
 
-#ifdef _SVX_TPSHADOW_CXX
     DECL_LINK( ClickShadowHdl_Impl, void * );
     DECL_LINK( ModifyShadowHdl_Impl, void * );
-#endif
 
 public:
     SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
@@ -409,7 +401,6 @@ private:
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-#ifdef _SVX_TPGRADNT_CXX
     DECL_LINK( ClickAddHdl_Impl, void * );
     DECL_LINK( ClickModifyHdl_Impl, void * );
     DECL_LINK( ClickDeleteHdl_Impl, void * );
@@ -420,7 +411,6 @@ private:
 
     long CheckChanges_Impl();
     void SetControlState_Impl( XGradientStyle eXGS );
-#endif
 
 public:
     SvxGradientTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
@@ -493,7 +483,6 @@ private:
 
     SfxMapUnit          ePoolUnit;
 
-#ifdef _SVX_TPHATCH_CXX
     DECL_LINK( ChangeHatchHdl_Impl, void * );
     DECL_LINK( ModifiedHdl_Impl, void * );
     DECL_LINK( ClickAddHdl_Impl, void * );
@@ -503,7 +492,6 @@ private:
     DECL_LINK( ClickSaveHdl_Impl, void * );
 
     long CheckChanges_Impl();
-#endif
 
 public:
     SvxHatchTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
@@ -581,7 +569,6 @@ private:
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-#ifdef _SVX_TPBITMAP_CXX
     DECL_LINK( ClickAddHdl_Impl, void * );
     DECL_LINK( ClickImportHdl_Impl, void * );
     DECL_LINK( ClickModifyHdl_Impl, void * );
@@ -593,7 +580,6 @@ private:
     DECL_LINK( ClickSaveHdl_Impl, void * );
 
     long CheckChanges_Impl();
-#endif
 
 public:
     SvxBitmapTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
@@ -706,7 +692,6 @@ private:
 
     Color               aAktuellColor;
 
-#ifdef _SVX_TPCOLOR_CXX
     void    ConvertColorValues (Color& rColor, ColorModel eModell);
     void    RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK );
     void    CmykToRgb_Impl( Color& rColor, const sal_uInt16 nKey );
@@ -727,7 +712,6 @@ private:
     DECL_LINK( ModifiedHdl_Impl, void * );
 
     long CheckChanges_Impl();
-#endif
 
     void UpdateModified();
 public:

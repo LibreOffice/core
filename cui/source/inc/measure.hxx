@@ -67,12 +67,10 @@ private:
 
     sal_Bool                bPositionModified;
 
-#ifdef _SVX_MEASURE_CXX
     void                FillUnitLB();
 
     DECL_LINK( ClickAutoPosHdl_Impl, void * );
     DECL_LINK( ChangeAttrHdl_Impl, void * );
-#endif
 
 public:
 

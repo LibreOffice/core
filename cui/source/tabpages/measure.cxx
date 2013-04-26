@@ -23,8 +23,6 @@
 
 #include <cuires.hrc>
 
-#define _SVX_MEASURE_CXX
-
 #include <svx/svdomeas.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdattrx.hxx>

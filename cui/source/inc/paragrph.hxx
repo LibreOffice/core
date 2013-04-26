@@ -95,7 +95,6 @@ private:
     sal_Bool                    bRelativeMode;
     sal_Bool                    bNegativeIndents;
 
-#ifdef _SVX_PARAGRPH_CXX
     void                    SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
     void                    Init_Impl();
     void                    UpdateExample_Impl( sal_Bool bAll = sal_False );
@@ -103,7 +102,6 @@ private:
     DECL_LINK( LineDistHdl_Impl, ListBox* );
     DECL_LINK(ModifyHdl_Impl, void *);
     DECL_LINK( AutoHdl_Impl, CheckBox* );
-#endif
 
 protected:
     virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
@@ -158,13 +156,11 @@ class SvxParaAlignTabPage : public SfxTabPage
     FixedText                   aTextDirectionFT;
     svx::FrameDirectionListBox  aTextDirectionLB;
 
-#ifdef _SVX_PARAGRPH_CXX
     DECL_LINK(AlignHdl_Impl, void *);
     DECL_LINK(LastLineHdl_Impl, void *);
     DECL_LINK(TextDirectionHdl_Impl, void *);
 
     void                    UpdateExample_Impl( sal_Bool bAll = sal_False );
-#endif
 
                             SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual                 ~SvxParaAlignTabPage();
@@ -258,7 +254,6 @@ private:
     sal_Bool                bHtmlMode;
     sal_uInt16              nStdPos;
 
-#ifdef _SVX_PARAGRPH_CXX
     DECL_LINK(PageBreakHdl_Impl, void *);
     DECL_LINK(KeepTogetherHdl_Impl, void *);
     DECL_LINK(WidowHdl_Impl, void *);
@@ -267,7 +262,7 @@ private:
     DECL_LINK(ApplyCollClickHdl_Impl, void *);
     DECL_LINK( PageBreakPosHdl_Impl, ListBox* );
     DECL_LINK( PageBreakTypeHdl_Impl, ListBox* );
-#endif
+
     virtual void            PageCreated(SfxAllItemSet aSet);
 };
 
@@ -281,9 +276,8 @@ class SvxAsianTabPage : public SfxTabPage
 
     SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet );
 
-#ifdef _SVX_PARAGRPH_CXX
     DECL_LINK( ClickHdl_Impl, CheckBox* );
-#endif
+
 public:
     ~SvxAsianTabPage();
 

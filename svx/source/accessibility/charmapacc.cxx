@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define _SVX_CHARMAP_CXX_
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <stdio.h>

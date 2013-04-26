@@ -24,8 +24,6 @@
 #include <sfx2/request.hxx>
 #include <svx/dialogs.hrc>
 
-#define _SVX_CONNECT_CXX
-
 #include <svx/svdoedge.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdattrx.hxx>

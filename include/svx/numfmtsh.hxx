@@ -199,7 +199,7 @@ private:
     sal_uInt16              nCurCurrencyEntryPos;
     std::vector<String*>    aCurrencyFormatList;
     bool                    bUseStarFormat;
-#ifdef _SVX_NUMFMTSH_CXX
+
     SVX_DLLPRIVATE short FillEntryList_Impl( std::vector<String*>& rList );
     SVX_DLLPRIVATE void  FillEListWithStd_Impl( std::vector<String*>& rList,sal_uInt16 aPrivCat, short &Pos);
     SVX_DLLPRIVATE short FillEListWithFormats_Impl( std::vector<String*>& rList,short nSelPos,
@@ -220,9 +220,7 @@ private:
                                                 Color*& rpColor );
     SVX_DLLPRIVATE void  PosToCategory_Impl( sal_uInt16 nPos, short& rCategory );
     SVX_DLLPRIVATE void  CategoryToPos_Impl( short nCategory, sal_uInt16& rPos );
-#endif
 };
-
 
 #endif
 

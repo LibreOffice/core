@@ -41,11 +41,10 @@ class SvxLineBox : public LineLB
     SfxObjectShell* mpSh;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-#ifdef _SVX_ITEMWIN_CXX
                     DECL_LINK(DelayHdl_Impl, void *);
 
     void            ReleaseFocus_Impl();
-#endif
+
 public:
     SvxLineBox( Window* pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
@@ -75,9 +74,7 @@ class SvxColorBox : public ColorLB
     OUString maCommand;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-#ifdef _SVX_ITEMWIN_CXX
     void            ReleaseFocus_Impl();
-#endif
 
 public:
     SvxColorBox( Window* pParent,
@@ -108,9 +105,7 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
     Size            aLogicalSize;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-#ifdef _SVX_ITEMWIN_CXX
     void            ReleaseFocus_Impl();
-#endif
 
 protected:
     virtual void    Modify();
@@ -152,9 +147,7 @@ private:
     sal_Bool            bSelect;
     sal_Bool            bRelease;
 
-#ifdef _SVX_ITEMWIN_CXX
     void            ReleaseFocus_Impl();
-#endif
 };
 
 // class SvxFillAttrBox --------------------------------------------------
@@ -176,9 +169,7 @@ private:
     sal_uInt16          nCurPos;
     sal_Bool            bRelease;
 
-#ifdef _SVX_ITEMWIN_CXX
     void            ReleaseFocus_Impl();
-#endif
 };
 
 #endif // #ifndef _SVX_ITEMWIN_HXX

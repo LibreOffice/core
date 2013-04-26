@@ -31,8 +31,6 @@
 
 #include <svl/intitem.hxx>
 
-#define _SVX_HDFT_CXX
-
 #include <svx/hdft.hxx>
 #include <svx/pageitem.hxx>
 

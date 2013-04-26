@@ -21,8 +21,6 @@
 
 #include <svtools/treelistentry.hxx>
 
-#define _SVX_CHECKLBX_CXX
-
 #include <svx/checklbx.hxx>
 #include <svx/dialmgr.hxx>
 

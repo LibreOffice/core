@@ -25,7 +25,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 
-#define _OUTLINER_CXX
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <outleeng.hxx>

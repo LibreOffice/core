@@ -25,11 +25,6 @@
 #include <svl/nfversi.hxx>
 #include <svl/nfkeytab.hxx>
 
-// We need ImpSvNumberformatScan for the private SvNumberformat definitions.
-#ifdef _ZFORMAT_CXX
-#include "zforscan.hxx"
-#endif
-
 namespace utl {
     class DigitGroupingIterator;
 }
@@ -531,12 +526,10 @@ private:
     /// Whether it's a (YY)YY-M(M)-D(D) format.
     SVL_DLLPRIVATE bool ImpIsIso8601( const ImpSvNumFor& rNumFor );
 
-#ifdef _ZFORMAT_CXX     // ----- private implementation methods -----
-
-    const CharClass& rChrCls() const        { return rScan.GetChrCls(); }
-    const LocaleDataWrapper& rLoc() const   { return rScan.GetLoc(); }
-    CalendarWrapper& GetCal() const         { return rScan.GetCal(); }
-    const SvNumberFormatter& GetFormatter() const   { return *rScan.GetNumberformatter(); }
+    const CharClass& rChrCls() const;
+    const LocaleDataWrapper& rLoc() const;
+    CalendarWrapper& GetCal() const;
+    const SvNumberFormatter& GetFormatter() const;
 
     // divide in substrings and color conditions
     SVL_DLLPRIVATE short ImpNextSymbol( OUStringBuffer& rString,
@@ -702,9 +695,6 @@ private:
             impTransliterateImpl(rStr, rNum);
         }
     }
-
-#endif // _ZFORMAT_CXX
-
 };
 
 #endif  // _ZFORMAT_HXX

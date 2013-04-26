@@ -68,14 +68,12 @@ private:
     sal_uInt16          nAnsatzTypePos;
     sal_uInt16          nWinkelTypePos;
 
-#ifdef _SVX_LABDLG_CXX
     void            SetupAnsatz_Impl( sal_uInt16 nType );
     void            SetupType_Impl( sal_uInt16 nType );
     DECL_LINK( AnsatzSelectHdl_Impl, ListBox * );
     DECL_LINK( AnsatzRelSelectHdl_Impl, ListBox * );
     DECL_LINK( LineOptHdl_Impl, Button * );
     DECL_LINK( SelectCaptTypeHdl_Impl, void * );
-#endif
 
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;

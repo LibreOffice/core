@@ -31,9 +31,8 @@
 #include <svl/zformat.hxx>
 #include <unotools/digitgroupingiterator.hxx>
 
-#define _ZFORSCAN_CXX
 #include "zforscan.hxx"
-#undef _ZFORSCAN_CXX
+
 #include <svl/nfsymbol.hxx>
 using namespace svt;
 

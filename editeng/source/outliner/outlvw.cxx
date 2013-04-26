@@ -30,7 +30,6 @@
 #include <svl/style.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#define _OUTLINER_CXX
 #include <editeng/outliner.hxx>
 #include <outleeng.hxx>
 #include <paralist.hxx>

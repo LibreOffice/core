@@ -107,7 +107,6 @@ private:
     FieldUnit       eDefUnit;
     sal_Bool            bCheck;
 
-#ifdef _SVX_TABSTPGE_CXX
     void            InitTabPos_Impl( sal_uInt16 nPos = 0 );
     void            SetFillAndTabType_Impl();
 
@@ -123,11 +122,10 @@ private:
     DECL_LINK(ModifyHdl_Impl, void *);
     DECL_LINK( GetFillCharHdl_Impl, Edit* );
     DECL_LINK( GetDezCharHdl_Impl, Edit* );
-#endif
+
     virtual void            PageCreated(SfxAllItemSet aSet);
 };
 
 #endif // #ifndef _SVX_TABSTPGE_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

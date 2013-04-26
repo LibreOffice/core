@@ -66,13 +66,11 @@ private:
 
     SvxSaveTabPage_Impl*    pImpl;
 
-#ifdef _SVX_OPTSAVE_CXX
     DECL_LINK( AutoClickHdl_Impl, CheckBox * );
     DECL_LINK( FilterHdl_Impl, ListBox * );
     DECL_LINK(ODFVersionHdl_Impl, void *);
 
     void    DetectHiddenControls();
-#endif
 
 public:
     SvxSaveTabPage( Window* pParent, const SfxItemSet& rSet );

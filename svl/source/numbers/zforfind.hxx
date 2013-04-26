@@ -183,7 +183,6 @@ private:
      */
     sal_uInt16  nDatePatternNumbers;
 
-#ifdef _ZFORFIND_CXX        // methods private to implementation
     void Reset();                               // Reset all variables before start of analysis
 
     void InitText();                            // Init of months and days of week
@@ -414,11 +413,7 @@ private:
         @see nMayBeMonthDate
      */
     bool MayBeMonthDate();
-
-#endif  // _ZFORFIND_CXX
 };
-
-
 
 #endif  // _ZFORFIND_HXX
 

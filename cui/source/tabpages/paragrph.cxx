@@ -24,8 +24,6 @@
 #include <vcl/mnemonic.hxx>
 #include <svx/dialogs.hrc>
 
-#define _SVX_PARAGRPH_CXX   0
-
 #include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <editeng/pgrditem.hxx>

@@ -155,15 +155,11 @@ protected:
 private:
     sal_Bool                bAttrModified;
 
-#ifdef _SVX_OPTGRID_CXX
     DECL_LINK( ClickRotateHdl_Impl, void * );
     DECL_LINK( ChangeDrawHdl_Impl, MetricField * );
     DECL_LINK( ChangeGridsnapHdl_Impl, void * );
     DECL_LINK( ChangeDivisionHdl_Impl, NumericField * );
-
-#endif
 };
-
 
 #endif
 

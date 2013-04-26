@@ -33,8 +33,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/viewoptions.hxx>
 
-#define _SVX_OPTPATH_CXX
-
 #include "optpath.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>

@@ -64,10 +64,8 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >    xNewDic;
 
-#ifdef _SVX_OPTDICT_CXX
     DECL_LINK(OKHdl_Impl, void *);
     DECL_LINK(ModifyHdl_Impl, void *);
-#endif
 
 public:
     SvxNewDictionaryDialog( Window* pParent,
@@ -137,7 +135,6 @@ private:
     sal_Bool            bDoNothing;
     sal_Bool                bDicIsReadonly;
 
-#ifdef _SVX_OPTDICT_CXX
     DECL_LINK(SelectBookHdl_Impl, void *);
     DECL_LINK(SelectLangHdl_Impl, void *);
     DECL_LINK(SelectHdl, SvTabListBox*);
@@ -154,8 +151,6 @@ private:
     void            RemoveDictEntry(SvTreeListEntry* pEntry);
     sal_uInt16          GetLBInsertPos(const String &rDicWord);
 
-#endif
-
 protected:
 
     virtual void    Paint( const Rectangle& rRect );
@@ -169,7 +164,6 @@ public:
 
     sal_uInt16 GetSelectedDict() {return aAllDictsLB.GetSelectEntryPos();}
 };
-
 
 #endif
 

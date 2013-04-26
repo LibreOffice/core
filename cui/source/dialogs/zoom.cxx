@@ -24,8 +24,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 
-#define _SVX_ZOOM_CXX
-
 #include <cuires.hrc>
 
 #include "zoom.hxx"

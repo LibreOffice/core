@@ -26,8 +26,6 @@
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
 
-#define _SVX_TABAREA_CXX
-
 #include <cuires.hrc>
 #include <svx/xtable.hxx>
 #include "svx/globl3d.hxx"

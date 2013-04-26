@@ -62,7 +62,6 @@ public:
     void            SetPreSelectHdl( const Link& rHdl ) { aPreSelectHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
 
-#ifdef _SVX_CHARMAP_CXX_
     ::svx::SvxShowCharSetItem*  ImplGetItem( int _nPos );
     int                         FirstInView( void) const;
     int                         LastInView( void) const;
@@ -77,7 +76,6 @@ public:
     ScrollBar*                  getScrollBar();
     void                        ReleaseAccessible();
     sal_Int32                   getMaxCharCount() const;
-#endif // _SVX_CHARMAP_CXX_
 
     virtual void    Resize();
 

@@ -43,7 +43,6 @@
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#define _SVX_OPTINET2_CXX
 #include <dialmgr.hxx>
 #include "optinet2.hxx"
 #include <svx/svxdlg.hxx>

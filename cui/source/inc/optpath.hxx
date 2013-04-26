@@ -52,7 +52,6 @@ private:
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
-#ifdef _SVX_OPTPATH_CXX
     void        ChangeCurrentEntry( const String& _rFolder );
 
     DECL_LINK(PathHdl_Impl, void *);
@@ -68,7 +67,6 @@ private:
                              String& _rUserPath, String& _rWritablePath, sal_Bool& _rReadOnly );
     void        SetPathList( sal_uInt16 _nPathHandle,
                              const String& _rUserPath, const String& _rWritablePath );
-#endif
 
 public:
     SvxPathTabPage( Window* pParent, const SfxItemSet& rSet );

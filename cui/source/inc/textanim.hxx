@@ -67,7 +67,6 @@ private:
     FieldUnit           eFUnit;
     SfxMapUnit          eUnit;
 
-#ifdef _SVX_TEXTANIM_CXX
     DECL_LINK( SelectEffectHdl_Impl, void * );
     DECL_LINK( ClickEndlessHdl_Impl, void * );
     DECL_LINK( ClickAutoHdl_Impl, void * );
@@ -76,10 +75,8 @@ private:
 
     void                SelectDirection( SdrTextAniDirection nValue );
     sal_uInt16              GetSelectedDirection();
-#endif
 
 public:
-
     SvxTextAnimationPage( Window* pWindow, const SfxItemSet& rInAttrs );
     ~SvxTextAnimationPage();
 

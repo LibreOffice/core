@@ -32,8 +32,6 @@
 #include <svx/ofaitem.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
-#define _SVX_TPCOLOR_CXX
-
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include "svx/xattr.hxx"

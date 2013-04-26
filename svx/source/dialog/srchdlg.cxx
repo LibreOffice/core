@@ -47,7 +47,6 @@
 #include <sfx2/app.hxx>
 #include <toolkit/unohlp.hxx>
 
-#define _SVX_SRCHDLG_CXX
 #include "svx/srchdlg.hxx"
 
 #include <svx/dialogs.hrc>

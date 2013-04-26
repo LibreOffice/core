@@ -30,8 +30,6 @@
 
 #include <editeng/forbiddencharacterstable.hxx>
 
-#define _OUTLINER_CXX
-
 #include <editeng/outliner.hxx>
 #include <paralist.hxx>
 #include <editeng/outlobj.hxx>

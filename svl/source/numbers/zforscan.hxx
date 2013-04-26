@@ -218,7 +218,6 @@ private:                            // ---- privater Teil
     void InitSpecialKeyword( NfKeywordIndex eIdx ) const;
     void InitCompatCur() const;
 
-#ifdef _ZFORSCAN_CXX                // ----- private Methoden -----
     void SetDependentKeywords();
                                                 // Setzt die Sprachabh. Keyw.
     void SkipStrings(sal_uInt16& i, sal_Int32& nPos);// Ueberspringt StringSymbole
@@ -270,11 +269,7 @@ private:                            // ---- privater Teil
 
     // remove "..." and \... quotes from rStr, return how many chars removed
     static sal_Int32 RemoveQuotes( OUString& rStr );
-
-#endif //_ZFORSCAN_CXX
 };
-
-
 
 #endif  // _ZFORSCAN_HXX
 

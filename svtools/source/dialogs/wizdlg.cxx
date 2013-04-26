@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define _SVT_WIZDLG_CXX
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>

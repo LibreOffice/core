@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define _SV_VALUESET_CXX
-
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/valueset.hxx>

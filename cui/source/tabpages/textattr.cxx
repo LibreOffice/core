@@ -33,9 +33,6 @@
 #include <svx/svdotext.hxx>
 #include <svx/dialogs.hrc>
 
-#ifndef _SVX_TEXTATTR_CXX
-#define _SVX_TEXTATTR_CXX
-#endif
 #include "textattr.hxx"
 #include "textattr.hrc"
 #include <dialmgr.hxx>

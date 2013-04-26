@@ -239,7 +239,6 @@ protected:
     */
     void                SetEmptyViewMargin();
 
-#ifdef _SVT_WIZDLG_CXX
 private:
     SVT_DLLPRIVATE void             ImplInitData();
     SVT_DLLPRIVATE void             ImplCalcSize( Size& rSize );
@@ -247,7 +246,6 @@ private:
     SVT_DLLPRIVATE void             ImplPosTabPage();
     SVT_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
     SVT_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
-#endif
 
 public:
                         WizardDialog( Window* pParent, WinBits nStyle = WB_STDTABDIALOG );

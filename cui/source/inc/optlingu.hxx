@@ -77,7 +77,6 @@ class SvxEditModulesDlg : public ModalDialog
 
     SvTreeListEntry*    CreateEntry(String& rTxt, sal_uInt16 nCol);
 
-#ifdef _SVX_OPTLINGU_CXX
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
     DECL_LINK( UpDownHdl_Impl, PushButton * );
     DECL_LINK( ClickHdl_Impl, PushButton * );
@@ -86,7 +85,6 @@ class SvxEditModulesDlg : public ModalDialog
     DECL_LINK( LangSelectHdl_Impl, ListBox* );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox * );
     DECL_LINK(OpenURLHdl_Impl, void *);
-#endif
 
 public:
     SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData);
@@ -143,7 +141,6 @@ private:
     void    AddDicBoxEntry( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
     sal_uLong   GetDicUserData( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
 
-#ifdef _SVX_OPTLINGU_CXX
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
     DECL_LINK( ClickHdl_Impl, PushButton * );
     DECL_LINK( BoxDoubleClickHdl_Impl, SvTreeListBox * );
@@ -153,7 +150,6 @@ private:
 
     void                UpdateModulesBox_Impl();
     void                UpdateDicBox_Impl();
-#endif
 
 public:
     virtual             ~SvxLinguTabPage();

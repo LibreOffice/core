@@ -47,14 +47,12 @@ private:
     SfxItemSet*         pOutSet;
     sal_Bool            bModified;
 
-#ifdef _SVX_ZOOM_CXX
     DECL_LINK( UserHdl, RadioButton* );
     DECL_LINK(SpinHdl, void *);
     DECL_LINK( ViewLayoutUserHdl, RadioButton* );
     DECL_LINK( ViewLayoutSpinHdl, NumericField* );
     DECL_LINK( ViewLayoutCheckHdl, CheckBox* );
     DECL_LINK( OKHdl, Button* );
-#endif
 
 public:
     SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet );

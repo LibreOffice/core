@@ -644,7 +644,6 @@ private:
     Link                maDoubleClickHdl;
     Link                maExtraDownHdl;
 
-#ifdef _SV_RULER_CXX
     SVT_DLLPRIVATE void                ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void                ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void                ImplVDrawText( long nX, long nY, const String& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
@@ -675,7 +674,6 @@ private:
     SVT_DLLPRIVATE void                ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void                ImplEndDrag();
                         DECL_DLLPRIVATE_LINK( ImplUpdateHdl, void* );
-#endif
 
     // Forbidden and not implemented.
     Ruler (const Ruler &);

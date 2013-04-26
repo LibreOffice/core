@@ -37,10 +37,8 @@ private:
     sal_Bool            mbPersistence;
     sal_Bool            mbDummy1;
 
-#ifdef _CONFIG_CXX
     TOOLS_DLLPRIVATE sal_Bool           ImplUpdateConfig() const;
     TOOLS_DLLPRIVATE ImplGroupData*     ImplGetGroup() const;
-#endif
 
 public:
                         Config( const OUString& rFileName );

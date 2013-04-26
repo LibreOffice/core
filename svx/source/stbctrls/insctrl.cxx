@@ -23,8 +23,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 
-#define _SVX_INSCTRL_CXX
-
 #include <svx/dialogs.hrc>
 
 #include "svx/insctrl.hxx"

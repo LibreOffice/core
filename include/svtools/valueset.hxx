@@ -37,10 +37,8 @@ class ScrollBar;
 struct ValueSetItem;
 typedef ::std::vector< ValueSetItem* > ValueItemList;
 
-#ifdef _SV_VALUESET_CXX
 class ValueSetAcc;
 class ValueItemAcc;
-#endif
 
 /*************************************************************************
 
@@ -241,7 +239,6 @@ private:
     Link            maSelectHdl;
     Link            maHighlightHdl;
 
-#ifdef _SV_VALUESET_CXX
     friend class ValueSetAcc;
     friend class ValueItemAcc;
     using Control::ImplInitSettings;
@@ -272,7 +269,6 @@ private:
     SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
     DECL_DLLPRIVATE_LINK( ImplTimerHdl, void* );
-#endif
 
     // Forbidden and not implemented.
     ValueSet (const ValueSet &);

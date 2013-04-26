@@ -74,10 +74,8 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
     sal_uInt16      nValidMask; // Only temporary for GetAttribs / setAttribs,
                                 // because of the large Bullets
 
-#ifdef _SVX_BULITEM_CXX
     void    SetDefaultFont_Impl();
     void    SetDefaults_Impl();
-#endif
 
 public:
     TYPEINFO();
