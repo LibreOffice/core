@@ -386,9 +386,9 @@ public:
 
     virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ) = 0; //add for SwFldDlg
     virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ) = 0; //add for SwFldEditDlg
-    virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg( Window* pParent, //add for SwRenameXNamedDlg
-                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
-                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess, int nResId ) = 0;
+    virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg(Window* pParent, //add for SwRenameXNamedDlg
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess) = 0;
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(Window *pParent) = 0;
 
     virtual VclAbstractDialog*          CreateTblMergeDialog( Window* pParent, sal_Bool& rWithPrev ) = 0; //add for SwMergeTblDlg

@@ -21,60 +21,11 @@
 #include <globals.hrc>
 #include <helpid.h>
 
-ModalDialog DLG_RENAME_XNAMED
-{
-    HelpID = HID_RENAME_XNAMED ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 220 , 60 ) ;
-    Moveable = TRUE ;
-    FixedText FT_NEW_NAME
-    {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ en-US ] = "New name";
-    };
-    Edit ED_NEW_NAME
-    {
-        HelpID = "sw:Edit:DLG_RENAME_XNAMED:ED_NEW_NAME";
-        Pos = MAP_APPFONT ( 65 , 13 ) ;
-        Size = MAP_APPFONT ( 87 , 12 ) ;
-        Border = TRUE;
-    };
-    FixedLine FL_NAME
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ en-US ] = "Change name";
-    };
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 164 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 164 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-    };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( 164 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-    };
-    Text [ en-US ] = "Rename object: ";
-};
 String STR_SERVICE_UNAVAILABLE
 {
     Text [ en-US ] = "The following service is not available: ";
 };
+
 Resource RES_FRMEX_MENU
 {
     StringArray 1

@@ -190,7 +190,7 @@
 #define TP_INSERT_SECTION           (RC_GLOBALS_BEGIN +  85)
 #define DLG_INSERT_SECTION          (RC_GLOBALS_BEGIN +  86)
 #define DLG_SECTION_PROPERTIES      (RC_GLOBALS_BEGIN +  87)
-#define DLG_RENAME_XNAMED           (RC_GLOBALS_BEGIN +  88)
+
 #define DLG_MULTI_TOX               (RC_GLOBALS_BEGIN +  89)
 #define TP_TOX_SELECT               (RC_GLOBALS_BEGIN +  90)
 #define TP_TOX_ENTRY                (RC_GLOBALS_BEGIN +  91)

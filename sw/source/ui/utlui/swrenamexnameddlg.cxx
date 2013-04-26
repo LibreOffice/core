@@ -54,36 +54,32 @@ using namespace ::com::sun::star;
 
 SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
             uno::Reference< container::XNamed > & xN,
-            uno::Reference< container::XNameAccess > & xNA ) :
-    ModalDialog(pWin, SW_RES(DLG_RENAME_XNAMED)),
-   aNameFL(this, SW_RES(FL_NAME)),
-    aNewNameFT(this, SW_RES(FT_NEW_NAME)),
-   aNewNameED(this, SW_RES(ED_NEW_NAME)),
-   aOk(this, SW_RES(PB_OK)),
-   aCancel(this, SW_RES(PB_CANCEL)),
-   aHelp(this, SW_RES(PB_HELP)),
-   xNamed(xN),
-   xNameAccess(xNA)
+            uno::Reference< container::XNameAccess > & xNA )
+    : ModalDialog(pWin, "RenameObjectDialog",
+        "modules/swriter/ui/renameobjectdialog.ui")
+    , m_sRemoveWarning(SW_RESSTR(STR_REMOVE_WARNING))
+    , xNamed(xN)
+    , xNameAccess(xNA)
 {
-    FreeResource();
-    sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));
+    get(m_pNewNameED, "entry");
+    get(m_pOk, "ok");
 
     String sTmp(GetText());
-    aNewNameED.SetText(xNamed->getName());
-    aNewNameED.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+    m_pNewNameED->SetText(xNamed->getName());
+    m_pNewNameED->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
     sTmp += String(xNamed->getName());
     SetText(sTmp);
 
-    aOk.SetClickHdl(LINK(this, SwRenameXNamedDlg, OkHdl));
-    aNewNameED.SetModifyHdl(LINK(this, SwRenameXNamedDlg, ModifyHdl));
-    aOk.Enable(sal_False);
+    m_pOk->SetClickHdl(LINK(this, SwRenameXNamedDlg, OkHdl));
+    m_pNewNameED->SetModifyHdl(LINK(this, SwRenameXNamedDlg, ModifyHdl));
+    m_pOk->Enable(sal_False);
 }
 
 IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl)
 {
     try
     {
-        xNamed->setName(aNewNameED.GetText());
+        xNamed->setName(m_pNewNameED->GetText());
     }
     catch (const uno::RuntimeException&)
     {
@@ -110,12 +106,12 @@ IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
     if(sTmp.Len() != nLen)
     {
         pEdit->SetText(sTmp);
-        String sWarning(sRemoveWarning);
+        String sWarning(m_sRemoveWarning);
         sWarning += sMsg;
         InfoBox(this, sWarning).Execute();
     }
 
-    aOk.Enable(sTmp.Len() && !xNameAccess->hasByName(sTmp)
+    m_pOk->Enable(sTmp.Len() && !xNameAccess->hasByName(sTmp)
     && (!xSecondAccess.is() || !xSecondAccess->hasByName(sTmp))
     && (!xThirdAccess.is() || !xThirdAccess->hasByName(sTmp))
     );

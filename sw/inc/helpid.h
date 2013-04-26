@@ -181,7 +181,6 @@
 #define HID_INSERT_SECTION_PAGE                                 "SW_HID_INSERT_SECTION_PAGE"
 #define HID_INSERT_SECTION_DLG                                  "SW_HID_INSERT_SECTION_DLG"
 #define HID_SECTION_PROPERTIES_DLG                              "SW_HID_SECTION_PROPERTIES_DLG"
-#define HID_RENAME_XNAMED                                       "SW_HID_RENAME_XNAMED"
 #define HID_TP_TOX_SELECT                                       "SW_HID_TP_TOX_SELECT"
 #define HID_TP_TOX_ENTRY                                        "SW_HID_TP_TOX_ENTRY"
 #define HID_TOX_STYLES_PAGE                                     "SW_HID_TOX_STYLES_PAGE"

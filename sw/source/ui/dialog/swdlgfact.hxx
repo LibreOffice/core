@@ -485,9 +485,9 @@ public:
         const SfxItemSet* pItemSet, SwWrtShell* pSh); //add for SwTableTabDlg
     virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ); //add for SwFldDlg
     virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ); //add for SwFldEditDlg
-    virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg( Window* pParent, //add for SwRenameXNamedDlg
-                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
-                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess, int nResId );
+    virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg(Window* pParent, //add for SwRenameXNamedDlg
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess);
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(Window *pParent); //add for SwModalRedlineAcceptDlg
 
     virtual VclAbstractDialog*          CreateTblMergeDialog(Window* pParent, sal_Bool& rWithPrev); //add for SwMergeTblDlg

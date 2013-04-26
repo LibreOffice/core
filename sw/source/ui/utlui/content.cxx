@@ -2889,7 +2889,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        AbstractSwRenameXNamedDlg* pDlg = pFact->CreateSwRenameXNamedDlg( this, xNamed, xNameAccess, DLG_RENAME_XNAMED );
+        AbstractSwRenameXNamedDlg* pDlg = pFact->CreateSwRenameXNamedDlg(this, xNamed, xNameAccess);
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if(xSecond.is())
             pDlg->SetAlternativeAccess( xSecond, xThird);

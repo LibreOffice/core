@@ -1003,23 +1003,12 @@ SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( SwView& 
     return 0;
 }
 
-AbstractSwRenameXNamedDlg * SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg( Window* pParent,
-                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
-                                                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess,int nResId )
+AbstractSwRenameXNamedDlg * SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(Window* pParent,
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess)
 {
-    SwRenameXNamedDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_RENAME_XNAMED :
-            pDlg = new SwRenameXNamedDlg( pParent,xNamed, xNameAccess);
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwRenameXNamedDlg_Impl( pDlg );
-    return 0;
+    SwRenameXNamedDlg* pDlg = new SwRenameXNamedDlg( pParent,xNamed, xNameAccess);
+    return new AbstractSwRenameXNamedDlg_Impl( pDlg );
 }
 
 AbstractSwModalRedlineAcceptDlg * SwAbstractDialogFactory_Impl::CreateSwModalRedlineAcceptDlg(Window *pParent)
