@@ -44,7 +44,6 @@
 #include <helpid.h>
 #include <globals.hrc>      // for template name 'none'
 #include <misc.hrc>
-#include <outline.hrc>
 #include <paratr.hxx>
 
 #include <unomid.h>
@@ -58,14 +57,11 @@ using namespace ::com::sun::star;
 
 DBG_NAME(outlinehdl)
 
-class SwNumNamesDlg: public ModalDialog
+class SwNumNamesDlg : public ModalDialog
 {
-    FixedLine    aFormFL;
-    Edit         aFormEdit;
-    ListBox      aFormBox;
-    OKButton     aOKBtn;
-    CancelButton aCancelBtn;
-    HelpButton   aHelpBtn;
+    Edit*     m_pFormEdit;
+    ListBox*  m_pFormBox;
+    OKButton* m_pOKBtn;
 
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( SelectHdl, ListBox * );
@@ -73,10 +69,9 @@ class SwNumNamesDlg: public ModalDialog
 
 public:
     SwNumNamesDlg(Window *pParent);
-    ~SwNumNamesDlg();
     void SetUserNames(const String *pList[]);
-    String GetName() const { return aFormEdit.GetText(); }
-    sal_uInt16 GetCurEntryPos() const { return aFormBox.GetSelectEntryPos(); }
+    String GetName() const { return m_pFormEdit->GetText(); }
+    sal_uInt16 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
 };
 
 /*------------------------------------------------------------------------
@@ -84,8 +79,8 @@ public:
 ------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 {
-    aFormEdit.SetText(pBox->GetSelectEntry());
-    aFormEdit.SetSelection(Selection(0, SELECTION_MAX));
+    m_pFormEdit->SetText(pBox->GetSelectEntry());
+    m_pFormEdit->SetSelection(Selection(0, SELECTION_MAX));
     return 0;
 }
 IMPL_LINK_INLINE_END( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
@@ -102,14 +97,14 @@ void SwNumNamesDlg::SetUserNames(const String *pList[])
     {
         if(pList[i])
         {
-            aFormBox.RemoveEntry(i);
-            aFormBox.InsertEntry(*pList[i], i);
+            m_pFormBox->RemoveEntry(i);
+            m_pFormBox->InsertEntry(*pList[i], i);
             if(i == nSelect && nSelect < SwBaseNumRules::nMaxRules)
                 nSelect++;
         }
     }
-    aFormBox.SelectEntryPos(nSelect);
-    SelectHdl(&aFormBox);
+    m_pFormBox->SelectEntryPos(nSelect);
+    SelectHdl(m_pFormBox);
 }
 
 /*------------------------------------------------------------------------
@@ -117,7 +112,7 @@ void SwNumNamesDlg::SetUserNames(const String *pList[])
 ------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 {
-    aOKBtn.Enable(!pBox->GetText().isEmpty());
+    m_pOKBtn->Enable(!pBox->GetText().isEmpty());
     return 0;
 }
 IMPL_LINK_INLINE_END( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
@@ -133,22 +128,18 @@ IMPL_LINK_NOARG_INLINE_START(SwNumNamesDlg, DoubleClickHdl)
 IMPL_LINK_NOARG_INLINE_END(SwNumNamesDlg, DoubleClickHdl)
 
 SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
-    : ModalDialog(pParent, SW_RES(DLG_NUM_NAMES)),
-    aFormFL(this, SW_RES(FL_FORM)),
-    aFormEdit(this, SW_RES(ED_FORM)),
-    aFormBox(this, SW_RES(LB_FORM)),
-    aOKBtn(this, SW_RES(BT_OK)),
-    aCancelBtn(this, SW_RES(BT_CANCEL)),
-    aHelpBtn(this, SW_RES(BT_HELP))
+    : ModalDialog(pParent, "NumberingNameDialog",
+        "modules/swriter/ui/numberingnamedialog.ui")
 {
-    FreeResource();
-    aFormEdit.SetModifyHdl(LINK(this, SwNumNamesDlg, ModifyHdl));
-    aFormBox.SetSelectHdl(LINK(this, SwNumNamesDlg, SelectHdl));
-    aFormBox.SetDoubleClickHdl(LINK(this, SwNumNamesDlg, DoubleClickHdl));
-    SelectHdl(&aFormBox);
+    get(m_pFormEdit, "entry");
+    get(m_pFormBox, "form");
+    m_pFormBox->SetDropDownLineCount(5);
+    get(m_pOKBtn, "ok");
+    m_pFormEdit->SetModifyHdl(LINK(this, SwNumNamesDlg, ModifyHdl));
+    m_pFormBox->SetSelectHdl(LINK(this, SwNumNamesDlg, SelectHdl));
+    m_pFormBox->SetDoubleClickHdl(LINK(this, SwNumNamesDlg, DoubleClickHdl));
+    SelectHdl(m_pFormBox);
 }
-
-SwNumNamesDlg::~SwNumNamesDlg() {}
 
 static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
 {

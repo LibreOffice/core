@@ -25,7 +25,6 @@
 #define HID_DOCINFO_EDT                                         "SW_HID_DOCINFO_EDT"
 #define HID_PASSWD                                              "SW_HID_PASSWD"
 #define HID_CONFIG_SAVE                                         "SW_HID_CONFIG_SAVE"
-#define HID_NUM_NAMES                                           "SW_HID_NUM_NAMES"
 
 #define HID_FORMEDT_CONTENT                                     "SW_HID_FORMEDT_CONTENT"
 #define HID_FORMEDT_USER                                        "SW_HID_FORMEDT_USER"

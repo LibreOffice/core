@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Untitled 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Untitled 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Untitled 3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Untitled 4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Untitled 5</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Untitled 6</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Untitled 7</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Untitled 8</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Untitled 9</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="NumberingNameDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -97,6 +132,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <property name="model">liststore1</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="treeview-selection1"/>
                         </child>
