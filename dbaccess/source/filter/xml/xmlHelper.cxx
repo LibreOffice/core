@@ -144,7 +144,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMappe
 // -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapper()
 {
-#define MAP_CONST_COLUMN( name, prefix, token, type, context )  { name.ascii, name.length,  prefix, token, type|XML_TYPE_PROP_TABLE_COLUMN, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_COLUMN( name, prefix, token, type, context )  { name.ascii, name.length,  prefix, token, static_cast<sal_Int32>(type|XML_TYPE_PROP_TABLE_COLUMN), context, SvtSaveOptions::ODFVER_010 }
     static const XMLPropertyMapEntry s_aColumnStylesProperties[] =
     {
         MAP_CONST_COLUMN( PROPERTY_WIDTH,           XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,       XML_TYPE_MEASURE, 0),
