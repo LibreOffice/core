@@ -104,6 +104,7 @@ private:
     FuPoor*             pDrawActual;
     FuPoor*             pDrawOld;
 
+    ScDocShell*         pCurDocument;
     ScGridWindow*       pGridWin[4];
     ScColBar*           pColBar[2];
     ScRowBar*           pRowBar[2];

@@ -223,6 +223,7 @@ static bool lcl_HasRowOutline( const ScViewData& rViewData )
 
 ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     pFrameWin( pParent ),
+    pCurDocument (&rDocSh),
     aViewData( &rDocSh, pViewShell ),
     pSelEngine( NULL ),
     aFunctionSet( &aViewData ),
@@ -2028,14 +2029,13 @@ void ScTabView::FreezeSplitters( bool bFreeze )
     if ( eOldV != SC_SPLIT_NONE )
         ePos = SC_SPLIT_TOPLEFT;
     Window* pWin = pGridWin[ePos];
-    ScDocShell* pDocSh = NULL;
 
     bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
 
     if ( bFreeze )
     {
         Point aWinStart = pWin->GetPosPixel();
-        pDocSh->SetDocumentModified();
+        pCurDocument->SetDocumentModified();
 
         Point aSplit;
         SCsCOL nPosX;
