@@ -205,6 +205,7 @@ private:
     ::sfx2::sidebar::ControllerItem  maBulletNumRuleIndex;
     ::sfx2::sidebar::ControllerItem  maNumNumRuleIndex;
 
+    cssu::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
     ParaLineSpacingPopup maLineSpacePopup;
