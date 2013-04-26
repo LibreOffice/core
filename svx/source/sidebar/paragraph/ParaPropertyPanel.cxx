@@ -1650,12 +1650,12 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       //i122166, the icons for numbering or bullets toolbox inside toolbar and sidebar should be the same one
       maBulletOnOff (FN_NUM_BULLET_ON, *pBindings,*this,A2S("DefaultBullet"),rxFrame),
       maNumberOnOff (FN_NUM_NUMBERING_ON, *pBindings,*this,A2S("DefaultNumbering"),rxFrame),
-      mxFrame(rxFrame),
       //End i122166
       maBackColorControl (SID_BACKGROUND_COLOR, *pBindings,*this),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
       maBulletNumRuleIndex (FN_BUL_NUM_RULE_INDEX, *pBindings,*this),
       maNumNumRuleIndex (FN_NUM_NUM_RULE_INDEX, *pBindings,*this),
+      mxFrame(rxFrame),
       maContext(),
       mpBindings(pBindings),
       maLineSpacePopup(this, ::boost::bind(&ParaPropertyPanel::CreateLineSpacingControl, this, _1)),
