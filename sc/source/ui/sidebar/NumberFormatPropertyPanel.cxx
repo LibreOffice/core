@@ -30,6 +30,7 @@
 #include "scresid.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/imagemgr.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
@@ -39,6 +40,7 @@
 
 using namespace css;
 using namespace cssu;
+using ::sfx2::sidebar::Theme;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
@@ -72,11 +74,6 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     // yes, grep for it in SC and symphony (!)
     maFormatControl(SID_NUMBER_FORMAT, *pBindings, *this),
 
-    maImgNumber(ScResId(IMG_NUMBER)),
-    maImgPercent(ScResId(IMG_PERCENT)),
-    maImgCurrency(ScResId(IMG_CURRENCY)),
-    maImgDate(ScResId(IMG_DATE)),
-    maImgText(ScResId(IMG_TEXT)),
     mnCategorySelected(0),
     mxFrame(rxFrame),
     maContext(),
@@ -105,11 +102,24 @@ void NumberFormatPropertyPanel::Initialize()
     mpLbCategory->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Category")));     //wj acc
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
 
-    mpTBCategory->SetItemImage(ID_NUMBER, maImgNumber);
-    mpTBCategory->SetItemImage(ID_PERCENT, maImgPercent);
-    mpTBCategory->SetItemImage(ID_CURRENCY, maImgCurrency);
-    mpTBCategory->SetItemImage(ID_DATE, maImgDate);
-    mpTBCategory->SetItemImage(ID_TEXT, maImgText);
+    // Note that we use icons from UNO commands that are not in every case the commands
+    // that are really dispatched.  They just look right.
+    mpTBCategory->SetItemImage(
+        ID_NUMBER,
+        GetImage(mxFrame, A2S(".uno:NumericField"), sal_False, Theme::IsHighContrastMode()));
+    mpTBCategory->SetItemImage(
+        ID_PERCENT,
+        GetImage(mxFrame, A2S(".uno:NumberFormatPercent"), sal_False, Theme::IsHighContrastMode()));
+    mpTBCategory->SetItemImage(
+        ID_CURRENCY,
+        GetImage(mxFrame, A2S(".uno:NumberFormatCurrency"), sal_False, Theme::IsHighContrastMode()));
+    mpTBCategory->SetItemImage(
+        ID_DATE,
+        GetImage(mxFrame, A2S(".uno:NumberFormatDate"), sal_False, Theme::IsHighContrastMode()));
+    mpTBCategory->SetItemImage(
+        ID_TEXT,
+        GetImage(mxFrame, A2S(".uno:InsertFixedText"), sal_False, Theme::IsHighContrastMode()));
+
     Size aTbxSize( mpTBCategory->CalcWindowSizePixel() );
     mpTBCategory->SetOutputSizePixel( aTbxSize );
     mpTBCategory->SetBackground(Wallpaper());
