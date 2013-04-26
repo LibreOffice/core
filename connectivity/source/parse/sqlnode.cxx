@@ -1232,8 +1232,8 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
     if (SQLyyparse() != 0)
     {
         m_sFieldName= OUString();
-    m_xField.clear();
-    m_xFormatter.clear();
+        m_xField.clear();
+        m_xFormatter.clear();
         m_nFormatKey = 0;
         m_nDateFormatKey = 0;
 
@@ -1253,8 +1253,8 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
         (*s_pGarbageCollector)->clear();
 
         m_sFieldName= OUString();
-    m_xField.clear();
-    m_xFormatter.clear();
+        m_xField.clear();
+        m_xFormatter.clear();
         m_nFormatKey = 0;
         m_nDateFormatKey = 0;
 
@@ -1729,7 +1729,7 @@ sal_Bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNode
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-void OSQLParseNode::replaceNodeValue(const OUString& rTableAlias,const OUString& rColumnName)
+void OSQLParseNode::replaceNodeValue(const OUString& rTableAlias, const OUString& rColumnName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::replaceNodeValue" );
     for (sal_uInt32 i=0;i<count();++i)
@@ -1856,7 +1856,7 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
     }
 }
 //-----------------------------------------------------------------------------
-void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_Bool bNegate)
+void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, sal_Bool bNegate)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::negateSearchCondition" );
     if(!pSearchCondition) // no where condition at entry point
