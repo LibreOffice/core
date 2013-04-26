@@ -21,6 +21,4 @@
 
 _TCHAR APPLICATION_SWITCH[] = _T( "--base" );
 
-LPCWSTR APPUSERMODELID = L"TheDocumentFoundation.LibreOffice.Base";
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

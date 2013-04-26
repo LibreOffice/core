@@ -21,6 +21,4 @@
 
 _TCHAR APPLICATION_SWITCH[] = _T( "--math" );
 
-LPCWSTR APPUSERMODELID = L"TheDocumentFoundation.LibreOffice.Math";
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
