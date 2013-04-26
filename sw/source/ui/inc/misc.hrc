@@ -26,7 +26,6 @@
 #define DLG_INSERT_BOOKMARK         (RC_MISC_BEGIN + 17)
 #define DLG_NUM_NAMES               (RC_MISC_BEGIN + 18)
 #define DLG_SORTING                 (RC_MISC_BEGIN + 19)
-#define DLG_RENAME_GLOS             (RC_MISC_BEGIN + 25)
 
 #define DLG_TAB_OUTLINE             (RC_MISC_BEGIN + 31)
 

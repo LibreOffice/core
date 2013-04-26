@@ -18,7 +18,6 @@
  */
 
 #include "misc.hrc"
-#include "glossary.hrc"
 #include "cmdid.h"
 #include "helpid.h"
 #include "access.hrc"
@@ -44,94 +43,6 @@ String STR_QUERY_DELETE_GROUP2
 String STR_GLOSSARY
 {
     Text [ en-US ] = "AutoText :" ;
-};
-ModalDialog DLG_RENAME_GLOS
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 287 , 47 ) ;
-    Moveable = TRUE ;
-    HelpID = HID_RENAME_GLOSSARY ;
-    OKButton BT_OKNEW
-    {
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 231 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-        TabStop = TRUE ;
-    };
-    CancelButton BT_CANCEL
-    {
-        Pos = MAP_APPFONT ( 231 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText FT_ON
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ en-US ] = "Na~me" ;
-    };
-    Edit ED_ON
-    {
-        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_ON";
-        ReadOnly = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 44 , 12 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
-        Left = TRUE ;
-    };
-    FixedText FT_OS
-    {
-        Pos = MAP_APPFONT ( 147 , 14 ) ;
-        Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ en-US ] = "Short~cut" ;
-    };
-    Edit ED_OS
-    {
-        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_OS";
-        ReadOnly = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 200 , 12 ) ;
-        Size = MAP_APPFONT ( 21 , 12 ) ;
-        Left = TRUE ;
-    };
-    FixedText FT_NN
-    {
-        Pos = MAP_APPFONT ( 12 , 29 ) ;
-        Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ en-US ] = "~New" ;
-    };
-    Edit ED_NN
-    {
-        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_NN";
-        TabStop = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 44 , 27 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
-        Left = TRUE ;
-    };
-    FixedText FT_NS
-    {
-        Pos = MAP_APPFONT ( 147 , 29 ) ;
-        Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ en-US ] = "~Shortcut" ;
-    };
-    Edit ED_NS
-    {
-        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_NS";
-        TabStop = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 200 , 27 ) ;
-        Size = MAP_APPFONT ( 21 , 12 ) ;
-        Left = TRUE ;
-    };
-    FixedLine FL_NN
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 219 , 8 ) ;
-    };
-    Text [ en-US ] = "Rename AutoText" ;
 };
 String STR_SAVE_GLOSSARY
 {

@@ -97,6 +97,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/previewzoomdialog \
 	sw/uiconfig/swriter/ui/printoptionspage \
 	sw/uiconfig/swriter/ui/printeroptions \
+	sw/uiconfig/swriter/ui/renameautotextdialog \
 	sw/uiconfig/swriter/ui/renameobjectdialog \
 	sw/uiconfig/swriter/ui/rowheight \
 	sw/uiconfig/swriter/ui/sortdialog \

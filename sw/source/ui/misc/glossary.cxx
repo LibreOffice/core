@@ -64,7 +64,6 @@
 #include <swerror.h>
 #include <globals.hrc>
 #include <misc.hrc>
-#include <glossary.hrc>
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 
@@ -116,17 +115,11 @@ struct GroupUserData
 ------------------------------------------------------------------------*/
 class SwNewGlosNameDlg : public ModalDialog
 {
-    FixedText       aNNFT;
-    Edit            aNewName;
-    FixedText       aNSFT;
-    NoSpaceEdit     aNewShort;
-    OKButton        aOk;
-    CancelButton    aCancel;
-    FixedText       aONFT;
-    Edit            aOldName;
-    FixedText       aOSFT;
-    Edit            aOldShort;
-    FixedLine       aFL;
+    Edit*        m_pNewName;
+    NoSpaceEdit* m_pNewShort;
+    OKButton*    m_pOk;
+    Edit*        m_pOldName;
+    Edit*        m_pOldShort;
 
 protected:
     DECL_LINK( Modify, Edit * );
@@ -137,34 +130,28 @@ public:
                       const String& rOldName,
                       const String& rOldShort );
 
-    String GetNewName()  const { return aNewName.GetText(); }
-    String GetNewShort() const { return aNewShort.GetText(); }
+    String GetNewName()  const { return m_pNewName->GetText(); }
+    String GetNewShort() const { return m_pNewShort->GetText(); }
 };
 
 SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
                             const String& rOldName,
-                            const String& rOldShort ) :
-    ModalDialog( pParent, SW_RES( DLG_RENAME_GLOS ) ),
-    aNNFT   (this, SW_RES( FT_NN    )),
-    aNewName(this, SW_RES( ED_NN    )),
-    aNSFT   (this, SW_RES( FT_NS    )),
-    aNewShort(this,SW_RES( ED_NS    )),
-    aOk     (this, SW_RES( BT_OKNEW)),
-    aCancel (this, SW_RES( BT_CANCEL)),
-    aONFT   (this, SW_RES( FT_ON    )),
-    aOldName(this, SW_RES( ED_ON    )),
-    aOSFT   (this, SW_RES( FT_OS    )),
-    aOldShort(this,SW_RES( ED_OS    )),
-    aFL    (this, SW_RES( FL_NN    ))
-
+                            const String& rOldShort )
+    : ModalDialog(pParent, "RenameAutoTextDialog",
+        "modules/swriter/ui/renameautotextdialog.ui")
 {
-    FreeResource();
-    aOldName.SetText( rOldName );
-    aOldShort.SetText( rOldShort );
-    aNewName.SetModifyHdl(LINK(this, SwNewGlosNameDlg, Modify ));
-    aNewShort.SetModifyHdl(LINK(this, SwNewGlosNameDlg, Modify ));
-    aOk.SetClickHdl(LINK(this, SwNewGlosNameDlg, Rename ));
-    aNewName.GrabFocus();
+    get(m_pNewName, "newname");
+    get(m_pNewShort, "newsc");
+    get(m_pOk, "ok");
+    get(m_pOldName, "oldname");
+    get(m_pOldShort, "oldsc");
+
+    m_pOldName->SetText( rOldName );
+    m_pOldShort->SetText( rOldShort );
+    m_pNewName->SetModifyHdl(LINK(this, SwNewGlosNameDlg, Modify ));
+    m_pNewShort->SetModifyHdl(LINK(this, SwNewGlosNameDlg, Modify ));
+    m_pOk->SetClickHdl(LINK(this, SwNewGlosNameDlg, Rename ));
+    m_pNewName->GrabFocus();
 }
 
 /*------------------------------------------------------------------------
@@ -794,28 +781,28 @@ IMPL_LINK_NOARG_INLINE_END(SwGlossaryDlg, EditHdl)
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
 {
-    OUString aName(aNewName.GetText());
+    OUString aName(m_pNewName->GetText());
     SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
 
-    if( pBox == &aNewName )
-        aNewShort.SetText( lcl_GetValidShortCut( aName ) );
+    if (pBox == m_pNewName)
+        m_pNewShort->SetText( lcl_GetValidShortCut( aName ) );
 
-    sal_Bool bEnable = !aName.isEmpty() && !aNewShort.GetText().isEmpty() &&
-        (!pDlg->DoesBlockExist(aName, aNewShort.GetText())
-            || aName == aOldName.GetText());
-    aOk.Enable(bEnable);
+    sal_Bool bEnable = !aName.isEmpty() && !m_pNewShort->GetText().isEmpty() &&
+        (!pDlg->DoesBlockExist(aName, m_pNewShort->GetText())
+            || aName == m_pOldName->GetText());
+    m_pOk->Enable(bEnable);
     return 0;
 }
 
 IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename)
 {
     SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
-    OUString sNew = GetAppCharClass().uppercase(aNewShort.GetText());
-    if( pDlg->pGlossaryHdl->HasShortName(aNewShort.GetText())
-        && sNew != aOldShort.GetText() )
+    OUString sNew = GetAppCharClass().uppercase(m_pNewShort->GetText());
+    if( pDlg->pGlossaryHdl->HasShortName(m_pNewShort->GetText())
+        && sNew != m_pOldShort->GetText() )
     {
         InfoBox(this, SW_RES(MSG_DOUBLE_SHORTNAME)).Execute();
-        aNewShort.GrabFocus();
+        m_pNewShort->GrabFocus();
     }
     else
         EndDialog(sal_True);
