@@ -65,15 +65,6 @@ icu_CFLAGS+=$(C_RESTRICTIONFLAGS)
 icu_LDFLAGS+= -L../lib  -L../../lib -L../stubdata -L../../stubdata  -L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
-.IF "$(OS)"=="MACOSX"
-.IF "$(EXTRA_CFLAGS)"!=""
-CPP:=gcc -E $(EXTRA_CFLAGS)
-CXX:=g++ $(EXTRA_CFLAGS)
-CC:=gcc $(EXTRA_CFLAGS)
-.EXPORT : CPP
-.ENDIF # "$(EXTRA_CFLAGS)"!=""
-.ENDIF # "$(OS)"=="MACOSX"
-
 icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
