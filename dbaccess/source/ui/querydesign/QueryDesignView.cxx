@@ -3072,7 +3072,7 @@ void OQueryDesignView::SaveUIConfig()
 }
 // -----------------------------------------------------------------------------
 OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pEntry,
-                                                           const String& _sCriteria,
+                                                           const OUString& _sCriteria,
                                                            OUString& _rsErrorMessage,
                                                            Reference<XPropertySet>& _rxColumn) const
 {
@@ -3086,7 +3086,6 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
     ::connectivity::OSQLParser& rParser( static_cast<OQueryController&>(getController()).getParser() );
     OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntry->GetTabWindow());
 
-    String sTest(_sCriteria);
     // special handling for functions
     if ( pEntry->GetFunctionType() & (FKT_OTHER | FKT_AGGREGATE | FKT_NUMERIC) )
     {
@@ -3157,6 +3156,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
         }
     }
 
+    OUString sTest(_sCriteria);
     OSQLParseNode* pParseNode = rParser.predicateTree(  _rsErrorMessage,
                                                         sTest,
                                                         static_cast<OQueryController&>(getController()).getNumberFormatter(),

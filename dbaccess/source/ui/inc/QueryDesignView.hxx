@@ -141,7 +141,7 @@ namespace dbaui
                 );
 
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
-                                                                    const String& _sCriteria,
+                                                                    const OUString& _sCriteria,
                                                                     OUString& _rsErrorMessage,
                                                                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn) const;
 
