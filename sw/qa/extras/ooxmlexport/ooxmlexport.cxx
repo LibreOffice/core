@@ -578,12 +578,7 @@ void Test::testCellBtlr()
 
     // Create the zip file.
     utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFilterArgs(1);
-    aFilterArgs[0].Name = "FilterName";
-    aFilterArgs[0].Value <<= OUString("Office Open XML Text");
-    xStorable->storeToURL(aTempFile.GetURL(), aFilterArgs);
+    save("Office Open XML Text", aTempFile);
 
     // Read the XML stream we're interested in.
     uno::Sequence<uno::Any> aArgs(1);

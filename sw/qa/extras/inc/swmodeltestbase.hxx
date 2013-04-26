@@ -288,6 +288,17 @@ protected:
         calcLayout();
     }
 
+    /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
+    void save(OUString aFilter, utl::TempFile& rTempFile)
+    {
+        rTempFile.EnableKillingFile();
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aFilterArgs(1);
+        aFilterArgs[0].Name = "FilterName";
+        aFilterArgs[0].Value <<= aFilter;
+        xStorable->storeToURL(rTempFile.GetURL(), aFilterArgs);
+    }
+
     void finish()
     {
         sal_uInt32 nEndTime = osl_getGlobalTimer();

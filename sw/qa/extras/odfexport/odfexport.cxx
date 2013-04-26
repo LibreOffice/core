@@ -152,14 +152,8 @@ void Test::testFdo58949()
      * and replacement image) OLE objects using UNO, so we'll check the zip file directly.
      */
 
-    // Create the zip file.
     utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFilterArgs(1);
-    aFilterArgs[0].Name = "FilterName";
-    aFilterArgs[0].Value <<= OUString("writer8");
-    xStorable->storeToURL(aTempFile.GetURL(), aFilterArgs);
+    save("writer8", aTempFile);
 
     uno::Sequence<uno::Any> aArgs(1);
     aArgs[0] <<= OUString(aTempFile.GetURL());
