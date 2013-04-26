@@ -107,7 +107,7 @@ gb_LinkTarget__RPATHS := \
 	OOO:@__________________________________________________OOO/ \
 	SDKBIN: \
 	OXT: \
-	NONE:@__VIA_LIBRARY_PATH__@ \
+	NONE:@__________________________________________________NONE/ \
 
 # $(call gb_LinkTarget__get_installname,libfilename,soversion,layerprefix)
 define gb_LinkTarget__get_installname
