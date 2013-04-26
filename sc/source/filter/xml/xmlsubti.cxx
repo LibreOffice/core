@@ -283,15 +283,14 @@ void ScMyTables::AddMatrixRange(
     ScMarkData aMark;
     aMark.SetMarkArea( aScRange );
     aMark.SelectTable( aScRange.aStart.Tab(), sal_True );
-    ScTokenArray* pCode = new ScTokenArray;
+    boost::scoped_ptr<ScTokenArray> pCode(new ScTokenArray);
     pCode->AddStringXML( rFormula );
     if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !rFormulaNmsp.isEmpty() )
         pCode->AddStringXML( rFormulaNmsp );
     pDoc->InsertMatrixFormula(
-        aScRange.aStart.Col(), aScRange.aStart.Row(),
-        aScRange.aEnd.Col(), aScRange.aEnd.Row(),
-        aMark, EMPTY_OUSTRING, pCode, eGrammar, false );
-    delete pCode;
+        nStartColumn, nStartRow,
+        nEndColumn, nEndRow,
+        aMark, EMPTY_OUSTRING, pCode.get(), eGrammar, false );
     pDoc->IncXMLImportedFormulaCount( rFormula.getLength() );
 }
 
