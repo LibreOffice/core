@@ -3246,6 +3246,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                                                                     ,xConnection
                                                                     ,xFormatter
                                                                     ,xField
+                                                                    ,OUString()
                                                                     ,aAppLocale
                                                                     ,cDecimalSeparator
                                                                     ,getParseContext());

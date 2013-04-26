@@ -294,6 +294,7 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
+                const OUString &_sPredicateTableAlias,
                 const ::com::sun::star::lang::Locale& _rIntl,
                 const sal_Char _cDecSeparator,
                 const IParseContext* _pContext

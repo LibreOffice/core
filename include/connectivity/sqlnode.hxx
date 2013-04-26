@@ -82,6 +82,7 @@ namespace connectivity
         ::boost::shared_ptr< QueryNameSet >     pSubQueryHistory;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    xFormatter;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       xField;
+        OUString                                                                        sPredicateTableAlias;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xQueries;  // see bParseToSDBCLevel
         const IParseContext& m_rContext;
         sal_Char            cDecSep;
@@ -94,6 +95,7 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _xFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xField,
+            const OUString &_sPredicateTableAlias,
             const ::com::sun::star::lang::Locale& _rLocale,
             const IParseContext* _pContext,
             bool _bIntl,
@@ -329,6 +331,7 @@ namespace connectivity
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
+                                     const OUString &_sTableAlias,
                                      const ::com::sun::star::lang::Locale& rIntl,
                                      sal_Char _cDec,
                                      const IParseContext* pContext = NULL ) const;
@@ -410,6 +413,7 @@ namespace connectivity
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
+                            const OUString &_sPredicateTableAlias,
                             const ::com::sun::star::lang::Locale& rIntl,
                             const IParseContext* pContext,
                             bool _bIntl,

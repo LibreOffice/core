@@ -140,6 +140,7 @@ namespace connectivity
 //-----------------------------------------------------------------------------
 SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _rxConnection,
         const Reference< XNumberFormatter >& _xFormatter, const Reference< XPropertySet >& _xField,
+        const OUString &_sPredicateTableAlias,
         const Locale& _rLocale, const IParseContext* _pContext,
         bool _bIntl, bool _bQuote, sal_Char _cDecSep, bool _bPredicate, bool _bParseToSDBC )
     :rLocale(_rLocale)
@@ -148,6 +149,7 @@ SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _r
     ,pSubQueryHistory( new QueryNameSet )
     ,xFormatter(_xFormatter)
     ,xField(_xField)
+    ,sPredicateTableAlias(_sPredicateTableAlias)
     ,m_rContext( _pContext ? (const IParseContext&)(*_pContext) : (const IParseContext&)OSQLParser::s_aDefaultContext )
     ,cDecSep(_cDecSep)
     ,bQuote(_bQuote)
@@ -215,7 +217,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseNodeToStr" );
 
     parseNodeToStr(
-        rString, _rxConnection, NULL, NULL,
+        rString, _rxConnection, NULL, NULL, OUString(),
         pContext ? pContext->getPreferredLocale() : OParseContext::getDefaultLocale(),
         pContext, _bIntl, _bQuote, '.', false, false );
 }
@@ -233,7 +235,7 @@ void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr(rString, _rxConnection, xFormatter, NULL, rIntl, pContext, sal_True, sal_True, _cDec, true, false);
+        parseNodeToStr(rString, _rxConnection, xFormatter, NULL, OUString(), rIntl, pContext, sal_True, sal_True, _cDec, true, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -241,6 +243,7 @@ void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
                                               const Reference< XConnection > & _rxConnection,
                                               const Reference< XNumberFormatter > & xFormatter,
                                               const Reference< XPropertySet > & _xField,
+                                              const OUString &_sPredicateTableAlias,
                                               const ::com::sun::star::lang::Locale& rIntl,
                                               sal_Char _cDec,
                                               const IParseContext* pContext ) const
@@ -250,7 +253,7 @@ void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
-        parseNodeToStr( rString, _rxConnection, xFormatter, _xField, rIntl, pContext, true, true, _cDec, true, false );
+        parseNodeToStr( rString, _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext, true, true, _cDec, true, false );
 }
 
 //-----------------------------------------------------------------------------
@@ -258,6 +261,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
                       const Reference< XConnection > & _rxConnection,
                       const Reference< XNumberFormatter > & xFormatter,
                       const Reference< XPropertySet > & _xField,
+                      const OUString &_sPredicateTableAlias,
                       const ::com::sun::star::lang::Locale& rIntl,
                       const IParseContext* pContext,
                       bool _bIntl,
@@ -277,7 +281,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
         {
             OSQLParseNode::impl_parseNodeToString_throw( sBuffer,
                 SQLParseNodeParameter(
-                    _rxConnection, xFormatter, _xField, rIntl, pContext,
+                     _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext,
                     _bIntl, _bQuote, _cDecSep, _bPredicate, _bSubstitute
                 ) );
         }
@@ -299,7 +303,7 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::parseNodeToExecutableStatement" );
     OSL_PRECOND( _rxConnection.is(), "OSQLParseNode::parseNodeToExecutableStatement: invalid connection!" );
     SQLParseNodeParameter aParseParam( _rxConnection,
-        NULL, NULL, OParseContext::getDefaultLocale(), NULL, false, true, '.', false, true );
+        NULL, NULL, OUString(), OParseContext::getDefaultLocale(), NULL, false, true, '.', false, true );
 
     if ( aParseParam.aMetaData.supportsSubqueriesInFrom() )
     {
@@ -340,7 +344,7 @@ namespace
 //-----------------------------------------------------------------------------
 void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::getTableRange" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseNodeToString_throw" );
     if ( isToken() )
     {
         parseLeaf(rString,rParam);
@@ -477,10 +481,17 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             //   "currentFieldName" =
             // but only at the very beginning of the criterion
             // (not embedded deep in the expression).
-            if (rString.isEmpty() && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
+            // TODO: replace "beginning of criterion" by "in simple expression",
+            // that is anything made of:
+            //  - parentheses
+            //  - logical operators (and, or, not)
+            //  - comparison operators (IS, =, >, <, BETWEEN, LIKE, ...)
+            //    (see where the parser calls inPredicateCheck for a full list)
+            // but *not* e.g. in function arguments
+            if (rParam.bPredicate && rString.isEmpty() && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
             {
-                sal_Bool bFilter = sal_False;
-                // retrieve the fields name
+                bool bFilter = false;
+                // retrieve the field's name & table range
                 OUString aFieldName;
                 try
                 {
@@ -496,21 +507,47 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                 if(pSubTree->count())
                 {
                     const OSQLParseNode* pCol = pSubTree->m_aChildren[pSubTree->count()-1];
-                    if  (   (   SQL_ISRULE(pCol,column_val)
-                            &&  pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
-                            )
-                        ||  pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
+                    if (SQL_ISRULE(pCol,column_val))
+                    {
+                        assert(pCol->count() == 1);
+                        pCol = pCol->getChild(0);
+                    }
+                    const OSQLParseNode* pTable(NULL);
+                    switch (pSubTree->count())
+                    {
+                    case 1:
+                        break;
+                    case 3:
+                        pTable = pSubTree->m_aChildren[0];
+                        break;
+                    case 5:
+                    case 7:
+                        SAL_WARN("connectivity.parse", "SQL: catalog and/or schema in column_ref in predicate");
+                        break;
+                    default:
+                        SAL_WARN("connectivity.parse", "impl_parseNodeToString_throw: SQL grammar changed; column_ref has " << pSubTree->count() << " children");
+                        assert(false);
+                        break;
+                    }
+                    // TODO: not all DBMS match column names case-insensitively...
+                    // see XDatabaseMetaData::supportsMixedCaseIdentifiers()
+                    // and XDatabaseMetaData::supportsMixedCaseQuotedIdentifiers()
+                    if  (   // table name matches (or no table name)?
+                            ( !pTable || pTable->getTokenValue().equalsIgnoreAsciiCase(rParam.sPredicateTableAlias) )
+                         && // column name matches?
+                            pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
                         )
-                        bFilter = sal_True;
+                        bFilter = true;
                 }
 
-                // ok we found the field, if the following node is the
-                // comparision operator '=' we filter it as well
                 if (bFilter)
                 {
+                    // skip field
+                    ++i;
+                    // if the following node is the comparision operator'=',
+                    // we filter it as well
                     if (SQL_ISRULE(this, comparison_predicate))
                     {
-                        ++i;
                         if(i != m_aChildren.end())
                         {
                             pSubTree = *i;
@@ -518,8 +555,6 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                                 ++i;
                         }
                     }
-                    else
-                        ++i;
                 }
                 else
                 {

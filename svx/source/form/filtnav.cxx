@@ -903,7 +903,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUStr
             OUString aPreparedText;
             Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             xParseNode->parseNodeToPredicateStr(
-                aPreparedText, xConnection, xFormatter, xField, aAppLocale, '.', getParseContext() );
+                aPreparedText, xConnection, xFormatter, xField, OUString(), aAppLocale, '.', getParseContext() );
             rText = aPreparedText;
             return sal_True;
         }

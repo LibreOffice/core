@@ -1118,6 +1118,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                                             xConnection,
                                                             static_cast<OQueryController&>(getDesignView()->getController()).getNumberFormatter(),
                                                             xColumn,
+                                                            pEntry->GetAlias(),
                                                             getDesignView()->getLocale(),
                                                             static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
                                                             &(static_cast<OQueryController&>(getDesignView()->getController()).getParser().getContext()));
@@ -1157,6 +1158,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                                                     xConnection,
                                                                     static_cast<OQueryController&>(getDesignView()->getController()).getNumberFormatter(),
                                                                     xColumn,
+                                                                    pEntry->GetAlias(),
                                                                     getDesignView()->getLocale(),
                                                                     static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
                                                                     &(static_cast<OQueryController&>(getDesignView()->getController()).getParser().getContext()));

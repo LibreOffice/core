@@ -2985,7 +2985,10 @@ sal_Bool DbFilterField::commitControl()
                 xParseNode->parseNodeToPredicateStr(aPreparedText,
                                                     xConnection,
                                                     xNumberFormatter,
-                                                    m_rColumn.GetField(),aAppLocale,'.',
+                                                    m_rColumn.GetField(),
+                                                    OUString(),
+                                                    aAppLocale,
+                                                    '.',
                                                     getParseContext());
                 m_aText = aPreparedText;
             }

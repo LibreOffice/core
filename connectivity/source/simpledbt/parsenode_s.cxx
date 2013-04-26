@@ -71,9 +71,11 @@ namespace connectivity
     //----------------------------------------------------------------
     void OSimpleParseNode::parseNodeToPredicateStr(OUString& _rString, const Reference< XConnection >& _rxConnection,
         const Reference< XNumberFormatter >& _rxFormatter, const Reference< XPropertySet >& _rxField,
+        const OUString &_sPredicateTableAlias,
         const Locale& _rIntl, const sal_Char _cDecSeparator,const IParseContext* _pContext) const
     {
-        m_pFullNode->parseNodeToPredicateStr( _rString, _rxConnection, _rxFormatter, _rxField, _rIntl, _cDecSeparator, _pContext );
+        m_pFullNode->parseNodeToPredicateStr( _rString, _rxConnection, _rxFormatter, _rxField, _sPredicateTableAlias,
+                                              _rIntl, _cDecSeparator, _pContext );
     }
 
 //........................................................................
