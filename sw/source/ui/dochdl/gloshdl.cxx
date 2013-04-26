@@ -79,8 +79,7 @@ void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    AbstractGlossaryDlg* pDlg = pFact->CreateGlossaryDlg( DLG_RENAME_GLOS,
-                                                        pViewFrame, this, pWrtShell);
+    AbstractGlossaryDlg* pDlg = pFact->CreateGlossaryDlg(pViewFrame, this, pWrtShell);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     String sName, sShortName;
 
@@ -370,7 +369,7 @@ sal_Bool SwGlossaryHdl::ExpandGlossary()
     SwTextBlocks *pGlossary;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc( DLG_RENAME_GLOS );
+    ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc();
     OSL_ENSURE(fnGetCurrGroup, "Dialogdiet fail!");
     String sGroupName( (*fnGetCurrGroup)() );
     if(STRING_NOTFOUND == sGroupName.Search(GLOS_DELIM))

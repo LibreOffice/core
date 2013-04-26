@@ -1061,23 +1061,12 @@ SfxAbstractApplyTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog(
     return new AbstractApplyTabDialog_Impl( pDlg );
 }
 
-AbstractGlossaryDlg* SwAbstractDialogFactory_Impl::CreateGlossaryDlg( int nResId,
-                                                SfxViewFrame* pViewFrame,
+AbstractGlossaryDlg* SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) //add for SwGlossaryDlg
 {
-    SwGlossaryDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_RENAME_GLOS :
-            pDlg = new SwGlossaryDlg( pViewFrame, pGlosHdl, pWrtShell );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractGlossaryDlg_Impl( pDlg );
-    return 0;
+    SwGlossaryDlg* pDlg = new SwGlossaryDlg(pViewFrame, pGlosHdl, pWrtShell);
+    return new AbstractGlossaryDlg_Impl( pDlg );
 }
 
 AbstractFldInputDlg* SwAbstractDialogFactory_Impl::CreateFldInputDlg( int nResId,
@@ -1319,27 +1308,14 @@ AbstractMailMergeWizard*    SwAbstractDialogFactory_Impl::CreateMailMergeWizard(
 }
 
 //add for static func in SwGlossaryDlg
-GlossaryGetCurrGroup    SwAbstractDialogFactory_Impl::GetGlossaryCurrGroupFunc( sal_uInt16 nId )
+GlossaryGetCurrGroup    SwAbstractDialogFactory_Impl::GetGlossaryCurrGroupFunc()
 {
-    switch ( nId )
-    {
-        case DLG_RENAME_GLOS :
-            return SwGlossaryDlg::GetCurrGroup;
-        default:
-            break;
-    }
-    return 0;
+    return SwGlossaryDlg::GetCurrGroup;
 }
-GlossarySetActGroup SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc( sal_uInt16 nId )
+
+GlossarySetActGroup SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc()
 {
-    switch ( nId )
-    {
-        case DLG_RENAME_GLOS :
-            return SwGlossaryDlg::SetActGroup;
-        default:
-            break;
-    }
-    return 0;
+    return SwGlossaryDlg::SetActGroup;
 }
 
 

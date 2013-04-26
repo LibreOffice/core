@@ -105,7 +105,7 @@ static const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
-        ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
+        ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
         if ( fnSetActGroup )
             (*fnSetActGroup)( rItem.sGlossaryGroup );
         SwGlossaryHdl* pGlosHdl = rSh.GetView().GetGlosHdl();

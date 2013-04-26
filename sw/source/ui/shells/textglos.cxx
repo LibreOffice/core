@@ -74,7 +74,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
+                ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
                 pGlosHdl->SetCurGroup(aGroup, sal_True);
@@ -90,7 +90,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 String aGroup = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
+                ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
                 rReq.Done();
@@ -106,7 +106,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                     aName = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
+                ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
                 pGlosHdl->SetCurGroup(aGroup, sal_True);

@@ -407,8 +407,7 @@ public:
                                                 sal_uInt16              nPageId = 0,
                                                 SwWrtShell*         pActShell = 0,
                                                 sal_Bool                bNew = sal_False ) = 0; //add for SwTemplateDlg
-    virtual AbstractGlossaryDlg*        CreateGlossaryDlg( int nResId,
-                                                SfxViewFrame* pViewFrame,
+    virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0; //add for SwGlossaryDlg
     virtual AbstractFldInputDlg*        CreateFldInputDlg( int nResId,
@@ -464,8 +463,8 @@ public:
     virtual AbstractMailMergeWizard*    CreateMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem) = 0;
 
     //add for static func in SwGlossaryDlg
-    virtual GlossaryGetCurrGroup        GetGlossaryCurrGroupFunc( sal_uInt16 nId ) = 0;
-    virtual GlossarySetActGroup         SetGlossaryActGroupFunc( sal_uInt16 nId ) = 0;
+    virtual GlossaryGetCurrGroup        GetGlossaryCurrGroupFunc() = 0;
+    virtual GlossarySetActGroup         SetGlossaryActGroupFunc() = 0;
 
     // for tabpage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
