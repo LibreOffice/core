@@ -44,6 +44,9 @@ enum tSeriesOrDiagramPropertyType
     DIAGRAM
 };
 
+extern bool operator!=( const ::com::sun::star::awt::Size & rSize1,
+                        const ::com::sun::star::awt::Size & rSize2 );
+
 //PROPERTYTYPE is the type of the outer property
 
 template< typename PROPERTYTYPE >
