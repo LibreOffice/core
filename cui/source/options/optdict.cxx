@@ -30,8 +30,6 @@
 #include <vcl/msgbox.hxx>
 #include <svx/dialogs.hrc>
 
-#define _SVX_OPTDICT_CXX
-
 #include <linguistic/misc.hxx>
 #include <cuires.hrc>
 #include "optdict.hrc"

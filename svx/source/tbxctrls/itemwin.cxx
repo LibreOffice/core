@@ -24,8 +24,6 @@
 #include <sfx2/module.hxx>
 #include <tools/urlobj.hxx>
 
-#define _SVX_ITEMWIN_CXX
-
 #include <vcl/svapp.hxx>
 
 #include <svx/dialogs.hrc>

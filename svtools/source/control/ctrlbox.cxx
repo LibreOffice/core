@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define _CTRLBOX_CXX
 #include <tools/stream.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>

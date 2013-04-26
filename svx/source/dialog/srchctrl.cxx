@@ -22,8 +22,6 @@
 
 #include <svx/svxids.hrc>
 
-#define _SVX_SRCHDLG_CXX // so that private methods from SrchDlgare known
-
 #include "srchctrl.hxx"
 #include "svx/srchdlg.hxx"
 #include <svl/srchitem.hxx>

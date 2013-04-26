@@ -21,7 +21,6 @@
 #include <sfx2/dispatch.hxx>
 #include <tools/shl.hxx>
 
-#define _SVX_FONTWORK_CXX
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdview.hxx>

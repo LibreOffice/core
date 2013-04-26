@@ -224,7 +224,6 @@ private:
     Timer           maDragScrollTimer;
     sal_uInt16          mnDragScrollHitTest;
 
-#ifdef _SV_CALENDAR_CXX
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit( WinBits nWinStyle );
@@ -252,7 +251,6 @@ private:
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, sal_Bool bRepeat );
     SVT_DLLPRIVATE void         ImplEndTracking( sal_Bool bCancel );
     SVT_DLLPRIVATE DayOfWeek    ImplGetWeekStart() const;
-#endif
 
 protected:
 
@@ -412,11 +410,9 @@ private:
     sal_Bool                mbNone;
     Link                maSelectHdl;
 
-#ifdef _SV_CALENDAR_CXX
                         DECL_DLLPRIVATE_LINK( ImplSelectHdl, Calendar* );
                         DECL_DLLPRIVATE_LINK( ImplClickHdl, PushButton* );
                         DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, void* );
-#endif
 
 public:
                         CalendarField( Window* pParent, WinBits nWinStyle );

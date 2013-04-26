@@ -19,7 +19,6 @@
 
 #include <tools/color.hxx>
 
-#define _SVX_NUMFMTSH_CXX
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>
 

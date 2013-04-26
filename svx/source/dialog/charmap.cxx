@@ -19,7 +19,6 @@
 
 #include <stdio.h>
 
-#define _SVX_CHARMAP_CXX_
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
 

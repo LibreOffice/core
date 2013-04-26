@@ -142,7 +142,6 @@ class SvxPageDescPage : public SfxTabPage
 
     SvxPage_Impl*       pImpl;
 
-#ifdef _SVX_PAGE_CXX
     void                Init_Impl();
     DECL_LINK(LayoutHdl_Impl, void *);
     DECL_LINK(PaperBinHdl_Impl, void *);
@@ -173,7 +172,6 @@ class SvxPageDescPage : public SfxTabPage
                                                 long nLastMargin, MarginPosition nPos );
     void                CheckMarginEdits( bool _bClear );
     bool                IsMarginOutOfRange();
-#endif
 
     SvxPageDescPage( Window* pParent, const SfxItemSet& rSet );
 

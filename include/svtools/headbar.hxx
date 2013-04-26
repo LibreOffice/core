@@ -263,7 +263,6 @@ private:
         ::com::sun::star::accessibility::XAccessible >
                         mxAccessible;
 
-#ifdef _SV_HEADBAR_CXX
     using Window::ImplInit;
     SVT_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
     SVT_DLLPRIVATE void             ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
@@ -285,7 +284,6 @@ private:
     SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, sal_Bool bCommand );
     SVT_DLLPRIVATE void             ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void             ImplEndDrag( sal_Bool bCancel );
-#endif
 
 public:
                         HeaderBar( Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );

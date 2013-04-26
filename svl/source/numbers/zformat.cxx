@@ -36,7 +36,6 @@
 #include <com/sun/star/i18n/CalendarDisplayCode.hpp>
 #include <com/sun/star/i18n/AmPmValue.hpp>
 
-#define _ZFORMAT_CXX
 #include <svl/zformat.hxx>
 #include <zforscan.hxx>
 
@@ -5477,6 +5476,26 @@ sal_uInt16 SvNumberformat::ImpGetNumForStringElementCount( sal_uInt16 nNumFor ) 
         }
     }
     return nCnt;
+}
+
+const CharClass& SvNumberformat::rChrCls() const
+{
+    return rScan.GetChrCls();
+}
+
+const LocaleDataWrapper& SvNumberformat::rLoc() const
+{
+    return rScan.GetLoc();
+}
+
+CalendarWrapper& SvNumberformat::GetCal() const
+{
+    return rScan.GetCal();
+}
+
+const SvNumberFormatter& SvNumberformat::GetFormatter() const
+{
+    return *rScan.GetNumberformatter();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

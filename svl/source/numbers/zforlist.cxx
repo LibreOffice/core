@@ -30,10 +30,8 @@
 #include <unotools/misccfg.hxx>
 
 
-#define _ZFORLIST_CXX
 #include <osl/mutex.hxx>
 #include <svl/zforlist.hxx>
-#undef _ZFORLIST_CXX
 
 #include "zforscan.hxx"
 #include "zforfind.hxx"

@@ -22,8 +22,6 @@
 #include <sfx2/module.hxx>
 #include <svx/dialogs.hrc>
 
-#define _SVX_TPSHADOW_CXX
-
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <cuires.hrc>

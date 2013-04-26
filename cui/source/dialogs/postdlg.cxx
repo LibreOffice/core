@@ -29,8 +29,6 @@
 #include <comphelper/processfactory.hxx>
 #include <svx/svxids.hrc>   // SID_ATTR_...
 
-#define _SVX_POSTDLG_CXX
-
 #include <cuires.hrc>
 #include <svx/postattr.hxx>
 #include "postdlg.hxx"

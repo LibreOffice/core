@@ -24,7 +24,6 @@
 #include <sfx2/objsh.hxx>
 #include <svx/dialogs.hrc>
 
-#define _SVX_TABLINE_CXX
 #include <cuires.hrc>
 #include "tabline.hrc"
 

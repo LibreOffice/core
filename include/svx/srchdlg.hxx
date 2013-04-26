@@ -223,7 +223,6 @@ private:
 
     mutable sal_Int32           nTransliterationFlags;
 
-#ifdef _SVX_SRCHDLG_CXX
     DECL_LINK( ModifyHdl_Impl, ComboBox* pEdit );
     DECL_LINK( FlagHdl_Impl, Control* pCtrl );
     DECL_LINK( CommandHdl_Impl, Button* pBtn );
@@ -254,7 +253,6 @@ private:
     void            SaveToModule_Impl();
 
     void            ApplyTransliterationFlags_Impl( sal_Int32 nSettings );
-#endif
 };
 
 inline sal_Bool SvxSearchDialog::HasSearchAttributes() const

@@ -55,7 +55,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
-#define _SVX_OPTLINGU_CXX
 #include "optlingu.hrc"
 
 #include <svx/svxdlg.hxx>

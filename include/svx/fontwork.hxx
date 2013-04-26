@@ -26,7 +26,8 @@
 #include <sfx2/ctrlitem.hxx>
 #include <svx/xenum.hxx>
 #include <svx/dlgctrl.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
+#include <svx/xtextit0.hxx>
 
 // forward ---------------------------------------------------------------
 
@@ -125,7 +126,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
     XColorListRef   pColorList;
 
-#ifdef _SVX_FONTWORK_CXX
  friend class SvxFontWorkChildWindow;
  friend class SvxFontWorkControllerItem;
 
@@ -152,7 +152,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void SetShadowColor_Impl(const XFormTextShadowColorItem*);
     void SetShadowXVal_Impl(const XFormTextShadowXValItem*);
     void SetShadowYVal_Impl(const XFormTextShadowYValItem*);
-#endif
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
     void ApplyImageList();

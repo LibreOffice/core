@@ -31,7 +31,6 @@
 
 #include "valueimp.hxx"
 
-#define _SV_VALUESET_CXX
 #include <svtools/valueset.hxx>
 
 namespace

@@ -23,7 +23,6 @@
 #include <sfx2/module.hxx>
 #include <swpossizetabpage.hxx>
 #include <svx/dialogs.hrc>
-#define _SVX_LABDLG_CXX
 
 #include <svx/svdattrx.hxx>
 #include <cuires.hrc>

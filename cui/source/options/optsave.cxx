@@ -20,7 +20,6 @@
 #include <tools/shl.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#define _SVX_OPTSAVE_CXX
 
 #include "optsave.hrc"
 #include <cuires.hrc>

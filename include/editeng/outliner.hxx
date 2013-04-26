@@ -216,8 +216,6 @@ private:
     };
     MouseTarget OLD_ePrevMouseTarget;
 
-#ifdef _OUTLINER_CXX
-
     EDITENG_DLLPRIVATE void         ImplExpandOrCollaps( sal_uInt16 nStartPara, sal_uInt16 nEndPara, sal_Bool bExpand );
 
     EDITENG_DLLPRIVATE sal_uLong       ImpCheckMousePos( const Point& rPosPixel, MouseTarget& reTarget);
@@ -229,8 +227,6 @@ private:
     EDITENG_DLLPRIVATE void        ImpPasted( sal_uLong nStart, sal_uLong nPrevParaCount, sal_uInt16 nSize);
     EDITENG_DLLPRIVATE sal_uInt16      ImpCalcSelectedPages( sal_Bool bIncludeFirstSelected );
     EDITENG_DLLPRIVATE sal_Bool        ImpIsIndentingPages();
-
-#endif
 
 public:
                 OutlinerView( Outliner* pOut, Window* pWindow );
@@ -603,8 +599,6 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     sal_uLong               nDummy;
 
-#ifdef _OUTLINER_CXX
-
     DECL_LINK(              ParaVisibleStateChangedHdl, Paragraph* );
     DECL_LINK(              BeginMovingParagraphsHdl, void* );
     DECL_LINK(              EndMovingParagraphsHdl, MoveParagraphsInfo* );
@@ -641,7 +635,6 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     sal_uInt16      ImplGetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
     void        ImplCheckDepth( sal_Int16& rnDepth ) const;
-#endif
 
 protected:
     void            ParagraphInserted( sal_uInt16 nParagraph );

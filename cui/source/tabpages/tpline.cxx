@@ -23,8 +23,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 
-#define _SVX_TPLINE_CXX
-
 #include <cuires.hrc>
 #include "tabline.hrc"
 #include "svx/xattr.hxx"

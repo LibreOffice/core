@@ -164,11 +164,10 @@ class SVT_DLLPUBLIC ColorListBox : public ListBox
     ImpColorList*   pColorList; // separate liste, in case of user data are required from outside
     Size            aImageSize;
 
-#ifdef _CTRLBOX_CXX
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     SVT_DLLPRIVATE void         ImplDestroyColorEntries();
-#endif
+
 public:
                     ColorListBox( Window* pParent,
                                   WinBits nWinStyle = WB_BORDER );
@@ -424,10 +423,8 @@ private:
     sal_Bool        mbWYSIWYG;
     String          maFontMRUEntriesFile;
 
-#ifdef _CTRLBOX_CXX
     SVT_DLLPRIVATE void         ImplCalcUserItemSize();
     SVT_DLLPRIVATE void         ImplDestroyFontList();
-#endif
 
 protected:
     void            LoadMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode cSep = ';' );
@@ -506,10 +503,8 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
                     bPtRelative:1,
                     bStdSize:1;
 
-#ifdef _CTRLBOX_CXX
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
-#endif
 
 protected:
     virtual OUString CreateFieldText( sal_Int64 nValue ) const;

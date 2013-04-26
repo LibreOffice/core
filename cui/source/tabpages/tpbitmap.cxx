@@ -31,8 +31,6 @@
 #include <vcl/bmpacc.hxx>
 #include <svx/dialogs.hrc>
 
-#define _SVX_TPBITMAP_CXX
-
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include "svx/xattr.hxx"

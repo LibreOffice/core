@@ -22,8 +22,6 @@
 #include <svtools/ruler.hxx>
 #include <svx/dialogs.hrc>
 
-#define _SVX_TABSTPGE_CXX
-
 #include <cuires.hrc>
 #include "tabstpge.hrc"
 #include <editeng/lrspitem.hxx>

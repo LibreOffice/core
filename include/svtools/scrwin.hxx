@@ -57,11 +57,9 @@ private:
                     bHCenter:1,
                     bVCenter:1;
 
-#ifdef _SVT_SCRWIN_CXX
     SVT_DLLPRIVATE void         ImpInitialize( ScrollableWindowFlags nFlags );
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
     DECL_DLLPRIVATE_LINK( EndScrollHdl, ScrollBar * );
-#endif
 
 public:
                     ScrollableWindow( Window* pParent, WinBits nBits = 0,

@@ -40,11 +40,8 @@ public:
 private:
     sal_Bool    bInsert;
 
-#ifdef _SVX_INSCTRL_CXX
     SVX_DLLPRIVATE void DrawItemText_Impl();
-#endif
 };
-
 
 #endif
 

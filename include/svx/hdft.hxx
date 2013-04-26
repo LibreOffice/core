@@ -93,9 +93,7 @@ protected:
     DECL_LINK(RangeHdl, void *);
 
 private:
-#ifdef _SVX_HDFT_CXX
     SVX_DLLPRIVATE void         ResetBackground_Impl( const SfxItemSet& rSet );
-#endif
 };
 
 // class SvxHeaderPage ---------------------------------------------------

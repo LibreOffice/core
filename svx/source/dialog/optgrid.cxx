@@ -22,8 +22,6 @@
 #include <sfx2/module.hxx>
 #include <svl/intitem.hxx>
 
-#define _SVX_OPTGRID_CXX
-
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include "svx/optgrid.hxx"

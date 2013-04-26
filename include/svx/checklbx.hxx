@@ -34,9 +34,7 @@ class SVX_DLLPUBLIC SvxCheckListBox : public SvTreeListBox
 private:
     SvLBoxButtonData*   pCheckButton;
 
-#ifdef _SVX_CHECKLBX_CXX
     SVX_DLLPRIVATE void             Init_Impl();
-#endif
 
     using SvTreeListBox::InsertEntry;
     // Avoid ambiguity with new InsertEntry:

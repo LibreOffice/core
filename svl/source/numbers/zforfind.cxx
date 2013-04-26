@@ -37,10 +37,7 @@
 #include "zforscan.hxx"
 #include <svl/zformat.hxx>
 
-#define _ZFORFIND_CXX
 #include "zforfind.hxx"
-#undef _ZFORFIND_CXX
-
 
 #ifndef DBG_UTIL
 #define NF_TEST_CALENDAR 0

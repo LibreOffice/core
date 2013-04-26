@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
 #include <vcl/i18nhelp.hxx>
 
-#define _SV_RULER_CXX
 #include <svtools/ruler.hxx>
 
 // =======================================================================
@@ -101,12 +99,10 @@ private:
     sal_Bool                bAutoPageWidth;
     sal_Bool                bTextRTL;
 
-#ifdef _SV_RULER_CXX
 public:
                         ImplRulerData();
                         ~ImplRulerData();
     ImplRulerData&      operator=( const ImplRulerData& rData );
-#endif
 };
 
 

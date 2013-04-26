@@ -162,12 +162,11 @@ private:
     OutputDevice*           mpDev;
     OutputDevice*           mpDev2;
     boost::ptr_vector<ImplFontListNameInfo> maEntries;
-#ifdef CTRLTOOL_CXX
+
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const OUString& rSearchName, sal_uLong* pIndex ) const;
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const OUString& rStr ) const;
     SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, sal_Bool bAll,
                                              sal_Bool bInsertData );
-#endif
 
 public:
                             FontList( OutputDevice* pDevice,

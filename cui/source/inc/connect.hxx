@@ -61,11 +61,9 @@ private:
     const SdrView*      pView;
     SfxMapUnit          eUnit;
 
-#ifdef _SVX_CONNECT_CXX
     void                FillTypeLB();
 
                         DECL_LINK( ChangeAttrHdl_Impl, void * );
-#endif
 
 public:
 

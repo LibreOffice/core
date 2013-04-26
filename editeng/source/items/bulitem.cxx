@@ -20,8 +20,6 @@
 #include <tools/stream.hxx>
 #include <vcl/outdev.hxx>
 
-#define _SVX_BULITEM_CXX
-
 #include <editeng/bulletitem.hxx>
 #include <editeng/editrids.hrc>
 

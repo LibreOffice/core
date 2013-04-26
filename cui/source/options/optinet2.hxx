@@ -29,11 +29,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <unotools/configitem.hxx>
 
-#ifdef _SVX_OPTINET2_CXX
 #include <svtools/headbar.hxx>
-#else
-class HeaderBar;
-#endif
 #include <readonlyimage.hxx>
 
 namespace svx {
@@ -101,7 +97,6 @@ private:
 
     uno::Reference< uno::XInterface > m_xConfigurationUpdateAccess;
 
-#ifdef _SVX_OPTINET2_CXX
     void ArrangeControls_Impl();
     void EnableControls_Impl(sal_Bool bEnable);
     void ReadConfigData_Impl();
@@ -110,7 +105,6 @@ private:
 
     DECL_LINK( ProxyHdl_Impl, ListBox * );
     DECL_LINK( LoseFocusHdl_Impl, Edit * );
-#endif
 
     SvxProxyTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxProxyTabPage();

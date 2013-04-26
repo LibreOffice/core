@@ -43,7 +43,6 @@
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <rtl/strbuf.hxx>
 
-#define _OFA_AUTOCDLG_CXX
 #include "autocdlg.hxx"
 #include "autocdlg.hrc"
 #include "helpid.hrc"

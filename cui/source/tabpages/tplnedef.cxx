@@ -26,8 +26,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
-#define _SVX_TPLNEDEF_CXX
-
 #include <cuires.hrc>
 #include "tabline.hrc"
 #include "helpid.hrc"

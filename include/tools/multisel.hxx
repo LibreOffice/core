@@ -42,12 +42,10 @@ private:
     sal_Bool        bCurValid;  // are nCurIndex and nCurSubSel valid
     sal_Bool        bSelectNew; // auto-select newly inserted indexes
 
-#ifdef _SV_MULTISEL_CXX
     TOOLS_DLLPRIVATE void           ImplClear();
     TOOLS_DLLPRIVATE size_t         ImplFindSubSelection( long nIndex ) const;
     TOOLS_DLLPRIVATE sal_Bool       ImplMergeSubSelections( size_t nPos1, size_t nPos2 );
     TOOLS_DLLPRIVATE long           ImplFwdUnselected();
-#endif
 
 public:
                     MultiSelection();

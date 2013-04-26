@@ -28,6 +28,12 @@
 #include <svx/langbox.hxx>
 #include "svtools/treelistentry.hxx"
 
+#include <vcl/group.hxx>
+#include <vcl/button.hxx>
+#include <vcl/lstbox.hxx>
+#include <svtools/svtabbx.hxx>
+#include <svx/simptabl.hxx>
+
 class CharClass;
 class CollatorWrapper;
 class SmartTagMgr;
@@ -51,13 +57,6 @@ public:
 
     void EnableLanguage(bool bEnable);
 };
-
-#ifdef _OFA_AUTOCDLG_CXX
-#include <vcl/group.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <svtools/svtabbx.hxx>
-#include <svx/simptabl.hxx>
 
 // class OfaACorrCheckListBox ------------------------------------------
 
@@ -528,8 +527,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& );
 };
 
-#endif // _OFA_AUTOCDLG_CXX
-
-#endif //
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,8 +29,6 @@
 #include <sfx2/htmlmode.hxx>
 #include <sal/macros.h>
 
-#define _SVX_PAGE_CXX
-
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include "page.hxx"

@@ -53,10 +53,8 @@ private:
 
 protected:
     virtual short       Ok();
-#ifdef _SVX_TABLINE_CXX
     DECL_LINK( CancelHdlImpl, void * );
     void                SavePalettes();
-#endif
 
 public:
     SvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr,
@@ -182,7 +180,6 @@ private:
     DECL_LINK( SizeHdl_Impl, MetricField * );
     DECL_LINK( RatioHdl_Impl, CheckBox * );
 
-#ifdef _SVX_TPLINE_CXX
     DECL_LINK( ClickInvisibleHdl_Impl, void * );
     DECL_LINK( ChangeStartHdl_Impl, void * );
     DECL_LINK( ChangeEndHdl_Impl, void * );
@@ -196,7 +193,6 @@ private:
      DECL_LINK ( ChangeCapStyleHdl_Impl, void * );
 
     sal_Bool FillXLSet_Impl();
-#endif
 
     void InitSymbols(MenuButton* pButton);
     void SymbolSelected(MenuButton* pButton);
@@ -292,7 +288,6 @@ private:
     SfxMapUnit          ePoolUnit;
     FieldUnit           eFUnit;
 
-#ifdef _SVX_TPLNEDEF_CXX
     void FillDash_Impl();
     void FillDialog_Impl();
 
@@ -309,7 +304,6 @@ private:
     DECL_LINK( SelectTypeHdl_Impl, void * );
 
     void CheckChanges_Impl();
-#endif
 
 public:
     SvxLineDefTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
@@ -374,7 +368,6 @@ private:
     sal_uInt16*         pDlgType;
     sal_uInt16*             pPosLineEndLb;
 
-#ifdef _SVX_TPLNEEND_CXX
     DECL_LINK( ClickAddHdl_Impl, void * );
     DECL_LINK( ClickModifyHdl_Impl, void * );
     DECL_LINK( ClickDeleteHdl_Impl, void * );
@@ -384,7 +377,6 @@ private:
     long ChangePreviewHdl_Impl( void* p );
 
     void CheckChanges_Impl();
-#endif
 
 public:
     SvxLineEndDefTabPage( Window* pParent, const SfxItemSet& rInAttrs );

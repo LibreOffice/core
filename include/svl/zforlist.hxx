@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/NumberFormatCode.hpp>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/numberformatcodewrapper.hxx>
 #include <tools/link.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/nfkeytab.hxx>
@@ -815,8 +816,6 @@ private:
     OUString aThousandSep;
     OUString aDateSep;
 
-#ifdef _ZFORLIST_CXX                // ----- private Methoden -----
-
     SVL_DLLPRIVATE static bool          bCurrencyTableInitialized;
     SVL_DLLPRIVATE static sal_uInt16            nSystemCurrencyPosition;
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl* pFormatterRegistry;
@@ -915,8 +914,6 @@ private:
 
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
     DECL_DLLPRIVATE_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void* );
-
-#endif // _ZFORLIST_CXX
 
 public:
 

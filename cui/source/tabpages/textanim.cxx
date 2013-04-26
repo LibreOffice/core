@@ -24,9 +24,6 @@
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
 
-#ifndef _SVX_TEXTANIM_CXX
-#define _SVX_TEXTANIM_CXX
-#endif
 #include "textanim.hxx"
 #include "textanim.hrc"
 #include "textattr.hxx"

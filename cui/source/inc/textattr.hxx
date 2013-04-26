@@ -72,11 +72,8 @@ private:
     sal_Bool                bWordWrapTextEnabled;
     sal_Bool                bFitToSizeEnabled;
 
-
-#ifdef _SVX_TEXTATTR_CXX
     DECL_LINK( ClickFullWidthHdl_Impl, void * );
     DECL_LINK( ClickHdl_Impl, void * );
-#endif
 
     /** Return whether the text direction is from left to right (</sal_True>) or
         top to bottom (</sal_False>).

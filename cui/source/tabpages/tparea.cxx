@@ -23,8 +23,6 @@
 #include <sfx2/module.hxx>
 #include <svx/dialogs.hrc>
 
-#define _SVX_TPAREA_CXX
-
 #if defined (UNX) || defined (ICC) || defined(WNT)
 #include <stdlib.h>
 #endif
