@@ -61,6 +61,7 @@ interface XApplication
     [attribute] boolean DisplayExcel4Menus;
     [attribute] boolean DisplayNoteIndicator;
     [attribute] boolean ShowWindowsInTaskbar;
+    [attribute] boolean Iteration;
     [attribute, readonly] string LibraryPath;
     [attribute, readonly] string TemplatesPath;
     [attribute, readonly] string PathSeparator;
@@ -86,6 +87,7 @@ interface XApplication
         raises(com::sun::star::script::BasicErrorException);
     XRange Union([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3, [in] /*Optional*/ any Arg4, [in] /*Optional*/ any Arg5, [in] /*Optional*/ any Arg6, [in] /*Optional*/ any Arg7, [in] /*Optional*/ any Arg8, [in] /*Optional*/ any Arg9, [in] /*Optional*/ any Arg10, [in] /*Optional*/ any Arg11, [in] /*Optional*/ any Arg12, [in] /*Optional*/ any Arg13, [in] /*Optional*/ any Arg14, [in] /*Optional*/ any Arg15, [in] /*Optional*/ any Arg16, [in] /*Optional*/ any Arg17, [in] /*Optional*/ any Arg18, [in] /*Optional*/ any Arg19, [in] /*Optional*/ any Arg20, [in] /*Optional*/ any Arg21, [in] /*Optional*/ any Arg22, [in] /*Optional*/ any Arg23, [in] /*Optional*/ any Arg24, [in] /*Optional*/ any Arg25, [in] /*Optional*/ any Arg26, [in] /*Optional*/ any Arg27, [in] /*Optional*/ any Arg28, [in] /*Optional*/ any Arg29, [in] /*Optional*/ any Arg30)
         raises(com::sun::star::script::BasicErrorException);
+    double InchesToPoints( [in] double Inches );
     void Volatile([in] any Volatile);
     any Caller( [in] any Index );
     any MenuBars( [in] any aIndex );
