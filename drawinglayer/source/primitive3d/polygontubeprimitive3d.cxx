@@ -42,9 +42,10 @@ namespace drawinglayer
                 static Primitive3DSequence aLineTubeList;
                 static sal_uInt32 nLineTubeSegments(0L);
                 static attribute::MaterialAttribute3D aLineMaterial;
+                static ::osl::Mutex aMutex;
 
                 // may exclusively change static data, use mutex
-                ::osl::Mutex m_mutex;
+                ::osl::MutexGuard aGuard(aMutex);
 
                 if(nSegments != nLineTubeSegments || !(rMaterial == aLineMaterial))
                 {
