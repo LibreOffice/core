@@ -289,7 +289,7 @@ void XCDGenerator::Main()
 *//*-*************************************************************************************************************/
 void XCDGenerator::impl_printCopyright()
 {
-    fprintf( stderr, "\n(c) Copyright 2000, 2010 Oracle and/or its affiliates.\n" );
+    fprintf( stderr, "\nLicensed to the Apache Software Foundation.\n" );
 }
 
 //*****************************************************************************************************************
