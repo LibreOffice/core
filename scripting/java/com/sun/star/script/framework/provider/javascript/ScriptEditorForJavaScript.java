@@ -48,7 +48,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
     // template for JavaScript scripts
     private static String JSTEMPLATE;
 
-    static private Main rhinoWindow;
+    private Main rhinoWindow;
     private URL scriptURL;
     // global list of ScriptEditors, key is URL of file being edited
     private static Map<URL,ScriptEditorForJavaScript> BEING_EDITED = new HashMap<URL,ScriptEditorForJavaScript>();
