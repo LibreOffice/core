@@ -49,28 +49,33 @@ $(eval $(call gb_CppunitTest_use_api,sw_odfexport,\
 $(eval $(call gb_CppunitTest_use_ure,sw_odfexport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_odfexport,\
-	basic/util/sb \
+    basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \
     linguistic/source/lng \
-    package/util/package2 \
+    oox/util/oox \
     package/source/xstor/xstor \
-    sw/util/sw \
-    sw/util/swd \
+    package/util/package2 \
     sax/source/expatwrap/expwrap \
+    sax/source/fastparser/fastsax \
     sfx2/util/sfx \
+    starmath/util/sm \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
+    sw/util/sw \
+    sw/util/swd \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    writerfilter/util/writerfilter \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
     xmloff/util/xo \
 ))

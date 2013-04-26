@@ -17,6 +17,7 @@ public:
     void testFirstHeaderFooter();
     void testTextframeGradient();
     void testFdo60769();
+    void testFdo58949();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -35,6 +36,7 @@ void Test::run()
         {"first-header-footer.odt", &Test::testFirstHeaderFooter},
         {"textframe-gradient.odt", &Test::testTextframeGradient},
         {"fdo60769.odt", &Test::testFdo60769},
+        {"fdo58949.docx", &Test::testFdo58949},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -140,6 +142,29 @@ void Test::testFdo60769()
         // Second paragraph: no field start
         CPPUNIT_ASSERT(aType == "Text" || aType == "TextFieldEnd" || aType == "TextFieldEnd");
     }
+}
+
+void Test::testFdo58949()
+{
+    /*
+     * The problem was that the exporter didn't insert "Obj102" to the
+     * resulting zip file. No idea how to check for "broken" (missing OLE data
+     * and replacement image) OLE objects using UNO, so we'll check the zip file directly.
+     */
+
+    // Create the zip file.
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFilterArgs(1);
+    aFilterArgs[0].Name = "FilterName";
+    aFilterArgs[0].Value <<= OUString("writer8");
+    xStorable->storeToURL(aTempFile.GetURL(), aFilterArgs);
+
+    uno::Sequence<uno::Any> aArgs(1);
+    aArgs[0] <<= OUString(aTempFile.GetURL());
+    uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("Obj102")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
