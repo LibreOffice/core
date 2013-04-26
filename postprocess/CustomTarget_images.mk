@@ -65,14 +65,19 @@ $(packimages_DIR)/images_%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
-		$(call gb_Postprocess_get_target,AllResources)
+		$(call gb_Postprocess_get_target,AllResources) \
+		$(call gb_Postprocess_get_target,AllUIConfigs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
 			-m $(SRCDIR)/icon-themes/galaxy -c $(SRCDIR)/icon-themes/$* \
 			$(packimages_CUSTOM_FALLBACK_1) $(packimages_CUSTOM_FALLBACK_2) \
 			$(call gb_Helper_optional,HELP,-l $(helpimages_DIR) ) \
-			-l $(packimages_DIR) -l $(dir $(call gb_ResTarget_get_imagelist_target)) -s $< -o $@ \
+			-l $(packimages_DIR) \
+			-l $(dir $(call gb_ResTarget_get_imagelist_target)) \
+			-l $(dir $(call gb_UIConfig_get_imagelist_target)) \
+			-l $(dir $(call gb_UIConfig_get_imagelist_target,modules/)) \
+			-s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # make sure to have one to keep packing happy
