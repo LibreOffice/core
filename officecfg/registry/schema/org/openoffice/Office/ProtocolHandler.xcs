@@ -17,26 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ProtocolHandler" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains UNO services that support special URL protocols. These services are used generically.</desc>
-	</info>
-	<templates>
-		<group oor:name="Handler">
-			<info>
-				<desc>Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
-			</info>
-			<prop oor:name="Protocols" oor:type="oor:string-list">
-				<info>
-					<desc>Lists the URL pattern that can recognized by this service.</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="HandlerSet" oor:node-type="Handler">
-			<info>
-				<desc>Lists the registered protocol handler services.</desc>
-			</info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ProtocolHandler" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains UNO services that support special URL protocols. These services are used generically.</desc>
+  </info>
+  <templates>
+    <group oor:name="Handler">
+      <info>
+        <desc>Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
+      </info>
+      <prop oor:name="Protocols" oor:type="oor:string-list">
+        <info>
+          <desc>Lists the URL pattern that can recognized by this service.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="HandlerSet" oor:node-type="Handler">
+      <info>
+        <desc>Lists the registered protocol handler services.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

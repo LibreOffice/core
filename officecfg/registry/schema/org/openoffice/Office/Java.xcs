@@ -17,110 +17,109 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Java" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-	</info>
-	<component>
-		<group oor:name="VirtualMachine">
-			<info>
-				<desc>Provides information used to initialize a Java Virtual Machine. </desc>
-			</info>
-			<prop oor:name="Home" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Java -->
-				<!-- OldLocation: java.ini -->
-				<!-- Notice: Default: depends on Java installation path -->
-				<info>
-					<deprecated/>
-					<desc>Specifies the path of the Java installation.</desc>
-					<label>Java Home</label>
-				</info>
-				<value>NULL</value>
-			</prop>
-			<prop oor:name="Version" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Java -->
-				<!-- OldLocation: java.ini -->
-				<!-- Notice: Default: depends on version used -->
-				<info>
-					<deprecated/>
-					<desc>Specifies the version of the Java installation that is used.</desc>
-					<label>Java Version</label>
-				</info>
-				<value>NULL</value>
-			</prop>
-			<prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Java -->
-				<!-- OldLocation: java.ini -->
-				<info>
-					<deprecated/>
-					<desc>Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
-					<label>Enable JVM</label>
-				</info>
-				<value>true</value>
-			</prop>
-			<prop oor:name="Security" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Java -->
-				<!-- OldLocation: java.ini -->
-				<!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
-				<info>
-					<desc>Determines if security checks are performed for applets.</desc>
-					<label>Enable security checks</label>
-				</info>
-				<value>true</value>
-			</prop>
-			<prop oor:name="NetAccess" oor:type="xs:int">
-				<!-- OldPath: Java -->
-				<!-- OldLocation: java.ini -->
-				<!-- UIHints: Tools  Options  StarOffice  Security  [Section] Java -->
-				<info>
-					<desc>Determines if and to what extent Java applets are allowed to access the network.</desc>
-					<label>Net access</label>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>Host - connect to origin</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>Unrestricted - connect to all</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc>None - no connection alloed</desc>
-						</info>
-					</enumeration>
-				</constraints>
-			</prop>
-			<prop oor:name="UserClassPath" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Java -->
-				<!-- OldLocation: java.ini -->
-				<!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
-				<info>
-					<deprecated/>
-					<desc>Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
-					<label>Classpath</label>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="Debug" oor:type="xs:boolean">
-				<!-- OldPath: Java -->
-				<!-- OldLocation: java.ini -->
-				<info>
-					<deprecated/>
-					<desc> Indicates that JVM supports debugging.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Properties" oor:type="oor:string-list">
-				<!-- OldPath: Java -->
-				<!-- OldLocation: java.ini -->
-				<info>
-					<deprecated/>
-					<desc>Specifies properties for use with the Java VM.</desc>
-				</info>
-			</prop>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Java" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info/>
+  <component>
+    <group oor:name="VirtualMachine">
+      <info>
+        <desc>Provides information used to initialize a Java Virtual Machine. </desc>
+      </info>
+      <prop oor:name="Home" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Java -->
+        <!-- OldLocation: java.ini -->
+        <!-- Notice: Default: depends on Java installation path -->
+        <info>
+          <deprecated/>
+          <desc>Specifies the path of the Java installation.</desc>
+          <label>Java Home</label>
+        </info>
+        <value>NULL</value>
+      </prop>
+      <prop oor:name="Version" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Java -->
+        <!-- OldLocation: java.ini -->
+        <!-- Notice: Default: depends on version used -->
+        <info>
+          <deprecated/>
+          <desc>Specifies the version of the Java installation that is used.</desc>
+          <label>Java Version</label>
+        </info>
+        <value>NULL</value>
+      </prop>
+      <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Java -->
+        <!-- OldLocation: java.ini -->
+        <info>
+          <deprecated/>
+          <desc>Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
+          <label>Enable JVM</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Security" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Java -->
+        <!-- OldLocation: java.ini -->
+        <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
+        <info>
+          <desc>Determines if security checks are performed for applets.</desc>
+          <label>Enable security checks</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="NetAccess" oor:type="xs:int">
+        <!-- OldPath: Java -->
+        <!-- OldLocation: java.ini -->
+        <!-- UIHints: Tools  Options  StarOffice  Security  [Section] Java -->
+        <info>
+          <desc>Determines if and to what extent Java applets are allowed to access the network.</desc>
+          <label>Net access</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>Host - connect to origin</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>Unrestricted - connect to all</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="3">
+            <info>
+              <desc>None - no connection alloed</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="UserClassPath" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Java -->
+        <!-- OldLocation: java.ini -->
+        <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
+        <info>
+          <deprecated/>
+          <desc>Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
+          <label>Classpath</label>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="Debug" oor:type="xs:boolean">
+        <!-- OldPath: Java -->
+        <!-- OldLocation: java.ini -->
+        <info>
+          <deprecated/>
+          <desc> Indicates that JVM supports debugging.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Properties" oor:type="oor:string-list">
+        <!-- OldPath: Java -->
+        <!-- OldLocation: java.ini -->
+        <info>
+          <deprecated/>
+          <desc>Specifies properties for use with the Java VM.</desc>
+        </info>
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>
-

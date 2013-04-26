@@ -17,68 +17,69 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Jobs" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains information about registered jobs, bound on events.</desc>
-	</info>
-	<templates>
-		<group oor:name="Job">
-            		<info>
-				<desc>Describes an UNO service, which is registered for a special event.</desc>
-			</info>
-            		<prop oor:name="Service" oor:type="xs:string">
-                		<info>
-					<desc>Must contain an UNO implementation(!) name of the implemented job component.</desc>
-				</info>
-            		</prop>
-            		<prop oor:name="Context" oor:type="xs:string">
-                		<info>
-					<desc>An property to define the context this event should be active in. It can be empty or a colon separated list of the supported application modules.</desc>
-				</info>
-            		</prop>
-            		<group oor:name="Arguments" oor:extensible="true">
-                		<info>
-					<desc>Can be filled with any argument, which is under control of the job component.</desc>
-				</info>
-            		</group>
-        	</group>
-        	<group oor:name="TimeStamp">
-            		<info>
-				<desc>Is used to enable/disable a job execution related to a triggered event.</desc>
-			</info>
-            		<prop oor:name="AdminTime" oor:type="xs:string" oor:nillable="false">
-                		<info>
-					<desc>If it's newer then UserTime, the job will be reactivated next time.</desc>
-				</info>
-                		<value>2003-01-01T00:00:00+00:00</value>
-            		</prop>
-            		<prop oor:name="UserTime" oor:type="xs:string" oor:nillable="false">
-                		<info>
-					<desc>If it's newer then AdminTime, the job is deactivated for execution.</desc>
-				</info>
-                		<value>2003-01-01T00:00:00+00:00</value>
-            		</prop>
-        	</group>
-        	<group oor:name="Event">
-            		<info>
-				<desc>Describe a state, which can be detected at runtime and will be used to start jobs, which are registered for it.</desc>
-			</info>
-            		<set oor:name="JobList" oor:node-type="TimeStamp">
-                		<info>
-					<desc>This list contains all registered jobs, which wish to be executed, if the coressponding event was triggered.</desc>
-				</info>
-            		</set>
-        	</group>
-	</templates>
-	<component>
-		<set oor:name="Jobs" oor:node-type="Job">
-            		<info>
-				<desc>This list contains all well known job components and it's properties.</desc>
-			</info>
-		</set>
-		<set oor:name="Events" oor:node-type="Event">
-            		<info>
-				<desc>Here jobs can be bound to events and can be enabled/disable by using TimeStamp values.</desc>
-			</info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Jobs" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains information about registered jobs, bound on events.</desc>
+  </info>
+  <templates>
+    <group oor:name="Job">
+      <info>
+        <desc>Describes an UNO service, which is registered for a special event.</desc>
+      </info>
+      <prop oor:name="Service" oor:type="xs:string">
+        <info>
+          <desc>Must contain an UNO implementation(!) name of the implemented job component.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Context" oor:type="xs:string">
+        <info>
+          <desc>An property to define the context this event should be active in. It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <group oor:name="Arguments" oor:extensible="true">
+        <info>
+          <desc>Can be filled with any argument, which is under control of the job component.</desc>
+        </info>
+      </group>
+    </group>
+    <group oor:name="TimeStamp">
+      <info>
+        <desc>Is used to enable/disable a job execution related to a triggered event.</desc>
+      </info>
+      <prop oor:name="AdminTime" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>If it's newer then UserTime, the job will be reactivated next time.</desc>
+        </info>
+        <value>2003-01-01T00:00:00+00:00</value>
+      </prop>
+      <prop oor:name="UserTime" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>If it's newer then AdminTime, the job is deactivated for execution.</desc>
+        </info>
+        <value>2003-01-01T00:00:00+00:00</value>
+      </prop>
+    </group>
+    <group oor:name="Event">
+      <info>
+        <desc>Describe a state, which can be detected at runtime and will be used to start jobs, which are registered for it.</desc>
+      </info>
+      <set oor:name="JobList" oor:node-type="TimeStamp">
+        <info>
+          <desc>This list contains all registered jobs, which wish to be executed, if the coressponding event was triggered.</desc>
+        </info>
+      </set>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Jobs" oor:node-type="Job">
+      <info>
+        <desc>This list contains all well known job components and it's properties.</desc>
+      </info>
+    </set>
+    <set oor:name="Events" oor:node-type="Event">
+      <info>
+        <desc>Here jobs can be bound to events and can be enabled/disable by using TimeStamp values.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

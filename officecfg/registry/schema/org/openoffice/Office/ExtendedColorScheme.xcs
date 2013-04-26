@@ -18,86 +18,85 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ExtendedColorScheme" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
-	</info>
-	<templates>
-		<group oor:name="ColorEntry">
-			<info>
-				<desc>Specifies the color settings for the document.</desc>
-			</info>
-			<prop oor:name="Color" oor:type="xs:int">
-				<info>
-					<desc>Specifies the color of the document.</desc>
-				</info>
-			</prop>
-			<prop oor:name="DefaultColor" oor:type="xs:int">
-				<info>
-					<desc>Specifies the system color of the document.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="Component">
-			<info>
-				<desc>Specifies the component color settings.</desc>
-			</info>
-			<set oor:name="Entries" oor:node-type="ColorEntry">
-				<info>
-					<desc>Specifies the color settings for customizing the appearance the extension.</desc>
-				</info>			
-			</set>
-		</group>
-		<group oor:name="EntryName">
-			<info>
-				<desc>Specifies the UI name for the color or group name of the component.</desc>
-			</info>
-			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>Specifies the localized name that is used when presenting the entry to the user.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="ComponentName">
-			<info>
-				<desc>Specifies the ui strings for the component.</desc>
-			</info>
-			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>Specifies the localized name that is used when presenting the entry to the user.</desc>
-				</info>
-			</prop>
-			<set oor:name="Entries" oor:node-type="EntryName">
-				<info>
-					<desc>Specifies the entry names.</desc>
-				</info>			
-			</set>
-		</group>
-		<set oor:name="ExtendedColorScheme" oor:node-type="Component">
-			<info>
-				<desc>Specifies the color settings for customizing the appearance of extensions.</desc>
-			</info>			
-		</set>
-	</templates>
-	<component>
-		<group oor:name="ExtendedColorScheme">
-			<info>
-				<desc>Specifies the color settings for customizing the appearance of extensions.</desc>
-			</info>
-			<prop oor:name="CurrentColorScheme" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
-				</info>
-			</prop>
-			<set oor:name="ColorSchemes" oor:node-type="ExtendedColorScheme">
-				<!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
-				<info>
-					<desc>Lists entries with color settings.</desc>
-				</info>
-			</set>
-		</group>
-		<set oor:name="EntryNames" oor:node-type="ComponentName">
-			<info>
-				<desc>Lists entries with color entry UI names.</desc>
-			</info>
-		</set>
-	</component>
+  <info/>
+  <templates>
+    <group oor:name="ColorEntry">
+      <info>
+        <desc>Specifies the color settings for the document.</desc>
+      </info>
+      <prop oor:name="Color" oor:type="xs:int">
+        <info>
+          <desc>Specifies the color of the document.</desc>
+        </info>
+      </prop>
+      <prop oor:name="DefaultColor" oor:type="xs:int">
+        <info>
+          <desc>Specifies the system color of the document.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Component">
+      <info>
+        <desc>Specifies the component color settings.</desc>
+      </info>
+      <set oor:name="Entries" oor:node-type="ColorEntry">
+        <info>
+          <desc>Specifies the color settings for customizing the appearance the extension.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="EntryName">
+      <info>
+        <desc>Specifies the UI name for the color or group name of the component.</desc>
+      </info>
+      <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies the localized name that is used when presenting the entry to the user.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="ComponentName">
+      <info>
+        <desc>Specifies the ui strings for the component.</desc>
+      </info>
+      <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies the localized name that is used when presenting the entry to the user.</desc>
+        </info>
+      </prop>
+      <set oor:name="Entries" oor:node-type="EntryName">
+        <info>
+          <desc>Specifies the entry names.</desc>
+        </info>
+      </set>
+    </group>
+    <set oor:name="ExtendedColorScheme" oor:node-type="Component">
+      <info>
+        <desc>Specifies the color settings for customizing the appearance of extensions.</desc>
+      </info>
+    </set>
+  </templates>
+  <component>
+    <group oor:name="ExtendedColorScheme">
+      <info>
+        <desc>Specifies the color settings for customizing the appearance of extensions.</desc>
+      </info>
+      <prop oor:name="CurrentColorScheme" oor:type="xs:string">
+        <info>
+          <desc>Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
+        </info>
+      </prop>
+      <set oor:name="ColorSchemes" oor:node-type="ExtendedColorScheme">
+        <!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
+        <info>
+          <desc>Lists entries with color settings.</desc>
+        </info>
+      </set>
+    </group>
+    <set oor:name="EntryNames" oor:node-type="ComponentName">
+      <info>
+        <desc>Lists entries with color entry UI names.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

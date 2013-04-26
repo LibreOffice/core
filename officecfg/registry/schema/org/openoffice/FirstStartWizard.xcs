@@ -18,37 +18,37 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="FirstStartWizard" oor:package="org.openoffice" xml:lang="en-US">
-	<info>
-		<desc>Contains properties regarding the first start wiazrd.</desc>
-	</info>
-	<templates>
-		<group oor:name="Option">
-			<info>
-				<desc>Describes properties of a wizard tab page option.</desc>
-			</info>
-			<prop oor:name="Visible" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Determine if an option is visible or not.</desc>
-                </info>
-                <value>true</value>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="TabPages">
-			<info>
-				<desc>Contains properties for the various first start wizard tab pages.</desc>
-			</info>
-			<group oor:name="Registration">
-			    <info>
-				    <desc>Specifies properties of the registration tab page.</desc>
-			    </info>
-			    <set oor:name="RegistrationOptions" oor:node-type="Option">
-				    <info>
-					    <desc>Specifies radio button properties of the registration tab page.</desc>
-				    </info>
-			    </set>
-			</group>
-		</group>
-	</component>
+  <info>
+    <desc>Contains properties regarding the first start wiazrd.</desc>
+  </info>
+  <templates>
+    <group oor:name="Option">
+      <info>
+        <desc>Describes properties of a wizard tab page option.</desc>
+      </info>
+      <prop oor:name="Visible" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determine if an option is visible or not.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="TabPages">
+      <info>
+        <desc>Contains properties for the various first start wizard tab pages.</desc>
+      </info>
+      <group oor:name="Registration">
+        <info>
+          <desc>Specifies properties of the registration tab page.</desc>
+        </info>
+        <set oor:name="RegistrationOptions" oor:node-type="Option">
+          <info>
+            <desc>Specifies radio button properties of the registration tab page.</desc>
+          </info>
+        </set>
+      </group>
+    </group>
+  </component>
 </oor:component-schema>

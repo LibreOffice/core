@@ -17,140 +17,140 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Inet" oor:package="org.openoffice" xml:lang="en-US"> <info>
-		<desc>Contains Internet-related configurations (proxies, etc.).</desc>
-	</info>
-	<component>
-		<group oor:name="Settings">
-			<info>
-				<desc>Contains Internet-related configurations (servers, proxies, etc.).</desc>
-			</info>
-			<prop oor:name="ooInetNoProxy" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Inet/NoProxy -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<desc>Enumerates the names of servers that do not require any proxies.</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="ooInetProxyType" oor:type="xs:int">
-				<!-- OldPath: Inet/ProxyType -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<desc>Specifies the type of proxy selection.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>No proxies</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>Automatic proxy configuration</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>Manual proxy configuration</desc>
-						</info>
-					</enumeration>
-				</constraints>
-			</prop>
-			<prop oor:name="ooInetFTPProxyName" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Inet/FTPProxyName -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<desc>Specifies the name of the FTP proxy server.</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
-				<!-- OldPath: Inet/FTPProxyPort -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<desc>Specifies the port of the FTP proxy server.</desc>
-				</info>
-				<constraints>
-					<minInclusive oor:value="0">
-						<info>
-							<desc>Specifies the minimum allowed port number.</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="65535">
-						<info>
-							<desc>Specifies the maximum allowed port number.</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-			</prop>
-			<prop oor:name="ooInetHTTPProxyName" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Inet/HTTPProxyName -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<desc>Specifies the name of the HTTP proxy server.</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="ooInetHTTPProxyPort" oor:type="xs:int">
-				<!-- OldPath: Inet/HTTPProxyPort -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<desc>Specifies the port of the HTTP proxy server.</desc>
-				</info>
-				<constraints>
-					<minInclusive oor:value="0">
-						<info>
-							<desc>Specifies the minimum allowed port number.</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="65535">
-						<info>
-							<desc>Specifies the maximum allowed port number.</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-			</prop>
-			<prop oor:name="ooInetHTTPSProxyName" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Inet/HTTPSProxyName -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<desc>Specifies the name of the HTTPS proxy server.</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="ooInetHTTPSProxyPort" oor:type="xs:int">
-				<!-- OldPath: Inet/HTTPSProxyPort -->
-				<!-- OldLocation: soffice.ini -->
-				<!-- UIHints: Tools  Options  Internet  Proxy -->
-				<info>
-					<desc>Specifies the port of the HTTPS proxy server.</desc>
-				</info>
-				<constraints>
-					<minInclusive oor:value="0">
-						<info>
-							<desc>Specifies the minimum allowed port number.</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="65535">
-						<info>
-							<desc>Specifies the maximum allowed port number.</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-			</prop>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Inet" oor:package="org.openoffice" xml:lang="en-US">
+  <info>
+    <desc>Contains Internet-related configurations (proxies, etc.).</desc>
+  </info>
+  <component>
+    <group oor:name="Settings">
+      <info>
+        <desc>Contains Internet-related configurations (servers, proxies, etc.).</desc>
+      </info>
+      <prop oor:name="ooInetNoProxy" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/NoProxy -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Enumerates the names of servers that do not require any proxies.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetProxyType" oor:type="xs:int">
+        <!-- OldPath: Inet/ProxyType -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the type of proxy selection.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>No proxies</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>Automatic proxy configuration</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Manual proxy configuration</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetFTPProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/FTPProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the FTP proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/FTPProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the FTP proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetHTTPProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/HTTPProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the HTTP proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetHTTPProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/HTTPProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the HTTP proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetHTTPSProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/HTTPSProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the HTTPS proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetHTTPSProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/HTTPSProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the HTTPS proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>
-

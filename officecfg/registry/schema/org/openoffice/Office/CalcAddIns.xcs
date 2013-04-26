@@ -17,51 +17,77 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="CalcAddIns" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<info>
-		<desc>Contains add-in function configuration.</desc>
-	</info>
-	<templates>
-		<group oor:name="AddInParameter" >
-			<info><desc>Describes one parameter.</desc></info>
-			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
-				<info><desc>Specifies the user-visible name of the parameter.</desc></info>
-			</prop>
-			<prop oor:name="Description" oor:type="xs:string" oor:localized="true">
-				<info><desc>Specifies a description of the parameter.</desc></info>
-			</prop>
-		</group>
-		<group oor:name="AddInFunction">
-			<info><desc>Describes one function.</desc></info>
-			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
-				<info><desc>Specifies the user-visible name of the function.</desc></info>
-			</prop>
-			<prop oor:name="Description" oor:type="xs:string" oor:localized="true">
-				<info><desc>Specifies a description of the function.</desc></info>
-			</prop>
-			<prop oor:name="Category" oor:type="xs:string">
-				<info><desc>Specifies the programmatic name of the category the function belongs to.</desc></info>
-			</prop>
-			<prop oor:name="CategoryDisplayName" oor:type="xs:string" oor:localized="true">
-				<info><desc>Specifies the user-visible name of the category the function belongs to.</desc></info>
-			</prop>
-			<prop oor:name="CompatibilityName" oor:type="xs:string" oor:localized="true">
-				<info><desc>Specifies a localized function name for exchange with other applications.</desc></info>
-			</prop>
-			<set oor:name="Parameters" oor:node-type="AddInParameter">
-				<info><desc>Specifies the function's parameters.</desc></info>
-			</set>
-		</group>
-		<group oor:name="AddIn">
-			<info><desc>Describes one add-in component.</desc></info>
-			<set oor:name="AddInFunctions" oor:node-type="AddInFunction">
-				<info><desc>Specifies the component's functions.</desc></info>
-			</set>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="AddInInfo" oor:node-type="AddIn">
-			<info><desc>Specifies the installed add-in components.</desc></info>
-		</set>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="CalcAddIns" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains add-in function configuration.</desc>
+  </info>
+  <templates>
+    <group oor:name="AddInParameter">
+      <info>
+        <desc>Describes one parameter.</desc>
+      </info>
+      <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies the user-visible name of the parameter.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Description" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies a description of the parameter.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="AddInFunction">
+      <info>
+        <desc>Describes one function.</desc>
+      </info>
+      <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies the user-visible name of the function.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Description" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies a description of the function.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Category" oor:type="xs:string">
+        <info>
+          <desc>Specifies the programmatic name of the category the function belongs to.</desc>
+        </info>
+      </prop>
+      <prop oor:name="CategoryDisplayName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies the user-visible name of the category the function belongs to.</desc>
+        </info>
+      </prop>
+      <prop oor:name="CompatibilityName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies a localized function name for exchange with other applications.</desc>
+        </info>
+      </prop>
+      <set oor:name="Parameters" oor:node-type="AddInParameter">
+        <info>
+          <desc>Specifies the function's parameters.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="AddIn">
+      <info>
+        <desc>Describes one add-in component.</desc>
+      </info>
+      <set oor:name="AddInFunctions" oor:node-type="AddInFunction">
+        <info>
+          <desc>Specifies the component's functions.</desc>
+        </info>
+      </set>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="AddInInfo" oor:node-type="AddIn">
+      <info>
+        <desc>Specifies the installed add-in components.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

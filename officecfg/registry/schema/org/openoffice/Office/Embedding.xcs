@@ -18,119 +18,118 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Embedding" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
-		<desc>Contains embedding related information, such as the list of available for embedding objects.</desc>
-	</info>
-	<templates>
-		<group oor:name="Object">
-			<info>
-				<desc>Describes an embedded object.</desc>
-			</info>
-			<!--The default must be written by the setup.-->
-			<prop oor:name="ObjectFactory" oor:type="xs:string">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Specifies the service name of the object's factory.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ObjectDocumentServiceName" oor:type="xs:string">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Optional entry that specifies the service name of the document that is used by the object.</desc>
-				</info>
-			</prop>
-            <prop oor:name="ObjectMiscStatus" oor:type="xs:long">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Specifies the miscellaneous properties of the object.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ObjectVerbs" oor:type="oor:string-list">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Specifies the list of verbs supported by the object.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ObjectDocumentFilterName" oor:type="xs:string">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Optional entry that specifies the filter name that is used by the object.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="Verb">
-			<info>
-				<desc>Describes possible verbs that can be supported by an embedded object.</desc>
-			</info>
-			<prop oor:name="VerbUIName" oor:localized="true" oor:type="xs:string">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Specifies the localized name of the verb that can be shown in the UI.</desc>
-				</info>
-			</prop>
-			<prop oor:name="VerbID" oor:type="xs:int">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Specifies the unique ID for the verb.</desc>
-				</info>
-			</prop>
-			<prop oor:name="VerbFlags" oor:type="xs:int">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Specifies the flags of the verb that can control verb's representation in UI.</desc>
-				</info>
-			</prop>
-			<prop oor:name="VerbAttributes" oor:type="xs:int">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Specifies the attributes of the verb.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="ObjectName">
-			<info>
-				<desc>Provides object name that appears in UI.</desc>
-			</info>
-			<prop oor:name="ObjectUIName" oor:localized="true" oor:type="xs:string">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Specifies the localized name of the object that can be shown in the UI.</desc>
-				</info>
-			</prop>
-			<prop oor:name="ClassID" oor:type="xs:string">
-				<!-- UIHints: setup -->
-				<info>
-					<desc>Class ID of the object.</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="Objects" oor:node-type="Object">
-			<info>
-				<desc>Contains the explicitly registered embedded objects. ClassID is used as a name for entry.</desc>
-			</info>
-		</set>
-		<set oor:name="Verbs" oor:node-type="Verb">
-			<info>
-				<desc>Contains possible verbs for embedded objects.</desc>
-			</info>
-		</set>
-		<group oor:name="MimeTypeClassIDRelations" oor:extensible="true">
-			<info>
-				<desc>Contains convertion table from MimeType to ClassID. MimeType is used as a name for entry.</desc>
-			</info>
-		</group>
-		<group oor:name="UserFactories" oor:extensible="true">
-			<info>
-				<desc>List of additional factories that can be used to create embedded object.</desc>
-			</info>
-		</group>
-		<set oor:name="ObjectNames" oor:node-type="ObjectName">
-			<info>
-				<desc>List of object names to be used in GUI and ClassIDs.</desc>
-			</info>
-		</set>
-	</component>
+  <info>
+    <desc>Contains embedding related information, such as the list of available for embedding objects.</desc>
+  </info>
+  <templates>
+    <group oor:name="Object">
+      <info>
+        <desc>Describes an embedded object.</desc>
+      </info>
+      <!--The default must be written by the setup.-->
+      <prop oor:name="ObjectFactory" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the service name of the object's factory.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Optional entry that specifies the service name of the document that is used by the object.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ObjectMiscStatus" oor:type="xs:long">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the miscellaneous properties of the object.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ObjectVerbs" oor:type="oor:string-list">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the list of verbs supported by the object.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ObjectDocumentFilterName" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Optional entry that specifies the filter name that is used by the object.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Verb">
+      <info>
+        <desc>Describes possible verbs that can be supported by an embedded object.</desc>
+      </info>
+      <prop oor:name="VerbUIName" oor:localized="true" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the localized name of the verb that can be shown in the UI.</desc>
+        </info>
+      </prop>
+      <prop oor:name="VerbID" oor:type="xs:int">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the unique ID for the verb.</desc>
+        </info>
+      </prop>
+      <prop oor:name="VerbFlags" oor:type="xs:int">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the flags of the verb that can control verb's representation in UI.</desc>
+        </info>
+      </prop>
+      <prop oor:name="VerbAttributes" oor:type="xs:int">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the attributes of the verb.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="ObjectName">
+      <info>
+        <desc>Provides object name that appears in UI.</desc>
+      </info>
+      <prop oor:name="ObjectUIName" oor:localized="true" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Specifies the localized name of the object that can be shown in the UI.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ClassID" oor:type="xs:string">
+        <!-- UIHints: setup -->
+        <info>
+          <desc>Class ID of the object.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Objects" oor:node-type="Object">
+      <info>
+        <desc>Contains the explicitly registered embedded objects. ClassID is used as a name for entry.</desc>
+      </info>
+    </set>
+    <set oor:name="Verbs" oor:node-type="Verb">
+      <info>
+        <desc>Contains possible verbs for embedded objects.</desc>
+      </info>
+    </set>
+    <group oor:name="MimeTypeClassIDRelations" oor:extensible="true">
+      <info>
+        <desc>Contains convertion table from MimeType to ClassID. MimeType is used as a name for entry.</desc>
+      </info>
+    </group>
+    <group oor:name="UserFactories" oor:extensible="true">
+      <info>
+        <desc>List of additional factories that can be used to create embedded object.</desc>
+      </info>
+    </group>
+    <set oor:name="ObjectNames" oor:node-type="ObjectName">
+      <info>
+        <desc>List of object names to be used in GUI and ClassIDs.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>
-

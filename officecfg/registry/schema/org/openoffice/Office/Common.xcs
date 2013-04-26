@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema
-    oor:package="org.openoffice.Office" oor:name="Common" xml:lang="en-US"
-    xmlns:oor="http://openoffice.org/2001/registry"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.Office" oor:name="Common" xml:lang="en-US">
   <info>
     <desc>Contains common settings which are potentially shared by other
     components.</desc>
@@ -772,9 +769,7 @@
           </enumeration>
         </constraints>
       </prop>
-      <prop
-          oor:name="DynamicBorderColors" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="DynamicBorderColors" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>specifies whether the controls should use dynamic border
           coloring, if possible. Dymamic border coloring means that when the
@@ -783,9 +778,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="UseDocumentTextMetrics" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="UseDocumentTextMetrics" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>controls whether form controls, when they render their text, use
           the same metrics as the document does. If this is set to &lt;true&gt;,
@@ -858,9 +851,7 @@
           password.</desc>
         </info>
       </set>
-      <prop
-          oor:name="AuthenticateUsingSystemCredentials"
-          oor:type="oor:string-list">
+      <prop oor:name="AuthenticateUsingSystemCredentials" oor:type="oor:string-list">
         <info>
           <desc>Contains a list of URLs that should be accessed using system
           credentials of the user.</desc>
@@ -952,27 +943,21 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="OverlayBuffer_Calc" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="OverlayBuffer_Calc" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Similar to OverlayBuffer, but only for Calc Application</desc>
           <label>Calc Overlay is allowed to use a Background Buffer</label>
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="OverlayBuffer_Writer" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="OverlayBuffer_Writer" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Similar to OverlayBuffer, but only for Writer Application</desc>
           <label>Writer Overlay is allowed to use a Background Buffer</label>
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="OverlayBuffer_DrawImpress" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="OverlayBuffer_DrawImpress" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Similar to OverlayBuffer, but only for Draw/Impress
           Applications</desc>
@@ -993,9 +978,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="PaintBuffer_Calc" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="PaintBuffer_Calc" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Similar to PaintBuffer, but only for Calc Application.
           PaintBuffer is the global switch.</desc>
@@ -1003,9 +986,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="PaintBuffer_Writer" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="PaintBuffer_Writer" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Similar to PaintBuffer, but only for Writer Application.
           PaintBuffer is the global switch.</desc>
@@ -1013,9 +994,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="PaintBuffer_DrawImpress" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="PaintBuffer_DrawImpress" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Similar to PaintBuffer, but only for Draw/Impress Applications.
           PaintBuffer is the global switch.</desc>
@@ -1057,8 +1036,7 @@
         </info>
         <value>300</value>
       </prop>
-      <prop
-          oor:name="MaximumPaperHeight" oor:type="xs:int" oor:nillable="false">
+      <prop oor:name="MaximumPaperHeight" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Specifies the maximum allowed Paper Height for page definitions
           in cm. Default is 3m, i.e. 300 cm. When this is changed to higher
@@ -1067,9 +1045,7 @@
         </info>
         <value>300</value>
       </prop>
-      <prop
-          oor:name="MaximumPaperLeftMargin" oor:type="xs:int"
-          oor:nillable="false">
+      <prop oor:name="MaximumPaperLeftMargin" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Specifies the maximum allowed Left Margin for the page
           definitions in 1/100th cm.</desc>
@@ -1077,9 +1053,7 @@
         </info>
         <value>9999</value>
       </prop>
-      <prop
-          oor:name="MaximumPaperRightMargin" oor:type="xs:int"
-          oor:nillable="false">
+      <prop oor:name="MaximumPaperRightMargin" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Specifies the maximum allowed Right Margin for the page
           definitions in 1/100th cm.</desc>
@@ -1087,9 +1061,7 @@
         </info>
         <value>9999</value>
       </prop>
-      <prop
-          oor:name="MaximumPaperTopMargin" oor:type="xs:int"
-          oor:nillable="false">
+      <prop oor:name="MaximumPaperTopMargin" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Specifies the maximum allowed Top Margin for the page
           definitions in 1/100th cm.</desc>
@@ -1097,9 +1069,7 @@
         </info>
         <value>9999</value>
       </prop>
-      <prop
-          oor:name="MaximumPaperBottomMargin" oor:type="xs:int"
-          oor:nillable="false">
+      <prop oor:name="MaximumPaperBottomMargin" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Specifies the maximum allowed Bottom Margin for the page
           definitions in 1/100th cm.</desc>
@@ -1118,9 +1088,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="SnapHorVerLinesToDiscrete" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="SnapHorVerLinesToDiscrete" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>This switch allows to enhance visualisation of graphics which
           use Horizontal or Vertical Hairlines combined with AntiAliased mode
@@ -1134,9 +1102,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="RenderDecoratedTextDirect" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="RenderDecoratedTextDirect" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>This switch determines if the decorations of decorated text
           portions (e.g. underline, strike through) are rendered using VCL
@@ -1149,9 +1115,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="RenderSimpleTextDirect" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="RenderSimpleTextDirect" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>This switch determines if simple text is directly rendered using
           VCL or not. If not, the simple text is decomposed into PolyPolygons
@@ -1163,8 +1127,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="SolidDragCreate" oor:type="xs:boolean" oor:nillable="false">
+      <prop oor:name="SolidDragCreate" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>This switch decides if Interactions in the DrawingLayer are
           visualized using Wireframe or Full-Object previews. If false, only
@@ -1179,9 +1142,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="Quadratic3DRenderLimit" oor:type="xs:int"
-          oor:nillable="false">
+      <prop oor:name="Quadratic3DRenderLimit" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>This defines a Limitation for the default raster conversion from
           3D Scenes to Bitmaps. The number is the maximum number of pixels to
@@ -1193,9 +1154,7 @@
         </info>
         <value>1000000</value>
       </prop>
-      <prop
-          oor:name="QuadraticFormControlRenderLimit" oor:type="xs:int"
-          oor:nillable="false">
+      <prop oor:name="QuadraticFormControlRenderLimit" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>This defines a Limitation for the default raster conversion of
           FormControls in edit mode. These have the ability to be displayed
@@ -1208,9 +1167,7 @@
         </info>
         <value>45000</value>
       </prop>
-      <prop
-          oor:name="TransparentSelection" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="TransparentSelection" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>This switch defines if the selections in the applications (text
           or cells) are visualized using inverse (XOR) when set to false (the
@@ -1222,9 +1179,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="TransparentSelectionPercent" oor:type="xs:short"
-          oor:nillable="false">
+      <prop oor:name="TransparentSelectionPercent" oor:type="xs:short" oor:nillable="false">
         <info>
           <desc>Specifies the degree of transparence to be used when transparent
           selection is used. The value is a percent value. Since neither no
@@ -1236,9 +1191,7 @@
         </info>
         <value>75</value>
       </prop>
-      <prop
-          oor:name="SelectionMaximumLuminancePercent" oor:type="xs:short"
-          oor:nillable="false">
+      <prop oor:name="SelectionMaximumLuminancePercent" oor:type="xs:short" oor:nillable="false">
         <info>
           <desc>Specifies the maximum allowed luminance the system's selection
           color may have. When the colorfetched from the system is brighter
@@ -1254,9 +1207,7 @@
       <info>
         <desc>Contains miscellaneous settings for the auto correction.</desc>
       </info>
-      <prop
-          oor:name="UseReplacementTable" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="UseReplacementTable" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Use replacement
@@ -1268,9 +1219,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="TwoCapitalsAtStart" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Correct TWo
@@ -1282,9 +1231,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="CapitalAtStartSentence" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Capitalize first
@@ -1296,9 +1243,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="ChangeUnderlineWeight" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="ChangeUnderlineWeight" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold*
@@ -1310,9 +1255,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="SetInetAttribute" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="SetInetAttribute" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL
@@ -1324,9 +1267,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="ChangeOrdinalNumber" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace
@@ -1350,9 +1291,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="AddNonBreakingSpace" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="AddNonBreakingSpace" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking
@@ -1364,9 +1303,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="RemoveDoubleSpaces" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="RemoveDoubleSpaces" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Ignore Double
@@ -1377,9 +1314,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="CorrectAccidentalCapsLock" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="CorrectAccidentalCapsLock" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Correct accidental
              use of cAPS LOCK key -->
         <info>
@@ -1389,9 +1324,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="ReplaceSingleQuote" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="ReplaceSingleQuote" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single
@@ -1422,9 +1355,7 @@
           <label>End Single quote</label>
         </info>
       </prop>
-      <prop
-          oor:name="ReplaceDoubleQuote" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="ReplaceDoubleQuote" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double
@@ -1460,9 +1391,7 @@
           <desc>Contains settings to apply replacement rules and
           exceptions.</desc>
         </info>
-        <prop
-            oor:name="TwoCapitalsAtStart" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: AutoCorrect/Options/All -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions - Words with
@@ -1475,9 +1404,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="CapitalAtStartSentence" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: AutoCorrect/Options/All -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions -
@@ -1555,8 +1482,7 @@
           </info>
           <value>5500000</value>
         </prop>
-        <prop
-            oor:name="ObjectReleaseTime" oor:type="xs:int" oor:nillable="false">
+        <prop oor:name="ObjectReleaseTime" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>Specifies the time in seconds after which a cached object is
             freed from the cache.</desc>
@@ -1578,9 +1504,7 @@
         <info>
           <desc>Contains various properties information purpose only.</desc>
         </info>
-        <prop
-            oor:name="WorkPathChanged" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="WorkPathChanged" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>A flag which is set by the tools options dialog whenever a
             user changed the work path.</desc>
@@ -1668,8 +1592,7 @@
           </info>
           <value>$(progpath)/filter</value>
         </prop>
-        <prop
-            oor:name="Gallery" oor:type="oor:string-list">
+        <prop oor:name="Gallery" oor:type="oor:string-list">
           <info>
             <desc>Specifies the directory which contains the Gallery database
             and multimedia files.</desc>
@@ -1747,8 +1670,7 @@
             <it>$(userurl)/template</it>
           </value>
         </prop>
-        <prop
-            oor:name="UIConfig" oor:type="oor:string-list" oor:nillable="false">
+        <prop oor:name="UIConfig" oor:type="oor:string-list" oor:nillable="false">
           <info>
             <desc>Specifies additional folders containing a global user
             interface configuration. The final user interface configuration is
@@ -1764,8 +1686,7 @@
           </info>
           <value>$(userurl)/config</value>
         </prop>
-        <prop
-            oor:name="UserDictionary" oor:type="xs:string" oor:nillable="false">
+        <prop oor:name="UserDictionary" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Contains the custom dictionaries.</desc>
           </info>
@@ -1793,9 +1714,7 @@
           </info>
           <value>$(progpath)/addin</value>
         </prop>
-        <prop
-            oor:name="AutoCorrect" oor:type="oor:string-list"
-            oor:nillable="false">
+        <prop oor:name="AutoCorrect" oor:type="oor:string-list" oor:nillable="false">
           <info>
             <desc>Specifies the default directory for the settings of the
             AutoCorrect dialog.</desc>
@@ -1805,8 +1724,7 @@
             <it>$(userurl)/autocorr</it>
           </value>
         </prop>
-        <prop
-            oor:name="AutoText" oor:type="oor:string-list" oor:nillable="false">
+        <prop oor:name="AutoText" oor:type="oor:string-list" oor:nillable="false">
           <info>
             <desc>Specifies the default directory where the AutoText modules are
             located.</desc>
@@ -1868,8 +1786,7 @@
           </info>
           <value>$(progpath)/filter</value>
         </prop>
-        <prop
-            oor:name="Gallery" oor:type="oor:string-list" oor:nillable="false">
+        <prop oor:name="Gallery" oor:type="oor:string-list" oor:nillable="false">
           <info>
             <desc>Specifies the default directory where the Gallery database and
             multimedia files are located.</desc>
@@ -1930,8 +1847,7 @@
           </info>
           <value>$(temp)</value>
         </prop>
-        <prop
-            oor:name="Template" oor:type="oor:string-list" oor:nillable="false">
+        <prop oor:name="Template" oor:type="oor:string-list" oor:nillable="false">
           <info>
             <desc>Specifies the default directory where all provided templates
             are located in folders and sub-folders.</desc>
@@ -1942,8 +1858,7 @@
             <it>$(userurl)/template</it>
           </value>
         </prop>
-        <prop
-            oor:name="UIConfig" oor:type="oor:string-list" oor:nillable="false">
+        <prop oor:name="UIConfig" oor:type="oor:string-list" oor:nillable="false">
           <info>
             <desc>Specifies the default directories for the global user
             interface configuration. The final user interface configuration is
@@ -1958,8 +1873,7 @@
           </info>
           <value>$(userurl)/config</value>
         </prop>
-        <prop
-            oor:name="UserDictionary" oor:type="xs:string" oor:nillable="false">
+        <prop oor:name="UserDictionary" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Specifies the default directory which stores the custom
             dictionaries.</desc>
@@ -2020,9 +1934,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="ShowFontBoxWYSIWYG" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="ShowFontBoxWYSIWYG" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Desktop/ShowFontBoxWYSIWYG -->
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - General - View -->
@@ -2051,9 +1963,7 @@
           </info>
           <value>10</value>
         </prop>
-        <prop
-            oor:name="NonProportionalFontsOnly" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="NonProportionalFontsOnly" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether only non-proportional font should be
             presented on the dialog page.</desc>
@@ -2175,9 +2085,7 @@
         <desc>Contains settings which are used during the Office startup to
         check for unfinished work.</desc>
       </info>
-      <prop
-          oor:name="DevelopmentChart" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="DevelopmentChart" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Specifies that If this option is set to true, the new
           development chart library is used instead of the standard one. Do not
@@ -2246,8 +2154,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="CreateBackup" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="CreateBackup" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: General/Save/Documents -->
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
@@ -2258,8 +2165,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="EditProperty" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="EditProperty" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: General/Save/Documents -->
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
@@ -2270,9 +2176,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="AutoSavePrompt" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="AutoSavePrompt" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: General/Save/Documents -->
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
@@ -2283,9 +2187,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="AutoSaveTimeIntervall" oor:type="xs:int"
-            oor:nillable="false">
+        <prop oor:name="AutoSaveTimeIntervall" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: General/Save/Documents -->
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
@@ -2321,9 +2223,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="PrettyPrinting" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="PrettyPrinting" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools  Options - General  Save - optimize XML file
                size-->
           <!--the UI setting is inverse to this setting-->
@@ -2335,9 +2235,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="WarnAlienFormat" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="WarnAlienFormat" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools  Options - General  Save - -->
           <info>
             <desc>Specifies if a warning message is shown if a file is going to
@@ -2346,8 +2244,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="AlwaysSaveAs" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="AlwaysSaveAs" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>If the option is set, every time a user triggers a plain Save
             operation, SaveAs operation with possible additional user
@@ -2355,9 +2252,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>If the  value is "true", then the ODF that is saved by
             OpenOffice.org will be backward compatible to previous minor
@@ -2444,8 +2339,7 @@
         <info>
           <desc>Specifies ODF settings.</desc>
         </info>
-        <prop
-            oor:name="DefaultVersion" oor:type="xs:short" oor:nillable="false">
+        <prop oor:name="DefaultVersion" oor:type="xs:short" oor:nillable="false">
           <!-- UIHints: Tools - Options - Load/Save - General - ODF version -->
           <info>
             <desc>Specifies the default ODF version for saving documents.</desc>
@@ -2479,9 +2373,7 @@
           </constraints>
           <value>3</value>
         </prop>
-        <prop
-            oor:name="UseSHA1InODF12" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="UseSHA1InODF12" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether SHA1 algorithm instead of SHA256 should be
             used in ODF12 for StartKey and Checksum generation during
@@ -2489,9 +2381,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="UseBlowfishInODF12" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="UseBlowfishInODF12" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether Blowfish algorithm instead of AES should be
             used in ODF12 for encryption.</desc>
@@ -2504,9 +2394,7 @@
       <info>
         <desc>Contains settings regarding the loading of documents.</desc>
       </info>
-      <prop
-          oor:name="UserDefinedSettings" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="UserDefinedSettings" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools  Options - General  Load/Save - General [Section]
              Load - Load user-defined with the document-->
         <info>
@@ -2516,9 +2404,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="ShowOfficeUpdateDialog" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="ShowOfficeUpdateDialog" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Specifies whether the office update dialog should be shown in
           case the loaded document has newer ODF version than the maximal
@@ -2535,9 +2421,7 @@
         <info>
           <desc>Contains security settings regarding Basic scripts.</desc>
         </info>
-        <prop
-            oor:name="SecureURL" oor:type="oor:string-list"
-            oor:nillable="false">
+        <prop oor:name="SecureURL" oor:type="oor:string-list" oor:nillable="false">
           <!-- OldPath: Security/SecureURL -->
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - Browser -->
@@ -2578,9 +2462,7 @@
           </constraints>
           <value>1</value>
         </prop>
-        <prop
-            oor:name="ExecutePlugins" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="ExecutePlugins" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether execution of plugins found inside a document
             is allowed.</desc>
@@ -2594,17 +2476,14 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="Confirmation" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="Confirmation" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether the user must confirm before a basic script
             can be executed.</desc>
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="WarnSaveOrSendDoc" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="WarnSaveOrSendDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies wether to warn when saving or sending documents with
             personal/hidden data.</desc>
@@ -2623,52 +2502,42 @@
             <desc>Contains the path to the users NSS certificate directory.</desc>
           </info>
         </prop>
-        <prop
-            oor:name="WarnPrintDoc" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="WarnPrintDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies wether to warn when printing documents with
             personal/hidden data.</desc>
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="WarnCreatePDF" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="WarnCreatePDF" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies wether to warn when creating PDF documents with
             personal/hidden data.</desc>
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="RemovePersonalInfoOnSaving" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="RemovePersonalInfoOnSaving" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies wether to remove personal information on
             saving.</desc>
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="RecommendPasswordProtection" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="RecommendPasswordProtection" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies wether to recommend password protection when saving
             documents.</desc>
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="HyperlinksWithCtrlClick" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="HyperlinksWithCtrlClick" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether ctrl-click is required to follow
             hyperlinks.</desc>
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="MacroSecurityLevel" oor:type="xs:int"
-            oor:nillable="false">
+        <prop oor:name="MacroSecurityLevel" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>Level of Macro security.</desc>
           </info>
@@ -2686,9 +2555,7 @@
           </constraints>
           <value>2</value>
         </prop>
-        <prop
-            oor:name="DisableMacrosExecution" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="DisableMacrosExecution" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether the macro execution is disabled in general.
             If it is set to true, the "MacroSecurityLevel" is ignored. If it is
@@ -2735,9 +2602,7 @@
         <info>
           <desc>Contains settings to change new document window behavior.</desc>
         </info>
-        <prop
-            oor:name="ForceFocusAndToFront" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="ForceFocusAndToFront" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Every new document window will be forced to front and grabs
             the focus.</desc>
@@ -2812,9 +2677,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="MousePositioning" oor:type="xs:short"
-            oor:nillable="false">
+        <prop oor:name="MousePositioning" oor:type="xs:short" oor:nillable="false">
           <!-- OldPath: General/View -->
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Mouse
@@ -2843,9 +2706,7 @@
           </constraints>
           <value>2</value>
         </prop>
-        <prop
-            oor:name="MiddleMouseButton" oor:type="xs:short"
-            oor:nillable="false">
+        <prop oor:name="MiddleMouseButton" oor:type="xs:short" oor:nillable="false">
           <!-- OldPath: General/View -->
           <!-- UIHints: Tools  Options - General  View  [Section] Middle mouse
                button -->
@@ -2878,8 +2739,7 @@
         <info>
           <desc>Contains localization specific settings.</desc>
         </info>
-        <prop
-            oor:name="AutoMnemonic" oor:type="xs:boolean" oor:localized="true">
+        <prop oor:name="AutoMnemonic" oor:type="xs:boolean" oor:localized="true">
           <!-- OldPath: International/AutoMnemonic -->
           <!-- OldLocation: soffice.ini -->
           <info>
@@ -2912,9 +2772,7 @@
         <info>
           <desc>Contains menu view settings.</desc>
         </info>
-        <prop
-            oor:name="DontHideDisabledEntry" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="DontHideDisabledEntry" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Desktop/DontHideDisabledEntry -->
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - General - View -->
@@ -2924,18 +2782,14 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsSystemIconsInMenus" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsSystemIconsInMenus" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Indicates whether icons in the office menus should
             shown/hidden by following the System theme.</desc>
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="ShowIconsInMenues" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="ShowIconsInMenues" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: General/View -->
           <!-- UIHints: Tools  Options - General  View  [Section] Options -->
           <info>
@@ -3161,8 +3015,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="MinPixelHeight" oor:type="xs:short" oor:nillable="false">
+        <prop oor:name="MinPixelHeight" oor:type="xs:short" oor:nillable="false">
           <info>
             <desc>Specifies an additional limit if Font Antialiasing is enabled.
             Fonts that are smaller than the specified limit are not
@@ -3224,9 +3077,7 @@
       <info>
         <desc>Specifies options related to printing.</desc>
       </info>
-      <prop
-          oor:name="PrintingModifiesDocument" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="PrintingModifiesDocument" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools  Options - General  Print  [Section]
              PrinterOptions -->
         <info>
@@ -3251,9 +3102,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="PaperOrientation" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="PaperOrientation" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: General/Print/Warning -->
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
@@ -3275,8 +3124,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="Transparency" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="Transparency" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
           <info>
             <desc>Specifies if a warning should be displayed in case the
@@ -3294,9 +3142,7 @@
           <info>
             <desc>Specifies the options related to printing.</desc>
           </info>
-          <prop
-              oor:name="ReduceTransparency" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ReduceTransparency" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3306,9 +3152,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ReducedTransparencyMode" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedTransparencyMode" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3318,9 +3162,7 @@
             </info>
             <value>0</value>
           </prop>
-          <prop
-              oor:name="ReduceGradients" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ReduceGradients" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3330,9 +3172,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ReducedGradientMode" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedGradientMode" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3342,9 +3182,7 @@
             </info>
             <value>0</value>
           </prop>
-          <prop
-              oor:name="ReducedGradientStepCount" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedGradientStepCount" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3354,9 +3192,7 @@
             </info>
             <value>64</value>
           </prop>
-          <prop
-              oor:name="ReduceBitmaps" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ReduceBitmaps" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3366,9 +3202,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ReducedBitmapMode" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedBitmapMode" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3379,9 +3213,7 @@
             </info>
             <value>1</value>
           </prop>
-          <prop
-              oor:name="ReducedBitmapResolution" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedBitmapResolution" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3391,9 +3223,7 @@
             </info>
             <value>3</value>
           </prop>
-          <prop
-              oor:name="ReducedBitmapIncludesTransparency"
-              oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="ReducedBitmapIncludesTransparency" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3403,9 +3233,7 @@
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="ConvertToGreyscales" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ConvertToGreyscales" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
@@ -3415,9 +3243,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="PDFAsStandardPrintJobFormat" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="PDFAsStandardPrintJobFormat" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3433,9 +3259,7 @@
             <desc>Specifies the options for printing to a file.</desc>
             <label>Print File</label>
           </info>
-          <prop
-              oor:name="ReduceTransparency" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ReduceTransparency" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3445,9 +3269,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ReducedTransparencyMode" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedTransparencyMode" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3457,9 +3279,7 @@
             </info>
             <value>0</value>
           </prop>
-          <prop
-              oor:name="ReduceGradients" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ReduceGradients" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3469,9 +3289,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ReducedGradientMode" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedGradientMode" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3481,9 +3299,7 @@
             </info>
             <value>0</value>
           </prop>
-          <prop
-              oor:name="ReducedGradientStepCount" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedGradientStepCount" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3493,9 +3309,7 @@
             </info>
             <value>64</value>
           </prop>
-          <prop
-              oor:name="ReduceBitmaps" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ReduceBitmaps" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3505,9 +3319,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ReducedBitmapMode" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedBitmapMode" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3518,9 +3330,7 @@
             </info>
             <value>1</value>
           </prop>
-          <prop
-              oor:name="ReducedBitmapResolution" oor:type="xs:short"
-              oor:nillable="false">
+          <prop oor:name="ReducedBitmapResolution" oor:type="xs:short" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3530,9 +3340,7 @@
             </info>
             <value>3</value>
           </prop>
-          <prop
-              oor:name="ReducedBitmapIncludesTransparency"
-              oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="ReducedBitmapIncludesTransparency" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3543,9 +3351,7 @@
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="ConvertToGreyscales" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ConvertToGreyscales" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3555,9 +3361,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="PDFAsStandardPrintJobFormat" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="PDFAsStandardPrintJobFormat" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
@@ -3705,8 +3509,7 @@
         <info>
           <desc>Contains settings for the start center.</desc>
         </info>
-        <prop
-            oor:name="AddFeatureURL" oor:type="xs:string" oor:nillable="false">
+        <prop oor:name="AddFeatureURL" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Contains a string specifying the URL to be browsed for
             additional features (e.g. extensions)</desc>
@@ -3720,18 +3523,14 @@
           </info>
           <value/>
         </prop>
-        <prop
-            oor:name="TemplateRepositoryURL" oor:type="xs:string"
-            oor:nillable="false">
+        <prop oor:name="TemplateRepositoryURL" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Contains a string specifying the URL to be browsed for
             additional template documents</desc>
           </info>
           <value/>
         </prop>
-        <prop
-            oor:name="StartCenterHideExternalLinks" oor:type="xs:int"
-            oor:nillable="false">
+        <prop oor:name="StartCenterHideExternalLinks" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>Contains a number deciding whether to show or hide buttons
             with external links</desc>
@@ -4150,44 +3949,35 @@
           <info>
             <desc>Specifies default settings of Microsoft import filters.</desc>
           </info>
-          <prop
-              oor:name="MathTypeToMath" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="MathTypeToMath" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if convertible MathType OLE objects are converted
               into Math objects.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="WinWordToWriter" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="WinWordToWriter" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if convertible WinWord OLE objects are converted
               into Writer objects.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="ExcelToCalc" oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="ExcelToCalc" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if convertible Excel OLE objects are converted
               into Calc objects.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="PowerPointToImpress" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="PowerPointToImpress" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if convertible PowerPoint OLE objects are
               converted into Impress objects.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="ImportWWFieldsAsEnhancedFields" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ImportWWFieldsAsEnhancedFields" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Flag to control use of enhanced fields.</desc>
             </info>
@@ -4198,62 +3988,49 @@
           <info>
             <desc>Specifies default settings of Microsoft export filters.</desc>
           </info>
-          <prop
-              oor:name="MathToMathType" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="MathToMathType" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if embedded Math objects are converted into
               MathType objects.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="WriterToWinWord" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="WriterToWinWord" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if embedded Writer objects are converted into
               WinWord objects.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="CalcToExcel" oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="CalcToExcel" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if embedded Calc objects are converted into Excel
               objects.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="ImpressToPowerPoint" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ImpressToPowerPoint" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if embedded Impress objects are converted into
               PowerPoint objects.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="EnablePowerPointPreview" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="EnablePowerPointPreview" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if previews are created when saving PowerPoint
               documents.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="EnableExcelPreview" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="EnableExcelPreview" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if previews are created when saving Excel
               documents.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="EnableWordPreview" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="EnableWordPreview" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if previews are created when saving Word
               documents.</desc>
@@ -4308,8 +4085,7 @@
           <info>
             <desc>Specifies default settings of graphic export dialogs.</desc>
           </info>
-          <prop
-              oor:name="PixelExportUnit" oor:type="xs:int" oor:nillable="false">
+          <prop oor:name="PixelExportUnit" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the unit default that is used in the graphic
               export dialog if exporting pixel graphics.</desc>
@@ -4354,9 +4130,7 @@
             </constraints>
             <value>-1</value>
           </prop>
-          <prop
-              oor:name="PixelExportResolutionUnit" oor:type="xs:int"
-              oor:nillable="false">
+          <prop oor:name="PixelExportResolutionUnit" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the unit default for the resolution that is used
               in the graphic export dialog if exporting pixel
@@ -4381,9 +4155,7 @@
             </constraints>
             <value>0</value>
           </prop>
-          <prop
-              oor:name="PixelExportResolution" oor:type="xs:int"
-              oor:nillable="false">
+          <prop oor:name="PixelExportResolution" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the logical width of a graphic.
               [UNIT=1/100 mm].</desc>
@@ -4398,9 +4170,7 @@
             </constraints>
             <value>96</value>
           </prop>
-          <prop
-              oor:name="MaxFilesizeForRealtimePreview" oor:type="xs:int"
-              oor:nillable="false">
+          <prop oor:name="MaxFilesizeForRealtimePreview" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the maximum raw graphic size in bytes up to which
               the realtime preview is enabled, for fast computers this value may
@@ -4408,9 +4178,7 @@
             </info>
             <value>4000000</value>
           </prop>
-          <prop
-              oor:name="VectorExportUnit" oor:type="xs:int"
-              oor:nillable="false">
+          <prop oor:name="VectorExportUnit" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the unit default that is used in the graphic
               export dialog if exporting vector graphics.</desc>
@@ -4508,9 +4276,7 @@
               </constraints>
               <value>0</value>
             </prop>
-            <prop
-                oor:name="RLE_Coding" oor:type="xs:boolean"
-                oor:nillable="false">
+            <prop oor:name="RLE_Coding" oor:type="xs:boolean" oor:nillable="false">
               <!-- OldPath: BMP-RLE_CODING -->
               <!-- OldLocation: fltopt.ini -->
               <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog]
@@ -4610,9 +4376,7 @@
               </constraints>
               <value>2</value>
             </prop>
-            <prop
-                oor:name="CompressionMode" oor:type="xs:int"
-                oor:nillable="false">
+            <prop oor:name="CompressionMode" oor:type="xs:int" oor:nillable="false">
               <info>
                 <desc>Specifies if bitmaps are exported by using the LZW (Lempel
                 - Ziv - Welch) compression algorithm. Compression is only
@@ -4910,26 +4674,21 @@
             <info>
               <desc>Specifies default settings of SVG export dialog.</desc>
             </info>
-            <prop
-                oor:name="TinyMode" oor:type="xs:boolean" oor:nillable="false">
+            <prop oor:name="TinyMode" oor:type="xs:boolean" oor:nillable="false">
               <info>
                 <desc>Specifies if SVG Tiny profile should be used for
                 export.</desc>
               </info>
               <value>false</value>
             </prop>
-            <prop
-                oor:name="EmbedFonts" oor:type="xs:boolean"
-                oor:nillable="false">
+            <prop oor:name="EmbedFonts" oor:type="xs:boolean" oor:nillable="false">
               <info>
                 <desc>Specifies if fonts should be embedded into SVG
                 file.</desc>
               </info>
               <value>true</value>
             </prop>
-            <prop
-                oor:name="UseNativeTextDecoration" oor:type="xs:boolean"
-                oor:nillable="false">
+            <prop oor:name="UseNativeTextDecoration" oor:type="xs:boolean" oor:nillable="false">
               <info>
                 <desc>Specifies if text decoration like underlining and
                 strike-through be drawm by using SVG attributes (true) or by
@@ -4948,9 +4707,7 @@
           <info>
             <desc>Contains settings for HTML import.</desc>
           </info>
-          <prop
-              oor:name="NumbersEnglishUS" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="NumbersEnglishUS" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  Options  Load/Save - HTML Compability [Section]
                  Import -->
             <info>
@@ -4960,8 +4717,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="UnknownTag" oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="UnknownTag" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Browser/HTML/Import -->
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Import -->
@@ -4972,8 +4728,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="FontSetting" oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="FontSetting" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Browser/HTML/Import -->
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Import -->
@@ -5120,8 +4875,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="PrintLayout" oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="PrintLayout" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Browser/HTML/Export -->
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
@@ -5132,9 +4886,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="LocalGraphic" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="LocalGraphic" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Browser/HTML/Export -->
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
@@ -5184,9 +4936,7 @@
             </info>
             <value>1</value>
           </prop>
-          <prop
-              oor:name="UseLosslessCompression" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="UseLosslessCompression" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if graphics are exported to PDF using a lossless
               compression eg. PNG or if they are compressed using the JPEG
@@ -5217,18 +4967,14 @@
             </constraints>
             <value>90</value>
           </prop>
-          <prop
-              oor:name="ReduceImageResolution" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ReduceImageResolution" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if the resolution of each image is reduced to the
               resolution specified by the property MaxImageResolution.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="MaxImageResolution" oor:type="xs:int"
-              oor:nillable="false">
+          <prop oor:name="MaxImageResolution" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>If the property ReduceImageResolution is set to true all
               images will be reduced to the given value in DPI.</desc>
@@ -5262,69 +5008,54 @@
             </constraints>
             <value>300</value>
           </prop>
-          <prop
-              oor:name="UseTaggedPDF" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="UseTaggedPDF" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Determines if PDF are created by using special tags also
               known as Tagged PDF.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ExportNotes" oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="ExportNotes" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if notes are exported to PDF.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ExportBookmarks" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ExportBookmarks" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if bookmarks are exported to PDF.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="OpenBookmarkLevels" oor:type="xs:int"
-              oor:nillable="false">
+          <prop oor:name="OpenBookmarkLevels" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies how many bookmark levels should be opened in the
               reader application when the PDF gets opened.</desc>
             </info>
             <value>-1</value>
           </prop>
-          <prop
-              oor:name="ExportNotesPages" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ExportNotesPages" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if notes pages are exported to PDF. (Notes pages
               are available in Impress documents only).</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="UseTransitionEffects" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="UseTransitionEffects" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies slide transitions are exported to PDF. This option
               is active only if storing Impress documents.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="ExportFormFields" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ExportFormFields" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies whether form fields are exported as widgets or
               only their fixed print representation is exported.</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="EmbedStandardFonts" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="EmbedStandardFonts" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies whether to embed the 14 standard PDF fonts or
               not.</desc>
@@ -5359,18 +5090,14 @@
             </constraints>
             <value>0</value>
           </prop>
-          <prop
-              oor:name="AllowDuplicateFieldNames" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="AllowDuplicateFieldNames" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies whether multiple form fields exported are allowed
               to have the same field name.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="IsSkipEmptyPages" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="IsSkipEmptyPages" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that automatically inserted empty pages are
               suppressed. This option is active only if storing Writer
@@ -5378,71 +5105,56 @@
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="IsAddStream" oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="IsAddStream" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that a stream is inserted to the PDF file which
               contains the original document for archiving purposes.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="HideViewerMenubar" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="HideViewerMenubar" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies whether to hide the PDF viewer menubar when the
               document is active.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="HideViewerToolbar" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="HideViewerToolbar" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies whether to hide the PDF viewer toolbar when the
               document is active.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="HideViewerWindowControls" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="HideViewerWindowControls" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies whether to hide the PDF viewer controls when the
               document is active.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ResizeWindowToInitialPage" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ResizeWindowToInitialPage" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that the PDF viewer window is opened full screen
               when the document is opened.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="CenterWindow" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="CenterWindow" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that the PDF viewer window is centered to the
               screen when the PDF document is opened.</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="OpenInFullScreenMode" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="OpenInFullScreenMode" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that the PDF viewer window is opened full screen,
               on top of all windows..</desc>
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="DisplayPDFDocumentTitle" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="DisplayPDFDocumentTitle" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that the title of the document, if present in the
               document properties, is displayed in the PDF viewer window title
@@ -5559,9 +5271,7 @@
             </constraints>
             <value>0</value>
           </prop>
-          <prop
-              oor:name="FirstPageOnLeft" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="FirstPageOnLeft" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Used with the value 3 of the PageLayout property above, true
               if the first page (odd) should be on the left side of the
@@ -5631,18 +5341,14 @@
             </constraints>
             <value>4</value>
           </prop>
-          <prop
-              oor:name="EnableCopyingOfContent" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="EnableCopyingOfContent" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that the pages and the document content can be
               extracted to be used in other documents (copy and paste).</desc>
             </info>
             <value>true</value>
           </prop>
-          <prop
-              oor:name="EnableTextAccessForAccessibilityTools"
-              oor:type="xs:boolean" oor:nillable="false">
+          <prop oor:name="EnableTextAccessForAccessibilityTools" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that the document content can be extracted to be
               used in accessibility applications.</desc>
@@ -5651,9 +5357,7 @@
           </prop>
           <!-- END PDF Encryption -->
           <!-- PDF Version selection -->
-          <prop
-              oor:name="SelectPdfVersion" oor:type="xs:int"
-              oor:nillable="false">
+          <prop oor:name="SelectPdfVersion" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the version of PDF to emit.</desc>
             </info>
@@ -5673,9 +5377,7 @@
           </prop>
           <!-- END PDF Version selection -->
           <!-- PDF Relative Link -->
-          <prop
-              oor:name="ExportLinksRelativeFsys" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ExportLinksRelativeFsys" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that the file system related hyperlinks (file://
               protocol) present in the document will be exported as relative to
@@ -5683,9 +5385,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="PDFViewSelection" oor:type="xs:int"
-              oor:nillable="false">
+          <prop oor:name="PDFViewSelection" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies the way the exported PDF will be viewed
               (experienced) by the user.</desc>
@@ -5719,9 +5419,7 @@
             </constraints>
             <value>0</value>
           </prop>
-          <prop
-              oor:name="ConvertOOoTargetToPDFTarget" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ConvertOOoTargetToPDFTarget" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that the target documents with .od[tpgs]
               extension, will have that extension changed to .pdf when the link
@@ -5729,9 +5427,7 @@
             </info>
             <value>false</value>
           </prop>
-          <prop
-              oor:name="ExportBookmarksToPDFDestination" oor:type="xs:boolean"
-              oor:nillable="false">
+          <prop oor:name="ExportBookmarksToPDFDestination" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies that the bookmarks contained in the source
               OpenOffice.org file should be exported to the PDF file as Named
@@ -5753,8 +5449,7 @@
           be open at the same time. NIL will be interpreted as infinite!</desc>
         </info>
       </prop>
-      <prop
-          oor:name="PluginsEnabled" oor:type="xs:boolean" oor:nillable="false">
+      <prop oor:name="PluginsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: ? -->
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Browser  Other  Plug-Ins  Enable -->
@@ -5764,9 +5459,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="UseSystemFileDialog" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="UseSystemFileDialog" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if the system's file and folder pickers should be
           used. If false, the proprietary file/folder picker implementations
@@ -5775,18 +5468,14 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="UseDocumentSystemFileLocking" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="UseDocumentSystemFileLocking" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Allows to specify whether the OOo document file locking
           mechanics should use the system file locking.</desc>
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="UseDocumentOOoLockFile" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="UseDocumentOOoLockFile" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Allows to specify whether the OOo document file locking
           mechanics should use the lock file for locking.</desc>
@@ -5800,9 +5489,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="ShowLinkWarningDialog" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="ShowLinkWarningDialog" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if a warning dialog should be
           displayed when a user checks the link checkbox in
@@ -5810,9 +5497,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="UseSystemPrintDialog" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="UseSystemPrintDialog" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if the system's print dialog should be used. If
           false, the platform independent print dialog implementation will be
@@ -5821,34 +5506,27 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="DisableUICustomization" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="DisableUICustomization" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Disables the customization of the UI elements.</desc>
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="AlwaysAllowSave" oor:type="xs:boolean" oor:nillable="false">
+      <prop oor:name="AlwaysAllowSave" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if the user can save the document even when it's not
           modified.</desc>
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="ExperimentalMode" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="ExperimentalMode" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determins if various experimental, and potentially unstable
           features should be enabled in the user interface.</desc>
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="MacroRecorderMode" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="MacroRecorderMode" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determins if the limited, and awkward code producing
           macro recorder should be enabled in the user interface.</desc>
@@ -5962,7 +5640,7 @@
           <desc>URL of the image the user wants to use; it is used only when
             BackgroundImage is 'own'.</desc>
         </info>
-        <value></value>
+        <value/>
       </prop>
       <prop oor:name="Persona" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General Personalization -->
@@ -5996,7 +5674,7 @@
             accent.  When set, the value has form
             "header.jpg;footer.jpg;#RGBTXT;#RGBACC".</desc>
         </info>
-        <value></value>
+        <value/>
       </prop>
       <prop oor:name="ToolboxStyle" oor:type="xs:short" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
@@ -6017,9 +5695,7 @@
         </constraints>
         <value>1</value>
       </prop>
-      <prop
-          oor:name="FormControlPilotsEnabled" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="FormControlPilotsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Enables/Disables the usage of AutoPilots for form
           controls.</desc>
@@ -6074,65 +5750,49 @@
           those settings can be overruled in concrete documents, they specify
           creation-time defaults only.</desc>
         </info>
-        <node-ref
-            oor:name="com.sun.star.text.TextDocument"
-            oor:node-type="ApplicationControlLayout">
+        <node-ref oor:name="com.sun.star.text.TextDocument" oor:node-type="ApplicationControlLayout">
           <info>
             <desc>specifies certain default layout settings for form controls in
             text documents</desc>
           </info>
         </node-ref>
-        <node-ref
-            oor:name="com.sun.star.text.WebDocument"
-            oor:node-type="ApplicationControlLayout">
+        <node-ref oor:name="com.sun.star.text.WebDocument" oor:node-type="ApplicationControlLayout">
           <info>
             <desc>specifies certain default layout settings for form controls in
             web pages</desc>
           </info>
         </node-ref>
-        <node-ref
-            oor:name="com.sun.star.sheet.SpreadsheetDocument"
-            oor:node-type="ApplicationControlLayout">
+        <node-ref oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:node-type="ApplicationControlLayout">
           <info>
             <desc>specifies certain default layout settings for form controls in
             spreadsheet documents</desc>
           </info>
         </node-ref>
-        <node-ref
-            oor:name="com.sun.star.drawing.DrawingDocument"
-            oor:node-type="ApplicationControlLayout">
+        <node-ref oor:name="com.sun.star.drawing.DrawingDocument" oor:node-type="ApplicationControlLayout">
           <info>
             <desc>specifies certain default layout settings for form controls in
             drawing documents</desc>
           </info>
         </node-ref>
-        <node-ref
-            oor:name="com.sun.star.presentation.PresentationDocument"
-            oor:node-type="ApplicationControlLayout">
+        <node-ref oor:name="com.sun.star.presentation.PresentationDocument" oor:node-type="ApplicationControlLayout">
           <info>
             <desc>specifies certain default layout settings for form controls in
             presentation documents</desc>
           </info>
         </node-ref>
-        <node-ref
-            oor:name="com.sun.star.xforms.XMLFormDocument"
-            oor:node-type="ApplicationControlLayout">
+        <node-ref oor:name="com.sun.star.xforms.XMLFormDocument" oor:node-type="ApplicationControlLayout">
           <info>
             <desc>specifies certain default layout settings for form controls in
             XML form documents</desc>
           </info>
         </node-ref>
-        <node-ref
-            oor:name="com.sun.star.sdb.FormDesign"
-            oor:node-type="ApplicationControlLayout">
+        <node-ref oor:name="com.sun.star.sdb.FormDesign" oor:node-type="ApplicationControlLayout">
           <info>
             <desc>specifies certain default layout settings for form controls in
             database form documents</desc>
           </info>
         </node-ref>
-        <node-ref
-            oor:name="com.sun.star.sdb.TextReportDesign"
-            oor:node-type="ApplicationControlLayout">
+        <node-ref oor:name="com.sun.star.sdb.TextReportDesign" oor:node-type="ApplicationControlLayout">
           <info>
             <desc>specifies certain default layout settings for form controls in
             database text report documents.</desc>
@@ -6144,9 +5804,7 @@
           <desc>specifies settings for the property browser used for forms and
           form controls.</desc>
         </info>
-        <prop
-            oor:name="ExperimentalProperties" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="ExperimentalProperties" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Enables or disables the property browser's access to
             form/control properties which are not officially supported.</desc>
@@ -6167,9 +5825,7 @@
       <info>
         <desc>Contains layout specific settings for Asian languages.</desc>
       </info>
-      <prop
-          oor:name="IsKerningWesternTextOnly" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsKerningWesternTextOnly" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: Tools  Options  Asian typography  Asian layout Kerning
@@ -6181,9 +5837,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="CompressCharacterDistance" oor:type="xs:short"
-          oor:nillable="false">
+      <prop oor:name="CompressCharacterDistance" oor:type="xs:short" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: Tools  Options  Asian typography  Asian layout Character
@@ -6209,9 +5863,7 @@
       <info>
         <desc>Contains all options for search.</desc>
       </info>
-      <prop
-          oor:name="IsWholeWordsOnly" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsWholeWordsOnly" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
@@ -6229,9 +5881,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="IsUseRegularExpression" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsUseRegularExpression" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
@@ -6240,9 +5890,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="IsSearchForStyles" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsSearchForStyles" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
@@ -6251,9 +5899,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="IsSimilaritySearch" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsSimilaritySearch" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
@@ -6271,9 +5917,7 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="IsUseAsianOptions" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsUseAsianOptions" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
@@ -6282,27 +5926,21 @@
         </info>
         <value>false</value>
       </prop>
-      <prop
-          oor:name="ComponentSearchGroupLabel" oor:type="xs:string"
-          oor:localized="true">
+      <prop oor:name="ComponentSearchGroupLabel" oor:type="xs:string" oor:localized="true">
         <!-- UIHints: Edit/Find & Replace -->
         <info>
           <desc>Specifies the divider label in case of a component-based search
           extension.</desc>
         </info>
       </prop>
-      <prop
-          oor:name="ComponentSearchCommandLabel1" oor:type="xs:string"
-          oor:localized="true">
+      <prop oor:name="ComponentSearchCommandLabel1" oor:type="xs:string" oor:localized="true">
         <!-- UIHints: Edit/Find & Replace -->
         <info>
           <desc>Specifies the label of the first component-based search
           command.</desc>
         </info>
       </prop>
-      <prop
-          oor:name="ComponentSearchCommandLabel2" oor:type="xs:string"
-          oor:localized="true">
+      <prop oor:name="ComponentSearchCommandLabel2" oor:type="xs:string" oor:localized="true">
         <!-- UIHints: Edit/Find & Replace -->
         <info>
           <desc>Specifies the label of the second component-based search
@@ -6320,9 +5958,7 @@
         <info>
           <desc>Contains search options for the Japanese language.</desc>
         </info>
-        <prop
-            oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6332,9 +5968,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatchHiraganaKatakana" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatchHiraganaKatakana" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6344,9 +5978,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatchContractions" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatchContractions" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6356,9 +5988,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatchMinusDashCho-on" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatchMinusDashCho-on" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6368,9 +5998,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatchRepeatCharMarks" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatchRepeatCharMarks" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6380,9 +6008,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatchVariantFormKanji" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatchVariantFormKanji" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6392,9 +6018,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatchOldKanaForms" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatchOldKanaForms" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6404,9 +6028,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatch_DiZi_DuZu" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatch_DiZi_DuZu" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6416,9 +6038,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatch_BaVa_HaFa" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatch_BaVa_HaFa" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6428,9 +6048,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatch_TsiThiChi_DhiZi" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatch_TsiThiChi_DhiZi" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6440,9 +6058,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatch_HyuIyu_ByuVyu" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatch_HyuIyu_ByuVyu" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6452,9 +6068,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatch_SeShe_ZeJe" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsMatch_SeShe_ZeJe" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6464,8 +6078,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="IsMatch_IaIya" oor:type="xs:boolean"
-              oor:nillable="false">
+        <prop oor:name="IsMatch_IaIya" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6475,8 +6088,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsMatch_KiKu" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="IsMatch_KiKu" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6486,9 +6098,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsIgnorePunctuation" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsIgnorePunctuation" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6498,9 +6108,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsIgnoreWhitespace" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsIgnoreWhitespace" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6511,9 +6119,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsIgnoreProlongedSoundMark" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsIgnoreProlongedSoundMark" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6523,9 +6129,7 @@
           </info>
           <value>true</value>
         </prop>
-        <prop
-            oor:name="IsIgnoreMiddleDot" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="IsIgnoreMiddleDot" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: -->
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
@@ -6541,9 +6145,7 @@
       <info>
         <desc>Specifies settings for the accessibility options.</desc>
       </info>
-      <prop
-          oor:name="AutoDetectSystemHC" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="AutoDetectSystemHC" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Enables the automatic detection of a high contrast mode set for
           your desktop. Some OS' do not provide this option explicitly, but
@@ -6553,9 +6155,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="IsForPagePreviews" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsForPagePreviews" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Enables the use of high contrast colors, instead of displaying
           the normal/original WYSIWYG colors.</desc>
@@ -6563,9 +6163,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="IsHelpTipsDisappear" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsHelpTipsDisappear" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Enables or disables the automatic time out of help tips. You can
           specify a duration (n) of 1 to 99 seconds. If this option is
@@ -6597,9 +6195,7 @@
         </constraints>
         <value>4</value>
       </prop>
-      <prop
-          oor:name="IsAllowAnimatedGraphics" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsAllowAnimatedGraphics" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Indicates whether to allow the graphical animation in all SO/OO
           applications (i.e. animated GIFs and objects in Impress during
@@ -6609,9 +6205,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="IsAllowAnimatedText" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsAllowAnimatedText" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Indicates whether to allow all textual animation like blinking
           and scrolling in all SO/OO applications.</desc>
@@ -6619,9 +6213,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="IsAutomaticFontColor" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsAutomaticFontColor" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Overrides all text color attributes set in a SO/OO document for
           display only.</desc>
@@ -6637,9 +6229,7 @@
         </info>
         <value>true</value>
       </prop>
-      <prop
-          oor:name="IsSelectionInReadonly" oor:type="xs:boolean"
-          oor:nillable="false">
+      <prop oor:name="IsSelectionInReadonly" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Indicates whether the cursor is displayed in read-only
           texts.</desc>
@@ -6697,8 +6287,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="VerticalText" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="VerticalText" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies, whether vertical text is available (true) or not
@@ -6706,9 +6295,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="AsianTypography" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="AsianTypography" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies, whether Asian typography options like compression
@@ -6716,8 +6303,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="JapaneseFind" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="JapaneseFind" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies, whether Japanese find options are selectable for
@@ -6733,8 +6319,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="ChangeCaseMap" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="ChangeCaseMap" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies whether case mapping to half and full width,
@@ -6750,8 +6335,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="EmphasisMarks" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="EmphasisMarks" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies whether emphasis marks are available (true) or not
@@ -6759,9 +6343,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="VerticalCallOut" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="VerticalCallOut" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies whether vertical call out objects are available
@@ -6783,9 +6365,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="CTLSequenceChecking" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="CTLSequenceChecking" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies whether CTL strings are checked for the correct
@@ -6793,9 +6373,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="CTLSequenceCheckingRestricted" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="CTLSequenceCheckingRestricted" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies whether CTL strings are checked restricted for the
@@ -6804,9 +6382,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="CTLSequenceCheckingTypeAndReplace" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="CTLSequenceCheckingTypeAndReplace" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>
             <desc>Specifies whether CTL input sequences are corrected while
@@ -6814,8 +6390,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop
-            oor:name="CTLCursorMovement" oor:type="xs:int" oor:nillable="false">
+        <prop oor:name="CTLCursorMovement" oor:type="xs:int" oor:nillable="false">
           <!-- UIHints: options-->
           <info>
             <desc>Specifies the type of text cursor movement (logical (0) or
@@ -6868,9 +6443,7 @@
         <info>
           <desc>Contains Writer specific settings for smart tags.</desc>
         </info>
-        <prop
-            oor:name="RecognizeSmartTags" oor:type="xs:boolean"
-            oor:nillable="false">
+        <prop oor:name="RecognizeSmartTags" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether smart tag recognization is enabled.</desc>
           </info>

@@ -17,31 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Commands" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains general information about ~ and rules, and about actions based on office commands.</desc>
-	</info>
-	<templates>
-		<group oor:name="CommandType">
-			<info>
-				<desc>Describes a command.</desc>
-			</info>
-			<prop oor:name="Command" oor:type="xs:string">
-				<info>
-					<desc>Specifies the command name for dispatching without a protocol part.</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="Execute">
-			<info>
-				<desc>Contains information about the execute status.</desc>
-			</info>
-			<set oor:name="Disabled" oor:node-type="CommandType">
-				<info>
-					<desc>Contains commands that are disabled in the Office user interface.</desc>
-				</info>
-			</set>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Commands" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains general information about ~ and rules, and about actions based on office commands.</desc>
+  </info>
+  <templates>
+    <group oor:name="CommandType">
+      <info>
+        <desc>Describes a command.</desc>
+      </info>
+      <prop oor:name="Command" oor:type="xs:string">
+        <info>
+          <desc>Specifies the command name for dispatching without a protocol part.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Execute">
+      <info>
+        <desc>Contains information about the execute status.</desc>
+      </info>
+      <set oor:name="Disabled" oor:node-type="CommandType">
+        <info>
+          <desc>Contains commands that are disabled in the Office user interface.</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>

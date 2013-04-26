@@ -17,36 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Security" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Stores security related settings.</desc>
-	</info>
-	<templates>
-		<group oor:name="SecureExtension">
-			<info>
-				<desc>Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
-			</info>
-			<prop oor:name="Extension" oor:type="xs:string">
-				<info>
-					<desc>Provides a file extension that is not case-sensitive.</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<set oor:name="SecureExtensions" oor:node-type="SecureExtension">
-			<info>
-				<desc>Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
-			</info>
-		</set>
-		<group oor:name="Hyperlinks">
-			<info>
-				<desc>Specifies how secure hyperlinks are processed.</desc>
-			</info>
-			<prop oor:name="Open" oor:type="xs:int">
-				<info>
-					<desc>Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
-				</info>
-			</prop>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Security" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Stores security related settings.</desc>
+  </info>
+  <templates>
+    <group oor:name="SecureExtension">
+      <info>
+        <desc>Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
+      </info>
+      <prop oor:name="Extension" oor:type="xs:string">
+        <info>
+          <desc>Provides a file extension that is not case-sensitive.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="SecureExtensions" oor:node-type="SecureExtension">
+      <info>
+        <desc>Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
+      </info>
+    </set>
+    <group oor:name="Hyperlinks">
+      <info>
+        <desc>Specifies how secure hyperlinks are processed.</desc>
+      </info>
+      <prop oor:name="Open" oor:type="xs:int">
+        <info>
+          <desc>Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
+        </info>
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>

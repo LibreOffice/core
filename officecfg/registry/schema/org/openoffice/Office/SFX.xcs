@@ -17,21 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="SFX" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains the component-schema for the sfx module.</desc>
-	</info>
-	<component>
-		<group oor:name="Help">
-			<info>
-				<desc>Contains settings which specifies how the help in Office should work.</desc>
-			</info>
-			<prop oor:name="HelpAgentStarterList" oor:type="xs:string" oor:localized="true" oor:nillable="false">
-				<!-- OldLocation: hlpagent.ini -->
-				<info>
-					<desc>Lists IDs used by SFX to start the help agent.</desc>
-				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="SFX" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains the component-schema for the sfx module.</desc>
+  </info>
+  <component>
+    <group oor:name="Help">
+      <info>
+        <desc>Contains settings which specifies how the help in Office should work.</desc>
+      </info>
+      <prop oor:name="HelpAgentStarterList" oor:type="xs:string" oor:localized="true" oor:nillable="false">
+        <!-- OldLocation: hlpagent.ini -->
+        <info>
+          <desc>Lists IDs used by SFX to start the help agent.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>

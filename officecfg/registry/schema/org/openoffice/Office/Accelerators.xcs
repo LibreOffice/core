@@ -17,56 +17,56 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Accelerators" oor:package="org.openoffice.Office" xml:lang="en-US">
-    <info>
-        <desc>Configuration of Accelerators replacing the old not XCU-based configuration</desc>
-    </info>
-	<templates>
-		<group oor:name="Key">		
-            <info>
-                <desc>document the Key format</desc>
-            </info>	
-            <prop oor:name="Command" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>e.g..uno:About</desc>
-				</info>
-            </prop>	
-		</group>
-		<set oor:name="Module" oor:node-type="Key">
-            <info>
-                <desc>point to a module of OOo</desc>
-            </info>		
-		</set>
-	</templates>
-	<component>
-	    <group oor:name="PrimaryKeys">
-	        <info>
-	            <desc>contains the preferred keys</desc>
-	        </info>
-	        <set oor:name="Global" oor:node-type="Key">
-	            <info>
-				    <desc>Defined as key-values pairs</desc>
-	            </info>
-	        </set>
-	        <set oor:name="Modules" oor:node-type="Module">
-	            <info>
-				    <desc>containing the modules of OOo, defined as key-values pairs</desc>
-	            </info>
-	        </set>	        
-	    </group>
-	    <group oor:name="SecondaryKeys">
-	        <info>
-	            <desc>contains the secondary keys</desc>
-	        </info>
-	        <set oor:name="Global" oor:node-type="Key">
-	            <info>
-				    <desc>Defined as key-values pairs</desc>
-	            </info>
-	        </set>
-	        <set oor:name="Modules" oor:node-type="Module">
-	            <info>
-				    <desc>containing the modules of OOo, defined as key-values pairs</desc>
-	            </info>
-	        </set>	        
-	    </group>	    
-	</component>
+  <info>
+    <desc>Configuration of Accelerators replacing the old not XCU-based configuration</desc>
+  </info>
+  <templates>
+    <group oor:name="Key">
+      <info>
+        <desc>document the Key format</desc>
+      </info>
+      <prop oor:name="Command" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>e.g..uno:About</desc>
+        </info>
+      </prop>
+    </group>
+    <set oor:name="Module" oor:node-type="Key">
+      <info>
+        <desc>point to a module of OOo</desc>
+      </info>
+    </set>
+  </templates>
+  <component>
+    <group oor:name="PrimaryKeys">
+      <info>
+        <desc>contains the preferred keys</desc>
+      </info>
+      <set oor:name="Global" oor:node-type="Key">
+        <info>
+          <desc>Defined as key-values pairs</desc>
+        </info>
+      </set>
+      <set oor:name="Modules" oor:node-type="Module">
+        <info>
+          <desc>containing the modules of OOo, defined as key-values pairs</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="SecondaryKeys">
+      <info>
+        <desc>contains the secondary keys</desc>
+      </info>
+      <set oor:name="Global" oor:node-type="Key">
+        <info>
+          <desc>Defined as key-values pairs</desc>
+        </info>
+      </set>
+      <set oor:name="Modules" oor:node-type="Module">
+        <info>
+          <desc>containing the modules of OOo, defined as key-values pairs</desc>
+        </info>
+      </set>
+    </group>
+  </component>
 </oor:component-schema>
