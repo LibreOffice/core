@@ -642,10 +642,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
 	localebe1 \
 	ucpexpand1 \
 ))
-$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
-    directx5canvas \
-    nullcanvas \
-))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     testtools_cppobj \
