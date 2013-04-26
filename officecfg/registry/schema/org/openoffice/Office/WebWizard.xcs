@@ -17,521 +17,520 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="WebWizard" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<info>
-		<desc>Contains the configuration schema for the web wizard</desc>
-	</info>
-	<templates>
-		<group oor:name="WWizLayout">
-			<info>
-				<desc>Information on a web-wizard layout</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the layout (start at 0, must be exporter-unique)</desc>
-				</info>
-			</prop>
-			<prop oor:localized="true" oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>The UI name of the layout</desc>
-				</info>
-			</prop>
-			<prop oor:name="FSName" oor:type="xs:string">
-				<info>
-					<desc>the directory name of the layout.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="WWizExporter">
-			<info>
-				<desc>Information on a web wizard exporter</desc>
-			</info>
-			<prop oor:localized="true" oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>the UI name of the exporter</desc>
-				</info>
-			</prop>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>a general index of the exporter, starts with 0, must be exporter-unique</desc>
-				</info>
-			</prop>
-			<prop oor:name="ExporterClass" oor:type="xs:string">
-				<info>
-					<desc>A full quilified class name of the exporter class</desc>
-				</info>
-			</prop>
-			<prop oor:name="OwnDirectory" oor:type="xs:boolean">
-				<info>
-					<desc>does this exporter needs an own directory to export to.</desc>
-				</info>
-			</prop>
-			<prop oor:name="SupportsFilename" oor:type="xs:boolean">
-				<info>
-					<desc>does this exporter support a given filename, or export to a self-generated filename</desc>
-				</info>
-			</prop>
-			<prop oor:name="DefaultFilename" oor:type="xs:string">
-				<info>
-					<desc>if does not support filename, what name does it use?</desc>
-				</info>
-			</prop>
-			<prop oor:name="Extension" oor:type="xs:string">
-				<info>
-					<desc>the extension that should be used, if the expoter supports filename</desc>
-				</info>
-			</prop>
-			<prop oor:name="SupportedMimeTypes" oor:type="xs:string">
-				<info>
-					<desc>one of : writer/calc/impress/draw/graphics/other/(empty for all)</desc>
-				</info>
-			</prop>
-			<prop oor:name="Icon" oor:type="xs:string">
-				<info>
-					<desc>the icon to use as preview</desc>
-				</info>
-			</prop>
-			<prop oor:name="TargetType" oor:type="xs:string">
-				<info>
-					<desc>A type name out of TypeDetection (like graphic_HTML)</desc>
-				</info>
-			</prop>
-			<prop oor:name="PageType" oor:type="xs:int">
-				<info>
-					<desc>Page type of the target document; 0 = no page, 1 = pages, 2 = slides</desc>
-				</info>
-			</prop>
-			<prop oor:name="Binary" oor:type="xs:boolean">
-				<info>
-					<desc>if the target format is binary (like pdf) - html is NOT binary.</desc>
-				</info>
-			</prop>
-			<set oor:name="Arguments" oor:node-type="WWizArgument">
-				<info>
-					<desc>additional arguments given to the exporter class by initialisation</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="WWizArgument">
-			<info>
-				<desc>An argument used by exporters and other configuration groups/sets</desc>
-			</info>
-			<prop oor:name="Value" oor:type="xs:string">
-				<info>
-					<desc>the value of the argument</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="WWizStyle">
-			<info>
-				<desc>Specifies style information (css)
-			</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the style (used by the ui) - starts with 0, must by - style-unique</desc>
-				</info>
-			</prop>
-			<prop oor:localized="true" oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>UI name of the style</desc>
-				</info>
-			</prop>
-			<prop oor:name="CssHref" oor:type="xs:string">
-				<info>
-					<desc>the name of the css file</desc>
-				</info>
-			</prop>
-			<prop oor:name="BackgroundImage" oor:type="xs:string">
-				<info>
-					<desc>default background image. not implemented.</desc>
-				</info>
-			</prop>
-			<prop oor:name="IconSet" oor:type="xs:string">
-				<info>
-					<desc>default iconset. not implemented</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="WWizImage">
-			<info>
-				<desc>locates images for the background images of the webwizard</desc>
-			</info>
-			<prop oor:name="Href" oor:type="xs:string">
-				<info>
-					<desc>either a directory or a full qualified filename. Office-path variables can be used.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="WWizIconSet">
-			<info>
-				<desc>describes an icon set, used in export of draw and impress documents.</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>index of the icon set</desc>
-				</info>
-			</prop>
-			<prop oor:localized="true" oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>UI name of the icon set</desc>
-				</info>
-			</prop>
-			<prop oor:name="FNPrefix" oor:type="xs:string">
-				<info>
-					<desc>prefix of the filename. see impress/draw html export</desc>
-				</info>
-			</prop>
-			<prop oor:name="FNPostfix" oor:type="xs:string">
-				<info>
-					<desc>postfix of the filename. see impress/draw html export</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="WWizDocument">
-			<info>
-				<desc>describes a document to be exported</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the document in the "content"</desc>
-				</info>
-			</prop>
-			<prop oor:name="Title" oor:type="xs:string">
-				<info>
-					<desc>Title of the document</desc>
-				</info>
-			</prop>
-			<prop oor:name="Description" oor:type="xs:string">
-				<info>
-					<desc>description of the document</desc>
-				</info>
-			</prop>
-			<prop oor:name="URL" oor:type="xs:string">
-				<info>
-					<desc>a full url of the document</desc>
-				</info>
-			</prop>
-			<prop oor:name="Author" oor:type="xs:string">
-				<info>
-					<desc>the author of the document</desc>
-				</info>
-			</prop>
-			<prop oor:name="Exporter" oor:type="xs:string">
-				<info>
-					<desc>the name of the exporter used for this document</desc>
-				</info>
-			</prop>
-			<prop oor:name="ApplyWebStyle" oor:type="xs:boolean">
-				<info>
-					<desc>not implemented</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="WWizContent">
-			<info>
-				<desc>describes a web-wizard content, which contains 
-				recursivley documents and other contents.
-				At the moment, contents contain only documents. Implementation of
-				sub-contents is a future issue
-			</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the content in its parent content.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>The content's name</desc>
-				</info>
-			</prop>
-			<prop oor:name="Description" oor:type="xs:string">
-				<info>
-					<desc>The contents description</desc>
-				</info>
-			</prop>
-			<set oor:name="Contents" oor:node-type="WWizContent">
-				<info>
-					<desc>sub contents of this content. not implemented.</desc>
-				</info>
-			</set>
-			<set oor:name="Documents" oor:node-type="WWizDocument">
-				<info>
-					<desc>documents contained in this content</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="WWizSession">
-			<info>
-				<desc>A web wizard session. contains all the user's input.</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the session in the list of saved session.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>a user given name of the session</desc>
-				</info>
-			</prop>
-			<prop oor:name="InDirectory" oor:type="xs:string">
-				<info>
-					<desc>the last used directory from which the user added documents
-					to the wizard.
-				</desc>
-				</info>
-			</prop>
-			<prop oor:name="OutDirectory" oor:type="xs:string">
-				<info>
-					<desc>The last directory the user used as output.</desc>
-				</info>
-			</prop>
-			<node-ref oor:name="Content" oor:node-type="WWizContent">
-				<info>
-					<desc>the content (documents) of the session</desc>
-				</info>
-			</node-ref>
-			<group oor:name="Design">
-				<info>
-					<desc>design specifications of the session.</desc>
-				</info>
-				<prop oor:name="Layout" oor:type="xs:string">
-					<info>
-						<desc>layout name chosen by the user</desc>
-					</info>
-				</prop>
-				<prop oor:name="Style" oor:type="xs:string">
-					<info>
-						<desc>Style name chosen by the user.</desc>
-					</info>
-				</prop>
-				<prop oor:name="BackgroundImage" oor:type="xs:string">
-					<info>
-						<desc>background image chosen by the user.</desc>
-					</info>
-				</prop>
-				<prop oor:name="IconSet" oor:type="xs:string">
-					<info>
-						<desc>Icon set chosen by the user.</desc>
-					</info>
-				</prop>
-				<prop oor:name="OptimizeDisplaySize" oor:type="xs:int">
-					<info>
-						<desc>0 = 640x..., 1 = 800x..., 2 = 1024x...</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplayTitle" oor:type="xs:boolean">
-					<info>
-						<desc>ignored</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplayDescription" oor:type="xs:boolean">
-					<info>
-						<desc>should the desctiprion of each document be listed in the TOC</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplayAuthor" oor:type="xs:boolean">
-					<info>
-						<desc>should the author of each document be listed in the TOC</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplayCreateDate" oor:type="xs:boolean">
-					<info>
-						<desc>should the creation date of each document be listed in the TOC</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplayUpdateDate" oor:type="xs:boolean">
-					<info>
-						<desc>should the "last changed date" of each document be listed in the TOC</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplayFilename" oor:type="xs:boolean">
-					<info>
-						<desc>should the filename of each document be listed in the TOC</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplayFileFormat" oor:type="xs:boolean">
-					<info>
-						<desc>should the file format of each document be listed in the TOC</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplayFormatIcon" oor:type="xs:boolean">
-					<info>
-						<desc>should the file format icon of each document be listed in the TOC</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplayPages" oor:type="xs:boolean">
-					<info>
-						<desc>should the number of pages/slides of each document be listed in the TOC</desc>
-					</info>
-				</prop>
-				<prop oor:name="DisplaySize" oor:type="xs:boolean">
-					<info>
-						<desc>should the size of binary files be listed in the TOC</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="GeneralInfo">
-				<info>
-					<desc>the general web site information of the session</desc>
-				</info>
-				<prop oor:name="Title" oor:type="xs:string">
-					<info>
-						<desc>web site title</desc>
-					</info>
-				</prop>
-				<prop oor:name="Description" oor:type="xs:string">
-					<info>
-						<desc>web site description </desc>
-					</info>
-				</prop>
-				<prop oor:name="Icon" oor:type="xs:string">
-					<info>
-						<desc>web site favIcon (local URL)</desc>
-					</info>
-				</prop>
-				<prop oor:name="Author" oor:type="xs:string">
-					<info>
-						<desc>Web Site author</desc>
-					</info>
-				</prop>
-				<prop oor:name="Keywords" oor:type="xs:string">
-					<info>
-						<desc>web site keywords</desc>
-					</info>
-				</prop>
-				<prop oor:name="CreationDate" oor:type="xs:int">
-					<info>
-						<desc>web site creation date</desc>
-					</info>
-				</prop>
-				<prop oor:name="UpdateDate" oor:type="xs:int">
-					<info>
-						<desc>web site last update date</desc>
-					</info>
-				</prop>
-				<prop oor:name="RevisitAfter" oor:type="xs:int">
-					<info>
-						<desc>web site rvisit after meta info</desc>
-					</info>
-				</prop>
-				<prop oor:name="Email" oor:type="xs:string">
-					<info>
-						<desc>email for contact in web site</desc>
-					</info>
-				</prop>
-				<prop oor:name="Copyright" oor:type="xs:string">
-					<info>
-						<desc>copyright notice of web site</desc>
-					</info>
-				</prop>
-			</group>
-			<set oor:name="Publishing" oor:node-type="WWizPublish">
-				<info>
-					<desc>publishing information of the web site. 
-					always contains always 3 members with the names local, ftp and zip.
-					</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="WWizPublish">
-			<info>
-				<desc>specifies information of a single target to publish to</desc>
-			</info>
-			<prop oor:name="Publish" oor:type="xs:boolean">
-				<info>
-					<desc>should this target be used?</desc>
-				</info>
-			</prop>
-			<prop oor:name="URL" oor:type="xs:string">
-				<info>
-					<desc>full url to publish to</desc>
-				</info>
-			</prop>
-			<prop oor:name="Username" oor:type="xs:string">
-				<info>
-					<desc>used by ftp targets</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="WWizFilter">
-			<info>
-				<desc>specifies information of a filter for the add dialog</desc>
-			</info>
-			<prop oor:name="Index" oor:type="xs:int">
-				<info>
-					<desc>the index of the filter </desc>
-				</info>
-			</prop>
-			<prop oor:localized="true" oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>UI Name of the filter</desc>
-				</info>
-			</prop>
-			<prop oor:name="Filter" oor:type="xs:string">
-				<info>
-					<desc>Semicolon separated list of file types this filter will show</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="WebWizard">
-			<info>
-				<desc>the web wizard configuration</desc>
-			</info>
-			<prop oor:name="WorkDir" oor:type="xs:string">
-				<info>
-					<desc>the sub dir under temnplate/(langauge)/ of the web wizard files</desc>
-				</info>
-			</prop>
-			<prop oor:name="LastSavedSession" oor:type="xs:string">
-				<info>
-					<desc>The name of the last saved session. empty if last session was not saved.</desc>
-				</info>
-			</prop>
-			<set oor:name="Exporters" oor:node-type="WWizExporter">
-				<info>
-					<desc>the set of available exporters</desc>
-				</info>
-			</set>
-			<set oor:name="Layouts" oor:node-type="WWizLayout">
-				<info>
-					<desc>the set of available layouts</desc>
-				</info>
-			</set>
-			<set oor:name="Styles" oor:node-type="WWizStyle">
-				<info>
-					<desc>the set of available styles</desc>
-				</info>
-			</set>
-			<set oor:name="BackgroundImages" oor:node-type="WWizImage">
-				<info>
-					<desc>the set of available background images</desc>
-				</info>
-			</set>
-			<set oor:name="IconSets" oor:node-type="WWizIconSet">
-				<info>
-					<desc>the set of available icon sets (at the moment, hard programmed 4)</desc>
-				</info>
-			</set>
-			<set oor:name="SavedSessions" oor:node-type="WWizSession">
-				<info>
-					<desc>the set of saved sessions.</desc>
-				</info>
-			</set>
-			<set oor:name="Filters" oor:node-type="WWizFilter">
-				<info>
-					<desc>the set filters in the "add" dialog.</desc>
-				</info>
-			</set>
-			<node-ref oor:name="DefaultSession" oor:node-type="WWizSession">
-				<info>
-					<desc>the default settings are loaded from this session.</desc>
-				</info>
-			</node-ref>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WebWizard" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains the configuration schema for the web wizard</desc>
+  </info>
+  <templates>
+    <group oor:name="WWizLayout">
+      <info>
+        <desc>Information on a web-wizard layout</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the layout (start at 0, must be exporter-unique)</desc>
+        </info>
+      </prop>
+      <prop oor:localized="true" oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>The UI name of the layout</desc>
+        </info>
+      </prop>
+      <prop oor:name="FSName" oor:type="xs:string">
+        <info>
+          <desc>the directory name of the layout.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="WWizExporter">
+      <info>
+        <desc>Information on a web wizard exporter</desc>
+      </info>
+      <prop oor:localized="true" oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>the UI name of the exporter</desc>
+        </info>
+      </prop>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>a general index of the exporter, starts with 0, must be exporter-unique</desc>
+        </info>
+      </prop>
+      <prop oor:name="ExporterClass" oor:type="xs:string">
+        <info>
+          <desc>A full quilified class name of the exporter class</desc>
+        </info>
+      </prop>
+      <prop oor:name="OwnDirectory" oor:type="xs:boolean">
+        <info>
+          <desc>does this exporter needs an own directory to export to.</desc>
+        </info>
+      </prop>
+      <prop oor:name="SupportsFilename" oor:type="xs:boolean">
+        <info>
+          <desc>does this exporter support a given filename, or export to a self-generated filename</desc>
+        </info>
+      </prop>
+      <prop oor:name="DefaultFilename" oor:type="xs:string">
+        <info>
+          <desc>if does not support filename, what name does it use?</desc>
+        </info>
+      </prop>
+      <prop oor:name="Extension" oor:type="xs:string">
+        <info>
+          <desc>the extension that should be used, if the expoter supports filename</desc>
+        </info>
+      </prop>
+      <prop oor:name="SupportedMimeTypes" oor:type="xs:string">
+        <info>
+          <desc>one of : writer/calc/impress/draw/graphics/other/(empty for all)</desc>
+        </info>
+      </prop>
+      <prop oor:name="Icon" oor:type="xs:string">
+        <info>
+          <desc>the icon to use as preview</desc>
+        </info>
+      </prop>
+      <prop oor:name="TargetType" oor:type="xs:string">
+        <info>
+          <desc>A type name out of TypeDetection (like graphic_HTML)</desc>
+        </info>
+      </prop>
+      <prop oor:name="PageType" oor:type="xs:int">
+        <info>
+          <desc>Page type of the target document; 0 = no page, 1 = pages, 2 = slides</desc>
+        </info>
+      </prop>
+      <prop oor:name="Binary" oor:type="xs:boolean">
+        <info>
+          <desc>if the target format is binary (like pdf) - html is NOT binary.</desc>
+        </info>
+      </prop>
+      <set oor:name="Arguments" oor:node-type="WWizArgument">
+        <info>
+          <desc>additional arguments given to the exporter class by initialisation</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="WWizArgument">
+      <info>
+        <desc>An argument used by exporters and other configuration groups/sets</desc>
+      </info>
+      <prop oor:name="Value" oor:type="xs:string">
+        <info>
+          <desc>the value of the argument</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="WWizStyle">
+      <info>
+        <desc>Specifies style information (css)</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the style (used by the ui) - starts with 0, must by - style-unique</desc>
+        </info>
+      </prop>
+      <prop oor:localized="true" oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>UI name of the style</desc>
+        </info>
+      </prop>
+      <prop oor:name="CssHref" oor:type="xs:string">
+        <info>
+          <desc>the name of the css file</desc>
+        </info>
+      </prop>
+      <prop oor:name="BackgroundImage" oor:type="xs:string">
+        <info>
+          <desc>default background image. not implemented.</desc>
+        </info>
+      </prop>
+      <prop oor:name="IconSet" oor:type="xs:string">
+        <info>
+          <desc>default iconset. not implemented</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="WWizImage">
+      <info>
+        <desc>locates images for the background images of the webwizard</desc>
+      </info>
+      <prop oor:name="Href" oor:type="xs:string">
+        <info>
+          <desc>either a directory or a full qualified filename. Office-path variables can be used.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="WWizIconSet">
+      <info>
+        <desc>describes an icon set, used in export of draw and impress documents.</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>index of the icon set</desc>
+        </info>
+      </prop>
+      <prop oor:localized="true" oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>UI name of the icon set</desc>
+        </info>
+      </prop>
+      <prop oor:name="FNPrefix" oor:type="xs:string">
+        <info>
+          <desc>prefix of the filename. see impress/draw html export</desc>
+        </info>
+      </prop>
+      <prop oor:name="FNPostfix" oor:type="xs:string">
+        <info>
+          <desc>postfix of the filename. see impress/draw html export</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="WWizDocument">
+      <info>
+        <desc>describes a document to be exported</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the document in the "content"</desc>
+        </info>
+      </prop>
+      <prop oor:name="Title" oor:type="xs:string">
+        <info>
+          <desc>Title of the document</desc>
+        </info>
+      </prop>
+      <prop oor:name="Description" oor:type="xs:string">
+        <info>
+          <desc>description of the document</desc>
+        </info>
+      </prop>
+      <prop oor:name="URL" oor:type="xs:string">
+        <info>
+          <desc>a full url of the document</desc>
+        </info>
+      </prop>
+      <prop oor:name="Author" oor:type="xs:string">
+        <info>
+          <desc>the author of the document</desc>
+        </info>
+      </prop>
+      <prop oor:name="Exporter" oor:type="xs:string">
+        <info>
+          <desc>the name of the exporter used for this document</desc>
+        </info>
+      </prop>
+      <prop oor:name="ApplyWebStyle" oor:type="xs:boolean">
+        <info>
+          <desc>not implemented</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="WWizContent">
+      <info>
+        <desc>describes a web-wizard content, which contains
+	  recursivley documents and other contents.
+	  At the moment, contents contain only documents. Implementation of
+	  sub-contents is a future issue
+	</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the content in its parent content.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>The content's name</desc>
+        </info>
+      </prop>
+      <prop oor:name="Description" oor:type="xs:string">
+        <info>
+          <desc>The contents description</desc>
+        </info>
+      </prop>
+      <set oor:name="Contents" oor:node-type="WWizContent">
+        <info>
+          <desc>sub contents of this content. not implemented.</desc>
+        </info>
+      </set>
+      <set oor:name="Documents" oor:node-type="WWizDocument">
+        <info>
+          <desc>documents contained in this content</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="WWizSession">
+      <info>
+        <desc>A web wizard session. contains all the user's input.</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the session in the list of saved session.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>a user given name of the session</desc>
+        </info>
+      </prop>
+      <prop oor:name="InDirectory" oor:type="xs:string">
+        <info>
+          <desc>the last used directory from which the user added documents
+	    to the wizard.
+          </desc>
+        </info>
+      </prop>
+      <prop oor:name="OutDirectory" oor:type="xs:string">
+        <info>
+          <desc>The last directory the user used as output.</desc>
+        </info>
+      </prop>
+      <node-ref oor:name="Content" oor:node-type="WWizContent">
+        <info>
+          <desc>the content (documents) of the session</desc>
+        </info>
+      </node-ref>
+      <group oor:name="Design">
+        <info>
+          <desc>design specifications of the session.</desc>
+        </info>
+        <prop oor:name="Layout" oor:type="xs:string">
+          <info>
+            <desc>layout name chosen by the user</desc>
+          </info>
+        </prop>
+        <prop oor:name="Style" oor:type="xs:string">
+          <info>
+            <desc>Style name chosen by the user.</desc>
+          </info>
+        </prop>
+        <prop oor:name="BackgroundImage" oor:type="xs:string">
+          <info>
+            <desc>background image chosen by the user.</desc>
+          </info>
+        </prop>
+        <prop oor:name="IconSet" oor:type="xs:string">
+          <info>
+            <desc>Icon set chosen by the user.</desc>
+          </info>
+        </prop>
+        <prop oor:name="OptimizeDisplaySize" oor:type="xs:int">
+          <info>
+            <desc>0 = 640x..., 1 = 800x..., 2 = 1024x...</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplayTitle" oor:type="xs:boolean">
+          <info>
+            <desc>ignored</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplayDescription" oor:type="xs:boolean">
+          <info>
+            <desc>should the desctiprion of each document be listed in the TOC</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplayAuthor" oor:type="xs:boolean">
+          <info>
+            <desc>should the author of each document be listed in the TOC</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplayCreateDate" oor:type="xs:boolean">
+          <info>
+            <desc>should the creation date of each document be listed in the TOC</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplayUpdateDate" oor:type="xs:boolean">
+          <info>
+            <desc>should the "last changed date" of each document be listed in the TOC</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplayFilename" oor:type="xs:boolean">
+          <info>
+            <desc>should the filename of each document be listed in the TOC</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplayFileFormat" oor:type="xs:boolean">
+          <info>
+            <desc>should the file format of each document be listed in the TOC</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplayFormatIcon" oor:type="xs:boolean">
+          <info>
+            <desc>should the file format icon of each document be listed in the TOC</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplayPages" oor:type="xs:boolean">
+          <info>
+            <desc>should the number of pages/slides of each document be listed in the TOC</desc>
+          </info>
+        </prop>
+        <prop oor:name="DisplaySize" oor:type="xs:boolean">
+          <info>
+            <desc>should the size of binary files be listed in the TOC</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="GeneralInfo">
+        <info>
+          <desc>the general web site information of the session</desc>
+        </info>
+        <prop oor:name="Title" oor:type="xs:string">
+          <info>
+            <desc>web site title</desc>
+          </info>
+        </prop>
+        <prop oor:name="Description" oor:type="xs:string">
+          <info>
+            <desc>web site description </desc>
+          </info>
+        </prop>
+        <prop oor:name="Icon" oor:type="xs:string">
+          <info>
+            <desc>web site favIcon (local URL)</desc>
+          </info>
+        </prop>
+        <prop oor:name="Author" oor:type="xs:string">
+          <info>
+            <desc>Web Site author</desc>
+          </info>
+        </prop>
+        <prop oor:name="Keywords" oor:type="xs:string">
+          <info>
+            <desc>web site keywords</desc>
+          </info>
+        </prop>
+        <prop oor:name="CreationDate" oor:type="xs:int">
+          <info>
+            <desc>web site creation date</desc>
+          </info>
+        </prop>
+        <prop oor:name="UpdateDate" oor:type="xs:int">
+          <info>
+            <desc>web site last update date</desc>
+          </info>
+        </prop>
+        <prop oor:name="RevisitAfter" oor:type="xs:int">
+          <info>
+            <desc>web site rvisit after meta info</desc>
+          </info>
+        </prop>
+        <prop oor:name="Email" oor:type="xs:string">
+          <info>
+            <desc>email for contact in web site</desc>
+          </info>
+        </prop>
+        <prop oor:name="Copyright" oor:type="xs:string">
+          <info>
+            <desc>copyright notice of web site</desc>
+          </info>
+        </prop>
+      </group>
+      <set oor:name="Publishing" oor:node-type="WWizPublish">
+        <info>
+          <desc>publishing information of the web site.
+	    always contains always 3 members with the names local, ftp and zip.
+          </desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="WWizPublish">
+      <info>
+        <desc>specifies information of a single target to publish to</desc>
+      </info>
+      <prop oor:name="Publish" oor:type="xs:boolean">
+        <info>
+          <desc>should this target be used?</desc>
+        </info>
+      </prop>
+      <prop oor:name="URL" oor:type="xs:string">
+        <info>
+          <desc>full url to publish to</desc>
+        </info>
+      </prop>
+      <prop oor:name="Username" oor:type="xs:string">
+        <info>
+          <desc>used by ftp targets</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="WWizFilter">
+      <info>
+        <desc>specifies information of a filter for the add dialog</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+        <info>
+          <desc>the index of the filter </desc>
+        </info>
+      </prop>
+      <prop oor:localized="true" oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>UI Name of the filter</desc>
+        </info>
+      </prop>
+      <prop oor:name="Filter" oor:type="xs:string">
+        <info>
+          <desc>Semicolon separated list of file types this filter will show</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="WebWizard">
+      <info>
+        <desc>the web wizard configuration</desc>
+      </info>
+      <prop oor:name="WorkDir" oor:type="xs:string">
+        <info>
+          <desc>the sub dir under temnplate/(langauge)/ of the web wizard files</desc>
+        </info>
+      </prop>
+      <prop oor:name="LastSavedSession" oor:type="xs:string">
+        <info>
+          <desc>The name of the last saved session. empty if last session was not saved.</desc>
+        </info>
+      </prop>
+      <set oor:name="Exporters" oor:node-type="WWizExporter">
+        <info>
+          <desc>the set of available exporters</desc>
+        </info>
+      </set>
+      <set oor:name="Layouts" oor:node-type="WWizLayout">
+        <info>
+          <desc>the set of available layouts</desc>
+        </info>
+      </set>
+      <set oor:name="Styles" oor:node-type="WWizStyle">
+        <info>
+          <desc>the set of available styles</desc>
+        </info>
+      </set>
+      <set oor:name="BackgroundImages" oor:node-type="WWizImage">
+        <info>
+          <desc>the set of available background images</desc>
+        </info>
+      </set>
+      <set oor:name="IconSets" oor:node-type="WWizIconSet">
+        <info>
+          <desc>the set of available icon sets (at the moment, hard programmed 4)</desc>
+        </info>
+      </set>
+      <set oor:name="SavedSessions" oor:node-type="WWizSession">
+        <info>
+          <desc>the set of saved sessions.</desc>
+        </info>
+      </set>
+      <set oor:name="Filters" oor:node-type="WWizFilter">
+        <info>
+          <desc>the set filters in the "add" dialog.</desc>
+        </info>
+      </set>
+      <node-ref oor:name="DefaultSession" oor:node-type="WWizSession">
+        <info>
+          <desc>the default settings are loaded from this session.</desc>
+        </info>
+      </node-ref>
+    </group>
+  </component>
 </oor:component-schema>
