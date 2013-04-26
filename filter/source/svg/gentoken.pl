@@ -55,9 +55,9 @@ print ( HXX "#include <sal/types.h>\n\n" );
 $i = 0;
 foreach( sort(keys(%tokens)) )
 {
+    $i = $i + 1;
     print( HXX "const sal_Int32 $tokens{$_} = $i;\n" );
     print( GPERF "$_,$tokens{$_}\n" );
-    $i = $i + 1;
 }
 print ( GPERF "%%\n" );
 print ( HXX "const sal_Int32 XML_TOKEN_COUNT = $i;\n" );
