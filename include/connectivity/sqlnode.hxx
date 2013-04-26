@@ -171,7 +171,6 @@ namespace connectivity
             insert_statement,
             insert_atom_commalist,
             insert_atom,
-            predicate_check,
             from_clause,
             qualified_join,
             cross_union,

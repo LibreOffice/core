@@ -1404,7 +1404,6 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::insert_statement, "insert_statement" },
             { OSQLParseNode::insert_atom_commalist, "insert_atom_commalist" },
             { OSQLParseNode::insert_atom, "insert_atom" },
-            { OSQLParseNode::predicate_check, "predicate_check" },
             { OSQLParseNode::from_clause, "from_clause" },
             { OSQLParseNode::qualified_join, "qualified_join" },
             { OSQLParseNode::cross_union, "cross_union" },

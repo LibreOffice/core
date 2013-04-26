@@ -3431,7 +3431,6 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
         case OSQLParseNode::between_predicate:
         case OSQLParseNode::like_predicate:
         case OSQLParseNode::test_for_null:
-        case OSQLParseNode::predicate_check: // Seems to never be generated?
         case OSQLParseNode::boolean_term:
         case OSQLParseNode::boolean_primary:
         case OSQLParseNode::in_predicate:
