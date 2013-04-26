@@ -165,7 +165,8 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            delete *pCustomShowList->erase( pCustomShowList->begin() + nPos );
+            delete (*pCustomShowList)[nPos];
+            pCustomShowList->erase( pCustomShowList->begin() + nPos );
             m_pLbCustomShows->RemoveEntry( nPos );
             m_pLbCustomShows->SelectEntryPos( nPos == 0 ? nPos : nPos - 1 );
             bModified = sal_True;
