@@ -35,6 +35,8 @@
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
+#include <vector>
+
 using rtl::OUString;
 using rtl::OUStringToOString;
 using rtl::OUStringBuffer;
