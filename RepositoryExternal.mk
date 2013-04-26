@@ -518,10 +518,16 @@ endif # SYSTEM_HYPH
 
 ifeq ($(SYSTEM_HUNSPELL),YES)
 
+#
+# Workaround to use system libhunspell with enabled werror:
+# OpenSUSE 12.3
+# hunspell-devel-1.3.2-12.1.1.x86_64
+# /usr/include/hunspell/hunvisapi.h
+# #elif BUILDING_LIBHUNSPELL && 1
 define gb_LinkTarget__use_hunspell
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(HUNSPELL_CFLAGS) \
+	$(HUNSPELL_CFLAGS) -DBUILDING_LIBHUNSPELL=0 \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(HUNSPELL_LIBS))
 
