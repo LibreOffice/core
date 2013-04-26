@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/awt/XPopupMenu.hpp>
+#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -155,22 +156,19 @@ void SAL_CALL PopupMenuController::doubleClick() throw (RuntimeException)
 
 bool PopupMenuController::CreatePopupMenuController() throw (Exception)
 {
-    Reference< XMultiComponentFactory > xPopupMenuControllerRegistration( getServiceManager()->createInstance( SERVICENAME_POPUPMENUCONTROLLERFACTORY ), UNO_QUERY_THROW );
+    Reference< XMultiComponentFactory > xPopupMenuControllerRegistration = PopupMenuControllerFactory::create( m_xContext );
 
     Sequence< Any > aSeq( 2 );
     PropertyValue aPropValue;
 
-    aPropValue.Name = OUString( "ModuleName" );
+    aPropValue.Name = OUString( "ModuleIdentifier" );
     aPropValue.Value <<= getModuleName();
     aSeq[0] <<= aPropValue;
     aPropValue.Name = OUString( "Frame" );
     aPropValue.Value <<= m_xFrame;
     aSeq[1] <<= aPropValue;
 
-    Reference< XComponentContext > xComponentContext(
-        comphelper::getComponentContext( getServiceManager() ) );
-
-    Reference< XPopupMenuController > xPopupMenuController( xPopupMenuControllerRegistration->createInstanceWithArgumentsAndContext( getCommandURL(), aSeq, xComponentContext ), UNO_QUERY );
+    Reference< XPopupMenuController > xPopupMenuController( xPopupMenuControllerRegistration->createInstanceWithArgumentsAndContext( getCommandURL(), aSeq, m_xContext ), UNO_QUERY );
     if ( xPopupMenuController.is() )
     {
         mxPopupMenuController = xPopupMenuController;

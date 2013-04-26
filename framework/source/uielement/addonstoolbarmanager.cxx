@@ -221,8 +221,6 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     {
     }
 
-    Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
-
     sal_uInt32  nElements( 0 );
     sal_Bool    bAppendSeparator( sal_False );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
@@ -279,42 +277,39 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 sal_Bool bMustBeInit( sal_True );
 
                 // Support external toolbar controller for add-ons!
-                if ( m_xToolbarControllerRegistration.is() &&
-                     m_xToolbarControllerRegistration->hasController( aURL, m_aModuleIdentifier ))
+                if ( m_xToolbarControllerFactory.is() &&
+                     m_xToolbarControllerFactory->hasController( aURL, m_aModuleIdentifier ))
                 {
-                    if ( xToolbarControllerFactory.is() )
+                    Sequence< Any > aArgs(5);
+                    PropertyValue   aPropValue;
+
+                    aPropValue.Name     = OUString( "ModuleIdentifier" );
+                    aPropValue.Value    <<= m_aModuleIdentifier;
+                    aArgs[0] <<= aPropValue;
+                    aPropValue.Name     = OUString( "Frame" );
+                    aPropValue.Value    <<= m_xFrame;
+                    aArgs[1] <<= aPropValue;
+                    aPropValue.Name     = OUString( "ServiceManager" );
+                    Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
+                    aPropValue.Value    <<= xMSF;
+                    aArgs[2] <<= aPropValue;
+                    aPropValue.Name     = OUString( "ParentWindow" );
+                    aPropValue.Value    <<= xToolbarWindow;
+                    aArgs[3] <<= aPropValue;
+                    aPropValue.Name     = OUString( "ItemId" );
+                    aPropValue.Value    = makeAny( sal_Int32( nId ));
+                    aArgs[4] <<= aPropValue;
+
+                    try
                     {
-                        Sequence< Any > aArgs(5);
-                        PropertyValue   aPropValue;
-
-                        aPropValue.Name     = OUString( "ModuleName" );
-                        aPropValue.Value    <<= m_aModuleIdentifier;
-                        aArgs[0] <<= aPropValue;
-                        aPropValue.Name     = OUString( "Frame" );
-                        aPropValue.Value    <<= m_xFrame;
-                        aArgs[1] <<= aPropValue;
-                        aPropValue.Name     = OUString( "ServiceManager" );
-                        Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
-                        aPropValue.Value    <<= xMSF;
-                        aArgs[2] <<= aPropValue;
-                        aPropValue.Name     = OUString( "ParentWindow" );
-                        aPropValue.Value    <<= xToolbarWindow;
-                        aArgs[3] <<= aPropValue;
-                        aPropValue.Name     = OUString( "ItemId" );
-                        aPropValue.Value    = makeAny( sal_Int32( nId ));
-                        aArgs[4] <<= aPropValue;
-
-                        try
-                        {
-                            xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                            aURL, aArgs, m_xContext ),
-                                                                        UNO_QUERY );
-                        }
-                        catch ( const uno::Exception& )
-                        {
-                        }
-                        bMustBeInit = sal_False; // factory called init already!
+                        xController = Reference< XStatusListener >( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
+                                                                        aURL, aArgs, m_xContext ),
+                                                                    UNO_QUERY );
                     }
+                    catch ( uno::Exception& )
+                    {
+                    }
+                    bMustBeInit = sal_False; // factory called init already!
                 }
                 else
                 {

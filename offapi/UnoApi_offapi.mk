@@ -951,6 +951,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	Task \
 	TemplateAccess \
 	ToolbarController \
+	ToolbarControllerFactory \
 	TransientDocumentsDocumentContentFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/gallery,\
@@ -2632,7 +2633,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XToolbarController \
 	XToolbarControllerListener \
 	XTransientDocumentsDocumentContentFactory \
-	XUIControllerRegistration \
+    XUIControllerFactory \
 	XUntitledNumbers \
 	XUrlList \
 	XWindowArranger \

@@ -41,6 +41,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/ToolbarControllerFactory.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -229,7 +230,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
 
-    m_xToolbarControllerRegistration = frame::ToolBarControllerFactory::create( m_xContext );
+    m_xToolbarControllerFactory = frame::ToolbarControllerFactory::create( m_xContext );
     m_xURLTransformer = URLTransformer::create( m_xContext );
 
     m_pToolBar->SetSelectHdl( LINK( this, ToolBarManager, Select) );
@@ -873,7 +874,6 @@ void ToolBarManager::CreateControllers()
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::CreateControllers" );
 
-    Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
 
     css::util::URL      aURL;
@@ -908,41 +908,38 @@ void ToolBarManager::CreateControllers()
             }
         }
 
-        if ( m_xToolbarControllerRegistration.is() &&
-             m_xToolbarControllerRegistration->hasController( aCommandURL, m_aModuleIdentifier ))
+        if ( m_xToolbarControllerFactory.is() &&
+             m_xToolbarControllerFactory->hasController( aCommandURL, m_aModuleIdentifier ))
         {
-            if ( xToolbarControllerFactory.is() )
+            PropertyValue aPropValue;
+            std::vector< Any > aPropertyVector;
+
+            aPropValue.Name     = OUString( "ModuleIdentifier" );
+            aPropValue.Value    <<= m_aModuleIdentifier;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropValue.Name     = OUString( "Frame" );
+            aPropValue.Value    <<= m_xFrame;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropValue.Name     = OUString( "ServiceManager" );
+            Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
+            aPropValue.Value    <<= xMSF;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropValue.Name     = OUString( "ParentWindow" );
+            aPropValue.Value    <<= xToolbarWindow;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+
+            if ( nWidth > 0 )
             {
-                PropertyValue aPropValue;
-                std::vector< Any > aPropertyVector;
-
-                aPropValue.Name     = OUString( "ModuleName" );
-                aPropValue.Value    <<= m_aModuleIdentifier;
+                aPropValue.Name     = OUString( "Width" );
+                aPropValue.Value    <<= nWidth;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = OUString( "Frame" );
-                aPropValue.Value    <<= m_xFrame;
-                aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = OUString( "ServiceManager" );
-                Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
-                aPropValue.Value    <<= xMSF;
-                aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = OUString( "ParentWindow" );
-                aPropValue.Value    <<= xToolbarWindow;
-                aPropertyVector.push_back( makeAny( aPropValue ));
-
-                if ( nWidth > 0 )
-                {
-                    aPropValue.Name     = OUString( "Width" );
-                    aPropValue.Value    <<= nWidth;
-                    aPropertyVector.push_back( makeAny( aPropValue ));
-                }
-
-                Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
-                xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                aCommandURL, aArgs, m_xContext ),
-                                                            UNO_QUERY );
-                bInit = sal_False; // Initialization is done through the factory service
             }
+
+            Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
+            xController = Reference< XStatusListener >( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
+                                                            aCommandURL, aArgs, m_xContext ),
+                                                        UNO_QUERY );
+            bInit = sal_False; // Initialization is done through the factory service
         }
 
         if (( aCommandURL == aLoadURL ) && ( !m_pToolBar->IsItemVisible(nId)))
@@ -1040,7 +1037,7 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Name = OUString( "ParentWindow" );
                 aPropValue.Value <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = OUString( "ModuleName" );
+                aPropValue.Name = OUString( "ModuleIdentifier" );
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
 

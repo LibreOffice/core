@@ -69,6 +69,8 @@
 #include <com/sun/star/ui/UIElementFactoryManager.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
+#include <com/sun/star/frame/ToolbarControllerFactory.hpp>
+#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 
 #include <toolkit/unohlp.hxx>
 #include <comphelper/configuration.hxx>
@@ -2214,21 +2216,17 @@ void Desktop::PreloadConfigurationData()
 
     // preload popup menu controller factories. As all controllers are in the same
     // configuration file they also get preloaded!
-    Reference< ::com::sun::star::frame::XUIControllerRegistration > xPopupMenuControllerFactory(
-        rFactory->createInstance(
-            rtl::OUString( "com.sun.star.frame.PopupMenuControllerFactory" )),
-            UNO_QUERY );
-    if ( xPopupMenuControllerFactory.is() )
+
+    Reference< css::frame::XUIControllerRegistration > xPopupMenuControllerFactory =
+    css::frame::PopupMenuControllerFactory::create( xContext );
+    try
     {
-        try
-        {
-            xPopupMenuControllerFactory->hasController(
-                        rtl::OUString( ".uno:CharFontName" ),
-                        OUString() );
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
+        xPopupMenuControllerFactory->hasController(
+                    OUString( ".uno:CharFontName" ),
+                    OUString() );
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
     }
 
     // preload filter configuration

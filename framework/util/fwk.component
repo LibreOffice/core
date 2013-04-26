@@ -105,7 +105,7 @@
     <service name="com.sun.star.frame.TaskCreator"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ToolBarControllerFactory">
-    <service name="com.sun.star.frame.ToolBarControllerFactory"/>
+    <service name="com.sun.star.frame.ToolbarControllerFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ToolBarFactory">
     <service name="com.sun.star.ui.ToolBarFactory"/>
