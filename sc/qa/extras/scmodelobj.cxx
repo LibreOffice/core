@@ -10,6 +10,9 @@
 #include <test/unoapi_test.hxx>
 #include <test/sheet/xgoalseek.hxx>
 
+using namespace css;
+using namespace css::uno;
+
 namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 1

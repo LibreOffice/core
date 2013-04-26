@@ -22,6 +22,9 @@
 
 #define NUMBER_OF_TESTS 7
 
+using namespace css;
+using namespace css::uno;
+
 namespace sc_apitest {
 
 class ScEditFieldObj_Cell : public UnoApiTest, apitest::XTextField, apitest::XTextContent, apitest::XPropertySet

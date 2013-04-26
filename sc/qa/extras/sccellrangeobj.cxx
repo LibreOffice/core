@@ -18,6 +18,9 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
+using namespace css;
+using namespace css::uno;
+
 namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 14

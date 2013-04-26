@@ -32,6 +32,9 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
+using namespace css;
+using namespace css::uno;
+
 namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 6

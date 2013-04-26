@@ -25,6 +25,9 @@
 
 #define NUMBER_OF_TESTS 5
 
+using namespace css;
+using namespace css::uno;
+
 namespace sc_apitest {
 
 class ScEditFieldObj_Header : public UnoApiTest, apitest::XTextContent, apitest::XPropertySet

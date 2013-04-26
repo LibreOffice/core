@@ -14,6 +14,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
+using namespace css;
+using namespace css::uno;
+
 namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 13

@@ -15,6 +15,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 
+using namespace css;
+using namespace css::uno;
 
 namespace sc_apitest {
 
