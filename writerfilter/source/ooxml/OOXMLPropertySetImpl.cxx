@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include "ooxmlLoggers.hxx"
+#include <ooxml/resourceids.hxx>
 
 namespace writerfilter {
 namespace ooxml
@@ -467,7 +468,20 @@ void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 
     if (pProperty.get() != NULL && pProperty->getId() != 0x0)
     {
-        mProperties.push_back(pProperty);
+        /*
+         HACK: Ugly hack. This retarded overdesigned writerfilter thing
+         processes attributes in random order (as given by boost::unordered_map
+         when iterating it), but StyleSheetTable::lcl_attribute() needs
+         to know whether NS_ooxml::LN_CT_Style_type is STYLE_TYPE_TABLE first.
+         And all this overdesigned machinery doesn't even give a reasonable
+         way to find out if an attribute is there before encountering it
+         in random order in lcl_attribute(), so just make sure here that
+         the attribute comes first.
+        */
+        if( pProperty->getId() == NS_ooxml::LN_CT_Style_type )
+            mProperties.insert( mProperties.begin(), pProperty );
+        else
+            mProperties.push_back(pProperty);
     }
 #ifdef DEBUG_PROPERTY_SET
     else
