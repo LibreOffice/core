@@ -99,7 +99,7 @@
                 DO NOT SET THIS VALUE UNLESS YOU KNOW WHAT YOU ARE DOING!
           </desc>
         </info>
-        <value></value>
+        <value/>
       </prop>
       <prop oor:name="ReporterEmail" oor:type="xs:string" oor:nillable="false">
         <info>
@@ -108,7 +108,7 @@
                 Its only purpose is testing and quality assureance.
           </desc>
         </info>
-        <value></value>
+        <value/>
       </prop>
     </group>
   </component>
