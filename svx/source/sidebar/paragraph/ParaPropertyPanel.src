@@ -71,40 +71,24 @@ Control RID_SIDEBAR_PARA_PANEL
                 Identifier = BT_SUBSTLEFT ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_LEFT;
                 Text [ en-US ] = "Align Left" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/AlignTextLeft_16x16.png";
-                };
             };
             ToolBoxItem
             {
                 Identifier = BT_SUBSTCENTER ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_CENTER;
                 Text [ en-US ] = "Align Center" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/AlignTextCenter_16x16.png";
-                };
             };
             ToolBoxItem
             {
                 Identifier = BT_SUBSTRIGHT ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_RIGHT;
                 Text [ en-US ] = "Align Right" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/AlignTextRight_16x16.png";
-                };
             };
             ToolBoxItem
             {
                 Identifier = BT_SUBSTJUSTIFY ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_HALIGN_JUSTIFY;
                 Text [ en-US ] = "Align Justified" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/AlignTextJustified_16x16.png";
-                };
             };
         };
     };
@@ -276,20 +260,12 @@ Control RID_SIDEBAR_PARA_PANEL
                 Identifier = BT_TBX_INDENT_INC ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENT_INC ;
                 Text [ en-US ] = "Increase Indent" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/Indent_16x16.png";
-                };
             };
             ToolBoxItem
             {
                 Identifier = BT_TBX_INDENT_DEC ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENT_DEC ;
                 Text [ en-US ] = "Decrease Indent" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/Outdent_16x16.png";
-                };
             };
             ToolBoxItem
             {
@@ -318,20 +294,12 @@ Control RID_SIDEBAR_PARA_PANEL
                 Identifier = BT_TBX_INDENT_PROMOTE ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENTP_INC ;
                 Text [ en-US ] = "Increase Indent" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/Indent_16x16.png";
-                };
             };
             ToolBoxItem
             {
                 Identifier = BT_TBX_INDENT_DEMOTE ;
                 HelpID = HID_PPROPERTYPANEL_PARA_TBI_INDENTP_DEC ;
                 Text [ en-US ] = "Decrease Indent" ;
-                ItemBitmap = Bitmap
-                {
-                    File = "symphony/Outdent_16x16.png";
-                };
             };
             ToolBoxItem
             {
@@ -441,19 +409,6 @@ Control RID_SIDEBAR_PARA_PANEL
         Size = MAP_APPFONT( IMAGE_SIZE, IMAGE_SIZE );
     };
 
-    ImageList IL_VERT_ALIGN
-    {
-        Prefix = "symphony/para_vert";
-        MaskColor = STD_MASKCOLOR ;
-        SVX_PROPERTYPANEL_PARA_VERT_IDLIST
-    };
-    ImageList ILH_VERT_ALIGN
-    {
-        Prefix = "symphony/para_verth";
-        MaskColor = STD_MASKCOLOR ;
-        SVX_PROPERTYPANEL_PARA_VERT_IDLIST
-    };
-
     ImageList IL_NUM_BULLET
     {
         Prefix = "symphony/para_numbullet";
@@ -505,38 +460,6 @@ Control RID_SIDEBAR_PARA_PANEL
     Image IMG_INDENT3
     {
         ImageBitmap = Bitmap{File = "symphony/Indent4.png";};
-    };
-    Image IMG_LEFT_PARA
-    {
-        ImageBitmap = Bitmap{File = "symphony/AlignTextLeft_16x16.png";};
-    };
-    Image IMG_CENTER_PARA
-    {
-        ImageBitmap = Bitmap{File = "symphony/AlignTextCenter_16x16.png";};
-    };
-    Image IMG_RIGHT_PARA
-    {
-        ImageBitmap = Bitmap{File = "symphony/AlignTextRight_16x16.png";};
-    };
-    Image IMG_JUSTIFY_PARA
-    {
-        ImageBitmap = Bitmap{File = "symphony/AlignTextJustified_16x16.png";};
-    };
-    Image IMG_INDENT_INC
-    {
-        ImageBitmap = Bitmap{File = "symphony/Indent_16x16.png";};
-    };
-    Image IMG_INDENT_DEC
-    {
-        ImageBitmap = Bitmap{File = "symphony/Outdent_16x16.png";};
-    };
-    Image IMG_INDENT_INC_BD
-    {
-        ImageBitmap = Bitmap{File = "symphony/rte_Indent_16x16.png";};
-    };
-    Image IMG_INDENT_DEC_BD
-    {
-        ImageBitmap = Bitmap{File = "symphony/rte_Outdent_16x16.png";};
     };
     Image IMG_INDENT_HANG
     {

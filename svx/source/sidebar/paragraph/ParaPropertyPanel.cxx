@@ -279,21 +279,12 @@ SfxBindings* ParaPropertyPanel::GetBindings()
     return mpBindings;
 }
 
-void ParaPropertyPanel::SetupIcons (void)
-{
-    if (Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
-    {
-    }
-    else
-    {
-    }
-}
+
+
 
 void ParaPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
 {
     (void)rEvent;
-
-    SetupIcons();
 }
 
 ParaPropertyPanel::~ParaPropertyPanel()
@@ -382,10 +373,11 @@ void ParaPropertyPanel::EndNumberingPopupMode (void)
 
 void ParaPropertyPanel::InitToolBoxAlign()
 {
-    maAlignToolBox->SetItemImage(TOOLBOX_ITEM1,maLeftPara);
-    maAlignToolBox->SetItemImage(TOOLBOX_ITEM2,maCentPara);
-    maAlignToolBox->SetItemImage(TOOLBOX_ITEM3,maRightPara);
-    maAlignToolBox->SetItemImage(TOOLBOX_ITEM4,maJusPara);
+    maAlignToolBox->SetItemImage(TOOLBOX_ITEM1, maLeftAlignControl.GetIcon());
+    maAlignToolBox->SetItemImage(TOOLBOX_ITEM2, maCenterAlignControl.GetIcon());
+    maAlignToolBox->SetItemImage(TOOLBOX_ITEM3, maRightAlignControl.GetIcon());
+    maAlignToolBox->SetItemImage(TOOLBOX_ITEM4, maJustifyAlignControl.GetIcon());
+
     Link aLink = LINK( this, ParaPropertyPanel, AlignStyleModifyHdl_Impl );
     maAlignToolBox->SetSelectHdl( aLink );
     Size aTbxSize (maAlignToolBox->CalcWindowSizePixel());
@@ -394,7 +386,9 @@ void ParaPropertyPanel::InitToolBoxAlign()
 
 void ParaPropertyPanel::InitToolBoxVertAlign()
 {
-    InitImageList(maTBxVertAlign, maVertImageList, maVertImageListH);
+    maTBxVertAlign->SetItemImage(IID_VERT_TOP, maVertTop.GetIcon());
+    maTBxVertAlign->SetItemImage(IID_VERT_CENTER, maVertCenter.GetIcon());
+    maTBxVertAlign->SetItemImage(IID_VERT_BOTTOM, maVertBottom.GetIcon());
     maTBxVertAlign->SetSelectHdl(LINK(this,ParaPropertyPanel,VertTbxSelectHandler));
     Size aTbxSize (maTBxVertAlign->CalcWindowSizePixel());
     maTBxVertAlign->SetOutputSizePixel( aTbxSize );
@@ -410,13 +404,13 @@ void ParaPropertyPanel::InitToolBoxIndent()
 
     if( Application::GetSettings().GetLayoutRTL())
     {
-        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM1,maIndInc_BD);
-        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM2,maIndDec_BD);
+        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM1, maIncIndentControl.GetIcon());
+        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM2, maDecIndentControl.GetIcon());
     }
     else
     {
-        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM1,maIndInc);
-        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM2,maIndDec);
+        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM1, maIncIndentControl.GetIcon());
+        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM2, maDecIndentControl.GetIcon());
     }
     maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM3,maIndHang);
     aLink = LINK( this, ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl );
@@ -427,13 +421,13 @@ void ParaPropertyPanel::InitToolBoxIndent()
 
     if( Application::GetSettings().GetLayoutRTL())
     {
-        maTbxProDemote->SetItemImage(TOOLBOX_ITEM1,maIndInc_BD);
-        maTbxProDemote->SetItemImage(TOOLBOX_ITEM2,maIndDec_BD);
+        maTbxProDemote->SetItemImage(TOOLBOX_ITEM1, maOutLineLeftControl.GetIcon());
+        maTbxProDemote->SetItemImage(TOOLBOX_ITEM2, maOutLineRightControl.GetIcon());
     }
     else
     {
-        maTbxProDemote->SetItemImage(TOOLBOX_ITEM1,maIndInc);
-        maTbxProDemote->SetItemImage(TOOLBOX_ITEM2,maIndDec);
+        maTbxProDemote->SetItemImage(TOOLBOX_ITEM1, maOutLineLeftControl.GetIcon());
+        maTbxProDemote->SetItemImage(TOOLBOX_ITEM2, maOutLineRightControl.GetIcon());
     }
     maTbxProDemote->SetItemImage(TOOLBOX_ITEM3,maIndHang);
     aLink = LINK( this, ParaPropertyPanel, ClickProDemote_Hdl_Impl );
@@ -459,17 +453,8 @@ void ParaPropertyPanel::InitToolBoxBGColor()
 
 void ParaPropertyPanel::InitToolBoxBulletsNumbering()
 {
-    if( Application::GetSettings().GetLayoutRTL())
-    {
-        maTBxNumBullet->SetItemImage( IID_BULLET, maNumBImageListRTL.GetImage( IID_BULLET ) );
-        maTBxNumBullet->SetItemImage( IID_NUMBER, maNumBImageListRTL.GetImage( IID_NUMBER ) );
-    }
-    else
-    //i122166, the icons for numbering or bullets toolbox inside toolbar and sidebar should be the same one
-    {
-        maBulletOnOff.SetupToolBoxItem(*maTBxNumBullet, IID_BULLET);
-        maNumberOnOff.SetupToolBoxItem(*maTBxNumBullet, IID_NUMBER);
-    }
+    maTBxNumBullet->SetItemImage(IID_BULLET, maBulletOnOff.GetIcon());
+    maTBxNumBullet->SetItemImage(IID_NUMBER, maNumberOnOff.GetIcon());
 
     maTBxNumBullet->SetDropdownClickHdl(LINK(this,ParaPropertyPanel,NumBTbxDDHandler));
     maTBxNumBullet->SetSelectHdl(LINK(this,ParaPropertyPanel,NumBTbxSelectHandler));
@@ -482,8 +467,8 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     maTopDist->SetModifyHdl(aLink);
     maBottomDist->SetModifyHdl( aLink );
 
-    maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM1,maParInc);
-    maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM2,maParDec);
+    maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM1, maParInc);
+    maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM2, maParDec);
     aLink = LINK( this, ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl );
     maTbxUL_IncDec->SetSelectHdl(aLink);
     m_eULSpaceUnit = maULSpaceControl.GetCoreMetric();
@@ -523,7 +508,6 @@ void ParaPropertyPanel::initial()
     GetBindings()->Invalidate(SID_ATTR_PARA_ADJUST_BLOCK,sal_True,sal_False);
 
     //toolbox
-    SetupIcons();
     InitToolBoxAlign();
     InitToolBoxVertAlign();
     InitToolBoxIndent();
@@ -624,23 +608,23 @@ IMPL_LINK(ParaPropertyPanel, VertTbxSelectHandler, ToolBox*, pToolBox)
     if (nId == 1)
     {
         nSID = SID_TABLE_VERT_NONE;
-        maTBxVertAlign->SetItemState(1, STATE_CHECK);
-        maTBxVertAlign->SetItemState(2, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(3, STATE_NOCHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_CHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
     }
     else if (nId == 2)
     {
         nSID = SID_TABLE_VERT_CENTER;
-        maTBxVertAlign->SetItemState(1, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(2, STATE_CHECK);
-        maTBxVertAlign->SetItemState(3, STATE_NOCHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_CHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
     }
     else if (nId == 3)
     {
         nSID = SID_TABLE_VERT_BOTTOM;
-        maTBxVertAlign->SetItemState(1, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(2, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(3, STATE_CHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_CHECK);
     }
     SfxBoolItem aBoolItem(nSID, sal_True);
     GetBindings()->GetDispatcher()->Execute(nSID, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
@@ -652,18 +636,18 @@ void ParaPropertyPanel::VertStateChanged(sal_uInt16 nSID, SfxItemState eState, c
 {
     if (eState < SFX_ITEM_DONTCARE)
     {
-        maTBxVertAlign->SetItemState(1, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(2, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(3, STATE_NOCHECK);
-        maTBxVertAlign->EnableItem(1, sal_False);
-        maTBxVertAlign->EnableItem(2, sal_False);
-        maTBxVertAlign->EnableItem(3, sal_False);
+        maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+        maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
+        maTBxVertAlign->EnableItem(IID_VERT_TOP, sal_False);
+        maTBxVertAlign->EnableItem(IID_VERT_CENTER, sal_False);
+        maTBxVertAlign->EnableItem(IID_VERT_BOTTOM, sal_False);
     }
     else
     {
-        maTBxVertAlign->EnableItem(1, sal_True);
-        maTBxVertAlign->EnableItem(2, sal_True);
-        maTBxVertAlign->EnableItem(3, sal_True);
+        maTBxVertAlign->EnableItem(IID_VERT_TOP, sal_True);
+        maTBxVertAlign->EnableItem(IID_VERT_CENTER, sal_True);
+        maTBxVertAlign->EnableItem(IID_VERT_BOTTOM, sal_True);
         if ( (eState >= SFX_ITEM_DEFAULT) && (pState->ISA(SfxBoolItem)))
         {
             const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
@@ -673,44 +657,44 @@ void ParaPropertyPanel::VertStateChanged(sal_uInt16 nSID, SfxItemState eState, c
             {
                 if (nSID == SID_TABLE_VERT_NONE)
                 {
-                    maTBxVertAlign->SetItemState(1, STATE_CHECK);
-                    maTBxVertAlign->SetItemState(2, STATE_NOCHECK);
-                    maTBxVertAlign->SetItemState(3, STATE_NOCHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_CHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
                 }
                 else if (nSID == SID_TABLE_VERT_CENTER)
                 {
-                    maTBxVertAlign->SetItemState(1, STATE_NOCHECK);
-                    maTBxVertAlign->SetItemState(2, STATE_CHECK);
-                    maTBxVertAlign->SetItemState(3, STATE_NOCHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_CHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
                 }
                 else if (nSID == SID_TABLE_VERT_BOTTOM)
                 {
-                    maTBxVertAlign->SetItemState(1, STATE_NOCHECK);
-                    maTBxVertAlign->SetItemState(2, STATE_NOCHECK);
-                    maTBxVertAlign->SetItemState(3, STATE_CHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_CHECK);
                 }
             }
             else
             {
                 if (nSID == SID_TABLE_VERT_NONE)
                 {
-                    maTBxVertAlign->SetItemState(1, STATE_NOCHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
                 }
                 else if (nSID == SID_TABLE_VERT_CENTER)
                 {
-                    maTBxVertAlign->SetItemState(2, STATE_NOCHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
                 }
                 else if (nSID == SID_TABLE_VERT_BOTTOM)
                 {
-                    maTBxVertAlign->SetItemState(3, STATE_NOCHECK);
+                    maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
                 }
             }
         }
         else
         {
-            maTBxVertAlign->SetItemState(1, STATE_NOCHECK);
-            maTBxVertAlign->SetItemState(2, STATE_NOCHECK);
-            maTBxVertAlign->SetItemState(3, STATE_NOCHECK);
+            maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+            maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+            maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
         }
     }
 }
@@ -1588,19 +1572,9 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       maIndent1 (SVX_RES(IMG_INDENT1)),
       maIndent2 (SVX_RES(IMG_INDENT2)),
       maIndent3 (SVX_RES(IMG_INDENT3)),
-      maLeftPara (SVX_RES(IMG_LEFT_PARA)),
-      maCentPara (SVX_RES(IMG_CENTER_PARA)),
-      maRightPara (SVX_RES(IMG_RIGHT_PARA)),
-      maJusPara (SVX_RES(IMG_JUSTIFY_PARA)),
-      maIndInc (SVX_RES(IMG_INDENT_INC)),
-      maIndDec (SVX_RES(IMG_INDENT_DEC)),
-      maIndInc_BD (SVX_RES(IMG_INDENT_INC_BD)),
-      maIndDec_BD (SVX_RES(IMG_INDENT_DEC_BD)),
       maIndHang (SVX_RES(IMG_INDENT_HANG)),
       maParInc (SVX_RES(IMG_PARA_INC)),
       maParDec (SVX_RES(IMG_PARA_DEC)),
-      maVertImageList (SVX_RES(IL_VERT_ALIGN)),
-      maVertImageListH (SVX_RES(IL_VERT_ALIGN)),
       maNumBImageList (SVX_RES(IL_NUM_BULLET)),
       maNumBImageListH (SVX_RES(ILH_NUM_BULLET)),
       maNumBImageListRTL (SVX_RES(IL_NUM_BULLET_RTL)),
@@ -1617,28 +1591,24 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       mnNumTypeIndex ((sal_uInt16)0xFFFF),
       maColor (COL_AUTO),
       mbColorAvailable (true),
- //, m_eMetricUnit            (FUNIT_INCH)
-//, m_last_eMetricUnit      (FUNIT_INCH)
       m_eLRSpaceUnit(),
       m_eULSpaceUnit(),
-      maLeftAlignControl (SID_ATTR_PARA_ADJUST_LEFT, *pBindings,*this),
-      maCenterAlignControl (SID_ATTR_PARA_ADJUST_CENTER, *pBindings,*this),
-      maRightAlignControl (SID_ATTR_PARA_ADJUST_RIGHT, *pBindings,*this),
-      maJustifyAlignControl (SID_ATTR_PARA_ADJUST_BLOCK, *pBindings,*this),
+      maLeftAlignControl(SID_ATTR_PARA_ADJUST_LEFT, *pBindings, *this, A2S("LeftPara"), rxFrame),
+      maCenterAlignControl(SID_ATTR_PARA_ADJUST_CENTER, *pBindings, *this, A2S("CenterPara"), rxFrame),
+      maRightAlignControl(SID_ATTR_PARA_ADJUST_RIGHT, *pBindings, *this, A2S("RightPara"), rxFrame),
+      maJustifyAlignControl(SID_ATTR_PARA_ADJUST_BLOCK, *pBindings, *this, A2S("JustifyPara"), rxFrame),
       maLRSpaceControl (SID_ATTR_PARA_LRSPACE,*pBindings,*this),
       maLNSpaceControl (SID_ATTR_PARA_LINESPACE, *pBindings,*this),
       maULSpaceControl (SID_ATTR_PARA_ULSPACE, *pBindings,*this),
-      maOutLineLeftControl (SID_OUTLINE_LEFT, *pBindings,*this),
-      maOutLineRightControl (SID_OUTLINE_RIGHT, *pBindings,*this),
-      maDecIndentControl (SID_DEC_INDENT, *pBindings,*this),
-      maIncIndentControl (SID_INC_INDENT, *pBindings,*this),
-      maVertTop (SID_TABLE_VERT_NONE, *pBindings,*this),
-      maVertCenter (SID_TABLE_VERT_CENTER, *pBindings,*this),
-      maVertBottom (SID_TABLE_VERT_BOTTOM,*pBindings,*this),
-      //i122166, the icons for numbering or bullets toolbox inside toolbar and sidebar should be the same one
-      maBulletOnOff (FN_NUM_BULLET_ON, *pBindings,*this,A2S("DefaultBullet"),rxFrame),
-      maNumberOnOff (FN_NUM_NUMBERING_ON, *pBindings,*this,A2S("DefaultNumbering"),rxFrame),
-      //End i122166
+      maOutLineLeftControl(SID_OUTLINE_LEFT, *pBindings, *this, A2S("OutlineRight"), rxFrame),
+      maOutLineRightControl(SID_OUTLINE_RIGHT, *pBindings, *this, A2S("OutlineLeft"), rxFrame),
+      maDecIndentControl(SID_DEC_INDENT, *pBindings,*this, A2S("DecrementIndent"), rxFrame),
+      maIncIndentControl(SID_INC_INDENT, *pBindings,*this, A2S("IncrementIndent"), rxFrame),
+      maVertTop (SID_TABLE_VERT_NONE, *pBindings, *this, A2S("CellVertTop"), rxFrame),
+      maVertCenter (SID_TABLE_VERT_CENTER, *pBindings,*this, A2S("CellVertCenter"), rxFrame),
+      maVertBottom (SID_TABLE_VERT_BOTTOM,*pBindings,*this, A2S("CellVertBottom"), rxFrame),
+      maBulletOnOff(FN_NUM_BULLET_ON, *pBindings, *this, A2S("DefaultBullet"), rxFrame),
+      maNumberOnOff(FN_NUM_NUMBERING_ON, *pBindings, *this, A2S("DefaultNumbering"), rxFrame),
       maBackColorControl (SID_BACKGROUND_COLOR, *pBindings,*this),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
       maBulletNumRuleIndex (FN_BUL_NUM_RULE_INDEX, *pBindings,*this),

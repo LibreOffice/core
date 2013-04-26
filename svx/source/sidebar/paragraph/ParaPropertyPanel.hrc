@@ -34,12 +34,6 @@
 #define MF_AFTER_INDENT                              4
 #define MF_FL_INDENT                                 6
 #define TBX_HORIZONTALALIGNMENT                      5
-#define IMG_LEFT_PARA                                7
-#define IMG_CENTER_PARA                              8
-#define IMG_RIGHT_PARA                               9
-#define IMG_JUSTIFY_PARA                             10
-#define IMG_INDENT_INC                               11
-#define IMG_INDENT_DEC                               12
 #define IMG_PARA_INC                                 13
 #define IMG_PARA_DEC                                 14
 #define IMG_INDENT_HANG                              15
@@ -63,8 +57,6 @@
 #define MF_BELOW_PARASPACING                         34
 #define TBX_INDENT_PRO_DEMOTE                        35
 #define TBX_VERT_ALIGN      40
-#define IL_VERT_ALIGN       41
-#define ILH_VERT_ALIGN      42
 #define TBX_NUM_BULLET      44
 #define IL_NUM_BULLET       45
 #define ILH_NUM_BULLET      46
@@ -87,8 +79,6 @@
 #define TBI_INDENT_DEC          70
 #define TBI_UL_INC              71
 #define TBI_UL_DEC              72
-#define IMG_INDENT_INC_BD       73
-#define IMG_INDENT_DEC_BD       74
 
 //for vertical alignment
 #define IID_VERT_TOP        1
