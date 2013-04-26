@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,odk/docs/cpp))
+$(eval $(call gb_CustomTarget_CustomTarget,odk/docs))
 
 odk_cpp_INCDIRLIST := sal salhelper rtl osl typelib uno cppu cppuhelper \
 	$(if $(filter WNT,$(OS)),systools)
@@ -29,12 +29,12 @@ odk_cpp_DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(SRCDIR)/include/sal/
 	$(addprefix $(odk_cpp_PREFIX),$(odk_cpp_INCDIRLIST) $(odk_cpp_INCFILELIST))
 odk_cpp_DOXY_WORKDIR := $(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref
 
-$(eval $(call gb_CustomTarget_register_targets,odk/docs/cpp,\
-	Doxyfile \
-	doxygen.log \
+$(eval $(call gb_CustomTarget_register_targets,odk/docs,\
+	cpp/Doxyfile \
+	cpp/doxygen.log \
 ))
 
-$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/Doxyfile : \
+$(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile : \
 		$(SRCDIR)/odk/pack/gendocu/Doxyfile \
 		$(gb_Module_CURRENTMAKEFILE)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
@@ -46,8 +46,8 @@ $(call gb_CustomTarget_get_workdir,odk/docs/cpp)/Doxyfile : \
 		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(call odk_cygwin_path,$(odk_cpp_PREFIX))!' \
 		$< > $@
 
-$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/doxygen.log : \
-		$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/Doxyfile \
+$(call gb_CustomTarget_get_workdir,odk/docs)/cpp/doxygen.log : \
+		$(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile \
 		$(SRCDIR)/include/sal/log-areas.dox \
 		$(SRCDIR)/odk/pack/gendocu/main.dox \
 		$(call gb_PackageSet_get_target,odk_headers)
