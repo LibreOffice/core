@@ -182,6 +182,10 @@
                         generic-name="Condition Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
+    <glade-widget-class title="NoSpace Edit" name="swlo-NoSpaceEdit"
+                        generic-name="NoSpace Edit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
+
     <glade-widget-class title="Cursor Reference Edit" name="sclo-ScCursorRefEdit"
                         generic-name="Cursor Reference Edit" parent="foruilo-RefEdit"
                         icon-name="widget-gtk-textentry"/>

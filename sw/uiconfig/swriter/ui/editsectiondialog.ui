@@ -600,7 +600,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="swuilo-ConditionEdit" id="condition">
+                                      <object class="swlo-ConditionEdit" id="condition">
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
