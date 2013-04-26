@@ -101,7 +101,7 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
     case PPT_TOKEN( sp ):           // Shape
         {
             AttributeList aAttribs( xAttribs );
-            oox::drawingml::ShapePtr pShape = oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) );
+            boost::shared_ptr<PPTShape> pShape( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) );
             if( aAttribs.getBool( XML_useBgFill, false ) )
             {
                 ::oox::drawingml::FillProperties &aFill = pShape->getFillProperties();
@@ -110,6 +110,7 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
                 // TODO: We are using white here, because thats the closest we can assume (?)
                 aFill.maFillColor.setSrgbClr( API_RGB_WHITE );
             }
+            pShape->setModelId(xAttribs->getOptionalValue( XML_modelId ));
             xRet.set( new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape ) );
         }
         break;

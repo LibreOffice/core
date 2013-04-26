@@ -65,6 +65,12 @@ namespace oox { namespace ppt {
                     maShapeTarget.msSubShapeId = rAttribs.getString( XML_spid, OUString() );
                     return this;
                 case PPT_TOKEN( graphicEl ):
+                    return this; // needs a:dgm for the target
+                case A_TOKEN( dgm ):
+                    bTargetSet = true;
+                    maShapeTarget.mnType = XML_dgm;
+                    maShapeTarget.msSubShapeId = rAttribs.getString( XML_id, OUString() );
+                    return this;
                 case PPT_TOKEN( oleChartEl ):
                     bTargetSet = true;
                     // TODO

@@ -347,9 +347,18 @@ void PPTShape::addShape(
 
                     }
                 }
-                if( pShapeMap && !msId.isEmpty() )
+                if( pShapeMap )
                 {
-                    (*pShapeMap)[ msId ] = shared_from_this();
+                    // bnc#705982 - if optional model id reference is
+                    // there, use that to obtain target shape
+                    if( !msModelId.isEmpty() )
+                    {
+                        (*pShapeMap)[ msModelId ] = shared_from_this();
+                    }
+                    else if( !msId.isEmpty() )
+                    {
+                        (*pShapeMap)[ msId ] = shared_from_this();
+                    }
                 }
 
                 // if this is a group shape, we have to add also each child shape

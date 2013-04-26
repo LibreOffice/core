@@ -97,8 +97,14 @@ namespace oox { namespace ppt {
             break;
         case XML_spTgt:
         {
+            OUString sShapeName = msValue;
+
+            // bnc#705982 - catch referenced diagram fallback shapes
+            if( maShapeTarget.mnType == XML_dgm )
+                sShapeName = maShapeTarget.msSubShapeId;
+
             Any rTarget;
-            ::oox::drawingml::ShapePtr pShape = pSlide->getShape(msValue);
+            ::oox::drawingml::ShapePtr pShape = pSlide->getShape(sShapeName);
             SAL_WARN_IF( !pShape, "oox.ppt", "failed to locate Shape");
             if( pShape )
             {
