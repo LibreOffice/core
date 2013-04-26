@@ -673,6 +673,7 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
     pValue[nIndex].Name = "ViewAreaLeft";
     pValue[nIndex++].Value <<= aRect.Left();
 
+    pValue[nIndex].Name = "ViewAreaWidth";
     pValue[nIndex++].Value <<= aRect.GetWidth();
 
     pValue[nIndex].Name = "ViewAreaHeight";
