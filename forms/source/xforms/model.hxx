@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include "mip.hxx"
 #include <map>
 
 
@@ -46,7 +47,6 @@ namespace com { namespace sun { namespace star
 } } }
 namespace xforms
 {
-    class MIP;
     class BindingCollection;
     class SubmissionCollection;
     class InstanceCollection;
