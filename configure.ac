@@ -8721,6 +8721,7 @@ if test "$with_system_hunspell" = "yes"; then
     fi
     AC_LANG_POP([C++])
     libo_MINGW_CHECK_DLL([libhunspell-1.3])
+    HUNSPELL_CFLAGS="`echo $HUNSPELL_CFLAGS | sed -e \"s/-I/${ISYSTEM}/g\"`"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
