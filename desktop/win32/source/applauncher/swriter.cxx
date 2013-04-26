@@ -21,6 +21,4 @@
 
 _TCHAR APPLICATION_SWITCH[] = _T( "--writer" );
 
-LPCWSTR APPUSERMODELID = L"TheDocumentFoundation.LibreOffice.Writer";
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
