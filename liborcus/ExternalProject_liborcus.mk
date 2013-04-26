@@ -64,11 +64,17 @@ endif
 endif
 
 liborcus_CXXFLAGS=$(CXXFLAGS)
+liborcus_LDFLAGS=$(LDFLAGS)
 ifeq ($(COM),MSC)
 liborcus_CXXFLAGS+=$(BOOST_CXXFLAGS)
 endif
 ifeq ($(SYSTEM_BOOST),NO)
 liborcus_CXXFLAGS+=-I$(WORKDIR)/UnpackedTarball/boost
+else
+liborcus_LDFLAGS+=$(BOOST_LDFLAGS)
+endif
+ifneq (,$(PTHREAD_LIBS))
+liborcus_LDFLAGS+=$(PTHREAD_LIBS)
 endif
 
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
@@ -76,7 +82,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		$(if $(liborcus_LIBS),LIBS='$(liborcus_LIBS)') \
 		$(if $(liborcus_CXXFLAGS),CXXFLAGS='$(liborcus_CXXFLAGS)') \
 		$(if $(liborcus_CPPFLAGS),CPPFLAGS='$(liborcus_CPPFLAGS)') \
-		$(if $(filter YES,$(SYSTEM_BOOST)),LDFLAGS='$(BOOST_LDFLAGS)') \
+		$(if $(liborcus_LDFLAGS),LDFLAGS='$(liborcus_LDFLAGS)') \
 		./configure \
 			--with-pic \
 			--enable-static \
