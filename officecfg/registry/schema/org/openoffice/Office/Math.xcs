@@ -17,1169 +17,1170 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Math" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains settings for Math.</desc>
-	</info>
-	<templates>
-		<group oor:name="FontFormat">
-			<info>
-				<desc>Lists properties for describing a font.</desc>
-			</info>
-			<prop oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>Specifies the font name.</desc>
-				</info>
-			</prop>
-			<prop oor:name="CharSet" oor:type="xs:short">
-				<info>
-					<desc>Specifies the character set for a font.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Family" oor:type="xs:short">
-				<info>
-					<desc>Specifies the font family.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>not known</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>decorative</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>modern</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc>roman</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="4">
-						<info>
-							<desc>script</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="5">
-						<info>
-							<desc>swiss</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="6">
-						<info>
-							<desc>system</desc>
-						</info>
-					</enumeration>
-				</constraints>
-			</prop>
-			<prop oor:name="Pitch" oor:type="xs:short">
-				<info>
-					<desc>Specifies the pitch of a font.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>not known</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>fixed</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>variable</desc>
-						</info>
-					</enumeration>
-				</constraints>
-			</prop>
-			<prop oor:name="Weight" oor:type="xs:short">
-				<info>
-					<desc>Specifies the weight of a font.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>not known</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>thin</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>ultra light</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc>light</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="4">
-						<info>
-							<desc>semi light</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="5">
-						<info>
-							<desc>normal</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="6">
-						<info>
-							<desc>medium</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="7">
-						<info>
-							<desc>semi bold</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="8">
-						<info>
-							<desc>bold</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="9">
-						<info>
-							<desc>ultra bold</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="10">
-						<info>
-							<desc>black</desc>
-						</info>
-					</enumeration>
-				</constraints>
-			</prop>
-			<prop oor:name="Italic" oor:type="xs:short">
-				<info>
-					<desc>Specifies the font italics.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>not slanted</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>oblique</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>normal</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc>not known</desc>
-						</info>
-					</enumeration>
-				</constraints>
-			</prop>
-		</group>
-		<group oor:name="Symbol">
-			<info>
-				<desc>Contains settings for defining a user- or predefined symbol.</desc>
-			</info>
-			<prop oor:name="Char" oor:type="xs:int">
-				<info>
-					<desc>Specifies the character value of the symbol.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Set" oor:type="xs:string">
-				<info>
-					<desc>Specifies the symbol set containing the symbol.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Predefined" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies if a symbol is predefined or user-defined.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="FontFormatId" oor:type="xs:string">
-				<info>
-					<desc>Specifies the font format used. The value must be one of the node-names in the FontFormatList.</desc>
-				</info>
-			</prop>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="Print">
-			<info>
-				<desc>Contains settings for printing.</desc>
-			</info>
-			<prop oor:name="Title" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/Print -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
-				<info>
-					<desc>Specifies if the title (filename) is printed.</desc>
-					<label>Title row</label>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="FormulaText" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/Print -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
-				<info>
-					<desc>Specifies if the formula text is printed.</desc>
-					<label>Formula text</label>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="Frame" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/Print -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
-				<info>
-					<desc>Specifies if a border is drawn around the formula when printed.</desc>
-					<label>Border</label>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="Size" oor:type="xs:short" oor:nillable="false">
-				<!-- OldPath: Math/Print -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
-				<info>
-					<desc>Defines the size used when printing the formula.</desc>
-					<label>Print Size</label>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>Original size</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>Adapt to paper size</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>Define zoom factor</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				<value>0</value>
-			</prop>
-			<prop oor:name="ZoomFactor" oor:type="xs:short" oor:nillable="false">
-				<!-- OldPath: Math/Print -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
-				<info>
-					<desc>Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
-					<label>Zoom factor</label>
-				</info>
-				<constraints>
-					<minInclusive oor:value="10">
-						<info>
-							<desc>Specifies the minimum value allowed</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="400">
-						<info>
-							<desc>Specifies the maximum value allowed.</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-				<value>100</value>
-			</prop>
-		</group>
-        <group oor:name="LoadSave">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Math" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains settings for Math.</desc>
+  </info>
+  <templates>
+    <group oor:name="FontFormat">
+      <info>
+        <desc>Lists properties for describing a font.</desc>
+      </info>
+      <prop oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>Specifies the font name.</desc>
+        </info>
+      </prop>
+      <prop oor:name="CharSet" oor:type="xs:short">
+        <info>
+          <desc>Specifies the character set for a font.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Family" oor:type="xs:short">
+        <info>
+          <desc>Specifies the font family.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
             <info>
-                <desc>Contains settings related to load and save operations.</desc>
+              <desc>not known</desc>
             </info>
-            <prop oor:name="IsSaveOnlyUsedSymbols" oor:type="xs:boolean" oor:nillable="false">
-                <!-- UIHints: - Tools/Options - OpenOffice Maths - Settings -->
-                <info>
-                    <desc>When set only symbols used in the current formula will be saved. Otherwise all user defined symbols will be saved in each formula.</desc>
-                    <label>Save only used symbols.</label>
-                </info>
-                <value>true</value>
-            </prop>
-        </group>
-		<group oor:name="Misc">
-			<info>
-				<desc>Contains miscellaneous settings.</desc>
-			</info>
-			<prop oor:name="IgnoreSpacesRight" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/Misc -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
-				<info>
-					<desc>Ignores spacing symbols at the end of a line.</desc>
-					<label>Ignore ~ and &apos; at the end of the line</label>
-				</info>
-				<value>true</value>
-			</prop>
-		</group>
-		<group oor:name="View">
-			<info>
-				<desc>Contains view settings.</desc>
-			</info>
-			<prop oor:name="ToolboxVisible" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/View -->
-				<!-- OldLocation: Soffice.cfg -->
-                <!-- UIHints: View - Elements -->
-				<info>
-					<desc>Toggles the visibility of the ToolBox (Selection Box).</desc>
-					<label>Show Tool Box</label>
-				</info>
-				<value>true</value>
-			</prop>
-			<prop oor:name="AutoRedraw" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/View -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: View - AutoRefresh Display -->
-				<info>
-					<desc>Automatically updates the display of the formula after the text has changed.</desc>
-					<label>Update display automatically</label>
-				</info>
-				<value>true</value>
-			</prop>
-			<prop oor:name="FormulaCursor" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/View -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: The icon &quot;Formula Cursor&quot; in the Tool bar -->
-				<info>
-					<desc>Toggles the visibility of the FormulaCursor.</desc>
-					<label>Show Formula Cursor</label>
-				</info>
-				<value>true</value>
-			</prop>
-		</group>
-		<set oor:name="FontFormatList" oor:node-type="FontFormat">
-			<info>
-				<desc>Lists the FontFormat entries that can be used as symbol definitions in the SymbolList.</desc>
-			</info>
-		</set>
-		<group oor:name="StandardFormat">
-			<info>
-				<desc>Defines the default format settings for formulas.</desc>
-			</info>
-			<prop oor:name="Textmode" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Text Mode -->
-				<info>
-					<desc>Displays some expressions in a compact form.</desc>
-					<label>Textmode</label>
-				</info>
-				<value>false</value>
-			</prop>
-            <prop oor:name="GreekCharStyle" oor:type="xs:short" oor:nillable="false">
-                <!-- UIHints: n/a yet -->
-                <info>
-                    <desc>Specifies the default layout for symbols from the 'Greek' symbol set.</desc>
-                    <label>Greek character style</label>
-                </info>
-                <constraints>
-                    <minInclusive oor:value="0">
-                        <info>
-                            <desc>Specifies the minimum value allowed</desc>
-                        </info>
-                    </minInclusive>
-                    <maxInclusive oor:value="2">
-                        <info>
-                            <desc>Specifies the maximum value allowed</desc>
-                        </info>
-                    </maxInclusive>
-                </constraints>
-                <value>0</value>
-            </prop>
-            <prop oor:name="ScaleNormalBracket" oor:type="xs:boolean" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Spacing - Category - Brackets - Scale all brackets -->
-				<info>
-					<desc>Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
-					<label>Scale normal brackets</label>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="HorizontalAlignment" oor:type="xs:short" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Alignment - Horizontal -->
-				<info>
-					<desc>Specifies the default horizontal alignment for the formula.</desc>
-					<label>Horizontal alignment</label>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>left</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>centered</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>right</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				<value>1</value>
-			</prop>
-			<prop oor:name="BaseSize" oor:type="xs:short" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format- Font Size - Base size -->
-				<info>
-					<desc>Specifies the reference base size. [UNIT=Pts]</desc>
-					<label>Base size</label>
-				</info>
-				<constraints>
-					<minInclusive oor:value="4">
-						<info>
-							<desc>Specifies the minimum value allowed</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="127">
-						<info>
-							<desc>Specifies the maximum value allowed</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-				<value>12</value>
-			</prop>
-			<prop oor:name="TextSize" oor:type="xs:short" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format- Font Size - Text -->
-				<info>
-					<desc>Specifies the text size relative to the base size. [UNIT=%]</desc>
-					<label>Text size</label>
-				</info>
-				<constraints>
-					<minInclusive oor:value="5">
-						<info>
-							<desc>Specifies the minimum value allowed (must be positive)</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="200">
-						<info>
-							<desc>Specifies the maximum value allowed</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-				<value>100</value>
-			</prop>
-			<prop oor:name="IndexSize" oor:type="xs:short" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format- Font Size - Indices -->
-				<info>
-					<desc>Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
-					<label>Index size</label>
-				</info>
-				<constraints>
-					<minInclusive oor:value="5">
-						<info>
-							<desc>Specifies the minimum value allowed (must be positive)</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="200">
-						<info>
-							<desc>Specifies the maximum value allowed</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-				<value>60</value>
-			</prop>
-			<prop oor:name="FunctionSize" oor:type="xs:short" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format- Font Size - Functions -->
-				<info>
-					<desc>Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
-					<label>Function size</label>
-				</info>
-				<constraints>
-					<minInclusive oor:value="5">
-						<info>
-							<desc>Specifies the minimum value allowed (must be positive)</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="200">
-						<info>
-							<desc>Specifies the maximum value allowed</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-				<value>100</value>
-			</prop>
-			<prop oor:name="OperatorSize" oor:type="xs:short" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format- Font Size - Operators -->
-				<info>
-					<desc>Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
-					<label>Operator size</label>
-				</info>
-				<constraints>
-					<minInclusive oor:value="5">
-						<info>
-							<desc>Specifies the minimum value allowed (must be positive)</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="200">
-						<info>
-							<desc>Specifies the maximum value allowed</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-				<value>100</value>
-			</prop>
-			<prop oor:name="LimitsSize" oor:type="xs:short" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format- Font Size - Limits -->
-				<info>
-					<desc>Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
-					<label>Limits size</label>
-				</info>
-				<constraints>
-					<minInclusive oor:value="5">
-						<info>
-							<desc>Specifies the minimum value allowed (must be positive)</desc>
-						</info>
-					</minInclusive>
-					<maxInclusive oor:value="200">
-						<info>
-							<desc>Specifies the maximum value allowed</desc>
-						</info>
-					</maxInclusive>
-				</constraints>
-				<value>60</value>
-			</prop>
-			<prop oor:name="VariableFont" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Fonts - Variables -->
-				<info>
-					<desc>Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
-					<label>Variable Font name</label>
-				</info>
-				<value/>
-			</prop>
-			<prop oor:name="FunctionFont" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Fonts - Functions -->
-				<info>
-					<desc>Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
-					<label>Function Font name</label>
-				</info>
-				<value/>
-			</prop>
-			<prop oor:name="NumberFont" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Fonts - Numbers -->
-				<info>
-					<desc>Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
-					<label>Number Font name</label>
-				</info>
-				<value/>
-			</prop>
-			<prop oor:name="TextFont" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Fonts - Text -->
-				<info>
-					<desc>Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
-					<label>Text Font name</label>
-				</info>
-				<value/>
-			</prop>
-			<prop oor:name="SansFont" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Fonts - Sans -->
-				<info>
-					<desc>Specifies the FontFormat (font) to be used for &apos;sans&apos;. The value must be contained in the FontFormatList.</desc>
-					<label>Sans Font name</label>
-				</info>
-				<value/>
-			</prop>
-			<prop oor:name="SerifFont" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Fonts - Serif -->
-				<info>
-					<desc>Specifies the FontFormat (font) to be used for &apos;serif&apos;. The value must be contained in the FontFormatList.</desc>
-					<label>Serif Font name</label>
-				</info>
-				<value/>
-			</prop>
-			<prop oor:name="FixedFont" oor:type="xs:string" oor:nillable="false">
-				<!-- OldPath: Math/StandardFormat -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Format - Fonts - Fixed -->
-				<info>
-					<desc>Specifies the FontFormat (font) to be used for &apos;fixed&apos;. The value must be contained in the FontFormatList.</desc>
-					<label>Fixed Font name</label>
-				</info>
-				<value/>
-			</prop>
-			<group oor:name="Distance">
-				<info>
-					<desc>Specifies the distance settings used for formatting a formula.</desc>
-				</info>
-				<prop oor:name="Horizontal" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Spacing - Spacing -->
-					<info>
-						<desc>Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
-						<label>Horizontal distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="200">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>10</value>
-				</prop>
-				<prop oor:name="Vertical" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Spacing - Line Spacing -->
-					<info>
-						<desc>Specifies the vertical distance of different lines. [UNIT=%]</desc>
-						<label>Vertical distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="200">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>5</value>
-				</prop>
-				<prop oor:name="Root" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Spacing - Root Spacing -->
-					<info>
-						<desc>Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
-						<label>Distance to root symbol</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="SubScript" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Indexes - Subscript -->
-					<info>
-						<desc>Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
-						<label>Subscript distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>20</value>
-				</prop>
-				<prop oor:name="SuperScript" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Indexes - Superscript -->
-					<info>
-						<desc>Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
-						<label>Superscript distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>20</value>
-				</prop>
-				<prop oor:name="LowerLimit" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Limits - Lower Limit -->
-					<info>
-						<desc>Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
-						<label>Lower limit distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="UpperLimit" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Limits - Upper Limit -->
-					<info>
-						<desc>Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
-						<label>Upper limit distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="OperatorSize" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Operators - Excess size -->
-					<info>
-						<desc>Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
-						<label>Oversize of large operator</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>50</value>
-				</prop>
-				<prop oor:name="OperatorSpace" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Operators - Spacing -->
-					<info>
-						<desc>Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
-						<label>Distance to large operator</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>20</value>
-				</prop>
-				<prop oor:name="Numerator" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Fractions - Numerator -->
-					<info>
-						<desc>Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
-						<label>Numerator distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="Denominator" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Fractions - Denominator -->
-					<info>
-						<desc>Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
-						<label>Denominator distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="Fraction" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Fraction Bars - Excess length -->
-					<info>
-						<desc>Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
-						<label>Fraction overlength</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>10</value>
-				</prop>
-				<prop oor:name="StrokeWidth" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Fraction Bars - Weight -->
-					<info>
-						<desc>Specifies the stroke width of the fraction separator [UNIT=%]</desc>
-						<label>Fraction strokewidth</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="1">
-							<info>
-								<desc>Specifies the minimum value allowed (must be positive)</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>5</value>
-				</prop>
-				<prop oor:name="BracketSize" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Brackets - Excess size (left/right) -->
-					<info>
-						<desc>Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
-						<label>Bracket oversize</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>5</value>
-				</prop>
-				<prop oor:name="BracketSpace" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Brackets - Spacing -->
-					<info>
-						<desc>Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
-						<label>Bracket distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>5</value>
-				</prop>
-				<prop oor:name="NormalBracketSize" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Brackets - Excess size -->
-					<info>
-						<desc>Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
-						<label>Normal bracket oversize</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="MatrixRow" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Matrixes - Line Spacing -->
-					<info>
-						<desc>Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
-						<label>Matrix row distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="300">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>3</value>
-				</prop>
-				<prop oor:name="MatrixColumn" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Matrixes - Column Spacing -->
-					<info>
-						<desc>Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
-						<label>Matrix column distance</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="300">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>30</value>
-				</prop>
-				<prop oor:name="OrnamentSize" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Symbols - Primary height -->
-					<info>
-						<desc>Specifies the distance between the attribute and its base. [UNIT=%]</desc>
-						<label>Distance to attribute</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="OrnamentSpace" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Symbols - Minimum distance -->
-					<info>
-						<desc>Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
-						<label>Distance between attributes</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="100">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="LeftSpace" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Borders - Left -->
-					<info>
-						<desc>Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
-						<label>Left margin</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="10000">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>100</value>
-				</prop>
-				<prop oor:name="RightSpace" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Borders - Right -->
-					<info>
-						<desc>Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
-						<label>Right margin</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="10000">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>100</value>
-				</prop>
-				<prop oor:name="TopSpace" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Borders - Top -->
-					<info>
-						<desc>Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
-						<label>Top margin</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="10000">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="BottomSpace" oor:type="xs:short" oor:nillable="false">
-					<!-- OldPath: Math/StandardFormat -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Format - Spacing - Category - Borders - Bottom -->
-					<info>
-						<desc>Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
-						<label>Bottom margin</label>
-					</info>
-					<constraints>
-						<minInclusive oor:value="0">
-							<info>
-								<desc>Specifies the minimum value allowed</desc>
-							</info>
-						</minInclusive>
-						<maxInclusive oor:value="10000">
-							<info>
-								<desc>Specifies the maximum value allowed</desc>
-							</info>
-						</maxInclusive>
-					</constraints>
-					<value>0</value>
-				</prop>
-			</group>
-		</group>
-		<set oor:name="SymbolList" oor:node-type="Symbol">
-			<info>
-				<desc>Lists the defined symbols.</desc>
-			</info>
-		</set>
-	</component>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>decorative</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>modern</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="3">
+            <info>
+              <desc>roman</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="4">
+            <info>
+              <desc>script</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="5">
+            <info>
+              <desc>swiss</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="6">
+            <info>
+              <desc>system</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="Pitch" oor:type="xs:short">
+        <info>
+          <desc>Specifies the pitch of a font.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>not known</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>fixed</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>variable</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="Weight" oor:type="xs:short">
+        <info>
+          <desc>Specifies the weight of a font.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>not known</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>thin</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>ultra light</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="3">
+            <info>
+              <desc>light</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="4">
+            <info>
+              <desc>semi light</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="5">
+            <info>
+              <desc>normal</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="6">
+            <info>
+              <desc>medium</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="7">
+            <info>
+              <desc>semi bold</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="8">
+            <info>
+              <desc>bold</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="9">
+            <info>
+              <desc>ultra bold</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="10">
+            <info>
+              <desc>black</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+      <prop oor:name="Italic" oor:type="xs:short">
+        <info>
+          <desc>Specifies the font italics.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>not slanted</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>oblique</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>normal</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="3">
+            <info>
+              <desc>not known</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
+    </group>
+    <group oor:name="Symbol">
+      <info>
+        <desc>Contains settings for defining a user- or predefined symbol.</desc>
+      </info>
+      <prop oor:name="Char" oor:type="xs:int">
+        <info>
+          <desc>Specifies the character value of the symbol.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Set" oor:type="xs:string">
+        <info>
+          <desc>Specifies the symbol set containing the symbol.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Predefined" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if a symbol is predefined or user-defined.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="FontFormatId" oor:type="xs:string">
+        <info>
+          <desc>Specifies the font format used. The value must be one of the node-names in the FontFormatList.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="Print">
+      <info>
+        <desc>Contains settings for printing.</desc>
+      </info>
+      <prop oor:name="Title" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
+        <info>
+          <desc>Specifies if the title (filename) is printed.</desc>
+          <label>Title row</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="FormulaText" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
+        <info>
+          <desc>Specifies if the formula text is printed.</desc>
+          <label>Formula text</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="Frame" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
+        <info>
+          <desc>Specifies if a border is drawn around the formula when printed.</desc>
+          <label>Border</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="Size" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
+        <info>
+          <desc>Defines the size used when printing the formula.</desc>
+          <label>Print Size</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>Original size</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>Adapt to paper size</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Define zoom factor</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>0</value>
+      </prop>
+      <prop oor:name="ZoomFactor" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/Print -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
+        <info>
+          <desc>Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
+          <label>Zoom factor</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="10">
+            <info>
+              <desc>Specifies the minimum value allowed</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="400">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>100</value>
+      </prop>
+    </group>
+    <group oor:name="LoadSave">
+      <info>
+        <desc>Contains settings related to load and save operations.</desc>
+      </info>
+      <prop oor:name="IsSaveOnlyUsedSymbols" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: - Tools/Options - OpenOffice Maths - Settings -->
+        <info>
+          <desc>When set only symbols used in the current formula will be saved. Otherwise all user defined symbols will be saved in each formula.</desc>
+          <label>Save only used symbols.</label>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+    <group oor:name="Misc">
+      <info>
+        <desc>Contains miscellaneous settings.</desc>
+      </info>
+      <prop oor:name="IgnoreSpacesRight" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/Misc -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
+        <info>
+          <desc>Ignores spacing symbols at the end of a line.</desc>
+          <label>Ignore ~ and ' at the end of the line</label>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+    <group oor:name="View">
+      <info>
+        <desc>Contains view settings.</desc>
+      </info>
+      <prop oor:name="ToolboxVisible" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/View -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: View - Elements -->
+        <info>
+          <desc>Toggles the visibility of the ToolBox (Selection Box).</desc>
+          <label>Show Tool Box</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="AutoRedraw" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/View -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: View - AutoRefresh Display -->
+        <info>
+          <desc>Automatically updates the display of the formula after the text has changed.</desc>
+          <label>Update display automatically</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="FormulaCursor" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/View -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: The icon &quot;Formula Cursor&quot; in the Tool bar -->
+        <info>
+          <desc>Toggles the visibility of the FormulaCursor.</desc>
+          <label>Show Formula Cursor</label>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+    <set oor:name="FontFormatList" oor:node-type="FontFormat">
+      <info>
+        <desc>Lists the FontFormat entries that can be used as symbol definitions in the SymbolList.</desc>
+      </info>
+    </set>
+    <group oor:name="StandardFormat">
+      <info>
+        <desc>Defines the default format settings for formulas.</desc>
+      </info>
+      <prop oor:name="Textmode" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Text Mode -->
+        <info>
+          <desc>Displays some expressions in a compact form.</desc>
+          <label>Textmode</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="GreekCharStyle" oor:type="xs:short" oor:nillable="false">
+        <!-- UIHints: n/a yet -->
+        <info>
+          <desc>Specifies the default layout for symbols from the 'Greek' symbol set.</desc>
+          <label>Greek character style</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum value allowed</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="2">
+            <info>
+              <desc>Specifies the maximum value allowed</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>0</value>
+      </prop>
+      <prop oor:name="ScaleNormalBracket" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Spacing - Category - Brackets - Scale all brackets -->
+        <info>
+          <desc>Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
+          <label>Scale normal brackets</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="HorizontalAlignment" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Alignment - Horizontal -->
+        <info>
+          <desc>Specifies the default horizontal alignment for the formula.</desc>
+          <label>Horizontal alignment</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>left</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>centered</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>right</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>1</value>
+      </prop>
+      <prop oor:name="BaseSize" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format- Font Size - Base size -->
+        <info>
+          <desc>Specifies the reference base size. [UNIT=Pts]</desc>
+          <label>Base size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="4">
+            <info>
+              <desc>Specifies the minimum value allowed</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="127">
+            <info>
+              <desc>Specifies the maximum value allowed</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>12</value>
+      </prop>
+      <prop oor:name="TextSize" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format- Font Size - Text -->
+        <info>
+          <desc>Specifies the text size relative to the base size. [UNIT=%]</desc>
+          <label>Text size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5">
+            <info>
+              <desc>Specifies the minimum value allowed (must be positive)</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="200">
+            <info>
+              <desc>Specifies the maximum value allowed</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>100</value>
+      </prop>
+      <prop oor:name="IndexSize" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format- Font Size - Indices -->
+        <info>
+          <desc>Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+          <label>Index size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5">
+            <info>
+              <desc>Specifies the minimum value allowed (must be positive)</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="200">
+            <info>
+              <desc>Specifies the maximum value allowed</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>60</value>
+      </prop>
+      <prop oor:name="FunctionSize" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format- Font Size - Functions -->
+        <info>
+          <desc>Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+          <label>Function size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5">
+            <info>
+              <desc>Specifies the minimum value allowed (must be positive)</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="200">
+            <info>
+              <desc>Specifies the maximum value allowed</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>100</value>
+      </prop>
+      <prop oor:name="OperatorSize" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format- Font Size - Operators -->
+        <info>
+          <desc>Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+          <label>Operator size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5">
+            <info>
+              <desc>Specifies the minimum value allowed (must be positive)</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="200">
+            <info>
+              <desc>Specifies the maximum value allowed</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>100</value>
+      </prop>
+      <prop oor:name="LimitsSize" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format- Font Size - Limits -->
+        <info>
+          <desc>Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+          <label>Limits size</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5">
+            <info>
+              <desc>Specifies the minimum value allowed (must be positive)</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="200">
+            <info>
+              <desc>Specifies the maximum value allowed</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>60</value>
+      </prop>
+      <prop oor:name="VariableFont" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Fonts - Variables -->
+        <info>
+          <desc>Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
+          <label>Variable Font name</label>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="FunctionFont" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Fonts - Functions -->
+        <info>
+          <desc>Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
+          <label>Function Font name</label>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="NumberFont" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Fonts - Numbers -->
+        <info>
+          <desc>Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
+          <label>Number Font name</label>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="TextFont" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Fonts - Text -->
+        <info>
+          <desc>Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
+          <label>Text Font name</label>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="SansFont" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Fonts - Sans -->
+        <info>
+          <desc>Specifies the FontFormat (font) to be used for 'sans'. The value must be contained in the FontFormatList.</desc>
+          <label>Sans Font name</label>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="SerifFont" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Fonts - Serif -->
+        <info>
+          <desc>Specifies the FontFormat (font) to be used for 'serif'. The value must be contained in the FontFormatList.</desc>
+          <label>Serif Font name</label>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="FixedFont" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Math/StandardFormat -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Format - Fonts - Fixed -->
+        <info>
+          <desc>Specifies the FontFormat (font) to be used for 'fixed'. The value must be contained in the FontFormatList.</desc>
+          <label>Fixed Font name</label>
+        </info>
+        <value/>
+      </prop>
+      <group oor:name="Distance">
+        <info>
+          <desc>Specifies the distance settings used for formatting a formula.</desc>
+        </info>
+        <prop oor:name="Horizontal" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Spacing - Spacing -->
+          <info>
+            <desc>Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+            <label>Horizontal distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="200">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>10</value>
+        </prop>
+        <prop oor:name="Vertical" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Spacing - Line Spacing -->
+          <info>
+            <desc>Specifies the vertical distance of different lines. [UNIT=%]</desc>
+            <label>Vertical distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="200">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>5</value>
+        </prop>
+        <prop oor:name="Root" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Spacing - Root Spacing -->
+          <info>
+            <desc>Specifies the vertical distance of the root symbol's horizontal bar to the argument. [UNIT=%]</desc>
+            <label>Distance to root symbol</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="SubScript" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Indexes - Subscript -->
+          <info>
+            <desc>Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+            <label>Subscript distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>20</value>
+        </prop>
+        <prop oor:name="SuperScript" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Indexes - Superscript -->
+          <info>
+            <desc>Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+            <label>Superscript distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>20</value>
+        </prop>
+        <prop oor:name="LowerLimit" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Limits - Lower Limit -->
+          <info>
+            <desc>Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+            <label>Lower limit distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="UpperLimit" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Limits - Upper Limit -->
+          <info>
+            <desc>Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+            <label>Upper limit distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="OperatorSize" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Operators - Excess size -->
+          <info>
+            <desc>Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+            <label>Oversize of large operator</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>50</value>
+        </prop>
+        <prop oor:name="OperatorSpace" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Operators - Spacing -->
+          <info>
+            <desc>Specifies the distance between the large operator and it's argument. [UNIT=%]</desc>
+            <label>Distance to large operator</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>20</value>
+        </prop>
+        <prop oor:name="Numerator" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Fractions - Numerator -->
+          <info>
+            <desc>Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+            <label>Numerator distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="Denominator" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Fractions - Denominator -->
+          <info>
+            <desc>Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
+            <label>Denominator distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="Fraction" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Fraction Bars - Excess length -->
+          <info>
+            <desc>Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+            <label>Fraction overlength</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>10</value>
+        </prop>
+        <prop oor:name="StrokeWidth" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Fraction Bars - Weight -->
+          <info>
+            <desc>Specifies the stroke width of the fraction separator [UNIT=%]</desc>
+            <label>Fraction strokewidth</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="1">
+              <info>
+                <desc>Specifies the minimum value allowed (must be positive)</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>5</value>
+        </prop>
+        <prop oor:name="BracketSize" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Brackets - Excess size (left/right) -->
+          <info>
+            <desc>Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+            <label>Bracket oversize</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>5</value>
+        </prop>
+        <prop oor:name="BracketSpace" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Brackets - Spacing -->
+          <info>
+            <desc>Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+            <label>Bracket distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>5</value>
+        </prop>
+        <prop oor:name="NormalBracketSize" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Brackets - Excess size -->
+          <info>
+            <desc>Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+            <label>Normal bracket oversize</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="MatrixRow" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Matrixes - Line Spacing -->
+          <info>
+            <desc>Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+            <label>Matrix row distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="300">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>3</value>
+        </prop>
+        <prop oor:name="MatrixColumn" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Matrixes - Column Spacing -->
+          <info>
+            <desc>Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+            <label>Matrix column distance</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="300">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>30</value>
+        </prop>
+        <prop oor:name="OrnamentSize" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Symbols - Primary height -->
+          <info>
+            <desc>Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+            <label>Distance to attribute</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="OrnamentSpace" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Symbols - Minimum distance -->
+          <info>
+            <desc>Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+            <label>Distance between attributes</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="100">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="LeftSpace" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Borders - Left -->
+          <info>
+            <desc>Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+            <label>Left margin</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="10000">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>100</value>
+        </prop>
+        <prop oor:name="RightSpace" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Borders - Right -->
+          <info>
+            <desc>Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+            <label>Right margin</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="10000">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>100</value>
+        </prop>
+        <prop oor:name="TopSpace" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Borders - Top -->
+          <info>
+            <desc>Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+            <label>Top margin</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="10000">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="BottomSpace" oor:type="xs:short" oor:nillable="false">
+          <!-- OldPath: Math/StandardFormat -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Format - Spacing - Category - Borders - Bottom -->
+          <info>
+            <desc>Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+            <label>Bottom margin</label>
+          </info>
+          <constraints>
+            <minInclusive oor:value="0">
+              <info>
+                <desc>Specifies the minimum value allowed</desc>
+              </info>
+            </minInclusive>
+            <maxInclusive oor:value="10000">
+              <info>
+                <desc>Specifies the maximum value allowed</desc>
+              </info>
+            </maxInclusive>
+          </constraints>
+          <value>0</value>
+        </prop>
+      </group>
+    </group>
+    <set oor:name="SymbolList" oor:node-type="Symbol">
+      <info>
+        <desc>Lists the defined symbols.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

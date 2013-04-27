@@ -17,1072 +17,1060 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="DataAccess" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-	</info>
-	<import oor:component="org.openoffice.Office.Common"/>
-	<uses oor:component="org.openoffice.Office.Common"/>
-	<templates>
-		<info>
-		</info>
-		<group oor:name="DatabaseDocumentRegistration">
-			<info>
-				<desc>describes a single database document registration.</desc>
-			</info>
-			<prop oor:name="Name" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the database.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Location" oor:type="xs:string">
-				<info>
-					<desc>Specifies the location of the database.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="EmbeddedDatabaseSetting">
-			<info>
-				<desc>Describes a setting for an embedded database.</desc>
-			</info>
-			<prop oor:name="Value" oor:type="oor:any">
-				<info>
-                    <desc>Describes the value for an embedded database setting.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="ReportEngineName">
-			<info>
-				<desc>Describes the report engine.</desc>
-			</info>
-			<prop oor:name="ServiceName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the service name for the report engine.</desc>
-				</info>
-			</prop>
-			<prop oor:name="UIName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the product name of the report engine.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="EmbeddedDatabaseName">
-			<info>
-				<desc>Describes the URL schema for an embedded database. They must start with sdbc:embedded:.</desc>
-			</info>
-			<prop oor:name="URL" oor:type="xs:string">
-				<info>
-					<desc>Specifies the URL for the embedded database.</desc>
-				</info>
-			</prop>
-			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
-				<info>
-					<desc>Specifies the name of the embedded database which will be displayed in the statusbar of the database application.</desc>
-				</info>
-			</prop>
-			<set oor:name="EmbeddedDatabaseSettings" oor:node-type="EmbeddedDatabaseSetting">
-				<info>
-					<desc>Specifies the settings of an embedded database.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="DataSource">
-			<info>
-				<desc>Specifies the data source to be used for the bibliography.</desc>
-			</info>
-			<prop oor:name="DataSourceName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the registered data source.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Command" oor:type="xs:string">
-				<info>
-					<desc>Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
-				</info>
-			</prop>
-			<prop oor:name="CommandType" oor:type="xs:short">
-				<info>
-					<desc>Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
-				</info>
-			</prop>
-			<set oor:name="Fields" oor:node-type="FieldAssignment">
-				<info>
-					<desc>Specifies the column name mapping between the programatic column name and the logical column name.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="FieldAssignment">
-			<info>
-				<desc>Specifies the mapping between the desired (logical) column titles and the real column titles of the data source.</desc>
-			</info>
-			<prop oor:name="ProgrammaticFieldName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the desired (logical) column name.</desc>
-				</info>
-			</prop>
-			<prop oor:name="AssignedFieldName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the real column name used in the data source.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="DriverPooling">
-			<info>
-				<desc>Specifies the connection pooling of used database drivers.</desc>
-			</info>
-			<prop oor:name="DriverName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the database drivers.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Enable" oor:type="xs:boolean">
-				<info>
-					<desc>Specifies if the pooling for this driver should be enabled.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Timeout" oor:type="xs:int">
-				<info>
-					<desc>Specifies the time after a connection will be released.</desc>
-				</info>
-			</prop>
-		</group>
-        <group oor:name="DriverClassPath">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="DataAccess" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info/>
+  <import oor:component="org.openoffice.Office.Common"/>
+  <uses oor:component="org.openoffice.Office.Common"/>
+  <templates>
+    <info/>
+    <group oor:name="DatabaseDocumentRegistration">
+      <info>
+        <desc>describes a single database document registration.</desc>
+      </info>
+      <prop oor:name="Name" oor:type="xs:string">
+        <info>
+          <desc>Specifies the name of the database.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Location" oor:type="xs:string">
+        <info>
+          <desc>Specifies the location of the database.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="EmbeddedDatabaseSetting">
+      <info>
+        <desc>Describes a setting for an embedded database.</desc>
+      </info>
+      <prop oor:name="Value" oor:type="oor:any">
+        <info>
+          <desc>Describes the value for an embedded database setting.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="ReportEngineName">
+      <info>
+        <desc>Describes the report engine.</desc>
+      </info>
+      <prop oor:name="ServiceName" oor:type="xs:string">
+        <info>
+          <desc>Specifies the service name for the report engine.</desc>
+        </info>
+      </prop>
+      <prop oor:name="UIName" oor:type="xs:string">
+        <info>
+          <desc>Specifies the product name of the report engine.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="EmbeddedDatabaseName">
+      <info>
+        <desc>Describes the URL schema for an embedded database. They must start with sdbc:embedded:.</desc>
+      </info>
+      <prop oor:name="URL" oor:type="xs:string">
+        <info>
+          <desc>Specifies the URL for the embedded database.</desc>
+        </info>
+      </prop>
+      <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Specifies the name of the embedded database which will be displayed in the statusbar of the database application.</desc>
+        </info>
+      </prop>
+      <set oor:name="EmbeddedDatabaseSettings" oor:node-type="EmbeddedDatabaseSetting">
+        <info>
+          <desc>Specifies the settings of an embedded database.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="DataSource">
+      <info>
+        <desc>Specifies the data source to be used for the bibliography.</desc>
+      </info>
+      <prop oor:name="DataSourceName" oor:type="xs:string">
+        <info>
+          <desc>Specifies the name of the registered data source.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Command" oor:type="xs:string">
+        <info>
+          <desc>Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+        </info>
+      </prop>
+      <prop oor:name="CommandType" oor:type="xs:short">
+        <info>
+          <desc>Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
+        </info>
+      </prop>
+      <set oor:name="Fields" oor:node-type="FieldAssignment">
+        <info>
+          <desc>Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="FieldAssignment">
+      <info>
+        <desc>Specifies the mapping between the desired (logical) column titles and the real column titles of the data source.</desc>
+      </info>
+      <prop oor:name="ProgrammaticFieldName" oor:type="xs:string">
+        <info>
+          <desc>Specifies the desired (logical) column name.</desc>
+        </info>
+      </prop>
+      <prop oor:name="AssignedFieldName" oor:type="xs:string">
+        <info>
+          <desc>Specifies the real column name used in the data source.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="DriverPooling">
+      <info>
+        <desc>Specifies the connection pooling of used database drivers.</desc>
+      </info>
+      <prop oor:name="DriverName" oor:type="xs:string">
+        <info>
+          <desc>Specifies the name of the database drivers.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Enable" oor:type="xs:boolean">
+        <info>
+          <desc>Specifies if the pooling for this driver should be enabled.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Timeout" oor:type="xs:int">
+        <info>
+          <desc>Specifies the time after a connection will be released.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="DriverClassPath">
+      <info>
+        <desc>Specifies the path or jar to the Java driver class.</desc>
+      </info>
+      <prop oor:name="Path" oor:type="xs:string">
+        <info>
+          <desc>Specifies the class path where the JDBC driver class can be found.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="UserDefinedDriver">
+      <info>
+        <desc>Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
+      </info>
+      <prop oor:name="DriverPageDisplayName" oor:type="xs:string">
+        <info>
+          <desc>Specifies the display name of the database driver page.</desc>
+        </info>
+      </prop>
+      <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
+        <info>
+          <desc>Specifies the display name of the database driver.</desc>
+        </info>
+      </prop>
+      <prop oor:name="DriverDsnPrefix" oor:type="xs:string">
+        <info>
+          <desc>Specifies the prefix of the URL of the database driver.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Extension" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The file extension, which match to this type. Only set when it is file based driver</desc>
+        </info>
+        <value/>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <info/>
+    <group oor:name="Policies">
+      <info>
+        <desc>Defines different policies for working with OpenOffice.org Base.</desc>
+      </info>
+      <group oor:name="Features">
+        <info>
+          <desc>controls availability of certain database access related features in the OpenOffice.org applications.</desc>
+        </info>
+        <group oor:name="Base">
           <info>
-            <desc>Specifies the path or jar to the Java driver class.</desc>
+            <desc>controls availability of features within OpenOffice.org Base.</desc>
           </info>
-          <prop oor:name="Path" oor:type="xs:string">
+          <prop oor:name="CreateLocalDatabase" oor:type="xs:boolean" oor:nillable="false">
             <info>
-              <desc>Specifies the class path where the JDBC driver class can be found.</desc>
+              <desc>Specifies that the user is able to create new local database documents in the "Create Database" wizard.</desc>
+            </info>
+            <value>true</value>
+          </prop>
+        </group>
+        <group oor:name="Writer">
+          <info>
+            <desc>Specifies which data-access related features are available in OpenOffice.org Writer.</desc>
+          </info>
+          <prop oor:name="DatabaseFields" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies that the Database tab page should be available in the fields dialog.</desc>
+            </info>
+            <value>true</value>
+          </prop>
+        </group>
+        <group oor:name="Common">
+          <info>
+            <desc>Specifies which data-access related features, usually existent in all applications, are available.</desc>
+          </info>
+          <prop oor:name="EditDatabaseFromDataSourceView" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies that the data source view (also known as data source browser) should offer the "Edit database file" context menu entry.</desc>
+            </info>
+            <value>true</value>
+          </prop>
+        </group>
+      </group>
+    </group>
+    <group oor:name="ReportEngines">
+      <info>
+        <desc>Specifies the default report engine which should be used.</desc>
+      </info>
+      <prop oor:name="DefaultReportEngine" oor:type="xs:string">
+        <info>
+          <desc>Specifies the name of the report engine to use.</desc>
+        </info>
+      </prop>
+      <set oor:name="ReportEngineNames" oor:node-type="ReportEngineName">
+        <info>
+          <desc>Specifies all report engine names which are registered.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="EmbeddedDatabases">
+      <info>
+        <desc>Specifies the default embedded database which should be used.</desc>
+      </info>
+      <prop oor:name="DefaultEmbeddedDatabase" oor:type="xs:string">
+        <info>
+          <desc>Specifies the name of the embedded database to use.</desc>
+        </info>
+      </prop>
+      <set oor:name="EmbeddedDatabaseNames" oor:node-type="EmbeddedDatabaseName">
+        <info>
+          <desc>Specifies all embedded database names which are registered.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="DriverManager">
+      <info>
+        <desc>Specifies additional information about the database drivers.</desc>
+      </info>
+      <prop oor:name="DriverPrecedence" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
+        </info>
+        <value oor:separator=";">com.sun.star.comp.sdbc.ODBCDriver;com.sun.star.comp.sdbc.JDBCDriver</value>
+      </prop>
+    </group>
+    <group oor:name="ConnectionPool">
+      <info>
+        <desc>Specifies all information which is needed for the global connection pool.</desc>
+      </info>
+      <prop oor:name="EnablePooling" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if the global connection pool is enabled.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <set oor:name="DriverSettings" oor:node-type="DriverPooling">
+        <info>
+          <desc>Specifies the connection pooling of used database drivers.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="JDBC">
+      <info>
+        <desc>Specifies all information which is needed for the connections established using JDBC.</desc>
+      </info>
+      <set oor:name="DriverClassPaths" oor:node-type="DriverClassPath">
+        <info>
+          <desc>Specifies the class paths where to find JDBC database drivers. The node name specifies the name
+            of the JDBC driver which is to be loaded.</desc>
+        </info>
+      </set>
+    </group>
+    <set oor:name="RegisteredNames" oor:node-type="DatabaseDocumentRegistration">
+      <info>
+        <desc>Specifies the database documents registered within OpenOffice.org, for quick access by a programmatic name.</desc>
+      </info>
+    </set>
+    <set oor:name="UserDefinedDriverSettings" oor:node-type="UserDefinedDriver">
+      <info>
+        <desc>Contains a list of descriptions for user defined drivers.</desc>
+      </info>
+    </set>
+    <group oor:name="AddressBook">
+      <info>
+        <desc>Specifies the data source that can be used as an AddressBook.</desc>
+      </info>
+      <prop oor:name="DataSourceName" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the name of the registered data source.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="Command" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="CommandType" oor:type="xs:short">
+        <info>
+          <desc>Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="AutoPilotCompleted" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if the auto pilot is completed.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <set oor:name="Fields" oor:node-type="FieldAssignment">
+        <info>
+          <desc>Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="Bibliography">
+      <info>
+        <desc>Specifies settings of the bibliography component</desc>
+      </info>
+      <prop oor:name="BeamerHeight" oor:type="xs:int">
+        <info>
+          <desc>Specifies the height of the database beamer</desc>
+        </info>
+      </prop>
+      <prop oor:name="ViewHeight" oor:type="xs:int">
+        <info>
+          <desc>Specifies the height of the view window</desc>
+        </info>
+      </prop>
+      <prop oor:name="QueryText" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the search text for filtering</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="QueryField" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the search field for filtering</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ShowColumnAssignmentWarning" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether a non-assigned column results in a warning box.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <node-ref oor:name="CurrentDataSource" oor:node-type="DataSource">
+        <!-- OldPath: Bibliography/BibliographyCurrent-->
+        <!-- OldLocation: Soffice.ini-->
+        <info>
+          <desc>Determines the current data source for the bibliography.</desc>
+        </info>
+      </node-ref>
+      <set oor:name="DataSourceHistory" oor:node-type="DataSource">
+        <!--OldPath: Bibliography/Bibliography-->
+        <!--OldLocation: Soffice.ini-->
+        <info>
+          <desc>Specifies the data source that can be used as a bibliography.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="DriverSettings">
+      <info>
+        <desc>Specifies the driver settings that are used.</desc>
+      </info>
+      <group oor:name="com.sun.star.comp.sdbc.MozabDriver">
+        <info>
+          <desc>Specifies the driver settings for the mozilla database driver.</desc>
+        </info>
+        <group oor:name="MozillaPreferences">
+          <info>
+            <desc>Specifies the mozilla preferences.</desc>
+          </info>
+          <prop oor:name="ProfileName" oor:type="xs:string" oor:nillable="false">
+            <info>
+              <desc>Specifies the mozilla profile name.</desc>
+            </info>
+            <value/>
+            <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+          </prop>
+          <prop oor:name="PabDescription" oor:type="xs:string" oor:localized="true" oor:nillable="false">
+            <info>
+              <desc>Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
+            </info>
+            <value/>
+          </prop>
+          <prop oor:name="HisDescription" oor:type="xs:string" oor:localized="true" oor:nillable="false">
+            <info>
+              <desc>Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
+            </info>
+            <value/>
+          </prop>
+        </group>
+        <group oor:name="ColumnAliases">
+          <info>
+            <desc>Specifies the column alias names used.</desc>
+          </info>
+          <prop oor:name="FirstName" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the first name.</desc>
+            </info>
+          </prop>
+          <prop oor:name="LastName" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the last name.</desc>
+            </info>
+          </prop>
+          <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the display name.</desc>
+            </info>
+          </prop>
+          <prop oor:name="NickName" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the nickname.</desc>
+            </info>
+          </prop>
+          <prop oor:name="PrimaryEmail" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the primary email.</desc>
+            </info>
+          </prop>
+          <prop oor:name="SecondEmail" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the first name.</desc>
+            </info>
+          </prop>
+          <prop oor:name="PreferMailFormat" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the preferred mail format.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkPhone" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the phone at work.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomePhone" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the phone at home.</desc>
+            </info>
+          </prop>
+          <prop oor:name="FaxNumber" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the fax number.</desc>
+            </info>
+          </prop>
+          <prop oor:name="PagerNumber" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the pager number.</desc>
+            </info>
+          </prop>
+          <prop oor:name="CellularNumber" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the cellular number.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeAddress" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the home address.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeAddress2" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the 2nd home address.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeCity" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the home city.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeState" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the home state.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeZipCode" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the home ZIP code.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeCountry" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the home country.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkAddress" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the work address.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkAddress2" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the 2nd work address.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkCity" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the work city.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkState" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the work state.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkZipCode" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the work ZIP code.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkCountry" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the work country.</desc>
+            </info>
+          </prop>
+          <prop oor:name="JobTitle" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the job title.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Department" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the department.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Company" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the company.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WebPage1" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the 1st webpage.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WebPage2" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the 2nd webpage.</desc>
+            </info>
+          </prop>
+          <prop oor:name="BirthYear" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the birth year.</desc>
+            </info>
+          </prop>
+          <prop oor:name="BirthMonth" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the birth month.</desc>
+            </info>
+          </prop>
+          <prop oor:name="BirthDay" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the birth day.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Custom1" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the 1st custom field.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Custom2" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the 2nd custom field.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Custom3" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the 3rd custom field.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Custom4" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the 4th custom field.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Notes" oor:type="xs:string" oor:localized="true">
+            <info>
+              <desc>Specifies the notes.</desc>
             </info>
           </prop>
         </group>
-		<group oor:name="UserDefinedDriver">
-			<info>
-				<desc>Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
-			</info>
-			<prop oor:name="DriverPageDisplayName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the display name of the database driver page.</desc>
-				</info>
-			</prop>
-			<prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-				<info>
-					<desc>Specifies the display name of the database driver.</desc>
-				</info>
-			</prop>
-			<prop oor:name="DriverDsnPrefix" oor:type="xs:string">
-				<info>
-					<desc>Specifies the prefix of the URL of the database driver.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Extension" oor:type="xs:string" oor:nillable="false">
-                <info><desc>The file extension, which match to this type. Only set when it is file based driver</desc></info>
-				<value/>
-            </prop>
-		</group>
-	</templates>
-	<component>
-		<info>
-		</info>
-        <group oor:name="Policies">
-            <info>
-                <desc>Defines different policies for working with OpenOffice.org Base.</desc>
-            </info>
-            <group oor:name="Features">
-                <info>
-                    <desc>controls availability of certain database access related features in the OpenOffice.org applications.</desc>
-                </info>
-                <group oor:name="Base">
-                    <info>
-                        <desc>controls availability of features within OpenOffice.org Base.</desc>
-                    </info>
-                    <prop oor:name="CreateLocalDatabase" oor:type="xs:boolean" oor:nillable="false">
-                        <info>
-                            <desc>Specifies that the user is able to create new local database documents in the "Create Database" wizard.</desc>
-                        </info>
-                        <value>true</value>
-                    </prop>
-                </group>
-                <group oor:name="Writer">
-                    <info>
-                        <desc>Specifies which data-access related features are available in OpenOffice.org Writer.</desc>
-                    </info>
-                    <prop oor:name="DatabaseFields" oor:type="xs:boolean" oor:nillable="false">
-                        <info>
-                            <desc>Specifies that the Database tab page should be available in the fields dialog.</desc>
-                        </info>
-                        <value>true</value>
-                    </prop>
-                </group>
-                <group oor:name="Common">
-                    <info>
-                        <desc>Specifies which data-access related features, usually existent in all applications, are available.</desc>
-                    </info>
-                    <prop oor:name="EditDatabaseFromDataSourceView" oor:type="xs:boolean" oor:nillable="false">
-                        <info>
-                            <desc>Specifies that the data source view (also known as data source browser) should offer the "Edit database file" context menu entry.</desc>
-                        </info>
-                        <value>true</value>
-                    </prop>
-                </group>
-            </group>
-        </group>
-        <group oor:name="ReportEngines">
-			<info>
-				<desc>Specifies the default report engine which should be used.</desc>
-			</info>
-			<prop oor:name="DefaultReportEngine" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the report engine to use.</desc>
-				</info>
-			</prop>
-			<set oor:name="ReportEngineNames" oor:node-type="ReportEngineName">
-				<info>
-					<desc>Specifies all report engine names which are registered.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="EmbeddedDatabases">
-			<info>
-				<desc>Specifies the default embedded database which should be used.</desc>
-			</info>
-			<prop oor:name="DefaultEmbeddedDatabase" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the embedded database to use.</desc>
-				</info>
-			</prop>
-			<set oor:name="EmbeddedDatabaseNames" oor:node-type="EmbeddedDatabaseName">
-				<info>
-					<desc>Specifies all embedded database names which are registered.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="DriverManager">
-			<info>
-				<desc>Specifies additional information about the database drivers.</desc>
-			</info>
-			<prop oor:name="DriverPrecedence" oor:type="oor:string-list" oor:nillable="false">
-				<info>
-					<desc>Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
-				</info>
-				<value oor:separator=";">com.sun.star.comp.sdbc.ODBCDriver;com.sun.star.comp.sdbc.JDBCDriver</value>
-			</prop>
-		</group>
-		<group oor:name="ConnectionPool">
-			<info>
-				<desc>Specifies all information which is needed for the global connection pool.</desc>
-			</info>
-			<prop oor:name="EnablePooling" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies if the global connection pool is enabled.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<set oor:name="DriverSettings" oor:node-type="DriverPooling">
-				<info>
-					<desc>Specifies the connection pooling of used database drivers.</desc>
-				</info>
-			</set>
-		</group>
-
-        <group oor:name="JDBC">
+      </group>
+      <group oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver">
+        <info>
+          <desc>Specifies the driver settings for the evolution database driver.</desc>
+        </info>
+        <group oor:name="EvolutionPreferences">
           <info>
-            <desc>Specifies all information which is needed for the connections established using JDBC.</desc>
+            <desc>Specifies the evolution preferences.</desc>
           </info>
-          <set oor:name="DriverClassPaths" oor:node-type="DriverClassPath">
+          <prop oor:name="FullPathExportingCommand" oor:type="xs:string" oor:nillable="false">
             <info>
-              <desc>Specifies the class paths where to find JDBC database drivers. The node name specifies the name
-                    of the JDBC driver which is to be loaded.</desc>
+              <desc>Specifies the evolution full path exporting command name.</desc>
             </info>
-          </set>
+            <value/>
+            <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+          </prop>
         </group>
-
-		<set oor:name="RegisteredNames" oor:node-type="DatabaseDocumentRegistration">
-			<info>
-				<desc>Specifies the database documents registered within OpenOffice.org, for quick access by a programmatic name.</desc>
-			</info>
-		</set>
-
-		<set oor:name="UserDefinedDriverSettings" oor:node-type="UserDefinedDriver">
-			<info>
-				<desc>Contains a list of descriptions for user defined drivers.</desc>
-			</info>
-		</set>
-
-		<group oor:name="AddressBook">
-			<info>
-				<desc>Specifies the data source that can be used as an AddressBook.</desc>
-			</info>
-			<prop oor:name="DataSourceName" oor:type="xs:string" oor:nillable="false">
-				<info>
-					<desc>Specifies the name of the registered data source.</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="Command" oor:type="xs:string" oor:nillable="false">
-				<info>
-					<desc>Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="CommandType" oor:type="xs:short">
-				<info>
-					<desc>Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
-				</info>
-			</prop>
-			<prop oor:name="AutoPilotCompleted" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies if the auto pilot is completed.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<set oor:name="Fields" oor:node-type="FieldAssignment">
-				<info>
-					<desc>Specifies the column name mapping between the programatic column name and the logical column name.</desc>
-				</info>
-			</set>
-		</group>
-
-		<group oor:name="Bibliography">
-			<info>
-				<desc>Specifies settings of the bibliography component</desc>
-			</info>
-			<prop oor:name="BeamerHeight" oor:type="xs:int">
-				<info>
-					<desc>Specifies the height of the database beamer</desc>
-				</info>
-			</prop>
-			<prop oor:name="ViewHeight" oor:type="xs:int">
-				<info>
-					<desc>Specifies the height of the view window</desc>
-				</info>
-			</prop>
-			<prop oor:name="QueryText" oor:type="xs:string" oor:nillable="false">
-				<info>
-					<desc>Specifies the search text for filtering</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="QueryField" oor:type="xs:string" oor:nillable="false">
-				<info>
-					<desc>Specifies the search field for filtering</desc>
-				</info>
-				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-			</prop>
-			<prop oor:name="ShowColumnAssignmentWarning" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Determines whether a non-assigned column results in a warning box.</desc>
-				</info>
-				<value>true</value>
-			</prop>
-			<node-ref oor:name="CurrentDataSource" oor:node-type="DataSource">
-				<!-- OldPath: Bibliography/BibliographyCurrent-->
-				<!-- OldLocation: Soffice.ini-->
-				<info>
-					<desc>Determines the current data source for the bibliography.</desc>
-				</info>
-			</node-ref>
-			<set oor:name="DataSourceHistory" oor:node-type="DataSource">
-				<!--OldPath: Bibliography/Bibliography-->
-				<!--OldLocation: Soffice.ini-->
-				<info>
-					<desc>Specifies the data source that can be used as a bibliography.</desc>
-				</info>
-			</set>
-		</group>
-
-		<group oor:name="DriverSettings">
-			<info>
-				<desc>Specifies the driver settings that are used.</desc>
-			</info>
-
-			<group oor:name="com.sun.star.comp.sdbc.MozabDriver">
-				<info>
-					<desc>Specifies the driver settings for the mozilla database driver.</desc>
-				</info>
-				<group oor:name="MozillaPreferences">
-					<info>
-						<desc>Specifies the mozilla preferences.</desc>
-					</info>
-					<prop oor:name="ProfileName" oor:type="xs:string" oor:nillable="false">
-						<info>
-							<desc>Specifies the mozilla profile name.</desc>
-						</info>
-						<value/>
-						<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-					</prop>
-					<prop oor:name="PabDescription" oor:type="xs:string" oor:localized="true" oor:nillable="false">
-						<info>
-							<desc>Describes the name of the table which the Mozilla Personal Address Book is mapped to</desc>
-						</info>
-						<value/>
-					</prop>
-					<prop oor:name="HisDescription" oor:type="xs:string" oor:localized="true" oor:nillable="false">
-						<info>
-							<desc>Describes the name of the table which the Mozilla Collected Addresses is mapped to</desc>
-						</info>
-						<value/>
-					</prop>
-				</group>
-				<group oor:name="ColumnAliases">
-					<info>
-						<desc>Specifies the column alias names used.</desc>
-					</info>
-					<prop oor:name="FirstName" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the first name.</desc>
-						</info>
-					</prop>
-					<prop oor:name="LastName" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the last name.</desc>
-						</info>
-					</prop>
-					<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the display name.</desc>
-						</info>
-					</prop>
-					<prop oor:name="NickName" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the nickname.</desc>
-						</info>
-					</prop>
-					<prop oor:name="PrimaryEmail" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the primary email.</desc>
-						</info>
-					</prop>
-					<prop oor:name="SecondEmail" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the first name.</desc>
-						</info>
-					</prop>
-					<prop oor:name="PreferMailFormat" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the preferred mail format.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkPhone" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the phone at work.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomePhone" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the phone at home.</desc>
-						</info>
-					</prop>
-					<prop oor:name="FaxNumber" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the fax number.</desc>
-						</info>
-					</prop>
-					<prop oor:name="PagerNumber" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the pager number.</desc>
-						</info>
-					</prop>
-					<prop oor:name="CellularNumber" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the cellular number.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeAddress" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the home address.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeAddress2" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the 2nd home address.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeCity" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the home city.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeState" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the home state.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeZipCode" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the home ZIP code.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeCountry" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the home country.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkAddress" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the work address.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkAddress2" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the 2nd work address.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkCity" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the work city.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkState" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the work state.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkZipCode" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the work ZIP code.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkCountry" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the work country.</desc>
-						</info>
-					</prop>
-					<prop oor:name="JobTitle" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the job title.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Department" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the department.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Company" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the company.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WebPage1" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the 1st webpage.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WebPage2" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the 2nd webpage.</desc>
-						</info>
-					</prop>
-					<prop oor:name="BirthYear" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the birth year.</desc>
-						</info>
-					</prop>
-					<prop oor:name="BirthMonth" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the birth month.</desc>
-						</info>
-					</prop>
-					<prop oor:name="BirthDay" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the birth day.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Custom1" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the 1st custom field.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Custom2" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the 2nd custom field.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Custom3" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the 3rd custom field.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Custom4" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the 4th custom field.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Notes" oor:type="xs:string" oor:localized="true">
-						<info>
-							<desc>Specifies the notes.</desc>
-						</info>
-					</prop>
-				</group>
-			</group>
-
-			<group oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver">
-				<info>
-					<desc>Specifies the driver settings for the evolution database driver.</desc>
-				</info>
-				<group oor:name="EvolutionPreferences">
-					<info>
-						<desc>Specifies the evolution preferences.</desc>
-					</info>
-					<prop oor:name="FullPathExportingCommand" oor:type="xs:string" oor:nillable="false">
-						<info>
-							<desc>Specifies the evolution full path exporting command name.</desc>
-						</info>
-						<value/>
-						<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-					</prop>
-				</group>
-				<group oor:name="ColumnAliases">
-					<info>
-						<desc>Specifies the column alias names used.</desc>
-					</info>
-					<prop oor:name="FirstName" oor:type="xs:string">
-						<info>
-							<desc>Specifies the first name.</desc>
-						</info>
-					</prop>
-					<prop oor:name="LastName" oor:type="xs:string">
-						<info>
-							<desc>Specifies the last name.</desc>
-						</info>
-					</prop>
-					<prop oor:name="DisplayName" oor:type="xs:string">
-						<info>
-							<desc>Specifies the display name.</desc>
-						</info>
-					</prop>
-					<prop oor:name="NickName" oor:type="xs:string">
-						<info>
-							<desc>Specifies the nickname.</desc>
-						</info>
-					</prop>
-					<prop oor:name="PrimaryEmail" oor:type="xs:string">
-						<info>
-							<desc>Specifies the primary email.</desc>
-						</info>
-					</prop>
-					<prop oor:name="SecondEmail" oor:type="xs:string">
-						<info>
-							<desc>Specifies the first name.</desc>
-						</info>
-					</prop>
-					<prop oor:name="PreferMailFormat" oor:type="xs:string">
-						<info>
-							<desc>Specifies the perfered mail format.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkPhone" oor:type="xs:string">
-						<info>
-							<desc>Specifies the phone at work.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomePhone" oor:type="xs:string">
-						<info>
-							<desc>Specifies the phone at home.</desc>
-						</info>
-					</prop>
-					<prop oor:name="FaxNumber" oor:type="xs:string">
-						<info>
-							<desc>Specifies the fax number.</desc>
-						</info>
-					</prop>
-					<prop oor:name="PagerNumber" oor:type="xs:string">
-						<info>
-							<desc>Specifies the pager number.</desc>
-						</info>
-					</prop>
-					<prop oor:name="CellularNumber" oor:type="xs:string">
-						<info>
-							<desc>Specifies the cellular number.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeAddress" oor:type="xs:string">
-						<info>
-							<desc>Specifies the home address.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeAddress2" oor:type="xs:string">
-						<info>
-							<desc>Specifies the 2nd home address.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeCity" oor:type="xs:string">
-						<info>
-							<desc>Specifies the home city.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeState" oor:type="xs:string">
-						<info>
-							<desc>Specifies the home state.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeZipCode" oor:type="xs:string">
-						<info>
-							<desc>Specifies the home ZIP code.</desc>
-						</info>
-					</prop>
-					<prop oor:name="HomeCountry" oor:type="xs:string">
-						<info>
-							<desc>Specifies the home country.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkAddress" oor:type="xs:string">
-						<info>
-							<desc>Specifies the work address.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkAddress2" oor:type="xs:string">
-						<info>
-							<desc>Specifies the 2nd work address.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkCity" oor:type="xs:string">
-						<info>
-							<desc>Specifies the work city.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkState" oor:type="xs:string">
-						<info>
-							<desc>Specifies the work state.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkZipCode" oor:type="xs:string">
-						<info>
-							<desc>Specifies the work ZIP code.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WorkCountry" oor:type="xs:string">
-						<info>
-							<desc>Specifies the work country.</desc>
-						</info>
-					</prop>
-					<prop oor:name="JobTitle" oor:type="xs:string">
-						<info>
-							<desc>Specifies the job title.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Department" oor:type="xs:string">
-						<info>
-							<desc>Specifies the department.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Company" oor:type="xs:string">
-						<info>
-							<desc>Specifies the company.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WebPage1" oor:type="xs:string">
-						<info>
-							<desc>Specifies the 1st webpage.</desc>
-						</info>
-					</prop>
-					<prop oor:name="WebPage2" oor:type="xs:string">
-						<info>
-							<desc>Specifies the 2nd webpage.</desc>
-						</info>
-					</prop>
-					<prop oor:name="BirthYear" oor:type="xs:string">
-						<info>
-							<desc>Specifies the birth year.</desc>
-						</info>
-					</prop>
-					<prop oor:name="BirthMonth" oor:type="xs:string">
-						<info>
-							<desc>Specifies the birth month.</desc>
-						</info>
-					</prop>
-					<prop oor:name="BirthDay" oor:type="xs:string">
-						<info>
-							<desc>Specifies the birth day.</desc>
-						</info>
-					</prop>
-					<prop oor:name="Notes" oor:type="xs:string">
-						<info>
-							<desc>Specifies the notes.</desc>
-						</info>
-					</prop>
-				</group>
-			</group>
-
-            <group oor:name="com.sun.star.comp.sdbc.kab.Driver">
-                <info>
-                    <desc>Specifies the driver settings for the mozilla database driver.</desc>
-                </info>
-                <prop oor:name="DisableKDEMaximumVersionCheck" oor:type="xs:boolean" oor:nillable="false">
-                    <info>
-                        <desc>At runtime, the driver checks if the installed KDE version is too new to be supported.
-                              In this case, it refuses creating connections. With the setting here, this check can
-                              be disabled (which might do anything from simply work to crash).</desc>
-                    </info>
-                    <value>false</value>
-                </prop>
-            </group>
-
-            <group oor:name="com.sun.star.sdbcx.comp.hsqldb.Driver">
-                <info>
-                    <desc>Specifies settings for the driver accessing HSQL databases embedded into OpenOffice.org
-                          database documents (.odb)</desc>
-                </info>
-                <group oor:name="PermittedJavaMethods" oor:extensible="true">
-                    <info>
-                        <desc>HSQLDB features calling Java code directly from SQL statements. For security
-                              reasons, this is restricted to classes from the org.hsqldb.Library package,
-                              the java.lang.math package, plus any methods specified in this configuraton
-                              setting. If a method specification ends with .*, then all methods
-                              from the respectiv package are permitted.</desc>
-                    </info>
-                </group>
-            </group>
-
+        <group oor:name="ColumnAliases">
+          <info>
+            <desc>Specifies the column alias names used.</desc>
+          </info>
+          <prop oor:name="FirstName" oor:type="xs:string">
+            <info>
+              <desc>Specifies the first name.</desc>
+            </info>
+          </prop>
+          <prop oor:name="LastName" oor:type="xs:string">
+            <info>
+              <desc>Specifies the last name.</desc>
+            </info>
+          </prop>
+          <prop oor:name="DisplayName" oor:type="xs:string">
+            <info>
+              <desc>Specifies the display name.</desc>
+            </info>
+          </prop>
+          <prop oor:name="NickName" oor:type="xs:string">
+            <info>
+              <desc>Specifies the nickname.</desc>
+            </info>
+          </prop>
+          <prop oor:name="PrimaryEmail" oor:type="xs:string">
+            <info>
+              <desc>Specifies the primary email.</desc>
+            </info>
+          </prop>
+          <prop oor:name="SecondEmail" oor:type="xs:string">
+            <info>
+              <desc>Specifies the first name.</desc>
+            </info>
+          </prop>
+          <prop oor:name="PreferMailFormat" oor:type="xs:string">
+            <info>
+              <desc>Specifies the perfered mail format.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkPhone" oor:type="xs:string">
+            <info>
+              <desc>Specifies the phone at work.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomePhone" oor:type="xs:string">
+            <info>
+              <desc>Specifies the phone at home.</desc>
+            </info>
+          </prop>
+          <prop oor:name="FaxNumber" oor:type="xs:string">
+            <info>
+              <desc>Specifies the fax number.</desc>
+            </info>
+          </prop>
+          <prop oor:name="PagerNumber" oor:type="xs:string">
+            <info>
+              <desc>Specifies the pager number.</desc>
+            </info>
+          </prop>
+          <prop oor:name="CellularNumber" oor:type="xs:string">
+            <info>
+              <desc>Specifies the cellular number.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeAddress" oor:type="xs:string">
+            <info>
+              <desc>Specifies the home address.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeAddress2" oor:type="xs:string">
+            <info>
+              <desc>Specifies the 2nd home address.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeCity" oor:type="xs:string">
+            <info>
+              <desc>Specifies the home city.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeState" oor:type="xs:string">
+            <info>
+              <desc>Specifies the home state.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeZipCode" oor:type="xs:string">
+            <info>
+              <desc>Specifies the home ZIP code.</desc>
+            </info>
+          </prop>
+          <prop oor:name="HomeCountry" oor:type="xs:string">
+            <info>
+              <desc>Specifies the home country.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkAddress" oor:type="xs:string">
+            <info>
+              <desc>Specifies the work address.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkAddress2" oor:type="xs:string">
+            <info>
+              <desc>Specifies the 2nd work address.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkCity" oor:type="xs:string">
+            <info>
+              <desc>Specifies the work city.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkState" oor:type="xs:string">
+            <info>
+              <desc>Specifies the work state.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkZipCode" oor:type="xs:string">
+            <info>
+              <desc>Specifies the work ZIP code.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WorkCountry" oor:type="xs:string">
+            <info>
+              <desc>Specifies the work country.</desc>
+            </info>
+          </prop>
+          <prop oor:name="JobTitle" oor:type="xs:string">
+            <info>
+              <desc>Specifies the job title.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Department" oor:type="xs:string">
+            <info>
+              <desc>Specifies the department.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Company" oor:type="xs:string">
+            <info>
+              <desc>Specifies the company.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WebPage1" oor:type="xs:string">
+            <info>
+              <desc>Specifies the 1st webpage.</desc>
+            </info>
+          </prop>
+          <prop oor:name="WebPage2" oor:type="xs:string">
+            <info>
+              <desc>Specifies the 2nd webpage.</desc>
+            </info>
+          </prop>
+          <prop oor:name="BirthYear" oor:type="xs:string">
+            <info>
+              <desc>Specifies the birth year.</desc>
+            </info>
+          </prop>
+          <prop oor:name="BirthMonth" oor:type="xs:string">
+            <info>
+              <desc>Specifies the birth month.</desc>
+            </info>
+          </prop>
+          <prop oor:name="BirthDay" oor:type="xs:string">
+            <info>
+              <desc>Specifies the birth day.</desc>
+            </info>
+          </prop>
+          <prop oor:name="Notes" oor:type="xs:string">
+            <info>
+              <desc>Specifies the notes.</desc>
+            </info>
+          </prop>
         </group>
-
-		<group oor:name="FormSearchOptions">
-			<info>
-				<desc>Specifies the options for searching in forms.</desc>
-			</info>
-			<prop oor:name="SearchType" oor:type="xs:string" oor:nillable="false">
-				<info>
-					<desc>Specifies the search type.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="text">
-						<info>
-							<desc>Search for text</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="null">
-						<info>
-							<desc>Search for NULL</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="non-null">
-						<info>
-							<desc>Search for non-NULL</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				<value>text</value>
-			</prop>
-			<prop oor:name="SearchPosition" oor:type="xs:string" oor:nillable="false">
-				<info>
-					<desc>Specifies the search position.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="anywhere-in-field">
-						<info>
-							<desc>Anywhere</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="beginning-of-field">
-						<info>
-							<desc>Beginning</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="end-of-field">
-						<info>
-							<desc>End</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="complete-field">
-						<info>
-							<desc>Complete</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				<value>anywhere-in-field</value>
-			</prop>
-			<prop oor:name="SearchHistory" oor:type="oor:string-list">
-				<info>
-					<desc>Contains a list of the previous search strings.</desc>
-				</info>
-			</prop>
-			<prop oor:name="IsSearchAllFields" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies if all fields should be searched.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="IsUseFormatter" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies that the formatter should be used.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="IsBackwards" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies that the search starts backward.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="IsWildcardSearch" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies that the search contains wildcards.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="IsUseRegularExpression" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies that regular expressions should be used.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="IsSimilaritySearch" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies that the similarity search should be used.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="IsLevenshteinRelaxed" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies that the similarity search should be combined.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="LevenshteinOther" oor:type="xs:short" oor:nillable="false">
-				<info>
-					<desc>Specifies the number of characters that can be exchanged while searching for similarity.</desc>
-				</info>
-				<value>2</value>
-			</prop>
-			<prop oor:name="LevenshteinShorter" oor:type="xs:short" oor:nillable="false">
-				<info>
-					<desc>Specifies the number of characters that can be deleted while searching for similarity.</desc>
-				</info>
-				<value>2</value>
-			</prop>
-			<prop oor:name="LevenshteinLonger" oor:type="xs:short" oor:nillable="false">
-				<info>
-					<desc>Specifies the number of characters that can be added while searching for similarity.</desc>
-				</info>
-				<value>2</value>
-			</prop>
-			<prop oor:name="IsMatchCase" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies that the searched value should match.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="IsUseAsianOptions" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies that the Asian options for search should be used.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<group oor:name="Japanese">
-				<info>
-					<desc>Specifies the Japanese options for searching.</desc>
-				</info>
-				<prop oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the MatchFullHalfWidthForms search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatchHiraganaKatakana" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the MatchHiraganaKatakana search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatchContractions" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the MatchContractions search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatchMinusDashCho-on" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the MatchMinusDashCho-on search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatchRepeatCharMarks" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the MatchRepeatCharMarks search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatchVariantFormKanji" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the MatchVariantFormKanji search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatchOldKanaForms" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the MatchOldKanaForms search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatch_DiZi_DuZu" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the Match_DiZi_DuZu search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatch_BaVa_HaFa" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the Match_BaVa_HaFa search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatch_TsiThiChi_DhiZi" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the Match_TsiThiChi_DhiZi search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatch_HyuIyu_ByuVyu" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the Match_HyuIyu_ByuVyu search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatch_SeShe_ZeJe" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the Match_SeShe_ZeJe search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatch_IaIya" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the Match_IaIya search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsMatch_KiKu" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the Match_KiKu search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsIgnorePunctuation" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the IgnorePunctuation search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsIgnoreWhitespace" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the IgnoreWhitespace search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsIgnoreProlongedSoundMark" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the IgnoreProlongedSoundMark search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="IsIgnoreMiddleDot" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the IgnoreMiddleDot search option is enabled.</desc>
-					</info>
-					<value>true</value>
-				</prop>
-			</group>
-		</group>
-	</component>
+      </group>
+      <group oor:name="com.sun.star.comp.sdbc.kab.Driver">
+        <info>
+          <desc>Specifies the driver settings for the mozilla database driver.</desc>
+        </info>
+        <prop oor:name="DisableKDEMaximumVersionCheck" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>At runtime, the driver checks if the installed KDE version is too new to be supported.
+              In this case, it refuses creating connections. With the setting here, this check can
+              be disabled (which might do anything from simply work to crash).</desc>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="com.sun.star.sdbcx.comp.hsqldb.Driver">
+        <info>
+          <desc>Specifies settings for the driver accessing HSQL databases embedded into OpenOffice.org
+            database documents (.odb)</desc>
+        </info>
+        <group oor:name="PermittedJavaMethods" oor:extensible="true">
+          <info>
+            <desc>HSQLDB features calling Java code directly from SQL statements. For security
+              reasons, this is restricted to classes from the org.hsqldb.Library package,
+              the java.lang.math package, plus any methods specified in this configuraton
+              setting. If a method specification ends with .*, then all methods
+              from the respectiv package are permitted.</desc>
+          </info>
+        </group>
+      </group>
+    </group>
+    <group oor:name="FormSearchOptions">
+      <info>
+        <desc>Specifies the options for searching in forms.</desc>
+      </info>
+      <prop oor:name="SearchType" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the search type.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="text">
+            <info>
+              <desc>Search for text</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="null">
+            <info>
+              <desc>Search for NULL</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="non-null">
+            <info>
+              <desc>Search for non-NULL</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>text</value>
+      </prop>
+      <prop oor:name="SearchPosition" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the search position.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="anywhere-in-field">
+            <info>
+              <desc>Anywhere</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="beginning-of-field">
+            <info>
+              <desc>Beginning</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="end-of-field">
+            <info>
+              <desc>End</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="complete-field">
+            <info>
+              <desc>Complete</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>anywhere-in-field</value>
+      </prop>
+      <prop oor:name="SearchHistory" oor:type="oor:string-list">
+        <info>
+          <desc>Contains a list of the previous search strings.</desc>
+        </info>
+      </prop>
+      <prop oor:name="IsSearchAllFields" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if all fields should be searched.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsUseFormatter" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that the formatter should be used.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsBackwards" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that the search starts backward.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsWildcardSearch" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that the search contains wildcards.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsUseRegularExpression" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that regular expressions should be used.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsSimilaritySearch" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that the similarity search should be used.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsLevenshteinRelaxed" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that the similarity search should be combined.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="LevenshteinOther" oor:type="xs:short" oor:nillable="false">
+        <info>
+          <desc>Specifies the number of characters that can be exchanged while searching for similarity.</desc>
+        </info>
+        <value>2</value>
+      </prop>
+      <prop oor:name="LevenshteinShorter" oor:type="xs:short" oor:nillable="false">
+        <info>
+          <desc>Specifies the number of characters that can be deleted while searching for similarity.</desc>
+        </info>
+        <value>2</value>
+      </prop>
+      <prop oor:name="LevenshteinLonger" oor:type="xs:short" oor:nillable="false">
+        <info>
+          <desc>Specifies the number of characters that can be added while searching for similarity.</desc>
+        </info>
+        <value>2</value>
+      </prop>
+      <prop oor:name="IsMatchCase" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that the searched value should match.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="IsUseAsianOptions" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies that the Asian options for search should be used.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <group oor:name="Japanese">
+        <info>
+          <desc>Specifies the Japanese options for searching.</desc>
+        </info>
+        <prop oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the MatchFullHalfWidthForms search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchHiraganaKatakana" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the MatchHiraganaKatakana search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchContractions" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the MatchContractions search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchMinusDashCho-on" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the MatchMinusDashCho-on search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchRepeatCharMarks" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the MatchRepeatCharMarks search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchVariantFormKanji" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the MatchVariantFormKanji search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatchOldKanaForms" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the MatchOldKanaForms search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_DiZi_DuZu" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the Match_DiZi_DuZu search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_BaVa_HaFa" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the Match_BaVa_HaFa search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_TsiThiChi_DhiZi" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the Match_TsiThiChi_DhiZi search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_HyuIyu_ByuVyu" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the Match_HyuIyu_ByuVyu search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_SeShe_ZeJe" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the Match_SeShe_ZeJe search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_IaIya" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the Match_IaIya search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsMatch_KiKu" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the Match_KiKu search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsIgnorePunctuation" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the IgnorePunctuation search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsIgnoreWhitespace" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the IgnoreWhitespace search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsIgnoreProlongedSoundMark" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the IgnoreProlongedSoundMark search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="IsIgnoreMiddleDot" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the IgnoreMiddleDot search option is enabled.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+    </group>
+  </component>
 </oor:component-schema>
