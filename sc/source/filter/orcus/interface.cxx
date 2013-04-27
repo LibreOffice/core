@@ -24,9 +24,7 @@
 
 using namespace com::sun::star;
 
-using orcus::spreadsheet::row_t;
-using orcus::spreadsheet::col_t;
-using orcus::spreadsheet::formula_grammar_t;
+namespace os = orcus::spreadsheet;
 
 ScOrcusGlobalSettings::ScOrcusGlobalSettings(ScDocumentImport& rDoc) : mrDoc(rDoc) {}
 
@@ -188,14 +186,14 @@ void ScOrcusSheet::cellInserted()
     }
 }
 
-void ScOrcusSheet::set_auto(row_t row, col_t col, const char* p, size_t n)
+void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t n)
 {
     OUString aVal(p, n, RTL_TEXTENCODING_UTF8);
     mrDoc.setAutoInput(ScAddress(col, row, mnTab), aVal);
     cellInserted();
 }
 
-void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
+void ScOrcusSheet::set_string(os::row_t row, os::col_t col, size_t sindex)
 {
     // We need to defer string cells since the shared string pool is not yet
     // populated at the time this method is called.  Orcus imports string
@@ -206,20 +204,20 @@ void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
     cellInserted();
 }
 
-void ScOrcusSheet::set_value(row_t row, col_t col, double value)
+void ScOrcusSheet::set_value(os::row_t row, os::col_t col, double value)
 {
     mrDoc.setNumericCell(ScAddress(col, row, mnTab), value);
     cellInserted();
 }
 
-void ScOrcusSheet::set_bool(row_t row, col_t col, bool value)
+void ScOrcusSheet::set_bool(os::row_t row, os::col_t col, bool value)
 {
     mrDoc.setNumericCell(ScAddress(col, row, mnTab), value ? 1.0 : 0.0);
     cellInserted();
 }
 
 void ScOrcusSheet::set_date_time(
-    row_t row, col_t col, int year, int month, int day, int hour, int minute, double second)
+    os::row_t row, os::col_t col, int year, int month, int day, int hour, int minute, double second)
 {
     SvNumberFormatter* pFormatter = mrDoc.getDoc().GetFormatTable();
 
@@ -242,13 +240,13 @@ void ScOrcusSheet::set_date_time(
     cellInserted();
 }
 
-void ScOrcusSheet::set_format(row_t /*row*/, col_t /*col*/, size_t /*xf_index*/)
+void ScOrcusSheet::set_format(os::row_t /*row*/, os::col_t /*col*/, size_t /*xf_index*/)
 {
 }
 
 namespace {
 
-formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( formula_grammar_t grammar )
+formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t grammar )
 {
     formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
     switch(grammar)
@@ -271,7 +269,7 @@ formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( formula_grammar_t gram
 }
 
 void ScOrcusSheet::set_formula(
-    row_t row, col_t col, formula_grammar_t grammar, const char* p, size_t n)
+    os::row_t row, os::col_t col, os::formula_grammar_t grammar, const char* p, size_t n)
 {
     OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
     formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
@@ -279,7 +277,7 @@ void ScOrcusSheet::set_formula(
     cellInserted();
 }
 
-void ScOrcusSheet::set_formula_result(row_t row, col_t col, const char* p, size_t n)
+void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, const char* p, size_t n)
 {
     ScFormulaCell* pCell = mrDoc.getDoc().GetFormulaCell(ScAddress(col, row, mnTab));
     if (!pCell)
@@ -293,7 +291,7 @@ void ScOrcusSheet::set_formula_result(row_t row, col_t col, const char* p, size_
 }
 
 void ScOrcusSheet::set_shared_formula(
-    row_t row, col_t col, formula_grammar_t grammar, size_t sindex,
+    os::row_t row, os::col_t col, os::formula_grammar_t grammar, size_t sindex,
     const char* p_formula, size_t n_formula)
 {
     OUString aFormula( p_formula, n_formula, RTL_TEXTENCODING_UTF8 );
@@ -314,7 +312,7 @@ void ScOrcusSheet::set_shared_formula(
 }
 
 void ScOrcusSheet::set_shared_formula(
-    row_t row, col_t col, formula_grammar_t grammar, size_t sindex,
+    os::row_t row, os::col_t col, os::formula_grammar_t grammar, size_t sindex,
     const char* p_formula, size_t n_formula, const char* /*p_range*/, size_t /*n_range*/)
 {
     OUString aFormula( p_formula, n_formula, RTL_TEXTENCODING_UTF8 );
@@ -334,7 +332,7 @@ void ScOrcusSheet::set_shared_formula(
     }
 }
 
-void ScOrcusSheet::set_shared_formula(row_t row, col_t col, size_t sindex)
+void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sindex)
 {
     if(maSharedFormulas.find(sindex) == maSharedFormulas.end())
         return;
@@ -347,13 +345,13 @@ void ScOrcusSheet::set_shared_formula(row_t row, col_t col, size_t sindex)
 }
 
 void ScOrcusSheet::set_array_formula(
-    row_t /*row*/, col_t /*col*/, formula_grammar_t /*grammar*/,
-    const char* /*p*/, size_t /*n*/, row_t /*array_rows*/, col_t /*array_cols*/)
+    os::row_t /*row*/, os::col_t /*col*/, os::formula_grammar_t /*grammar*/,
+    const char* /*p*/, size_t /*n*/, os::row_t /*array_rows*/, os::col_t /*array_cols*/)
 {
 }
 
 void ScOrcusSheet::set_array_formula(
-    row_t /*row*/, col_t /*col*/, formula_grammar_t /*grammar*/,
+    os::row_t /*row*/, os::col_t /*col*/, os::formula_grammar_t /*grammar*/,
     const char* /*p*/, size_t /*n*/, const char* /*p_range*/, size_t /*n_range*/)
 {
 }
