@@ -49,7 +49,12 @@
 
 ServerFontLayout::ServerFontLayout( ServerFont& rFont )
 :   mrServerFont( rFont )
-{}
+{
+    bUseHarfBuzz = false;
+#if ENABLE_HARFBUZZ
+    bUseHarfBuzz = (getenv("SAL_USE_HARFBUZZ") != NULL);
+#endif
+}
 
 void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
 {
@@ -60,7 +65,7 @@ void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    ServerFontLayoutEngine* pLE = mrServerFont.GetLayoutEngine();
+    ServerFontLayoutEngine* pLE = mrServerFont.GetLayoutEngine(bUseHarfBuzz);
     assert(pLE);
     bool bRet = pLE ? pLE->layout(*this, rArgs) : false;
     return bRet;
@@ -70,9 +75,8 @@ bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 long ServerFontLayout::GetTextWidth() const
 {
     long nWidth;
-#if ENABLE_HARFBUZZ
-    const char* pUseHarfBuzz = getenv("SAL_USE_HARFBUZZ");
-    if (pUseHarfBuzz) {
+    if (bUseHarfBuzz)
+    {
         GlyphVector aGlyphItems = GenericSalLayout::GetGlyphItems();
 
         if( aGlyphItems.empty() )
@@ -96,8 +100,10 @@ long ServerFontLayout::GetTextWidth() const
         nWidth = nMaxPos - nMinPos;
     }
     else
-#endif
-    nWidth = GenericSalLayout::GetTextWidth();
+    {
+        nWidth = GenericSalLayout::GetTextWidth();
+    }
+
     return nWidth;
 }
 
@@ -126,14 +132,11 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
 void ServerFontLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 {
-#if ENABLE_HARFBUZZ
     // No idea what issue ApplyDXArray() was supposed to fix, but whatever
     // GenericSalLayout::ApplyDXArray() does it just breaks our perfectly
     // positioned text.
-    const char* pUseHarfBuzz = getenv("SAL_USE_HARFBUZZ");
-    if (!pUseHarfBuzz)
-#endif
-    GenericSalLayout::ApplyDXArray(rArgs);
+    if (!bUseHarfBuzz)
+        GenericSalLayout::ApplyDXArray(rArgs);
 }
 
 // =======================================================================
@@ -1160,13 +1163,12 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
 // =======================================================================
 
-ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
+ServerFontLayoutEngine* ServerFont::GetLayoutEngine(bool bUseHarfBuzz)
 {
     // find best layout engine for font, platform, script and language
     if (!mpLayoutEngine) {
 #if ENABLE_HARFBUZZ
-        const char* pUseHarfBuzz = getenv("SAL_USE_HARFBUZZ");
-        if (pUseHarfBuzz)
+        if (bUseHarfBuzz)
             mpLayoutEngine = new HbLayoutEngine(*this);
         else
 #endif

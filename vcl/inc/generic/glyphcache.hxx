@@ -240,7 +240,7 @@ private:
     int                 ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
     bool                ApplyGSUB( const FontSelectPattern& );
 
-    ServerFontLayoutEngine* GetLayoutEngine();
+    ServerFontLayoutEngine* GetLayoutEngine( bool );
 
     typedef ::boost::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList           maGlyphList;
@@ -317,6 +317,8 @@ private:
     // enforce proper copy semantic
     SAL_DLLPRIVATE  ServerFontLayout( const ServerFontLayout& );
     SAL_DLLPRIVATE  ServerFontLayout& operator=( const ServerFontLayout& );
+
+    bool            bUseHarfBuzz;
 
 public:
                     ServerFontLayout( ServerFont& );
