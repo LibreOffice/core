@@ -1,0 +1,13 @@
+= This file is part of the LibreOffice project.
+=
+= This Source Code Form is subject to the terms of the Mozilla Public
+= License, v. 2.0. If a copy of the MPL was not distributed with this
+= file, You can obtain one at http://mozilla.org/MPL/2.0/.
+=
+
+[Bootstrap]
+URE_INTERNAL_LIB_DIR=${ORIGIN}
+URE_INTERNAL_JAVA_DIR=${ORIGIN}../share/java
+URE_INTERNAL_JAVA_CLASSPATH=${URE_MORE_JAVA_TYPES}
+UNO_TYPES=${ORIGIN}/../share/misc/types.rdb ${URE_MORE_TYPES}
+UNO_SERVICES=${ORIGIN}/../share/misc/services.rdb ${URE_MORE_SERVICES}
