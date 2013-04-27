@@ -46,7 +46,7 @@
     describing its tables, its supported SQL grammar, its stored
     procedures, and the capabilities of this connection. This
     information is obtained with the
-    <member scope="com::sun::star::sdbc">XDatabaseMetaData::getMetaData()</member>
+    com::sun::star::sdbc::XDatabaseMetaData::getMetaData()
     method.
 
     </p>
@@ -189,9 +189,9 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         transactions. Otherwise, its SQL statements are grouped into
         transactions that are terminated by a call to either
         the method
-        <member scope="com::sun::star::sdbc">XConnection::commit()</member>
+        com::sun::star::sdbc::XConnection::commit()
         or the method
-        <member scope="com::sun::star::sdbc">XConnection::rollback()</member>
+        com::sun::star::sdbc::XConnection::rollback()
         .
         By default, new connections are in auto-commit mode.
         </p>

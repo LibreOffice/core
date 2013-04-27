@@ -39,16 +39,16 @@
     You can use the normal com::sun::star::sdbc::XRow
     (or com::sun::star::sdb::XColumn)
     methods such as
-    <member scope="com::sun::star::sdbc">XRow::getString()</member>
+    com::sun::star::sdbc::XRow::getString()
     and
-    <member scope="com::sun::star::sdbc">XRow::getInt()</member>
+    com::sun::star::sdbc::XRow::getInt()
     to retrieve the data from these XResultSets. If a given form of
     metadata is not available, these methods should throw a
     com::sun::star::sdbc::SQLException
     .
     After calling one of the getXXX() methods,
     one can check whether that value is <NULL/>
-    with the method <member scope="com::sun::star::sdbc">XRow::wasNull()</member>.
+    with the method com::sun::star::sdbc::XRow::wasNull().
     In the text only "(may be <NULL/>)" is mentioned for this case.
     </p>
     <p>Some of these methods take arguments that are String patterns. These
@@ -1002,7 +1002,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** support the Database transactions?
         If not, invoking the method
-        <member scope="com::sun::star::sdbc">XConnection::commit()</member>
+        com::sun::star::sdbc::XConnection::commit()
         is a noop and the
         isolation level is TransactionIsolation_NONE.
         @returns
@@ -2345,7 +2345,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** indicates whether or not a visible row delete can be detected by
         calling
-        <member scope="com::sun::star::sdbc">XResultSet::rowDeleted()</member>
+        com::sun::star::sdbc::XResultSet::rowDeleted()
         . If deletesAreDetected()
         returns <FALSE/>, then deleted rows are removed from the result set.
         @param setType

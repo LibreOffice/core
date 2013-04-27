@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     intended to be a write or read operation. This is done by
     providing either instances of PropertyPutArgument or
     PropertyGetArgument as arguments to
-    <member scope="com::sun::star::script">XInvocation::Invoke</member>.
+    com::sun::star::script::XInvocation::Invoke.
 
     @since OOo 1.1.2
 */

@@ -116,7 +116,7 @@ published service UnoControlGridModel
     [property] boolean Tabstop;
 
     /** Specifies the selection mode that is enabled for this grid control.
-        <p>The default value is <member scope="com::sun::star::view">SelectionType::SINGLE</member></p>
+        <p>The default value is com::sun::star::view::SelectionType::SINGLE</p>
     */
     [property] ::com::sun::star::view::SelectionType SelectionModel;
 

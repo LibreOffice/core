@@ -32,7 +32,7 @@ published constants ProcedureResult
              in the
              com::sun::star::sdbc::XResultSet
              object returned by the method
-             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedures()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getProcedures()
              .
              <p>
              Indicates that it is not known whether the procedure returns
@@ -46,7 +46,7 @@ published constants ProcedureResult
              in the
              com::sun::star::sdbc::XResultSet
              object returned by the method
-             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedures()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getProcedures()
              .
              <p>
              Indicates that the procedure does not return
@@ -60,7 +60,7 @@ published constants ProcedureResult
              in the
              com::sun::star::sdbc::XResultSet
              object returned by the method
-             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedures()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getProcedures()
              .
              <p>
              Indicates that the procedure returns

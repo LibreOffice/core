@@ -51,7 +51,7 @@ published struct TableSortField
     /** type of contents in the field.
 
         <p>If the value is
-        <member scope="com::sun::star::table::TableSortFieldType">AUTOMATIC</member>
+        com::sun::star::table::TableSortFieldType::AUTOMATIC
         the algorithm used for sorting is application specific.
         Especially it may or may not use the values given by
         "CollatorLocale" and "CollatorAlgorithm".</p>
@@ -61,7 +61,7 @@ published struct TableSortField
     /** the locale used by the collator when comparing/sorting text.
 
         <p>This property will not be used when the "FieldType" is
-        <member scope="com::sun::star::table::TableSortFieldType">NUMERIC</member>
+        com::sun::star::table::TableSortFieldType::NUMERIC
         </p>
 
         @ see   com::sun::star::i18n::XCollator
@@ -71,7 +71,7 @@ published struct TableSortField
     /** the algorithm used by the collator when comparing/sorting text.
 
         <p>This property will not be used when the "FieldType" is
-        <member scope="com::sun::star::table::TableSortFieldType">NUMERIC</member>
+        com::sun::star::table::TableSortFieldType::NUMERIC
         </p>
 
         @ see   com::sun::star::i18n::XCollator

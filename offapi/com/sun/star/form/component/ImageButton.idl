@@ -37,7 +37,7 @@
 /** This service specifies the control model for a clickable button which
     is represented by an image.
 
-     <p>The image to be displayed is determined by <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+     <p>The image to be displayed is determined by com::sun::star::awt::UnoControlImageControlModel::ImageURL
     property specifies the URL of an image to be displayed.</p>
 
     @see CommandButton
@@ -54,7 +54,7 @@ published service ImageButton
         <p>Other components can register as com::sun::star::awt::XImageConsumer
         at this producer. Then they will be notified of any change in the image to be displayed.</p>
 
-        <p>Whenever the <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+        <p>Whenever the com::sun::star::awt::UnoControlImageControlModel::ImageURL
         property is changed, the model loads the specified image, and sets it as image source
         at its com::sun::star::awt::XImageProducer. Then, all
         com::sun::star::awt::XImageConsumers are notified and supplied with

@@ -47,20 +47,20 @@ published service Shape
 
     /** This is the color for dimming this shape.
 
-        <p>This color is used if the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
-        is <TRUE/> and <member scope="com::sun::star::drawing">Shape::DimHide</member> is <FALSE/>.</p>
+        <p>This color is used if the property com::sun::star::drawing::Shape::DimPrev
+        is <TRUE/> and com::sun::star::drawing::Shape::DimHide is <FALSE/>.</p>
      */
     [property] com::sun::star::util::Color DimColor;
 
 
-    /** If this property and the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
+    /** If this property and the property com::sun::star::drawing::Shape::DimPrev
         are both <TRUE/>, the shape is hidden instead of dimmed to a color.
      */
     [property] boolean DimHide;
 
 
     /** If this property is <TRUE/>, this shape is dimmed to the color of
-        property <member scope="com::sun::star::drawing">Shape::DimColor</member> after executing its
+        property com::sun::star::drawing::Shape::DimColor after executing its
         animation effect.
      */
     [property] boolean DimPrevious;
@@ -133,7 +133,7 @@ published service Shape
 
 
     /** specifies an "OLE2" verb for the ClickAction VERB in
-        the property <member scope="com::sun::star::drawing">Shape::OnClick</member>.
+        the property com::sun::star::drawing::Shape::OnClick.
      */
     [property] long Verb;
 

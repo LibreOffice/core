@@ -60,16 +60,16 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
 
             <p>Valid types classes are:
             <ul>
-            <li><member scope="com::sun::star::uno">TypeClass::MODULE</member>
-            <li><member scope="com::sun::star::uno">TypeClass::INTERFACE</member>
-            <li><member scope="com::sun::star::uno">TypeClass::SERVICE</member>
-            <li><member scope="com::sun::star::uno">TypeClass::STRUCT</member>
-            <li><member scope="com::sun::star::uno">TypeClass::ENUM</member>
-            <li><member scope="com::sun::star::uno">TypeClass::EXCEPTION</member>
-            <li><member scope="com::sun::star::uno">TypeClass::TYPEDEF</member>
-            <li><member scope="com::sun::star::uno">TypeClass::CONSTANT</member>
-            <li><member scope="com::sun::star::uno">TypeClass::CONSTANTS</member>
-            <li><member scope="com::sun::star::uno">TypeClass::SINGLETON</member>
+            <li>com::sun::star::uno::TypeClass::MODULE
+            <li>com::sun::star::uno::TypeClass::INTERFACE
+            <li>com::sun::star::uno::TypeClass::SERVICE
+            <li>com::sun::star::uno::TypeClass::STRUCT
+            <li>com::sun::star::uno::TypeClass::ENUM
+            <li>com::sun::star::uno::TypeClass::EXCEPTION
+            <li>com::sun::star::uno::TypeClass::TYPEDEF
+            <li>com::sun::star::uno::TypeClass::CONSTANT
+            <li>com::sun::star::uno::TypeClass::CONSTANTS
+            <li>com::sun::star::uno::TypeClass::SINGLETON
             </ul>
 
         @param depth

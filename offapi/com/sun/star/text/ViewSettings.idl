@@ -153,7 +153,7 @@ published service ViewSettings
 
     /** Defines the zoom value to use.
         Valid only if the ZoomType is set to
-        <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
+        com::sun::star::view::DocumentZoomType::BY_VALUE.
      */
     [property] short ZoomValue;
     /** If this property is <TRUE/> hyperlinks in the document are executed (loaded) on

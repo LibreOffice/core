@@ -35,7 +35,7 @@
     <p>The base service for list boxes (ListBox) offers only
     one possibility to specify the list entries:
     The display strings in the
-    <member scope="com::sun::star::awt">UnoControlListBoxModel::StringItemList</member>
+    com::sun::star::awt::UnoControlListBoxModel::StringItemList
     property and the corresponding values in the ListBox::ListSource
     property.</p>
 
@@ -74,7 +74,7 @@ published service DatabaseListBox
         be used as the value of the component. If the control is bound
         to a database field, the column value is stored in the
         database field identified by the property
-        <member scope="com::sun::star::form">DataAwareControlModel::DataField</member>.
+        com::sun::star::form::DataAwareControlModel::DataField.
 
         <dl>
             <dt>-1</dt>
@@ -90,10 +90,10 @@ published service DatabaseListBox
 
         <p>The bound column property is only used if a list source is defined
         and the list source matches with the types
-        <member scope="com::sun::star::form">ListSourceType::TABLE</member>,
-        <member scope="com::sun::star::form">ListSourceType::QUERY</member>,
-        <member scope="com::sun::star::form">ListSourceType::SQL</member> or
-        <member scope="com::sun::star::form">ListSourceType::SQLPASSTHROUGH</member>.
+        com::sun::star::form::ListSourceType::TABLE,
+        com::sun::star::form::ListSourceType::QUERY,
+        com::sun::star::form::ListSourceType::SQL or
+        com::sun::star::form::ListSourceType::SQLPASSTHROUGH.
         Otherwise the property is ignored, as there is no result set from which to
         get the column values.</p>
     */
@@ -105,32 +105,32 @@ published service DatabaseListBox
         <p>Depending on the value of this property, the way the value of ListBox::ListSource
         is evaluated varies.
             <dl>
-                <dt><member scope="com::sun::star::form">ListSourceType::VALUELIST</member></dt>
+                <dt>com::sun::star::form::ListSourceType::VALUELIST</dt>
                 <dd>The elements in the string sequence in ListBox::ListSource
                 build up the entry list.</dd>
 
-                <dt><member scope="com::sun::star::form">ListSourceType::TABLE</member></dt>
+                <dt>com::sun::star::form::ListSourceType::TABLE</dt>
                 <dd>The first element of the string sequence in ListBox::ListSource
                 determines the table which the list result set should be based on.</dd>
 
-                <dt><member scope="com::sun::star::form">ListSourceType::QUERY</member></dt>
+                <dt>com::sun::star::form::ListSourceType::QUERY</dt>
                 <dd>The first element of the string sequence in ListBox::ListSource
                 determines the query which the list result set should be based on.<br/>
                 For retrieving the query, the connection which the data form is working with
-                (<member scope="com::sun::star::sdb">RowSet::ActiveConnection</member>) is queried for
+                (com::sun::star::sdb::RowSet::ActiveConnection) is queried for
                 the com::sun::star::sdb::XQueriesSupplier interface.</dd>
 
-                <dt><member scope="com::sun::star::form">ListSourceType::SQL</member></dt>
+                <dt>com::sun::star::form::ListSourceType::SQL</dt>
                 <dd>The first element of the string sequence in ListBox::ListSource
                 contains the SQL statement which the list result set should be based on.</p>
 
-                <dt><member scope="com::sun::star::form">ListSourceType::SQLPASSTHROUGH</member></dt>
+                <dt>com::sun::star::form::ListSourceType::SQLPASSTHROUGH</dt>
                 <dd>The first element of the string sequence in ListBox::ListSource
                 contains the SQL statement which the list result set should be based on.<br/>
                 The statement is not analyzed by the parser. This means that you can use database specific
                 SQL features here, but, on the other hand, loose features like parameter value substitution.</dd>
 
-                <dt><member scope="com::sun::star::form">ListSourceType::TABLEFIELDS</member></dt>
+                <dt>com::sun::star::form::ListSourceType::TABLEFIELDS</dt>
                 <dd>The first element of the string sequence in ListBox::ListSource
                 determines the table whose column names should fill the list.</dd>
             </dl>

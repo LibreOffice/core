@@ -44,7 +44,7 @@ module com { module sun { module star { module configuration {
  </p>
  <p>An implementation is usually obtained from a
  com::sun::star::lang::ServiceManager. The arguments passed to
- <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContextAndArguments()</member>
+ com::sun::star::lang::XMultiComponentFactory::createInstanceWithContextAndArguments()
  select the configuration data source. They may also define the scope of
  administrable data or contain credentials to be used to authorize the
  administrative access. Missing parameters may be filled in
@@ -68,7 +68,7 @@ published service AdministrationProvider
  of the configuration.
 
  <p>The parameter <var>aServiceSpecifier</var> passed to
- <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
  supports at least the service specifiers
  <code>"com.sun.star.configuration.ConfigurationAccess"</code> and
  <code>"com.sun.star.configuration.ConfigurationUpdateAccess"</code>.
@@ -93,7 +93,7 @@ published service AdministrationProvider
  </p>
 
  <p>The arguments passed to
- <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
  in parameter <var>aArguments</var> specify the administrative entity for which
  data should be administered. In other words they determine the layer to which
  changes will apply. They also specify the view of that configuration that
@@ -139,11 +139,11 @@ published service AdministrationProvider
  value <code>locale = "*"</code>.
  </p>
 
- <p><member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
+ <p>com::sun::star::lang::XMultiServiceFactory::createInstance()
  may be unusable. Only an implementation that supports service names that can be
  used with no further arguments support this method. It should return the
  same result as if
- <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
  had been called using an empty sequence of arguments.
  </p>
 */
@@ -153,7 +153,7 @@ published service AdministrationProvider
 /** allows controlling or observing the lifetime of the configuration.
 
  <p>The owner of the provider may dispose of this object
- using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+ using com::sun::star::lang::XComponent::dispose().
  </p>
 
  <p>Views created by the provider generally refer to data that is managed by

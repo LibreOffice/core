@@ -46,7 +46,7 @@ published constants ColumnType
              com::sun::star::sdbc::XResultSet
              object
              returned by the method
-             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getVersionColumns()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getVersionColumns()
              .
      */
     const long NOT_PSEUDO   = 1;

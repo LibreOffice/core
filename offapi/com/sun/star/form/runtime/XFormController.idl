@@ -135,9 +135,9 @@ interface XFormControllerContext;
         <td>This is a passive functionality: It cannot be dispatched, instead, interested parties may
         use the dispatcher to add as com::sun::star::frame::XStatusListener, and be
         notified when the record count changes.<br/>
-        The status value which is being notified (<member scope="com::sun::star::frame">FeatureStateEvent::State</member>)
+        The status value which is being notified (com::sun::star::frame::FeatureStateEvent::State)
         is a string which can be used to display the record count. In particular, if the record count is not yet known
-        (<member scope="com::sun::star::sdb">RowSet::IsRowCountFinal</member> is <FALSE/>), this is indicated in the
+        (com::sun::star::sdb::RowSet::IsRowCountFinal is <FALSE/>), this is indicated in the
         string, too.</td>
       </tr>
 
@@ -221,10 +221,10 @@ interface XFormControllerContext;
 
       <tr style="vertical-align: top;">
         <td><em>applyFilter</em></td>
-        <td><p>Toggles the <member scope="com::sun::star::sdb">RowSet::ApplyFilter</member> property
+        <td><p>Toggles the com::sun::star::sdb::RowSet::ApplyFilter property
         of the form.</p>
         <p>Additionally, status listeners will be provided with the current (boolean) state of this property
-        in the <member scope="com::sun::star::frame">FeatureStateEvent::State</member> member of the event
+        in the com::sun::star::frame::FeatureStateEvent::State member of the event
         notified by the dispatcher.</p></td>
       </tr>
 

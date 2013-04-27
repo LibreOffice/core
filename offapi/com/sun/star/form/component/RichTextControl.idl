@@ -56,10 +56,10 @@ published service RichTextControl
 
         <p>If the property is set to <TRUE/>, the control will ignore the following properties:
         <ul>
-            <li><member scope="com::sun::star::awt">UnoControlEditModel::EchoChar</member></li>
-            <li><member scope="com::sun::star::awt">UnoControlEditModel::MaxTextLen</member></li>
-            <li><member scope="com::sun::star::awt">UnoControlEditModel::MultiLine</member></li>
-            <li><member scope="com::sun::star::awt">UnoControlEditModel::Align</member></li>
+            <li>com::sun::star::awt::UnoControlEditModel::EchoChar</li>
+            <li>com::sun::star::awt::UnoControlEditModel::MaxTextLen</li>
+            <li>com::sun::star::awt::UnoControlEditModel::MultiLine</li>
+            <li>com::sun::star::awt::UnoControlEditModel::Align</li>
         </ul>
         </p>
     */

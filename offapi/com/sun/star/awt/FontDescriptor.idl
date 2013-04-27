@@ -139,7 +139,7 @@ published struct FontDescriptor
         <FALSE/> means that the spacing also gets underlined.</p>
 
         <p>This property is only valid if the property
-        <member scope="com::sun::star::awt">FontDescriptor::Underline</member>
+        com::sun::star::awt::FontDescriptor::Underline
         is not <const>FontUnderline::NONE</const>.</p>
      */
     boolean WordLineMode;

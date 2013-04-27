@@ -113,7 +113,7 @@ published service ParagraphStyle
     /** returns the name of the page style in use
 
         <P>For setting the page style you have to use the
-        <member scope="com::sun::star::text">PageDescName</member>
+        com::sun::star::text::PageDescName
         properties.
         </P>
     */

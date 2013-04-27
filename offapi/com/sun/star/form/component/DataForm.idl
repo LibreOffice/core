@@ -62,7 +62,7 @@ published service DataForm
         <ul><li>After all notifications as defined in the com::sun::star::sdb::RowSet
                 service have been sent, the DataForm resets itself, if all
                 com::sun::star::form::XResetListeners approve this.</li>
-            <li>After the reset happened, the <member scope="com::sun::star::sdb">RowSet::IsModified</member>
+            <li>After the reset happened, the com::sun::star::sdb::RowSet::IsModified
                 property is reset to <FALSE/>. This property might have been switched to <TRUE/> during listener
                 notifications, since listeners are allowed to change field values. Also, the
                 com::sun::star::form::XReset::reset() implementations of bound control

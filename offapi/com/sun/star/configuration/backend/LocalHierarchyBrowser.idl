@@ -44,7 +44,7 @@ published service LocalHierarchyBrowser
         </p>
 
         <p> The following additional arguments are supported for
-            <member scope="com::sun::star::task">XJob::execute()</member>:<BR/>
+            com::sun::star::task::XJob::execute():<BR/>
 
         <dl>
             <dt><code>SchemaDataUrl</code> : <atom>string</atom></dt>

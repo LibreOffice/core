@@ -38,7 +38,7 @@
     are automatically unchecked</p>
 
     <p>Like in HTML, radio buttons are grouped together if and only if they have the
-    same name (see <member scope="com::sun::star::form">FormComponent::Name</member>).</p>
+    same name (see com::sun::star::form::FormComponent::Name).</p>
  */
 published service RadioButton
 {

@@ -42,7 +42,7 @@ service DefaultViewController
 
     /** allows intercepting context menu requests done by the user
 
-        <p>The <member scope="::com::sun::star::ui">ContextMenuExecuteEvent::Selection</member> member
+        <p>The ::com::sun::star::ui::ContextMenuExecuteEvent::Selection member
         of the event passed to an interceptor will <em>not</em> be the controller itself
         (though the controller also supports the <a href="#XSelectionSupplier"><code>XSelectionSupplier</code></a>
         interface), but a component which describes the current selection of the very window where the context

@@ -61,9 +61,9 @@ published service FrameLoader
         The internal name is a part of his configuration and will be passed by
         the FrameLoaderFactory after creation
         if optional interface com::sun::star::lang::XInitialization
-        is supported. Value of function <member scope="com::sun::star::container">XNamed::getName()</member>
+        is supported. Value of function com::sun::star::container::XNamed::getName()
         can be used on service FrameLoaderFactory to get further information about this loader.
-        Setting of this name by calling <member scope="com::sun::star::container">XNamed::setName()</member>
+        Setting of this name by calling com::sun::star::container::XNamed::setName()
         must be forwarded to same factory service. He should decide, if it's allowed or not.
         The reason: prevent code against name ambiguities.
         </p>

@@ -32,7 +32,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 /** This interface is implemented by a view or window that supports drag
     operations and will be received as part of a DragGestureEvent
-    through a <member scope="com::sun::star::datatransfer::dnd">XDragGestureListener::dragGestureRecognized()</member>
+    through a com::sun::star::datatransfer::dnd::XDragGestureListener::dragGestureRecognized()
     callback.
 
     <p>Differently to Java, the association between view and interface is fixed
@@ -61,7 +61,7 @@ published interface XDragSource: com::sun::star::uno::XInterface
         @returns
         The default drag cursor for the specified drag action.
         <p>The returned value may be used as parameter for the method
-        <member scope="com::sun::star::datatransfer::dnd">XDragSourceContext::setCursor()</member>.</p>
+        com::sun::star::datatransfer::dnd::XDragSourceContext::setCursor().</p>
     */
 
     long getDefaultCursor( [in] byte dragAction )
@@ -74,7 +74,7 @@ published interface XDragSource: com::sun::star::uno::XInterface
         a drag operation or if the user attempts to start a drag while an
         existing drag operation is still executing, the action fails immediately.
         This is indicated by calling
-        <member scope="com::sun::star::datatransfer::dnd">XDragSourceListener::dragDropEnd()</member>
+        com::sun::star::datatransfer::dnd::XDragSourceListener::dragDropEnd()
         on the parameter listener with a DragSourceDragEvent showing a failure.</p>
 
         @param trigger

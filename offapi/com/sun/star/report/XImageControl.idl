@@ -34,7 +34,7 @@ interface XImageControl
         <p>Other components can register as com::sun::star::awt::XImageConsumer
         at this producer. Then they will be notified of any change in the image to be displayed.</p>
 
-        <p>Whenever the <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+        <p>Whenever the com::sun::star::awt::UnoControlImageControlModel::ImageURL
         property is changed, the model loads the specified image, and sets it as image source
         at its com::sun::star::awt::XImageProducer. Then, all
         com::sun::star::awt::XImageConsumers are notified and supplied with

@@ -38,7 +38,7 @@ published interface XSelectionChangeListener: com::sun::star::lang::XEventListen
     /** is called when the selection changes.
 
         <p>You can get the new selection via XSelectionSupplier from
-        <member scope="com::sun::star::lang">EventObject::Source</member>.
+        com::sun::star::lang::EventObject::Source.
 
      */
     void selectionChanged( [in] com::sun::star::lang::EventObject aEvent );

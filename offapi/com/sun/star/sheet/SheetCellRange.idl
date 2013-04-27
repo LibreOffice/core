@@ -104,7 +104,7 @@ published service SheetCellRange
     /** provides "Find & Replace" functionality.
 
         <p>The property
-        <member scope="com::sun::star::util">SearchDescriptor::SearchWords</member>
+        com::sun::star::util::SearchDescriptor::SearchWords
         has a different meaning in spreadsheets: If set to <TRUE/>, the
         spreadsheet searches for cells containing the search text only.</p>
      */

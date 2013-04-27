@@ -67,7 +67,7 @@ service TabularDataProviderArguments
         or rows in a table.
 
         <p>If this property is not given as argument it is assumed to
-        <member scope="com::sun::star::chart">ChartDataRowSource::COLUMNS</member>,
+        com::sun::star::chart::ChartDataRowSource::COLUMNS,
         i.e., the default is "take data from columns".</p>
      */
     [property]   ::com::sun::star::chart::ChartDataRowSource   DataRowSource;

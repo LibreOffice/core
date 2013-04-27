@@ -59,8 +59,8 @@ published service LayerFilter
 
       <p> Call <method scope="com::sun::star::lang">XInitialization::initialize</method>()
          with a single argument of type com::sun::star::beans::NamedValue,
-         where <member scope="com::sun::star::beans">NamedValue::Name</member> is <code>"Source"</code>
-         and <member scope="com::sun::star::beans">NamedValue::Value</member>
+         where com::sun::star::beans::NamedValue::Name is <code>"Source"</code>
+         and com::sun::star::beans::NamedValue::Value
          is an object implementing XLayer.
      </p>
       */

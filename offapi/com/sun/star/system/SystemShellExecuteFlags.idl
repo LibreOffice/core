@@ -33,7 +33,7 @@ published constants SystemShellExecuteFlags
     const long DEFAULTS                = 0;
 
     /** Prevents the display of system error message boxes if the
-        method <member scope="com::sun::star::system">XSystemShellExecute::execute()</member> fails.
+        method com::sun::star::system::XSystemShellExecute::execute() fails.
      */
     const long NO_SYSTEM_ERROR_MESSAGE = 1;
 

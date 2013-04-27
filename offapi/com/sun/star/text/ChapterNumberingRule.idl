@@ -39,7 +39,7 @@
 
     </p>
     <p>In the com::sun::star::style::NumberingAlignment only the field
-    <member scope="com::sun::star::style">NumberingAlignment::Alignment</member> is applied.
+    com::sun::star::style::NumberingAlignment::Alignment is applied.
 
     </p>
     <p>Depending on the numbering types, the parameters for bullets or bit maps

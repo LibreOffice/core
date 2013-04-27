@@ -175,7 +175,7 @@ published interface XColumn: com::sun::star::uno::XInterface
         read prior to getting the value of any other column. The next
         call to a get method implicitly closes the stream. Also, a
         stream may return 0 when the method
-        <member scope="com::sun::star::io">XInputStream::available()</member>
+        com::sun::star::io::XInputStream::available()
         is called whether there is data available or not.
         </p>
             @returns
@@ -196,7 +196,7 @@ published interface XColumn: com::sun::star::uno::XInterface
         read prior to getting the value of any other column. The next
         call to a get method implicitly closes the stream. Also, a
         stream may return 0 when the method
-        <member scope="com::sun::star::io">XInputStream::available()</member>
+        com::sun::star::io::XInputStream::available()
         is called whether there is data available or not.
         </p>
         @returns

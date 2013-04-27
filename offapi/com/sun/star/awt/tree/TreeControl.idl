@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module awt { module tree {
     <h4>Selection</h4>
     <p>If you are interested in knowing when the selection changes implement a
     com::sun::star::view::XSelectionChangeListener and add the instance with the method
-    <member scope="::com::sun::star::view">XSelectionSupplier::addSelectionChangeListener()</member>.
+    ::com::sun::star::view::XSelectionSupplier::addSelectionChangeListener().
     You than will be notified for any selection change.
     </p>
 

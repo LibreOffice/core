@@ -70,9 +70,9 @@ published interface XIntrospection: com::sun::star::uno::XInterface
             <dd>If an object implements com::sun::star::container::XNameAccess,
                 the items that can be accessed are not considered as properties
                 of the object and so are not included in the property list offered by
-                <member scope="com::sun::star::beans">XIntrospectionAccess::getProperties()</member>.
+                com::sun::star::beans::XIntrospectionAccess::getProperties().
                 com::sun::star::container::XNameAccess items have to be
-                accessed separately by <member scope="com::sun::star::beans">XIntrospectionAccess::getNameAccess()</member>.
+                accessed separately by com::sun::star::beans::XIntrospectionAccess::getNameAccess().
             </dd>
         </dl>
 

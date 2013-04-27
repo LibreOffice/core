@@ -27,7 +27,7 @@ module com { module sun { module star { module sdb {
 /** defines error conditions for OpenOffice.org Base core components
 
     <p>Core components of OpenOffice.org will use those error conditions
-    as error codes (<member scope="com::sun::star::sdbc">SQLException::ErrorCode</member>)
+    as error codes (com::sun::star::sdbc::SQLException::ErrorCode)
     wherever possible.<br/>
     That is, if an <code>SQLException</code> is raised by
     such a component, caused by an error condition which is included in the

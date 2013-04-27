@@ -48,7 +48,7 @@ module com { module sun { module star { module configuration {
  <p>The accumulated changes within this hierarchy can be managed using
  com::sun::star::util::XChangesBatch. Pending changes
  will become persistent and visible from other overlapping hierarchies
- only when <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
+ only when com::sun::star::util::XChangesBatch::commitChanges()
  is called. If the hierarchy is disposed or discarded without committing
  changes, the changes will be lost.
  </p>
@@ -66,19 +66,19 @@ published service UpdateRootElement
 
 /** allows managing changes within the hierarchy.
 
- <p><member scope="com::sun::star::util">XChangesBatch::getPendingChanges()</member>
+ <p>com::sun::star::util::XChangesBatch::getPendingChanges()
  reports all changes within the hierarchy that are done through (direct or
  indirect) descendants of this element. The same set of changes is committed
  to persistent storage and/or made visible to other objects accessing the same
  data set, when
- <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
+ com::sun::star::util::XChangesBatch::commitChanges()
  is invoked.
  </p>
 
  <p>If the implementation supports
- <member scope="com::sun::star::lang">XLocalizable::setLocale()</member>, changes
+ com::sun::star::lang::XLocalizable::setLocale(), changes
  will be considered to apply to the locale that is set when
- <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
+ com::sun::star::util::XChangesBatch::commitChanges()
  is invoked.
  </p>
 

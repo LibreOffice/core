@@ -29,7 +29,7 @@ module com { module sun { module star { module linguistic2 {
     <p>A dictionary implementing this service will be used for
     Hangul/Hanja conversion. Therefore the locale of the
     dictionary has to be Korean, and the conversion type
-    <member scope="com::sun::star::linguistic2">ConversionDictionaryType::HANGUL_HANJA</member>.</p>
+    com::sun::star::linguistic2::ConversionDictionaryType::HANGUL_HANJA.</p>
 
     <p>Also for a pair (entry) to be added the
     left part has to be in Hangul and the right in Hanja,

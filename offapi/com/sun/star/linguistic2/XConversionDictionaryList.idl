@@ -57,7 +57,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         The dictionary to be added needs not necessarily be created by
         this service.</p>
 
-        <p>The <member scope="com::sun::star::container::XNameReplace">replaceByName</member>
+        <p>The com::sun::star::container::XNameReplace::replaceByName
         function is implemented empty since renaming of dictionaries
         is not allowed.</p>
     */

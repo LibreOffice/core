@@ -39,7 +39,7 @@ published constants SimpleMailClientFlags
         If this flag is specified, a recipient address must have been
         specified for the given XSimpleMailMessage
         object given to the method
-        <member scope="com::sun::star::system">XSimpleMailClient::sendSimpleMailMessage()</member>.
+        com::sun::star::system::XSimpleMailClient::sendSimpleMailMessage().
      */
     const long NO_USER_INTERFACE    = 1;
 
@@ -47,7 +47,7 @@ published constants SimpleMailClientFlags
         information if necessary.
         When this flag is specified and the user needs to logon in order
         to send a simple mail message via the method
-        <member scope="com::sun::star::system">XSimpleMailClient::sendSimpleMailMessage()</member>,
+        com::sun::star::system::XSimpleMailClient::sendSimpleMailMessage(),
         an Exception will be thrown.
     */
     const long NO_LOGON_DIALOG      = 2;

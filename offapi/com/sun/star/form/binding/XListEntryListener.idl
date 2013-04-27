@@ -63,7 +63,7 @@ interface XListEntryListener : com::sun::star::lang::XEventListener
 
         <p>The listener should retrieve the complete new list by calling the
         XListEntrySource::getAllListEntries() method of the event source
-        (which is denoted by <member scope="com::sun::star::lang">EventObject::Source</member>).
+        (which is denoted by com::sun::star::lang::EventObject::Source).
     */
     void    allEntriesChanged( [in] com::sun::star::lang::EventObject Source );
 };

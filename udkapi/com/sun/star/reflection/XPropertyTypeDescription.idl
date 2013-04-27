@@ -29,7 +29,7 @@
 /** Reflects a property.
 
     <p>The type class of this type is
-    <member scope="com::sun::star::uno">TypeClass::PROPERTY</member>.
+    com::sun::star::uno::TypeClass::PROPERTY.
 
     @since OOo 1.1.2
   */

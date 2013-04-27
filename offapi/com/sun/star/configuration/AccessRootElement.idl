@@ -74,7 +74,7 @@ published service AccessRootElement
 /** allows controlling or observing the lifetime of the whole hierarchy.
 
  <p>The owner of the hierarchy may dispose of this object
- using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+ using com::sun::star::lang::XComponent::dispose().
  As this object owns its child elements and, recursively, the whole hierarchy,
  any descendant elements obtained, directly or indirectly, from this object
  will also be disposed. Disposing of the object does not affect a persistent
@@ -111,14 +111,14 @@ published service AccessRootElement
  </p>
 
  <p>
- If <member scope="com::sun::star::beans">XMultiPropertySet::setPropertyValues()</member>
- or <member scope="com::sun::star::beans">XMultiHierarchicalPropertySet::setHierarchicalPropertyValues()</member>
+ If com::sun::star::beans::XMultiPropertySet::setPropertyValues()
+ or com::sun::star::beans::XMultiHierarchicalPropertySet::setHierarchicalPropertyValues()
  is used on an element of the hierarchy to change multiple values within
  the hierarchy, all changes will be notified with a single event.
  </p>
 
  <p>If an outside source uses
- <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
+ com::sun::star::util::XChangesBatch::commitChanges()
  on an overlapping hierarchy access, all relevant changes will be notified
  with a single event.
  </p>
@@ -139,7 +139,7 @@ published service AccessRootElement
  <p><em>Changing the locale is generally not supported.</em> If it is supported,
  there is no guarantee that values already loaded into the hierarchy, or an
  application cache, are refreshed to reflect the new locale. Use of
- <member scope="com::sun::star::lang">XLocalizable::setLocale()</member>
+ com::sun::star::lang::XLocalizable::setLocale()
  is therefore not recommended.
  </p>
 */

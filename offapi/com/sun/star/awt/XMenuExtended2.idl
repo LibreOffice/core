@@ -79,7 +79,7 @@ interface XMenuExtended2
             if <TRUE/>, disabled menu entries are hidden.
 
         @see
-            <member scope="com::sun::star::awt">XMenu::enableItem()</member>
+            com::sun::star::awt::XMenu::enableItem()
     */
     void hideDisabledEntries( [in] boolean bHide );
 

@@ -38,11 +38,11 @@
     this unless you are (1) executing a stored procedure that you know may
     return multiple results or (2) you are dynamically executing an
     unknown SQL string. The methods
-    <member scope="com::sun::star::sdbc">XMultipleResults::getMoreResults()</member>
+    com::sun::star::sdbc::XMultipleResults::getMoreResults()
     ,
-    <member scope="com::sun::star::sdbc">XMultipleResults::getResultSet()</member>
+    com::sun::star::sdbc::XMultipleResults::getResultSet()
     and
-    <member scope="com::sun::star::sdbc">XMultipleResults::getUpdateCount()</member>
+    com::sun::star::sdbc::XMultipleResults::getUpdateCount()
     let you navigate through multiple results.
 
     </p>

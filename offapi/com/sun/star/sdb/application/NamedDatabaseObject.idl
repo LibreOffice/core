@@ -61,7 +61,7 @@ struct NamedDatabaseObject
         DatabaseObjectContainer::QUERIES, DatabaseObjectContainer::DATA_SOURCE,
         DatabaseObjectContainer::FORMS or DatabaseObjectContainer::REPORTS,
         this denotes the name of the data source (as denoted by
-        <member scope="com::sun::star::sdb">DataSource::Name</member>)</p>
+        com::sun::star::sdb::DataSource::Name)</p>
 
         @see XDatabaseMetaData::isCatalogAtStart
         @see DatabaseObjectContainer

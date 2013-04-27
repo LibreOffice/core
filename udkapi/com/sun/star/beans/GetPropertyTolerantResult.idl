@@ -44,7 +44,7 @@ published struct GetPropertyTolerantResult
     /** contains the state of the property.
 
         <p>The value is undefined if <var>Result</var> is not
-        <member scope="com::sun::star::beans::TolerantPropertySetResultType">SUCCESS</member>.</p>
+        com::sun::star::beans::TolerantPropertySetResultType::SUCCESS.</p>
      */
     com::sun::star::beans::PropertyState    State;
 
@@ -52,7 +52,7 @@ published struct GetPropertyTolerantResult
     /** contains the value of the property.
 
         <p>The value is undefined if <var>Result</var> is not
-        <member scope="com::sun::star::beans::TolerantPropertySetResultType">SUCCESS</member>.</p>
+        com::sun::star::beans::TolerantPropertySetResultType::SUCCESS.</p>
      */
     any     Value;
 

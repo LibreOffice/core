@@ -27,8 +27,8 @@ module com {  module sun {  module star {  module form { module inspection {
 
 
 /** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
-    which is able to enhance the <member scope="com::sun::star::form::component">CommandButton::ButtonType</member>
-    and <member scope="com::sun::star::form::component">CommandButton::TargetURL</member> properties of a
+    which is able to enhance the com::sun::star::form::component::CommandButton::ButtonType
+    and com::sun::star::form::component::CommandButton::TargetURL properties of a
     com::sun::star::form::component::CommandButton.
 
     <p>For this, the two properties are superseded by new versions, where as button type, additional

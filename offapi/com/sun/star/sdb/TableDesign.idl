@@ -51,8 +51,8 @@ published service TableDesign
         <p>Parameters (passed to the method
         com::sun::star::lang::XInitialization::initialize())
         have to be instances of com::sun::star::beans::PropertyValue, where the
-        <member scope="com::sun::star::beans">PropertyValue::Name</member> member specifies what the parameter controls,
-        with the <member scope="com::sun::star::beans">PropertyValue::Value</member> member containing the value
+        com::sun::star::beans::PropertyValue::Name member specifies what the parameter controls,
+        with the com::sun::star::beans::PropertyValue::Value member containing the value
         to be used.<br>
         Recognized parameters are:
         <ul>

@@ -76,7 +76,7 @@ published service ImportFilter
             <ul>
                 <li>first item will be a set of configuration data of the filter</li>
                 <li>after that will follow may given optional parameters of call
-                    <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+                    com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
                     of service FilterFactory.
                 </li>
             </ul>

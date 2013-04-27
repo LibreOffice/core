@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module sdb {
     <br/>
     In this case, the browser displays and maintains some additional slots (to be more concrete: toolbox items), which,
     upon triggering, call the
-    <member scope="com::sun::star::frame">XDispatch::dispatch()</member> method of the object
+    com::sun::star::frame::XDispatch::dispatch() method of the object
     provided by the external instance.
     </p>
 
@@ -164,7 +164,7 @@ published service DataSourceBrowser
     /** is used to initialize the browser.
 
         <p>
-        Parameters (passed to the method <member scope="com::sun::star::lang">XInitialization::initialize()</member>)
+        Parameters (passed to the method com::sun::star::lang::XInitialization::initialize())
         have to be instances of com::sun::star::beans::PropertyValue, or
         instances of com::sun::star::beans::NamedValue, where the <code>Name</code> member
         specifies what the parameter controls, with the <code>Value</code> member containing the value to be used.
@@ -256,7 +256,7 @@ published service DataSourceBrowser
         <p>Context menu interception is currently supported only for the browser control where the registered
         data sources and all their tables and queries are displayed in a tree view.</p>
 
-        <p>The selection supplied by <member scope="com::sun::star::ui">ContextMenuExecuteEvent::Selection</member>,
+        <p>The selection supplied by com::sun::star::ui::ContextMenuExecuteEvent::Selection,
         in the event structure passed to the context menu interceptors, actually is a value from the
         com::sun::star::sdb::application::NamedDatabaseObject group.</p>
 

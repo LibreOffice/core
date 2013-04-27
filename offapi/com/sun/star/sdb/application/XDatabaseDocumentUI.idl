@@ -82,7 +82,7 @@ interface XDatabaseDocumentUI
         connected, the application will try to establish a connection by using
         com::sun::star::sdbc::XDataSource::getConnection()
         with the current settings, as specified in the
-        <member scope="com::sun::star::sdb">DataSource::Settings</member> member.</p>
+        com::sun::star::sdb::DataSource::Settings member.</p>
 
         <p>If the connection cannot be established, the respective error message is shown
         in the application window.</p>

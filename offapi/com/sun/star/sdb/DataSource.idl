@@ -162,21 +162,21 @@ published service DataSource
         a large set of such properties, no all of them are effectively used for a concrete data source, nonetheless,
         they're all present in the <code>Settings</code>.<br/>
         Such properties are not removable from the bag, that is, their
-        <member scope="com::sun::star::beans">PropertyAttribute::REMOVABLE</member> attribute is <em>not</em> set.<br/>
+        com::sun::star::beans::PropertyAttribute::REMOVABLE attribute is <em>not</em> set.<br/>
         Usually, you'll find that all of this properties have the
-        <member scope="com::sun::star::beans::">PropertyState::PropertyState_DEFAULT_VALUE</member> state.</p>
+        com::sun::star::beans::::PropertyState::PropertyState_DEFAULT_VALUE state.</p>
 
         <p><em>User-defined</em> properties are the ones which are added at runtime by any instance. They might or might
         not be removable, this depends on whether or not the code adding them specifies the
-        <member scope="com::sun::star::beans">PropertyAttribute::REMOVABLE</member> attribute. Also, they might
+        com::sun::star::beans::PropertyAttribute::REMOVABLE attribute. Also, they might
         or might not have a default value, determined by the
-        <member scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</member> attribute at the time they're added
+        com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT attribute at the time they're added
         to the bag.</p>
 
         <p>When a data source is made persistent, then properties which are not removable (which are assumed to be the
         pre-defined properties) are ignored when they are in <code>DEFAULT</code> state. All other properties are
         always made persistent, except when an explicit
-        <member scope="com::sun::star::beans">PropertyAttribute::TRANSIENT</member> attribute prohibits this.</p>
+        com::sun::star::beans::PropertyAttribute::TRANSIENT attribute prohibits this.</p>
 
         <p>Similar, when you obtain the #Info property of a <code>DataSource</code>, the
         <code>Settings</code> bag is asked for all its property values, and the ones which are removable and

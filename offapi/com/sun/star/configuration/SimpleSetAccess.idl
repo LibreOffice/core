@@ -45,7 +45,7 @@ published service SimpleSetAccess
 /** is the basic service for accessing child and descendent nodes.
 
  <p>External names from foreign namespaces should be normalized using
- <member scope="com::sun::star::util">XStringEscape::escapeString()</member>,
+ com::sun::star::util::XStringEscape::escapeString(),
  if available, before using them as element names.
  </p>
 */
@@ -63,7 +63,7 @@ published service SimpleSetAccess
  <p>This interface may be missing, if the implementation can support only
  one predefined type or if the elements are of a simple type and
  no further information is available.  In the latter case,
- <member scope="com::sun::star::container">XElementAccess::getElementType()</member>
+ com::sun::star::container::XElementAccess::getElementType()
  provides all the information there is about the element's type.
  </p>
 */

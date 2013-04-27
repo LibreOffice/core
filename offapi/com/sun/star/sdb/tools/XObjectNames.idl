@@ -72,8 +72,8 @@ interface XObjectNames
 
         @param CommandType
             specifies the com::sun::star::sdb::CommandType of the object for which
-            a unique name is to be generated. Must be either <member scope="com::sun::star::sdb">CommandType::TABLE</member>
-            or <member scope="com::sun::star::sdb">CommandType::QUERY</member>.
+            a unique name is to be generated. Must be either com::sun::star::sdb::CommandType::TABLE
+            or com::sun::star::sdb::CommandType::QUERY.
 
         @param BaseName
             specifies the base of the to-be-created object name. If empty, a default
@@ -107,8 +107,8 @@ interface XObjectNames
 
         @param CommandType
             specifies the com::sun::star::sdb::CommandType of the object whose
-            name should be checked. Must be either <member scope="com::sun::star::sdb">CommandType::TABLE</member>
-            or <member scope="com::sun::star::sdb">CommandType::QUERY</member>.
+            name should be checked. Must be either com::sun::star::sdb::CommandType::TABLE
+            or com::sun::star::sdb::CommandType::QUERY.
 
         @param Name
             specifies the to-be-checked name of the object.

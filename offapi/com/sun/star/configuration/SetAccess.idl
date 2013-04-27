@@ -56,7 +56,7 @@ published service SetAccess
 /** is the basic service for accessing child and descendent nodes in a hierarchy.
 
  <p>External names (from foreign namespaces) should be normalized using
- <member scope="com::sun::star::util">XStringEscape::escapeString()</member>
+ com::sun::star::util::XStringEscape::escapeString()
  (if available) before using them as element names.
  </p>
 */

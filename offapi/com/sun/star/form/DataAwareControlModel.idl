@@ -70,14 +70,14 @@ published service DataAwareControlModel
         <p>In the context of a control model which is data-aware, the semantics of <em>default value</em>
         (see XReset) is as follows:<br/>
         If (and only if) the control is valid bound to a column of it's com::sun::star::form::component::DataForm, and the form
-        is not positioned on a new record (see <member scope="com::sun::star::sdb">RowSet::IsNew</member>), then
+        is not positioned on a new record (see com::sun::star::sdb::RowSet::IsNew), then
         XReset::reset() does not reset the model's value to it's default value, but uses the
         underlying column value.<br/>
         In all other cases, the model is reset to the default value as specified by the respective property.</p>
 
         <p>For an example, have a look at the com::sun::star::form::component::TextField. It inherits
-        the <member scope="com::sun::star::awt">UnoControlEditModel::Text</member> property from the underlying
-        service, and additionally specifies the <member scope="com::sun::star::form::component">TextField::DefaultText</member>.
+        the com::sun::star::awt::UnoControlEditModel::Text property from the underlying
+        service, and additionally specifies the com::sun::star::form::component::TextField::DefaultText.
         </p>
 
         <p>In the context of a com::sun::star::form::component::DataForm, controls are

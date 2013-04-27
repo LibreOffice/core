@@ -47,7 +47,7 @@ interface XFeatureInvalidation;
     record, so the user doesn't lose her input. So you need to call
     com::sun::star::sdbc::XResultSetUpdate::updateRow() or
     com::sun::star::sdbc::XResultSetUpdate::insertRow(), depending
-    on the form's <member scope="com::sun::star::sdb">RowSet::IsNew</member> property.<br/>
+    on the form's com::sun::star::sdb::RowSet::IsNew property.<br/>
     But then you're done, right? Wrong, again.<br/>
     When the user just entered some data into one of the form fields, but did not yet
     leave this field, then the data is not yet committed to the form, not to talk
@@ -208,7 +208,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
     /** determines whether the form is currently positioned on the insertion row
 
         <p>This is a convenience method only. Calling it is equivalent to examining the
-        <member scope="com::sun::star::sdb">RowSet::IsNew</member> property of the form.</p>
+        com::sun::star::sdb::RowSet::IsNew property of the form.</p>
 
         @throws ::com::sun::star::lang::WrappedTargetException
             if an error occurs obtaining the form property
@@ -220,7 +220,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
     /** determines whether the current row of the form is modified
 
         <p>This is a convenience method only. Calling it is equivalent to examining the
-        <member scope="com::sun::star::sdb">RowSet::IsModified</member> property of the form.</p>
+        com::sun::star::sdb::RowSet::IsModified property of the form.</p>
 
         @throws ::com::sun::star::lang::WrappedTargetException
             if an error occurs obtaining the form property

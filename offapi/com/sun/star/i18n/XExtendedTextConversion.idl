@@ -41,7 +41,7 @@ published interface XExtendedTextConversion : ::com::sun::star::i18n::XTextConve
 {
     /**
         The functionality of this method is same as
-        <member scope="::com::sun::star::i18n">XTextConversion::getConversion()</member>,
+        ::com::sun::star::i18n::XTextConversion::getConversion(),
         except an additional output parameter rOffset.
 
         @param rOffset

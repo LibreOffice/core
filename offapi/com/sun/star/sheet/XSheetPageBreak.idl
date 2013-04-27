@@ -39,7 +39,7 @@ published interface XSheetPageBreak: com::sun::star::uno::XInterface
 
         <P>This includes manual and automatic page breaks. To add or
         remove manual breaks, use the
-        <member scope="com::sun::star::table">TableColumn::IsStartOfNewPage</member>
+        com::sun::star::table::TableColumn::IsStartOfNewPage
         property of the column.</P>
 
         @returns
@@ -53,7 +53,7 @@ published interface XSheetPageBreak: com::sun::star::uno::XInterface
 
         <P>This includes manual and automatic page breaks. To add or
         remove manual breaks, use the
-        <member scope="com::sun::star::table">TableRow::IsStartOfNewPage</member>
+        com::sun::star::table::TableRow::IsStartOfNewPage
         property of the row.</P>
 
         @returns

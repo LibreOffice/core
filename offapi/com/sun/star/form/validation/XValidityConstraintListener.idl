@@ -35,7 +35,7 @@ interface XValidityConstraintListener : com::sun::star::lang::XEventListener
         at which the listener is registered, changed.
 
     @param Source
-        The event source. The member <member scope="com::sun::star::lang">EventObject::Source</member>
+        The event source. The member com::sun::star::lang::EventObject::Source
         represents the validator component whose validity constraint changed.
     */
     void    validityConstraintChanged( [in] com::sun::star::lang::EventObject Source );

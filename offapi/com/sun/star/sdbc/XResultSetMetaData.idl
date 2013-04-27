@@ -233,7 +233,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
 
     /** returns the fully-qualified name of the service whose instances
         are manufactured if the method
-        <member scope="com::sun::star::sdbc">XResultSet::.getObject()</member>
+        com::sun::star::sdbc::XResultSet::.getObject()
         is called to retrieve a value from the column.
         @param column
             the first column is 1, the second is 2,

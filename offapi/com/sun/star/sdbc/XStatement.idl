@@ -86,11 +86,11 @@ published interface XStatement: com::sun::star::uno::XInterface
         <code>execute</code>
         method executes a SQL statement and indicates
         the form of the first result. You can then use
-        <member scope="com::sun::star::sdbc">XStatement::getResultSet()</member>
+        com::sun::star::sdbc::XStatement::getResultSet()
         or
-        <member scope="com::sun::star::sdbc">XStatement::getUpdateCount()</member>
+        com::sun::star::sdbc::XStatement::getUpdateCount()
         to retrieve the result, and
-        <member scope="com::sun::star::sdbc">XStatement::getMoreResults()</member>
+        com::sun::star::sdbc::XStatement::getMoreResults()
         to move to any subsequent result(s).
         </p>
 

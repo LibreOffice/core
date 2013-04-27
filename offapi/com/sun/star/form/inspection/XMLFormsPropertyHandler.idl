@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module form { module inspection {
     <p>The handler introduces new properties to choose an com::sun::star::xforms::XModel
     and a com::sun::star::xforms::Binding within this model. Additionally,
     it introduces properties which reflect the different facets of the binding (e.g.
-    <member scope="com::sun::star::xforms">Binding::BindingExpression</member>), so they can be changed
+    com::sun::star::xforms::Binding::BindingExpression), so they can be changed
     directly in the com::sun::star::inspection::ObjectInspector as if they were a
     property of the form component which is being inspected.</p>
 

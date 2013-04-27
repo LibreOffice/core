@@ -56,7 +56,7 @@ interface XUIConfigurationManager2
         instance.
 
     <p>The owner of the object may dispose of this object using
-    <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+    com::sun::star::lang::XComponent::dispose().
     </p>
     */
     interface ::com::sun::star::lang::XComponent;

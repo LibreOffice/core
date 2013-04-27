@@ -56,7 +56,7 @@ published service ListBox
 
 
     /** contains the values associated to the strings to be displayed
-        (which are specified by <member scope="com::sun::star::awt">UnoControlListBoxModel::StringItemList</member>)
+        (which are specified by com::sun::star::awt::UnoControlListBoxModel::StringItemList)
      */
     [property] sequence<string> ListSource;
 

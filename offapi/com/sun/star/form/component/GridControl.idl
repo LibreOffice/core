@@ -103,7 +103,7 @@ published service GridControl
 
         <p>The reset of the control is forwarded to all it's elements, means to all the column models.
         As grid columns are very much like data-aware stand-alone controls, you can find a description
-        of the reset functionality in <member scope="com::sun::star::form">DataAwareControlModel::XReset</member>.
+        of the reset functionality in com::sun::star::form::DataAwareControlModel::XReset.
     */
     interface com::sun::star::form::XReset;
 

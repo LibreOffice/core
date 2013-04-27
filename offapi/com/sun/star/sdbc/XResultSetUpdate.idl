@@ -60,7 +60,7 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
         This method may be called after calling an
         <code>updateXXX</code>
         method(s) and before calling
-        <member scope="com::sun::star::sdbc">XResultSetUpdate::updateRow()</member>
+        com::sun::star::sdbc::XResultSetUpdate::updateRow()
         to rollback the updates made to a row. If no updates have been made or
         <code>updateRow</code>
         has already been called, then this method has no
@@ -90,7 +90,7 @@ published interface XResultSetUpdate: com::sun::star::uno::XInterface
         <code>getXXX</code>
         ,
         and
-        <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow()</member>
+        com::sun::star::sdbc::XResultSetUpdate::insertRow()
         methods may be
         called when the cursor is on the insert row.  All of the columns in
         a result set must be given a value each time this method is

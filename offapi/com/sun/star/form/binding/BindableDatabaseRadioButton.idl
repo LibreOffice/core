@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module form {  module binding {
     </ul></p>
 
     <p>If the value binding associated with a BindableDatabaseRadioButton
-    supports exchanging string values, <em>and</em> the <member scope="com::sun::star::form::component">RadioButton::RefValue</member>
+    supports exchanging string values, <em>and</em> the com::sun::star::form::component::RadioButton::RefValue
     is <em>not</em> empty, then the radio button will exchange it's value as string:
     <ul><li>A string equal to the reference value will be mapped to the button being checked, and vice versa</li>
         <li>A string not equal to the reference value will be mapped to the button being unchecked, and vice versa</li>
@@ -62,7 +62,7 @@ service BindableDatabaseRadioButton
     /** specifies a value which is to be associated with the control when it's <em>not</em>
         selected.
 
-        <p><member scope="com::sun::star::form::component">RadioButton::RefValue</member> is transferred to
+        <p>com::sun::star::form::component::RadioButton::RefValue is transferred to
         possible external value bindings as soon as the radio button is selected. With the member
         #SecondaryRefValue, clients of the radio button can also associate a value with
         the <em>not selected</em> state of the control.</p>

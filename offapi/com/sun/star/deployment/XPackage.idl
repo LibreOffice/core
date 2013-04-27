@@ -343,7 +343,7 @@ interface XPackage
         currently not registered, for example after calling
         XPackage::revokePackage(), then <member
         scope="com::sun::star::beans">Optional::IsPresent</member> is <TRUE/> and
-        the <member scope="com::sun::star::beans">Optional::Value</member> may
+        the com::sun::star::beans::Optional::Value may
         be an empty string.
     */
     com::sun::star::beans::Optional<string> getRegistrationDataURL()

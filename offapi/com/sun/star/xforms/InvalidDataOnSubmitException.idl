@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module xforms {
 /** thrown if the user triggers an XForms submission with invalid
     instance data
 
-    The <member scope="com::sun::star::uno">Exception::Source</member> member
+    The com::sun::star::uno::Exception::Source member
     refers to the submission which was invoked.
 
 */

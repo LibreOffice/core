@@ -73,12 +73,12 @@ published service StorageStream
 
         <p>
         The stream must be disposed by
-        <member scope="com::sun::star::lang">XComponent::dispose()</member>
+        com::sun::star::lang::XComponent::dispose()
         call or by explicit closing of input and output ( if provided )
         streams implementations with
-        <member scope="com::sun::star::io">XInputStream::closeInput()</member>
+        com::sun::star::io::XInputStream::closeInput()
         and
-        <member scope="com::sun::star::io">XOutputStream::closeOutput()</member>
+        com::sun::star::io::XOutputStream::closeOutput()
         calls.
         </p>
 

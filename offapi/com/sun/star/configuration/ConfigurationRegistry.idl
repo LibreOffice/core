@@ -45,7 +45,7 @@ module com { module sun { module star { module configuration {
     it's structure. Removal and addition of sub nodes is allowed only for special
     nodes, and even then the new elements have to comply to a given scheme (which is some
     kind of attribute of the container node). So for instance the
-    <member scope="com.sun.star.registry">XRegistryKey::createKey()</member> method is not allowed
+    com.sun.star.registry::XRegistryKey::createKey() method is not allowed
     for some nodes.
     </p><p>
     Thus anybody using this service is strongly advised to read and understand the specification
@@ -60,7 +60,7 @@ module com { module sun { module star { module configuration {
 published service ConfigurationRegistry
 {
     /** controls the binding of the object to a configuration sub tree.
-        <p><member scope="com::sun::star::registry">XSimpleRegistry::open()</member>
+        <p>com::sun::star::registry::XSimpleRegistry::open()
         is used to open a special subtree within the configuration tree.
         </p>
         <p>The parameters of this method control the location of the root of the to-be-opened

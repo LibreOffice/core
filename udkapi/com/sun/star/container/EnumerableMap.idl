@@ -39,7 +39,7 @@ module com { module sun { module star { module container {
             type are accepted.</li>
         <li>If the key type is <code>DOUBLE</code> or <code>FLOAT</code>, then <code>Double.NaN</code> respectively
             <code>Float.NaN</code> is not accepted as key.</li>
-        <li>If the key type's class is <member scope="com::sun::star::uno">TypeClass::ENUM</member>, then only keys
+        <li>If the key type's class is com::sun::star::uno::TypeClass::ENUM, then only keys
             of exactly this type are accepted.</li>
         <li>If the key type is any of <code>BYTE</code>, <code>SHORT</code>, <code>UNSIGNED SHORT</code>,
             <code>LONG</code>, <code>UNSIGNED LONG</code>, or <code>HYPER</code>, then all keys which can losslessly
@@ -53,12 +53,12 @@ module com { module sun { module star { module container {
     the following rules apply:
     <a name="valuerules"></a>
     <ul><li>The <VOID/> value will be accepted to be put into the map.</p>
-        <li>If the value type's class is <member scope="com::sun::star::uno">TypeClass::ANY</member>, any value
+        <li>If the value type's class is com::sun::star::uno::TypeClass::ANY, any value
             will be accepted.</li>
         <li>If the value type is an interface type, then all values denoting objects which can be queried for
             the given interface are accepted.</li>
-        <li>If the value type's class is <member scope="com::sun::star::uno">TypeClass::EXCEPTION</member>
-            or <member scope="com::sun::star::uno">TypeClass::STRUCT</member>, then values whose type equals the
+        <li>If the value type's class is com::sun::star::uno::TypeClass::EXCEPTION
+            or com::sun::star::uno::TypeClass::STRUCT, then values whose type equals the
             value type, or is a sub class of the value type, are accepted.</li>
         <li>For all other value types, only values whose type matches exactly are accepted.</li>
         <li>If the value type is <code>DOUBLE</code> or <code>FLOAT</code>, then <code>Double.NaN</code> respectively
@@ -83,8 +83,8 @@ service EnumerableMap : XEnumerableMap
 
         @throws ::com::sun::star::beans::IllegalTypeException
             if <arg>KeyType</arg> or <arg>ValueType</arg> are unsupported types.
-            For values, all type classes except <member scope="com::sun::star::uno">TypeClass::VOID</member>
-            and <member scope="com::sun::star::uno">TypeClass::UNKNOWN</member> are accepted.
+            For values, all type classes except com::sun::star::uno::TypeClass::VOID
+            and com::sun::star::uno::TypeClass::UNKNOWN are accepted.
             For keys, scalar types, strings, com::sun::star::uno::Type itself, and interface
             types are accepted.
     */
@@ -105,7 +105,7 @@ service EnumerableMap : XEnumerableMap
 
         @throws ::com::sun::star::beans::IllegalTypeException
             if <arg>KeyType</arg> or <arg>ValueType</arg> are unsupported types.
-            For values, all type classes except <member scope="com::sun::star::uno">TypeClass::VOID</member>
+            For values, all type classes except com::sun::star::uno::TypeClass::VOID
             are accepted.<br/>
             For keys, scalar types, strings, com::sun::star::uno::Type itself, and interface
             types are accepted.

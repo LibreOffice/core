@@ -43,7 +43,7 @@ published interface XOutParameters: com::sun::star::uno::XInterface
 
     /** registers the designated output parameter.  This version of
         the method
-        <member scope="com::sun::star::sdbc">XOutParameters::registerOutParameter()</member>
+        com::sun::star::sdbc::XOutParameters::registerOutParameter()
         should be used for a user-named or REF output parameter. Examples
         of user-named types include: STRUCT, DISTINCT, OBJECT, and named array
         types.
@@ -52,7 +52,7 @@ published interface XOutParameters: com::sun::star::uno::XInterface
         <p>
         Before executing a stored procedure call, you must explicitly
         call
-        <member scope="com::sun::star::sdbc">XOutParameters::registerOutParameter()</member>
+        com::sun::star::sdbc::XOutParameters::registerOutParameter()
         to register the type from
         com::sun::star::sdbc::DataType
         for each OUT parameter.
@@ -104,12 +104,12 @@ published interface XOutParameters: com::sun::star::uno::XInterface
         <code>get</code>
         method to read the value of that parameter.
         This version of
-        <member scope="com::sun::star::sdbc">XOutParameters::registerOutParameter()</member>
+        com::sun::star::sdbc::XOutParameters::registerOutParameter()
         should be
         used when the parameter is of SDBC type
-        <member scope="com::sun::star::sdbc">DataType::NUMERIC</member>
+        com::sun::star::sdbc::DataType::NUMERIC
         or
-        <member scope="com::sun::star::sdbc">DataType::DECIMAL</member>
+        com::sun::star::sdbc::DataType::DECIMAL
         .
         @param parameterIndex
             the first parameter is 1, the second is 2, ...

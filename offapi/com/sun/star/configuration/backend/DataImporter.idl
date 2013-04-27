@@ -37,13 +37,13 @@ published service DataImporter
 
         <p> The source and destination repositories are selected by arguments
             passed to
-            <member scope="com::sun::star::task">XJob::execute()</member>.
+            com::sun::star::task::XJob::execute().
             The names and meanings of such arguments depend on
             the implementation. Each implementation must document such arguments.
         </p>
 
         <p> Implementations may return a value from
-            <member scope="com::sun::star::task">XJob::execute()</member>
+            com::sun::star::task::XJob::execute()
             that indicates the status of job execution. The type and meaning of
             such status indicators depend on the implementation.
         </p>
@@ -54,7 +54,7 @@ published service DataImporter
         </p>
 
         <p> The following arguments to
-            <member scope="com::sun::star::task">XJob::execute()</member>
+            com::sun::star::task::XJob::execute()
             should be supported by implementations. Implementations must document
             a failure to support any of these arguments:
         <dl>

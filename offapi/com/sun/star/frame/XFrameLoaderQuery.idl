@@ -34,13 +34,13 @@
  */
 published interface XFrameLoaderQuery: com::sun::star::uno::XInterface
 {
-    /** use member <member scope="com::sun::star::container">XNameAccess::getElementNames()</member>
+    /** use member com::sun::star::container::XNameAccess::getElementNames()
         provided by service FrameLoaderFactory instead of this
         @deprecated
      */
     sequence< string > getAvailableFilterNames();
 
-    /** use member <member scope="com::sun::star::container">XNameAccess::getByName()</member>
+    /** use member com::sun::star::container::XNameAccess::getByName()
         provided by service FrameLoaderFactory instead of this
         @deprecated
      */

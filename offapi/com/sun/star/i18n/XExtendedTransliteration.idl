@@ -44,7 +44,7 @@ module com { module sun { module star { module i18n {
 published interface XExtendedTransliteration : ::com::sun::star::i18n::XTransliteration
 {
     /** Transliterate a substring. The functionality is the same as
-        <member scope="::com::sun::star::i18n">XTransliteration::transliterate()</member>
+        ::com::sun::star::i18n::XTransliteration::transliterate()
         but omits the offset parameter to improve performance.
 
         @param aStr

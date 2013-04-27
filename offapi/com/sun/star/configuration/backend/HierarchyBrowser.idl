@@ -36,13 +36,13 @@ published service HierarchyBrowser
     /** allows executing a scan of the repository
 
         <p> The repository to browse is selected by arguments passed to
-            <member scope="com::sun::star::task">XJob::execute()</member>.
+            com::sun::star::task::XJob::execute().
             The names and meanings of such arguments depend on
             the implementation. Each implementation must document such arguments.
         </p>
 
         <p> The following argument to
-            <member scope="com::sun::star::task">XJob::execute()</member>
+            com::sun::star::task::XJob::execute()
             must be supported by all implementations:
         <dl>
             <dt><code>ExcludeComponents</code> : <atom dim="[]">string</atom> or <atom >string</atom></dt>
@@ -53,7 +53,7 @@ published service HierarchyBrowser
         </dl>
         </p>
         <p> The return value of
-            <member scope="com::sun::star::task">XJob::execute()</member>
+            com::sun::star::task::XJob::execute()
             is a list of components found. The format in which components are
             returned may depend on the implementation. Each implementation
             should support returning component identifiers that are compatible

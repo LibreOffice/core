@@ -29,7 +29,7 @@ module com { module sun { module star { module document {
 
 /** describes an event happening in an OfficeDocument
 
-    <p>The <member scope="com::sun::star::lang">EventObject::Source</member> member
+    <p>The com::sun::star::lang::EventObject::Source member
     of the base type refers to the document which broadcasts the event.</p>
 
     <p>This type is the successor of the EventObject type, which should not be used

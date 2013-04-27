@@ -25,8 +25,8 @@ module com {  module sun {  module star {  module sdbc {
 
 /** represents the properties for a dBase connection (session) with a specific
     database. These properties can be used when calling the method
-    <member scope="com::sun::star::sdbc">XDriver::connect()</member> or
-    <member scope="com::sun::star::sdbc">XDriverManager::getConnectionWithInfo()</member>.
+    com::sun::star::sdbc::XDriver::connect() or
+    com::sun::star::sdbc::XDriverManager::getConnectionWithInfo().
 
     <p>
     The properties for a connection contain additional information about how to connect to a database and

@@ -178,7 +178,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         <code>absolute(1)</code>
         is the same
         as calling
-        <member scope="com::sun::star::sdbc">XResultSet::first()</member>
+        com::sun::star::sdbc::XResultSet::first()
         .
         Calling <code>moveToPosition(-1)</code> is the same as calling
         <code>moveToLast()</code>.
@@ -200,7 +200,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         Note: Calling
         <code>relative(1)</code>
         is different from calling
-        <member scope="com::sun::star::sdbc">XResultSet::next()</member>
+        com::sun::star::sdbc::XResultSet::next()
         because is makes sense to call
         <code>next()</code>
         when there is no current row, for example, when the cursor is positioned before
@@ -252,7 +252,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         is called after calling
         <code>updateXXX</code>
         , but before calling
-        <member scope="com::sun::star::sdbc">XResultSet::updateRow()</member>
+        com::sun::star::sdbc::XResultSet::updateRow()
         , then the updates made to the row are lost.
         Calling the method
         <code>refreshRow</code>

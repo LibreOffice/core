@@ -51,7 +51,7 @@ published interface XWarningsSupplier: com::sun::star::uno::XInterface
 
     /** clears all warnings reported for the object implementing the interface.
         After a call to this method, the method
-        <member scope="com::sun::star::sdbc">XWarningsSupplier::getWarnings()</member>
+        com::sun::star::sdbc::XWarningsSupplier::getWarnings()
         returns
         <void/>
         until a new warning is reported for the object.

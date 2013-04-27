@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module view {
 
 /** specifies the print progress of an XPrintJob.
 
-    <p><member scope="com::sun::star::lang">EventObject::Source</member>
+    <p>com::sun::star::lang::EventObject::Source
     contains the XPrintJob having changed its state</p>.
 
     @since OOo 1.1.2

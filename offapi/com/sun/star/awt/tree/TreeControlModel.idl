@@ -35,7 +35,7 @@ service TreeControlModel
     service ::com::sun::star::awt::UnoControlModel;
 
     /** Specifies the selection mode that is enabled for this tree.
-        <p>The default value is <member scope="com::sun::star::view">SelectionType::NONE</member></p>
+        <p>The default value is com::sun::star::view::SelectionType::NONE</p>
     */
     [property] ::com::sun::star::view::SelectionType SelectionType;
 

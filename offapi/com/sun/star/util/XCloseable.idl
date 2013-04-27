@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module util {
     <p>
     If an object should be terminated, it can be:<br>
     <ul>
-        <li>disposed (if it supports <member scope="com::sun::star::lang">XComponent::dispose()</member>)</li>
+        <li>disposed (if it supports com::sun::star::lang::XComponent::dispose())</li>
         <li>closed   (if it supports XCloseable::close())</li>
     </ul>
     First version gives the object no chance to disagree with that (e.g. if a
@@ -58,7 +58,7 @@ published interface XCloseable: XCloseBroadcaster
     /** try to close the object
 
         <p>
-        Must definitely be called before <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+        Must definitely be called before com::sun::star::lang::XComponent::dispose().
         But nobody can guarantee real closing of called object - because it can disagree with that if any
         still running processes can't be canceled yet. It's not allowed to block this call till internal
         operations will be finished here. They must be canceled or call must return immediately by throwing

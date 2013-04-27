@@ -58,11 +58,11 @@ published service SimpleSetUpdate
  </p>
 
  <p>If the elements of this set are of simple type (the type returned by
- <member scope="com::sun::star::container">XElementAccess::getElementType()</member>
+ com::sun::star::container::XElementAccess::getElementType()
  is not an interface type), then values of that type can directly be passed to
- <member scope="com::sun::star::container">XNameContainer::insertByName()</member>
+ com::sun::star::container::XNameContainer::insertByName()
  and
- <member scope="com::sun::star::container">XNameContainer::replaceByName()</member>.
+ com::sun::star::container::XNameContainer::replaceByName().
  </p>
 
  <p>Otherwise new elements have to be constructed to match the type
@@ -72,20 +72,20 @@ published service SimpleSetUpdate
  </p>
 
  <p>Objects to be inserted must not be contained in any set at the time of
- insertion. <member scope="com::sun::star::container">XChild::getParent()</member>
+ insertion. com::sun::star::container::XChild::getParent()
  must return <NULL/>. If a name had been assigned to the object prior to insertion
- (using <member scope="com::sun::star::container">XNamed::setName()</member>
+ (using com::sun::star::container::XNamed::setName()
  or by other means), this name is ignored and will be lost.
  After insertion the name of the object is the name that was used as argument
- to <member scope="com::sun::star::container">XNameContainer::insertByName()</member>
- or <member scope="com::sun::star::container">XNameContainer::replaceByName()</member>.
+ to com::sun::star::container::XNameContainer::insertByName()
+ or com::sun::star::container::XNameContainer::replaceByName().
 </p>
 
 
  <p>Objects that are removed using
- <member scope="com::sun::star::container">XNameContainer::removeByName()</member>
+ com::sun::star::container::XNameContainer::removeByName()
  or replaced using
- <member scope="com::sun::star::container">XNameContainer::replaceByName()</member>
+ com::sun::star::container::XNameContainer::replaceByName()
  remain valid and can be reinserted into a set supporting the same template and
  even under a different name.
  </p>
@@ -102,24 +102,24 @@ published service SimpleSetUpdate
 
  <p>This interface shall be implemented by an implementation,
  if and only if the element type of the set, as returned by
- <member scope="com::sun::star::container">XElementAccess::getElementType()</member>,
+ com::sun::star::container::XElementAccess::getElementType(),
  is an object type, such as an interface.
  </p>
 
- <p>Using <member scope="com::sun::star::lang">XSingleServiceFactory::createInstance()</member>
+ <p>Using com::sun::star::lang::XSingleServiceFactory::createInstance()
  an instance of the element template of this set is created. If the set
  supports multiple templates or variations of the basic template, a default
  variant of the basic template is instantiated. If an implementation supports
  variations, they may be specified by passing arguments to
- <member scope="com::sun::star::lang">XSingleServiceFactory::createInstanceWithArguments()</member>.
+ com::sun::star::lang::XSingleServiceFactory::createInstanceWithArguments().
  There are no predefined arguments for all versions of this service.
  </p>
 
  <p>The object created is not contained in the set and does not have a name yet.
  It may subsequently be inserted into the set and named using
- <member scope="com::sun::star::container">XNameContainer::insertByName()</member>
+ com::sun::star::container::XNameContainer::insertByName()
  or
- <member scope="com::sun::star::container">XNameContainer::replaceByName()</member>.
+ com::sun::star::container::XNameContainer::replaceByName().
  </p>
 */
     [optional] interface com::sun::star::lang::XSingleServiceFactory;
@@ -135,14 +135,14 @@ published service SimpleSetUpdate
 
  <p>This interface may only be implemented if the element type of the set
  (as returned by
- <member scope="com::sun::star::container">XElementAccess::getElementType()</member>)
+ com::sun::star::container::XElementAccess::getElementType())
  is an object type, such as an interface. An implementation should also implement
  interface XTemplateContainer which is optional in this service.
  </p>
 
  <p>The service identifier argument passed
- to <member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
- or <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ to com::sun::star::lang::XMultiServiceFactory::createInstance()
+ or com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
  names the template to be instantiated or otherwise identifies the structure
  to be built. The implementation must at least support using the template
  name obtained from XTemplateContainer::getElementTemplateName()

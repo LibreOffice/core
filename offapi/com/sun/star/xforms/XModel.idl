@@ -76,7 +76,7 @@ interface XModel
 
         @throws com::sun::star::lang::WrappedTargetException
             when another error occurred during the submission. The
-            <member scope="com::sun::star::lang">WrappedTargetException::TargetException</member> describes
+            com::sun::star::lang::WrappedTargetException::TargetException describes
             this error then.
     */
     void submit( [in] string id )
@@ -100,7 +100,7 @@ interface XModel
 
         @throws com::sun::star::lang::WrappedTargetException
             when another error occurred during the submission. The
-            <member scope="com::sun::star::lang">WrappedTargetException::TargetException</member> describes
+            com::sun::star::lang::WrappedTargetException::TargetException describes
             this error then.
     */
     void submitWithInteraction( [in] string id, [in] com::sun::star::task::XInteractionHandler aHandler )

@@ -64,7 +64,7 @@ published service DatabaseComboBox
 
     /** specifies the kind of list source.
 
-        <p>Note: A value of <member scope="com::sun::star::form">ListSourceType::VALUELIST</member>
+        <p>Note: A value of com::sun::star::form::ListSourceType::VALUELIST
         is not valid for a combo box. It won't be rejected when setting it, but controls will usually ignore it
         and leave the list empty.</p>
      */

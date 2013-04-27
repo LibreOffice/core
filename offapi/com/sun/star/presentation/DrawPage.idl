@@ -56,13 +56,13 @@ published service DrawPage
     [property] long Change;
 
 
-    /** If the property <member scope="com::sun::star::drawing">DrawPage::Change</member> is set to 1,
+    /** If the property com::sun::star::drawing::DrawPage::Change is set to 1,
         this is the time in seconds this page is shown before switching
         to the next page.
      */
     [property] long Duration;
 
-    /** If the property <member scope="com::sun::star::drawing">DrawPage::Change</member> is set to 1,
+    /** If the property com::sun::star::drawing::DrawPage::Change is set to 1,
         this is the time in seconds this page is shown before switching
         to the next page, also permitting sub-second precision here.
      */

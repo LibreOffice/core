@@ -175,7 +175,7 @@ interface XImageManager
         holds the information. The access key is a command URL and provides a
         ::com::sun::star::graphic::XGraphic. This container
         is placed into  the
-        <member scope="com::sun::star::ui">ConfigurationEvent::Element</member>.
+        com::sun::star::ui::ConfigurationEvent::Element.
         The image set which has been changed is put into the
         com::sun::star::ui::ConfigurationEvent::aInfo().
         </p>
@@ -186,7 +186,7 @@ interface XImageManager
         instance.
 
     <p>The owner of the object may dispose of this object using
-    <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+    com::sun::star::lang::XComponent::dispose().
     </p>
     */
     interface ::com::sun::star::lang::XComponent;

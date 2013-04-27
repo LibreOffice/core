@@ -41,7 +41,7 @@ published interface XCellRangeFormula: com::sun::star::uno::XInterface
 
         <p>Each element of the result contains the same string that
         would be returned by
-        <member scope="com::sun::star::table">XCell::getFormula()</member>
+        com::sun::star::table::XCell::getFormula()
         for the corresponding cell.</p>
      */
     sequence< sequence< string > > getFormulaArray();
@@ -51,7 +51,7 @@ published interface XCellRangeFormula: com::sun::star::uno::XInterface
         <p>The size of the array must be the same as the size of the cell
         range. Each element of the array is interpreted the same way as
         the argument to a
-        <member scope="com::sun::star::table">XCell::setFormula()</member>
+        com::sun::star::table::XCell::setFormula()
         call for the corresponding cell.</p>
 
         @throws com::sun::star::uno::RuntimeException

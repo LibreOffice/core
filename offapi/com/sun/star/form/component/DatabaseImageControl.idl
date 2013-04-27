@@ -39,16 +39,16 @@
     but as binary stream (see com::sun::star::sdb::XColumn::getBinaryStream()).</p>
 
     <p>Usually, an image control model can be bound to binary columns only, namely
-    <member scope="com::sun::star::sdbc">DataType::BINARY</member>,
-    <member scope="com::sun::star::sdbc">DataType::VARBINARY</member>,
-    <member scope="com::sun::star::sdbc">DataType::LONGVARBINARY</member>,
-    <member scope="com::sun::star::sdbc">DataType::OTHER</member>,
-    <member scope="com::sun::star::sdbc">DataType::LONGVARCHAR</member></p>
+    com::sun::star::sdbc::DataType::BINARY,
+    com::sun::star::sdbc::DataType::VARBINARY,
+    com::sun::star::sdbc::DataType::LONGVARBINARY,
+    com::sun::star::sdbc::DataType::OTHER,
+    com::sun::star::sdbc::DataType::LONGVARCHAR</p>
 
     <p/>
 
     <p>Note that besides taking the image to be displayed from the bound field, there is another option. The
-    <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member> property specifies
+    com::sun::star::awt::UnoControlImageControlModel::ImageURL property specifies
     the URL of an image to be displayed. If this property is changed from outside, the respective file
     is loaded and set as image source.</p>
 
@@ -67,13 +67,13 @@
             <li>When the user by some interaction tells the control to contain a new image, this is
                 exchanged by URL. For example, implementations of the control service may allow the user
                 to browse for image. After this, the URL of the image is set as
-                <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+                com::sun::star::awt::UnoControlImageControlModel::ImageURL
                 property at the model.<br/>
                 Now the control loads the image determined by the property value, and starts producing
                 a new data stream, which is displayed by the control (which is a consumer for this stream).<br/>
                 From now on, the control and thus the database record counts as modified. If the cursor of the
                 form is moved further, the modified record is saved, means the content of the image pointed to
-                by <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+                by com::sun::star::awt::UnoControlImageControlModel::ImageURL
                 is saved into the column.</li>
         </ul>
     </p>

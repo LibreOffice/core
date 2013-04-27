@@ -42,7 +42,7 @@
 /** describes a container which provides access to documents embedded into a database document,
     usually forms and reports.
 
-    <p>The <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+    <p>The com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
     should be used to create sub document container or form, or report objects.</p>
 
     <p>The embedded documents do not support any particular database related service, instead, they're

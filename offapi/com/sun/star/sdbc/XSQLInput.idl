@@ -57,14 +57,14 @@
     is called with an object of a service implementing the interface
     <code>SQLData</code>
     , the SDBC driver calls the method
-    <member scope="com::sun::star::sdbc">XSQLData::getSQLType()</member>
+    com::sun::star::sdbc::XSQLData::getSQLType()
     to determine the SQL type of the user-defined type (UDT) being custom mapped.
     The driver creates an instance of
     com::sun::star::sdbc::XSQLInput
     ,
     populating it with the attributes of the UDT. The driver then passes the input
     stream to the method
-    <member scope="com::sun::star::sdbc">XSQLData::readSQL()</member>
+    com::sun::star::sdbc::XSQLData::readSQL()
     , which in turn calls the
     <code>XSQLInput.readXXX</code>
     methods in its implementation for reading the attributes from the input stream.
@@ -201,7 +201,7 @@ published interface XSQLInput: com::sun::star::uno::XInterface
         the method returns <void/>. If the datum is a SQL structured or distinct
         type, it determines the SQL type of the datum at the head of the stream,
         constructs an object of the appropriate service, and calls the method
-        <member scope="com::sun::star::sdbc">XSQLData::readSQL()</member>
+        com::sun::star::sdbc::XSQLData::readSQL()
         on that object, which reads additional data
         from the stream using the protocol described for that method.
 

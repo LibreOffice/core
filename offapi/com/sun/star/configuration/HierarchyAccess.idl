@@ -53,7 +53,7 @@ published service HierarchyAccess
 {
 /** allows access to immediate children of this node.
 
- <p><member scope="com::sun::star::container">XNameAccess::getByName()</member>
+ <p>com::sun::star::container::XNameAccess::getByName()
  returns an <atom>any</atom> holding either a simple value or an interface
  on another HierarchyAccess if the child is not a simple value.
  </p>
@@ -62,7 +62,7 @@ published service HierarchyAccess
 
 /** allows access to all descendants of this node
 
- <p><member scope="com::sun::star::container">XHierarchicalNameAccess::getByHierarchicalName()</member>
+ <p>com::sun::star::container::XHierarchicalNameAccess::getByHierarchicalName()
  returns an <atom>any</atom> holding either a simple value or an interface
  on another HierarchyAccess if the descendant is not a simple value.
  </p>
@@ -93,7 +93,7 @@ published service HierarchyAccess
  described by com::sun::star::beans::PropertyAttribute
  values or if the same information is available by other means,
  e.g. if the implementation supports
- <member scope="com::sun::star::beans">XPropertySet::getPropertySetInfo()</member>.
+ com::sun::star::beans::XPropertySet::getPropertySetInfo().
  </p>
 
  <p>If a child of this node is an object that implements

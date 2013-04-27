@@ -77,7 +77,7 @@ published service ContentLoader
         </ul>
 
         The parameters passed to the
-        <member scope="com::sun::star::frame">XFrameLoader::load()</member>
+        com::sun::star::frame::XFrameLoader::load()
         are forwarded to the object being created,
         in particular to it's
         com::sun::star::lang::XInitialization

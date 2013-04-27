@@ -59,14 +59,14 @@ published service TableSortDescriptor
         <p>Some implementations may not support sorting columns.</p>
 
         @deprecated
-         use the property <member scope="com::sun::star::util">SortDescriptor::SortColumns</member>
+         use the property com::sun::star::util::SortDescriptor::SortColumns
          instead.
      */
     [property] com::sun::star::table::TableOrientation Orientation;
 
 
     /** specifies whether the first row or column (depending on
-        <member scope="com::sun::star::util">SortDescriptor::SortColumns</member>) is a
+        com::sun::star::util::SortDescriptor::SortColumns) is a
         header which should not be sorted.
      */
     [property] boolean ContainsHeader;

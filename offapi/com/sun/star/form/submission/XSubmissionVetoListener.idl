@@ -38,11 +38,11 @@ interface XSubmissionVetoListener : com::sun::star::lang::XEventListener
         is about to submit its data.
 
         @param event
-            The submission event. The <member scope="com::sun::star::lang">EventObject::Source</member>
+            The submission event. The com::sun::star::lang::EventObject::Source
             member of the structure describes the component which is about to submit its data.
 
         @throws com::sun::star::util::VetoException
-            when the submission is vetoed. <member scope="com::sun::star::uno">Exception::Message</member>
+            when the submission is vetoed. com::sun::star::uno::Exception::Message
             should contain a justification for the veto then.
      */
     void    submitting( [in] com::sun::star::lang::EventObject event )

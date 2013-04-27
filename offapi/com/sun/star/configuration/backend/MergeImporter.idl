@@ -30,7 +30,7 @@ module com { module sun { module star { module configuration { module backend {
     imports data into a configuration layer by merging with existing data.
 
     <p> No named arguments to
-        <member scope="com::sun::star::lang">XInitialization::initialize()</member>
+        com::sun::star::lang::XInitialization::initialize()
         are supported.
     </p>
 

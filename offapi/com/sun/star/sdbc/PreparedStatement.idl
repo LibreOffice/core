@@ -52,12 +52,12 @@
      must specify types that are compatible with the defined SQL type of
      the input parameter. For instance, if the IN parameter has SQL type
      Integer, then the method
-     <member scope="com::sun::star::sdbc">XParameters::setInt()</member>
+     com::sun::star::sdbc::XParameters::setInt()
      should be used.
      </P>
      <p>
      If arbitrary parameter type conversions are required, the method
-     <member scope="com::sun::star::sdbc">XParameters::setObject()</member>
+     com::sun::star::sdbc::XParameters::setObject()
      should be used with a target SQL type.
      </p>
      <p>

@@ -35,8 +35,8 @@ module com {  module sun {  module star {  module form { module inspection {
     have "no", a "vertical", a "horizontal", or "both" scrollbars.<p>
 
     <p>Second, if it detects a com::sun::star::form::component::RichTextControl to inspect,
-    it supersedes the <member scope="com::sun::star::form::component">RichTextControl::RichText</member>
-    and the <member scope="com::sun::star::awt">UnoControlEditModel::MultiLine</member> properties with a new
+    it supersedes the com::sun::star::form::component::RichTextControl::RichText
+    and the com::sun::star::awt::UnoControlEditModel::MultiLine properties with a new
     one which allows choosing the text type with one single action.</p>
 
     @see com::sun::star::inspection::XPropertyHandler

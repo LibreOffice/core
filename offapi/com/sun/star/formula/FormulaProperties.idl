@@ -146,35 +146,35 @@ published service FormulaProperties
     /** contains the relative height of the font for functions.
 
         The values unit is percent of the
-        <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
+        com::sun::star::formula::FormulaProperties::BaseFontHeight
      */
     [property] short    RelativeFontHeightFunctions;
 
     /** contains the relative height of the font for indices.
 
         The values unit is percent of the
-        <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
+        com::sun::star::formula::FormulaProperties::BaseFontHeight
      */
     [property] short    RelativeFontHeightIndices;
 
     /** contains the relative height of the font for limits.
 
         The values unit is percent of the
-        <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
+        com::sun::star::formula::FormulaProperties::BaseFontHeight
      */
     [property] short    RelativeFontHeightLimits;
 
     /** contains the relative height of the font for operators.
 
         The values unit is percent of the
-        <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
+        com::sun::star::formula::FormulaProperties::BaseFontHeight
      */
     [property] short    RelativeFontHeightOperators;
 
     /** contains the relative height of the font for text.
 
         The values unit is percent of the
-        <member scope="com::sun::star::formula">FormulaProperties::BaseFontHeight</member>
+        com::sun::star::formula::FormulaProperties::BaseFontHeight
      */
     [property] short    RelativeFontHeightText;
 

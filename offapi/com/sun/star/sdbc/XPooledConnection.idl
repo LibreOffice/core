@@ -39,7 +39,7 @@
     </p>
     <p>
     When the method
-    <member scope="com::sun::star::sdbc">XPooledConnection::getConnection()</member>
+    com::sun::star::sdbc::XPooledConnection::getConnection()
     is called, the PooledConnection returns the connection which is pooled.
     </p>
 

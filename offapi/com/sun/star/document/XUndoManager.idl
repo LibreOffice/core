@@ -157,7 +157,7 @@ interface XUndoManager
 
         <p>The Undo manager takes ownership of any actions pushed onto the undo stack. This means that if the
         action is finally removed from the Undo manager's control (e.g. by calling clear() resp.
-        clearRedo()), it will be disposed, as long as it supports the <member scope="com::sun::star::lang">XComponent</member>
+        clearRedo()), it will be disposed, as long as it supports the com::sun::star::lang::XComponent
         interface.</p>
 
         <p>If the Undo manager is <a href="#locking">locked</a> at the moment the method is called, the call will be ignored, and the undo action

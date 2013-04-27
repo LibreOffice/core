@@ -57,7 +57,7 @@ published service CachedContentResultSet
     <p>The default value is implementation specific.
 
     <p>If you set the value to
-    <member scope="com::sun::star::sdbc">FetchDirection::UNKNOWN</member> an
+    com::sun::star::sdbc::FetchDirection::UNKNOWN an
     implementation specific direction will be used.
     */
     [property] long FetchDirection;

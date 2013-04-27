@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module sheet {
     multiple data fields.
 
     <p>This data field can be inserted into the rows dimension or columns
-    dimension by changing its <member scope="DataPilotField">Orientation</member>
+    dimension by changing its DataPilotField::Orientation
     property. This interface can be used to access the data layout field
     before multiple data fields are inserted into the DataPilot table. It
     remains invisible as long as the DataPilot table contains at most one data
@@ -47,7 +47,7 @@ published interface XDataPilotDataLayoutFieldSupplier
 
         <p>If the field does not exist yet, it will be created. It is possible
         to insert this field into the rows or columns dimension by changing
-        its <member scope="DataPilotField">Orientation</member> property.</p>
+        its DataPilotField::Orientation property.</p>
      */
     XDataPilotField getDataLayoutField();
 

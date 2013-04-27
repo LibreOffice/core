@@ -49,7 +49,7 @@ module com { module sun { module star { module configuration {
 
  <p>While an instance is not contained in a set object, it is owned by
  the client and can be disposed by calling
- <member scope="com::sun::star::lang">XComponent::dispose()</member>. The name
+ com::sun::star::lang::XComponent::dispose(). The name
  of the object can freely be changed in that situation though without
  persistent effect.
  </p>
@@ -59,7 +59,7 @@ module com { module sun { module star { module configuration {
  While it is contained in the container, clients must not dispose the
  object. When inserted, the name of the object is fixed and is used to
  identify it within the container. An implementation may support
- <member scope="com::sun::star::container">XNamed::setName()</member> even in
+ com::sun::star::container::XNamed::setName() even in
  this case. If it does, changing the name has the same effect of removing
  the object (under the old name) and then reinserting it into the same
  container (using the new name).
@@ -102,12 +102,12 @@ published service SetElement
 
  <p>In this service, this interface is mandatory</p>
 
- <p><member scope="com::sun::star::container">XChild::getParent()</member>
+ <p>com::sun::star::container::XChild::getParent()
  returns <NULL/>, if the object is currently not contained in a container.
  </p>
 
  <p>An implementation may also support
- <member scope="com::sun::star::container">XChild::setParent()</member>.
+ com::sun::star::container::XChild::setParent().
  If it does, changing the parent has the effect of first removing the object
  from its old parent (if any) and then inserting it into the new parent
  (unless that is <NULL/>) under the same name. The new parent must be part of
@@ -120,9 +120,9 @@ published service SetElement
 /** allows controlling or observing the lifetime of the object.
 
  <p>Clients may dispose of the object using
- <member scope="com::sun::star::lang">XComponent::dispose()</member>, only if
+ com::sun::star::lang::XComponent::dispose(), only if
  the object is currently not contained in a container (
- <member scope="com::sun::star::container">XChild::getParent()</member>
+ com::sun::star::container::XChild::getParent()
  returns <NULL/>).
  </p>
 

@@ -42,7 +42,7 @@ published interface XDropTargetDropContext : com::sun::star::uno::XInterface
     /** Accept the Drop.
 
         <p>This method should be called from the
-        <member scope="com::sun::star::datatransfer::dnd">XDropTargetListener::drop()</member>
+        com::sun::star::datatransfer::dnd::XDropTargetListener::drop()
         method if the implementation wishes to accept the drop operation with the specified action.</p>
 
         @param dragOperation

@@ -37,7 +37,7 @@
 
     <p>
     When the method
-    <member scope="com::sun::star::sdbc">XDriverManager::getConnection()</member>
+    com::sun::star::sdbc::XDriverManager::getConnection()
     is called,
     the DriverManager will attempt to
     locate a suitable driver.

@@ -39,7 +39,7 @@ published struct SetPropertyTolerantFailed
         properties value.
 
         <p>Since the property was not successful set the result will never be
-        <member scope="com::sun::star::beans::TolerantPropertySetResultType">SUCCESS</member>.
+        com::sun::star::beans::TolerantPropertySetResultType::SUCCESS.
         </p>
 
         @see com::sun::star::beans::TolerantPropertySetResultType

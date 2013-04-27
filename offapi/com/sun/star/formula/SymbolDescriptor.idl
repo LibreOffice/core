@@ -74,16 +74,16 @@ published struct SymbolDescriptor
         @see   com::sun::star::awt::FontWeight
 
         The allowed integer values correspond as follows:
-        0 : <member scope="com::sun::star::awt">FontWeight::DONTKNOW</member>
-        1 : <member scope="com::sun::star::awt">FontWeight::THIN</member>
-        2 : <member scope="com::sun::star::awt">FontWeight::ULTRALIGHT</member>
-        3 : <member scope="com::sun::star::awt">FontWeight::LIGHT</member>
-        4 : <member scope="com::sun::star::awt">FontWeight::SEMILIGHT</member>
-        5 : <member scope="com::sun::star::awt">FontWeight::NORMAL</member>
-        7 : <member scope="com::sun::star::awt">FontWeight::SEMIBOLD</member>
-        8 : <member scope="com::sun::star::awt">FontWeight::BOLD</member>
-        9 : <member scope="com::sun::star::awt">FontWeight::ULTRABOLD</member>
-        10 : <member scope="com::sun::star::awt">FontWeight::BLACK</member>
+        0 : com::sun::star::awt::FontWeight::DONTKNOW
+        1 : com::sun::star::awt::FontWeight::THIN
+        2 : com::sun::star::awt::FontWeight::ULTRALIGHT
+        3 : com::sun::star::awt::FontWeight::LIGHT
+        4 : com::sun::star::awt::FontWeight::SEMILIGHT
+        5 : com::sun::star::awt::FontWeight::NORMAL
+        7 : com::sun::star::awt::FontWeight::SEMIBOLD
+        8 : com::sun::star::awt::FontWeight::BOLD
+        9 : com::sun::star::awt::FontWeight::ULTRABOLD
+        10 : com::sun::star::awt::FontWeight::BLACK
 
     */
     short nWeight;
@@ -94,7 +94,7 @@ published struct SymbolDescriptor
 
         The values
         <member cope"com::sun::star::awt">FontSlant::REVERSE_OBLIQUE</member> and
-        <member scope="com::sun::star::awt">FontSlant::REVERSE_ITALIC</member>
+        com::sun::star::awt::FontSlant::REVERSE_ITALIC
         may not be used.
     */
     short nItalic;

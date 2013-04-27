@@ -61,7 +61,7 @@ published interface XDropTargetDragContext: com::sun::star::uno::XInterface
 
     /** Reject the drag as a result of examining the available
         com::sun::star::datatransfer::DataFlavor types
-        received in the <member scope="com::sun::star::datatransfer::dnd">XDropTargetListener::dragEnter()</member> method.
+        received in the com::sun::star::datatransfer::dnd::XDropTargetListener::dragEnter() method.
     */
 
     void rejectDrag();

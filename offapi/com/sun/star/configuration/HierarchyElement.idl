@@ -91,7 +91,7 @@ published service HierarchyElement
  as a child or descendant of another tree node, for example, directly from a factory or provider.
  </p>
 
- <p><member scope="com::sun::star::container">XChild::getParent()</member>
+ <p>com::sun::star::container::XChild::getParent()
  returns NULL, if this object is currently not contained in another node.
  </p>
 

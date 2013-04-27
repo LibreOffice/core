@@ -74,7 +74,7 @@ interface XValidatableFormComponent : XValidatable
 
         <p>Again, this is a convenience method. For example, for a com::sun::star::form::component::FormattedField,
         calling this method is equivalent to retrieving the
-        <member scope="com::sun::star::awt">UnoControlFormattedFieldModel::EffectiveValue</member>.</p>
+        com::sun::star::awt::UnoControlFormattedFieldModel::EffectiveValue.</p>
 
         <p>If no validator has been set (XValidatable::setValidator()), the value returned
         here is defined by the service implementing this interface.</p>

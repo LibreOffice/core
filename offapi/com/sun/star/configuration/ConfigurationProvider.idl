@@ -30,7 +30,7 @@ module com { module sun { module star { module configuration {
 
  <p>An implementation is usually obtained from a
  com::sun::star::lang::ServiceManager. The arguments passed to
- <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContextAndArguments()</member>
+ com::sun::star::lang::XMultiComponentFactory::createInstanceWithContextAndArguments()
  select the configuration data source. Arguments must be provided as
  com::sun::star::beans::NamedValue
  or com::sun::star::beans::PropertyValue.
@@ -42,7 +42,7 @@ module com { module sun { module star { module configuration {
  com::sun::star::configuration::DefaultProvider object.
  </p>
  <p>Some arguments for
- <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
  may be given default values during creation of this service. In particular
  this applies to the parameters <code>"Locale"</code> and <code>"EnableAsync"</code>.
  </p>
@@ -55,7 +55,7 @@ published service ConfigurationProvider
  of the configuration.
 
  <p>The parameter <var>aServiceSpecifier</var> passed to
- <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
  supports at least the service specifiers
  <code>"com.sun.star.configuration.ConfigurationAccess"</code> and
  <code>"com.sun.star.configuration.ConfigurationUpdateAccess"</code>.
@@ -80,7 +80,7 @@ published service ConfigurationProvider
  </p>
 
  <p>The arguments passed to
- <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
  in parameter <var>aArguments</var> specify the view of the configuration that
  should be created. That is, they determine the subset of elements that can be
  accessed starting from the returned object. Each element of the argument
@@ -176,7 +176,7 @@ published service ConfigurationProvider
           at some later time. If <FALSE/>, the cache must operate in
           <em>write-through</em> mode, where updates are written to persistent
           storage at once - that is before
-          <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
+          com::sun::star::util::XChangesBatch::commitChanges()
           returns.
           <p><em>This parameter was formerly called <code>"lazywrite"</code>.
             The old name should still be supported for compatibility.
@@ -198,11 +198,11 @@ published service ConfigurationProvider
     </li>
  </ul>
 
- <p><member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
+ <p>com::sun::star::lang::XMultiServiceFactory::createInstance()
  may be unusable. Only an implementation that supports service names that can be
  used with no further arguments support this method. It should return the
  same result as if
- <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
  had been called using an empty sequence of arguments.
  </p>
 */
@@ -212,7 +212,7 @@ published service ConfigurationProvider
 /** allows controlling or observing the lifetime of the configuration.
 
  <p>The owner of the provider may dispose of this object
- using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+ using com::sun::star::lang::XComponent::dispose().
  Note that the default provider is owned by the
  com::sun::star::lang::ServiceManager and should not be
  disposed of by user code.

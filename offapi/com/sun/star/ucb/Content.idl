@@ -922,7 +922,7 @@ published service Content
     /** provides access to the parent content of this content.
 
         <p>The object returned by the implementation of the method
-        <member scope="com::sun::star::container">XChild::getParent()</member>
+        com::sun::star::container::XChild::getParent()
         must implement the service Content. If the content is a
         root object, an empty interface may be returned.
 

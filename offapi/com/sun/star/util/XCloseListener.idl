@@ -102,7 +102,7 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
         </p>
 
         <p>
-        If the event <member scope="com::sun::star::lang">XEventListener::disposing()</member> occurred before
+        If the event com::sun::star::lang::XEventListener::disposing() occurred before
         it must be accepted too. There exist no chance for a disagreement any more.
         </p>
 

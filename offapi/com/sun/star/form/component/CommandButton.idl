@@ -44,7 +44,7 @@ published service CommandButton
 
     /** supplies the image producer when the button is to display an image.
 
-        <p>If the <member scope="com::sun::star::awt">UnoControlButtonModel::ImageURL</member> points to the location of an
+        <p>If the com::sun::star::awt::UnoControlButtonModel::ImageURL points to the location of an
         image to be displayed on the button, this interface can be used to retrieve an image
         producer, which itself will supply the image.</p>
 
@@ -77,7 +77,7 @@ published service CommandButton
 
     /** specifies the default toggle state for the button, used when it is reset.
 
-        <p>This property is meaningful only when <member scope="com::sun::star::awt">UnoControlButtonModel::Toggle</member>
+        <p>This property is meaningful only when com::sun::star::awt::UnoControlButtonModel::Toggle
         is <TRUE/>. In this case, the <code>DefaultState</code> controls to which <code>State</code> the button will
         be reset.</p>
 
@@ -88,7 +88,7 @@ published service CommandButton
 
     /** allows resetting the button
 
-        <p>This property is meaningful only when <member scope="com::sun::star::awt">UnoControlButtonModel::Toggle</member>
+        <p>This property is meaningful only when com::sun::star::awt::UnoControlButtonModel::Toggle
         is <TRUE/>. In this case, the <code>DefaultState</code> controls to which <code>State</code> the button will
         be reset, when com::sun::star::form::XReset::reset() is invoked.</p>
 

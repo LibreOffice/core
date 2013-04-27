@@ -33,9 +33,9 @@ module com {  module sun {  module star {  module form { module binding {
     <p>Control models usually have some kind of value property, which reflects the very current
     content of the controls associated with this model. For instance, for an
     com::sun::star::form::component::TextField, this would be the
-    <member scope="com::sun::star::awt">UnoControlEditModel::Text</member> property of the base
+    com::sun::star::awt::UnoControlEditModel::Text property of the base
     service. Similarly, a com::sun::star::form::component::CheckBox has
-    a property <member scope="com::sun::star::awt">UnoControlCheckBoxModel::State</member>, which
+    a property com::sun::star::awt::UnoControlCheckBoxModel::State, which
     reflects the current check state.</p>
 
     <p>Usual com::sun::star::form::DataAwareControlModels can be bound to

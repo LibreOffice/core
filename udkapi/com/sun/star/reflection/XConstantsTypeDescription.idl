@@ -30,7 +30,7 @@
 /** Reflects a constants group.
 
     <p>The type class of this type is
-    <member scope="com::sun::star::uno">TypeClass::CONSTANTS</member>.
+    com::sun::star::uno::TypeClass::CONSTANTS.
 
     @since OOo 1.1.2
   */

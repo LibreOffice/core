@@ -78,15 +78,15 @@ service GenericDrawingDocument
         and can be inserted into text as com::sun::star::text::TextContent.
 
         <ul>
-            <li><member scope="com::sun::star::text">TextField::DateTime</member></li>
-            <li><member scope="com::sun::star::text">TextField::URL</member></li>
-            <li><member scope="com::sun::star::text">TextField::PageNumber</member></li>
-            <li><member scope="com::sun::star::text">TextField::PageCount</member></li>
-            <li><member scope="com::sun::star::text">TextField::SheetName</member></li>
-            <li><member scope="com::sun::star::text">TextField::FileName</member></li>
-            <li><member scope="com::sun::star::text">TextField::DocInfo.Title</member></li>
-            <li><member scope="com::sun::star::text">TextField::Author</member></li>
-            <li><member scope="com::sun::star::text">TextField::Measure</member></li>
+            <li>com::sun::star::text::TextField::DateTime</li>
+            <li>com::sun::star::text::TextField::URL</li>
+            <li>com::sun::star::text::TextField::PageNumber</li>
+            <li>com::sun::star::text::TextField::PageCount</li>
+            <li>com::sun::star::text::TextField::SheetName</li>
+            <li>com::sun::star::text::TextField::FileName</li>
+            <li>com::sun::star::text::TextField::DocInfo.Title</li>
+            <li>com::sun::star::text::TextField::Author</li>
+            <li>com::sun::star::text::TextField::Measure</li>
         </ul>
 
         <p>The following services gives access to resources used inside the document

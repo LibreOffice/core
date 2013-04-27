@@ -74,7 +74,7 @@ published interface XTransferable: com::sun::star::uno::XInterface
 
         <br/><br/><p><strong>Note: </strong>This method is only for analogy with the JAVA Clipboard interface. To
         avoid many calls, the caller should instead use
-        <member scope="com::sun::star::datatransfer">XTransferable::getTransferDataFlavors()</member>.
+        com::sun::star::datatransfer::XTransferable::getTransferDataFlavors().
     */
     boolean isDataFlavorSupported( [in] DataFlavor aFlavor );
 };

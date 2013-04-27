@@ -36,7 +36,7 @@
     provided by the
     com::sun::star::sdbc::XResultSetMetaData
     interface returned by the
-    <member scope="com::sun::star::sdbc">XResultSetMetaDataSupplier::getMetaData()</member>
+    com::sun::star::sdbc::XResultSetMetaDataSupplier::getMetaData()
     method.
     </p>
  */

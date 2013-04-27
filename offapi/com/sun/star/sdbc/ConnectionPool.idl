@@ -28,7 +28,7 @@
 
     <p>
     When the method
-    <member scope="com::sun::star::sdbc">XPooledConnection::getConnection()</member>
+    com::sun::star::sdbc::XPooledConnection::getConnection()
     is called,
     the ConnectionPool will attempt to locate a suitable pooled connection
     or create a new connection from the DriverManager. When the connection

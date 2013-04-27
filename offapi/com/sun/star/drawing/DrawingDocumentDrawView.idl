@@ -108,9 +108,9 @@ published service DrawingDocumentDrawView
         @see com::sun::star::view::DocumentZoomType
 
         Note: After setting other types then
-        <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>,
+        com::sun::star::view::DocumentZoomType::BY_VALUE,
         implementations may calculate the required zoom value and set the type
-        to <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>
+        to com::sun::star::view::DocumentZoomType::BY_VALUE
         afterwards.
 
         @since OOo 1.1.2
@@ -120,7 +120,7 @@ published service DrawingDocumentDrawView
 
        /** Defines the zoom value to use.
         Valid only if the ZoomType is set to
-        <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
+        com::sun::star::view::DocumentZoomType::BY_VALUE.
 
         @since OOo 1.1.2
     */

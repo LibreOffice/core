@@ -35,7 +35,7 @@ interface XFormComponentValidityListener : com::sun::star::lang::XEventListener
         is registered changed.
 
         @param Source
-            The member <member scope="com::sun::star::lang">EventObject::Source</member>
+            The member com::sun::star::lang::EventObject::Source
             represents the XValidatableFormComponent whose validity, value, or text changed.
     */
     void    componentValidityChanged( [in] com::sun::star::lang::EventObject Source );

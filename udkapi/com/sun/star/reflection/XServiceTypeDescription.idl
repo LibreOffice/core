@@ -35,7 +35,7 @@
     accumulation-based services.</p>
 
     <p>The type class of this type is
-    <member scope="com::sun::star::uno">TypeClass::SERVICE</member>.
+    com::sun::star::uno::TypeClass::SERVICE.
 
     @since OOo 1.1.2
   */

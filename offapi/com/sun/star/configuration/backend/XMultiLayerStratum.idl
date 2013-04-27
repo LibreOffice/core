@@ -149,7 +149,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 </p>
                 <p> The format and meaning of a timestamp depends on
                     the implementation. Timestamps can be obtained using
-                    <member scope="com::sun::star::util">XTimeStamped::getTimestamp()</member>.
+                    com::sun::star::util::XTimeStamped::getTimestamp().
                 </p>
 
       @returns
@@ -192,7 +192,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 </p>
                 <p> The format and meaning of a timestamp depends on
                     the implementation. Timestamps can be obtained using
-                    <member scope="com::sun::star::util">XTimeStamped::getTimestamp()</member>.
+                    com::sun::star::util::XTimeStamped::getTimestamp().
                 </p>
 
       @returns
@@ -246,7 +246,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 </p>
                 <p> The format and meaning of a timestamp depends on
                     the implementation. Timestamps can be obtained using
-                    <member scope="com::sun::star::util">XTimeStamped::getTimestamp()</member>.
+                    com::sun::star::util::XTimeStamped::getTimestamp().
                 </p>
 
       @returns

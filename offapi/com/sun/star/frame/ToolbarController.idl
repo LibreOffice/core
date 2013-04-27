@@ -53,7 +53,7 @@ service ToolbarController
 
         <p>
         The toolbar controller implementation should register itself as a
-        listener when its <member scope="com::sun::star::util">XUpdatable</member>
+        listener when its com::sun::star::util::XUpdatable
         interface has been called.
         </p>
      */

@@ -31,7 +31,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 /** This class is the base class for DragSourceDragEvent and DragSourceDropEvent.
 
     <p>To access the XDragSource that originated this event, use the
-    <member scope="com::sun::star::lang">EventObject::Source</member> member of
+    com::sun::star::lang::EventObject::Source member of
     this object.</p>
 */
 

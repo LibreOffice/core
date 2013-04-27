@@ -41,7 +41,7 @@ published interface XGraphicExportFilter
 
         <ul>
             <li>
-                <member scope="com::sun::star::document">MediaDescriptor::MediaType</member>
+                com::sun::star::document::MediaDescriptor::MediaType
                 <p>Depending on the export filters supported by this component,
                 this is the mime type of the target graphic file.</p>
                 <p>Possible values are:</p>
@@ -68,7 +68,7 @@ published interface XGraphicExportFilter
                 for all values supported by the component.</p>
             </li>
             <li>
-                <member scope="com::sun::star::document">MediaDescriptor::URL</member>
+                com::sun::star::document::MediaDescriptor::URL
                 <p>This is the target url of the file that will be created during export.</p>
             </li>
         </ul>

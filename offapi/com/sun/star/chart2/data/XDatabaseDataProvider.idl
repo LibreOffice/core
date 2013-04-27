@@ -106,11 +106,11 @@ interface XDatabaseDataProvider
     on the CommandType.
     <p>In case of a #CommandType of CommandType::COMMAND,
     means in case the #Command specifies an SQL statement, the inherited
-    <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+    com::sun::star::sdbc::RowSet::EscapeProcessing
     becomes relevant:<br/>
     It then can be to used to specify whether the SQL statement should be analyzed on the
     client side before sending it to the database server.<br/>
-    The default value for <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+    The default value for com::sun::star::sdbc::RowSet::EscapeProcessing
     is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
     which are not standard SQL, to your database.</p>
 

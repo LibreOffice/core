@@ -36,7 +36,7 @@
     describing its tables, its supported SQL grammar, its stored
     procedures, and the capabilities of this connection. This
     information is obtained with the
-    <member scope="com::sun::star::sdbc">XConnection::getMetaData()</member>
+    com::sun::star::sdbc::XConnection::getMetaData()
     method.
     </p>
     <p>

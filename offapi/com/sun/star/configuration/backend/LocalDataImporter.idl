@@ -49,7 +49,7 @@ published service LocalDataImporter
     /** provides for running an import job
 
         <p> The implementation returns <void/> from
-            <member scope="com::sun::star::task">XJob::execute()</member>
+            com::sun::star::task::XJob::execute()
             to indicates successful execution. If import is not executed,
             because <code>OverwriteExisting = </code><TRUE/> was specified,
             a com::sun::star::lang::IllegalAccessException
@@ -62,7 +62,7 @@ published service LocalDataImporter
         </p>
 
         <p> The standard arguments to
-            <member scope="com::sun::star::task">XJob::execute()</member>
+            com::sun::star::task::XJob::execute()
             are all supported by implementations. Additionally the following
             argument is required to select the data source:
         <dl>

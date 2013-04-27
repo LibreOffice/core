@@ -109,7 +109,7 @@ constants FormFeature
     /// opens a dialog which allows the user to interactively specify a form filter
     const short InteractiveFilter   = 16;
 
-    /** toggles the <member scope="com::sun::star::sdb">RowSet::ApplyFilter</member> property
+    /** toggles the com::sun::star::sdb::RowSet::ApplyFilter property
         of a the form.
     */
     const short ToggleApplyFilter   = 17;
@@ -121,8 +121,8 @@ constants FormFeature
         Articles WHERE Price &gt; 100</code>, then the <code>Price &gt; 100</code> filter
         will not be removed.</p>
 
-        <p>Effectively, this operation resets the <member scope="com::sun::star::sdb">RowSet::Filter</member>
-        and <member scope="com::sun::star::sdb">RowSet::Order</member> properties of the form.</p>
+        <p>Effectively, this operation resets the com::sun::star::sdb::RowSet::Filter
+        and com::sun::star::sdb::RowSet::Order properties of the form.</p>
     */
     const short RemoveFilterAndSort = 18;
 

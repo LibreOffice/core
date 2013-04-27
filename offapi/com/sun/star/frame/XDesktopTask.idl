@@ -37,7 +37,7 @@ published interface XDesktopTask: com::sun::star::lang::XComponent
     void initialize( [in] com::sun::star::awt::XWindow TaskWindow );
 
     /** use com::sun::star::util::XCloseable
-        or <member scope="com::sun::star::lang">XComponent::dispose()</member>
+        or com::sun::star::lang::XComponent::dispose()
         instead.
 
         @deprecated

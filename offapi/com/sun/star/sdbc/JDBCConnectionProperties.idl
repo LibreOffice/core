@@ -26,8 +26,8 @@ module com {  module sun {  module star {  module sdbc {
 
 /** represents the properties for a JDBC connection (session) with a specific
     database. These properties can be used when calling the method
-    <member scope="com::sun::star::sdbc">XDriver::connect()</member> or
-    <member scope="com::sun::star::sdbc">XDriverManager::getConnectionWithInfo()</member>.
+    com::sun::star::sdbc::XDriver::connect() or
+    com::sun::star::sdbc::XDriverManager::getConnectionWithInfo().
 
     <p>
     The properties for a connection contain additional information about how to connect to a database and
@@ -80,7 +80,7 @@ service JDBCConnectionProperties
     */
     [optional, property] string AutoRetrievingStatement;
 
-    /** specifies how the type info returned by <member scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member> will be modified.
+    /** specifies how the type info returned by com::sun::star::sdbc::XDatabaseMetaData::getTypeInfo() will be modified.
         <p>The sequence contains an even amount of string values. Each pair describes
         <li>what should be searched for and </li>
         <li>what should be replaced if found.</li>

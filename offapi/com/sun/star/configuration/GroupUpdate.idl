@@ -62,7 +62,7 @@ published service GroupUpdate
 
  <p>Elements of this group may be replaced only if they are of simple type.
  The type returned by
- <member scope="com::sun::star::container">XElementAccess::getElementType()</member>
+ com::sun::star::container::XElementAccess::getElementType()
  must not be an interface type. Replacing whole subtrees is not supported.
  </p>
 */

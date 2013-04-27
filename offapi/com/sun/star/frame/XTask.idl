@@ -31,7 +31,7 @@
 published interface XTask: XFrame
 {
     /** use com::sun::star::util::XCloseable or
-        <member scope="com::sun::star::lang">XComponent::dispose()</member>
+        com::sun::star::lang::XComponent::dispose()
         at a Frame instead of this one
         @deprecated
      */

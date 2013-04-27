@@ -184,8 +184,8 @@ published service UnoControlCheckBoxModel
     /** denotes the writing mode used in the control, as specified in the
         com::sun::star::text::WritingMode2 constants group.
 
-        <p>Only <member scope="com::sun::star::text">WritingMode2::LR_TB</member> and
-        <member scope="com::sun::star::text">WritingMode2::RL_TB</member> are supported at the moment.</p>
+        <p>Only com::sun::star::text::WritingMode2::LR_TB and
+        com::sun::star::text::WritingMode2::RL_TB are supported at the moment.</p>
 
         @since OOo 3.1
     */

@@ -57,7 +57,7 @@ published service GroupElement
 
  <p>In this service this interface is mandatory</p>
 
- <p><member scope="com::sun::star::container">XChild::getParent()</member>
+ <p>com::sun::star::container::XChild::getParent()
  shall not return NULL.
  </p>
 

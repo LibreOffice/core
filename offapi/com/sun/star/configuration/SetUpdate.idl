@@ -72,8 +72,8 @@ published service SetUpdate
  </p>
 
  <p>Other ways in which an element may be moved among or within compatible sets
- include <member scope="com::sun::star::container">XChild::setParent()</member>
- and <member scope="com::sun::star::container">XNamed::setName()</member>, if
+ include com::sun::star::container::XChild::setParent()
+ and com::sun::star::container::XNamed::setName(), if
  the element implements them.
  </p>
 

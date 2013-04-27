@@ -35,7 +35,7 @@
     if the original COM objects support IDispatch. </p>
 
     <p>The optional parameters of the method
-    <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+    com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
     are reserved for future use; at this time they are ignored.  </p>
 
     @deprecated

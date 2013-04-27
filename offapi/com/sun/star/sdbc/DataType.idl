@@ -79,7 +79,7 @@ published constants DataType
     /** indicates that the SQL type is database-specific and
              gets mapped to an object that can be accessed via
              the method
-             <member scope="com::sun::star::sdbc">XRow::getObject()</member>
+             com::sun::star::sdbc::XRow::getObject()
              .
      */
     const long OTHER        = 1111;

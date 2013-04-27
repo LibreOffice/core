@@ -40,7 +40,7 @@ module com { module sun { module star { module frame {
 
     <p>
     To access the user interface command description of a module, a unique module specifier
-    must be provided to <member scope="com::sun::star::container">XNameAccess::getByName()</member> function.
+    must be provided to com::sun::star::container::XNameAccess::getByName() function.
     The module specifier can be retrieved from the com::sun::star::frame::ModuleManager
     service. The interface provides references to com::sun:star::ui::ModuleUICommandDescription.
     </p>

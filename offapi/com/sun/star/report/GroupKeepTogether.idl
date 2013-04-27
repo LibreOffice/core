@@ -25,7 +25,7 @@
 
 
 /** Specifies if groups in a multi column report where the group has the property
-    <member scope="XGroup">KeepTogether</member> set to WHOLE_GROUP or WITH_FIRST_DETAIL will keep together by page or column.
+    XGroup::KeepTogether set to WHOLE_GROUP or WITH_FIRST_DETAIL will keep together by page or column.
     @see XGroup
  */
 constants GroupKeepTogether

@@ -80,7 +80,7 @@ published service SheetSortDescriptor2
 
 
     /** specifies whether the first row or column (depending on
-        <member scope="com::sun::star::table">TableSortDescriptor::Orientation</member>) is a header which
+        com::sun::star::table::TableSortDescriptor::Orientation) is a header which
         should not be sorted.
      */
     [property] boolean ContainsHeader;

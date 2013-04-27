@@ -122,7 +122,7 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
             a sequence of type
             com::sun::star::beans::GetDirectPropertyTolerantResult
             but only for those properties supplied whoms state is
-            <member scope="com::sun::star::beans::PropertyState">DIRECT_VALUE</member>.
+            com::sun::star::beans::PropertyState::DIRECT_VALUE.
      */
     sequence< com::sun::star::beans::GetDirectPropertyTolerantResult > getDirectPropertyValuesTolerant(
                 [in] sequence< string > aPropertyNames );

@@ -49,7 +49,7 @@ interface XPopupMenuExtended
 
     /** queries if the com::sun::star::awt::PopupMenu
         is being executed as a result of invoking
-        <member scope="com::sun::star::awt">XPopupMenu::execute()</member>; that is,
+        com::sun::star::awt::XPopupMenu::execute(); that is,
         for a PopupMenu activated by a MenuBar item,
         this methods returns <FALSE/>.
 
@@ -57,16 +57,16 @@ interface XPopupMenuExtended
             <TRUE/> if the com::sun::star::awt::PopupMenu
             is being executed, <FALSE/> otherwise.
 
-        @see <member scope="com::sun::star::awt">XPopupMenu::execute()</member>
+        @see com::sun::star::awt::XPopupMenu::execute()
 
         @since OOo 3.1
     */
     boolean isInExecute();
 
     /** ends the execution of the com::sun::star::awt::PopupMenu.
-        <member scope="com::sun::star::awt">XPopupMenu::execute()</member> will then return 0.
+        com::sun::star::awt::XPopupMenu::execute() will then return 0.
 
-        @see <member scope="com::sun::star::awt">XPopupMenu::execute()</member>
+        @see com::sun::star::awt::XPopupMenu::execute()
 
         @since OOo 3.1
     */
@@ -129,7 +129,7 @@ interface XPopupMenuExtended
 
         <p>The KeyEvent is <b>only</b> used as a container to transport
         the shortcut information, so that in this case
-        <member scope="::com::sun::star::lang::">EventObject::Source</member> is <NULL/>.</p>
+        ::com::sun::star::lang::::EventObject::Source is <NULL/>.</p>
 
         @param nItemId
             specifies the menu item identifier for which the KeyEvent should be retrieved.

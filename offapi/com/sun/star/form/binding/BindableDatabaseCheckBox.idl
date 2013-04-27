@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module form {  module binding {
     </ul></p>
 
     <p>If the value binding associated with a BindableDatabaseCheckBox
-    supports exchanging string values, <em>and</em> the <member scope="com::sun::star::form::component">CheckBox::RefValue</member>
+    supports exchanging string values, <em>and</em> the com::sun::star::form::component::CheckBox::RefValue
     is <em>not</em> empty, then the radio button will exchange it's value as string:
     <ul><li>A string equal to the reference value will be mapped to the button being checked, and vice versa</li>
         <li>A string not equal to the reference value will be mapped to the button being unchecked, and vice versa</li>
@@ -65,7 +65,7 @@ service BindableDatabaseCheckBox
     /** specifies a value which is to be associated with the control when it's <em>not</em>
         checked.
 
-        <p><member scope="com::sun::star::form::component">CheckBox::RefValue</member> is transferred to
+        <p>com::sun::star::form::component::CheckBox::RefValue is transferred to
         possible external value bindings as soon as the check box is checked. With the member
         #SecondaryRefValue, clients of the check box can also associate a value with
         the <em>not checked</em> state of the control.</p>

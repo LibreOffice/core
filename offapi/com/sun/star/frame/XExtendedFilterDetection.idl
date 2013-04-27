@@ -33,7 +33,7 @@
  */
 published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
-    /** use <member scope="com::sun::star::document">XExtendedFilterDetection::detect()</member> instead of this
+    /** use com::sun::star::document::XExtendedFilterDetection::detect() instead of this
         @deprecated
      */
     string detect(

@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module beans {
 /** specifies information being retrieved about a single property.
 
      This type is used for the elements in the sequence returned by
-     <member scope="com::sun::star::beans::XTolerantMultiPropertySet">GetDirectPropertyTolerantResult</member>.
+     com::sun::star::beans::XTolerantMultiPropertySet::GetDirectPropertyTolerantResult.
 
     @see com::sun::star::beans::XTolerantMultiPropertySet
  */

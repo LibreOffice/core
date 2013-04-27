@@ -112,8 +112,8 @@ service CopyTableWizard : XCopyTableWizard
             <p>Additionally to the obvious restrictions (such as that creating a view is not possible
             if the copy source and the copy destination denote different databases), the following restrictions
             apply to the settings, and possible combinations:
-            <ul><li>Only <member scope="com::sun::star::sdb">CommandType::TABLE</member> and
-                <member scope="com::sun::star::sdb">CommandType::QUERY</member> are supported.</li>
+            <ul><li>Only com::sun::star::sdb::CommandType::TABLE and
+                com::sun::star::sdb::CommandType::QUERY are supported.</li>
 
                 <li>If you specify a <code>ConnectionResource</code>, or an
                 <code>ActiveConnection</code> which implements an com::sun::star::sdbc::Connection only

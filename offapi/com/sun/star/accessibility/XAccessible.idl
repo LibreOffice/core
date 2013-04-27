@@ -38,12 +38,12 @@ module com { module sun { module star { module accessibility {
     implementation of the
     class that is made accessible and the actual accessibility code into two
     (mostly) independent parts.  The only necessary dependence is the
-    <member scope="XAccessible">getAccessibleContext()</member> function
+    XAccessible::getAccessibleContext() function
     that returns the accessible context.  This one-way link has to be
     persistent in some sense: As long as there is at least one reference to
     a specific XAccessibleContext object the
     XAccessible object has to return the same context for every
-    call to <member scope="XAccessible">getAccessibleContext()</member>.
+    call to XAccessible::getAccessibleContext().
     This is necessary to allow the use of object identity for comparing
     accessibility contexts for being equal.</p>
 
