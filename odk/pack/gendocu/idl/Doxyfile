@@ -1,0 +1,45 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+PROJECT_BRIEF = %
+PROJECT_NAME = %
+OUTPUT_DIRECTORY = %
+STRIP_FROM_PATH = %
+INPUT = %
+RECURSIVE = YES
+
+HTML_OUTPUT = .
+GENERATE_LATEX = NO
+
+QUIET = %
+WARNINGS = YES
+WARN_IF_DOC_ERROR = YES
+WARN_FORMAT = "$file:$line: $text"
+
+# for windows? actually should NOT need this - no case collision in files!
+# note this changes filenames (uppercase letters translated to "_lowercase")
+#CASE_SENSE_NAMES = NO
+# this is bad because the directories have random names...
+#CREATE_SUBDIRS = YES
+# hmm... not sure if we want the source files in the output?
+#SHOW_USED_FILES = NO
+#SHOW_FILES = NO
+# make it possible to auto-generate links to all compounds and members
+PREDICTABLE_URLS = YES
+
+# ideally everything should be documented, but...
+EXTRACT_ALL = YES
+# first line is "brief" doc
+JAVADOC_AUTOBRIEF = YES
+# we want detailed description for everything, starting with "brief" doc
+REPEAT_BRIEF = YES
+ALWAYS_DETAILED_SEC = YES
+# by default members detail sections are prefixed with ns-qualified class
+# name which looks like overkill/clutter
+HIDE_SCOPE_NAMES = YES
+

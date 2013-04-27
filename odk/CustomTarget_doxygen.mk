@@ -54,4 +54,36 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/doxygen.log : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
 	$(DOXYGEN) $< > $@
 
+$(eval $(call gb_CustomTarget_register_targets,odk/docs,\
+	idl/Doxyfile \
+	idl/doxygen.log \
+))
+
+odk_idl_PREFIX := $(SRCDIR)/udkapi/ $(SRCDIR)/offapi/
+odk_idl_DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/idl/main.dox \
+	$(addsuffix com,$(odk_idl_PREFIX)) \
+odk_idl_DOXY_WORKDIR := $(call gb_CustomTarget_get_workdir,odk/docs/idl)/ref
+
+# don't depend on the IDL files directly but instead on the udkapi/offapi
+# which will get rebuilt when any IDL file changes
+$(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile : \
+		$(SRCDIR)/odk/pack/gendocu/idl/Doxyfile \
+		$(call gb_UnoApi_get_target,udkapi) \
+		$(call gb_UnoApi_get_target,offapi) \
+		$(gb_Module_CURRENTMAKEFILE)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
+	sed -e 's!^INPUT = %$$!INPUT = $(call odk_cygwin_path,$(odk_idl_DOXY_INPUT))!' \
+		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(call odk_cygwin_path,$(odk_idl_DOXY_WORKDIR))!' \
+		-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = "$(PRODUCTNAME) $(PRODUCTVERSION) SDK API Reference"!' \
+		-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
+		-e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
+		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(call odk_cygwin_path,$(odk_idl_PREFIX))!' \
+		$< > $@
+
+$(call gb_CustomTarget_get_workdir,odk/docs)/idl/doxygen.log : \
+		$(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile \
+		$(SRCDIR)/odk/pack/gendocu/idl/main.dox
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
+	$(DOXYGEN) $< > $@
+
 # vim: set noet sw=4 ts=4:
