@@ -28,16 +28,13 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/awt/vclxfont.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
-
-#ifndef VCLEVENT_WINDOW_FRAMETITLECHANGED
-#define VCLEVENT_WINDOW_FRAMETITLECHANGED   1018
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
