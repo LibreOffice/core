@@ -17,967 +17,968 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WriterWeb" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc>Contains settings for the HTML editor.</desc>
-	</info>
-	<import oor:component="org.openoffice.Office.Common"/>
-	<component>
-		<group oor:name="Content">
-			<info>
-				<desc>Contains settings for various content elements.</desc>
-			</info>
-			<group oor:name="Display">
-				<info>
-					<desc>Contains settings for the visibility of various elements.</desc>
-				</info>
-				<prop oor:name="GraphicObject" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Display -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
-					<info>
-						<desc>Specifies if graphics and objects are displayed.</desc>
-						<label>Graphics and Objects</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Display -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
-					<info>
-						<desc>Specifies if tables are displayed.</desc>
-						<label>Tables</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="DrawingControl" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Display -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
-					<info>
-						<desc>Specifies if drawings and controls are displayed.</desc>
-						<label>Drawings and controls</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="FieldCode" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Display -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
-					<info>
-						<desc>Specifies if field codes are displayed.</desc>
-						<label>Field codes</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="Note" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Display -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
-					<info>
-						<desc>Specifies if comments are displayed.</desc>
-						<label>Comments</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="PreventTips" oor:type="xs:boolean" oor:nillable="false">
-					<!-- UIHints: Not accessible via user interface -->
-					<info>
-						<desc>Enables the writer to prevent the display of help tips programmatically.</desc>
-						<label>Prevent help tips</label>
-					</info>
-					<value>false</value>
-				</prop>
-			</group>
-			<group oor:name="NonprintingCharacter">
-				<info>
-					<desc>Contains settings for the visibility of various non-printing characters.</desc>
-				</info>
-				<prop oor:name="MetaCharacters" oor:type="xs:boolean" oor:nillable="false">
-					<!-- UIHints: View - Nonprinting Characters -->
-					<info>
-						<desc>Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
-						<label>Meta characters</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="ParagraphEnd" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
-					<info>
-						<desc>Specifies if paragraph ends are shown on the screen.</desc>
-						<label>Paragraph end</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="OptionalHyphen" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
-					<info>
-						<desc>Specifies if optional hyphens are shown on the screen.</desc>
-						<label>Optional hyphens</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Space" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
-					<info>
-						<desc>Specifies if spaces are shown on the screen.</desc>
-						<label>Spaces</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="ProtectedSpace" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
-					<info>
-						<desc>Specifies if protected spaces are shown on the screen.</desc>
-						<label>Protected Spaces</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Break" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
-					<info>
-						<desc>Specifies if breaks are shown on the screen.</desc>
-						<label>Breaks</label>
-					</info>
-					<value>true</value>
-				</prop>
-			</group>
-			<group oor:name="Highlighting">
-				<info>
-					<desc>Contains settings for highlighting contents.</desc>
-				</info>
-				<prop oor:name="Field" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Content/Highlighting -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Highlighting -->
-					<info>
-						<desc>Specifies if fields are highlighted.</desc>
-						<label>Fields</label>
-					</info>
-					<value>true</value>
-				</prop>
-			</group>
-		</group>
-		<group oor:name="Layout">
-			<info>
-				<desc>Contains layout-specific settings.</desc>
-			</info>
-			<group oor:name="Line">
-				<info>
-					<desc>Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
-				</info>
-				<prop oor:name="Guide" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Layout/Lines -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
-					<info>
-						<desc>Displays helplines around the frames when frames are moved.</desc>
-						<label>Helplines</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
-					<!-- OldPath: HTML_Editor/Layout/Lines -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
-					<info>
-						<desc>Displays the control points as simple squares without a 3D effect.</desc>
-						<label>Simple control points</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="LargeControlPoint" oor:type="xs:boolean">
-					<!-- OldPath: HTML_Editor/Layout/Lines -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
-					<info>
-						<desc>Displays larger control points.</desc>
-						<label>Large control points</label>
-					</info>
-					<value>false</value>
-				</prop>
-			</group>
-			<group oor:name="Window">
-				<info>
-					<desc>Contains various settings for the window, such as scrollbars, rules, etc.</desc>
-				</info>
-				<prop oor:name="HorizontalScroll" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Layout/Window -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
-					<info>
-						<desc>Specifies if the horizontal scroll bar is displayed.</desc>
-						<label>Horizontal scroll</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="VerticalScroll" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Layout/Window -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
-					<info>
-						<desc>Specifies if the vertical scroll bar is displayed.</desc>
-						<label>Vertical Scroll</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="ShowRulers" oor:type="xs:boolean" oor:nillable="false">
-					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
-					<info>
-						<desc>Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
-						<label>Show rulers</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="HorizontalRuler" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Layout/Window -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
-					<info>
-						<desc>Specifies if the horizontal ruler is displayed.</desc>
-						<label>Horizontal ruler</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="HorizontalRulerUnit" oor:type="xs:int">
-					<!-- OldPath: Writer/Layout -->
-					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
-					<info>
-						<desc>Specifies the measurement unit for the horizontal ruler.</desc>
-						<label>Horizontal ruler measure unit</label>
-					</info>
-					<constraints>
-						<enumeration oor:value="1">
-							<info>
-								<desc>Millimeter</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="2">
-							<info>
-								<desc>Centimeter</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="3">
-							<info>
-								<desc>Meter</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="4">
-							<info>
-								<desc>Kilometer</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="6">
-							<info>
-								<desc>Point</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="7">
-							<info>
-								<desc>Pica</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="8">
-							<info>
-								<desc>Inch</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="9">
-							<info>
-								<desc>Foot</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="10">
-							<info>
-								<desc>Miles</desc>
-							</info>
-						</enumeration>
-					</constraints>
-				</prop>
-				<prop oor:name="VerticalRuler" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Layout/Window -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
-					<info>
-						<desc>Specifies if the vertical ruler is displayed.</desc>
-						<label>Vertical Ruler</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="VerticalRulerUnit" oor:type="xs:int">
-					<!-- OldPath: Writer/Layout -->
-					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
-					<info>
-						<desc>Specifies the measurement unit for the vertical ruler.</desc>
-						<label>Vertical ruler measure unit</label>
-					</info>
-					<constraints>
-						<enumeration oor:value="1">
-							<info>
-								<desc>Millimeter</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="2">
-							<info>
-								<desc>Centimeter</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="3">
-							<info>
-								<desc>Meter</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="4">
-							<info>
-								<desc>Kilometer</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="6">
-							<info>
-								<desc>Point</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="7">
-							<info>
-								<desc>Pica</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="8">
-							<info>
-								<desc>Inch</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="9">
-							<info>
-								<desc>Foot</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="10">
-							<info>
-								<desc>Miles</desc>
-							</info>
-						</enumeration>
-					</constraints>
-				</prop>
-				<prop oor:name="SmoothScroll" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Layout/Window -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
-					<info>
-						<desc>Activates the smooth page scrolling function.</desc>
-						<label>Smooth scroll</label>
-					</info>
-					<value>false</value>
-				</prop>
-			</group>
-			<group oor:name="Other">
-				<info>
-					<desc>Contains miscellaneous settings.</desc>
-				</info>
-                <prop oor:name="IsAlignMathObjectsToBaseline" oor:type="xs:boolean" oor:nillable="false">
-                    <!-- UIHints: none yet -->
-                    <info>
-                        <desc>Automatically align the baseline of Math objects with the baseline of the surrounding text.</desc>
-                        <label>Align Math objects</label>
-                    </info>
-                    <value>true</value>
-                </prop>
-				<prop oor:name="MeasureUnit" oor:type="xs:int">
-					<!-- OldPath: HTML_Editor/Layout/Window -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Meas. Unit -->
-					<info>
-						<desc>Specifies the measurement units.</desc>
-						<label>Measure unit</label>
-					</info>
-					<constraints>
-						<enumeration oor:value="1">
-							<info>
-								<desc>Millimeter</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="2">
-							<info>
-								<desc>Centimeter</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="3">
-							<info>
-								<desc>Meter</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="4">
-							<info>
-								<desc>Kilometer</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="6">
-							<info>
-								<desc>Point</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="7">
-							<info>
-								<desc>Pica</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="8">
-							<info>
-								<desc>Inch</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="9">
-							<info>
-								<desc>Foot</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="10">
-							<info>
-								<desc>Miles</desc>
-							</info>
-						</enumeration>
-					</constraints>
-				</prop>
-			</group>
-			<group oor:name="Zoom">
-				<info>
-					<desc>Contains zoom specific settings.</desc>
-				</info>
-				<prop oor:name="Type" oor:type="xs:int" oor:nillable="false">
-					<!-- UIHints: (Status Bar) -->
-					<info>
-						<desc>Specifies the zoom type.</desc>
-						<label>Zoom Type</label>
-					</info>
-					<constraints>
-						<enumeration oor:value="0">
-							<info>
-								<desc>Percent</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="2">
-							<info>
-								<desc>Whole Page</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="3">
-							<info>
-								<desc>Page Width</desc>
-							</info>
-						</enumeration>
-					</constraints>
-					<value>0</value>
-				</prop>
-				<prop oor:name="Value" oor:type="xs:int" oor:nillable="false">
-					<!-- UIHints: (Status Bar) -->
-					<info>
-						<desc>Specifies the zoom value.</desc>
-						<label>Zoom Value</label>
-					</info>
-					<value>100</value>
-				</prop>
-			</group>
-		</group>
-		<group oor:name="Grid">
-			<info>
-				<desc>Contains various items for the grid that are not listed in other sections.</desc>
-			</info>
-			<group oor:name="Option">
-				<info>
-					<desc>Contains options for the grid.</desc>
-				</info>
-				<prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Grid/Option -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
-					<info>
-						<desc>Moves frames, drawing elements, and form functions only between the grid points.</desc>
-						<label>Snap to grid</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Grid/Option -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
-					<info>
-						<desc>Displays the grid.</desc>
-						<label>Visible grid</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Grid/Option -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
-					<info>
-						<desc>Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
-						<label>Synchronize axes</label>
-					</info>
-					<value>false</value>
-				</prop>
-			</group>
-			<group oor:name="Resolution">
-				<info>
-					<desc>Contains settings for specifying the grid resolution.</desc>
-				</info>
-				<prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Grid/Resolution -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
-					<info>
-						<desc>Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
-						<label>X Axis Resolution</label>
-					</info>
-					<value>1000</value>
-				</prop>
-				<prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Grid/Resolution -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
-					<info>
-						<desc>Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
-						<label>Y Axis Resolution</label>
-					</info>
-					<value>1000</value>
-				</prop>
-			</group>
-			<group oor:name="Subdivision">
-				<info>
-					<desc>Contains settings for subdividing of the grid.</desc>
-				</info>
-				<prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Grid/Subdivision -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
-					<info>
-						<desc>Specifies the number of intervals between two grid points on the X-axis.</desc>
-						<label>X Axis Subdivision</label>
-					</info>
-					<value>1</value>
-				</prop>
-				<prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Grid/Subdivision -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
-					<info>
-						<desc>Defines the distance between the grid points on the Y-axis.</desc>
-						<label>Y Axis Subdivision</label>
-					</info>
-					<value>1</value>
-				</prop>
-			</group>
-		</group>
-		<group oor:name="Print">
-			<info>
-				<desc>Contains settings for printing.</desc>
-			</info>
-			<group oor:name="Content">
-				<info>
-					<desc>Contains settings for specifying which content types are printed.</desc>
-				</info>
-				<prop oor:name="Graphic" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print/Contents -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
-					<info>
-						<desc>Specifies if graphics are printed.</desc>
-						<label>Graphics</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print/Contents -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
-					<info>
-						<desc>Specifies if tables are printed.</desc>
-						<label>Tables</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Control" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print/Contents -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
-					<info>
-						<desc>Specifies if controls are printed.</desc>
-						<label>Controls</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Background" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print/Contents -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
-					<info>
-						<desc>Specifies if background objects are printed.</desc>
-						<label>Background</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="PrintBlack" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print/Contents -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
-					<info>
-						<desc>Specifies if text is always printed in black.</desc>
-						<label>Print black</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="Note" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Notes -->
-					<info>
-						<desc>Specifies if comments are printed and how they are printed.</desc>
-					</info>
-					<constraints>
-						<enumeration oor:value="0">
-							<info>
-								<desc>None</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="1">
-							<info>
-								<desc>Comments only</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="2">
-							<info>
-								<desc>End of document</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="3">
-							<info>
-								<desc>End of page</desc>
-							</info>
-						</enumeration>
-					</constraints>
-					<value>0</value>
-				</prop>
-			</group>
-			<group oor:name="Page">
-				<info>
-					<desc>Specifies which pages are printed and how they are printed.</desc>
-				</info>
-				<prop oor:name="Reversed" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print/Pages -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
-					<info>
-						<desc>Reverses the printing order.</desc>
-						<label>Reversed</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="Brochure" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print/Pages -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
-					<info>
-						<desc>Prints in brochure format.</desc>
-						<label>Brochure</label>
-					</info>
-					<value>false</value>
-				</prop>
-                                <prop oor:name="BrochureRightToLeft" oor:type="xs:boolean" oor:nillable="false">
-                                        <!-- OldPath: Writer/Print/Pages -->
-                                        <!-- OldLocation: Soffice.cfg -->
-                                        <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
-                                        <info>
-                                                <desc>Prints in brochure format, with right-to-left direction.</desc>
-                                                <label>Right-to-left</label>
-                                        </info>
-                                        <value>false</value>
-                                </prop>
-			</group>
-			<group oor:name="Output">
-				<info>
-					<desc>Contains output-specific settings.</desc>
-				</info>
-				<prop oor:name="SinglePrintJob" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print/Output -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Output -->
-					<info>
-						<desc>Controls the print output.</desc>
-						<label>Create single print jobs</label>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="Fax" oor:type="xs:string" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Print -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Fax -->
-					<info>
-						<desc>Specifies which fax machine is used when faxing directly from the document</desc>
-						<label>Fax</label>
-					</info>
-					<value/>
-					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-				</prop>
-			</group>
-			<group oor:name="Papertray">
-				<info>
-					<desc>Contains settings for printers with multiple paper trays.</desc>
-				</info>
-				<prop oor:name="FromPrinterSetup" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Papertray -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Paper tray -->
-					<info>
-						<desc>Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
-						<label>From printer setup</label>
-					</info>
-					<value>false</value>
-				</prop>
-			</group>
-		</group>
-		<group oor:name="Table">
-			<info>
-				<desc>Contains settings for tables.</desc>
-			</info>
-			<group oor:name="Shift">
-				<info>
-					<desc>Contains settings used when shifting table rows/columns.</desc>
-				</info>
-				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Table/Shift -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
-					<!--Notice: NonMetric default: 635 1/100 mm-->
-					<info>
-						<desc>Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
-						<label>Row</label>
-					</info>
-					<value>500</value>
-				</prop>
-				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Table/Shift -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
-					<!-- Notice: NonMetric default: 635 1/100 mm-->
-					<info>
-						<desc>Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
-						<label>Column</label>
-					</info>
-					<value>500</value>
-				</prop>
-			</group>
-			<group oor:name="Insert">
-				<info>
-					<desc>Contains settings used when inserting table rows/columns.</desc>
-				</info>
-				<prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Table/Insert -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
-					<!-- Notice: NonMetric default: 635 1/100 mm -->
-					<info>
-						<desc>Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
-						<label>Row</label>
-					</info>
-					<value>500</value>
-				</prop>
-				<prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Table/Insert -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
-					<!-- Notice: The NonMetric Default 2540 1/100 mm-->
-					<info>
-						<desc>Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
-						<label>Column</label>
-					</info>
-					<value>2500</value>
-				</prop>
-			</group>
-			<group oor:name="Change">
-				<info>
-					<desc>Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
-				</info>
-				<prop oor:name="Effect" oor:type="xs:int" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Table -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document - Table  [Section] Effect -->
-					<info>
-						<desc>Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
-					</info>
-					<constraints>
-						<enumeration oor:value="0">
-							<info>
-								<desc>Fixed</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="1">
-							<info>
-								<desc>FixedProportional</desc>
-							</info>
-						</enumeration>
-						<enumeration oor:value="2">
-							<info>
-								<desc>Variable</desc>
-							</info>
-						</enumeration>
-					</constraints>
-					<value>2</value>
-				</prop>
-			</group>
-			<group oor:name="Input">
-				<info>
-					<desc>Contains settings used when inputting text or data in tables.</desc>
-				</info>
-				<prop oor:name="NumberRecognition" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Insert/IntoTables -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
-					<info>
-						<desc>Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
-						<label>Number recognition</label>
-					</info>
-                    <value>true</value>
-				</prop>
-				<prop oor:name="NumberFormatRecognition" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Insert/IntoTables -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
-					<info>
-						<desc>Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
-						<label>Number format recognition</label>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Alignment" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Insert/IntoTables -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
-					<info>
-						<desc>Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
-						<label>Alignment</label>
-					</info>
-					<value>false</value>
-				</prop>
-			</group>
-		</group>
-		<group oor:name="Insert">
-			<info>
-				<desc>Specifies the settings for inserting various object types.</desc>
-			</info>
-			<group oor:name="Table">
-				<info>
-					<desc>Specifies the default settings for inserting tables.</desc>
-				</info>
-				<prop oor:name="Header" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Insert/Tables -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
-					<info>
-						<desc>Specifies if the table has a header</desc>
-						<label>Header</label>
-					</info>
-                                        <value>false</value>
-				</prop>
-				<prop oor:name="RepeatHeader" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Insert/Tables -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
-					<info>
-						<desc>Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
-						<label>Repeat header</label>
-					</info>
-                                        <value>false</value>
-				</prop>
-				<prop oor:name="Border" oor:type="xs:boolean" oor:nillable="false">
-					<!-- OldPath: HTML_Editor/Insert/Tables -->
-					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
-					<info>
-						<desc>Specifies if table cells have a border by default.</desc>
-						<label>Border</label>
-					</info>
-					<value>true</value>
-				</prop>
-			</group>
-		</group>
-		<group oor:name="ObjectBar">
-			<info>
-				<desc>Specifies the settings for the object bar.</desc>
-			</info>
-			<group oor:name="Selection">
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Right mouse click to the toolbar with object selection-->
-				<info>
-					<desc>Specifies the type of object bar that is visible.</desc>
-				</info>
-				<prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
-					<info>
-						<desc>Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
-					</info>
-					<value>-1</value>
-				</prop>
-				<prop oor:name="Table" oor:type="xs:int" oor:nillable="false">
-					<info>
-						<desc>Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
-					</info>
-					<value>-1</value>
-				</prop>
-				<prop oor:name="NumberedList" oor:type="xs:int" oor:nillable="false">
-					<info>
-						<desc>Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
-					</info>
-					<value>-1</value>
-				</prop>
-				<prop oor:name="NumberedList_InTable" oor:type="xs:int" oor:nillable="false">
-					<info>
-						<desc>Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
-					</info>
-					<value>-1</value>
-				</prop>
-				<prop oor:name="BezierObject" oor:type="xs:int" oor:nillable="false">
-					<info>
-						<desc>Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
-					</info>
-					<value>-1</value>
-				</prop>
-			</group>
-		</group>
-		<group oor:name="Background">
-			<info>
-				<desc>Contains settings for the background of a document.</desc>
-			</info>
-			<prop oor:name="Color" oor:type="xs:int">
-				<!-- OldPath: HTML_Editor/Background -->
-				<!-- OldLocation: Soffice.cfg -->
-				<!-- UIHints: Tools - Option - HTML-Document  Background - [Section] Background color -->
-				<info>
-					<desc>Determines the background color.</desc>
-					<label>Background color</label>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="Gallery">
-			<info>
-				<desc>Contains settings for gallery items that can be added to the document.</desc>
-			</info>
-			<prop oor:name="AddGraphic" oor:type="xs:boolean" oor:nillable="false">
-				<!--OldLocation: Soffice.cfg -->
-				<!--UIHints: HTML document in readonly mode - context menu of a graphic - Add Graphics - As Link / Copy-->
-				<info>
-					<desc>Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
-				</info>
-				<value>true</value>
-			</prop>
-		</group>
-	</component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WriterWeb" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains settings for the HTML editor.</desc>
+  </info>
+  <import oor:component="org.openoffice.Office.Common"/>
+  <component>
+    <group oor:name="Content">
+      <info>
+        <desc>Contains settings for various content elements.</desc>
+      </info>
+      <group oor:name="Display">
+        <info>
+          <desc>Contains settings for the visibility of various elements.</desc>
+        </info>
+        <prop oor:name="GraphicObject" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
+          <info>
+            <desc>Specifies if graphics and objects are displayed.</desc>
+            <label>Graphics and Objects</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
+          <info>
+            <desc>Specifies if tables are displayed.</desc>
+            <label>Tables</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="DrawingControl" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
+          <info>
+            <desc>Specifies if drawings and controls are displayed.</desc>
+            <label>Drawings and controls</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="FieldCode" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
+          <info>
+            <desc>Specifies if field codes are displayed.</desc>
+            <label>Field codes</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Note" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
+          <info>
+            <desc>Specifies if comments are displayed.</desc>
+            <label>Comments</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="PreventTips" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Not accessible via user interface -->
+          <info>
+            <desc>Enables the writer to prevent the display of help tips programmatically.</desc>
+            <label>Prevent help tips</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="NonprintingCharacter">
+        <info>
+          <desc>Contains settings for the visibility of various non-printing characters.</desc>
+        </info>
+        <prop oor:name="MetaCharacters" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: View - Nonprinting Characters -->
+          <info>
+            <desc>Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
+            <label>Meta characters</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="ParagraphEnd" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <info>
+            <desc>Specifies if paragraph ends are shown on the screen.</desc>
+            <label>Paragraph end</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="OptionalHyphen" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <info>
+            <desc>Specifies if optional hyphens are shown on the screen.</desc>
+            <label>Optional hyphens</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Space" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <info>
+            <desc>Specifies if spaces are shown on the screen.</desc>
+            <label>Spaces</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="ProtectedSpace" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <info>
+            <desc>Specifies if protected spaces are shown on the screen.</desc>
+            <label>Protected Spaces</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Break" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <info>
+            <desc>Specifies if breaks are shown on the screen.</desc>
+            <label>Breaks</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+      <group oor:name="Highlighting">
+        <info>
+          <desc>Contains settings for highlighting contents.</desc>
+        </info>
+        <prop oor:name="Field" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Content/Highlighting -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Highlighting -->
+          <info>
+            <desc>Specifies if fields are highlighted.</desc>
+            <label>Fields</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Layout">
+      <info>
+        <desc>Contains layout-specific settings.</desc>
+      </info>
+      <group oor:name="Line">
+        <info>
+          <desc>Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
+        </info>
+        <prop oor:name="Guide" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Layout/Lines -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
+          <info>
+            <desc>Displays helplines around the frames when frames are moved.</desc>
+            <label>Helplines</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
+          <!-- OldPath: HTML_Editor/Layout/Lines -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
+          <info>
+            <desc>Displays the control points as simple squares without a 3D effect.</desc>
+            <label>Simple control points</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="LargeControlPoint" oor:type="xs:boolean">
+          <!-- OldPath: HTML_Editor/Layout/Lines -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
+          <info>
+            <desc>Displays larger control points.</desc>
+            <label>Large control points</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="Window">
+        <info>
+          <desc>Contains various settings for the window, such as scrollbars, rules, etc.</desc>
+        </info>
+        <prop oor:name="HorizontalScroll" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Layout/Window -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies if the horizontal scroll bar is displayed.</desc>
+            <label>Horizontal scroll</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="VerticalScroll" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Layout/Window -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies if the vertical scroll bar is displayed.</desc>
+            <label>Vertical Scroll</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="ShowRulers" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
+          <info>
+            <desc>Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+            <label>Show rulers</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="HorizontalRuler" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Layout/Window -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies if the horizontal ruler is displayed.</desc>
+            <label>Horizontal ruler</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="HorizontalRulerUnit" oor:type="xs:int">
+          <!-- OldPath: Writer/Layout -->
+          <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
+          <info>
+            <desc>Specifies the measurement unit for the horizontal ruler.</desc>
+            <label>Horizontal ruler measure unit</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Millimeter</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Centimeter</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>Meter</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="4">
+              <info>
+                <desc>Kilometer</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="6">
+              <info>
+                <desc>Point</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="7">
+              <info>
+                <desc>Pica</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="8">
+              <info>
+                <desc>Inch</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="9">
+              <info>
+                <desc>Foot</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="10">
+              <info>
+                <desc>Miles</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+        <prop oor:name="VerticalRuler" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Layout/Window -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
+          <info>
+            <desc>Specifies if the vertical ruler is displayed.</desc>
+            <label>Vertical Ruler</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="VerticalRulerUnit" oor:type="xs:int">
+          <!-- OldPath: Writer/Layout -->
+          <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
+          <info>
+            <desc>Specifies the measurement unit for the vertical ruler.</desc>
+            <label>Vertical ruler measure unit</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Millimeter</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Centimeter</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>Meter</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="4">
+              <info>
+                <desc>Kilometer</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="6">
+              <info>
+                <desc>Point</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="7">
+              <info>
+                <desc>Pica</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="8">
+              <info>
+                <desc>Inch</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="9">
+              <info>
+                <desc>Foot</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="10">
+              <info>
+                <desc>Miles</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+        <prop oor:name="SmoothScroll" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Layout/Window -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
+          <info>
+            <desc>Activates the smooth page scrolling function.</desc>
+            <label>Smooth scroll</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="Other">
+        <info>
+          <desc>Contains miscellaneous settings.</desc>
+        </info>
+        <prop oor:name="IsAlignMathObjectsToBaseline" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: none yet -->
+          <info>
+            <desc>Automatically align the baseline of Math objects with the baseline of the surrounding text.</desc>
+            <label>Align Math objects</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="MeasureUnit" oor:type="xs:int">
+          <!-- OldPath: HTML_Editor/Layout/Window -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Meas. Unit -->
+          <info>
+            <desc>Specifies the measurement units.</desc>
+            <label>Measure unit</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Millimeter</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Centimeter</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>Meter</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="4">
+              <info>
+                <desc>Kilometer</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="6">
+              <info>
+                <desc>Point</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="7">
+              <info>
+                <desc>Pica</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="8">
+              <info>
+                <desc>Inch</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="9">
+              <info>
+                <desc>Foot</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="10">
+              <info>
+                <desc>Miles</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
+      </group>
+      <group oor:name="Zoom">
+        <info>
+          <desc>Contains zoom specific settings.</desc>
+        </info>
+        <prop oor:name="Type" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: (Status Bar) -->
+          <info>
+            <desc>Specifies the zoom type.</desc>
+            <label>Zoom Type</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Percent</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Whole Page</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>Page Width</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
+        <prop oor:name="Value" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: (Status Bar) -->
+          <info>
+            <desc>Specifies the zoom value.</desc>
+            <label>Zoom Value</label>
+          </info>
+          <value>100</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Grid">
+      <info>
+        <desc>Contains various items for the grid that are not listed in other sections.</desc>
+      </info>
+      <group oor:name="Option">
+        <info>
+          <desc>Contains options for the grid.</desc>
+        </info>
+        <prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Grid/Option -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
+          <info>
+            <desc>Moves frames, drawing elements, and form functions only between the grid points.</desc>
+            <label>Snap to grid</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Grid/Option -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
+          <info>
+            <desc>Displays the grid.</desc>
+            <label>Visible grid</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Grid/Option -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
+          <info>
+            <desc>Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
+            <label>Synchronize axes</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="Resolution">
+        <info>
+          <desc>Contains settings for specifying the grid resolution.</desc>
+        </info>
+        <prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Grid/Resolution -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
+          <info>
+            <desc>Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
+            <label>X Axis Resolution</label>
+          </info>
+          <value>1000</value>
+        </prop>
+        <prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Grid/Resolution -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
+          <info>
+            <desc>Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
+            <label>Y Axis Resolution</label>
+          </info>
+          <value>1000</value>
+        </prop>
+      </group>
+      <group oor:name="Subdivision">
+        <info>
+          <desc>Contains settings for subdividing of the grid.</desc>
+        </info>
+        <prop oor:name="XAxis" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Grid/Subdivision -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
+          <info>
+            <desc>Specifies the number of intervals between two grid points on the X-axis.</desc>
+            <label>X Axis Subdivision</label>
+          </info>
+          <value>1</value>
+        </prop>
+        <prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Grid/Subdivision -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
+          <info>
+            <desc>Defines the distance between the grid points on the Y-axis.</desc>
+            <label>Y Axis Subdivision</label>
+          </info>
+          <value>1</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Print">
+      <info>
+        <desc>Contains settings for printing.</desc>
+      </info>
+      <group oor:name="Content">
+        <info>
+          <desc>Contains settings for specifying which content types are printed.</desc>
+        </info>
+        <prop oor:name="Graphic" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print/Contents -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
+          <info>
+            <desc>Specifies if graphics are printed.</desc>
+            <label>Graphics</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Table" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print/Contents -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
+          <info>
+            <desc>Specifies if tables are printed.</desc>
+            <label>Tables</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Control" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print/Contents -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
+          <info>
+            <desc>Specifies if controls are printed.</desc>
+            <label>Controls</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Background" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print/Contents -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
+          <info>
+            <desc>Specifies if background objects are printed.</desc>
+            <label>Background</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintBlack" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print/Contents -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
+          <info>
+            <desc>Specifies if text is always printed in black.</desc>
+            <label>Print black</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Note" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Notes -->
+          <info>
+            <desc>Specifies if comments are printed and how they are printed.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>None</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Comments only</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>End of document</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>End of page</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
+      </group>
+      <group oor:name="Page">
+        <info>
+          <desc>Specifies which pages are printed and how they are printed.</desc>
+        </info>
+        <prop oor:name="Reversed" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print/Pages -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
+          <info>
+            <desc>Reverses the printing order.</desc>
+            <label>Reversed</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Brochure" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print/Pages -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
+          <info>
+            <desc>Prints in brochure format.</desc>
+            <label>Brochure</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="BrochureRightToLeft" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: Writer/Print/Pages -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
+          <info>
+            <desc>Prints in brochure format, with right-to-left direction.</desc>
+            <label>Right-to-left</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <group oor:name="Output">
+        <info>
+          <desc>Contains output-specific settings.</desc>
+        </info>
+        <prop oor:name="SinglePrintJob" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print/Output -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Output -->
+          <info>
+            <desc>Controls the print output.</desc>
+            <label>Create single print jobs</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Fax" oor:type="xs:string" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Print -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Fax -->
+          <info>
+            <desc>Specifies which fax machine is used when faxing directly from the document</desc>
+            <label>Fax</label>
+          </info>
+          <value/>
+          <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+        </prop>
+      </group>
+      <group oor:name="Papertray">
+        <info>
+          <desc>Contains settings for printers with multiple paper trays.</desc>
+        </info>
+        <prop oor:name="FromPrinterSetup" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Papertray -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Paper tray -->
+          <info>
+            <desc>Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
+            <label>From printer setup</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Table">
+      <info>
+        <desc>Contains settings for tables.</desc>
+      </info>
+      <group oor:name="Shift">
+        <info>
+          <desc>Contains settings used when shifting table rows/columns.</desc>
+        </info>
+        <prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Table/Shift -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
+          <!--Notice: NonMetric default: 635 1/100 mm-->
+          <info>
+            <desc>Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
+            <label>Row</label>
+          </info>
+          <value>500</value>
+        </prop>
+        <prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Table/Shift -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
+          <!-- Notice: NonMetric default: 635 1/100 mm-->
+          <info>
+            <desc>Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
+            <label>Column</label>
+          </info>
+          <value>500</value>
+        </prop>
+      </group>
+      <group oor:name="Insert">
+        <info>
+          <desc>Contains settings used when inserting table rows/columns.</desc>
+        </info>
+        <prop oor:name="Row" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Table/Insert -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
+          <!-- Notice: NonMetric default: 635 1/100 mm -->
+          <info>
+            <desc>Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
+            <label>Row</label>
+          </info>
+          <value>500</value>
+        </prop>
+        <prop oor:name="Column" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Table/Insert -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
+          <!-- Notice: The NonMetric Default 2540 1/100 mm-->
+          <info>
+            <desc>Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
+            <label>Column</label>
+          </info>
+          <value>2500</value>
+        </prop>
+      </group>
+      <group oor:name="Change">
+        <info>
+          <desc>Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
+        </info>
+        <prop oor:name="Effect" oor:type="xs:int" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Table -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document - Table  [Section] Effect -->
+          <info>
+            <desc>Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Fixed</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>FixedProportional</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Variable</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>2</value>
+        </prop>
+      </group>
+      <group oor:name="Input">
+        <info>
+          <desc>Contains settings used when inputting text or data in tables.</desc>
+        </info>
+        <prop oor:name="NumberRecognition" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Insert/IntoTables -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
+          <info>
+            <desc>Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
+            <label>Number recognition</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="NumberFormatRecognition" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Insert/IntoTables -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
+          <info>
+            <desc>Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+            <label>Number format recognition</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Alignment" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Insert/IntoTables -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
+          <info>
+            <desc>Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+            <label>Alignment</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Insert">
+      <info>
+        <desc>Specifies the settings for inserting various object types.</desc>
+      </info>
+      <group oor:name="Table">
+        <info>
+          <desc>Specifies the default settings for inserting tables.</desc>
+        </info>
+        <prop oor:name="Header" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Insert/Tables -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
+          <info>
+            <desc>Specifies if the table has a header</desc>
+            <label>Header</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="RepeatHeader" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Insert/Tables -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
+          <info>
+            <desc>Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
+            <label>Repeat header</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Border" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: HTML_Editor/Insert/Tables -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
+          <info>
+            <desc>Specifies if table cells have a border by default.</desc>
+            <label>Border</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="ObjectBar">
+      <info>
+        <desc>Specifies the settings for the object bar.</desc>
+      </info>
+      <group oor:name="Selection">
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Right mouse click to the toolbar with object selection-->
+        <info>
+          <desc>Specifies the type of object bar that is visible.</desc>
+        </info>
+        <prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="Table" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="NumberedList" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="NumberedList_InTable" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="BezierObject" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
+          </info>
+          <value>-1</value>
+        </prop>
+      </group>
+    </group>
+    <group oor:name="Background">
+      <info>
+        <desc>Contains settings for the background of a document.</desc>
+      </info>
+      <prop oor:name="Color" oor:type="xs:int">
+        <!-- OldPath: HTML_Editor/Background -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Option - HTML-Document  Background - [Section] Background color -->
+        <info>
+          <desc>Determines the background color.</desc>
+          <label>Background color</label>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Gallery">
+      <info>
+        <desc>Contains settings for gallery items that can be added to the document.</desc>
+      </info>
+      <prop oor:name="AddGraphic" oor:type="xs:boolean" oor:nillable="false">
+        <!--OldLocation: Soffice.cfg -->
+        <!--UIHints: HTML document in readonly mode - context menu of a graphic - Add Graphics - As Link / Copy-->
+        <info>
+          <desc>Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>

@@ -18,141 +18,141 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Recovery" oor:package="org.openoffice.Office" xml:lang="en-US">
-    <info>
+  <info>
+    <desc> </desc>
+  </info>
+  <templates>
+    <group oor:name="RecoveryEntry">
+      <info>
         <desc> </desc>
-    </info>
-	<templates>
-		<group oor:name="RecoveryEntry">
-            <info>
-                <desc> </desc>
-            </info>
-			<prop oor:name="TempURL" oor:type="xs:string">
-                <info>
-                    <desc> </desc>
-                </info>
-    		</prop>
-			<prop oor:name="OriginalURL" oor:type="xs:string">
-                <info>
-                    <desc> </desc>
-                </info>
-			</prop>
-			<prop oor:name="TemplateURL" oor:type="xs:string">
-                <info>
-                    <desc> </desc>
-                </info>
-			</prop>
-			<prop oor:name="Module" oor:type="xs:string">
-                <info>
-                    <desc> </desc>
-                </info>
-			</prop>
-			<prop oor:name="DocumentState" oor:type="xs:int">
-                <info>
-                    <desc> </desc>
-                </info>
-			</prop>
-			<prop oor:name="Filter" oor:type="xs:string">
-                <info>
-                    <desc> </desc>
-                </info>
-			</prop>
-			<prop oor:name="Title" oor:type="xs:string">
-                <info>
-                    <desc> </desc>
-                </info>
-			</prop>
-            <prop oor:name="ViewNames" oor:type="oor:string-list">
-                <info>
-                    <desc> </desc>
-                </info>
-            </prop>
-        </group>
-    </templates>
-	<component>
-		<set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
-            <info>
-                <desc> </desc>
-            </info>
-        </set>
-        <group oor:name="SessionShutdown">
-            <info>
-                <desc>The session shutdown related information.</desc>
-            </info>
-            <prop oor:name="DocumentStoreUIEnabled" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Determines if the office is allowed to show request to store modified documents on session shutdown.</desc>
-                </info>
-                <value>false</value>
-            </prop>
-        </group>
-        <group oor:name="RecoveryInfo">
-            <info>
-                <desc> </desc>
-            </info>
-            <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Determines if the recovery feature should be enabled or disabled</desc>
-                </info>
-                <value>true</value>
-            </prop>
-            <prop oor:name="Crashed" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc> </desc>
-                </info>
-                <value>false</value>
-            </prop>
-            <prop oor:name="SessionData" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc> </desc>
-                </info>
-                <value>false</value>
-            </prop>
-        </group>
-        <group oor:name="CrashReporter">
-            <info>
-                <desc>Settings for the crash reporter.</desc>
-            </info>
-            <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc>Specifies if the crash reporter should be enabled or disabled.</desc>
-                </info>
-                <value>false</value>
-            </prop>
-        </group>
-        <group oor:name="AutoSave">
-            <info>
-                <desc> </desc>
-            </info>
-            <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc> </desc>
-                </info>
-                <value>true</value>
-            </prop>
-            <prop oor:name="UserAutoSaveEnabled" oor:type="xs:boolean" oor:nillable="false">
-                <info>
-                    <desc> </desc>
-                </info>
-                <value>false</value>
-            </prop>
-            <prop oor:name="TimeIntervall" oor:type="xs:int" oor:nillable="false">
-                <info>
-                    <desc> </desc>
-                </info>
-                <value>15</value>
-            </prop>
-            <prop oor:name="MinSpaceDocSave" oor:type="xs:int" oor:nillable="false">
-                <info>
-                    <desc>Define the minimum space in [MB], which must be available on disc to save backups for open documents. Note: values less then 1 will be ignored.</desc>
-                </info>
-                <value>5</value>
-            </prop>
-            <prop oor:name="MinSpaceConfigSave" oor:type="xs:int" oor:nillable="false">
-                <info>
-                    <desc>Define the minimum space in [MB], which must be available on disc to store the recovery configuration. Note: values less then 1 will be ignored.</desc>
-                </info>
-                <value>1</value>
-            </prop>
-        </group>
-    </component>
+      </info>
+      <prop oor:name="TempURL" oor:type="xs:string">
+        <info>
+          <desc> </desc>
+        </info>
+      </prop>
+      <prop oor:name="OriginalURL" oor:type="xs:string">
+        <info>
+          <desc> </desc>
+        </info>
+      </prop>
+      <prop oor:name="TemplateURL" oor:type="xs:string">
+        <info>
+          <desc> </desc>
+        </info>
+      </prop>
+      <prop oor:name="Module" oor:type="xs:string">
+        <info>
+          <desc> </desc>
+        </info>
+      </prop>
+      <prop oor:name="DocumentState" oor:type="xs:int">
+        <info>
+          <desc> </desc>
+        </info>
+      </prop>
+      <prop oor:name="Filter" oor:type="xs:string">
+        <info>
+          <desc> </desc>
+        </info>
+      </prop>
+      <prop oor:name="Title" oor:type="xs:string">
+        <info>
+          <desc> </desc>
+        </info>
+      </prop>
+      <prop oor:name="ViewNames" oor:type="oor:string-list">
+        <info>
+          <desc> </desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
+      <info>
+        <desc> </desc>
+      </info>
+    </set>
+    <group oor:name="SessionShutdown">
+      <info>
+        <desc>The session shutdown related information.</desc>
+      </info>
+      <prop oor:name="DocumentStoreUIEnabled" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines if the office is allowed to show request to store modified documents on session shutdown.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+    <group oor:name="RecoveryInfo">
+      <info>
+        <desc> </desc>
+      </info>
+      <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines if the recovery feature should be enabled or disabled</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Crashed" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc> </desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="SessionData" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc> </desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+    <group oor:name="CrashReporter">
+      <info>
+        <desc>Settings for the crash reporter.</desc>
+      </info>
+      <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if the crash reporter should be enabled or disabled.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
+    <group oor:name="AutoSave">
+      <info>
+        <desc> </desc>
+      </info>
+      <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc> </desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="UserAutoSaveEnabled" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc> </desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="TimeIntervall" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc> </desc>
+        </info>
+        <value>15</value>
+      </prop>
+      <prop oor:name="MinSpaceDocSave" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Define the minimum space in [MB], which must be available on disc to save backups for open documents. Note: values less then 1 will be ignored.</desc>
+        </info>
+        <value>5</value>
+      </prop>
+      <prop oor:name="MinSpaceConfigSave" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Define the minimum space in [MB], which must be available on disc to store the recovery configuration. Note: values less then 1 will be ignored.</desc>
+        </info>
+        <value>1</value>
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>

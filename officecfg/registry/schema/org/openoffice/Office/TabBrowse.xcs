@@ -17,35 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:package="org.openoffice.Office"
-                      oor:name="TabBrowse"
-                      xmlns:oor="http://openoffice.org/2001/registry"
-                      xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                      xml:lang="en-US">
-    <info>
-		<desc>Contain all needed properties for the tabbed document interface of OOo.</desc>
-	</info>
-
-	<templates>
-	</templates>
-
-	<component>
-
-        <group oor:name="TaskCreatorService">
-            <info>
-        		<desc>The TaskCreatorService is used to create new document windows.
-                      It must be replaced if the logic behind creation of such windows should be changed.</desc>
-        	</info>
-            <prop oor:name="ImplementationName" oor:type="xs:string">
-                <info>
-            		<desc>Because there can exists more then one implementations of such TaskCreatorService,
-                          the actual one must be specified with it's UNO implementation name.
-                          Otherwise it's not guaranteed, which implementation is realy used at runtime.</desc>
-            	</info>
-            </prop>
-        </group>
-
-	</component>
-
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office" oor:name="TabBrowse" xml:lang="en-US">
+  <info>
+    <desc>Contain all needed properties for the tabbed document interface of OOo.</desc>
+  </info>
+  <templates/>
+  <component>
+    <group oor:name="TaskCreatorService">
+      <info>
+        <desc>The TaskCreatorService is used to create new document windows.
+          It must be replaced if the logic behind creation of such windows should be changed.</desc>
+      </info>
+      <prop oor:name="ImplementationName" oor:type="xs:string">
+        <info>
+          <desc>Because there can exists more then one implementations of such TaskCreatorService,
+            the actual one must be specified with it's UNO implementation name.
+            Otherwise it's not guaranteed, which implementation is realy used at runtime.</desc>
+        </info>
+      </prop>
+    </group>
+  </component>
 </oor:component-schema>

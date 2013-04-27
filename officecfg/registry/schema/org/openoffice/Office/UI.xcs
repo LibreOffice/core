@@ -18,495 +18,494 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UI" oor:package="org.openoffice.Office" xml:lang="en-US">
-	<info>
-	</info>
-	<templates>
-		<group oor:name="FilterClass">
-			<info>
-				<desc>Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
-			</info>
-			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true" oor:nillable="false">
-				<info>
-					<desc>Specifies the localized name that is used when presenting the class to the user.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Filters" oor:type="oor:string-list">
-				<info>
-					<desc>Contains a list of filters that belong to this filter class. Filters that referred here (for a given class) are collected at runtime and then presented as one single entry.</desc>
-				</info>
-			</prop>
-		</group>
-		<group oor:name="ColorScheme">
-			<!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
-			<info>
-				<desc>Defines the templates for color settings used to customize the appearance of the applications.</desc>
-			</info>
-			<group oor:name="DocColor">
-				<info>
-					<desc>Specifies the color settings for the document.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color of the document.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="DocBoundaries">
-				<info>
-					<desc>Specifies the settings for the documents boundaries.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of anchors (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for of the document boundaries.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="AppBackground">
-				<info>
-					<desc>Specifies the settings for the application background.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies Color of the application background.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="ObjectBoundaries">
-				<info>
-					<desc>Specifies the settings for object boundaries.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of object boundaries (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for object boundaries.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="TableBoundaries">
-				<info>
-					<desc>Specifies the settings for table boundaries.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of table boundaries (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for table boundaries.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="FontColor">
-				<info>
-					<desc>Specifies the settings for the font.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies color of the font.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="Links">
-				<info>
-					<desc>Specifies the settings for unvisited links.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of unvisited links (true = visible).</desc>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for unvisited links.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="LinksVisited">
-				<info>
-					<desc>Specifies the settings for visited links.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of visited links (true = visible).</desc>
-					</info>
-					<value>false</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for visited links.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="Spell">
-				<info>
-					<desc>Specifies the settings for incorrect text found with spellchecking.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color of incorrect text found with AutoSpellcheck.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="SmartTags">
-				<info>
-					<desc>Specifies the settings for smart tags.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color of smart tags.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="Shadow">
-				<info>
-					<desc>Specifies the settings for shadows.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of shadows (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for shadows.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="WriterTextGrid">
-				<info>
-					<desc>Specifies the settings for the text grid in Writer.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the text grid.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="WriterFieldShadings">
-				<info>
-					<desc>Specifies the settings for field shadings in Writer.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of field shadings (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the field shadings.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="WriterIdxShadings">
-				<info>
-					<desc>Specifies the settings for index and table shadings in Writer.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of index and table shadings (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the index and table shadings.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="WriterDirectCursor">
-				<info>
-					<desc>Specifies the settings for the direct cursor in Writer.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of direct cursor (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the direct cursor.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="WriterScriptIndicator">
-				<info>
-					<desc>Specifies the settings for script indicators in Writer.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for script indicators.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="WriterSectionBoundaries">
-				<info>
-					<desc>Specifies the settings for section boundaries in Writer.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of section boundaries (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for section boundaries.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="WriterHeaderFooterMark">
-				<info>
-					<desc>Specifies the settings for the header/footer mark in Writer.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the header/footer mark.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="WriterPageBreaks">
-				<info>
-					<desc>Specifies the settings for the page break mark in Writer.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the page break mark.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="HTMLSGML">
-				<info>
-					<desc>Specifies the settings used for SGML in HTML documents.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for SGML code.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="HTMLComment">
-				<info>
-					<desc>Specifies the settings used for comments in HTML documents.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for comments.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="HTMLKeyword">
-				<info>
-					<desc>Specifies the settings used for keywords in HTML documents.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for keywords.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="HTMLUnknown">
-				<info>
-					<desc>Specifies the settings used for other text in HTML documents.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for other text.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="CalcGrid">
-				<info>
-					<desc>Specifies the settings used for grid lines in Calc.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the grid.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="CalcPageBreak">
-				<info>
-					<desc>Specifies the settings used for page breaks in the page break preview in Calc.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for page breaks in the page break preview.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="CalcPageBreakManual">
-				<info>
-					<desc>Specifies the settings used for manual breaks in Calc.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for manual page breaks.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="CalcPageBreakAutomatic">
-				<info>
-					<desc>Specifies the settings used for automatic breaks in Calc.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for automatic page breaks.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="CalcDetective">
-				<info>
-					<desc>Specifies the settings used for audition arrows in Calc.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for audition arrows to precedent or dependent cells.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="CalcDetectiveError">
-				<info>
-					<desc>Specifies the settings used for audition arrows to cells with errors in Calc.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for audition arrows to cells containing errors.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="CalcReference">
-				<info>
-					<desc>Specifies the settings used for the cursor when editing references in Calc.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the cursor when editing references.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="CalcNotesBackground">
-				<info>
-					<desc>Specifies the settings used for the background of comments in Calc.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the background of comments.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="DrawGrid">
-				<info>
-					<desc>Specifies the settings used for the grid in Draw/Impress.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-					<info>
-						<desc>Specifies the visibility of the grid (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for the grid.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="BASICIdentifier">
-				<info>
-					<desc>Specifies the settings for identifiers in BASIC source code.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for identifiers.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="BASICComment">
-				<info>
-					<desc>Specifies the settings for comments in BASIC source code.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for comments.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="BASICNumber">
-				<info>
-					<desc>Specifies the settings for numbers in BASIC source code.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for numbers.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="BASICString">
-				<info>
-					<desc>Specifies the settings for strings in BASIC source code.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for strings.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="BASICOperator">
-				<info>
-					<desc>Specifies the settings for operators in BASIC source code.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for operators.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="BASICKeyword">
-				<info>
-					<desc>Specifies the settings for keywords in BASIC source code.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for keywords (reserved expressions).</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="BASICError">
-				<info>
-					<desc>Specifies the settings for errors shown in BASIC source code.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for errors.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="SQLIdentifier">
-				<info>
-					<desc>Specifies the settings for SQL identifiers, as used the Query Designer.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for SQL identifiers.</desc>
-					</info>
-				</prop>
-			</group>
+  <info/>
+  <templates>
+    <group oor:name="FilterClass">
+      <info>
+        <desc>Describes a class of filters. Filter classes (for example, 'Text documents') appear as a single filter to the user.</desc>
+      </info>
+      <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true" oor:nillable="false">
+        <info>
+          <desc>Specifies the localized name that is used when presenting the class to the user.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Filters" oor:type="oor:string-list">
+        <info>
+          <desc>Contains a list of filters that belong to this filter class. Filters that referred here (for a given class) are collected at runtime and then presented as one single entry.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="ColorScheme">
+      <!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
+      <info>
+        <desc>Defines the templates for color settings used to customize the appearance of the applications.</desc>
+      </info>
+      <group oor:name="DocColor">
+        <info>
+          <desc>Specifies the color settings for the document.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color of the document.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DocBoundaries">
+        <info>
+          <desc>Specifies the settings for the documents boundaries.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of anchors (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for of the document boundaries.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="AppBackground">
+        <info>
+          <desc>Specifies the settings for the application background.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies Color of the application background.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ObjectBoundaries">
+        <info>
+          <desc>Specifies the settings for object boundaries.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of object boundaries (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for object boundaries.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="TableBoundaries">
+        <info>
+          <desc>Specifies the settings for table boundaries.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of table boundaries (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for table boundaries.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="FontColor">
+        <info>
+          <desc>Specifies the settings for the font.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies color of the font.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Links">
+        <info>
+          <desc>Specifies the settings for unvisited links.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of unvisited links (true = visible).</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for unvisited links.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="LinksVisited">
+        <info>
+          <desc>Specifies the settings for visited links.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of visited links (true = visible).</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for visited links.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Spell">
+        <info>
+          <desc>Specifies the settings for incorrect text found with spellchecking.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color of incorrect text found with AutoSpellcheck.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SmartTags">
+        <info>
+          <desc>Specifies the settings for smart tags.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color of smart tags.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Shadow">
+        <info>
+          <desc>Specifies the settings for shadows.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of shadows (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for shadows.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WriterTextGrid">
+        <info>
+          <desc>Specifies the settings for the text grid in Writer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the text grid.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WriterFieldShadings">
+        <info>
+          <desc>Specifies the settings for field shadings in Writer.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of field shadings (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the field shadings.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WriterIdxShadings">
+        <info>
+          <desc>Specifies the settings for index and table shadings in Writer.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of index and table shadings (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the index and table shadings.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WriterDirectCursor">
+        <info>
+          <desc>Specifies the settings for the direct cursor in Writer.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of direct cursor (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the direct cursor.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WriterScriptIndicator">
+        <info>
+          <desc>Specifies the settings for script indicators in Writer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for script indicators.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WriterSectionBoundaries">
+        <info>
+          <desc>Specifies the settings for section boundaries in Writer.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of section boundaries (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for section boundaries.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WriterHeaderFooterMark">
+        <info>
+          <desc>Specifies the settings for the header/footer mark in Writer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the header/footer mark.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WriterPageBreaks">
+        <info>
+          <desc>Specifies the settings for the page break mark in Writer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the page break mark.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="HTMLSGML">
+        <info>
+          <desc>Specifies the settings used for SGML in HTML documents.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for SGML code.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="HTMLComment">
+        <info>
+          <desc>Specifies the settings used for comments in HTML documents.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for comments.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="HTMLKeyword">
+        <info>
+          <desc>Specifies the settings used for keywords in HTML documents.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for keywords.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="HTMLUnknown">
+        <info>
+          <desc>Specifies the settings used for other text in HTML documents.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for other text.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcGrid">
+        <info>
+          <desc>Specifies the settings used for grid lines in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the grid.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcPageBreak">
+        <info>
+          <desc>Specifies the settings used for page breaks in the page break preview in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for page breaks in the page break preview.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcPageBreakManual">
+        <info>
+          <desc>Specifies the settings used for manual breaks in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for manual page breaks.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcPageBreakAutomatic">
+        <info>
+          <desc>Specifies the settings used for automatic breaks in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for automatic page breaks.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcDetective">
+        <info>
+          <desc>Specifies the settings used for audition arrows in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for audition arrows to precedent or dependent cells.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcDetectiveError">
+        <info>
+          <desc>Specifies the settings used for audition arrows to cells with errors in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for audition arrows to cells containing errors.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcReference">
+        <info>
+          <desc>Specifies the settings used for the cursor when editing references in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the cursor when editing references.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcNotesBackground">
+        <info>
+          <desc>Specifies the settings used for the background of comments in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the background of comments.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DrawGrid">
+        <info>
+          <desc>Specifies the settings used for the grid in Draw/Impress.</desc>
+        </info>
+        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies the visibility of the grid (true = visible).</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the grid.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="BASICIdentifier">
+        <info>
+          <desc>Specifies the settings for identifiers in BASIC source code.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for identifiers.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="BASICComment">
+        <info>
+          <desc>Specifies the settings for comments in BASIC source code.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for comments.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="BASICNumber">
+        <info>
+          <desc>Specifies the settings for numbers in BASIC source code.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for numbers.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="BASICString">
+        <info>
+          <desc>Specifies the settings for strings in BASIC source code.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for strings.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="BASICOperator">
+        <info>
+          <desc>Specifies the settings for operators in BASIC source code.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for operators.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="BASICKeyword">
+        <info>
+          <desc>Specifies the settings for keywords in BASIC source code.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for keywords (reserved expressions).</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="BASICError">
+        <info>
+          <desc>Specifies the settings for errors shown in BASIC source code.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for errors.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SQLIdentifier">
+        <info>
+          <desc>Specifies the settings for SQL identifiers, as used the Query Designer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for SQL identifiers.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="SQLNumber">
         <info>
           <desc>Specifies the settings for SQL numbers, as used the Query Designer.</desc>
@@ -567,98 +566,98 @@
           </info>
         </prop>
       </group>
-		</group>
-	</templates>
-	<component>
-		<group oor:name="FilterClassification">
-			<info>
-				<desc>Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
-			</info>
-			<group oor:name="GlobalFilters">
-				<info>
-					<desc>Presents global classes to the user in a group of their own. A typical example for a global class is &quot;text documents&quot;, whereas &quot;StarWriter 4.0 / 5.0 documents&quot; is not a global class.</desc>
-				</info>
-				<prop oor:name="Order" oor:type="oor:string-list" oor:nillable="false">
-					<info>
-						<desc>List specifying the order of the global filters within their group.</desc>
-					</info>
-					<value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formula.FormularProperties;com.sun.star.sdb.OfficeDatabaseDocument</value>
-				</prop>
-				<set oor:name="Classes" oor:node-type="FilterClass">
-					<info>
-						<desc>Lists global classes. The name of a class denotes to the document service name of the associated module.</desc>
-					</info>
-				</set>
-			</group>
-			<group oor:name="LocalFilters">
-				<info>
-					<desc>Combines several filters into one entry and presents the classes to the user &quot;in-place&quot;.</desc>
-				</info>
-				<set oor:name="Classes" oor:node-type="FilterClass">
-					<info>
-						<desc>Lists local classes.</desc>
-					</info>
-				</set>
-			</group>
-		</group>
-		<group oor:name="ColorScheme">
-			<info>
-				<desc>Specifies the color settings for customizing the appearance of the applications.</desc>
-			</info>
-			<prop oor:name="CurrentColorScheme" oor:type="xs:string">
-				<info>
-					<desc>Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
-				</info>
-			</prop>
-			<set oor:name="ColorSchemes" oor:node-type="ColorScheme">
-				<!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
-				<info>
-					<desc>Lists entries with color settings.</desc>
-				</info>
-			</set>
-		</group>
-		<group oor:name="FilePicker">
-			<info>
-				<desc>Specifies various settings for the internal file/folder picker dialog.</desc>
-			</info>
-			<prop oor:name="FillAsynchronously" oor:type="xs:boolean" oor:nillable="false">
-				<info>
-					<desc>Specifies whether the dialog should fill its view asynchronously. Asnychronous filling allows the user to cancel blocking operations, which may be useful for instance for mounted, but dead NFS devices.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<group oor:name="Timeout">
-				<info>
-					<desc>Specifies the timeouts to be used when the file view is to be filled asynchronously.
+    </group>
+  </templates>
+  <component>
+    <group oor:name="FilterClassification">
+      <info>
+        <desc>Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
+      </info>
+      <group oor:name="GlobalFilters">
+        <info>
+          <desc>Presents global classes to the user in a group of their own. A typical example for a global class is "text documents", whereas "StarWriter 4.0 / 5.0 documents" is not a global class.</desc>
+        </info>
+        <prop oor:name="Order" oor:type="oor:string-list" oor:nillable="false">
+          <info>
+            <desc>List specifying the order of the global filters within their group.</desc>
+          </info>
+          <value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formula.FormularProperties;com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <set oor:name="Classes" oor:node-type="FilterClass">
+          <info>
+            <desc>Lists global classes. The name of a class denotes to the document service name of the associated module.</desc>
+          </info>
+        </set>
+      </group>
+      <group oor:name="LocalFilters">
+        <info>
+          <desc>Combines several filters into one entry and presents the classes to the user "in-place".</desc>
+        </info>
+        <set oor:name="Classes" oor:node-type="FilterClass">
+          <info>
+            <desc>Lists local classes.</desc>
+          </info>
+        </set>
+      </group>
+    </group>
+    <group oor:name="ColorScheme">
+      <info>
+        <desc>Specifies the color settings for customizing the appearance of the applications.</desc>
+      </info>
+      <prop oor:name="CurrentColorScheme" oor:type="xs:string">
+        <info>
+          <desc>Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
+        </info>
+      </prop>
+      <set oor:name="ColorSchemes" oor:node-type="ColorScheme">
+        <!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
+        <info>
+          <desc>Lists entries with color settings.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="FilePicker">
+      <info>
+        <desc>Specifies various settings for the internal file/folder picker dialog.</desc>
+      </info>
+      <prop oor:name="FillAsynchronously" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether the dialog should fill its view asynchronously. Asnychronous filling allows the user to cancel blocking operations, which may be useful for instance for mounted, but dead NFS devices.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <group oor:name="Timeout">
+        <info>
+          <desc>Specifies the timeouts to be used when the file view is to be filled asynchronously.
 These settings are not evaluated if the FillAsynchronously property is false.</desc>
-				</info>
-				<prop oor:name="Min" oor:type="xs:int" oor:nillable="false">
-					<info>
-						<desc>Specifies the minimum timeout in milliseconds. When the file view is filled, the dialog will wait at least this time before the user is allowed to cancel the operation.</desc>
-					</info>
-					<constraints>
-						<minInclusive oor:value="1000">
-							<info>
-								<desc>The minimum timeout value is 1 second.</desc>
-							</info>
-						</minInclusive>
-					</constraints>
-					<value>1000</value>
-				</prop>
-				<prop oor:name="Max" oor:type="xs:int" oor:nillable="false">
-					<info>
-						<desc>Specifies the maximum timeout in milliseconds. When the file view is being filled, and its content could not be completely obtained within the time frame given here, the operation is cancelled automatically.</desc>
-					</info>
-					<constraints>
-						<minInclusive oor:value="5000">
-							<info>
-								<desc>The maximum timeout value should be at least 5 mseconds.</desc>
-							</info>
-						</minInclusive>
-					</constraints>
-					<value>30000</value>
-				</prop>
-			</group>
-		</group>
-	</component>
+        </info>
+        <prop oor:name="Min" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies the minimum timeout in milliseconds. When the file view is filled, the dialog will wait at least this time before the user is allowed to cancel the operation.</desc>
+          </info>
+          <constraints>
+            <minInclusive oor:value="1000">
+              <info>
+                <desc>The minimum timeout value is 1 second.</desc>
+              </info>
+            </minInclusive>
+          </constraints>
+          <value>1000</value>
+        </prop>
+        <prop oor:name="Max" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Specifies the maximum timeout in milliseconds. When the file view is being filled, and its content could not be completely obtained within the time frame given here, the operation is cancelled automatically.</desc>
+          </info>
+          <constraints>
+            <minInclusive oor:value="5000">
+              <info>
+                <desc>The maximum timeout value should be at least 5 mseconds.</desc>
+              </info>
+            </minInclusive>
+          </constraints>
+          <value>30000</value>
+        </prop>
+      </group>
+    </group>
+  </component>
 </oor:component-schema>
