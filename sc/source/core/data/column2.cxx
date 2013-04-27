@@ -1649,6 +1649,7 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
                 ScValueCell* pVC = static_cast<ScValueCell*>(it->pCell);
                 rMat.PutDouble(pVC->GetValue(), nMatCol, it->nRow - nRow1);
             }
+            break;
             case CELLTYPE_FORMULA:
             {
                 ScFormulaCell* pFC = static_cast<ScFormulaCell*>(it->pCell);
@@ -1658,6 +1659,7 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
 
                 rMat.PutDouble(pFC->GetResultDouble(), nMatCol, it->nRow - nRow1);
             }
+            break;
             default:
                 ;
         }
