@@ -275,6 +275,8 @@ gb_GLOBALDEFS += \
 
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
+gb_RUNNABLE_INSTDIR :=
+
 include $(GBUILDDIR)/Deliver.mk
 
 $(eval $(call gb_Deliver_init))
