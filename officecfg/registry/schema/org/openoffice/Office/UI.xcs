@@ -629,7 +629,7 @@
       <group oor:name="Timeout">
         <info>
           <desc>Specifies the timeouts to be used when the file view is to be filled asynchronously.
-These settings are not evaluated if the FillAsynchronously property is false.</desc>
+            These settings are not evaluated if the FillAsynchronously property is false.</desc>
         </info>
         <prop oor:name="Min" oor:type="xs:int" oor:nillable="false">
           <info>
