@@ -11,6 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,instsetoo_native/setup))
 
 $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	ooenv \
+	ure-link \
 ))
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv :
@@ -28,5 +29,12 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv :
 		echo 'export MALLOC_PERTURB_=153' && \
 		echo 'export OOO_DISABLE_RECOVERY=1' \
 	) > $@
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ure-link :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),LN ,1)
+	rm -f $@ && \
+	mkdir -p $(dir $@)/ure && \
+	cd $(dir $@) && \
+	ln -s ure ure-link
 
 # vim: set noet sw=4 ts=4:
