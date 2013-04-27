@@ -7,21 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,instsetoo_native))
+$(eval $(call gb_Package_Package,instsetoo_native_setup,$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)))
 
-ifneq (,$(filter WNT,$(OS))$(filter-out NO,$(EPM)))
+$(eval $(call gb_Package_set_outdir,instsetoo_native_setup,$(INSTDIR)))
 
-$(eval $(call gb_Module_add_targets,instsetoo_native,\
-	CustomTarget_install \
-))
-
-endif
-
-ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(eval $(call gb_Module_add_targets,instsetoo_native,\
-	CustomTarget_setup \
-	Package_setup \
-))
-endif
+$(eval $(call gb_Package_add_file,instsetoo_native_setup,program/ooenv,ooenv))
 
 # vim: set noet sw=4 ts=4:
