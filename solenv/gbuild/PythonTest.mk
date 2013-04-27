@@ -32,6 +32,7 @@ ifneq ($(DISABLE_PYTHON),TRUE)
 $(call gb_PythonTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PYT,2)
 	$(call gb_Helper_abbreviate_dirs,\
+		rm -rf $(dir $(call gb_PythonTest_get_target,$*)) && \
 		mkdir -p $(dir $(call gb_PythonTest_get_target,$*)) && \
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
@@ -40,6 +41,7 @@ $(call gb_PythonTest_get_target,%) :
 		URE_BOOTSTRAP=vnd.sun.star.pathname:$(gb_DEVINSTALLROOT)/program/fundamentalrc \
 		PYTHONPATH=$(PYPATH) \
 		UserInstallation="$(call gb_Helper_make_url,$(OUTDIR)/unittest)" \
+		TestUserDir="$(call gb_Helper_make_url,$(dir $(call gb_PythonTest_get_target,$*)))" \
 		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_PythonTest_COMMAND) \
 			$(MODULES) \
 		$(if $(gb_CppunitTest__interactive),, \

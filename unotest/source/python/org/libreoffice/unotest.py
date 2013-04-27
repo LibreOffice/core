@@ -127,7 +127,7 @@ class OfficeConnection(object):
     def getContext(self):
         return self.xContext
 
-class UnoConnection:
+class UnoRemoteConnection:
     def __init__(self, args):
         self.args = args
         self.connection = None
@@ -186,6 +186,10 @@ class UnoInProcess:
             obj.setPropertyValue(k, v)
             value = obj.getPropertyValue(k)
             test.assertEqual(value, v)
+
+    def setProperties(self, obj, dict):
+        for k,v in dict.items():
+            obj.setPropertyValue(k, v)
 
     def postTest(self):
         assert(self.xContext)
