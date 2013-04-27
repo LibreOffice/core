@@ -35,15 +35,13 @@
 #include "userdat.hxx"
 #include "docsh.hxx"
 
-// forwards -> galwrap.cxx (wg. CLOOKs)
+// forwards (apparently because of ancient compiler limits not in headers!?)
 
 sal_uInt16  GallerySGA_FORMAT_GRAPHIC();
 Graphic GalleryGetGraphic       ();
 sal_Bool    GalleryIsLinkage        ();
 String  GalleryGetFullPath      ();
 String  GalleryGetFilterName    ();
-
-// forwards -> imapwrap.cxx (wg. CLOOKs)
 
 class SvxIMapDlg;
 

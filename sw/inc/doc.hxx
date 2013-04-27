@@ -605,7 +605,7 @@ private:
 
     DECL_LINK( AddDrawUndo, SdrUndoAction * );
                                         // DrawModel
-    void DrawNotifyUndoHdl();           // Because of CLOOKs
+    void DrawNotifyUndoHdl();
 
     /** Only for internal use and therefore private.
      Copy a range within the same or to another document.

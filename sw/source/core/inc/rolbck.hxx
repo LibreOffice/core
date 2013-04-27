@@ -25,8 +25,6 @@
 #include <vector>
 #include <set>
 
-//Nur die History anziehen, um das docnew.cxx gegen die CLOOK's zu behaupten.
-
 namespace sfx2 {
     class MetadatableUndo;
 }
@@ -50,8 +48,6 @@ class SwpHints;
 class SwFmtChain;
 class SwNode;
 class SwCharFmt;
-
-#ifndef ROLBCK_HISTORY_ONLY
 
 #include <tox.hxx>
 
@@ -339,8 +335,6 @@ public:
 
 };
 
-#endif
-
 class SwpHstry : public std::vector<SwHistoryHint*> {
 public:
     // the destructor will free all objects still in the vector
@@ -401,8 +395,6 @@ public:
     void CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx );
 };
 
-#ifndef ROLBCK_HISTORY_ONLY
-
 class SwRegHistory : public SwClient
 {
 private:
@@ -430,8 +422,6 @@ public:
     void RegisterInModify( SwModify* pRegIn, const SwNode& rNd );
     void ChangeNodeIndex( sal_uLong nNew ) { m_nNodeIndex = nNew; }
 };
-
-#endif
 
 #endif // _ROLBCK_HXX
 

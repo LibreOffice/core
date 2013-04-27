@@ -377,7 +377,7 @@ void ScTabView::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll
     aViewData.SetZoom( rNewX, rNewY, bAll );
     if (pDrawView)
         pDrawView->RecalcScale();
-    ZoomChanged();              // einzeln wegen CLOOKs
+    ZoomChanged();
 }
 
 void ScTabView::RefreshZoom()
@@ -393,7 +393,7 @@ void ScTabView::SetPagebreakMode( bool bSet )
     aViewData.SetPagebreakMode(bSet);
     if (pDrawView)
         pDrawView->RecalcScale();
-    ZoomChanged();              // einzeln wegen CLOOKs
+    ZoomChanged();
 }
 
 void ScTabView::ResetDrawDragMode()

@@ -1940,7 +1940,7 @@ public:
 
     ScFormulaVectorState GetFormulaVectorState( const ScAddress& rPos ) const;
 
-private: // CLOOK-Impl-methods
+private:
 
     /**
      * Use this class as a locale variable to merge number formatter from

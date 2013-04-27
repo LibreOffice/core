@@ -17,70 +17,137 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
-#include "ViewShellImplementation.hxx"
-#include <vcl/waitobj.hxx>
+#include <avmedia/mediaplayer.hxx>
+
+#include <basic/sberrors.hxx>
+#include <basic/sbstar.hxx>
+
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
+
+#include <comphelper/processfactory.hxx>
+
+#include <editeng/editdata.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/zoomitem.hxx>
+
+#include <svl/aeitem.hxx>
+
+#include <svx/SpellDialogChildWindow.hxx>
+#include <svx/compressgraphicdialog.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/bmpmask.hxx>
+#include <svx/colrctrl.hxx>
+#include <svx/extedit.hxx>
+#include <svx/extrusionbar.hxx>
+#include <svx/f3dchild.hxx>
+#include <svx/fontwork.hxx>
+#include <svx/fontworkbar.hxx>
+#include <svx/galbrws.hxx>
+#include <svx/graphichelper.hxx>
+#include <svx/hlnkitem.hxx>
+#include <svx/imapdlg.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtmfitm.hxx>
+#include <svx/svdoattr.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svxids.hrc>
+#include <svx/svdoole2.hxx>
+#include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
-#include <sfx2/zoomitem.hxx>
-#include <editeng/editdata.hxx>
-#include <basic/sberrors.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/dispatch.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svl/aeitem.hxx>
-#include <editeng/eeitem.hxx>
-#include <basic/sbstar.hxx>
-#include <editeng/flditem.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/graphichelper.hxx>
-#include <svx/compressgraphicdialog.hxx>
-#include <svx/extedit.hxx>
-#include <svx/svdoutl.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/svdoattr.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/sdtmfitm.hxx>
-#include <svx/sdtagitm.hxx>
 #include <svx/xlnedwit.hxx>
-#include <svx/fontworkbar.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnwtit.hxx>
 
-#include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
+#include <tools/diagnose_ex.h>
 
-#include <sfx2/viewfrm.hxx>
-#include "sdgrffilter.hxx"
+#include <unotools/useroptions.hxx>
+
+#include <vcl/graph.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/waitobj.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
-#include "helpids.h"
-#include "sdattr.hxx"
-#include "drawview.hxx"
+#include "strings.hrc"
+
+#include "framework/FrameworkHelper.hxx"
+
+#include "AnimationChildWindow.hxx"
+#include "DrawDocShell.hxx"
+#include "DrawViewShell.hxx"
+#include "GraphicViewShell.hxx"
+#include "LayerDialogChildWindow.hxx"
+#include "LayerTabBar.hxx"
+#include "Outliner.hxx"
+#include "ViewShellHint.hxx"
+#include "ViewShellImplementation.hxx"
 #include "Window.hxx"
 #include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "sdpage.hxx"
+#include "drawview.hxx"
+#include "fuarea.hxx"
+#include "fubullet.hxx"
+#include "fuchar.hxx"
+#include "fucushow.hxx"
+#include "fuconnct.hxx"
+#include "fucopy.hxx"
+#include "fudspord.hxx"
+#include "fuexpand.hxx"
+#include "fuinsert.hxx"
+#include "fuinsfil.hxx"
+#include "fuline.hxx"
+#include "fulinend.hxx"
+#include "fulink.hxx"
+#include "fumeasur.hxx"
+#include "fumorph.hxx"
+#include "fuoaprms.hxx"
+#include "fuolbull.hxx"
+#include "fupage.hxx"
+#include "fuparagr.hxx"
+#include "fuprlout.hxx"
 #include "fuscale.hxx"
-#include "sdresid.hxx"
-#include "GraphicViewShell.hxx"
-#include "unmodpg.hxx"
-#include "slideshow.hxx"
+#include "fusel.hxx"
+#include "fusldlg.hxx"
+#include "fusnapln.hxx"
+#include "fusumry.hxx"
+#include "futempl.hxx"
+#include "futhes.hxx"
+#include "futransf.hxx"
+#include "futxtatt.hxx"
 #include "fuvect.hxx"
-#include "stlpool.hxx"
-
+#include "fuzoom.hxx"
+#include "helpids.h"
 #include "optsitem.hxx"
 #include "sdabstdlg.hxx"
-#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#include <com/sun/star/drawing/XDrawPages.hpp>
-
-#include <strings.hrc>
+#include "sdattr.hxx"
+#include "sdgrffilter.hxx"
+#include "sdpage.hxx"
+#include "sdresid.hxx"
+#include "slideshow.hxx"
+#include "stlpool.hxx"
+#include "undolayer.hxx"
+#include "unmodpg.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+#define MIN_ACTIONS_FOR_DIALOG  5000    ///< if there are more meta objects, we show a dialog during the break up
 
 namespace sd {
 
@@ -1036,11 +1103,1820 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_ATTRIBUTES_LINE:  // BASIC
+        {
+            SetCurrentFunction( FuLine::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_ATTRIBUTES_AREA:  // BASIC
+        {
+            SetCurrentFunction( FuArea::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_ATTR_TRANSFORM:
+        {
+            SetCurrentFunction( FuTransform::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Invalidate(SID_RULER_OBJECT);
+            Cancel();
+        }
+        break;
+
+        case SID_CHAR_DLG:  // BASIC
+        {
+            SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_PARA_DLG:
+        {
+            SetCurrentFunction( FuParagraph::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_OUTLINE_BULLET:
+        {
+            SetCurrentFunction( FuOutlineBullet::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case FN_INSERT_SOFT_HYPHEN:
+        case FN_INSERT_HARDHYPHEN:
+        case FN_INSERT_HARD_SPACE:
+        case SID_INSERT_RLM :
+        case SID_INSERT_LRM :
+        case SID_INSERT_ZWNBSP :
+        case SID_INSERT_ZWSP:
+        case SID_CHARMAP:
+        {
+            SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_PRESENTATION_LAYOUT:
+        {
+            SetCurrentFunction( FuPresentationLayout::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+            Cancel();
+        }
+        break;
+
+        case SID_PASTE_SPECIAL:
+        {
+            SetCurrentFunction( FuInsertClipboard::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_CHANGE_PICTURE:
+        case SID_INSERT_GRAPHIC:
+        {
+            SetCurrentFunction( FuInsertGraphic::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+            rReq.Ignore ();
+            Invalidate(SID_DRAWTBX_INSERT);
+        }
+        break;
+
+        case SID_INSERT_AVMEDIA:
+        {
+            SetCurrentFunction( FuInsertAVMedia::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+
+            Cancel();
+            rReq.Ignore ();
+
+            Invalidate(SID_DRAWTBX_INSERT);
+        }
+        break;
+
+        case SID_INSERT_OBJECT:
+        case SID_INSERT_PLUGIN:
+        case SID_INSERT_SOUND:
+        case SID_INSERT_VIDEO:
+        case SID_INSERT_FLOATINGFRAME:
+        case SID_INSERT_MATH:
+        case SID_INSERT_DIAGRAM:
+        case SID_ATTR_TABLE:
+        {
+            SetCurrentFunction( FuInsertOLE::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+
+            Cancel();
+            rReq.Ignore ();
+
+            Invalidate(SID_DRAWTBX_INSERT);
+        }
+        break;
+
+        case SID_COPYOBJECTS:
+        {
+            if ( mpDrawView->IsPresObjSelected(sal_False, sal_True) )
+            {
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+            }
+            else
+            {
+                if ( mpDrawView->IsTextEdit() )
+                {
+                    mpDrawView->SdrEndTextEdit();
+                }
+
+                SetCurrentFunction( FuCopy::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            }
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_INSERTFILE:  // BASIC
+        {
+            Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
+            SetCurrentFunction( FuInsertFile::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
+            Cancel();
+            rReq.Done ();
+
+            Invalidate(SID_DRAWTBX_INSERT);
+        }
+        break;
+
+        case SID_SELECT_BACKGROUND:
+        case SID_PAGESETUP:  // BASIC ??
+        {
+            SetCurrentFunction( FuPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+            rReq.Ignore (); // we generate independent macros !!
+        }
+        break;
+
+        case SID_ZOOM_OUT:
+        case SID_ZOOM_PANNING:
+        {
+            mbZoomOnPage = sal_False;
+            SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+            // finishes itself, no Cancel() needed!
+            Invalidate( SID_ZOOM_TOOLBOX );
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_BEFORE_OBJ:
+        case SID_BEHIND_OBJ:
+        {
+            SetCurrentFunction( FuDisplayOrder::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+            Invalidate( SID_POSITION );
+            rReq.Ignore ();
+            // finishes itself, no Cancel() needed!
+        }
+        break;
+
+        case SID_REVERSE_ORDER:   // BASIC
+        {
+            mpDrawView->ReverseOrderOfMarked();
+            Invalidate( SID_POSITION );
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_ANIMATION_EFFECTS:
+        {
+            SetCurrentFunction( FuObjectAnimationParameters::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+            Cancel();
+        }
+        break;
+
+        case SID_LINEEND_POLYGON:
+        {
+            SetCurrentFunction( FuLineEnd::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_CAPTUREPOINT:
+            // negative value to signal call from menu
+            maMousePos = Point(-1,-1);
+        case SID_SET_SNAPITEM:
+        {
+            SetCurrentFunction( FuSnapLine::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+            Cancel();
+        }
+        break;
+
+        case SID_MANAGE_LINKS:
+        {
+            SetCurrentFunction( FuLink::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_THESAURUS:
+        {
+            SetCurrentFunction( FuThesaurus::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_TEXTATTR_DLG:
+        {
+            SetCurrentFunction( FuTextAttrDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_MEASURE_DLG:
+        {
+            SetCurrentFunction( FuMeasureDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_CONNECTION_DLG:
+        {
+            SetCurrentFunction( FuConnectionDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_CONNECTION_NEW_ROUTING:
+        {
+            SfxItemSet aDefAttr( GetPool(), SDRATTR_EDGELINE1DELTA, SDRATTR_EDGELINE3DELTA );
+            GetView()->SetAttributes( aDefAttr, sal_True ); // (ReplaceAll)
+
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_TWAIN_SELECT:
+        {
+            if( mxScannerManager.is() )
+            {
+                try
+                {
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::scanner::ScannerContext >
+                        aContexts( mxScannerManager->getAvailableScanners() );
+
+                    if( aContexts.getLength() )
+                    {
+                        ::com::sun::star::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
+                        mxScannerManager->configureScannerAndScan( aContext, mxScannerListener );
+                    }
+                }
+                catch(...)
+                {
+                }
+            }
+
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_TWAIN_TRANSFER:
+        {
+            sal_Bool bDone = sal_False;
+
+            if( mxScannerManager.is() )
+            {
+                try
+                {
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::scanner::ScannerContext > aContexts( mxScannerManager->getAvailableScanners() );
+
+                    if( aContexts.getLength() )
+                    {
+                        mxScannerManager->startScan( aContexts.getConstArray()[ 0 ], mxScannerListener );
+                        bDone = sal_True;
+                    }
+                }
+                catch( ... )
+                {
+                }
+            }
+
+            if( !bDone )
+            {
+#ifndef UNX
+                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE;
+#else
+                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE_UNX;
+#endif
+
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String( SdResId( nId ) ) ).Execute();
+            }
+            else
+            {
+                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                rBindings.Invalidate( SID_TWAIN_SELECT );
+                rBindings.Invalidate( SID_TWAIN_TRANSFER );
+            }
+
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_POLYGON_MORPHING:
+        {
+            SetCurrentFunction( FuMorph::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_VECTORIZE:
+        {
+            SetCurrentFunction( FuVectorize::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_INSERTLAYER:
+        {
+            if ( mpDrawView->IsTextEdit() )
+            {
+                mpDrawView->SdrEndTextEdit();
+            }
+
+            SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
+            sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
+            sal_uInt16 nLayer = nLayerCnt - 2 + 1;
+            String aLayerName ( SdResId(STR_LAYER) ), aLayerTitle, aLayerDesc;
+            aLayerName += OUString::number( (sal_Int32)nLayer );
+            sal_Bool bIsVisible = sal_False;
+            sal_Bool bIsLocked = sal_False;
+            sal_Bool bIsPrintable = sal_False;
+
+            const SfxItemSet* pArgs = rReq.GetArgs();
+
+            if (! pArgs)
+            {
+                SfxItemSet aNewAttr( GetDoc()->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
+
+                aNewAttr.Put( SdAttrLayerName( aLayerName ) );
+                aNewAttr.Put( SdAttrLayerTitle() );
+                aNewAttr.Put( SdAttrLayerDesc() );
+                aNewAttr.Put( SdAttrLayerVisible() );
+                aNewAttr.Put( SdAttrLayerPrintable() );
+                aNewAttr.Put( SdAttrLayerLocked() );
+                aNewAttr.Put( SdAttrLayerThisPage() );
+
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, String( SdResId( STR_INSERTLAYER ) ) ) : 0;
+                if( pDlg )
+                {
+                    pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
+
+                    // test for already existing names
+                    sal_Bool bLoop = sal_True;
+                    while( bLoop && pDlg->Execute() == RET_OK )
+                    {
+                        pDlg->GetAttr( aNewAttr );
+                        aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+
+                        if( rLayerAdmin.GetLayer( aLayerName, sal_False )
+                            || aLayerName.Len()==0 )
+                        {
+                            // name already exists
+                            WarningBox aWarningBox (
+                                GetParentWindow(),
+                                WinBits( WB_OK ),
+                                String(SdResId( STR_WARN_NAME_DUPLICATE)));
+                            aWarningBox.Execute();
+                        }
+                        else
+                            bLoop = sal_False;
+                    }
+                    if( bLoop ) // was canceled
+                    {
+                        delete pDlg;
+
+                        Cancel();
+                        rReq.Ignore ();
+                        break;
+                    }
+                    else
+                    {
+                        aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                        aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                        bIsVisible   = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                        bIsLocked    = ((SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
+                        bIsPrintable = ((SdAttrLayerPrintable &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
+
+                        delete pDlg;
+                    }
+                }
+            }
+            else if (pArgs->Count () != 4)
+                 {
+#ifndef DISABLE_SCRIPTING
+                     StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
+                     Cancel();
+                     rReq.Ignore ();
+                     break;
+                 }
+                 else
+                 {
+                     SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, sal_False);
+                     SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
+                     SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, sal_False);
+                     SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, sal_False);
+
+                     aLayerName   = pLayerName->GetValue ();
+                     bIsVisible   = pIsVisible->GetValue ();
+                     bIsLocked    = pIsLocked->GetValue ();
+                     bIsPrintable = pIsPrintable->GetValue ();
+                 }
+
+            String aPrevLayer = mpDrawView->GetActiveLayer();
+            String aName;
+            SdrLayer* pLayer;
+            sal_uInt16 nPrevLayer = 0;
+            nLayerCnt = rLayerAdmin.GetLayerCount();
+
+            for ( nLayer = 0; nLayer < nLayerCnt; nLayer++ )
+            {
+                pLayer = rLayerAdmin.GetLayer(nLayer);
+                aName = pLayer->GetName();
+
+                if ( aPrevLayer == aName )
+                {
+                    nPrevLayer = std::max(nLayer, (sal_uInt16) 4);
+                }
+            }
+
+            mpDrawView->InsertNewLayer(aLayerName, nPrevLayer + 1);
+            pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
+            if( pLayer )
+            {
+                pLayer->SetTitle( aLayerTitle );
+                pLayer->SetDescription( aLayerDesc );
+            }
+
+            mpDrawView->SetLayerVisible( aLayerName, bIsVisible );
+            mpDrawView->SetLayerLocked( aLayerName, bIsLocked);
+            mpDrawView->SetLayerPrintable(aLayerName, bIsPrintable);
+
+            mpDrawView->SetActiveLayer(aLayerName);
+
+            ResetActualLayer();
+
+            GetDoc()->SetChanged(sal_True);
+
+            GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
+                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_MODIFYLAYER:
+        {
+            if ( mpDrawView->IsTextEdit() )
+            {
+                mpDrawView->SdrEndTextEdit();
+            }
+
+            SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
+            sal_uInt16 nCurPage = GetLayerTabControl()->GetCurPageId();
+            String aLayerName( GetLayerTabControl()->GetPageText(nCurPage) );
+            SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
+
+            String aLayerTitle( pLayer->GetTitle() );
+            String aLayerDesc( pLayer->GetDescription() );
+
+            String aOldLayerName( aLayerName );
+            String aOldLayerTitle( aLayerTitle );
+            String aOldLayerDesc( aLayerDesc );
+
+            sal_Bool bIsVisible, bIsLocked, bIsPrintable;
+            sal_Bool bOldIsVisible = bIsVisible = mpDrawView->IsLayerVisible(aLayerName);
+            sal_Bool bOldIsLocked = bIsLocked = mpDrawView->IsLayerLocked(aLayerName);
+            sal_Bool bOldIsPrintable = bIsPrintable = mpDrawView->IsLayerPrintable(aLayerName);
+
+
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            // is it allowed to delete the layer?
+            bool bDelete = true;
+
+            String aLayoutLayer ( SdResId(STR_LAYER_LAYOUT) );
+            String aControlsLayer ( SdResId(STR_LAYER_CONTROLS) );
+            String aMeasureLinesLayer ( SdResId(STR_LAYER_MEASURELINES) );
+            String aBackgroundLayer( SdResId(STR_LAYER_BCKGRND) );
+            String aBackgroundObjLayer( SdResId(STR_LAYER_BCKGRNDOBJ) );
+
+            if( aLayerName == aLayoutLayer       || aLayerName == aControlsLayer ||
+                aLayerName == aMeasureLinesLayer ||
+                aLayerName == aBackgroundLayer   || aLayerName == aBackgroundObjLayer )
+            {
+                bDelete = false;
+            }
+
+            if (! pArgs)
+            {
+                SfxItemSet aNewAttr( GetDoc()->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
+
+                aNewAttr.Put( SdAttrLayerName( aLayerName ) );
+                aNewAttr.Put( SdAttrLayerTitle( aLayerTitle ) );
+                aNewAttr.Put( SdAttrLayerDesc( aLayerDesc ) );
+                aNewAttr.Put( SdAttrLayerVisible( bIsVisible ) );
+                aNewAttr.Put( SdAttrLayerLocked( bIsLocked ) );
+                aNewAttr.Put( SdAttrLayerPrintable( bIsPrintable ) );
+                aNewAttr.Put( SdAttrLayerThisPage() );
+
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, String( SdResId( STR_MODIFYLAYER ) ) ) : 0;
+                if( pDlg )
+                {
+                    pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
+
+                    // test for already existing names
+                    sal_Bool    bLoop = sal_True;
+                    sal_uInt16  nRet = 0;
+                    while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
+                    {
+                        pDlg->GetAttr( aNewAttr );
+                        aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+
+                        if( (rLayerAdmin.GetLayer( aLayerName, sal_False ) &&
+                             aLayerName != aOldLayerName) || aLayerName.Len()==0 )
+                        {
+                            // name already exists
+                            WarningBox aWarningBox (
+                                GetParentWindow(),
+                                WinBits( WB_OK ),
+                                String( SdResId( STR_WARN_NAME_DUPLICATE)));
+                            aWarningBox.Execute();
+                        }
+                        else
+                            bLoop = sal_False;
+                    }
+                    switch (nRet)
+                    {
+                        case RET_OK :
+                            aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                            aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                            bIsVisible   = ((const SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                            bIsLocked    = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
+                            bIsPrintable = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
+
+                            delete pDlg;
+                            break;
+
+                        default :
+                            delete pDlg;
+                            rReq.Ignore ();
+                            Cancel ();
+                            return;
+                    }
+                }
+            }
+            else if (pArgs->Count () == 4)
+            {
+                SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, sal_False);
+                SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
+                SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, sal_False);
+                SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, sal_False);
+
+                aLayerName   = pLayerName->GetValue ();
+                bIsVisible   = pIsVisible->GetValue ();
+                bIsLocked    = pIsLocked->GetValue ();
+                bIsPrintable = pIsPrintable->GetValue ();
+            }
+            else
+            {
+#ifndef DISABLE_SCRIPTING
+                StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
+                Cancel ();
+                rReq.Ignore ();
+                break;
+            }
+
+            ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
+            SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
+                GetDoc(),
+                pLayer,
+                // old values
+                aOldLayerName,
+                aOldLayerTitle,
+                aOldLayerDesc,
+                bOldIsVisible,
+                bOldIsLocked,
+                bOldIsPrintable,
+                // new values
+                aLayerName,
+                aLayerTitle,
+                aLayerDesc,
+                bIsVisible,
+                bIsLocked,
+                bIsPrintable
+                );
+            pManager->AddUndoAction( pAction );
+
+            ModifyLayer( pLayer, aLayerName, aLayerTitle, aLayerDesc, bIsVisible, bIsLocked, bIsPrintable );
+
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_RENAMELAYER:
+        {
+            if ( mpDrawView->IsTextEdit() )
+            {
+                mpDrawView->SdrEndTextEdit();
+            }
+
+            GetLayerTabControl()->StartEditMode(
+                GetLayerTabControl()->GetCurPageId() );
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_EDIT_HYPERLINK :
+        {
+            GetViewFrame()->GetDispatcher()->Execute( SID_HYPERLINK_DIALOG );
+
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_OPEN_HYPERLINK:
+        {
+            OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
+            if ( pOutView )
+            {
+                const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
+                if ( pFieldItem )
+                {
+                    const SvxFieldData* pField = pFieldItem->GetField();
+                    if( pField && pField->ISA( SvxURLField ) )
+                    {
+                        const SvxURLField* pURLField = static_cast< const SvxURLField* >( pField );
+
+                        SfxStringItem aUrl( SID_FILE_NAME, pURLField->GetURL() );
+                        SfxStringItem aTarget( SID_TARGETNAME, pURLField->GetTargetFrame() );
+
+                        String aReferName;
+                        SfxViewFrame* pFrame = GetViewFrame();
+                        SfxMedium* pMed = pFrame->GetObjectShell()->GetMedium();
+                        if (pMed)
+                            aReferName = pMed->GetName();
+
+                        SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
+                        SfxStringItem aReferer( SID_REFERER, aReferName );
+
+                        SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
+                        SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
+
+                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                        if (pViewFrm)
+                            pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
+                                                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                                        &aUrl, &aTarget,
+                                                        &aFrm, &aReferer,
+                                                        &aNewView, &aBrowsing,
+                                                        0L );
+                    }
+                }
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_HYPERLINK_SETLINK:
+        {
+            const SfxItemSet* pReqArgs = rReq.GetArgs();
+
+            if (pReqArgs)
+            {
+                SvxHyperlinkItem* pHLItem =
+                (SvxHyperlinkItem*) &pReqArgs->Get(SID_HYPERLINK_SETLINK);
+
+                if (pHLItem->GetInsertMode() == HLINK_FIELD)
+                {
+                    InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
+                                   pHLItem->GetTargetFrame(), NULL);
+                }
+                else if (pHLItem->GetInsertMode() == HLINK_BUTTON)
+                {
+                    InsertURLButton(pHLItem->GetURL(), pHLItem->GetName(),
+                                    pHLItem->GetTargetFrame(), NULL);
+                }
+                else if (pHLItem->GetInsertMode() == HLINK_DEFAULT)
+                {
+                    OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
+
+                    if (pOlView)
+                    {
+                        InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
+                                       pHLItem->GetTargetFrame(), NULL);
+                    }
+                    else
+                    {
+                        InsertURLButton(pHLItem->GetURL(), pHLItem->GetName(),
+                                        pHLItem->GetTargetFrame(), NULL);
+                    }
+                }
+            }
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_INSERT_FLD_DATE_FIX:
+        case SID_INSERT_FLD_DATE_VAR:
+        case SID_INSERT_FLD_TIME_FIX:
+        case SID_INSERT_FLD_TIME_VAR:
+        case SID_INSERT_FLD_AUTHOR:
+        case SID_INSERT_FLD_PAGE:
+        case SID_INSERT_FLD_PAGES:
+        case SID_INSERT_FLD_FILE:
+        {
+            sal_uInt16 nMul = 1;
+            SvxFieldItem* pFieldItem = 0;
+
+            switch( nSId )
+            {
+                case SID_INSERT_FLD_DATE_FIX:
+                    pFieldItem = new SvxFieldItem(
+                        SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
+                break;
+
+                case SID_INSERT_FLD_DATE_VAR:
+                    pFieldItem = new SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD );
+                break;
+
+                case SID_INSERT_FLD_TIME_FIX:
+                    pFieldItem = new SvxFieldItem(
+                        SvxExtTimeField( Time( Time::SYSTEM ), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD );
+                break;
+
+                case SID_INSERT_FLD_TIME_VAR:
+                    pFieldItem = new SvxFieldItem( SvxExtTimeField(), EE_FEATURE_FIELD );
+                break;
+
+                case SID_INSERT_FLD_AUTHOR:
+                {
+                    SvtUserOptions aUserOptions;
+                    pFieldItem = new SvxFieldItem(
+                            SvxAuthorField(
+                                aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() ), EE_FEATURE_FIELD );
+                }
+                break;
+
+                case SID_INSERT_FLD_PAGE:
+                {
+                    pFieldItem = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
+                    nMul = 3;
+                }
+                break;
+
+                case SID_INSERT_FLD_PAGES:
+                {
+                    pFieldItem = new SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD );
+                    nMul = 3;
+                }
+                break;
+
+                case SID_INSERT_FLD_FILE:
+                {
+                    String aName;
+                    if( GetDocSh()->HasName() )
+                        aName = GetDocSh()->GetMedium()->GetName();
+                    pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
+                }
+                break;
+            }
+
+            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+
+            if( pOLV )
+            {
+                const SvxFieldItem* pOldFldItem = pOLV->GetFieldAtSelection();
+
+                if( pOldFldItem && ( pOldFldItem->GetField()->ISA( SvxURLField ) ||
+                                    pOldFldItem->GetField()->ISA( SvxDateField ) ||
+                                    pOldFldItem->GetField()->ISA( SvxTimeField ) ||
+                                    pOldFldItem->GetField()->ISA( SvxExtTimeField ) ||
+                                    pOldFldItem->GetField()->ISA( SvxExtFileField ) ||
+                                    pOldFldItem->GetField()->ISA( SvxAuthorField ) ||
+                                    pOldFldItem->GetField()->ISA( SvxPageField ) ) )
+                {
+                    // select field, then it will be deleted when inserting
+                    ESelection aSel = pOLV->GetSelection();
+                    if( aSel.nStartPos == aSel.nEndPos )
+                        aSel.nEndPos++;
+                    pOLV->SetSelection( aSel );
+                }
+
+                if( pFieldItem )
+                    pOLV->InsertField( *pFieldItem );
+            }
+            else
+            {
+                Outliner* pOutl = GetDoc()->GetInternalOutliner();
+                pOutl->Init( OUTLINERMODE_TEXTOBJECT );
+                sal_uInt16 nOutlMode = pOutl->GetMode();
+                pOutl->SetStyleSheet( 0, NULL );
+                pOutl->QuickInsertField( *pFieldItem, ESelection() );
+                OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
+
+                SdrRectObj* pRectObj = new SdrRectObj( OBJ_TEXT );
+                pRectObj->SetMergedItem(SdrTextAutoGrowWidthItem(sal_True));
+
+                pOutl->UpdateFields();
+                pOutl->SetUpdateMode( sal_True );
+                Size aSize( pOutl->CalcTextSize() );
+                aSize.Width() *= nMul;
+                pOutl->SetUpdateMode( sal_False );
+
+                Point aPos;
+                Rectangle aRect( aPos, GetActiveWindow()->GetOutputSizePixel() );
+                aPos = aRect.Center();
+                aPos = GetActiveWindow()->PixelToLogic(aPos);
+                aPos.X() -= aSize.Width() / 2;
+                aPos.Y() -= aSize.Height() / 2;
+
+                Rectangle aLogicRect(aPos, aSize);
+                pRectObj->SetLogicRect(aLogicRect);
+                pRectObj->SetOutlinerParaObject( pOutlParaObject );
+                mpDrawView->InsertObjectAtView(pRectObj, *mpDrawView->GetSdrPageView());
+                pOutl->Init( nOutlMode );
+            }
+
+            delete pFieldItem;
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_MODIFY_FIELD:
+        {
+            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+
+            if( pOLV )
+            {
+                const SvxFieldItem* pFldItem = pOLV->GetFieldAtSelection();
+
+                if( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
+                                 pFldItem->GetField()->ISA( SvxAuthorField ) ||
+                                 pFldItem->GetField()->ISA( SvxExtFileField ) ||
+                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
+                {
+                    // Dialog...
+                    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+                    AbstractSdModifyFieldDlg* pDlg = pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : 0;
+                    if( pDlg && pDlg->Execute() == RET_OK )
+                    {
+                        // To make a correct SetAttribs() call at the utlinerView
+                        // it is necessary to split the actions here
+                        SvxFieldData* pField = pDlg->GetField();
+                        ESelection aSel = pOLV->GetSelection();
+                        sal_Bool bSelectionWasModified(sal_False);
+
+                        if( pField )
+                        {
+                            SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
+
+                            if( aSel.nStartPos == aSel.nEndPos )
+                            {
+                                bSelectionWasModified = sal_True;
+                                aSel.nEndPos++;
+                                pOLV->SetSelection( aSel );
+                            }
+
+                            pOLV->InsertField( aFieldItem );
+
+                            // select again for eventual SetAttribs call
+                            pOLV->SetSelection( aSel );
+                        }
+
+                        SfxItemSet aSet( pDlg->GetItemSet() );
+
+                        if( aSet.Count() )
+                        {
+                            pOLV->SetAttribs( aSet );
+
+                            ::Outliner* pOutliner = pOLV->GetOutliner();
+                            if( pOutliner )
+                                pOutliner->UpdateFields();
+                        }
+
+                        if(pField)
+                        {
+                            // restore selection to original
+                            if(bSelectionWasModified)
+                            {
+                                aSel.nEndPos--;
+                                pOLV->SetSelection( aSel );
+                            }
+
+                            delete pField;
+                        }
+                    }
+                    delete pDlg;
+                }
+            }
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_OPEN_XML_FILTERSETTINGS:
+        {
+            try
+            {
+                css::uno::Reference < css::ui::dialogs::XExecutableDialog > xDialog = css::ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
+                xDialog->execute();
+            }
+            catch( ::com::sun::star::uno::RuntimeException& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_GROUP:  // BASIC
+        {
+            if ( mpDrawView->IsPresObjSelected( sal_True, sal_True, sal_True ) )
+            {
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+            }
+            else
+            {
+                mpDrawView->GroupMarked();
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_UNGROUP:  // BASIC
+        {
+            mpDrawView->UnGroupMarked();
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_NAME_GROUP:
+        {
+            // only allow for single object selection since the name of an object needs
+            // to be unique
+            if(1L == mpDrawView->GetMarkedObjectCount())
+            {
+                // #i68101#
+                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
+                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+                String aName(pSelected->GetName());
+
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName);
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+
+                pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
+
+                if(RET_OK == pDlg->Execute())
+                {
+                    pDlg->GetName(aName);
+                    pSelected->SetName(aName);
+                }
+
+                delete pDlg;
+            }
+
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+            rBindings.Invalidate( SID_CONTEXT );
+
+            Cancel();
+            rReq.Ignore();
+            break;
+        }
+
+        // #i68101#
+        case SID_OBJECT_TITLE_DESCRIPTION:
+        {
+            if(1L == mpDrawView->GetMarkedObjectCount())
+            {
+                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
+                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+                String aTitle(pSelected->GetTitle());
+                String aDescription(pSelected->GetDescription());
+
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription);
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+
+                if(RET_OK == pDlg->Execute())
+                {
+                    pDlg->GetTitle(aTitle);
+                    pDlg->GetDescription(aDescription);
+                    pSelected->SetTitle(aTitle);
+                    pSelected->SetDescription(aDescription);
+                }
+
+                delete pDlg;
+            }
+
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+            rBindings.Invalidate( SID_CONTEXT );
+
+            Cancel();
+            rReq.Ignore();
+            break;
+        }
+
+        case SID_ENTER_GROUP:  // BASIC
+        {
+            mpDrawView->EnterMarkedGroup();
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_LEAVE_GROUP:  // BASIC
+        {
+            mpDrawView->LeaveOneGroup();
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_LEAVE_ALL_GROUPS:  // BASIC
+        {
+            mpDrawView->LeaveAllGroup();
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_COMBINE:  // BASIC
+        {
+            // End text edit to avoid conflicts
+            if(mpDrawView->IsTextEdit())
+                mpDrawView->SdrEndTextEdit();
+
+            if ( mpDrawView->IsPresObjSelected() )
+            {
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+            }
+            else
+            {
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                mpDrawView->CombineMarkedObjects(sal_False);
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_DISTRIBUTE_DLG:
+        {
+            if ( mpDrawView->IsPresObjSelected() )
+            {
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+            }
+            else
+            {
+                mpDrawView->DistributeMarkedObjects();
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_POLY_MERGE:
+        {
+            // End text edit to avoid conflicts
+            if(mpDrawView->IsTextEdit())
+                mpDrawView->SdrEndTextEdit();
+
+            if ( mpDrawView->IsPresObjSelected() )
+            {
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+            }
+            else
+            {
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                mpDrawView->MergeMarkedObjects(SDR_MERGE_MERGE);
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_POLY_SUBSTRACT:
+        {
+            // End text edit to avoid conflicts
+            if(mpDrawView->IsTextEdit())
+                mpDrawView->SdrEndTextEdit();
+
+            if ( mpDrawView->IsPresObjSelected() )
+            {
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+            }
+            else
+            {
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                mpDrawView->MergeMarkedObjects(SDR_MERGE_SUBSTRACT);
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_POLY_INTERSECT:
+        {
+            // End text edit to avoid conflicts
+            if(mpDrawView->IsTextEdit())
+                mpDrawView->SdrEndTextEdit();
+
+            if ( mpDrawView->IsPresObjSelected() )
+            {
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+            }
+            else
+            {
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                mpDrawView->MergeMarkedObjects(SDR_MERGE_INTERSECT);
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_DISMANTLE:  // BASIC
+        {
+            if ( mpDrawView->IsDismantlePossible(sal_False) )
+            {
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                mpDrawView->DismantleMarkedObjects(sal_False);
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_CONNECT:  // BASIC
+        {
+            if ( mpDrawView->IsPresObjSelected() )
+            {
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+            }
+            else
+            {
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                mpDrawView->CombineMarkedObjects(sal_True);
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_BREAK:  // BASIC
+        {
+            if ( mpDrawView->IsTextEdit() )
+            {
+                mpDrawView->SdrEndTextEdit();
+            }
+
+            if ( mpDrawView->IsBreak3DObjPossible() )
+            {
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                mpDrawView->Break3DObj();
+            }
+            else if ( mpDrawView->IsDismantlePossible(sal_True) )
+            {
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                mpDrawView->DismantleMarkedObjects(sal_True);
+            }
+            else if ( mpDrawView->IsImportMtfPossible() )
+            {
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+                sal_uLong nAnz=rMarkList.GetMarkCount();
+
+                // determine the sum of meta objects of all selected meta files
+                sal_uLong nCount = 0;
+                for(sal_uLong nm=0; nm<nAnz; nm++)
+                {
+                    SdrMark*     pM=rMarkList.GetMark(nm);
+                    SdrObject*   pObj=pM->GetMarkedSdrObj();
+                    SdrGrafObj*  pGraf=PTR_CAST(SdrGrafObj,pObj);
+                    SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
+
+                    if(pGraf)
+                    {
+                        if(pGraf->HasGDIMetaFile())
+                        {
+                            nCount += pGraf->GetGraphic().GetGDIMetaFile().GetActionSize();
+                        }
+                        else if(pGraf->isEmbeddedSvg())
+                        {
+                            nCount += pGraf->getMetafileFromEmbeddedSvg().GetActionSize();
+                        }
+                    }
+
+                    if(pOle2 && pOle2->GetGraphic())
+                    {
+                         nCount += pOle2->GetGraphic()->GetGDIMetaFile().GetActionSize();
+                    }
+                }
+
+                // decide with the sum of all meta objects if we should show a dialog
+                if(nCount < MIN_ACTIONS_FOR_DIALOG)
+                {
+                    // nope, no dialog
+                    mpDrawView->DoImportMarkedMtf();
+                }
+                else
+                {
+                    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+                    if( pFact )
+                    {
+                        VclAbstractDialog* pDlg = pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, nAnz );
+                        if( pDlg )
+                        {
+                            pDlg->Execute();
+                            delete pDlg;
+                        }
+                    }
+                }
+            }
+
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_CONVERT_TO_3D:
+        {
+            if ( mpDrawView->IsPresObjSelected() )
+            {
+                ::sd::Window* pWindow = GetActiveWindow();
+                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+            }
+            else
+            {
+                if (mpDrawView->IsConvertTo3DObjPossible())
+                {
+                    if (mpDrawView->IsTextEdit())
+                    {
+                        mpDrawView->SdrEndTextEdit();
+                    }
+
+                    WaitObject aWait( (Window*)GetActiveWindow() );
+                    mpDrawView->ConvertMarkedObjTo3D(true);
+                }
+            }
+
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_FRAME_TO_TOP:  // BASIC
+        {
+            mpDrawView->PutMarkedToTop();
+            Cancel();
+            Invalidate( SID_POSITION );
+            rReq.Done ();
+        }
+        break;
+
+        case SID_MOREFRONT:  // BASIC
+        {
+            mpDrawView->MovMarkedToTop();
+            Cancel();
+            Invalidate( SID_POSITION );
+            rReq.Done ();
+        }
+        break;
+
+        case SID_MOREBACK:  // BASIC
+        {
+            mpDrawView->MovMarkedToBtm();
+            Cancel();
+            Invalidate( SID_POSITION );
+            rReq.Done ();
+        }
+        break;
+
+        case SID_FRAME_TO_BOTTOM:   // BASIC
+        {
+            mpDrawView->PutMarkedToBtm();
+            Cancel();
+            Invalidate( SID_POSITION );
+            rReq.Done ();
+        }
+        break;
+
+        case SID_HORIZONTAL:  // BASIC
+        {
+            mpDrawView->MirrorAllMarkedHorizontal();
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_VERTICAL:  // BASIC
+        {
+            mpDrawView->MirrorAllMarkedVertical();
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_OBJECT_ALIGN_LEFT:  // BASIC
+        {
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_LEFT, SDRVALIGN_NONE);
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_OBJECT_ALIGN_CENTER:  // BASIC
+        {
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_CENTER, SDRVALIGN_NONE);
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_OBJECT_ALIGN_RIGHT:  // BASIC
+        {
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_RIGHT, SDRVALIGN_NONE);
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_OBJECT_ALIGN_UP:  // BASIC
+        {
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_TOP);
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_OBJECT_ALIGN_MIDDLE:  // BASIC
+        {
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_CENTER);
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_OBJECT_ALIGN_DOWN:  // BASIC
+        {
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_BOTTOM);
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_SELECTALL:  // BASIC
+        {
+            if( (dynamic_cast<FuSelection*>( GetOldFunction().get() ) != 0) &&
+                !GetView()->IsFrameDragSingles() && GetView()->HasMarkablePoints())
+            {
+                if ( !mpDrawView->IsAction() )
+                    mpDrawView->MarkAllPoints();
+            }
+            else
+                mpDrawView->SelectAll();
+
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_STYLE_NEW: // BASIC ???
+        case SID_STYLE_APPLY:
+        case SID_STYLE_EDIT:
+        case SID_STYLE_DELETE:
+        case SID_STYLE_HIDE:
+        case SID_STYLE_SHOW:
+        case SID_STYLE_FAMILY:
+        case SID_STYLE_WATERCAN:
+        case SID_STYLE_UPDATE_BY_EXAMPLE:
+        case SID_STYLE_NEW_BY_EXAMPLE:
+        {
+            if( rReq.GetSlot() == SID_STYLE_EDIT && !rReq.GetArgs() )
+            {
+                SfxStyleSheet* pStyleSheet = mpDrawView->GetStyleSheet();
+                if( pStyleSheet && pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
+                    pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
+
+                if( (pStyleSheet == NULL) && GetView()->IsTextEdit() )
+                {
+                    GetView()->SdrEndTextEdit();
+
+                    pStyleSheet = mpDrawView->GetStyleSheet();
+                    if(pStyleSheet && pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
+                        pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
+                }
+
+                if( pStyleSheet == NULL )
+                {
+                    rReq.Ignore();
+                    break;
+                }
+
+                SfxAllItemSet aSet(GetDoc()->GetPool());
+
+                SfxStringItem aStyleNameItem( SID_STYLE_EDIT, pStyleSheet->GetName() );
+                aSet.Put(aStyleNameItem);
+
+                SfxUInt16Item aStyleFamilyItem( SID_STYLE_FAMILY, (sal_uInt16)pStyleSheet->GetFamily() );
+                aSet.Put(aStyleFamilyItem);
+
+                rReq.SetArgs(aSet);
+            }
+
+            if( rReq.GetArgs() )
+            {
+                SetCurrentFunction( FuTemplate::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+                if( rReq.GetSlot() == SID_STYLE_APPLY )
+                    GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
+                Cancel();
+            }
+            else if( rReq.GetSlot() == SID_STYLE_APPLY )
+                GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON );
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_IMAP:
+        {
+            sal_uInt16      nId = SvxIMapDlgChildWindow::GetChildWindowId();
+
+            GetViewFrame()->ToggleChildWindow( nId );
+            GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
+
+            if ( GetViewFrame()->HasChildWindow( nId )
+                && ( ( ViewShell::Implementation::GetImageMapDialog() ) != NULL ) )
+            {
+                const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
+
+                if ( rMarkList.GetMarkCount() == 1 )
+                    UpdateIMapDlg( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
+            }
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_GRID_FRONT:
+        {
+            mpDrawView->SetGridFront( !mpDrawView->IsGridFront() );
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_HELPLINES_FRONT:
+        {
+            mpDrawView->SetHlplFront( !mpDrawView->IsHlplFront() );
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_FONTWORK:
+        {
+            if ( rReq.GetArgs() )
+            {
+                GetViewFrame()->SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
+                                        ((const SfxBoolItem&) (rReq.GetArgs()->
+                                        Get(SID_FONTWORK))).GetValue());
+            }
+            else
+            {
+                GetViewFrame()->ToggleChildWindow( SvxFontWorkChildWindow::GetChildWindowId() );
+            }
+
+            GetViewFrame()->GetBindings().Invalidate(SID_FONTWORK);
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_COLOR_CONTROL:
+        {
+            if ( rReq.GetArgs() )
+                GetViewFrame()->SetChildWindow(SvxColorChildWindow::GetChildWindowId(),
+                                        ((const SfxBoolItem&) (rReq.GetArgs()->
+                                        Get(SID_COLOR_CONTROL))).GetValue());
+            else
+                GetViewFrame()->ToggleChildWindow(SvxColorChildWindow::GetChildWindowId() );
+
+            GetViewFrame()->GetBindings().Invalidate(SID_COLOR_CONTROL);
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_EXTRUSION_TOOGLE:
+        case SID_EXTRUSION_TILT_DOWN:
+        case SID_EXTRUSION_TILT_UP:
+        case SID_EXTRUSION_TILT_LEFT:
+        case SID_EXTRUSION_TILT_RIGHT:
+        case SID_EXTRUSION_3D_COLOR:
+        case SID_EXTRUSION_DEPTH:
+        case SID_EXTRUSION_DIRECTION:
+        case SID_EXTRUSION_PROJECTION:
+        case SID_EXTRUSION_LIGHTING_DIRECTION:
+        case SID_EXTRUSION_LIGHTING_INTENSITY:
+        case SID_EXTRUSION_SURFACE:
+        case SID_EXTRUSION_DEPTH_FLOATER:
+        case SID_EXTRUSION_DIRECTION_FLOATER:
+        case SID_EXTRUSION_LIGHTING_FLOATER:
+        case SID_EXTRUSION_SURFACE_FLOATER:
+        case SID_EXTRUSION_DEPTH_DIALOG:
+            svx::ExtrusionBar::execute( mpDrawView, rReq, GetViewFrame()->GetBindings() );
+            Cancel();
+            rReq.Ignore ();
+            break;
+
+        case SID_FONTWORK_SHAPE:
+        case SID_FONTWORK_SHAPE_TYPE:
+        case SID_FONTWORK_ALIGNMENT:
+        case SID_FONTWORK_SAME_LETTER_HEIGHTS:
+        case SID_FONTWORK_CHARACTER_SPACING:
+        case SID_FONTWORK_KERN_CHARACTER_PAIRS:
+        case SID_FONTWORK_GALLERY_FLOATER:
+        case SID_FONTWORK_CHARACTER_SPACING_FLOATER:
+        case SID_FONTWORK_ALIGNMENT_FLOATER:
+        case SID_FONTWORK_CHARACTER_SPACING_DIALOG:
+            svx::FontworkBar::execute( mpDrawView, rReq, GetViewFrame()->GetBindings() );
+            Cancel();
+            rReq.Ignore ();
+            break;
+
+        case SID_BMPMASK:
+        {
+            GetViewFrame()->ToggleChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() );
+            GetViewFrame()->GetBindings().Invalidate( SID_BMPMASK );
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_GALLERY:
+        {
+            GetViewFrame()->ToggleChildWindow( GalleryChildWindow::GetChildWindowId() );
+            GetViewFrame()->GetBindings().Invalidate( SID_GALLERY );
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_NAVIGATOR:
+        {
+            if ( rReq.GetArgs() )
+                GetViewFrame()->SetChildWindow(SID_NAVIGATOR,
+                                        ((const SfxBoolItem&) (rReq.GetArgs()->
+                                        Get(SID_NAVIGATOR))).GetValue());
+            else
+                GetViewFrame()->ToggleChildWindow( SID_NAVIGATOR );
+
+            GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_ANIMATION_OBJECTS:
+        {
+            if ( rReq.GetArgs() )
+                GetViewFrame()->SetChildWindow(
+                    AnimationChildWindow::GetChildWindowId(),
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_ANIMATION_OBJECTS))).GetValue());
+            else
+                GetViewFrame()->ToggleChildWindow(
+                    AnimationChildWindow::GetChildWindowId() );
+
+            GetViewFrame()->GetBindings().Invalidate(SID_ANIMATION_OBJECTS);
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_CUSTOM_ANIMATION_PANEL:
+        {
+            // Make the slide transition panel visible (expand it) in the
+            // tool pane.
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+                framework::FrameworkHelper::msCustomAnimationTaskPanelURL);
+
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_SLIDE_TRANSITIONS_PANEL:
+        {
+            // Make the slide transition panel visible (expand it) in the
+            // tool pane.
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+                framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
+
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_3D_WIN:
+        {
+            if ( rReq.GetArgs() )
+                GetViewFrame()->SetChildWindow( Svx3DChildWindow::GetChildWindowId(),
+                                        ((const SfxBoolItem&) (rReq.GetArgs()->
+                                        Get( SID_3D_WIN ))).GetValue());
+            else
+                GetViewFrame()->ToggleChildWindow( Svx3DChildWindow::GetChildWindowId() );
+
+            GetViewFrame()->GetBindings().Invalidate( SID_3D_WIN );
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_CONVERT_TO_3D_LATHE_FAST:
+        {
+            /* The call is enough. The initialization via Start3DCreation and
+               CreateMirrorPolygons is no longer needed if the parameter
+               sal_True is provided. Then a tilted rotary body with an axis left
+               besides the bounding rectangle of the selected objects is drawn
+               immediately and without user interaction.  */
+            mpDrawView->SdrEndTextEdit();
+            if(GetActiveWindow())
+                GetActiveWindow()->EnterWait();
+            mpDrawView->End3DCreation(true);
+            Cancel();
+            rReq.Ignore();
+            if(GetActiveWindow())
+                GetActiveWindow()->LeaveWait();
+        }
+        break;
+
+        case SID_PRESENTATION_DLG:
+        {
+            SetCurrentFunction( FuSlideShowDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_REMOTE_DLG:
+        {
+#ifdef ENABLE_SDREMOTE
+             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+             VclAbstractDialog* pDlg = pFact ? pFact->CreateRemoteDialog(GetActiveWindow()) : 0;
+             if (pDlg)
+                 pDlg->Execute();
+#endif
+        }
+        break;
+
+        case SID_CUSTOMSHOW_DLG:
+        {
+            SetCurrentFunction( FuCustomShowDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_EXPAND_PAGE:
+        {
+            SetCurrentFunction( FuExpandPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_SUMMARY_PAGE:
+        {
+            mpDrawView->SdrEndTextEdit();
+            SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Cancel();
+        }
+        break;
+
+        case SID_AVMEDIA_PLAYER:
+        {
+            GetViewFrame()->ToggleChildWindow( ::avmedia::MediaPlayer::GetChildWindowId() );
+            GetViewFrame()->GetBindings().Invalidate( SID_AVMEDIA_PLAYER );
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_LAYER_DIALOG_WIN:
+        {
+            if ( rReq.GetArgs() )
+            {
+                GetViewFrame()->SetChildWindow(
+                    LayerDialogChildWindow::GetChildWindowId(),
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_LAYER_DIALOG_WIN))).GetValue());
+            }
+            else
+            {
+                GetViewFrame()->ToggleChildWindow(
+                    LayerDialogChildWindow::GetChildWindowId());
+            }
+
+            GetViewFrame()->GetBindings().Invalidate(SID_LAYER_DIALOG_WIN);
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_DISPLAY_MASTER_BACKGROUND:
+        case SID_DISPLAY_MASTER_OBJECTS:
+        {
+            // Determine current page and toggle visibility of layers
+            // associated with master page background or master page shapes.
+            SdPage* pPage = GetActualPage();
+            if (pPage != NULL
+                && GetDoc() != NULL)
+            {
+                SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+                SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
+                sal_uInt8 aLayerId;
+                if (nSId == SID_DISPLAY_MASTER_BACKGROUND)
+                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
+                else
+                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+                aVisibleLayers.Set(aLayerId, !aVisibleLayers.IsSet(aLayerId));
+                pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
+            }
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+       case SID_PHOTOALBUM:
+       {
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            VclAbstractDialog* pDlg = pFact ? pFact->CreateSdPhotoAlbumDialog(
+                GetActiveWindow(),
+                GetDoc()) : 0;
+
+            if (pDlg)
+            {
+                pDlg->Execute();
+                delete pDlg;
+            }
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
         default:
         {
-            // Switch statement splitted because of CLOOKS. All case-statements
-            // which call a Fu???? - function, are gone into FuTemp01 (drviews8)
-            FuTemp01(rReq);
+            DBG_ASSERT( 0, "Slot without function" );
+            Cancel();
+            rReq.Ignore ();
         }
         break;
     }
@@ -1050,9 +2926,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         GetCurrentFunction()->Activate();
     }
 }
-
-
-
 
 /** This method consists basically of three parts:
     1. Process the arguments of the SFX request.

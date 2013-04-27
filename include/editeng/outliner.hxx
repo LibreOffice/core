@@ -887,7 +887,6 @@ public:
     sal_uInt16          GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
     sal_uLong           GetLineHeight( sal_uLong nParagraph, sal_uLong nLine = 0 );
 
-    // nFormat must be a value from the enum EETextFormat (due to CLOOKS)
     sal_uLong           Read( SvStream& rInput, const String& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
     ::svl::IUndoManager&

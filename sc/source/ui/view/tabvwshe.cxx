@@ -158,8 +158,6 @@ void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const S
 
 //------------------------------------------------------------------------
 
-// wenn CLOOKs: -> mit <editview.hxx> <flditem.hxx>in neue tabvwsh
-
 static void lcl_SelectFieldAfterInsert( EditView& rView )
 {
     ESelection aSel = rView.GetSelection();

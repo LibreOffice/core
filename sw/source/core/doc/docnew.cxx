@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define ROLBCK_HISTORY_ONLY     // The fight against the CLOOK's
 #include <doc.hxx>
 #include <dcontact.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>

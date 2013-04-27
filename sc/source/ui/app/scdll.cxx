@@ -46,9 +46,14 @@
 #include "sc.hrc"
 #include "cfgids.hxx"
 
-//! die Registrierung wird wegen CLOOKs in ein eigenes File wandern muessen...
+//! Here used to be an old German comment: "die Registrierung wird
+//! wegen CLOOKs in ein eigenes File wandern muessen..." which refers
+//! to the infamous CLOOK (Compiler Limit: Out of Keys) problem
+//! (http://msdn.microsoft.com/en-us/library/3d859kh1(v=vs.71).aspx ,
+//! which has not been relevant for many years. Presumably that is
+//! supposed to explain some odd arrangement of source code, or
+//! something. Or maybe that comment is completely irrelevant.
 
-// Interface-Registrierung
 #include "docsh.hxx"
 #include "tabvwsh.hxx"
 #include "prevwsh.hxx"
