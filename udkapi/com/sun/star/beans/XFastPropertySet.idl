@@ -66,7 +66,7 @@ published interface XFastPropertySet: com::sun::star::uno::XInterface
         @throws  stardiv::uno::lang::WrappedTargetException
             if the implementation has an internal reason for the exception.
             In this case the original exception is wrapped into this
-            <type scope="com::sun::star::lang">WrappedTargetException</type>.
+            com::sun::star::lang::WrappedTargetException.
 
      */
     void setFastPropertyValue( [in] long nHandle,
@@ -89,7 +89,7 @@ published interface XFastPropertySet: com::sun::star::uno::XInterface
         @throws  com::sun::star::lang::WrappedTargetException
             if the implementation has an internal reason for the exception.
             In this case the original exception is wrapped into that
-            <type scope="com::sun::star::lang">WrappedTargetException</type>.
+            com::sun::star::lang::WrappedTargetException.
      */
     any getFastPropertyValue( [in] long nHandle )
             raises( com::sun::star::beans::UnknownPropertyException,

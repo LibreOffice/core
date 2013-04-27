@@ -43,7 +43,7 @@ service Cell
 
         <p>All of these properties are either already available in the
         service
-        <type scope="com::sun::star::text">CellProperties</type>,
+        com::sun::star::text::CellProperties,
         or get matched against one of those or are implemented
         non-functional since they serve no purpose for text tables.</p>
 

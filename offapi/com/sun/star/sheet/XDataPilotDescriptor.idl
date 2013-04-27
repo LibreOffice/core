@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module sheet {
 /** provides access to the layout settings of a data pilot table.
 
     <p>This interface extends the interface
-    <type scope="com::sun::star::container">XNamed</type> which provides
+    com::sun::star::container::XNamed which provides
     access to the name of the data pilot table used e.g. in collections.</p>
 
     @see com::sun::star::sheet::DataPilotDescriptor

@@ -32,7 +32,7 @@
 published interface XTextDocument: com::sun::star::frame::XModel
 {
     /** @returns
-                the major <type scope="com::sun::star::text">Text</type> of the text document.
+                the major com::sun::star::text::Text of the text document.
 
                 <p>This text does not contain texts in TextFrames,
                 or cells of TextTables etc. directly. These are

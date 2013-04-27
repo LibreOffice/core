@@ -27,12 +27,12 @@ module com { module sun { module star { module io {
 
 /**
    An optional companion interface to
-   <type scope="com::sun::star::io">XOutputStream</type> that supports scenarios
+   com::sun::star::io::XOutputStream that supports scenarios
    where <member scope="com::sun::star::io">XOutputStream::writeBytes</member>
    operates asynchronously and does not necessarily report any errors.
 
    <p>A typical scenario where this interface is useful is when an
-   <type scope="com::sun::star::io">XOutputStream</type> is used to write to a
+   com::sun::star::io::XOutputStream is used to write to a
    file via NFS.  Normally, any calls to
    <member scope="com::sun::star::io">XOutputStream::writeBytes</member> will
    execute asynchronously then, in that any potential errors might only be
@@ -56,7 +56,7 @@ interface XAsyncOutputMonitor {
        and reports potentially pending errors.
 
        <p>Calling this method is potentially expensive (even if the associated
-       <type scope="com::sun::star::io">XOutputStream</type> represents a local
+       com::sun::star::io::XOutputStream represents a local
        file not accessed via NFS, for example).  This method has a similar
        description to
        <member scope="com::sun::star::io">XOutputStream::flush</member>.

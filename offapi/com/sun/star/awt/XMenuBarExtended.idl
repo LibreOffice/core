@@ -31,7 +31,7 @@
 
 
 /** multiple-inheritance interface designed to ease the use of all functions
-    available for a <type scope="com::sun::star::awt">MenuBar</type>.
+    available for a com::sun::star::awt::MenuBar.
 
     @since OOo 3.1
  */

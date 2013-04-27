@@ -85,7 +85,7 @@ interface XReportControlFormat
     };
 
 
-    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+    /** specifies the com::sun::star::text::FontEmphasis
         value of the text in the control.
      */
     [attribute,bound] short ControlTextEmphasis
@@ -94,7 +94,7 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** contains the font emphasis value as <type scope="com::sun::star::text">FontEmphasis</type>.
+    /** contains the font emphasis value as com::sun::star::text::FontEmphasis.
      */
     [attribute,bound] short CharEmphasis
     {
@@ -222,7 +222,7 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+    /** specifies the com::sun::star::text::FontRelief
         value of the text in the control.
      */
     [attribute,bound] short CharRelief

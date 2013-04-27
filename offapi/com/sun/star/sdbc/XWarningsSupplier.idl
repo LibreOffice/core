@@ -38,7 +38,7 @@ published interface XWarningsSupplier: com::sun::star::uno::XInterface
 
         <p>
         <b>Note:</b> Subsequent warnings will be chained to this
-        <type scope="com::sun::star::sdbc">SQLWarning</type>
+        com::sun::star::sdbc::SQLWarning
         .
         </p>
         @returns

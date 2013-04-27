@@ -45,22 +45,22 @@ interface XNumericControl : XPropertyControl
     */
     [attribute] com::sun::star::beans::Optional<double> MaxValue;
 
-    /** describes a <type scope="com::sun::star::util">MeasureUnit</type> to be applied
+    /** describes a com::sun::star::util::MeasureUnit to be applied
         for displaying values.
 
-        <p>Only a certain set of <type scope="com::sun::star::util">MeasureUnit</type> values is
+        <p>Only a certain set of com::sun::star::util::MeasureUnit values is
         supported. In particular, every value which denotes a fraction of another
         unit (like 100th millimeters) cannot be used as DisplayUnit.</p>
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the caller attempts to set an unsupported <type scope="com::sun::star::util">MeasureUnit</type>
+            if the caller attempts to set an unsupported com::sun::star::util::MeasureUnit
     */
     [attribute] short DisplayUnit
     {
         set raises (com::sun::star::lang::IllegalArgumentException);
     };
 
-    /** describes a <type scope="com::sun::star::util">MeasureUnit</type> to be
+    /** describes a com::sun::star::util::MeasureUnit to be
         applied for transferring values.
 
         <p>The core measurement unit for a property value might differ from the unit which

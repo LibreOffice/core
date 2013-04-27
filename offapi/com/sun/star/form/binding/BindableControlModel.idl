@@ -34,7 +34,7 @@ service BindableControlModel
     /** specifies the basic functionality for a form control model
 
         <p>Via this service, bindable control models inherit the
-        <type scope="com::sun::star::util">XCloneable</type> interface.<br/>
+        com::sun::star::util::XCloneable interface.<br/>
         If an bindable control model, at which a binding has been established (via
         <member>XBindableValue::setValueBinding</member>), is being cloned, then the
         binding is also established at the clone. Effectively, this means that

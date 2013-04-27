@@ -56,7 +56,7 @@ service AccessibleDropDownListBox
        <li>Description: The description of a dropdown list box is its localized
            help text.</li>
        <li>Children: There exists one child.
-           It is of type <type scope="com::sun::star::awt">AccessibleList</type>.</li>
+           It is of type com::sun::star::awt::AccessibleList.</li>
        <li>Parent: The parent is the window that contains the dropdown list box.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
@@ -65,7 +65,7 @@ service AccessibleDropDownListBox
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
                and subsequent calls to this object result in
-               <type scope="com::sun::star::lang">DisposedException</type>
+               com::sun::star::lang::DisposedException
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::ENABLED</const> is set

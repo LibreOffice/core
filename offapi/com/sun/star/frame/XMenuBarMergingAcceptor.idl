@@ -45,7 +45,7 @@ interface XMenuBarMergingAcceptor : com::sun::star::uno::XInterface
         functions from two application parts, container application and
         embedded object, are available to the user simultaneously. A menu
         bar which is set by this method has a higher priority than others
-        created by <type scope="com::sun::star::frame">XLayoutManager</type>
+        created by com::sun::star::frame::XLayoutManager
         interface. Settings of a merged menu bar cannot be retrieved.
         </p>
 

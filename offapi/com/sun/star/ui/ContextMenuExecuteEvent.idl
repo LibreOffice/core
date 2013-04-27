@@ -38,7 +38,7 @@ published struct  ContextMenuExecuteEvent
     ::com::sun::star::awt::Point      ExecutePosition;
     /** enables the access to the menu content.
      The implementing object has to support the service
-     <type scope="com::sun::star::ui">ActionTriggerContainer</type>;
+     com::sun::star::ui::ActionTriggerContainer;
      */
     ::com::sun::star::container::XIndexContainer  ActionTriggerContainer;
     /** provides the current selection inside the source window.

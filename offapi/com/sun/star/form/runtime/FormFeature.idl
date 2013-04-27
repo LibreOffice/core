@@ -80,7 +80,7 @@ constants FormFeature
     const short UndoRecordChanges   = 9;
 
     /** deletes the current record, while honoring any registered
-        <type scope="com::sun::star::form">XConfirmDeleteListener</type>s
+        com::sun::star::form::XConfirmDeleteListeners
     */
     const short DeleteRecord        = 10;
 

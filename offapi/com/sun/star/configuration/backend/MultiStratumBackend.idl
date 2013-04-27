@@ -42,7 +42,7 @@ service MultiStratumBackend
         allows initialization of backend data sources
 
       <p>If present a type
-         <type scope="com::sun::star::configuration::bootstrap">BootstrapContext</type>
+         com::sun::star::configuration::bootstrap::BootstrapContext
          must be passed, that provides further backend initialization settings.
       </p>
 

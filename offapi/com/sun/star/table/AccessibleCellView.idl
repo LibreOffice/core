@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module table {
 
 /** The accessible view of a cell in a text document or in the page preview
       of a spreadsheet document. See
-    <type scope="::com::sun::star::sheet">AccessibleCell</type> for cells in
+    ::com::sun::star::sheet::AccessibleCell for cells in
     the edit view of a spreadsheet.
     @since OOo 1.1.2
 */

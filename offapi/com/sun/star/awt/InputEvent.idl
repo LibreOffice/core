@@ -39,7 +39,7 @@ published struct InputEvent: com::sun::star::lang::EventObject
     /** contains the modifier keys which were pressed while the event occurred.
 
         <p>Zero or more constants from the
-        <type scope="com::sun::star::awt">KeyModifier</type> group.</p>
+        com::sun::star::awt::KeyModifier group.</p>
      */
     short Modifiers;
 

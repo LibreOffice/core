@@ -41,8 +41,8 @@ module com { module sun { module star { module configuration {
  </p>
 
  <p>New set element instances generally are created through members of
- <type scope="com::sun::star::lang">XSingleServiceFactory</type> or,
- if supported, <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+ com::sun::star::lang::XSingleServiceFactory or,
+ if supported, com::sun::star::lang::XMultiServiceFactory
  on an implementation of SetUpdate. Initially, they are not
  contained in a set object and have no meaningful name.
  </p>
@@ -73,7 +73,7 @@ module com { module sun { module star { module configuration {
 
  <p>When a set element is removed from its set from outside the hierarchy, the
  container disposes of the object. This occurrence can be detected by registering
- a <type scope="com::sun::star::lang">XEventListener</type> with the object.
+ a com::sun::star::lang::XEventListener with the object.
  </p>
 
  <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
@@ -126,7 +126,7 @@ published service SetElement
  returns <NULL/>).
  </p>
 
- <p>Clients may register an <type scope="com::sun::star::lang">XEventListener</type>
+ <p>Clients may register an com::sun::star::lang::XEventListener
  to be notified, if the object is removed from its container by an outside source.
  </p>
 */
@@ -139,13 +139,13 @@ published service SetElement
  </p>
 
  <p>If the object was created using interface
- <type scope="com::sun::star::lang">XSingleServiceFactory</type>
+ com::sun::star::lang::XSingleServiceFactory
  on an implementation of SetUpdate, this interface describes the
  same template as interface XTemplateContainer on that
  SetUpdate.
  </p>
  <p>If the object was created using interface
- <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+ com::sun::star::lang::XMultiServiceFactory
  on an implementation of SetUpdate, this interface describes the
  template whose name was used as a service identifier for the factory method.
  </p>

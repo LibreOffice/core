@@ -60,7 +60,7 @@ published service HierarchyDataSource
         should be created. That is, they determine the subset of elements that
         can be accessed starting from the returned object. Each element of the
         argument sequence should be a
-        <type scope="com::sun::star::beans">PropertyValue</type>, so that the
+        com::sun::star::beans::PropertyValue, so that the
         parameters can be identified by name rather than by position.
 
         <p>With both of the standard service specifiers above, an implementation

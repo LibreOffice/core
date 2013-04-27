@@ -68,7 +68,7 @@ interface XValidator : com::sun::star::uno::XInterface
     <p>Implementations which do not support dynamic validity constraints should simply ignore this
     call.</p>
 
-    @throws <type scope="com::sun::star::lang">NullPointerException</type>
+    @throws com::sun::star::lang::NullPointerException
         if the given listener is <NULL/>
     @see XValidityConstraintListener
     */
@@ -77,7 +77,7 @@ interface XValidator : com::sun::star::uno::XInterface
 
     /** revokes the given validity listener
 
-    @throws <type scope="com::sun::star::lang">NullPointerException</type>
+    @throws com::sun::star::lang::NullPointerException
         if the given listener is <NULL/>
     @see XValidityConstraintListener
     */

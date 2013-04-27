@@ -32,7 +32,7 @@ published service Chapter
 {
     service  com::sun::star::text::TextField;
     /** determines how the chapter should be displayed as described in
-        <type scope="com::sun::star::text">ChapterFormat</type>.
+        com::sun::star::text::ChapterFormat.
      */
     [property]short ChapterFormat;
     /** determines which chapter level should be used. The highest chapter

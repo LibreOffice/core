@@ -43,7 +43,7 @@ published service TypeDetection
         <p>
         Use this interface to get information about the type of the given resource.
         Return value will be always an internal name of a registered document type.
-        It can be used may on other services (e.g. <type scope="com::sun::star::frame">FrameLoaderFactory</type>)
+        It can be used may on other services (e.g. com::sun::star::frame::FrameLoaderFactory)
         to do further things, which base on it (e.g. to load it into a frame).
         </p>
      */
@@ -53,7 +53,7 @@ published service TypeDetection
 
         <p>
         Every container item is specified as a set of properties and will be
-        represented by a sequence< <type scope="com::sun::star::beans">PropertyValue</type> > structure.
+        represented by a sequence< com::sun::star::beans::PropertyValue > structure.
         Follow properties are supported:
         (But note: not all of them must be present every time!)
 
@@ -77,7 +77,7 @@ published service TypeDetection
                 <td><em>UINames</em></td>
                 <td>[sequence< string >]</td>
                 <td>It contains all available localized names for this type. The are organized
-                    in pairs and represented as a structure of sequence< <type scope="com::sun::star::beans">PropertyValue</type> >.
+                    in pairs and represented as a structure of sequence< com::sun::star::beans::PropertyValue >.
                     The name of such property must be interpreted as locale; it's value as the localized
                     type name corresponding to this locale.</td>
             </tr>
@@ -107,7 +107,7 @@ published service TypeDetection
                 <td>[sequence< string >]</td>
                 <td>This list contains different URL patterns, which identify this type.
                     E.g. data base contents can be described by an new defined protocol like "sql://select*".
-                    In combination with a suitable <type scope="com::sun::star::frame">FrameLoader</type> or
+                    In combination with a suitable com::sun::star::frame::FrameLoader or
                     ImportFilter/ExportFilter it would be possible then, to
                     layout a SQL query output into an office frame.</td>
             </tr>

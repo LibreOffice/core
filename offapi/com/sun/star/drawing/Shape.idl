@@ -68,7 +68,7 @@ published service Shape
 
     /** This interfaces gives access to an optional container of glue points.
         To have unique ids you should query the returned interface for
-        <type scope="com::sun::star::container">XIdentifierContainer</type>.
+        com::sun::star::container::XIdentifierContainer.
     */
     [optional] interface com::sun::star::drawing::XGluePointsSupplier;
 

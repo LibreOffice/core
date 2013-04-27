@@ -38,7 +38,7 @@ published interface XServiceDisplayName : ::com::sun::star::uno::XInterface
     /** returns the display name of the service for a given language.
 
          <p>The caller may specify a
-         <type scope="com::sun::star::lang">Locale</type> for the preferred
+         com::sun::star::lang::Locale for the preferred
          language of the resulting string.
          However, if that locale is not supported the resulting string may
          be given in a different language. Usually this should be English.</p>

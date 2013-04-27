@@ -63,7 +63,7 @@ interface XMenuExtended2
         @param nItemPos
             specifies the position of the menu item for which the item type is queried.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item in the position specified in <var>nItemPos</var>.
 
         @see MenuItemType

@@ -32,10 +32,10 @@ module chart2
 {
 
 /** A component that implements the
-    <type scope="::com::sun::star::chart">ChartDocument</type> service and
+    ::com::sun::star::chart::ChartDocument service and
     is initialized with a
-    <type scope="::com::sun::star::chart2">ChartDocument</type> via
-    the <type scope="::com::sun::star::uno">XAggregation</type> interface.
+    ::com::sun::star::chart2::ChartDocument via
+    the ::com::sun::star::uno::XAggregation interface.
  */
 service ChartDocumentWrapper
 {

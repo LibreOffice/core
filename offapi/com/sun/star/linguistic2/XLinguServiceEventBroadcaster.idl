@@ -30,17 +30,17 @@ module com { module sun { module star { module linguistic2 {
 
     <P>This interface may be used by spell checker or hyphenator
     implementations to allow clients to be registered and informed about
-    <type scope="com::sun::star::linguistic2">LinguServiceEvent</type>s.
+    com::sun::star::linguistic2::LinguServiceEvents.
     </P>
 
     <P>Note: The LinguServiceManager forwards the
-    <type scope="com::sun::star::linguistic2">LinguServiceEvent</type>s
+    com::sun::star::linguistic2::LinguServiceEvents
     it receives (from spell checkers or hyphenators) to its own listeners.
     Thus, there should be no need to register
     as a listener for a specific implementation./P>
 
-    @see    <type scope="com::sun::star::linguistic2">XLinguServiceManager</type>
-    @see    <type scope="com::sun::star::linguistic2">XLinguServiceEventListener</type>
+    @see    com::sun::star::linguistic2::XLinguServiceManager
+    @see    com::sun::star::linguistic2::XLinguServiceEventListener
 */
 published interface XLinguServiceEventBroadcaster : com::sun::star::uno::XInterface
 {

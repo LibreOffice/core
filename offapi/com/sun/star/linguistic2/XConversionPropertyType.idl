@@ -34,7 +34,7 @@ module com { module sun { module star { module linguistic2 {
     conversion dictionary
 
     <p>The property type must be one of
-    <type scope="com::sun::star::linguistic2">ConversionPropertyType</type></p>
+    com::sun::star::linguistic2::ConversionPropertyType</p>
 
     @see    com::sun::star::linguistic2::XConversionDictionary
     @see    com::sun::star::linguistic2::ConversionPropertyType

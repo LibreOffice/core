@@ -50,8 +50,8 @@ published interface XClipboard: com::sun::star::uno::XInterface
 
         @param xTrans
         The transferable object to set as new content.
-        <p>If the given <type scope="com::sun::star::datatransfer">XTransferable</type>
-        has no <type scope="com::sun::star::datatransfer">DataFlavor</type> the clipboard
+        <p>If the given com::sun::star::datatransfer::XTransferable
+        has no com::sun::star::datatransfer::DataFlavor the clipboard
         will be deleted.
         <p>A NULL value is not allowed.</p>
 

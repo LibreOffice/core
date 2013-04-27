@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module embed {
     The usual usage of this service is to create it, initialize with document
     frame, and to dispose the service. While disposing the service will do all
     the required actions to let the frame be closed using
-    <type scope="com::sun::star::util">XCloseable</type>::close( true ). Thus
+    com::sun::star::util::XCloseable::close( true ). Thus
     in case there is a code that prevents closing of the frame the code
     automatically becomes the owner of the frame.
     </p>

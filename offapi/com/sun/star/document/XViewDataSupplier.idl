@@ -39,8 +39,8 @@ published interface XViewDataSupplier: com::sun::star::uno::XInterface
     /** retrieve information about currently opened view to restore it later
 
         @returns
-            a <type scope="com::sun::star::container">XIndexAccess</type>,
-            that gives access to a list of <type scope="com::sun::star::beans">PropertyValue</type>
+            a com::sun::star::container::XIndexAccess,
+            that gives access to a list of com::sun::star::beans::PropertyValue
             for every open view. May <NULL/> if no view is currently available.
      */
     ::com::sun::star::container::XIndexAccess getViewData();
@@ -48,7 +48,7 @@ published interface XViewDataSupplier: com::sun::star::uno::XInterface
     /** restore all views which will be represented by given data argument
 
         @param Data
-            a list of <type scope="com::sun::star::beans">PropertyValue</type>s
+            a list of com::sun::star::beans::PropertyValues
             with information about last opened views to restore it
             <NULL/> isn't allowed here.
      */

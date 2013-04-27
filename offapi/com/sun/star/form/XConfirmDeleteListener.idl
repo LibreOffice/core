@@ -28,7 +28,7 @@
 
 
 /** allows to register a component for confirming deletions of
-    rows in a <type scope="com::sun::star::form::component">DataForm</type>.
+    rows in a com::sun::star::form::component::DataForm.
 
     @see XConfirmDeleteBroadcaster
  */

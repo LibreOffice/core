@@ -27,7 +27,7 @@ module com { module sun { module star { module linguistic2 {
 
     <P>These values define the flags which may be logically combined
     to build the event type of a
-    <type scope="com::sun::star::linguistic2">LinguServiceEvent</type></P>
+    com::sun::star::linguistic2::LinguServiceEvent</P>
 */
 published constants LinguServiceEventFlags
 {

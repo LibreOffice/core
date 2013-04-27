@@ -34,7 +34,7 @@ module com { module sun { module star { module ui {
     <p>
     The type of the interface depends on the real type of the user interface
     element. A menubar user interface element provides access to its
-    <type scope="com::sun::star::awt">XSystemDependentMenuBarPeer</type>
+    com::sun::star::awt::XSystemDependentMenuBarPeer
     which supports to retrieve the system dependent menu handle.
     A floating window or a toolbar user interface element return a
     <type scope=com::sun::star::awt>XWindow</type>

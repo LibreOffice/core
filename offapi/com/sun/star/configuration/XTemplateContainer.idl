@@ -29,11 +29,11 @@
     provide information about the template.
 
     <p> An implementation will also implement
-        <type scope="com::sun::star::lang">XSingleServiceFactory</type>, in which case
+        com::sun::star::lang::XSingleServiceFactory, in which case
         that interface creates instances of the specified template.
     </p>
     <p> If multiple templates are supported, the supported factory interface may be
-        <type scope="com::sun::star::lang">XMultiServiceFactory</type>, in which case
+        com::sun::star::lang::XMultiServiceFactory, in which case
         the <atom>string</atom> returned from
         <member>XTemplateContainer::getElementTemplateName()</member> can be used as
         the service name argument.

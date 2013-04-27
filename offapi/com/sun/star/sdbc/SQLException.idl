@@ -28,14 +28,14 @@
 
     <p>
     Each
-    <type scope="com::sun::star::sdbc">SQLException</type>
+    com::sun::star::sdbc::SQLException
     provides several kinds of information:
     </p>
     <p>
     <ul>
     <li>
     a string describing the error.  This is used as the
-    <type scope="com::sun::star::uno">Exception</type>
+    com::sun::star::uno::Exception
     message.
     </li>
     </ul>

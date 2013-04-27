@@ -31,7 +31,7 @@ published constants ColumnType
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object
              returned by the method
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getVersionColumns()</member>
@@ -43,7 +43,7 @@ published constants ColumnType
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object
              returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getVersionColumns()</member>
@@ -55,7 +55,7 @@ published constants ColumnType
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object
              returned by the method
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getVersionColumns()</member>

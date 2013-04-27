@@ -73,7 +73,7 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
             returned.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             If no child with the given index exists then an
-            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type>
+            ::com::sun::star::lang::IndexOutOfBoundsException
             exception is thrown.
     */
     XAccessible getAccessibleChild ([in] long i)

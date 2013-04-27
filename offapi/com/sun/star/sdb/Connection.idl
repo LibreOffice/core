@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module lang {
  module application { interface XTableUIProvider; };
 
 /** extends the
-    <type scope="com::sun::star::sdbc">Connection</type>
+    com::sun::star::sdbc::Connection
     of SDBC by providing the data definitions of a connected database.
  */
 published service Connection

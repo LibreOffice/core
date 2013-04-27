@@ -31,7 +31,7 @@
 
 /** describes a controller which can be used to browse and modify properties of form controls.
 
-    <p>The controller can be plugged into an <type scope="com::sun::star::frame">XFrame</type>, and will
+    <p>The controller can be plugged into an com::sun::star::frame::XFrame, and will
     provide a visual component for inspecting control properties. This means it allows to interactively control
     several aspects of a FormControlModel or DataAwareControlModel, such as it's
     data binding, it's layout, and it's event binding</p>
@@ -68,8 +68,8 @@
 
     @deprecated
         <p>Note that nowadays, this service is only a legacy wrapper using the
-        <type scope="com::sun::star::inspection">ObjectInspector</type> and the
-        <type scope="com::sun::star::form::inspection">DefaultFormComponentInspectorModel</type> services, and knitting them together.</p>
+        com::sun::star::inspection::ObjectInspector and the
+        com::sun::star::form::inspection::DefaultFormComponentInspectorModel services, and knitting them together.</p>
 
 */
 published service PropertyBrowserController
@@ -102,7 +102,7 @@ published service PropertyBrowserController
     /** ensures the basic functionality for a controller.
 
         <p>With supporting this interface, the component is able to operate in (and provide content
-        for) an <type scope="com::sun::star::frame">XFrame</type>.</p>
+        for) an com::sun::star::frame::XFrame.</p>
     */
     interface com::sun::star::frame::XController;
 

@@ -35,7 +35,7 @@ published constants SearchFlags
                     <member>SearchOptions::transliterateFlags</member>
                     instead.
 
-        @see <type scope="com::sun::star::i18n">TransliterationModules</type>
+        @see com::sun::star::i18n::TransliterationModules
     */
     const long  ALL_IGNORE_CASE     = 0x00000001;
 

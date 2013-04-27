@@ -53,7 +53,7 @@ service AccessibleIconChoiceControlEntry
        <li>Description: The description of an icon choice control entry is empty.</li>
        <li>Children: There exist no children.
         </li>
-       <li>Parent: The parent is either the <type scope="com::sun::star::awt">AccessibleIconChoiceControl</type>.</li>
+       <li>Parent: The parent is either the com::sun::star::awt::AccessibleIconChoiceControl.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>
@@ -61,7 +61,7 @@ service AccessibleIconChoiceControlEntry
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
                and subsequent calls to this object result in
-               <type scope="com::sun::star::lang">DisposedException</type>
+               com::sun::star::lang::DisposedException
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::ENABLED</const> is set

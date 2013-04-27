@@ -60,7 +60,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
             The filter criteria is split into levels. Each level represents the
             OR criteria. Within each level, the filters are provided as an AND criteria
             with the name of the column and the filter condition. The filter condition
-            is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+            is of type string. The operator used, is defined by com::sun::star::sdb::SQLFilterOperator.
 
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
@@ -69,9 +69,9 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         raises (com::sun::star::sdbc::SQLException,com::sun::star::lang::IllegalArgumentException);
 
     /** appends a new filter condition by a
-        <type scope="com::sun::star::sdb">DataColumn</type>
+        com::sun::star::sdb::DataColumn
         providing the name and the value for the filter.
-        The value property must be supported by the <type scope="com::sun::star::sdb">DataColumn</type>.
+        The value property must be supported by the com::sun::star::sdb::DataColumn.
         @param column
             the column which is used to create a filter
         @param  andCriteria
@@ -79,7 +79,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
             the new filter condition will be appended as OR criteria.
             E.g. (xx AND bb AND cc) OR newCriteria
         @param  filterOperator
-            The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+            The operator used, is defined by com::sun::star::sdb::SQLFilterOperator.
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
@@ -102,7 +102,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
 
 
     /** appends an additional part to the group criteria of the select
-        statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
+        statement. The column must be a com::sun::star::sdbcx::Column.
         @param column
             the column which is used to create a group part
         @throws com::sun::star::sdbc::SQLException
@@ -130,7 +130,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
             The HAVING filter criteria is split into levels. Each level represents the
             OR criteria. Within each level, the filters are provided as an AND criteria
             with the name of the column and the filter condition. The filter condition
-            is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+            is of type string. The operator used, is defined by com::sun::star::sdb::SQLFilterOperator.
 
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
@@ -139,7 +139,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
             raises (com::sun::star::sdbc::SQLException);
 
     /** appends a new HAVING filter condition by a
-        <type scope="com::sun::star::sdb">DataColumn</type>
+        com::sun::star::sdb::DataColumn
         providing the name and the value for the filter.
         @param column
             the column which is used to create a filter
@@ -148,7 +148,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
             the new filter condition will be appended as OR criteria.
             E.g. (xx AND bb AND cc) OR newCriteria
         @param  filterOperator
-            The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+            The operator used, is defined by com::sun::star::sdb::SQLFilterOperator.
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
@@ -170,7 +170,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
 
 
     /** appends an additional part to the sort order criteria of the select
-        statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
+        statement. The column must be a com::sun::star::sdbcx::Column.
         @param column
             the column which is used to create a order part
         @param  ascending

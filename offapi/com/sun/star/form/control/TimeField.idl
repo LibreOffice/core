@@ -30,7 +30,7 @@
 /** describes a control for inputting time values which can (but not necessarily has to) be bound
     to a database field.
 
-    <p>The model of the control has to support the <type scope="com::sun::star::form::component">TimeField</type>
+    <p>The model of the control has to support the com::sun::star::form::component::TimeField
     service.</p>
 
     @see com::sun::star::awt::UnoControl

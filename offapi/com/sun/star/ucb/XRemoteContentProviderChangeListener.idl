@@ -26,7 +26,7 @@
 module com { module sun { module star { module ucb {
 
 /** A listener interested in changes to a
-    <type scope="com::sun::star::ucb">XRemoteContentProviderSupplier</type>.
+    com::sun::star::ucb::XRemoteContentProviderSupplier.
 
     @version 1.0
     @author Stephan Bergmann
@@ -35,7 +35,7 @@ published interface XRemoteContentProviderChangeListener:
     com::sun::star::lang::XEventListener
 {
     /** gets called whenever changes to a
-        <type scope="com::sun::star::ucb">XRemoteContentProviderSupplier</type>
+        com::sun::star::ucb::XRemoteContentProviderSupplier
         occur.
 
         @param Event

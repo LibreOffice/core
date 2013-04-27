@@ -33,7 +33,7 @@ published interface XSQLErrorListener: com::sun::star::lang::XEventListener
 {
 
     /** invoked when a database error occurs, just before a
-        <type scope="com::sun::star::sdbc">SQLException</type>
+        com::sun::star::sdbc::SQLException
         is thrown to the application.
         @param aEvent
             the event which occurred

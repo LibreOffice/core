@@ -46,7 +46,7 @@ interface XDocumentDataSource
         on the document as soon as it's not needed anymore.</p>
 
         <p>Additionally, if the caller does long-lasting processing on the document, it's advised
-        to add itself as <type scope="com::sun::star::util">XCloseListener</type> to the document,
+        to add itself as com::sun::star::util::XCloseListener to the document,
         to prevent closing as long as the processing lasts.</p>
     */
     [readonly, attribute] XOfficeDatabaseDocument DatabaseDocument;

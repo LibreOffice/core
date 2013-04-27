@@ -60,7 +60,7 @@
     <member scope="com::sun::star::sdbc">XSQLData::getSQLType()</member>
     to determine the SQL type of the user-defined type (UDT) being custom mapped.
     The driver creates an instance of
-    <type scope="com::sun::star::sdbc">XSQLInput</type>
+    com::sun::star::sdbc::XSQLInput
     ,
     populating it with the attributes of the UDT. The driver then passes the input
     stream to the method

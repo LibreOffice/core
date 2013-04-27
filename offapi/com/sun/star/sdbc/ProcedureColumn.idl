@@ -31,7 +31,7 @@ published constants ProcedureColumn
              the column
              <code>COLUMN_TYPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .
@@ -42,7 +42,7 @@ published constants ProcedureColumn
              A possible value for the column
              <code>COLUMN_TYPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .
@@ -53,7 +53,7 @@ published constants ProcedureColumn
              A possible value for the column
              <code>COLUMN_TYPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .
@@ -64,7 +64,7 @@ published constants ProcedureColumn
              A possible value for the column
              <code>COLUMN_TYPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .
@@ -75,7 +75,7 @@ published constants ProcedureColumn
              A possible value for the column
              <code>COLUMN_TYPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .
@@ -86,7 +86,7 @@ published constants ProcedureColumn
              A possible value for the column
              <code>COLUMN_TYPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .

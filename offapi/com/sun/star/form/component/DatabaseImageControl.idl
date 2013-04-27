@@ -32,7 +32,7 @@
 
 /** specifies the model of a control used for displaying images stored in a database.
 
-    <p>As every <type scope="com::sun::star::form">DataAwareControlModel</type>, an image control
+    <p>As every com::sun::star::form::DataAwareControlModel, an image control
     can be bound to a database field. This means that for instance with every record change, the content
     of the database field is taken, interpreted as image, and displayed in the control.<br/>
     Unlike other more text-based controls, it does not interpret the content of the field as text or double,
@@ -54,10 +54,10 @@
 
     <p>In a usual data form, the scenario will be as follows:
         <ul><li>There is a DatabaseImageControl as part of the document model, which acts as
-                control model for an <type scope="com::sun::star::form::control">ImageControl</type>.</li>
+                control model for an com::sun::star::form::control::ImageControl.</li>
 
-            <li>The control is an <type scope="com::sun::star::awt">XImageConsumer</type> for the
-                <type scope="com::sun::star::awt">XImageProducer</type> supplied by the model.</li>
+            <li>The control is an com::sun::star::awt::XImageConsumer for the
+                com::sun::star::awt::XImageProducer supplied by the model.</li>
 
             <li>Whenever the form's cursor is positioned on a new record, the column the control
                 model is bound to is examined for a binary data stream. This stream is set as source
@@ -84,9 +84,9 @@ published service DatabaseImageControl
 
     service com::sun::star::form::DataAwareControlModel;
 
-    /** supplies the caller with an <type scope="com::sun::star::awt">XImageProducer</type>.
+    /** supplies the caller with an com::sun::star::awt::XImageProducer.
 
-        <p>Other components can register as <type scope="com::sun::star::awt">XImageConsumer</type>
+        <p>Other components can register as com::sun::star::awt::XImageConsumer
         at this producer. Then they will be notified of any change in the image to be displayed.</p>
      */
     interface com::sun::star::form::XImageProducerSupplier;

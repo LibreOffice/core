@@ -28,7 +28,7 @@
 
 
     <p>In addition to the information provided by
-    <type scope="com::sun::star::sdbc">SQLException</type>
+    com::sun::star::sdbc::SQLException
     , a
     <code>BatchUpdateException</code>
     provides the update counts for all commands

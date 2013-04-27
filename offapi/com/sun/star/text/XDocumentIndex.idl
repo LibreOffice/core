@@ -29,8 +29,8 @@
 
 
 
-    <p>Use <type scope="com::sun::star::util">XRefreshable</type> and
-    <type scope="com::sun::star::lang">XServiceInfo</type> instead, if available.
+    <p>Use com::sun::star::util::XRefreshable and
+    com::sun::star::lang::XServiceInfo instead, if available.
 
     </p>
 

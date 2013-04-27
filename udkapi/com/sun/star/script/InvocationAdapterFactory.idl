@@ -35,9 +35,9 @@ module com {  module sun {  module star {  module script {
 
     <p>
     The adapter has to support
-        <type scope="com::sun::star::script">XInvocationAdapterFactory</type>.
+        com::sun::star::script::XInvocationAdapterFactory.
     The adapter may also support
-        <type scope="com::sun::star::script">XInvocationAdapterFactory2</type>.
+        com::sun::star::script::XInvocationAdapterFactory2.
     </p>
  */
 published service InvocationAdapterFactory : XInvocationAdapterFactory2;

@@ -869,7 +869,7 @@ published service Content
         </p>
 
         <p>If a property with an unsupported type shall be added a
-        <type scope="com::sun::star::beans">IllegalTypeException</type> must
+        com::sun::star::beans::IllegalTypeException must
         be raised.
 
         @deprecated
@@ -887,7 +887,7 @@ published service Content
         <p>This interface must be implemented, if the implementation can
         dynamically change it's property set ( e.g. because it implements
         the interface
-        <type scope="com::sun::star::beans">XPropertyContainer</type>. )
+        com::sun::star::beans::XPropertyContainer. )
      */
     [optional] interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 

@@ -37,23 +37,23 @@ module com { module sun { module star { module task {
     <h3>Built-in Handlers</h3>
     The following well-known requests can be dealt with by the built-in handlers:
     <UL>
-        <LI><type scope="com::sun::star::ucb">AuthenticationRequest</type></LI>
-        <LI><type scope="com::sun::star::ucb">CertificateValidationRequest</type></LI>
-        <LI><type scope="com::sun::star::ucb">HandleCookiesRequest</type></LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveAugmentedIOException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveFileIOException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveIOException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveNetworkConnectException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveNetworkException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveNetworkGeneralException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveNetworkOffLineException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveNetworkReadException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveNetworkResolveNameException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveNetworkWriteException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveWrongMediumException</type>*</LI>
-        <LI><type scope="com::sun::star::task">PasswordRequest</type></LI>
-        <LI><type scope="com::sun::star::java">WrongJavaVersionException</type>*</LI>
-        <LI><type scope="com::sun::star::task">DocumentMacroConfirmationRequest</type></LI>
+        <LI>com::sun::star::ucb::AuthenticationRequest</LI>
+        <LI>com::sun::star::ucb::CertificateValidationRequest</LI>
+        <LI>com::sun::star::ucb::HandleCookiesRequest</LI>
+        <LI>com::sun::star::ucb::InteractiveAugmentedIOException*</LI>
+        <LI>com::sun::star::ucb::InteractiveFileIOException*</LI>
+        <LI>com::sun::star::ucb::InteractiveIOException*</LI>
+        <LI>com::sun::star::ucb::InteractiveNetworkConnectException*</LI>
+        <LI>com::sun::star::ucb::InteractiveNetworkException*</LI>
+        <LI>com::sun::star::ucb::InteractiveNetworkGeneralException*</LI>
+        <LI>com::sun::star::ucb::InteractiveNetworkOffLineException*</LI>
+        <LI>com::sun::star::ucb::InteractiveNetworkReadException*</LI>
+        <LI>com::sun::star::ucb::InteractiveNetworkResolveNameException*</LI>
+        <LI>com::sun::star::ucb::InteractiveNetworkWriteException*</LI>
+        <LI>com::sun::star::ucb::InteractiveWrongMediumException*</LI>
+        <LI>com::sun::star::task::PasswordRequest</LI>
+        <LI>com::sun::star::java::WrongJavaVersionException*</LI>
+        <LI>com::sun::star::task::DocumentMacroConfirmationRequest</LI>
     </UL>
     The requests marked with an asterisk are only handled if (a) their
     continuations match certain restrictions (see below), and (b) the
@@ -63,10 +63,10 @@ module com { module sun { module star { module task {
 
     <P>The continuation restrictions are as follows:  Let <VAR>C</VAR> be the
     subset of the provided continuations that are of type
-    <type scope="com::sun::star::task">XInteractionApprove</type>,
-    <type scope="com::sun::star::task">XInteractionDisapprove</type>,
-    <type scope="com::sun::star::task">XInteractionRetry</type>, or
-    <type scope="com::sun::star::task">XInteractionAbort</type> (or of a
+    com::sun::star::task::XInteractionApprove,
+    com::sun::star::task::XInteractionDisapprove,
+    com::sun::star::task::XInteractionRetry, or
+    com::sun::star::task::XInteractionAbort (or of a
     derived type).  All other continuations are ignored for these requests.
     The request is only handled if the set <VAR>C</VAR> is any of the
     following:
@@ -80,12 +80,12 @@ module com { module sun { module star { module task {
     </UL></P>
 
     <P>An
-    <type scope="com::sun::star::ucb">InteractiveAugmentedIOException</type>
+    com::sun::star::ucb::InteractiveAugmentedIOException
     carries with it a sequence of arguments, which should be
-    <type scope="com::sun::star::beans">PropertyValue</type>s.  The following
+    com::sun::star::beans::PropertyValues.  The following
     details which properties are interpreted by the interaction handler,
     depending on the request's
-    <type scope="com::sun::star::ucb">IOErrorCode</type>:
+    com::sun::star::ucb::IOErrorCode:
     <DL>
         <DT><code>"Uri"</code></DT>
         <DD>All error codes except

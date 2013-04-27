@@ -129,10 +129,10 @@ service DataPointProperties
     [property] ::com::sun::star::drawing::LineDash    BorderDash;
 
     /** The name of a dash that can be found in the
-        <type scope="com::sun::star::container">XNameContainer</type>
+        com::sun::star::container::XNameContainer
         "com.sun.star.drawing.LineDashTable", that can be created via
         the
-        <type scope="com::sun::star::uno">XMultiServiceFactory</type>
+        com::sun::star::uno::XMultiServiceFactory
         of the ChartDocument.
      */
     [optional, property] string                       BorderDashName;
@@ -159,10 +159,10 @@ service DataPointProperties
     [property] ::com::sun::star::drawing::LineDash    LineDash;
 
     /** The name of a dash that can be found in the
-        <type scope="com::sun::star::container">XNameContainer</type>
+        com::sun::star::container::XNameContainer
         "com.sun.star.drawing.LineDashTable", that can be created via
         the
-        <type scope="com::sun::star::uno">XMultiServiceFactory</type>
+        com::sun::star::uno::XMultiServiceFactory
         of the ChartDocument.
      */
     [optional, property] string                       LineDashName;
@@ -280,7 +280,7 @@ service DataPointProperties
     /** If void, no error bars are shown for the data point in
         x-direction.
 
-        <p>The <type scope="com::sun::star::beans">XPropertySet</type>
+        <p>The com::sun::star::beans::XPropertySet
         must support the service ErrorBar.</p>
      */
     [optional, maybevoid, property] com::sun::star::beans::XPropertySet      ErrorBarX;
@@ -288,7 +288,7 @@ service DataPointProperties
     /** If void, no error bars are shown for the data point in
         y-direction.
 
-        <p>The <type scope="com::sun::star::beans">XPropertySet</type>
+        <p>The com::sun::star::beans::XPropertySet
         must support the service ErrorBar.</p>
      */
     [optional, maybevoid, property] com::sun::star::beans::XPropertySet      ErrorBarY;

@@ -47,7 +47,7 @@ published service GetExpression
      */
     [property]boolean IsShowFormula;
     /** determines the type of the variable as described in
-        <type scope="com::sun::star::text">SetVariableType</type>
+        com::sun::star::text::SetVariableType
      */
     [property]short SubType;
     /** contains the numerical value of the field.

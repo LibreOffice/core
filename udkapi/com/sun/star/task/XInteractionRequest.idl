@@ -34,13 +34,13 @@ published interface XInteractionRequest: com::sun::star::uno::XInterface
     /** Get information about the request itself.
 
         @returns
-        an <type scope="com::sun::star::uno">Exception</type>, wrapped as an
+        an com::sun::star::uno::Exception, wrapped as an
         <atom>any</atom>.
      */
     any getRequest();
 
     /** Get the set of
-        <type scope="com::sun::star::task">XInteractionContinuation</type>s
+        com::sun::star::task::XInteractionContinuations
         the client supports for this request.
      */
     sequence<com::sun::star::task::XInteractionContinuation> getContinuations();

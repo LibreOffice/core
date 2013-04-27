@@ -44,7 +44,7 @@ enum SymbolStyle
     STANDARD,
 
     /** uses the symbol given in the
-        <type scope="com::sun::star::drawing">PolyPolygonBezierCoords</type>
+        com::sun::star::drawing::PolyPolygonBezierCoords
         given in <member>Symbol::PolygonCoords</member>.
      */
     POLYGON,

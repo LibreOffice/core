@@ -88,7 +88,7 @@ published service DataAccessDescriptor
 
     /** is a connection to use.
 
-        <p>This object is guaranteed to be a <type scope="com::sun::star::sdbc">Connection</type>, but usually
+        <p>This object is guaranteed to be a com::sun::star::sdbc::Connection, but usually
         it will be a Connection from the module com::sun::star::sdb.<br/>
         Especially in the case where no <member>DataSourceName</member> is given, but
         <member>CommandType</member> is <member>CommandType::QUERY</member>, the ActiveConnection needs
@@ -180,13 +180,13 @@ published service DataAccessDescriptor
         has access to an already existent result set, it can pass it along for reusage. This is encouraged
         to increase performance.</p>
 
-        <p>The object will at least support the <type scope="com::sun::star::sdbc">ResultSet</type> service.</p>
+        <p>The object will at least support the com::sun::star::sdbc::ResultSet service.</p>
 
-        <p>Note that any superservices of <type scope="com::sun::star::sdbc">ResultSet</type>
+        <p>Note that any superservices of com::sun::star::sdbc::ResultSet
         are also allowed. Especially, this member can denote an instance of the
-        <type scope="com::sun::star::sdb">RowSet</type>, or an instance obtained
+        com::sun::star::sdb::RowSet, or an instance obtained
         by calling <member scope="com::sun::star::sdb">XResultSetAccess::createResultSet</member>
-        on such a <type scope="com::sun::star::sdb">RowSet</type>. This becomes important in
+        on such a com::sun::star::sdb::RowSet. This becomes important in
         conjunction with the <member>Selection</member> property.</p>
 
         @see com::sun::star::sdb::XResultSetAccess
@@ -207,7 +207,7 @@ published service DataAccessDescriptor
         <member>BookmarkSelection</member> becomes mandatory.</p>
 
         <p>If the elements specify bookmarks, and a <member>ResultSet</member> has been specified, then
-        this result set is required to support the <type scope="com::sun::star::sdbcx">XRowLocate</type> interface.</p>
+        this result set is required to support the com::sun::star::sdbcx::XRowLocate interface.</p>
     */
     [optional, property] sequence< any > Selection;
 
@@ -240,7 +240,7 @@ published service DataAccessDescriptor
         used to describe a column object can pass this object directly, instead of specifying it only implicitly
         with the <member>ColumnName</member> property.</p>
 
-        <p>The object will at least support the <type scope="com::sun::star::sdbcx">Column</type> service, but more
+        <p>The object will at least support the com::sun::star::sdbcx::Column service, but more
         often it will even be a Column from the com::sun::star::sdb module.</p>
     */
     [optional, property] com::sun::star::beans::XPropertySet Column;

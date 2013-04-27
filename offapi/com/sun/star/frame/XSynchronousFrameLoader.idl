@@ -40,7 +40,7 @@ published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
 
         @param Descriptor
             describes the resource which should be loaded
-            It use a <type scope="com::sun::star::document">MediaDescriptor</type> for that.
+            It use a com::sun::star::document::MediaDescriptor for that.
 
         @param Frame
             the target frame which should contain the new loaded component

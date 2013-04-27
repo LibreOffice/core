@@ -29,15 +29,15 @@ module com { module sun { module star { module linguistic2 {
 /** Offers information about which languages are supported by the object.
 
     <P>This interface has to be implemented by
-    <type scope="com::sun::star::linguistic2">SpellChecker</type>,
-    <type scope="com::sun::star::linguistic2">Hyphenator</type> and
-    <type scope="com::sun::star::linguistic2">Thesaurus</type>
+    com::sun::star::linguistic2::SpellChecker,
+    com::sun::star::linguistic2::Hyphenator and
+    com::sun::star::linguistic2::Thesaurus
     implementations in order to be queried for the languages they
     can use.
     </P>
 
-    @see    <type scope="com::sun::star::lang">Locale</type>
-    @see    <type scope="com::sun::star::uno">XInterface</type>
+    @see    com::sun::star::lang::Locale
+    @see    com::sun::star::uno::XInterface
 */
 published interface XSupportedLocales : com::sun::star::uno::XInterface
 {

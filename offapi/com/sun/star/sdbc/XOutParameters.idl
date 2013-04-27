@@ -54,7 +54,7 @@ published interface XOutParameters: com::sun::star::uno::XInterface
         call
         <member scope="com::sun::star::sdbc">XOutParameters::registerOutParameter()</member>
         to register the type from
-        <type scope="com::sun::star::sdbc">DataType</type>
+        com::sun::star::sdbc::DataType
         for each OUT parameter.
         <br/>
         For a user-named parameter the fully-qualified SQL type name of the

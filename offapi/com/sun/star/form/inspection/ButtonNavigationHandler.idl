@@ -26,14 +26,14 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements a property handler for use with an <type scope="com::sun::star::inspection">ObjectInspector</type>
+/** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
     which is able to enhance the <member scope="com::sun::star::form::component">CommandButton::ButtonType</member>
     and <member scope="com::sun::star::form::component">CommandButton::TargetURL</member> properties of a
-    <type scope="com::sun::star::form::component">CommandButton</type>.
+    com::sun::star::form::component::CommandButton.
 
     <p>For this, the two properties are superseded by new versions, where as button type, additional
     possible values are added for navigating the parent form of the button. For instance, in an
-    <type scope="com::sun::star::inspection">ObjectInspector</type> using this handler, the user will be able
+    com::sun::star::inspection::ObjectInspector using this handler, the user will be able
     to choose a button type saying "move to the next record", which, when chosen, well, moves the parent
     database form of the button to the next record.</p>
 

@@ -59,7 +59,7 @@ published interface XSystemDependentWindowPeer: com::sun::star::uno::XInterface
 
         @param SystemType
         one constant out of the constant group
-        <type scope="com::sun::star::lang">SystemDependent</type>.
+        com::sun::star::lang::SystemDependent.
      */
     any getWindowHandle( [in] sequence< byte > ProcessId, [in] short SystemType );
 

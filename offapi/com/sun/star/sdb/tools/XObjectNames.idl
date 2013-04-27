@@ -40,14 +40,14 @@ module com {  module sun {  module star {  module sdb { module tools {
     unique. Using this interface, you can easily ensure this uniqueness.</p>
 
     <p>All of the functionality present in this interface depends on a connection,
-    thus it entry point for obtaining it is a <type scope="com::sun::star::sdb">Connection</type>
+    thus it entry point for obtaining it is a com::sun::star::sdb::Connection
     service.</p>
 
     <p>The component itself does not have life-time control mechanisms, i.e. you
     cannot explicitly dispose it (<member scope="com::sun::star::lang">XComponent::dispose</member>),
     and you cannot be notified when it dies.<br/>
     However, if your try to access any of its methods or attributes, after the
-    connection which was used to create it was closed, a <type scope="com::sun::star::lang">DisposedException</type>
+    connection which was used to create it was closed, a com::sun::star::lang::DisposedException
     will be thrown.</p>
 
     @see XConnectionTools
@@ -71,7 +71,7 @@ interface XObjectNames
         you are actually creating the table respectively query.</p>
 
         @param CommandType
-            specifies the <type scope="com::sun::star::sdb">CommandType</type> of the object for which
+            specifies the com::sun::star::sdb::CommandType of the object for which
             a unique name is to be generated. Must be either <member scope="com::sun::star::sdb">CommandType::TABLE</member>
             or <member scope="com::sun::star::sdb">CommandType::QUERY</member>.
 
@@ -106,7 +106,7 @@ interface XObjectNames
         application driven by user interactions.</p>
 
         @param CommandType
-            specifies the <type scope="com::sun::star::sdb">CommandType</type> of the object whose
+            specifies the com::sun::star::sdb::CommandType of the object whose
             name should be checked. Must be either <member scope="com::sun::star::sdb">CommandType::TABLE</member>
             or <member scope="com::sun::star::sdb">CommandType::QUERY</member>.
 

@@ -47,7 +47,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
             <p>
             To create new documents, use "private:factory/scalc", "private:factory/swriter", etc.
             Other special protocols (e.g. "slot:", ".uno") are not allowed and raise
-            an <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+            an com::sun::star::lang::IllegalArgumentException.
             </p>
 
         @param TargetFrameName
@@ -101,11 +101,11 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
             the document is opened read-only. "FilterName" specifies the
             component type to create and the filter to use, for example:
             "Text - CSV". For more information see
-            <type scope="com::sun::star::document">MediaDescriptor</type>.
+            com::sun::star::document::MediaDescriptor.
             </p>
 
         @return
-            a <type scope="com::sun::star::lang">XComponent</type> for successfully loaded
+            a com::sun::star::lang::XComponent for successfully loaded
             documents or
             <br>
             <NULL/>if it failed
@@ -116,7 +116,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
             The real document service behind this interface can be one of follow three ones:
             <ul>
                 <li>
-                    <type scope="com::sun::star::awt">XWindow</type> for simple components<br/>
+                    com::sun::star::awt::XWindow for simple components<br/>
                     Should be used for viewable components only. It is not allowed to dispose
                     it after use directly, because the frame containing the component is its owner.
                     Because the frame object is not accessible through the interface too,
@@ -139,7 +139,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
                     Simply calling <method scope="com::sun::star::lang">XComponent::dispose</method> on this model may
                     cause problems, if some members of the "owner community" are currently
                     busy working on the model. These problems are handled by explicit closing
-                    negotiations through the interface <type scope="com::sun::star::util">XCloseable</type>.
+                    negotiations through the interface com::sun::star::util::XCloseable.
                     Direct dispose of the model is allowed only, if this special interface doesn't exist.
                 </li>
             </ul>

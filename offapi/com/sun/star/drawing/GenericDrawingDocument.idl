@@ -74,8 +74,8 @@ service GenericDrawingDocument
             <li>AppletShape</li>
         </ul>
 
-        <p>The following services are all <type scope="com::sun::star::text">TextField</type>
-        and can be inserted into text as <type scope="com::sun::star::text">TextContent</type>.
+        <p>The following services are all com::sun::star::text::TextField
+        and can be inserted into text as com::sun::star::text::TextContent.
 
         <ul>
             <li><member scope="com::sun::star::text">TextField::DateTime</member></li>
@@ -93,38 +93,38 @@ service GenericDrawingDocument
         and let you add new resources.
 
         <ul>
-            <li><type scope="com::sun::star::drawing">DashTable</type></li>
-            <li><type scope="com::sun::star::drawing">GradientTable</type></li>
-            <li><type scope="com::sun::star::drawing">HatchTable</type></li>
-            <li><type scope="com::sun::star::drawing">BitmapTable</type></li>
-            <li><type scope="com::sun::star::drawing">TransparencyGradientTable</type></li>
-            <li><type scope="com::sun::star::drawing">MarkerTable</type></li>
+            <li>com::sun::star::drawing::DashTable</li>
+            <li>com::sun::star::drawing::GradientTable</li>
+            <li>com::sun::star::drawing::HatchTable</li>
+            <li>com::sun::star::drawing::BitmapTable</li>
+            <li>com::sun::star::drawing::TransparencyGradientTable</li>
+            <li>com::sun::star::drawing::MarkerTable</li>
         </ul>
 
         <p>The following service can be set at the <code>Numbering</code> property
-        inside a <type scope="com::sun::star::style">ParagraphProperties</type>
+        inside a com::sun::star::style::ParagraphProperties
 
         <ul>
-            <li><type scope="com::sun::star::text">NumberingRules</type></li>
+            <li>com::sun::star::text::NumberingRules</li>
         </ul>
 
-        <p>The following services can be used for a <type scope="com::sun::star::image">ImageMap</type>
+        <p>The following services can be used for a com::sun::star::image::ImageMap
         inside the document.
 
-        <br>A <type scope="com::sun::star::image">ImageMap</type> can be obtained from a
+        <br>A com::sun::star::image::ImageMap can be obtained from a
         GraphicObjectShape
 
         <ul>
-            <li><type scope="com::sun::star::image">ImageMapRectangleObject</type></li>
-            <li><type scope="com::sun::star::image">ImageMapCircleObject</type></li>
-            <li><type scope="com::sun::star::image">ImageMapPolygonObject</type></li>
+            <li>com::sun::star::image::ImageMapRectangleObject</li>
+            <li>com::sun::star::image::ImageMapCircleObject</li>
+            <li>com::sun::star::image::ImageMapPolygonObject</li>
         </ul>
 
         <p>The following services lets you access the drawing property defaults
         of a document.
 
         <ul>
-            <li><type scope="com::sun::star::drawing">Defaults</type></li>
+            <li>com::sun::star::drawing::Defaults</li>
         </ul>
     */
     interface com::sun::star::lang::XMultiServiceFactory;

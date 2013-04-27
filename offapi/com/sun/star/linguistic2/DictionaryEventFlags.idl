@@ -28,7 +28,7 @@ module com { module sun { module star { module linguistic2 {
     <P>These flags represent the type of events that a dictionary
     may broadcast.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">DictionaryEvent</type>
+    @see    com::sun::star::linguistic2::DictionaryEvent
 */
 published constants DictionaryEventFlags
 {

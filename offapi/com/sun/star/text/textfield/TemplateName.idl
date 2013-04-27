@@ -33,7 +33,7 @@ published service TemplateName
 {
     service com::sun::star::text::TextField;
     /** determines the format the template file name is displayed as specified in
-        <type scope="com::sun::star::text">FilenameDisplayFormat</type>.
+        com::sun::star::text::FilenameDisplayFormat.
       */
     [property]short FileFormat;
 

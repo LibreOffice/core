@@ -39,7 +39,7 @@ published interface XAllListenerAdapterService: com::sun::star::uno::XInterface
         listener.
 
         To get the correct listener interface the returned
-        <type scope="com::sun::star::uno">XInterface</type> has to
+        com::sun::star::uno::XInterface has to
         be queried for it.
      */
     com::sun::star::uno::XInterface createAllListerAdapter( [in] type xListenerType,

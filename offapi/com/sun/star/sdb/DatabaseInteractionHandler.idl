@@ -28,24 +28,24 @@ module com {  module sun {  module star {  module sdb {
 /** describes a service which is able to handle database-related interactions.
 
     <p>Usually, you will not instantiate this service directly. Instead, you'll instantiate a generic
-    <type scope="com::sun::star::task">InteractionHandler</type> service, and pass it your request. Based on
+    com::sun::star::task::InteractionHandler service, and pass it your request. Based on
     configuration data, this implementation will decide where to forward the request to.</p>
 
     <p>By default, the <code>DatabaseInteractionHandler</code> feels responsible (as per configuration) for the
     following interaction types:
     <ul>
         <li><b>database related errors</b><br/>
-            The general structure to transport such errors is the <type scope="com::sun::star::sdbc">SQLException</type>,
+            The general structure to transport such errors is the com::sun::star::sdbc::SQLException,
             and if your interaction request supplies such a <code>SQLException</code> (or an instance of any derived class),
             the handler will display a generic error dialog, which is able to travel the object chain which may be contained
             in the exception.
         </li>
         <li><b>parameter requests</b><br/>
-            If your interaction request supplies an <type scope="com::sun::star::sdb">ParametersRequest</type>,
+            If your interaction request supplies an com::sun::star::sdb::ParametersRequest,
             the handler will open a standard dialog asking the user to fill in parameter values.
             <br/>
             In the case you want to use this feature of the handler, you should supply a special continuation
-            (<type scope="com::sun::star::sdb">XInteractionSupplyParameters</type>) as well, so the
+            (com::sun::star::sdb::XInteractionSupplyParameters) as well, so the
             handler can return the entered information.
         </li>
     </ul>

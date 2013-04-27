@@ -84,7 +84,7 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
     XContent mapContent([in] XContent Source);
 
     /** Map the content identifiers (or related data) contained in the columns
-        of a <type scope="com::sun::star::sdbc">XRow</type>.
+        of a com::sun::star::sdbc::XRow.
 
         @param Value  On input, a sequence of anys corresponding to the columns
         of the XRow (the first column goes into the zeroth position of the

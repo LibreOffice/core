@@ -39,7 +39,7 @@ interface XUnitConversion: com::sun::star::uno::XInterface
         @param Point
             A given Point in a well known type
         @param TargetUnit
-            A type from <type scope="com::sun::star::util">MeasureUnit</type> in which the Point will convert to.
+            A type from com::sun::star::util::MeasureUnit in which the Point will convert to.
 
         @return
             Returns a new Point in the TargetUnit type format.
@@ -52,7 +52,7 @@ interface XUnitConversion: com::sun::star::uno::XInterface
         @param Point
             A given Point in the SourceUnit type
         @param SourceUnit
-            The type from <type scope="com::sun::star::util">MeasureUnit</type> of the Point.
+            The type from com::sun::star::util::MeasureUnit of the Point.
 
         @return
             Return a new Point in Pixel type format.
@@ -66,7 +66,7 @@ interface XUnitConversion: com::sun::star::uno::XInterface
         @param aSize
             A given Size in a well known type
         @param TargetUnit
-            A type from <type scope="com::sun::star::util">MeasureUnit</type> in which the Size will convert to.
+            A type from com::sun::star::util::MeasureUnit in which the Size will convert to.
 
         @return
             Returns a new Size in the TargetUnit type format.
@@ -79,7 +79,7 @@ interface XUnitConversion: com::sun::star::uno::XInterface
         @param Size
             A given Size in a well known type
         @param TargetUnit
-            The type from <type scope="com::sun::star::util">MeasureUnit</type> of the Size.
+            The type from com::sun::star::util::MeasureUnit of the Size.
 
         @return
             Returns a new Size in the TargetUnit type format.

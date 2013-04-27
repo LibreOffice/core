@@ -34,7 +34,7 @@
 /** this service is supported from all shapes inside a PresentationDocument.
 
 
-    This usually enhances objects of type <type scope="com::sun::star::drawing">Shape</type> with
+    This usually enhances objects of type com::sun::star::drawing::Shape with
     presentation properties.
 */
 published service Shape

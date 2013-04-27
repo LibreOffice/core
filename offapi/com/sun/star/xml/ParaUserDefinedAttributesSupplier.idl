@@ -40,7 +40,7 @@ published service ParaUserDefinedAttributesSupplier
         attributes can be written back without loss.</p>
 
         <p>The
-        <type scope="com::sun::star::container">XNameContainer</type>
+        com::sun::star::container::XNameContainer
         supports the service AttributeContainer.</p>
 
      */

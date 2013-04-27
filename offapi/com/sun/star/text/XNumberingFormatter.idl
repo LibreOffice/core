@@ -28,8 +28,8 @@ module com { module sun { module star { module text {
 /**
     supports the formatting of numberings
     in various language environments.
-    @see <type scope="com::sun::star::text">NumberingRules</type>
-    @see <type scope="com::sun::star::text">NumberingLevel</type>
+    @see com::sun::star::text::NumberingRules
+    @see com::sun::star::text::NumberingLevel
     @version    1.0
     @author     <a href="mailto:oliver.specht@germany.sun.com">Oliver Specht</a>
 */
@@ -37,8 +37,8 @@ published interface XNumberingFormatter : com::sun::star::uno::XInterface
 {
 /** @returns
     the formatted numbering string according to the given
-    <type scope="com::sun::star::text">NumberingLevel</type>
-    and the given <type scope="com::sun::star::lang">Locale</type>.
+    com::sun::star::text::NumberingLevel
+    and the given com::sun::star::lang::Locale.
 */
     string makeNumberingString(
                 [in]sequence <com::sun::star::beans::PropertyValue> aProperties,

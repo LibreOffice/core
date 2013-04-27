@@ -50,7 +50,7 @@ service PopupMenuController
 
         <p>
         A pop-up menu controller implementation gets initialized with a
-        <type scope="com::sun::star::awt">XPopupMenu</type> object. This assures
+        com::sun::star::awt::XPopupMenu object. This assures
         that a pop-up menu controller can be implemented with any UNO based
         language.
         </p>
@@ -65,9 +65,9 @@ service PopupMenuController
         initialize every controller correctly.<br/>
 
         A pop-up menu controller needs at least two additional arguments
-        provided as <type scope="com::sun::star::beans">PropertyValue</type>:
+        provided as com::sun::star::beans::PropertyValue:
         <ul>
-            <li><b>Frame</b><br>specifies the <type scope="com::sun::star::frame">XFrame</type>
+            <li><b>Frame</b><br>specifies the com::sun::star::frame::XFrame
                    instance to which the pop-up menu controller belongs to.</li>
             <li><b>CommandURL</b><br>specifies which pop-up menu controller should be created.</li>
         </ul>

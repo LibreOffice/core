@@ -58,7 +58,7 @@ interface XPackageManagerFactory
         <p>
         Context strings other than <code>"user"</code>, <code>"shared"</code>
         <!-- or <code>vnd.sun.star.tdoc</code --> will last in an
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+        com::sun::star::lang::IllegalArgumentException.
         </p>
 
         @param context

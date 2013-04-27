@@ -34,7 +34,7 @@ published service ParagraphCount
     service  com::sun::star::text::TextField;
 
     /** specifies the type of the numbering as
-        <type scope="com::sun::star::style">NumberingType</type>
+        com::sun::star::style::NumberingType
      */
     [property]short NumberingType;
 };

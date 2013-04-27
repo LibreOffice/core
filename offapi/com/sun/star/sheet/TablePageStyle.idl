@@ -30,7 +30,7 @@
 /** represents a page style for a spreadsheet.
 
     <p>This service extends the service
-    <type scope="com::sun::star::style">PageStyle</type> with spreadsheet
+    com::sun::star::style::PageStyle with spreadsheet
     specific properties.</p>
  */
 published service TablePageStyle

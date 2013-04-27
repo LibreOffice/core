@@ -60,8 +60,8 @@ published interface XImplementationLoader: com::sun::star::uno::XInterface
 
         @return returns a factory interface, which allows to create an instance of
                 the concrete implementation. In general, the object supports a
-                <type scope="com::sun::star::lang">XSingleComponentFactory</type>
-                and the <type scope="com::sun::star::lang">XServiceInfo</type> interface. The
+                com::sun::star::lang::XSingleComponentFactory
+                and the com::sun::star::lang::XServiceInfo interface. The
                 XServiceInfo interface informs about the capabilities of the
                 service implementation, not the factory itself.
      */

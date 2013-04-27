@@ -27,9 +27,9 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     <p>
     If a Automation object is converted into a UNO object by a scripting
     bridge, such as
-    <type scope="com::sun::star::bridge::oleautomation">BridgeSupplier</type>,
+    com::sun::star::bridge::oleautomation::BridgeSupplier,
     then it is accessed through the
-    <type scope="com::sun::star::script">XInvocation</type> interface.
+    com::sun::star::script::XInvocation interface.
     The methods
     <member scope="com::sun::star::script">XInvocation::setValue</member>
     and

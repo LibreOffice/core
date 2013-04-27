@@ -45,7 +45,7 @@ module data
     transfer a complete sequence of values.
 
     <p>With the optional
-    <type scope="com::sun::star::container">XIndexReplace</type> it is
+    com::sun::star::container::XIndexReplace it is
     possible to modify single elements, if the corresponding
     DataProvider supports modification of its values.</p>
   */
@@ -108,11 +108,11 @@ service DataSequence
         be formatted with.
 
         <p>The key identifies a number format in an
-        <type scope="com::sun::star::util">XNumberFormats</type>
+        com::sun::star::util::XNumberFormats
         object.  This object can be retrieved by the
-        <type scope="com::sun::star::util">XNumberFormatsSupplier</type>
+        com::sun::star::util::XNumberFormatsSupplier
         interface supported by
-        <type scope="com::sun::star::chart">ChartDocument</type>.</p>
+        com::sun::star::chart::ChartDocument.</p>
 
         @todo use proper number format instead of a transient key.
      */

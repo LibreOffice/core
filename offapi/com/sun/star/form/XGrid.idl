@@ -31,9 +31,9 @@
 
     <p>Note that a grid control does not allow free control over the current row:
     In such a control, every line represents a row of data of the underlying
-    <type scope="com::sun::star::form::component">DataForm</type>. Thus, the <em>current
+    com::sun::star::form::component::DataForm. Thus, the <em>current
     row</em> of the grid control always equals the current row of the
-    <type scope="com::sun::star::form::component">DataForm</type>, and can be affected only
+    com::sun::star::form::component::DataForm, and can be affected only
     by changing the latter.<br/>
     The current column of a grid control, whoever, can be freely controlled.</p>
 

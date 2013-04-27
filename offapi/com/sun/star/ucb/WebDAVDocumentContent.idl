@@ -102,10 +102,10 @@ published service WebDAVDocumentContent
         boolean IsFolder ( read-only, always false )
         </li>
         <li>
-        <type scope="com::sun::star::util">DateTime</type> DateCreated ( read-only )
+        com::sun::star::util::DateTime DateCreated ( read-only )
         </li>
         <li>
-        <type scope="com::sun::star::util">DateTime</type> DateModified ( read-only )
+        com::sun::star::util::DateTime DateModified ( read-only )
         </li>
         <li>
         string MediaType ( read-only, the MIME type - as delivered by the server )

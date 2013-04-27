@@ -50,14 +50,14 @@ published service RelationDesign
 
         <p>Parameters (passed to the method
         <member scope="com::sun::star::lang">XInitialization::initialize</member>)
-        have to be instances of <type scope="com::sun::star::beans">PropertyValue</type>, where the
+        have to be instances of com::sun::star::beans::PropertyValue, where the
         <member scope="com::sun::star::beans">PropertyValue::Name</member> member specifies what the parameter controls,
         with the <member scope="com::sun::star::beans">PropertyValue::Value</member> member containing the value
         to be used.<br>
         Recognized parameters are:
         <ul>
             <li><b>Frame</b><br>
-            has to be an <type scope="com::sun::star::frame">XFrame</type> interface specifying the frame to plug the
+            has to be an com::sun::star::frame::XFrame interface specifying the frame to plug the
             RelationDesign component into.
             </li>
             <li><b>DataSourceName</b><br>

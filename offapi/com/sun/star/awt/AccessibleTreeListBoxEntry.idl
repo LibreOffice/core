@@ -55,10 +55,10 @@ service AccessibleTreeListBoxEntry
            >AccessibleRole::LABEL</const>.</li>
        <li>Name: The name of a tree list box entry is it's text.</li>
        <li>Description: The description of a tree list box entry is empty.</li>
-       <li>Children: There can exist children of type <type scope="com::sun::star::awt">AccessibleTreeListBoxEntry</type>.
+       <li>Children: There can exist children of type com::sun::star::awt::AccessibleTreeListBoxEntry.
         </li>
-       <li>Parent: The parent is either the <type scope="com::sun::star::awt">AccessibleTreeListBox</type>
-            or an <type scope="com::sun::star::awt">AccessibleTreeListBoxEntry</type> that contains the tree list box entry.</li>
+       <li>Parent: The parent is either the com::sun::star::awt::AccessibleTreeListBox
+            or an com::sun::star::awt::AccessibleTreeListBoxEntry that contains the tree list box entry.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>
@@ -66,7 +66,7 @@ service AccessibleTreeListBoxEntry
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
                and subsequent calls to this object result in
-               <type scope="com::sun::star::lang">DisposedException</type>
+               com::sun::star::lang::DisposedException
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::ENABLED</const> is set

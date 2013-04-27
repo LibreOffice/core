@@ -33,9 +33,9 @@ module com { module sun { module star { module linguistic2 {
     It consists of an event type and may supply an affected
     dictionary entry.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
-    @see    <type scope="com::sun::star::linguistic2">XDictionaryEventListener</type>
-    @see    <type scope="com::sun::star::lang">EventObject</type>
+    @see    com::sun::star::linguistic2::XDictionary
+    @see    com::sun::star::linguistic2::XDictionaryEventListener
+    @see    com::sun::star::lang::EventObject
 */
 published struct DictionaryEvent : com::sun::star::lang::EventObject
 {
@@ -44,7 +44,7 @@ published struct DictionaryEvent : com::sun::star::lang::EventObject
          <p>This must be the value of a single flag. No combinations are
          allowed.</p>
 
-        @see    <type scope="com::sun::star::linguistic2">DictionaryEventFlags</type>
+        @see    com::sun::star::linguistic2::DictionaryEventFlags
     */
     short nEvent;
 
@@ -53,7 +53,7 @@ published struct DictionaryEvent : com::sun::star::lang::EventObject
          <p>It must be set if an entry was
          added or deleted, otherwise it should be empty.</p>
 
-        @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
+        @see    com::sun::star::linguistic2::XDictionaryEntry
     */
     com::sun::star::linguistic2::XDictionaryEntry xDictionaryEntry;
 

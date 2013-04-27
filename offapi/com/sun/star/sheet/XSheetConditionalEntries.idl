@@ -51,7 +51,7 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
         <const>ConditionOperator::BETWEEN</const> or
         <const>ConditionOperator::NOT_BETWEEN</const> operations).</dd>
 
-        <dt><type scope="com::sun::star::table">CellAddress</type>
+        <dt>com::sun::star::table::CellAddress
         SourcePosition</dt>
         <dd>contains the base address for relative cell references in formulas.
         </dd>

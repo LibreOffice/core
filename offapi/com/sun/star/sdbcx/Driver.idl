@@ -29,7 +29,7 @@
 
 
 /** extends the service
-    <type scope="com::sun::star::sdbc">Driver</type>
+    com::sun::star::sdbc::Driver
     by beans for data definition.
 <p>
     This service is optional for each driver. Its purpose is to define

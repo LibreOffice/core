@@ -23,7 +23,7 @@
 
 module com {  module sun {  module star {  module media {
 
-/** a <type scope="com::sun::star::media">XPlayer</type> factory.
+/** a com::sun::star::media::XPlayer factory.
     This helps creating new players.
  */
 service Manager : XManager;

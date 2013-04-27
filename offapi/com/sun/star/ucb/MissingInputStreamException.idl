@@ -26,7 +26,7 @@
 module com { module sun { module star { module ucb {
 
 /** This exception is used to indicate that there is an
-    <type scope="com::sun::star::io">XInputStream</type> missing.
+    com::sun::star::io::XInputStream missing.
 
     <p>For example, the command "insert" may fail, if the implementation
     expects that an input stream is supplied with the given

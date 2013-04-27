@@ -76,7 +76,7 @@ interface XTable
         @param aRange
             the cell range for the cursor.
 
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             if the given reference is empty or not a range from this table.
 
         @see com::sun::star::table::CellCursor

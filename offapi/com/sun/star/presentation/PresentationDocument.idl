@@ -36,7 +36,7 @@ service PresentationDocument
     /** This is a basic service for a drawing document.
 
         <p>The following services are available at the
-        <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+        com::sun::star::lang::XMultiServiceFactory
         only in a presentation application
 
         <ul>
@@ -54,9 +54,9 @@ service PresentationDocument
             <li>SlideNumberShape</li>
             <li>DateTimeShape</li>
             <li>DocumentSettings</li>
-            <li><type scope="textfield">Header</type></li>
-            <li><type scope="textfield">Footer</type></li>
-            <li><type scope="textfield">DateTime</type></li>
+            <li>textfield::Header</li>
+            <li>textfield::Footer</li>
+            <li>textfield::DateTime</li>
         </ul>
      */
     service com::sun::star::drawing::GenericDrawingDocument;

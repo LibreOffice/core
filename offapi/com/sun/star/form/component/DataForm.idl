@@ -56,12 +56,12 @@ published service DataForm
 
         <p>The insertion row is a virtual row which is used to insert new records. It is reached
         by calling <member scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</member>.
-        The <type scope="com::sun::star::sdb">RowSet</type> service specifies exactly which notifications
+        The com::sun::star::sdb::RowSet service specifies exactly which notifications
         happen in which order when calling <member scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</member>,
         and a DataForm implementation extends this with the following contract:
-        <ul><li>After all notifications as defined in the <type scope="com::sun::star::sdb">RowSet</type>
+        <ul><li>After all notifications as defined in the com::sun::star::sdb::RowSet
                 service have been sent, the DataForm resets itself, if all
-                <type scope="com::sun::star::form">XResetListeners</type> approve this.</li>
+                com::sun::star::form::XResetListeners approve this.</li>
             <li>After the reset happened, the <member scope="com::sun::star::sdb">RowSet::IsModified</member>
                 property is reset to <FALSE/>. This property might have been switched to <TRUE/> during listener
                 notifications, since listeners are allowed to change field values. Also, the
@@ -97,7 +97,7 @@ published service DataForm
     /** can be used for filling parameters.
 
         <p>You can add your component as
-        <type scope="com::sun::star::form">XDatabaseParameterListener</type>
+        com::sun::star::form::XDatabaseParameterListener
         to a form to get notified whenever the form needs parameter values to be filled in<br/>
         In a first approach, the form tries to fill any parameters from it's master-detail relation
         (if any). All values which can't be filled are then passed to all listeners, which can

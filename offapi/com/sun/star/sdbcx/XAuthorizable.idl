@@ -65,7 +65,7 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
         @param objName
             the name of the object
         @param objType
-            a value from the <type scope="com::sun::star::sdbcx">PrivilegeObject</type> constants group
+            a value from the com::sun::star::sdbcx::PrivilegeObject constants group
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
@@ -77,7 +77,7 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
         @param objName
             the name of the object
         @param objType
-            a value from the <type scope="com::sun::star::sdbcx">PrivilegeObject</type> constants group
+            a value from the com::sun::star::sdbcx::PrivilegeObject constants group
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */

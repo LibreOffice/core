@@ -20,7 +20,7 @@ module com { module sun { module star { module configuration {
    The default ConfigurationProvider.
 
    <p>This singleton somewhat arbitrarily makes available the
-   <type scope="com::sun::star::lang">XMultiServiceFactory</type> interface of
+   com::sun::star::lang::XMultiServiceFactory interface of
    the (old-style) DefaultProvider service, as it is the most
    frequently used one.  See the DefaultProvider service for
    details.</p>

@@ -103,7 +103,7 @@ published interface XStorable: com::sun::star::uno::XInterface
 
         @param lArguments
             optional parameters for saving
-            (see <type scope="com::sun::star::document">MediaDescriptor</type> for further details)
+            (see com::sun::star::document::MediaDescriptor for further details)
 
         @throws com::sun::star::io::IOException
             if an IO error occurred during save operation
@@ -133,7 +133,7 @@ published interface XStorable: com::sun::star::uno::XInterface
 
         @param lArguments
             optional parameters for saving
-            (see <type scope="com::sun::star::document">MediaDescriptor</type> for further details)
+            (see com::sun::star::document::MediaDescriptor for further details)
 
         @see XStorable::store
         @see XStorable::storeAsURL

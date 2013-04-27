@@ -26,8 +26,8 @@ module com { module sun { module star { module text {
 /** provides access to the numbering types that are supported by a component.
     <p>To be able to store unknown numbering types in a file format the numbering types
      correspond to an identifier.</p>
-    @see <type scope="com::sun::star::text">NumberingRules</type>
-    @see <type scope="com::sun::star::style">NumberingType</type>
+    @see com::sun::star::text::NumberingRules
+    @see com::sun::star::style::NumberingType
     @version    1.0
     @author     <a href="mailto:oliver.specht@germany.sun.com">Oliver Specht</a>
 */

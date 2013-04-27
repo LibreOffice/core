@@ -28,13 +28,13 @@ module com { module sun { module star { module document {
 
     <p>
     If during loading time the filter can't be detected and wasn't given at calling time,
-    a possible <type scope="com::sun::star::task">InteractionHandler</type> will be used.
+    a possible com::sun::star::task::InteractionHandler will be used.
     (it's a a part of used MediaDescriptor)
     Such "NoSuchFilterRequest" will be used then to start right interaction on that to
     get a decision which filter should be used for given URL. A possible continuation
     of type XInteractionFilterSelect will transport this decision back to
     generic filter detection and force using of it. Of course it's possible to abort
-    the loading process by use another continuation <type scope="com::sun::star::task">XInteractionAbort</type>.
+    the loading process by use another continuation com::sun::star::task::XInteractionAbort.
     </p>
 
     @see MediaDescriptor

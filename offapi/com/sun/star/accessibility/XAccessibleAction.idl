@@ -62,7 +62,7 @@ interface XAccessibleAction : ::com::sun::star::uno::XInterface
 
         @throws IndexOutOfBoundsException
             If no action with the given index exists then an
-            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type>
+            ::com::sun::star::lang::IndexOutOfBoundsException
             exception is thrown.
     */
     boolean doAccessibleAction ([in] long nIndex)
@@ -80,7 +80,7 @@ interface XAccessibleAction : ::com::sun::star::uno::XInterface
 
         @throws IndexOutOfBoundsException
             If the given index lies not in the valid range then an
-            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type>
+            ::com::sun::star::lang::IndexOutOfBoundsException
             exception is thrown.
     */
     string getAccessibleActionDescription ([in] long nIndex)

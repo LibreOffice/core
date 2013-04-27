@@ -39,9 +39,9 @@
 
     <p>The connection between a data-aware control model and a form whose data the
     control should display is made by parentship relations. The parent of a data-aware
-    control model (see <type scope="com::sun::star::container">XChild</type>, inherited
+    control model (see com::sun::star::container::XChild, inherited
     via the FormControlModel and FormComponent services) has
-    always to be a <type scope="com::sun::star::form::component">DataForm</type>.</p>
+    always to be a com::sun::star::form::component::DataForm.</p>
  */
 published service DataAwareControlModel
 {
@@ -69,18 +69,18 @@ published service DataAwareControlModel
 
         <p>In the context of a control model which is data-aware, the semantics of <em>default value</em>
         (see XReset) is as follows:<br/>
-        If (and only if) the control is valid bound to a column of it's <type scope="com::sun::star::form::component">DataForm</type>, and the form
+        If (and only if) the control is valid bound to a column of it's com::sun::star::form::component::DataForm, and the form
         is not positioned on a new record (see <member scope="com::sun::star::sdb">RowSet::IsNew</member>), then
         <member>XReset::reset</member> does not reset the model's value to it's default value, but uses the
         underlying column value.<br/>
         In all other cases, the model is reset to the default value as specified by the respective property.</p>
 
-        <p>For an example, have a look at the <type scope="com::sun::star::form::component">TextField</type>. It inherits
+        <p>For an example, have a look at the com::sun::star::form::component::TextField. It inherits
         the <member scope="com::sun::star::awt">UnoControlEditModel::Text</member> property from the underlying
         service, and additionally specifies the <member scope="com::sun::star::form::component">TextField::DefaultText</member>.
         </p>
 
-        <p>In the context of a <type scope="com::sun::star::form::component">DataForm</type>, controls are
+        <p>In the context of a com::sun::star::form::component::DataForm, controls are
         automatically reset when one of the following applies
         <ul><li>The form is reset by invoking it's XReset interface.</li>
             <li>The form moves to a new record.</li>
@@ -94,7 +94,7 @@ published service DataAwareControlModel
     /** specifies the name of the bound database field.
 
         <p>This property makes sense in the <em>context</em> of the control model only. Normally, a control model
-        is a child of a <type scope="com::sun::star::form::component">DataForm</type>, which is bound
+        is a child of a com::sun::star::form::component::DataForm, which is bound
         to a higher level object such as a table or query - more general, a result set.<br/>
         This member here describes the column of this result set which the control should act for.</p>
 
@@ -120,7 +120,7 @@ published service DataAwareControlModel
 
     /** references to the cursor field to which the control is bound.
         <p>Applies only if the form the control model belongs to is loaded and the control is valid bound.
-        The referenced field supports the <type scope="com::sun::star::sdb">Column</type> service.
+        The referenced field supports the com::sun::star::sdb::Column service.
         </p>
         @see DataAwareControlModel::DataField
      */
@@ -132,31 +132,31 @@ published service DataAwareControlModel
         property. <br/>
         A very common design method for forms is to group a data aware control with a label control,
         with the latter describing the content of the former. For instance, you may have a
-        <type scope="com::sun::star::form::component">TextField</type>, which is bound to the e-mail
+        com::sun::star::form::component::TextField, which is bound to the e-mail
         column of your data source. Then you will probably add a
-        <type scope="com::sun::star::form::component">FixedText</type> whose label is "E-Mail",
+        com::sun::star::form::component::FixedText whose label is "E-Mail",
         and associate it with the TextField by setting it as <member>LabelControl</member>.<br/>
         Now if you imagine a component offering data search in a form, this component will examine
-        the <member>LabelControl</member> property, find the <type scope="com::sun::star::form::component">FixedText</type>,
-        examine it's label, and use this label to refer to the <type scope="com::sun::star::form::component">TextField</type>.
+        the <member>LabelControl</member> property, find the com::sun::star::form::component::FixedText,
+        examine it's label, and use this label to refer to the com::sun::star::form::component::TextField.
         </p>
         <p>When setting the property, a number of constraints apply:
         <ul>
             <li>The object which is to be set has to support the following interfaces
-                <ul><li><type scope="com::sun::star::awt">XControlModel</type></li>
-                    <li><type scope="com::sun::star::lang">XServiceInfo</type></li>
-                    <li><type scope="com::sun::star::beans">XPropertySet</type></li>
-                    <li><type scope="com::sun::star::container">XChild</type></li>
+                <ul><li>com::sun::star::awt::XControlModel</li>
+                    <li>com::sun::star::lang::XServiceInfo</li>
+                    <li>com::sun::star::beans::XPropertySet</li>
+                    <li>com::sun::star::container::XChild</li>
                 </ul>
             </il>
             <li>It has to be a part of the same document as the model who's property is to be modified.</il>
             <li>Additionally, the support of a special service, indicating that the model is of the right type,
                 is required. Which kind of service is in the request depends on the type of the control model.<br/>
 
-                For instance, text fields (<type scope="com::sun::star::form::component">TextField</type>) can be
-                labeled by label controls only (<type scope="com::sun::star::form::component">FixedText</type>),
-                and radio buttons (<type scope="com::sun::star::form::component">RadioButton</type>) can be labeled
-                by group boxes (<type scope="com::sun::star::form::component">GroupBox</type>) only.
+                For instance, text fields (com::sun::star::form::component::TextField) can be
+                labeled by label controls only (com::sun::star::form::component::FixedText),
+                and radio buttons (com::sun::star::form::component::RadioButton) can be labeled
+                by group boxes (com::sun::star::form::component::GroupBox) only.
             </li>
         </ul>
         </p>

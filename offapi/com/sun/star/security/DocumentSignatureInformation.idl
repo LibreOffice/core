@@ -43,7 +43,7 @@ struct DocumentSignatureInformation
     boolean         SignatureIsValid;
     /* reflects the validity of the certificate.
        Contains a value from the constants of
-       <type scope="com::sun::star::security">CertificateValidity</type>.
+       com::sun::star::security::CertificateValidity.
      */
     long CertificateStatus;
     /* indicates what content of a document is signed.

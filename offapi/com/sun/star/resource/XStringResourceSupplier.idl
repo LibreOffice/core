@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module resource {
 
 /**
     Provides access to a string resource represented by a
-    <type scope="com::sun::star::resource">XStringResourceResolver</type>.
+    com::sun::star::resource::XStringResourceResolver.
  */
 interface XStringResourceSupplier: com::sun::star::uno::XInterface
 {
@@ -37,12 +37,12 @@ interface XStringResourceSupplier: com::sun::star::uno::XInterface
     /**
         Provides access to a string resource.
         Depending on the context the returned object may also support
-        <type scope="com::sun::star::resource">XStringResourceManager</type> or
-        <type scope="com::sun::star::resource">XStringResourcePersistence</type> or
-        <type scope="com::sun::star::resource">XStringResourceWithStorage</type>
+        com::sun::star::resource::XStringResourceManager or
+        com::sun::star::resource::XStringResourcePersistence or
+        com::sun::star::resource::XStringResourceWithStorage
 
         @returns an interface
-        <type scope="com::sun::star::resource">XStringResourceResolver</type>
+        com::sun::star::resource::XStringResourceResolver
      */
     com::sun::star::resource::XStringResourceResolver getStringResource();
 };

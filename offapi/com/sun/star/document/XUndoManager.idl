@@ -76,7 +76,7 @@ interface XUndoManager
     /** allows accessing the component, usually a document, which the undo manager works for.
 
         <p><member scope="com::sun::star::container">XChild::setParent</member> is not supported, and will throw
-        an <type scope="com::sun::star::lang">NoSupportException</type>.</p>
+        an com::sun::star::lang::NoSupportException.</p>
     */
     interface ::com::sun::star::container::XChild;
 
@@ -271,7 +271,7 @@ interface XUndoManager
     /** clears the undo and the redo stack.
 
         <p>All actions will be removed from both the Undo and the Redo stack. Actions which implement the
-        <type scope="com::sun::star::lang">XComponent</type> interface will be disposed.</p>
+        com::sun::star::lang::XComponent interface will be disposed.</p>
 
         @throws UndoContextNotClosedException
             if the method is invoked while an undo context is still open
@@ -281,7 +281,7 @@ interface XUndoManager
 
     /** clears the redo stack.
 
-        <p>All actions will be removed from the Redo stack. Actions which implement the <type scope="com::sun::star::lang">XComponent</type>
+        <p>All actions will be removed from the Redo stack. Actions which implement the com::sun::star::lang::XComponent
         interface will be disposed.</p>
 
         @throws UndoContextNotClosedException

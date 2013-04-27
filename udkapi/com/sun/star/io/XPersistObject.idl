@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module io {
      itself again (by using the read method). Therefor it must be
      createable by name via a factory, which is in general
      the global service manager. The create and read mechanism
-     is implemented by the <type scope="com::sun::star::io">ObjectInputStream</type>.
+     is implemented by the com::sun::star::io::ObjectInputStream.
 
      <p>The serialization format (the series of strings, integers, objects) must
      be specified at the specification of the concrete service.

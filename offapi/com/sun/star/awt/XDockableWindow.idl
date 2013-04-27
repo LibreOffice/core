@@ -53,7 +53,7 @@ interface XDockableWindow : com::sun::star::uno::XInterface
         @param bEnable
             <TRUE/> specifies that docking is enabled
             <FALSE/> specifies that docking is disabled and no
-                <type scope="com::sun::star::awt">XDockableWindowListener</type> will be called
+                com::sun::star::awt::XDockableWindowListener will be called
      */
     void enableDocking( [in] boolean bEnable );
 
@@ -96,7 +96,7 @@ interface XDockableWindow : com::sun::star::uno::XInterface
 
     /** shows the window in a menu like style, i.e. without decoration
         a special indicator will allow for tearing off the window
-        see <type scope="com::sun::star::awt">XDockableWindowListener</type> for
+        see com::sun::star::awt::XDockableWindowListener for
         the corresponding events
         @param WindowRect
             specifies the position and size of the pop-up window in frame coordinates

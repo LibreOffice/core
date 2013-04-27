@@ -41,7 +41,7 @@ published struct MouseEvent: com::sun::star::awt::InputEvent
     /** contains the pressed mouse buttons.
 
         <p>Zero ore more constants from the
-        <type scope="com::sun::star::awt">MouseButton</type> group.</p>
+        com::sun::star::awt::MouseButton group.</p>
      */
     short Buttons;
 

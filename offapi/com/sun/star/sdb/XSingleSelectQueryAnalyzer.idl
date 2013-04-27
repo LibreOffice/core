@@ -75,7 +75,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
              The filter criteria is split into levels. Each level represents the
              OR criteria. Within each level, the filters are provided as an AND criteria
              with the name of the column and the filter condition. The filter condition
-             is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+             is of type string. The operator used, is defined by com::sun::star::sdb::SQLFilterOperator.
              </p>
         @returns
             the structured filter
@@ -100,7 +100,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
         The columns returned form the GROUP BY clause.
         </p>
         @returns
-            a collection of <type scope="com::sun::star::sdb">GroupColumn</type> which form the GROUP BY.
+            a collection of com::sun::star::sdb::GroupColumn which form the GROUP BY.
      */
     com::sun::star::container::XIndexAccess getGroupColumns();
 
@@ -121,7 +121,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
              The HAVING filter criteria is split into levels. Each level represents the
              OR criteria. Within each level, the filters are provided as an AND criteria
              with the name of the column and the filter condition. The filter condition
-             is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+             is of type string. The operator used, is defined by com::sun::star::sdb::SQLFilterOperator.
              </p>
         @returns
             the structured HAVING filter
@@ -146,7 +146,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
         select command, but it does not contain the ORDER BY keyword .
         </p>
         @returns
-            a collection of <type scope="com::sun::star::sdb">OrderColumn</type> which form the ORDER BY.
+            a collection of com::sun::star::sdb::OrderColumn which form the ORDER BY.
      */
     com::sun::star::container::XIndexAccess getOrderColumns();
 

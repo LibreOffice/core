@@ -68,7 +68,7 @@ module com { module sun { module star { module container {
     <p>The factory methods of the <code>XEnumerableMap</code> interface support both <em>isolated</em>
     and <em>non-isolated</em> enumerators. The latter one will be automatically disposed when the map changes
     after enumerator creation, so every attempt to use them will result in a
-    <type scope="com::sun::star::lang">DisposedException</type> being thrown.</p>
+    com::sun::star::lang::DisposedException being thrown.</p>
 
     @see http://udk.openoffice.org/common/man/typesystem.html
 */
@@ -85,7 +85,7 @@ service EnumerableMap : XEnumerableMap
             if <arg>KeyType</arg> or <arg>ValueType</arg> are unsupported types.
             For values, all type classes except <member scope="com::sun::star::uno">TypeClass::VOID</member>
             and <member scope="com::sun::star::uno">TypeClass::UNKNOWN</member> are accepted.
-            For keys, scalar types, strings, <type scope="com::sun::star::uno">Type</type> itself, and interface
+            For keys, scalar types, strings, com::sun::star::uno::Type itself, and interface
             types are accepted.
     */
     create( [in] type KeyType, [in] type ValueType )
@@ -94,7 +94,7 @@ service EnumerableMap : XEnumerableMap
     /** creates an instance mapping from the given key type to the given value type
 
         <p>The resulting map is immutable, so later alter operations on it will fail
-        with a <type scope="com::sun::star::lang">NoSupportException</type>.</p>
+        with a com::sun::star::lang::NoSupportException.</p>
 
         @param KeyType
             denotes the type of the keys in the to-be-created map
@@ -107,7 +107,7 @@ service EnumerableMap : XEnumerableMap
             if <arg>KeyType</arg> or <arg>ValueType</arg> are unsupported types.
             For values, all type classes except <member scope="com::sun::star::uno">TypeClass::VOID</member>
             are accepted.<br/>
-            For keys, scalar types, strings, <type scope="com::sun::star::uno">Type</type> itself, and interface
+            For keys, scalar types, strings, com::sun::star::uno::Type itself, and interface
             types are accepted.
         @throws ::com::sun::star::lang::IllegalArgumentException
             if any of the given values or keys violates the <a href="#keyrules">key rules</a> or

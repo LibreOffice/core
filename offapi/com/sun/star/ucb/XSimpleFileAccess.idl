@@ -219,7 +219,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
 
         <p>
         A default interaction handler is available as service
-        <type scope="com::sun::star::task">InteractionHandler</type>.
+        com::sun::star::task::InteractionHandler.
         The documentation of this service also contains further
         information about the interaction handler concept.
         </p>

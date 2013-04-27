@@ -29,7 +29,7 @@
 
 /** describes a combo box control.
 
-    <p>The model of the control has to support the <type scope="com::sun::star::form::component">ComboBox</type>
+    <p>The model of the control has to support the com::sun::star::form::component::ComboBox
     service.</p>
 
     @see com::sun::star::awt::UnoControl

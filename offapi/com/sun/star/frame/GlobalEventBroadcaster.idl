@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module frame {
 
 /**
     This service offers the document event functionality that can be found at any
-    <type scope="com::sun::star::document">OfficeDocument</type>, but it does it for all existing documents.
+    com::sun::star::document::OfficeDocument, but it does it for all existing documents.
     So it is a single place where a listener can be registered for all events in all
     documents.
  */

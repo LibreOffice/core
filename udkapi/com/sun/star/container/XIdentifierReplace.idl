@@ -53,7 +53,7 @@ published interface XIdentifierReplace: com::sun::star::container::XIdentifierAc
 
         @throws  com::sun::star::lang::WrappedTargetException
             If the implementation has internal reasons for exceptions,
-            then wrap these in a <type scope="com::sun::star::lang">WrappedTargetException</type>
+            then wrap these in a com::sun::star::lang::WrappedTargetException
             exception.
      */
     void replaceByIdentifer( [in] long Identifier,

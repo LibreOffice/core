@@ -26,16 +26,16 @@
  module com {  module sun {  module star {  module task {
 
 /** Specifies a way of how to continue from an
-    <type scope="com::sun::star::task">XInteractionRequest</type>.
+    com::sun::star::task::XInteractionRequest.
     <P>Different sub-interfaces of this interface specify different ways of
     continuing.</P>
  */
 published interface XInteractionContinuation: com::sun::star::uno::XInterface
 {
     /** Select this way of continuing from an
-        <type scope="com::sun::star::task">XInteractionRequest</type> (given a
+        com::sun::star::task::XInteractionRequest (given a
         choice of various
-        <type scope="com::sun::star::task">XInteractionContinuation</type>s).
+        com::sun::star::task::XInteractionContinuations).
      */
     void select();
 

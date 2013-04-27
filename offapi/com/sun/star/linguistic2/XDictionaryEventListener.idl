@@ -30,10 +30,10 @@ module com { module sun { module star { module linguistic2 {
 
     <P>The single method is used by a dictionary to notify its
     listeners about
-    <type scope="com::sun::star::linguistic2">DictionaryEvent</type>s.</P>
+    com::sun::star::linguistic2::DictionaryEvents.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
-    @see    <type scope="com::sun::star::lang">XEventListener</type>
+    @see    com::sun::star::linguistic2::XDictionary
+    @see    com::sun::star::lang::XEventListener
 */
 published interface XDictionaryEventListener : com::sun::star::lang::XEventListener
 {
@@ -42,7 +42,7 @@ published interface XDictionaryEventListener : com::sun::star::lang::XEventListe
         @param  aDicEvent
             the event to be notified of.
 
-    @see    <type scope="com::sun::star::lang">DictionaryEvent</type>
+    @see    com::sun::star::lang::DictionaryEvent
     */
     void processDictionaryEvent(
             [in] com::sun::star::linguistic2::DictionaryEvent aDicEvent );

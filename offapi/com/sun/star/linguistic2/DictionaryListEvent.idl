@@ -39,19 +39,19 @@ module com { module sun { module star { module linguistic2 {
     last broadcasting will be supplied. Otherwise, that list will
     be empty.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">DictionaryList</type>
-    @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
-    @see    <type scope="com::sun::star::lang">EventObject</type>
+    @see    com::sun::star::linguistic2::DictionaryList
+    @see    com::sun::star::linguistic2::XDictionaryListEventListener
+    @see    com::sun::star::lang::EventObject
 */
 published struct DictionaryListEvent : com::sun::star::lang::EventObject
 {
     /** the combined type of the accumulated events.
 
     <p>The value can be the combination of multiple
-     <type scope="com::sun::star::linguistic2">DictionaryListEventFlags</type>
+     com::sun::star::linguistic2::DictionaryListEventFlags
      by applying the logical OR to them.</p>
 
-    @see    <type scope="com::sun::star::linguistic2">DictionaryListEventFlags</type>
+    @see    com::sun::star::linguistic2::DictionaryListEventFlags
 
     <!-- Dennis: Does the <type> tag change the display of its contents -->
     <!-- Thomas: AFAIK it should translate into a hyperlink or so. -->
@@ -61,11 +61,11 @@ published struct DictionaryListEvent : com::sun::star::lang::EventObject
     /** list of accumulated dictionary events.
 
          <p>It will be empty if all
-        <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        com::sun::star::linguistic2::XDictionaryListEventListener
          are satisfied with the condensed representation of the
         <member scope="com::sun::star::linguistic2">DictionaryListEvent::nCondensedEvent</member>.</p>
 
-        @see    <type scope="com::sun::star::linguistic2">DictionaryEvent</type>
+        @see    com::sun::star::linguistic2::DictionaryEvent
     */
     sequence< com::sun::star::linguistic2::DictionaryEvent > aDictionaryEvents;
 

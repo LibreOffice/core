@@ -42,13 +42,13 @@
  */
 published service StorageStream
 {
-    /** allows to get access to <type scope="com::sun::star::io">XInputStream</type>
-        and <type scope="com::sun::star::io">XOutputStream</type>
+    /** allows to get access to com::sun::star::io::XInputStream
+        and com::sun::star::io::XOutputStream
         implementations.
 
         <p>
         In case the storage stream is open readonly the returned reference
-        to <type scope="com::sun::star::io">XOutputStream</type> will be
+        to com::sun::star::io::XOutputStream will be
         empty.
         </p>
     */
@@ -95,7 +95,7 @@ published service StorageStream
 
         <p>
         In case a stream is disposed any call to it's methods should result in
-        <type scope="com::sun::star::lang">DisposedException</type>.
+        com::sun::star::lang::DisposedException.
         </p>
      */
     interface ::com::sun::star::lang::XComponent;

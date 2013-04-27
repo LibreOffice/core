@@ -40,7 +40,7 @@
 
     <p>Different Diagram Types, e.g., PieDiagram or
     LineDiagram, can be instantiated by the
-    <type scope="com::sun::star::lang">XMultiServiceFactory</type> of
+    com::sun::star::lang::XMultiServiceFactory of
     the XChartDocument.</p>
 
  */
@@ -66,15 +66,15 @@ published service Diagram
 
 
     /** If this property is <TRUE/> the position is calculated by the application automatically.
-        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
-        to set a concrete position (note <type scope="com::sun::star::chart">XDiagram</type> is derived from <type scope="com::sun::star::drawing">XShape</type>).
+        Setting this property to false will have no effect. Instead use the interface com::sun::star::drawing::XShape
+        to set a concrete position (note com::sun::star::chart::XDiagram is derived from com::sun::star::drawing::XShape).
      */
     [optional, property] boolean AutomaticPosition;
 
 
     /** If this property is <TRUE/> the size is calculated by the application automatically.
-        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
-        to set a concrete size (note <type scope="com::sun::star::chart">XDiagram</type> is derived from <type scope="com::sun::star::drawing">XShape</type>).
+        Setting this property to false will have no effect. Instead use the interface com::sun::star::drawing::XShape
+        to set a concrete size (note com::sun::star::chart::XDiagram is derived from com::sun::star::drawing::XShape).
      */
     [optional, property] boolean AutomaticSize;
 

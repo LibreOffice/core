@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module awt { module grid {
  */
 published service UnoControlGridModel
 {
-    /** specifies the standard model of an <type scope="com::sun::star::awt">UnoControl</type>. */
+    /** specifies the standard model of an com::sun::star::awt::UnoControl. */
     service com::sun::star::awt::UnoControlModel;
 
     /** Specifies whether the grid control should display a special header column.
@@ -48,7 +48,7 @@ published service UnoControlGridModel
 
     /** specifies the width of the row header column, if applicable.
 
-        <p>The width is specified in application font units - see <type scope="com::sun::star::util">MeasureUnit</type>.</p>
+        <p>The width is specified in application font units - see com::sun::star::util::MeasureUnit.</p>
 
         <p>The value given here is ignored if <member>ShowRowHeader</member> is <FALSE/>.</p>
     */
@@ -62,7 +62,7 @@ published service UnoControlGridModel
 
     /** specifies the height of the column header row, if applicable.
 
-        <p>The height is specified in application font units - see <type scope="com::sun::star::util">MeasureUnit</type>.</p>
+        <p>The height is specified in application font units - see com::sun::star::util::MeasureUnit.</p>
 
         <p>The value given here is ignored if <member>ShowColumnHeader</member> is <FALSE/>.</p>
 
@@ -73,7 +73,7 @@ published service UnoControlGridModel
 
     /** Specifies the height of rows in the grid control.
 
-        <p>The height is specified in application font units - see <type scope="com::sun::star::util">MeasureUnit</type>.</p>
+        <p>The height is specified in application font units - see com::sun::star::util::MeasureUnit.</p>
     */
     [property, maybevoid] long RowHeight;
 
@@ -215,12 +215,12 @@ published service UnoControlGridModel
      */
     [property, maybevoid] com::sun::star::util::Color               TextLineColor;
 
-    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+    /** specifies the com::sun::star::text::FontEmphasis
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
 
-    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+    /** specifies the com::sun::star::text::FontRelief
         value of the text in the control.
      */
     [property] short FontRelief;

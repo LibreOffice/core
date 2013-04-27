@@ -46,7 +46,7 @@ published interface XCompoundTypeDescription: com::sun::star::reflection::XTypeD
 
         <p>For a polymorphic struct type template, a member of parameterized
         type is represented by an instance of
-        <type scope="com::sun::star::reflection::">XTypeDescription</type> whose
+        com::sun::star::reflection::::XTypeDescription whose
         type class is <code>UNKNOWN</code> and whose name is the name of the
         type parameter.</p>
 

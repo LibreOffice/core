@@ -51,29 +51,29 @@ module com { module sun { module star { module linguistic2 {
     <P> For the thesaurus, the behavior is the same when no meaning was found.
     </P>
 
-    @see    <type scope="com::sun::star::linguistic2">SpellChecker</type>
-    @see    <type scope="com::sun::star::linguistic2">Hyphenator</type>
-    @see    <type scope="com::sun::star::linguistic2">Thesaurus</type>
+    @see    com::sun::star::linguistic2::SpellChecker
+    @see    com::sun::star::linguistic2::Hyphenator
+    @see    com::sun::star::linguistic2::Thesaurus
 */
 published interface XLinguServiceManager : com::sun::star::uno::XInterface
 {
     /**
         @returns
-            the <type scope="com::sun::star::linguistic2">XSpellChecker</type>
+            the com::sun::star::linguistic2::XSpellChecker
             interface to be used for spell checking.
     */
     com::sun::star::linguistic2::XSpellChecker  getSpellChecker();
 
     /**
         @returns
-            the <type scope="com::sun::star::linguistic2">XHyphenator</type>
+            the com::sun::star::linguistic2::XHyphenator
             interface to be used for hyphenation.
     */
     com::sun::star::linguistic2::XHyphenator    getHyphenator();
 
     /**
         @returns
-            the <type scope="com::sun::star::linguistic2">XThesaurus</type>
+            the com::sun::star::linguistic2::XThesaurus
             interface to be used for thesaurus functionality.
     */
     com::sun::star::linguistic2::XThesaurus     getThesaurus();
@@ -81,9 +81,9 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
     /** adds a listener to the list of event listeners.
 
         <P>The listeners may support one or both of
-        <type scope="com::sun::star::linguistic2">XDictionaryEventListener</type>
+        com::sun::star::linguistic2::XDictionaryEventListener
         and
-        <type scope="com::sun::star::linguistic2">XLinguServiceEventListener</type>
+        com::sun::star::linguistic2::XLinguServiceEventListener
         interfaces.
         </P>
 

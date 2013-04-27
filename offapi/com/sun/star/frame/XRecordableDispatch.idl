@@ -76,7 +76,7 @@ published interface XRecordableDispatch: com::sun::star::uno::XInterface
 
         @param Arguments
             optional arguments for this request
-            (see <type scope="com::sun::star::document">MediaDescriptor</type> for details)
+            (see com::sun::star::document::MediaDescriptor for details)
 
         @param Recorder
             object which can be used to record the request

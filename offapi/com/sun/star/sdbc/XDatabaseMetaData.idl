@@ -34,17 +34,17 @@
 
     <p>Many of the methods here return lists of information in
     the form of
-    <type scope="com::sun::star::sdbc">XResultSet</type>
+    com::sun::star::sdbc::XResultSet
     objects.
-    You can use the normal <type scope="com::sun::star::sdbc">XRow</type>
-    (or <type scope="com::sun::star::sdb">XColumn</type>)
+    You can use the normal com::sun::star::sdbc::XRow
+    (or com::sun::star::sdb::XColumn)
     methods such as
     <member scope="com::sun::star::sdbc">XRow::getString()</member>
     and
     <member scope="com::sun::star::sdbc">XRow::getInt()</member>
     to retrieve the data from these XResultSets. If a given form of
     metadata is not available, these methods should throw a
-    <type scope="com::sun::star::sdbc">SQLException</type>
+    com::sun::star::sdbc::SQLException
     .
     After calling one of the getXXX() methods,
     one can check whether that value is <NULL/>
@@ -60,7 +60,7 @@
     </p>
     <p>
     A
-    <type scope="com::sun::star::sdbc">SQLException</type>
+    com::sun::star::sdbc::SQLException
     will be thrown if a driver does not support
     a metadata method. In the case of methods that return an XResultSet,
     either an XResultSet (which may be empty) is returned or a
@@ -991,7 +991,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the database default transaction isolation level.
         The values are defined in
-        <type scope="com::sun::star::sdbc">TransactionIsolation</type>.
+        com::sun::star::sdbc::TransactionIsolation.
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2239,7 +2239,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does the database support the given result set type?
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2251,10 +2251,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         with the given result set type?
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @param concurrency
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetConcurrency</type>
+            com::sun::star::sdbc::ResultSetConcurrency
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2267,7 +2267,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether a result set's own updates are visible.
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2278,7 +2278,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether a result set's own deletes are visible.
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2289,7 +2289,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether a result set's own inserts are visible.
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2300,7 +2300,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether updates made by others are visible.
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2311,7 +2311,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether deletes made by others are visible.
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2322,7 +2322,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether inserts made by others are visible.
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2335,7 +2335,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <code>XResultSet.rowUpdated</code>.
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2350,7 +2350,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         returns <FALSE/>, then deleted rows are removed from the result set.
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2363,7 +2363,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <member scope="com::sun::star::sdbc">XResultSet::rowInserted().</member>
         @param setType
             defined in
-            <type scope="com::sun::star::sdbc">ResultSetType</type>
+            com::sun::star::sdbc::ResultSetType
         @returns
             <TRUE/> if so
         @throws SQLException

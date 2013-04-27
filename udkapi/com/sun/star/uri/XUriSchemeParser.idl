@@ -41,7 +41,7 @@ published interface XUriSchemeParser: com::sun::star::uno::XInterface {
        references (with an optional fragment part).</p>
 
        <p>If an object is returned, the behaviour of its
-       <type scope="com::sun::star::uri">XUriReference</type> methods must
+       com::sun::star::uri::XUriReference methods must
        reflect the fact that the object represents an absolute URI reference
        with the given scheme and scheme-specific part, and without a fragment
        part.</p>
@@ -55,7 +55,7 @@ published interface XUriSchemeParser: com::sun::star::uno::XInterface {
 
        @returns
        an object that supports
-       <type scope="com::sun::star::uri">XUriReference</type> (and possibly also
+       com::sun::star::uri::XUriReference (and possibly also
        additional, scheme-specific interfaces), if the given input can be parsed
        into an absolute URI; otherwise, <NULL/> is returned.
      */

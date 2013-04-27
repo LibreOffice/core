@@ -28,7 +28,7 @@ module com { module sun { module star { module resource {
 
 
 /** specifies a service providing access to a resource string table implementing the
-    <type scope="com::sun::star::resource">XStringResourceWithStorage</type> interface.
+    com::sun::star::resource::XStringResourceWithStorage interface.
  */
 service StringResourceWithStorage : com::sun::star::resource::XStringResourceWithStorage
 {
@@ -64,7 +64,7 @@ service StringResourceWithStorage : com::sun::star::resource::XStringResourceWit
             responsible that the passed string is a valid comment in a Java
             properties file, e.g. "# My strings". The string may be empty.
 
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             if a null interface is passed as Storage
      */
     create( [in] ::com::sun::star::embed::XStorage Storage,

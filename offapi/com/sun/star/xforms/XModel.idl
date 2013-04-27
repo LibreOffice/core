@@ -116,7 +116,7 @@ interface XModel
 
     /** gets container containing all instances;
 
-        <p>The elements of the set are arrays of <type scope="com::sun::star::beans">PropertyValue</type>s,
+        <p>The elements of the set are arrays of com::sun::star::beans::PropertyValues,
         containing the ID, the URL, and the instance itself.</p>
     */
     com::sun::star::container::XSet getInstances();

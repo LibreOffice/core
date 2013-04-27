@@ -60,7 +60,7 @@ interface XUIElementFactory : ::com::sun::star::uno::XInterface
             characters for type and name. This argument must not be empty to
             have a working user interface element instance.The implementation
             can throw an
-            <type scope="com::sun::star::container">NoSuchElementException</type>
+            com::sun::star::container::NoSuchElementException
             if it doesn't know how to create the request user interface
             element.
 
@@ -68,7 +68,7 @@ interface XUIElementFactory : ::com::sun::star::uno::XInterface
             The following arguments are supported:
             <ul>
                 <li><b>Frame</b><br>
-                    specifies the <type scope="com::sun::star::frame">XFrame</type>
+                    specifies the com::sun::star::frame::XFrame
                     instance to which the user interface element belongs to. To
                     create a configurable user interface element the frame
                     instance must contain a visible component. Otherwise it is
@@ -94,7 +94,7 @@ interface XUIElementFactory : ::com::sun::star::uno::XInterface
         user interface element cannot retrieve its structure data and changes to
         the user interface element structure won't be persistent. It is up to the
         implementation to throw an
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        com::sun::star::lang::IllegalArgumentException
         if it cannot create a user interface element with the provided arguments.
 
         @see ConfigurableUIElement

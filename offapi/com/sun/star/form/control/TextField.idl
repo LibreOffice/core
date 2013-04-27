@@ -31,7 +31,7 @@
 /** describes a control for entering arbitrary text which can (but not necessarily has to) be bound
     to a database field.
 
-    <p>The model of the control has to support the <type scope="com::sun::star::form::component">TextField</type>
+    <p>The model of the control has to support the com::sun::star::form::component::TextField
     service.</p>
 
     <p>In addition, this control can be used in HTML forms. It triggers the

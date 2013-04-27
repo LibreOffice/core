@@ -40,13 +40,13 @@ interface XObjectNames;
 interface XDataSourceMetaData;
 
 /** encapsulates various useful functionality around a
-    <type scope="com::sun::star::sdb">Connection</type>
+    com::sun::star::sdb::Connection
 
     <p>Most of the functionality provided here is meaningful only relative to
     a given database connection. For instance, for quoting table names, you need
     the meta data instance of the connection. Thus, the entry point for obtaining
     a XConnectionTools instance is the
-    <type scope="com::sun::star::sdb">Connection</type> service.</p>
+    com::sun::star::sdb::Connection service.</p>
 
     <p>Note that nearly all functionality provided by this interface is also
     available by other means, it's only provided here for convenience purposes.</p>
@@ -77,9 +77,9 @@ interface XConnectionTools
     /** get fields for a result set given by a "command descriptor"
 
         <p>A command descriptor here means:
-        <ul><li>a SDB-level connection (<type scope="com.sun.star.sdb">Connection</type></li>
+        <ul><li>a SDB-level connection (com.sun.star.sdb::Connection</li>
             <li>a string specifying the name of an object relative to the connection</li>
-            <li>a <type scope="com.sun.star.sdb">CommandType</type> value specifying the type
+            <li>a com.sun.star.sdb::CommandType value specifying the type
                 of the object</type></li>
         </ul>
         </p>

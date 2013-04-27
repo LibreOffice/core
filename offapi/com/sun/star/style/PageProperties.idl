@@ -130,9 +130,9 @@ published service PageProperties
 [optional , property] com::sun::star::text::XTextColumns TextColumns;
 /** contains user defined  attributes.
 
-    <p>This <type scope="com::sun::star::container">XNameContainer</type>
+    <p>This com::sun::star::container::XNameContainer
     supports the service
-    <type scope="com::sun::star::xml">AttributeContainer</type>.</p>
+    com::sun::star::xml::AttributeContainer.</p>
  */
 [property] com::sun::star::container::XNameContainer UserDefinedAttributes;
 
@@ -319,7 +319,7 @@ of the current page is used as limit.
  */
 [optional,property] byte FootnoteLineRelativeWidth;
 /** contains the adjustment of the separator line between the text and the footnote area.
-     <p><type scope="com::sun::star::text">HorizontalAdjust</type>s.</p>
+     <p>com::sun::star::text::HorizontalAdjusts.</p>
  */
 [optional,property] short FootnoteLineAdjust;
 /** contains the distance between the text and the separator line between the
@@ -334,7 +334,7 @@ of the current page is used as limit.
  scope="com::sun::star::text">WritingMode2</type> constants */
 [optional,property] short WritingMode;
 /** contains the mode of the text grid (none, lines, ...), as
-    represented by <type scope="com::sun::star::text">TextGridMode</type>
+    represented by com::sun::star::text::TextGridMode
     constants */
 [optional, property] short GridMode;
 /** contains the display color of the text grid */

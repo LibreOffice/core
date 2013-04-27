@@ -31,7 +31,7 @@
     <p>A COM object must have a ProgId since the ProgId is used as argument for
     XMultiServiceFactory::createInstance. The only interfaces which are mapped
     are <code>IUnknown</code> and <code>IDispatch</code>.
-    The created UNO objects support <type scope="com::sun::star::script">XInvocation</type>
+    The created UNO objects support com::sun::star::script::XInvocation
     if the original COM objects support IDispatch. </p>
 
     <p>The optional parameters of the method

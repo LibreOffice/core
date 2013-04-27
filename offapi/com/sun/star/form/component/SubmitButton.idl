@@ -40,7 +40,7 @@ service SubmitButton
 
         <p>Note that the control model itself will not make any use of the submission.
         Instead, submissions are triggered by a control (not a control <em>model</em>).
-        Thus, the <type scope="com::sun::star::form::control">SubmitButton</type>
+        Thus, the com::sun::star::form::control::SubmitButton
         control associated with a SubmitButton model is responsible for
         using the submission supplied at this model.</p>
     */

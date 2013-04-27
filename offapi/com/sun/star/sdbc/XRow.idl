@@ -47,7 +47,7 @@
 
 /** is used to access data which is collected in a row.
     All methods raise a
-    <type scope="com::sun::star::sdbc">SQLException</type>
+    com::sun::star::sdbc::SQLException
     if a database access error occurs.
  */
 published interface XRow: com::sun::star::uno::XInterface

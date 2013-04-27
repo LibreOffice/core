@@ -62,8 +62,8 @@ published service DataPilotFieldGroups
     /** provides read/write access to the data pilot field groups in the
         collection via name.
 
-        <p>The <type scope="com::sun::star::container">XNameContainer</type>
-        and <type scope="com::sun::star::container">XNameReplace</type>
+        <p>The com::sun::star::container::XNameContainer
+        and com::sun::star::container::XNameReplace
         interfaces can be used to manage the item groups. It is possible to
         insert, remove, and replace item groups.</p>
 

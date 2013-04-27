@@ -37,7 +37,7 @@ module com { module sun { module star { module linguistic2 {
      position 9 you will get an additional "f" before the hyphen
      character.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XHyphenator</type>
+    @see    com::sun::star::linguistic2::XHyphenator
 */
 published interface XPossibleHyphens : com::sun::star::uno::XInterface
 {
@@ -51,7 +51,7 @@ published interface XPossibleHyphens : com::sun::star::uno::XInterface
     /** @returns
             the language of the hyphenated word.
 
-        @see    <type scope="com::sun::star::lang">Locale</type>
+        @see    com::sun::star::lang::Locale
     */
     com::sun::star::lang::Locale getLocale();
 

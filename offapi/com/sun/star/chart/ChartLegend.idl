@@ -36,7 +36,7 @@
 
 
     <p>The text/font properties which are specified in the service
-    <type scope="com::sun::star::drawing">Shape</type> correlate to all text
+    com::sun::star::drawing::Shape correlate to all text
     objects inside the legend.</p>
  */
 published service ChartLegend
@@ -45,7 +45,7 @@ published service ChartLegend
 
 
     /** If this property is <TRUE/> the position is calculated by the application automatically.
-        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
+        Setting this property to false will have no effect. Instead use the interface com::sun::star::drawing::XShape
         to set a concrete position.
      */
     [optional, property] boolean AutomaticPosition;

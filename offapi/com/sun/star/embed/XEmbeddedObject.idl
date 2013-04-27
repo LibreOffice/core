@@ -73,7 +73,7 @@ published interface XEmbeddedObject
 
         @param nNewState
             specifies the new state, can take values from the constant set
-            <type scope="com::sun::star::embed">EmbedStates</type>
+            com::sun::star::embed::EmbedStates
 
         @throws com::sun::star::embed::UnreachableStateException
             the specified state can not be reached

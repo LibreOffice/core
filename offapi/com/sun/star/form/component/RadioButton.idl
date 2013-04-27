@@ -70,7 +70,7 @@ published service RadioButton
         form.
 
         <p>If the form the control belongs to is to be submitted (see
-        <type scope="com::sun::star::form">XSubmit</type>), and the control is checked, this reference
+        com::sun::star::form::XSubmit), and the control is checked, this reference
         value is used for submission.</p>
      */
     [property] string RefValue;

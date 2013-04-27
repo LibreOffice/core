@@ -94,13 +94,13 @@ published service UnoControlComboBoxModel
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
 
-    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+    /** specifies the com::sun::star::text::FontEmphasis
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
 
 
-    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+    /** specifies the com::sun::star::text::FontRelief
         value of the text in the control.
      */
     [property] short FontRelief;
@@ -171,7 +171,7 @@ published service UnoControlComboBoxModel
     [property] com::sun::star::util::Color TextLineColor;
 
     /** denotes the writing mode used in the control, as specified in the
-        <type scope="com::sun::star::text">WritingMode2</type> constants group.
+        com::sun::star::text::WritingMode2 constants group.
 
         <p>Only <member scope="com::sun::star::text">WritingMode2::LR_TB</member> and
         <member scope="com::sun::star::text">WritingMode2::RL_TB</member> are supported at the moment.</p>

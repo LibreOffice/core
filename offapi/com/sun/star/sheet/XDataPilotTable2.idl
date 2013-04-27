@@ -31,10 +31,10 @@
 
 module com {  module sun {  module star {  module sheet {
 
-/** additional methods to extend <type scope="com::sun::star::sheet">XDataPilotTable</type>.
+/** additional methods to extend com::sun::star::sheet::XDataPilotTable.
 
-   <type scope="com::sun::star::sheet">XDataPilotTable2</type> extends the old
-   <type scope="com::sun::star::sheet">XDataPilotTable</type> interface with
+   com::sun::star::sheet::XDataPilotTable2 extends the old
+   com::sun::star::sheet::XDataPilotTable interface with
    additional methods.
 
    @see com::sun::star::sheet::XDataPilotTable
@@ -89,7 +89,7 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
     /** <p>This method returns a different output range of a DataPilot table
         per specified output range type.</p>
 
-        @returns <type scope="com::sun::star::table">CellRangeAddress</type> depicting
+        @returns com::sun::star::table::CellRangeAddress depicting
         the range specified.  See DataPilotOutputRangeType for a set
         of possible output range types.
 

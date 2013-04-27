@@ -43,7 +43,7 @@ module com {   module sun {   module star {   module rdf {
     <member>XRepository::destroyGraph</member>.
     If a graph is destroyed, subsequent calls to <member>addStatement</member>,
     <member>removeStatements</member> will fail with an
-    <type scope="com::sun::star::container">NoSuchElementException</type>.
+    com::sun::star::container::NoSuchElementException.
     </p>
 
     @since OOo 3.2

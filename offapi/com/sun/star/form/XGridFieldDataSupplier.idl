@@ -34,7 +34,7 @@
 
     <p>This interface allows to retrieve data even for rows which are not current, which is quite useful,
     as normally, you can't affect the current row in a grid control without moving the cursor of the underlying
-    <type scope="com::sun::star::form::component">DataForm</type>.</p>
+    com::sun::star::form::component::DataForm.</p>
 
     @see XGrid
     @see com::sun::star::form::control::GridControl

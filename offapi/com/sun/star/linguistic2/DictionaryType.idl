@@ -31,8 +31,8 @@ module com { module sun { module star { module linguistic2 {
     checking) and a negative one only negative entries (words defined
     to be reported as incorrect by the spell checker).</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
-    @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
+    @see    com::sun::star::linguistic2::XDictionary
+    @see    com::sun::star::linguistic2::XDictionaryEntry
 */
 published enum DictionaryType
 {

@@ -43,7 +43,7 @@ module com { module sun { module star { module configuration {
  default data which is accessible through this service.
  </p>
  <p>An implementation is usually obtained from a
- <type scope="com::sun::star::lang">ServiceManager</type>. The arguments passed to
+ com::sun::star::lang::ServiceManager. The arguments passed to
  <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContextAndArguments()</member>
  select the configuration data source. They may also define the scope of
  administrable data or contain credentials to be used to authorize the
@@ -99,8 +99,8 @@ published service AdministrationProvider
  changes will apply. They also specify the view of that configuration that
  should be created. That is, they determine the subset of elements that can be
  accessed starting from the returned object. Each element of the argument
- sequence should be a <type scope="com::sun::star::beans">PropertyValue</type>
- or a <type scope="com::sun::star::beans">NamedValue</type>,
+ sequence should be a com::sun::star::beans::PropertyValue
+ or a com::sun::star::beans::NamedValue,
  so that the parameters can be identified by name rather than by position.
  </p>
 

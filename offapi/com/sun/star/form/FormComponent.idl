@@ -70,7 +70,7 @@ published service FormComponent
         properties</em>.</p>
 
         <p>Additionally, you can add more properties to the component as needed,
-        using the <type scope="com::sun::star::beans">XPropertyContainer</type> interface.
+        using the com::sun::star::beans::XPropertyContainer interface.
         Those properties are called <em>dynamic properties</em>.</p>
 
         <p>Dynamic properties are not evaluated by the component itself,
@@ -90,7 +90,7 @@ published service FormComponent
     /** the name of the component.
 
         <p>Note that the name accessed here is the same as when using the
-        <type scope="com::sun::star::container">XNamed</type> interface.</p>
+        com::sun::star::container::XNamed interface.</p>
      */
     [property] string Name;
 

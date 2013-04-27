@@ -29,7 +29,7 @@ module com { module sun { module star { module script {
 
 
 /** is the interface for an XLibraryContainer which can be made
-    persistent in an <type scope="com::sun::star::embed">XStorage</type>.
+    persistent in an com::sun::star::embed::XStorage.
 
     <p>A persistent library container is associated with a root storage. The
     container is responsible for a particular sub storage of the root storage,

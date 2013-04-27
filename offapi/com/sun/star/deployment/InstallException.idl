@@ -30,7 +30,7 @@ interface XPackage;
    describes the fact that deployment unit is  about to be installed.
 
    <p>This exception is intended to be used with an
-   <type scope="com::sun::star::task">XInteractionHandler</type>.</p>
+   com::sun::star::task::XInteractionHandler.</p>
 
    @since OOo 2.2
 */

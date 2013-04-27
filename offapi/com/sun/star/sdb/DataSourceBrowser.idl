@@ -66,12 +66,12 @@ module com {  module sun {  module star {  module sdb {
     >The communication between the browser and external instances works in two ways.
     <br/>
     The way <em>in</em> is provided by the
-    <type scope="com::sun::star::frame">XDispatchProvider</type>
+    com::sun::star::frame::XDispatchProvider
     interface the service exports (Please see below for more details on this).
     <br/>
     The way <em>out</em> works in another way. There are several URLs which an external
     instance can provide dispatches for (usually by implementing a
-    <type scope="com::sun::star::frame">XDispatchProviderInterceptor</type>
+    com::sun::star::frame::XDispatchProviderInterceptor
     for the parent frame of the browser), thus indicating that the browser should provide special functionality.
     <br/>
     In this case, the browser displays and maintains some additional slots (to be more concrete: toolbox items), which,
@@ -86,7 +86,7 @@ module com {  module sun {  module star {  module sdb {
             <li><b>.uno:DataSourceBrowser/InsertColumns</b>
             <br/>
             Available whenever an external instance provides a dispatcher (
-            <type scope="com::sun::star::frame">XDispatch</type>)
+            com::sun::star::frame::XDispatch)
             for this URL.
             <br/>
             Enabled, if at least one row in the grid view of a table or query is selected.
@@ -98,7 +98,7 @@ module com {  module sun {  module star {  module sdb {
             <li><b>.uno:DataSourceBrowser/InsertContent</b>
             <br/>
             Available whenever an external instance provides a dispatcher(
-            <type scope="com::sun::star::frame">XDispatch</type>
+            com::sun::star::frame::XDispatch
             ) for this URL.
             <br/>
             Enabled, if at least one row in the grid view of a table or query is selected.
@@ -110,7 +110,7 @@ module com {  module sun {  module star {  module sdb {
             <li><b>.uno:DataSourceBrowser/FormLetter</b>
             <br/>
             Available whenever an external instance provides a dispatcher (
-            <type scope="com::sun::star::frame">XDispatch</type>) for this URL.
+            com::sun::star::frame::XDispatch) for this URL.
             <br/>
             It is the task of the external instance to provide functionality for this URL, but usually it is used
             to implement some kind of "Form Letter" functionality.
@@ -165,14 +165,14 @@ published service DataSourceBrowser
 
         <p>
         Parameters (passed to the method <member scope="com::sun::star::lang">XInitialization::initialize()</member>)
-        have to be instances of <type scope="com::sun::star::beans">PropertyValue</type>, or
-        instances of <type scope="com::sun::star::beans">NamedValue</type>, where the <code>Name</code> member
+        have to be instances of com::sun::star::beans::PropertyValue, or
+        instances of com::sun::star::beans::NamedValue, where the <code>Name</code> member
         specifies what the parameter controls, with the <code>Value</code> member containing the value to be used.
         <br/>
         Recognized parameters are:
         <ul>
             <li><b>Frame</b><br/>
-            has to be an  <type scope="com::sun::star::frame">XFrame</type> interface specifying the frame to
+            has to be an  com::sun::star::frame::XFrame interface specifying the frame to
             plug the browser component into.</li>
 
             <li><b>DataSourceName</b><br/>
@@ -213,7 +213,7 @@ published service DataSourceBrowser
     <member scope="com::sun::star::frame">XDispatchProvider::queryDispatch</member>
     method
     to query for objects which implement the
-    <type scope="com::sun::star::frame">XDispatch</type>
+    com::sun::star::frame::XDispatch
     interface,
     and which allow you to be notified on status changes and to dispatch special requests.
     </p>
@@ -258,7 +258,7 @@ published service DataSourceBrowser
 
         <p>The selection supplied by <member scope="com::sun::star::ui">ContextMenuExecuteEvent::Selection</member>,
         in the event structure passed to the context menu interceptors, actually is a value from the
-        <type scope="com::sun::star::sdb::application">NamedDatabaseObject</type> group.</p>
+        com::sun::star::sdb::application::NamedDatabaseObject group.</p>
 
         @since OOo 3.0
     */

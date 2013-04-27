@@ -32,7 +32,7 @@ module com { module sun { module star { module linguistic2 {
     originally returned reference from the spell checker.
     E.g. from the user dictionaries.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XSpellAlternatives</type>
+    @see    com::sun::star::linguistic2::XSpellAlternatives
 */
 interface XSetSpellAlternatives : com::sun::star::uno::XInterface
 {
@@ -46,7 +46,7 @@ interface XSetSpellAlternatives : com::sun::star::uno::XInterface
     /**
         set the type of error found.
 
-        @see    <type scope="com::sun::star::linguistic2">SpellFailure</type>
+        @see    com::sun::star::linguistic2::SpellFailure
         @since  OOo 3.0.1
     */
     void setFailureType( [in] short nFailureType );

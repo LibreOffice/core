@@ -172,7 +172,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     /** Broadcasts the a focusGained on all registered focus listeners
         @param source
             The object that has gained the input focus. It should implement
-            <type scope="com::sun::star::accessibility">XAccessible</type>.
+            com::sun::star::accessibility::XAccessible.
     */
     void fireFocusGained (
         [in] ::com::sun::star::uno::XInterface source);
@@ -181,7 +181,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     /** Broadcasts the a focusGained on all registered focus listeners
         @param source
             The object that has lost the input focus. It should implement
-            <type scope="com::sun::star::accessibility">XAccessible</type>.
+            com::sun::star::accessibility::XAccessible.
     */
     void fireFocusLost (
         [in] ::com::sun::star::uno::XInterface source);

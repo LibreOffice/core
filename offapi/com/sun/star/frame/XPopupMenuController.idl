@@ -30,7 +30,7 @@ module com { module sun { module star { module frame {
     fill and update a pop-up menu dynamically.
 
     <p>
-    A pop-up menu controller gets a <type scope="com::sun::star::awt">XPopupMenu</type>
+    A pop-up menu controller gets a com::sun::star::awt::XPopupMenu
     from its parent menu implementation. The controller has to fill this pop-up
     menu with a set of menu items and/or sub menus. The parent menu implementation
     briefs the controller whenever the pop-up menu gets activated by a user.
@@ -40,7 +40,7 @@ module com { module sun { module star { module frame {
 */
 interface XPopupMenuController : com::sun::star::uno::XInterface
 {
-    /** provides a <type scope="com::sun::star::awt">XPopupMenu</type> to a
+    /** provides a com::sun::star::awt::XPopupMenu to a
         pop-up menu controller implementation. The controller must fill this
         pop-up menu with its functions.
 

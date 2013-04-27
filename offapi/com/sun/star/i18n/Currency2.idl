@@ -31,7 +31,7 @@ module com { module sun { module star { module i18n {
     sequence by <member>XLocaleData2::getAllCurrencies2()</member>.
 
     <p> It is derived from
-    <type scope="::com::sun::star::i18n">Currency</type> and provides an
+    ::com::sun::star::i18n::Currency and provides an
     additional flag for currency entries that are available only for legacy
     reasons in context of loaded documents that use them, but otherwise
     should not be offered to the user to be selectable.

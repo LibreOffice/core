@@ -27,7 +27,7 @@ module com { module sun { module star { module resource {
 
 /**
     Extends XStringResourcePersistence by methods to handle an
-    associated <type scope="com::sun::star::embed">XStorage</type> instance.
+    associated com::sun::star::embed::XStorage instance.
 
     @see XStringResourcePersistence.
 */
@@ -39,7 +39,7 @@ interface XStringResourceWithStorage: com::sun::star::resource::XStringResourceP
         this storage. The modified state will be unmodified after the call.
 
         This method can throw all exceptions thrown by the methods of
-        <type scope="com::sun::star::embed">XStorage</type>
+        com::sun::star::embed::XStorage
     */
     void storeAsStorage( [in] ::com::sun::star::embed::XStorage Storage )
         raises( com::sun::star::uno::Exception );
@@ -63,7 +63,7 @@ interface XStringResourceWithStorage: com::sun::star::resource::XStringResourceP
         this storage is in sync with the resource data.
         </p>
 
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             if a null interface is passed as Storage
     */
     void setStorage( [in] ::com::sun::star::embed::XStorage Storage )

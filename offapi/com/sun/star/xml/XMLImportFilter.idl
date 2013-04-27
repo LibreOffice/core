@@ -29,9 +29,9 @@ module com { module sun { module star { module xml {
 
 /** describes an import filter for XML-based file formats.
 
-    <p>It is an extension of <type scope="com::sun::star::document">ImportFilter</type>
+    <p>It is an extension of com::sun::star::document::ImportFilter
     and differs from it in that this filter additionally supports the
-    <type scope="com::sun::star::xml::sax">XDocumentHandler</type> interface.
+    com::sun::star::xml::sax::XDocumentHandler interface.
 */
 published service XMLImportFilter
 {

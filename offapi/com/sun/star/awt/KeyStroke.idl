@@ -34,7 +34,7 @@ published struct KeyStroke
     /** contains the modifier keys which were pressed while the event occurred.
 
         <p>Zero or more constants from the group
-        <type scope="com::sun::star::awt">KeyModifier</type>.</p>
+        com::sun::star::awt::KeyModifier.</p>
      */
     short Modifiers;
 
@@ -42,7 +42,7 @@ published struct KeyStroke
     /** contains the integer code representing the key of the event.
 
         <p>This is a constant from the constant group
-        <type scope="com::sun::star::awt">Key</type>.</p>
+        com::sun::star::awt::Key.</p>
      */
     short KeyCode;
 
@@ -55,7 +55,7 @@ published struct KeyStroke
     /** contains the function type of the key event.
 
         <p>This is a constant from the constant group
-        <type scope="com::sun::star::awt">KeyFunction</type>.</p>
+        com::sun::star::awt::KeyFunction.</p>
      */
     short KeyFunc;
 };

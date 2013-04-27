@@ -31,7 +31,7 @@
 
     <p>
     A
-    <type scope="com::sun::star::sdbc">PreparedStatement</type>
+    com::sun::star::sdbc::PreparedStatement
     uses one precompiled SQL Statement. In batch execution
     it is possible to set collection of parameter settings, which are executed in
     one batch job.

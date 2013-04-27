@@ -67,11 +67,11 @@ published interface XIntrospection: com::sun::star::uno::XInterface
             </dd>
 
             <dt> <strong>Important note:</strong></dt>
-            <dd>If an object implements <type scope="com::sun::star::container">XNameAccess</type>,
+            <dd>If an object implements com::sun::star::container::XNameAccess,
                 the items that can be accessed are not considered as properties
                 of the object and so are not included in the property list offered by
                 <member scope="com::sun::star::beans">XIntrospectionAccess::getProperties()</member>.
-                <type scope="com::sun::star::container">XNameAccess</type> items have to be
+                com::sun::star::container::XNameAccess items have to be
                 accessed separately by <member scope="com::sun::star::beans">XIntrospectionAccess::getNameAccess()</member>.
             </dd>
         </dl>
@@ -84,9 +84,9 @@ published interface XIntrospection: com::sun::star::uno::XInterface
 
         <p>Methods which do not belong to a property nor which represent
         a listener access nor which are methods of XPropertySet,
-        <type scope="com::sun::star::container">XNameAccess</type>,
-        <type scope="com::sun::star::container">XIndexAccess</type>, or
-        <type scope="com::sun::star::container">XEnumerationAccess</type>, are considered to be normal
+        com::sun::star::container::XNameAccess,
+        com::sun::star::container::XIndexAccess, or
+        com::sun::star::container::XEnumerationAccess, are considered to be normal
         methods. </p>
 
         @see XIntrospectionAccess

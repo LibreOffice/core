@@ -117,7 +117,7 @@ published constants FormComponentType
     */
     const short SPINBUTTON = 21;
 
-    /** specifies a control which provides controller functionality for the <type scope="com::sun::star::form::component">DataForm</type>
+    /** specifies a control which provides controller functionality for the com::sun::star::form::component::DataForm
         it belongs to, such as functionality to navigate or filter this form.
     */
     const short NAVIGATIONBAR = 22;

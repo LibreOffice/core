@@ -160,7 +160,7 @@ published service CellProperties
     /** contains the index of the number format that is used in the cells.
 
         <p>The proper value can be determined by using the
-        <type scope="com::sun::star::util">NumberFormatter</type>
+        com::sun::star::util::NumberFormatter
         interface of the document.</p>
      */
     [property] long NumberFormat;

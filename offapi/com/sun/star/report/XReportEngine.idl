@@ -56,9 +56,9 @@ interface XReportEngine
     interface com::sun::star::beans::XPropertySet;
 
     /** creates a report document.
-        @throws <type scope="com::sun::star::lang">DisposedException</type>
+        @throws com::sun::star::lang::DisposedException
             If the report engine is already disposed.
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             If the report definition was not set or is <NULL/>.
     */
     com::sun::star::frame::XModel createDocumentModel()
@@ -69,9 +69,9 @@ interface XReportEngine
     /** creates a report document.
         @param  _frame
             The frame must have a controller set. This controller will be set at the model.
-        @throws <type scope="com::sun::star::lang">DisposedException</type>
+        @throws com::sun::star::lang::DisposedException
             If the report engine is already disposed.
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             If the report definition was not set or is <NULL/>.
 
         OJ: Has to be discussed if this method is useful.
@@ -84,9 +84,9 @@ interface XReportEngine
     /** creates a report document.
         @return
             The URL where the new document is located.
-        @throws <type scope="com::sun::star::lang">DisposedException</type>
+        @throws com::sun::star::lang::DisposedException
             If the report engine is already disposed.
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             If the report definition was not set or is <NULL/>.
     */
     com::sun::star::util::URL createDocument()
@@ -95,7 +95,7 @@ interface XReportEngine
                 ::com::sun::star::uno::Exception );
 
     /** allows to interrupt the creation process of the report document.
-        @throws <type scope="com::sun::star::lang">DisposedException</type>
+        @throws com::sun::star::lang::DisposedException
             If the report engine is already disposed.
     */
     void interrupt()

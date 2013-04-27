@@ -64,7 +64,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     */
     boolean isAssignableFrom( [in] XIdlClass xType );
 
-    /** Returns the <type scope="com::sun::star::uno">TypeClass</type>
+    /** Returns the com::sun::star::uno::TypeClass
         of the reflected type.
 
         @returns

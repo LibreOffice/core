@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module chart {
 service AccessibleChartDocumentView
 {
     /** Base interface for being accessible.  It gives access to the
-        <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
+        ::com::sun::star::accessibility::XAccessibleContext
         interface.
     */
     interface ::com::sun::star::accessibility::XAccessible;
@@ -69,7 +69,7 @@ service AccessibleChartDocumentView
              subcomponents support the service
              AccessibleChartElement.  Additionally, there may be
              shapes a user added via the clipboard.  For details see the
-             <type scope="::com::sun::star::drawing">AccessibleShape</type>.
+             ::com::sun::star::drawing::AccessibleShape.
              </dd>
          <dt>Parent</dt>
              <dd>The parent will usually be the window that contains the

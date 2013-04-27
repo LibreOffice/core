@@ -33,8 +33,8 @@ module com { module sun { module star { module linguistic2 {
     listeners. Its single function will be called by the broadcasting
     dictionary-list in order to notify its registered listeners.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">DictionaryListEvent</type>
-    @see    <type scope="com::sun::star::linguistic2">XDictionaryList</type>
+    @see    com::sun::star::linguistic2::DictionaryListEvent
+    @see    com::sun::star::linguistic2::XDictionaryList
 */
 published interface XDictionaryListEventListener : com::sun::star::lang::XEventListener
 {
@@ -43,7 +43,7 @@ published interface XDictionaryListEventListener : com::sun::star::lang::XEventL
         @param  aDicListEvent
             the event to be notified of.
 
-    @see    <type scope="com::sun::star::linguistic2">DictionaryListEvent</type>
+    @see    com::sun::star::linguistic2::DictionaryListEvent
     */
     void processDictionaryListEvent(
         [in] com::sun::star::linguistic2::DictionaryListEvent aDicListEvent );

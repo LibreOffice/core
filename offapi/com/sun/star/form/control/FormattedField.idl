@@ -30,7 +30,7 @@
 /** describes a control which can be used for inputting values with a arbitrary formatting, and
     can (but not necessarily has to) be bound to a database field.
 
-    <p>The model of the control has to support the <type scope="com::sun::star::form::component">FormattedField</type>
+    <p>The model of the control has to support the com::sun::star::form::component::FormattedField
     service.</p>
 
     <p>In addition, this control can be used in HTML forms. It triggers the

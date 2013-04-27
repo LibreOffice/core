@@ -43,7 +43,7 @@
 published interface XPluginManager: com::sun::star::uno::XInterface
 {
     /** Creates a default context.  This context depends on the service
-        <type scope="com::sun::star::frame">Desktop</type>.</p>
+        com::sun::star::frame::Desktop.</p>
 
         @return plugin context
     */

@@ -34,10 +34,10 @@ published interface XUriReferenceFactory;
    scheme-specific parser.  Such a scheme-specific parser will typically enforce
    additional restrictions during parsing, and will typically return objects
    that support extra, scheme-specific interfaces in addition to
-   <type scope="com::sun::star::uri">XUriReference</type>.  If no such parser
+   com::sun::star::uri::XUriReference.  If no such parser
    is found, and for relative URI references, a generic parser is used, which
    returns objects that only support
-   <type scope="com::sun::star::uri">XUriReference</type>.</p>
+   com::sun::star::uri::XUriReference.</p>
 
    <p>Locating a scheme-specific parser works as follows:  A scheme consists of
    Latin captial letters
@@ -58,7 +58,7 @@ published interface XUriReferenceFactory;
    &ldquo;<code>com.sun.star.uri.UriSchemeParser_</code>&rdquo; and
    <var>s</var>&prime;, then that service is used.  It is an error if that
    service does not support
-   <type scope="com::sun::star::uri">XUriSchemeParser</type>.</p>
+   com::sun::star::uri::XUriSchemeParser.</p>
 
    @since OOo 2.0
  */

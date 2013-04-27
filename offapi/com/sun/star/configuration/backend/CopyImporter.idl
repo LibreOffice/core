@@ -51,7 +51,7 @@ published service CopyImporter
         <p> This interface, which is optional in Importer
             is mandatory in this service and supports the following arguments
             which must be provided as
-            <type scope="com::sun::star::beans">NamedValue</type>:
+            com::sun::star::beans::NamedValue:
         <dl>
             <dt><code>Overwrite</code> : <atom>boolean</atom></dt>
             <dd>If <FALSE/>, specifies that the data should be applied

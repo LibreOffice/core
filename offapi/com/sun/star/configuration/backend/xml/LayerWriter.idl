@@ -32,7 +32,7 @@ module xml {
     can be used to parse a stream of configuration layer XML.
 
     <p> The configuration layer data described to a
-    <type scope="com::sun::star::configuration::backend">XLayerHandler</type>
+    com::sun::star::configuration::backend::XLayerHandler
     is written to a stream as OOR Update XML.
     </p>
 
@@ -57,7 +57,7 @@ published service LayerWriter
     /** allows initializing target stream.
 
         <p> The target can be passed
-            as a <type scope="com::sun::star::io">XOutputStream</type>.
+            as a com::sun::star::io::XOutputStream.
         </p>
       */
     interface com::sun::star::lang::XInitialization ;

@@ -42,8 +42,8 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         <p>If any object is attached under this index, then this
         event is attached automatically.</p>
         <p>Exceptions of type
-        <type scope="com::sun::star::beans">IntrospectionException</type> and
-        <type scope="com::sun::star::script">CannotCreateAdapterException</type>
+        com::sun::star::beans::IntrospectionException and
+        com::sun::star::script::CannotCreateAdapterException
         that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
      */
@@ -61,8 +61,8 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         event is attached automatically (see <member>attach</member>)</p>
 
         <p>Exceptions of type
-        <type scope="com::sun::star::beans">IntrospectionException</type> and
-        <type scope="com::sun::star::script">CannotCreateAdapterException</type>
+        com::sun::star::beans::IntrospectionException and
+        com::sun::star::script::CannotCreateAdapterException
         that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
 
@@ -83,8 +83,8 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         (see <member>attach</member>).</p>
 
         <p>Exceptions of type
-        <type scope="com::sun::star::beans">IntrospectionException</type> and
-        <type scope="com::sun::star::script">CannotCreateAdapterException</type>
+        com::sun::star::beans::IntrospectionException and
+        com::sun::star::script::CannotCreateAdapterException
         that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
 
@@ -143,8 +143,8 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         for the given index to the given object.
 
         <p>Exceptions of type
-        <type scope="com::sun::star::beans">IntrospectionException</type> and
-        <type scope="com::sun::star::script">CannotCreateAdapterException</type>
+        com::sun::star::beans::IntrospectionException and
+        com::sun::star::script::CannotCreateAdapterException
         that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
      */
@@ -158,8 +158,8 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         which are registered at this object for the given index.
 
         <p>Exceptions of type
-        <type scope="com::sun::star::beans">IntrospectionException</type> and
-        <type scope="com::sun::star::script">CannotCreateAdapterException</type>
+        com::sun::star::beans::IntrospectionException and
+        com::sun::star::script::CannotCreateAdapterException
         that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
      */

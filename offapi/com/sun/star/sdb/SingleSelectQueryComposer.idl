@@ -30,11 +30,11 @@ interface XSingleSelectQueryComposer;
     <p>
     It hides the complexity of parsing and evaluating a single select statement and provides
     sophisticated methods for expanding a statement with filter, group by, having and order
-    criteria. To get the new extended statement use the methods from <type scope="com::sun::star::sdb">SingleSelectQueryAnalyzer</type>.
+    criteria. To get the new extended statement use the methods from com::sun::star::sdb::SingleSelectQueryAnalyzer.
     </p>
 
     <p>A SingleSelectQueryComposer is usually obtained from a Connection
-    using the <type scope="com::sun::star::lang">XMultiServiceFactory</type> interface.</p>
+    using the com::sun::star::lang::XMultiServiceFactory interface.</p>
  */
 service SingleSelectQueryComposer
 {
@@ -47,7 +47,7 @@ service SingleSelectQueryComposer
 
     interface XSingleSelectQueryComposer;
 
-    /** is the original SQL statement set with the interface <type scope="com::sun::star::sdb">XSingleSelectQueryAnalyzer</type>.
+    /** is the original SQL statement set with the interface com::sun::star::sdb::XSingleSelectQueryAnalyzer.
     */
     [readonly, property] string Original;
 };

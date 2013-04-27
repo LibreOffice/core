@@ -106,7 +106,7 @@ service TransientDocumentsFolderContent
         string Title
         </li>
         <li>
-        <type scope="com::sun::star::embed">XStorage</type> Storage ( read-only,
+        com::sun::star::embed::XStorage Storage ( read-only,
         always a reference to a storage opened in read-only mode. No write
         operations are possible. TDCP contents must be used for writing.)
         </li>
@@ -174,7 +174,7 @@ service TransientDocumentsFolderContent
         Let the new child ( not the parent! ) execute the command "insert".
         This will commit the creation process. For streams, you need to supply
         the implementation of an
-        <type scope="com::sun::star::io">XInputStream</type> with the command's
+        com::sun::star::io::XInputStream with the command's
         parameters, that provides access to the stream data.
         </li>
         </ol>

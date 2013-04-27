@@ -68,7 +68,7 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
 
             Otherwise for every property value that could not successfully
             be set an entry of the
-            <type scope="com::sun::star::beans">SetPropertyTolerantFailed</type>
+            com::sun::star::beans::SetPropertyTolerantFailed
             will be present in this sequence.
             The order of the properties is also alphabetically ascending.
 
@@ -96,7 +96,7 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
 
         @returns
             a sequence of type
-            <type scope="com::sun::star::beans">GetPropertyTolerantResult</type>
+            com::sun::star::beans::GetPropertyTolerantResult
             for each of the properties listed in <var>aPropertyNames</var>.
      */
     sequence< com::sun::star::beans::GetPropertyTolerantResult > getPropertyValuesTolerant(
@@ -120,7 +120,7 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
 
         @returns
             a sequence of type
-            <type scope="com::sun::star::beans">GetDirectPropertyTolerantResult</type>
+            com::sun::star::beans::GetDirectPropertyTolerantResult
             but only for those properties supplied whoms state is
             <member scope="com::sun::star::beans::PropertyState">DIRECT_VALUE</member>.
      */

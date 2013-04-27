@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module sheet {
     specific set of functions.
     That service must contain the AddIn service, and the
     functions that are implemented, in one or more interfaces.
-    The <type scope="com::sun::star::lang">XServiceName</type> interface
+    The com::sun::star::lang::XServiceName interface
     must describe that service, and the XAddIn interface
     must describe the individual functions.</p>
 
@@ -71,12 +71,12 @@ module com {  module sun {  module star {  module sheet {
     the function call, <void/> will be passed. This allows for optional
     parameters.</dd>
 
-    <dt><type scope="com::sun::star::table">XCellRange</type></dt>
-    <dd>for a <type scope="com::sun::star::table">XCellRange</type> interface
+    <dt>com::sun::star::table::XCellRange</dt>
+    <dd>for a com::sun::star::table::XCellRange interface
     to the source data.</dd>
 
-    <dt><type scope="com::sun::star::beans">XPropertySet</type></dt>
-    <dd>for a <type scope="com::sun::star::beans">XPropertySet</type>
+    <dt>com::sun::star::beans::XPropertySet</dt>
+    <dd>for a com::sun::star::beans::XPropertySet
     interface to the SpreadsheetDocument making the function
     call. Only one parameter of this type is allowed in each function. It
     can be used to query document settings like

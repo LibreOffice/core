@@ -45,15 +45,15 @@ module com {  module sun {  module star {  module awt { module tree {
 
     <h4>Selection</h4>
     <p>If you are interested in knowing when the selection changes implement a
-    <type scope="com::sun::star::view">XSelectionChangeListener</type> and add the instance with the method
+    com::sun::star::view::XSelectionChangeListener and add the instance with the method
     <member scope="::com::sun::star::view">XSelectionSupplier::addSelectionChangeListener()</member>.
     You than will be notified for any selection change.
     </p>
 
     <p>
     If you are interested in detecting either double-click events or when a user clicks on a node,
-    regardless of whether or not it was selected, you can get the <type scope="com::sun::star::awt">XWindow</type>
-    and add yourself as a <type scope="com::sun::star::awt">XMouseClickHandler</type>. You can use the
+    regardless of whether or not it was selected, you can get the com::sun::star::awt::XWindow
+    and add yourself as a com::sun::star::awt::XMouseClickHandler. You can use the
     method <member>XTreeControl::getNodeForLocation()</member> to retrieve the node that was under the
     mouse at the time the event was fired.
     </p>

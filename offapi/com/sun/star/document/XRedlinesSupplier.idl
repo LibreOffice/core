@@ -33,7 +33,7 @@ published interface XRedlinesSupplier: com::sun::star::uno::XInterface
             an enumeration access that provides access to the redline objects of the document.
 
             <p>The returned objects implement at least the interface
-            <type scope="com::sun::star::beans">XPropertySet</type>.
+            com::sun::star::beans::XPropertySet.
             Specific objects may support other interfaces as well.</p>
      */
     com::sun::star::container::XEnumerationAccess getRedlines();

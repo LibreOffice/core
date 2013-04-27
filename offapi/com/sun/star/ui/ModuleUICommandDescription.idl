@@ -43,8 +43,8 @@ service ModuleUICommandDescription
     /** provides access to user interface commands of an installed module.
 
         <p>
-        An implementation must provide a <type scope="com::sun::star::uno">Sequence</type> which
-        has <type scope="com::sun::star::beans">PropertyValue</type> as entries. The following
+        An implementation must provide a com::sun::star::uno::Sequence which
+        has com::sun::star::beans::PropertyValue as entries. The following
         entries a defined:
         <ul>
             <li><b>Label</b><br>a string which specifies the short name of the user interface command with

@@ -75,9 +75,9 @@ published service HierarchyAccess
 
 /** provides support for inexact names.
  <p>Exact names can be obtained for simple or hierarchical names for use in
- <type scope="com::sun::star::container">XNameAccess</type>,
- <type scope="com::sun::star::container">XHierarchicalNameAccess</type>,
- <type scope="com::sun::star::beans">XPropertySet</type> or
+ com::sun::star::container::XNameAccess,
+ com::sun::star::container::XHierarchicalNameAccess,
+ com::sun::star::beans::XPropertySet or
  any other interfaces that allow access to or manipulation of subnodes
  selected by name or hierarchical name.
  </p>
@@ -90,15 +90,15 @@ published service HierarchyAccess
 /** provides information about immediate children of this node. [optional]
 
  <p>This interface may be missing, if the hierarchy supports no traits that are
- described by <type scope="com::sun::star::beans">PropertyAttribute</type>
+ described by com::sun::star::beans::PropertyAttribute
  values or if the same information is available by other means,
  e.g. if the implementation supports
  <member scope="com::sun::star::beans">XPropertySet::getPropertySetInfo()</member>.
  </p>
 
  <p>If a child of this node is an object that implements
- <type scope="com::sun::star::beans">XProperty</type>, then this implementation
- returns the same <type scope="com::sun::star::beans">Property</type> for that
+ com::sun::star::beans::XProperty, then this implementation
+ returns the same com::sun::star::beans::Property for that
  child as the child itself.
  </p>
 */
@@ -115,8 +115,8 @@ published service HierarchyAccess
  a default state (as indicated by
  <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
  they should implement
- <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
- the <type scope="com::sun::star::beans">PropertyState</type> applies to all
+ com::sun::star::beans::XPropertyWithState, in which case
+ the com::sun::star::beans::PropertyState applies to all
  their children and recursively to all descendants.
  </p>
 
@@ -138,8 +138,8 @@ published service HierarchyAccess
  a default state (as indicated by
  <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
  they should implement
- <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
- the <type scope="com::sun::star::beans">PropertyState</type> applies to all
+ com::sun::star::beans::XPropertyWithState, in which case
+ the com::sun::star::beans::PropertyState applies to all
  their children and recursively to all descendants.
  </p>
 

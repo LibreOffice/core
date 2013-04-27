@@ -25,9 +25,9 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** this is a container for <type scope="com::sun::star::awt">Gradient</type>s
+/** this is a container for com::sun::star::awt::Gradients
 
-    <p>It is used for example to access the <type scope="com::sun::star::awt">Gradient</type>s that
+    <p>It is used for example to access the com::sun::star::awt::Gradients that
     are used inside a document.
 
     @see DrawingDocumentFactory
@@ -35,7 +35,7 @@
 */
 published service GradientTable
 {
-    /** this container lets you access the <type scope="com::sun::star::awt">Gradient</type>s that
+    /** this container lets you access the com::sun::star::awt::Gradients that
         are indexed with a name.
 
         <p>Note: You can add new entries for later use, but you cannot

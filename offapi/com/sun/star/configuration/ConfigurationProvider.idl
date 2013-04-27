@@ -29,17 +29,17 @@ module com { module sun { module star { module configuration {
  factory for objects that provide access to a subset of the configuration.
 
  <p>An implementation is usually obtained from a
- <type scope="com::sun::star::lang">ServiceManager</type>. The arguments passed to
+ com::sun::star::lang::ServiceManager. The arguments passed to
  <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContextAndArguments()</member>
  select the configuration data source. Arguments must be provided as
- <type scope="com::sun::star::beans">NamedValue</type>
- or <type scope="com::sun::star::beans">PropertyValue</type>.
+ com::sun::star::beans::NamedValue
+ or com::sun::star::beans::PropertyValue.
  If the parameters given are incomplete missing values are taken
  from the context or the environment. If an instance already exists for the
  given set of arguments, the existing instance may be reused.
  In particular, instantiating a provider without explicit arguments to access
  the default configuration data will always yield the same
- <type scope="com::sun::star::configuration">DefaultProvider</type> object.
+ com::sun::star::configuration::DefaultProvider object.
  </p>
  <p>Some arguments for
  <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
@@ -84,8 +84,8 @@ published service ConfigurationProvider
  in parameter <var>aArguments</var> specify the view of the configuration that
  should be created. That is, they determine the subset of elements that can be
  accessed starting from the returned object. Each element of the argument
- sequence should be a <type scope="com::sun::star::beans">PropertyValue</type>
- or a <type scope="com::sun::star::beans">NamedValue</type>,
+ sequence should be a com::sun::star::beans::PropertyValue
+ or a com::sun::star::beans::NamedValue,
  so that the parameters can be identified by name rather than by position.
  </p>
 
@@ -120,7 +120,7 @@ published service ConfigurationProvider
           number of nesting levels away from the root need not be included in the
           view.
          </dd>
-         <dt><code>"locale"</code> : <type scope="com::sun::star::lang">Locale</type></dt>
+         <dt><code>"locale"</code> : com::sun::star::lang::Locale</dt>
          <dd>specifies the locale for which localized values should be
           retrieved.
          </dd>
@@ -214,7 +214,7 @@ published service ConfigurationProvider
  <p>The owner of the provider may dispose of this object
  using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
  Note that the default provider is owned by the
- <type scope="com::sun::star::lang">ServiceManager</type> and should not be
+ com::sun::star::lang::ServiceManager and should not be
  disposed of by user code.
  </p>
 

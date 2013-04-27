@@ -53,7 +53,7 @@ interface XDatabaseDocumentUI
     /** provides access to the application's main window
 
         <p>Note that reading this attribute is equivalent to querying the component
-        for the <type scope="com::sun::star::frame">XController</type> interface,
+        for the com::sun::star::frame::XController interface,
         asking the controller for its frame, and asking this frame for its
         container window.</p>
 
@@ -99,9 +99,9 @@ interface XDatabaseDocumentUI
         forms, reports, tables, queries. Those components are tracked by the application,
         and provided in this attribute.</p>
 
-        <p>The components here might either be documents (<type scope="com::sun::star::frame">XModel</type>),
-        controllers (<type scope="com::sun::star::frame">XController</type>), or frames
-        (<type scope="com::sun::star::frame">XFrame</type>).
+        <p>The components here might either be documents (com::sun::star::frame::XModel),
+        controllers (com::sun::star::frame::XController), or frames
+        (com::sun::star::frame::XFrame).
 
         @since OOo 3.0
     */
@@ -161,8 +161,8 @@ interface XDatabaseDocumentUI
         it allows opening a table, query, form, or report for either editing or viewing.</p>
 
         <p>This method is a convenience wrapper for API which is also available otherwise. For instance,
-        for loading forms and reports, you could use the <type scope="com::sun::star::frame">XComponentLoader</type>
-        interface of the <type scope="::com::sun::star::sdb">Forms</type> resp. <type scope="::com::sun::star::sdb">Reports</type>
+        for loading forms and reports, you could use the com::sun::star::frame::XComponentLoader
+        interface of the ::com::sun::star::sdb::Forms resp. ::com::sun::star::sdb::Reports
         collections.</p>
 
         <p>Note there must exist a connection to the database before you can call this method.</p>
@@ -195,17 +195,17 @@ interface XDatabaseDocumentUI
               <tr style="vertical-align: top;">
                 <td><em>Tables</em></td>
                 <td>A table designer is opened, and allows to edit the structure of the table.
-                    See also <type scope="::com::sun::star::sdb">TableDesign</type></td>
+                    See also ::com::sun::star::sdb::TableDesign</td>
                 <td>A table data view is opened, and allows to view and edit the data contained in the table.
-                    See also <type scope="::com::sun::star::sdb">DataSourceBrowser</type></td>
+                    See also ::com::sun::star::sdb::DataSourceBrowser</td>
               </tr>
 
               <tr style="vertical-align: top;">
                 <td><em>Queries</em></td>
                 <td>A query designer is opened, and allows to edit the statement constituting the query.
-                    See also <type scope="::com::sun::star::sdb">QueryDesign</type></td>
+                    See also ::com::sun::star::sdb::QueryDesign</td>
                 <td>A table data view is opened, and allows to view and edit the data contained in the query.
-                    See also <type scope="::com::sun::star::sdb">DataSourceBrowser</type></td>
+                    See also ::com::sun::star::sdb::DataSourceBrowser</td>
               </tr>
 
               <tr style="vertical-align: top;">
@@ -225,8 +225,8 @@ interface XDatabaseDocumentUI
             </p>
 
         @return
-            the component which has been loaded. This is either an <type scope="com::sun::star::frame">XModel</type>,
-            or an <type scope="com::sun::star::frame">XController</type> if the component does is model-less.
+            the component which has been loaded. This is either an com::sun::star::frame::XModel,
+            or an com::sun::star::frame::XController if the component does is model-less.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <arg>ObjectType</arg> denotes an invalid object type
@@ -271,7 +271,7 @@ interface XDatabaseDocumentUI
 
         @param DocumentDefinition
             Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
-            or <member>DatabaseObject::REPORT</member>, this will contain the <type scope="com::sun::star::sdb">DocumentDefinition</type>
+            or <member>DatabaseObject::REPORT</member>, this will contain the com::sun::star::sdb::DocumentDefinition
             object which controls the sub component.
     */
     ::com::sun::star::lang::XComponent createComponent(
@@ -295,7 +295,7 @@ interface XDatabaseDocumentUI
 
         @param DocumentDefinition
             Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
-            or <member>DatabaseObject::REPORT</member>, this will contain the <type scope="com::sun::star::sdb">DocumentDefinition</type>
+            or <member>DatabaseObject::REPORT</member>, this will contain the com::sun::star::sdb::DocumentDefinition
             object which controls the sub component.<br/>
             You can use this object to control various aspects of the sub component. For instance, you could decide
             to create the component hidden, by passing a <code>Hidden</code> flag (set to <TRUE/>) in <arg>Arguments</arg>,

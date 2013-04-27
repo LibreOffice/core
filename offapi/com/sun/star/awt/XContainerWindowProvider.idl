@@ -29,7 +29,7 @@ module com { module sun { module star { module awt {
 
 
 /** provides container windows implementing the
-    <type scope="com::sun::star::awt">XWindow</type> interface.
+    com::sun::star::awt::XWindow interface.
  */
 interface XContainerWindowProvider : ::com::sun::star::uno::XInterface {
 
@@ -56,15 +56,15 @@ interface XContainerWindowProvider : ::com::sun::star::uno::XInterface {
 
             xHandler can handle events in two different ways:
 
-            1. By supporting the <type scope="com::sun::star::awt">XContainerWindowEventHandler</type>
+            1. By supporting the com::sun::star::awt::XContainerWindowEventHandler
             interface. This is a generic interface to accept event notifications.
 
             2. By providing interfaces that directly implement the handler
             methods to be called. The XContainerWindowProvider implementation then
             will try to access these events using the
-            <type scope="com::sun::star::beans">Introspection</type>Introspection
+            com::sun::star::beans::IntrospectionIntrospection
             service. To make this possible the handler implementation also has to
-            support <type scope="com::sun::star::lang">XTypeProvider</type>.
+            support com::sun::star::lang::XTypeProvider.
 
             If XContainerWindowEventHandler is supported XContainerWindowEventHandler.callHandlerMethod()
             is always called first to handle the event. Only if the event cannot be
@@ -81,7 +81,7 @@ interface XContainerWindowProvider : ::com::sun::star::uno::XInterface {
             will be searched. The signature is similar to XContainerWindowEventHandler.
             callHandlerMethod except for MethodName itself that isn't needed
             here. For more information about these parameters, see
-            <type scope="com::sun::star::awt">XContainerWindowEventHandler</type>.
+            com::sun::star::awt::XContainerWindowEventHandler.
 
             If this method is found, it will be called, otherwise a method
 
@@ -90,13 +90,13 @@ interface XContainerWindowProvider : ::com::sun::star::uno::XInterface {
             will be searched and called.
 
         @returns
-            a window implementing the <type scope="com::sun::star::awt">XWindow</type> interface.
+            a window implementing the com::sun::star::awt::XWindow interface.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if no window for the given URL is found or if the URL is invalid
             or xParent is null.
 
-        @see <type scope="com::sun::star::awt">XContainerWindowEventHandler</type>
+        @see com::sun::star::awt::XContainerWindowEventHandler
 
      */
     com::sun::star::awt::XWindow createContainerWindow

@@ -60,7 +60,7 @@ service AccessibleFixedText
                 >AccessibleStateType::DEFUNC</const>
                 is set if the object has already been disposed
                 and subsequent calls to this object result in
-                <type scope="com::sun::star::lang">DisposedException</type>
+                com::sun::star::lang::DisposedException
                 exceptions.</li>
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::ENABLED</const> is set

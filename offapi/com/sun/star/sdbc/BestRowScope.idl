@@ -32,7 +32,7 @@ published constants BestRowScope
              A possible value for the column
              <code>SCOPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object
              returned by the method
              <member>XDatabaseMetaData::getBestRowIdentifier()</member>
@@ -45,7 +45,7 @@ published constants BestRowScope
              A possible value for the column
              <code>SCOPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object
              returned by the method
              <member>XDatabaseMetaData::getBestRowIdentifier()</member>
@@ -58,7 +58,7 @@ published constants BestRowScope
              A possible value for the column
              <code>SCOPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object
              returned by the method
              <member>XDatabaseMetaData::getBestRowIdentifier()</member>

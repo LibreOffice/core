@@ -28,7 +28,7 @@ published constants ColumnSearch
 {
 
     /** A possible value for column <code>SEARCHABLE</code> in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object returned by the method
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
              .
@@ -41,7 +41,7 @@ published constants ColumnSearch
     const long NONE = 0;
 
     /** A possible value for column <code>SEARCHABLE</code> in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object returned by the method
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
              .
@@ -56,7 +56,7 @@ published constants ColumnSearch
     const long CHAR = 1;
 
     /** A possible value for column <code>SEARCHABLE</code> in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object returned by the method
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
              .
@@ -73,7 +73,7 @@ published constants ColumnSearch
     /** A possible value for column
             <code>SEARCHABLE</code>
             in the
-            <type scope="com::sun::star::sdbc">XResultSet</type>
+            com::sun::star::sdbc::XResultSet
             object returned by the method
             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
             .

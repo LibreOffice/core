@@ -39,7 +39,7 @@
 
     <p>
     Implements the service
-    <type scope="com::sun::star::sdbc">Connection</type>
+    com::sun::star::sdbc::Connection
     .
     It is possible to open more than one connection at the same time, but the method
     <member scope="com::sun::star::sdb">DatabaseAccessConnection::dispose()</member>

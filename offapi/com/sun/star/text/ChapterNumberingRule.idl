@@ -38,7 +38,7 @@
     NUM_ROMAN_LOWER, NUM_ARABIC, or NUM_NUMBER_NONE
 
     </p>
-    <p>In the <type scope="com::sun::star::style">NumberingAlignment</type> only the field
+    <p>In the com::sun::star::style::NumberingAlignment only the field
     <member scope="com::sun::star::style">NumberingAlignment::Alignment</member> is applied.
 
     </p>

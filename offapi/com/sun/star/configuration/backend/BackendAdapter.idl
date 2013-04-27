@@ -53,12 +53,12 @@ published service BackendAdapter
 
       <p>If this interface is present, a SingleBackend
         may be passed, that is used to access the data.
-        Also a <type scope="com::sun::star::configuration::bootstrap">BootstrapContext</type>
+        Also a com::sun::star::configuration::bootstrap::BootstrapContext
         can be passed, that provides further settings for the backend.
       </p>
 
       <p>If this interface is missing, the real backend to use is determined
-        from the <type scope="com::sun::star::uno">XComponentContext</type>.
+        from the com::sun::star::uno::XComponentContext.
       </p>
       */
     [optional] interface com::sun::star::lang::XInitialization ;

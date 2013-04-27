@@ -48,7 +48,7 @@ interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface
         <member>setStorage</member> from the storage and initialize the
         user interface configuration manager instance with the newly
         data. This call can throw an
-        <type scope="com::sun::star::io">IOException</type> if
+        com::sun::star::io::IOException if
         <member>store</member> cannot store its data into the internal
         storage.
     */
@@ -58,7 +58,7 @@ interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface
         the previously set storage by <member>setStorage</member>. Can
         be used to make copy of the current user interface configuration
         data to another storage. This call will throw an
-        <type scope="com::sun::star::io">IOException</type> if the provided
+        com::sun::star::io::IOException if the provided
         storage is in read-only mode.
 
         @param Storage

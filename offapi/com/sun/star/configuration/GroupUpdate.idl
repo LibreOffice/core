@@ -47,7 +47,7 @@ published service GroupUpdate
 /** allows replacing values.
 
  <p>This service extends the interface
- <type scope="com::sun::star::container">XNameAccess</type> supported
+ com::sun::star::container::XNameAccess supported
  by service GroupAccess to allow changing values.
  This strongly overlaps with functionality available through
  PropertyHierarchy (from GroupAccess), so that
@@ -56,8 +56,8 @@ published service GroupUpdate
  </p>
 
  <p>Changes can be observed by registering a listener with interface
- <type scope="com::sun::star::beans">XPropertySet</type> or
- <type scope="com::sun::star::beans">XMultiPropertySet</type>.
+ com::sun::star::beans::XPropertySet or
+ com::sun::star::beans::XMultiPropertySet.
  </p>
 
  <p>Elements of this group may be replaced only if they are of simple type.

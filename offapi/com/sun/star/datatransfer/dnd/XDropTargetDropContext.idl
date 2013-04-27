@@ -55,7 +55,7 @@ published interface XDropTargetDropContext : com::sun::star::uno::XInterface
     void acceptDrop( [in] byte dragOperation );
 
     /** Reject the drop as a result of examining the available
-        <type scope="com::sun::star::datatransfer">DataFlavor</type> types
+        com::sun::star::datatransfer::DataFlavor types
         received in the <member>XDropTargetListener::dragEnter()</member> method.
     */
 

@@ -44,8 +44,8 @@ interface XTransferableSupplier
         <p>A NULL value is not allowed.</p>
 
         @throws com::sun::star::datatransfer::UnsupportedFlavorException
-        if the given <type scope="com::sun::star::datatransfer">XTransferable</type>
-        has no <type scope="com::sun::star::datatransfer">DataFlavor</type> or the called
+        if the given com::sun::star::datatransfer::XTransferable
+        has no com::sun::star::datatransfer::DataFlavor or the called
         object can't handle any of the available ones.
 
         @see com::sun::star::datatransfer::XTransferable

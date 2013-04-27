@@ -32,7 +32,7 @@ published constants KeyRule
             and
             <code>DELETE_RULE</code>
             in the
-            <type scope="com::sun::star::sdbc">XResultSet</type>
+            com::sun::star::sdbc::XResultSet
              objects returned by the methods
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,
@@ -65,7 +65,7 @@ published constants KeyRule
              and
              <code>DELETE_RULE</code>
             in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              objects returned by the methods
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,
@@ -96,7 +96,7 @@ published constants KeyRule
              and
              <code>DELETE_RULE</code>
             in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
               objects returned by the methods
             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,
@@ -123,7 +123,7 @@ published constants KeyRule
              and
              <code>DELETE_RULE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              objects returned by the methods
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,
@@ -148,7 +148,7 @@ published constants KeyRule
              and
              <code>DELETE_RULE</code>
             in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              objects returned by the methods
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,

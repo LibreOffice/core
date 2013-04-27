@@ -44,7 +44,7 @@ published service X11DropTarget
     interface XDropTarget;
 
     /** The service expects an instance of
-        <type scope="com::sun::star::awt">XDisplayConnection</type>
+        com::sun::star::awt::XDisplayConnection
          as the first parameter. The second parameter must be a long
         that contains an XWindow window which shall be registered
         as drop target.

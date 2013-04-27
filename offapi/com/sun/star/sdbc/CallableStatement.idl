@@ -44,33 +44,33 @@
     </p>
     <p>
     IN parameter values are set using the set methods inherited from
-    <type scope="com::sun::star::sdbc">PreparedStatement</type>
+    com::sun::star::sdbc::PreparedStatement
     . The type of all
     OUT parameters must be registered prior to executing the stored procedure;
     their values are retrieved after execution via the
     <code>get</code>
     methods
     provided by the
-    <type scope="com::sun::star::sdbc">XRow</type>
+    com::sun::star::sdbc::XRow
     .
     </p>
     <p>
     A
     <code>CallableStatement</code>
     can return one
-    <type scope="com::sun::star::sdbc">XResultSet</type>
+    com::sun::star::sdbc::XResultSet
     or multiple
-    <type scope="com::sun::star::sdbc">ResultSet</type>
+    com::sun::star::sdbc::ResultSet
     objects. Multiple
     <code>ResultSet</code>
     objects are
     handled using operations inherited from
-    <type scope="com::sun::star::sdbc">XPreparedStatement</type>
+    com::sun::star::sdbc::XPreparedStatement
     .
     </p>
     <p>
     For maximum portability, a call's
-    <type scope="com::sun::star::sdbc">ResultSet</type>
+    com::sun::star::sdbc::ResultSet
     objects and
     update counts should be processed prior to getting the values of output
     parameters.

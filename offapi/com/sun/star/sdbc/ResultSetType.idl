@@ -28,14 +28,14 @@ published constants ResultSetType
 {
 
     /** is the type for a
-            <type scope="com::sun::star::sdb">ResultSet</type>
+            com::sun::star::sdb::ResultSet
             object whose cursor may move only forward.
      */
     const long FORWARD_ONLY         = 1003;
 
 
     /** is the type for a
-            <type scope="com::sun::star::sdb">ResultSet</type>
+            com::sun::star::sdb::ResultSet
             object that is scrollable
              but generally not sensitive to changes made by others.
      */
@@ -43,7 +43,7 @@ published constants ResultSetType
 
 
     /** is the type for a
-            <type scope="com::sun::star::sdb">ResultSet</type>
+            com::sun::star::sdb::ResultSet
             object that is scrollable
              and generally sensitive to changes made by others.
      */

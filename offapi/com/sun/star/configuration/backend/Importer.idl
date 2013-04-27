@@ -47,7 +47,7 @@ published service Importer
         its behavior .
 
         <p> Arguments are provided as
-            <type scope="com::sun::star::beans">NamedValue</type>.
+            com::sun::star::beans::NamedValue.
             Implementations specify which arguments they support.
 
         <dl>

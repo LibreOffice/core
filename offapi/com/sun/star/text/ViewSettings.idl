@@ -235,14 +235,14 @@ published service ViewSettings
     [optional, property] boolean ShowNonprintingCharacters;
     /** metric unit of the horizontal ruler
 
-        <p>Uses values <type scope="com::sun::star::awt">FieldUnit</type></p>
+        <p>Uses values com::sun::star::awt::FieldUnit</p>
 
         @since OOo 3.1
      */
     [optional, property] long HorizontalRulerMetric;
     /** metric unit of the vertical ruler
 
-        <p>Uses values from <type scope="com::sun::star::awt">FieldUnit</type></p>
+        <p>Uses values from com::sun::star::awt::FieldUnit</p>
 
         @since OOo 3.1
      */

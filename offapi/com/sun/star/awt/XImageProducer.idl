@@ -44,7 +44,7 @@ published interface XImageProducer: com::sun::star::uno::XInterface
     void addConsumer( [in] com::sun::star::awt::XImageConsumer xConsumer );
 
 
-    /** removes the given <type scope="com::sun::star::awt">XImageConsumer</type>
+    /** removes the given com::sun::star::awt::XImageConsumer
         callback from the list of consumers currently registered to receive
         image data.
 

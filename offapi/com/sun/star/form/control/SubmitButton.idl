@@ -29,12 +29,12 @@ module com {  module sun {  module star {  module form {  module control {
 
 /** specifies a button control which can execute external submissions
 
-    <p>The model of the control has to support the <type scope="com::sun::star::form::component">SubmitButton</type>
+    <p>The model of the control has to support the com::sun::star::form::component::SubmitButton
     service.</p>
 
     <p>The control is clickable. When clicked (by mouse or keyboard, or programmatically),
         the following happens:
-    <ol><li>Any <type scope="com::sun::star::form::submission">XSubmissionVetoListener</type>s registered
+    <ol><li>Any com::sun::star::form::submission::XSubmissionVetoListeners registered
             at the component are given the chance to veto the submission.
         </li>
         <li>The model of the control is examined for an external submission object. That is,
@@ -44,11 +44,11 @@ module com {  module sun {  module star {  module form {  module control {
             <member scope="com::sun::star::form::submission">XSubmission::submit</member> method is invoked.
         </li>
         <li>If there is no external submission, the parent object of the model is examined
-            for the presence of the <type scope="com::sun::star::form">XSubmit</type> interface. If it
+            for the presence of the com::sun::star::form::XSubmit interface. If it
             is present, it's <member scope="com::sun::star::form">XSubmit::submit</member> method is
             invoked.<br/>
-            Since the parent object of a submit button can only be a <type scope="com::sun::star::form::component">Form</type>,
-            this means that SubmitButtons are also able to submit <type scope="com::sun::star::form::component">HTMLForm</type>s.
+            Since the parent object of a submit button can only be a com::sun::star::form::component::Form,
+            this means that SubmitButtons are also able to submit com::sun::star::form::component::HTMLForms.
         </li>
     </ol>
     </p>

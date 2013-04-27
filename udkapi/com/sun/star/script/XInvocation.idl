@@ -37,9 +37,9 @@
 
 /** gives access to an object's methods and properties.
     Container access is available through
-    <type scope="com::sun::star::container">XIndexContainer</type>,
-    <type scope="com::sun::star::container">XNameContainer</type> and
-    <type scope="com::sun::star::container">XEnumerationAccess</type>.
+    com::sun::star::container::XIndexContainer,
+    com::sun::star::container::XNameContainer and
+    com::sun::star::container::XEnumerationAccess.
     </p>
  */
 published interface XInvocation: com::sun::star::uno::XInterface
@@ -75,7 +75,7 @@ published interface XInvocation: com::sun::star::uno::XInterface
     /** sets a value to the property with the specified name.
 
         <p> If the underlying object implements an
-        <type scope="com::sun::star::container">XNameContainer</type>,
+        com::sun::star::container::XNameContainer,
         then this method will insert the value if there is no such
         <var>aPropertyName</var>.
 

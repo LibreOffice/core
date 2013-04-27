@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     <p>This interface describes a name-type-value triple which describes a
     single attribute of a tag. Implementors are encouraged to implement the
-    <type scope="com::sun::star::util">XCloneable</type> interface also to
+    com::sun::star::util::XCloneable interface also to
     allow the user to make a copy of the instance.
 
     </p>

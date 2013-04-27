@@ -46,9 +46,9 @@
     should be used to create sub document container or form, or report objects.</p>
 
     <p>The embedded documents do not support any particular database related service, instead, they're
-    usual <type scope="com::sun::star::document">OfficeDocument</type>s.<br/>
+    usual com::sun::star::document::OfficeDocuments.<br/>
     The only thing worth mentioning here is that they support the
-    <type scope="com::sun::star::container">XChild</type> interface, whose
+    com::sun::star::container::XChild interface, whose
     <member scope="com::sun::star::container">XChild::getParent</member> method can be used to
     obtain the database document which the embedded document belongs to.
     </p>
@@ -67,7 +67,7 @@ service DocumentContainer
         of a <code>DocumentDefinition</code> supports at least the following commands, additionally to
         the ones already supported by the DefinitionContent:
         <ul>
-            <li><strong>open</strong>: provides a <type scope="com::sun::star::ucb::">XDynamicResultSet</type>
+            <li><strong>open</strong>: provides a com::sun::star::ucb::::XDynamicResultSet
                 to enumerate the content of the document container.</li>
             <li><strong>delete</strong>: deletes the document container, including all contained documents.</li>
         </ul>

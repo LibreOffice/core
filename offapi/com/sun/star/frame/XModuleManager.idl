@@ -39,7 +39,7 @@ interface XModuleManager : com::sun::star::uno::XInterface
        @descr  This identifier can then be used at the service ModuleManager
                to get more information about this module.
 
-               For identification the interface <type scope="com::sun::star::lang">XServiceInfo</type>
+               For identification the interface com::sun::star::lang::XServiceInfo
                is requested on the given module. Because all module service registrations must be unique
                this value can be queried and checked against the configuration.
 
@@ -50,23 +50,23 @@ interface XModuleManager : com::sun::star::uno::XInterface
                Possible objects for this parameter can be the following one:
                <ul>
                    <li>
-                       <b><type scope="com::sun::star::frame">XFrame</type></b><br>
+                       <b>com::sun::star::frame::XFrame</b><br>
                        A frame contains (against a component window) a controller.
                        Such controller represent the module (in case no model exists).
                    </li>
                    <li>
-                       <b><type scope="com::sun::star::frame">XController</type></b><br>
+                       <b>com::sun::star::frame::XController</b><br>
                        A controller can be bound to a model. Then the model represent the module.
                        If no model exists - the controller is used for identification.
                    </li>
                    <li>
-                       <b><type scope="com::sun::star::frame">XModel</type></b><br>
+                       <b>com::sun::star::frame::XModel</b><br>
                        A model represent a module everytime and can be used for
                        identification directly.
                    </li>
                </ul>
 
-       @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+       @throws com::sun::star::lang::IllegalArgumentException
                if the parameter Module is:
                <ul>
                    <li>an empty one</li>

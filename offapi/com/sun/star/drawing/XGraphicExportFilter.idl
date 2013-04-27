@@ -36,7 +36,7 @@ published interface XGraphicExportFilter
         starts the export of the graphic file.
 
         <p>The following properties from the
-        <type scope="com::sun::star::document">MediaDescriptor</type> are
+        com::sun::star::document::MediaDescriptor are
         supported:</p>
 
         <ul>
@@ -64,7 +64,7 @@ published interface XGraphicExportFilter
                     <li>image/x-xpixmap</li>
                     <li>image/svg+xml</li>
                 </ul>
-                <p>Ask the interface <type scope="com::sun::star::document">XMimeTypeInfo</type>
+                <p>Ask the interface com::sun::star::document::XMimeTypeInfo
                 for all values supported by the component.</p>
             </li>
             <li>

@@ -36,7 +36,7 @@
     created/loaded from the resource. The arguments are passed to the loader
     to modify its behavior. An example for such an argument is "AsTemplate",
     which loads the resource as a template for a new document.
-    (see <type scope="com::sun::star::document">MediaDescriptor</type> for further details)
+    (see com::sun::star::document::MediaDescriptor for further details)
     </p>
 
     <p>
@@ -48,7 +48,7 @@
     <p>
     If there is at least one controller, there is by definition a
     current controller. And if that controller supports the interface
-    <type scope="com::sun::star::view">XSelectionSupplier</type>, it has a current selection too.
+    com::sun::star::view::XSelectionSupplier, it has a current selection too.
     </p>
 
     @see com::sun::star::document::MediaDescriptor
@@ -64,7 +64,7 @@ published interface XModel: com::sun::star::lang::XComponent
 
         @param Arguments
             are optional arguments for that resource
-            (see <type scope="com::sun::star::document">MediaDescriptor</type>)
+            (see com::sun::star::document::MediaDescriptor)
 
         @return
             <TRUE/> for success
@@ -85,7 +85,7 @@ published interface XModel: com::sun::star::lang::XComponent
     string getURL();
 
     /** provides read access on currently representation of the
-        <type scope="com::sun::star::document">MediaDescriptor</type>
+        com::sun::star::document::MediaDescriptor
         of this model which describes the model and his state
 
         @returns
@@ -97,7 +97,7 @@ published interface XModel: com::sun::star::lang::XComponent
     /** is called whenever a new controller is created for this model.
 
         <p>
-        The <type scope="com::sun::star::lang">XComponent</type> interface
+        The com::sun::star::lang::XComponent interface
         of the controller must be used to recognize when it is deleted.
         </p>
 
@@ -111,7 +111,7 @@ published interface XModel: com::sun::star::lang::XComponent
     /** is called whenever an existing controller should be deregistered at this model.
 
         <p>
-        The <type scope="com::sun::star::lang">XComponent</type> interface
+        The com::sun::star::lang::XComponent interface
         of the controller must be used to recognize when it is deleted.
         </p>
 

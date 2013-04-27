@@ -124,7 +124,7 @@ service AccessibleParagraphView
         <method scope="::com::sun::star::accessibility"
         >XAccessibleText::getCharacterAttributes</method>
         are a sub set of the properties described by the service
-        <type scope="::com::sun::star::style">CharacterProperties</type>. For
+        ::com::sun::star::style::CharacterProperties. For
         properties that have Asian and complex counterparts, the value that
         is visible is returned. This can be in fact the western, Asian or
         complex value.  Its not possible to change the value of any property
@@ -151,7 +151,7 @@ service AccessibleParagraphView
         <method scope="::com::sun::star::accessibility"
         >XAccessibleText::getCharacterAttributes</method> are a sub set of the properties
         described by the service
-        <type scope="::com::sun::star::style">CharacterProperties</type>. For
+        ::com::sun::star::style::CharacterProperties. For
         properties that have Asian and complex counterparts, the value that
         is visible is returned. This can be in fact the western, Asian or
         complex value.

@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module form {
 
 
-/** is superseded by <type scope="com::sun::star::form::runtime">XFormController</type>.
+/** is superseded by com::sun::star::form::runtime::XFormController.
     @deprecated
  */
 published interface XFormController: com::sun::star::awt::XTabController

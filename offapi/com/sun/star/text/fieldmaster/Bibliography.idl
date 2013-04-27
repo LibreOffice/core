@@ -61,7 +61,7 @@ published service Bibliography
             <LI><P>[property] boolean IsSortAscending;</P>
             <UL>
                 <LI><P>Determines whether the sorting is ascending or descending.
-                 It uses the type <type scope="com::sun::star::text">BibliographyDataField</type></P>
+                 It uses the type com::sun::star::text::BibliographyDataField</P>
             </UL>
         </UL>
      */

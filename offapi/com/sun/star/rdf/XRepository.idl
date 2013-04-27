@@ -88,7 +88,7 @@ interface XRepository
         <type scope="com::sun::star::datatransfer">UnsupportedFlavorException
         </type> is raised.
         If the format requires use of a BaseURI, but none is given, an
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        com::sun::star::lang::IllegalArgumentException
         is raised.
         </p>
 

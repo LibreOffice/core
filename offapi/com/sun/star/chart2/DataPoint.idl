@@ -44,7 +44,7 @@ service DataPoint
 
 
     /** this property handles the style.  This property must support
-        the service <type scope="com::sun::star::style">Style</type>.
+        the service com::sun::star::style::Style.
 
         <p>It should provide templates for all properties in this
         service, thus it must also support DataPoint.</p>

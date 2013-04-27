@@ -46,7 +46,7 @@ module com { module sun { module star { module configuration {
  </p>
 
  <p>The accumulated changes within this hierarchy can be managed using
- <type scope="com::sun::star::util">XChangesBatch</type>. Pending changes
+ com::sun::star::util::XChangesBatch. Pending changes
  will become persistent and visible from other overlapping hierarchies
  only when <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
  is called. If the hierarchy is disposed or discarded without committing

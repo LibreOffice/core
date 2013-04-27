@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module drawing {
 service AccessibleGraphControl
 {
     /** Base interface for being accessible.  It gives access to the
-        <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
+        ::com::sun::star::accessibility::XAccessibleContext
         interface.
     */
     interface ::com::sun::star::accessibility::XAccessible;

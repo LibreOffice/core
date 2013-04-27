@@ -37,7 +37,7 @@ interface XUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface
 
         @returns
             an object implementing
-            <type scope="::com::sun::star::ui">UIConfigurationManager</type>
+            ::com::sun::star::ui::UIConfigurationManager
             service.
     */
     XUIConfigurationManager getUIConfigurationManager();

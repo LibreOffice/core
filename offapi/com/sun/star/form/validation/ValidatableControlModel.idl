@@ -39,7 +39,7 @@ service ValidatableControlModel
     /** specifies the basic functionality for a form control model
 
         <p>Via this service, validatable control models inherit the
-        <type scope="com::sun::star::util">XCloneable</type> interface.<br/>
+        com::sun::star::util::XCloneable interface.<br/>
         If an validatable control model, at which a validator has been set (via
         <member>XValidatable::setValidator</member>), is being cloned, then the
         validator is also set at the clone. Effectively, this means that

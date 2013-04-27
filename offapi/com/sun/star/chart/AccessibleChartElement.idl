@@ -33,16 +33,16 @@ module com {  module sun {  module star {  module chart {
     elements.
 
     <p>The list of objects that implement this service is
-    <type scope="::com::sun::star::chart">ChartTitle</type>,
-    <type scope="::com::sun::star::chart">ChartLegend</type>,
-    <type scope="::com::sun::star::chart">Diagram</type>,
-    <type scope="::com::sun::star::chart">ChartAxis</type>,
-    <type scope="::com::sun::star::chart">ChartDataRowProperties</type>,
-    <type scope="::com::sun::star::chart">ChartDataPointProperties</type>.
+    ::com::sun::star::chart::ChartTitle,
+    ::com::sun::star::chart::ChartLegend,
+    ::com::sun::star::chart::Diagram,
+    ::com::sun::star::chart::ChartAxis,
+    ::com::sun::star::chart::ChartDataRowProperties,
+    ::com::sun::star::chart::ChartDataPointProperties.
     </p>
 
     <p>The
-       <type scope="::com::sun::star::accessibility">XAccessibleExtendedComponent</type>
+       ::com::sun::star::accessibility::XAccessibleExtendedComponent
        is supported by all chart elements.</p>
 
     @since OOo 1.1.2
@@ -50,7 +50,7 @@ module com {  module sun {  module star {  module chart {
 service AccessibleChartElement
 {
     /** Base interface for being accessible.  It gives access to the
-        <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
+        ::com::sun::star::accessibility::XAccessibleContext
         interface.
     */
     interface ::com::sun::star::accessibility::XAccessible;
@@ -78,8 +78,8 @@ service AccessibleChartElement
              is very restricted in order to avoid overwhelming or
              confusing the user.</dd>
          <dt>Children</dt>
-             <dd>The <type scope="::com::sun::star::chart">Diagram</type> and
-             the <type scope="::com::sun::star::chart">ChartLegend</type>
+             <dd>The ::com::sun::star::chart::Diagram and
+             the ::com::sun::star::chart::ChartLegend
              contain children, all other objects in a chart do not, i.e., are
              leaves in the document representation tree.</dd>
          <dt>Parent</dt>
@@ -143,8 +143,8 @@ service AccessibleChartElement
         position in one or the other coordinate system).</p>
 
         <p>Focus handling depends on support of the
-        <type scope="::com::sun::star::accessibility">XAccessibleText</type> and
-        <type scope="::com::sun::star::accessibility">XAccessibleEditableText</type>
+        ::com::sun::star::accessibility::XAccessibleText and
+        ::com::sun::star::accessibility::XAccessibleEditableText
         interfaces.</p>
 
         <p>Key bindings are not supported at the moment</p>
@@ -155,7 +155,7 @@ service AccessibleChartElement
 
         <p>This interface is used primarily to provide the predominant
         foreground and background colors and&mdash;if applicable, i.e. the
-        <type scope="::com::sun::star::accessibility">XAccessibleText</type>
+        ::com::sun::star::accessibility::XAccessibleText
         interface is supported&mdash;information about the font used to display
         text.</p>
 

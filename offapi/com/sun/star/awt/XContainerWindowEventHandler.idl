@@ -30,7 +30,7 @@ module com { module sun { module star { module awt {
 
 
 /** Handles events fired by windows represented by a
-    <type scope="com::sun::star::awt">XWindow</type> interface.
+    com::sun::star::awt::XWindow interface.
  */
 interface XContainerWindowEventHandler : ::com::sun::star::uno::XInterface {
 
@@ -43,7 +43,7 @@ interface XContainerWindowEventHandler : ::com::sun::star::uno::XInterface {
 
         @param xWindow
             the window instance that generated the event. If used in the scope of
-            <type scope="com::sun::star::awt">XContainerWindowProvider</type> this
+            com::sun::star::awt::XContainerWindowProvider this
             is the same window instance that was returned by the createContainerWindow
             method when passing the XContainerWindowEventHandler instance receiving the
             event as handler parameter.
@@ -53,7 +53,7 @@ interface XContainerWindowEventHandler : ::com::sun::star::uno::XInterface {
             provides additional information for the event.
             If the event was caused by the window or any of the controls which it contains
             then the any should contain an object derived from
-            <type scope="com::sun::star::lang">EventObject</type>. Typically this would be one
+            com::sun::star::lang::EventObject. Typically this would be one
             of the several com::sun::star::awt::*Event types.
 
         @param MethodName
@@ -65,7 +65,7 @@ interface XContainerWindowEventHandler : ::com::sun::star::uno::XInterface {
         @throws com::sun::star::lang::WrappedTargetException
             if the implementation of the method, which is determined by the argument MethodName,
             throws an exception. This exception is then wrapped into a
-            <type scope="com::sun::star::lang">WrappedTargetException</type>.
+            com::sun::star::lang::WrappedTargetException.
 
      */
     boolean callHandlerMethod(

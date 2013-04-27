@@ -46,7 +46,7 @@ published interface XLoadable: com::sun::star::uno::XInterface
     /** loads a component from an URL
         @param lArguments
             parameters for saving
-            (see <type scope="com::sun::star::document">MediaDescriptor</type> for further details)
+            (see com::sun::star::document::MediaDescriptor for further details)
             the FileName parameter must be specified, other parameters are optional
     */
 

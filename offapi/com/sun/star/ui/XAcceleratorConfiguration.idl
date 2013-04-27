@@ -43,13 +43,13 @@ module com {  module sun {  module star {  module ui {
     Note further:<br>
     All changes you made on this configuration access modify the
     the configuration set inside memory only. You have to use
-    the <type scope="com::sun::star::util">XFlushable</type> interface
+    the com::sun::star::util::XFlushable interface
     (which must be available at the same implementation object too), to
     make it persistent.
     </p>
 
     @see    AcceleratorConfiguration
-    @see    <type scope="dom::sun::star::util">XFlushable</type>
+    @see    dom::sun::star::util::XFlushable
 
     @since OOo 2.0
 */
@@ -160,7 +160,7 @@ interface XAcceleratorConfiguration
         @param  sCommand
                 the command, where key bindings are searched for.
 
-        @return A list of <type scope="com::sun::star::awt">KeyEvent</type> structures,
+        @return A list of com::sun::star::awt::KeyEvent structures,
                 where the specified command is registered for.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
@@ -251,8 +251,8 @@ interface XAcceleratorConfiguration
 
     /** connects this configuration to a new storage
         which must be used further on subsequent calls of
-        <type scope="com::sun::star::util::">XConfigurationPersistence.load()</type>
-        and <type scope="com::sun::star::util::">XConfigurationPersistence.store()</type>.
+        com::sun::star::util::::XConfigurationPersistence.load()
+        and com::sun::star::util::::XConfigurationPersistence.store().
      */
     interface com::sun::star::ui::XUIConfigurationStorage;
 

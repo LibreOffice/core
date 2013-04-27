@@ -45,7 +45,7 @@ module com { module sun { module star { module ucb {
     listener-controlled update from one version to the next version. Two
     ContentResultSet implementations were given to the listener in
     the first notification as interface
-    <type scope="com::sun::star::sdbc">XResultSet</type>.
+    com::sun::star::sdbc::XResultSet.
     </p>
 
     <p>
@@ -96,7 +96,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
     /** Call this, if you don't care about any changes.
 
         @returns
-        an <type scope="com::sun::star::sdbc">XResultSet</type> that is
+        an com::sun::star::sdbc::XResultSet that is
         implemented as ContentResultSet. Its content will never
         change.
 

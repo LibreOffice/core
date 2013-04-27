@@ -44,8 +44,8 @@ service UIElementSettings
 
         <p>
         The container contains the items of the user interface element. Every
-        item is stored as a sequence of <type scope="com::sun::star::beans">PropertyValue</type>.
-        The properties insides the sequence are defined by the service <type scope="com::sun::star::ui">ItemDescriptor</type>.
+        item is stored as a sequence of com::sun::star::beans::PropertyValue.
+        The properties insides the sequence are defined by the service com::sun::star::ui::ItemDescriptor.
         It depends on the function which provides these service if the container is shareable read-only or exclusive writable.
 
         @see com::sun::star::ui::ItemDescriptor

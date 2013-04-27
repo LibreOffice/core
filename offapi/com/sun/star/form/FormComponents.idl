@@ -61,10 +61,10 @@ published service FormComponents
 
         <p>The interface allows managing of scripts associated with dependent components, accessed by index.
         However, as a client of the FormComponents service, there's no need to bother with
-        the container aspect of the <type scope="com::sun::star::script">XEventAttacherManager</type>
+        the container aspect of the com::sun::star::script::XEventAttacherManager
         directly. A FormComponents container will automatically synchronize the elements
         you put into it with the scripting information obtained at the
-        <type scope="com::sun::star::script">XEventAttacherManager</type> interface.</p>
+        com::sun::star::script::XEventAttacherManager interface.</p>
 
         <p>For instance, at any time you can obtain the events associated with the <code>n</code><super>th</super>
         element in the form components by calling

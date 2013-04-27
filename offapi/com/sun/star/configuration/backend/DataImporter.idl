@@ -49,7 +49,7 @@ published service DataImporter
         </p>
          <p>If <void/> or <TRUE/> is returned, this indicates successful
             execution. If an
-            <type scope="com::sun::star::uno">Exception</type> is returned,
+            com::sun::star::uno::Exception is returned,
             it represents an error condition encountered during execution.
         </p>
 
@@ -96,7 +96,7 @@ published service DataImporter
                 optional. If this parameter is missing, data will be imported
                 unaltered. <em>Support for this parameter is optional.</em>
                 If the implementation does not support a filter it will raise an
-                <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+                com::sun::star::lang::IllegalArgumentException.
             </dd>
         </dl>
         </p>

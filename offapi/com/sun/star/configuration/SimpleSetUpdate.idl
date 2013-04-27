@@ -49,12 +49,12 @@ published service SimpleSetUpdate
 /** allows inserting, removing, and replacing elements.
 
  <p>This interface extends the interface
- <type scope="com::sun::star::container">XNameAccess</type> supported
+ com::sun::star::container::XNameAccess supported
  by service SimpleSetAccess to allow modifying the container.
  </p>
 
  <p>If available, changes can be observed by registering a listener with interface
- <type scope="com::sun::star::container">XContainer</type>.
+ com::sun::star::container::XContainer.
  </p>
 
  <p>If the elements of this set are of simple type (the type returned by
@@ -67,8 +67,8 @@ published service SimpleSetUpdate
 
  <p>Otherwise new elements have to be constructed to match the type
  prescribed by the element template of this set. Such elements can be created
- using interfaces <type scope="com::sun::star::lang">XSingleServiceFactory</type>
- and, if supported, <type scope="com::sun::star::lang">XMultiServiceFactory</type>.
+ using interfaces com::sun::star::lang::XSingleServiceFactory
+ and, if supported, com::sun::star::lang::XMultiServiceFactory.
  </p>
 
  <p>Objects to be inserted must not be contained in any set at the time of
@@ -147,7 +147,7 @@ published service SimpleSetUpdate
  to be built. The implementation must at least support using the template
  name obtained from <member>XTemplateContainer::getElementTemplateName()</member>
  as a service identifier, in which case the result shall be the same as if
- the corresponding member of <type scope="com::sun::star::lang">XSingleServiceFactory</type>
+ the corresponding member of com::sun::star::lang::XSingleServiceFactory
  had been called.
  </p>
 

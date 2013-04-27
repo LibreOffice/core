@@ -28,14 +28,14 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** represents a cell which can be addressed with a
-    <type scope="com::sun::star::table">CellAddress</type>.
+    com::sun::star::table::CellAddress.
  */
 published interface XCellAddressable: com::sun::star::uno::XInterface
 {
 
     /** returns the address of the cell in the spreadsheet document.
 
-        <p>The <type scope="com::sun::star::table">CellAddress</type>
+        <p>The com::sun::star::table::CellAddress
         can be used to address the cell within its document.</p>
      */
     com::sun::star::table::CellAddress getCellAddress();

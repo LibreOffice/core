@@ -48,7 +48,7 @@ published service Task
 
     /**
      @deprecated
-         use <type scope="com::sun::star::util">XCloseable</type> instead.
+         use com::sun::star::util::XCloseable instead.
 
      */
     interface XTask;

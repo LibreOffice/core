@@ -50,7 +50,7 @@ service GraphicRendererVCL
         container should be rendered
 
         <p>In case of using VCL Devices, this property should
-        hold a <type scope="com::sun::star::awt">XDevice</type>
+        hold a com::sun::star::awt::XDevice
         interface</p>
     */
     [property] any Device;

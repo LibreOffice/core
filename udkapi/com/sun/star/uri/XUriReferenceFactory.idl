@@ -43,7 +43,7 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
 
        @returns
        an object that supports
-       <type scope="com::sun::star::uri">XUriReference</type> (and possibly also
+       com::sun::star::uri::XUriReference (and possibly also
        additional, scheme-specific interfaces), if the given input can be parsed
        into a URI reference; otherwise, <NULL/> is returned.
      */
@@ -76,7 +76,7 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
 
        @returns
        a fresh object that supports
-       <type scope="com::sun::star::uri">XUriReference</type> (and possibly also
+       com::sun::star::uri::XUriReference (and possibly also
        additional, scheme-specific interfaces), if the given
        <code>uriReference</code> is either already absolute, or can be resolved
        to an absolute URI reference, relative to the given
@@ -133,7 +133,7 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
 
        @returns
        a fresh object that supports
-       <type scope="com::sun::star::uri">XUriReference</type>, if the given
+       com::sun::star::uri::XUriReference, if the given
        <code>uriReference</code> is either already relative, or is not
        hierarchical, or is of a different scheme than the given
        <code>baseUriReference</code>, or can be changed to a relative URI

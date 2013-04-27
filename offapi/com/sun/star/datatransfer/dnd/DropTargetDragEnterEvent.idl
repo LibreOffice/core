@@ -31,7 +31,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     associated with a Drag and Drop operation enters the visible geometry
     of a window associated with a drop target.
 
-    <p>It contains the <type scope="com::sun::star::datatransfer">DataFlavor</type>
+    <p>It contains the com::sun::star::datatransfer::DataFlavor
     types supported by the transferable object of the current Drag and Drop operation. </p>
 
     @see com::sun::star::datatransfer::XTransferable
@@ -39,7 +39,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published struct DropTargetDragEnterEvent: DropTargetDragEvent
 {
-    /** A sequence of supported <type scope="com::sun::star::datatransfer">DataFlavor</type> types.
+    /** A sequence of supported com::sun::star::datatransfer::DataFlavor types.
 
      */
 

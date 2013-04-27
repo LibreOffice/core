@@ -43,7 +43,7 @@ published service ExtendedUser
      */
     [property]boolean IsFixed;
     /** specifies which part of the user data is displayed as described in
-        <type scope="com::sun::star::text">UserDataPart</type>.
+        com::sun::star::text::UserDataPart.
      */
     [property]short UserDataType;
 

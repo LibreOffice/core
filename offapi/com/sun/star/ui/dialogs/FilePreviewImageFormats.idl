@@ -24,7 +24,7 @@
 module com { module sun { module star { module ui { module dialogs {
 
 /** These constants are used to specify image formats supported by an implementation
-    of the interface <type scope="com::sun::star::ui::dialogs">XFilePreview</type>.
+    of the interface com::sun::star::ui::dialogs::XFilePreview.
  */
 
 published constants FilePreviewImageFormats

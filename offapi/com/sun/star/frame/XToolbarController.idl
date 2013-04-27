@@ -45,7 +45,7 @@ interface XToolbarController : com::sun::star::uno::XInterface
     /** provides a function to execute the command which is bound to the toolbar controller.
 
         @param
-            a combination of <type scope="com::sun::star::awt">KeyModifier</type> value that represent
+            a combination of com::sun::star::awt::KeyModifier value that represent
             the current state of the modifier keys.
 
         <p>
@@ -66,7 +66,7 @@ interface XToolbarController : com::sun::star::uno::XInterface
     /** requests to create a pop-up window for additional functions.
 
         @return
-            a <type scope="com::sun::star::awt">XWindow</type> which provides additional functions
+            a com::sun::star::awt::XWindow which provides additional functions
             to the user. The reference must be empty if component does not want to provide a separate
             window.
     */
@@ -75,11 +75,11 @@ interface XToolbarController : com::sun::star::uno::XInterface
     /** requests to create an item window which can be added to the toolbar.
 
         @param Parent
-            a <type scope="com::sun::star::awt">XWindow</type> which must be used as a parent
+            a com::sun::star::awt::XWindow which must be used as a parent
             for the requested item window.
 
         @return
-            a <type scope="com::sun::star::awt">XWindow</type> which can be added to a toolbar.
+            a com::sun::star::awt::XWindow which can be added to a toolbar.
             The reference must be empty if a component does not want to provide an item window.
     */
     com::sun::star::awt::XWindow createItemWindow( [in] com::sun::star::awt::XWindow Parent );

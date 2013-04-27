@@ -30,8 +30,8 @@ module com {  module sun {  module star {  module form { module validation {
 
     <p>There are two methods how the value which is represented by a control model
     can interact with other components (well, except the trivial ones accessible
-    by using <type scope="com::sun::star::beans">XPropertySet</type>):
-    <ul><li>binding the value to an external component via <type scope="com::sun::star::form::binding">XBindableValue</type></li>
+    by using com::sun::star::beans::XPropertySet):
+    <ul><li>binding the value to an external component via com::sun::star::form::binding::XBindableValue</li>
         <li>validating the current value by an external component, via XValidatable and XValidator</li>
     </ul></p>
 
@@ -53,7 +53,7 @@ service ValidatableBindableControlModel
         established as validator, as if it has been passed to <member>XValidatable::setValidator</member>.<br/>
         If, while this binding is active (in both its roles as value binding and validator),
         an attempt is made to establish another validator, this is blocked with raising a
-        <type scope="com::sun::star::util">VetoException</type> upon calling <member>XValidatable::setValidator</member>.</p>
+        com::sun::star::util::VetoException upon calling <member>XValidatable::setValidator</member>.</p>
     */
     service com::sun::star::form::binding::BindableControlModel;
 };

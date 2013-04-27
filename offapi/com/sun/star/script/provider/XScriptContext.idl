@@ -45,7 +45,7 @@ interface XScriptContext : ::com::sun::star::uno::XInterface {
         Obtain the document reference on which the script can operate
 
         @returns
-          <type scope="com::sun::star::frame">XModel</type> interface
+          com::sun::star::frame::XModel interface
     */
     ::com::sun::star::frame::XModel getDocument();
 
@@ -70,7 +70,7 @@ interface XScriptContext : ::com::sun::star::uno::XInterface {
         Obtain the desktop reference on which the script can operate
 
         @returns
-          <type scope="com::sun::star::frame">XDesktop</type> interface
+          com::sun::star::frame::XDesktop interface
     */
     ::com::sun::star::frame::XDesktop getDesktop();
 
@@ -79,7 +79,7 @@ interface XScriptContext : ::com::sun::star::uno::XInterface {
         other uno components
 
         @returns
-          <type scope="com::sun::star::uno">XComponentContext</type> interface
+          com::sun::star::uno::XComponentContext interface
     */
     ::com::sun::star::uno::XComponentContext getComponentContext();
 

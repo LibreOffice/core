@@ -57,7 +57,7 @@ published service LayerUpdateMerger
         </p>
         <p> Implementations can provide more arguments to fine tune the behavior.
             Such arguments are provided as
-            <type scope="com::sun::star::beans">NamedValue</type>.
+            com::sun::star::beans::NamedValue.
             Implementations should support the following named arguments:
         <dl>
             <dt><code>Overwrite</code> : <atom>boolean</atom></dt>

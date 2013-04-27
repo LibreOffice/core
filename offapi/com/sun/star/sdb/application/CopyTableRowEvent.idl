@@ -43,7 +43,7 @@ struct CopyTableRowEvent : ::com::sun::star::lang::EventObject
 
     /** denotes the error which happened while copying the data.
 
-        <p>Usually, this contains an instance of <type scope="com::sun::star::sdbc">SQLException</type>.</p>
+        <p>Usually, this contains an instance of com::sun::star::sdbc::SQLException.</p>
     */
     any Error;
 };

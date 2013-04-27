@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module awt {
 /** describes a menu for top-level windows.
 
     <p>A menu bar can only be used by top-level windows. They support
-       the interface <type scope="com::sun::star::awt">XTopWindow</type>
+       the interface com::sun::star::awt::XTopWindow
        to set an menu bar object.
     </p>
  */

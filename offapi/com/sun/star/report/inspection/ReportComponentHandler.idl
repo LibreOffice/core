@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module report { module inspection {
 
 
-/** implements the default property handler for all known types of <type scope="com::sun::star::report">XReportComponent</type>s.
+/** implements the default property handler for all known types of com::sun::star::report::XReportComponents.
 
     @see com::sun::star::inspection::XPropertyHandler
 */

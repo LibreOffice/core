@@ -36,7 +36,7 @@
     @see XSubmit
 
     @deprecated
-        This interface is superseded by the <type scope="com::sun::star::form::submission">XSubmissionVetoListener</type>
+        This interface is superseded by the com::sun::star::form::submission::XSubmissionVetoListener
         interface. New implementations should use the latter, if possible.
  */
 published interface XSubmitListener: com::sun::star::lang::XEventListener

@@ -46,7 +46,7 @@ service FileHandler : XLogHandler
 
         @param FileURL
             the URL of the file to be created. This URL is resolved using the
-            <type scope="::com::sun::star::util">PathSubstitution</type> service. That
+            ::com::sun::star::util::PathSubstitution service. That
             is, it is allowed to include placeholders such as <code>$(userurl)</code>.
     */
     create( [in] string FileURL );

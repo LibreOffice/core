@@ -79,7 +79,7 @@ published interface XStatement: com::sun::star::uno::XInterface
         this unless you are (1) executing a stored procedure that you know may
         return multiple results or (2) you are dynamically executing an
         unknown SQL string. The navigation through multiple results is covered by
-        <type scope="com::sun::star::sdbc">XMultipleResults</type>.
+        com::sun::star::sdbc::XMultipleResults.
         </p>
         <p>
         The
@@ -104,7 +104,7 @@ published interface XStatement: com::sun::star::uno::XInterface
     boolean execute([in]string sql) raises (SQLException);
 
     /** returns the
-        <type scope="com::sun::star::sdbc">Connection</type>
+        com::sun::star::sdbc::Connection
         object
         that produced this
         <code>Statement</code>

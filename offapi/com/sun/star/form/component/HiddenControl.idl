@@ -31,7 +31,7 @@
     <p>The only sense of a hidden control is to store data in the form which is
     not visible to the user.</p>
 
-    <p>Usually, hidden controls are used in <type scope="com::sun::star::form::component">HTMLForm</type>s,
+    <p>Usually, hidden controls are used in com::sun::star::form::component::HTMLForms,
     where they contain data which is to be submitted.<br/>
     Nevertheless, you can use them in your own forms for storing any data, for instance
     to evaluate it in some scripting macro.</p>

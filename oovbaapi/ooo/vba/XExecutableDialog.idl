@@ -26,7 +26,7 @@
 module ooo {  module vba {
 
 /** The VBA equivalent to the UNO interface
-    <type scope="com::sun::star::ui::dialogs">XExecutableDialog</type>.
+    com::sun::star::ui::dialogs::XExecutableDialog.
  */
 interface XExecutableDialog
 {

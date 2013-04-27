@@ -46,7 +46,7 @@ published struct InvocationInfo
 
     /** Only for property members:
         This field may contain zero or more constants of the
-        <type scope="com::sun::star::beans">PropertyAttribute</type>
+        com::sun::star::beans::PropertyAttribute
         constants group. It is not guaranteed that all necessary
         constants are set to describe the property completely,
         but a flag will only be set, if the corresponding charac-

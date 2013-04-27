@@ -69,13 +69,13 @@ published service UnoControlDialogModel
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
 
-    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+    /** specifies the com::sun::star::text::FontEmphasis
         value of the text in the caption bar of the dialog.
      */
     [property] short FontEmphasisMark;
 
 
-    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+    /** specifies the com::sun::star::text::FontRelief
         value of the text in the caption bar of the dialog.
      */
     [property] short FontRelief;

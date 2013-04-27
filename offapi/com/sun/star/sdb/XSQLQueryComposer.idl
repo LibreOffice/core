@@ -98,7 +98,7 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
     string getOrder();
 
     /** appends a new filter condition by a
-        <type scope="com::sun::star::sdb">DataColumn</type>
+        com::sun::star::sdb::DataColumn
         providing the name and the value for the filter.
         @param column
             the column which is used to create a filter

@@ -40,15 +40,15 @@ published enum InteractionClassification
 
     /** Some information for the client/user (which will typically lead to the
         selection of an
-        <type scope="com::sun::star::task">XInteractionApprove</type>
+        com::sun::star::task::XInteractionApprove
         continuation).
      */
     INFO,
 
     /** A query for the client/user (which will typically lead to the
         selection of an
-        <type scope="com::sun::star::task">XInteractionApprove</type> or
-        <type scope="com::sun::star::task">XInteractionDisapprove</type>
+        com::sun::star::task::XInteractionApprove or
+        com::sun::star::task::XInteractionDisapprove
         continuation).
      */
     QUERY

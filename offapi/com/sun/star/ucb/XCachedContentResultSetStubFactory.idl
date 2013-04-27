@@ -31,7 +31,7 @@ module com { module sun { module star { module ucb {
 published interface XCachedContentResultSetStubFactory: com::sun::star::uno::XInterface
 {
     /** creates a remote optimized
-        <type scope="com::sun::star::sdbc">XResultSet</type>.
+        com::sun::star::sdbc::XResultSet.
 
         @param xSource
         must be an instance of service ContentResultSet.

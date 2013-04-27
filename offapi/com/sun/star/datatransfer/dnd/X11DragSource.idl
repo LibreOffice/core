@@ -43,7 +43,7 @@ published service X11DragSource
     interface XDragSource;
 
     /** The service expects an instance of
-        <type scope="com::sun::star::awt">XDisplayConnection</type>
+        com::sun::star::awt::XDisplayConnection
         as the first parameter.
     */
     interface com::sun::star::lang::XInitialization;

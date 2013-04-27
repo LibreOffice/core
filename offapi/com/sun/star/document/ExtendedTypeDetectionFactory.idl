@@ -45,10 +45,10 @@ published service ExtendedTypeDetectionFactory
         A detection component must be specified by it's UNO implementation name and will be crated then.
         Every new created component can be initialized with it's own configuration data
         and may given optional arguments of the corresponding createInstanceWithArguments() request. To do so the
-        service must support the optional interface <type scope="com::sun::star::lang">XInitialization</type>.
+        service must support the optional interface com::sun::star::lang::XInitialization.
         The arguments parameter will have the following structure:
         <ul>
-            <li>sequence< Any >[0] contains a sequence< <type scope="com::sun::star::beans">PropertyValue</type> >,
+            <li>sequence< Any >[0] contains a sequence< com::sun::star::beans::PropertyValue >,
                 which represent the configuration data set of this detector component. The used properties are the same, as
                 they are available at the container interface of this factory service. (see below)</li>
             <li>Every following item of the argument list sequence< Any >[1..n] contains the copied argument of the
@@ -63,7 +63,7 @@ published service ExtendedTypeDetectionFactory
 
         <p>
         Every container item is specified as a set of properties and will be
-        represented by a sequence< <type scope="com::sun::star::beans">PropertyValue</type> > structure.
+        represented by a sequence< com::sun::star::beans::PropertyValue > structure.
         Follow properties are supported:
         (But note: not all of them must be present every time!)
         </p>

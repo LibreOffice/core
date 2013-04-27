@@ -35,7 +35,7 @@ module com { module sun { module star { module resource {
     strings for different locales.
 
     The interface is derived from
-    <type scope="com::sun::star::resource">XStringResourceResolver</type>
+    com::sun::star::resource::XStringResourceResolver
     that allows to access the string table but not to modify it. This
     interface also allows to modify the string table.
 
@@ -66,11 +66,11 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
             the default locale will be used <TRUE/>.
 
             <p>If false: If the exact locale that should be set is not available
-            a <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            a com::sun::star::lang::IllegalArgumentException
             is thrown.
 
             <p>If false: If the exact locale that should be set is not available
-            a <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            a com::sun::star::lang::IllegalArgumentException
             is thrown.
     */
     void setCurrentLocale
@@ -86,10 +86,10 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         @param aLocale
             Specifies the default locale to be used.
             If this locale is not available a
-            <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            com::sun::star::lang::IllegalArgumentException
             is thrown.
 
-        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+        @throws com::sun::star::lang::NoSupportException
             if the resource is read only, see <member>isReadOnly</member>
     */
     void setDefaultLocale( [in] com::sun::star::lang::Locale locale )
@@ -109,7 +109,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         @param Str
             String to be associated with the Resource ID.
 
-        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+        @throws com::sun::star::lang::NoSupportException
             if the resource is read only, see <member>isReadOnly</member>
     */
     void setString
@@ -141,7 +141,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
             The locale has to match exactly with one of the locales provided by
             <member>getLocales</member>. A closest match search is not supported.
 
-        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+        @throws com::sun::star::lang::NoSupportException
             if the resource is read only, see <member>isReadOnly</member>
     */
     void setStringForLocale
@@ -161,11 +161,11 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
             The Resource ID to be removed for the current locale.
 
         @throws
-        <type scope="com::sun::star::resource">MissingResourceException</type>
+        com::sun::star::resource::MissingResourceException
         if the Resource ID is not valid.
 
         @throws
-        <type scope="com::sun::star::lang">NoSupportException</type>
+        com::sun::star::lang::NoSupportException
         if the resource is read only, see <member>isReadOnly</member>
     */
     void removeId( [in] string ResourceID )
@@ -186,11 +186,11 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
             <member>getLocales</member>. A closest match search is not supported.
 
         @throws
-        <type scope="com::sun::star::resource">MissingResourceException</type>
+        com::sun::star::resource::MissingResourceException
         if the Resource ID is not valid.
 
         @throws
-        <type scope="com::sun::star::lang">NoSupportException</type>
+        com::sun::star::lang::NoSupportException
         if the resource is read only, see <member>isReadOnly</member>
     */
     void removeIdForLocale( [in] string ResourceID, [in] com::sun::star::lang::Locale locale )
@@ -208,15 +208,15 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         will be copied from the default locale.</p>
 
         @throws
-        <type scope="com::sun::star::container">ElementExistException</type>
+        com::sun::star::container::ElementExistException
         if the Locale already has been created.
 
         @throws
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        com::sun::star::lang::IllegalArgumentException
         if the Locale is not valid.
 
         @throws
-        <type scope="com::sun::star::lang">NoSupportException</type>
+        com::sun::star::lang::NoSupportException
         if the resource is read only, see <member>isReadOnly</member>
     */
     void newLocale( [in] com::sun::star::lang::Locale locale )
@@ -230,11 +230,11 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         strings for each locale.
 
         @throws
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        com::sun::star::lang::IllegalArgumentException
         if the Locale to be removed is not supported.
 
         @throws
-        <type scope="com::sun::star::lang">NoSupportException</type>
+        com::sun::star::lang::NoSupportException
         if the resource is read only, see <member>isReadOnly</member>
     */
     void removeLocale( [in] com::sun::star::lang::Locale locale )
@@ -273,7 +273,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         that may not have been loaded so far.
 
         @throws
-        <type scope="com::sun::star::lang">NoSupportException</type>
+        com::sun::star::lang::NoSupportException
         if the next available id exceeds the range of type long.
         So it's not recommended to use own Resource IDs starting
         with a decimal number near to the maximum long value if

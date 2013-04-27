@@ -37,7 +37,7 @@ published service FileName
      */
     [property]string CurrentPresentation;
     /** determines the format the file name is displayed as specified in
-        <type scope="com::sun::star::text">FilenameDisplayFormat</type>.
+        com::sun::star::text::FilenameDisplayFormat.
       */
     [property]short FileFormat;
     /** If this flag is set to <FALSE/> the content is regularly updated.

@@ -55,7 +55,7 @@ service CellValueBinding
     /** allows notifications of changes in the content of the underlying cell.
 
         <p>Note that this interface is already optionally allowed in the
-        underlying service (<type scope="com::sun::star::form::binding">ValueBinding</type>),
+        underlying service (com::sun::star::form::binding::ValueBinding),
         but it loses it's optionality here.</p>
     */
     interface com::sun::star::util::XModifyBroadcaster;
@@ -68,7 +68,7 @@ service CellValueBinding
         will throw an exception.</p>
 
         <p>The arguments passed to the <member scope"com::sun::star::lang">XInitialization::initialize</member>
-        method must be instances of <type scope="com::sun::star::beans">NamedValue</type>, where
+        method must be instances of com::sun::star::beans::NamedValue, where
         the <member scope"com::sun::star::beans">NamedValue::Name</member> denotes the type of information
         to initialize, and the <member scope"com::sun::star::beans">NamedValue::Value</member>
         the initial value.</p>
@@ -76,7 +76,7 @@ service CellValueBinding
         <p>The following aspects of the components can be initialized:<br/>
             <ul><li><b>BoundCell</b><br/>
                 specifies the address of the cell to bind this instance to. Must be a
-                <type scope="com::sun::star::table">CellAddress</type> instance.</li>
+                com::sun::star::table::CellAddress instance.</li>
             </ul>
         </p>
     */

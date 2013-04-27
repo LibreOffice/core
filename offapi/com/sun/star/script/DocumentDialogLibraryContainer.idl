@@ -50,7 +50,7 @@ service DocumentDialogLibraryContainer : XStorageBasedLibraryContainer
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <code>Document</code> does not denote a valid
-            <type scope="com::sun::star::document">OfficeDocument</type>.
+            com::sun::star::document::OfficeDocument.
     */
     create( [in] ::com::sun::star::document::XStorageBasedDocument Document )
         raises( ::com::sun::star::lang::IllegalArgumentException );

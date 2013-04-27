@@ -34,10 +34,10 @@ published struct DatabaseParameterEvent: com::sun::star::lang::EventObject
 {
     /** specifies the list of parameters which are required for opening a result set.
 
-        <p>Usually, a <type scope="com::sun::star::form::component">DataForm</type> fires this
+        <p>Usually, a com::sun::star::form::component::DataForm fires this
         event when loading the form requires parameters to be filled in.</p>
 
-        <p>Every parameter object supports the <type scope="com::sun::star::beans">XPropertySet</type>
+        <p>Every parameter object supports the com::sun::star::beans::XPropertySet
         interface, and at least the properties <em>Name</em> and <em>Value</em></p>
 
         @see com::sun::star::sdb::RowSet

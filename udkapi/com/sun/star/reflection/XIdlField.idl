@@ -34,7 +34,7 @@
  module com {  module sun {  module star {  module reflection {
 
 
-/** Deprecated.  Use <type scope="com::sun::star::reflection">XIdlField2</type>
+/** Deprecated.  Use com::sun::star::reflection::XIdlField2
     instead.
 
     @deprecated

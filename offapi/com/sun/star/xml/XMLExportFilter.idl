@@ -28,9 +28,9 @@ module com { module sun { module star { module xml {
 
 /** describes an export filter for XML-based file formats.
 
-    <p>It is an extension of <type scope="com::sun::star::document">ExportFilter</type>
+    <p>It is an extension of com::sun::star::document::ExportFilter
     and differs from it only in that an
-    <type scope="com::sun::star::xml::sax">XDocumentHandler</type> needs to
+    com::sun::star::xml::sax::XDocumentHandler needs to
     be passed through the XInitialization interface. This
     XDocumentHandler will then be used to export the XML data stream.  */
 published service XMLExportFilter

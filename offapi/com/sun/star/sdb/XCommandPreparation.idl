@@ -39,7 +39,7 @@ published interface XCommandPreparation: com::sun::star::uno::XInterface
 {
 
     /** creates a
-        <type scope="com::sun::star::sdbc">PreparedStatement</type>
+        com::sun::star::sdbc::PreparedStatement
         object for sending parameterized SQL statements to the database.
 
         <p>
@@ -52,7 +52,7 @@ published interface XCommandPreparation: com::sun::star::uno::XInterface
             the command to be prepared. Any SQL statement.
         @param commandType
             kind of the command
-            <type scope="com::sun::star::sdb">CommandType</type>
+            com::sun::star::sdb::CommandType
         @returns
             the PreparedStatement object
         @throws com::sun::star::sdbc::SQLException

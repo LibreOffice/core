@@ -26,22 +26,22 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements a property handler for use with an <type scope="com::sun::star::inspection">ObjectInspector</type>
+/** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
     which provides properties related to binding form control models to XForm bindings and validating
     the form control content.
 
-    <p>By using an XMLFormsPropertyHandler, an <type scope="com::sun::star::inspection">ObjectInspector</type>
-    can be used to bind form components to <type scope="com::sun::star::xforms">Binding</type> instances.
+    <p>By using an XMLFormsPropertyHandler, an com::sun::star::inspection::ObjectInspector
+    can be used to bind form components to com::sun::star::xforms::Binding instances.
     Since those instances also support validating form control content (by supporting an
-    <type scope="com::sun::star::form::validation">XValidator</type> interface), it seems reasonable to
+    com::sun::star::form::validation::XValidator interface), it seems reasonable to
     edit those validate-related properties (like the XSD data type to validate against) in the
-    <type scope="com::sun::star::inspection">ObjectInspector</type>, too. This is what an XSDValidationPropertyHandler
+    com::sun::star::inspection::ObjectInspector, too. This is what an XSDValidationPropertyHandler
     is good for.</p>
 
     <p>The handler expects a value named "ContextDocument" in the context in which it is created.
-    That is, the <type scope="com::sun::star::uno">XComponentContext</type> used for creating the
+    That is, the com::sun::star::uno::XComponentContext used for creating the
     CellBindingPropertyHandler is examined for a value with this name. If the object in this
-    value denotes a XML form document (indicated by supporting the <type scope="com::sun::star::xforms">XFormsSupplier</type>
+    value denotes a XML form document (indicated by supporting the com::sun::star::xforms::XFormsSupplier
     interface), this document is used to do XML binding related work.</p>
 
     @see com::sun::star::inspection::XPropertyHandler

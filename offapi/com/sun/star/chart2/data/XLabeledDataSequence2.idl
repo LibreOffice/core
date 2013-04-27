@@ -58,7 +58,7 @@ interface XLabeledDataSequence2
 
         <p>If a LabeledDataSequence is cloned, it has to
         query its contents for the
-        <type scope="com::sun::star::util">XCloneable</type> interface
+        com::sun::star::util::XCloneable interface
         and use it if available.</p>
     */
     interface ::com::sun::star::util::XCloneable;

@@ -54,7 +54,7 @@ interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
                     be already known by the object; if a different one is
                     set an exception should be thrown to indicate the
                     error; it should take values from
-                    <type scope="com::sun::star::xml:crypto">DigestID</type>.
+                    com::sun::star::xml:crypto::DigestID.
             </dd>
             <dt>EncryptionAlgorithm</dt>
             <dd>
@@ -64,7 +64,7 @@ interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
                     known by the object; if a different one is set
                     an exception should be thrown to indicate the error;
                     it should take values from
-                    <type scope="com::sun::star::xml:crypto">CipherID</type>.
+                    com::sun::star::xml:crypto::CipherID.
             </dd>
             <dt>ChecksumAlgorithm</dt>
             <dd>
@@ -74,7 +74,7 @@ interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
                     be already known by the object; if a different one is
                     set an exception should be thrown to indicate the
                     error; it should take values from
-                    <type scope="com::sun::star::xml:crypto">DigestID</type>.
+                    com::sun::star::xml:crypto::DigestID.
             </dd>
         </dl>
      */

@@ -116,7 +116,7 @@ published service TextGraphicObject
          It contains percentage values between -100 and +100.
      */
     [property] short Transparency;
-    /** contains the ColorMode as <type scope="com::sun::star::drawing">ColorMode</type>.
+    /** contains the ColorMode as com::sun::star::drawing::ColorMode.
      */
     [property] com::sun::star::drawing::ColorMode  GraphicColorMode;
     /** contains the graphic.

@@ -56,7 +56,7 @@ service AccessibleSpreadsheetPageView
                 >XAccessibleContext::getAccessibleChild</method>
                 an object that supports this service is returned for
                 every header and footer that is at least partially visible.</li>
-            <li><type scope="::com::sun::star::table">AccessibleTableView</type>:
+            <li>::com::sun::star::table::AccessibleTableView:
                 A child where calling
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleChild::getAccessibleChild</method>
@@ -64,7 +64,7 @@ service AccessibleSpreadsheetPageView
                 every table fragment that is contained in the document body
                 and is at least partially visible. A table fragment is the
                 part of a table that is displayed on a certain page.</li>
-            <li><type scope="::com::sun::star::drawing">AccessibleShape</type>:
+            <li>::com::sun::star::drawing::AccessibleShape:
                 A child where calling
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleChild</method>
@@ -73,7 +73,7 @@ service AccessibleSpreadsheetPageView
                 objects are children of the
                 AccessibleSpreadsheetPageView regardless
                 whether they are bound to a table or a cell.</li>
-            <li><type scope="::com::sun::star::text">AccessibleParagraphView</type>:
+            <li>::com::sun::star::text::AccessibleParagraphView:
                 A child where calling
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleChild</method>

@@ -38,7 +38,7 @@ published service FileSystemStorage
         </p>
 
         <dl>
-            <dt>interface <type scope="com::sun::star::lang">XComponent</type>
+            <dt>interface com::sun::star::lang::XComponent
             </dt>
             <dd>
                 <p>

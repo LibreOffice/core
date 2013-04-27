@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module gallery {
     inserting and removing of single items.
 
     <p>This interface extends the interface
-    <type scope="com::sun::star::container">XIndexAccess</type> which provides
+    com::sun::star::container::XIndexAccess which provides
     access to existing Gallery items collection.</p>
 
     @see com::sun::star::container::XIndexAccess
@@ -86,7 +86,7 @@ interface XGalleryTheme : com::sun::star::container::XIndexAccess
     /** inserts an item
 
         @param Graphic
-            The <type scope="com::sun::star::graphic">XGraphic</type> object
+            The com::sun::star::graphic::XGraphic object
             that should be added to the collection
 
         @param Index

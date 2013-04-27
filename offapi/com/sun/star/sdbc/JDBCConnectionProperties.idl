@@ -53,12 +53,12 @@ service JDBCConnectionProperties
         </member>.
 
         <p>The class path is a list of zero or more internal (see the
-        <type scope="com::sun::star::uri">ExternalUriReferenceTranslator</type>
+        com::sun::star::uri::ExternalUriReferenceTranslator
         service) URI references, where any space characters
         (<code>U+0020</code>) are ignored (and, in particular, separate adjacent
         URI references).  Any &ldquo;vnd.sun.star.expand&rdquo; URL references
         in the list are expanded using the
-        <type scope="com::sun::star::util">theMacroExpander</type>
+        com::sun::star::util::theMacroExpander
         singleton.</p>
 
         @since OOo 2.3

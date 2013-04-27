@@ -45,7 +45,7 @@ published service CustomPresentationAccess
 
         <p>These services are needed for the <code>insertByName</code>
         and <code>replaceByName</code> methods of this service
-        <type scope="com::sun::star::container">XNameContainer</type> interface.
+        com::sun::star::container::XNameContainer interface.
      */
     interface com::sun::star::lang::XSingleServiceFactory;
 };

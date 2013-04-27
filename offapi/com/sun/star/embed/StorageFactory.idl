@@ -47,13 +47,13 @@
         <dd>
                   specifies source of the object, it can be a string
                   containing URL, an
-                  <type scope="com::sun::star::io">XStream</type>
+                  com::sun::star::io::XStream
                   implementation or
-                  <type scope="com::sun::star::io">XInputStream</type>;
+                  com::sun::star::io::XInputStream;
                   in case of
-                  <type scope="com::sun::star::io">XStream</type>
+                  com::sun::star::io::XStream
                   implementation
-                  the <type scope="com::sun::star::io">XSeekable</type>
+                  the com::sun::star::io::XSeekable
                   interface must be supported.
         </dd>
 
@@ -66,19 +66,19 @@
         <dt>parameter 3</dt>
         <dd>
                   this parameter represents
-                  <type scope="com::sun::star::uno">Any</type>
+                  com::sun::star::uno::Any
                   containing a sequence of
-                  <type scope="com::sun::star::beans">PropertyValue</type>.<br>
+                  com::sun::star::beans::PropertyValue.<br>
                   The parameter can contain entries from
-                  <type scope="com::sun::star::document">MediaDescryptor</type>
+                  com::sun::star::document::MediaDescryptor
                   to transport some document info during the storage
                   initialization, it can be for example
-                  <type scope="com::sun::star::task">XInteractionHandler</type>
+                  com::sun::star::task::XInteractionHandler
                   implementation, password for the storage and repair
                   package flag.<br>
                   Additionally the parameter might contain property with the name
                   "StorageFormat" that can take values from
-                  <type scope="com::sun::star::embed">StorageFormats</type>.
+                  com::sun::star::embed::StorageFormats.
                   If the property is not provided a storage of package format
                   is created.
         </dd>

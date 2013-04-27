@@ -32,7 +32,7 @@
 
     <p> Usually, a component which supports the
     XApproveActionBroadcaster interface implements
-    <type scope="com::sun::star::awt">XActionListener</type> as well.</p>
+    com::sun::star::awt::XActionListener as well.</p>
  */
 published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
 {

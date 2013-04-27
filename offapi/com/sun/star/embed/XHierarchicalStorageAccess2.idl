@@ -34,7 +34,7 @@ interface XHierarchicalStorageAccess2 : XHierarchicalStorageAccess
 
         <p>
         If storage does not allow any encryption this method will always throw
-        <type scope="com::sun::star::packages">NoEncryptionException</type>.
+        com::sun::star::packages::NoEncryptionException.
         </p>
 
         <p>

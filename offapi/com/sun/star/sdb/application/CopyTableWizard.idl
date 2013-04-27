@@ -92,7 +92,7 @@ service CopyTableWizard : XCopyTableWizard
         then this connection will be disposed upon disposal of the wizard.</p>
 
         @param Source
-            the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> describing the
+            the com::sun::star::sdb::DataAccessDescriptor describing the
             data to copy.
 
             <p>The following members of the <code>DataAccessDescriptor</code> are supported, and evaluated
@@ -116,8 +116,8 @@ service CopyTableWizard : XCopyTableWizard
                 <member scope="com::sun::star::sdb">CommandType::QUERY</member> are supported.</li>
 
                 <li>If you specify a <code>ConnectionResource</code>, or an
-                <code>ActiveConnection</code> which implements an <type scope="com::sun::star::sdbc">Connection</type> only
-                (as opposed to a <type scope="com::sun::star::sdb">Connection</type>), then the resulting connection is
+                <code>ActiveConnection</code> which implements an com::sun::star::sdbc::Connection only
+                (as opposed to a com::sun::star::sdb::Connection), then the resulting connection is
                 not able to provide queries, thus a command type <code>QUERY</code> will be rejected.</li>
 
                 <li><code>Filter</code>, <code>Order</code>, <code>HavingClause</code> and <code>GroupBy</code>
@@ -126,7 +126,7 @@ service CopyTableWizard : XCopyTableWizard
             Violating any of the above restrictions will result in an error at creation time.</p>
 
         @param Destination
-            the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> describing the
+            the com::sun::star::sdb::DataAccessDescriptor describing the
             target for the copy operation.
 
             <p>Only <code>DataSourceName</code>, <code>DatabaseLocation</code>, <code>ActiveConnection</code>
@@ -134,7 +134,7 @@ service CopyTableWizard : XCopyTableWizard
             in the order mentioned here, so if multiple of the are present, only the first one is evaluated.</p>
 
             <p>Also, at the moment the connection which is implied by either of the settings above
-            must support the <type scope="com::sun::star::sdb">Connection</type> service. In particular,
+            must support the com::sun::star::sdb::Connection service. In particular,
             it is not sufficient to pass an SDBC-level connection.</p>
 
             <p>Note that creating a view (see <member>CopyTableOperation::CreateAsView</member>) is
@@ -156,7 +156,7 @@ service CopyTableWizard : XCopyTableWizard
         @throws ::com::sun::star::lang::WrappedTargetException
             if an error other than the ones mentioned above occurs while extracting the necessary
             information from any of the data access descriptors. For instance, this might
-            be an <type scope="com::sun::star::sdbc">SQLException</type> thrown upon connecting
+            be an com::sun::star::sdbc::SQLException thrown upon connecting
             to a data source described by the descriptor's <code>DataSourceName</code> member.
 
         @see ::com::sun::star::sdb::DataAccessDescriptor
@@ -182,8 +182,8 @@ service CopyTableWizard : XCopyTableWizard
             specifies an interaction handler to use when user input is required.
 
             <p>When specifying this parameter, you should use an implementation
-            supporting the <type scope="com::sun::star::sdb">InteractionHandler</type>, since
-            the general-purpose <type scope="com::sun::star::task">InteractionHandler</type> cannot
+            supporting the com::sun::star::sdb::InteractionHandler, since
+            the general-purpose com::sun::star::task::InteractionHandler cannot
             handle all requests described <a href="#interaction">above</a>.</p>
 
         @see ::com::sun::star::sdb::InteractionHandler

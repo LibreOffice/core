@@ -40,7 +40,7 @@ published service TextSortable
             of this interfaces implementation are those of the
             "com.sun.star.text.TextSortDescriptor" service.
 
-           @see <type scope="com::sun::star::text">TextSortDescriptor</type>
+           @see com::sun::star::text::TextSortDescriptor
          */
         interface com::sun::star::util::XSortable;
 };

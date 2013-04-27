@@ -40,9 +40,9 @@ published service ContentResultSet
 {
     /** must be implemented to make it possible to resolve cyclic object
         references ( i.e. between an implementation of
-        <type scope="com::sun::star::beans">XPropertySet</type>
+        com::sun::star::beans::XPropertySet
         - which may hold property change listeners - and
-        <type scope="com::sun::star::beans">XPropertyChangeListener</type>
+        com::sun::star::beans::XPropertyChangeListener
         - which may hold the property set ).
 
         <p>This interface is required.
@@ -62,7 +62,7 @@ published service ContentResultSet
 
         <p>Note that every method of this interface implementation additionally
         may throw a ResultSetException ( which is derived from
-        <type scope="com::sun::star::sdbc">SQLException</type> to be compatible
+        com::sun::star::sdbc::SQLException to be compatible
         to that interface ). The new exception transports another exception,
         which indicates the reason for the failure of the method call.
 
@@ -74,7 +74,7 @@ published service ContentResultSet
 
         <p>Note that every method of this interface implementation additionally
         may throw a ResultSetException ( which is derived from
-        <type scope="com::sun::star::sdbc">SQLException</type> to be compatible
+        com::sun::star::sdbc::SQLException to be compatible
         to that interface ). The new exception transports another exception,
         which indicates the reason for the failure of the method call.
 
@@ -87,7 +87,7 @@ published service ContentResultSet
 
         <p>Note that every method of this interface implementation additionally
         may throw a ResultSetException ( which is derived from
-        <type scope="com::sun::star::sdbc">SQLException</type> to be compatible
+        com::sun::star::sdbc::SQLException to be compatible
         to that interface ). The new exception transports another exception,
         which indicates the reason for the failure of the method call.
 

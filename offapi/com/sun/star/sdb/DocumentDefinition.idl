@@ -31,7 +31,7 @@ module com { module sun { module star { module sdb {
     <p>Usual instances of a <code>DocumentDefinition</code> are forms and reports.</p>
 
     <p>Note that the <code>DocumentDefinition</code> does not denote the actual document
-    (i.e. an object supporting the <type scope="com::sun::star::frame">XModel</type> interface),
+    (i.e. an object supporting the com::sun::star::frame::XModel interface),
     but only a shortcut to access and load those actual documents.</p>
 */
 service DocumentDefinition
@@ -51,7 +51,7 @@ service DocumentDefinition
                 the <code>execute</code> method is the model of the loaded document.</li>
             <li><strong>preview</strong>: retrieves an image showing a preview of the sub document.</li>
             <li><strong>getDocumentInfo</strong>: retrieves the document information, as
-                <type scope="com::sun::star::document">XDocumentProperties</type>
+                com::sun::star::document::XDocumentProperties
                 instance, of the sub document.</li>
             <li><strong>delete</strong>: deletes the sub document from the database document.</li>
             <li><strong>close</strong>: closes the sub document, if it had previously been opened

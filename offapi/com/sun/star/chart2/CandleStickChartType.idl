@@ -60,11 +60,11 @@ service CandleStickChartType
         property set given here contains the formatting attributes of
         the white boxes, i.e. the boxes shown for rising values.</p>
 
-        <p>The <type scope="com::sun::star::beans">XPropertySet</type>
+        <p>The com::sun::star::beans::XPropertySet
         given here must support the services
-        <type scope="com::sun::star::drawing">FillProperties</type>
+        com::sun::star::drawing::FillProperties
         and
-        <type scope="com::sun::star::drawing">LineProperties</type>.</p>
+        com::sun::star::drawing::LineProperties.</p>
      */
     [maybevoid, property] com::sun::star::beans::XPropertySet WhiteDay;
 
@@ -73,11 +73,11 @@ service CandleStickChartType
         property set given here contains the formatting attributes of
         the black boxes, i.e. the boxes shown for falling values.</p>
 
-        <p>The <type scope="com::sun::star::beans">XPropertySet</type>
+        <p>The com::sun::star::beans::XPropertySet
         given here must support the services
-        <type scope="com::sun::star::drawing">FillProperties</type>
+        com::sun::star::drawing::FillProperties
         and
-        <type scope="com::sun::star::drawing">LineProperties</type>.</p>
+        com::sun::star::drawing::LineProperties.</p>
      */
     [maybevoid, property] com::sun::star::beans::XPropertySet BlackDay;
 

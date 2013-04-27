@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** a description of how a cell range is to be sorted.
 
-    <p>This service extends the <type scope="com::sun::star::table">TableSortDescriptor2</type>
+    <p>This service extends the com::sun::star::table::TableSortDescriptor2
     service with spreadsheet specific properties.</p>
 
     @since OOo 1.1.2

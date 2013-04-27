@@ -56,14 +56,14 @@ published service HierarchyElement
 /** provides a property descriptor for this element.[optional]
 
  <p>This interface may be missing, if the hierarchy supports no traits that are
- described by <type scope="com::sun::star::beans">PropertyAttribute</type>
+ described by com::sun::star::beans::PropertyAttribute
  values.
  </p>
 
  <p>If the parent of this object implements
- <type scope="com::sun::star::beans">XPropertySetInfo</type>, then this returns
- the same <type scope="com::sun::star::beans">Property</type> as the
- <type scope="com::sun::star::beans">XPropertySetInfo</type> of the parent.
+ com::sun::star::beans::XPropertySetInfo, then this returns
+ the same com::sun::star::beans::Property as the
+ com::sun::star::beans::XPropertySetInfo of the parent.
  </p>
 */
     [optional] interface com::sun::star::beans::XProperty;
@@ -75,7 +75,7 @@ published service HierarchyElement
  </p>
 
  <p>If the parent of this object implements
- <type scope="com::sun::star::beans">XPropertyState</type>, then members
+ com::sun::star::beans::XPropertyState, then members
  of this interface have the same effect as corresponding members of the parent.
  </p>
 

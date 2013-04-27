@@ -26,13 +26,13 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements a property handler for use with an <type scope="com::sun::star::inspection">ObjectInspector</type>
+/** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
     which provides properties for button controls which support submission of XML forms.
 
     <p>The handler expects a value named "ContextDocument" in the context in which it is created.
-    That is, the <type scope="com::sun::star::uno">XComponentContext</type> used for creating the
+    That is, the com::sun::star::uno::XComponentContext used for creating the
     CellBindingPropertyHandler is examined for a value with this name. If the object in this
-    value denotes a XML form document (indicated by supporting the <type scope="com::sun::star::xforms">XFormsSupplier</type>
+    value denotes a XML form document (indicated by supporting the com::sun::star::xforms::XFormsSupplier
     interface), this document is used to examine the XML submissions which the button can be bound to.</p>
 
     @see com::sun::star::inspection::XPropertyHandler

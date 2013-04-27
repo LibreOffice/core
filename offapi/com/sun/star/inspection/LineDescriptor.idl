@@ -86,13 +86,13 @@ struct LineDescriptor
 
     /** describes the URL of an image to display on the primary button, if any.
 
-        <p>This URL will be used to obtain an actual <type scope="com::sun::star::graphic">XGraphic</type>
-        object from an <type scope="com::sun::star::graphic">GraphicProvider</type>.</p>
+        <p>This URL will be used to obtain an actual com::sun::star::graphic::XGraphic
+        object from an com::sun::star::graphic::GraphicProvider.</p>
 
         <p>The property will be ignored if <member>HasPrimaryButton</member> is <FALSE/>.</p>
 
         <p>If you need to specify a graphic which does not have an URL, but is available as
-        <type scope="com::sun::star::graphic">XGraphic</type> only, then you must leave
+        com::sun::star::graphic::XGraphic only, then you must leave
         <code>PrimaryButtonImageURL</code> empty, and use the <member>PrimaryButtonImage</member> property.
 
         @see PrimaryButtonImage
@@ -131,13 +131,13 @@ struct LineDescriptor
 
     /** describes the URL of an image to display on the secondary button, if any.
 
-        <p>This URL will be used to obtain an actual <type scope="com::sun::star::graphic">XGraphic</type>
-        object from an <type scope="com::sun::star::graphic">GraphicProvider</type>.</p>
+        <p>This URL will be used to obtain an actual com::sun::star::graphic::XGraphic
+        object from an com::sun::star::graphic::GraphicProvider.</p>
 
         <p>The property will be ignored if <member>HasSecondaryButton</member> is <FALSE/>.</p>
 
         <p>If you need to specify a graphic which does not have an URL, but is available as
-        <type scope="com::sun::star::graphic">XGraphic</type> only, then you must leave
+        com::sun::star::graphic::XGraphic only, then you must leave
         <code>SecondaryButtonImageURL</code> empty, and use the <member>SecondaryButtonImage</member> property.
 
         @see SecondaryButtonImage

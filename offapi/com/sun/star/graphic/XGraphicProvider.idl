@@ -39,7 +39,7 @@ module com { module sun { module star { module graphic
 published interface XGraphicProvider : ::com::sun::star::uno::XInterface
 {
     /** Calling this method returns a
-        <type scope="com::sun::star::beans">XPropertySet</type>
+        com::sun::star::beans::XPropertySet
         interface that gives access to the properties of the
         unloaded graphic
 
@@ -52,7 +52,7 @@ published interface XGraphicProvider : ::com::sun::star::uno::XInterface
             of the graphic, for which the attributes should be returned
 
         @returns
-            A <type scope="com::sun::star::beans">XPropertySet</type> interface
+            A com::sun::star::beans::XPropertySet interface
             to get access to the different graphic properties
 
         @see MediaProperties

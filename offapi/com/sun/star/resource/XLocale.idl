@@ -29,7 +29,7 @@
 
  module com {  module sun {  module star {  module resource {
 
-/** offers some operations on <type scope="com::sun::star::lang">Locale</type>
+/** offers some operations on com::sun::star::lang::Locale
     structures.@see         XResourceBundle
         @see         Locale
  */
@@ -181,7 +181,7 @@ published interface XLocale: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::Locale inLocale );
 
     /** @returns
-                <TRUE/> if the <type scope="com::sun::star::lang">Locale</type> <var>l1</var> is equal to the
+                <TRUE/> if the com::sun::star::lang::Locale <var>l1</var> is equal to the
                 other one.
 
                 <p>A locale is deemed equal to another locale with identical

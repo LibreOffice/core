@@ -30,7 +30,7 @@ module com { module sun { module star { module awt {
 
 
 /** Handles events fired by dialogs represented by a
-    <type scope="com::sun::star::awt">XDialog</type> interface.
+    com::sun::star::awt::XDialog interface.
  */
 interface XDialogEventHandler : ::com::sun::star::uno::XInterface {
 
@@ -43,7 +43,7 @@ interface XDialogEventHandler : ::com::sun::star::uno::XInterface {
 
         @param xDialog
             the dialog instance that generated the event. This is the same dialog instance
-            that was returned by the <type scope="com::sun::star::awt">XDialogProvider2</type>
+            that was returned by the com::sun::star::awt::XDialogProvider2
             createDialogWithHandler method when passing the XDialogEventHandler instance
             receiving the event as handler parameter.
 
@@ -52,7 +52,7 @@ interface XDialogEventHandler : ::com::sun::star::uno::XInterface {
             provides additional information for the event.
             If the event was caused by the dialog or any of the controls which it contains
             then the any should contain an object derived from
-            <type scope="com::sun::star::lang">EventObject</type>. Typically this would be one
+            com::sun::star::lang::EventObject. Typically this would be one
             of the several com::sun::star::awt::*Event types.
 
         @param MethodName
@@ -64,7 +64,7 @@ interface XDialogEventHandler : ::com::sun::star::uno::XInterface {
         @throws com::sun::star::lang::WrappedTargetException
             if the implementation of the method, which is determined by the argument MethodName,
             throws an exception. This exception is then wrapped into a
-            <type scope="com::sun::star::lang">WrappedTargetException</type>.
+            com::sun::star::lang::WrappedTargetException.
 
      */
     boolean callHandlerMethod(

@@ -97,16 +97,16 @@ service DataSeries
     /** gives access to the data points contained in a data series.
 
         <p>The objects returned by the
-        <type scope="com::sun::star::container">XIndexAccess</type>
+        com::sun::star::container::XIndexAccess
         are of type
-        <type scope="com::sun::star::beans">XPropertySet</type>
+        com::sun::star::beans::XPropertySet
         and support the service
         DataPoint.
     */
 //     interface ::com::sun::star::container::XIndexContainer;
 
     /** establishes a broadcaster-listener mechanism for the
-        <type scope="com::sun::star::container">XIndexContainer</type>
+        com::sun::star::container::XIndexContainer
         to keep changes and the property
         <member>DataSeries::AttributedDataPoints</member> in sync.
      */

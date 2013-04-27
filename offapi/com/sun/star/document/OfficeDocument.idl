@@ -39,8 +39,8 @@ module com {   module sun {   module star {   module document {
 
     <p>
     All major document-like components should support this service
-    instead of simple components which supports a <type scope="com::sun::star::frame">Controller</type>
-    or pure <type scope="com::sun::star::awt">XWindow</type> only.
+    instead of simple components which supports a com::sun::star::frame::Controller
+    or pure com::sun::star::awt::XWindow only.
     </p>
 
     @see com::sun::star::frame::Controller

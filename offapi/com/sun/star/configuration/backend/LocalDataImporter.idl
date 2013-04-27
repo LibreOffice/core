@@ -52,12 +52,12 @@ published service LocalDataImporter
             <member scope="com::sun::star::task">XJob::execute()</member>
             to indicates successful execution. If import is not executed,
             because <code>OverwriteExisting = </code><TRUE/> was specified,
-            a <type scope="com::sun::star::lang">IllegalAccessException</type>
+            a com::sun::star::lang::IllegalAccessException
             is returned.
         </p>
          <p>If <void/> or <TRUE/> is returned, this indicates successful
             execution. If an
-            <type scope="com::sun::star::uno">Exception</type> is returned,
+            com::sun::star::uno::Exception is returned,
             it represents an error condition encountered during execution.
         </p>
 

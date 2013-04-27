@@ -81,7 +81,7 @@ published service FileContent
         Let the new object ( not the parent! ) execute the command "insert".
         This will create the corresponding physical file or directory.
         For files, you need to supply the implementation of
-        an <type scope="com::sun::star::io">XInputStream</type> with the
+        an com::sun::star::io::XInputStream with the
         command's parameters, that provides access to the stream data.
         </li>
         </ol>
@@ -140,7 +140,7 @@ published service FileContent
         <true/> for directories )
         </li>
         <li>
-        <type scope="com::sun::star::util">DateTime</type> DateModified ( read-only )
+        com::sun::star::util::DateTime DateModified ( read-only )
         </li>
         <li>
         boolean IsReadOnly ( read-only attribute )

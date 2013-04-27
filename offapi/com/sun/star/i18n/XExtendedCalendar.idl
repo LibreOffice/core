@@ -32,7 +32,7 @@ module com { module sun { module star { module i18n {
     systems.
 
     <p> It is derived from
-    <type scope="::com::sun::star::i18n">XCalendar</type> and provides
+    ::com::sun::star::i18n::XCalendar and provides
     additional functionality to display parts of the date currently
     set at the calendar. </p>
 

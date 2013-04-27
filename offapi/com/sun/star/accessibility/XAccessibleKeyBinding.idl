@@ -30,7 +30,7 @@ module com { module sun { module star { module accessibility {
     then can be associated to a certain action.
 
     <p>There can be zero, one, or more key bindings.  Each key binding consists
-    of a sequence of <type scope="::com::sun::star::awt">KeyStroke</type>
+    of a sequence of ::com::sun::star::awt::KeyStroke
     objects.  The association of an action with a key binding is established
     by the XAccessibleAction interface returning an
     XAccessibleKeyBinding object.</p>

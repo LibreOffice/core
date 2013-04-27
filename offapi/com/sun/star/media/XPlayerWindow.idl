@@ -43,7 +43,7 @@ interface XPlayerWindow : ::com::sun::star::awt::XWindow
     /** changes the pointer for the player window.
 
         @param SystemPointerType
-            a <type scope="::com::sun::star::awt">SystemPointer</type>
+            a ::com::sun::star::awt::SystemPointer
      */
     void setPointerType( [in] long SystemPointerType );
 };

@@ -33,18 +33,18 @@ module com { module sun { module star { module linguistic2 {
     and/or the spelling of previously incorrect or correct words
     should be checked again.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XLinguServiceEventBroadcaster</type>
-    @see    <type scope="com::sun::star::linguistic2">XLinguServiceEventListener</type>
-    @see    <type scope="com::sun::star::linguistic2">SpellChecker</type>
-    @see    <type scope="com::sun::star::linguistic2">Hyphenator</type>
-    @see    <type scope="com::sun::star::lang">EventObject</type>
+    @see    com::sun::star::linguistic2::XLinguServiceEventBroadcaster
+    @see    com::sun::star::linguistic2::XLinguServiceEventListener
+    @see    com::sun::star::linguistic2::SpellChecker
+    @see    com::sun::star::linguistic2::Hyphenator
+    @see    com::sun::star::lang::EventObject
 */
 published struct LinguServiceEvent : com::sun::star::lang::EventObject
 {
     /** The type of event.
 
          <p>The value may be combined via logical OR from those values
-        defined in <type scope="com::sun::star::linguistic2">LinguServiceEventFlags</type></p>
+        defined in com::sun::star::linguistic2::LinguServiceEventFlags</p>
     */
     short nEvent;
 

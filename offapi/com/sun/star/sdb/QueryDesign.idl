@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module sdb {
         <li><a name="view_mode"</a><b>View Mode</b>
         <p>In <code>View Mode</code>, the designer is used to modify an existing or create a new server-side
         view.</p>
-        <p>The view which is being designed must support the <type scope="com::sun::star::sdbcx">XAlterView</type>
+        <p>The view which is being designed must support the com::sun::star::sdbcx::XAlterView
         interface, except when a new view is being designed. In the latter case, the designer closes itself
         automatically when <code>XAlterView</code> is not supported, and the view has been saved.</p></li>
 
@@ -58,13 +58,13 @@ module com {  module sun {  module star {  module sdb {
 
     <h3><a name="initialization"></a>Initialization</h3>
 
-    <p>Initialization is done using the <type scope="com::sun::star::lang">XInitialization</type> interface,
-    which expects a sequence of objects being either <type scope="com::sun::star::beans">NamedValue</type>s or
-    <type scope="com::sun::star::beans">PropertyValue</type>s. The following parameters are supported at
+    <p>Initialization is done using the com::sun::star::lang::XInitialization interface,
+    which expects a sequence of objects being either com::sun::star::beans::NamedValues or
+    com::sun::star::beans::PropertyValues. The following parameters are supported at
     initialization time:
     <ul>
         <li><b>Frame</b><br/>
-        has to be an <type scope="com::sun::star::frame">XFrame</type> interface specifying the frame to plug the
+        has to be an com::sun::star::frame::XFrame interface specifying the frame to plug the
         QueryDesign component into.<br/>
         This parameter is mandatory.
         </li>

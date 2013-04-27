@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module lang {
     avoid this.
     </p>
 
-    <p>Service factories added via <type scope="com::sun::star::container">XSet</type>
+    <p>Service factories added via com::sun::star::container::XSet
     should support the following interfaces: </p>
 
     <dl>
@@ -66,16 +66,16 @@ module com {  module sun {  module star {  module lang {
 
     <p>Since LibreOffice 3.6, in addition to instances of
     XServiceInfo et al, the
-    <type scope="com::sun::star::container">XSet</type> of at least the default
+    com::sun::star::container::XSet of at least the default
     C++ service manager implementation now also supports sequences of
-    <type scope="com::sun::star::beans">NamedValue</type> in <code>insert</code>
+    com::sun::star::beans::NamedValue in <code>insert</code>
     and <code>remove</code>.  The sequence elements must each have a
     <code>Name</code> of <code>uri</code> and a string <code>Value</code> that
     is the URI of a service rdb.  It is legal for there to be no such
     <code>uri</code> elements.  For <code>insert</code>, there can additionally
     be an optional element with a <code>Name</code> of
     <code>component-context</code> and a value that is a non-null reference of
-    type <type scope="com::sun::star::uno">XComponentContext</type> that shall
+    type com::sun::star::uno::XComponentContext that shall
     be used instead of this service manager's default component context when
     loading the corresponding implementations.
 

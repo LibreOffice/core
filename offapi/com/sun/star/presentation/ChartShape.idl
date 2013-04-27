@@ -32,7 +32,7 @@
 
     <p>Presentation shapes can be used in a presentation
     page layouts and their position and size is by default set
-    by the presentation shapes on the <type scope="com::sun::star::drawing">MasterPage</type>.
+    by the presentation shapes on the com::sun::star::drawing::MasterPage.
  */
 published service ChartShape
 {

@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module sdb {
 
 /** is a service for user interaction for databases.
     @deprecated
-        Do not use this service anymore. Instead, create a generic <type scope="com::sun::star::task">InteractionHandler</type>
+        Do not use this service anymore. Instead, create a generic com::sun::star::task::InteractionHandler
         instance, and pass it your request. It will determine, based on configuration data, which concrete interaction
         handler implementation to use for a specific request. In particular, requests formerly server by this service here
         are by default passed to a DatabaseInteractionHandler.

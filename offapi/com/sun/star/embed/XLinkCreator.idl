@@ -38,7 +38,7 @@
 published interface XLinkCreator: com::sun::star::uno::XInterface
 {
     /** creates a new object based on
-        <type scope="com::sun::star::document">MediaDescriptor</type>
+        com::sun::star::document::MediaDescriptor
         and initializes it as a link.
 
         <p>
@@ -53,13 +53,13 @@ published interface XLinkCreator: com::sun::star::uno::XInterface
             a name for the entry
 
         @param aArgs
-            <type scope="com::sun::star::document">MediaDescriptor</type>
+            com::sun::star::document::MediaDescriptor
             the link will be based on
 
         @param aObjectArgs
             optional parameters for the object persistence initialization,
             see also
-            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+            com::sun::star::embed::EmbeddedObjectDescriptor
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             the argument is illegal

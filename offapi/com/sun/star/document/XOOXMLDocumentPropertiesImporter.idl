@@ -42,9 +42,9 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
 
         <p>
         The storage must represent OOXML format and support
-        <type scope="com::sun::star::embed">XRelationshipAccess</type>
+        com::sun::star::embed::XRelationshipAccess
         interface. Please see
-        <type scope="com::sun::star::embed">StorageFactory</type> for details
+        com::sun::star::embed::StorageFactory for details
         regarding creation of such a storage.
         </p>
 

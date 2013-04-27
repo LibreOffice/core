@@ -38,7 +38,7 @@ published interface XPropertyTypeDescription : com::sun::star::reflection::XType
     /** @return the flags defined for this property.
 
         <p>The possible values are defined in
-        <type scope="com::sun::star::beans">PropertyAttribute</type>
+        com::sun::star::beans::PropertyAttribute
       */
     short getPropertyFlags();
 

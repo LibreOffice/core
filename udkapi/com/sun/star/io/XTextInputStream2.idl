@@ -35,7 +35,7 @@ published interface XTextInputStream2
     /// Interface to read text data
     interface com::sun::star::io::XTextInputStream;
 
-    /// Interface to specify the used <type scope="com::sun::star::io">XInputStream</type>
+    /// Interface to specify the used com::sun::star::io::XInputStream
     interface com::sun::star::io::XActiveDataSink;
 
 };

@@ -45,7 +45,7 @@ published service Column
 
 
     /** is the
-        <type scope="com::sun::star::sdbc">DataType</type>
+        com::sun::star::sdbc::DataType
         of the column.
      */
     [readonly, property] long Type;

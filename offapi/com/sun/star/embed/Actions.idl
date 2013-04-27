@@ -31,7 +31,7 @@ published constants Actions
         close.
 
         <p>
-        Usually a <type scope="com::sun::star::util">XCloseListener</type>
+        Usually a com::sun::star::util::XCloseListener
         implementation could use this constant to request approval to throw
         veto exception.
         </p>
@@ -42,7 +42,7 @@ published constants Actions
         to terminate.
 
         <p>
-        Usually a <type scope="com::sun::star::frame">XTerminateListener</type>
+        Usually a com::sun::star::frame::XTerminateListener
         implementation could use this constant to request approval to throw
         veto exception.
         </p>

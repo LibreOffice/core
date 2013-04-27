@@ -25,7 +25,7 @@
 
 
 /** is a factory for instances of service
-    <type scope="com::sun::star::sdb">SQLQueryComposer</type>
+    com::sun::star::sdb::SQLQueryComposer
     .
  */
 published interface XSQLQueryComposerFactory: com::sun::star::uno::XInterface

@@ -29,7 +29,7 @@
 
 
 /** extends the
-    <type scope="com::sun::star::sdbcx">ResultSet</type>
+    com::sun::star::sdbcx::ResultSet
     by a more sophisticated access to the result sets
     data.
  */

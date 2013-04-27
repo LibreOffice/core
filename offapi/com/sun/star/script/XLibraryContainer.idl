@@ -59,7 +59,7 @@ published interface XLibraryContainer: com::sun::star::container::XNameAccess
         In this case, the returned interface really is only an
         XNameAccess. If ReadOnly is false (and the referenced
         storage allows write access) the returned interface also
-        can be a <type scope="com::sun::star::container">XNameContainer</type>.
+        can be a com::sun::star::container::XNameContainer.
      */
     com::sun::star::container::XNameAccess createLibraryLink( [in] string Name, [in] string StorageURL, [in] boolean ReadOnly )
         raises( com::sun::star::lang::IllegalArgumentException,

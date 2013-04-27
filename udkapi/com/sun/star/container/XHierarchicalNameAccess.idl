@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module container {
     fully qualified name, e.g., "com.sun.star.uno.XInterface". </p>
 
     <p>To implement inaccurate name access, support the
-    <type scope="com::sun::star::beans">XExactName</type> interface.  </p>
+    com::sun::star::beans::XExactName interface.  </p>
 
     @see com::sun::star::beans::XExactName
  */

@@ -35,7 +35,7 @@ struct Ambiguous<T> {
 
        <p>Even if this structure instance is ambiguous, this member should
        contain a useful value.  If there is no useful value for an ambiguous
-       structure instance, <type scope="com::sun::star::beans">Optional</type>
+       structure instance, com::sun::star::beans::Optional
        can be used as the type of this member.</p>
      */
     T Value;

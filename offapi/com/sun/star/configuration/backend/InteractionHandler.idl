@@ -42,10 +42,10 @@ module com { module sun { module star { module configuration { module backend {
 
     <P>The continuation restrictions are as follows:  Let <VAR>C</VAR> be the
     subset of the provided continuations that are of type
-    <type scope="com::sun::star::task">XInteractionApprove</type>,
-    <type scope="com::sun::star::task">XInteractionDisapprove</type>,
-    <type scope="com::sun::star::task">XInteractionRetry</type>, or
-    <type scope="com::sun::star::task">XInteractionAbort</type> (or of a
+    com::sun::star::task::XInteractionApprove,
+    com::sun::star::task::XInteractionDisapprove,
+    com::sun::star::task::XInteractionRetry, or
+    com::sun::star::task::XInteractionAbort (or of a
     derived type).  All other continuations are ignored for these requests.
     The request is only handled if the set <VAR>C</VAR> is any of the
     following:
@@ -71,11 +71,11 @@ published service InteractionHandler
     /** Initialize the interaction handler.
 
         <P>The arguments must be a sequence of
-        <type scope="com::sun::star::beans">PropertyValue</type>s.  The
+        com::sun::star::beans::PropertyValues.  The
         currently supported properties are:
         <UL>
             <LI><code>"Parent"</code> of type
-            <type scope="com::sun::star::awt">XWindow</type> denotes the
+            com::sun::star::awt::XWindow denotes the
             parent window for any GUI dialogs the interaction handler pops up;
             it is strongly recommended that this property is supplied;</LI>
             <LI><code>"Context"</code> of type <atom>string</atom> is a

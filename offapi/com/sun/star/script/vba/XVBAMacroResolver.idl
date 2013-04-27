@@ -48,7 +48,7 @@ interface XVBAMacroResolver
         @return
             The script URL referring to the passed VBA macro.
 
-        @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if a macro with the passed name does not exist.
     **/
     string resolveVBAMacroToScriptURL( [in] string aVBAMacroName )
@@ -64,7 +64,7 @@ interface XVBAMacroResolver
         @return
             The VBA macro name referring to a macro with the passed script URL.
 
-        @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if a macro with the passed name does not exist.
     **/
     string resolveScriptURLtoVBAMacro( [in] string aScriptURL )

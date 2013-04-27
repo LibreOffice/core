@@ -28,7 +28,7 @@
 
 
 /** specifies a style sheet for paragraphs within a
-    <type scope="com::sun::star::text">Text</type>.
+    com::sun::star::text::Text.
  */
 published service ParagraphStyle
 {
@@ -37,7 +37,7 @@ published service ParagraphStyle
 
     /** contains user defined attributes for paragraphs.
 
-        @see    <type scope="com::sun::star::xml">ParaUserDefinedAttributesSupplier</type>
+        @see    com::sun::star::xml::ParaUserDefinedAttributesSupplier
      */
     [optional] service com::sun::star::xml::ParaUserDefinedAttributesSupplier;
 

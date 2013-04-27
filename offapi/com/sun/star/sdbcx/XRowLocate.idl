@@ -102,7 +102,7 @@ published interface XRowLocate: com::sun::star::uno::XInterface
         @param second
             the second bookmark
         @returns
-            a value of <type scope="com::sun::star::sdbcx">CompareBookmark</type>
+            a value of com::sun::star::sdbcx::CompareBookmark
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
 

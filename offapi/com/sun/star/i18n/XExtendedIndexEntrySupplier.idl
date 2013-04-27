@@ -32,7 +32,7 @@ module com { module sun { module star { module i18n {
     This interface provides information for creating "Table of Index"
 
     <p> It is derived from
-    <type scope="::com::sun::star::i18n">XIndexEntrySupplier</type> and
+    ::com::sun::star::i18n::XIndexEntrySupplier and
     provides following additional functionalities.</p>
     <ul>
     <li>Provide supported language/locale list.

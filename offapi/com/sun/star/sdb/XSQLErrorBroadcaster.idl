@@ -28,7 +28,7 @@
 
 /** interface for notifying potential listeners
     of
-    <type scope="com::sun::star::sdbc">SQLException</type>
+    com::sun::star::sdbc::SQLException
     s posted by any database object.
  */
 published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface

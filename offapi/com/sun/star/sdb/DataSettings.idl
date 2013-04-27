@@ -28,7 +28,7 @@
 
 
 /** extends the
-    <type scope="com::sun::star::sdbcx">Table</type>
+    com::sun::star::sdbcx::Table
     with additional display information, sorting and filtering criteria.
 
     */

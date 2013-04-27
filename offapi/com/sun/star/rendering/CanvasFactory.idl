@@ -34,7 +34,7 @@ module com { module sun { module star { module rendering {
 
     <p>
     Instantiating this service, you can use its
-    <type scope="com::sun::star::lang">XMultiComponentFactory</type>
+    com::sun::star::lang::XMultiComponentFactory
     interface to create Canvas objects, passing an empty string
     as service specifier (default).
     If you want to manually override the configured service list, you can pass

@@ -32,10 +32,10 @@ module com { module sun { module star { module ucb {
     target folder that has the same file name as the source file.
 
     <p>If this exception is passed to an
-    <type scope="com::sun::star::task">XInteractionHandler</type> an
+    com::sun::star::task::XInteractionHandler an
     XInteractionSupplyName and an
     XInteractionReplaceExistingData should be supplied with
-    the <type scope="com::sun::star::task">XInteractionRequest</type>. On
+    the com::sun::star::task::XInteractionRequest. On
     return the XInteractionSupplyName, if selected, will contain
     a new name supposed to resolve the name clash. The
     XInteractionReplaceExistingData will be selected if the

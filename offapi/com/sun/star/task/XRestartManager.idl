@@ -35,7 +35,7 @@ published interface XRestartManager : com::sun::star::uno::XInterface
 {
     /** let the office restart asynchronously
         @param xInteractionHandler
-            the <type scope="com::sun::star::task">InteractionHandler</type>
+            the com::sun::star::task::InteractionHandler
             service implementation, that is used in case a problem is detected
             during requesting the restart.
 

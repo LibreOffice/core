@@ -37,13 +37,13 @@ interface XObjectInspectorUI;
 */
 interface XObjectInspector
 {
-    /** allows to plug the inspector into an <type scope="com::sun::star::frame">XFrame</type>
+    /** allows to plug the inspector into an com::sun::star::frame::XFrame
 
         <p>The <member scope="com::sun::star::frame">XController::setModel</member> method
         accepts only XObjectInspectorModels, and will return <FALSE/> if the
         to-be-attached model is not <NULL/>, but does not support this interface.</p>
 
-        <p>If you do not want to support a full-blown <type scope="com::sun::star::frame">XModel</type>,
+        <p>If you do not want to support a full-blown com::sun::star::frame::XModel,
         use the <member>InspectorModel</member> attribute instead.</p>
 
         <p>The <member scope="com::sun::star::frame">XController::getViewData</member> and
@@ -54,7 +54,7 @@ interface XObjectInspector
 
     /** allows to intercept functionality
 
-        <p>This interface is inherited from the <type scope="com::sun::star::frame">Controller</type>
+        <p>This interface is inherited from the com::sun::star::frame::Controller
         service, currently, there is no functionality to intercept at an XObjectInspector.</p>
     */
     interface com::sun::star::frame::XDispatchProvider;
@@ -66,7 +66,7 @@ interface XObjectInspector
 
         <p>Note that there are two ways of setting or retrieving the current model: You can either
         use <member scope="com::sun::star::frame">XModel::setModel</member>, or, if you do not want
-        or need to implement the full-blown <type scope="com::sun::star::frame">XModel</type> interface,
+        or need to implement the full-blown com::sun::star::frame::XModel interface,
         you can use this property directly. Both approaches are semantically equivalent.</p>
 
         <p>If a new model is set at the inspector, the complete UI will be rebuilt to reflect

@@ -26,11 +26,11 @@
 module com { module sun { module star { module text {
 
 /**
-    provides access to default <type scope="com::sun::star::text">NumberingRules</type>
+    provides access to default com::sun::star::text::NumberingRules
      according to a given locale information.
     <p></p>
-    @see <type scope="com::sun::star::text">NumberingRules</type>
-    @see <type scope="com::sun::star::lang">Locale</type>
+    @see com::sun::star::text::NumberingRules
+    @see com::sun::star::lang::Locale
     @version    1.0
     @author     <a href="mailto:oliver.specht@germany.sun.com">Oliver Specht</a>
 */
@@ -38,21 +38,21 @@ published interface XDefaultNumberingProvider : com::sun::star::uno::XInterface
 {
     /**
         provides access to outline numberings according to
-        a given <type scope="com::sun::star::lang">Locale</type>.
+        a given com::sun::star::lang::Locale.
         <p>Outline numberings usually consist of levels
             with different settings. </p>
-        @see <type scope="com::sun::star::text">NumberingLevel</type>
+        @see com::sun::star::text::NumberingLevel
     */
     sequence<com::sun::star::container::XIndexAccess>
         getDefaultOutlineNumberings([in]com::sun::star::lang::Locale aLocale);
     /**
         provides access to outline numberings according
-        to a given <type scope="com::sun::star::lang">Locale</type>.
+        to a given com::sun::star::lang::Locale.
         <p>In contrast to outline numberings the continuous
             numberings consist of
             level using the equal settings in all numbering levels.</P>
-        @see <type scope="com::sun::star::text">NumberingLevel</type>
-        @see <type scope="com::sun::star::lang">Locale</type>
+        @see com::sun::star::text::NumberingLevel
+        @see com::sun::star::lang::Locale
     */
     sequence<com::sun::star::beans::PropertyValues>
         getDefaultContinuousNumberingLevels([in]com::sun::star::lang::Locale aLocale);

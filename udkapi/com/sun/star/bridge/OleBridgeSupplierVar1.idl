@@ -28,7 +28,7 @@
 /** maps UNO types to COM types and vice versa. It is optimized for use in a
      remote szenario. <p>
 The functionality is basically the same as
-<type scope="com::sun::star::bridge">OleBridgeSupplier2</type>.
+com::sun::star::bridge::OleBridgeSupplier2.
 However, the implementation should be optimized for remote access. For example, it could
 try to reduce the calls into the remote process. Also it could create components on its own behalf in the remote process, if this increases performance.
 

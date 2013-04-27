@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module drawing {
 
 /** View dependent part of the Draw and Impress controller.
     <p>During the lifetime of an Impress application the
-    <type scope="com::sun::star::drawing">DrawingDocumentDrawView</type>
+    com::sun::star::drawing::DrawingDocumentDrawView
     changes its sub controllers whenever the view in the center pane is
     replaced by another one.  The sub controller handles the things that are
     not common to all views, i.e. properties, the current page/slide, and

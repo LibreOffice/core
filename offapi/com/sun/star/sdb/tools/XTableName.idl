@@ -44,7 +44,7 @@ module com {  module sun {  module star {  module sdb { module tools {
     cannot explicitly dispose it (<member scope="com::sun::star::lang">XComponent::dispose</member>),
     and you cannot be notified when it dies.<br/>
     However, if your try to access any of its methods or attributes, after the
-    connection which was used to create it was closed, a <type scope="com::sun::star::lang">DisposedException</type>
+    connection which was used to create it was closed, a com::sun::star::lang::DisposedException
     will be thrown.</p>
 
     @see XConnectionTools
@@ -105,11 +105,11 @@ interface XTableName
     */
     [attribute, readonly]   string  NameForSelect;
 
-    /** is the <type scope="com::sun::star::sdb">Table</type> object specified
+    /** is the com::sun::star::sdb::Table object specified
         by the current name.
 
         <p>Retrieving this attribute is equivalent to obtaining the tables
-        container from the connection (via <type scope="com::sun::star::sdbcx">XTablesSupplier</type>),
+        container from the connection (via com::sun::star::sdbcx::XTablesSupplier),
         and calling its <member scope="com::sun::star::container">XNameAccess::getByName</member>
         method with the ComposedName.</p>
 

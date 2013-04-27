@@ -38,7 +38,7 @@ struct SolverConstraint
     SolverConstraintOperator Operator;
 
     /** The comparison value, of type <atom>double</atom> or
-        <type scope="com::sun::star::table">CellAddress</type>.
+        com::sun::star::table::CellAddress.
      */
     any Right;
 };

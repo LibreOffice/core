@@ -62,7 +62,7 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
         <atom>long</atom>, <atom>double</atom> or <atom>string</atom>
         type.</dd>
 
-        <dt><type scope="com::sun::star::table">XCellRange</type></dt>
+        <dt>com::sun::star::table::XCellRange</dt>
         <dd>for a SheetCellRange object that contains the
         data.</dd>
         </dl>
@@ -87,10 +87,10 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
             <atom>string</atom> values.</dd>
             </dl>
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if the named function does not exist.
 
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             if the function can not be called with these arguments.
      */
     any callFunction( [in] string aName, [in] sequence< any > aArguments )

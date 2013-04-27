@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module form {  module component {
 
 
-/** specifies a component which extends the <type scope="com::sun::star::awt">UnoControlEditModel</type>
+/** specifies a component which extends the com::sun::star::awt::UnoControlEditModel
     with capabilities to display and input formatted text.
 */
 published service RichTextControl
@@ -38,7 +38,7 @@ published service RichTextControl
     service com::sun::star::form::FormControlModel;
 
     /** specifies capabilities to provide rich text, as opposed to the simple text provided by the
-        <type scope="com::sun::star::awt">UnoControlEditModel</type>
+        com::sun::star::awt::UnoControlEditModel
     */
     service com::sun::star::text::TextRange;
 
@@ -52,7 +52,7 @@ published service RichTextControl
     /** specifies whether the control should display the text including all its formatting.
 
         <p>If this is set to <FALSE/>, the control will act as ordinary
-        <type scope="com::sun::star::awt">UnoControlEditModel</type>.</p>
+        com::sun::star::awt::UnoControlEditModel.</p>
 
         <p>If the property is set to <TRUE/>, the control will ignore the following properties:
         <ul>

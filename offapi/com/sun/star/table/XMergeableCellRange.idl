@@ -33,7 +33,7 @@ interface XMergeableCellRange : com::sun::star::uno::XInterface
 {
     /** merges the area specified by this range.
 
-        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+        @throws com::sun::star::lang::NoSupportException
             if a merge is not possible for this range. You can use
             <method>isMergeable()</method> to check if a merge is possible.
      */
@@ -52,10 +52,10 @@ interface XMergeableCellRange : com::sun::star::uno::XInterface
             this is the number of rows that will be added to each cell. Zero
             means no new rows
 
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             if at least one of the parameters is less than zero.
 
-        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+        @throws com::sun::star::lang::NoSupportException
             if a split is not possible for this range.
     */
     void split( [in] long Columns, [in] long Rows )

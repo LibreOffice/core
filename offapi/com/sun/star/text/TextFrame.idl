@@ -105,7 +105,7 @@ published service TextFrame
     [optional, property] short WidthType;
 
     /** contains the writing direction, as represented by the
-        <type scope="com::sun::star::text">WritingMode2</type> constants
+        com::sun::star::text::WritingMode2 constants
      */
     [optional, property] short WritingMode;
 

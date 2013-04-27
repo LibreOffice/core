@@ -39,7 +39,7 @@ published interface XNotifyingDispatch: XDispatch
 
         @param Arguments
             optional arguments for this request
-            (see <type scope="com::sun::star::document">MediaDescriptor</type>)
+            (see com::sun::star::document::MediaDescriptor)
 
         @param Listener
             optional listener for guaranteed notifications of this request

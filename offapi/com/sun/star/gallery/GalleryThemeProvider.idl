@@ -40,10 +40,10 @@ service GalleryThemeProvider
 
     /** allows initializing the provider
         <p>You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
-        method of your <type scope="com::sun::star::lang">XMultiServiceFactory</type>.</p>
+        method of your com::sun::star::lang::XMultiServiceFactory.</p>
 
         <p>You specify a parameter by passing one (or more)
-        <type scope="com::sun::star::beans">PropertyValue</type>
+        com::sun::star::beans::PropertyValue
         object(s) to the initialize method, where the <em>Name</em> field contains a string describing which aspect
         you want to affect, and the <em>Value</em> field containing a value.</p>
 

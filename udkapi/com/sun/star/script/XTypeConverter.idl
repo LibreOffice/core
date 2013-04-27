@@ -60,9 +60,9 @@ published interface XTypeConverter: com::sun::star::uno::XInterface
     /** Converts the value <code>aFrom</code> to the specified simple type
         <code>aDestinationType</code>.
         Throws an CannotConvertException if the conversion
-        failed and an <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        failed and an com::sun::star::lang::IllegalArgumentException
         if the destination
-        <type scope="com::sun::star::uno">TypeClass</type> is not simple,
+        com::sun::star::uno::TypeClass is not simple,
         e.g. not long or byte.
 
         @param aFrom

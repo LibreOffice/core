@@ -24,7 +24,7 @@
  module com {  module sun {  module star {  module registry {
 
 
-/** extends the functionality of <type scope="com::sun::star::registry">XImplementationRegistration</type>. It can be useful to specify a complete Url to a component but register the components name only (library or jar name).
+/** extends the functionality of com::sun::star::registry::XImplementationRegistration. It can be useful to specify a complete Url to a component but register the components name only (library or jar name).
 
     @since OOo 2.4
  */

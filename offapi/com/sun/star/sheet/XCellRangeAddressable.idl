@@ -28,14 +28,14 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** represents a cell which can be addressed with a
-    <type scope="com::sun::star::table">CellRangeAddress</type>.
+    com::sun::star::table::CellRangeAddress.
  */
 published interface XCellRangeAddressable: com::sun::star::uno::XInterface
 {
 
     /** returns the address of the cell range in the spreadsheet document.
 
-        <p>The <type scope="com::sun::star::table">CellRangeAddress</type>
+        <p>The com::sun::star::table::CellRangeAddress
         can be used to address the range within its document.</p>
      */
     com::sun::star::table::CellRangeAddress getRangeAddress();

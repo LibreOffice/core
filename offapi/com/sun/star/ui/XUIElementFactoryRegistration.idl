@@ -91,7 +91,7 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
 
         @param ModuleName
             an optional module identifier. This value can remain empty, if a generic factory is requested.
-            The module identifier can be retrieved from the <type scope="com::sun::star::frame">ModuleManager</type> service.
+            The module identifier can be retrieved from the com::sun::star::frame::ModuleManager service.
     */
     ::com::sun::star::ui::XUIElementFactory getFactory( [in] string ResourceURL, [in] string ModuleIdentifier );
 
@@ -114,7 +114,7 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
         @param aModuleIdentifier
             an optional module identifier that can be used to register a factory only for a single module. This value
             can remain empty if no special factory for a single module is needed. The module identifier can be retrieved
-            from the <type scope="com::sun::star::frame">ModuleManager</type> service.
+            from the com::sun::star::frame::ModuleManager service.
 
         @param aFactoryImplementationName
             a UNO implementation name that can be used by an implementation to create a factory instance.
@@ -140,7 +140,7 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
         @param aModuleName
             an optional module name that can be used to deregister a factory only for a single module. This value
             can remain empty if not a module based factory should be deregistered. The module identifier can be retrieved
-            from the <type scope="com::sun::star::frame">ModuleManager</type> service.
+            from the com::sun::star::frame::ModuleManager service.
 
         <p>
         <b>Using this function can be very dangerous as other implementation with OpenOffice may not be able to  create their

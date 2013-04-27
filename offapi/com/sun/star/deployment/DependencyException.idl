@@ -33,7 +33,7 @@ module com { module sun { module star { module deployment {
    environment.
 
    <p>This exception is intended to be used with an
-   <type scope="com::sun::star::task">XInteractionHandler</type>.</p>
+   com::sun::star::task::XInteractionHandler.</p>
 
    @since OOo 2.0.4
 */

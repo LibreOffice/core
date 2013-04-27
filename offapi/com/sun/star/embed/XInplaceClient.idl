@@ -85,12 +85,12 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         raises( ::com::sun::star::embed::WrongStateException );
 
     /** allows to retrieve the
-        <type scope="com::sun::star::frame">LayoutManager</type> of the
+        com::sun::star::frame::LayoutManager of the
         container.
 
         @return
             reference to object representing the
-            <type scope="com::sun::star::frame">LayoutManager</type> of the
+            com::sun::star::frame::LayoutManager of the
             container
 
         @throws com::sun::star::embed::WrongStateException
@@ -103,7 +103,7 @@ interface XInplaceClient: com::sun::star::uno::XInterface
 
         @return
             reference to object implementing the
-            <type scope="com::sun::star::frame">XDispatchProvider</type>
+            com::sun::star::frame::XDispatchProvider
 
         @throws com::sun::star::embed::WrongStateException
             the object is in unexpected state to make such request

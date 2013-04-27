@@ -35,7 +35,7 @@ interface XSolverDescription: com::sun::star::uno::XInterface
     [attribute, readonly] string ComponentDescription;
 
     /** returns a short description for a property in the component's
-        <type scope="com::sun::star::beans">XPropertySet</type> interface.
+        com::sun::star::beans::XPropertySet interface.
     */
     string getPropertyDescription( [in] string aPropertyName );
 

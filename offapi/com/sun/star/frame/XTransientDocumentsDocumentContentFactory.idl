@@ -28,7 +28,7 @@
 module com { module sun { module star { module frame {
 
 /** specifies a factory for
-    <type scope="com::sun::star::ucb">TransientDocumentsDocumentContent</type>s.
+    com::sun::star::ucb::TransientDocumentsDocumentContents.
 
      @version  1.0
      @author   Kai Sommerfeld
@@ -40,19 +40,19 @@ module com { module sun { module star { module frame {
 interface XTransientDocumentsDocumentContentFactory : com::sun::star::uno::XInterface
 {
     /** creates a
-        <type scope="com::sun::star::ucb">TransientDocumentsDocumentContent</type>
-        based on a given <type scope="com::sun::star::document">OfficeDocument</type>.
+        com::sun::star::ucb::TransientDocumentsDocumentContent
+        based on a given com::sun::star::document::OfficeDocument.
 
         @param Model
         the document model for that a
-        <type scope="com::sun::star::ucb">TransientDocumentsDocumentContent</type>
+        com::sun::star::ucb::TransientDocumentsDocumentContent
         is requested. The model must be an implementation of service
-        <type scope="com::sun::star::document">OfficeDocument</type>.
+        com::sun::star::document::OfficeDocument.
 
         @returns
         a document content based on the given document model. The content must
         be an implementation of service
-        <type scope="com::sun::star::ucb">TransientDocumentsDocumentContent</type>.
+        com::sun::star::ucb::TransientDocumentsDocumentContent.
 
         @throws com::sun::star::lang::IllegalArgumentException
         if the document model cannot be associated with content for any reason.

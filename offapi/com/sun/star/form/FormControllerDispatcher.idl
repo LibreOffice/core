@@ -25,8 +25,8 @@
 module com {  module sun {  module star {  module form {
 
 
-/** is not used anymore, and superseded by <type scope="com::sun::star::form::runtime">FormController</type> and
-    <type scope="com::sun::star::form::runtime">FormOperations</type>.
+/** is not used anymore, and superseded by com::sun::star::form::runtime::FormController and
+    com::sun::star::form::runtime::FormOperations.
 
     @deprecated
  */

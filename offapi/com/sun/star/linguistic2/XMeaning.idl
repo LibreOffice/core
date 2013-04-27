@@ -32,7 +32,7 @@ module com { module sun { module star { module linguistic2 {
     call and allows for retrieval of its synonyms.
     </P>
 
-    @see    <type scope="com::sun::star::linguistic2">XThesaurus</type>
+    @see    com::sun::star::linguistic2::XThesaurus
  */
 published interface XMeaning : com::sun::star::uno::XInterface
 {

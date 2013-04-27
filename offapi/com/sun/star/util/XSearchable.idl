@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module util {
     (in particular, for a text range which contains a specific string pattern).
 
     @example
-        in a <type scope="com::sun::star::text">TextDocument</type>:
+        in a com::sun::star::text::TextDocument:
         set all "search for" to bold using findFirst()/findNext():
 
     <listing>
@@ -64,7 +64,7 @@ published interface XSearchable: com::sun::star::uno::XInterface
     /** searches the contained texts for the next occurrence of whatever is specified.
 
         @returns
-            the position within the component, e.g. a <type scope="com::sun::star::text">XTextRange</type>
+            the position within the component, e.g. a com::sun::star::text::XTextRange
             which determines the found elements.
 
         @see SearchDescriptor

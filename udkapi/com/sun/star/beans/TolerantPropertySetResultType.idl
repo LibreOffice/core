@@ -25,13 +25,13 @@ module com {  module sun {  module star {  module beans {
 
 
 /** specifies the possible failure types when using the
-    <type scope="com::sun::star::beans">XTolerantMultiPropertySet</type>
+    com::sun::star::beans::XTolerantMultiPropertySet
     interface.
 
     <p>It usually matches one of the exception types that may occur when
     using the
-    <type scope="com::sun::star::beans">XPropertySet</type> or
-    <type scope="com::sun::star::beans">XMultiPropertySet</type> interfaces.</p>
+    com::sun::star::beans::XPropertySet or
+    com::sun::star::beans::XMultiPropertySet interfaces.</p>
 */
 constants TolerantPropertySetResultType
 {
@@ -63,7 +63,7 @@ constants TolerantPropertySetResultType
     */
     const short PROPERTY_VETO       = 3;
 
-    /** a <type scope="com::sun::star::lang">WrappedTargetException</type>
+    /** a com::sun::star::lang::WrappedTargetException
         did occur.
     */
     const short WRAPPED_TARGET      = 4;

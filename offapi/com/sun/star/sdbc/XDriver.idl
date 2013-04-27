@@ -71,7 +71,7 @@ published interface XDriver: com::sun::star::uno::XInterface
 
         <p>
         The driver should raise a
-        <type scope="com::sun::star::sdbc">SQLException</type>
+        com::sun::star::sdbc::SQLException
         if it is the right
         driver to connect to the given URL, but has trouble connecting to
         the database.

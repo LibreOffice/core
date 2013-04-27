@@ -45,7 +45,7 @@ published constants EmbedStates
         The object has a connection to the container client and a component
         loaded from persistent entry. In case of internal document it also
         means existing of document model that implements
-        <type scope="com::sun::star::frame">XModel</type> interface.
+        com::sun::star::frame::XModel interface.
         </p>
      */
     const long RUNNING = 1;

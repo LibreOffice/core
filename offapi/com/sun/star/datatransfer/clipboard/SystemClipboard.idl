@@ -33,7 +33,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
     <br/><br/><p><strong>Notes:</strong> The Unix implementation needs to be instantiated with 2 Arguments:
     <ul>
-        <li>A <type scope="com::sun::star::awt">XDisplayConnection</type> that provides the
+        <li>A com::sun::star::awt::XDisplayConnection that provides the
         display to be used.</li>
         <li>A string that names the selection to be used</li>
     </ul>

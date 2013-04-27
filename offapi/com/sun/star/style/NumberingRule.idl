@@ -30,7 +30,7 @@
 /** specifies a rule to format numberings.
 
     <p>It is normally represented by a sequence of
-    <type scope="com::sun::star::beans">PropertyValue</type>s.</p>
+    com::sun::star::beans::PropertyValues.</p>
  */
 published service NumberingRule
 {

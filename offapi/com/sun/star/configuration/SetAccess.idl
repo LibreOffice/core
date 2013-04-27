@@ -65,7 +65,7 @@ published service SetAccess
 /** is the basic service providing information about and access to elements
  of a not necessarily hierarchical <em>set</em>.
 
- <p>Interface <type scope="com::sun::star::configuration">XTemplateContainer</type>,
+ <p>Interface com::sun::star::configuration::XTemplateContainer,
  which is optional in SimpleSetAccess must always be implemented
  in this service, if the elements are of object type.  </p>
 */

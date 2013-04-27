@@ -42,8 +42,8 @@ module com { module sun { module star { module ui {
     <p>
     To access the window based information of a module, a unique module specifier
     must be provided to <member scope="com::sun::star::container">XNameAccess::getByName()</member> function.
-    The module specifier can be retrieved from the <type scope="com::sun::star::frame">ModuleManager</type>
-    service. The interface provides references to a <type scope="com::sun:star::ui">ModuleWindowStateConfiguration</type>.
+    The module specifier can be retrieved from the com::sun::star::frame::ModuleManager
+    service. The interface provides references to a com::sun:star::ui::ModuleWindowStateConfiguration.
     </p>
 
     @see com::sun::star::frame::ModuleManager

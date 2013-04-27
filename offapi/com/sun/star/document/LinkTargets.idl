@@ -29,8 +29,8 @@ module com {   module sun {   module star {   module document {
 /** This service gives access to a collection of names that are child links
     of the parent object that supplied this service.
 
-    <p>The <type scope="com::sun::star::container">XNameAccess</type> returns elements
-    of <type scope="com::sun::star::beans">XPropertySet</type> that implement
+    <p>The com::sun::star::container::XNameAccess returns elements
+    of com::sun::star::beans::XPropertySet that implement
     the service LinkTarget.  </p>
  */
 published service LinkTargets

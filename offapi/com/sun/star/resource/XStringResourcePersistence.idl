@@ -51,7 +51,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         see StringResourceWithLocation.
 
         The StringResourceWithStorage is initialized with an instance
-        of <type scope="com::sun::star::embed">XStorage</type>
+        of com::sun::star::embed::XStorage
         used to load data from and store data to,
         see StringResourceWithStorage.
 
@@ -59,15 +59,15 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         this method does nothing.
 
         This method can throw all exceptions thrown by the methods of
-        <type scope="com::sun::star::embed">XStorage</type> respectively
+        com::sun::star::embed::XStorage respectively
         a <type scope="com::sun::star::ucb">CommandAbortedException in
         case of a StringResourceWithLocation for all exceptions that are
         not handled by a previously specified
-        <type scope="com::sun::star::task">XInteractionHandler</type>.
+        com::sun::star::task::XInteractionHandler.
         The handler to be used for the store operation can be specified
         during initialization of StringResourceWithLocation.
 
-        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+        @throws com::sun::star::lang::NoSupportException
             if no URL or no valid storage are provided.
     */
     void store()
@@ -116,7 +116,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
 
         This method can be used to make a copy of the current string
         table data to a storage. This method can throw all exceptions
-        thrown by the methods of <type scope="com::sun::star::embed">XStorage</type>
+        thrown by the methods of com::sun::star::embed::XStorage
 
         @param Storage
             all string table data will be stored to this storage.
@@ -135,7 +135,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
             for a detailed description see <member>setComment</member>.
 
         This method can throw all exceptions thrown by the methods of
-        <type scope="com::sun::star::embed">XStorage</type>
+        com::sun::star::embed::XStorage
     */
     void storeToStorage( [in] ::com::sun::star::embed::XStorage Storage,
         [in] string BaseName, [in] string Comment )
@@ -172,7 +172,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
             for a detailed description see <member>setComment</member>.
 
         @param Handler
-            a <type scope="com::sun::star::task">XInteractionHandler</type>.
+            a com::sun::star::task::XInteractionHandler.
             It will be passed to ucb handle exceptions. Exceptions not processed
             by this handler will be passed as com::sun::star::uno::Exception. If
             this parameter is null this applies to all exceptions thrown by ucb.
@@ -189,7 +189,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         in a binary format.
 
         This method is intended to support datatransfer functionality, e.g. provided
-        by <type scope="com::sun::star::datatransfer">XTransferable</type> and
+        by com::sun::star::datatransfer::XTransferable and
         related interfaces.
 
         See <member>importBinary</member>).
@@ -208,7 +208,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         only contains the locales and strings specified in the binary data.
 
         This method is intended to support datatransfer functionality, e.g. provided
-        by <type scope="com::sun::star::datatransfer">XTransferable</type> and
+        by com::sun::star::datatransfer::XTransferable and
         related interfaces.
 
         See <member>importBinary</member>).

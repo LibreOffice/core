@@ -60,7 +60,7 @@ published interface XStorage
 
         <p>
         In case a storage is disposed any call to it's methods should result
-        in <type scope="com::sun::star::lang">DisposedException</type>.
+        in com::sun::star::lang::DisposedException.
         </p>
      */
     interface ::com::sun::star::lang::XComponent;
@@ -139,7 +139,7 @@ published interface XStorage
 
         <p>
         If storage does not allow any encryption this method will always throw
-        <type scope="com::sun::star::packages">NoEncryptionException</type>.
+        com::sun::star::packages::NoEncryptionException.
         </p>
 
         <p>
@@ -261,7 +261,7 @@ published interface XStorage
 
         <p>
         If storage does not allow any encryption this method will always throw
-        <type scope="com::sun::star::packages">NoEncryptionException</type>.
+        com::sun::star::packages::NoEncryptionException.
         </p>
 
         <p>

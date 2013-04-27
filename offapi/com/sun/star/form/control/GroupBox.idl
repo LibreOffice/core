@@ -29,7 +29,7 @@
 
 /** describes a control which can be used for visually grouping controls
 
-    <p>The model of the control has to support the <type scope="com::sun::star::form::component">GroupBox</type>
+    <p>The model of the control has to support the com::sun::star::form::component::GroupBox
     service.</p>
 
     @see com::sun::star::awt::UnoControl

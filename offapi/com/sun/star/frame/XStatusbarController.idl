@@ -175,11 +175,11 @@ interface XStatusbarController
         representation.
 
         @param xGraphics
-            a reference to a <type scope="com::sun::star::awt">XGraphics</type>
+            a reference to a com::sun::star::awt::XGraphics
             which has to be used to update the visual representation.
 
         @param nCommand
-            a <type scope="com::sun::star::awt">Rectangle</type> which
+            a com::sun::star::awt::Rectangle which
             determine the output rectangle for all drawing operations
 
         @param nStyle

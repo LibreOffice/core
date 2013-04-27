@@ -44,7 +44,7 @@ published interface XCellRangeData: com::sun::star::uno::XInterface
         range. Each element of the array must contain a <atom>double</atom>
         or a <atom>string</atom>.</p>
 
-        @throws <type scope="com::sun::star::uno">RuntimeException</type>
+        @throws com::sun::star::uno::RuntimeException
             If the size of the array is different from the current size.
      */
     void setDataArray( [in] sequence< sequence< any > > aArray );

@@ -39,8 +39,8 @@ interface XSubDocument
         on the desktop.</p>
 
         @return
-            the sub document, usually an <type scope="com::sun::star::frame">XModel</type>,
-            or an <type scope="com::sun::star::frame">XController</type> if the sub document
+            the sub document, usually an com::sun::star::frame::XModel,
+            or an com::sun::star::frame::XController if the sub document
             does not have an own model.
 
         @throws ::com::sun::star::lang::WrappedTargetException
@@ -53,8 +53,8 @@ interface XSubDocument
     /** opens the sub document in design mode
 
         @return
-            the sub document, usually an <type scope="com::sun::star::frame">XModel</type>,
-            or an <type scope="com::sun::star::frame">XController</type> if the sub document
+            the sub document, usually an com::sun::star::frame::XModel,
+            or an com::sun::star::frame::XController if the sub document
             does not have an own model.
 
         @throws ::com::sun::star::lang::WrappedTargetException

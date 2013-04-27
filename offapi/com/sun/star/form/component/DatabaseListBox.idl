@@ -118,7 +118,7 @@ published service DatabaseListBox
                 determines the query which the list result set should be based on.<br/>
                 For retrieving the query, the connection which the data form is working with
                 (<member scope="com::sun::star::sdb">RowSet::ActiveConnection</member>) is queried for
-                the <type scope="com::sun::star::sdb">XQueriesSupplier</type> interface.</dd>
+                the com::sun::star::sdb::XQueriesSupplier interface.</dd>
 
                 <dt><member scope="com::sun::star::form">ListSourceType::SQL</member></dt>
                 <dd>The first element of the string sequence in <member>ListBox::ListSource</member>

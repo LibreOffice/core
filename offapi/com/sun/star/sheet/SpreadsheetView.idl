@@ -69,11 +69,11 @@ published service SpreadsheetView
 
     /** provides access to the view's selection.
     <p>The selection in a spreadsheet view can be a
-        <type scope="com::sun::star::sheet">SheetCell</type>,
-        <type scope="com::sun::star::sheet">SheetCellRange</type>,
-        <type scope="com::sun::star::sheet">SheetCellRanges</type>,
-        <type scope="com::sun::star::drawing">Shape</type> or
-        <type scope="com::sun::star::drawing">Shapes</type> object.
+        com::sun::star::sheet::SheetCell,
+        com::sun::star::sheet::SheetCellRange,
+        com::sun::star::sheet::SheetCellRanges,
+        com::sun::star::drawing::Shape or
+        com::sun::star::drawing::Shapes object.
     </p>
      */
     interface com::sun::star::view::XSelectionSupplier;

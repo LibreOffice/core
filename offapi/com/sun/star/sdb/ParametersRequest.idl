@@ -38,10 +38,10 @@ published exception ParametersRequest: com::sun::star::task::ClassifiedInteracti
 {
     /** is the list of parameters requested.
         The objects returned by the
-        <type scope="com::sun::star::container">XIndexAccess</type>
+        com::sun::star::container::XIndexAccess
         have to
         be property sets describing the respective parameter. For this, the objects have to support the
-        service <type scope="com::sun::star::sdbcx">Column</type>.
+        service com::sun::star::sdbcx::Column.
     */
     com::sun::star::container::XIndexAccess Parameters;
 

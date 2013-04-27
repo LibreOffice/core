@@ -51,10 +51,10 @@ published service RegistryServiceManager
     /** The first two arguments of the intitialization arguments reference:
         <ol>
         <li>a simple registry
-        (<type scope="com::sun::star::registry">XSimpleRegistry</type>),
+        (com::sun::star::registry::XSimpleRegistry),
         i.e. the registry to be read from</li>
         <li>a component context
-        (<type scope="com::sun::star::uno">XComponentContext</type>)
+        (com::sun::star::uno::XComponentContext)
         to be installed as "DefaultContext" property of the
         ServiceManager which is the context to be used
         using the XMultiServiceFactory interface.</li>

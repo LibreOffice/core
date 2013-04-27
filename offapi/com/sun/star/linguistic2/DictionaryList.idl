@@ -29,9 +29,9 @@ module com { module sun { module star { module linguistic2 {
      <P>The active dictionaries of this list will be used for
      spell checking and hyphenation.</P>
 
-    @see <type scope="com::sun::star::linguistic2">XDictionary</type>
-    @see <type scope="com::sun::star::linguistic2">XDictionaryList</type>
-    @see <type scope="com::sun::star::linguistic2">XSearchableDictionaryList</type>
+    @see com::sun::star::linguistic2::XDictionary
+    @see com::sun::star::linguistic2::XDictionaryList
+    @see com::sun::star::linguistic2::XSearchableDictionaryList
 */
 published service DictionaryList : XSearchableDictionaryList;
 

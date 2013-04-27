@@ -37,7 +37,7 @@ service DefinitionContent
     /** provides the functionality for treating the object as part of a hierarchy
         of objects.
 
-        <p>The following commands are commonly supported by the <type scope="com::sun::star::ucb">XCommandProcessor</type>
+        <p>The following commands are commonly supported by the com::sun::star::ucb::XCommandProcessor
         implementation of a <code>DefinitionContent</code>:
         <ul>
             <li><strong>getPropertyValues</strong></li>

@@ -34,10 +34,10 @@ module com { module sun { module star { module script { module browse {
 interface XBrowseNodeFactory : ::com::sun::star::uno::XInterface {
 
     /** a factory method for the creation of XBrowseNodes
-        ( view ) <type scope="::com::sun::star::script::browse">BrowseNodeFactoryViewTypes</type> specifies the type of view to be returned
+        ( view ) ::com::sun::star::script::browse::BrowseNodeFactoryViewTypes specifies the type of view to be returned
 
         @returns
-            an object implementing <type scope="::com::sun::star::script::browse">XBrowseNode</type>
+            an object implementing ::com::sun::star::script::browse::XBrowseNode
 
     */
     com::sun::star::script::browse::XBrowseNode createView( [in] short viewType );

@@ -48,7 +48,7 @@ published constants EntryInitModes
 
     /** The object should be initialized using additional arguments from
         provided
-        <type scope="com::sun::star::document">MediaDescriptor</type>.
+        com::sun::star::document::MediaDescriptor.
      */
     const long MEDIA_DESCRIPTOR_INIT = 3;
 

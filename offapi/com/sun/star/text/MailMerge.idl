@@ -74,16 +74,16 @@ published service MailMerge
     /** contains the name of the data source that is to be used for merging.
 
         <p>For the interaction of this property with other data access relevant properties, see
-        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+        the com::sun::star::sdb::DataAccessDescriptor service.</p>
      */
     [property] string DataSourceName;
 
 
     /** determines the type of the database command as
-        described in <type scope="com::sun::star::sdb">CommandType</type>
+        described in com::sun::star::sdb::CommandType
 
         <p>For the interaction of this property with other data access relevant properties, see
-        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+        the com::sun::star::sdb::DataAccessDescriptor service.</p>
      */
     [property] long CommandType;
 
@@ -91,24 +91,24 @@ published service MailMerge
     /** contains the database command.
 
         <p>For the interaction of this property with other data access relevant properties, see
-        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+        the com::sun::star::sdb::DataAccessDescriptor service.</p>
      */
     [property] string Command;
 
 
     /** provides access to a
-        <type scope="com::sun::star::sdbc">XResultSet</type> of
-        a <type scope="com::sun::star::sdbc">ResultSet</type> service.
+        com::sun::star::sdbc::XResultSet of
+        a com::sun::star::sdbc::ResultSet service.
 
-        <p>Note that any superservices of <type scope="com::sun::star::sdbc">ResultSet</type>
+        <p>Note that any superservices of com::sun::star::sdbc::ResultSet
         are also allowed. Especially, this member can denote an instance of the
-        <type scope="com::sun::star::sdb">RowSet</type>, or an instance obtained
+        com::sun::star::sdb::RowSet, or an instance obtained
         by calling <member scope="com::sun::star::sdb">XResultSetAccess::createResultSet</member>
-        on such a <type scope="com::sun::star::sdb">RowSet</type>. This becomes important in
+        on such a com::sun::star::sdb::RowSet. This becomes important in
         conjunction with the <member>Selection</member> property.</p>
 
         <p>For the interaction of this property with other data access relevant properties, see
-        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+        the com::sun::star::sdb::DataAccessDescriptor service.</p>
      */
     [property] com::sun::star::sdbc::XResultSet ResultSet;
 
@@ -116,7 +116,7 @@ published service MailMerge
     /** contains the connection to the database.
 
         <p>For the interaction of this property with other data access relevant properties, see
-        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+        the com::sun::star::sdb::DataAccessDescriptor service.</p>
      */
     [property] com::sun::star::sdbc::XConnection ActiveConnection;
 
@@ -126,14 +126,14 @@ published service MailMerge
         <p>This property is relevant in conjunction with the <member>ResultSet</member>
         only. A single element of this array describes a bookmark relative to the result set.<br/>
         Note that this implies that the <member>ResultSet</member> needs to support the
-        <type scope="com::sun::star::sdbcx">XRowLocate</type> interface.</p>
+        com::sun::star::sdbcx::XRowLocate interface.</p>
 
         <p>If this array is empty, the whole result set, as described by <member>ResultSet</member>
         respectively the triple (<member>DataSourceName</member>, <member>DataCommandType</member>,
         <member>DataCommand</member>).</p>
 
         <p>For the interaction of this property with other data access relevant properties, see
-        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+        the com::sun::star::sdb::DataAccessDescriptor service.</p>
      */
     [property] sequence< any > Selection;
 
@@ -141,7 +141,7 @@ published service MailMerge
     /** returns if escape processing is on or off.
 
         <p>For the interaction of this property with other data access relevant properties, see
-        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+        the com::sun::star::sdb::DataAccessDescriptor service.</p>
      */
     [property] boolean EscapeProcessing;
 
@@ -149,7 +149,7 @@ published service MailMerge
     /** contains a filter expression for an SQL statement.
 
         <p>For the interaction of this property with other data access relevant properties, see
-        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+        the com::sun::star::sdb::DataAccessDescriptor service.</p>
      */
     [property] string Filter;
 

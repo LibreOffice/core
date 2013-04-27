@@ -55,7 +55,7 @@ published interface XNumberFormatTypes: com::sun::star::uno::XInterface
                 @param  nIndex
                 the index of the wanted number format within the formats for
                 the given locale. One of the
-                 <type scope="com::sun::star::i18n">NumberFormatIndex</type>
+                 com::sun::star::i18n::NumberFormatIndex
                 constants.
      */
     long getFormatIndex( [in] short nIndex,

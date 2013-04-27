@@ -208,7 +208,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         @returns
             The LineBreakResults contain the break
             position of the line, BreakType and
-            <type scope="com::sun::star::linguistic2">XHyphenatedWord</type>
+            com::sun::star::linguistic2::XHyphenatedWord
      */
     LineBreakResults getLineBreak( [in] string aText, [in] long nStartPos,
                     [in] ::com::sun::star::lang::Locale aLocale,

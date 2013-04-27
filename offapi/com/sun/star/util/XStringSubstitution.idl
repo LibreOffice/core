@@ -56,7 +56,7 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
 
         @param bSubstRequired
             Specifies if a successful substitution is required. The
-            function throws a <type scope="com::sun::star::container">NoSuchElementException</type>
+            function throws a com::sun::star::container::NoSuchElementException
             if it finds a variable that is unknown. In this case it is possible
             that the returned string would not be what the caller expected!
 
@@ -93,7 +93,7 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
         <p>
         The method iterates through it's internal variable list and tries to
         find the given variable. If the variable is unknown a
-        <type scope="com::sun::star::container">NoSuchElementException</type>
+        com::sun::star::container::NoSuchElementException
         is thrown.
         </p>
 
@@ -102,7 +102,7 @@ published interface XStringSubstitution : com::sun::star::uno::XInterface
 
         @return
             Returns a string that represents the variable. If the
-            variable is unknown a <type scope="com::sun::star::container">NoSuchElementException</type>
+            variable is unknown a com::sun::star::container::NoSuchElementException
             is thrown.
     */
     string getSubstituteVariableValue( [in] string variable )

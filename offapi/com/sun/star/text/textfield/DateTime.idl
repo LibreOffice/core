@@ -58,12 +58,12 @@ published service DateTime
     /** this is the display format for this field.
         Depending on <member>IsDate</member>, this
         is either a
-        <type scope="com::sun::star::text">DateDisplayFormat</type> or
-        <type scope="com::sun::star::text">TimeDisplayFormat</type>.
+        com::sun::star::text::DateDisplayFormat or
+        com::sun::star::text::TimeDisplayFormat.
 
         This property is deprecated and is here only
         for components that do not support a
-        <type scope="com::sun::star::util">NumberFormatter</type>.
+        com::sun::star::util::NumberFormatter.
 
         @see com::sun::star::text::DateDisplayFormat
         @see com::sun::star::text::TimeDisplayFormat

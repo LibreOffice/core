@@ -31,13 +31,13 @@ module com { module sun { module star { module resource {
     Interface to access strings in a resource.
 
     The interface is derived from
-    <type scope="com::sun::star::util">XModifyBroadcaster</type>
+    com::sun::star::util::XModifyBroadcaster
 
-    All registered <type scope="com::sun::star::util">XModifyListener</type>
+    All registered com::sun::star::util::XModifyListener
     interfaces will be notified if either the current locale changes or if
     a string is added, changed or removed. This usually will only happen if
     the implementing object also supports the interface
-    <type scope="com::sun::star::resource">XStringResourceManager</type>
+    com::sun::star::resource::XStringResourceManager
     and is used in the design mode of a Dialog or String table editor.
     But also changing the locale at runtime can be supported in this way.
 
@@ -48,7 +48,7 @@ interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
         Resolves the passed ResoureID for the current locale. This
         locale is set during initialization of the object implementing
         this interface or - in case that also the interface
-        <type scope="com::sun::star::resource">XStringResourceManager</type>
+        com::sun::star::resource::XStringResourceManager
         is supported - by using the <code>XStringResourceManager::setLocale</code>
         method.
 
@@ -84,7 +84,7 @@ interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
 
         @return  the localized string for the specified ID and Locale
 
-        @throws <type scope="com::sun::star::resource">MissingResourceException</type>
+        @throws com::sun::star::resource::MissingResourceException
             if no entry exists for the given ResourceID or locale
     */
     string resolveStringForLocale( [in] string ResourceID, [in] com::sun::star::lang::Locale locale )

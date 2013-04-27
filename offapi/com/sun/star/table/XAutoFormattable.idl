@@ -37,7 +37,7 @@ published interface XAutoFormattable: com::sun::star::uno::XInterface
         @param aName
             is the name of the AutoFormat to apply.
 
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             if the specified AutoFormat does not exist.
      */
     void autoFormat( [in] string aName )

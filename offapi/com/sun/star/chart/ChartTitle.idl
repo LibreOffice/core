@@ -37,7 +37,7 @@ published service ChartTitle
 
 
     /** If this property is <TRUE/> the position is calculated by the application automatically.
-        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
+        Setting this property to false will have no effect. Instead use the interface com::sun::star::drawing::XShape
         to set a concrete position.
      */
     [optional, property] boolean AutomaticPosition;

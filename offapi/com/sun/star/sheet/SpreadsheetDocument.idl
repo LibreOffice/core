@@ -77,7 +77,7 @@ published service SpreadsheetDocument
     /** provides common methods for a document model.
 
         <p>This interface is derived from
-        <type scope="com::sun::star::lang">XComponent</type>.</p>
+        com::sun::star::lang::XComponent.</p>
      */
     interface com::sun::star::frame::XModel;
 

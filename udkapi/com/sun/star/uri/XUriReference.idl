@@ -36,7 +36,7 @@ module com { module sun { module star { module uri {
 
    @see com::sun::star::uri::UriReferenceFactory
    which allows to create URI reference objects that support
-   <type scope="com::sun::star::uri">XUriReference</type> and additional,
+   com::sun::star::uri::XUriReference and additional,
    scheme-specific interfaces.
 
    @since OOo 2.0

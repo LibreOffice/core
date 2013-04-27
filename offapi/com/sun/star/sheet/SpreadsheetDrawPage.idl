@@ -29,7 +29,7 @@
 /** This abstract service is implemented by every page of a
     SpreadsheetDocument.
 
-    @example create and insert a couple of <type scope="com::sun::star::drawing">LineShape</type>s:
+    @example create and insert a couple of com::sun::star::drawing::LineShapes:
 
     <listing>
     xPage = xDoc.DrawPages(0)
@@ -49,10 +49,10 @@ published service SpreadsheetDrawPage
 {
 
 
-    /** manages the <type scope="com::sun::star::drawing">Shape</type>s of this page.
+    /** manages the com::sun::star::drawing::Shapes of this page.
 
-                <p>It also lets you add new <type scope="com::sun::star::drawing">Shape</type>s. The program currently
-                requires that these <type scope="com::sun::star::drawing">Shape</type>s be created by the factory of
+                <p>It also lets you add new com::sun::star::drawing::Shapes. The program currently
+                requires that these com::sun::star::drawing::Shapes be created by the factory of
                 the document.
 
                 @see SpreadsheetDocument
@@ -61,7 +61,7 @@ published service SpreadsheetDrawPage
 
 
     /** With this interface you can group/ungroup a collection of
-                <type scope="com::sun::star::drawing">Shape</type>s.
+                com::sun::star::drawing::Shapes.
      */
     interface com::sun::star::drawing::XShapeGrouper;
 

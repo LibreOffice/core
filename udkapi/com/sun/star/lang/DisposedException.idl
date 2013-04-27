@@ -29,7 +29,7 @@
     disposed before and can't uphold its method specification anymore.
 
     <p>The implementation normally should implement the
-    <type scope="com::sun::star::lang">XComponent</type> interface
+    com::sun::star::lang::XComponent interface
     to indicate this possibility. </p>
  */
 published exception DisposedException: com::sun::star::uno::RuntimeException

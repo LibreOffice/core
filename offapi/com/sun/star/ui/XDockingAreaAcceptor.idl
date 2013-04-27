@@ -61,9 +61,9 @@ interface XDockingAreaAcceptor : com::sun::star::uno::XInterface
         is available or not.
 
         <p>
-        The <type scope="com::sun::star::awt">Rectangle</type> parameter is
+        The com::sun::star::awt::Rectangle parameter is
         filled by the caller with pixel data. The members of
-        <type scope="com::sun::star::awt">Rectangle</type> must be filled
+        com::sun::star::awt::Rectangle must be filled
         as following:
         <ul>
             <li>X      = requested area on left side (in pixel)</li>
@@ -79,9 +79,9 @@ interface XDockingAreaAcceptor : com::sun::star::uno::XInterface
 
         <p>
         The callee must size its document window so that we have the amount
-        of space we have provided. The <type scope="com::sun::star::awt">Rectangle</type>
+        of space we have provided. The com::sun::star::awt::Rectangle
         parameter is filled by the caller with pixel data. The members of
-        <type scope="com::sun::star::awt">Rectangle</type> must be filled as
+        com::sun::star::awt::Rectangle must be filled as
         following:
         <ul>
             <li>X      = new area on left side (in pixel)</li>

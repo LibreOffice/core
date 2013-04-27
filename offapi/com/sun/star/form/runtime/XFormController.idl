@@ -62,10 +62,10 @@ interface XFormControllerContext;
     else inactive. To be notified whenever this activation state of a given controller changes, you can
     add listeners.</p>
 
-    <p>This interface supersedes the <type scope="com::sun::star::form">FormController</type>.</p>
+    <p>This interface supersedes the com::sun::star::form::FormController.</p>
 
     <h3>Responsibilities</h3>
-    <p>A FormController is responsible for a <type scope="com::sun::star::awt">UnoControlContainer</type>,
+    <p>A FormController is responsible for a com::sun::star::awt::UnoControlContainer,
     and all controls therein.</p>
 
     <p>Furthermore, a form controller is responsible for preventing invalid user input. That is, if the form
@@ -93,7 +93,7 @@ interface XFormControllerContext;
     <p>Alternatively, you can prevent the check on a per-control basis, using the
     <member>DataAwareControlModel::InputRequired</member> property of a single control model.</p>
 
-    <p>If a control which the controller is responsible for supports the <type scope="com::sun::star::frame">XDispatchProviderInterception</type>
+    <p>If a control which the controller is responsible for supports the com::sun::star::frame::XDispatchProviderInterception
     interface, the controller registers a dispatch interceptor. Then, the control can try to delegate part of its
     functionality to the controller by querying the dispatch interceptor for it.</p>
 
@@ -106,11 +106,11 @@ interface XFormControllerContext;
     Example: The URL suffix for deleting the current record is <em>deleteRecord</em>, so the complete URL for
     requesting a dispatcher for this functionality is <em>.uno:FormController/deleteRecord</em>.</p>
 
-    <p>Some URLs may require parameters. For this, the sequence of <type scope="com::sun::star::beans">PropertyValue</type>s
+    <p>Some URLs may require parameters. For this, the sequence of com::sun::star::beans::PropertyValues
     passed to the <member scope="com::sun::star::frame">XDispatch::dispatch</member> call is used - every property value is
     used as one named parameter.</p>
 
-    <p>For all URLs, interested parties can register as status listeners (<type scope="com::sun::star::frame">XStatusListener</type>)
+    <p>For all URLs, interested parties can register as status listeners (com::sun::star::frame::XStatusListener)
     at the dispatchers, and be notified whenever the functionality associated with the URL becomes enabled or
     disabled.<br/>
     For instance, the URL with the suffix <em>moveToFirst</em> is associated with moving the form to the first
@@ -133,7 +133,7 @@ interface XFormControllerContext;
       <tr style="vertical-align: top;">
         <td><em>RecordCount</em></td>
         <td>This is a passive functionality: It cannot be dispatched, instead, interested parties may
-        use the dispatcher to add as <type scope="com::sun::star::frame">XStatusListener</type>, and be
+        use the dispatcher to add as com::sun::star::frame::XStatusListener, and be
         notified when the record count changes.<br/>
         The status value which is being notified (<member scope="com::sun::star::frame">FeatureStateEvent::State</member>)
         is a string which can be used to display the record count. In particular, if the record count is not yet known
@@ -274,7 +274,7 @@ interface XFormController
     /** used to notify deletions of data in the form before they happen.
 
         <p>A form controller listens for deletion events at the form it is responsible for. If and only if no
-        <type scope="com::sun::star::form">XConfirmDeleteListener</type> is registered at
+        com::sun::star::form::XConfirmDeleteListener is registered at
         the controller, it uses an own dialog to ask the user for confirmation.</p>
     */
     interface ::com::sun::star::form::XConfirmDeleteBroadcaster;
@@ -282,7 +282,7 @@ interface XFormController
     /** is used to notify errors which happen in the form the controller is responsible for.
 
         <p>A form controller listens for error events at the form it is responsible for. If and only if no
-        <type scope="com::sun::star::sdb">XSQLErrorListener</type> is registered at the controller, it
+        com::sun::star::sdb::XSQLErrorListener is registered at the controller, it
         uses an own dialog to notify the user of the error.</p>
 
     */
@@ -295,7 +295,7 @@ interface XFormController
     /** is used broadcasting parameter events in the form.
 
         <p>A form controller listens for parameter events at the form it is responsible for. If and only if no
-        <type scope="com::sun::star::form">XDatabaseParameterListener</type> is registered at the controller, it
+        com::sun::star::form::XDatabaseParameterListener is registered at the controller, it
         uses an own dialog to ask the user for parameter values.</p>
     */
     interface ::com::sun::star::form::XDatabaseParameterBroadcaster2;

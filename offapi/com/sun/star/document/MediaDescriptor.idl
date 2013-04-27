@@ -227,7 +227,7 @@ service MediaDescriptor
         the other properties. It is not allowed to keep a reference to this
         InputStream after loading the component, and it would be useless, because
         in general an InputStream is usable for reading only once, except when it
-        also implements the <type scope="com::sun::star::io">XSeekable</type> interface.
+        also implements the com::sun::star::io::XSeekable interface.
         </p>
      */
     [optional,property] com::sun::star::io::XInputStream InputStream;
@@ -235,7 +235,7 @@ service MediaDescriptor
     /** handle exceptional situations
 
         <p>
-        Object implementing the <type scope="com::sun::star::task">InteractionHandler</type>
+        Object implementing the com::sun::star::task::InteractionHandler
         service that is used to handle exceptional situations where proceeding with the task
         is impossible without additional information or impossible at all.
         The implemented API provides a default implementation for it that can handle many situations.
@@ -260,7 +260,7 @@ service MediaDescriptor
         <p>
         Type of the medium to load, that must match to one of the types defined
         in the TypeDetection configuration (otherwise it's ignored).
-        This bypasses the type detection of the <type scope="com::sun::star::frame">Desktop</type> environment,
+        This bypasses the type detection of the com::sun::star::frame::Desktop environment,
         so passing a wrong MediaType will cause failure of loading.
         </p>
      */
@@ -310,7 +310,7 @@ service MediaDescriptor
         Setting this to <TRUE/> forces the component to create a new window on loading
         in any case. If the component supports multiple views, a second view is
         opened, if not, the component is loaded one more time. Otherwise the behavior
-        depends on the default window handling of the <type scope="com::sun::star::frame">Desktop</type> environment.
+        depends on the default window handling of the com::sun::star::frame::Desktop environment.
         </p>
      */
     [optional,property] boolean OpenNewView;
@@ -420,7 +420,7 @@ service MediaDescriptor
     /** can be used for status information
 
         <p>
-        Object implementing the <type scope="com::sun::star::task">XStatusIndicator</type>
+        Object implementing the com::sun::star::task::XStatusIndicator
         interface that can be used to give status information (text or progress) for the task.
         The office provides a default implementation for it. It is not allowed to keep
         a reference to this object, even not in the loaded or stored component's
@@ -499,8 +499,8 @@ service MediaDescriptor
     /** set special view state
         <p>
         Data to set a special view state after loading. The type depends on
-        the component and is usually retrieved from a <type scope="com::sun::star::frame">Controller</type>
-        object by its <type scope="com::sun::star::frame">XController</type>
+        the component and is usually retrieved from a com::sun::star::frame::Controller
+        object by its com::sun::star::frame::XController
         interface. Default is: no view data.
         </p>
      */
@@ -517,7 +517,7 @@ service MediaDescriptor
     [optional,property] short ViewId;
 
     /** should the macro be executed.
-        the value should be one from <type scope="com::sun::star::document">MacroExecMode</type>
+        the value should be one from com::sun::star::document::MacroExecMode
         constant list.
 
         @since OOo 1.1.2
@@ -525,7 +525,7 @@ service MediaDescriptor
     [optional,property] short MacroExecutionMode;
 
     /** can the document be updated depending from links.
-        the value should be one from <type scope="com::sun::star::document">UpdateDocMode</type>
+        the value should be one from com::sun::star::document::UpdateDocMode
         constant list.
 
         @since OOo 1.1.2

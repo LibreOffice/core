@@ -204,7 +204,7 @@ published service ResultSet
 
     /** retrieves the direction for fetching rows from database tables
         that is the default for result sets generated from this
-        <type scope="com::sun::star::sdbcx">Statement</type>
+        com::sun::star::sdbcx::Statement
         object.
         <br/>
         If this <code>Statement</code> object has not set a fetch direction,
@@ -215,11 +215,11 @@ published service ResultSet
 
     /** retrieves the number of result set rows that is the default fetch size
         for result sets generated from this
-        <type scope="com::sun::star::sdbcx">Statement</type>
+        com::sun::star::sdbcx::Statement
         object.
         <br/>
         If this
-        <type scope="com::sun::star::sdbcx">Statement</type>
+        com::sun::star::sdbcx::Statement
         object has not set a fetch size,
         the return value is implementation-specific.
      */

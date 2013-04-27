@@ -37,7 +37,7 @@ published service Style
 {
     /** contains user defined attributes.
 
-        @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
+        @see    com::sun::star::xml::UserDefinedAttributesSupplier
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 

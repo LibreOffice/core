@@ -63,7 +63,7 @@ interface XStringResourceWithLocation: com::sun::star::resource::XStringResource
         and afterwards this location is in sync with the resource data.
         </p>
 
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             if an empty string is passed as URL
     */
     void setURL( [in] string URL )

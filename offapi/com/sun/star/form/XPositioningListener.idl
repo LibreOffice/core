@@ -31,8 +31,8 @@
 /** allows to receive notifications about cursor movements into a database form.
 
     <p>Please do <em><b>not</b></em> use anymore, this interface is deprecated, and
-    superseded by functionality from the <type scope="com::sun::star::form::component">DataForm</type>
-    service, as well as the <type scope="com::sun::star::sdbc">XRowSetListener</type>.</p>
+    superseded by functionality from the com::sun::star::form::component::DataForm
+    service, as well as the com::sun::star::sdbc::XRowSetListener.</p>
 
     @deprecated
  */

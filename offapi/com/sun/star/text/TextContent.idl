@@ -35,7 +35,7 @@ module com { module sun { module star { module text {
     XTextField is used.
 
     <p>If the concrete TextContent has a "floating" object,
-    like a graphic, <type scope="com::sun::star::drawing">XShape</type>
+    like a graphic, com::sun::star::drawing::XShape
     is used.
 
     @see TextField

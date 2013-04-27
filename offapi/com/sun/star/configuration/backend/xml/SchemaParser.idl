@@ -32,7 +32,7 @@ module xml {
     OOR Schema XML format.
 
     <p> The configuration schema XML from a given stream is parsed and fed to a
-        <type scope="com::sun::star::configuration::backend">XSchemaHandler</type>.
+        com::sun::star::configuration::backend::XSchemaHandler.
     </p>
 
     @see com::sun::star::configuration::backend::xml::LayerParser
@@ -56,8 +56,8 @@ published service SchemaParser
     /** allows initializing the source stream.
 
         <p> The source can be passed
-            as a <type scope="com::sun::star::io">XInputStream</type> or
-            as a <type scope="com::sun::star::xml::sax">InputSource</type>.
+            as a com::sun::star::io::XInputStream or
+            as a com::sun::star::xml::sax::InputSource.
         </p>
       */
     interface com::sun::star::lang::XInitialization ;

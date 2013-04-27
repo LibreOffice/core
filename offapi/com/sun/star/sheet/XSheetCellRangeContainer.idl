@@ -58,7 +58,7 @@ published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellR
             <p>The specified range must fit exactly to an element of the
             collection. The method does not try to shorten a range.</p>
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if the collection does not contain the specified range.
      */
     void removeRangeAddress(
@@ -88,7 +88,7 @@ published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellR
             <p>All specified ranges must fit exactly to elements of the
             collection. The method does not try to shorten ranges.</p>
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if the collection does not contain any of the specified ranges.
      */
     void removeRangeAddresses(

@@ -27,19 +27,19 @@ module com { module sun { module star { module ucb {
 
 /** This interface should be implemented by an internal
     XCommandEnvironment that can not supply an
-    <type scope="com::sun::star::task">XInteractionHandler</type>, but instead
+    com::sun::star::task::XInteractionHandler, but instead
     wants interaction requests to be handled by other internal error handling
     mechanism.
 */
 published interface XInteractionHandlerSupplier: com::sun::star::uno::XInterface
 {
     /** Returns whether an
-        <type scope="com::sun::star::task">XInteractionHandler</type> can be
+        com::sun::star::task::XInteractionHandler can be
         supplied.
 
         @returns
         <TRUE/>, if an
-        <type scope="com::sun::star::task">XInteractionHandler</type> can be
+        com::sun::star::task::XInteractionHandler can be
         supplied, <FALSE/> otherwise.
     */
     boolean hasInteractionHandler();

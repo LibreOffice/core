@@ -55,7 +55,7 @@ service SortableGridDataModel : XSortableMutableGridDataModel
 {
     /** creates a new instance of the <code>SortableGridDataModel</code>
 
-        <p>For string comparison, a default <type scope="::com::sun::star::i18n">Collator</type>, based on the system's
+        <p>For string comparison, a default ::com::sun::star::i18n::Collator, based on the system's
         locale, will be used.</p>
 
         @param DelegatorModel

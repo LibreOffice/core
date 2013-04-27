@@ -47,7 +47,7 @@ module com { module sun { module star { module bridge { module oleautomation {
     </p>
     <p>
     The service implements the
-    <type scope="com::sun::star::bridge">XBridgeSupplier2</type> interface and
+    com::sun::star::bridge::XBridgeSupplier2 interface and
     handles the model types
     <const>com::sun::star::bridge::ModelDependent::UNO</const> and
     <const>com::sun::star::bridge::ModelDependent::OLE</const>.

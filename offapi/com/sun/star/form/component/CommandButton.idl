@@ -63,7 +63,7 @@ published service CommandButton
         <p>This property is evaluated if the button is of type URL.</p>
 
         <p>As always, there is a number of target names which have a special meaning, and force
-        a special <type scope="com::sun::star::frame">Frame</type> to be used.</p>
+        a special com::sun::star::frame::Frame to be used.</p>
      */
     [property] string TargetFrame;
 
@@ -82,7 +82,7 @@ published service CommandButton
         be reset.</p>
 
         <p>For a given implementation of the interface, if this (optional) property is present, then also the optional
-        interface <type scope="com::sun::star::form">XReset</type> must be present.</p>
+        interface com::sun::star::form::XReset must be present.</p>
     */
     [optional, property] boolean DefaultState;
 

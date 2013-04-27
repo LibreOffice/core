@@ -38,7 +38,7 @@ interface XFormLayerAccess
     /// provides access to form controls contained in the view
     interface XControlAccess;
 
-    /** returns the <type scope="com::sun::star::form">FormController</type>
+    /** returns the com::sun::star::form::FormController
         instance which operates on a given form.
 
         <p>A form controller is a component which controls the user interaction
@@ -65,7 +65,7 @@ interface XFormLayerAccess
 
         <p><em>Note</em>: This is a convenience method. In the user interface,
         the design mode is coupled with the <code>.uno:SwitchControlDesignMode</code>
-        feature (see <type scope="com::sun::star::frame">XDispatchProvider</type>),
+        feature (see com::sun::star::frame::XDispatchProvider),
         and asking for the current mode is the same as asking for the state of this
         feature.</p>
     */
@@ -76,7 +76,7 @@ interface XFormLayerAccess
 
         <p><em>Note</em>: This is a convenience method. In the user interface,
         the design mode is coupled with the <code>.uno:SwitchControlDesignMode</code>
-        feature (see <type scope="com::sun::star::frame">XDispatchProvider</type>),
+        feature (see com::sun::star::frame::XDispatchProvider),
         and changing the current mode is the same as dispatching this feature URL.</p>
     */
     void    setFormDesignMode( [in] boolean DesignMode );

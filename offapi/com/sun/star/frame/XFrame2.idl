@@ -89,7 +89,7 @@ published interface XFrame2
      */
     interface XFramesSupplier; // -> XFrame
 
-    /** supplies access to <type scope="com::sun::star::task">XStatusIndicator</type> objects
+    /** supplies access to com::sun::star::task::XStatusIndicator objects
         for the component within the frame to show progresses
      */
     interface com::sun::star::task::XStatusIndicatorFactory;

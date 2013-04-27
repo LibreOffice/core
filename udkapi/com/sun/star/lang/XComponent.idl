@@ -62,7 +62,7 @@ published interface XComponent: com::sun::star::uno::XInterface
         in case it can comply with its specification (for instance addEventListener()).
         Often the object can't fulfill its specification anymore,
         in this case it must throw the DisposedException
-        (which is derived from <type scope="com::sun::star::uno">RuntimeException</type>)
+        (which is derived from com::sun::star::uno::RuntimeException)
     when it gets called.</p>
 
         <p>For some objects no real owner can be identified, thus it can be
@@ -80,10 +80,10 @@ published interface XComponent: com::sun::star::uno::XInterface
         <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.</p>
 
-        <p>If this <type scope="com::sun::star::lang">XComponent</type> is
+        <p>If this com::sun::star::lang::XComponent is
         already disposed when <member scope="com::sun::star::lang">
         XComponent::addEventListener</member> is called, the call will not fail
-        with a <type scope="com::sun::star::lang">DisposedException</type>, but
+        with a com::sun::star::lang::DisposedException, but
         the caller will be notified via the
         <member scope="com::sun::star::lang">XEventListener::disposing</member>
         callback.  This callback can occur synchronously within the
@@ -101,10 +101,10 @@ published interface XComponent: com::sun::star::uno::XInterface
         <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.
 
-        <p>If this <type scope="com::sun::star::lang">XComponent</type> is
+        <p>If this com::sun::star::lang::XComponent is
         already disposed when <member scope="com::sun::star::lang">
         XComponent::removeEventListener</member> is called, the call will not
-        fail with a <type scope="com::sun::star::lang">DisposedException</type>,
+        fail with a com::sun::star::lang::DisposedException,
         but will rather be ignored silently.</p>
 
         @see XComponent::addEventListener

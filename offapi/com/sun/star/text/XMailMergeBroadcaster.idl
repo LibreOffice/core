@@ -33,7 +33,7 @@ module com { module sun { module star { module text {
 /** allows for adding/removing of mail merge event listeners.
 
     <p>Registered listeners will be notified with a
-    <type scope="com::sun::star::text">MailMergeEvent</type>
+    com::sun::star::text::MailMergeEvent
     when a document is about to get merged.</p>
 
     @see    com::sun::star::text::MailMergeEvent

@@ -46,7 +46,7 @@ published service UpdatableLayer
         handles read access to the contents of the layer.
 
         <p> If the implementation supports
-         <type scope="com::sun::star::util">XTimeStamped</type>,
+         com::sun::star::util::XTimeStamped,
          then after executing <member>XUpdatableLayer::replaceWith()</member>
          the timestamp will be the one for the replaced contents and
          if reading after updates is supported the next read will reproduce the

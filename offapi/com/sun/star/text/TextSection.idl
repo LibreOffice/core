@@ -131,7 +131,7 @@ published service TextSection
     */
     [property] boolean FootnoteIsOwnNumbering;
     /** determines the numbering type of the footnote numbering as a value of
-     <type scope="com::sun::star::style">NumberingType</type>.
+     com::sun::star::style::NumberingType.
      This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
     */
     [property] short FootnoteNumberingType;
@@ -160,7 +160,7 @@ published service TextSection
     */
     [property] boolean EndnoteIsOwnNumbering;
     /** determines the numbering type of the endnote numbering as a value of
-     <type scope="com::sun::star::style">NumberingType</type>.
+     com::sun::star::style::NumberingType.
      This is only valid if <code>EndoteIsOwnNumbering</code> is set.
     */
     [property] short EndnoteNumberingType;

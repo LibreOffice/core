@@ -41,28 +41,28 @@ published exception MalformedDataException: ::com::sun::star::uno::Exception
         </p>
         <p> For example the following exceptions may be used:
         <dl>
-            <dt><type scope="com::sun::star::container">ElementExistException</type></dt>
+            <dt>com::sun::star::container::ElementExistException</dt>
             <dd>for duplicate nodes.</dd>
 
-            <dt><type scope="com::sun::star::container">NoSuchElementException</type></dt>
+            <dt>com::sun::star::container::NoSuchElementException</dt>
             <dd>for nodes that are not in the schema.</dd>
 
-            <dt><type scope="com::sun::star::beans">IllegalTypeException</type></dt>
+            <dt>com::sun::star::beans::IllegalTypeException</dt>
             <dd>for properties having the wrong or an invalid type.</dd>
 
-            <dt><type scope="com::sun::star::beans">PropertyExistException</type></dt>
+            <dt>com::sun::star::beans::PropertyExistException</dt>
             <dd>for duplicate properties.</dd>
 
-            <dt><type scope="com::sun::star::beans">UnknownPropertyException</type></dt>
+            <dt>com::sun::star::beans::UnknownPropertyException</dt>
             <dd>for properties that are not in the schema.</dd>
 
-            <dt><type scope="com::sun::star::lang">IllegalArgumentException</type></dt>
+            <dt>com::sun::star::lang::IllegalArgumentException</dt>
             <dd>for data values (names,attributes,etc.) that are invalid.</dd>
 
-            <dt><type scope="com::sun::star::lang">IllegalAccessException</type></dt>
+            <dt>com::sun::star::lang::IllegalAccessException</dt>
             <dd>for changes that violate access restrictions.</dd>
 
-            <dt><type scope="com::sun::star::lang">NoSupportException</type></dt>
+            <dt>com::sun::star::lang::NoSupportException</dt>
             <dd>for features that are not supported by the current implementation.</dd>
         </dl>
         </p>

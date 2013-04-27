@@ -26,11 +26,11 @@ module com { module sun { module star { module linguistic2 {
 /** these define the various return types for spell checking to fail verification.
 
     <P>A value of this type is part of the
-    <type scope="com::sun::star::linguistic2">XSpellAlternatives</type>
+    com::sun::star::linguistic2::XSpellAlternatives
     interface which is the return type for an unsuccessful
     spelling attempt.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XSpellChecker</type>
+    @see    com::sun::star::linguistic2::XSpellChecker
 */
 published constants SpellFailure
 {

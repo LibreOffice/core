@@ -41,9 +41,9 @@ service PropertyPool
     /** must provide defaults for all properties
 
         <p>As the service
-        <type scope="com::sun::star::style">Style</type> implies the
+        com::sun::star::style::Style implies the
         implementation of
-        <type scope="com::sun::star::beans">XPropertySet</type>, the
+        com::sun::star::beans::XPropertySet, the
         method
         <member scope="com::sun::star::style">XDefaultsSupplier::getDefaults</member>
         should return itself.

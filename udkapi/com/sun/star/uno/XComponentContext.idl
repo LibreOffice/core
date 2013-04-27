@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module lang {
 module com {  module sun {  module star {  module uno {
 
 /** Component context to be passed to a component via
-    <type scope="com::sun::star::lang">XSingleComponentFactory</type>.
+    com::sun::star::lang::XSingleComponentFactory.
     Arbitrary values (e.g. deployment values) can be retrieved from the context.
 */
 published interface XComponentContext : XInterface

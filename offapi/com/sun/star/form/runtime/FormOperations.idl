@@ -36,11 +36,11 @@ module com { module sun { module star { module form { module runtime {
  */
 service FormOperations : XFormOperations
 {
-    /** creates a <code>FormOperations</code> instance which works on a <type scope="com::sun::star::form">FormController</type>
+    /** creates a <code>FormOperations</code> instance which works on a com::sun::star::form::FormController
         instance.
         @throws IllegalArgumentException
             if the given form controller is <NULL/>, or does not have a model denoting a valid
-            <type scope="com::sun::star::form::component">DataForm</type> instance.
+            com::sun::star::form::component::DataForm instance.
     */
     createWithFormController(
         [in] XFormController Controller
@@ -49,11 +49,11 @@ service FormOperations : XFormOperations
         ::com::sun::star::lang::IllegalArgumentException
     );
 
-    /** creates a <code>FormOperations</code> instance which works on a <type scope="com::sun::star::form::component">DataForm</type>
+    /** creates a <code>FormOperations</code> instance which works on a com::sun::star::form::component::DataForm
         instance.
 
         @throws IllegalArgumentException
-            if the given form is <NULL/>, or does not support the <type scope="com::sun::star::form::component">DataForm</type>
+            if the given form is <NULL/>, or does not support the com::sun::star::form::component::DataForm
             service.
     */
     createWithForm(

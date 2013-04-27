@@ -34,7 +34,7 @@
     <p>
     The number, types, and properties of a ResultSet's columns are
     provided by the
-    <type scope="com::sun::star::sdbc">XResultSetMetaData</type>
+    com::sun::star::sdbc::XResultSetMetaData
     interface returned by the
     <member scope="com::sun::star::sdbc">XResultSetMetaDataSupplier::getMetaData()</member>
     method.

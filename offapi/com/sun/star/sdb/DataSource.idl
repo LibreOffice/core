@@ -44,7 +44,7 @@
 
 
 /** is a factory to establish database connections. It should be registered at
-    a <type scope="com::sun::star::uno">NamingService</type>.
+    a com::sun::star::uno::NamingService.
     @see com::sun::star::sdb::DatabaseContext
  */
 published service DataSource
@@ -58,7 +58,7 @@ published service DataSource
     interface XCompletedConnection;
 
     /** useful for establishing isolated connections which are not shared among others
-        as it is the case when using XCompletedConnection or <type scope="com::sun::star::sdbc">XDataSource</type>.
+        as it is the case when using XCompletedConnection or com::sun::star::sdbc::XDataSource.
         @see XCompletedConnection
         @see com::sun::star::sdbc::XDataSource
         @since OOo 1.1.2
@@ -76,7 +76,7 @@ published service DataSource
         The object returned by the
         <method scope="com::sun::star::sdb">XQueryDefinitionsSupplier::getQueryDefinitions()</method>
         supports the
-        <type scope="com::sun::star::sdb">DefinitionContainer</type>
+        com::sun::star::sdb::DefinitionContainer
         service.
         </p>
      */
@@ -91,7 +91,7 @@ published service DataSource
         The object returned by the
         <method scope="com::sun::star::sdb">XBookmarksSupplier::getBookmarks()</method>
         supports the
-        <type scope="com::sun::star::sdb">DefinitionContainer</type>
+        com::sun::star::sdb::DefinitionContainer
         service.
         </p>
      */
@@ -123,7 +123,7 @@ published service DataSource
 
         <p>Instead, the values in this property have two use cases:
         <ul><li>Upon creating a connection, for every value in this sequence it's checked
-                whether the <type scope="com::sun::star::sdbc">XDriver</type> which is to provide
+                whether the com::sun::star::sdbc::XDriver which is to provide
                 the connection supports a setting with the respective name, using its
                 <member scope="com::sun::star::sdbc">XDriver::getPropertyInfo<member> method.br/>
                 If so, the settings is passed to the driver's
@@ -146,11 +146,11 @@ published service DataSource
         <p>You should use the <member>Setting</member> property if you need to access a few properties only,
         and the <member>Info</member> property if you need access to all existent settings at once.</p>
 
-        <p>The object represented by this property supports the <type scope="com::sun::star::beans">PropertyBag</type>
+        <p>The object represented by this property supports the com::sun::star::beans::PropertyBag
         service. That is, you can at runtime add arbitrary new properties to the bag.</p>
 
         <p>Additionally, the property bag supports default values of properties, and thus the
-        <type scope="com::sun::star::beans">XPropertyState</type> interface. If you add an own property to
+        com::sun::star::beans::XPropertyState interface. If you add an own property to
         the bag using <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member>, you need
         to specify an initial value, which is also used as default value (exceptions see below).</p>
 

@@ -33,9 +33,9 @@
 
 
 /** is a client side ResultSet, which combines the characteristics of a
-    <type scope="com::sun::star::sdbc">Statement</type>
+    com::sun::star::sdbc::Statement
     and a
-    <type scope="com::sun::star::sdbc">ResultSet</type>.
+    com::sun::star::sdbc::ResultSet.
 
 
     <p>
@@ -109,7 +109,7 @@ published service RowSet
 
     /** retrieves the number of seconds the driver will wait for a Statement
         to execute. If the limit is exceeded, a
-        <type scope="com::sun::star::sdbc">SQLException</type>
+        com::sun::star::sdbc::SQLException
         is thrown.
         There is no limitation, if set to zero.
      */

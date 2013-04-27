@@ -54,13 +54,13 @@ published interface XLinkFactory: com::sun::star::uno::XInterface
             a name for the entry
 
         @param aArgs
-            <type scope="com::sun::star::document">MediaDescriptor</type>
+            com::sun::star::document::MediaDescriptor
             that contains source for the link
 
         @param aObjectArgs
             optional parameters for the object persistence initialization
             see also
-            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+            com::sun::star::embed::EmbeddedObjectDescriptor
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal

@@ -23,10 +23,10 @@
 module com { module sun { module star { module ucb {
 
 /** An indication used in a
-    <type scope="com::sun::star::ucb">RemoteContentProviderChangeEvent</type> to
+    com::sun::star::ucb::RemoteContentProviderChangeEvent to
     specify whether a remote content provider has been added to or removed
     from an
-    <type scope="com::sun::star::ucb">XRemoteContentProviderSupplier</type>.
+    com::sun::star::ucb::XRemoteContentProviderSupplier.
 
     @version 1.0
     @author Stephan Bergmann

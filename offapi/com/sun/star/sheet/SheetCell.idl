@@ -104,8 +104,8 @@ published service SheetCell
 
 
     /** provides methods to lock and unlock the update between
-        <type scope="com::sun::star::table">XCell</type> and
-        <type scope="com::sun::star::text">XText</type>.
+        com::sun::star::table::XCell and
+        com::sun::star::text::XText.
     */
     interface com::sun::star::document::XActionLockable;
 

@@ -25,7 +25,7 @@
 module com { module sun { module star { module ucb {
 
 /** An improved version of a
-    <type scope="com::sun::star::ucb">XCommandProcessor</type> that helps avoid
+    com::sun::star::ucb::XCommandProcessor that helps avoid
     ever-increasing resource consumption.
  */
 published interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor

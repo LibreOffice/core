@@ -30,7 +30,7 @@
 
 module com {  module sun {  module star {  module awt {
 
-/** specifies extended functions for a <type scope="com::sun::star::awt">PopupMenu</type>.
+/** specifies extended functions for a com::sun::star::awt::PopupMenu.
 
     @since OOo 3.1
  */
@@ -41,20 +41,20 @@ interface XPopupMenuExtended
     interface ::com::sun::star::awt::XPopupMenu;
 
     /** specifies extended menu functions, available for both
-        <type scope="com::sun::star::awt">MenuBar</type> and
-        <type scope="com::sun::star::awt">PopupMenu</type>.
+        com::sun::star::awt::MenuBar and
+        com::sun::star::awt::PopupMenu.
     */
     interface ::com::sun::star::awt::XMenuExtended2;
 
 
-    /** queries if the <type scope="com::sun::star::awt">PopupMenu</type>
+    /** queries if the com::sun::star::awt::PopupMenu
         is being executed as a result of invoking
         <member scope="com::sun::star::awt">XPopupMenu::execute()</member>; that is,
         for a PopupMenu activated by a MenuBar item,
         this methods returns <FALSE/>.
 
         @return
-            <TRUE/> if the <type scope="com::sun::star::awt">PopupMenu</type>
+            <TRUE/> if the com::sun::star::awt::PopupMenu
             is being executed, <FALSE/> otherwise.
 
         @see <member scope="com::sun::star::awt">XPopupMenu::execute()</member>
@@ -63,7 +63,7 @@ interface XPopupMenuExtended
     */
     boolean isInExecute();
 
-    /** ends the execution of the <type scope="com::sun::star::awt">PopupMenu</type>.
+    /** ends the execution of the com::sun::star::awt::PopupMenu.
         <member scope="com::sun::star::awt">XPopupMenu::execute()</member> will then return 0.
 
         @see <member scope="com::sun::star::awt">XPopupMenu::execute()</member>
@@ -117,7 +117,7 @@ interface XPopupMenuExtended
         @param aKeyEvent
             specifies the KeyEvent for the menu item.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -137,7 +137,7 @@ interface XPopupMenuExtended
         @return
             the KeyEvent struct assigned to the requested menu item.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -154,7 +154,7 @@ interface XPopupMenuExtended
         @param sHelpText
             specifies the help text for the menu item.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -170,7 +170,7 @@ interface XPopupMenuExtended
         @return
             a string with the help text.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -187,7 +187,7 @@ interface XPopupMenuExtended
         @param sTipHelpText
             specifies the tip help text for the menu item.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -203,7 +203,7 @@ interface XPopupMenuExtended
         @return
             a string with the tip help text.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -224,7 +224,7 @@ interface XPopupMenuExtended
             if <TRUE/>, the image will be scaled to the standard size used internally by
             the implementation.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -240,10 +240,10 @@ interface XPopupMenuExtended
             specifies the menu item identifier for which the image should be retrieved.
 
         @return
-            a <type scope="::com::sun::star::graphic::">XGraphic</type> reference
+            a ::com::sun::star::graphic::::XGraphic reference
             to the current image for the requested menu item.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -262,7 +262,7 @@ interface XPopupMenuExtended
         @param nAngle
             specifies the rotation angle for the menu item image.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -277,7 +277,7 @@ interface XPopupMenuExtended
 
         @return the rotation angle of the menu item image, or 0 if it has no rotation.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -295,7 +295,7 @@ interface XPopupMenuExtended
         @param bMirror
             if <TRUE/>, the item image is mirrored.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1
@@ -310,7 +310,7 @@ interface XPopupMenuExtended
 
         @return <TRUE/> if the item image is mirrored, <FALSE/> otherwise.
 
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
 
         @since OOo 3.1

@@ -30,7 +30,7 @@
 published service ParagraphPropertiesComplex
 {
     /** contains the writing direction, as represented by the
-        <type scope="com::sun::star::text">WritingMode2</type> constants
+        com::sun::star::text::WritingMode2 constants
      */
     [property] short WritingMode;
 };

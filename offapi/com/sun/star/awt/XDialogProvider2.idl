@@ -29,7 +29,7 @@ module com { module sun { module star { module awt {
 
 
 /** provides dialogs implementing the
-    <type scope="com::sun::star::awt">XDialog</type> interface.
+    com::sun::star::awt::XDialog interface.
  */
 interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
 
@@ -49,15 +49,15 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
 
             xHandler can handle events in two different ways:
 
-            1. By supporting the <type scope="com::sun::star::awt">XDialogEventHandler</type> interface.
+            1. By supporting the com::sun::star::awt::XDialogEventHandler interface.
             This is a generic interface to accept event notifications.
 
             2. By providing interfaces that directly implement the handler
             methods to be called. The XDialogProvider2 implementation then
             will try to access these events using the
-            <type scope="com::sun::star::beans">Introspection</type>Introspection
+            com::sun::star::beans::IntrospectionIntrospection
             service. To make this possible the handler implementation also has to
-            support <type scope="com::sun::star::lang">XTypeProvider</type>.
+            support com::sun::star::lang::XTypeProvider.
 
             If XDialogEventHandler is supported XDialogEventHandler.callHandlerMethod()
             is always called first to handle the event. Only if the event cannot be
@@ -74,7 +74,7 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
             will be searched. The signature is similar to XDialogEventHandler.
             callHandlerMethod except for MethodName itself that isn't needed
             here. For more information about these parameters, see
-            <type scope="com::sun::star::awt">XDialogEventHandler</type>.
+            com::sun::star::awt::XDialogEventHandler.
 
             If this method is found, it will be called, otherwise a method
 
@@ -83,13 +83,13 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
             will be searched and called.
 
         @returns
-            a dialog implementing the <type scope="com::sun::star::awt">XDialog</type> interface.
+            a dialog implementing the com::sun::star::awt::XDialog interface.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if no dialog for the given URL is found or if the URL is invalid
             or xHandler is null.
 
-        @see <type scope="com::sun::star::awt">XDialogEventHandler</type>
+        @see com::sun::star::awt::XDialogEventHandler
 
      */
     com::sun::star::awt::XDialog createDialogWithHandler

@@ -30,9 +30,9 @@ module com { module sun { module star { module i18n {
     Access locale specific data.
 
     <p> Derived from
-    <type scope="::com::sun::star::i18n">XLocaleData</type> and provides
+    ::com::sun::star::i18n::XLocaleData and provides
     an additional method to return a sequence of all
-    <type scope="::com::sun::star::i18n">Currency2</type> elements
+    ::com::sun::star::i18n::Currency2 elements
     available for that locale.
 
     @since OOo 2.0.3

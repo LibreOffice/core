@@ -69,7 +69,7 @@ published interface XTextTable: com::sun::star::text::XTextContent
 
 
     /** @returns
-            the <type scope="com::sun::star::table">XCell</type> interface of the cell with the specified name.
+            the com::sun::star::table::XCell interface of the cell with the specified name.
 
         @param aCellName
             is a concatenation of the alphanumeric column name and the

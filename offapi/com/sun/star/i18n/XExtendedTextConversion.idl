@@ -31,7 +31,7 @@ module com { module sun { module star { module i18n {
     This interface provides Text Conversion service.
 
     <p> It is derived from
-    <type scope="::com::sun::star::i18n">XTextConversion</type> and provides
+    ::com::sun::star::i18n::XTextConversion and provides
     a new conversion function containing position map (offset) between original
     and converted string. </p>
 

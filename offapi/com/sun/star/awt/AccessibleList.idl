@@ -58,14 +58,14 @@ service AccessibleList
        <li>Description: The description of a list is its localized
            help text.</li>
        <li>Children: There exists children.
-            Each child is of type <type scope="com::sun::star::awt">AccessibleListItem</type>. </li>
+            Each child is of type com::sun::star::awt::AccessibleListItem. </li>
        <li>Parent: The parent can be of type
             <ul>
             <li>
-                <type scope="com::sun::star::awt">AccessibleComboBox</type>
-                <type scope="com::sun::star::awt">AccessibleListBox</type>
-                <type scope="com::sun::star::awt">AccessibleDropDownListBox</type>
-                <type scope="com::sun::star::awt">AccessibleDropDownComboBox</type>
+                com::sun::star::awt::AccessibleComboBox
+                com::sun::star::awt::AccessibleListBox
+                com::sun::star::awt::AccessibleDropDownListBox
+                com::sun::star::awt::AccessibleDropDownComboBox
             </li>
             .
        </li>
@@ -76,7 +76,7 @@ service AccessibleList
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
                and subsequent calls to this object result in
-               <type scope="com::sun::star::lang">DisposedException</type>
+               com::sun::star::lang::DisposedException
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::ENABLED</const> is set
@@ -112,7 +112,7 @@ service AccessibleList
     interface com::sun::star::accessibility::XAccessibleComponent;
     interface com::sun::star::accessibility::XAccessibleExtendedComponent;
 
-    /** Support of the <type scope="com::sun::star::accessibility">XAccessible</type> interface may be
+    /** Support of the com::sun::star::accessibility::XAccessible interface may be
         discontinued in the future.
     */
     interface com::sun::star::accessibility::XAccessible;

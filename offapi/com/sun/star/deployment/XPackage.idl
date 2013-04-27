@@ -281,9 +281,9 @@ interface XPackage
     /** returns the publisher info for the package, the strings
         might be empty, if there is no publisher
 
-        <type scope="::com::sun::star::beans">StringPair</type>::First
+        ::com::sun::star::beans::StringPair::First
         represents the publisher name and
-        <type scope="::com::sun::star::beans">StringPair</type>::Second
+        ::com::sun::star::beans::StringPair::Second
         represents the URL to the publisher.
     */
 
@@ -303,7 +303,7 @@ interface XPackage
         @param newTitle
                new package name
         @param nameClashAction
-               one of <type scope="com::sun::star::ucb">NameClash</type>
+               one of com::sun::star::ucb::NameClash
         @param xCmdEnv
                command environment for error and progress handling
     */

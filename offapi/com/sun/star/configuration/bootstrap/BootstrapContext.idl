@@ -31,8 +31,8 @@ module com { module sun { module star { module configuration { module bootstrap 
     associated metaconfiguration mechanism.
 
     <p> The contained settings are used to initialize the
-        <type scope="com::sun::star::configuration">DefaultProvider</type> and
-        <type scope="com::sun::star::configuration::backend">DefaultBackend</type> of the
+        com::sun::star::configuration::DefaultProvider and
+        com::sun::star::configuration::backend::DefaultBackend of the
         component context.
     </p>
     <p> The implementation is usually available as a singleton in the context

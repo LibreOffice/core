@@ -41,7 +41,7 @@ interface XScriptProvider : ::com::sun::star::uno::XInterface {
             is the logical or language-dependent script URI
 
         @returns
-            an object implementing <type scope="::com::sun::star::script::provider">XScript</type> representing the script
+            an object implementing ::com::sun::star::script::provider::XScript representing the script
 
         @throws ::com::sun::star::provider::ScriptFrameworkErrorException
             Framework error getting  script for URI.

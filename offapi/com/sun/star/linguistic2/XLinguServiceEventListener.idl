@@ -29,12 +29,12 @@ module com { module sun { module star { module linguistic2 {
 /** is used to inform listeners about LinguServiceEvents.
 
     <P>The function of this interface is used by the
-    <type scope="com::sun::star::linguistic2">XLinguServiceEventBroadcaster</type>
+    com::sun::star::linguistic2::XLinguServiceEventBroadcaster
     to inform its listeners about the
-    <type scope="com::sun::star::linguistic2">LinguServiceEvent</type>s.
+    com::sun::star::linguistic2::LinguServiceEvents.
     </P>
 
-    @see    <type scope="com::sun::star::linguistic2">XLinguServiceManager</type>
+    @see    com::sun::star::linguistic2::XLinguServiceManager
 */
 published interface XLinguServiceEventListener : com::sun::star::lang::XEventListener
 {

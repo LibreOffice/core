@@ -94,9 +94,9 @@ published service TextProperties
 
     /** describes the numbering levels.
         <p>The different rules accessible with this
-        <type scope="com::sun::star::container">XIndexReplace</type> interface
+        com::sun::star::container::XIndexReplace interface
         are sequences of property values as described in the service
-        <type scope="com::sun::star::style">NumberingRule</type>.</p>
+        com::sun::star::style::NumberingRule.</p>
      */
     [optional, property] com::sun::star::container::XIndexReplace NumberingRules;
 

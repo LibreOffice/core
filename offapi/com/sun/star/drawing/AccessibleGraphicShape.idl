@@ -43,10 +43,10 @@ service AccessibleGraphicShape
 
         <p>See AccessibleShape for documentation and support of
         the interfaces
-        <type scope="::com::sun::star::accessibility">XAccessible</type>,
-        <type scope="::com::sun::star::accessibility">XAccessibleContext</type>,
+        ::com::sun::star::accessibility::XAccessible,
+        ::com::sun::star::accessibility::XAccessibleContext,
         and
-        <type scope="::com::sun::star::accessibility">XAccessibleComponent</type>.</p>
+        ::com::sun::star::accessibility::XAccessibleComponent.</p>
 
         @see AccessibleShape
     */

@@ -22,9 +22,9 @@
 #include <com/sun/star/loader/XImplementationLoader.idl>
 
 module com {  module sun {  module star {  module loader {
-/**the same as <type scope="com::sun::star::loader">Java</type>.
+/**the same as com::sun::star::loader::Java.
 <p>This service was introduced for UNO 3 components. The then
-<type scope="com::sun::star::loader">Java</type> service was intended for
+com::sun::star::loader::Java service was intended for
 UNO 2 components. Since UNO 2 is not supported anymore, the service
 name is reused again.
 

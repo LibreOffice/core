@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module text {
 
 
 /** specifies a style sheet numberings within a
-    <type scope="com::sun::star::text">Text</type>.
+    com::sun::star::text::Text.
  */
 published service NumberingStyle
 {

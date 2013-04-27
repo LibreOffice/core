@@ -208,7 +208,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         the changed settings to the default.</p>
 
         <p>If for example the template changed the
-        <type scope="com::sun::star::drawing">LineStyle</type> of all
+        com::sun::star::drawing::LineStyle of all
         series to NONE, this method should reset all series with
         LineStyle NONE back to SOLID.  If a series has a style DASH,
         it must not be changed.</p>

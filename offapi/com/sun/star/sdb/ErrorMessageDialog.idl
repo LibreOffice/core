@@ -42,14 +42,14 @@ module com {  module sun {  module star {  module sdb {
      </module>
      ,
     they will - sooner or later - encounter
-    <type scope="com::sun::star::sdbc">SQLException</type>
+    com::sun::star::sdbc::SQLException
     's.
     <br/>
     These exceptions can be chained, so the information wrapped in one single
-    <type scope="com::sun::star::sdbc">SQLException</type>
+    com::sun::star::sdbc::SQLException
     can be rather complex (e.g., every instance where such an exception is passing before it is finally caught, could
     append a
-    <type scope="com::sun::star::sdb">SQLContext</type>
+    com::sun::star::sdb::SQLContext
     to explain what it was doing), and they should be
     presented to the user in a consistent way.
     <br/>
@@ -63,12 +63,12 @@ published service ErrorMessageDialog : com::sun::star::ui::dialogs::XExecutableD
         <p>
         You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
         method of your
-        <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+        com::sun::star::lang::XMultiServiceFactory
         .
         </p>
         <p>
         You specify a parameter by passing one (or more)
-        <type scope="com::sun::star::beans">PropertyValue</type>
+        com::sun::star::beans::PropertyValue
         object(s) to the initialize method, where the <em>Name</em> field contains a string describing which aspect
         you want to affect, and the <em>Value</em> field containing a value.
         <br/>
@@ -76,7 +76,7 @@ published service ErrorMessageDialog : com::sun::star::ui::dialogs::XExecutableD
         <method scope="com::sun::star::beans">XPropertySet::setPropertyValue()
         </method>
          of the
-        <type scope="com::sun::star::beans">XPropertySet</type>
+        com::sun::star::beans::XPropertySet
         interface ...
         <br/>
         allowed parameters are
@@ -85,14 +85,14 @@ published service ErrorMessageDialog : com::sun::star::ui::dialogs::XExecutableD
                 String describing the initial title of the dialog. If not specified, a default title is used.
             </li>
             <li><b>parentWindow</b><br/>
-                <type scope="com::sun::star::awt">XWindow</type>
+                com::sun::star::awt::XWindow
                 describing the parent window to use for the dialog.
             </li>
             <li><b>sqlException</b><br/>
-                <type scope="com::sun::star::sdbc">SQLException</type>
+                com::sun::star::sdbc::SQLException
                 describing the error which is being displayed.<br/>
                 When initializing this value, you may use any derivative of
-                <type scope="com::sun::star::sdbc">SQLException</type>
+                com::sun::star::sdbc::SQLException
                 .
             </li>
         </ul>

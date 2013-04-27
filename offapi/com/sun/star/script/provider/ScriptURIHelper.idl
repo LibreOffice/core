@@ -46,7 +46,7 @@ service ScriptURIHelper : XScriptURIHelper {
             by the Scripting Framework on its creation
 
         @throws
-            <type scope="::com::sun::star::lang">IllegalArgumentException</type>
+            ::com::sun::star::lang::IllegalArgumentException
     */
     create( [in] string language, [in] string location )
         raises ( ::com::sun::star::lang::IllegalArgumentException );

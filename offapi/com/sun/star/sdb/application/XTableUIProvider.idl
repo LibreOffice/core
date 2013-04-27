@@ -51,7 +51,7 @@ interface XTableUIProvider
 
         @param ColorMode
             denotes the color mode of the graphic to retrieve, being one of the
-            <type scope="com::sun::star::graphic">GraphicColorMode</type> constants.
+            com::sun::star::graphic::GraphicColorMode constants.
         @return
             the icon which should be used to represent the table in the
             database application window, or <NULL/> if the default icon
@@ -79,11 +79,11 @@ interface XTableUIProvider
             Two component types are supported so far
             <ul><li>modal dialogs<br/>
                     If the returned component supports the
-                    <type scope="com::sun::star::ui::dialogs">XExecutableDialog</type>
+                    com::sun::star::ui::dialogs::XExecutableDialog
                     interface, the dialog will be executed modally.</li>
                 <li>modeless frames<br/>
                     If the returned component supports the
-                    <type scope="com::sun::star::frame">XController</type>
+                    com::sun::star::frame::XController
                     interface, it is assumed that it represents a controller,
                     loaded into a new frame, which is a modeless and, in its lifetime,
                     depends on the application main window.</li>

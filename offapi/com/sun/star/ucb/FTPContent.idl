@@ -80,7 +80,7 @@ published service FTPContent
         Let the new object ( not the parent! ) execute the command "insert".
         This will create the corresponding physical file or directory.
         For files, you need to supply the implementation of
-        an <type scope="com::sun::star::io">XInputStream</type> with the
+        an com::sun::star::io::XInputStream with the
         command's parameters, that provides access to the stream data.
         </li>
         </ol>
@@ -148,7 +148,7 @@ published service FTPContent
         string Title ( file name )
         </li>
         <li>
-        <type scope="com::sun::star::util">DateTime</type>DateCreated ( read-only )
+        com::sun::star::util::DateTimeDateCreated ( read-only )
         </li>
         </ul>
         </p>

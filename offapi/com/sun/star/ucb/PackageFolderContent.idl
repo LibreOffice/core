@@ -178,7 +178,7 @@ published service PackageFolderContent
         Let the new child ( not the parent! ) execute the command "insert".
         This will commit the creation process. For streams, you need to supply
         the implementation of an
-        <type scope="com::sun::star::io">XInputStream</type> with the command's
+        com::sun::star::io::XInputStream with the command's
         parameters, that provides access to the stream data.
         </li>
         </ol>

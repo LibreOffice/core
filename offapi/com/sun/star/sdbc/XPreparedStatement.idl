@@ -52,7 +52,7 @@ published interface XPreparedStatement: com::sun::star::uno::XInterface
     XResultSet executeQuery() raises (SQLException);
 
     /** executes the SQL INSERT, UPDATE or DELETE statement in this
-        <type scope="com::sun::star::sdbc">PreparedStatement</type>
+        com::sun::star::sdbc::PreparedStatement
         object.
         <br/>
         In addition, SQL statements that return nothing, such as
@@ -80,10 +80,10 @@ published interface XPreparedStatement: com::sun::star::uno::XInterface
     boolean execute() raises (SQLException);
 
     /** returns the
-        <type scope="com::sun::star::sdbc">Connection</type>
+        com::sun::star::sdbc::Connection
         object
         that produced this
-        <type scope="com::sun::star::sdbc">Statement</type>
+        com::sun::star::sdbc::Statement
         object.
         @returns
             the Connection object

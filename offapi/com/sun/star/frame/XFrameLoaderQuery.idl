@@ -46,7 +46,7 @@ published interface XFrameLoaderQuery: com::sun::star::uno::XInterface
      */
     sequence< ::com::sun::star::beans::PropertyValue > getLoaderProperties( [in] string sFilterName );
 
-    /** use member <type scope="com::sun::star::container">XContainerQuery</type>
+    /** use member com::sun::star::container::XContainerQuery
         provided by service FrameLoaderFactory instead of this
         @deprecated
      */

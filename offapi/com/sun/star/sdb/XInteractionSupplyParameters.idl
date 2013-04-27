@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module sdb {
 
     <p>
     This continuation is typically used in conjunction with a
-    <type scope="com::sun::star::sdb">ParametersRequest</type>.
+    com::sun::star::sdb::ParametersRequest.
     </p>
 */
 published interface XInteractionSupplyParameters: com::sun::star::task::XInteractionContinuation

@@ -257,7 +257,7 @@ published interface XParameters: com::sun::star::uno::XInterface
         the specified number of bytes.
         When a very large binary value is input to a LONGVARBINARY or LONGVARCHAR
         parameter, it may be more practical to send it via an
-        <type scope="com::sun::star::io">XInputStream</type>
+        com::sun::star::io::XInputStream
         . SDBC will read the data from the stream as needed, until it reaches end-of-file.
         @param parameterIndex
             the first parameter is 1, the second is 2, ...
@@ -276,7 +276,7 @@ published interface XParameters: com::sun::star::uno::XInterface
         the specified number of bytes.
         When a very large binary value is input to a LONGVARCHAR
         parameter, it may be more practical to send it via a
-        <type scope="com::sun::star::io">XInputStream</type>
+        com::sun::star::io::XInputStream
         . SDBC will read the data from the stream as needed, until it reaches end-of-file.
         @param parameterIndex
             the first parameter is 1, the second is 2, ...
@@ -338,7 +338,7 @@ published interface XParameters: com::sun::star::uno::XInterface
             the parameter value
         @param targetSqlType
             the SQL type (as defined in
-            <type scope="com::sun::star::sdbc">DataType</type>
+            com::sun::star::sdbc::DataType
             ) to be sent to the database. The scale argument may further qualify this type.
         @param scale
             for

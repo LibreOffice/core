@@ -50,7 +50,7 @@ published interface XInsertObjectDialog: com::sun::star::uno::XInterface
 
         @param lObjArgs
             optional parameters for the object persistence initialization
-            see also <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+            see also com::sun::star::embed::EmbeddedObjectDescriptor
 
         @returns
             the structure containing the object and container related options

@@ -26,12 +26,12 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements a property handler for use with an <type scope="com::sun::star::inspection">ObjectInspector</type>
-    which, for a <type scope="com::sun::star::form">FormComponent</type>, provides the script events
+/** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
+    which, for a com::sun::star::form::FormComponent, provides the script events
     offered by this form component.
 
-    <p>For this, the parent of the form component, which by definition supports the <type scope="com::sun::star::form">FormComponent</type>
-    service, is examined for the <type scope="com::sun::star::script">XEventAttacherManager</type> interface.</p>
+    <p>For this, the parent of the form component, which by definition supports the com::sun::star::form::FormComponent
+    service, is examined for the com::sun::star::script::XEventAttacherManager interface.</p>
 
     @see com::sun::star::inspection::XPropertyHandler
     @see com::sun::star::form::component::CommandButton

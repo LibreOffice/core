@@ -33,7 +33,7 @@ module xml {
     OOR Update XML format.
 
     <p> The configuration layer XML from a given stream is parsed and fed to a
-    <type scope="com::sun::star::configuration::backend">XLayerHandler</type>.
+    com::sun::star::configuration::backend::XLayerHandler.
     </p>
 
     @see com::sun::star::configuration::backend::xml::SchemaParser
@@ -41,7 +41,7 @@ module xml {
 
     @see com::sun::star::configuration::backend::xml::LayerWriter
         Service that writes OOR Update XML for data described via
-        <type scope="com::sun::star::configuration::backend">XLayerHandler</type>.
+        com::sun::star::configuration::backend::XLayerHandler.
 
     @since OOo 1.1.2
 */
@@ -61,8 +61,8 @@ published service LayerParser
     /** allows initializing the source stream.
 
         <p> The source can be passed
-            as a <type scope="com::sun::star::io">XInputStream</type> or
-            as a <type scope="com::sun::star::xml::sax">InputSource</type>.
+            as a com::sun::star::io::XInputStream or
+            as a com::sun::star::xml::sax::InputSource.
         </p>
       */
     interface com::sun::star::lang::XInitialization ;

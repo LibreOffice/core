@@ -62,14 +62,14 @@ service ToolbarController
     /** used to initialize a component with required arguments.
 
         A toolbar controller needs at least three additional arguments
-        provided as <type scope="com::sun::star::beans">PropertyValue</type>:
+        provided as com::sun::star::beans::PropertyValue:
         <ul>
-            <li><b>Frame</b><br>a <type scope="com::sun::star::frame">XFrame</type>
+            <li><b>Frame</b><br>a com::sun::star::frame::XFrame
                    instance to which the toolbar controller belongs.</li>
             <li><b>CommandURL</b><br>a string which specifies the command a
                    toolbar controller is bound.</li>
             <li><b>ServiceManager</b><br>a
-                   <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+                   com::sun::star::lang::XMultiServiceFactory
                    instance which can be used to create additional UNO services.</li>
         </ul>
     */

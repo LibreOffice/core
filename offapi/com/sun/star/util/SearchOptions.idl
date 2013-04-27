@@ -63,7 +63,7 @@ published  struct SearchOptions  {
     long            insertedChars;
 
     /** Flags for the transliteration. Same meaning as the enum of
-        <type scope="com::sun::star::i18n">TransliterationModules</type>
+        com::sun::star::i18n::TransliterationModules
     */
     long            transliterateFlags;
 };

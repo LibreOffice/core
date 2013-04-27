@@ -59,7 +59,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
     void setFirstDiagram( [in] XDiagram xDiagram );
 
     /** creates an internal
-        <type scope="com::sun::star::chart2">XDataProvider</type> that
+        com::sun::star::chart2::XDataProvider that
         is handled by the chart document itself.
 
         <p>When the model is stored, the data provider will also be

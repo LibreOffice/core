@@ -27,7 +27,7 @@
 
 module com {  module sun {  module star {  module sheet {
 
-/** Primary interface for the <type scope="com::sun::star::sheet">ExternalDocLinks</type> service.
+/** Primary interface for the com::sun::star::sheet::ExternalDocLinks service.
 
     @see com::sun::star::sheet::ExternalDocLinks
 

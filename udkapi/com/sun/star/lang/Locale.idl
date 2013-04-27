@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module lang {
     <p> <strong>Note:</strong> When you ask for a resource for a
     particular locale, you get the best available match, not necessarily
     precisely what you asked for. For more information, see
-    <type scope="com::sun::star::resource">XResourceBundle</type>.</p>
+    com::sun::star::resource::XResourceBundle.</p>
 
     <p> Each implementation that performs locale-sensitive operations
     allows you to get all the available objects of that type. Use the

@@ -28,14 +28,14 @@ published constants ResultSetConcurrency
 {
 
     /** is the concurrency mode for a
-        <type scope="com::sun::star::sdb">ResultSet</type>
+        com::sun::star::sdb::ResultSet
         object that may NOT be updated.
      */
     const long READ_ONLY = 1007;
 
 
     /** is the concurrency mode for a
-            <type scope="com::sun::star::sdb">ResultSet</type>
+            com::sun::star::sdb::ResultSet
             object that may be updated.
      */
     const long UPDATABLE = 1008;

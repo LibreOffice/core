@@ -28,7 +28,7 @@
 /** provides multiple, probably parallel running, status indicator objects
 
     <p>
-    A possible factory is the <type scope="com::sun::star::frame">Frame</type>
+    A possible factory is the com::sun::star::frame::Frame
     service.
     </p>
 

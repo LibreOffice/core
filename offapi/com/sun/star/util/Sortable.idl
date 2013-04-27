@@ -40,7 +40,7 @@ published service Sortable
             of this interfaces implementation are those of the
             "com.sun.star.util.SortDescriptor" service.
 
-           @see <type scope="com::sun::star::util">SortDescriptor</type>
+           @see com::sun::star::util::SortDescriptor
          */
         interface com::sun::star::util::XSortable;
 };

@@ -30,7 +30,7 @@ module com { module sun { module star { module awt {
 
 
 /** provides dialogs implementing the
-    <type scope="com::sun::star::awt">XDialog</type> interface.
+    com::sun::star::awt::XDialog interface.
  */
 interface XDialogProvider : ::com::sun::star::uno::XInterface {
 
@@ -41,7 +41,7 @@ interface XDialogProvider : ::com::sun::star::uno::XInterface {
             is the URL.
 
         @returns
-            a dialog implementing the <type scope="com::sun::star::awt">XDialog</type> interface.
+            a dialog implementing the com::sun::star::awt::XDialog interface.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if no dialog for the given URL is found or if the URL is invalid.

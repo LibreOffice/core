@@ -58,7 +58,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
 {
 
     /** creates a new
-        <type scope="com::sun::star::sdbc">Statement</type>
+        com::sun::star::sdbc::Statement
         object for sending SQL statements to the database.
 
 
@@ -66,7 +66,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         SQL statements without parameters are normally
         executed using Statement objects. If the same SQL statement
         is executed many times, it is more efficient to use a
-        <type scope="com::sun::star::sdbc">PreparedStatement</type>
+        com::sun::star::sdbc::PreparedStatement
         .
         </p>
         <p>
@@ -85,7 +85,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     XStatement createStatement() raises (SQLException);
 
     /** creates a
-        <type scope="com::sun::star::sdbc">PreparedStatement</type>
+        com::sun::star::sdbc::PreparedStatement
         object for sending parameterized SQL statements to the database.
 
 
@@ -109,7 +109,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         the statement to the database for precompilation. Some drivers
         may not support precompilation. In this case, the statement may
         not be sent to the database until the
-        <type scope="com::sun::star::sdbc">PreparedStatement</type>
+        com::sun::star::sdbc::PreparedStatement
         is executed.  This has no direct effect on users; however, it does
         affect which method throws certain SQLExceptions.
         </p>
@@ -131,7 +131,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
     XPreparedStatement prepareStatement([in]string sql) raises (SQLException);
 
     /** creates a
-        <type scope="com::sun::star::sdbc">CallableStatement</type>
+        com::sun::star::sdbc::CallableStatement
         object for calling
         database stored procedures.
 
@@ -337,7 +337,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
 
         <p>
         The constants defined in
-        <type scope="com::sun::star::sdbc">TransactionIsolation</type>
+        com::sun::star::sdbc::TransactionIsolation
         are the possible transaction isolation levels.
         </p>
         <p>

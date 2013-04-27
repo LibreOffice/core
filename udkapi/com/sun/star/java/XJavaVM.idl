@@ -53,7 +53,7 @@ published interface XJavaVM: com::sun::star::uno::XInterface
         the C++ <code>jvmaccess::VirtualMachine</code> class, always represented
         as a <atom>hyper</atom> integer.  The pointer is guaranteed to be valid
         as long as the reference to this
-        <type scope="com::sun::star::java">XJavaVM</type> is valid (but the
+        com::sun::star::java::XJavaVM is valid (but the
         pointer should be converted into a reference-counted reference as soon
         as possible).  Again, if the first 16 bytes of the
         <code>processID</code> do not match the current process, or if the VM
@@ -66,7 +66,7 @@ published interface XJavaVM: com::sun::star::uno::XInterface
         the C++ <code>jvmaccess::UnoVirtualMachine</code> class, always
         represented as a <atom>hyper</atom> integer.  The pointer is guaranteed
         to be valid as long as the reference to this
-        <type scope="com::sun::star::java">XJavaVM</type> is valid.  Again, if
+        com::sun::star::java::XJavaVM is valid.  Again, if
         the first 16 bytes of the <code>processID</code> do not match the
         current process, or if the VM cannot be instantiated for whatever
         reason, a <void/> <atom>any</atom> is returned.</p>

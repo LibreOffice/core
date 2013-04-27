@@ -48,7 +48,7 @@ interface XAccessibleTextAttributes
 
         @return
             Returns the requested attributes of the text. Each attribute
-            is represented by a <type scope="::com::sun::star::beans">PropertyValue</type>
+            is represented by a ::com::sun::star::beans::PropertyValue
             object.
     */
     sequence<::com::sun::star::beans::PropertyValue>
@@ -76,7 +76,7 @@ interface XAccessibleTextAttributes
         @return
             Returns the requested attributes of the specified character.
             Each attribute is represented by a
-            <type scope="::com::sun::star::beans">PropertyValue</type> object.
+            ::com::sun::star::beans::PropertyValue object.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the index is invalid

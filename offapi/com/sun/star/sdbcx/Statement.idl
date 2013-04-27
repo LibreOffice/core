@@ -25,7 +25,7 @@
 
 
 /** extends the definition of the service
-    <type scope="com::sun::star::sdbc">Statement</type>
+    com::sun::star::sdbc::Statement
     with a flag for the usage of bookmarks.
     @see ResultSet
     @see XRowLocate

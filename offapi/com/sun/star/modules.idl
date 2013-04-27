@@ -204,28 +204,28 @@ module report {};
     <p>
     The <a href="http://www.w3.org/TR/rdf-concepts/">RDF data model</a>
     describes graphs of statements.
-    The nodes in the graph are of type <type scope="rdf">XNode</type>,
-    which has several subtypes: <type scope="rdf">XResource</type>,
-    <type scope="rdf">XBlankNode</type>,
-    <type scope="rdf">XURI</type> and <type scope="rdf">XLiteral</type>.
+    The nodes in the graph are of type rdf::XNode,
+    which has several subtypes: rdf::XResource,
+    rdf::XBlankNode,
+    rdf::XURI and rdf::XLiteral.
     Statements are then triples of nodes, and have type
-    <type scope="rdf">Statement</type>.
+    rdf::Statement.
     </p>
 
     <p>
     The main part of the RDF data model is the
-    <type scope="rdf">XRepository</type>, which consists of a set of graphs.
+    rdf::XRepository, which consists of a set of graphs.
     The repository allows for importing/exporting graphs from/to files,
     as well as querying the contents of the repository.
-    The type of the graphs is <type scope="rdf">XNamedGraph</type>.
+    The type of the graphs is rdf::XNamedGraph.
     </p>
 
     <p>
     Documents that support metadata implement the interfaces
-    <type scope="rdf">XRepositorySupplier</type> and
-    <type scope="rdf">XDocumentMetadataAccess</type>.
+    rdf::XRepositorySupplier and
+    rdf::XDocumentMetadataAccess.
     Furthermore, all elements of ODF documents that may have metadata attached
-    implement the interface <type scope="rdf">XMetadatable</type>.
+    implement the interface rdf::XMetadatable.
     </p>
 
  */

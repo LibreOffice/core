@@ -33,7 +33,7 @@ module com { module sun { module star { module i18n {
     Hiragana to Katakana.
 
     <p> It is derived from
-    <type scope="::com::sun::star::i18n">XTransliteration</type> and provides
+    ::com::sun::star::i18n::XTransliteration and provides
     additional functionality for character to character and
     string to string without offset parameter transliteration. These
     should be used for performance reason if their full-blown

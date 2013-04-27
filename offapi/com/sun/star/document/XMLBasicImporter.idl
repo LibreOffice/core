@@ -32,7 +32,7 @@ module com { module sun { module star { module document {
     <p>The <method>XImporter::setTargetDocument</method> method must be
     called in order to provide the import component with the target document
     to which the data should be imported.
-    The <type scope="com::sun::star::xml::sax">XDocumentHandler</type>
+    The com::sun::star::xml::sax::XDocumentHandler
     interface is used to stream the XML data into the filter.</p>
 
     @since OOo 2.0

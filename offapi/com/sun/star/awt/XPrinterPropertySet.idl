@@ -35,7 +35,7 @@
     <p>All properties are vetoable properties. If you change the properties
     between <member scope="com::sun::star::awt">XPrinter::startPage</member>
     and <member scope="com::sun::star::awt">XPrinter::endPage</member>, a
-    <type scope="com::sun::star::beans">PropertyVetoException</type>
+    com::sun::star::beans::PropertyVetoException
     is thrown.</p>
 
     @see XPrinter

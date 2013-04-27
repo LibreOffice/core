@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module packages {
     Each instance is created with an argument which specifies the URL of
     the Package file to which the user requires access. If the instance is
     created without arguments, it must be initialized with the
-    <type scope="com::sun::star::lang">XInitialization</type> service methods
+    com::sun::star::lang::XInitialization service methods
     before it is a valid instance of the service.
 */
 published service Package

@@ -34,11 +34,11 @@ published interface XUriSchemeParser;
    <code>"vnd.sun.star.expand"</code>, ignoring case.  The objects returned by
    <member scope="com::sun::star::uri">XUriSchemeParser::parse</member>
    implement
-   <type scope="com::sun::star::uri">XVndSunStarExpandUrlReference</type>.</p>
+   com::sun::star::uri::XVndSunStarExpandUrlReference.</p>
 
    <p>This service is not intended to be instantiated directly by client code.
    Rather, it should be used indirectly through the
-   <type scope="com::sun::star::uri">UriReferenceFactory</type> service.</p>
+   com::sun::star::uri::UriReferenceFactory service.</p>
 
    @since OOo 2.3
  */

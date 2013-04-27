@@ -34,7 +34,7 @@ module com { module sun { module star { module linguistic2 {
     is correct or additionally, if it was misspelled, some proposals
     how it might be correctly written.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XSupportedLocales</type>
+    @see    com::sun::star::linguistic2::XSupportedLocales
 */
 published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
 {
@@ -60,7 +60,7 @@ published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocal
             It is usually empty in order to use the default values supplied with
             the property set.
 
-        @see    <type scope="com::sun::star::lang">Locale</type>
+        @see    com::sun::star::lang::Locale
     */
     boolean isValid(
             [in] string aWord,
@@ -91,8 +91,8 @@ published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocal
             the property set.
         exception is raised.</P>
 
-        @see    <type scope="com::sun::star::linguistic2">XSpellAlternatives</type>
-        @see    <type scope="com::sun::star::lang">Locale</type>
+        @see    com::sun::star::linguistic2::XSpellAlternatives
+        @see    com::sun::star::lang::Locale
     */
     com::sun::star::linguistic2::XSpellAlternatives spell(
             [in] string aWord,

@@ -144,7 +144,7 @@ published struct WindowDescriptor
     /** specifies the window attributes.
 
         <p>Use one value out of the constant group
-        <type scope="com::sun::star::awt">WindowAttribute</type>.</p>
+        com::sun::star::awt::WindowAttribute.</p>
      */
     long WindowAttributes;
 

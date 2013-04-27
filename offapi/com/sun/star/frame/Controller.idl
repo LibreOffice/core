@@ -31,7 +31,7 @@
  module com {  module sun {  module star {  module frame {
 
 /** is an abstract service for a component which offers a deeper integration of
-    desktop components than a <type scope="com::sun::star::awt">XWindow</type>
+    desktop components than a com::sun::star::awt::XWindow
     can offer
 
     <p>
@@ -39,7 +39,7 @@
     environment. A controller is a richer component then a pure window, but full featured
     components need a XModel interface too.
     <br>
-    (see service <type scope="com::sun::star::document">OfficeDocument</type> for further information)
+    (see service com::sun::star::document::OfficeDocument for further information)
     <p>
 
     @see com::sun::star::document::OfficeDocument

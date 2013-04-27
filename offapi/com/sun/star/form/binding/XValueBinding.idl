@@ -67,7 +67,7 @@ interface XValueBinding : com::sun::star::uno::XInterface
             if the value currently cannot be changed, since the binding is not
             fully operational. Possible reasons for this include the binding being
             readonly, or the target of the binding not being present.
-        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+        @throws com::sun::star::lang::NoSupportException
             if the binding in general does not support write access to it's binding
 
         @see getSupportedValueTypes

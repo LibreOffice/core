@@ -59,10 +59,10 @@
         <dt>parameter 3</dt>
         <dd>
                   allows to provide
-                  <type scope="com::sun::star::document">MediaDescryptor</type>
+                  com::sun::star::document::MediaDescryptor
                   to the storage so some parts can be used for
                   initialization, it can be for example
-                  <type scope="com::sun::star::task">XInteractionHandler</type>
+                  com::sun::star::task::XInteractionHandler
                   implementation.
         </dd>
     </dl>

@@ -49,7 +49,7 @@ module com { module sun { module star { module container {
 
     <p>Implementations of this interface might decide to support only <em>isolated</em> enumerators, or
     only <em>non-isolated</em> enumerators. Again, it's up to the service to specify this. Requesting an
-    enumerator type which is not supported will generally result in an <type scope="com::sun::star::lang">NoSupportException</type>
+    enumerator type which is not supported will generally result in an com::sun::star::lang::NoSupportException
     being thrown.</p>
  */
 interface XEnumerableMap : XMap
@@ -78,7 +78,7 @@ interface XEnumerableMap : XMap
 
     /** creates a enumerator for the key-value pairs of the map
 
-        <p>The elements returned by the enumerator are instances of <type scope="com::sun::star::beans">Pair</type>,
+        <p>The elements returned by the enumerator are instances of com::sun::star::beans::Pair,
         holding the key-value-pairs which are part of the map.</p>
 
         @param Isolated

@@ -35,7 +35,7 @@ published service ColumnSettings
         column.
 
         <p>The proper value can be determined by using the
-        <type scope="com::sun::star::util">XNumberFormatter</type>
+        com::sun::star::util::XNumberFormatter
         interface.
         </p>
         <p>

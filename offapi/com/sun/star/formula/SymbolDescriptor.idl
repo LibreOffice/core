@@ -53,25 +53,25 @@ published struct SymbolDescriptor
 
     /** Specifies the character set which is supported by the font.
 
-        @see   <type scope="com::sun::star::awt">CharSet</type>
+        @see   com::sun::star::awt::CharSet
     */
     short nCharSet;
 
     /** Specifies the general style of the font.
 
-        @see   <type scope="com::sun::star::awt">FontFamily</type>
+        @see   com::sun::star::awt::FontFamily
     */
     short nFamily;
 
     /** Specifies the pitch of the font.
 
-        @see   <type scope="com::sun::star::awt">FontPitch</type>
+        @see   com::sun::star::awt::FontPitch
     */
     short nPitch;
 
     /** Specifies the thickness of the line.
 
-        @see   <type scope="com::sun::star::awt">FontWeight</type>
+        @see   com::sun::star::awt::FontWeight
 
         The allowed integer values correspond as follows:
         0 : <member scope="com::sun::star::awt">FontWeight::DONTKNOW</member>
@@ -90,7 +90,7 @@ published struct SymbolDescriptor
 
     /** Specifies if the font is italic.
 
-        @see   <type scope="com::sun::star::awt">FontSlant</type>
+        @see   com::sun::star::awt::FontSlant
 
         The values
         <member cope"com::sun::star::awt">FontSlant::REVERSE_OBLIQUE</member> and

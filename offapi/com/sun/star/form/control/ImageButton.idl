@@ -29,7 +29,7 @@
 
 /** describes a control which can be used for displaying images on a control acting like a button.
 
-    <p>The model of the control has to support the <type scope="com::sun::star::form::component">ImageButton</type>
+    <p>The model of the control has to support the com::sun::star::form::component::ImageButton
     service.</p>
 
     <p>The control is clickable, the action taken upon clicking depends on the settings
@@ -45,10 +45,10 @@ published service ImageButton
 
     /** allows external instances to register as veto listener for the button's actions.
 
-        <p>An <type scope="com::sun::star::form">XApproveActionListener</type> returning false on
+        <p>An com::sun::star::form::XApproveActionListener returning false on
         it's approve-method will prevent any action which would usually be triggered - this includes
         not only submitting or resetting forms, but also calling the
-        <type scope="com::sun::star::awt">XActionListener</type>s of the super service<br/>
+        com::sun::star::awt::XActionListeners of the super service<br/>
         This may be interesting for e.g. forms which want to provide input validation before submitting
         data.<br/>
 

@@ -43,7 +43,7 @@ interface XModuleManager2
         Every module is referenced by an unique service name
         (which is used inside configuration as set node name too)
         and is further represented by a sequence of elements of type
-        <type scope="com::sun::star::beans">PropertyValue</type>.
+        com::sun::star::beans::PropertyValue.
         A list of properties can be gotten from the configuration template
         org.openoffice.Setup/Factory.
         </p>

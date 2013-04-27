@@ -40,7 +40,7 @@ published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInt
     /** Offer the local content broker to a remote content provider acceptor.
 
         <p> The Uno Url is handed to the
-        <type scope="com::sun::star::bridge">UnoUrlResolver</type> service,
+        com::sun::star::bridge::UnoUrlResolver service,
         which is responsible for raising any of the advertised exceptions. </p>
 
         @param Url  A Uno Url to address the

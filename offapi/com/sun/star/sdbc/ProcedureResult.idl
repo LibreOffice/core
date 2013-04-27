@@ -30,7 +30,7 @@ published constants ProcedureResult
     /** A possible value for column
              <code>PROCEDURE_TYPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedures()</member>
              .
@@ -44,7 +44,7 @@ published constants ProcedureResult
     /** A possible value for column
             <code>PROCEDURE_TYPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedures()</member>
              .
@@ -58,7 +58,7 @@ published constants ProcedureResult
     /** A possible value for column
             <code>PROCEDURE_TYPE</code>
              in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
+             com::sun::star::sdbc::XResultSet
              object returned by the method
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedures()</member>
              .

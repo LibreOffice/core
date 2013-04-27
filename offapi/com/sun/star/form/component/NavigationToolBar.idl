@@ -65,14 +65,14 @@ service NavigationToolBar
 
     /** specifies the relief for the font described in <member>FontDescriptor</member>
 
-        <p>The value must be one of the <type scope="com::sun::star::text">FontRelief</type>
+        <p>The value must be one of the com::sun::star::text::FontRelief
         constants.</p>
      */
     [property] long FontRelief;
 
     /** specifies the emphasis mark for the font described in <member>FontDescriptor</member>
 
-        <p>The value must be one of the <type scope="com::sun::star::text">FontEmphasis</type>
+        <p>The value must be one of the com::sun::star::text::FontEmphasis
         constants.</p>
      */
     [property] long FontEmphasisMark;

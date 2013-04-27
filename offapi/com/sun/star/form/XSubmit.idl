@@ -34,7 +34,7 @@
 
 /** provides functionality to submit data from a component.
 
-    <p>Usually, this is used by <type scope="com::sun::star::form::component">HTMLForm</type>s.
+    <p>Usually, this is used by com::sun::star::form::component::HTMLForms.
 
     <p>See the <A href="http://www.w3.org/TR/1999/REC-html401-19991224/interact/forms.html#h-17.13">HTML specification</A>
     to learn about submitting forms.</p>

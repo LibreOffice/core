@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module sdb {
 /** implements a loader for various datasource-related user interface components.
 
     <p>Usually, you don't deal with this loader directly. Instead, use an instance with
-    the <type scope="com::sun::star::frame">XComponentLoader</type> interface, and pass
+    the com::sun::star::frame::XComponentLoader interface, and pass
     one of the below-mentioned URLs to it.</p>
 
     @see com::sun::star::frame::XComponentLoader
@@ -51,27 +51,27 @@ published service ContentLoader
         <ul>
             <li><b>.component:DB/DataSourceBrowser</b><br/>
                 Using this URL creates an instance of the
-                <type scope="com::sun::star::sdb">DataSourceBrowser</type>
+                com::sun::star::sdb::DataSourceBrowser
                 service and plugs it into the frame passed to the loader.
             </li>
             <li><b>.component:DB/FormGridView</b><br/>
                 Using this URL creates an instance of the
-                <type scope="com::sun::star::sdb">ExternalSourceBrowser</type>
+                com::sun::star::sdb::ExternalSourceBrowser
                 service and plugs it into the frame passed to the loader.
             </li>
             <li><b>.component:DB/QueryDesign</b><br/>
                 Using this URL creates an instance of the
-                <type scope="com::sun::star::sdb">QueryDesign</type>
+                com::sun::star::sdb::QueryDesign
                 service and plugs it into the frame passed to the loader.
             </li>
             <li><b>.component:DB/TableDesign</b><br/>
                 Using this URL creates an instance of the
-                <type scope="com::sun::star::sdb">TableDesign</type>
+                com::sun::star::sdb::TableDesign
                 service and plugs it into the frame passed to the loader.
             </li>
             <li><b>.component:DB/RelationDesign</b><br/>
                 Using this URL creates an instance of the
-                <type scope="com::sun::star::sdb">RelationDesign</type>
+                com::sun::star::sdb::RelationDesign
                 service and plugs it into the frame passed to the loader.
             </li>
         </ul>
@@ -80,7 +80,7 @@ published service ContentLoader
         <member scope="com::sun::star::frame">XFrameLoader::load()</member>
         are forwarded to the object being created,
         in particular to it's
-        <type scope="com::sun::star::lang">XInitialization</type>
+        com::sun::star::lang::XInitialization
         interface.
     **/
     service com::sun::star::frame::FrameLoader;

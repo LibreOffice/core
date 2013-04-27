@@ -39,7 +39,7 @@ interface XReportControlModel
     */
     interface com::sun::star::container::XContainer;
 
-    /** gives access to the <type scope="com::sun::star::report">XFormatCondition</type> elements by index.
+    /** gives access to the com::sun::star::report::XFormatCondition elements by index.
     */
     interface com::sun::star::container::XIndexContainer;
 

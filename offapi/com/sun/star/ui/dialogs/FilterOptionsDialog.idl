@@ -29,18 +29,18 @@ module com { module sun { module star { module ui { module dialogs {
 /** This service enables a filter developer to register a dialog to query
     for user options before the filter operation is performed.
 
-    <p>The user options are stored inside the <type scope="com::sun::star::document">MediaDescriptor</type>
-    and can be queried from the <type scope="com::sun::star::document">MediaDescriptor</type> by
-    the component that implements <type scope="com::sun::star::document">XFilter</type>.</p>
+    <p>The user options are stored inside the com::sun::star::document::MediaDescriptor
+    and can be queried from the com::sun::star::document::MediaDescriptor by
+    the component that implements com::sun::star::document::XFilter.</p>
 
-    <p>The application will set the <type scope="com::sun::star::document">MediaDescriptor</type>
-    using the interface <type scope="com::sun::star::beans">XPropertyAccess</type> and then
+    <p>The application will set the com::sun::star::document::MediaDescriptor
+    using the interface com::sun::star::beans::XPropertyAccess and then
     call <method>XExecutableDialog::execute<method>.</p>
 
     <p>If that method returns <code>ExecutableDialogResults::OK</code>,
-    the application will retrieve the changed <type scope="com::sun::star::document">MediaDescriptor</type>
-    back using the interface <type scope="com::sun::star::beans">XPropertyAccess</type>. The filter
-    operation is than continued, using the new <type scope="com::sun::star::document">MediaDescriptor</type>.</p>
+    the application will retrieve the changed com::sun::star::document::MediaDescriptor
+    back using the interface com::sun::star::beans::XPropertyAccess. The filter
+    operation is than continued, using the new com::sun::star::document::MediaDescriptor.</p>
 
     <p>Otherwise, the filter operation is canceled.</p>
 
@@ -49,8 +49,8 @@ module com { module sun { module star { module ui { module dialogs {
 published service FilterOptionsDialog
 {
     /** this interface is used to set the property values of the
-        <type scope="com::sun::star::document">MediaDescriptor</type> before executing
-        the dialog and to retrieve the changed <type scope="com::sun::star::document">MediaDescriptor</type>
+        com::sun::star::document::MediaDescriptor before executing
+        the dialog and to retrieve the changed com::sun::star::document::MediaDescriptor
 
         afterwards.
      */

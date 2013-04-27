@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module sheet {
 /** A single sheet cache for an external document.
 
     <p>This cached data is used for external cell and cell range references,
-    as well as external range names.  An <type scope="com::sun::star::sheet">ExternalDocLink</type>
+    as well as external range names.  An com::sun::star::sheet::ExternalDocLink
     instance contains a set of these sheet caches.</p>
 
     @see com::sun::star::sheet::ExternalDocLink

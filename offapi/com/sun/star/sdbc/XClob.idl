@@ -74,10 +74,10 @@
     </p>
     <p>
     Methods in the interfaces
-    <type scope="com::sun::star::sdbc">XResultSet</type>
+    com::sun::star::sdbc::XResultSet
     ,
     and
-    <type scope="com::sun::star::sdbc">XPreparedStatement</type>
+    com::sun::star::sdbc::XPreparedStatement
     , such as
     <code>getClob</code>
     and

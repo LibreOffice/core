@@ -93,7 +93,7 @@ interface XAnimatedImages
             the index at which a new image set should be inserted. Must be greater than or equal to <code>0</code>,
             and smaller than or equal to the value returned by <member>getImageSetCount</member>.
         @param i_imageURLs
-            the URLs for the images for the given set. Will be resolved using a <type scope="com::sun::star::graphic">GraphicProvider</type>.
+            the URLs for the images for the given set. Will be resolved using a com::sun::star::graphic::GraphicProvider.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the <code>i_index</code> is not a valid index.
@@ -116,7 +116,7 @@ interface XAnimatedImages
             and smaller than the value returned by <member>getImageSetCount</member>.
 
         @param i_imageURLs
-            the URLs for the images for the given set. Will be resolved using a <type scope="com::sun::star::graphic">GraphicProvider</type>.
+            the URLs for the images for the given set. Will be resolved using a com::sun::star::graphic::GraphicProvider.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the <code>i_index</code> is not a valid index.

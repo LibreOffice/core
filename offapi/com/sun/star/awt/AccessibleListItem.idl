@@ -51,7 +51,7 @@ service AccessibleListItem
        <li>Name: The name of a list item is the text of the item.</li>
        <li>Description: The description of a list item is empty.</li>
        <li>Children: There exists no children.</li>
-       <li>Parent: The parent is of type <type scope="com::sun::star::awt">AccessibleList</type>.</li>
+       <li>Parent: The parent is of type com::sun::star::awt::AccessibleList.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>
@@ -59,7 +59,7 @@ service AccessibleListItem
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
                and subsequent calls to this object result in
-               <type scope="com::sun::star::lang">DisposedException</type>
+               com::sun::star::lang::DisposedException
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::ENABLED</const> is always set.</li>

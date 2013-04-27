@@ -53,7 +53,7 @@ service AccessibleToolBox
        <li>Name: The name of a tool box is its localized label.</li>
        <li>Description: The description of a tool box is its localized
            help text.</li>
-       <li>Children: There exists children of type <type scope="com::sun::star::awt">AccessibleToolBoxItem</type>.
+       <li>Children: There exists children of type com::sun::star::awt::AccessibleToolBoxItem.
        </li>
        <li>Parent: The parent is the window that contains the tool box.</li>
        <li>Relations: There are no relations.</li>
@@ -63,7 +63,7 @@ service AccessibleToolBox
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
                and subsequent calls to this object result in
-               <type scope="com::sun::star::lang">DisposedException</type>
+               com::sun::star::lang::DisposedException
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::ENABLED</const> is set

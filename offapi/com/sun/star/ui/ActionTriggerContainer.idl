@@ -50,10 +50,10 @@ module com {  module sun {  module star {  module ui {
 published service ActionTriggerContainer
 {
     /** provides access to the entries of a menu. The element type
-     is <type scope="com::sun::star::beans">XPropertySet</type>.
+     is com::sun::star::beans::XPropertySet.
      The property set contains attributes like CommandURL, HelpURL
-     as defined in the service <type scope="com::sun::star::ui">ActionTrigger</type>
-     and optional a <type scope="com::sun::star::ui">ActionTriggerContainer</type>.
+     as defined in the service com::sun::star::ui::ActionTrigger
+     and optional a com::sun::star::ui::ActionTriggerContainer.
      */
 
     interface ::com::sun::star::container::XIndexContainer;

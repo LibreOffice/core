@@ -36,7 +36,7 @@ exception ScriptFrameworkErrorException : com::sun::star::uno::Exception {
     /** Scripting language of script that generated exception
      */
     string language;
-    /** error type  <type scope="::com::sun::star::script::provider">ScriptFrameworkErrorType</type>
+    /** error type  ::com::sun::star::script::provider::ScriptFrameworkErrorType
      */
     long errorType;
 };

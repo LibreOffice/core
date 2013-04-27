@@ -42,8 +42,8 @@ module com { module sun { module star { module linguistic2 {
      to be equal. Also a "." at the end of the word will make no
      difference.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
-    @see    <type scope="com::sun::star::uno">XInterface</type>
+    @see    com::sun::star::linguistic2::XDictionary
+    @see    com::sun::star::uno::XInterface
 */
 published interface XDictionaryEntry : com::sun::star::uno::XInterface
 {

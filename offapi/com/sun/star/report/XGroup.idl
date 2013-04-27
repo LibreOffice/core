@@ -64,7 +64,7 @@ interface XGroup
     [attribute,bound] boolean FooterOn;
 
     /** returns the group header.
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             If the group has the header disabled.
         @see XSection
     */
@@ -75,7 +75,7 @@ interface XGroup
     };
 
     /** returns the group footer.
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             If the group has the footer disabled.
         @see XSection
     */

@@ -57,19 +57,19 @@
     the control belongs to, and the columns correspond to single columns of the form's row set.</p>
 
     <p>Columns of a grid control are modeled by own objects, too. They are very similar to usual
-    <type scope="com::sun::star::form">DataAwareControlModel</type>s modeling other "single-value" controls, but they are not described
-    as own services. Instead, they need to be created using the <type scope="com::sun::star::form">XGridColumnFactory</type> interface.</p>
+    com::sun::star::form::DataAwareControlModels modeling other "single-value" controls, but they are not described
+    as own services. Instead, they need to be created using the com::sun::star::form::XGridColumnFactory interface.</p>
  */
 published service GridControl
 {
     service com::sun::star::form::FormControlModel;
 
-    /** provides basic functionality of a container of <type scope="com::sun::star::form">FormComponent</type>s.
+    /** provides basic functionality of a container of com::sun::star::form::FormComponents.
 
         <p>All the container-related methods of this service related to control models,
         this is what are the container elements for a GridControl.</p>
 
-        <p>As the <type scope="com::sun::star::form">FormComponents</type> service also specifies
+        <p>As the com::sun::star::form::FormComponents service also specifies
         the <type scope"com::sun::star::script">XEventAttacherManager</type> service, grid control models
         also provide a scripting environment for their columns.</p>
     */

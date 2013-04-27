@@ -124,8 +124,8 @@ published service Shape
     /** contains a text range where the shape should be anchored to.
      <p>There are two different ways to get newly created shapes into the
      text document. One of them is to use the insertTextContent() method of
-     the <type scope="com::sun::star::text">XSimpleText</type>. The other is to call the add()
-     method of the <type scope="com::sun::star::drawing">XShapes</type> interface.
+     the com::sun::star::text::XSimpleText. The other is to call the add()
+     method of the com::sun::star::drawing::XShapes interface.
      To be able to determine an anchor position for shape that are anchored at a certain
      text position the property TextRange is used.</p>
 

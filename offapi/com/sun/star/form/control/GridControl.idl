@@ -42,7 +42,7 @@ module control {
 
 /** describes a table-like control for displaying data.
 
-    <p>The model of the control has to support the <type scope="com::sun::star::form::component">GridControl</type>
+    <p>The model of the control has to support the com::sun::star::form::component::GridControl
     service.</p>
 
     @see com::sun::star::awt::UnoControl
@@ -92,7 +92,7 @@ published service GridControl
 
         <p>The selection used with the methods <method scope="com::sun::star::view">XSelectionSupplier::getSelection</method>
         and <method scope="com::sun::star::view">XSelectionSupplier::select</method> is a sequence of Any's.<br/>
-        Here the elements of the Sequence are the bookmarks (in the <type scope="com::sun::star::sdb">RowSet</type>)
+        Here the elements of the Sequence are the bookmarks (in the com::sun::star::sdb::RowSet)
         of the (to-be-) selected rows.</p>
     */
     [optional] interface com::sun::star::view::XSelectionSupplier;

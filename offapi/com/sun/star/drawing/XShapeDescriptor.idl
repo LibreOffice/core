@@ -29,7 +29,7 @@
 /** offers some settings which are allowed even for objects which are not yet inserted into a draw page.
 
     @deprecated
-        replaced by <type scope="com::sun::star::lang">XServiceName</type>
+        replaced by com::sun::star::lang::XServiceName
  */
 published interface XShapeDescriptor: com::sun::star::uno::XInterface
 {

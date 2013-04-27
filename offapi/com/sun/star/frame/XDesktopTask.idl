@@ -31,12 +31,12 @@
  */
 published interface XDesktopTask: com::sun::star::lang::XComponent
 {
-    /** use <type scope="com::sun::star::lang">XInitialization</type> instead..
+    /** use com::sun::star::lang::XInitialization instead..
         @deprecated
      */
     void initialize( [in] com::sun::star::awt::XWindow TaskWindow );
 
-    /** use <type scope="com::sun::star::util">XCloseable</type>
+    /** use com::sun::star::util::XCloseable
         or <member scope="com::sun::star::lang">XComponent::dispose()</member>
         instead.
 

@@ -38,7 +38,7 @@
     If you change the properties between a call to
     <member scope="com::sun::star::awt">XPrinter::startPage</member> and a call
     to <member scope="com::sun::star::awt">XPrinter::endPage</member>,
-    a <type scope="com::sun::star::beans">PropertyVetoException</type> is
+    a com::sun::star::beans::PropertyVetoException is
     thrown.</p>
  */
 published interface XPrinter: com::sun::star::awt::XPrinterPropertySet

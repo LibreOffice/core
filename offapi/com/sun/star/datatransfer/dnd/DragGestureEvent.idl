@@ -38,7 +38,7 @@ published struct DragGestureEvent: com::sun::star::lang::EventObject
     /** The action selected by the user.
         <p>Different constants may be combined using a logical OR.</p>
         It's further possible to combine the ACTION_DEFAULT with one of the other
-        actions defined in <type scope="com::sun::star::datatransfer::dnd">DNDConstants</type>.
+        actions defined in com::sun::star::datatransfer::dnd::DNDConstants.
         This means the user did not press any key during the Drag and Drop operation
         and the action that was combined with ACTION_DEFAULT is the system default action.</p>
 
@@ -64,7 +64,7 @@ published struct DragGestureEvent: com::sun::star::lang::EventObject
 
     /** The last event comprising the gesture.
 
-    <p>The initial trigger event will presumably be a <type scope="com::sun::star::awt">MouseEvent</type> event.
+    <p>The initial trigger event will presumably be a com::sun::star::awt::MouseEvent event.
     If it is not, the implementation should either react accordingly or
     presume that the left mouse button was clicked. </p>
     */

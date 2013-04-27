@@ -25,7 +25,7 @@ module com { module sun { module star { module sdbcx {
 
 /**
     extends the definition of the service
-    <type scope="com::sun::star::sdbc">PreparedStatement</type>
+    com::sun::star::sdbc::PreparedStatement
     with a flag for the usage of bookmarks.
     @see ResultSet
     @see XRowLocate

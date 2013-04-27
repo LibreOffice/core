@@ -257,7 +257,7 @@ published interface XFrame: com::sun::star::lang::XComponent
             the controller of the new component or <NULL/> for release
 
             <p>
-            Simple components may implement a <type scope="com::sun::star::awt">XWindow</type> only.
+            Simple components may implement a com::sun::star::awt::XWindow only.
             In this case no controller must be given here.
             </p>
 

@@ -49,7 +49,7 @@ service AccessibleSpreadsheet
             >XAccessible::getAccessibleContext</method> for these children
             returns an object that supports the following service.</li>
         <ul>
-            <li><type scope="::com::sun::star::sheet">AccessibleCell</type>:
+            <li>::com::sun::star::sheet::AccessibleCell:
                 A child where calling
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleChild</method>

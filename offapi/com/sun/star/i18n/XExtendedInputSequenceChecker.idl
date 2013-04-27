@@ -31,7 +31,7 @@ module com { module sun { module star { module i18n {
     This interface perform input sequence correction for the languages like Thai and Hindi
 
     <p> It is derived from
-    <type scope="::com::sun::star::i18n">XInputSequenceChecker</type> and
+    ::com::sun::star::i18n::XInputSequenceChecker and
     provides additional functionality to correct input sequence.</p>
 
      @since OOo 2.0.1

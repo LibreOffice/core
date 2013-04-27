@@ -46,7 +46,7 @@ published interface XCellRange: com::sun::star::uno::XInterface
         @returns
             the specified cell.
 
-        @throws <type scope="com::sun::star::lang">IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
             if an index is outside the dimensions of this range.
 
         @see com::sun::star::table::Cell
@@ -74,7 +74,7 @@ published interface XCellRange: com::sun::star::uno::XInterface
         @returns
             the specified cell range.
 
-        @throws <type scope="com::sun::star::lang">IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
             if an index is outside the dimensions of this range.
 
         @see com::sun::star::table::CellRange

@@ -89,7 +89,7 @@ interface XImageManager
             a command URL has no associated image a graphics object with an
             empty image is provided. If the sequence
             <var>aCommandURLSequence</var> contains an invalid command
-            URL a <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            URL a com::sun::star::lang::IllegalArgumentException
             is thrown.
     */
     sequence< ::com::sun::star::graphic::XGraphic > getImages( [in] short nImageType, [in] sequence< string > aCommandURLSequence ) raises ( com::sun::star::lang::IllegalArgumentException );
@@ -109,9 +109,9 @@ interface XImageManager
         <p>
         If a command URL cannot be found the replace call will be omitted. If
         <var>aCommandURLSequence</var> contains an invalid command URL a
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        com::sun::star::lang::IllegalArgumentException
         is thrown. If the image manager is  associated with a read-only configuration
-        manager a <type scope="com::sun::star::lang">IllegalAccessException</type>
+        manager a com::sun::star::lang::IllegalAccessException
         is thrown.
         </p>
     */
@@ -127,9 +127,9 @@ interface XImageManager
 
         <p>
         If the <var>aCommandURLSequence</var> contains an invalid command URL a
-        <type scope="com::sun::star::lang">IllegalArgumentException</type> is
+        com::sun::star::lang::IllegalArgumentException is
         thrown. If  the image manager is associated with a read-only configuration
-        manager a <type scope="com::sun::star::lang">IllegalAccessException</type>
+        manager a com::sun::star::lang::IllegalAccessException
         is thrown.
         </p>
     */
@@ -150,9 +150,9 @@ interface XImageManager
         <p>
         If an association is already present it is replaced. If
         <var>aCommandURLSequence</var> contains an invalid command URL a
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        com::sun::star::lang::IllegalArgumentException
         is thrown. If the configuration manager is read-only a
-        <type scope="com::sun::star::lang">IllegalAccessException</type> is
+        com::sun::star::lang::IllegalAccessException is
         thrown.
         </p>
     */
@@ -171,9 +171,9 @@ interface XImageManager
         set has been changed, due to insert, remove or replace operations. To
         minimize the overhead for notifications an image manager places all
         inserted and/or replaced images into a single notify call. A container
-        which implements <type scope="com::sun::star::container">XNameAccess</type>
+        which implements com::sun::star::container::XNameAccess
         holds the information. The access key is a command URL and provides a
-        <type scope="::com::sun::star::graphic">XGraphic</type>. This container
+        ::com::sun::star::graphic::XGraphic. This container
         is placed into  the
         <member scope="com::sun::star::ui">ConfigurationEvent::Element</member>.
         The image set which has been changed is put into the
@@ -203,11 +203,11 @@ interface XImageManager
             unique identifier of module.
             </li>
             <li><b>UserConfigStorage</b>specifies a
-            <type scope="com::sun::star::embed">XStorage</type> property which
+            com::sun::star::embed::XStorage property which
             provides access to the configuration storage of the module.
             </li>
             <li><b>UserRootCommit</b>specifies an optional
-            <type scope="com::sun::star::embed">XTransactedObject</type>
+            com::sun::star::embed::XTransactedObject
             property which makes it possible to commit a root storage.
             </li>
         </ul>

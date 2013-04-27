@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module form {  module binding {
 /** This service specifies a check box which is data-aware and thus can be bound to a
     database field, and additionally supports binding to arbitrary external values.
 
-    <p>The <type scope="com::sun::star::form::binding">XValueBinding</type> instance which
+    <p>The com::sun::star::form::binding::XValueBinding instance which
     can be associated with a BindableDatabaseCheckBox must support exchanging
     boolean values. The following mapping between external values and control states apply:
     <ul><li><TRUE/> will be mapped to the box being checked, and vice versa</li>

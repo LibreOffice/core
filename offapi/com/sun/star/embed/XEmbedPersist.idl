@@ -73,12 +73,12 @@ published interface XEmbedPersist: XCommonEmbedPersist
         @param aMediaArgs
             optional parameters for the embedded document persistence
             initialization, see also
-            <type scope="com::sun::star::document">MediaDescriptor</type>
+            com::sun::star::document::MediaDescriptor
 
         @param aObjectArgs
             optional parameters for the object persistence initialization,
             see also
-            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+            com::sun::star::embed::EmbeddedObjectDescriptor
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
@@ -114,11 +114,11 @@ published interface XEmbedPersist: XCommonEmbedPersist
 
         @param aMediaArgs
             optional parameters for document saving, see also
-            <type scope="com::sun::star::document">MediaDescriptor</type>
+            com::sun::star::document::MediaDescriptor
 
         @param aObjectArgs
             optional parameters for the object saving, see also
-            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+            com::sun::star::embed::EmbeddedObjectDescriptor
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
@@ -163,11 +163,11 @@ published interface XEmbedPersist: XCommonEmbedPersist
 
         @param aMediaArgs
             optional parameters for document saving, see also
-            <type scope="com::sun::star::document">MediaDescriptor</type>
+            com::sun::star::document::MediaDescriptor
 
         @param aObjectArgs
             optional parameters for the object saving, see also
-            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+            com::sun::star::embed::EmbeddedObjectDescriptor
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal

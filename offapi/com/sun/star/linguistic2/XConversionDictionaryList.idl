@@ -34,7 +34,7 @@ module com { module sun { module star { module linguistic2 {
 /** is used to manage and maintain a list of conversion dictionaries.
 
     <p>The dictionaries added to the list may or may not support the
-    <type scope="com::sun::star::util">XFlushable</type> interface.
+    com::sun::star::util::XFlushable interface.
     If they do those dictionaries have to be flushed upon termination
     of the dictionary list.</p>
 
@@ -52,7 +52,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         parameter.</p>
 
         <p>A dictionary to be added must support the
-        <type scope="com::sun::star::linguistic2">XConversionDictionary</type>
+        com::sun::star::linguistic2::XConversionDictionary
         interface.
         The dictionary to be added needs not necessarily be created by
         this service.</p>
@@ -79,7 +79,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
             defines the language of the dictionary.
 
         @param nConversionDictionaryType
-            One of <type scope="com::sun::star::linguistic2">ConversionDictionaryType</type> values.
+            One of com::sun::star::linguistic2::ConversionDictionaryType values.
 
         @throws NoSupportException
             when <var>nConversionDictionaryType</var> is not known by the implementation.
@@ -122,15 +122,15 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         @param nConversionDictionaryType
             specifies the type of conversion the dictionary
             can be used for. It is one of
-            <type scope="com::sun::star::linguistic2">ConversionDictionaryType</type>.
+            com::sun::star::linguistic2::ConversionDictionaryType.
 
         @param eConversionDirection
             specifies the direction of the conversion to look for.
             It is one of
-            <type scope="com::sun::star::linguistic2">ConversionDirection</type>.
+            com::sun::star::linguistic2::ConversionDirection.
 
         @param nTextConversionOptions
-            Combination of <type scope="com::sun::star::i18n">TextConversionOption</type>
+            Combination of com::sun::star::i18n::TextConversionOption
             values.
 
         @throws com::sun::star::lang::IllegalArgumentException
@@ -166,7 +166,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         @param nConversionDictionaryType
             specifies the type of conversion dictionaries to be looked up.
             It is one of
-            <type scope="com::sun::star::linguistic2">ConversionDictionaryType</type>.
+            com::sun::star::linguistic2::ConversionDictionaryType.
         @param eDirection
             specifies if the left text or the right text of entries will
             be used.

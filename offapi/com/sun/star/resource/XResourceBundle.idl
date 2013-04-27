@@ -160,7 +160,7 @@ module com { module sun { module star { module resource {
 
     <p>The get methods all require the key as an argument and return
     the object if found. If the object is not found, the get methods
-    throw a <type scope="com::sun::star::container">NoSuchElementException</type>.
+    throw a com::sun::star::container::NoSuchElementException.
 
     <P> <STRONG>NOTE:</STRONG> You should always supply a base service
     with no suffixes. This will be the class of "last resort" if a

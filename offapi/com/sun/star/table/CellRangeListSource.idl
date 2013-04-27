@@ -55,7 +55,7 @@ service CellRangeListSource
         will throw an exception.</p>
 
         <p>The arguments passed to the <member scope"com::sun::star::lang">XInitialization::initialize</member>
-        method must be instances of <type scope="com::sun::star::beans">NamedValue</type>, where
+        method must be instances of com::sun::star::beans::NamedValue, where
         the <member scope"com::sun::star::beans">NamedValue::Name</member> denotes the type of information
         to initialize, and the <member scope"com::sun::star::beans">NamedValue::Value</member>
         the initial value.</p>
@@ -63,7 +63,7 @@ service CellRangeListSource
         <p>The following aspects of the components can be initialized:<br/>
             <ul><li><b>CellRange</b><br/>
                 specifies the address of the cell range to bind this instance to. Must be a
-                <type scope="com::sun::star::table">CellRangeAddress</type> instance.</li>
+                com::sun::star::table::CellRangeAddress instance.</li>
             </ul>
         </p>
     */

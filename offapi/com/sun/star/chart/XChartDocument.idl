@@ -101,7 +101,7 @@ published interface XChartDocument: com::sun::star::frame::XModel
         @param xDiagram
             the new diagram that should be set for the chart.  To
             create such a diagram component, you can use the
-            <type scope="com::sun::star::lang">XMultiServiceFactory</type>,
+            com::sun::star::lang::XMultiServiceFactory,
             which should be implemented by an
             XChartDocument.
      */

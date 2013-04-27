@@ -45,7 +45,7 @@ interface XBrowseNode : ::com::sun::star::uno::XInterface
     Get the children of this node
 
     @returns
-    <type scope="::com::sun::star::script::browse">XBrowseNode</type> sequence of child nodes
+    ::com::sun::star::script::browse::XBrowseNode sequence of child nodes
   */
     sequence < XBrowseNode > getChildNodes();
 

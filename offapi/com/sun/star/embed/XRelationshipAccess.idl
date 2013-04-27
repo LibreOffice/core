@@ -100,9 +100,9 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
 
         @returns
             sequence, each element of the sequence represents tag,
-            <type scope="::com::sun::star::beans">StringPair</type>::First
+            ::com::sun::star::beans::StringPair::First
             represents the tag name and
-            <type scope="::com::sun::star::beans">StringPair</type>::Second
+            ::com::sun::star::beans::StringPair::Second
             represents the tag value
 
         @throws ::com::sun::star::container::NoSuchElementException
@@ -127,9 +127,9 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         @returns
             sequence of entries, each entry is represented by sequence,
             each element of the sequence represents tag,
-            <type scope="::com::sun::star::beans">StringPair</type>::First
+            ::com::sun::star::beans::StringPair::First
             represents the tag name and
-            <type scope="::com::sun::star::beans">StringPair</type>::Second
+            ::com::sun::star::beans::StringPair::Second
             represents the tag value.
             The sequence should contain the "ID" tag.
 
@@ -146,9 +146,9 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         @returns
             sequence of entries, each entry is represented by sequence,
             each element of the sequence represents tag,
-            <type scope="::com::sun::star::beans">StringPair</type>::First
+            ::com::sun::star::beans::StringPair::First
             represents the tag name and
-            <type scope="::com::sun::star::beans">StringPair</type>::Second
+            ::com::sun::star::beans::StringPair::Second
             represents the tag value
 
         @throws ::com::sun::star::io::IOException
@@ -165,9 +165,9 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
 
         @param aEntry
             a sequence, each element of the sequence represents tag,
-            <type scope="::com::sun::star::beans">StringPair</type>::First
+            ::com::sun::star::beans::StringPair::First
             represents the tag name and
-            <type scope="::com::sun::star::beans">StringPair</type>::Second
+            ::com::sun::star::beans::StringPair::Second
             represents the tag value.
             May not contain "ID" tag, that is already specified in previous
             parameter.
@@ -209,9 +209,9 @@ published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
         @param aEntries
             sequence of entries, each entry is represented by sequence,
             each element of the sequence represents tag,
-            <type scope="::com::sun::star::beans">StringPair</type>::First
+            ::com::sun::star::beans::StringPair::First
             represents the tag name and
-            <type scope="::com::sun::star::beans">StringPair</type>::Second
+            ::com::sun::star::beans::StringPair::Second
             represents the tag value.
             Each entry must contain "ID" tag.
 

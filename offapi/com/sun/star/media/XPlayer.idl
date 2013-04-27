@@ -127,7 +127,7 @@ interface XPlayer
     /** gets the preferred window size
 
         @returns
-            the <type scope="com::sun::star::awt">Size</type>
+            the com::sun::star::awt::Size
      */
     ::com::sun::star::awt::Size getPreferredPlayerWindowSize();
 

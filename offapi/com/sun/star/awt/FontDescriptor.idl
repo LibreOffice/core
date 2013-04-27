@@ -58,7 +58,7 @@ published struct FontDescriptor
     /** specifies the general style of the font.
 
         <p>Use one value out of the constant group
-        <type scope="com::sun::star::awt">FontFamily</type>.</p>
+        com::sun::star::awt::FontFamily.</p>
      */
     short Family;
 
@@ -66,7 +66,7 @@ published struct FontDescriptor
     /** specifies the character set which is supported by the font.
 
         <p>Use one value out of the constant group
-        <type scope="com::sun::star::awt">CharSet</type>.</p>
+        com::sun::star::awt::CharSet.</p>
      */
     short CharSet;
 
@@ -74,7 +74,7 @@ published struct FontDescriptor
     /** specifies the pitch of the font.
 
         <p>Use one value out of the constant group
-        <type scope="com::sun::star::awt">FontPitch</type>.</p>
+        com::sun::star::awt::FontPitch.</p>
      */
     short Pitch;
 
@@ -107,7 +107,7 @@ published struct FontDescriptor
     /** specifies the kind of underlining.
 
         <p>Use one value out of the constant group
-        <type scope="com::sun::star::awt">FontUnderline</type>.</p>
+        com::sun::star::awt::FontUnderline.</p>
      */
     short Underline;
 
@@ -115,7 +115,7 @@ published struct FontDescriptor
     /** specifies the kind of strikeout.
 
         <p>Use one value out of the constant group
-        <type scope="com::sun::star::awt">FontStrikeout</type>.</p>
+        com::sun::star::awt::FontStrikeout.</p>
      */
     short Strikeout;
 
@@ -148,7 +148,7 @@ published struct FontDescriptor
     /** specifies the technology of the font representation.
 
         <p>One or more values out of the constant group
-        <type scope="com::sun::star::awt">FontType</type> can be combined by
+        com::sun::star::awt::FontType can be combined by
         an arithmetical or-operation.</p>
      */
     short Type;

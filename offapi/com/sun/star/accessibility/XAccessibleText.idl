@@ -154,7 +154,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
             Returns the explicitly or implicitly (empty
             <arg>aRequestedAttributes</arg> argument) requested attributes
             of the specified character.  Each attribute is represented by a
-            <type scope="::com::sun::star::beans">PropertyValue</type>
+            ::com::sun::star::beans::PropertyValue
             object.  The returned list of attribute descriptions contains
             all attributes that are both members of the sequence of
             requested attributes and are defined for the character at the

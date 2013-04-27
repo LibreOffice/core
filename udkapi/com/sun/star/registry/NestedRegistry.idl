@@ -115,7 +115,7 @@
     <li> use <method scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</method> to
     create an instance of this service where the value of the any parameter must be the sequence with
     the two open registries.
-    <li> use the initialize function of the <type scope="com::sun::star::lang">XInitialization</type> interface where the value of the
+    <li> use the initialize function of the com::sun::star::lang::XInitialization interface where the value of the
     any parameter must be the sequence with the two open registries.
     </ul>
     <br>

@@ -75,7 +75,7 @@ published interface XDragSourceContext: com::sun::star::uno::XInterface
     void setImage( [in] long imageId );
 
     /** This method notifies the context that the
-        <type scope="com::sun::star::datatransfer">DataFlavor</type> types
+        com::sun::star::datatransfer::DataFlavor types
         of the transferable object have changed.
 
         @see com::sun::star::datatransfer::XTransferable

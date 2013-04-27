@@ -52,7 +52,7 @@ published service Settings
     /** gives access to the set of forbidden characters.
 
         @return the
-            <type scope="com::sun::star::i18n">XForbiddenCharacters</type>
+            com::sun::star::i18n::XForbiddenCharacters
             interface to allow retrieval and modification of the
             forbidden characters set.
     */
@@ -124,7 +124,7 @@ published service Settings
 
     // Writer
     /** The name of the globally registered
-        <type scope="com::sun::star::sdb">DataSource</type>
+        com::sun::star::sdb::DataSource
         from which the current data is taken.
 
         <p>The data source can e.g. be used for feeding a form

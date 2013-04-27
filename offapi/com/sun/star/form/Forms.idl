@@ -29,7 +29,7 @@
 
     <p>Basically, a Forms is a FormComponents,
     with the additional restriction that the contained elements support the
-    <type scope="com::sun::star::form::component">Form</type> service.</p>
+    com::sun::star::form::component::Form service.</p>
 
     @see com::sun::star::form::component::Form
  */

@@ -25,7 +25,7 @@ module com { module sun { module star { module ucb {
 
 /** Types of input/output errors.
 
-    <P>See <type scope="com::sun::star::task">InteractionHandler</type> for a
+    <P>See com::sun::star::task::InteractionHandler for a
     description of what kinds of arguments
     InteractiveAugmentedIOException should use with each of these
     error codes.</P>

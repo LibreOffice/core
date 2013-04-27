@@ -30,7 +30,7 @@ interface XPackage;
    describes version clashes of a deployment unit.
 
    <p>This exception is intended to be used with an
-   <type scope="com::sun::star::task">XInteractionHandler</type>.</p>
+   com::sun::star::task::XInteractionHandler.</p>
 
    @since OOo 2.1
 */

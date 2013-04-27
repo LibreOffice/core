@@ -35,7 +35,7 @@ module com { module sun { module star { module linguistic2 {
     a failure-type that may specify why the word was not correct.
     </P>
 
-    @see    <type scope="com::sun::star::linguistic2">SpellFailure</type>
+    @see    com::sun::star::linguistic2::SpellFailure
 */
 published interface XSpellAlternatives : com::sun::star::uno::XInterface
 {
@@ -55,7 +55,7 @@ published interface XSpellAlternatives : com::sun::star::uno::XInterface
         @returns
             the type (reason) for spell checking to have failed verification.
 
-    @see    <type scope="com::sun::star::linguistic2">SpellFailure</type>
+    @see    com::sun::star::linguistic2::SpellFailure
     */
     short getFailureType();
 

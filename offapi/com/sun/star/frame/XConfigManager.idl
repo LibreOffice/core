@@ -84,7 +84,7 @@ published interface XConfigManager: com::sun::star::uno::XInterface
      */
     string substituteVariables( [in] string Text );
 
-    /** was designed for additional functionality for interface <type scope="com::sun::star::registry">XSimpleRegistry</type>
+    /** was designed for additional functionality for interface com::sun::star::registry::XSimpleRegistry
         and make no sense without that
         @deprecated
      */

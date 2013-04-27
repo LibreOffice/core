@@ -36,7 +36,7 @@ published interface XChapterNumberingSupplier: com::sun::star::uno::XInterface
                 the collection of numbering rules for this document.
 
                 <P>This interface allows access to the properties
-                of the numbering level via a sequence of <type scope="com::sun::star::beans">PropertyValues</type>.
+                of the numbering level via a sequence of com::sun::star::beans::PropertyValues.
      */
     com::sun::star::container::XIndexReplace getChapterNumberingRules();
 

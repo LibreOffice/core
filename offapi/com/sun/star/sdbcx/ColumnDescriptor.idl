@@ -35,7 +35,7 @@ published service ColumnDescriptor
 
 
     /** is the
-        <type scope="com::sun::star::sdbc">DataType</type>
+        com::sun::star::sdbc::DataType
         of the column.
      */
     [property] long Type;

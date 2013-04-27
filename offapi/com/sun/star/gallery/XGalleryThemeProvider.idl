@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module gallery {
     removing of Gallery themes by name.
 
     <p>This interface extends the interface
-    <type scope="com::sun::star::container">XNameAccess</type> which provides
+    com::sun::star::container::XNameAccess which provides
     access to existing Gallery themes collection.</p>
 
     @see com::sun::star::container::XNameAccess

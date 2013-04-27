@@ -28,21 +28,21 @@ module com {  module sun {  module star {  module reflection {
    Reflects the &ldquo;published&rdquo; status of a UNOIDL entity.
 
    <p>This interface is intended to be supported by objects that also support
-   <type scope="com::sun::star::reflection">XTypeDescription</type>.
+   com::sun::star::reflection::XTypeDescription.
    (This interface could have been made an optional sub-interface of
-   <type scope="com::sun::star::reflection">XTypeDescription</type>, but is
+   com::sun::star::reflection::XTypeDescription, but is
    instead kept independent for reasons of backwards compatibility.)</p>
 
    <p>For the various kinds of UNOIDL entities that are represented by objects
-   supporting <type scope="com::sun::star::reflection">XTypeDescription</type>
+   supporting com::sun::star::reflection::XTypeDescription
    and its subtypes, this optional interface should be supported as follows:</p>
    <ul>
        <li>Enum types
-       (<type scope="com::sun::star::reflection">XEnumTypeDescription</type>),
+       (com::sun::star::reflection::XEnumTypeDescription),
        plain struct types
-       (<type scope="com::sun::star::reflection">XStructTypeDescription</type>),
+       (com::sun::star::reflection::XStructTypeDescription),
        polymorphic struct type templates
-       (<type scope="com::sun::star::reflection">XStructTypeDescription</type>),
+       (com::sun::star::reflection::XStructTypeDescription),
        exception types (<type
        scope="com::sun::star::reflection">XCompoundTypeDescription</type>),
        interface types (<type
@@ -63,15 +63,15 @@ module com {  module sun {  module star {  module reflection {
        scope="com::sun::star::reflection">XSingletonTypeDescription2</type>)
        support the notion of being published.  Therefore, for an object that
        represents any such entity,
-       <type scope="com::sun::star::reflection">XPublished</type> should be
+       com::sun::star::reflection::XPublished should be
        supported.</li>
 
        <li>Sequence types (<type
        scope="com::sun::star::reflection">XIndirectTypeDescription</type>),
        type parameters of polymorphic struct type templates
-       (<type scope="com::sun::star::reflection">XTypeDescription</type>),
+       (com::sun::star::reflection::XTypeDescription),
        instantiated polymorphic struct types
-       (<type scope="com::sun::star::reflection">XStructTypeDescription</type>),
+       (com::sun::star::reflection::XStructTypeDescription),
        attributes of interface types (<type scope="com::sun::star::reflection">
        XInterfaceAttributeTypeDescription2</type>), methods of interface types
        (<type scope="com::sun::star::reflection">
@@ -79,12 +79,12 @@ module com {  module sun {  module star {  module reflection {
        accumulation-based services (<type
        scope="com::sun::star::reflection">XPropertyTypeDescription</type>),
        deprecated
-       <type scope="com::sun::star::reflection">XArrayTypeDescription</type>s,
+       com::sun::star::reflection::XArrayTypeDescriptions,
        and deprecated
-       <type scope="com::sun::star::reflection">XUnionTypeDescription</type>s do
+       com::sun::star::reflection::XUnionTypeDescriptions do
        not support the notion of being published.  Therefore, for an object that
        represents any such entity,
-       <type scope="com::sun::star::reflection">XPublished</type> should not be
+       com::sun::star::reflection::XPublished should not be
        supported.</li>
    </ul>
 

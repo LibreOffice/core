@@ -56,9 +56,9 @@ interface XFeatureInvalidation;
     <em>Now</em> you're done ...</p>
 
     <p>As another example, consider that you want to delete the current record from the
-    form. You have to take into account any <type scope="com::sun::star::form">XConfirmDeleteListener</type>s
-    registered at the <type scope="com::sun::star::form">FormController</type> or the
-    <type scope="com::sun::star::form::component">DataForm</type>.</p>
+    form. You have to take into account any com::sun::star::form::XConfirmDeleteListeners
+    registered at the com::sun::star::form::FormController or the
+    com::sun::star::form::component::DataForm.</p>
 
     <p>If you agree that this is ugly to do and maintain, then <code>XFormOperations</code>
     is for you. It provides a <member>execute</member> method, which will do all of the above
@@ -133,8 +133,8 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
             if a database access error occurs
 
         @throws ::com::sun::star::lang::WrappedTargetException
-            if an exception is caught which is no <type scope="com::sun::star::uno">RuntimeException</type>
-            and no <type scope="com::sun::star::sdbc">SQLException</type>.
+            if an exception is caught which is no com::sun::star::uno::RuntimeException
+            and no com::sun::star::sdbc::SQLException.
 
         @see executeWithArguments
     */
@@ -166,8 +166,8 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
             if a database access error occurs
 
         @throws ::com::sun::star::lang::WrappedTargetException
-            if an exception is caught which is no <type scope="com::sun::star::uno">RuntimeException</type>
-            and no <type scope="com::sun::star::sdbc">SQLException</type>.
+            if an exception is caught which is no com::sun::star::uno::RuntimeException
+            and no com::sun::star::sdbc::SQLException.
     */
     void            executeWithArguments(
                         [in] short Feature,

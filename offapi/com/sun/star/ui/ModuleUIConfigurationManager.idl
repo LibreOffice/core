@@ -50,14 +50,14 @@ service ModuleUIConfigurationManager
 
         <p>
         A module user interface configuration manager instance needs the following arguments as
-        <type scope="com::sun::star::beans">PropertyValue</type> to be in a working state:
+        com::sun::star::beans::PropertyValue to be in a working state:
         <ul>
-            <li><b>DefaultConfigStorage</b>a reference to a <type scope="com::sun::star::embed">Storage</type> that
+            <li><b>DefaultConfigStorage</b>a reference to a com::sun::star::embed::Storage that
             contains the default module user interface configuration settings.</li>
-            <li><b>UserConfigStorage</b>a reference to a <type scope="com::sun::star::embed">Storage</type> that
+            <li><b>UserConfigStorage</b>a reference to a com::sun::star::embed::Storage that
             contains the user-defined module user interface configuration settings.</li>
             <li><b>ModuleIdentifier</b>string that provides the module identifier.</li>
-            <li><b>UserRootCommit</b>a reference to a <type scope="com::sun::star::embed">XTransactedObject</type> which
+            <li><b>UserRootCommit</b>a reference to a com::sun::star::embed::XTransactedObject which
             represents the customizable root storage. Every implementation must use this reference to commit its
             changes also at the root storage.</li>
         </ul>

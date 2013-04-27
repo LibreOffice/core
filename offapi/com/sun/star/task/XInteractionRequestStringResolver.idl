@@ -47,7 +47,7 @@ interface XInteractionRequestStringResolver : com::sun::star::uno::XInterface
         be obtained.
 
         @returns the message string or an empty
-        <type scope="::com::sun::star::beans">Optional</type>.
+        ::com::sun::star::beans::Optional.
      */
     com::sun::star::beans::Optional< string >
         getStringFromInformationalRequest(

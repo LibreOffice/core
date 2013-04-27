@@ -43,7 +43,7 @@ interface XValidatable : com::sun::star::uno::XInterface
             the new validator which is to be used by the component. May be <NULL/>,
             in this case only the current validator is revoked.
 
-        @throws <type scope="com::sun::star::util">VetoException</type>
+        @throws com::sun::star::util::VetoException
             if changing the validator is not allowed in the current component state
      */
     void    setValidator( [in] XValidator Validator )

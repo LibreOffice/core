@@ -62,7 +62,7 @@ interface XBitmapCanvas : XCanvas
         being applied. Thus, on screen, it does not necessarily
         resemble a rectangle any more. The rectangle must be
         non-empty, see
-        <type scope="::com::sun::star::geometry">RealRectangle2D</type>
+        ::com::sun::star::geometry::RealRectangle2D
         for details.
 
         @param sourceViewState
@@ -81,7 +81,7 @@ interface XBitmapCanvas : XCanvas
         being applied. Thus, on screen, it does not necessarily
         resemble a rectangle any more. The rectangle must be
         non-empty, see
-        <type scope="::com::sun::star::geometry">RealRectangle2D</type>
+        ::com::sun::star::geometry::RealRectangle2D
         for details.
 
         @param destViewState

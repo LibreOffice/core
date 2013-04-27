@@ -36,8 +36,8 @@ published struct PostCommandArgument
     com::sun::star::io::XInputStream Source;
 
     /** The data sink receiving the returned contents (supporting either
-        <type scope="com::sun::star::io">XActiveDataSink</type> or
-        <type scope="com::sun::star::io">XOutputStream</type>).
+        com::sun::star::io::XActiveDataSink or
+        com::sun::star::io::XOutputStream).
     */
     com::sun::star::uno::XInterface Sink;
 };

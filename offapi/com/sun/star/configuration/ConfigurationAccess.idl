@@ -134,8 +134,8 @@ module com { module sun { module star { module configuration {
  </p>
 
  <p>The configuration should support explicit access to default values
- (implementing <type scope="com::sun::star::beans">XPropertyState</type>
- and  <type scope="com::sun::star::beans">XPropertyWithState</type>).
+ (implementing com::sun::star::beans::XPropertyState
+ and  com::sun::star::beans::XPropertyWithState).
  </p>
 
  @see ConfigurationProvider

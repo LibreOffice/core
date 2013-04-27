@@ -31,8 +31,8 @@
     to create an Invocation adapter for the passed object (Invoking
     createInstance() will fail).</p>
     <p>
-    The adapter has to support <type scope="com::sun::star::script">XInvocation</type>.
-    The adapter may also support <type scope="com::sun::star::script">XInvocation2</type>.
+    The adapter has to support com::sun::star::script::XInvocation.
+    The adapter may also support com::sun::star::script::XInvocation2.
     </p>
  */
 published service Invocation : com::sun::star::lang::XSingleServiceFactory;

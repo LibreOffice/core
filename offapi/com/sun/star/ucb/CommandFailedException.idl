@@ -28,7 +28,7 @@ module com { module sun { module star { module ucb {
 
 /** This exception is thrown if an exception situation occurred during the
     processing of a command and an
-    <type scope="com::sun::star::task">XInteractionHandler</type> was able
+    com::sun::star::task::XInteractionHandler was able
     to handle the request for the error condition and the requesting code
     decided to abort the command execution according to the selection made
     by the interaction handler.
@@ -40,7 +40,7 @@ module com { module sun { module star { module ucb {
 published exception CommandFailedException : com::sun::star::uno::Exception
 {
     /** contains the exception that was passed to the
-        <type scope="com::sun::star::task">XInteractionHandler</type>.
+        com::sun::star::task::XInteractionHandler.
      */
     any Reason;
 };

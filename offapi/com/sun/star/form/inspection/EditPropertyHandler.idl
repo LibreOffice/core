@@ -26,15 +26,15 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements a property handler for use with an <type scope="com::sun::star::inspection">ObjectInspector</type>
+/** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
     which provides convenience wrappers for some properties existing at a form component
-    derived from <type scope="com::sun::star::awt">UnoControlEditModel</type>.
+    derived from com::sun::star::awt::UnoControlEditModel.
 
-    <p>First, the handler supersedes the HScroll and the VScroll properties of a <type scope="com::sun::star::awt">UnoControlEditModel</type>
+    <p>First, the handler supersedes the HScroll and the VScroll properties of a com::sun::star::awt::UnoControlEditModel
     and puts them into one common property, allowing the user to choose whether she want to
     have "no", a "vertical", a "horizontal", or "both" scrollbars.<p>
 
-    <p>Second, if it detects a <type scope="com::sun::star::form::component">RichTextControl</type> to inspect,
+    <p>Second, if it detects a com::sun::star::form::component::RichTextControl to inspect,
     it supersedes the <member scope="com::sun::star::form::component">RichTextControl::RichText</member>
     and the <member scope="com::sun::star::awt">UnoControlEditModel::MultiLine</member> properties with a new
     one which allows choosing the text type with one single action.</p>

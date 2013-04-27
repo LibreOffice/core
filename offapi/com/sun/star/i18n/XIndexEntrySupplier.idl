@@ -47,7 +47,7 @@ published interface XIndexEntrySupplier : com::sun::star::uno::XInterface
     /**
         returns the page number word of an index entry, where one page
         or more pages are combined to one page number entry, for a given
-        <type scope="com::sun::star::lang">Locale</type>.
+        com::sun::star::lang::Locale.
 
         <p> For example, in English locale it returns <br/>
         <b>"p."</b>  for <em>bMorePages</em> == <FALSE/> <br/>

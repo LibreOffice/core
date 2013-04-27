@@ -42,7 +42,7 @@ published struct DispatchDescriptor
     /** specifies the URL of the resource/function
 
         <p>
-        Must be a full parsed URL. Use service <type scope="com::sun::star::util">URLTransformer</type>
+        Must be a full parsed URL. Use service com::sun::star::util::URLTransformer
         for that.
         </p>
 

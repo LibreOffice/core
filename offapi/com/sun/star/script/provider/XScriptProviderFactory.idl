@@ -40,7 +40,7 @@ interface XScriptProviderFactory : ::com::sun::star::uno::XInterface {
             is context for which the ScriptProvider is to be created for
 
         @returns
-            an object implementing <type scope="::com::sun::star::script::provider">XScriptProvider</type>
+            an object implementing ::com::sun::star::script::provider::XScriptProvider
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if illegal or unknown context is passed

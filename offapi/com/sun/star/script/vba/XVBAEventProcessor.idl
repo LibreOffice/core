@@ -45,7 +45,7 @@ interface XVBAEventProcessor
         @return
             <TRUE/>, if the VBA event handler exists.
 
-        @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if the passed event identifier is not supported, or if the passed
             specifier is required but invalid.
     **/
@@ -66,12 +66,12 @@ interface XVBAEventProcessor
             <TRUE/>, if event handing is enabled, and the event handler macro
             exists and has been invoked.
 
-        @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if the passed event identifier is not supported, or if the passed
             arguments do not conform to the arguments expected by the specified
             event.
 
-        @throws <type scope="::com::sun::star::util">VetoException</type>
+        @throws ::com::sun::star::util::VetoException
             if the VBA event handler has indicated to veto the event.
     **/
     boolean processVbaEvent( [in] long nEventId, [in] sequence< any > aArgs )

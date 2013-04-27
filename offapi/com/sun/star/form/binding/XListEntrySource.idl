@@ -45,7 +45,7 @@ interface XListEntrySource : com::sun::star::uno::XInterface
 
     /** provides access to a single list entry
 
-        @throws <type scope="com::sun::star::lang">IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
             if the given position does not denote a valid index in the list
 
         @see getListEntryCount
@@ -61,7 +61,7 @@ interface XListEntrySource : com::sun::star::uno::XInterface
     /** adds a listener which will be notified about changes in the list
         reflected by the component.
 
-        @throws <type scope="com::sun::star::lang">NullPointerException</type>
+        @throws com::sun::star::lang::NullPointerException
             if the given listener is <NULL/>
     */
     void    addListEntryListener( [in] XListEntryListener Listener )
@@ -70,7 +70,7 @@ interface XListEntrySource : com::sun::star::uno::XInterface
     /** revokes the given listener from the list of components which will
         be notified about changes in the entry list.
 
-        @throws <type scope="com::sun::star::lang">NullPointerException</type>
+        @throws com::sun::star::lang::NullPointerException
             if the given listener is <NULL/>
     */
     void    removeListEntryListener( [in] XListEntryListener Listener )

@@ -31,7 +31,7 @@ published interface XComponentSupplier: com::sun::star::uno::XInterface
     /** allows to get access to a component.
         <p>
         The component may not support
-        <type scope="com::sun::star::lang">XComponent</type> interface.
+        com::sun::star::lang::XComponent interface.
         </p>
 
         @return

@@ -67,7 +67,7 @@ service AccessibleEdit
                 >AccessibleStateType::DEFUNC</const>
                 is set if the object has already been disposed
                 and subsequent calls to this object result in
-                <type scope="com::sun::star::lang">DisposedException</type>
+                com::sun::star::lang::DisposedException
                 exceptions.</li>
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::EDITABLE</const> is set
@@ -103,7 +103,7 @@ service AccessibleEdit
     interface ::com::sun::star::accessibility::XAccessibleText;
 
     /** This interface extends the
-        <type scope="com::sun::star::accessibility">XAccessibleText</type>
+        com::sun::star::accessibility::XAccessibleText
         interface and gives read and write access to the text representation
         of an edit.
      */

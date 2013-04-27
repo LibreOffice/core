@@ -45,7 +45,7 @@ interface XUIControllerFactory
         Use <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext()</member> to create
         a new UI controller instance. Use the CommandURL as the service specifier.
 
-        This call supports the following arguments provided as <type scope="com::sun::star::beans">PropertyValue</type>:
+        This call supports the following arguments provided as com::sun::star::beans::PropertyValue:
         <ul>
             <li>
                 <b>Frame</b><br>specifies the <type scope="com::sun::star::frame">XFrame</type>

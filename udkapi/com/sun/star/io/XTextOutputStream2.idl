@@ -35,7 +35,7 @@ published interface XTextOutputStream2
     /// Interface to write text data
     interface com::sun::star::io::XTextOutputStream;
 
-    /// Interface to specify the used <type scope="com::sun::star::io">XOutputStream</type>
+    /// Interface to specify the used com::sun::star::io::XOutputStream
     interface com::sun::star::io::XActiveDataSource;
 
 };

@@ -21,7 +21,7 @@ module com { module sun { module star { module i18n {
     <member>XLocaleData3::getAllCalendars2()</member>.
 
     <p> Similar to
-    <type scope="::com::sun::star::i18n">Calendar</type> this provides 
+    ::com::sun::star::i18n::Calendar this provides
     additional members with a sequence of possessive (genitive case) and 
     partitive case month names for locales that use them, for example 
     Slavic locales. If a locale does not provide the possessive form in 
@@ -32,8 +32,8 @@ module com { module sun { module star { module i18n {
     <member>GenititiveMonths</member>. </p>
 
     <p> The sequences are of type
-    <type scope="com::sun::star::i18n">CalendarItem2</type> instead of
-    <type scope="com::sun::star::i18n">CalendarItem</type>, with the 
+    com::sun::star::i18n::CalendarItem2 instead of
+    com::sun::star::i18n::CalendarItem, with the
     additional <member>NarrowName</member> member.
 
     @see XLocaleData

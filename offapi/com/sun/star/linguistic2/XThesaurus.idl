@@ -35,7 +35,7 @@ module com { module sun { module star { module linguistic2 {
      (or small text) with the same or similar meaning.
     </P>
 
-    @see    <type scope="com::sun::star::linguistic2">XSupportedLocales</type>
+    @see    com::sun::star::linguistic2::XSupportedLocales
 */
 published interface XThesaurus : com::sun::star::linguistic2::XSupportedLocales
 {
@@ -50,7 +50,7 @@ published interface XThesaurus : com::sun::star::linguistic2::XSupportedLocales
             specifies the language of the word.
 
             <P>If the language is not supported, an
-            <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            com::sun::star::lang::IllegalArgumentException
             exception is raised.</P>
 
         @param aProperties
@@ -58,8 +58,8 @@ published interface XThesaurus : com::sun::star::linguistic2::XSupportedLocales
             It is usually empty in order to use the default values supplied with
             the property set.
 
-        @see    <type scope="com::sun::star::lang">Locale</type>
-        @see    <type scope="com::sun::star::linguistic2">XMeaning</type>
+        @see    com::sun::star::lang::Locale
+        @see    com::sun::star::linguistic2::XMeaning
     */
     sequence< com::sun::star::linguistic2::XMeaning > queryMeanings(
             [in] string aTerm,

@@ -112,7 +112,7 @@ interface XDataSequence : ::com::sun::star::uno::XInterface
         here.</p>
 
         <p>The number format key must be valid for the
-        <type scope="com::sun::star::util">XNumberFormatsSupplier</type>
+        com::sun::star::util::XNumberFormatsSupplier
         given by the XDataProvider, or 0 which is assumed
         to be always valid.</p>
      */

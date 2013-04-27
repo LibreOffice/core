@@ -30,7 +30,7 @@
 /** describes a control which can be used for inputting date values, and
     which can (but not necessarily has to) be bound to a database field.
 
-    <p>The model of the control has to support the <type scope="com::sun::star::form::component">DateField</type>
+    <p>The model of the control has to support the com::sun::star::form::component::DateField
     service.</p>
 
     @see com::sun::star::awt::UnoControl

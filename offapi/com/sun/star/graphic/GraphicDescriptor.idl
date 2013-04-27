@@ -28,7 +28,7 @@ module com { module sun { module star { module graphic
 {
 
 /** This service describes all graphic properties that are available
-    via the <type scope="com::sun::star::beans">XPropertySet</type> interface
+    via the com::sun::star::beans::XPropertySet interface
 
     @see XPropertySet
 */

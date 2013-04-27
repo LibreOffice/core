@@ -40,8 +40,8 @@
 /** specifies the standard model of an UnoControl
     in the <em>Smalltalk model view controller design</em>.
 
-    <p>The interfaces <type scope="com::sun::star::beans">XPropertySet</type>
-    and <type scope="com::sun::star::beans">XMultiPropertySet</type> need
+    <p>The interfaces com::sun::star::beans::XPropertySet
+    and com::sun::star::beans::XMultiPropertySet need
     access to the model data from the embedding environment. The control
     and the model can specify additional interfaces to exchange data or
     export more functionality from the model.</p>

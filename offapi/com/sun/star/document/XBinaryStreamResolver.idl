@@ -33,14 +33,14 @@ module com {  module sun {  module star {  module document {
     data. The binary data is represented through input and output streams.</p>
 
     <p>In the case of transforming an URL to binary data, the <code>getInputStream</code>
-    method is used. This returns a <type scope="com::sun::star::io">XInputStream</type>
+    method is used. This returns a com::sun::star::io::XInputStream
     from which the binary data, transformed from the given URL, can be read.</p>
 
     <p>In the case of transforming binary data to an URL, a
-    <type scope="com::sun::star::io">XOutputStream</type> is created first to write
+    com::sun::star::io::XOutputStream is created first to write
     the binary data to. After this, the <code>resolveOutputStream</code> method can
     be used to transform the binary data, represented through the
-    <type scope="com::sun::star::io">XOutputStream</type> interface, to an URL.</p>
+    com::sun::star::io::XOutputStream interface, to an URL.</p>
  */
 published interface XBinaryStreamResolver: com::sun::star::uno::XInterface
 {

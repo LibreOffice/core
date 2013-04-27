@@ -113,10 +113,10 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
         @param eConversionDirection
             specifies the direction of the conversion to look for.
             It is one of
-            <type scope="com::sun::star::linguistic2">ConversionDirection</type>.
+            com::sun::star::linguistic2::ConversionDirection.
 
         @param nTextConversionOptions
-            Combination of <type scope="com::sun::star::i18n">TextConversionOption</type>
+            Combination of com::sun::star::i18n::TextConversionOption
             values.
 
         @throws com::sun::star::lang::IllegalArgumentException

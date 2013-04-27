@@ -21,7 +21,7 @@ module com { module sun { module star { module i18n {
     One entry in a calendar, for example, a day of week or a month or an
     era.
 
-    <p> Derived from <type scope="com::sun::star::i18n">CalendarItem</type>
+    <p> Derived from com::sun::star::i18n::CalendarItem
     this provides an additional member for narrow names. </p>
 
     @since LibreOffice 3.5

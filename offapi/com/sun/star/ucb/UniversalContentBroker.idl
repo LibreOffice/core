@@ -28,7 +28,7 @@ module com { module sun { module star { module ucb {
     Contents via ContentProviders.
 
     <p>Traditionally, this service implements
-    <type scope="com::sun::star::lang">XInitialization</type> and needed to be
+    com::sun::star::lang::XInitialization and needed to be
     instantiated once with two arguments via
     <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext</method>
     for configuration before it could be obtained via plain
@@ -40,7 +40,7 @@ module com { module sun { module star { module ucb {
     instantiation.
 
     <p>(For backwards compatibility, the service implementation still supports
-    <type scope="com::sun::star::lang">XInitialization</type> and can still
+    com::sun::star::lang::XInitialization and can still
     explicitly be initialized via
     <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext</method>
     with two arguments of type string.  These strings are used as a pair of keys

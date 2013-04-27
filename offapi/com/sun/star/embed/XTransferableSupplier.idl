@@ -25,17 +25,17 @@
  module com {  module sun {  module star {  module embed {
 
 /** provide access to a
-    <type scope="com::sun::star::datatransfer">XTransferable</type>
+    com::sun::star::datatransfer::XTransferable
     implementation from the object.
  */
 published interface XTransferableSupplier: com::sun::star::uno::XInterface
 {
     /** allows to get access to
-        <type scope="com::sun::star::datatransfer">XTransferable</type>
+        com::sun::star::datatransfer::XTransferable
         implementation.
 
         @return
-            <type scope="com::sun::star::datatransfer">XTransferable</type>
+            com::sun::star::datatransfer::XTransferable
             implementation
      */
     ::com::sun::star::datatransfer::XTransferable getTransferable();

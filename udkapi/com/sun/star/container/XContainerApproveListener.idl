@@ -37,7 +37,7 @@ interface XContainerApproveListener
     /** is called for the listener to approve an insertion into the container
 
         @return
-            an instance implementing the <type scope="com::sun::star::util">XVeto</type> interface,
+            an instance implementing the com::sun::star::util::XVeto interface,
             if the insertion is vetoed, <NULL/> otherwise.
      */
     com::sun::star::util::XVeto approveInsertElement( [in] ContainerEvent Event )
@@ -46,7 +46,7 @@ interface XContainerApproveListener
     /** is called for the listener to approve a replacement inside the container
 
         @return
-            an instance implementing the <type scope="com::sun::star::util">XVeto</type> interface,
+            an instance implementing the com::sun::star::util::XVeto interface,
             if the replacement is vetoed, <NULL/> otherwise.
      */
     com::sun::star::util::XVeto approveReplaceElement( [in] ContainerEvent Event )
@@ -55,7 +55,7 @@ interface XContainerApproveListener
     /** is called for the listener to approve a removal of an element from the container
 
         @return
-            an instance implementing the <type scope="com::sun::star::util">XVeto</type> interface,
+            an instance implementing the com::sun::star::util::XVeto interface,
             if the removal is vetoed, <NULL/> otherwise.
      */
     com::sun::star::util::XVeto approveRemoveElement( [in] ContainerEvent Event )

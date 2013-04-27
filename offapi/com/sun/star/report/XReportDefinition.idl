@@ -118,9 +118,9 @@ interface XReportDefinition
 
     /** makes it possible to register listeners which are called whenever
         a document event occurs.
-        This is a workaround due to the fact that this interface can not be directly inherited from <type scope="com::sun::star::document">XEventBroadcaster</type>
-        because the methods addEventListener and removeEventListener are already defined in <type scope="com::sun::star::lang">XComponent</type>.
-        A queryInterface call is still supported to the <type scope="com::sun::star::document">XEventBroadcaster</type> interface.
+        This is a workaround due to the fact that this interface can not be directly inherited from com::sun::star::document::XEventBroadcaster
+        because the methods addEventListener and removeEventListener are already defined in com::sun::star::lang::XComponent.
+        A queryInterface call is still supported to the com::sun::star::document::XEventBroadcaster interface.
      */
     com::sun::star::document::XEventBroadcaster getEventBroadcaster()
         raises( ::com::sun::star::lang::DisposedException,
@@ -256,7 +256,7 @@ interface XReportDefinition
     [attribute,readonly] com::sun::star::report::XGroups Groups;
 
     /** returns the report header if the <member>ReportHeaderOn</member>is <TRUE/>.
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             If the report has the report header disabled.
         @see XSection
     */
@@ -266,7 +266,7 @@ interface XReportDefinition
     };
 
     /** returns the page header if the <member>PageHeaderOn</member>is <TRUE/>.
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             If the report has the page header disabled.
         @see XSection
     */
@@ -281,7 +281,7 @@ interface XReportDefinition
     [attribute,readonly] com::sun::star::report::XSection Detail;
 
     /** returns the page footer if the <member>PageFooterOn</member>is <TRUE/>.
-        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws com::sun::star::container::NoSuchElementException
             If the report has the page footer disabled.
         @see XSection
     */
@@ -291,7 +291,7 @@ interface XReportDefinition
     };
 
     /** returns the report footer if the <member>ReportFooterOn</member>is <TRUE/>.
-        @throws <type scope="com::sun::star::container">NullPointerException</type>
+        @throws com::sun::star::container::NullPointerException
             If the report has the report footer disabled.
         @see XSection
     */

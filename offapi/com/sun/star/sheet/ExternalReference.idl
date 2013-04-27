@@ -38,8 +38,8 @@ struct ExternalReference
         has a unique index value.
 
         <p>You can get the index value of an external document from the
-        corresponding <type scope="com::sun::star::sheet">ExternalDocLink</type>
-        instance through its attribute <type scope="com::sun::star::sheet::ExternalDocLink">TokenIndex</type>.</p>
+        corresponding com::sun::star::sheet::ExternalDocLink
+        instance through its attribute com::sun::star::sheet::ExternalDocLink::TokenIndex.</p>
 
         @see com::sun::star::sheet::ExternalDocLink
         @see com::sun::star::sheet::ExternalDocLink::TokenIndex

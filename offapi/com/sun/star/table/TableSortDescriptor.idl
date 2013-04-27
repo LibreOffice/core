@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module table {
 /** contains properties which describe sorting of rows or columns in a table.
 
     <p>It extends the general
-    <type scope="com::sun::star::util">SortDescriptor</type> with
+    com::sun::star::util::SortDescriptor with
     table-specific properties.</p>
 
     @deprecated

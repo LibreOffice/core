@@ -76,7 +76,7 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
         @param Arguments
             optional arguments for the command URL
             <br>
-            (see <type scope="com::sun::star::document">MediaDescriptor</type>
+            (see com::sun::star::document::MediaDescriptor
              for further information)
     */
     void recordDispatch(
@@ -96,7 +96,7 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
         @param Arguments
             optional arguments for the command URL
             <br>
-            (see <type scope="com::sun::star::document">MediaDescriptor</type>
+            (see com::sun::star::document::MediaDescriptor
              for further information)
     */
     void recordDispatchAsComment(

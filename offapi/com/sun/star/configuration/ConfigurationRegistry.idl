@@ -30,13 +30,13 @@ module com { module sun { module star { module configuration {
 /*  provides access to a configuration tree as a registry.
 
     <p>This service is deprecated,
-    <type scope="com.sun.star.configuration">ConfigurationProvider</type> should
+    com.sun.star.configuration::ConfigurationProvider should
     be used instead.</p>
 
-    <p> Using the <type scope="com::sun::star::registry">XSimpleRegistry</type>
+    <p> Using the com::sun::star::registry::XSimpleRegistry
     interface, the service can be bound to a subtree within the
     configuration tree, as provided by an
-    <type scope="com.sun.star.configuration">ConfigurationProvider</type>
+    com.sun.star.configuration::ConfigurationProvider
     service, which must be accessible from the service factory you use for the
     creation of this service.
     </p>
@@ -49,7 +49,7 @@ module com { module sun { module star { module configuration {
     for some nodes.
     </p><p>
     Thus anybody using this service is strongly advised to read and understand the specification
-    of an configuration provider (<type scope="com.sun.star.configuration">ConfigurationProvider</type>)
+    of an configuration provider (com.sun.star.configuration::ConfigurationProvider)
     and all of it's aspects.
     </p>
 
@@ -71,7 +71,7 @@ published service ConfigurationRegistry
 
     /** is used to commit changes to the configuration.
         <p>As specified for the
-        <type scope="com::sun::star::configuration">ConfigurationUpdateAccess</type>
+        com::sun::star::configuration::ConfigurationUpdateAccess
         service, all changes made to an configuration subtree have to be committed
         before they become persistent.
         To do this for a configuration accessed as a registry, call

@@ -60,7 +60,7 @@ published interface XIdlField2: com::sun::star::reflection::XIdlMember
         reflects the constant enum 32-bit value.
 
         <p>When setting an interface attribute raises a
-        non-<type scope="com::sun::star::uno">RuntimeException</type>, it is
+        non-com::sun::star::uno::RuntimeException, it is
         wrapped in a <type
         scope="com::sun::star::lang">WrappedTargetRuntimeException</type>.</p>
 
@@ -70,7 +70,7 @@ published interface XIdlField2: com::sun::star::reflection::XIdlMember
                 value of field
 
         @throws IllegalAccessException
-        An <type scope="com::sun::star::lang">IllegalAccessException</type>
+        An com::sun::star::lang::IllegalAccessException
         is thrown if the given object is no interface, enum or compound type;
         or the given object does not have the reflected field.
     */
@@ -82,7 +82,7 @@ published interface XIdlField2: com::sun::star::reflection::XIdlMember
         i.e. an interface or compound type (struct/exception).
 
         <p>When setting an interface attribute raises a
-        non-<type scope="com::sun::star::uno">RuntimeException</type>, it is
+        non-com::sun::star::uno::RuntimeException, it is
         wrapped in a <type
         scope="com::sun::star::lang">WrappedTargetRuntimeException</type>.</p>
 
@@ -92,7 +92,7 @@ published interface XIdlField2: com::sun::star::reflection::XIdlMember
                value to be set
 
         @throws IllegalAccessException
-        An <type scope="com::sun::star::lang">IllegalAccessException</type>
+        An com::sun::star::lang::IllegalAccessException
         is thrown if the given object is no interface or compound type;
         or the given object does not have the reflected field.
     */

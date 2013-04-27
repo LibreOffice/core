@@ -52,13 +52,13 @@ published service SetUpdate
  not necessarily hierarchical <em>set</em>.
 
  <p>Changes can be observed by registering a listener with interface
- <type scope="com::sun::star::container">XContainer</type>.
+ com::sun::star::container::XContainer.
  </p>
 
  <p>If the elements of this set are of object type, new elements are constructed
  to match the tree structure prescribed by the element template of this set, when
- using interfaces <type scope="com::sun::star::lang">XSingleServiceFactory</type>
- and (if supported) <type scope="com::sun::star::lang">XMultiServiceFactory</type>.
+ using interfaces com::sun::star::lang::XSingleServiceFactory
+ and (if supported) com::sun::star::lang::XMultiServiceFactory.
  </p>
 
  <p>Objects that are removed from a set can be reinserted into any set supporting

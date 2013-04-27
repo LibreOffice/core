@@ -48,7 +48,7 @@ published service SetExpression
     [property] long NumberFormat;
 
     /** specifies the type of the numbering as
-        <type scope="com::sun::star::style">NumberingType</type>
+        com::sun::star::style::NumberingType
      */
     [property] short NumberingType;
 
@@ -74,7 +74,7 @@ published service SetExpression
     [property] short SequenceValue;
 
     /** determines the type of the variable as described in
-        <type scope="com::sun::star::text">SetVariableType</type>
+        com::sun::star::text::SetVariableType
      */
     [property] short SubType;
 

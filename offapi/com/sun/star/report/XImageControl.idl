@@ -29,15 +29,15 @@ interface XImageControl
 {
     interface XReportControlModel;
 
-    /** supplies the caller with an <type scope="com::sun::star::awt">XImageProducer</type>.
+    /** supplies the caller with an com::sun::star::awt::XImageProducer.
 
-        <p>Other components can register as <type scope="com::sun::star::awt">XImageConsumer</type>
+        <p>Other components can register as com::sun::star::awt::XImageConsumer
         at this producer. Then they will be notified of any change in the image to be displayed.</p>
 
         <p>Whenever the <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
         property is changed, the model loads the specified image, and sets it as image source
-        at its <type scope="com::sun::star::awt">XImageProducer</type>. Then, all
-        <type scope="com::sun::star::awt">XImageConsumer</type>s are notified and supplied with
+        at its com::sun::star::awt::XImageProducer. Then, all
+        com::sun::star::awt::XImageConsumers are notified and supplied with
         the binary data of the image.<br/>
         Usually, controls acting for an ImageControl model are consumers, and use the
         data stream to display the image</p>
@@ -52,7 +52,7 @@ interface XImageControl
 
         <p>If this property is present, it supersedes the <member>ScaleImage</member> property.</p>
 
-        <p>The value of this property is one of the <type scope="com::sun::star::awt">ImageScaleMode</type> constants.</p>
+        <p>The value of this property is one of the com::sun::star::awt::ImageScaleMode constants.</p>
 
         @since OOo 3.2
     */

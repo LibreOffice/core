@@ -28,9 +28,9 @@ module com { module sun { module star { module linguistic2 {
     <P>These flags define the possible types for a
     dictionary-list event.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">DictionaryListEvent</type>
-    @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
-    @see    <type scope="com::sun::star::linguistic2">XDictionaryList</type>
+    @see    com::sun::star::linguistic2::DictionaryListEvent
+    @see    com::sun::star::linguistic2::XDictionaryListEventListener
+    @see    com::sun::star::linguistic2::XDictionaryList
 */
 published constants DictionaryListEventFlags
 {

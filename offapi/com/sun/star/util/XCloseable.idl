@@ -88,8 +88,8 @@ published interface XCloseable: XCloseBroadcaster
 
         <p>
         If this method was already called on an object it should return without any reaction. Normally it's possible to throw
-        a <type scope="com::sun::star::lang">DisposedException</type> for already disposed or closed objects
-        (which represent a <type scope="com::sun::star::uno">RuntimeException</type> and can be thrown by every interface call),
+        a com::sun::star::lang::DisposedException for already disposed or closed objects
+        (which represent a com::sun::star::uno::RuntimeException and can be thrown by every interface call),
         but it shouldn't be used here. The veto exception should be the only way to indicates the result.
         </p>
 

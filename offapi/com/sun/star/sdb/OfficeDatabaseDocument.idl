@@ -49,8 +49,8 @@ service OfficeDatabaseDocument
 {
     /** specifies basic functionality of a document in OpenOffice.org
 
-        <p>Note that a database document actually does not support the <type scope="com::sun::star::view">XPrintable</type> interface.
-        The non-optional requirement of this interface in the <type scope="com::sun::star::document">OfficeDocument</type>
+        <p>Note that a database document actually does not support the com::sun::star::view::XPrintable interface.
+        The non-optional requirement of this interface in the com::sun::star::document::OfficeDocument
         service is considered a documentation error.</p>
     */
     service com::sun::star::document::OfficeDocument;
@@ -213,7 +213,7 @@ service OfficeDatabaseDocument
         need, they invoke <member scope="com::sun::star::util">XCloseable::close</member>.</p>
 
         <p>Since this can be done by multiple clients, every client is additionally required
-        to register itself as <type scope="com::sun::star::util">XCloseListener</type> at
+        to register itself as com::sun::star::util::XCloseListener at
         the document, to prevent some other client closing the model while it's still needed
         by the first client.</p>
     */

@@ -32,7 +32,7 @@
  module com {  module sun {  module star {  module presentation {
 
 
-/** This is the service provided by a <type scope="com::sun::star::drawing">DrawPage</type> inside a
+/** This is the service provided by a com::sun::star::drawing::DrawPage inside a
     PresentationDocument.
 
     @see PresentationDocument

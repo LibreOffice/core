@@ -28,7 +28,7 @@ module com { module sun { module star { module resource {
 
 
 /** specifies a service providing access to a resource string table implementing the
-    <type scope="com::sun::star::resource">XStringResourceWithLocation</type> interface.
+    com::sun::star::resource::XStringResourceWithLocation interface.
  */
 service StringResourceWithLocation : com::sun::star::resource::XStringResourceWithLocation
 {
@@ -65,10 +65,10 @@ service StringResourceWithLocation : com::sun::star::resource::XStringResourceWi
             properties file, e.g. "# My strings". The string may be empty.
 
         @param Handler
-            a <type scope="com::sun::star::task">XInteractionHandler</type>
+            a com::sun::star::task::XInteractionHandler
             to be passed to ucb. This may be a null interface.
 
-        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
             if no string or an empty string is passed as URL
      */
     create( [in] string URL, [in] boolean ReadOnly,

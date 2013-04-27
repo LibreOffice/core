@@ -35,9 +35,9 @@ published struct ListAction
         <code>1</code> as usual with JDBC ).
 
         <p>Its value does not necessary indicate the new position in the new
-        <type scope="com::sun::star::sdbc">XResultSet</type>, but a position
+        com::sun::star::sdbc::XResultSet, but a position
         while doing the changes step by step beginning with the old
-        <type scope="com::sun::star::sdbc">XResultSet</type>.
+        com::sun::star::sdbc::XResultSet.
     */
     long Position;
 

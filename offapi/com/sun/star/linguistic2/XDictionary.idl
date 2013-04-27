@@ -32,7 +32,7 @@ module com { module sun { module star { module linguistic2 {
 
     <P>Personal dictionaries are used to supply additional
     information for spell checking and hyphenation (see
-    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>).
+    com::sun::star::linguistic2::XDictionaryEntry).
     Only active dictionaries with an appropriate language are used
     for that purpose.
     The entries of an active, positive dictionary are words that are
@@ -43,8 +43,8 @@ module com { module sun { module star { module linguistic2 {
     SPELLCHECK. An entry in a negative dictionary may supply a
     proposal for a word to be used instead of the one being used.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XDictionaryEvent</type>
-    @see    <type scope="com::sun::star::container">XNamed</type>
+    @see    com::sun::star::linguistic2::XDictionaryEvent
+    @see    com::sun::star::container::XNamed
 */
 published interface XDictionary : com::sun::star::container::XNamed
 {
@@ -53,7 +53,7 @@ published interface XDictionary : com::sun::star::container::XNamed
         @returns
             the type of the dictionary.
 
-        @see    <type scope="com::sun::star::linguistic2">DictionaryType</type>
+        @see    com::sun::star::linguistic2::DictionaryType
     */
     com::sun::star::linguistic2::DictionaryType getDictionaryType();
 
@@ -81,7 +81,7 @@ published interface XDictionary : com::sun::star::container::XNamed
          @returns
              the language of the dictionary.
 
-        @see    <type scope="com::sun::star::lang">Locale</type>
+        @see    com::sun::star::lang::Locale
     */
     com::sun::star::lang::Locale getLocale();
 
@@ -90,7 +90,7 @@ published interface XDictionary : com::sun::star::container::XNamed
          @param aLocale
             the new language of the dictionary.
 
-        @see    <type scope="com::sun::star::lang">Locale</type>
+        @see    com::sun::star::lang::Locale
     */
     void setLocale( [in] com::sun::star::lang::Locale aLocale );
 
@@ -103,7 +103,7 @@ published interface XDictionary : com::sun::star::container::XNamed
         @param  aWord
             the word to be looked for.
 
-        @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
+        @see    com::sun::star::linguistic2::XDictionaryEntry
     */
     com::sun::star::linguistic2::XDictionaryEntry getEntry( [in] string aWord );
 
@@ -121,8 +121,8 @@ published interface XDictionary : com::sun::star::container::XNamed
         @returns
             <TRUE/> if the entry was successfully added <FALSE/> otherwise.
 
-        @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
-        @see    <type scope="com::sun::star::linguistic2">DictionaryType</type>
+        @see    com::sun::star::linguistic2::XDictionaryEntry
+        @see    com::sun::star::linguistic2::DictionaryType
     */
     boolean addEntry(
         [in] com::sun::star::linguistic2::XDictionaryEntry xDicEntry );
@@ -148,7 +148,7 @@ published interface XDictionary : com::sun::star::container::XNamed
         @returns
             <TRUE/> if the entry was successfully added, <FALSE/> otherwise.
 
-        @see    <type scope="com::sun::star::linguistic2">DictionaryType</type>
+        @see    com::sun::star::linguistic2::DictionaryType
     */
     boolean add(
             [in] string aWord,
@@ -180,8 +180,8 @@ published interface XDictionary : com::sun::star::container::XNamed
          @returns
              a sequence with all the entries of the dictionary.
 
-        @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
-        @see    <type scope="com::sun::star::linguistic2">XSearchableDictionary</type>
+        @see    com::sun::star::linguistic2::XDictionaryEntry
+        @see    com::sun::star::linguistic2::XSearchableDictionary
         @deprecated
     */
 
@@ -206,7 +206,7 @@ published interface XDictionary : com::sun::star::container::XNamed
             it will always fail.
 
         @see    <member scope="com::sun::star::linguistic2">XDictionary::removeDictionaryEventListener</member>
-        @see    <type scope="com::sun::star::linguistic2">XDictionaryEventListener</type>
+        @see    com::sun::star::linguistic2::XDictionaryEventListener
     */
     boolean addDictionaryEventListener(
         [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );
@@ -221,7 +221,7 @@ published interface XDictionary : com::sun::star::container::XNamed
             <FALSE/> if the object was not found in the list.
 
         @see    <member scope="com::sun::star::linguistic2">XDictionary::addDictionaryEventListener</member>
-        @see    <type scope="com::sun::star::linguistic2">XDictionaryEventListener</type>
+        @see    com::sun::star::linguistic2::XDictionaryEventListener
     */
     boolean removeDictionaryEventListener(
         [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );

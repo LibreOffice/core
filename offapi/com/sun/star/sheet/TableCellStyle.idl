@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module sheet {
 /** contains the properties of a table cell style.
 
     <p>This service extends the service
-    <type scope="com::sun::star::style">CellStyle</type> with spreadsheet
+    com::sun::star::style::CellStyle with spreadsheet
     specific properties.</p>
  */
 published service TableCellStyle

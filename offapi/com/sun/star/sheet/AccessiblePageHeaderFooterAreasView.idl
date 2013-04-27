@@ -51,7 +51,7 @@ service AccessiblePageHeaderFooterAreasView
             >XAccessible::getAccessibleContext</method> for these children
             returns an object that supports one of the following services.</li>
         <ul>
-            <li><type scope="::com::sun::star::text">AccessibleHeaderFooterView</type>:
+            <li>::com::sun::star::text::AccessibleHeaderFooterView:
                 A child where calling <method scope="::com::sun::star::text"
                 >XAccessibleContext::getAccessibleChild</method>
                 an object that supports this service is returned for

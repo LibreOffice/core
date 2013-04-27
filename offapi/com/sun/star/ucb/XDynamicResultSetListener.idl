@@ -33,12 +33,12 @@ published interface XDynamicResultSetListener: com::sun::star::lang::XEventListe
     /** A method used to propagate changes of a result set.
 
         <p>In the first notify-call the listener gets two(!)
-        <type scope="com::sun::star::sdbc">XResultSet</type>s and has to hold
-        them. The <type scope="com::sun::star::sdbc">XResultSet</type>s are
+        com::sun::star::sdbc::XResultSets and has to hold
+        them. The com::sun::star::sdbc::XResultSets are
         implementations of the service ContentResultSet.
 
         <p>The notified new
-        <type scope="com::sun::star::sdbc">XResultSet</type> will stay valid
+        com::sun::star::sdbc::XResultSet will stay valid
         after returning from this method. The old one will become invalid after
         returning.
 

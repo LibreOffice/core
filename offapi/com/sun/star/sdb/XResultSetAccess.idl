@@ -34,14 +34,14 @@
 
 
 /** is the interface to create a
-    <type scope="com::sun::star::sdbc">ResultSet</type>
+    com::sun::star::sdbc::ResultSet
     based on the object providing the interface.
  */
 published interface XResultSetAccess: com::sun::star::uno::XInterface
 {
 
     /** returns a new
-        <type scope="com::sun::star::sdbc">ResultSet</type>
+        com::sun::star::sdbc::ResultSet
         based on the object.
         @returns
             the new created ResultSet object

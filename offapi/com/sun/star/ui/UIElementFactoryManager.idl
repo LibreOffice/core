@@ -30,7 +30,7 @@ module com { module sun { module star { module ui {
     interface element factories.
 
     <p>An implementation is usually obtained from a
-    <type scope="com::sun::star::lang">ServiceManager</type>.
+    com::sun::star::lang::ServiceManager.
     </p>
 
     @since OOo 2.0

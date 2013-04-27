@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module bridge { module oleautomation 
     </p>
     <p>
     Currently only a factory for the service
-    <type scope="com::sun::star::lang">MultiServiceFactory</type> is registered
+    com::sun::star::lang::MultiServiceFactory is registered
     by this service. The CLSID is {82154420-0FBF-11d4-8313-005004526AB4} and the
     ProgId is com.sun.star.ServiceManager.
     </p>

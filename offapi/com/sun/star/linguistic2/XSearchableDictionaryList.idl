@@ -36,7 +36,7 @@ module com { module sun { module star { module linguistic2 {
     the dictionary may hold entries of all languages.
     <P>
 
-    @see <type scope="com::sun::star::linguistic2">XDictionaryList</type>
+    @see com::sun::star::linguistic2::XDictionaryList
 */
 published interface XSearchableDictionaryList : com::sun::star::linguistic2::XDictionaryList
 {

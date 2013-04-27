@@ -23,7 +23,7 @@ module com { module sun { module star { module i18n {
     systems.
 
     <p> It is derived from
-    <type scope="::com::sun::star::i18n">XExtendedCalendar</type> and
+    ::com::sun::star::i18n::XExtendedCalendar and
     provides additional methods to obtain Calendar2 items
     that include the possessive genitive case month names and sequences 
     of CalendarItem2 items.. </p>

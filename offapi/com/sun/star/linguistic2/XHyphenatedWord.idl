@@ -31,7 +31,7 @@ module com { module sun { module star { module linguistic2 {
     <P>This interface is used as a return value for some of the hyphenator
     functions.</P>
 
-    @see    <type scope="com::sun::star::linguistic2">XHyphenator</type>
+    @see    com::sun::star::linguistic2::XHyphenator
 */
 published interface XHyphenatedWord : com::sun::star::uno::XInterface
 {

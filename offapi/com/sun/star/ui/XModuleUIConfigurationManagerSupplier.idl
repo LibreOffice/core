@@ -42,9 +42,9 @@ interface XModuleUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterf
 
         @returns
             an object implementing
-            <type scope="::com::sun::star::ui">ModuleUIConfigurationManager</type>
+            ::com::sun::star::ui::ModuleUIConfigurationManager
             service. If the provided module identifier is unknown a
-            <type scope="com::sun::star::container">NoSuchElementException</type>
+            com::sun::star::container::NoSuchElementException
             is thrown.
     */
     XUIConfigurationManager getUIConfigurationManager( [in] string ModuleIdentifier ) raises ( com::sun::star::container::NoSuchElementException );

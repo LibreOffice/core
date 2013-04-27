@@ -41,10 +41,10 @@ published constants ListActionType
     <p>The member <member>ListAction::ActionInfo</member> is required to
     contain a struct WelcomeDynamicResultSetStruct.
     This struct contains two
-    <type scope="com::sun::star::sdbc">XResultSet</type>s (old and new).
+    com::sun::star::sdbc::XResultSets (old and new).
     During and after the notification only the new set is valid for access.
     But the listener is required to remind both
-    <type scope="com::sun::star::sdbc">XResultSet</type>s as he will not get
+    com::sun::star::sdbc::XResultSets as he will not get
     another chance to get them again.
 
     <p>The members <member>ListAction::Count</member> and
@@ -113,7 +113,7 @@ published constants ListActionType
 
     /** The properties of one or more rows have changed.
 
-    <p>This action is related to a <type scope="com::sun::star::beans">PropertyChangeEvent</type>.
+    <p>This action is related to a com::sun::star::beans::PropertyChangeEvent.
 
     <p>The members <member>ListAction::Count</member> and
     <member>ListAction::Position</member> contain the position and count of the

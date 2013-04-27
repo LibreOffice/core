@@ -30,7 +30,7 @@ published constants IndexType
     /** A possible value for column
             <code>TYPE</code>
             in the
-            <type scope="com::sun::star::sdbc">XResultSet</type>
+            com::sun::star::sdbc::XResultSet
             object returned by the method
             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getIndexInfo()</member>
             .
@@ -44,7 +44,7 @@ published constants IndexType
     /** A possible value for column
             <code>TYPE</code>
             in the
-            <type scope="com::sun::star::sdbc">XResultSet</type>
+            com::sun::star::sdbc::XResultSet
             object returned by the method
             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getIndexInfo()</member>
             .
@@ -57,7 +57,7 @@ published constants IndexType
     /** A possible value for column
             <code>TYPE</code>
             in the
-            <type scope="com::sun::star::sdbc">XResultSet</type>
+            com::sun::star::sdbc::XResultSet
             object returned by the method
             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getIndexInfo()</member>
             .
@@ -70,7 +70,7 @@ published constants IndexType
     /** A possible value for column
             <code>TYPE</code>
             in the
-            <type scope="com::sun::star::sdbc">XResultSet</type>
+            com::sun::star::sdbc::XResultSet
             object returned by the method
             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getIndexInfo()</member>
             .

@@ -49,15 +49,15 @@ published service ImageButton
     service com::sun::star::form::FormControlModel;
 
 
-    /** supplies the caller with an <type scope="com::sun::star::awt">XImageProducer</type>.
+    /** supplies the caller with an com::sun::star::awt::XImageProducer.
 
-        <p>Other components can register as <type scope="com::sun::star::awt">XImageConsumer</type>
+        <p>Other components can register as com::sun::star::awt::XImageConsumer
         at this producer. Then they will be notified of any change in the image to be displayed.</p>
 
         <p>Whenever the <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
         property is changed, the model loads the specified image, and sets it as image source
-        at its <type scope="com::sun::star::awt">XImageProducer</type>. Then, all
-        <type scope="com::sun::star::awt">XImageConsumer</type>s are notified and supplied with
+        at its com::sun::star::awt::XImageProducer. Then, all
+        com::sun::star::awt::XImageConsumers are notified and supplied with
         the binary data of the image.<br/>
         Usually, controls acting for an ImageButton model are consumers, and use the
         data stream to display the image</p>
@@ -73,7 +73,7 @@ published service ImageButton
         <p>This property is evaluated if the button is of type URL.</p>
 
         <p>As always, there is a number of target names which have a special meaning, and force
-        a special <type scope="com::sun::star::frame">Frame</type> to be used.</p>
+        a special com::sun::star::frame::Frame to be used.</p>
      */
     [property] string TargetFrame;
 

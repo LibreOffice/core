@@ -67,13 +67,13 @@ module com { module sun { module star { module frame {
 
 interface XLayoutManager : com::sun::star::uno::XInterface
 {
-    /** attaches a <type scope="com::sun::star::frame">XFrame</type> to a layout manager.
+    /** attaches a com::sun::star::frame::XFrame to a layout manager.
 
         @param Frame
             specifies the frame that should be attached to the layout manager
 
         <p>
-        A layout manager needs a <type scope="com::sun::star::frame">XFrame</type> to be
+        A layout manager needs a com::sun::star::frame::XFrame to be
         able to work. Without a it no user interface elements can be created.
         </p>
     */
@@ -96,8 +96,8 @@ interface XLayoutManager : com::sun::star::uno::XInterface
     /** provides the current docking area size of the layout manager.
 
         @return
-            The <type scope="com::sun::star::awt">Rectangle</type> contains pixel values. The
-            members of <type scope="com::sun::star::awt">Rectangle</type> are filled as following:
+            The com::sun::star::awt::Rectangle contains pixel values. The
+            members of com::sun::star::awt::Rectangle are filled as following:
             <ul>
                 <li>X      = docking area on left side (in pixel)</li>
                 <li>Y      = docking area on top side (in pixel)</li>
@@ -191,7 +191,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
     /** retrieves all user interface elements which are currently instantiated.
 
         @return
-            a sequence of user interface elements providing <type scope="com::sun::star::ui">XUIElement</type>
+            a sequence of user interface elements providing com::sun::star::ui::XUIElement
             interface.
 
         <p>

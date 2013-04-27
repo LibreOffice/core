@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements the default property handler for all known types of <type scope="com::sun::star::form">FormComponent</type>s.
+/** implements the default property handler for all known types of com::sun::star::form::FormComponents.
 
     @see com::sun::star::inspection::XPropertyHandler
     @see com::sun::star::form::FormComponents

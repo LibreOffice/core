@@ -48,7 +48,7 @@ interface XScriptURIHelper : ::com::sun::star::uno::XInterface {
 
         @returns a URI to the storage as a <atom>string</atom>
 
-        @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if the storageURI is not a valid
     */
     string getStorageURI( [in] string scriptURI ) raises
@@ -59,7 +59,7 @@ interface XScriptURIHelper : ::com::sun::star::uno::XInterface {
 
         @returns the URI as a <atom>string</atom>
 
-        @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if the storageURI is not a valid
     */
     string getScriptURI( [in] string storageURI ) raises

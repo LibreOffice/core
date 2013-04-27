@@ -44,7 +44,7 @@ published interface XImportFilter: com::sun::star::uno::XInterface
             to xocHandler (???) methods.
 
       @param aSourceData
-          <type scope="com::sun::star::document">MediaDescriptor</type>
+          com::sun::star::document::MediaDescriptor
           which defines the data source
 
       @param msUserData

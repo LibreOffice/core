@@ -96,10 +96,10 @@ published service ODMAContent
         boolean IsFolder
         </li>
         <li>
-        <type scope="com::sun::star::util">DateTime</type> DateCreated ( read-only )
+        com::sun::star::util::DateTime DateCreated ( read-only )
         </li>
         <li>
-        <type scope="com::sun::star::util">DateTime</type> DateModified ( read-only )
+        com::sun::star::util::DateTime DateModified ( read-only )
         </li>
         <li>
         string Author

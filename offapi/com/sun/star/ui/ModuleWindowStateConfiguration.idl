@@ -46,24 +46,24 @@ service ModuleWindowStateConfiguration
         elements which are part of single installed module.
 
         <p>
-        An implementation must provide a <type scope="com::sun::star::uno">Sequence</type> which
-        has <type scope="com::sun::star::beans">PropertyValue</type> as entries. The following
+        An implementation must provide a com::sun::star::uno::Sequence which
+        has com::sun::star::beans::PropertyValue as entries. The following
         entries a defined:
         <ul>
             <li><b>Docked</b><br>a boolean which specifies if the window is docked or not.</li>
-            <li><b>DockingArea</b><br>a <type scope="com::sun::star::ui">DockingArea</type>
+            <li><b>DockingArea</b><br>a com::sun::star::ui::DockingArea
             which specifies the docking area where the window is docked.</li>
-            <li><b>DockPos</b><br>a <type scope="com::sun::star::awt">Point</type> which specifies the
+            <li><b>DockPos</b><br>a com::sun::star::awt::Point which specifies the
             docked position of a window. The X and Y values are interpreted as a row/column number and
             a pixel position for top/bottom docked windows. For left/right docked windows this is</li>
-            <li><b>DockSize</b><br>a <type scope="com::sun::star::awt">Size</type> which specifies
+            <li><b>DockSize</b><br>a com::sun::star::awt::Size which specifies
             the docked size of the window. This property is currently not used by the layout manager
             implementation. For future use.</li>
             <li><b>Locked</b><br>a boolean which specifies if the window is locked or not. This property
             is only valid for docked windows</li>
-            <li><b>Pos</b><br>a <type scope="com::sun::star::awt">Point</type> which specifies the
+            <li><b>Pos</b><br>a com::sun::star::awt::Point which specifies the
             floating position in pixel of the window.</li>
-            <li><b>Size</b><br>a <type scope="com::sun::star::awt">Size</type> which specifies the
+            <li><b>Size</b><br>a com::sun::star::awt::Size which specifies the
             floating size in pixel of the window.</li>
             <li><b>Style</b><br>a long which specifies the style of the window. A toolbar support the
             following values: 0 = icons, 1 = text, 2 = text+icons.</li>

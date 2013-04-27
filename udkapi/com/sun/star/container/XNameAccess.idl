@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module container {
 /** is used to access named objects within a container.
 
     <p>To implement inaccurate name access, support the
-    <type scope="com::sun::star::beans">XExactName</type>
+    com::sun::star::beans::XExactName
     interface.  </p>
     @see com::sun::star::beans::XExactName
  */
@@ -50,7 +50,7 @@ published interface XNameAccess: com::sun::star::container::XElementAccess
 
         @throws  com::sun::star::lang::WrappedTargetException
             If the implementation has internal reasons for exceptions,
-            then wrap these in a <type scope="com::sun::star::lang">WrappedTargetException</type>
+            then wrap these in a com::sun::star::lang::WrappedTargetException
             exception.
      */
     any getByName( [in] string aName )

@@ -38,7 +38,7 @@ published service JumpEdit
      */
     [property]string PlaceHolder;
     /** determines the type of the place holder as described in
-        <type scope="com::sun::star::text">PlaceholderType</type>.
+        com::sun::star::text::PlaceholderType.
      */
     [property]short PlaceHolderType;
 

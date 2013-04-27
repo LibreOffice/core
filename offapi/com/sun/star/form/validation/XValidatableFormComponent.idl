@@ -72,7 +72,7 @@ interface XValidatableFormComponent : XValidatable
         <p>The type of the current value, as well as it's semantics, depend on the service
         implementing this interface.</p>
 
-        <p>Again, this is a convenience method. For example, for a <type scope="com::sun::star::form::component">FormattedField</type>,
+        <p>Again, this is a convenience method. For example, for a com::sun::star::form::component::FormattedField,
         calling this method is equivalent to retrieving the
         <member scope="com::sun::star::awt">UnoControlFormattedFieldModel::EffectiveValue</member>.</p>
 
@@ -86,7 +86,7 @@ interface XValidatableFormComponent : XValidatable
         <p>XFormComponentValidityListeners are called whenever <em>any</em> of the aspects
         of the validatable form component (the validity flag, or the value) changed.</p>
 
-        @throws <type scope="com::sun::star::lang">NullPointerException</type>
+        @throws com::sun::star::lang::NullPointerException
             if the given listener is <NULL/>
     */
     void    addFormComponentValidityListener( [in] XFormComponentValidityListener Listener )
@@ -94,7 +94,7 @@ interface XValidatableFormComponent : XValidatable
 
     /** registers the given listener.
 
-        @throws <type scope="com::sun::star::lang">NullPointerException</type>
+        @throws com::sun::star::lang::NullPointerException
             if the given listener is <NULL/>
     */
     void    removeFormComponentValidityListener( [in] XFormComponentValidityListener Listener )

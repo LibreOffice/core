@@ -26,20 +26,20 @@
 module com {  module sun {  module star {  module form { module inspection {
 
 
-/** implements a property handler for use with an <type scope="com::sun::star::inspection">ObjectInspector</type>
+/** implements a property handler for use with an com::sun::star::inspection::ObjectInspector
     which provides properties related to binding form control models to XForm bindings.
 
-    <p>The handler introduces new properties to choose an <type scope="com::sun::star::xforms">XModel</type>
-    and a <type scope="com::sun::star::xforms">Binding</type> within this model. Additionally,
+    <p>The handler introduces new properties to choose an com::sun::star::xforms::XModel
+    and a com::sun::star::xforms::Binding within this model. Additionally,
     it introduces properties which reflect the different facets of the binding (e.g.
     <member scope="com::sun::star::xforms">Binding::BindingExpression</member>), so they can be changed
-    directly in the <type scope="com::sun::star::inspection">ObjectInspector</type> as if they were a
+    directly in the com::sun::star::inspection::ObjectInspector as if they were a
     property of the form component which is being inspected.</p>
 
     <p>The handler expects a value named "ContextDocument" in the context in which it is created.
-    That is, the <type scope="com::sun::star::uno">XComponentContext</type> used for creating the
+    That is, the com::sun::star::uno::XComponentContext used for creating the
     CellBindingPropertyHandler is examined for a value with this name. If the object in this
-    value denotes a XML form document (indicated by supporting the <type scope="com::sun::star::xforms">XFormsSupplier</type>
+    value denotes a XML form document (indicated by supporting the com::sun::star::xforms::XFormsSupplier
     interface), this document is used to do XML binding related work.</p>
 
     @see com::sun::star::inspection::XPropertyHandler

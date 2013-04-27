@@ -61,7 +61,7 @@ interface XFormulaOpCodeMapper
         @param Language
             Formula language to be used, one of FormulaLanguage
             constants. If a constant unknown to the implementation is passed,
-            <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            com::sun::star::lang::IllegalArgumentException
             is thrown.
 
         @returns
@@ -101,7 +101,7 @@ interface XFormulaOpCodeMapper
         @param Language
             Formula language to be used, one of FormulaLanguage
             constants. If a constant unknown to the implementation is passed,
-            <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            com::sun::star::lang::IllegalArgumentException
             is thrown.
 
         @param Groups

@@ -53,7 +53,7 @@ published interface XMultipleResults: com::sun::star::uno::XInterface
 {
 
     /** returns the current result as a
-        <type scope="com::sun::star::sdbc">ResultSet</type>
+        com::sun::star::sdbc::ResultSet
         object.
         This method should be called only once per result.
         @returns

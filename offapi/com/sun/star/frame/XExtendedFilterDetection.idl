@@ -28,7 +28,7 @@
    module star {
     module frame {
 
-/** use <type scope="com::sun::star::document">XExtendedFilterDetection</type> instead of this
+/** use com::sun::star::document::XExtendedFilterDetection instead of this
     @deprecated
  */
 published interface XExtendedFilterDetection: com::sun::star::uno::XInterface

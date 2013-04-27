@@ -28,7 +28,7 @@
 module com {  module sun {  module star {  module sheet {
 
 
-/** Primary interface for the <type scope="com::sun::star::sheet">ExternalDocLink</type> service.
+/** Primary interface for the com::sun::star::sheet::ExternalDocLink service.
 
     @see com::sun::star::sheet::ExternalDocLink
 
@@ -66,12 +66,12 @@ interface XExternalDocLink
 
         <p>This index value corresponds with the external document
         represented by an instance of
-        <type scope="com::sun::star::sheet">ExternalDocLink</type>.  This
+        com::sun::star::sheet::ExternalDocLink.  This
         value is stored within a formula token instance.</p>
 
         <p>Each external document cache instance has a unique index value, and this
         index value can be used to retrieve the corresponding external document cache
-        from the parent <type scope="com::sun::star::sheet">ExternalDocLinks</type> instance.</p>
+        from the parent com::sun::star::sheet::ExternalDocLinks instance.</p>
 
         @see com::sun::star::sheet::ExternalDocLinks
         @see com::sun::star::sheet::FormulaToken

@@ -47,7 +47,7 @@ module com { module sun { module star { module configuration {
  </p>
 
  <p>Generally it is not possible to navigate the parent or siblings, if any,
- of this element, so <type scope="com::sun::star::container">XChild</type> is
+ of this element, so com::sun::star::container::XChild is
  not supported.
  </p>
 
@@ -92,7 +92,7 @@ published service AccessRootElement
  this fragment is removed from the complete hierarchy by an outside source.
  </p>
 
- <p>Clients may register an <type scope="com::sun::star::lang">XEventListener</type>
+ <p>Clients may register an com::sun::star::lang::XEventListener
  to be notified when the object is disposed for either cause.
  </p>
 */
@@ -101,13 +101,13 @@ published service AccessRootElement
 /** allows registering listeners that observe the whole hierarchy.
 
  <p>A client can register an
- <type scope="com::sun::star::util">XChangesListener</type>,
+ com::sun::star::util::XChangesListener,
  which will receive notifications for any changes within the
  hierarchy (fragment) this object represents.
  </p>
 
  <p>An implementation will collect as many changes as possible into a single
- <type scope="com::sun::star::util">ChangesEvent</type>. For Example:
+ com::sun::star::util::ChangesEvent. For Example:
  </p>
 
  <p>

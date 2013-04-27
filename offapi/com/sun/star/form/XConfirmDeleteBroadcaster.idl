@@ -29,7 +29,7 @@
 
 
 /** provides the possibility of receiving an event for confirming deletions of
-    rows in a <type scope="com::sun::star::form::component">DataForm</type>.
+    rows in a com::sun::star::form::component::DataForm.
 
     @see XConfirmDeleteListener
  */

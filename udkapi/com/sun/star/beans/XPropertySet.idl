@@ -108,7 +108,7 @@ published interface XPropertySet: com::sun::star::uno::XInterface
         @throws com::sun::star::lang::WrappedTargetException
             if the implementation has an internal reason for the exception.
             In this case the original exception is wrapped into that
-            <type scope="com::sun::star::lang">WrappedTargetException</type>.
+            com::sun::star::lang::WrappedTargetException.
      */
     any getPropertyValue( [in] string PropertyName )
             raises( com::sun::star::beans::UnknownPropertyException,

@@ -38,7 +38,7 @@ published service CachedDynamicResultSet
     /** Provides remote optimized read access to a static or a dynamically
         changing ContentResultSet.
 
-        <p>The <type scope="com::sun::star::sdbc">XResultSet</type>s given to
+        <p>The com::sun::star::sdbc::XResultSets given to
         the listener in the first notification in the
         WelcomeDynamicResultSetStruct are implementations of the
         CachedContentResultSet service.

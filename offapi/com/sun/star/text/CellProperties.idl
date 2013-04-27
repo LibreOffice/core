@@ -40,7 +40,7 @@ published service CellProperties
 {
     /** contains user defined attributes.
 
-        @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
+        @see    com::sun::star::xml::UserDefinedAttributesSupplier
      */
     service com::sun::star::xml::UserDefinedAttributesSupplier;
 

@@ -136,7 +136,7 @@ interface XLanguageGuessing
             specifies the length of the sub-string to be checked.
             The value must met 0 <= nLen <= (length of text).
 
-        @see    <type scope="com::sun::star::lang">Locale</type>
+        @see    com::sun::star::lang::Locale
      */
     com::sun::star::lang::Locale    guessPrimaryLanguage(
             [in] string  aText,

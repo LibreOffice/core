@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module text {
     are bound to this text range.  </p>
 
     <p>A TextRange is also used for a <i>text portion</i> which is
-    returned by the <type scope="com::sun::star::container">XEnumeration</type>
+    returned by the com::sun::star::container::XEnumeration
     for a single paragraph. Because this is the mechanism to use to export
     data, all formatting attributes and contents bound to this range have
     to be available from implementations of this service. </p>

@@ -127,12 +127,12 @@ published service HierarchyDataReadAccess
     /** allows registering listeners that observe the hierarchy data source.
 
         <p>A client can register an
-        <type scope="com::sun::star::util">XChangesListener</type>, which will
+        com::sun::star::util::XChangesListener, which will
         receive notifications for any changes within the hierarchy (fragment)
         this object represents.
 
         <p>An implementation should collect as many changes as possible into a
-        single <type scope="com::sun::star::util">ChangesEvent</type>.
+        single com::sun::star::util::ChangesEvent.
     */
     interface com::sun::star::util::XChangesNotifier;
 

@@ -265,7 +265,7 @@ published service TableAutoFormatField
 
 
     /** property containing a description of the cell border.
-        Preferred over <type scope="com::sun::star::table">TableBorder</type> 
+        Preferred over com::sun::star::table::TableBorder
         <member>TableBorder</member>.
 
         @since LibreOffice 3.6

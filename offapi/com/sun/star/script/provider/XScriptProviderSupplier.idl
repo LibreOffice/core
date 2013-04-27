@@ -35,7 +35,7 @@ interface XScriptProviderSupplier : ::com::sun::star::uno::XInterface {
     /** returns scripting provider related to the object.
 
         @returns
-            an object implementing <type scope="::com::sun::star::script::provider">XScriptProvider</type> representing the script provider
+            an object implementing ::com::sun::star::script::provider::XScriptProvider representing the script provider
     */
     XScriptProvider getScriptProvider();
 };

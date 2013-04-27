@@ -44,7 +44,7 @@ published interface XParametersSupplier;
     or a previous instantiated connection.
     <p>
     Depending on the
-    <type scope="com::sun::star::sdbc">ResultSetConcurrency</type>
+    com::sun::star::sdbc::ResultSetConcurrency
     , the RowSet caches all data or uses
     an optimized way for retrieving the data, such as, refetching rows by their keys or
     if provided, by their bookmarks.
@@ -112,7 +112,7 @@ published interface XParametersSupplier;
                 <td><strong>RowCount</strong></td><td><strong>IsRowCountFinal</strong></td>
         </tr>
 
-        <tr><td><type scope="com::sun::star::sdbc">XResultSet</type></td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+        <tr><td>com::sun::star::sdbc::XResultSet</td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
 
         <tr><td align="right"><em>next</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td>
         <tr><td align="right"><em>beforeFirst</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
@@ -125,7 +125,7 @@ published interface XParametersSupplier;
         <tr><td align="right"><em>refreshRow</em></td><td/><td/><td align="center">X</td><td/><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
         <tr><td align="right"><em>cancelRowUpdates</em></td><td/><td/><td align="center">X</td><td/><td/><td/><td align="center">X</td><td/><td/><td/></tr>
 
-        <tr><td><type scope="com::sun::star::sdbc">XResultSetUpdate</type></td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+        <tr><td>com::sun::star::sdbc::XResultSetUpdate</td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
 
         <tr><td align="right"><em>insertRow</em></td><td/><td align="center">X</td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
         <tr><td align="right"><em>updateRow</em></td><td/><td align="center">X</td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td/><td/><td/></tr>
@@ -133,11 +133,11 @@ published interface XParametersSupplier;
         <tr><td align="right"><em>moveToInsertRow</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td/><td align="center">X</td><td align="center">X</td></tr>
         <tr><td align="right"><em>moveToCurrentRow</em></td><td align="center">X</td><td/><td/><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
 
-        <tr><td><type scope="com::sun::star::sdbcx">XDeleteRows</type></td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+        <tr><td>com::sun::star::sdbcx::XDeleteRows</td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
 
         <tr><td align="right"><em>deleteRows</em></td><td/><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
 
-        <tr><td><type scope="com::sun::star::sdbcx">XRowLocate</type></td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+        <tr><td>com::sun::star::sdbcx::XRowLocate</td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
 
         <tr><td align="right"><em>moveToBookmark</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
         <tr><td align="right"><em>moveRelativeToBookmark</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
@@ -156,7 +156,7 @@ published interface XParametersSupplier;
         <dt><member scope="com::sun::star::sdbc">XResultSet::getRow</member></dt>
         <dd>returns the position of the cursor, which has not been changed by the deletion.</dd>
 
-        <dt><type scope="com::sun::star::sdbc">XResultSet</type>: <code>next</code>, <code>first</code>, <code>last</code>, <code>absolute</code>,
+        <dt>com::sun::star::sdbc::XResultSet: <code>next</code>, <code>first</code>, <code>last</code>, <code>absolute</code>,
             <code>relative</code>, <code>previous</code>, <code>beforeFirst</code>, <code>afterLast</code></dt>
         <dd>will let the deleted row vanish from the result set. As a consequence, the <member>RowCount</member>
             will decrease when you do such a move operation after deleting a row.<br/>
@@ -167,13 +167,13 @@ published interface XParametersSupplier;
         <dt><member scope="com::sun::star::sdbc">XResultSet::refreshRow</member></dt>
         <dd>will throw an exception when the cursor is on a deleted row.</dd>
 
-        <dt><type scope="com::sun::star::sdbc">XRow</type>: <code>getFoo</code></dt>
+        <dt>com::sun::star::sdbc::XRow: <code>getFoo</code></dt>
         <dd>will return an empty value when the cursor is on a deleted row.</dd>
 
         <dt><member scope="com::sun::star::sdbcx">XRowLocate::getBookmark</member></dt>
         <dd>will throw an exception when the cursor is on a deleted row.</dd>
 
-        <dt><type scope="com::sun::star::sdbc">XRowUpdate</type>: <code>updateFoo</code></dt>
+        <dt>com::sun::star::sdbc::XRowUpdate: <code>updateFoo</code></dt>
         <dd>will throw an exception when the cursor is on a deleted row.</dd>
 
         <dt><member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member></dt>
@@ -197,11 +197,11 @@ published service RowSet
     /** can be used to allow an interaction handler to supply missing data during a execute process.
 
         <p>If you want a row set to be based on a parametrized query, you will usually use
-        the <type scope="com::sun::star::sdbc">XParameters</type> interface.<br/>
+        the com::sun::star::sdbc::XParameters interface.<br/>
         However, you can also choose to let an interaction handler supply such data. For this, you may
         for instance instantiate an InteractionHandler, which asks the user for the
         data, or you may write your own one, which supplies the data from somewhere else.
-        The default implementation will only ask for parameters which aren't set before through the <type scope="com::sun::star::sdbc">XParameters</type> interface.</p>
+        The default implementation will only ask for parameters which aren't set before through the com::sun::star::sdbc::XParameters interface.</p>
 
         @see com::sun::star::sdb::InteractionHandler
     */
@@ -209,8 +209,8 @@ published service RowSet
 
     /** approving of actions performed on the row set.
 
-        <p>The support of this interface implies a semantical extension to the <type scope="com::sun::star::sdbc">XResultSetUpdate</type>
-        interface which is supported via the <type scope="com::sun::star::sdbc">ResultSet</type>.</p>
+        <p>The support of this interface implies a semantical extension to the com::sun::star::sdbc::XResultSetUpdate
+        interface which is supported via the com::sun::star::sdbc::ResultSet.</p>
 
         @see XResultSetUpdate
      */
@@ -218,7 +218,7 @@ published service RowSet
 
     /** is the interface for updating row data to the database.
 
-        <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbc">ResultSet</type> service.</p>
+        <p>The optional support of this interface is already implied with the support of the com::sun::star::sdbc::ResultSet service.</p>
 
         <p>However, note that the additional support of the XRowSetApproveBroadcaster interface results
         in a semantical extension: the methods <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow</member>,
@@ -230,7 +230,7 @@ published service RowSet
 
     /** is the interface for deleting more than one row, identified by it's bookmark.
 
-        <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbcx">ResultSet</type> service.</p>
+        <p>The optional support of this interface is already implied with the support of the com::sun::star::sdbcx::ResultSet service.</p>
 
         <p>However, note that the additional support of the XRowSetApproveBroadcaster interface results
         in a semantical extension: the method <member scope="com::sun::star::sdbcx">XDeleteRows::deleteRows</member>
@@ -259,8 +259,8 @@ published service RowSet
         using the <code>XParametersSupplier</code> interface.</p>
 
         <p>The returned container contains parameter objects which do allow write access to the parameters (which
-        is equivalent to using the <type scope="com::sun::star::sdbc">XParameters</type> interface inherited from
-        <type scope="com::sun::star::sdbc">RowSet</type>). Additionally, they provide information about the parameters,
+        is equivalent to using the com::sun::star::sdbc::XParameters interface inherited from
+        com::sun::star::sdbc::RowSet). Additionally, they provide information about the parameters,
         such as their name (if they have one), their type, and the like.</p>
     */
     [optional] interface XParametersSupplier;
