@@ -17,391 +17,391 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="UI" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="FilterClassification">
-        <node oor:name="GlobalFilters">
-            <node oor:name="Classes">
-                <node oor:name="com.sun.star.text.TextDocument" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Text documents</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                                                <value oor:separator=";">AportisDoc Palm DB;HTML (StarWriter);LotusWordPro;MS Word 2003 XML;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 97;MS Word 97 Vorlage;MS_Works;Office Open XML Text;Office Open XML Text Template;OpenDocument Text Flat XML;PocketWord File;Rich Text Format;StarOffice XML (Writer);Text;WordPerfect;WordPerfect;writer_MIZI_Hwp_97;writer_StarOffice_XML_Writer_Template;writer8;writer8_template;writerglobal8;writerweb8_writer_template</value>
-                    </prop>
-                </node>
-                <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Spreadsheets</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                                                <value oor:separator=";">Calc MS Excel 2007 Binary;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;calc_StarOffice_XML_Calc_Template;calc8;calc8_template;chart8;DIF;Lotus;MiniCalc (Palm);MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;OpenDocument Spreadsheet Flat XML;Pocket Excel;Quattro Pro 6.0;StarOffice XML (Calc);StarOffice XML (Chart);Text - txt - csv (StarCalc)</value>
-                    </prop>
-                </node>
-                <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Presentations</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                                                <value oor:separator=";">Impress MS PowerPoint 2007 XML;Impress MS PowerPoint 2007 XML AutoPlay;Impress MS PowerPoint 2007 XML Template;impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;impress8;impress8_template;MS PowerPoint 97;MS PowerPoint 97 AutoPlay;MS PowerPoint 97 Vorlage;OpenDocument Presentation Flat XML</value>
-                    </prop>
-                </node>
-                <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Drawings</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                                                <value oor:separator=";">draw_StarOffice_XML_Draw_Template;StarOffice XML (Draw);draw8;draw8_template;Visio Document;SVG - Scalable Vector Graphics;Corel Draw Document;Publisher Document</value>
-                    </prop>
-                </node>
-                <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Web pages</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                                                <value oor:separator=";">HTML;writer_web_StarOffice_XML_Writer_Web_Template;writerweb8_writer_template</value>
-                    </prop>
-                </node>
-                <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Master documents</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                                                <value oor:separator=";">writer_globaldocument_StarOffice_XML_Writer_GlobalDocument;writerglobal8</value>
-                    </prop>
-                </node>
-                <node oor:name="com.sun.star.formula.FormularProperties" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Formulas</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                                                <value oor:separator=";">MathML XML (Math);MathType 3.x;StarOffice XML (Math);math8</value>
-                    </prop>
-                </node>
-                <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Database documents</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">StarOffice XML (Base)</value>
-                    </prop>
-                </node>
-            </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="UI" oor:package="org.openoffice.Office">
+  <node oor:name="FilterClassification">
+    <node oor:name="GlobalFilters">
+      <node oor:name="Classes">
+        <node oor:name="com.sun.star.text.TextDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Text documents</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">AportisDoc Palm DB;HTML (StarWriter);LotusWordPro;MS Word 2003 XML;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 97;MS Word 97 Vorlage;MS_Works;Office Open XML Text;Office Open XML Text Template;OpenDocument Text Flat XML;PocketWord File;Rich Text Format;StarOffice XML (Writer);Text;WordPerfect;WordPerfect;writer_MIZI_Hwp_97;writer_StarOffice_XML_Writer_Template;writer8;writer8_template;writerglobal8;writerweb8_writer_template</value>
+          </prop>
         </node>
-        <node oor:name="LocalFilters">
-            <node oor:name="Classes">
-                <node oor:name="msword956" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Microsoft Word 6.0 / 95</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">MS Word 95;MS WinWord 6.0</value>
-                    </prop>
-                </node>
-                <node oor:name="excel456" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">MS Excel 95;MS Excel 5.0/95;MS Excel 4.0</value>
-                    </prop>
-                </node>
-                <node oor:name="excel456templ" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">MS Excel 95 Vorlage/Template;MS Excel 5.0/95 Vorlage/Template;MS Excel 4.0 Vorlage/Template</value>
-                    </prop>
-                </node>
-                <node oor:name="swwtext" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">Text (StarWriter/Web)</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">Text (StarWriter/Web);Text DOS (StarWriter/Web);Text Mac (StarWriter/Web);Text Unix (StarWriter/Web)</value>
-                    </prop>
-                </node>
-                <node oor:name="wpw67" oor:op="replace">
-                    <prop oor:name="DisplayName">
-                        <value xml:lang="en-US">WordPerfect (Win) 6.0 - 7.0</value>
-                    </prop>
-                    <prop oor:name="Filters">
-                        <value oor:separator=";">WordPerfect (Win) 6.0 (W4W);WordPerfect (Win) 6.1 (W4W);WordPerfect (Win) 7.0 (W4W)</value>
-                    </prop>
-                </node>
-            </node>
+        <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Spreadsheets</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">Calc MS Excel 2007 Binary;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;calc_StarOffice_XML_Calc_Template;calc8;calc8_template;chart8;DIF;Lotus;MiniCalc (Palm);MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;OpenDocument Spreadsheet Flat XML;Pocket Excel;Quattro Pro 6.0;StarOffice XML (Calc);StarOffice XML (Chart);Text - txt - csv (StarCalc)</value>
+          </prop>
         </node>
+        <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Presentations</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">Impress MS PowerPoint 2007 XML;Impress MS PowerPoint 2007 XML AutoPlay;Impress MS PowerPoint 2007 XML Template;impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;impress8;impress8_template;MS PowerPoint 97;MS PowerPoint 97 AutoPlay;MS PowerPoint 97 Vorlage;OpenDocument Presentation Flat XML</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Drawings</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">draw_StarOffice_XML_Draw_Template;StarOffice XML (Draw);draw8;draw8_template;Visio Document;SVG - Scalable Vector Graphics;Corel Draw Document;Publisher Document</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Web pages</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">HTML;writer_web_StarOffice_XML_Writer_Web_Template;writerweb8_writer_template</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Master documents</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">writer_globaldocument_StarOffice_XML_Writer_GlobalDocument;writerglobal8</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.formula.FormularProperties" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Formulas</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">MathML XML (Math);MathType 3.x;StarOffice XML (Math);math8</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Database documents</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">StarOffice XML (Base)</value>
+          </prop>
+        </node>
+      </node>
     </node>
-    <node oor:name="ColorScheme">
-        <prop oor:name="CurrentColorScheme">
-            <value>${PRODUCTNAME}</value>
-        </prop>
-        <node oor:name="ColorSchemes">
-            <node oor:name="${PRODUCTNAME}" oor:op="replace">
-                <node oor:name="DocColor">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="DocBoundaries">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="AppBackground">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="ObjectBoundaries">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="TableBoundaries">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="FontColor">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="Links">
-                    <prop oor:name="IsVisible">
-                        <value>false</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="LinksVisited">
-                    <prop oor:name="IsVisible">
-                        <value>false</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="Spell">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="SmartTags">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="Shadow">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="WriterTextGrid">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="WriterFieldShadings">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="WriterIdxShadings">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="WriterDirectCursor">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="WriterScriptIndicator">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="WriterSectionBoundaries">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="WriterHeaderFooterMark">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="WriterPageBreaks">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="HTMLSGML">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="HTMLComment">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="HTMLKeyword">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="HTMLUnknown">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="CalcGrid">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="CalcPageBreak">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="CalcPageBreakManual">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="CalcPageBreakAutomatic">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="CalcDetective">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="CalcDetectiveError">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="CalcReference">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="CalcNotesBackground">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="DrawGrid">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="BASICIdentifier">
-                    <prop oor:name="Color" oor:type="xs:int">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="BASICComment">
-                    <prop oor:name="Color" oor:type="xs:int">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="BASICNumber">
-                    <prop oor:name="Color" oor:type="xs:int">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="BASICString">
-                    <prop oor:name="Color" oor:type="xs:int">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="BASICOperator">
-                    <prop oor:name="Color" oor:type="xs:int">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="BASICKeyword">
-                    <prop oor:name="Color" oor:type="xs:int">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="BASICError">
-                    <prop oor:name="Color" oor:type="xs:int">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="SQLIdentifier">
-                    <prop oor:name="Color" oor:type="xs:int">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="SQLNumber">
-                  <prop oor:name="Color" oor:type="xs:int">
-                    <value xsi:nil="true"/>
-                  </prop>
-                </node>
-                <node oor:name="SQLString">
-                  <prop oor:name="Color" oor:type="xs:int">
-                    <value xsi:nil="true"/>
-                  </prop>
-                </node>
-                <node oor:name="SQLOperator">
-                  <prop oor:name="Color" oor:type="xs:int">
-                    <value xsi:nil="true"/>
-                  </prop>
-                </node>
-                <node oor:name="SQLKeyword">
-                  <prop oor:name="Color" oor:type="xs:int">
-                    <value xsi:nil="true"/>
-                  </prop>
-                </node>
-                <node oor:name="SQLParameter">
-                  <prop oor:name="Color" oor:type="xs:int">
-                    <value xsi:nil="true"/>
-                  </prop>
-                </node>
-                <node oor:name="SQLComment">
-                  <prop oor:name="Color" oor:type="xs:int">
-                    <value xsi:nil="true"/>
-                  </prop>
-                </node>
-            </node>
+    <node oor:name="LocalFilters">
+      <node oor:name="Classes">
+        <node oor:name="msword956" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Microsoft Word 6.0 / 95</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">MS Word 95;MS WinWord 6.0</value>
+          </prop>
         </node>
+        <node oor:name="excel456" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">MS Excel 95;MS Excel 5.0/95;MS Excel 4.0</value>
+          </prop>
+        </node>
+        <node oor:name="excel456templ" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">MS Excel 95 Vorlage/Template;MS Excel 5.0/95 Vorlage/Template;MS Excel 4.0 Vorlage/Template</value>
+          </prop>
+        </node>
+        <node oor:name="swwtext" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">Text (StarWriter/Web)</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">Text (StarWriter/Web);Text DOS (StarWriter/Web);Text Mac (StarWriter/Web);Text Unix (StarWriter/Web)</value>
+          </prop>
+        </node>
+        <node oor:name="wpw67" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en-US">WordPerfect (Win) 6.0 - 7.0</value>
+          </prop>
+          <prop oor:name="Filters">
+            <value oor:separator=";">WordPerfect (Win) 6.0 (W4W);WordPerfect (Win) 6.1 (W4W);WordPerfect (Win) 7.0 (W4W)</value>
+          </prop>
+        </node>
+      </node>
     </node>
+  </node>
+  <node oor:name="ColorScheme">
+    <prop oor:name="CurrentColorScheme">
+      <value>${PRODUCTNAME}</value>
+    </prop>
+    <node oor:name="ColorSchemes">
+      <node oor:name="${PRODUCTNAME}" oor:op="replace">
+        <node oor:name="DocColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DocBoundaries">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="AppBackground">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="ObjectBoundaries">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="TableBoundaries">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="FontColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Links">
+          <prop oor:name="IsVisible">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="LinksVisited">
+          <prop oor:name="IsVisible">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Spell">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="SmartTags">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Shadow">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterTextGrid">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterFieldShadings">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterIdxShadings">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterDirectCursor">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterScriptIndicator">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterSectionBoundaries">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterHeaderFooterMark">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterPageBreaks">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="HTMLSGML">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="HTMLComment">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="HTMLKeyword">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="HTMLUnknown">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcGrid">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcPageBreak">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcPageBreakManual">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcPageBreakAutomatic">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcDetective">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcDetectiveError">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcReference">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcNotesBackground">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="DrawGrid">
+          <prop oor:name="IsVisible">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="BASICIdentifier">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="BASICComment">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="BASICNumber">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="BASICString">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="BASICOperator">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="BASICKeyword">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="BASICError">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="SQLIdentifier">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="SQLNumber">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="SQLString">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="SQLOperator">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="SQLKeyword">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="SQLParameter">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="SQLComment">
+          <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
 </oor:component-data>

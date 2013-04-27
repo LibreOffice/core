@@ -17,198 +17,198 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Calc" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="UnitConversion">
-        <node oor:name="CR1" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>ATS</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>13.7603</value>
-            </prop>
-        </node>
-        <node oor:name="CR2" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>BEF</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>40.3399</value>
-            </prop>
-        </node>
-        <node oor:name="CR3" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>DEM</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>1.95583</value>
-            </prop>
-        </node>
-        <node oor:name="CR4" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>ESP</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>166.386</value>
-            </prop>
-        </node>
-        <node oor:name="CR5" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>FIM</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>5.94573</value>
-            </prop>
-        </node>
-        <node oor:name="CR6" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>FRF</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>6.55957</value>
-            </prop>
-        </node>
-        <node oor:name="CR7" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>IEP</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>.787564</value>
-            </prop>
-        </node>
-        <node oor:name="CR8" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>ITL</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>1936.27</value>
-            </prop>
-        </node>
-        <node oor:name="CR9" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>LUF</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>40.3399</value>
-            </prop>
-        </node>
-        <node oor:name="CR10" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>NLG</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>2.20371</value>
-            </prop>
-        </node>
-        <node oor:name="CR11" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>PTE</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>200.482</value>
-            </prop>
-        </node>
-        <node oor:name="CR12" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>GRD</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>340.750</value>
-            </prop>
-        </node>
-        <node oor:name="CR13" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>SIT</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>239.640</value>
-            </prop>
-        </node>
-        <node oor:name="CR14" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>MTL</value>
-            </prop>
-            <prop oor:name="Factor">
-              <value>.429300</value>
-            </prop>
-        </node>
-        <node oor:name="CR15" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>CYP</value>
-            </prop>
-            <prop oor:name="Factor">
-              <value>.585274</value>
-            </prop>
-        </node>
-        <node oor:name="CR16" oor:op="replace">
-            <prop oor:name="FromUnit">
-                <value>EUR</value>
-            </prop>
-            <prop oor:name="ToUnit">
-                <value>SKK</value>
-            </prop>
-            <prop oor:name="Factor">
-                <value>30.1260</value>
-            </prop>
-        </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Calc" oor:package="org.openoffice.Office">
+  <node oor:name="UnitConversion">
+    <node oor:name="CR1" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>ATS</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>13.7603</value>
+      </prop>
     </node>
-    <node oor:name="Calculate">
-        <node oor:name="Other">
-            <node oor:name="Date">
-                <prop oor:name="YY">
-                    <value>1899</value>
-                </prop>
-                <prop oor:name="MM">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="DD">
-                    <value>30</value>
-                </prop>
-            </node>
-        </node>
+    <node oor:name="CR2" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>BEF</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>40.3399</value>
+      </prop>
     </node>
+    <node oor:name="CR3" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>DEM</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>1.95583</value>
+      </prop>
+    </node>
+    <node oor:name="CR4" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>ESP</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>166.386</value>
+      </prop>
+    </node>
+    <node oor:name="CR5" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>FIM</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>5.94573</value>
+      </prop>
+    </node>
+    <node oor:name="CR6" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>FRF</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>6.55957</value>
+      </prop>
+    </node>
+    <node oor:name="CR7" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>IEP</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>.787564</value>
+      </prop>
+    </node>
+    <node oor:name="CR8" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>ITL</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>1936.27</value>
+      </prop>
+    </node>
+    <node oor:name="CR9" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>LUF</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>40.3399</value>
+      </prop>
+    </node>
+    <node oor:name="CR10" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>NLG</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>2.20371</value>
+      </prop>
+    </node>
+    <node oor:name="CR11" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>PTE</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>200.482</value>
+      </prop>
+    </node>
+    <node oor:name="CR12" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>GRD</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>340.750</value>
+      </prop>
+    </node>
+    <node oor:name="CR13" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>SIT</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>239.640</value>
+      </prop>
+    </node>
+    <node oor:name="CR14" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>MTL</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>.429300</value>
+      </prop>
+    </node>
+    <node oor:name="CR15" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>CYP</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>.585274</value>
+      </prop>
+    </node>
+    <node oor:name="CR16" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>SKK</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>30.1260</value>
+      </prop>
+    </node>
+  </node>
+  <node oor:name="Calculate">
+    <node oor:name="Other">
+      <node oor:name="Date">
+        <prop oor:name="YY">
+          <value>1899</value>
+        </prop>
+        <prop oor:name="MM">
+          <value>12</value>
+        </prop>
+        <prop oor:name="DD">
+          <value>30</value>
+        </prop>
+      </node>
+    </node>
+  </node>
 </oor:component-data>

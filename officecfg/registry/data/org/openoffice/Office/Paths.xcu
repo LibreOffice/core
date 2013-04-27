@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -17,211 +17,183 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Paths" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
-    <node oor:name="Paths">
-
-        <node oor:name="Addin" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(progpath)/addin" oor:op="fuse" />
-            </node>
-        </node>
-
-        <node oor:name="AutoCorrect" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/autocorr" oor:op="fuse" />
-            </node>
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/autocorr</value>
-            </prop>
-        </node>
-
-        <node oor:name="AutoText" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/autotext/$(vlang)" oor:op="fuse" />
-            </node>
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/autotext</value>
-            </prop>
-        </node>
-
-        <node oor:name="Backup" oor:op="fuse" oor:mandatory="true">
-            <prop oor:name="IsSinglePath" oor:finalized="true">
-                <value>true</value>
-            </prop>
-            <node oor:name="InternalPaths" oor:finalized="true" />
-            <prop oor:name="UserPaths" oor:finalized="true" />
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/backup</value>
-            </prop>
-        </node>
-
-        <node oor:name="Basic" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/basic" oor:op="fuse" />
-            </node>
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/basic</value>
-            </prop>
-        </node>
-
-        <node oor:name="Bitmap" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/config/symbol" oor:op="fuse" />
-            </node>
-        </node>
-
-        <node oor:name="Config" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/config" oor:op="fuse" />
-            </node>
-        </node>
-
-        <node oor:name="Favorite" oor:op="fuse" oor:mandatory="true">
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/config/folders</value>
-            </prop>
-        </node>
-
-        <node oor:name="Filter" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(progpath)/filter" oor:op="fuse" />
-            </node>
-        </node>
-
+<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Paths" oor:package="org.openoffice.Office">
+  <node oor:name="Paths">
+    <node oor:name="Addin" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(progpath)/addin" oor:op="fuse"/>
+      </node>
+    </node>
+    <node oor:name="AutoCorrect" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/autocorr" oor:op="fuse"/>
+      </node>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/autocorr</value>
+      </prop>
+    </node>
+    <node oor:name="AutoText" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/autotext/$(vlang)" oor:op="fuse"/>
+      </node>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/autotext</value>
+      </prop>
+    </node>
+    <node oor:name="Backup" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="IsSinglePath" oor:finalized="true">
+        <value>true</value>
+      </prop>
+      <node oor:name="InternalPaths" oor:finalized="true"/>
+      <prop oor:name="UserPaths" oor:finalized="true"/>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/backup</value>
+      </prop>
+    </node>
+    <node oor:name="Basic" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/basic" oor:op="fuse"/>
+      </node>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/basic</value>
+      </prop>
+    </node>
+    <node oor:name="Bitmap" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/config/symbol" oor:op="fuse"/>
+      </node>
+    </node>
+    <node oor:name="Config" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/config" oor:op="fuse"/>
+      </node>
+    </node>
+    <node oor:name="Favorite" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="WritePath">
+        <value>$(userurl)/config/folders</value>
+      </prop>
+    </node>
+    <node oor:name="Filter" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(progpath)/filter" oor:op="fuse"/>
+      </node>
+    </node>
     <node oor:name="Gallery" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/gallery" oor:op="fuse" />
-            </node>
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/gallery</value>
-            </prop>
-        </node>
-
-        <node oor:name="Graphic" oor:op="fuse" oor:mandatory="true">
-            <prop oor:name="IsSinglePath" oor:finalized="true">
-                <value>true</value>
-            </prop>
-            <node oor:name="InternalPaths" oor:finalized="true" />
-            <prop oor:name="UserPaths" oor:finalized="true" />
-            <prop oor:name="WritePath">
-                              <value>$(userurl)/gallery</value>
-            </prop>
-        </node>
-
-        <node oor:name="Help" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                <node oor:name="$(instpath)/help" oor:op="fuse" />
-            </node>
-        </node>
-
-        <node oor:name="Linguistic" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                <node oor:name="$(insturl)/share/dict" oor:op="fuse"/>
-                <node oor:name="$(insturl)/share/dict/ooo" oor:op="fuse"/>
-            </node>
-            <prop oor:name="UserPaths">
-                <value>$(userurl)/wordbook</value>
-            </prop>
-        </node>
-
-        <node oor:name="Dictionary" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                <node oor:name="$(insturl)/share/wordbook" oor:op="fuse"/>
-            </node>
-            <prop oor:name="WritePath">
-                <value>$(userurl)/wordbook</value>
-            </prop>
-        </node>
-
-        <node oor:name="Module" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(progpath)" oor:op="fuse" />
-            </node>
-        </node>
-
-        <node oor:name="Palette" oor:op="fuse" oor:mandatory="true">
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/config</value>
-            </prop>
-        </node>
-
-        <node oor:name="Plugin" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(progpath)/plugin" oor:op="fuse" />
-            </node>
-        </node>
-
-                <node oor:name="Fingerprint" oor:op="fuse" oor:mandatory="true">
-                        <node oor:name="InternalPaths">
-                              <node install:module="internallibexttextcatdata" oor:name="$(insturl)/share/fingerprint" oor:op="fuse"/>
-                              <node install:module="externallibexttextcatdata" oor:name="${SYSTEM_LIBEXTTEXTCAT_DATA}" oor:op="fuse"/>
-                        </node>
-                </node>
-
-        <!-- deprecated ! -->
-        <node oor:name="Storage" oor:op="fuse" oor:mandatory="true">
-            <prop oor:name="WritePath">
-                     <value>$(userpath)/store</value>
-            </prop>
-        </node>
-
-        <node oor:name="Temp" oor:op="fuse" oor:mandatory="true">
-            <prop oor:name="IsSinglePath" oor:finalized="true">
-                  <value>true</value>
-            </prop>
-            <node oor:name="InternalPaths" oor:finalized="true"/>
-            <prop oor:name="UserPaths" oor:finalized="true"/>
-            <prop oor:name="WritePath">
-                  <value install:module="macosx">$(userurl)/temp</value>
-                  <value install:module="unxwnt">$(temp)</value>
-            </prop>
-        </node>
-
-        <node oor:name="Template" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/template/$(vlang)" oor:op="fuse" />
-            </node>
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/template</value>
-            </prop>
-        </node>
-
-        <node oor:name="UIConfig" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/config" oor:op="fuse" />
-            </node>
-        </node>
-
-        <node oor:name="UserConfig" oor:op="fuse" oor:mandatory="true">
-            <prop oor:name="IsSinglePath" oor:finalized="true">
-                <value>true</value>
-            </prop>
-            <node oor:name="InternalPaths" oor:finalized="true" />
-            <prop oor:name="UserPaths" oor:finalized="true" />
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/config</value>
-            </prop>
-        </node>
-
-        <node oor:name="Work" oor:op="fuse" oor:mandatory="true">
-            <prop oor:name="IsSinglePath" oor:finalized="true">
-                <value>true</value>
-            </prop>
-            <node oor:name="InternalPaths" oor:finalized="true" />
-            <prop oor:name="UserPaths" oor:finalized="true" />
-            <prop oor:name="WritePath">
-                     <value>$(work)</value>
-            </prop>
-        </node>
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/gallery" oor:op="fuse"/>
+      </node>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/gallery</value>
+      </prop>
     </node>
-    <node oor:name="Variables">
-        <prop oor:name="Work">
-            <value install:module="macosx" oor:external=
-           "com.sun.star.configuration.backend.MacOSXBackend WorkPathVariable"/>
-            <value install:module="unixdesktop" oor:external=
-          "com.sun.star.configuration.backend.DesktopBackend WorkPathVariable"/>
-        </prop>
+    <node oor:name="Graphic" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="IsSinglePath" oor:finalized="true">
+        <value>true</value>
+      </prop>
+      <node oor:name="InternalPaths" oor:finalized="true"/>
+      <prop oor:name="UserPaths" oor:finalized="true"/>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/gallery</value>
+      </prop>
     </node>
+    <node oor:name="Help" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(instpath)/help" oor:op="fuse"/>
+      </node>
+    </node>
+    <node oor:name="Linguistic" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/dict" oor:op="fuse"/>
+        <node oor:name="$(insturl)/share/dict/ooo" oor:op="fuse"/>
+      </node>
+      <prop oor:name="UserPaths">
+        <value>$(userurl)/wordbook</value>
+      </prop>
+    </node>
+    <node oor:name="Dictionary" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/wordbook" oor:op="fuse"/>
+      </node>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/wordbook</value>
+      </prop>
+    </node>
+    <node oor:name="Module" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(progpath)" oor:op="fuse"/>
+      </node>
+    </node>
+    <node oor:name="Palette" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="WritePath">
+        <value>$(userurl)/config</value>
+      </prop>
+    </node>
+    <node oor:name="Plugin" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(progpath)/plugin" oor:op="fuse"/>
+      </node>
+    </node>
+    <node oor:name="Fingerprint" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node install:module="internallibexttextcatdata" oor:name="$(insturl)/share/fingerprint" oor:op="fuse"/>
+        <node install:module="externallibexttextcatdata" oor:name="${SYSTEM_LIBEXTTEXTCAT_DATA}" oor:op="fuse"/>
+      </node>
+    </node>
+    <!-- deprecated ! -->
+    <node oor:name="Storage" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="WritePath">
+        <value>$(userpath)/store</value>
+      </prop>
+    </node>
+    <node oor:name="Temp" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="IsSinglePath" oor:finalized="true">
+        <value>true</value>
+      </prop>
+      <node oor:name="InternalPaths" oor:finalized="true"/>
+      <prop oor:name="UserPaths" oor:finalized="true"/>
+      <prop oor:name="WritePath">
+        <value install:module="macosx">$(userurl)/temp</value>
+        <value install:module="unxwnt">$(temp)</value>
+      </prop>
+    </node>
+    <node oor:name="Template" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/template/$(vlang)" oor:op="fuse"/>
+      </node>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/template</value>
+      </prop>
+    </node>
+    <node oor:name="UIConfig" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/share/config" oor:op="fuse"/>
+      </node>
+    </node>
+    <node oor:name="UserConfig" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="IsSinglePath" oor:finalized="true">
+        <value>true</value>
+      </prop>
+      <node oor:name="InternalPaths" oor:finalized="true"/>
+      <prop oor:name="UserPaths" oor:finalized="true"/>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/config</value>
+      </prop>
+    </node>
+    <node oor:name="Work" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="IsSinglePath" oor:finalized="true">
+        <value>true</value>
+      </prop>
+      <node oor:name="InternalPaths" oor:finalized="true"/>
+      <prop oor:name="UserPaths" oor:finalized="true"/>
+      <prop oor:name="WritePath">
+        <value>$(work)</value>
+      </prop>
+    </node>
+  </node>
+  <node oor:name="Variables">
+    <prop oor:name="Work">
+      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend WorkPathVariable"/>
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend WorkPathVariable"/>
+    </prop>
+  </node>
 </oor:component-data>
-

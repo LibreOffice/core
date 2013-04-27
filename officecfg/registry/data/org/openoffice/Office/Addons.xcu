@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -8,279 +7,276 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-
-<oor:component-data oor:name="Addons" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="AddonUI" install:module="librelogo">
-        <node oor:name="OfficeToolBar">
-            <node oor:name="LibreLogo.OfficeToolBar" oor:op="replace">
-                <node oor:name="m01" oor:op="replace">
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$goforward?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Forward</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                </node>
-                <node oor:name="m02" oor:op="replace">
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$gobackward?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Back</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                </node>
-                <node oor:name="m03" oor:op="replace">
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$left?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Left</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                </node>
-                <node oor:name="m04" oor:op="replace">
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$right?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Right</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                </node>
-                <node oor:name="m05" oor:op="replace">
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$run?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Start Logo program (text or selected text of the document)</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                </node>
-                <node oor:name="m06" oor:op="replace">
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$stop?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Stop</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                </node>
-                <node oor:name="m07" oor:op="replace">
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$home?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Home</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                </node>
-                <node oor:name="m08" oor:op="replace">
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$clearscreen?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Clear screen</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                </node>
-                <node oor:name="m09" oor:op="replace">
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$commandline?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Logo command line (press Enter for command execution or F1 for help)</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="ControlType" oor:type="xs:string">
-                        <value>Editfield</value>
-                    </prop>
-                    <prop oor:name="Width" oor:type="xs:long">
-                        <value>300</value>
-                    </prop>
-                </node>
-                <node oor:name="m10" oor:op="replace">
-                    <prop oor:name="Context" oor:type="xs:string">
-                        <value>com.sun.star.text.TextDocument</value>
-                    </prop>
-                    <prop oor:name="URL" oor:type="xs:string">
-                        <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$__translate__?language=Python&amp;location=share</value>
-                    </prop>
-                    <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">Uppercase commands, also translate them to the language of the document</value>
-                    </prop>
-                    <prop oor:name="Target" oor:type="xs:string">
-                        <value>_self</value>
-                    </prop>
-                </node>
+<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Addons" oor:package="org.openoffice.Office">
+  <node oor:name="AddonUI" install:module="librelogo">
+    <node oor:name="OfficeToolBar">
+      <node oor:name="LibreLogo.OfficeToolBar" oor:op="replace">
+        <node oor:name="m01" oor:op="replace">
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$goforward?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Forward</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
         </node>
+        <node oor:name="m02" oor:op="replace">
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$gobackward?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Back</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
         </node>
+        <node oor:name="m03" oor:op="replace">
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$left?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Left</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+        </node>
+        <node oor:name="m04" oor:op="replace">
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$right?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Right</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+        </node>
+        <node oor:name="m05" oor:op="replace">
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$run?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Start Logo program (text or selected text of the document)</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+        </node>
+        <node oor:name="m06" oor:op="replace">
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$stop?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Stop</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+        </node>
+        <node oor:name="m07" oor:op="replace">
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$home?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Home</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+        </node>
+        <node oor:name="m08" oor:op="replace">
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$clearscreen?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Clear screen</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+        </node>
+        <node oor:name="m09" oor:op="replace">
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$commandline?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Logo command line (press Enter for command execution or F1 for help)</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="ControlType" oor:type="xs:string">
+            <value>Editfield</value>
+          </prop>
+          <prop oor:name="Width" oor:type="xs:long">
+            <value>300</value>
+          </prop>
+        </node>
+        <node oor:name="m10" oor:op="replace">
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument</value>
+          </prop>
+          <prop oor:name="URL" oor:type="xs:string">
+            <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$__translate__?language=Python&amp;location=share</value>
+          </prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="en-US">Uppercase commands, also translate them to the language of the document</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string">
+            <value>_self</value>
+          </prop>
+        </node>
+      </node>
+    </node>
     <node oor:name="Images">
-        <node oor:name="logo-forward" oor:op="replace">
-            <prop oor:name="URL" oor:type="xs:string">
-                <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$goforward?language=Python&amp;location=share</value>
-            </prop>
-            <node oor:name="UserDefinedImages">
-                <prop oor:name="ImageSmallURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.up-arrow.png</value>
-                </prop>
-                <prop oor:name="ImageBigURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.up-arrow.png</value>
-                </prop>
-            </node>
+      <node oor:name="logo-forward" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$goforward?language=Python&amp;location=share</value>
+        </prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.up-arrow.png</value>
+          </prop>
+          <prop oor:name="ImageBigURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.up-arrow.png</value>
+          </prop>
         </node>
-        <node oor:name="logo-backward" oor:op="replace">
-            <prop oor:name="URL" oor:type="xs:string">
-                <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$gobackward?language=Python&amp;location=share</value>
-            </prop>
-            <node oor:name="UserDefinedImages">
-                <prop oor:name="ImageSmallURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.down-arrow.png</value>
-                </prop>
-                <prop oor:name="ImageBigURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.down-arrow.png</value>
-                </prop>
-            </node>
+      </node>
+      <node oor:name="logo-backward" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$gobackward?language=Python&amp;location=share</value>
+        </prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.down-arrow.png</value>
+          </prop>
+          <prop oor:name="ImageBigURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.down-arrow.png</value>
+          </prop>
         </node>
-        <node oor:name="logo-left" oor:op="replace">
-            <prop oor:name="URL" oor:type="xs:string">
-                <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$left?language=Python&amp;location=share</value>
-            </prop>
-            <node oor:name="UserDefinedImages">
-                <prop oor:name="ImageSmallURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.circular-leftarrow.png</value>
-                </prop>
-                <prop oor:name="ImageBigURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.circular-leftarrow.png</value>
-                </prop>
-            </node>
+      </node>
+      <node oor:name="logo-left" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$left?language=Python&amp;location=share</value>
+        </prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.circular-leftarrow.png</value>
+          </prop>
+          <prop oor:name="ImageBigURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.circular-leftarrow.png</value>
+          </prop>
         </node>
-        <node oor:name="logo-right" oor:op="replace">
-            <prop oor:name="URL" oor:type="xs:string">
-                <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$right?language=Python&amp;location=share</value>
-            </prop>
-            <node oor:name="UserDefinedImages">
-                <prop oor:name="ImageSmallURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.circular-arrow.png</value>
-                </prop>
-                <prop oor:name="ImageBigURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.circular-arrow.png</value>
-                </prop>
-            </node>
+      </node>
+      <node oor:name="logo-right" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$right?language=Python&amp;location=share</value>
+        </prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.circular-arrow.png</value>
+          </prop>
+          <prop oor:name="ImageBigURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.circular-arrow.png</value>
+          </prop>
         </node>
-        <node oor:name="logo-run" oor:op="replace">
-            <prop oor:name="URL" oor:type="xs:string">
-                <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$run?language=Python&amp;location=share</value>
-            </prop>
-            <node oor:name="UserDefinedImages">
-                <prop oor:name="ImageSmallURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_runbasic.png</value>
-                </prop>
-                <prop oor:name="ImageBigURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_runbasic.png</value>
-                </prop>
-            </node>
+      </node>
+      <node oor:name="logo-run" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$run?language=Python&amp;location=share</value>
+        </prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_runbasic.png</value>
+          </prop>
+          <prop oor:name="ImageBigURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_runbasic.png</value>
+          </prop>
         </node>
-        <node oor:name="logo-stop" oor:op="replace">
-            <prop oor:name="URL" oor:type="xs:string">
-                <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$stop?language=Python&amp;location=share</value>
-            </prop>
-            <node oor:name="UserDefinedImages">
-                <prop oor:name="ImageSmallURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_basicstop.png</value>
-                </prop>
-                <prop oor:name="ImageBigURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_basicstop.png</value>
-                </prop>
-            </node>
+      </node>
+      <node oor:name="logo-stop" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$stop?language=Python&amp;location=share</value>
+        </prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_basicstop.png</value>
+          </prop>
+          <prop oor:name="ImageBigURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_basicstop.png</value>
+          </prop>
         </node>
-        <node oor:name="logo-home" oor:op="replace">
-            <prop oor:name="URL" oor:type="xs:string">
-                <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$home?language=Python&amp;location=share</value>
-            </prop>
-            <node oor:name="UserDefinedImages">
-                <prop oor:name="ImageSmallURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_navigationbarleft.png</value>
-                </prop>
-                <prop oor:name="ImageBigURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_navigationbarleft.png</value>
-                </prop>
-            </node>
+      </node>
+      <node oor:name="logo-home" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$home?language=Python&amp;location=share</value>
+        </prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_navigationbarleft.png</value>
+          </prop>
+          <prop oor:name="ImageBigURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_navigationbarleft.png</value>
+          </prop>
         </node>
-        <node oor:name="logo-clearscreen" oor:op="replace">
-            <prop oor:name="URL" oor:type="xs:string">
-                <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$clearscreen?language=Python&amp;location=share</value>
-            </prop>
-            <node oor:name="UserDefinedImages">
-                <prop oor:name="ImageSmallURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_newdoc.png</value>
-                </prop>
-                <prop oor:name="ImageBigURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_newdoc.png</value>
-                </prop>
-            </node>
+      </node>
+      <node oor:name="logo-clearscreen" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$clearscreen?language=Python&amp;location=share</value>
+        </prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_newdoc.png</value>
+          </prop>
+          <prop oor:name="ImageBigURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_newdoc.png</value>
+          </prop>
         </node>
-        <node oor:name="logo-translate" oor:op="replace">
-            <prop oor:name="URL" oor:type="xs:string">
-                <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$__translate__?language=Python&amp;location=share</value>
-            </prop>
-            <node oor:name="UserDefinedImages">
-                <prop oor:name="ImageSmallURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_editglossary.png</value>
-                </prop>
-                <prop oor:name="ImageBigURL">
-                    <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_editglossary.png</value>
-                </prop>
-            </node>
+      </node>
+      <node oor:name="logo-translate" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$__translate__?language=Python&amp;location=share</value>
+        </prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_editglossary.png</value>
+          </prop>
+          <prop oor:name="ImageBigURL">
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_editglossary.png</value>
+          </prop>
         </node>
-
+      </node>
     </node>
-
-    </node>
+  </node>
 </oor:component-data>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Writer" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Writer" oor:package="org.openoffice.Office">
   <node oor:name="MailMergeWizard">
     <prop oor:name="FemaleGreetingLines">
       <value xml:lang="en-US" oor:separator=";">Dear Mrs. &lt;2&gt;,</value>
@@ -28,8 +28,8 @@
     <prop oor:name="NeutralGreetingLines">
       <value xml:lang="en-US" oor:separator=";">To whom it may concern,;Dear Friends,;Dear Sir or Madam,;Hello,</value>
     </prop>
-    <prop oor:name="IsHideEmptyParagraphs" >
-     <value>true</value>
+    <prop oor:name="IsHideEmptyParagraphs">
+      <value>true</value>
     </prop>
     <node oor:name="DataSource">
       <prop oor:name="DataSourceName" oor:type="xs:string">
@@ -58,7 +58,7 @@
       </node>
     </node>
     <prop oor:name="EMailSupported">
-     <value>true</value>
+      <value>true</value>
     </prop>
   </node>
   <node oor:name="AutoFunction" install:module="cjk">
@@ -71,7 +71,7 @@
   <node oor:name="Insert">
     <node oor:name="Caption">
       <prop oor:name="CaptionOrderNumberingFirst">
-         <value xml:lang="hu">true</value>
+        <value xml:lang="hu">true</value>
       </prop>
       <node oor:name="WriterObject">
         <node oor:name="Table">
@@ -179,526 +179,526 @@
       </node>
     </node>
     <node oor:name="Table">
-        <prop oor:name="RepeatHeader" oor:type="xs:boolean">
-         <value>true</value>
+      <prop oor:name="RepeatHeader" oor:type="xs:boolean">
+        <value>true</value>
+      </prop>
+    </node>
+  </node>
+  <node oor:name="Wizards">
+    <node oor:name="Letter">
+      <prop oor:name="LetterType" oor:type="xs:int">
+        <value>0</value>
+      </prop>
+      <node oor:name="BusinessLetter">
+        <prop oor:name="BusinessPaper" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
+        <prop oor:name="CreationType" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Footer" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="FooterOnlySecondPage" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="FooterPageNumbers" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Greeting" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="PaperCompanyAddressReceiverField" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PaperFooter" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PaperFooterHeight" oor:type="xs:double">
+          <value>3.1</value>
+        </prop>
+        <prop oor:name="PrintBendMarks" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintCompanyAddressReceiverField" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintCompanyLogo" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintFooter" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintGreeting" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSalutation" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ReceiverAddressType" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="Salutation" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderAddressType" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="SenderCity" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderCompanyName" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderPostCode" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderStreet" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="Style" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="TemplateName" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="TemplatePath" oor:type="xs:string">
+          <value/>
+        </prop>
+        <node oor:name="CompanyAddress">
+          <prop oor:name="Display" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Height" oor:type="xs:double">
+            <value>4</value>
+          </prop>
+          <prop oor:name="Width" oor:type="xs:double">
+            <value>15</value>
+          </prop>
+          <prop oor:name="X" oor:type="xs:double">
+            <value>6</value>
+          </prop>
+          <prop oor:name="Y" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+        </node>
+        <node oor:name="CompanyLogo">
+          <prop oor:name="Display" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+          <prop oor:name="Height" oor:type="xs:double">
+            <value>4</value>
+          </prop>
+          <prop oor:name="Width" oor:type="xs:double">
+            <value>5</value>
+          </prop>
+          <prop oor:name="X" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="Y" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+        </node>
+        <prop oor:name="Norm" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="PrintLetterSigns" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="SenderState" oor:type="xs:string">
+          <value/>
+        </prop>
+      </node>
+      <node oor:name="PrivateLetter">
+        <prop oor:name="CreationType" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Greeting" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="PrintGreeting" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSalutation" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Salutation" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="Style" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="TemplateName" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="TemplatePath" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="BusinessPaper" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Footer" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="FooterOnlySecondPage" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="FooterPageNumbers" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Norm" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="PaperCompanyAddressReceiverField" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PaperFooter" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PaperFooterHeight" oor:type="xs:double">
+          <value>0</value>
+        </prop>
+        <prop oor:name="PrintBendMarks" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PrintCompanyAddressReceiverField" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PrintCompanyLogo" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PrintFooter" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PrintLetterSigns" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ReceiverAddressType" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="SenderAddressType" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="SenderCity" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderCompanyName" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderPostCode" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderState" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderStreet" oor:type="xs:string">
+          <value/>
+        </prop>
+        <node oor:name="CompanyAddress">
+          <prop oor:name="Display" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Height" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="Width" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="X" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="Y" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+        </node>
+        <node oor:name="CompanyLogo">
+          <prop oor:name="Display" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Height" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="Width" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="X" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="Y" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+        </node>
+      </node>
+      <node oor:name="PrivateOfficialLetter">
+        <prop oor:name="CreationType" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="FooterPageNumbers" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Greeting" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="PrintBendMarks" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintCompanyAddressReceiverField" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintFooter" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintGreeting" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSalutation" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ReceiverAddressType" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="Salutation" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderAddressType" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="SenderCity" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderCompanyName" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderPostCode" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderState" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderStreet" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="Style" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="TemplateName" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="TemplatePath" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="BusinessPaper" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Footer" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="FooterOnlySecondPage" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Norm" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="PaperCompanyAddressReceiverField" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PaperFooter" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PaperFooterHeight" oor:type="xs:double">
+          <value>0</value>
+        </prop>
+        <prop oor:name="PrintCompanyLogo" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PrintLetterSigns" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <node oor:name="CompanyAddress">
+          <prop oor:name="Display" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Height" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="Width" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="X" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="Y" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+        </node>
+        <node oor:name="CompanyLogo">
+          <prop oor:name="Display" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Height" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="Width" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="X" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+          <prop oor:name="Y" oor:type="xs:double">
+            <value>0</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+    <node oor:name="Fax">
+      <prop oor:name="FaxType" oor:type="xs:int">
+        <value>0</value>
+      </prop>
+      <node oor:name="BusinessFax">
+        <prop oor:name="CreationType" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Footer" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="FooterOnlySecondPage" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="FooterPageNumbers" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Greeting" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="CommunicationType" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="PrintCompanyLogo" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintFooter" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintGreeting" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSalutation" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintDate" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintCommunicationType" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ReceiverAddressType" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="Salutation" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderAddressType" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="SenderCity" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderCompanyName" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderPostCode" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderStreet" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="SenderFax" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="Style" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="TemplateName" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="TemplatePath" oor:type="xs:string">
+          <value/>
+        </prop>
+      </node>
+      <node oor:name="PrivateFax">
+        <prop oor:name="CreationType" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Greeting" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="PrintGreeting" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSalutation" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Salutation" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="Style" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="TemplateName" oor:type="xs:string">
+          <value/>
+        </prop>
+        <prop oor:name="TemplatePath" oor:type="xs:string">
+          <value/>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Agenda">
+      <prop oor:name="IncludeMinutes">
+        <value>true</value>
+      </prop>
+      <prop oor:name="ShowMeetingType">
+        <value>true</value>
+      </prop>
+      <prop oor:name="ShowRead">
+        <value>true</value>
+      </prop>
+      <prop oor:name="ShowNotes">
+        <value>true</value>
+      </prop>
+      <prop oor:name="ShowCalledBy">
+        <value>true</value>
+      </prop>
+      <prop oor:name="ShowAttendees">
+        <value>true</value>
+      </prop>
+      <node oor:name="Topics"/>
     </node>
   </node>
- <node oor:name="Wizards">
-  <node oor:name="Letter">
-   <prop oor:name="LetterType" oor:type="xs:int">
-    <value>0</value>
-   </prop>
-   <node oor:name="BusinessLetter">
-    <prop oor:name="BusinessPaper" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="CreationType" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Footer" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="FooterOnlySecondPage" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="FooterPageNumbers" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="Greeting" oor:type="xs:string">
-     <value></value>
-    </prop>
-    <prop oor:name="PaperCompanyAddressReceiverField" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PaperFooter" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PaperFooterHeight" oor:type="xs:double">
-     <value>3.1</value>
-    </prop>
-    <prop oor:name="PrintBendMarks" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintCompanyAddressReceiverField" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintCompanyLogo" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintFooter" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintGreeting" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSalutation" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="ReceiverAddressType" oor:type="xs:int">
-     <value>1</value>
-    </prop>
-    <prop oor:name="Salutation" oor:type="xs:string">
-     <value></value>
-    </prop>
-    <prop oor:name="SenderAddressType" oor:type="xs:int">
-     <value>1</value>
-    </prop>
-    <prop oor:name="SenderCity" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderCompanyName" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderPostCode" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderStreet" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="TemplateName" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="TemplatePath" oor:type="xs:string">
-     <value></value>
-    </prop>
-    <node oor:name="CompanyAddress">
-     <prop oor:name="Display" oor:type="xs:boolean">
-      <value>true</value>
-     </prop>
-     <prop oor:name="Height" oor:type="xs:double">
-      <value>4</value>
-     </prop>
-     <prop oor:name="Width" oor:type="xs:double">
-      <value>15</value>
-     </prop>
-     <prop oor:name="X" oor:type="xs:double">
-      <value>6</value>
-     </prop>
-     <prop oor:name="Y" oor:type="xs:double">
-      <value>0</value>
-     </prop>
+  <node oor:name="Layout">
+    <node oor:name="Other">
+      <prop oor:name="TabStop">
+        <value xml:lang="zh-CN">740</value>
+      </prop>
     </node>
-    <node oor:name="CompanyLogo">
-     <prop oor:name="Display" oor:type="xs:boolean">
-      <value>true</value>
-     </prop>
-     <prop oor:name="Height" oor:type="xs:double">
-      <value>4</value>
-     </prop>
-     <prop oor:name="Width" oor:type="xs:double">
-      <value>5</value>
-     </prop>
-     <prop oor:name="X" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="Y" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-    </node>
-    <prop oor:name="Norm" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="PrintLetterSigns" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="SenderState" oor:type="xs:string">
-     <value/>
-    </prop>
-   </node>
-   <node oor:name="PrivateLetter">
-    <prop oor:name="CreationType" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Greeting" oor:type="xs:string">
-     <value></value>
-    </prop>
-    <prop oor:name="PrintGreeting" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSalutation" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="Salutation" oor:type="xs:string">
-     <value></value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="TemplateName" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="TemplatePath" oor:type="xs:string">
-     <value></value>
-    </prop>
-    <prop oor:name="BusinessPaper" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Footer" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="FooterOnlySecondPage" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="FooterPageNumbers" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Norm" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="PaperCompanyAddressReceiverField" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="PaperFooter" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="PaperFooterHeight" oor:type="xs:double">
-     <value>0</value>
-    </prop>
-    <prop oor:name="PrintBendMarks" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="PrintCompanyAddressReceiverField" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="PrintCompanyLogo" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="PrintFooter" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="PrintLetterSigns" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="ReceiverAddressType" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="SenderAddressType" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="SenderCity" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderCompanyName" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderPostCode" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderState" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderStreet" oor:type="xs:string">
-     <value/>
-    </prop>
-    <node oor:name="CompanyAddress">
-     <prop oor:name="Display" oor:type="xs:boolean">
+  </node>
+  <node oor:name="Notes">
+    <prop oor:name="ShowAnkor">
       <value>false</value>
-     </prop>
-     <prop oor:name="Height" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="Width" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="X" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="Y" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-    </node>
-    <node oor:name="CompanyLogo">
-     <prop oor:name="Display" oor:type="xs:boolean">
-      <value>false</value>
-     </prop>
-     <prop oor:name="Height" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="Width" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="X" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="Y" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-    </node>
-   </node>
-   <node oor:name="PrivateOfficialLetter">
-    <prop oor:name="CreationType" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="FooterPageNumbers" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="Greeting" oor:type="xs:string">
-     <value></value>
-    </prop>
-    <prop oor:name="PrintBendMarks" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintCompanyAddressReceiverField" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintFooter" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintGreeting" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSalutation" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="ReceiverAddressType" oor:type="xs:int">
-     <value>1</value>
-    </prop>
-    <prop oor:name="Salutation" oor:type="xs:string">
-     <value></value>
-    </prop>
-    <prop oor:name="SenderAddressType" oor:type="xs:int">
-     <value>1</value>
-    </prop>
-    <prop oor:name="SenderCity" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderCompanyName" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderPostCode" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderState" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderStreet" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="TemplateName" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="TemplatePath" oor:type="xs:string">
-     <value></value>
-    </prop>
-    <prop oor:name="BusinessPaper" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Footer" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="FooterOnlySecondPage" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Norm" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="PaperCompanyAddressReceiverField" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="PaperFooter" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="PaperFooterHeight" oor:type="xs:double">
-     <value>0</value>
-    </prop>
-    <prop oor:name="PrintCompanyLogo" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="PrintLetterSigns" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <node oor:name="CompanyAddress">
-     <prop oor:name="Display" oor:type="xs:boolean">
-      <value>false</value>
-     </prop>
-     <prop oor:name="Height" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="Width" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="X" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="Y" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-    </node>
-    <node oor:name="CompanyLogo">
-     <prop oor:name="Display" oor:type="xs:boolean">
-      <value>false</value>
-     </prop>
-     <prop oor:name="Height" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="Width" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="X" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-     <prop oor:name="Y" oor:type="xs:double">
-      <value>0</value>
-     </prop>
-    </node>
-   </node>
-  </node>
-  <node oor:name="Fax">
-   <prop oor:name="FaxType" oor:type="xs:int">
-    <value>0</value>
-   </prop>
-   <node oor:name="BusinessFax">
-    <prop oor:name="CreationType" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Footer" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="FooterOnlySecondPage" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="FooterPageNumbers" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="Greeting" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="CommunicationType" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="PrintCompanyLogo" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintFooter" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintGreeting" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSalutation" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintDate" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintCommunicationType" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="ReceiverAddressType" oor:type="xs:int">
-     <value>1</value>
-    </prop>
-    <prop oor:name="Salutation" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderAddressType" oor:type="xs:int">
-     <value>1</value>
-    </prop>
-    <prop oor:name="SenderCity" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderCompanyName" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderPostCode" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderStreet" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="SenderFax" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="TemplateName" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="TemplatePath" oor:type="xs:string">
-     <value></value>
-    </prop>
-   </node>
-   <node oor:name="PrivateFax">
-    <prop oor:name="CreationType" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Greeting" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="PrintGreeting" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSalutation" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="PrintSubjectLine" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="Salutation" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="TemplateName" oor:type="xs:string">
-     <value/>
-    </prop>
-    <prop oor:name="TemplatePath" oor:type="xs:string">
-     <value/>
-    </prop>
-   </node>
-  </node>
-  <node oor:name="Agenda" >
-    <prop  oor:name="IncludeMinutes">
-      <value>true</value>
-    </prop>
-    <prop oor:name="ShowMeetingType">
-      <value>true</value>
-    </prop>
-    <prop oor:name="ShowRead">
-      <value>true</value>
-    </prop>
-    <prop  oor:name="ShowNotes">
-      <value>true</value>
-    </prop>
-    <prop oor:name="ShowCalledBy">
-      <value>true</value>
-    </prop>
-    <prop oor:name="ShowAttendees">
-      <value>true</value>
-    </prop>
-    <node oor:name="Topics"/>
-  </node>
- </node>
- <node oor:name="Layout" >
-  <node oor:name="Other" >
-    <prop oor:name="TabStop">
-     <value xml:lang="zh-CN">740</value>
     </prop>
   </node>
- </node>
- <node oor:name="Notes">
-  <prop oor:name="ShowAnkor">
-   <value>false</value>
-  </prop>
- </node>
 </oor:component-data>
