@@ -302,7 +302,8 @@ public:
 
     CompareState CompareByTokenArray( ScFormulaCell *pOther ) const;
 
-    bool                   InterpretFormulaGroup();
+    bool InterpretFormulaGroup();
+    bool InterpretInvariantFormulaGroup();
 
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
     void StartListeningTo( ScDocument* pDoc );

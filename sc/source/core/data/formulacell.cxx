@@ -2965,82 +2965,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     }
 
     if (xGroup->mbInvariant)
-    {
-        if (pCode->GetVectorState() == FormulaVectorCheckReference)
-        {
-            // An invariant group should only have absolute references, and no
-            // external references are allowed.
-
-            ScTokenArray aCode;
-            pCode->Reset();
-            for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
-            {
-                const ScToken* pToken = static_cast<const ScToken*>(p);
-                switch (pToken->GetType())
-                {
-                    case svSingleRef:
-                    {
-                        const ScSingleRefData& rRef = pToken->GetSingleRef();
-                        ScAddress aRefPos(rRef.nCol, rRef.nRow, rRef.nTab);
-                        formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefPos);
-                        if (!pNewToken)
-                            return false;
-
-                        aCode.AddToken(*pNewToken);
-                    }
-                    break;
-                    case svDoubleRef:
-                    {
-                        const ScComplexRefData& rRef = pToken->GetDoubleRef();
-                        ScRange aRefRange(
-                            rRef.Ref1.nCol, rRef.Ref1.nRow, rRef.Ref1.nTab,
-                            rRef.Ref2.nCol, rRef.Ref2.nRow, rRef.Ref2.nTab);
-
-                        formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefRange);
-                        if (!pNewToken)
-                            return false;
-
-                        aCode.AddToken(*pNewToken);
-                    }
-                    break;
-                    default:
-                        aCode.AddToken(*pToken);
-                }
-            }
-
-            ScCompiler aComp(pDocument, aPos, aCode);
-            aComp.SetGrammar(pDocument->GetGrammar());
-            aComp.CompileTokenArray(); // Create RPN token array.
-            ScInterpreter aInterpreter(this, pDocument, aPos, aCode);
-            aInterpreter.Interpret();
-            aResult.SetToken(aInterpreter.GetResultToken().get());
-        }
-        else
-        {
-            // Formula contains no references.
-            ScInterpreter aInterpreter(this, pDocument, aPos, *pCode);
-            aInterpreter.Interpret();
-            aResult.SetToken(aInterpreter.GetResultToken().get());
-        }
-
-        for ( sal_Int32 i = 0; i < xGroup->mnLength; i++ )
-        {
-            ScAddress aTmpPos = aPos;
-            aTmpPos.SetRow(xGroup->mnStart + i);
-            ScFormulaCell* pCell = pDocument->GetFormulaCell(aTmpPos);
-            assert( pCell != NULL );
-
-            // FIXME: this set of horrors is unclear to me ... certainly
-            // the above GetCell is profoundly nasty & slow ...
-
-            // Ensure the cell truly has a result:
-            pCell->aResult = aResult;
-            pCell->ResetDirty();
-
-            // FIXME: there is a view / refresh missing here it appears.
-        }
-        return true;
-    }
+        return InterpretInvariantFormulaGroup();
 
     // scan the formula ...
     // have a document method: "Get2DRangeAsDoublesArray" that does the
@@ -3070,6 +2995,85 @@ bool ScFormulaCell::InterpretFormulaGroup()
     //    signal errors.
 
     return false;
+}
+
+bool ScFormulaCell::InterpretInvariantFormulaGroup()
+{
+    if (pCode->GetVectorState() == FormulaVectorCheckReference)
+    {
+        // An invariant group should only have absolute references, and no
+        // external references are allowed.
+
+        ScTokenArray aCode;
+        pCode->Reset();
+        for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
+        {
+            const ScToken* pToken = static_cast<const ScToken*>(p);
+            switch (pToken->GetType())
+            {
+                case svSingleRef:
+                {
+                    const ScSingleRefData& rRef = pToken->GetSingleRef();
+                    ScAddress aRefPos(rRef.nCol, rRef.nRow, rRef.nTab);
+                    formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefPos);
+                    if (!pNewToken)
+                        return false;
+
+                    aCode.AddToken(*pNewToken);
+                }
+                break;
+                case svDoubleRef:
+                {
+                    const ScComplexRefData& rRef = pToken->GetDoubleRef();
+                    ScRange aRefRange(
+                        rRef.Ref1.nCol, rRef.Ref1.nRow, rRef.Ref1.nTab,
+                        rRef.Ref2.nCol, rRef.Ref2.nRow, rRef.Ref2.nTab);
+
+                    formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefRange);
+                    if (!pNewToken)
+                        return false;
+
+                    aCode.AddToken(*pNewToken);
+                }
+                break;
+                default:
+                    aCode.AddToken(*pToken);
+            }
+        }
+
+        ScCompiler aComp(pDocument, aPos, aCode);
+        aComp.SetGrammar(pDocument->GetGrammar());
+        aComp.CompileTokenArray(); // Create RPN token array.
+        ScInterpreter aInterpreter(this, pDocument, aPos, aCode);
+        aInterpreter.Interpret();
+        aResult.SetToken(aInterpreter.GetResultToken().get());
+    }
+    else
+    {
+        // Formula contains no references.
+        ScInterpreter aInterpreter(this, pDocument, aPos, *pCode);
+        aInterpreter.Interpret();
+        aResult.SetToken(aInterpreter.GetResultToken().get());
+    }
+
+    for ( sal_Int32 i = 0; i < xGroup->mnLength; i++ )
+    {
+        ScAddress aTmpPos = aPos;
+        aTmpPos.SetRow(xGroup->mnStart + i);
+        ScFormulaCell* pCell = pDocument->GetFormulaCell(aTmpPos);
+        assert( pCell != NULL );
+
+        // FIXME: this set of horrors is unclear to me ... certainly
+        // the above GetCell is profoundly nasty & slow ...
+
+        // Ensure the cell truly has a result:
+        pCell->aResult = aResult;
+        pCell->ResetDirty();
+
+        // FIXME: there is a view / refresh missing here it appears.
+    }
+
+    return true;
 }
 
 void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
