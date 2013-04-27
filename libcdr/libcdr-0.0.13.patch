@@ -10,3 +10,11 @@
  #include <boost/property_tree/json_parser.hpp>
  #include <boost/property_tree/ptree.hpp>
  #include <boost/spirit/include/classic.hpp>
+@@ -3095,7 +3098,6 @@
+   if (!fflag1)
+     input->seek(8, WPX_SEEK_CUR);
+   unsigned stlId = readU32(input);
+-  printf("Fridrich %x\n", stlId);
+   unsigned numSt = readU32(input);
+   unsigned i = 0;
+   std::map<unsigned, CDRCharacterStyle> charStyles;
