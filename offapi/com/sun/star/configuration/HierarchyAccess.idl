@@ -113,7 +113,7 @@ published service HierarchyAccess
 
  <p>If elements that are not simple values, but objects themselves, support
  a default state (as indicated by
- <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
+ com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT),
  they should implement
  com::sun::star::beans::XPropertyWithState, in which case
  the com::sun::star::beans::PropertyState applies to all
@@ -136,7 +136,7 @@ published service HierarchyAccess
 
  <p>If elements that are not simple values, but objects themselves, support
  a default state (as indicated by
- <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
+ com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT),
  they should implement
  com::sun::star::beans::XPropertyWithState, in which case
  the com::sun::star::beans::PropertyState applies to all

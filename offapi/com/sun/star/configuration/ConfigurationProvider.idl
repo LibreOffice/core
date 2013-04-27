@@ -74,7 +74,7 @@ published service ConfigurationProvider
  which includes controlling updates for the whole view, it implements
  service UpdateRootElement.
  <BR />If the root element of the view is marked read-only (as indicated
- by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
+ by com::sun::star::beans::PropertyAttributes::READONLY),
  the implementation may either raise an exception or return a (read-only)
  ConfigurationAccess/AccessRootElement instead.
  </p>

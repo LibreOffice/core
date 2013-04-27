@@ -92,32 +92,32 @@ service AccessibleSpreadsheetDocumentView
         </ul>
         <li>The description is ???.</li>
         <li>The name is Spreadsheet Document View with a unique number.</li>
-        <li>The role is <const scope="::com::sun::star::accessibility">AccessibleRole::DOCUMENT</const></li>
+        <li>The role is ::com::sun::star::accessibility::AccessibleRole::DOCUMENT</li>
         <li>There are no relations.</li>
         <li>The following states are supported:
             <ul>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::DEFUNC</const> is always false until the document is
+                <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC is always false until the document is
                     closed.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::EDITABLE</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::ENABLED</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::MULTI_LINE</const> makes no sense in on a document and
+                <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_LINE makes no sense in on a document and
                     so it is left out of the list.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::MULTI_SELECTABLE</const> is always false, because a
+                <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE is always false, because a
                 document is not selectable. Only the children are
                 selectable. So it is left out of the list.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::OPAQUE</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::RESIZEABLE</const> is always false, because you can
+                <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::RESIZEABLE is always false, because you can
                     resize the window, but not the document. So it is left out
                     of the list.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::SELECTABLE</const> is always false, because a
+                <li>::com::sun::star::accessibility::AccessibleStateType::SELECTABLE is always false, because a
                     document is not selectable. Only the children are
                     selectable. So it is left out of the list.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::SELECTED</const> is always false, because a
+                <li>::com::sun::star::accessibility::AccessibleStateType::SELECTED is always false, because a
                     document is not selectable. Only the children are
                     selectable. So it is left out of the list.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::SHOWING</const>Is true if the Bounding Box lies in
+                <li>::com::sun::star::accessibility::AccessibleStateType::SHOWINGIs true if the Bounding Box lies in
                     the Bounding Box of the parent. Otherwise it is false.</li>
-                <li><const scope="::com::sun::star::accessibility">AccessibleStateType::VISIBLE</const>Is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLEIs always true.</li>
             </ul>
         </li>
     </ul>

@@ -54,7 +54,7 @@ service AccessibleChartDocumentView
         <dl>
          <dt>Role</dt>
              <dd>The object's role is
-             <const scope="com::sun::star::accessibility">AccessibleRole::DOCUMENT</const>.</dd>
+             com::sun::star::accessibility::AccessibleRole::DOCUMENT.</dd>
          <dt>Name</dt>
              <dd>Its name is the document's name or the base name of the filename if
              no document name has been set explicitly.</dd>
@@ -82,22 +82,22 @@ service AccessibleChartDocumentView
          <dt>States</dt>
              <dd>The following states are supported:
              <ul>
-              <li><const scope="com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+              <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                   is set if a document view becomes obsolete like when
                   the window, which displays the view, is closed.</li>
-              <li><const scope="com::sun::star::accessibility">AccessibleStateType::ENABLED</const>
+              <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
                   is always set unless the
-                  <const scope="com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+                  com::sun::star::accessibility::AccessibleStateType::DEFUNC
                   state is set.</li>
-              <li><const scope="com::sun::star::accessibility">AccessibleStateType::OPAQUE</const>
+              <li>com::sun::star::accessibility::AccessibleStateType::OPAQUE
                   is always set.</li>
-              <li><const scope="com::sun::star::accessibility">AccessibleStateType::SHOWING</const>
+              <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
                   is always set unless the
-                  <const scope="com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+                  com::sun::star::accessibility::AccessibleStateType::DEFUNC
                   state is set.</li>
-              <li><const scope="com::sun::star::accessibility">AccessibleStateType::VISIBLE</const>
+              <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
                   is always set unless the
-                  <const scope="com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+                  com::sun::star::accessibility::AccessibleStateType::DEFUNC
                   state is set.</li>
              </ul>
              </dd>

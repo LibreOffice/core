@@ -35,7 +35,7 @@ module com { module sun { module star { module configuration {
 
  <p>Descendants of this service also implement this service
  unless they are marked <em>read-only</em> (which is indicated by attribute
- <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>),
+ com::sun::star::beans::PropertyAttribute::READONLY),
  in which case they only need implement ConfigurationAccess.
  </p>
 

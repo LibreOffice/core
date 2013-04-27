@@ -30,7 +30,7 @@ published constants SearchFlags
 {
     /**
         @deprecated The constant ALL_IGNORE_CASE is never supported - use
-                    <const scope="com::sun::star::i18n">TransliterationModules::IGNORE_CASE</const>
+                    com::sun::star::i18n::TransliterationModules::IGNORE_CASE
                     with
                     SearchOptions::transliterateFlags()
                     instead.

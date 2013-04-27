@@ -34,7 +34,7 @@ published service PageNumber
     service  com::sun::star::text::TextField;
 
     /** determines the type of the numbering.
-     @see <const scope="com::sun::star::style">NumberingType</const>
+     @see com::sun::star::style::NumberingType
      */
     [property] short NumberingType;
 
@@ -42,11 +42,11 @@ published service PageNumber
      */
     [property] short Offset;
     /** determines which page the field refers to.
-        @see <const scope="com::sun::star::text">PageNumberType</const>
+        @see com::sun::star::text::PageNumberType
      */
     [property] PageNumberType SubType;
     /** if the user text string is set then it is displayed when the value
-     of NumberingType is set to <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>
+     of NumberingType is set to com::sun::star::style::NumberingType::CHAR_SPECIAL
           */
     [property] string UserText;
 

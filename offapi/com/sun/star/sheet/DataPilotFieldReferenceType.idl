@@ -71,7 +71,7 @@ constants DataPilotFieldReferenceType
 
 
     /** Each result is divided by its reference value. The reference value is determined in the
-        same way as for <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ITEM_DIFFERENCE</const>.
+        same way as for ::com::sun::star::sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE.
         Totals outside of the base field are shown as empty results.
 
         <p>Division by zero results in an error. Otherwise, empty results are shown as 0. Results for
@@ -85,10 +85,10 @@ constants DataPilotFieldReferenceType
 
     /** From each result, its reference value is subtracted, and the difference divided by the
         reference value. The reference value is determined in the same way as for
-        <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ITEM_DIFFERENCE</const>.
+        ::com::sun::star::sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE.
         Totals outside of the base field are shown as empty results.
 
-    <p>Division by zero results in an error. Otherwise, the rules for <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ITEM_DIFFERENCE</const> apply.</p>
+    <p>Division by zero results in an error. Otherwise, the rules for ::com::sun::star::sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE apply.</p>
     */
 
         const long ITEM_PERCENTAGE_DIFFERENCE = 3;
@@ -124,13 +124,13 @@ constants DataPilotFieldReferenceType
         const long ROW_PERCENTAGE = 5;
 
 
-    /** Same as <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ROW_PERCENTAGE</const>, but the total for the result's column is used.
+    /** Same as ::com::sun::star::sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE, but the total for the result's column is used.
     */
 
         const long COLUMN_PERCENTAGE = 6;
 
 
-    /** Same as <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ROW_PERCENTAGE</const>, but the grand total for the result's data field is used.
+    /** Same as ::com::sun::star::sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE, but the grand total for the result's data field is used.
     */
 
         const long TOTAL_PERCENTAGE = 7;

@@ -54,11 +54,11 @@ service AccessibleToolBoxItem
 
        <ul>
        <li>Role: The role of a tool box item is
-           <const scope="com::sun::star::accessibility">AccessibleRole::PUSH_BUTTON</const> when the item is a push button, or
-           <const scope="com::sun::star::accessibility">AccessibleRole::TOGGLE_BUTTON</const> when the item is a button and checkable, or
-           <const scope="com::sun::star::accessibility">AccessibleRole::PANEL</const> when the item is a window, or
-           <const scope="com::sun::star::accessibility">AccessibleRole::FILLER</const> when the item is a fill item, or
-           <const scope="com::sun::star::accessibility">AccessibleRole::SEPARATOR</const> when the item is a separator.</li>
+           com::sun::star::accessibility::AccessibleRole::PUSH_BUTTON when the item is a push button, or
+           com::sun::star::accessibility::AccessibleRole::TOGGLE_BUTTON when the item is a button and checkable, or
+           com::sun::star::accessibility::AccessibleRole::PANEL when the item is a window, or
+           com::sun::star::accessibility::AccessibleRole::FILLER when the item is a fill item, or
+           com::sun::star::accessibility::AccessibleRole::SEPARATOR when the item is a separator.</li>
        <li>Name: The name of a tool box item is the name set.</li>
        <li>Description: The description of a tool box item is its localized
            help text.</li>

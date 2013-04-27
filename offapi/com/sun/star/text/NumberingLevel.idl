@@ -63,18 +63,18 @@ published service NumberingLevel
 
 
     /** the ID of the symbol in the given font. This is only valid if the
-        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+        numbering type is com::sun::star::style::NumberingType::CHAR_SPECIAL.
           @deprecated
      */
     [optional, property] short BulletId;
 
     /** contains the symbol in the given font. This is only valid if the
-        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+        numbering type is com::sun::star::style::NumberingType::CHAR_SPECIAL.
      */
     [property] string BulletChar;
 
     /** the name of the font for the symbol. This is only valid if the
-        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+        numbering type is com::sun::star::style::NumberingType::CHAR_SPECIAL.
      */
     [property] string BulletFontName;
 
@@ -87,7 +87,7 @@ published service NumberingLevel
     /** the URL of the graphic file that is used as the numbering symbol.
 
         <p> This is only valid if the numbering type is
-        <const scope="com::sun::star::style">NumberingType::BITMAP</const>.</p>
+        com::sun::star::style::NumberingType::BITMAP.</p>
      */
     [property] string GraphicURL;
 
@@ -111,8 +111,8 @@ published service NumberingLevel
     /** specifies the start value for the numbering.
 
         <p>This property is only valid if the numbering type is not
-        <const scope="com::sun::star::style">NumberingType::BITMAP</const> or
-        <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.</p>
+        com::sun::star::style::NumberingType::BITMAP or
+        com::sun::star::style::NumberingType::CHAR_SPECIAL.</p>
      */
     [optional, property] short StartWith;
 
@@ -153,12 +153,12 @@ published service NumberingLevel
     [optional, property] string ParagraphStyleName;
 
     /** contains the color for the symbol. This is only valid if the
-        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+        numbering type is com::sun::star::style::NumberingType::CHAR_SPECIAL.
     */
     [optional, property] com::sun::star::util::Color BulletColor;
 
     /** contains the size of the symbol relative to the high of the paragraph. This is only valid if the
-        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+        numbering type is com::sun::star::style::NumberingType::CHAR_SPECIAL.
     */
     [optional, property] short BulletRelSize;
 

@@ -136,7 +136,7 @@ published struct WindowDescriptor
     /** specifies the position and size of the window.
 
         <p>This member is ignored if the window attribute is
-        <const scope="com::sun::star::awt">WindowAttribute::FULLSIZE</const>.</p>
+        com::sun::star::awt::WindowAttribute::FULLSIZE.</p>
      */
     com::sun::star::awt::Rectangle Bounds;
 

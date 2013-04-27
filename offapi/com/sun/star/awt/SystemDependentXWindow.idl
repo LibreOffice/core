@@ -29,7 +29,7 @@
     <p>This is the structure returned in the
     XSystemDependentWindowPeer::getWindowHandle() call,
     if the system type is
-    <const scope="com::sun::star::lang">SystemDependent::XWINDOW</const>.</p>
+    com::sun::star::lang::SystemDependent::XWINDOW.</p>
 
     @deprecated
  */

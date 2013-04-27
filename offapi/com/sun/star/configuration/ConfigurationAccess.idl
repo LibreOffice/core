@@ -129,7 +129,7 @@ module com { module sun { module star { module configuration {
  </p>
 
  <p>If the schema marks a value as <em>nullable</em> (which is indicated by
- attribute <const scope="com::sun::star::beans">PropertyAttribute::MAYBEVOID</const> ),
+ attribute com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
  its contents may be <NULL/>.
  </p>
 

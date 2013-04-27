@@ -82,7 +82,7 @@ published service GroupAccess
 
  <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
  all properties and subproperties will be reported as having attribute
- <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const> set,
+ com::sun::star::beans::PropertyAttribute::READONLY set,
  and attempts to change property values will fail.
  </p>
 */

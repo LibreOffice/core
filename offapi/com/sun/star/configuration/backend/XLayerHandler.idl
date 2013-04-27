@@ -294,7 +294,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <p> This must be the same type as is already defined in the schema
                 or lower layers, unless the previous type was unspecified
                 (as indicated by
-                <const scope="com::sun::star::uno">TypeClass::ANY</const>.)
+                com::sun::star::uno::TypeClass::ANY.)
             </p>
             <p> A <void/> type indicates that the type is unspecified
                 in this layer.

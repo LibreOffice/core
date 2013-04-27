@@ -189,7 +189,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         or not is implementation dependent.  It typically is when text is
         editable or otherwise when on the screen the caret can be placed
         behind the text.  You can be sure that the index is valid after you
-        have received a <const scope="AccessibleEventId">CARET</const> event
+        have received a AccessibleEventId::CARET event
         for this index.</p>
         @param nIndex
             Index of the character for which to return its bounding box.

@@ -38,7 +38,7 @@ module com { module sun { module star { module configuration {
 
  <p>Any child and descendant objects support modifying access as well,
  unless they represent a read-only tree element (as indicated by
- <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>).
+ com::sun::star::beans::PropertyAttribute::READONLY).
  </p>
 */
 published service SetUpdate

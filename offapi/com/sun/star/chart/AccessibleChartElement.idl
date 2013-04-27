@@ -61,7 +61,7 @@ service AccessibleChartElement
         <dl>
          <dt>Role</dt>
              <dd>All chart elements have the role
-             <const scope="::com::sun::star::accessibility">AccessibleRole::SHAPE</const>.
+             ::com::sun::star::accessibility::AccessibleRole::SHAPE.
              </dd>
          <dt>Name</dt>
              <dd>For unique elements you get fixed names.  The unique
@@ -93,30 +93,30 @@ service AccessibleChartElement
              <dd>The states supported by this service are:
              <ul>
 
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+              <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
                   is set if an object was removed.  This indicates that the user
                   should release all references to the accessible object.  If
                   this state is set then no other of the states below is set.
                   </li>
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::EDITABLE</const></li>
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::ENABLED</const>
+              <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE</li>
+              <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
                   is always set.<sup>&dagger;</sup></li>
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::MULTILINE</const>
+              <li>::com::sun::star::accessibility::AccessibleStateType::MULTILINE
                   is set for all titles.</li>
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::OPAQUE</const>
+              <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
                   is set for all elements that do have a transparency
                   attributes set to 0% and no transparency gradient.</li>
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::RESIZABLE</const>
+              <li>::com::sun::star::accessibility::AccessibleStateType::RESIZABLE
                   Is set for the diagram object only.  All other chart elements may not be resized.</li>
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::SELECTABLE</const></li>
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::SELECTED</const></li>
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::SHOWING</const>
+              <li>::com::sun::star::accessibility::AccessibleStateType::SELECTABLE</li>
+              <li>::com::sun::star::accessibility::AccessibleStateType::SELECTED</li>
+              <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
                   is always set.<sup>&dagger;</sup></li>
-              <li><const scope="::com::sun::star::accessibility">AccessibleStateType::VISIBLE</const>
+              <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
                   is always set.<sup>&dagger;</sup></li>
              </ul>
              <sup>&dagger;</sup>always, except if the state
-             <const scope="::com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+             ::com::sun::star::accessibility::AccessibleStateType::DEFUNC
              is set.</dd>
          <dt>Locale</dt>
              <dd>is supported.</dd>
